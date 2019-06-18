@@ -28,10 +28,12 @@ public class ViewClientMBeanImpl implements ViewClientMBean {
   private final ObjectName _objectName;
 
   /**
-   * Creates a management view client
+   * Creates a management view client.
    *
-   * @param viewClient the underlying view client
-   * @param splitByViewProcessor should the MBean name differentiate beans by view processor
+   * @param viewClient
+   *          the underlying view client
+   * @param splitByViewProcessor
+   *          should the MBean name differentiate beans by view processor
    */
   public ViewClientMBeanImpl(final ViewClient viewClient, final boolean splitByViewProcessor) {
     ArgumentChecker.notNull(viewClient, "viewClient");
@@ -40,15 +42,23 @@ public class ViewClientMBeanImpl implements ViewClientMBean {
   }
 
   /**
-   * Creates an object name using the scheme "com.opengamma:type=ViewClient,ViewProcessor=<viewProcessorName>,name=<viewClientId>"
+   * Creates an object name using the scheme "com.opengamma:type=ViewClient,ViewProcessor=<viewProcessorName>,name=<viewClientId>".
+   *
+   * @param viewProcessorName
+   *          the view processor name
+   * @param viewClientId
+   *          the underlying view client identifier
+   * @param splitByViewProcessor
+   *          should the MBean name differentiate beans by view processor
+   * @return the object name
    */
-  /*package*/ static ObjectName createObjectName(final String viewProcessorName,
-                                                 final UniqueId viewClientId,
-                                                 final boolean splitByViewProcessor) {
+  /* package */ static ObjectName createObjectName(final String viewProcessorName,
+      final UniqueId viewClientId,
+      final boolean splitByViewProcessor) {
     try {
-      final String beanNamePrefix = splitByViewProcessor ?
-          "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + viewProcessorName :
-          "com.opengamma:type=ViewProcessor";
+      final String beanNamePrefix = splitByViewProcessor
+          ? "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + viewProcessorName
+          : "com.opengamma:type=ViewProcessor";
       return new ObjectName(beanNamePrefix + ",ViewClients=ViewClients,name=ViewClient " + viewClientId.getValue());
     } catch (final MalformedObjectNameException e) {
       throw new OpenGammaRuntimeException("Error whilst attempting to register JMX Bean", e);
@@ -64,7 +74,7 @@ public class ViewClientMBeanImpl implements ViewClientMBean {
     return _objectName;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public UniqueId getUniqueId() {
     return _viewClient.getUniqueId();
@@ -85,7 +95,7 @@ public class ViewClientMBeanImpl implements ViewClientMBean {
     return _viewClient.isAttached();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void setUpdatePeriod(final long periodMillis) {
     _viewClient.setUpdatePeriod(periodMillis);
@@ -116,7 +126,7 @@ public class ViewClientMBeanImpl implements ViewClientMBean {
     return _viewClient.getLatestResult();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean isViewCycleAccessSupported() {
     return _viewClient.isViewCycleAccessSupported();
@@ -127,7 +137,7 @@ public class ViewClientMBeanImpl implements ViewClientMBean {
     _viewClient.setViewCycleAccessSupported(isViewCycleAccessSupported);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void shutdown() {
     _viewClient.shutdown();

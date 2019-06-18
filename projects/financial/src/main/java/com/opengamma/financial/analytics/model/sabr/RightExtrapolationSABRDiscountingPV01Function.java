@@ -37,7 +37,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
@@ -52,7 +51,7 @@ public class RightExtrapolationSABRDiscountingPV01Function extends RightExtrapol
   private static final Logger LOGGER = LoggerFactory.getLogger(RightExtrapolationSABRDiscountingPV01Function.class);
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#PV01}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PV01}.
    */
   public RightExtrapolationSABRDiscountingPV01Function() {
     super(PV01);
@@ -65,15 +64,15 @@ public class RightExtrapolationSABRDiscountingPV01Function extends RightExtrapol
       @Override
       protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
           final Set<ValueRequirement> desiredValues, final InstrumentDerivative derivative, final FXMatrix fxMatrix) {
-        final DayCount dayCount = DayCounts.ACT_360; //TODO
+        final DayCount dayCount = DayCounts.ACT_360; // TODO
         final SABRSwaptionProvider sabrData = getSABRSurfaces(executionContext, inputs, target, fxMatrix, dayCount);
         final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
         final String desiredCurveName = desiredValue.getConstraint(CURVE);
         final ValueProperties properties = desiredValue.getConstraints();
         final double cutoffStrike = Double.parseDouble(desiredValue.getConstraint(PROPERTY_STRIKE_CUTOFF));
         final double mu = Double.parseDouble(desiredValue.getConstraint(PROPERTY_MU));
-        final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, ReferenceAmount<Pair<String, Currency>>> calculator = new PV01CurveParametersCalculator<>(
-            new PresentValueCurveSensitivitySABRSwaptionRightExtrapolationCalculator(cutoffStrike, mu));
+        final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, ReferenceAmount<Pair<String, Currency>>> calculator =
+            new PV01CurveParametersCalculator<>(new PresentValueCurveSensitivitySABRSwaptionRightExtrapolationCalculator(cutoffStrike, mu));
         final ReferenceAmount<Pair<String, Currency>> pv01 = derivative.accept(calculator, sabrData);
         final Set<ComputedValue> results = new HashSet<>();
         boolean curveNameFound = false;
@@ -96,7 +95,7 @@ public class RightExtrapolationSABRDiscountingPV01Function extends RightExtrapol
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Collection<ValueProperties.Builder> properties = super.getResultProperties(compilationContext, target);
-        for (ValueProperties.Builder builder : properties) {
+        for (final ValueProperties.Builder builder : properties) {
           builder.withAny(CURVE);
         }
         return properties;

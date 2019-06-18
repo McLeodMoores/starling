@@ -9,13 +9,12 @@ import com.opengamma.financial.analytics.volatility.surface.VolatilitySurfaceSpe
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Custom JSON builder to convert VolatilitySurfaceSpecification to JSON object and back again
+ * Custom JSON builder to convert VolatilitySurfaceSpecification to JSON object and back again.
  */
 public final class VolatilitySurfaceSpecificationJSONBuilder extends AbstractJSONBuilder<VolatilitySurfaceSpecification> {
 
-
   /**
-   * Singleton
+   * Singleton.
    */
   public static final VolatilitySurfaceSpecificationJSONBuilder INSTANCE = new VolatilitySurfaceSpecificationJSONBuilder();
 

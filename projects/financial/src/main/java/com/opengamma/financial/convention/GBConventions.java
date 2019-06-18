@@ -27,10 +27,12 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Contains information used to construct standard versions of GBP instruments.
  *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class GBConventions {
   /** Month codes used by Bloomberg */
-  private static final char[] BBG_MONTH_CODES = new char[] {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K' };
+  private static final char[] BBG_MONTH_CODES = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K' };
   /** Modified business day convention */
   private static final BusinessDayConvention MODIFIED = BusinessDayConventions.MODIFIED_FOLLOWING;
   /** Following business day convention */
@@ -48,7 +50,9 @@ public class GBConventions {
 
   /**
    * Adds conventions for deposit, Libor fixings, swaps, FRAs and IR futures.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static synchronized void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -72,8 +76,10 @@ public class GBConventions {
       final ExternalId weekTullettLibor = tullettPrebonSecurityId("ASLIBGBP" + i + "WL");
       final ExternalId weekSimpleLibor = simpleNameSecurityId(weekDepositName);
       utils.addConventionBundle(ExternalIdBundle.of(dayBbgDeposit, daySimpleDeposit), dayDepositName, ACT_365, FOLLOWING, Period.ofDays(i), 0, false, GB);
-      utils.addConventionBundle(ExternalIdBundle.of(weekBbgDeposit, weekTullettDeposit, weekSimpleDeposit), weekDepositName, ACT_365, FOLLOWING, Period.ofDays(i * 7), 0, false, GB);
-      utils.addConventionBundle(ExternalIdBundle.of(weekBbgLibor, weekTullettLibor, weekSimpleLibor), weekLiborName, ACT_365, FOLLOWING, Period.ofDays(i * 7), 0, false, GB);
+      utils.addConventionBundle(ExternalIdBundle.of(weekBbgDeposit, weekTullettDeposit, weekSimpleDeposit), weekDepositName, ACT_365, FOLLOWING,
+          Period.ofDays(i * 7), 0, false, GB);
+      utils.addConventionBundle(ExternalIdBundle.of(weekBbgLibor, weekTullettLibor, weekSimpleLibor), weekLiborName, ACT_365, FOLLOWING, Period.ofDays(i * 7),
+          0, false, GB);
     }
 
     for (int i = 1; i < 13; i++) {
@@ -91,7 +97,8 @@ public class GBConventions {
       final ExternalId tullettDeposit = tullettPrebonSecurityId("MNDEPGBDTDY" + (i < 10 ? "0" : "") + i + "M");
       final ExternalId simpleDeposit = simpleNameSecurityId(depositName);
       utils.addConventionBundle(ExternalIdBundle.of(bbgLibor, tullettLibor, simpleLibor), liborName, ACT_365, MODIFIED, Period.ofMonths(i), 0, false, GB);
-      utils.addConventionBundle(ExternalIdBundle.of(bbgDeposit, tullettDeposit, simpleDeposit), depositName, ACT_365, MODIFIED, Period.ofMonths(i), 0, false, GB);
+      utils.addConventionBundle(ExternalIdBundle.of(bbgDeposit, tullettDeposit, simpleDeposit), depositName, ACT_365, MODIFIED, Period.ofMonths(i), 0, false,
+          GB);
     }
 
     for (int i = 1; i < 6; i++) {
@@ -114,7 +121,8 @@ public class GBConventions {
 
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("GBP_3M_SWAP")), "GBP_3M_SWAP", swapFixedDayCount, MODIFIED, ANNUAL, 0, GB, ACT_365,
         MODIFIED, QUARTERLY, 0, simpleNameSecurityId("GBP LIBOR 3m"), GB, true);
-    utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("GBP_6M_SWAP")), "GBP_6M_SWAP", swapFixedDayCount, swapFixedBusinessDay, swapFixedPaymentFrequency, 0, GB,
+    utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("GBP_6M_SWAP")), "GBP_6M_SWAP", swapFixedDayCount, swapFixedBusinessDay,
+        swapFixedPaymentFrequency, 0, GB,
         liborDayCount, MODIFIED, SEMI_ANNUAL, 0, simpleNameSecurityId("GBP LIBOR 6m"), GB, true);
 
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("GBP_3M_FRA")), "GBP_3M_FRA", ACT_365, MODIFIED, ANNUAL, 0, GB, ACT_365,
@@ -133,21 +141,24 @@ public class GBConventions {
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("GBP_OIS_SWAP")), "GBP_OIS_SWAP", ACT_365, MODIFIED, ANNUAL, 2, GB,
         ACT_365, MODIFIED, ANNUAL, 2, simpleNameSecurityId("GBP SONIO/N"), GB, true, publicationLagON);
 
-    //TODO sort out the swap names so that they are consistent
+    // TODO sort out the swap names so that they are consistent
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("GBP_IBOR_INDEX")), "GBP_IBOR_INDEX", ACT_365, MODIFIED, 0, false);
 
-    final int[] isdaFixTenor = new int[] {2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 30 };
+    final int[] isdaFixTenor = new int[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 30 };
     // ISDA fixing Libor 11:00am London
     utils.addConventionBundle(
         ExternalIdBundle.of(simpleNameSecurityId("GBP_ISDAFIX_GBPLIBOR11_1Y"), ExternalSchemes.ricSecurityId("GBPSFIX1Y="),
-            bloombergTickerSecurityId("BPISDB01 Index")), "GBP_ISDAFIX_GBPLIBOR11_1Y", swapFixedDayCount, swapFixedBusinessDay, swapFixedPaymentFrequency1Y, 0, GB, liborDayCount, MODIFIED,
+            bloombergTickerSecurityId("BPISDB01 Index")),
+        "GBP_ISDAFIX_GBPLIBOR11_1Y", swapFixedDayCount, swapFixedBusinessDay, swapFixedPaymentFrequency1Y, 0, GB, liborDayCount, MODIFIED,
         QUARTERLY, 2, simpleNameSecurityId("GBP LIBOR 3m"), GB, true, Period.ofYears(1));
     for (final int element : isdaFixTenor) {
       final String tenorString = element + "Y";
       final String tenorStringBbg = String.format("%02d", element);
       utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("GBP_ISDAFIX_GBPLIBOR11_" + tenorString),
-          ExternalSchemes.ricSecurityId("GBPSFIX" + tenorString + "="), bloombergTickerSecurityId("BPISDB" + tenorStringBbg + " Index")), "GBP_ISDAFIX_GBPLIBOR11_" + tenorString,
-          swapFixedDayCount, swapFixedBusinessDay, swapFixedPaymentFrequency, 0, GB, liborDayCount, MODIFIED, SEMI_ANNUAL, 0, simpleNameSecurityId("GBP LIBOR 6m"),
+          ExternalSchemes.ricSecurityId("GBPSFIX" + tenorString + "="), bloombergTickerSecurityId("BPISDB" + tenorStringBbg + " Index")),
+          "GBP_ISDAFIX_GBPLIBOR11_" + tenorString,
+          swapFixedDayCount, swapFixedBusinessDay, swapFixedPaymentFrequency, 0, GB, liborDayCount, MODIFIED, SEMI_ANNUAL, 0,
+          simpleNameSecurityId("GBP LIBOR 6m"),
           GB, true, Period.ofYears(element));
     }
 
@@ -155,7 +166,9 @@ public class GBConventions {
 
   /**
    * Adds conventions for GBP government bonds.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static void addTreasuryBondConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -166,7 +179,9 @@ public class GBConventions {
 
   /**
    * Adds conventions for GBP government bonds.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static void addInflationBondConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -177,7 +192,9 @@ public class GBConventions {
 
   /**
    * Adds conventions for GBP corporate inflation bonds issued in NL.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static void addNLInflationBondConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -188,7 +205,9 @@ public class GBConventions {
 
   /**
    * Adds conventions for GBP corporate inflation bonds issued in JE.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static void addJEInflationBondConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -199,7 +218,9 @@ public class GBConventions {
 
   /**
    * Adds conventions for GBP corporate inflation bonds issued in KY.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static void addKYInflationBondConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -210,7 +231,9 @@ public class GBConventions {
 
   /**
    * Adds conventions for GBP corporate inflation bonds issued in US.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static void addUSInflationBondConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -221,7 +244,9 @@ public class GBConventions {
 
   /**
    * Adds conventions for GBP-denominated corporate bonds.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static void addCorporateBondConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -232,7 +257,9 @@ public class GBConventions {
 
   /**
    * Adds conventions for GBP bond futures.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static void addBondFutureConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");

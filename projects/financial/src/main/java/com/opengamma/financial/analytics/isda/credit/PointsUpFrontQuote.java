@@ -31,6 +31,11 @@ import com.opengamma.analytics.financial.credit.isdastandardmodel.PointsUpFront;
 public class PointsUpFrontQuote implements CdsQuote, ImmutableBean {
 
   /**
+   * The quote type.
+   */
+  public static final String TYPE = "POINTS_UPFRONT";
+
+  /**
    * The coupon of the quote, denoted as a fractional amount.
    */
   @PropertyDefinition
@@ -44,8 +49,11 @@ public class PointsUpFrontQuote implements CdsQuote, ImmutableBean {
 
   /**
    * Builds an instance using the passed coupon and points up front numbers.
-   * @param coupon the coupon, a fractional amount
-   * @param pointsUpFront points up front, a fractional amount
+   *
+   * @param coupon
+   *          the coupon, a fractional amount
+   * @param pointsUpFront
+   *          points up front, a fractional amount
    * @return a points up front quote
    */
   public static PointsUpFrontQuote from(final double coupon, final double pointsUpFront) {

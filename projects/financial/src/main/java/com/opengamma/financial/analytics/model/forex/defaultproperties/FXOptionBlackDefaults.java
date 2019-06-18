@@ -31,30 +31,31 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  * Default properties for FX options priced using the Black functions.
+ * 
  * @deprecated Use the versions for curve and surfaces
  */
 @Deprecated
 public class FXOptionBlackDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(FXOptionBlackDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.FX_PRESENT_VALUE,
-    ValueRequirementNames.FX_CURRENCY_EXPOSURE,
-    ValueRequirementNames.VALUE_VEGA,
-    ValueRequirementNames.VALUE_GAMMA,
-    ValueRequirementNames.VALUE_GAMMA_P,
-    ValueRequirementNames.VEGA_MATRIX,
-    ValueRequirementNames.VEGA_QUOTE_MATRIX,
-    ValueRequirementNames.FX_CURVE_SENSITIVITIES,
-    ValueRequirementNames.PV01,
-    ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY,
-    ValueRequirementNames.VALUE_THETA,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-    ValueRequirementNames.VALUE_RHO,
-    ValueRequirementNames.VALUE_PHI,
-    ValueRequirementNames.VALUE_VOMMA,
-    ValueRequirementNames.VALUE_VANNA,
-    ValueRequirementNames.THETA
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.FX_PRESENT_VALUE,
+                ValueRequirementNames.FX_CURRENCY_EXPOSURE,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.VALUE_GAMMA_P,
+                ValueRequirementNames.VEGA_MATRIX,
+                ValueRequirementNames.VEGA_QUOTE_MATRIX,
+                ValueRequirementNames.FX_CURVE_SENSITIVITIES,
+                ValueRequirementNames.PV01,
+                ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY,
+                ValueRequirementNames.VALUE_THETA,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.VALUE_RHO,
+                ValueRequirementNames.VALUE_PHI,
+                ValueRequirementNames.VALUE_VOMMA,
+                ValueRequirementNames.VALUE_VANNA,
+                ValueRequirementNames.THETA
   };
   private final PriorityClass _priority;
   private final String _interpolatorName;
@@ -64,20 +65,25 @@ public class FXOptionBlackDefaults extends DefaultPropertyFunction {
   private final Map<Pair<String, String>, String> _surfaceNameByCurrencyPair;
 
   /**
-   * @param priority The priority of the functions
-   * @param interpolatorName The volatility surface interpolator name
-   * @param leftExtrapolatorName The volatility surface left extrapolator name
-   * @param rightExtrapolatorName The volatility surface right extrapolator name
-   * @param propertyValuesByCurrencies Values for the properties per currency: an array of strings where the <i>i<sup>th</sup></i> currency has properties:
-   * <ul>
-   * <li><i>i</i> = first currency name,
-   * <li><i>i + 1</i> = first currency curve configuration name
-   * <li><i>i + 2</i> = first currency discounting curve name
-   * <li><i>i + 3</i> = second currency name,
-   * <li><i>i + 4</i> = second currency curve configuration name
-   * <li><i>i + 5</i> = second currency discounting curve name
-   * <li><i>i + 6</i> = surface name
-   * </ul>
+   * @param priority
+   *          The priority of the functions
+   * @param interpolatorName
+   *          The volatility surface interpolator name
+   * @param leftExtrapolatorName
+   *          The volatility surface left extrapolator name
+   * @param rightExtrapolatorName
+   *          The volatility surface right extrapolator name
+   * @param propertyValuesByCurrencies
+   *          Values for the properties per currency: an array of strings where the <i>i<sup>th</sup></i> currency has properties:
+   *          <ul>
+   *          <li><i>i</i> = first currency name,
+   *          <li><i>i + 1</i> = first currency curve configuration name
+   *          <li><i>i + 2</i> = first currency discounting curve name
+   *          <li><i>i + 3</i> = second currency name,
+   *          <li><i>i + 4</i> = second currency curve configuration name
+   *          <li><i>i + 5</i> = second currency discounting curve name
+   *          <li><i>i + 6</i> = surface name
+   *          </ul>
    */
   public FXOptionBlackDefaults(final String priority, final String interpolatorName, final String leftExtrapolatorName, final String rightExtrapolatorName,
       final String... propertyValuesByCurrencies) {
@@ -88,7 +94,8 @@ public class FXOptionBlackDefaults extends DefaultPropertyFunction {
     ArgumentChecker.notNull(leftExtrapolatorName, "left extrapolator name");
     ArgumentChecker.notNull(rightExtrapolatorName, "right extrapolator name");
     ArgumentChecker.notNull(propertyValuesByCurrencies, "property values by currency");
-    ArgumentChecker.isTrue(propertyValuesByCurrencies.length % 7 == 0, "Must have two currencies, one curve config and discounting curve name per currency pair and one surface name");
+    ArgumentChecker.isTrue(propertyValuesByCurrencies.length % 7 == 0,
+        "Must have two currencies, one curve config and discounting curve name per currency pair and one surface name");
     _priority = PriorityClass.valueOf(priority);
     _interpolatorName = interpolatorName;
     _leftExtrapolatorName = leftExtrapolatorName;
@@ -113,7 +120,7 @@ public class FXOptionBlackDefaults extends DefaultPropertyFunction {
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final String putCurrency = security.accept(ForexVisitors.getPutCurrencyVisitor()).getCode();
     final String callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor()).getCode();
-    return (_propertyValuesByCurrency.containsKey(putCurrency) && _propertyValuesByCurrency.containsKey(callCurrency));
+    return _propertyValuesByCurrency.containsKey(putCurrency) && _propertyValuesByCurrency.containsKey(callCurrency);
   }
 
   @Override
@@ -131,7 +138,8 @@ public class FXOptionBlackDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final String putCurrency = security.accept(ForexVisitors.getPutCurrencyVisitor()).getCode();
     final String callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor()).getCode();

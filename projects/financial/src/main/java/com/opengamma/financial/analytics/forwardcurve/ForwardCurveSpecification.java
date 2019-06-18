@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.forwardcurve;
@@ -9,7 +9,7 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public abstract class ForwardCurveSpecification {
   private final ForwardCurveInstrumentProvider _curveInstrumentProvider;
@@ -24,7 +24,7 @@ public abstract class ForwardCurveSpecification {
     _target = target;
     _curveInstrumentProvider = curveInstrumentProvider;
   }
-  
+
   public String getName() {
     return _name;
   }
@@ -51,9 +51,9 @@ public abstract class ForwardCurveSpecification {
       return false;
     }
     final ForwardCurveSpecification other = (ForwardCurveSpecification) obj;
-    return getName().equals(other.getName()) &&
-        getTarget().equals(other.getTarget()) &&
-        getCurveInstrumentProvider().equals(other.getCurveInstrumentProvider());
+    return getName().equals(other.getName())
+        && getTarget().equals(other.getTarget())
+        && getCurveInstrumentProvider().equals(other.getCurveInstrumentProvider());
   }
 
 }

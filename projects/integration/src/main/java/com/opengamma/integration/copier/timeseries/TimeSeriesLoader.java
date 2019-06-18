@@ -17,7 +17,7 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Provides standard time series loader functionality
+ * Provides standard time series loader functionality.
  */
 public class TimeSeriesLoader {
 
@@ -29,27 +29,27 @@ public class TimeSeriesLoader {
   }
 
   public void run(final SheetFormat sheetFormat,
-                  final InputStream portfolioFileStream,
-                  final String dataSource,
-                  final String dataProvider,
-                  final String dataField,
-                  final String observationTime,
-                  final String idScheme,
-                  final String dateFormat,
-                  final boolean persist) {
+      final InputStream portfolioFileStream,
+      final String dataSource,
+      final String dataProvider,
+      final String dataField,
+      final String observationTime,
+      final String idScheme,
+      final String dateFormat,
+      final boolean persist) {
 
     // Set up writer
     final TimeSeriesWriter timeSeriesWriter = constructTimeSeriesWriter(persist);
 
-     // Set up reader
+    // Set up reader
     final TimeSeriesReader timeSeriesReader = new SingleSheetMultiTimeSeriesReader(sheetFormat,
-                                                                             portfolioFileStream,
-                                                                             dataSource,
-                                                                             dataProvider,
-                                                                             dataField,
-                                                                             observationTime,
-                                                                             idScheme,
-                                                                             dateFormat);
+        portfolioFileStream,
+        dataSource,
+        dataProvider,
+        dataField,
+        observationTime,
+        idScheme,
+        dateFormat);
 
     // Load in and write the securities, positions and trades
     timeSeriesReader.writeTo(timeSeriesWriter);
@@ -63,9 +63,8 @@ public class TimeSeriesLoader {
     if (write) {
       // Create a portfolio writer to persist imported positions, trades and securities to the OG masters
       return new MasterTimeSeriesWriter(_htsMaster);
-    } else {
-      // Create a dummy portfolio writer to pretty-print instead of persisting
-      return new DummyTimeSeriesWriter();
     }
+    // Create a dummy portfolio writer to pretty-print instead of persisting
+    return new DummyTimeSeriesWriter();
   }
 }

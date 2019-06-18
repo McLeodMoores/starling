@@ -22,12 +22,17 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Contains information used to construct standard version of RUB instruments.
+ *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class RUConventions {
 
   /**
-   * Adds conventions
-   * @param conventionMaster The convention master, not null
+   * Adds conventions.
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static synchronized void addFixedIncomeInstrumentConventions(final InMemoryConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -76,21 +81,21 @@ public class RUConventions {
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("RRDR1 Curncy"), simpleNameSecurityId("RUB DEPOSIT 1y")), "RUB DEPOSIT 1y", act360,
         following, Period.ofYears(1), 2, false, ru);
 
-    for (final int i : new int[] {1}) {
+    for (final int i : new int[] { 1 }) {
       final String name = "RUB IMPLIED DEPOSIT " + i + "w";
       final ExternalId tullett = tullettPrebonSecurityId("EMIDPRUBTOM" + i + "W");
       final ExternalId simple = simpleNameSecurityId(name);
       utils.addConventionBundle(ExternalIdBundle.of(tullett, simple), name, act360, following, Period.ofDays(i * 7), 2, false, ru);
     }
 
-    for (final int i : new int[] {1, 2, 3, 6, 9, 18}) {
+    for (final int i : new int[] { 1, 2, 3, 6, 9, 18 }) {
       final String name = "RUB IMPLIED DEPOSIT " + i + "m";
       final ExternalId tullett = tullettPrebonSecurityId("EMIDPRUBTOM" + (i < 10 ? "0" : "") + i + "M");
       final ExternalId simple = simpleNameSecurityId(name);
       utils.addConventionBundle(ExternalIdBundle.of(tullett, simple), name, act360, following, Period.ofMonths(i), 2, false, ru);
     }
 
-    for (final int i : new int[] {1, 2, 3, 4, 5, 6, 7}) {
+    for (final int i : new int[] { 1, 2, 3, 4, 5, 6, 7 }) {
       final String name = "RUB IMPLIED DEPOSIT " + i + "y";
       ExternalId tullett;
       if (i == 1 || i == 2) {

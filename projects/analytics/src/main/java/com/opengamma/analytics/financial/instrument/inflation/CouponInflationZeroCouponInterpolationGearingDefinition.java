@@ -22,16 +22,16 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing an zero-coupon inflation coupon were the inflation figure are interpolated between monthly inflation figures and the inflation increment is multiplied by a gearing factor.
- * The start index value is known when the coupon is traded/issued.
- * The index for a given month is given in the yield curve and in the time series on the first of the month.
- * The pay-off is factor*(Index_End / Index_Start - X) with X=0 for notional payment and X=1 for no notional payment.
+ * Class describing an zero-coupon inflation coupon were the inflation figure are interpolated between monthly inflation figures and the inflation increment is
+ * multiplied by a gearing factor. The start index value is known when the coupon is traded/issued. The index for a given month is given in the yield curve and
+ * in the time series on the first of the month. The pay-off is factor*(Index_End / Index_Start - X) with X=0 for notional payment and X=1 for no notional
+ * payment.
  */
 public class CouponInflationZeroCouponInterpolationGearingDefinition extends CouponInflationDefinition implements CouponInflationGearing {
 
   /**
-   * The reference dates for the index at the coupon start. Two months are required for the interpolation.
-   * There is usually a difference of two or three month between the reference date and the accrual start date.
+   * The reference dates for the index at the coupon start. Two months are required for the interpolation. There is usually a difference of two or three month
+   * between the reference date and the accrual start date.
    */
   private final ZonedDateTime[] _referenceStartDates;
   /**
@@ -39,8 +39,8 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
    */
   private final double _indexStartValue;
   /**
-   * The reference dates for the index at the coupon end. Two months are required for the interpolation.
-   * There is usually a difference of two or three month between the reference date and the payment date.
+   * The reference dates for the index at the coupon end. Two months are required for the interpolation. There is usually a difference of two or three month
+   * between the reference date and the payment date.
    */
   private final ZonedDateTime[] _referenceEndDates;
   /**
@@ -56,36 +56,55 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
    */
   private final double _factor;
   /**
-   * The lag in month between the index validity and the coupon dates for the standard product (the one in exchange market and used for the calibration, this lag is in most cases 3 month).
+   * The lag in month between the index validity and the coupon dates for the standard product (the one in exchange market and used for the calibration, this
+   * lag is in most cases 3 month).
    */
   private final int _conventionalMonthLag;
 
   /**
-   * The lag in month between the index validity and the coupon dates for the actual product. (In most of the cases,lags are standard so _conventionalMonthLag=_monthLag)
+   * The lag in month between the index validity and the coupon dates for the actual product. (In most of the cases,lags are standard so
+   * _conventionalMonthLag=_monthLag)
    */
   private final int _monthLag;
 
   /**
    * Constructor for zero-coupon inflation coupon.
-   * @param currency The coupon currency.
-   * @param paymentDate The payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param paymentYearFraction Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param conventionalMonthLag The lag in month between the index validity and the coupon dates for the standard product.
-   * @param monthLag The lag in month between the index validity and the coupon dates for the actual product.
-   * @param referenceStartDates The reference date for the index at the coupon start.
-   * @param indexStartValue The index value at the start of the coupon.
-   * @param referenceEndDate The reference date for the index at the coupon end.
-   * @param payNotional Flag indicating if the notional is paid (true) or not (false).
-   * @param weight The weight for the interpolation of the index.
-   * @param factor The multiplicative factor.
+   * 
+   * @param currency
+   *          The coupon currency.
+   * @param paymentDate
+   *          The payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param conventionalMonthLag
+   *          The lag in month between the index validity and the coupon dates for the standard product.
+   * @param monthLag
+   *          The lag in month between the index validity and the coupon dates for the actual product.
+   * @param referenceStartDates
+   *          The reference date for the index at the coupon start.
+   * @param indexStartValue
+   *          The index value at the start of the coupon.
+   * @param referenceEndDate
+   *          The reference date for the index at the coupon end.
+   * @param payNotional
+   *          Flag indicating if the notional is paid (true) or not (false).
+   * @param weight
+   *          The weight for the interpolation of the index.
+   * @param factor
+   *          The multiplicative factor.
    */
   public CouponInflationZeroCouponInterpolationGearingDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
       final ZonedDateTime accrualEndDate, final double paymentYearFraction, final double notional, final IndexPrice priceIndex, final int conventionalMonthLag,
-      final int monthLag, final ZonedDateTime[] referenceStartDates, final double indexStartValue, final ZonedDateTime[] referenceEndDate, final boolean payNotional,
+      final int monthLag, final ZonedDateTime[] referenceStartDates, final double indexStartValue, final ZonedDateTime[] referenceEndDate,
+      final boolean payNotional,
       final double weight, final double factor) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, paymentYearFraction, notional, priceIndex);
     ArgumentChecker.notNull(referenceStartDates, "Reference start date");
@@ -102,25 +121,42 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
 
   /**
    * Constructor for zero-coupon inflation coupon.
-   * @param currency The coupon currency.
-   * @param paymentDate The payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param paymentYearFraction Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param conventionalMonthLag The lag in month between the index validity and the coupon dates for the standard product.
-   * @param monthLag The lag in month between the index validity and the coupon dates for the actual product.
-   * @param referenceStartDate The reference date for the index at the coupon start.
-   * @param indexStartValue The index value at the start of the coupon.
-   * @param referenceEndDate The reference date for the index at the coupon end.
-   * @param payNotional Flag indicating if the notional is paid (true) or not (false).
-   * @param factor The multiplicative factor.
+   * 
+   * @param currency
+   *          The coupon currency.
+   * @param paymentDate
+   *          The payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param conventionalMonthLag
+   *          The lag in month between the index validity and the coupon dates for the standard product.
+   * @param monthLag
+   *          The lag in month between the index validity and the coupon dates for the actual product.
+   * @param referenceStartDate
+   *          The reference date for the index at the coupon start.
+   * @param indexStartValue
+   *          The index value at the start of the coupon.
+   * @param referenceEndDate
+   *          The reference date for the index at the coupon end.
+   * @param payNotional
+   *          Flag indicating if the notional is paid (true) or not (false).
+   * @param factor
+   *          The multiplicative factor.
    * @return The inflation zero-coupon.
    */
-  public static CouponInflationZeroCouponInterpolationGearingDefinition from(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
+  public static CouponInflationZeroCouponInterpolationGearingDefinition from(final Currency currency, final ZonedDateTime paymentDate,
+      final ZonedDateTime accrualStartDate,
       final ZonedDateTime accrualEndDate, final double paymentYearFraction, final double notional, final IndexPrice priceIndex, final int conventionalMonthLag,
-      final int monthLag, final ZonedDateTime[] referenceStartDate, final double indexStartValue, final ZonedDateTime[] referenceEndDate, final boolean payNotional, final double factor) {
+      final int monthLag, final ZonedDateTime[] referenceStartDate, final double indexStartValue, final ZonedDateTime[] referenceEndDate,
+      final boolean payNotional, final double factor) {
 
     ArgumentChecker.notNull(referenceStartDate, "Reference start date");
     ArgumentChecker.notNull(referenceEndDate, "Reference end date");
@@ -131,18 +167,29 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
   }
 
   /**
-   * Builder for inflation zero-coupon.
-   * The accrualStartDate is used for the referenceStartDate. The paymentDate is used for accrualEndDate. The paymentYearFraction is 1.0.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param paymentDate The payment date.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param conventionalMonthLag The lag in month between the index validity and the coupon dates for the standard product.
-   * @param monthLag The lag in month between the index validity and the coupon dates for the actual product.
-   * @param indexStartValue The index value at the start of the coupon.
-   * @param referenceEndDate The reference date for the index at the coupon end.
-   * @param payNotional Flag indicating if the notional is paid (true) or not (false).
-   * @param factor The multiplicative factor.
+   * Builder for inflation zero-coupon. The accrualStartDate is used for the referenceStartDate. The paymentDate is used for accrualEndDate. The
+   * paymentYearFraction is 1.0.
+   * 
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param paymentDate
+   *          The payment date.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param conventionalMonthLag
+   *          The lag in month between the index validity and the coupon dates for the standard product.
+   * @param monthLag
+   *          The lag in month between the index validity and the coupon dates for the actual product.
+   * @param indexStartValue
+   *          The index value at the start of the coupon.
+   * @param referenceEndDate
+   *          The reference date for the index at the coupon end.
+   * @param payNotional
+   *          Flag indicating if the notional is paid (true) or not (false).
+   * @param factor
+   *          The multiplicative factor.
    * @return The coupon.
    */
   public static CouponInflationZeroCouponInterpolationGearingDefinition from(final ZonedDateTime accrualStartDate, final ZonedDateTime paymentDate,
@@ -153,25 +200,38 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
     final ZonedDateTime refInterpolatedStartDate = accrualStartDate.minusMonths(monthLag);
     referenceStartDates[0] = refInterpolatedStartDate.with(TemporalAdjusters.lastDayOfMonth()).withHour(0).withMinute(0);
     referenceStartDates[1] = referenceStartDates[0].plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).withHour(0).withMinute(0);
-    return from(priceIndex.getCurrency(), paymentDate, accrualStartDate, paymentDate, 1.0, notional, priceIndex, conventionalMonthLag, monthLag, referenceStartDates, indexStartValue,
+    return from(priceIndex.getCurrency(), paymentDate, accrualStartDate, paymentDate, 1.0, notional, priceIndex, conventionalMonthLag, monthLag,
+        referenceStartDates, indexStartValue,
         referenceEndDate, payNotional, factor);
   }
 
   /**
-   * Builder for inflation zero-coupon based on an inflation lag and the index publication lag. The fixing date is the publication lag after the last reference month.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param paymentDate The payment date.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param indexStartValue The index value at the start of the coupon.
-   * @param conventionalMonthLag The lag in month between the index validity and the coupon dates for the standard product.
-   * @param monthLag The lag in month between the index validity and the coupon dates for the actual product.
-   * @param payNotional Flag indicating if the notional is paid (true) or not (false).
-   * @param factor The multiplicative factor.
+   * Builder for inflation zero-coupon based on an inflation lag and the index publication lag. The fixing date is the publication lag after the last reference
+   * month.
+   * 
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param paymentDate
+   *          The payment date.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param indexStartValue
+   *          The index value at the start of the coupon.
+   * @param conventionalMonthLag
+   *          The lag in month between the index validity and the coupon dates for the standard product.
+   * @param monthLag
+   *          The lag in month between the index validity and the coupon dates for the actual product.
+   * @param payNotional
+   *          Flag indicating if the notional is paid (true) or not (false).
+   * @param factor
+   *          The multiplicative factor.
    * @return The inflation zero-coupon.
    */
   public static CouponInflationZeroCouponInterpolationGearingDefinition from(final ZonedDateTime accrualStartDate, final ZonedDateTime paymentDate,
-      final double notional, final IndexPrice priceIndex, final double indexStartValue, final int conventionalMonthLag, final int monthLag, final boolean payNotional, final double factor) {
+      final double notional, final IndexPrice priceIndex, final double indexStartValue, final int conventionalMonthLag, final int monthLag,
+      final boolean payNotional, final double factor) {
     final ZonedDateTime refInterpolatedStartDate = accrualStartDate.minusMonths(monthLag);
     final ZonedDateTime[] referenceStartDates = new ZonedDateTime[2];
     referenceStartDates[0] = refInterpolatedStartDate.with(TemporalAdjusters.lastDayOfMonth());
@@ -186,17 +246,29 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
   }
 
   /**
-   * Builder for inflation zero-coupon based on an inflation lag and the index publication lag. The fixing date is the publication lag after the last reference month.
-   * @param paymentDate The payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param indexStartValue The index value at the start of the coupon.
-   * @param conventionalMonthLag The lag in month between the index validity and the coupon dates for the standard product.
-   * @param monthLag The lag in month between the index validity and the coupon dates for the actual product.
-   * @param payNotional Flag indicating if the notional is paid (true) or not (false).
-   * @param factor The multiplicative factor.
+   * Builder for inflation zero-coupon based on an inflation lag and the index publication lag. The fixing date is the publication lag after the last reference
+   * month.
+   * 
+   * @param paymentDate
+   *          The payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param indexStartValue
+   *          The index value at the start of the coupon.
+   * @param conventionalMonthLag
+   *          The lag in month between the index validity and the coupon dates for the standard product.
+   * @param monthLag
+   *          The lag in month between the index validity and the coupon dates for the actual product.
+   * @param payNotional
+   *          Flag indicating if the notional is paid (true) or not (false).
+   * @param factor
+   *          The multiplicative factor.
    * @return The inflation zero-coupon.
    */
   public static CouponInflationZeroCouponInterpolationGearingDefinition from(final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
@@ -216,12 +288,15 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
   }
 
   @Override
-  public CouponInflationDefinition with(final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double notional) {
-    return from(paymentDate, accrualStartDate, accrualEndDate, notional, getPriceIndex(), _indexStartValue, _conventionalMonthLag, _monthLag, _payNotional, _factor);
+  public CouponInflationDefinition with(final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
+      final double notional) {
+    return from(paymentDate, accrualStartDate, accrualEndDate, notional, getPriceIndex(), _indexStartValue, _conventionalMonthLag, _monthLag, _payNotional,
+        _factor);
   }
 
   /**
    * Gets the reference date for the index at the coupon start.
+   * 
    * @return The reference date for the index at the coupon start.
    */
   public ZonedDateTime[] getReferenceStartDates() {
@@ -230,6 +305,7 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
 
   /**
    * Gets the index value at the start of the coupon.
+   * 
    * @return The index value at the start of the coupon.
    */
   public double getIndexStartValue() {
@@ -238,6 +314,7 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
 
   /**
    * Gets the reference dates for the index at the coupon end.
+   * 
    * @return The reference date for the index at the coupon end.
    */
   public ZonedDateTime[] getReferenceEndDates() {
@@ -246,6 +323,7 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
 
   /**
    * Gets the weight on the first month index in the interpolation.
+   * 
    * @return The weight.
    */
   public double getWeight() {
@@ -254,6 +332,7 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
 
   /**
    * Gets the pay notional flag.
+   * 
    * @return The flag.
    */
   public boolean payNotional() {
@@ -262,6 +341,7 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
 
   /**
    * Gets the lag in month between the index validity and the coupon dates.
+   * 
    * @return The lag.
    */
   public int getConventionalMonthLag() {
@@ -270,6 +350,7 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
 
   /**
    * Gets the lag in month between the index validity and the coupon dates for the actual product.
+   * 
    * @return The lag.
    */
   public int getMonthLag() {
@@ -283,6 +364,7 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -299,12 +381,14 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
     referenceEndTime[1] = TimeCalculator.getTimeBetween(date, getReferenceEndDates()[1]);
     final ZonedDateTime naturalPaymentDate = getPaymentDate().minusMonths(_monthLag - _conventionalMonthLag);
     final double naturalPaymentTime = TimeCalculator.getTimeBetween(date, naturalPaymentDate);
-    return new CouponInflationZeroCouponInterpolationGearing(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(), _indexStartValue, referenceEndTime,
+    return new CouponInflationZeroCouponInterpolationGearing(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(),
+        _indexStartValue, referenceEndTime,
         naturalPaymentTime, _weight, _payNotional, _factor);
   }
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -333,7 +417,8 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
     referenceEndTime[1] = TimeCalculator.getTimeBetween(date, _referenceEndDates[1]);
     final ZonedDateTime naturalPaymentDate = getPaymentDate().minusMonths(_monthLag - _conventionalMonthLag);
     final double naturalPaymentTime = TimeCalculator.getTimeBetween(date, naturalPaymentDate);
-    return new CouponInflationZeroCouponInterpolationGearing(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(), _indexStartValue, referenceEndTime,
+    return new CouponInflationZeroCouponInterpolationGearing(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(),
+        _indexStartValue, referenceEndTime,
         naturalPaymentTime, _weight, _payNotional, _factor);
   }
 
@@ -348,7 +433,8 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
     referenceEndTime[1] = TimeCalculator.getTimeBetween(date, getReferenceEndDates()[1]);
     final ZonedDateTime naturalPaymentDate = getPaymentDate().minusMonths(_monthLag - _conventionalMonthLag);
     final double naturalPaymentTime = TimeCalculator.getTimeBetween(date, naturalPaymentDate);
-    return new CouponInflationZeroCouponInterpolationGearing(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(), _indexStartValue, referenceEndTime,
+    return new CouponInflationZeroCouponInterpolationGearing(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(),
+        _indexStartValue, referenceEndTime,
         naturalPaymentTime, _weight, _payNotional, _factor);
   }
 
@@ -374,7 +460,8 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
     referenceEndTime[1] = TimeCalculator.getTimeBetween(date, _referenceEndDates[1]);
     final ZonedDateTime naturalPaymentDate = getPaymentDate().minusMonths(_monthLag - _conventionalMonthLag);
     final double naturalPaymentTime = TimeCalculator.getTimeBetween(date, naturalPaymentDate);
-    return new CouponInflationZeroCouponInterpolationGearing(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(), _indexStartValue, referenceEndTime,
+    return new CouponInflationZeroCouponInterpolationGearing(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(),
+        _indexStartValue, referenceEndTime,
         naturalPaymentTime, _weight, _payNotional, _factor);
   }
 
@@ -402,15 +489,15 @@ public class CouponInflationZeroCouponInterpolationGearingDefinition extends Cou
     result = prime * result + _conventionalMonthLag;
     long temp;
     temp = Double.doubleToLongBits(_factor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_indexStartValue);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _monthLag;
     result = prime * result + (_payNotional ? 1231 : 1237);
     result = prime * result + Arrays.hashCode(_referenceEndDates);
     result = prime * result + Arrays.hashCode(_referenceStartDates);
     temp = Double.doubleToLongBits(_weight);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

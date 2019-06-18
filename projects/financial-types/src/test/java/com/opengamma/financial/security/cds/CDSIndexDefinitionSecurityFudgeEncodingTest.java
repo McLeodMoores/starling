@@ -5,7 +5,7 @@
  */
 package com.opengamma.financial.security.cds;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
@@ -36,6 +36,9 @@ public class CDSIndexDefinitionSecurityFudgeEncodingTest extends AbstractFudgeBu
     CDS_INDEX_DEFINITION_SECURITY = security;
   }
 
+  /**
+   * Tests a cycle.
+   */
   @Test
   public void testCycle() {
     assertEquals(CDS_INDEX_DEFINITION_SECURITY, cycleObject(CreditDefaultSwapIndexDefinitionSecurity.class,

@@ -20,7 +20,7 @@ import com.sun.jersey.api.representation.Form;
 import com.sun.jersey.spi.container.ContainerRequest;
 
 /**
- * Test HttpMethodFilter.
+ * Test {@link HttpMethodFilter}.
  */
 @Test(groups = TestGroup.UNIT)
 public class HttpMethodFilterTest {

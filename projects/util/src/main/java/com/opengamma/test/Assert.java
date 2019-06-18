@@ -4,7 +4,6 @@
 package com.opengamma.test;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.Map;
@@ -62,7 +61,9 @@ public final class Assert {
       throw new AssertionError("Collections not equal: expected: null and actual: " + actual.toString());
     }
     assertEquals(actual.size(), expected.size(), message);
-    assertTrue(actual.containsAll(expected), message);
+    if (!actual.containsAll(expected)) {
+      throw new AssertionError("Collections not equal: expected: " + expected.toString() + " and actual: " + actual.toString());
+    }
   }
 
   /**
@@ -107,7 +108,19 @@ public final class Assert {
       throw new AssertionError("Maps not equal: expected: null and actual: " + actual.toString());
     }
     assertEquals(actual.size(), expected.size(), message);
-    assertTrue(actual.entrySet().containsAll(expected.entrySet()), message);
+    for (final Map.Entry<?, ?> entries : actual.entrySet()) {
+      if (entries.getValue() instanceof Collection) {
+        final Collection<?> value = (Collection<?>) expected.get(entries.getKey());
+        if (value == null) {
+          throw new AssertionError("No value found in expected map for key " + entries.getKey());
+        }
+        if (entries.getValue() instanceof Collection) {
+          assertEqualsNoOrder((Collection<?>) entries.getValue(), value, message);
+        }
+      } else {
+        assertEquals(entries.getValue(), expected.get(entries.getKey()));
+      }
+    }
   }
 
 }

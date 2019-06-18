@@ -23,7 +23,9 @@ import com.opengamma.util.money.Currency;
 // CSOFF
 /**
  * Dummy pool of obligors used for testing purposes
+ * @deprecated Deprecated
  */
+@Deprecated
 public class UnderlyingPoolDummyPool {
 
   //--------------------------------------------------------------------------------------------------------------------------------------------------

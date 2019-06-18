@@ -41,8 +41,8 @@ public class SpreadCurveShiftFunction implements CurveShiftFunction<SpreadDouble
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public SpreadDoublesCurve evaluate(final SpreadDoublesCurve curve, final double x, final double shift) {
@@ -51,8 +51,8 @@ public class SpreadCurveShiftFunction implements CurveShiftFunction<SpreadDouble
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public SpreadDoublesCurve evaluate(final SpreadDoublesCurve curve, final double x, final double shift, final String newName) {
@@ -61,8 +61,8 @@ public class SpreadCurveShiftFunction implements CurveShiftFunction<SpreadDouble
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public SpreadDoublesCurve evaluate(final SpreadDoublesCurve curve, final double[] x, final double[] y) {
@@ -71,8 +71,8 @@ public class SpreadCurveShiftFunction implements CurveShiftFunction<SpreadDouble
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public SpreadDoublesCurve evaluate(final SpreadDoublesCurve curve, final double[] x, final double[] y, final String newName) {

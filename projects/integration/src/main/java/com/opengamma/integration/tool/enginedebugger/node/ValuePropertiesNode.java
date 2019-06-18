@@ -26,18 +26,16 @@ public class ValuePropertiesNode implements TreeTableNode {
     if (_constraints != null && _constraints.getProperties() != null) {
       final List<String> propertyKeyList = new ArrayList<>(_constraints.getProperties());
       return new ValuePropertyNode(propertyKeyList.get(index), _constraints.getValues(propertyKeyList.get(index)).toString());
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
   public int getChildCount() {
     if (_constraints != null && _constraints.getProperties() != null) {
       return _constraints.getProperties().size();
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   @Override

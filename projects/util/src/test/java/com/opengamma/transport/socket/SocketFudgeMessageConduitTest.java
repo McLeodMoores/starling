@@ -27,6 +27,10 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.INTEGRATION)
 public class SocketFudgeMessageConduitTest {
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   public void simpleTest() throws Exception {
     final CollectingFudgeMessageReceiver collectingReceiver = new CollectingFudgeMessageReceiver();
     final ServerSocketFudgeMessageReceiver socketReceiver = new ServerSocketFudgeMessageReceiver(collectingReceiver, FudgeContext.GLOBAL_DEFAULT);
@@ -75,6 +79,7 @@ public class SocketFudgeMessageConduitTest {
   private static void parallelSendTest(final ExecutorService executor, final AtomicInteger maxConcurrency) throws Exception {
     final CollectingFudgeMessageReceiver receiver = new CollectingFudgeMessageReceiver() {
       private final AtomicInteger _concurrency = new AtomicInteger(0);
+
       @Override
       public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
         final int concurrency = _concurrency.incrementAndGet();
@@ -101,6 +106,10 @@ public class SocketFudgeMessageConduitTest {
     assertNotNull(receiver.waitForMessage(2000));
   }
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   public void parallelSendTestSingle() throws Exception {
     for (int retry = 0; retry < 3; retry++) {
       try {
@@ -114,6 +123,10 @@ public class SocketFudgeMessageConduitTest {
     }
   }
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   public void parallelSendTestMulti() throws Exception {
     for (int retry = 0; retry < 3; retry++) {
       try {

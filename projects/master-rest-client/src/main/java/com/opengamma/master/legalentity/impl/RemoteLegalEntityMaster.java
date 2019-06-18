@@ -29,8 +29,8 @@ import com.sun.jersey.api.client.GenericType;
  * Provides access to a remote {@link LegalEntityMaster}.
  */
 public class RemoteLegalEntityMaster
-    extends AbstractRemoteDocumentMaster<LegalEntityDocument>
-    implements LegalEntityMaster {
+extends AbstractRemoteDocumentMaster<LegalEntityDocument>
+implements LegalEntityMaster {
 
   /**
    * Creates an instance.
@@ -77,9 +77,8 @@ public class RemoteLegalEntityMaster
     if (uniqueId.isVersioned()) {
       final URI uri = new com.opengamma.master.legalentity.impl.DataLegalEntityUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(LegalEntityDocument.class);
-    } else {
-      return get(uniqueId, VersionCorrection.LATEST);
     }
+    return get(uniqueId, VersionCorrection.LATEST);
   }
 
   //-------------------------------------------------------------------------

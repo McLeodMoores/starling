@@ -67,7 +67,10 @@ public class VolatilitySurfaceManipulatorBuilder {
   }
 
   /**
-   * @deprecated Use {@link #parallelShift} with {@link ScenarioShiftType#ABSOLUTE}
+   * @param shift
+   *          the shift
+   * @return the builder
+   * @deprecated Use {@link #parallelShift(ScenarioShiftType, Number)} with {@link ScenarioShiftType#ABSOLUTE}
    */
   @Deprecated
   public VolatilitySurfaceManipulatorBuilder parallelShift(final Number shift) {
@@ -76,7 +79,10 @@ public class VolatilitySurfaceManipulatorBuilder {
   }
 
   /**
-   * @deprecated Use {@link #parallelShift} with {@link ScenarioShiftType#RELATIVE}
+   * @param shift
+   *          the shift
+   * @return the builder
+   * @deprecated Use {@link #parallelShift(ScenarioShiftType, Number)} with {@link ScenarioShiftType#RELATIVE}
    */
   @Deprecated
   public VolatilitySurfaceManipulatorBuilder constantMultiplicativeShift(final Number shift) {
@@ -85,7 +91,14 @@ public class VolatilitySurfaceManipulatorBuilder {
   }
 
   /**
-   * @deprecated Use {@link #shifts)} with {@link ScenarioShiftType#ABSOLUTE} and one shift
+   * @param x
+   *          the x co-ordinate of the value to shift
+   * @param y
+   *          the y co-ordinate of the value to shift
+   * @param shift
+   *          the shift
+   * @return the builder
+   * @deprecated Use {@link #shifts(ScenarioShiftType, VolatilitySurfaceShift...)} with {@link ScenarioShiftType#ABSOLUTE} and one shift
    */
   @Deprecated
   public VolatilitySurfaceManipulatorBuilder singleAdditiveShift(final Number x, final Number y, final Number shift) {
@@ -94,7 +107,14 @@ public class VolatilitySurfaceManipulatorBuilder {
   }
 
   /**
-   * @deprecated Use {@link #shifts)} with {@link ScenarioShiftType#ABSOLUTE} and multiple shifts
+   * @param x
+   *          the x co-ordinates of the values to shift
+   * @param y
+   *          the y co-ordinates of the values to shift
+   * @param shifts
+   *          the shifts
+   * @return the builder
+   * @deprecated Use {@link #shifts(ScenarioShiftType, VolatilitySurfaceShift...)} with {@link ScenarioShiftType#ABSOLUTE} and multiple shifts
    */
   @Deprecated
   public VolatilitySurfaceManipulatorBuilder multipleAdditiveShifts(final List<Number> x, final List<Number> y, final List<Number> shifts) {
@@ -103,7 +123,14 @@ public class VolatilitySurfaceManipulatorBuilder {
   }
 
   /**
-   * @deprecated Use {@link #shifts)} with {@link ScenarioShiftType#RELATIVE} and one shift
+   * @param x
+   *          the x co-ordinate of the value to shift
+   * @param y
+   *          the y co-ordinate of the value to shift
+   * @param shift
+   *          the shift
+   * @return the builder
+   * @deprecated Use {@link #shifts(ScenarioShiftType, VolatilitySurfaceShift...)} with {@link ScenarioShiftType#RELATIVE} and one shift
    */
   @Deprecated
   public VolatilitySurfaceManipulatorBuilder singleMultiplicativeShift(final Number x, final Number y, final Number shift) {
@@ -112,7 +139,14 @@ public class VolatilitySurfaceManipulatorBuilder {
   }
 
   /**
-   * @deprecated Use {@link #shifts)} with {@link ScenarioShiftType#RELATIVE} and multiple shifts
+   * @param x
+   *          the x co-ordinates of the value to shift
+   * @param y
+   *          the y co-ordinates of the value to shift
+   * @param shifts
+   *          the shifts
+   * @return the builder
+   * @deprecated Use {@link #shifts(ScenarioShiftType, VolatilitySurfaceShift...)} with {@link ScenarioShiftType#RELATIVE} and multiple shifts
    */
   @Deprecated
   public VolatilitySurfaceManipulatorBuilder multipleMultiplicativeShifts(final List<Number> x, final List<Number> y, final List<Number> shifts) {

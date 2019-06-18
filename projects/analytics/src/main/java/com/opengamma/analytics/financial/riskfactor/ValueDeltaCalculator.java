@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.riskfactor;
@@ -17,8 +17,8 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the value (or dollar) delta of an option given market data and the delta. The value delta is defined as the
- * option delta multiplied by the spot and shares per option.
+ * Calculates the value (or dollar) delta of an option given market data and the delta. The value delta is defined as the option delta multiplied by the spot
+ * and shares per option.
  */
 public final class ValueDeltaCalculator implements ValueGreekCalculator {
   /** Static instance */
@@ -27,7 +27,8 @@ public final class ValueDeltaCalculator implements ValueGreekCalculator {
   private static final MultiplierCalculator MULTIPLIER_CALCULATOR = new MultiplierCalculator();
 
   /**
-   * Gets an instance of this calculator
+   * Gets an instance of this calculator.
+   * 
    * @return The (singleton) instance
    */
   public static ValueDeltaCalculator getInstance() {
@@ -49,7 +50,7 @@ public final class ValueDeltaCalculator implements ValueGreekCalculator {
    */
   private static final class MultiplierCalculator extends InstrumentDerivativeVisitorAdapter<StaticReplicationDataBundle, Double> {
 
-    /* package */MultiplierCalculator() {
+    /* package */ MultiplierCalculator() {
     }
 
     @Override

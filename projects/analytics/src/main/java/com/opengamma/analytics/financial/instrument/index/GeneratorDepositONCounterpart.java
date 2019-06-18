@@ -39,13 +39,20 @@ public class GeneratorDepositONCounterpart extends GeneratorInstrument<Generator
 
   /**
    * Deposit generator from all the financial details.
-   * @param nameGenerator The generator name. Not null.
-   * @param currency The index currency. Not null.
-   * @param calendar The calendar associated to the index. Not null.
-   * @param dayCount The day count convention associated to the index.
-   * @param nameCounterpart The counterpart name. Not null.
+   * 
+   * @param nameGenerator
+   *          The generator name. Not null.
+   * @param currency
+   *          The index currency. Not null.
+   * @param calendar
+   *          The calendar associated to the index. Not null.
+   * @param dayCount
+   *          The day count convention associated to the index.
+   * @param nameCounterpart
+   *          The counterpart name. Not null.
    */
-  public GeneratorDepositONCounterpart(final String nameGenerator, final Currency currency, final Calendar calendar, final DayCount dayCount, final String nameCounterpart) {
+  public GeneratorDepositONCounterpart(final String nameGenerator, final Currency currency, final Calendar calendar, final DayCount dayCount,
+      final String nameCounterpart) {
     super(nameGenerator);
     ArgumentChecker.notNull(currency, "Currency");
     ArgumentChecker.notNull(calendar, "Calendar");
@@ -59,6 +66,7 @@ public class GeneratorDepositONCounterpart extends GeneratorInstrument<Generator
 
   /**
    * Gets the index currency.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -67,6 +75,7 @@ public class GeneratorDepositONCounterpart extends GeneratorInstrument<Generator
 
   /**
    * Gets the calendar associated to the index.
+   * 
    * @return The calendar.
    */
   public Calendar getCalendar() {
@@ -75,6 +84,7 @@ public class GeneratorDepositONCounterpart extends GeneratorInstrument<Generator
 
   /**
    * Gets the day count convention associated to the index.
+   * 
    * @return The day count convention.
    */
   public DayCount getDayCount() {
@@ -83,6 +93,7 @@ public class GeneratorDepositONCounterpart extends GeneratorInstrument<Generator
 
   /**
    * Gets the counterpart name.
+   * 
    * @return The name.
    */
   public String getNameCounterpart() {
@@ -91,14 +102,20 @@ public class GeneratorDepositONCounterpart extends GeneratorInstrument<Generator
 
   /**
    * Generate an overnight deposit for the given counterpart.
-   * @param date The reference date.
-   * @param rate The deposit rate.
-   * @param notional The deposit notional.
-   * @param attribute The ON deposit attributes. The deposit starts at today+start period. Only the start period is used.
+   * 
+   * @param date
+   *          The reference date.
+   * @param rate
+   *          The deposit rate.
+   * @param notional
+   *          The deposit notional.
+   * @param attribute
+   *          The ON deposit attributes. The deposit starts at today+start period. Only the start period is used.
    * @return The overnight deposit.
    */
   @Override
-  public DepositCounterpartDefinition generateInstrument(final ZonedDateTime date, final double rate, final double notional, final GeneratorAttributeIR attribute) {
+  public DepositCounterpartDefinition generateInstrument(final ZonedDateTime date, final double rate, final double notional,
+      final GeneratorAttributeIR attribute) {
     ArgumentChecker.notNull(date, "Reference date");
     final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(date, attribute.getStartPeriod(), _calendar);
     final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, 1, _calendar);

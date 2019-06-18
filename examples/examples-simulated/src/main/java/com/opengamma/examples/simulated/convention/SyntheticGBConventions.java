@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.convention;
@@ -12,6 +12,7 @@ import org.apache.commons.lang.Validate;
 import org.threeten.bp.Period;
 
 import com.opengamma.core.id.ExternalSchemes;
+import com.opengamma.financial.convention.ConventionBundle;
 import com.opengamma.financial.convention.ConventionBundleMaster;
 import com.opengamma.financial.convention.ConventionBundleMasterUtils;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -24,9 +25,9 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * Instrument
- * 
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class SyntheticGBConventions {
 
   public static synchronized void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {
@@ -47,7 +48,8 @@ public class SyntheticGBConventions {
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("GBPLIBORP1M")), "GBP LIBOR 1m", act365, modified, Period.ofMonths(1), 0, false, gb);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("GBPLIBORP2M")), "GBP LIBOR 2m", act365, modified, Period.ofMonths(2), 0, false, gb);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("GBPLIBORP3M")), "GBP LIBOR 3m", act365, modified, Period.ofMonths(3), 0, false, gb);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("GBPLIBORP6M"), simpleNameSecurityId("GBP LIBOR 6m")), "GBP LIBOR 6m", act365, modified, Period.ofMonths(6), 0, false, gb);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("GBPLIBORP6M"), simpleNameSecurityId("GBP LIBOR 6m")), "GBP LIBOR 6m", act365, modified,
+        Period.ofMonths(6), 0, false, gb);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("GBPLIBORP12M")), "GBP LIBOR 12m", act365, modified, Period.ofMonths(12), 0, false, gb);
 
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("GBPCASHP1D")), "GBPCASHP1D", act365, following, Period.ofDays(1), 0, false, gb);

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.convention;
@@ -12,6 +12,7 @@ import org.apache.commons.lang.Validate;
 import org.threeten.bp.Period;
 
 import com.opengamma.core.id.ExternalSchemes;
+import com.opengamma.financial.convention.ConventionBundle;
 import com.opengamma.financial.convention.ConventionBundleMaster;
 import com.opengamma.financial.convention.ConventionBundleMasterUtils;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -24,8 +25,9 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * 
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class SyntheticJPConventions {
 
   public static synchronized void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {
@@ -41,12 +43,18 @@ public class SyntheticJPConventions {
 
     final ConventionBundleMasterUtils utils = new ConventionBundleMasterUtils(conventionMaster);
 
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("JPYLIBORP7D"), simpleNameSecurityId("JPY LIBOR 1w")), "JPY LIBOR 1w", act360, following, Period.ofDays(7), 2, false, jp);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("JPYLIBORP14D"), simpleNameSecurityId("JPY LIBOR 2w")), "JPY LIBOR 2w", act360, following, Period.ofDays(14), 2, false, jp);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("JPYLIBORP1M"), simpleNameSecurityId("JPY LIBOR 1m")), "JPY LIBOR 1m", act360, following, Period.ofMonths(1), 2, false, jp);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("JPYLIBORP2M"), simpleNameSecurityId("JPY LIBOR 2m")), "JPY LIBOR 2m", act360, following, Period.ofMonths(2), 2, false, jp);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("JPYLIBORP3M"), simpleNameSecurityId("JPY LIBOR 3m")), "JPY LIBOR 3m", act360, following, Period.ofMonths(3), 2, false, jp);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("JPYLIBORP6M"), simpleNameSecurityId("JPY LIBOR 6m")), "JPY LIBOR 6m", act360, following, Period.ofMonths(6), 2, false, jp);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("JPYLIBORP7D"), simpleNameSecurityId("JPY LIBOR 1w")), "JPY LIBOR 1w", act360, following,
+        Period.ofDays(7), 2, false, jp);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("JPYLIBORP14D"), simpleNameSecurityId("JPY LIBOR 2w")), "JPY LIBOR 2w", act360, following,
+        Period.ofDays(14), 2, false, jp);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("JPYLIBORP1M"), simpleNameSecurityId("JPY LIBOR 1m")), "JPY LIBOR 1m", act360, following,
+        Period.ofMonths(1), 2, false, jp);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("JPYLIBORP2M"), simpleNameSecurityId("JPY LIBOR 2m")), "JPY LIBOR 2m", act360, following,
+        Period.ofMonths(2), 2, false, jp);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("JPYLIBORP3M"), simpleNameSecurityId("JPY LIBOR 3m")), "JPY LIBOR 3m", act360, following,
+        Period.ofMonths(3), 2, false, jp);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("JPYLIBORP6M"), simpleNameSecurityId("JPY LIBOR 6m")), "JPY LIBOR 6m", act360, following,
+        Period.ofMonths(6), 2, false, jp);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("JPYLIBORP12M")), "JPY LIBOR 12m", act360, following, Period.ofMonths(12), 2, false, jp);
 
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("JPYCASHP1D")),

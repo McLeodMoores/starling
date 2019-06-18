@@ -36,14 +36,14 @@ import com.opengamma.provider.security.SecurityProvider;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * The portfolio loader tool
+ * The portfolio loader tool.
  */
 @Scriptable
 public class ResolvingPortfolioLoaderTool extends AbstractTool<IntegrationToolContext> {
 
   /** File name option flag */
   private static final String FILE_NAME_OPT = "f";
-  /** Portfolio name option flag*/
+  /** Portfolio name option flag */
   private static final String PORTFOLIO_NAME_OPT = "n";
   /** Write option flag */
   private static final String WRITE_OPT = "w";
@@ -51,24 +51,25 @@ public class ResolvingPortfolioLoaderTool extends AbstractTool<IntegrationToolCo
   private static final String OVERWRITE_OPT = "o";
   /** Verbose option flag */
   private static final String VERBOSE_OPT = "v";
-  /** Time series data provider option flag*/
+  /** Time series data provider option flag */
   private static final String TIME_SERIES_DATAPROVIDER_OPT = "p";
-  /** Time series data field option flag*/
+  /** Time series data field option flag */
   private static final String TIME_SERIES_DATAFIELD_OPT = "d";
   /** Date format option flag */
   private static final String DATE_FORMAT_OPT = "df";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new ResolvingPortfolioLoaderTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Loads the portfolio into the position master.
    */
@@ -83,8 +84,7 @@ public class ResolvingPortfolioLoaderTool extends AbstractTool<IntegrationToolCo
         context.getPositionMaster(),
         context.getSecurityMaster(),
         getCommandLine().hasOption(WRITE_OPT),
-        getCommandLine().hasOption(OVERWRITE_OPT)
-    );
+        getCommandLine().hasOption(OVERWRITE_OPT));
 
     String dateFormat = "yyyy-MM-dd";
     if (getCommandLine().hasOption(DATE_FORMAT_OPT)) {
@@ -102,8 +102,7 @@ public class ResolvingPortfolioLoaderTool extends AbstractTool<IntegrationToolCo
     final PositionReader positionReader = constructPortfolioReader(
         getCommandLine().getOptionValue(FILE_NAME_OPT),
         context.getSecurityProvider(),
-        builder.toFormatter()
-    );
+        builder.toFormatter());
 
     // Create portfolio copier
     final ResolvingPortfolioCopier portfolioCopier = new ResolvingPortfolioCopier(
@@ -111,9 +110,8 @@ public class ResolvingPortfolioLoaderTool extends AbstractTool<IntegrationToolCo
         context.getHistoricalTimeSeriesProvider(),
         context.getBloombergReferenceDataProvider(),
         getOptionValue(TIME_SERIES_DATAPROVIDER_OPT, "CMPL"),
-        getCommandLine().getOptionValues(TIME_SERIES_DATAFIELD_OPT) == null ?
-            new String[]{"PX_LAST"} : getCommandLine().getOptionValues(TIME_SERIES_DATAFIELD_OPT)
-    );
+        getCommandLine().getOptionValues(TIME_SERIES_DATAFIELD_OPT) == null ? new String[] { "PX_LAST" }
+            : getCommandLine().getOptionValues(TIME_SERIES_DATAFIELD_OPT));
 
     // Create visitor for verbose/quiet mode
     PortfolioCopierVisitor portfolioCopierVisitor;
@@ -146,10 +144,9 @@ public class ResolvingPortfolioLoaderTool extends AbstractTool<IntegrationToolCo
       }
       // Create a portfolio writer to persist imported positions, trades and securities to the OG masters
       return new MasterPositionWriter(portfolioName, portfolioMaster, positionMaster, securityMaster, false, false, false);
-    } else {
-      // Create a dummy portfolio writer to pretty-print instead of persisting
-      return new PrettyPrintingPositionWriter(true);
     }
+    // Create a dummy portfolio writer to pretty-print instead of persisting
+    return new PrettyPrintingPositionWriter(true);
   }
 
   // TODO take a stream as well as the file name, BBG master
@@ -174,11 +171,9 @@ public class ResolvingPortfolioLoaderTool extends AbstractTool<IntegrationToolCo
     }
   }
 
-
   private String getOptionValue(final String optionName, final String defaultValue) {
     return getCommandLine().getOptionValue(optionName) == null ? defaultValue : getCommandLine().getOptionValue(optionName);
   }
-
 
   @Override
   protected Options createOptions(final boolean contextProvided) {
@@ -223,6 +218,5 @@ public class ResolvingPortfolioLoaderTool extends AbstractTool<IntegrationToolCo
 
     return options;
   }
-
 
 }

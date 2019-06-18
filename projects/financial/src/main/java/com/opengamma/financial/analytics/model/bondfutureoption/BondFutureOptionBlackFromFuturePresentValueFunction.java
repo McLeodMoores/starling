@@ -29,10 +29,11 @@ import com.opengamma.financial.security.option.BondFutureOptionSecurity;
 import com.opengamma.id.ExternalId;
 
 /**
- *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondFutureOptionBlackFromFuturePresentValueFunction extends BondFutureOptionBlackFunction {
-  /** String indicating the calculation method */
+  /** String indicating the calculation method. */
   public static final String FUTURES_PRICE = "FromFuturePrice";
   private static final PresentValueBlackCalculator CALCULATOR = PresentValueBlackCalculator.getInstance();
 
@@ -41,7 +42,8 @@ public class BondFutureOptionBlackFromFuturePresentValueFunction extends BondFut
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative bondFutureOption, final YieldCurveWithBlackCubeBundle data, final MultiCurveCalculationConfig curveCalculationConfig,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative bondFutureOption, final YieldCurveWithBlackCubeBundle data,
+      final MultiCurveCalculationConfig curveCalculationConfig,
       final ValueSpecification spec, final FunctionInputs inputs, final Set<ValueRequirement> desiredValue, final BondFutureOptionSecurity security) {
     final Object underlyingValue = inputs.getValue(MarketDataRequirementNames.MARKET_VALUE);
     if (underlyingValue == null) {

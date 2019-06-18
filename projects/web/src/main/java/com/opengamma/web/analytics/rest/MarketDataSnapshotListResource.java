@@ -72,7 +72,7 @@ public class MarketDataSnapshotListResource {
 
     final Multimap<String, ManageableMarketDataSnapshot> snapshotsByBasisView = LinkedListMultimap.create();
     for (final MarketDataSnapshotDocument doc : MarketDataSnapshotSearchIterator.iterable(_snapshotMaster, snapshotSearchRequest)) {
-      final ManageableMarketDataSnapshot snapshot = doc.getSnapshot();
+      final ManageableMarketDataSnapshot snapshot = (ManageableMarketDataSnapshot) doc.getNamedSnapshot();
       if (snapshot.getUniqueId() == null) {
         LOGGER.warn("Ignoring snapshot with null unique identifier {}", snapshot.getName());
         continue;

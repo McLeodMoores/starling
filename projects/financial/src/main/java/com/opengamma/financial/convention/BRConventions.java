@@ -24,14 +24,18 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Contains information used to construct standard versions of BRL instruments
+ * Contains information used to construct standard versions of BRL instruments.
+ *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class BRConventions {
   /** Month codes used by Bloomberg */
-  private static final char[] BBG_MONTH_CODES = new char[] {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'};
+  private static final char[] BBG_MONTH_CODES = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K' };
 
   /**
-   * @param conventionMaster The convention master, not null
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static synchronized void addFixedIncomeInstrumentConventions(final InMemoryConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -60,7 +64,8 @@ public class BRConventions {
       final ExternalId tullettImpliedDeposit = tullettPrebonSecurityId("LMIDPBRLSPT" + (i < 10 ? "0" : "") + i + "M");
       final ExternalId simpleImpliedDeposit = simpleNameSecurityId(impliedDepositName);
       utils.addConventionBundle(ExternalIdBundle.of(bbgDeposit, simpleDeposit), depositName, bus252, following, Period.ofMonths(i), 2, false, br);
-      utils.addConventionBundle(ExternalIdBundle.of(tullettImpliedDeposit, simpleImpliedDeposit), impliedDepositName, bus252, following, Period.ofMonths(i), 2, false, br);
+      utils.addConventionBundle(ExternalIdBundle.of(tullettImpliedDeposit, simpleImpliedDeposit), impliedDepositName, bus252, following, Period.ofMonths(i), 2,
+          false, br);
     }
 
     for (int i = 1; i < 2; i++) {
@@ -91,9 +96,12 @@ public class BRConventions {
         ExternalIdBundle.of(bloombergTickerSecurityId("BZDIOVRA Index"), simpleNameSecurityId("Brazil Cetip Interbank Deposit Rate")),
         "Brazil Cetip Interbank Deposit Rate", bus252, following, Period.ofDays(1), 0, false, br, 0);
 
-    utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("BRL_DI_SWAP")), "BRL_DI_SWAP", swapFixedLegDayCount, swapFixedLegBusinessDayConvention, swapFixedLegPaymentFrequency,
-        swapFixedLegSettlementDays, swapFixedLegRegion, swapFixedLegCompoundingFrequency, swapFixedLegCompoundingType, swapFloatingLegDayCount, swapFloatingLegBusinessDayConvention,
-        swapFloatingLegPaymentFrequency, swapFloatingLegSettlementDays, swapFloatingLegCompoundingFrequency, swapFloatingLegCompoundingType, swapFloatingLegInitialRate, swapFloatingLegRegion, isEOM);
+    utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("BRL_DI_SWAP")), "BRL_DI_SWAP", swapFixedLegDayCount, swapFixedLegBusinessDayConvention,
+        swapFixedLegPaymentFrequency,
+        swapFixedLegSettlementDays, swapFixedLegRegion, swapFixedLegCompoundingFrequency, swapFixedLegCompoundingType, swapFloatingLegDayCount,
+        swapFloatingLegBusinessDayConvention,
+        swapFloatingLegPaymentFrequency, swapFloatingLegSettlementDays, swapFloatingLegCompoundingFrequency, swapFloatingLegCompoundingType,
+        swapFloatingLegInitialRate, swapFloatingLegRegion, isEOM);
   }
 
 }

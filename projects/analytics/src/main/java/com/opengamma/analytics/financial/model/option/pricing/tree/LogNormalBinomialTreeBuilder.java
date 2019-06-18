@@ -15,10 +15,13 @@ import com.opengamma.analytics.math.rootfinding.RealSingleRootFinder;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Builds a binomial tree where the nodes are set to locally match a log-normal process. The process that the tree is emulating is of the form  df/f = mu(f,t)dt + sigma(f,t)dw.
- * From a node at (f,t) the two daughter nodes f+ and f- (at time t + dt) are set such that p*(1-p)*(ln(f+/f-))^2 = dt*sigma(f,t)^2, where p is the probability of reaching f+ from f.
- * The forwarding condition is p*f+ + (1-p)*f- = f*exp(mu(f,t)*dt). This is adapted from the paper Derman and Kani, The Volatility Smile and Its Implied Tree
- * @param <T> A GeneralLogNormalOptionDataBundle or anything that extends it
+ * Builds a binomial tree where the nodes are set to locally match a log-normal process. The process that the tree is emulating is of the form df/f = mu(f,t)dt
+ * + sigma(f,t)dw. From a node at (f,t) the two daughter nodes f+ and f- (at time t + dt) are set such that p*(1-p)*(ln(f+/f-))^2 = dt*sigma(f,t)^2, where p is
+ * the probability of reaching f+ from f. The forwarding condition is p*f+ + (1-p)*f- = f*exp(mu(f,t)*dt). This is adapted from the paper Derman and Kani, The
+ * Volatility Smile and Its Implied Tree
+ * 
+ * @param <T>
+ *          A GeneralLogNormalOptionDataBundle or anything that extends it
  */
 public class LogNormalBinomialTreeBuilder<T extends GeneralLogNormalOptionDataBundle> extends BinomialTreeBuilder<T> {
 
@@ -52,8 +55,9 @@ public class LogNormalBinomialTreeBuilder<T extends GeneralLogNormalOptionDataBu
   protected double getNextHigherNode(final double dt, final double sigma, final double forward, final double lowerNode) {
     final Function1D<Double, Double> func = new UpperNodes(dt, sigma, forward, lowerNode);
     final double fTry = forward * Math.exp(sigma * Math.sqrt(dt));
-    //ensure we do not get p = 1 and thus a divide by zero
-    final double[] limits = BRACKET_ROOT.getBracketedPoints(func, (forward - lowerNode) / 0.6 + lowerNode, (forward - lowerNode) / 0.4 + lowerNode, forward * (1 + EPS), 10 * fTry);
+    // ensure we do not get p = 1 and thus a divide by zero
+    final double[] limits = BRACKET_ROOT.getBracketedPoints(func, (forward - lowerNode) / 0.6 + lowerNode, (forward - lowerNode) / 0.4 + lowerNode,
+        forward * (1 + EPS), 10 * fTry);
     return ROOT.getRoot(func, limits[0], limits[1]);
   }
 
@@ -77,7 +81,7 @@ public class LogNormalBinomialTreeBuilder<T extends GeneralLogNormalOptionDataBu
     private final double _f;
     private final double _s;
 
-    public UpperNodes(final double dt, final double sigma, final double forward, final double s) {
+    UpperNodes(final double dt, final double sigma, final double forward, final double s) {
       _rootdt = Math.sqrt(dt);
       _sigma = sigma;
       _f = forward;
@@ -100,7 +104,7 @@ public class LogNormalBinomialTreeBuilder<T extends GeneralLogNormalOptionDataBu
     private final double _f;
     private final double _s;
 
-    public LowerNodes(final double dt, final double sigma, final double forward, final double s) {
+    LowerNodes(final double dt, final double sigma, final double forward, final double s) {
       _rootdt = Math.sqrt(dt);
       _sigma = sigma;
       _f = forward;
@@ -122,7 +126,7 @@ public class LogNormalBinomialTreeBuilder<T extends GeneralLogNormalOptionDataBu
     private final double _f;
     private final double _spot;
 
-    public CentreNode(final double dt, final double sigma, final double forward, final double spot) {
+    CentreNode(final double dt, final double sigma, final double forward, final double spot) {
       _rootdt = Math.sqrt(dt);
       _sigma = sigma;
       _f = forward;

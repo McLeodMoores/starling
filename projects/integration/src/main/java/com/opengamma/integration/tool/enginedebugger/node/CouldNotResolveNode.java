@@ -8,7 +8,7 @@ package com.opengamma.integration.tool.enginedebugger.node;
 import com.opengamma.engine.value.ValueRequirement;
 
 /**
- * Node for when a valueReq couldn't be resolved
+ * Node for when a valueReq couldn't be resolved.
  */
 public class CouldNotResolveNode extends ValueRequirementNode {
 

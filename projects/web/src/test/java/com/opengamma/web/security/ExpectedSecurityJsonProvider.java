@@ -124,52 +124,52 @@ import com.opengamma.util.time.Expiry;
     return visitFutureSecurity(security);
   }
 
-  private JSONObject visitFutureSecurity(final FutureSecurity security) {
+  private static JSONObject visitFutureSecurity(final FutureSecurity security) {
     final JSONObject result = security.accept(new FinancialSecurityVisitorSameValueAdapter<JSONObject>(null) {
 
       @Override
-      public JSONObject visitBondFutureSecurity(final BondFutureSecurity security) {
+      public JSONObject visitBondFutureSecurity(final BondFutureSecurity bondFutureSecurity) {
         final Map<String, Object> secMap = Maps.newHashMap();
 
         final Map<String, Object> templateData = Maps.newHashMap();
-        addDefaultFields(security, templateData);
-        addExpiry(templateData, security.getExpiry());
-        templateData.put("firstDeliveryDate", security.getFirstDeliveryDate().toString());
-        templateData.put("lastDeliveryDate", security.getLastDeliveryDate().toString());
-        if (StringUtils.isNotBlank(security.getTradingExchange())) {
-          templateData.put("tradingExchange", security.getTradingExchange());
+        addDefaultFields(bondFutureSecurity, templateData);
+        addExpiry(templateData, bondFutureSecurity.getExpiry());
+        templateData.put("firstDeliveryDate", bondFutureSecurity.getFirstDeliveryDate().toString());
+        templateData.put("lastDeliveryDate", bondFutureSecurity.getLastDeliveryDate().toString());
+        if (StringUtils.isNotBlank(bondFutureSecurity.getTradingExchange())) {
+          templateData.put("tradingExchange", bondFutureSecurity.getTradingExchange());
         }
-        if (StringUtils.isNotBlank(security.getSettlementExchange())) {
-          templateData.put("settlementExchange", security.getSettlementExchange());
+        if (StringUtils.isNotBlank(bondFutureSecurity.getSettlementExchange())) {
+          templateData.put("settlementExchange", bondFutureSecurity.getSettlementExchange());
         }
-        if (security.getCurrency() != null && StringUtils.isNotBlank(security.getCurrency().getCode())) {
-          templateData.put("currency", security.getCurrency().getCode());
+        if (bondFutureSecurity.getCurrency() != null && StringUtils.isNotBlank(bondFutureSecurity.getCurrency().getCode())) {
+          templateData.put("currency", bondFutureSecurity.getCurrency().getCode());
         }
-        final List<BondFutureDeliverable> basket = security.getBasket();
+        final List<BondFutureDeliverable> basket = bondFutureSecurity.getBasket();
         if (!basket.isEmpty()) {
           final Map<String, String> underlyingBond = Maps.newHashMap();
           for (final BondFutureDeliverable bondFutureDeliverable : basket) {
             underlyingBond.put(ExternalSchemes.BLOOMBERG_TICKER.getName() + "-" + bondFutureDeliverable.getIdentifiers().getValue(ExternalSchemes.BLOOMBERG_TICKER),
-              String.valueOf(bondFutureDeliverable.getConversionFactor()));
+                String.valueOf(bondFutureDeliverable.getConversionFactor()));
           }
           templateData.put("underlyingBond", underlyingBond);
         }
-        templateData.put("unitAmount", security.getUnitAmount());
+        templateData.put("unitAmount", bondFutureSecurity.getUnitAmount());
         secMap.put(TEMPLATE_DATA, templateData);
-        addSecurityXml(security, secMap);
-        addExternalIds(security, secMap);
+        addSecurityXml(bondFutureSecurity, secMap);
+        addExternalIds(bondFutureSecurity, secMap);
         return new JSONObject(secMap);
       }
     });
     return result;
   }
 
-  private void addSecurityXml(final FinancialSecurity security, final Map<String, Object> secMap) {
+  private static void addSecurityXml(final FinancialSecurity security, final Map<String, Object> secMap) {
     final String secXml = JodaBeanSerialization.serializer(true).xmlWriter().write(security, true);
     secMap.put("securityXml", secXml);
   }
 
-  private void addExternalIds(final FinancialSecurity security, final Map<String, Object> secMap) {
+  private static void addExternalIds(final FinancialSecurity security, final Map<String, Object> secMap) {
     final Map<String, String> identifiers = Maps.newHashMap();
     final ExternalIdBundle externalIdBundle = security.getExternalIdBundle();
     if (externalIdBundle.getExternalId(ExternalSchemes.BLOOMBERG_BUID) != null) {
@@ -190,7 +190,7 @@ import com.opengamma.util.time.Expiry;
     secMap.put("identifiers", identifiers);
   }
 
-  private void addDefaultFields(final FinancialSecurity security, final Map<String, Object> templateData) {
+  private static void addDefaultFields(final FinancialSecurity security, final Map<String, Object> templateData) {
     if (StringUtils.isNotBlank(security.getName())) {
       templateData.put("name", security.getName());
     }
@@ -208,7 +208,7 @@ import com.opengamma.util.time.Expiry;
     }
   }
 
-  private void addExpiry(final Map<String, Object> templateData, final Expiry expiry) {
+  private static void addExpiry(final Map<String, Object> templateData, final Expiry expiry) {
     final Map<String, Object> expiryDateMap = Maps.newHashMap();
     expiryDateMap.put("datetime", expiry.getExpiry().toOffsetDateTime().toString());
     expiryDateMap.put("timezone", expiry.getExpiry().getZone().toString());

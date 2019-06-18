@@ -43,6 +43,7 @@ public abstract class AbstractSecurityLoader implements SecurityLoader {
 
   @Override
   public Map<ExternalIdBundle, UniqueId> loadSecurities(final Iterable<ExternalIdBundle> externalIdBundles) {
+    ArgumentChecker.notNull(externalIdBundles, "externalIdBundles");
     final SecurityLoaderRequest request = SecurityLoaderRequest.create(externalIdBundles);
     final SecurityLoaderResult result = loadSecurities(request);
     return result.getResultMap();

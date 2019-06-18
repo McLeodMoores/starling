@@ -49,10 +49,11 @@ public class BloombergBpipeApplicationUserIdentityProvider {
   }
 
   /**
-   * Return an authorized identity for a bpipe application
+   * Return an authorized identity for a bpipe application.
    *
    * @return the bloomberg identity for an application
-   * @throws UnauthenticatedException if an authorized identity cannot be created from bloomberg
+   * @throws UnauthenticatedException
+   *           if an authorized identity cannot be created from bloomberg
    */
   public Identity getIdentity() {
 
@@ -64,7 +65,7 @@ public class BloombergBpipeApplicationUserIdentityProvider {
       final EventQueue tokenEventQueue = new EventQueue();
       session.generateToken(new CorrelationID(), tokenEventQueue);
       String token = null;
-      //Generate token responses will come on this dedicated queue. There would be no other messages on that queue.
+      // Generate token responses will come on this dedicated queue. There would be no other messages on that queue.
       Event event = tokenEventQueue.nextEvent(WAIT_TIME_MS);
       if (Event.EventType.TOKEN_STATUS.equals(event.eventType()) || Event.EventType.REQUEST_STATUS.equals(event.eventType())) {
         for (final Message msg : event) {
@@ -104,9 +105,11 @@ public class BloombergBpipeApplicationUserIdentityProvider {
         }
       }
     } catch (IOException | InterruptedException ex) {
-      throw new UnauthenticatedException(String.format("Bloomberg authorization failed using authentication option: %s", bloombergConnector.getSessionOptions().authenticationOptions()));
+      throw new UnauthenticatedException(
+          String.format("Bloomberg authorization failed using authentication option: %s", bloombergConnector.getSessionOptions().authenticationOptions()));
     }
-    throw new UnauthenticatedException(String.format("Bloomberg authorization failed using authentication option: %s", bloombergConnector.getSessionOptions().authenticationOptions()));
+    throw new UnauthenticatedException(
+        String.format("Bloomberg authorization failed using authentication option: %s", bloombergConnector.getSessionOptions().authenticationOptions()));
   }
 
 }

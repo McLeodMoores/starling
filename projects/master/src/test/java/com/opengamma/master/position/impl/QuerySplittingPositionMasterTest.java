@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.position.impl;
@@ -32,7 +32,10 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class QuerySplittingPositionMasterTest {
 
-  public void testSearch_disabled() {
+  /**
+   *
+   */
+  public void testSearchDisabled() {
     final PositionMaster mock = Mockito.mock(PositionMaster.class);
     final QuerySplittingPositionMaster instance = new QuerySplittingPositionMaster(mock);
     final PositionSearchRequest request = new PositionSearchRequest();
@@ -42,7 +45,10 @@ public class QuerySplittingPositionMasterTest {
     assertSame(instance.search(request), result);
   }
 
-  public void testSearch_no_positions() {
+  /**
+   *
+   */
+  public void testSearchNoPositions() {
     final PositionMaster mock = Mockito.mock(PositionMaster.class);
     final QuerySplittingPositionMaster instance = new QuerySplittingPositionMaster(mock);
     final PositionSearchRequest request = new PositionSearchRequest();
@@ -52,7 +58,10 @@ public class QuerySplittingPositionMasterTest {
     assertSame(instance.search(request), result);
   }
 
-  public void testSearch_small() {
+  /**
+   *
+   */
+  public void testSearchSmall() {
     final PositionMaster mock = Mockito.mock(PositionMaster.class);
     final QuerySplittingPositionMaster instance = new QuerySplittingPositionMaster(mock);
     final PositionSearchRequest request = new PositionSearchRequest();
@@ -63,7 +72,10 @@ public class QuerySplittingPositionMasterTest {
     assertSame(instance.search(request), result);
   }
 
-  public void testSearch_invalid_paging() {
+  /**
+   *
+   */
+  public void testSearchInvalidPaging() {
     final PositionMaster mock = Mockito.mock(PositionMaster.class);
     final QuerySplittingPositionMaster instance = new QuerySplittingPositionMaster(mock);
     final PositionSearchRequest request = new PositionSearchRequest();
@@ -78,7 +90,10 @@ public class QuerySplittingPositionMasterTest {
     assertSame(instance.search(request), result);
   }
 
-  public void testSearch_large_page_all() {
+  /**
+   *
+   */
+  public void testSearchLargePageAll() {
     final PositionMaster mock = Mockito.mock(PositionMaster.class);
     final QuerySplittingPositionMaster instance = new QuerySplittingPositionMaster(mock);
     final VersionCorrection now = VersionCorrection.of(Instant.now(), Instant.now());
@@ -130,6 +145,9 @@ public class QuerySplittingPositionMasterTest {
     assertEquals(instance.search(request), result);
   }
 
+  /**
+   *
+   */
   public void testHistory() {
     final PositionMaster mock = Mockito.mock(PositionMaster.class);
     final QuerySplittingPositionMaster instance = new QuerySplittingPositionMaster(mock);
@@ -139,6 +157,9 @@ public class QuerySplittingPositionMasterTest {
     assertSame(instance.history(request), result);
   }
 
+  /**
+   *
+   */
   public void testGetTrade() {
     final PositionMaster mock = Mockito.mock(PositionMaster.class);
     final QuerySplittingPositionMaster instance = new QuerySplittingPositionMaster(mock);

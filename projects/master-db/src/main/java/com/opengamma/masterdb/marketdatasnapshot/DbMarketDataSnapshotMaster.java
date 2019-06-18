@@ -56,11 +56,9 @@ import com.opengamma.util.paging.Paging;
 /**
  * A snapshot master implementation using a database for persistence.
  * <p>
- * This is a full implementation of the exchange master using an SQL database.
- * Full details of the API are in {@link MarketDataSnapshotMaster}.
+ * This is a full implementation of the exchange master using an SQL database. Full details of the API are in {@link MarketDataSnapshotMaster}.
  * <p>
- * The SQL is stored externally in {@code DbMarketDataSnapshotMaster.elsql}.
- * Alternate databases or specific SQL requirements can be handled using database
+ * The SQL is stored externally in {@code DbMarketDataSnapshotMaster.elsql}. Alternate databases or specific SQL requirements can be handled using database
  * specific overrides, such as {@code DbMarketDataSnapshotMaster-MySpecialDB.elsql}.
  * <p>
  * This class is mutable but must be treated as immutable after configuration.
@@ -70,7 +68,7 @@ public class DbMarketDataSnapshotMaster
     implements MarketDataSnapshotMaster {
 
   static {
-    //Registered here because I can't guarantee that the classes themselves are loaded
+    // Registered here because I can't guarantee that the classes themselves are loaded
     final FudgeTypeDictionary typeDictionary = OpenGammaFudgeContext.getInstance().getTypeDictionary();
     typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableUnstructuredMarketDataSnapshot",
         ManageableUnstructuredMarketDataSnapshot.class);
@@ -114,14 +112,15 @@ public class DbMarketDataSnapshotMaster
   /**
    * Creates an instance.
    *
-   * @param dbConnector  the database connector, not null
+   * @param dbConnector
+   *          the database connector, not null
    */
   public DbMarketDataSnapshotMaster(final DbConnector dbConnector) {
     super(dbConnector, IDENTIFIER_SCHEME_DEFAULT);
     setElSqlBundle(ElSqlBundle.of(dbConnector.getDialect().getElSqlConfig(), DbMarketDataSnapshotMaster.class));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public MarketDataSnapshotSearchResult search(final MarketDataSnapshotSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
@@ -157,24 +156,24 @@ public class DbMarketDataSnapshotMaster
     args.addValue("paging_offset", request.getPagingRequest().getFirstItem());
     args.addValue("paging_fetch", request.getPagingRequest().getPagingSize());
 
-    final String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args)};
+    final String[] sql = { getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args) };
     doSearch(request.getPagingRequest(), sql, args, new MarketDataSnapshotDocumentExtractor(request.isIncludeData()), result);
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public MarketDataSnapshotDocument get(final UniqueId uniqueId) {
     return doGet(uniqueId, new MarketDataSnapshotDocumentExtractor(true), "MarketDataSnapshot");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public MarketDataSnapshotDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     return doGetByOidInstants(objectId, versionCorrection, new MarketDataSnapshotDocumentExtractor(true), "MarketDataSnapshot");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public MarketDataSnapshotHistoryResult history(final MarketDataSnapshotHistoryRequest request) {
     return doHistory(request, new MarketDataSnapshotHistoryResult(), new MarketDataSnapshotDocumentExtractor(request.isIncludeData()));
@@ -187,11 +186,12 @@ public class DbMarketDataSnapshotMaster
     return args;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Inserts a new document.
    *
-   * @param document  the document, not null
+   * @param document
+   *          the document, not null
    * @return the new document, not null
    */
   @Override
@@ -225,7 +225,7 @@ public class DbMarketDataSnapshotMaster
     return document;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Mapper from SQL rows to a MarketDataSnapshotDocument.
    */
@@ -254,9 +254,9 @@ public class DbMarketDataSnapshotMaster
       final Timestamp correctionTo = rs.getTimestamp("CORR_TO_INSTANT");
       final UniqueId uniqueId = createUniqueId(docOid, docId);
 
-      final NamedSnapshot marketDataSnapshot = _includeData ?
-          createPopulatedSnapshot(rs) :
-          createEmptyMarketDataSnapshot(rs, uniqueId);
+      final NamedSnapshot marketDataSnapshot = _includeData
+          ? createPopulatedSnapshot(rs)
+          : createEmptyMarketDataSnapshot(rs, uniqueId);
 
       final MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument();
       doc.setUniqueId(uniqueId);
@@ -275,7 +275,7 @@ public class DbMarketDataSnapshotMaster
     }
 
     private ManageableMarketDataSnapshot createEmptyMarketDataSnapshot(final ResultSet rs,
-                                                                       final UniqueId uniqueId) throws SQLException {
+        final UniqueId uniqueId) throws SQLException {
       final ManageableMarketDataSnapshot snapshot = new ManageableMarketDataSnapshot();
       snapshot.setName(rs.getString("NAME"));
       snapshot.setUniqueId(uniqueId);

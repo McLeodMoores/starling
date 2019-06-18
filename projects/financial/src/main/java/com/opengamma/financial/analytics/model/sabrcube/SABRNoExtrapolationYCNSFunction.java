@@ -36,11 +36,13 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Calculates the yield curve node sensitivities for instruments priced using the SABR model.
+ *
  * @deprecated Use {@link NoExtrapolationSABRDiscountingYCNSFunction}
  */
 @Deprecated
 public class SABRNoExtrapolationYCNSFunction extends SABRYCNSFunction {
-  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator.using(PresentValueCurveSensitivitySABRCalculator.getInstance());
+  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator
+      .using(PresentValueCurveSensitivitySABRCalculator.getInstance());
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -55,7 +57,8 @@ public class SABRNoExtrapolationYCNSFunction extends SABRYCNSFunction {
         return false;
       }
       final InterestRateInstrumentType type = SwapSecurityUtils.getSwapType((SwapSecurity) security);
-      if ((type != InterestRateInstrumentType.SWAP_FIXED_CMS) && (type != InterestRateInstrumentType.SWAP_CMS_CMS) && (type != InterestRateInstrumentType.SWAP_IBOR_CMS)) {
+      if (type != InterestRateInstrumentType.SWAP_FIXED_CMS && type != InterestRateInstrumentType.SWAP_CMS_CMS
+          && type != InterestRateInstrumentType.SWAP_IBOR_CMS) {
         return false;
       }
     }
@@ -74,7 +77,8 @@ public class SABRNoExtrapolationYCNSFunction extends SABRYCNSFunction {
     final InterpolatedDoublesSurface betaSurface = surfaces.getBetaSurface();
     final InterpolatedDoublesSurface nuSurface = surfaces.getNuSurface();
     final InterpolatedDoublesSurface rhoSurface = surfaces.getRhoSurface();
-    final SABRInterestRateParameters modelParameters = new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, VolatilityFunctionFactory.HAGAN_FORMULA);
+    final SABRInterestRateParameters modelParameters = new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface,
+        VolatilityFunctionFactory.HAGAN_FORMULA);
     return new SABRInterestRateDataBundle(modelParameters, yieldCurves);
   }
 

@@ -37,7 +37,8 @@ public class BloombergLiveDataServerUtils {
   /**
    * Gets a reference data provider for a class, defined by a method.
    *
-   * @param testMethod  the test method, not null
+   * @param testMethod
+   *          the test method, not null
    * @return the data provider, not null
    */
   public static ReferenceDataProvider getCachingReferenceDataProvider(final Method testMethod) {
@@ -47,7 +48,8 @@ public class BloombergLiveDataServerUtils {
   /**
    * Gets a reference data provider for a class.
    *
-   * @param testClass  the test class, not null
+   * @param testClass
+   *          the test class, not null
    * @return the data provider, not null
    */
   public static ReferenceDataProvider getCachingReferenceDataProvider(final Class<?> testClass) {
@@ -58,8 +60,10 @@ public class BloombergLiveDataServerUtils {
   /**
    * Adds caching to a reference data provider.
    *
-   * @param underlying  the underlying provider, not null
-   * @param testClass  the test class, not null
+   * @param underlying
+   *          the underlying provider, not null
+   * @param testClass
+   *          the test class, not null
    * @return the data provider, not null
    */
   private static ReferenceDataProvider getCachingReferenceDataProvider(final ReferenceDataProvider underlying, final Class<?> testClass) {
@@ -81,7 +85,8 @@ public class BloombergLiveDataServerUtils {
   /**
    * Stops the specified reference data provider, as best as possible.
    *
-   * @param refDataProvider  the provider to stop, null ignored
+   * @param refDataProvider
+   *          the provider to stop, null ignored
    */
   public static void stopCachingReferenceDataProvider(final ReferenceDataProvider refDataProvider) {
     if (refDataProvider != null) {
@@ -98,7 +103,7 @@ public class BloombergLiveDataServerUtils {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public static BloombergLiveDataServer startTestServer(final Method testMethod) {
     return startTestServer(testMethod.getClass());
   }
@@ -119,15 +124,16 @@ public class BloombergLiveDataServerUtils {
       public void send(final FudgeMsg message) {
         // do nothing
       }
+
       @Override
       public FudgeContext getFudgeContext() {
         return OpenGammaFudgeContext.getInstance();
       }
     };
     final BloombergLiveDataServer server = new BloombergLiveDataServer(BloombergTestUtils.getBloombergConnector(),
-                                                                 cachingRefDataProvider,
-                                                                 EHCacheUtils.createCacheManager(),
-                                                                 fudgeMessageSender);
+        cachingRefDataProvider,
+        EHCacheUtils.createCacheManager(),
+        fudgeMessageSender);
     final DistributionSpecificationResolver distributionSpecificationResolver = server.getDefaultDistributionSpecificationResolver();
     server.setDistributionSpecificationResolver(distributionSpecificationResolver);
 
@@ -135,12 +141,14 @@ public class BloombergLiveDataServerUtils {
     return server;
   }
 
-  public static CombiningBloombergLiveDataServer startTestServer(final Class<?> testClass, final FakeSubscriptionSelector subscriptionSelector, final ReferenceDataProvider refDataProvider) {
+  public static CombiningBloombergLiveDataServer startTestServer(final Class<?> testClass, final FakeSubscriptionSelector subscriptionSelector,
+      final ReferenceDataProvider refDataProvider) {
     final ReferenceDataProvider cachingRefDataProvider = getCachingReferenceDataProvider(refDataProvider, testClass);
     final BloombergLiveDataServer underlying = getTestServer(cachingRefDataProvider);
 
     final CacheManager cacheManager = EHCacheUtils.createCacheManager();
-    final FakeSubscriptionBloombergLiveDataServer fakeServer = new FakeSubscriptionBloombergLiveDataServer(underlying, ExternalSchemes.BLOOMBERG_BUID_WEAK, cacheManager);
+    final FakeSubscriptionBloombergLiveDataServer fakeServer = new FakeSubscriptionBloombergLiveDataServer(underlying, ExternalSchemes.BLOOMBERG_BUID_WEAK,
+        cacheManager);
     fakeServer.start();
 
     final CombiningBloombergLiveDataServer combinedServer = new CombiningBloombergLiveDataServer(fakeServer, underlying, subscriptionSelector, cacheManager);

@@ -1,42 +1,41 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.rootfinding;
 
 import org.apache.commons.lang.Validate;
 
+import com.opengamma.analytics.math.function.RealPolynomialFunction1D;
+
 import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 
-import com.opengamma.analytics.math.function.RealPolynomialFunction1D;
-
 /**
- * The eigenvalues of a matrix $\mathbf{A}$ are the roots of the characteristic
- * polynomial $P(x) = \mathrm{det}[\mathbf{A} - x\mathbb{1}]$. For a 
- * polynomial 
- * $$
- * \begin{align*}
- * P(x) = \sum_{i=0}^n a_i x^i
- * \end{align*} 
- * $$
- * an equivalent polynomial can be constructed from the characteristic polynomial of the matrix
- * $$
- * \begin{align*}
- * A = 
- * \begin{pmatrix}
- * -\frac{a_{m-1}}{a_m}  & -\frac{a_{m-2}}{a_m} & \cdots & -\frac{a_{1}}{a_m} & -\frac{a_{0}}{a_m} \\
- * 1                      & 0                     & \cdots & 0                   & 0                   \\
- * 0                      & 1                     & \cdots & 0                   & 0                   \\
- * \vdots                &                       & \cdots &                     & \vdots             \\
- * 0                      & 0                     & \cdots & 1                   & 0                   
- * \end{pmatrix}
- * \end{align*}
- * $$
- * and so the roots are found by calculating the eigenvalues of this matrix.
+ * The eigenvalues of a matrix $\mathbf{A}$ are the roots of the characteristic polynomial $P(x) = \mathrm{det}[\mathbf{A} - x\mathbb{1}]$. and so the roots are
+ * found by calculating the eigenvalues of this matrix.
  */
+// * For a polynomial
+// * $$
+// * \begin{align*}
+// * P(x) = \sum_{i=0}^n a_i x^i
+// * \end{align*}
+// * $$
+// * an equivalent polynomial can be constructed from the characteristic polynomial of the matrix
+// * $$
+// * \begin{align*}
+// * A =
+// * \begin{pmatrix}
+// * -\frac{a_{m-1}}{a_m} & -\frac{a_{m-2}}{a_m} & \cdots & -\frac{a_{1}}{a_m} & -\frac{a_{0}}{a_m} \\
+// * 1 & 0 & \cdots & 0 & 0 \\
+// * 0 & 1 & \cdots & 0 & 0 \\
+// * \vdots & & \cdots & & \vdots \\
+// * 0 & 0 & \cdots & 1 & 0
+// * \end{pmatrix}
+// * \end{align*}
+// * $$
 public class EigenvaluePolynomialRootFinder implements Polynomial1DRootFinder<Double> {
 
   /**

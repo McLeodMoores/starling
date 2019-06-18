@@ -36,17 +36,26 @@ public class EHCachingDistributionSpecificationResolverTest {
 
   private CacheManager _cacheManager;
 
+  /**
+   * Sets up the cache.
+   */
   @BeforeClass
   public void setUpClass() {
     _cacheManager = EHCacheUtils.createTestCacheManager(getClass());
   }
 
+  /**
+   * Shuts down the cache.
+   */
   @AfterClass
   public void tearDownClass() {
     EHCacheUtils.shutdownQuiet(_cacheManager);
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests caching.
+   */
   public void testCaching() {
     final ExternalId id = ExternalId.of("foo", "bar");
 

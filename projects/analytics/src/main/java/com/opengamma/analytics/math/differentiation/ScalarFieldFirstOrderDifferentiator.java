@@ -13,14 +13,10 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Differentiates a scalar field (i.e. there is a scalar value for every point
- * in some vector space) with respect to the vector space using finite
- * difference.
+ * Differentiates a scalar field (i.e. there is a scalar value for every point in some vector space) with respect to the vector space using finite difference.
  * <p>
- * For a function $y = f(\mathbf{x})$ where $\mathbf{x}$ is a n-dimensional
- * vector and $y$ is a scalar, this class produces a gradient function
- * $\mathbf{g}(\mathbf{x})$, i.e. a function that returns the gradient for each
- * point $\mathbf{x}$, where $\mathbf{g}$ is the n-dimensional vector
+ * For a function $y = f(\mathbf{x})$ where $\mathbf{x}$ is a n-dimensional vector and $y$ is a scalar, this class produces a gradient function
+ * $\mathbf{g}(\mathbf{x})$, i.e. a function that returns the gradient for each point $\mathbf{x}$, where $\mathbf{g}$ is the n-dimensional vector
  * $\frac{dy}{dx_i}$.
  */
 public class ScalarFieldFirstOrderDifferentiator implements Differentiator<DoubleMatrix1D, Double, DoubleMatrix1D> {
@@ -41,10 +37,13 @@ public class ScalarFieldFirstOrderDifferentiator implements Differentiator<Doubl
 
   /**
    * Approximates the derivative of a scalar function by finite difference. If the size of the domain is very small or very large, consider re-scaling first.
-   * @param differenceType {@link FiniteDifferenceType#FORWARD}, {@link FiniteDifferenceType#BACKWARD}, or {@link FiniteDifferenceType#CENTRAL}. In most situations,
-   * {@link FiniteDifferenceType#CENTRAL} is preferable. Not null
-   * @param eps The step size used to approximate the derivative. If this value is too small, the result will most likely be dominated by noise.
-   * Use around 10<sup>-5</sup> times the domain size.
+   * 
+   * @param differenceType
+   *          {@link FiniteDifferenceType#FORWARD}, {@link FiniteDifferenceType#BACKWARD}, or {@link FiniteDifferenceType#CENTRAL}. In most situations,
+   *          {@link FiniteDifferenceType#CENTRAL} is preferable. Not null
+   * @param eps
+   *          The step size used to approximate the derivative. If this value is too small, the result will most likely be dominated by noise. Use around
+   *          10<sup>-5</sup> times the domain size.
    */
   public ScalarFieldFirstOrderDifferentiator(final FiniteDifferenceType differenceType, final double eps) {
     Validate.notNull(differenceType);
@@ -132,13 +131,14 @@ public class ScalarFieldFirstOrderDifferentiator implements Differentiator<Doubl
   }
 
   @Override
-  public Function1D<DoubleMatrix1D, DoubleMatrix1D> differentiate(final Function1D<DoubleMatrix1D, Double> function, final Function1D<DoubleMatrix1D, Boolean> domain) {
+  public Function1D<DoubleMatrix1D, DoubleMatrix1D> differentiate(final Function1D<DoubleMatrix1D, Double> function,
+      final Function1D<DoubleMatrix1D, Boolean> domain) {
     Validate.notNull(function);
     Validate.notNull(domain);
 
-    final double[] wFwd = new double[] {-3. / _twoEps, 4. / _twoEps, -1. / _twoEps };
-    final double[] wCent = new double[] {-1. / _twoEps, 0., 1. / _twoEps };
-    final double[] wBack = new double[] {1. / _twoEps, -4. / _twoEps, 3. / _twoEps };
+    final double[] wFwd = new double[] { -3. / _twoEps, 4. / _twoEps, -1. / _twoEps };
+    final double[] wCent = new double[] { -1. / _twoEps, 0., 1. / _twoEps };
+    final double[] wBack = new double[] { 1. / _twoEps, -4. / _twoEps, 3. / _twoEps };
 
     return new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
 

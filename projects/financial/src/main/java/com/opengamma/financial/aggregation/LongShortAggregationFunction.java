@@ -136,18 +136,16 @@ public class LongShortAggregationFunction implements AggregationFunction<String>
       final Map<String, String> attributes = position.getAttributes();
       if (attributes.containsKey(getName())) {
         return attributes.get(getName());
-      } else {
-        return NOT_LONG_SHORT;
-      }
-    } else {
-      position.getSecurityLink().resolve(_secSource);
-      final FinancialSecurityVisitor<String> visitor = new Visitor(position);
-      if (position.getSecurity() instanceof FinancialSecurity) {
-        final FinancialSecurity finSec = (FinancialSecurity) position.getSecurity();
-        return finSec.accept(visitor);
       }
       return NOT_LONG_SHORT;
     }
+    position.getSecurityLink().resolve(_secSource);
+    final FinancialSecurityVisitor<String> visitor = new Visitor(position);
+    if (position.getSecurity() instanceof FinancialSecurity) {
+      final FinancialSecurity finSec = (FinancialSecurity) position.getSecurity();
+      return finSec.accept(visitor);
+    }
+    return NOT_LONG_SHORT;
   }
 
   @Override

@@ -24,7 +24,8 @@ import com.opengamma.util.money.Currency;
 /**
  * Hibernate bean/security conversion operations.
  */
-public final class NonDeliverableFXForwardSecurityBeanOperation extends AbstractSecurityBeanOperation<NonDeliverableFXForwardSecurity, NonDeliverableFXForwardSecurityBean> {
+public final class NonDeliverableFXForwardSecurityBeanOperation
+    extends AbstractSecurityBeanOperation<NonDeliverableFXForwardSecurity, NonDeliverableFXForwardSecurityBean> {
 
   /**
    * Singleton instance.
@@ -36,7 +37,8 @@ public final class NonDeliverableFXForwardSecurityBeanOperation extends Abstract
   }
 
   @Override
-  public NonDeliverableFXForwardSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final NonDeliverableFXForwardSecurity security) {
+  public NonDeliverableFXForwardSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final NonDeliverableFXForwardSecurity security) {
     final NonDeliverableFXForwardSecurityBean bean = new NonDeliverableFXForwardSecurityBean();
     bean.setPayCurrency(secMasterSession.getOrCreateCurrencyBean(security.getPayCurrency().getCode()));
     bean.setPayAmount(security.getPayAmount());

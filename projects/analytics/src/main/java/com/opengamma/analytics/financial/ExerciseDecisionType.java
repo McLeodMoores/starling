@@ -10,11 +10,11 @@ package com.opengamma.analytics.financial;
  */
 public enum ExerciseDecisionType {
   /**
-   * European => decision to be made only on single Expiry.
+   * European =&gt; decision to be made only on single Expiry.
    */
   EUROPEAN,
   /**
-   * American => decision may be made at any time before Expiry.
+   * American =&gt; decision may be made at any time before Expiry.
    */
   AMERICAN;
 

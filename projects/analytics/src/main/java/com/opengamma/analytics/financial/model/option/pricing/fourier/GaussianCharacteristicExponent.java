@@ -15,22 +15,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * This class represents the characteristic exponent for a Brownian motion driven by normally-distributed increments
- * $$
- * \begin{align*}
- * \phi_X &= E\left[e^{iuX}\right]\\
- * &= \frac{1}{\sqrt{2\pi}\sigma}\int_{-\infty}^{\infty} e^{iux} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)\\
- * %&= \exp\left({iu\mu - \tfrac{1}{2}\sigma^2 u^2}\right)
- * \end{align*}
- * $$
- * and
- * $$
- * \begin{align*}
- * \phi_{X_t}(u) &= [\phi_X(u)]^t \\
- * &= \exp\left(t\left(iu\mu - \frac{\sigma^2 u^2}{2}\right)\right)
- * \end{align*}
- * $$
- *
+ * This class represents the characteristic exponent for a Brownian motion driven by normally-distributed increments.
  */
 public class GaussianCharacteristicExponent implements CharacteristicExponent {
   private final double _mu;

@@ -57,12 +57,12 @@ public class EquityDividendFutureLoader extends SecurityLoader {
       FIELD_FUT_TRADING_HRS,
       FIELD_ID_MIC_PRIM_EXCH, // trading exchange
       FIELD_CRNCY,
-//      FIELD_FUTURES_CATEGORY,
-//      FIELD_FUT_TRADING_UNITS,
+      // FIELD_FUTURES_CATEGORY,
+      // FIELD_FUT_TRADING_UNITS,
       FIELD_PARSEKYABLE_DES,
       FIELD_SETTLE_DT,
       FIELD_FUTURES_CATEGORY,
-//      FIELD_FUT_CONT_SIZE,
+      // FIELD_FUT_CONT_SIZE,
       FIELD_UNDL_SPOT_TICKER,
       FIELD_ID_BBG_UNIQUE,
       FIELD_ID_CUSIP,
@@ -71,20 +71,22 @@ public class EquityDividendFutureLoader extends SecurityLoader {
       FIELD_FUT_VAL_PT));
 
   /**
-   * The valid Bloomberg future categories for Equity Dividend Futures
+   * The valid Bloomberg future categories for Equity Dividend Futures.
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = Collections.unmodifiableSet(Sets.newHashSet(
       BloombergConstants.BBG_STOCK_FUTURE_TYPE));
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   *
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public EquityDividendFutureLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.EQUITY_DIVIDEND_FUTURE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     final String marketSectorDes = fieldData.getString(FIELD_MARKET_SECTOR_DES);
@@ -94,8 +96,8 @@ public class EquityDividendFutureLoader extends SecurityLoader {
     final String currencyStr = fieldData.getString(FIELD_CRNCY);
     final String settleDate = fieldData.getString(FIELD_SETTLE_DT);
     final String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
-//    Double unitNumber = fieldData.getDouble(FIELD_FUT_CONT_SIZE);
-//    String unitName = fieldData.getString(FIELD_FUT_TRADING_UNITS);
+    // Double unitNumber = fieldData.getDouble(FIELD_FUT_CONT_SIZE);
+    // String unitName = fieldData.getString(FIELD_FUT_TRADING_UNITS);
     final String underlyingTicker = fieldData.getString(FIELD_UNDL_SPOT_TICKER);
     final String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
     final String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
@@ -134,14 +136,14 @@ public class EquityDividendFutureLoader extends SecurityLoader {
       LOGGER.info("currency is null, cannot construct equity dividend future security");
       return null;
     }
-//    if (!isValidField(unitName)) {
-//      LOGGER.info("unitName is null, cannot construct equity dividend future security");
-//      return null;
-//    }
-//    if (unitNumber == null) {
-//      LOGGER.info("unitNumber is null, cannot construct equity dividend future security");
-//      return null;
-//    }
+    // if (!isValidField(unitName)) {
+    // LOGGER.info("unitName is null, cannot construct equity dividend future security");
+    // return null;
+    // }
+    // if (unitNumber == null) {
+    // LOGGER.info("unitNumber is null, cannot construct equity dividend future security");
+    // return null;
+    // }
     ExternalId underlying = null;
     if (underlyingTicker != null) {
       if (BloombergDataUtils.isValidBloombergTicker(underlyingTicker)) {
@@ -160,7 +162,8 @@ public class EquityDividendFutureLoader extends SecurityLoader {
       return null;
     }
     final Currency currency = Currency.parse(currencyStr);
-    final EquityIndexDividendFutureSecurity security = new EquityIndexDividendFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount, settle.getExpiry(), underlying, category);
+    final EquityIndexDividendFutureSecurity security = new EquityIndexDividendFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount,
+        settle.getExpiry(), underlying, category);
     security.setName(name);
     // set identifiers
     parseIdentifiers(fieldData, security);

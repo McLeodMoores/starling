@@ -11,12 +11,13 @@ import com.opengamma.analytics.financial.interestrate.future.derivative.Interest
 import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureOptionPremiumTransaction;
 import com.opengamma.analytics.financial.interestrate.future.method.InterestRateFutureOptionMarginSecurityBlackSurfaceMethod;
 import com.opengamma.analytics.financial.interestrate.future.method.InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod;
-import com.opengamma.analytics.financial.provider.calculator.blackstirfutures.UnderlyingMarketPriceSTIRFutureOptionCalculator;
 import com.opengamma.util.ArgumentChecker;
 
 /**
  * InstrumentDerivativeVisitor that calculates the underlying future price.
- * @deprecated [@link YieldCurveBundle} is deprecated. Use {@link UnderlyingMarketPriceSTIRFutureOptionCalculator}.
+ *
+ * @deprecated [@link YieldCurveBundle} is deprecated. Use
+ *             {@link com.opengamma.analytics.financial.provider.calculator.blackstirfutures.UnderlyingMarketPriceSTIRFutureOptionCalculator}.
  */
 @Deprecated
 public class UnderlyingMarketPriceCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double> {
@@ -25,6 +26,7 @@ public class UnderlyingMarketPriceCalculator extends InstrumentDerivativeVisitor
 
   /**
    * Gets a static instance.
+   *
    * @return An instance
    */
   public static UnderlyingMarketPriceCalculator getInstance() {
@@ -32,9 +34,11 @@ public class UnderlyingMarketPriceCalculator extends InstrumentDerivativeVisitor
   }
 
   /** Calculator for margined interest rate future options */
-  private static final InterestRateFutureOptionMarginSecurityBlackSurfaceMethod MARGINED_IR_FUTURE_OPTION = InterestRateFutureOptionMarginSecurityBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionMarginSecurityBlackSurfaceMethod MARGINED_IR_FUTURE_OPTION =
+      InterestRateFutureOptionMarginSecurityBlackSurfaceMethod.getInstance();
   /** Calculator for premium interest rate future options */
-  private static final InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_IR_FUTURE_OPTION = InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_IR_FUTURE_OPTION =
+      InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod.getInstance();
 
   @Override
   public Double visitInterestRateFutureOptionMarginSecurity(final InterestRateFutureOptionMarginSecurity security, final YieldCurveBundle curves) {

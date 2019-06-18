@@ -35,7 +35,8 @@ public class ForexFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Adds deprecated FX forward functions to the repository
+   * Adds deprecated FX forward functions to the repository.
+   * 
    * @return The configuration source populated with FX forward functions.
    * @deprecated The functions that are added are deprecated
    */

@@ -8,8 +8,6 @@ package com.opengamma.engine.management;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.Duration;
 import org.threeten.bp.Instant;
 import org.threeten.bp.ZoneId;
@@ -35,11 +33,9 @@ import net.sf.ehcache.CacheException;
 
 /**
  * An MBean implementation for attributes and operations on a view process.
- *
  */
 public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ViewProcessMXBeanImpl.class);
   /**
    * The backing view process instance
    */
@@ -72,15 +68,18 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
   private volatile Instant _lastSuccessfulCycleTimeStamp;
 
   /**
-   * Create a management View
+   * Create a management View.
    *
-   * @param viewProcess the underlying view process
-   * @param viewProcessor the view processor responsible for the view process
+   * @param viewProcess
+   *          the underlying view process
+   * @param viewProcessor
+   *          the view processor responsible for the view process
    * @param splitByViewProcessor
+   *          true to split by view processor
    */
   public ViewProcessMXBeanImpl(final ViewProcessInternal viewProcess,
-                               final ViewProcessor viewProcessor,
-                               final boolean splitByViewProcessor) {
+      final ViewProcessor viewProcessor,
+      final boolean splitByViewProcessor) {
     ArgumentChecker.notNull(viewProcess, "viewProcess");
     ArgumentChecker.notNull(viewProcessor, "ViewProcessor");
     _viewProcess = viewProcess;
@@ -153,13 +152,21 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
   }
 
   /**
-   * Creates an object name using the scheme "com.opengamma:type=View,ViewProcessor=<viewProcessorName>,name=<viewProcessId>"
+   * Creates an object name using the scheme "com.opengamma:type=View,ViewProcessor=<viewProcessorName>,name=<viewProcessId>".
+   *
+   * @param viewProcessorName
+   *          the view processor name
+   * @param viewProcessId
+   *          the underlying view process identifier
+   * @param splitByViewProcessor
+   *          should the MBean name differentiate beans by view processor
+   * @return the object name
    */
   static ObjectName createObjectName(final String viewProcessorName, final UniqueId viewProcessId, final boolean splitByViewProcessor) {
     try {
-      final String beanNamePrefix = splitByViewProcessor ?
-          "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + viewProcessorName :
-          "com.opengamma:type=ViewProcessor";
+      final String beanNamePrefix = splitByViewProcessor
+          ? "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + viewProcessorName
+          : "com.opengamma:type=ViewProcessor";
       return new ObjectName(beanNamePrefix + ",ViewProcesses=ViewProcesses,name=ViewProcess " + viewProcessId.getValue());
     } catch (final MalformedObjectNameException e) {
       throw new CacheException(e);
@@ -179,8 +186,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
   @Override
   public String getViewName() {
     @SuppressWarnings("unchecked")
-    final
-    ConfigItem<ViewDefinition> configItem = (ConfigItem<ViewDefinition>) _viewProcessor.getConfigSource().get(_viewProcess.getDefinitionId());
+    final ConfigItem<ViewDefinition> configItem = (ConfigItem<ViewDefinition>) _viewProcessor.getConfigSource().get(_viewProcess.getDefinitionId());
     return configItem.getName();
   }
 
@@ -235,9 +241,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
 
   @Override
   public Long getTimeSinceLastSuccessfulCycle() {
-    return _lastSuccessfulCycleTimeStamp != null ?
-        _lastSuccessfulCycleTimeStamp.until(Instant.now(), ChronoUnit.MILLIS) :
-        null;
+    return _lastSuccessfulCycleTimeStamp != null ? _lastSuccessfulCycleTimeStamp.until(Instant.now(), ChronoUnit.MILLIS) : null;
   }
 
   @Override
@@ -286,4 +290,3 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
     return statsProcessor;
   }
 }
-

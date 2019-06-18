@@ -16,7 +16,7 @@ import com.opengamma.analytics.financial.pnl.UnderlyingType;
 import com.opengamma.analytics.financial.trade.OptionTradeData;
 
 /**
- * 
+ *
  */
 public class GreekDataBundle {
   private final GreekResultCollection _greekValues;
@@ -66,9 +66,9 @@ public class GreekDataBundle {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_greekValues == null) ? 0 : _greekValues.hashCode());
-    result = prime * result + ((_underlyingData == null) ? 0 : _underlyingData.hashCode());
-    result = prime * result + ((_tradeData == null) ? 0 : _tradeData.hashCode());
+    result = prime * result + (_greekValues == null ? 0 : _greekValues.hashCode());
+    result = prime * result + (_underlyingData == null ? 0 : _underlyingData.hashCode());
+    result = prime * result + (_tradeData == null ? 0 : _tradeData.hashCode());
     return result;
   }
 
@@ -84,6 +84,7 @@ public class GreekDataBundle {
       return false;
     }
     final GreekDataBundle other = (GreekDataBundle) obj;
-    return ObjectUtils.equals(_greekValues, other._greekValues) && ObjectUtils.equals(_underlyingData, other._underlyingData) && ObjectUtils.equals(_tradeData, other._tradeData);
+    return ObjectUtils.equals(_greekValues, other._greekValues) && ObjectUtils.equals(_underlyingData, other._underlyingData)
+        && ObjectUtils.equals(_tradeData, other._tradeData);
   }
 }

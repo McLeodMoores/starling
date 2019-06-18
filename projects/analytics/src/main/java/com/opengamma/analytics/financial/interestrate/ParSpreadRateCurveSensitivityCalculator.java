@@ -25,8 +25,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Compute the sensitivity of the spread to the curve; the spread is the number to be added to the rate of the instrument for which the present value of the instrument is zero.
- * The notion of "market quote" will depend of each instrument.
+ * Compute the sensitivity of the spread to the curve; the spread is the number to be added to the rate of the instrument for which the present value of the
+ * instrument is zero. The notion of "market quote" will depend of each instrument.
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -39,6 +40,7 @@ public final class ParSpreadRateCurveSensitivityCalculator extends InstrumentDer
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static ParSpreadRateCurveSensitivityCalculator getInstance() {
@@ -61,7 +63,8 @@ public final class ParSpreadRateCurveSensitivityCalculator extends InstrumentDer
   private static final CashDiscountingMethod METHOD_DEPOSIT = CashDiscountingMethod.getInstance();
   private static final DepositZeroDiscountingMethod METHOD_DEPOSIT_ZERO = DepositZeroDiscountingMethod.getInstance();
   private static final ForwardRateAgreementDiscountingMethod METHOD_FRA = ForwardRateAgreementDiscountingMethod.getInstance();
-  //  private static final InterestRateFutureTransactionDiscountingMethod METHOD_IR_FUTURES_TRANSACTION = InterestRateFutureTransactionDiscountingMethod.getInstance();
+  // private static final InterestRateFutureTransactionDiscountingMethod METHOD_IR_FUTURES_TRANSACTION =
+  // InterestRateFutureTransactionDiscountingMethod.getInstance();
   private static final InterestRateFutureSecurityDiscountingMethod METHOD_IR_FUTURES_SECURITY = InterestRateFutureSecurityDiscountingMethod.getInstance();
 
   @Override

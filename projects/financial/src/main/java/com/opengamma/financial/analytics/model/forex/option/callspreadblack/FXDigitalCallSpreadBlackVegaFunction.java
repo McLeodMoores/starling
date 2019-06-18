@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.forex.option.callspreadblack;
@@ -25,7 +25,10 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * The function calculating the Black volatility sensitivity to each point to which the option is sensitive..
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXDigitalCallSpreadBlackVegaFunction extends FXDigitalCallSpreadBlackSingleValuedFunction {
 
   public FXDigitalCallSpreadBlackVegaFunction() {
@@ -37,7 +40,8 @@ public class FXDigitalCallSpreadBlackVegaFunction extends FXDigitalCallSpreadBla
       final Set<ValueRequirement> desiredValues, final FunctionInputs inputs, final ValueSpecification spec, final FunctionExecutionContext executionContext) {
     final String spreadName = Iterables.getOnlyElement(desiredValues).getConstraint(CalculationPropertyNamesAndValues.PROPERTY_CALL_SPREAD_VALUE);
     final double spread = Double.parseDouble(spreadName);
-    final PresentValueBlackVolatilitySensitivityCallSpreadBlackForexCalculator calculator = new PresentValueBlackVolatilitySensitivityCallSpreadBlackForexCalculator(spread);
+    final PresentValueBlackVolatilitySensitivityCallSpreadBlackForexCalculator calculator =
+        new PresentValueBlackVolatilitySensitivityCallSpreadBlackForexCalculator(spread);
     final PresentValueForexBlackVolatilitySensitivity result = fxDigital.accept(calculator, data);
     final CurrencyAmount vegaValue = result.toSingleValue();
     return Collections.singleton(new ComputedValue(spec, vegaValue.getAmount()));

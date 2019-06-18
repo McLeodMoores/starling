@@ -14,7 +14,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 /**
  * Calculator of the present value as a multiple currency amount.
  */
-public final class PresentValueLMMDDCalculator extends InstrumentDerivativeVisitorAdapter<LiborMarketModelDisplacedDiffusionProviderInterface, MultipleCurrencyAmount> {
+public final class PresentValueLMMDDCalculator
+extends InstrumentDerivativeVisitorAdapter<LiborMarketModelDisplacedDiffusionProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -23,6 +24,7 @@ public final class PresentValueLMMDDCalculator extends InstrumentDerivativeVisit
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueLMMDDCalculator getInstance() {
@@ -40,10 +42,11 @@ public final class PresentValueLMMDDCalculator extends InstrumentDerivativeVisit
    */
   private static final SwaptionPhysicalFixedIborLMMDDMethod METHOD_SWT_PHYS = SwaptionPhysicalFixedIborLMMDDMethod.getInstance();
 
-  // -----     Swaption     ------
+  // ----- Swaption ------
 
   @Override
-  public MultipleCurrencyAmount visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption, final LiborMarketModelDisplacedDiffusionProviderInterface lmm) {
+  public MultipleCurrencyAmount visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption,
+      final LiborMarketModelDisplacedDiffusionProviderInterface lmm) {
     return METHOD_SWT_PHYS.presentValue(swaption, lmm);
   }
 

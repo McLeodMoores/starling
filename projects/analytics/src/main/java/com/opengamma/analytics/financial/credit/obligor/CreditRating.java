@@ -6,54 +6,54 @@
 package com.opengamma.analytics.financial.credit.obligor;
 
 /**
- * Enumerate the possible credit rating states for a reference entity (generic rating classifications).
- * The ratings are long term.
+ * Enumerate the possible credit rating states for a reference entity (generic rating classifications). The ratings are long term.
+ * 
  * @deprecated Credit ratings have been promoted to objects. See {@link com.opengamma.analytics.financial.legalentity.CreditRating}
  */
 @Deprecated
 public enum CreditRating {
   /**
-   * AAA rating
+   * AAA rating.
    */
   AAA,
   /**
-   * AA rating
+   * AA rating.
    */
   AA,
   /**
-   * A rating
+   * A rating.
    */
   A,
   /**
-   * BBB rating
+   * BBB rating.
    */
   BBB,
   /**
-   * BB rating
+   * BB rating.
    */
   BB,
   /**
-   * B rating
+   * B rating.
    */
   B,
   /**
-   * CCC rating
+   * CCC rating.
    */
   CCC,
   /**
-   * CC rating
+   * CC rating.
    */
   CC,
   /**
-   * C rating
+   * C rating.
    */
   C,
   /**
-   * Reference entity has already defaulted
+   * Reference entity has already defaulted.
    */
   DEFAULT,
   /**
-   * No rating
+   * No rating.
    */
   NR;
 
@@ -61,9 +61,9 @@ public enum CreditRating {
   private static final String AGENCY = "GENERIC";
 
   /**
-   * Delegates to {@link com.opengamma.analytics.financial.legalentity.CreditRating}, with
-   * the agency name set to GENERIC and the rating assumed to be long-term. The description
-   * field is not set.
+   * Delegates to {@link com.opengamma.analytics.financial.legalentity.CreditRating}, with the agency name set to GENERIC and the rating assumed to be
+   * long-term. The description field is not set.
+   * 
    * @return A credit rating object
    */
   public com.opengamma.analytics.financial.legalentity.CreditRating toCreditRating() {

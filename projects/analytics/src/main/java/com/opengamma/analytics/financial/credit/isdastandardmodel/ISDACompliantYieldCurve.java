@@ -30,7 +30,7 @@ public class ISDACompliantYieldCurve extends ISDACompliantCurve {
     ArgumentChecker.notEmpty(t, "t");
     ArgumentChecker.notEmpty(rt, "rt");
     ArgumentChecker.isTrue(t.length == rt.length, "length of t not equal to length of rt");
-    return new ISDACompliantYieldCurve(new ISDACompliantCurve(new double[][] {t, rt }));
+    return new ISDACompliantYieldCurve(new ISDACompliantCurve(new double[][] { t, rt }));
   }
 
   /**
@@ -43,36 +43,41 @@ public class ISDACompliantYieldCurve extends ISDACompliantCurve {
   /**
    * Creates a flat yield curve at level r.
    *
-   * @param t  the (arbitrary) single knot point (t > 0)
-   * @param r  the level
+   * @param t
+   *          the (arbitrary) single knot point (t &gt; 0)
+   * @param r
+   *          the level
    */
   public ISDACompliantYieldCurve(final double t, final double r) {
     super(t, r);
   }
 
   /**
-   * Creates a yield (discount) curve with knots at times, t, zero rates, r, at the knots and piecewise constant
-   * forward  rates between knots (i.e. linear interpolation of r*t or the -log(discountFactor).
+   * Creates a yield (discount) curve with knots at times, t, zero rates, r, at the knots and piecewise constant forward rates between knots (i.e. linear
+   * interpolation of r*t or the -log(discountFactor).
    *
-   * @param t  the set of times that form the knots of the curve. Must be ascending with the first value >= 0, not null
-   * @param r  the set of zero rates, not null
+   * @param t
+   *          the set of times that form the knots of the curve. Must be ascending with the first value &ge; 0, not null
+   * @param r
+   *          the set of zero rates, not null
    */
   public ISDACompliantYieldCurve(final double[] t, final double[] r) {
     super(t, r);
   }
 
   /**
-   * A curve in which the knots are measured (in fractions of a year) from a particular base-date but the curve is 'observed'
-   * from a different base-date. As an example<br>
-   * Today (the observation point) is 11-Jul-13, but the yield curve is snapped (bootstrapped from money market and swap rates)
-   * on 10-Jul-13 - seen from the original base date (10-Jul-13) there is an offset of 1/365 (assuming a day count of ACT/365) that must be applied to use
-   * the yield curve today.  <br>
-   * In general, a discount curve observed at time $t_1$ can be written as $P(t_1,T)$. Observed from time $t_2$ this is
-   * $P(t_2,T) = \frac{P(t_1,T)}{P(t_1,t_2)}$
+   * A curve in which the knots are measured (in fractions of a year) from a particular base-date but the curve is 'observed' from a different base-date. As an
+   * example<br>
+   * Today (the observation point) is 11-Jul-13, but the yield curve is snapped (bootstrapped from money market and swap rates) on 10-Jul-13 - seen from the
+   * original base date (10-Jul-13) there is an offset of 1/365 (assuming a day count of ACT/365) that must be applied to use the yield curve today. <br>
+   * In general, a discount curve observed at time $t_1$ can be written as $P(t_1,T)$. Observed from time $t_2$ this is $P(t_2,T) = \frac{P(t_1,T)}{P(t_1,t_2)}$
    *
-   * @param timesFromBaseDate  the times measured from the base date of the curve, not null
-   * @param r  the zero rates, not null
-   * @param newBaseFromOriginalBase  if this curve is to be used from a new base-date, what is the offset of the new base from the original
+   * @param timesFromBaseDate
+   *          the times measured from the base date of the curve, not null
+   * @param r
+   *          the zero rates, not null
+   * @param newBaseFromOriginalBase
+   *          if this curve is to be used from a new base-date, what is the offset of the new base from the original
    */
   ISDACompliantYieldCurve(final double[] timesFromBaseDate, final double[] r, final double newBaseFromOriginalBase) {
     super(timesFromBaseDate, r, newBaseFromOriginalBase);
@@ -81,13 +86,14 @@ public class ISDACompliantYieldCurve extends ISDACompliantCurve {
   /**
    * Creates a shallow copy of the specified curve, used to down cast from ISDACompliantCurve.
    *
-   * @param from  the curve to copy from, not null
+   * @param from
+   *          the curve to copy from, not null
    */
   public ISDACompliantYieldCurve(final ISDACompliantCurve from) {
     super(from);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public ISDACompliantYieldCurve withOffset(final double offsetFromNewBaseDate) {
     return new ISDACompliantYieldCurve(super.withOffset(offsetFromNewBaseDate));

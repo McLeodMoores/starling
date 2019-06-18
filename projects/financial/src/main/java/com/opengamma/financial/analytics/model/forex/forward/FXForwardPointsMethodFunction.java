@@ -24,9 +24,10 @@ import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.function.AbstractFunction;
@@ -78,7 +79,8 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
   private ConfigDBFXForwardCurveDefinitionSource _fxForwardCurveDefinitionSource;
 
   /**
-   * @param valueRequirementName The value requirement name, not null
+   * @param valueRequirementName
+   *          The value requirement name, not null
    */
   public FXForwardPointsMethodFunction(final String valueRequirementName) {
     ArgumentChecker.notNull(valueRequirementName, "value requirement name");
@@ -115,8 +117,8 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
     if (forwardCurveDefinition == null) {
       throw new OpenGammaRuntimeException("Couldn't find FX forward curve definition called " + forwardCurveName + " for target " + currencyPair);
     }
-    final FXForwardCurveSpecification forwardCurveSpecification =
-        _fxForwardCurveSpecificationSource.getSpecification(forwardCurveName, currencyPair.toString());
+    final FXForwardCurveSpecification forwardCurveSpecification = _fxForwardCurveSpecificationSource.getSpecification(forwardCurveName,
+        currencyPair.toString());
     if (forwardCurveSpecification == null) {
       throw new OpenGammaRuntimeException("Couldn't find FX forward curve specification called " + forwardCurveName + " for target " + currencyPair);
     }
@@ -133,8 +135,8 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
     final CurrencyPairs baseQuotePairs = (CurrencyPairs) baseQuotePairsObject;
     final YieldAndDiscountCurve[] curves;
     final String[] allCurveNames;
-    curves = new YieldAndDiscountCurve[] {payCurve, receiveCurve };
-    allCurveNames = new String[] {fullPayCurveName, fullReceiveCurveName };
+    curves = new YieldAndDiscountCurve[] { payCurve, receiveCurve };
+    allCurveNames = new String[] { fullPayCurveName, fullReceiveCurveName };
     // Implementation note: The ForexSecurityConverter create the Forex with currency order pay/receive. The curve are passed in the same order.
     final ForexSecurityConverter converter = new ForexSecurityConverter(baseQuotePairs);
     final InstrumentDefinition<?> definition = security.accept(converter);
@@ -156,17 +158,26 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
   /**
    * Performs the calculation.
    *
-   * @param fxForward The FX forward
-   * @param data The yield curve data
-   * @param fxForwardPoints A curve containing FX forward rates
-   * @param target The computation target
-   * @param desiredValues The desired values
-   * @param inputs The function inputs
-   * @param executionContext The execution context
-   * @param fxForwardCurveDefinition The definition of the FX forward curve
+   * @param fxForward
+   *          The FX forward
+   * @param data
+   *          The yield curve data
+   * @param fxForwardPoints
+   *          A curve containing FX forward rates
+   * @param target
+   *          The computation target
+   * @param desiredValues
+   *          The desired values
+   * @param inputs
+   *          The function inputs
+   * @param executionContext
+   *          The execution context
+   * @param fxForwardCurveDefinition
+   *          The definition of the FX forward curve
    * @return A set of computed values
    */
-  protected abstract Set<ComputedValue> getResult(Forex fxForward, YieldCurveBundle data, DoublesCurve fxForwardPoints, ComputationTarget target, Set<ValueRequirement> desiredValues,
+  protected abstract Set<ComputedValue> getResult(Forex fxForward, YieldCurveBundle data, DoublesCurve fxForwardPoints, ComputationTarget target,
+      Set<ValueRequirement> desiredValues,
       FunctionInputs inputs, FunctionExecutionContext executionContext, FXForwardCurveDefinition fxForwardCurveDefinition);
 
   @Override
@@ -232,7 +243,8 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String payCurveName = null;
     String payCurveCalculationConfig = null;
     String receiveCurveName = null;
@@ -256,16 +268,17 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
     assert payCurveName != null;
     assert receiveCurveName != null;
     assert forwardCurveName != null;
-    final ValueProperties properties = getResultProperties(target, payCurveName, receiveCurveName, payCurveCalculationConfig, receiveCurveCalculationConfig, forwardCurveName).get();
+    final ValueProperties properties = getResultProperties(target, payCurveName, receiveCurveName, payCurveCalculationConfig, receiveCurveCalculationConfig,
+        forwardCurveName).get();
     return Collections.singleton(new ValueSpecification(getValueRequirementName(), target.toSpecification(), properties));
   }
 
-  protected abstract ValueProperties.Builder getResultProperties(final ComputationTarget target);
+  protected abstract ValueProperties.Builder getResultProperties(ComputationTarget target);
 
-  protected abstract ValueProperties.Builder getResultProperties(final ComputationTarget target, final String payCurveName, final String receiveCurveName,
-      final String payCurveCalculationConfig, final String receiveCurveCalculationConfig, final String forwardCurveName);
+  protected abstract ValueProperties.Builder getResultProperties(ComputationTarget target, String payCurveName, String receiveCurveName,
+      String payCurveCalculationConfig, String receiveCurveCalculationConfig, String forwardCurveName);
 
-  protected abstract ValueProperties.Builder getResultProperties(final ValueRequirement desiredValue, final ComputationTarget target);
+  protected abstract ValueProperties.Builder getResultProperties(ValueRequirement desiredValue, ComputationTarget target);
 
   /**
    * Gets the value requirement name.
@@ -279,9 +292,12 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
   /**
    * Gets the requirement for the pay curve.
    *
-   * @param curveName The pay curve name
-   * @param currency The pay currency
-   * @param curveCalculationConfigName The pay curve calculation configuration name
+   * @param curveName
+   *          The pay curve name
+   * @param currency
+   *          The pay currency
+   * @param curveCalculationConfigName
+   *          The pay curve calculation configuration name
    * @return The pay curve requirement
    */
   protected static ValueRequirement getPayCurveRequirement(final String curveName, final Currency currency, final String curveCalculationConfigName) {
@@ -293,13 +309,18 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
   /**
    * Gets the pay curve.
    *
-   * @param inputs The function inputs
-   * @param currency The pay currency
-   * @param curveName The pay curve name
-   * @param curveCalculationConfig The pay curve calculation configuration name
+   * @param inputs
+   *          The function inputs
+   * @param currency
+   *          The pay currency
+   * @param curveName
+   *          The pay curve name
+   * @param curveCalculationConfig
+   *          The pay curve calculation configuration name
    * @return The pay curve
    */
-  protected static YieldAndDiscountCurve getPayCurve(final FunctionInputs inputs, final Currency currency, final String curveName, final String curveCalculationConfig) {
+  protected static YieldAndDiscountCurve getPayCurve(final FunctionInputs inputs, final Currency currency, final String curveName,
+      final String curveCalculationConfig) {
     final Object curveObject = inputs.getValue(getPayCurveRequirement(curveName, currency, curveCalculationConfig));
     if (curveObject == null) {
       throw new OpenGammaRuntimeException("Could not get " + curveName + " curve");
@@ -311,9 +332,12 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
   /**
    * Gets the requirement for the receive curve.
    *
-   * @param curveName The receive curve name
-   * @param currency The receive currency
-   * @param curveCalculationConfigName The receive curve calculation configuration name
+   * @param curveName
+   *          The receive curve name
+   * @param currency
+   *          The receive currency
+   * @param curveCalculationConfigName
+   *          The receive curve calculation configuration name
    * @return The receive curve requirement
    */
   protected static ValueRequirement getReceiveCurveRequirement(final String curveName, final Currency currency, final String curveCalculationConfigName) {
@@ -325,13 +349,18 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
   /**
    * Gets the receive curve.
    *
-   * @param inputs The function inputs
-   * @param currency The receive currency
-   * @param curveName The receive curve name
-   * @param curveCalculationConfig The receive curve calculation configuration name
+   * @param inputs
+   *          The function inputs
+   * @param currency
+   *          The receive currency
+   * @param curveName
+   *          The receive curve name
+   * @param curveCalculationConfig
+   *          The receive curve calculation configuration name
    * @return The receive curve
    */
-  protected static YieldAndDiscountCurve getReceiveCurve(final FunctionInputs inputs, final Currency currency, final String curveName, final String curveCalculationConfig) {
+  protected static YieldAndDiscountCurve getReceiveCurve(final FunctionInputs inputs, final Currency currency, final String curveName,
+      final String curveCalculationConfig) {
     final Object curveObject = inputs.getValue(getReceiveCurveRequirement(curveName, currency, curveCalculationConfig));
     if (curveObject == null) {
       throw new OpenGammaRuntimeException("Could not get " + curveName + " curve");
@@ -340,7 +369,8 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
     return curve;
   }
 
-  protected static DoublesCurve getFXForwardCurve(final FunctionInputs inputs, final FXForwardCurveDefinition definition, final FXForwardCurveSpecification specification, final LocalDate now) {
+  protected static DoublesCurve getFXForwardCurve(final FunctionInputs inputs, final FXForwardCurveDefinition definition,
+      final FXForwardCurveSpecification specification, final LocalDate now) {
     final Object fxForwardCurveObject = inputs.getValue(ValueRequirementNames.FX_FORWARD_POINTS_CURVE_MARKET_DATA);
     if (fxForwardCurveObject == null) {
       throw new OpenGammaRuntimeException("Could not get FX forward curve data");
@@ -357,8 +387,8 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
       tList.add(DateUtils.getDifferenceInYears(now, now.plus(tenor.getPeriod())));
       fxList.add(fxForward);
     }
-    final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR,
-        Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+    final Interpolator1D interpolator = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME,
+        LinearExtrapolator1dAdapter.NAME);
     return InterpolatedDoublesCurve.from(tList.toDoubleArray(), fxList.toDoubleArray(), interpolator);
   }
 

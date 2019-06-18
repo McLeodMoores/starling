@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.util.wrapper;
@@ -27,7 +27,8 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * Utility class for converting OpenGamma mathematical objects into <a href="http://commons.apache.org/math/api-2.1/index.html">Commons</a> objects and vice versa.
+ * Utility class for converting OpenGamma mathematical objects into <a href="http://commons.apache.org/math/api-2.1/index.html">Commons</a> objects and vice
+ * versa.
  */
 public final class CommonsMathWrapper {
 
@@ -35,7 +36,8 @@ public final class CommonsMathWrapper {
   }
 
   /**
-   * @param f An OG 1-D function mapping doubles onto doubles, not null 
+   * @param f
+   *          An OG 1-D function mapping doubles onto doubles, not null
    * @return A Commons univariate real function
    */
   public static UnivariateRealFunction wrapUnivariate(final Function1D<Double, Double> f) {
@@ -50,7 +52,8 @@ public final class CommonsMathWrapper {
   }
 
   /**
-   * @param f An OG 1-D function mapping vectors of doubles onto doubles, not null
+   * @param f
+   *          An OG 1-D function mapping vectors of doubles onto doubles, not null
    * @return A Commons multivariate real function
    */
   public static MultivariateRealFunction wrapMultivariate(final Function1D<DoubleMatrix1D, Double> f) {
@@ -66,7 +69,8 @@ public final class CommonsMathWrapper {
   }
 
   /**
-   * @param f An OG n-D function mapping doubles onto doubles, not null
+   * @param f
+   *          An OG n-D function mapping doubles onto doubles, not null
    * @return A Commons multivariate real function
    */
   public static MultivariateRealFunction wrap(final FunctionND<Double, Double> f) {
@@ -86,7 +90,8 @@ public final class CommonsMathWrapper {
   }
 
   /**
-   * @param x An OG 2-D matrix of doubles, not null
+   * @param x
+   *          An OG 2-D matrix of doubles, not null
    * @return A Commons matrix
    */
   public static RealMatrix wrap(final DoubleMatrix2D x) {
@@ -95,8 +100,9 @@ public final class CommonsMathWrapper {
   }
 
   /**
-   * @param x An OG 1-D vector of doubles, not null
-   * @return A Commons matrix 
+   * @param x
+   *          An OG 1-D vector of doubles, not null
+   * @return A Commons matrix
    */
   public static RealMatrix wrapAsMatrix(final DoubleMatrix1D x) {
     Validate.notNull(x);
@@ -109,7 +115,8 @@ public final class CommonsMathWrapper {
   }
 
   /**
-   * @param x A Commons matrix, not null
+   * @param x
+   *          A Commons matrix, not null
    * @return An OG 2-D matrix of doubles
    */
   public static DoubleMatrix2D unwrap(final RealMatrix x) {
@@ -118,7 +125,8 @@ public final class CommonsMathWrapper {
   }
 
   /**
-   * @param x An OG vector of doubles, not null
+   * @param x
+   *          An OG vector of doubles, not null
    * @return A Commons vector
    */
   public static RealVector wrap(final DoubleMatrix1D x) {
@@ -127,7 +135,8 @@ public final class CommonsMathWrapper {
   }
 
   /**
-   * @param x A Commons vector, not null
+   * @param x
+   *          A Commons vector, not null
    * @return An OG 1-D matrix of doubles
    */
   public static DoubleMatrix1D unwrap(final RealVector x) {
@@ -136,7 +145,8 @@ public final class CommonsMathWrapper {
   }
 
   /**
-   * @param z An OG complex number, not null
+   * @param z
+   *          An OG complex number, not null
    * @return A Commons complex number
    */
   public static Complex wrap(final ComplexNumber z) {
@@ -145,7 +155,8 @@ public final class CommonsMathWrapper {
   }
 
   /**
-   * @param lagrange A Commons polynomial in Lagrange form, not null
+   * @param lagrange
+   *          A Commons polynomial in Lagrange form, not null
    * @return An OG 1-D function mapping doubles to doubles
    */
   public static Function1D<Double, Double> unwrap(final PolynomialFunctionLagrangeForm lagrange) {
@@ -165,7 +176,8 @@ public final class CommonsMathWrapper {
   }
 
   /**
-   * @param x A Commons pair of <i>(x, f(x))</i>, not null
+   * @param x
+   *          A Commons pair of <i>(x, f(x))</i>, not null
    * @return A matrix of double with the <i>x</i> as the first element and <i>f(x)</i> the second
    */
   public static double[] unwrap(final RealPointValuePair x) {
@@ -174,7 +186,8 @@ public final class CommonsMathWrapper {
   }
 
   /**
-   * @param f An OG 1-D function mapping doubles to doubles, not null
+   * @param f
+   *          An OG 1-D function mapping doubles to doubles, not null
    * @return A Commons differentiable univariate real function
    */
   public static DifferentiableUnivariateRealFunction wrapDifferentiable(final DoubleFunction1D f) {

@@ -23,18 +23,20 @@ import com.opengamma.util.time.Tenor;
  */
 public class CapFloorCMSSpreadSecurityGenerator extends SecurityGenerator<CapFloorCMSSpreadSecurity> {
 
-  private static final DayCount[] DAY_COUNT = new DayCount[] {DayCounts.ACT_360, DayCounts.THIRTY_U_360 };
-  private static final Frequency[] FREQUENCY = new Frequency[] {SimpleFrequency.QUARTERLY, SimpleFrequency.SEMI_ANNUAL, SimpleFrequency.ANNUAL };
-  private static final Tenor[] SHORT_TENORS = new Tenor[] {Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.FIVE_YEARS, Tenor.ofYears(8) };
-  private static final Tenor[] LONG_TENORS = new Tenor[] {Tenor.ofYears(8), Tenor.ofYears(9), Tenor.ofYears(10), Tenor.ofYears(20) };
-  private static final double[] STRIKES = new double[] {0.001, 0.0015, 0.002, 0.0025, 0.003, 0.004, 0.005, 0.0075, 0.01, 0.015, 0.02, 0.03, 0.04 };
+  private static final DayCount[] DAY_COUNT = new DayCount[] { DayCounts.ACT_360, DayCounts.THIRTY_U_360 };
+  private static final Frequency[] FREQUENCY = new Frequency[] { SimpleFrequency.QUARTERLY, SimpleFrequency.SEMI_ANNUAL, SimpleFrequency.ANNUAL };
+  private static final Tenor[] SHORT_TENORS = new Tenor[] { Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.FIVE_YEARS, Tenor.ofYears(8) };
+  private static final Tenor[] LONG_TENORS = new Tenor[] { Tenor.ofYears(8), Tenor.ofYears(9), Tenor.ofYears(10), Tenor.ofYears(20) };
+  private static final double[] STRIKES = new double[] { 0.001, 0.0015, 0.002, 0.0025, 0.003, 0.004, 0.005, 0.0075, 0.01, 0.015, 0.02, 0.03, 0.04 };
 
-  protected String createName(final boolean cap, final Tenor tenor1, final Tenor tenor2, final double strike, final ZonedDateTime startDate, final ZonedDateTime maturityDate,
+  protected String createName(final boolean cap, final Tenor tenor1, final Tenor tenor2, final double strike, final ZonedDateTime startDate,
+      final ZonedDateTime maturityDate,
       final Frequency frequency, final Currency currency, final double notional) {
     final StringBuilder sb = new StringBuilder("CMS ");
     sb.append(cap ? "cap" : "floor");
     sb.append(" spread on ").append(tenor1.getPeriod().toString().substring(1)).append(" and ").append(tenor2.getPeriod().toString().substring(1));
-    sb.append(" @ ").append(strike).append(" [").append(startDate.format(DATE_FORMATTER)).append(" - ").append(maturityDate.format(DATE_FORMATTER)).append("], ");
+    sb.append(" @ ").append(strike).append(" [").append(startDate.format(DATE_FORMATTER)).append(" - ").append(maturityDate.format(DATE_FORMATTER))
+        .append("], ");
     sb.append(frequency.getName()).append(", ").append(currency.getCode()).append(' ').append(NOTIONAL_FORMATTER.format(notional));
     return sb.toString();
   }
@@ -77,7 +79,8 @@ public class CapFloorCMSSpreadSecurityGenerator extends SecurityGenerator<CapFlo
     final DayCount dayCount = getRandom(DAY_COUNT);
     CapFloorCMSSpreadSecurity security = null;
     if (shortIdentifier != null && longIdentifier != null) {
-      security = new CapFloorCMSSpreadSecurity(startDate, maturityDate, notional, longIdentifier, shortIdentifier, strike, frequency, currency, dayCount, payer, cap);
+      security = new CapFloorCMSSpreadSecurity(startDate, maturityDate, notional, longIdentifier, shortIdentifier, strike, frequency, currency, dayCount, payer,
+          cap);
       security.setName(createName(cap, tenor1, tenor2, strike, startDate, maturityDate, frequency, currency, notional));
     }
     return security;

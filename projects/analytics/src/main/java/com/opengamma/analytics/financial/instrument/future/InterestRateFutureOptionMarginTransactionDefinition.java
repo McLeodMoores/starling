@@ -22,10 +22,15 @@ public class InterestRateFutureOptionMarginTransactionDefinition extends Futures
 
   /**
    * Constructor of the future option transaction from details.
-   * @param underlyingOption The underlying option future security.
-   * @param quantity The quantity of the transaction. Can be positive or negative.
-   * @param tradeDate The transaction date.
-   * @param tradePrice The transaction price.
+   * 
+   * @param underlyingOption
+   *          The underlying option future security.
+   * @param quantity
+   *          The quantity of the transaction. Can be positive or negative.
+   * @param tradeDate
+   *          The transaction date.
+   * @param tradePrice
+   *          The transaction price.
    */
   public InterestRateFutureOptionMarginTransactionDefinition(final InterestRateFutureOptionMarginSecurityDefinition underlyingOption, final long quantity,
       final ZonedDateTime tradeDate, final double tradePrice) {
@@ -34,17 +39,19 @@ public class InterestRateFutureOptionMarginTransactionDefinition extends Futures
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
   public InterestRateFutureOptionMarginTransaction toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
-    throw new UnsupportedOperationException("The method toDerivative of InterestRateTransactionDefinition does not support the two argument method (without margin price data).");
+    throw new UnsupportedOperationException(
+        "The method toDerivative of InterestRateTransactionDefinition does not support the two argument method (without margin price data).");
   }
 
   /**
-   * The lastMarginPrice is the last closing price used for margining. It is usually the official closing price of the previous business day.
-   * {@inheritDoc}
+   * The lastMarginPrice is the last closing price used for margining. It is usually the official closing price of the previous business day. {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -53,7 +60,8 @@ public class InterestRateFutureOptionMarginTransactionDefinition extends Futures
     ArgumentChecker.notNull(dateTime, "date");
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");
     final LocalDate date = dateTime.toLocalDate();
-    ArgumentChecker.isTrue(!date.isAfter(getUnderlyingSecurity().getUnderlyingFuture().getFixingPeriodStartDate().toLocalDate()), "Date is after last margin date");
+    ArgumentChecker.isTrue(!date.isAfter(getUnderlyingSecurity().getUnderlyingFuture().getFixingPeriodStartDate().toLocalDate()),
+        "Date is after last margin date");
     final LocalDate tradeDateLocal = getTradeDate().toLocalDate();
     ArgumentChecker.isTrue(!date.isBefore(tradeDateLocal), "Valuation date {} is before the trade date {} ", date, tradeDateLocal);
     final InterestRateFutureOptionMarginSecurity underlyingOption = getUnderlyingSecurity().toDerivative(dateTime, yieldCurveNames);
@@ -63,24 +71,26 @@ public class InterestRateFutureOptionMarginTransactionDefinition extends Futures
     } else { // Transaction is today
       referencePrice = getTradePrice();
     }
-    final InterestRateFutureOptionMarginTransaction optionTransaction = new InterestRateFutureOptionMarginTransaction(underlyingOption, getQuantity(), referencePrice);
+    final InterestRateFutureOptionMarginTransaction optionTransaction = new InterestRateFutureOptionMarginTransaction(underlyingOption, getQuantity(),
+        referencePrice);
     return optionTransaction;
   }
 
   @Override
   public InterestRateFutureOptionMarginTransaction toDerivative(final ZonedDateTime date) {
-    throw new UnsupportedOperationException("The method toDerivative of InterestRateTransactionDefinition does not support the two argument method (without margin price data).");
+    throw new UnsupportedOperationException(
+        "The method toDerivative of InterestRateTransactionDefinition does not support the two argument method (without margin price data).");
   }
 
   /**
-   * {@inheritDoc}
-   * The lastMarginPrice is the last closing price used for margining. It is usually the official closing price of the previous business day.
+   * {@inheritDoc} The lastMarginPrice is the last closing price used for margining. It is usually the official closing price of the previous business day.
    */
   @Override
   public InterestRateFutureOptionMarginTransaction toDerivative(final ZonedDateTime dateTime, final Double lastMarginPrice) {
     final double referencePrice = referencePrice(dateTime, lastMarginPrice);
     final InterestRateFutureOptionMarginSecurity underlyingOption = getUnderlyingSecurity().toDerivative(dateTime);
-    final InterestRateFutureOptionMarginTransaction optionTransaction = new InterestRateFutureOptionMarginTransaction(underlyingOption, getQuantity(), referencePrice);
+    final InterestRateFutureOptionMarginTransaction optionTransaction = new InterestRateFutureOptionMarginTransaction(underlyingOption, getQuantity(),
+        referencePrice);
     return optionTransaction;
   }
 

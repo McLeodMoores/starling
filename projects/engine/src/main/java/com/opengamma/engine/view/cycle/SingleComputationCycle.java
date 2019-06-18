@@ -93,8 +93,8 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
   public static final String MARKET_DATA_SHIFT_PROPERTY = "MARKET_DATA_SHIFT";
 
   /**
-   * Marker for nodes that have not been executed, for example because of blacklist suppression, calculation error or missing input data
-   * (perhaps caused by blacklist suppression or calculation errors).
+   * Marker for nodes that have not been executed, for example because of blacklist suppression, calculation error or missing input data (perhaps caused by
+   * blacklist suppression or calculation errors).
    */
   private static final DependencyNodeJobExecutionResult BLACKLISTED_NODE_JOB_RESULT = new DependencyNodeJobExecutionResult("", CalculationJobResultItemBuilder
       .of(new MutableExecutionLog(ExecutionLogMode.FULL)).withSuppression().toResultItem(), AggregatedExecutionLog.EMPTY);
@@ -149,7 +149,7 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public Instant getValuationTime() {
     return getExecutionOptions().getValuationTime();
   }
@@ -174,7 +174,7 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
   }
 
   /**
-   * Gets the start time
+   * Gets the start time.
    *
    * @return the start timep
    */
@@ -210,7 +210,7 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
     return new HashSet<>(getCompiledViewDefinition().getViewDefinition().getAllCalculationConfigurationNames());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private UniqueId getCycleId() {
     return _cycleId;
   }
@@ -223,7 +223,7 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
     return _viewProcessContext.getExecutionLogModeSource();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public UniqueId getUniqueId() {
     return _cycleId;
@@ -311,9 +311,12 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
   /**
    * Prepares the cycle for execution, organising the caches and copying any values salvaged from a previous cycle.
    *
-   * @param previousCycle the previous cycle from which a delta cycle should be performed, or null to perform a full cycle
-   * @param marketDataSnapshot the market data snapshot with which to execute the cycle, not null
-   * @param suppressExecutionOnNoMarketData true if execution is to be suppressed when input data is entirely missing, false otherwise
+   * @param previousCycle
+   *          the previous cycle from which a delta cycle should be performed, or null to perform a full cycle
+   * @param marketDataSnapshot
+   *          the market data snapshot with which to execute the cycle, not null
+   * @param suppressExecutionOnNoMarketData
+   *          true if execution is to be suppressed when input data is entirely missing, false otherwise
    * @return true if execution should continue, false if execution should be suppressed
    */
   public boolean preExecute(final SingleComputationCycle previousCycle, final MarketDataSnapshot marketDataSnapshot,
@@ -339,13 +342,13 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
     final Map<DistinctMarketDataSelector, Set<ValueSpecification>> marketDataSelections = calculationConfiguration.getMarketDataSelections();
     if (marketDataSelections.isEmpty()) {
       LOGGER.info("No market data selections defined in graph [{}]", calcConfigurationName);
-      return Collections.<ValueSpecification, FunctionParameters>emptyMap();
+      return Collections.<ValueSpecification, FunctionParameters> emptyMap();
     }
     LOGGER.info("Building function parameters for market data manipulation in graph [{}]", calcConfigurationName);
     final Map<ValueSpecification, FunctionParameters> parameters = new HashMap<>();
     // Get function params configured through the view definition
-    final Map<DistinctMarketDataSelector, FunctionParameters> functionParameters =
-        Maps.newHashMap(calculationConfiguration.getMarketDataSelectionFunctionParameters());
+    final Map<DistinctMarketDataSelector, FunctionParameters> functionParameters = Maps
+        .newHashMap(calculationConfiguration.getMarketDataSelectionFunctionParameters());
     LOGGER.info("Added in function parameters from view definition - now have {} entries", functionParameters.size());
     // Add the function params passed through the execution options which will
     // potentially override the same functions from the view definition
@@ -386,8 +389,9 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
   /**
    * Synchronously runs the cycle.
    *
-   * @throws InterruptedException if the thread is interrupted while waiting for the computation cycle to complete. Execution of any
-   * outstanding jobs will be cancelled, but {@link #release()} still must be called.
+   * @throws InterruptedException
+   *           if the thread is interrupted while waiting for the computation cycle to complete. Execution of any outstanding jobs will be cancelled, but
+   *           {@link #release()} still must be called.
    */
   public void execute() throws InterruptedException {
     _executor = new SingleComputationCycleExecutor(this);
@@ -454,8 +458,10 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
   /**
    * Populates the value cache with the required input data.
    *
-   * @param snapshot the market data snapshot from which to source the input data, not null
-   * @param suppressExecutionOnNoMarketData true if execution is to be suppressed when input data is entirely missing, false otherwise
+   * @param snapshot
+   *          the market data snapshot from which to source the input data, not null
+   * @param suppressExecutionOnNoMarketData
+   *          true if execution is to be suppressed when input data is entirely missing, false otherwise
    * @return true if execution should continue, false if execution should be suppressed
    */
   private boolean prepareInputs(final MarketDataSnapshot snapshot, final boolean suppressExecutionOnNoMarketData) {
@@ -542,7 +548,8 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
    * <li>Only recompute the values that could have changed based on live data inputs
    * </ul>
    *
-   * @param previousCycle Previous iteration. It must not have been cleaned yet ({@link #releaseResources()}).
+   * @param previousCycle
+   *          Previous iteration. It must not have been cleaned yet ({@link #releaseResources()}).
    */
   private void computeDelta(final SingleComputationCycle previousCycle) {
     if (previousCycle.getState() != ViewCycleState.EXECUTED) {
@@ -560,9 +567,9 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
       final ViewComputationCache previousCache = previousCycle.getComputationCache(calcConfig);
       final DependencyNodeJobExecutionResultCache jobExecutionResultCache = getJobExecutionResultCache(calcConfig);
       final DependencyNodeJobExecutionResultCache previousJobExecutionResultCache = previousCycle.getJobExecutionResultCache(calcConfig);
-      final LiveDataDeltaCalculator deltaCalculator =
-          new LiveDataDeltaCalculator(depGraph, cache, previousCache, parameterDelta.getValueSpecifications(calcConfig, previousViewDefinition,
-          viewDefinition));
+      final LiveDataDeltaCalculator deltaCalculator = new LiveDataDeltaCalculator(depGraph, cache, previousCache,
+          parameterDelta.getValueSpecifications(calcConfig, previousViewDefinition,
+              viewDefinition));
       deltaCalculator.computeDelta();
       LOGGER.info("Computed delta for calculation configuration '{}'. {} nodes out of {} require recomputation.",
           calcConfig, deltaCalculator.getChangedNodes().size(), depGraph.getSize());
@@ -640,7 +647,8 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
   /**
    * Returns the dependency graph used by this cycle for the given calculation configuration.
    *
-   * @param calcConfName calculation configuration name
+   * @param calcConfName
+   *          calculation configuration name
    * @return the dependency graph
    */
   protected DependencyGraph getDependencyGraph(final String calcConfName) {
@@ -648,22 +656,23 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
   }
 
   /**
-   * Returns the set of values already calculated and in the shared cache at execution of the graph, or that have been blacklisted.
-   * This will control the subset of the graph that is used to create the jobs.
+   * Returns the set of values already calculated and in the shared cache at execution of the graph, or that have been blacklisted. This will control the subset
+   * of the graph that is used to create the jobs.
    *
-   * @param calcConfName the calculation configuration name to query
+   * @param calcConfName
+   *          the calculation configuration name to query
    * @return the values in the shared cache, not null
    */
   protected Set<ValueSpecification> getSharedValues(final String calcConfName) {
     // Get the market data
-    final Set<ValueSpecification> sharedValues =
-        new HashSet<>(getCompiledViewDefinition().getCompiledCalculationConfiguration(calcConfName).getMarketDataRequirements());
+    final Set<ValueSpecification> sharedValues = new HashSet<>(
+        getCompiledViewDefinition().getCompiledCalculationConfiguration(calcConfName).getMarketDataRequirements());
     // Add anything kept as part of a delta cycle
     final DependencyNodeJobExecutionResultCache jobCache = getJobExecutionResultCache(calcConfName);
     sharedValues.addAll(jobCache.getExecutedData());
     // Handle blacklisted nodes
-    final FunctionBlacklistQuery blacklist =
-        getViewProcessContext().getFunctionCompilationService().getFunctionCompilationContext().getGraphExecutionBlacklist();
+    final FunctionBlacklistQuery blacklist = getViewProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
+        .getGraphExecutionBlacklist();
     if (!blacklist.isEmpty()) {
       final Iterator<DependencyNode> nodes = getDependencyGraph(calcConfName).nodeIterator();
       Collection<ComputedValue> errors = null;
@@ -690,7 +699,7 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
     return sharedValues;
   }
 
-  //--------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
   @Override
   public void release() {
     if (getState() == ViewCycleState.DESTROYED) {
@@ -725,11 +734,13 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
   }
 
   /**
-   * Receives a job result fragment. These will be streamed in by the execution framework. Only one notification per job will be
-   * received (for example the execution framework might have repeated/duplicated jobs to handle node failures).
+   * Receives a job result fragment. These will be streamed in by the execution framework. Only one notification per job will be received (for example the
+   * execution framework might have repeated/duplicated jobs to handle node failures).
    *
-   * @param job the job that was executed, not null
-   * @param jobResult the job result, not null
+   * @param job
+   *          the job that was executed, not null
+   * @param jobResult
+   *          the job result, not null
    */
   public void jobCompleted(final CalculationJob job, final CalculationJobResult jobResult) {
     final SingleComputationCycleExecutor executor = _executor;

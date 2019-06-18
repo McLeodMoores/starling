@@ -27,7 +27,7 @@ public class EquityOptionBAWPresentValueFunction extends EquityOptionBAWFunction
   private static final EqyOptBaroneAdesiWhaleyPresentValueCalculator CALCULATOR = EqyOptBaroneAdesiWhaleyPresentValueCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBAWPresentValueFunction() {
     super(ValueRequirementNames.PRESENT_VALUE);

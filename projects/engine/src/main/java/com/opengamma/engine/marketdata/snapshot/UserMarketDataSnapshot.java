@@ -90,11 +90,11 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
   /** The cube specification property */
   private static final String CUBE_SPECIFICATION_PROPERTY = "VolatiltyCubeSpecification";
 
-  private static final Map<String, StructuredMarketDataHandler> STRUCTURED_DATA_HANDLERS =
-      ImmutableMap.of(ValueRequirementNames.YIELD_CURVE_MARKET_DATA, new YieldCurveDataHandler(),
-          ValueRequirementNames.CURVE_MARKET_DATA, new CurveDataHandler(),
-          ValueRequirementNames.VOLATILITY_SURFACE_DATA, new SurfaceDataHandler(),
-          ValueRequirementNames.VOLATILITY_CUBE_MARKET_DATA, new CubeDataHandler());
+  private static final Map<String, StructuredMarketDataHandler> STRUCTURED_DATA_HANDLERS = ImmutableMap.of(ValueRequirementNames.YIELD_CURVE_MARKET_DATA,
+      new YieldCurveDataHandler(),
+      ValueRequirementNames.CURVE_MARKET_DATA, new CurveDataHandler(),
+      ValueRequirementNames.VOLATILITY_SURFACE_DATA, new SurfaceDataHandler(),
+      ValueRequirementNames.VOLATILITY_CUBE_MARKET_DATA, new CubeDataHandler());
 
   private InMemoryLKVMarketDataProvider _unstructured;
   private final StructuredMarketDataSnapshot _snapshot;
@@ -113,22 +113,18 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
     // does not have the override values.
     if (valueSnapshot.getOverrideValue() != null) {
       return valueSnapshot.getOverrideValue();
-    } else {
-      return valueSnapshot.getMarketValue();
     }
+    return valueSnapshot.getMarketValue();
   }
 
   private static Double queryDouble(final ValueSnapshot valueSnapshot) {
     final Object objResult = query(valueSnapshot);
-    if (objResult == null //original query() would return null for Doubles so do same here
+    if (objResult == null // original query() would return null for Doubles so do same here
         ||
         objResult instanceof Double) {
       return (Double) objResult;
-    } else {
-      throw new OpenGammaRuntimeException(format(
-          "Double was expected in snapshot but Object instance of type %s found instead.",
-          objResult.getClass()));
     }
+    throw new OpenGammaRuntimeException(format("Double was expected in snapshot but Object instance of type %s found instead.", objResult.getClass()));
   }
 
   private static SnapshotDataBundle createSnapshotDataBundle(final UnstructuredMarketDataSnapshot values) {
@@ -240,8 +236,8 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
   public Instant getSnapshotTime() {
     Instant snapshotTime = _snapshot.getValuationTime();
     if (snapshotTime == null) {
-      //older snapshots do not always contain valuation times,
-      //so default to now if none can be inferred.
+      // older snapshots do not always contain valuation times,
+      // so default to now if none can be inferred.
       snapshotTime = Instant.now();
     }
     return snapshotTime;
@@ -252,9 +248,8 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
     final StructuredMarketDataHandler handler = STRUCTURED_DATA_HANDLERS.get(valueSpecification.getValueName());
     if (handler == null) {
       return _unstructured.getCurrentValue(valueSpecification);
-    } else {
-      return handler.query(valueSpecification, _snapshot);
     }
+    return handler.query(valueSpecification, _snapshot);
   }
 
   // MarketDataProvider
@@ -271,9 +266,8 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
         final StructuredMarketDataHandler handler = STRUCTURED_DATA_HANDLERS.get(desiredValue.getValueName());
         if (handler == null) {
           return unstructured.getAvailability(targetSpec, target, desiredValue);
-        } else {
-          return handler.resolve(targetSpec, target, desiredValue, _snapshot);
         }
+        return handler.resolve(targetSpec, target, desiredValue, _snapshot);
       }
 
       @Override
@@ -293,8 +287,7 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
   }
 
   /**
-   * Handler for a type of structured market data. Converts the data stored in the database into an object that
-   * can be consumed by the engine.
+   * Handler for a type of structured market data. Converts the data stored in the database into an object that can be consumed by the engine.
    */
   private abstract static class StructuredMarketDataHandler {
 
@@ -303,7 +296,8 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
     }
 
     /**
-     * @param snapshot A snapshot of market data
+     * @param snapshot
+     *          A snapshot of market data
      * @return Whether the snapshot contains data that this handler can convert.
      */
     protected abstract boolean isValidSnapshot(StructuredMarketDataSnapshot snapshot);
@@ -391,10 +385,11 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
         }
         return createValueProperties().with(ValuePropertyNames.SURFACE,
             surface.getName()).with(INSTRUMENT_TYPE_PROPERTY,
-                surface.getInstrumentType()).with(
-                    SURFACE_QUOTE_TYPE_PROPERTY,
-                    surface.getQuoteType())
-                    .with(SURFACE_QUOTE_UNITS_PROPERTY, surface.getQuoteUnits()).get();
+                surface.getInstrumentType())
+            .with(
+                SURFACE_QUOTE_TYPE_PROPERTY,
+                surface.getQuoteType())
+            .with(SURFACE_QUOTE_UNITS_PROPERTY, surface.getQuoteUnits()).get();
       }
       return null;
     }
@@ -443,7 +438,7 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
       final Set<String> quoteTypes = constraints.getValues(CUBE_QUOTE_TYPE_PROPERTY);
       final Set<String> quoteUnits = constraints.getValues(CUBE_QUOTE_UNITS_PROPERTY);
       for (final VolatilityCubeKey cube : snapshot.getVolatilityCubes().keySet()) {
-        if (!target.equals(ComputationTarget.NULL)) {
+        if (!target.equals(ComputationTarget.NULL.getUniqueId())) {
           continue;
         }
         if (definitionNames != null && !definitionNames.isEmpty() && !definitionNames.contains(cube.getDefinitionName())) {
@@ -517,9 +512,8 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
       }
       if (properties != null) {
         return properties.get();
-      } else {
-        return null;
       }
+      return null;
     }
 
     @Override
@@ -567,9 +561,8 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
       }
       if (properties != null) {
         return properties.get();
-      } else {
-        return null;
       }
+      return null;
     }
 
     @Override

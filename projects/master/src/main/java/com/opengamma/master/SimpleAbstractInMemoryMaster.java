@@ -173,11 +173,13 @@ implements AbstractMaster<D>, ChangeProvider {
     final List<D> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, storedVersionFrom, storedVersionTo, replacementDocuments);
     final D lastReplacementDocument = orderedReplacementDocuments.get(orderedReplacementDocuments.size() - 1);
     // Start of fix for no id
-    final UniqueId newUniqueId = objectId.getObjectId().atLatestVersion();
-    lastReplacementDocument.setUniqueId(newUniqueId);
-    if (lastReplacementDocument.getValue() instanceof MutableUniqueIdentifiable) {
-      final MutableUniqueIdentifiable muidable = (MutableUniqueIdentifiable) lastReplacementDocument.getValue();
-      muidable.setUniqueId(newUniqueId);
+    if (lastReplacementDocument.getUniqueId() == null) {
+      final UniqueId newUniqueId = objectId.getObjectId().atLatestVersion();
+      lastReplacementDocument.setUniqueId(newUniqueId);
+      if (lastReplacementDocument.getValue() instanceof MutableUniqueIdentifiable) {
+        final MutableUniqueIdentifiable muidable = (MutableUniqueIdentifiable) lastReplacementDocument.getValue();
+        muidable.setUniqueId(newUniqueId);
+      }
     }
     // end fix for no id
     if (!_store.replace(objectId.getObjectId(), storedDocument, lastReplacementDocument)) {

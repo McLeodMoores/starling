@@ -49,7 +49,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Base class for FX forward functions
+ * Base class for FX forward functions.
+ *
  * @deprecated Use {@link DiscountingFunction}
  */
 @Deprecated
@@ -73,7 +74,8 @@ public abstract class FXForwardFunction extends AbstractFunction.NonCompiledInvo
   private final String _valueRequirementName;
 
   /**
-   * @param valueRequirementName The value requirement name, not null
+   * @param valueRequirementName
+   *          The value requirement name, not null
    */
   public FXForwardFunction(final String valueRequirementName) {
     ArgumentChecker.notNull(valueRequirementName, "value requirement name");
@@ -81,7 +83,8 @@ public abstract class FXForwardFunction extends AbstractFunction.NonCompiledInvo
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
@@ -109,8 +112,8 @@ public abstract class FXForwardFunction extends AbstractFunction.NonCompiledInvo
     final CurrencyPairs baseQuotePairs = (CurrencyPairs) baseQuotePairsObject;
     final YieldAndDiscountCurve[] curves;
     final String[] allCurveNames;
-    curves = new YieldAndDiscountCurve[] {payCurve, receiveCurve };
-    allCurveNames = new String[] {fullPayCurveName, fullReceiveCurveName };
+    curves = new YieldAndDiscountCurve[] { payCurve, receiveCurve };
+    allCurveNames = new String[] { fullPayCurveName, fullReceiveCurveName };
     // Implementation note: The ForexSecurityConverter create the Forex with currency order pay/receive. The curve are passed in the same order.
     final ForexSecurityConverter converter = new ForexSecurityConverter(baseQuotePairs);
     final InstrumentDefinition<?> definition = security.accept(converter);
@@ -121,21 +124,28 @@ public abstract class FXForwardFunction extends AbstractFunction.NonCompiledInvo
     return getResult(forex, yieldCurves, target, desiredValues, inputs, spec, executionContext);
   }
 
-  //TODO clumsy. Push the execute() method down into the functions and have getForward() and getData() methods
+  // TODO clumsy. Push the execute() method down into the functions and have getForward() and getData() methods
   /**
    * Performs the calculation.
    *
-   * @param fxForward The FX forward
-   * @param data The yield curve data
-   * @param target The computation target
-   * @param desiredValues The desired values
-   * @param inputs The function inputs
-   * @param spec The specification of the result
-   * @param executionContext The execution context
+   * @param fxForward
+   *          The FX forward
+   * @param data
+   *          The yield curve data
+   * @param target
+   *          The computation target
+   * @param desiredValues
+   *          The desired values
+   * @param inputs
+   *          The function inputs
+   * @param spec
+   *          The specification of the result
+   * @param executionContext
+   *          The execution context
    * @return A set of computed values
    */
-  protected abstract Set<ComputedValue> getResult(final Forex fxForward, final YieldCurveBundle data, final ComputationTarget target, final Set<ValueRequirement> desiredValues,
-      final FunctionInputs inputs, final ValueSpecification spec, final FunctionExecutionContext executionContext);
+  protected abstract Set<ComputedValue> getResult(Forex fxForward, YieldCurveBundle data, ComputationTarget target,
+      Set<ValueRequirement> desiredValues, FunctionInputs inputs, ValueSpecification spec, FunctionExecutionContext executionContext);
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -174,7 +184,8 @@ public abstract class FXForwardFunction extends AbstractFunction.NonCompiledInvo
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final Currency payCurrency = security.accept(ForexVisitors.getPayCurrencyVisitor());
     final Currency receiveCurrency = security.accept(ForexVisitors.getReceiveCurrencyVisitor());
-    final ValueRequirement payFundingCurve = YieldCurveFunctionUtils.getCurveRequirementForFXForward(ComputationTargetSpecification.of(payCurrency), payCurveName, payCurveCalculationConfig, true);
+    final ValueRequirement payFundingCurve = YieldCurveFunctionUtils.getCurveRequirementForFXForward(ComputationTargetSpecification.of(payCurrency),
+        payCurveName, payCurveCalculationConfig, true);
     final ValueRequirement receiveFundingCurve = YieldCurveFunctionUtils.getCurveRequirementForFXForward(ComputationTargetSpecification.of(receiveCurrency),
         receiveCurveName, receiveCurveCalculationConfig, false);
     final ValueRequirement pairQuoteRequirement = new ValueRequirement(ValueRequirementNames.CURRENCY_PAIRS, ComputationTargetSpecification.NULL);
@@ -182,7 +193,8 @@ public abstract class FXForwardFunction extends AbstractFunction.NonCompiledInvo
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String currencyPairConfigName = null;
     String payCurveName = null;
     String payCurveCalculationConfig = null;
@@ -224,33 +236,42 @@ public abstract class FXForwardFunction extends AbstractFunction.NonCompiledInvo
   /**
    * Gets the general result properties.
    *
-   * @param target The target
+   * @param target
+   *          The target
    * @return The result properties
    */
-  protected abstract ValueProperties.Builder getResultProperties(final ComputationTarget target);
+  protected abstract ValueProperties.Builder getResultProperties(ComputationTarget target);
 
   /**
    * Gets the result properties with curve information set.
    *
-   * @param target The target
-   * @param payCurve The name of the pay curve
-   * @param payCurveCalculationConfig The name of the pay curve calculation configuration
-   * @param receiveCurve The name of the receive curve
-   * @param receiveCurveCalculationConfig The name of the receive curve calculation configuration
-   * @param baseQuotePair The base / counter information for the currency pair
+   * @param target
+   *          The target
+   * @param payCurve
+   *          The name of the pay curve
+   * @param payCurveCalculationConfig
+   *          The name of the pay curve calculation configuration
+   * @param receiveCurve
+   *          The name of the receive curve
+   * @param receiveCurveCalculationConfig
+   *          The name of the receive curve calculation configuration
+   * @param baseQuotePair
+   *          The base / counter information for the currency pair
    * @return The result properties
    */
-  protected abstract ValueProperties.Builder getResultProperties(final ComputationTarget target, final String payCurve, final String payCurveCalculationConfig,
-      final String receiveCurve, final String receiveCurveCalculationConfig, final CurrencyPair baseQuotePair);
+  protected abstract ValueProperties.Builder getResultProperties(ComputationTarget target, String payCurve, String payCurveCalculationConfig,
+      String receiveCurve, String receiveCurveCalculationConfig, CurrencyPair baseQuotePair);
 
   /**
    * Gets the result properties.
    *
-   * @param target The target
-   * @param desiredValue The desired value
+   * @param target
+   *          The target
+   * @param desiredValue
+   *          The desired value
    * @return The result properties
    */
-  protected abstract ValueProperties.Builder getResultProperties(final ComputationTarget target, final ValueRequirement desiredValue);
+  protected abstract ValueProperties.Builder getResultProperties(ComputationTarget target, ValueRequirement desiredValue);
 
   /**
    * Gets the value requirement name.
@@ -264,14 +285,20 @@ public abstract class FXForwardFunction extends AbstractFunction.NonCompiledInvo
   /**
    * Gets the pay curve.
    *
-   * @param inputs The function inputs
-   * @param currency The pay currency
-   * @param curveName The pay curve name
-   * @param curveCalculationConfig The pay curve calculation configuration name
+   * @param inputs
+   *          The function inputs
+   * @param currency
+   *          The pay currency
+   * @param curveName
+   *          The pay curve name
+   * @param curveCalculationConfig
+   *          The pay curve calculation configuration name
    * @return The pay curve
    */
-  protected static YieldAndDiscountCurve getPayCurve(final FunctionInputs inputs, final Currency currency, final String curveName, final String curveCalculationConfig) {
-    final Object curveObject = inputs.getValue(YieldCurveFunctionUtils.getCurveRequirementForFXForward(ComputationTargetSpecification.of(currency), curveName, curveCalculationConfig, true));
+  protected static YieldAndDiscountCurve getPayCurve(final FunctionInputs inputs, final Currency currency, final String curveName,
+      final String curveCalculationConfig) {
+    final Object curveObject = inputs.getValue(
+        YieldCurveFunctionUtils.getCurveRequirementForFXForward(ComputationTargetSpecification.of(currency), curveName, curveCalculationConfig, true));
     if (curveObject == null) {
       throw new OpenGammaRuntimeException("Could not get " + curveName + " curve");
     }
@@ -282,13 +309,18 @@ public abstract class FXForwardFunction extends AbstractFunction.NonCompiledInvo
   /**
    * Gets the receive curve.
    *
-   * @param inputs The function inputs
-   * @param currency The receive currency
-   * @param curveName The receive curve name
-   * @param curveCalculationConfig The receive curve calculation configuration name
+   * @param inputs
+   *          The function inputs
+   * @param currency
+   *          The receive currency
+   * @param curveName
+   *          The receive curve name
+   * @param curveCalculationConfig
+   *          The receive curve calculation configuration name
    * @return The receive curve
    */
-  protected static YieldAndDiscountCurve getReceiveCurve(final FunctionInputs inputs, final Currency currency, final String curveName, final String curveCalculationConfig) {
+  protected static YieldAndDiscountCurve getReceiveCurve(final FunctionInputs inputs, final Currency currency, final String curveName,
+      final String curveCalculationConfig) {
     final Object curveObject = inputs.getValue(YieldCurveFunctionUtils.getCurveRequirementForFXForward(ComputationTargetSpecification.of(currency),
         curveName, curveCalculationConfig, false));
     if (curveObject == null) {

@@ -666,8 +666,7 @@ public final class DefaultSecurityAttributeMappings {
     final CurrencyPair pair = currencyPairs.getCurrencyPair(payCurrency, receiveCurrency);
     if (pair != null) {
       return pair.getName();
-    } else {
-      return payCurrency.getCode() + "/" + receiveCurrency.getCode();
     }
+    return payCurrency.getCode() + "/" + receiveCurrency.getCode();
   }
 }

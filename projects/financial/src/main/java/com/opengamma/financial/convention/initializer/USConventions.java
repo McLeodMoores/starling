@@ -47,7 +47,7 @@ import static com.opengamma.financial.convention.initializer.PerCurrencyConventi
 import org.threeten.bp.LocalTime;
 
 import com.opengamma.analytics.financial.interestrate.CompoundingType;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.convention.CompoundingIborLegConvention;
 import com.opengamma.financial.convention.DeliverablePriceQuotedSwapFutureConvention;
@@ -90,7 +90,7 @@ public class USConventions extends ConventionMasterInitializer {
 
   /** Singleton. */
   public static final ConventionMasterInitializer INSTANCE = new USConventions();
-  /** OIS X-Ccy USD/JPY ON leg convention string **/
+  /** OIS X-Ccy USD/JPY ON leg convention string. **/
   public static final String OIS_USD_JPY_ON_LEG = "USD Overnight USD/JPY XCcy Leg";
 
   private static final BusinessDayConvention MODIFIED_FOLLOWING = BusinessDayConventions.MODIFIED_FOLLOWING;
@@ -107,7 +107,7 @@ public class USConventions extends ConventionMasterInitializer {
   protected USConventions() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ConventionMaster master) {
     final String depositConventionName = getConventionName(Currency.USD, DEPOSIT);
@@ -196,29 +196,29 @@ public class USConventions extends ConventionMasterInitializer {
     final String liborLeg1MConventionName = getConventionName(Currency.USD, TENOR_STR_1M, IRS_IBOR_LEG);
     final VanillaIborLegConvention liborLeg1MConvention = new VanillaIborLegConvention(
         liborLeg1MConventionName, getIds(Currency.USD, TENOR_STR_1M, IRS_IBOR_LEG),
-        liborConventionId, true, Interpolator1DFactory.LINEAR, Tenor.ONE_MONTH, 2, true, StubType.SHORT_START, false, 0);
+        liborConventionId, true, LinearInterpolator1dAdapter.NAME, Tenor.ONE_MONTH, 2, true, StubType.SHORT_START, false, 0);
     final String liborLeg3MConventionName = getConventionName(Currency.USD, TENOR_STR_3M, IRS_IBOR_LEG);
     final VanillaIborLegConvention liborLeg3MConvention = new VanillaIborLegConvention(
         liborLeg3MConventionName, getIds(Currency.USD, TENOR_STR_3M, IRS_IBOR_LEG),
-        liborConventionId, true, Interpolator1DFactory.LINEAR, Tenor.THREE_MONTHS, 2, true, StubType.SHORT_START, false, 0);
+        liborConventionId, true, LinearInterpolator1dAdapter.NAME, Tenor.THREE_MONTHS, 2, true, StubType.SHORT_START, false, 0);
     final String liborLeg6MConventionName = getConventionName(Currency.USD, TENOR_STR_6M, IRS_IBOR_LEG);
     final VanillaIborLegConvention liborLeg6MConvention = new VanillaIborLegConvention(
         liborLeg6MConventionName, getIds(Currency.USD, TENOR_STR_6M, IRS_IBOR_LEG),
-        liborConventionId, true, Interpolator1DFactory.LINEAR, Tenor.SIX_MONTHS, 2, true, StubType.SHORT_START, false, 0);
+        liborConventionId, true, LinearInterpolator1dAdapter.NAME, Tenor.SIX_MONTHS, 2, true, StubType.SHORT_START, false, 0);
     final String liborLeg12MConventionName = getConventionName(Currency.USD, TENOR_STR_12M, IRS_IBOR_LEG);
     final VanillaIborLegConvention liborLeg12MConvention = new VanillaIborLegConvention(
         liborLeg12MConventionName, getIds(Currency.USD, TENOR_STR_12M, IRS_IBOR_LEG),
-        liborConventionId, true, Interpolator1DFactory.LINEAR, Tenor.TWELVE_MONTHS, 2, true, StubType.SHORT_START, false, 0);
+        liborConventionId, true, LinearInterpolator1dAdapter.NAME, Tenor.TWELVE_MONTHS, 2, true, StubType.SHORT_START, false, 0);
 
     // Ibor legs - with payment delay
     final String liborLeg3MPayLagConventionName = getConventionName(Currency.USD, TENOR_STR_3M, PAY_LAG + IBOR_LEG);
     final VanillaIborLegConvention liborLeg3MPayLagConvention = new VanillaIborLegConvention(
         liborLeg3MPayLagConventionName, getIds(Currency.USD, TENOR_STR_3M, PAY_LAG + IBOR_LEG),
-        liborConventionId, true, Interpolator1DFactory.LINEAR, Tenor.THREE_MONTHS, 2, true, StubType.NONE, false, 2);
+        liborConventionId, true, LinearInterpolator1dAdapter.NAME, Tenor.THREE_MONTHS, 2, true, StubType.NONE, false, 2);
 
     // Ibor legs - compounded
     final String liborLeg1MComp3MConventionName = getConventionName(Currency.USD, TENOR_STR_1M + " x "
-    + TENOR_STR_3M, IBOR_CMP_FLAT_LEG); // "USD 1M x 3M Comp Ibor Leg"
+        + TENOR_STR_3M, IBOR_CMP_FLAT_LEG); // "USD 1M x 3M Comp Ibor Leg"
     final CompoundingIborLegConvention liborLeg1MComp3MConvention = new CompoundingIborLegConvention(
         liborLeg1MComp3MConventionName, getIds(Currency.USD, TENOR_STR_1M + " x " + TENOR_STR_3M, IBOR_CMP_FLAT_LEG),
         liborConventionId, Tenor.THREE_MONTHS, CompoundingType.FLAT_COMPOUNDING, Tenor.ONE_MONTH, StubType.SHORT_START,
@@ -262,7 +262,8 @@ public class USConventions extends ConventionMasterInitializer {
     final DeliverablePriceQuotedSwapFutureConvention cmsDeliverableSwapFutureConvention = new DeliverablePriceQuotedSwapFutureConvention(
         cmeDeliverableSwapFutureConventionName,
         ExternalIdBundle.of(SCHEME_NAME, CME_DELIVERABLE_SWAP_FUTURE), ExternalId.of(ExchangeTradedInstrumentExpiryCalculator.SCHEME,
-            IMMFutureAndFutureOptionQuarterlyExpiryCalculator.NAME), US, liborConventionId, 100000);
+            IMMFutureAndFutureOptionQuarterlyExpiryCalculator.NAME),
+        US, liborConventionId, 100000);
 
     // Inflation
     final PriceIndexConvention priceIndexConvention = new PriceIndexConvention(
@@ -280,7 +281,7 @@ public class USConventions extends ConventionMasterInitializer {
     final String liborLegGovtConventionName = getConventionName(Currency.USD, TENOR_STR_3M, GOVT + IBOR_LEG);
     final VanillaIborLegConvention liborLegGovtConvention = new VanillaIborLegConvention(
         liborLegGovtConventionName, getIds(Currency.USD, TENOR_STR_3M, GOVT + IBOR_LEG),
-        liborConventionId, true, Interpolator1DFactory.LINEAR, Tenor.THREE_MONTHS, 2, false, StubType.NONE, false, 0);
+        liborConventionId, true, LinearInterpolator1dAdapter.NAME, Tenor.THREE_MONTHS, 2, false, StubType.NONE, false, 0);
 
     // X-Ccy OIS
     final OISLegConvention oisXCcyJPYLegConvention = new OISLegConvention(

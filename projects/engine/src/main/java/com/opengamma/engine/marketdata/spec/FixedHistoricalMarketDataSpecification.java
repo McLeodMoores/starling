@@ -22,8 +22,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 @BeanDefinition(hierarchy = "immutable")
-public class FixedHistoricalMarketDataSpecification extends HistoricalMarketDataSpecification
-    implements MarketDataSpecification {
+public class FixedHistoricalMarketDataSpecification extends HistoricalMarketDataSpecification {
 
   private static final long serialVersionUID = 1L;
 
@@ -31,20 +30,22 @@ public class FixedHistoricalMarketDataSpecification extends HistoricalMarketData
   private final LocalDate _snapshotDate;
 
   /**
-   * Creates an instance with a snapshotDate
+   * Creates an instance with a snapshotDate.
    *
-   * @param snapshotDate the snapshot date, not null
+   * @param snapshotDate
+   *          the snapshot date, not null
    */
   public FixedHistoricalMarketDataSpecification(final LocalDate snapshotDate) {
-   this(null, snapshotDate);
+    this(null, snapshotDate);
   }
 
-
   /**
-   * Creates an instance with a timeSeriesResolverKey and snapshotDate
+   * Creates an instance with a timeSeriesResolverKey and snapshotDate.
    *
-   * @param timeSeriesResolverKey the timeseries resolver key, not null
-   * @param snapshotDate the snapshot date, not null
+   * @param timeSeriesResolverKey
+   *          the timeseries resolver key, not null
+   * @param snapshotDate
+   *          the snapshot date, not null
    */
   public FixedHistoricalMarketDataSpecification(final String timeSeriesResolverKey, final LocalDate snapshotDate) {
     super(timeSeriesResolverKey);

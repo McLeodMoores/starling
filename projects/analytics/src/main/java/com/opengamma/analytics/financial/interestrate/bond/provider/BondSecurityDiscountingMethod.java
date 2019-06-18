@@ -54,6 +54,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Return the class instance.
+   * 
    * @return The instance.
    */
   public static BondSecurityDiscountingMethod getInstance() {
@@ -77,7 +78,8 @@ public final class BondSecurityDiscountingMethod {
   /**
    * The present value parallel shifts curve sensitivity calculator.
    */
-  private static final PresentValueParallelCurveSensitivityDiscountingCalculator PVPCSDC = PresentValueParallelCurveSensitivityDiscountingCalculator.getInstance();
+  private static final PresentValueParallelCurveSensitivityDiscountingCalculator PVPCSDC = PresentValueParallelCurveSensitivityDiscountingCalculator
+      .getInstance();
   /**
    * The root bracket used for yield finding.
    */
@@ -93,13 +95,17 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the present value of a bond security (without settlement amount payment).
-   * @param bond The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves) {
     ArgumentChecker.notNull(bond, "Bond");
-    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerMulticurves, bond.getCurrency(), bond.getIssuerEntity());
+    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerMulticurves, bond.getCurrency(),
+        bond.getIssuerEntity());
     final MultipleCurrencyAmount pvNominal = bond.getNominal().accept(PVDC, multicurvesDecorated);
     final MultipleCurrencyAmount pvCoupon = bond.getCoupon().accept(PVDC, multicurvesDecorated);
     return pvNominal.plus(pvCoupon);
@@ -107,12 +113,17 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the present value of a bond transaction from its clean price.
-   * @param bond The bond transaction.
-   * @param multicurves The multi-curves provider.
-   * @param cleanPrice The bond clean price.
+   * 
+   * @param bond
+   *          The bond transaction.
+   * @param multicurves
+   *          The multi-curves provider.
+   * @param cleanPrice
+   *          The bond clean price.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValueFromCleanPrice(final BondSecurity<? extends Payment, ? extends Coupon> bond, final MulticurveProviderInterface multicurves, final double cleanPrice) {
+  public MultipleCurrencyAmount presentValueFromCleanPrice(final BondSecurity<? extends Payment, ? extends Coupon> bond,
+      final MulticurveProviderInterface multicurves, final double cleanPrice) {
     ArgumentChecker.isTrue(bond instanceof BondFixedSecurity, "Present value from clean price available only for fixed coupon bond");
     final BondFixedSecurity bondFixed = (BondFixedSecurity) bond;
     final double dfSettle = multicurves.getDiscountFactor(bond.getCurrency(), bondFixed.getSettlementTime());
@@ -122,12 +133,17 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the present value of a bond transaction from its yield.
-   * @param bond The bond transaction.
-   * @param multicurves The multi-curves provider.
-   * @param yield The bond yield.
+   * 
+   * @param bond
+   *          The bond transaction.
+   * @param multicurves
+   *          The multi-curves provider.
+   * @param yield
+   *          The bond yield.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValueFromYield(final BondSecurity<? extends Payment, ? extends Coupon> bond, final MulticurveProviderInterface multicurves, final double yield) {
+  public MultipleCurrencyAmount presentValueFromYield(final BondSecurity<? extends Payment, ? extends Coupon> bond,
+      final MulticurveProviderInterface multicurves, final double yield) {
     ArgumentChecker.isTrue(bond instanceof BondFixedSecurity, "Present value from clean price available only for fixed coupon bond");
     final BondFixedSecurity bondFixed = (BondFixedSecurity) bond;
     final double cleanPrice = cleanPriceFromYield(bondFixed, yield);
@@ -135,25 +151,34 @@ public final class BondSecurityDiscountingMethod {
   }
 
   /**
-   * Computes the present value of a bond security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bond (Issuer Entity).
-   * The parallel shift is done in the curve convention.
-   * @param bond The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param zSpread The z-spread.
+   * Computes the present value of a bond security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bond
+   * (Issuer Entity). The parallel shift is done in the curve convention.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param zSpread
+   *          The z-spread.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValueFromZSpread(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves, final double zSpread) {
+  public MultipleCurrencyAmount presentValueFromZSpread(final BondSecurity<? extends Payment, ? extends Coupon> bond,
+      final IssuerProviderInterface issuerMulticurves, final double zSpread) {
     final IssuerProviderInterface issuerShifted = new IssuerProviderIssuerDecoratedSpread(issuerMulticurves, bond.getIssuerEntity(), zSpread);
     return presentValue(bond, issuerShifted);
   }
 
   /**
-   * @param bond The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param zSpread The z-spread.
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param zSpread
+   *          The z-spread.
    * @return The Z spread sensitivity.
    */
-  public double presentValueZSpreadSensitivity(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves, final double zSpread) {
+  public double presentValueZSpreadSensitivity(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves,
+      final double zSpread) {
     final IssuerProviderInterface issuerShifted = new IssuerProviderIssuerDecoratedSpread(issuerMulticurves, bond.getIssuerEntity(), zSpread);
     final StringAmount parallelSensi = presentValueParallelCurveSensitivity(bond, issuerShifted);
     return parallelSensi.getMap().get(issuerMulticurves.getName(bond.getIssuerEntity()));
@@ -161,8 +186,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the dirty price of a bond security from curves.
-   * @param bond The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
    * @return The dirty price.
    */
   public double dirtyPriceFromCurves(final BondFixedSecurity bond, final IssuerProviderInterface issuerMulticurves) {
@@ -176,8 +204,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the dirty price of a bond security from a clean price.
-   * @param bond The bond security.
-   * @param cleanPrice The clean price.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param cleanPrice
+   *          The clean price.
    * @return The dirty price.
    */
   public double dirtyPriceFromCleanPrice(final BondFixedSecurity bond, final double cleanPrice) {
@@ -187,8 +218,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the dirty price from the conventional yield.
-   * @param bond  The bond security.
-   * @param yield The bond yield.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param yield
+   *          The bond yield.
    * @return The dirty price.
    */
   public double dirtyPriceFromYield(final BondFixedSecurity bond, final double yield) {
@@ -203,7 +237,8 @@ public final class BondSecurityDiscountingMethod {
         return (nominal + bond.getCoupon().getNthPayment(0).getAmount()) / (1.0 + bond.getFactorToNextCoupon() * yield / bond.getCouponPerYear()) / nominal;
       }
       if (yieldConvention.equals(FRANCE_COMPOUND_METHOD)) {
-        return (nominal + bond.getCoupon().getNthPayment(0).getAmount()) / nominal * Math.pow(1.0 + yield / bond.getCouponPerYear(), -bond.getFactorToNextCoupon());
+        return (nominal + bond.getCoupon().getNthPayment(0).getAmount()) / nominal
+            * Math.pow(1.0 + yield / bond.getCouponPerYear(), -bond.getFactorToNextCoupon());
       }
     }
     if (yieldConvention.equals(US_STREET) || yieldConvention.equals(UK_BUMP_DMO_METHOD) || yieldConvention.equals(GERMAN_BOND)
@@ -219,8 +254,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Calculates the dirty price from a standard yield.
-   * @param bond The bond
-   * @param yield The yield
+   * 
+   * @param bond
+   *          The bond
+   * @param yield
+   *          The yield
    * @return The dirty price
    */
   private double dirtyPriceFromYieldStandard(final BondFixedSecurity bond, final double yield) {
@@ -238,8 +276,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the dirty price sensitivity to the curves.
-   * @param bond The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
    * @return The price curve sensitivity.
    */
   public MulticurveSensitivity dirtyPriceCurveSensitivity(final BondFixedSecurity bond, final IssuerProviderInterface issuerMulticurves) {
@@ -263,8 +304,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the clean price of a bond security from curves.
-   * @param bond The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
    * @return The clean price.
    */
   public double cleanPriceFromCurves(final BondFixedSecurity bond, final IssuerProviderInterface issuerMulticurves) {
@@ -274,8 +318,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the clean price of a bond security from a dirty price.
-   * @param bond The bond security.
-   * @param dirtyPrice The dirty price.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param dirtyPrice
+   *          The dirty price.
    * @return The clean price.
    */
   public double cleanPriceFromDirtyPrice(final BondFixedSecurity bond, final double dirtyPrice) {
@@ -285,8 +332,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the clean price from the conventional yield.
-   * @param bond  The bond security.
-   * @param yield The bond yield.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param yield
+   *          The bond yield.
    * @return The clean price.
    */
   public double cleanPriceFromYield(final BondFixedSecurity bond, final double yield) {
@@ -297,8 +347,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the conventional yield from the dirty price.
-   * @param bond The bond security.
-   * @param dirtyPrice The bond dirty price.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param dirtyPrice
+   *          The bond dirty price.
    * @return The yield.
    */
   public double yieldFromDirtyPrice(final BondFixedSecurity bond, final double dirtyPrice) {
@@ -318,8 +371,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the conventional yield from the dirty price.
-   * @param bond The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
    * @return The yield.
    */
   public double yieldFromCurves(final BondFixedSecurity bond, final IssuerProviderInterface issuerMulticurves) {
@@ -330,8 +386,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the conventional yield from the clean price.
-   * @param bond The bond security.
-   * @param cleanPrice The bond clean price.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param cleanPrice
+   *          The bond clean price.
    * @return The yield.
    */
   public double yieldFromCleanPrice(final BondFixedSecurity bond, final double cleanPrice) {
@@ -342,8 +401,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the modified duration of a bond from the conventional yield.
-   * @param bond  The bond security.
-   * @param yield The bond yield.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param yield
+   *          The bond yield.
    * @return The modified duration.
    */
   public double modifiedDurationFromYield(final BondFixedSecurity bond, final double yield) {
@@ -373,8 +435,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Calculates the modified duration from a standard yield.
-   * @param bond The bond
-   * @param yield The yield
+   * 
+   * @param bond
+   *          The bond
+   * @param yield
+   *          The yield
    * @return The modified duration
    */
   private double modifiedDurationFromYieldStandard(final BondFixedSecurity bond, final double yield) {
@@ -398,8 +463,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the modified duration of a bond from the curves.
-   * @param bond  The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
    * @return The modified duration.
    */
   public double modifiedDurationFromCurves(final BondFixedSecurity bond, final IssuerProviderInterface issuerMulticurves) {
@@ -409,8 +477,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the modified duration of a bond from the dirty price.
-   * @param bond  The bond security.
-   * @param dirtyPrice The bond dirty price.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param dirtyPrice
+   *          The bond dirty price.
    * @return The modified duration.
    */
   public double modifiedDurationFromDirtyPrice(final BondFixedSecurity bond, final double dirtyPrice) {
@@ -420,8 +491,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the modified duration of a bond from the clean price.
-   * @param bond  The bond security.
-   * @param cleanPrice The bond clean price.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param cleanPrice
+   *          The bond clean price.
    * @return The modified duration.
    */
   public double modifiedDurationFromCleanPrice(final BondFixedSecurity bond, final double cleanPrice) {
@@ -431,8 +505,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the Macaulay duration of a bond from the conventional yield.
-   * @param bond  The bond security.
-   * @param yield The bond yield.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param yield
+   *          The bond yield.
    * @return The Macaulay duration.
    */
   public double macaulayDurationFromYield(final BondFixedSecurity bond, final double yield) {
@@ -457,8 +534,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the Macaulay duration of a bond from the curves.
-   * @param bond  The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
    * @return The Macaulay duration.
    */
   public double macaulayDurationFromCurves(final BondFixedSecurity bond, final IssuerProviderInterface issuerMulticurves) {
@@ -468,8 +548,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the Macauley duration of a bond from the clean price.
-   * @param bond  The bond security.
-   * @param cleanPrice The bond clean price.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param cleanPrice
+   *          The bond clean price.
    * @return The Macauley duration.
    */
   public double macaulayDurationFromCleanPrice(final BondFixedSecurity bond, final double cleanPrice) {
@@ -479,8 +562,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the Macauley duration of a bond from the dirty price.
-   * @param bond  The bond security.
-   * @param dirtyPrice The bond dirty price.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param dirtyPrice
+   *          The bond dirty price.
    * @return The Macauley duration.
    */
   public double macaulayDurationFromDirtyPrice(final BondFixedSecurity bond, final double dirtyPrice) {
@@ -490,8 +576,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the convexity of a bond from the conventional yield.
-   * @param bond  The bond security.
-   * @param yield The bond yield.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param yield
+   *          The bond yield.
    * @return The convexity.
    */
   public double convexityFromYield(final BondFixedSecurity bond, final double yield) {
@@ -532,8 +621,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Calculates the convexity from a standard yield.
-   * @param bond The bond
-   * @param yield The yield
+   * 
+   * @param bond
+   *          The bond
+   * @param yield
+   *          The yield
    * @return The convexity
    */
   private double convexityFromYieldStandard(final BondFixedSecurity bond, final double yield) {
@@ -557,8 +649,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the convexity of a bond from the curves.
-   * @param bond  The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
    * @return The convexity.
    */
   public double convexityFromCurves(final BondFixedSecurity bond, final IssuerProviderInterface issuerMulticurves) {
@@ -568,8 +663,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the convexity of a bond from the dirty price.
-   * @param bond  The bond security.
-   * @param dirtyPrice The bond dirty price.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param dirtyPrice
+   *          The bond dirty price.
    * @return The convexity.
    */
   public double convexityFromDirtyPrice(final BondFixedSecurity bond, final double dirtyPrice) {
@@ -579,8 +677,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the convexity of a bond from the clean price.
-   * @param bond  The bond security.
-   * @param cleanPrice The bond clean price.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param cleanPrice
+   *          The bond clean price.
    * @return The convexity.
    */
   public double convexityFromCleanPrice(final BondFixedSecurity bond, final double cleanPrice) {
@@ -589,14 +690,19 @@ public final class BondSecurityDiscountingMethod {
   }
 
   /**
-   * Computes a bond z-spread from the curves and a present value.
-   * The z-spread is a parallel shift applied to the discounting curve associated to the bond (Issuer Entity) to match the present value.
-   * @param bond The bond.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param pv The target present value.
+   * Computes a bond z-spread from the curves and a present value. The z-spread is a parallel shift applied to the discounting curve associated to the bond
+   * (Issuer Entity) to match the present value.
+   * 
+   * @param bond
+   *          The bond.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param pv
+   *          The target present value.
    * @return The z-spread.
    */
-  public double zSpreadFromCurvesAndPV(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves, final MultipleCurrencyAmount pv) {
+  public double zSpreadFromCurvesAndPV(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves,
+      final MultipleCurrencyAmount pv) {
     ArgumentChecker.notNull(bond, "Bond");
     ArgumentChecker.notNull(issuerMulticurves, "Issuer and multi-curves provider");
     final Currency ccy = bond.getCurrency();
@@ -614,12 +720,17 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes a bond present value z-spread sensitivity from the curves and a present value.
-   * @param bond The bond.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param pv The target present value.
+   * 
+   * @param bond
+   *          The bond.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param pv
+   *          The target present value.
    * @return The z-spread sensitivity.
    */
-  public double presentValueZSpreadSensitivityFromCurvesAndPV(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves,
+  public double presentValueZSpreadSensitivityFromCurvesAndPV(final BondSecurity<? extends Payment, ? extends Coupon> bond,
+      final IssuerProviderInterface issuerMulticurves,
       final MultipleCurrencyAmount pv) {
     ArgumentChecker.notNull(bond, "Bond");
     ArgumentChecker.notNull(issuerMulticurves, "Issuer and multi-curves provider");
@@ -628,49 +739,70 @@ public final class BondSecurityDiscountingMethod {
   }
 
   /**
-   * Computes a bond z-spread from the curves and a clean price.
-   * The z-spread is a parallel shift applied to the discounting curve associated to the bond (Issuer Entity) to match the CleanPrice present value.
-   * @param bond The bond.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param cleanPrice The target clean price.
+   * Computes a bond z-spread from the curves and a clean price. The z-spread is a parallel shift applied to the discounting curve associated to the bond
+   * (Issuer Entity) to match the CleanPrice present value.
+   * 
+   * @param bond
+   *          The bond.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param cleanPrice
+   *          The target clean price.
    * @return The z-spread.
    */
-  public double zSpreadFromCurvesAndClean(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves, final double cleanPrice) {
+  public double zSpreadFromCurvesAndClean(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves,
+      final double cleanPrice) {
     return zSpreadFromCurvesAndPV(bond, issuerMulticurves, presentValueFromCleanPrice(bond, issuerMulticurves.getMulticurveProvider(), cleanPrice));
   }
 
   /**
    * Computes a bond z-spread from the curves and a yield.
-   * @param bond The bond.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param yield The yield.
+   * 
+   * @param bond
+   *          The bond.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param yield
+   *          The yield.
    * @return The z-spread.
    */
-  public double zSpreadFromCurvesAndYield(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves, final double yield) {
+  public double zSpreadFromCurvesAndYield(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves,
+      final double yield) {
     return zSpreadFromCurvesAndPV(bond, issuerMulticurves, presentValueFromYield(bond, issuerMulticurves.getMulticurveProvider(), yield));
   }
 
   /**
    * Computes the bond present value z-spread sensitivity from the curves and a clean price.
-   * @param bond The bond.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param cleanPrice The target clean price.
+   * 
+   * @param bond
+   *          The bond.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param cleanPrice
+   *          The target clean price.
    * @return The z-spread sensitivity.
    */
-  public double presentValueZSpreadSensitivityFromCurvesAndClean(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves,
+  public double presentValueZSpreadSensitivityFromCurvesAndClean(final BondSecurity<? extends Payment, ? extends Coupon> bond,
+      final IssuerProviderInterface issuerMulticurves,
       final double cleanPrice) {
-    return presentValueZSpreadSensitivityFromCurvesAndPV(bond, issuerMulticurves, presentValueFromCleanPrice(bond, issuerMulticurves.getMulticurveProvider(), cleanPrice));
+    return presentValueZSpreadSensitivityFromCurvesAndPV(bond, issuerMulticurves,
+        presentValueFromCleanPrice(bond, issuerMulticurves.getMulticurveProvider(), cleanPrice));
   }
 
   /**
    * Computes the present value curve sensitivity of a bond security (without settlement amount payment).
-   * @param bond The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
    * @return The present value curve sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final BondSecurity<? extends Payment, ? extends Coupon> bond,
+      final IssuerProviderInterface issuerMulticurves) {
     ArgumentChecker.notNull(bond, "Bond");
-    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerMulticurves, bond.getCurrency(), bond.getIssuerEntity());
+    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerMulticurves, bond.getCurrency(),
+        bond.getIssuerEntity());
     final MultipleCurrencyMulticurveSensitivity pvcsNominal = bond.getNominal().accept(PVCSDC, multicurvesDecorated);
     final MultipleCurrencyMulticurveSensitivity pvcsCoupon = bond.getCoupon().accept(PVCSDC, multicurvesDecorated);
     return pvcsNominal.plus(pvcsCoupon);
@@ -678,23 +810,30 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the present value curve sensitivity to parallel curve movement of a bond security (without settlement amount payment).
-   * @param bond The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
+   * 
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
    * @return The present value curve sensitivity.
    */
-  public StringAmount presentValueParallelCurveSensitivity(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves) {
+  public StringAmount presentValueParallelCurveSensitivity(final BondSecurity<? extends Payment, ? extends Coupon> bond,
+      final IssuerProviderInterface issuerMulticurves) {
     ArgumentChecker.notNull(bond, "Bond");
-    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerMulticurves, bond.getCurrency(), bond.getIssuerEntity());
+    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerMulticurves, bond.getCurrency(),
+        bond.getIssuerEntity());
     final StringAmount pvpcsNominal = bond.getNominal().accept(PVPCSDC, multicurvesDecorated);
     final StringAmount pvpcsCoupon = bond.getCoupon().accept(PVPCSDC, multicurvesDecorated);
     return StringAmount.plus(pvpcsNominal, pvpcsCoupon);
   }
 
   /**
-   * Calculates the accrued interest for a fixed-coupon bond using the yield. The accrued interest is defined
-   * as dirty price - clean price.
-   * @param bond The bond, not null
-   * @param yield The yield
+   * Calculates the accrued interest for a fixed-coupon bond using the yield. The accrued interest is defined as dirty price - clean price.
+   * 
+   * @param bond
+   *          The bond, not null
+   * @param yield
+   *          The yield
    * @return The accrued interest
    */
   public double accruedInterestFromYield(final BondFixedSecurity bond, final double yield) {
@@ -703,10 +842,12 @@ public final class BondSecurityDiscountingMethod {
   }
 
   /**
-   * Calculates the accrued interest for a fixed-coupon bond using the dirty price. The accrued interest is defined
-   * as dirty price - clean price.
-   * @param bond The bond, not null
-   * @param dirtyPrice The dirty price
+   * Calculates the accrued interest for a fixed-coupon bond using the dirty price. The accrued interest is defined as dirty price - clean price.
+   * 
+   * @param bond
+   *          The bond, not null
+   * @param dirtyPrice
+   *          The dirty price
    * @return The accrued interest
    */
   public double accruedInterestFromDirtyPrice(final BondFixedSecurity bond, final double dirtyPrice) {
@@ -715,10 +856,12 @@ public final class BondSecurityDiscountingMethod {
   }
 
   /**
-   * Calculates the accrued interest for a fixed-coupon bond using the clean price. The accrued interest is defined
-   * as dirty price - clean price.
-   * @param bond The bond, not null
-   * @param cleanPrice The clean price
+   * Calculates the accrued interest for a fixed-coupon bond using the clean price. The accrued interest is defined as dirty price - clean price.
+   * 
+   * @param bond
+   *          The bond, not null
+   * @param cleanPrice
+   *          The clean price
    * @return The accrued interest
    */
   public double accruedInterestFromCleanPrice(final BondFixedSecurity bond, final double cleanPrice) {
@@ -727,10 +870,12 @@ public final class BondSecurityDiscountingMethod {
   }
 
   /**
-   * Calculates the accrued interest for a fixed-coupon bond using the curves. The accrued interest is defined
-   * as dirty price - clean price.
-   * @param bond The bond, not null
-   * @param curves The curves, not null
+   * Calculates the accrued interest for a fixed-coupon bond using the curves. The accrued interest is defined as dirty price - clean price.
+   * 
+   * @param bond
+   *          The bond, not null
+   * @param curves
+   *          The curves, not null
    * @return The accrued interest
    */
   public double accruedInterestFromCurves(final BondFixedSecurity bond, final IssuerProviderInterface curves) {

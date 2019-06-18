@@ -26,10 +26,14 @@ public final class FXAmounts {
   private final double _baseAmount;
 
   /**
-   * @param baseCurrency The base currency
-   * @param counterCurrency The counter currency
-   * @param baseAmount The amount in the base currency
-   * @param counterAmount The amount in the counter currency
+   * @param baseCurrency
+   *          The base currency
+   * @param counterCurrency
+   *          The counter currency
+   * @param baseAmount
+   *          The amount in the base currency
+   * @param counterAmount
+   *          The amount in the counter currency
    */
   private FXAmounts(final Currency baseCurrency, final Currency counterCurrency, final double baseAmount, final double counterAmount) {
     ArgumentChecker.notNull(baseCurrency, "baseCurrency");
@@ -69,31 +73,30 @@ public final class FXAmounts {
   }
 
   /* package */ static FXAmounts forForward(final Currency payCurrency,
-                                            final Currency receiveCurrency,
-                                            final double payAmount,
-                                            final double receiveAmount,
-                                            final CurrencyPairs currencyPairs) {
+      final Currency receiveCurrency,
+      final double payAmount,
+      final double receiveAmount,
+      final CurrencyPairs currencyPairs) {
     return forAmounts(payCurrency, receiveCurrency, payAmount, receiveAmount, currencyPairs);
   }
 
   /* package */ static FXAmounts forOption(final Currency putCurrency,
-                                           final Currency callCurrency,
-                                           final double putAmount,
-                                           final double callAmount,
-                                           final boolean isLong,
-                                           final CurrencyPairs currencyPairs) {
+      final Currency callCurrency,
+      final double putAmount,
+      final double callAmount,
+      final boolean isLong,
+      final CurrencyPairs currencyPairs) {
     if (isLong) {
       return forAmounts(putCurrency, callCurrency, putAmount, callAmount, currencyPairs);
-    } else {
-      return forAmounts(callCurrency, putCurrency, callAmount, putAmount, currencyPairs);
     }
+    return forAmounts(callCurrency, putCurrency, callAmount, putAmount, currencyPairs);
   }
 
   private static FXAmounts forAmounts(final Currency payCurrency,
-                                      final Currency receiveCurrency,
-                                      final double payAmount,
-                                      final double receiveAmount,
-                                      final CurrencyPairs currencyPairs) {
+      final Currency receiveCurrency,
+      final double payAmount,
+      final double receiveAmount,
+      final CurrencyPairs currencyPairs) {
     Double baseAmount = CurrencyUtils.getBaseAmount(payCurrency, receiveCurrency, payAmount, receiveAmount, currencyPairs);
     Double counterAmount = CurrencyUtils.getCounterAmount(payCurrency, receiveCurrency, payAmount, receiveAmount, currencyPairs);
     final CurrencyPair currencyPair = currencyPairs.getCurrencyPair(payCurrency, receiveCurrency);
@@ -148,11 +151,11 @@ public final class FXAmounts {
 
   @Override
   public String toString() {
-    return "FXAmounts [" +
-        "_baseCurrency=" + _baseCurrency +
-        ", _counterCurrency=" + _counterCurrency +
-        ", _counterAmount=" + _counterAmount +
-        ", _baseAmount=" + _baseAmount +
-        "]";
+    return "FXAmounts ["
+        + "_baseCurrency=" + _baseCurrency
+        + ", _counterCurrency=" + _counterCurrency
+        + ", _counterAmount=" + _counterAmount
+        + ", _baseAmount=" + _baseAmount
+        + "]";
   }
 }

@@ -19,8 +19,7 @@ import com.opengamma.integration.copier.sheet.SheetFormat;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * This abstract class represents a sheet writer that, given a map from column names to data, writes out a row containing that
- * data under the matching columns.
+ * This abstract class represents a sheet writer that, given a map from column names to data, writes out a row containing that data under the matching columns.
  */
 public abstract class SheetWriter {
 
@@ -29,9 +28,11 @@ public abstract class SheetWriter {
   /**
    * Creates sheet writer that is specific to the file type.
    *
-   * @param filename  the file name, not null or empty
-   * @param columns  the columns, not null
-   * @return  a sheet writer
+   * @param filename
+   *          the file name, not null or empty
+   * @param columns
+   *          the columns, not null
+   * @return a sheet writer
    */
   public static SheetWriter newSheetWriter(final String filename, final String[] columns) {
     ArgumentChecker.notEmpty(filename, "filename");
@@ -42,10 +43,13 @@ public abstract class SheetWriter {
   /**
    * Creates a sheet writer.
    *
-   * @param sheetFormat  the sheet format, not null
-   * @param outputStream  the output stream, not null
-   * @param columns  the columns, not null
-   * @return  a sheet writer
+   * @param sheetFormat
+   *          the sheet format, not null
+   * @param outputStream
+   *          the output stream, not null
+   * @param columns
+   *          the columns, not null
+   * @return a sheet writer
    */
   public static SheetWriter newSheetWriter(final SheetFormat sheetFormat, final OutputStream outputStream, final String[] columns) {
     ArgumentChecker.notNull(sheetFormat, "sheetFormat");
@@ -63,7 +67,8 @@ public abstract class SheetWriter {
   /**
    * Writes the next row.
    *
-   * @param row  the row
+   * @param row
+   *          the row
    */
   public abstract void writeNextRow(Map<String, String> row);
 
@@ -78,9 +83,9 @@ public abstract class SheetWriter {
   public abstract void close();
 
   /**
-   * Gets the columns,
+   * Gets the columns.
    *
-   * @return  the columns
+   * @return the columns
    */
   protected String[] getColumns() {
     return _columns;
@@ -89,7 +94,8 @@ public abstract class SheetWriter {
   /**
    * Sets the columns.
    *
-   * @param columns  the columns
+   * @param columns
+   *          the columns
    */
   protected void setColumns(final String[] columns) {
     _columns = columns;
@@ -98,8 +104,9 @@ public abstract class SheetWriter {
   /**
    * Opens the file for writing and returns the output stream.
    *
-   * @param filename  the file name
-   * @return  the output stream
+   * @param filename
+   *          the file name
+   * @return the output stream
    */
   protected static OutputStream openFile(final String filename) {
     // Open input file for writing

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.method;
@@ -16,7 +16,7 @@ import com.opengamma.analytics.math.interpolation.Interpolator2D;
 import com.opengamma.util.money.Currency;
 
 /**
- * Specific objective function for cap floor zero coupon in price index model  model calibration.
+ * Specific objective function for cap floor zero coupon in price index model model calibration.
  */
 public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective extends SuccessiveRootFinderCalibrationObjectivewithInflation {
   /**
@@ -28,7 +28,7 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
    */
   private final InflationZeroCouponCapFloorParameters _inflationCapZeroCouponParameters;
   /**
-   * The currency for which the cap floor year on year in price index model  parameters are valid.
+   * The currency for which the cap floor year on year in price index model parameters are valid.
    */
   private final Currency _ccyInflationcapZeroCoupon;
   /**
@@ -52,10 +52,13 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
   private final double[][] _volatilityInit;
 
   /**
-   * Constructor of the objective function with the  year on year cap/floor parameters. The parameters range and accuracy are set at some default value 
-   * (minimum: 1.0E-6; maximum: 1.0, function value accuracy: 1.0E-4; parameter absolute accuracy: 1.0E-9).
-   * @param parameters The Zero Coupon cap/floor parameters.
-   * @param ccy The currency for which the Hull-White parameters are valid.
+   * Constructor of the objective function with the year on year cap/floor parameters. The parameters range and accuracy are set at some default value (minimum:
+   * 1.0E-6; maximum: 1.0, function value accuracy: 1.0E-4; parameter absolute accuracy: 1.0E-9).
+   * 
+   * @param parameters
+   *          The Zero Coupon cap/floor parameters.
+   * @param ccy
+   *          The currency for which the Hull-White parameters are valid.
    */
   public SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective(final InflationZeroCouponCapFloorParameters parameters, final Currency ccy) {
     super(new FXMatrix(ccy), ccy);
@@ -75,15 +78,19 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
 
   /**
    * Sets the year on year cap/floor curve bundle using the Hull-White parameters and a given set of curves.
-   * @param inflation The multi-curves provider.
+   * 
+   * @param inflation
+   *          The multi-curves provider.
    */
   @Override
   public void setInflation(final InflationProviderInterface inflation) {
-    _inflationCapZeroCouponProvider = new BlackSmileCapInflationZeroCouponProvider(inflation, new BlackSmileCapInflationZeroCouponParameters(_inflationCapZeroCouponParameters));
+    _inflationCapZeroCouponProvider = new BlackSmileCapInflationZeroCouponProvider(inflation,
+        new BlackSmileCapInflationZeroCouponParameters(_inflationCapZeroCouponParameters));
   }
 
   /**
    * Gets the inflation Zero Couponr cap/floor data.
+   * 
    * @return The inflation Zero Coupon cap/floor data.
    */
   public InflationZeroCouponCapFloorParameters getInflationCapZeroCouponParameters() {
@@ -92,6 +99,7 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
 
   /**
    * Sets the inflation Zero Coupon cap/floor curve bundle.
+   * 
    * @return The inflation Zero Coupon cap/floor curve bundle.
    */
   public BlackSmileCapInflationZeroCouponProvider getInflationCapZeroCouponProvider() {
@@ -105,6 +113,7 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
 
   /**
    * Gets the expiry index.
+   * 
    * @return The expiry index.
    */
   public int getExpiryIndex() {
@@ -113,14 +122,17 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
 
   /**
    * Sets the expiry index.
-   * @param index The expiry index.
+   * 
+   * @param index
+   *          The expiry index.
    */
   public void setExpiryIndex(final int index) {
     _expiryIndex = index;
   }
 
   /**
-   * Gets the strike  index.
+   * Gets the strike index.
+   * 
    * @return The strike index.
    */
   public int getStrikeIndex() {
@@ -128,8 +140,10 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
   }
 
   /**
-   * Sets the strike  index.
-   * @param index The strike index.
+   * Sets the strike index.
+   * 
+   * @param index
+   *          The strike index.
    */
   public void setStrikeIndex(final int index) {
     _strikeIndex = index;
@@ -142,11 +156,14 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
     _inflationCapZeroCouponParameters.setVolatility(x, _expiryIndex, _strikeIndex);
     // creating the new volatility surface using the new volatility matrix
     final Interpolator2D interpolator = _inflationCapZeroCouponProvider.getBlackParameters().getVolatilitySurface().getInterpolator();
-    final BlackSmileCapInflationZeroCouponParameters blackSmileCapInflationZeroCouponParameters = new BlackSmileCapInflationZeroCouponParameters(_inflationCapZeroCouponParameters, interpolator);
-    final BlackSmileCapInflationZeroCouponProvider blackSmileCapInflationZeroCouponProvider = new BlackSmileCapInflationZeroCouponProvider(_inflationCapZeroCouponProvider.getInflationProvider(),
+    final BlackSmileCapInflationZeroCouponParameters blackSmileCapInflationZeroCouponParameters = new BlackSmileCapInflationZeroCouponParameters(
+        _inflationCapZeroCouponParameters, interpolator);
+    final BlackSmileCapInflationZeroCouponProvider blackSmileCapInflationZeroCouponProvider = new BlackSmileCapInflationZeroCouponProvider(
+        _inflationCapZeroCouponProvider.getInflationProvider(),
         blackSmileCapInflationZeroCouponParameters);
 
-    return _inflationCapZeroCouponProvider.getMulticurveProvider().getFxRates().convert(getInstrument().accept(PVIC, blackSmileCapInflationZeroCouponProvider), _ccyInflationcapZeroCoupon).getAmount()
+    return _inflationCapZeroCouponProvider.getMulticurveProvider().getFxRates()
+        .convert(getInstrument().accept(PVIC, blackSmileCapInflationZeroCouponProvider), _ccyInflationcapZeroCoupon).getAmount()
         - getPrice();
   }
 

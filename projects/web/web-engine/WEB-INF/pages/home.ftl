@@ -3,7 +3,7 @@
 <#-- SECTION Main options -->
 <@section title="Home">
   <p>
-    Welcome to OpenGamma risk analytics.
+    Welcome to Starling risk analytics.
   </p>
   <p>
     Please choose one of the following items to view and manage:

@@ -35,10 +35,9 @@ public class MarketDataAddOperation implements OverrideOperation {
   public Object apply(final ValueRequirement valueRequirement, final Object value) {
     if (value instanceof Number) {
       return ((Number) value).doubleValue() + getAmount();
-    } else {
-      LOGGER.warn("Can't apply add operation to {} for {}", value, valueRequirement);
-      return value;
     }
+    LOGGER.warn("Can't apply add operation to {} for {}", value, valueRequirement);
+    return value;
   }
 
   @Override

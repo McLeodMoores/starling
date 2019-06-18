@@ -10,22 +10,22 @@ package com.opengamma.web;
  */
 public enum SheetFormat {
 
-  /** CSV sheet */
+  /** CSV sheet. */
   CSV,
 
-  /** XLS sheet */
+  /** XLS sheet. */
   XLS,
 
-  /** XLSX sheet */
+  /** XLSX sheet. */
   XLSX,
 
-  /** XLS sheet */
+  /** XLS sheet. */
   XML,
 
-  /** ZIP sheet */
+  /** ZIP sheet. */
   ZIP,
 
-  /** Unknown sheet */
+  /** Unknown sheet. */
   UNKNOWN;
 
   public static SheetFormat of(final String filename) {

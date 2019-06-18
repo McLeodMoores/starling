@@ -70,12 +70,15 @@ public class CapFloorCMSSpreadSecurityConverter extends FinancialSecurityVisitor
     final IborIndex[] iborIndex = new IborIndex[2];
     final IndexSwap[] swapIndex = new IndexSwap[2];
     for (int loopindex = 0; loopindex < 2; loopindex++) {
-      iborIndex[loopindex] = new IborIndex(currency, tenorPayment, iborIndexConvention[loopindex].getSettlementDays(), iborIndexConvention[loopindex].getDayCount(),
+      iborIndex[loopindex] = new IborIndex(currency, tenorPayment, iborIndexConvention[loopindex].getSettlementDays(),
+          iborIndexConvention[loopindex].getDayCount(),
           iborIndexConvention[loopindex].getBusinessDayConvention(), iborIndexConvention[loopindex].isEOMConvention());
       final Period fixedLegPaymentPeriod = ConversionUtils.getTenor(swapIndexConvention[loopindex].getSwapFixedLegFrequency());
-      swapIndex[loopindex] = new IndexSwap(fixedLegPaymentPeriod, swapIndexConvention[loopindex].getSwapFixedLegDayCount(), iborIndex[loopindex], swapIndexConvention[loopindex].getPeriod(), calendar);
+      swapIndex[loopindex] = new IndexSwap(fixedLegPaymentPeriod, swapIndexConvention[loopindex].getSwapFixedLegDayCount(), iborIndex[loopindex],
+          swapIndexConvention[loopindex].getPeriod(), calendar);
     }
-    return AnnuityCapFloorCMSSpreadDefinition.from(startDate, endDate, notional, swapIndex[0], swapIndex[1], tenorPayment, capFloorCMSSpreadSecurity.getDayCount(),
+    return AnnuityCapFloorCMSSpreadDefinition.from(startDate, endDate, notional, swapIndex[0], swapIndex[1], tenorPayment,
+        capFloorCMSSpreadSecurity.getDayCount(),
         capFloorCMSSpreadSecurity.isPayer(), capFloorCMSSpreadSecurity.getStrike(), capFloorCMSSpreadSecurity.isCap(), calendar, calendar);
   }
 

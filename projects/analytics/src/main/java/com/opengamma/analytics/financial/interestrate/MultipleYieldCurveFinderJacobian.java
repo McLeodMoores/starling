@@ -24,9 +24,10 @@ public class MultipleYieldCurveFinderJacobian extends Function1D<DoubleMatrix1D,
 
   private final InstrumentDerivativeVisitor<YieldCurveBundle, Map<String, List<DoublesPair>>> _calculator;
   private final MultipleYieldCurveFinderDataBundle _data;
-  private final YieldCurveBundleBuildingFunction _curveBuilderFunction; //TODO this could be moved into MultipleYieldCurveFinderDataBundle
+  private final YieldCurveBundleBuildingFunction _curveBuilderFunction; // TODO this could be moved into MultipleYieldCurveFinderDataBundle
 
-  public MultipleYieldCurveFinderJacobian(final MultipleYieldCurveFinderDataBundle data, final InstrumentDerivativeVisitor<YieldCurveBundle, Map<String, List<DoublesPair>>> calculator) {
+  public MultipleYieldCurveFinderJacobian(final MultipleYieldCurveFinderDataBundle data,
+      final InstrumentDerivativeVisitor<YieldCurveBundle, Map<String, List<DoublesPair>>> calculator) {
     Validate.notNull(data, "data");
     Validate.notNull(calculator, "calculator");
     _data = data;
@@ -73,7 +74,7 @@ public class MultipleYieldCurveFinderJacobian extends Function1D<DoubleMatrix1D,
             }
           }
         }
-        offset += _data.getNumberOfPointsForCurve(name); //_data.getCurveNodePointsForCurve(name).length;
+        offset += _data.getNumberOfPointsForCurve(name); // _data.getCurveNodePointsForCurve(name).length;
       }
     }
     return new DoubleMatrix2D(res);

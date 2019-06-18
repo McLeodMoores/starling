@@ -49,19 +49,36 @@ public class EquityFutureSecurity extends FutureSecurity {
    * <p>
    * The security details should be set before use.
    */
-  // TODO non-public
   public EquityFutureSecurity() {
     super();
   }
 
-  public EquityFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount,
-      final ZonedDateTime settlementDate, final ExternalId underlyingIdentifier, final String category) {
+  /**
+   * @param expiry
+   *          the expiry, not null
+   * @param tradingExchange
+   *          the name of the trading exchange, not null
+   * @param settlementExchange
+   *          the settlement exchange, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param settlementDate
+   *          the settlement date i.e. delivery date, not null
+   * @param underlyingIdentifier
+   *          the identifier of the underlying equity, not null
+   * @param category
+   *          the future category, not null
+   */
+  public EquityFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final ZonedDateTime settlementDate, final ExternalId underlyingIdentifier, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
     setSettlementDate(settlementDate);
     setUnderlyingId(underlyingIdentifier);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitEquityFutureSecurity(this);

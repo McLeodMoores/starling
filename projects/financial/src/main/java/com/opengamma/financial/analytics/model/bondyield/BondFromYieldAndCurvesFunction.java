@@ -60,7 +60,8 @@ public abstract class BondFromYieldAndCurvesFunction extends AbstractFunction.No
   private InstrumentExposuresProvider _instrumentExposuresProvider;
 
   /**
-   * @param valueRequirementName The value requirement name, not null
+   * @param valueRequirementName
+   *          The value requirement name, not null
    */
   public BondFromYieldAndCurvesFunction(final String valueRequirementName) {
     ArgumentChecker.notNull(valueRequirementName, "value requirement");
@@ -122,7 +123,8 @@ public abstract class BondFromYieldAndCurvesFunction extends AbstractFunction.No
     requirements.add(new ValueRequirement(MARKET_YTM, ComputationTargetSpecification.of(security), ValueProperties.builder().get()));
     try {
       for (final String curveExposureConfig : curveExposureConfigs) {
-        final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
+        final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig,
+            target.getTrade());
         for (final String curveConstructionConfigurationName : curveConstructionConfigurationNames) {
           final ValueProperties properties = ValueProperties.builder()
               .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName)
@@ -142,9 +144,10 @@ public abstract class BondFromYieldAndCurvesFunction extends AbstractFunction.No
   }
 
   /**
-   * Gets the value properties of the result
+   * Gets the value properties of the result.
    *
-   * @param target The computation target
+   * @param target
+   *          The computation target
    * @return The properties
    */
   protected ValueProperties.Builder getResultProperties(final ComputationTarget target) {
@@ -160,13 +163,19 @@ public abstract class BondFromYieldAndCurvesFunction extends AbstractFunction.No
   /**
    * Calculates the result.
    *
-   * @param inputs The function inputs
-   * @param derivative The instrument transaction
-   * @param issuerCurves The issuer and discounting curves
-   * @param yield The yield of the bond
-   * @param spec The result specification
+   * @param inputs
+   *          The function inputs
+   * @param derivative
+   *          The instrument transaction
+   * @param issuerCurves
+   *          The issuer and discounting curves
+   * @param yield
+   *          The yield of the bond
+   * @param spec
+   *          The result specification
    * @return The set of results
    */
-  protected abstract Set<ComputedValue> getResult(FunctionInputs inputs, InstrumentDerivative derivative, IssuerProvider issuerCurves, double yield, ValueSpecification spec);
+  protected abstract Set<ComputedValue> getResult(FunctionInputs inputs, InstrumentDerivative derivative, IssuerProvider issuerCurves, double yield,
+      ValueSpecification spec);
 
 }

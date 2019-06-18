@@ -33,13 +33,15 @@ public class WebExchangeVersionsResource extends AbstractWebExchangeResource {
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public WebExchangeVersionsResource(final AbstractWebExchangeResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public String getHTML() {
     final ExchangeHistoryRequest request = new ExchangeHistoryRequest(data().getExchange().getUniqueId());
@@ -70,9 +72,10 @@ public class WebExchangeVersionsResource extends AbstractWebExchangeResource {
     return Response.ok(json).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -85,13 +88,13 @@ public class WebExchangeVersionsResource extends AbstractWebExchangeResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{versionId}")
   public WebExchangeVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
     final ExchangeDocument doc = data().getExchange();
     final UniqueId combined = doc.getUniqueId().withVersion(idStr);
-    if (doc.getUniqueId().equals(combined) == false) {
+    if (!doc.getUniqueId().equals(combined)) {
       final ExchangeDocument versioned = data().getExchangeMaster().get(combined);
       data().setVersioned(versioned);
     } else {
@@ -100,10 +103,12 @@ public class WebExchangeVersionsResource extends AbstractWebExchangeResource {
     return new WebExchangeVersionResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebExchangeData data) {

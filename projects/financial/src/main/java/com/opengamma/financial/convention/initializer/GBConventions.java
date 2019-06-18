@@ -27,7 +27,7 @@ import static com.opengamma.financial.convention.initializer.PerCurrencyConventi
 
 import org.threeten.bp.LocalTime;
 
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.convention.DepositConvention;
 import com.opengamma.financial.convention.IborIndexConvention;
@@ -69,7 +69,7 @@ public class GBConventions extends ConventionMasterInitializer {
   protected GBConventions() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ConventionMaster master) {
     addConventions(master);
@@ -88,35 +88,36 @@ public class GBConventions extends ConventionMasterInitializer {
         liborConventionName, getIds(Currency.GBP, LIBOR), ACT_365, MODIFIED_FOLLOWING, 0, true, Currency.GBP,
         LocalTime.of(11, 00), "GB", GB, GB, "");
     final ExternalId liborConventionId = ExternalId.of(SCHEME_NAME, liborConventionName);
-    
+
     // Deposit
     final String depositONConventionName = getConventionName(Currency.GBP, DEPOSIT_ON);
     final DepositConvention depositONConvention = new DepositConvention(
         depositONConventionName, getIds(Currency.GBP, DEPOSIT_ON), ACT_365, FOLLOWING, 0, false, Currency.GBP, GB);
     final String depositConventionName = getConventionName(Currency.GBP, DEPOSIT);
-    final DepositConvention depositConvention = new DepositConvention(depositConventionName, getIds(Currency.GBP, DEPOSIT), ACT_365, MODIFIED_FOLLOWING, 0, true, Currency.GBP, GB);
-    
+    final DepositConvention depositConvention = new DepositConvention(depositConventionName, getIds(Currency.GBP, DEPOSIT), ACT_365, MODIFIED_FOLLOWING, 0,
+        true, Currency.GBP, GB);
+
     // Fixed legs
     final String oisFixedLegConventionName = getConventionName(Currency.GBP, TENOR_STR_1Y, PAY_LAG + FIXED_LEG);
     final SwapFixedLegConvention oisFixedLegConvention = new SwapFixedLegConvention(
         oisFixedLegConventionName, getIds(Currency.GBP, TENOR_STR_1Y, PAY_LAG + FIXED_LEG),
         Tenor.ONE_YEAR, ACT_365, MODIFIED_FOLLOWING, Currency.GBP, GB, 0, true, StubType.SHORT_START, false, 1);
-    
+
     final String irsFixedLeg12MConventionName = getConventionName(Currency.GBP, TENOR_STR_1Y, FIXED_LEG);
     final SwapFixedLegConvention irsFixed12MLegConvention = new SwapFixedLegConvention(
         irsFixedLeg12MConventionName, getIds(Currency.GBP, TENOR_STR_1Y, FIXED_LEG),
         Tenor.ONE_YEAR, ACT_365, MODIFIED_FOLLOWING, Currency.GBP, GB, 0, true, StubType.SHORT_START, false, 0);
-    
+
     final String irsFixedLeg6MConventionName = getConventionName(Currency.GBP, TENOR_STR_6M, FIXED_LEG);
     final SwapFixedLegConvention irsFixed6MLegConvention = new SwapFixedLegConvention(
         irsFixedLeg6MConventionName, getIds(Currency.GBP, TENOR_STR_6M, FIXED_LEG),
         Tenor.SIX_MONTHS, ACT_365, MODIFIED_FOLLOWING, Currency.GBP, GB, 0, true, StubType.SHORT_START, false, 0);
-    
+
     final String irsFixedLeg3MConventionName = getConventionName(Currency.GBP, TENOR_STR_3M, FIXED_LEG);
     final SwapFixedLegConvention irsFixed3MLegConvention = new SwapFixedLegConvention(
         irsFixedLeg3MConventionName, getIds(Currency.GBP, TENOR_STR_3M, FIXED_LEG),
         Tenor.THREE_MONTHS, ACT_365, MODIFIED_FOLLOWING, Currency.GBP, GB, 0, true, StubType.SHORT_START, false, 0);
-    
+
     // ON compounded legs
     final String oisFloatLegConventionName = getConventionName(Currency.GBP, ON_CMP_LEG);
     final OISLegConvention oisFloatLegConvention = new OISLegConvention(
@@ -127,36 +128,36 @@ public class GBConventions extends ConventionMasterInitializer {
     final String irsLibor6MLegConventionName = getConventionName(Currency.GBP, TENOR_STR_6M, LIBOR_LEG);
     final VanillaIborLegConvention irsLibor6MLegConvention = new VanillaIborLegConvention(
         irsLibor6MLegConventionName, getIds(Currency.GBP, TENOR_STR_6M, LIBOR_LEG),
-        liborConventionId, true, Interpolator1DFactory.LINEAR, Tenor.SIX_MONTHS, 0, true, StubType.SHORT_START, false, 0);
-    
+        liborConventionId, true, LinearInterpolator1dAdapter.NAME, Tenor.SIX_MONTHS, 0, true, StubType.SHORT_START, false, 0);
+
     final String irsLibor3MLegConventionName = getConventionName(Currency.GBP, TENOR_STR_3M, LIBOR_LEG);
     final VanillaIborLegConvention irsLibor3MLegConvention = new VanillaIborLegConvention(
         irsLibor3MLegConventionName, getIds(Currency.GBP, TENOR_STR_3M, LIBOR_LEG),
-        liborConventionId, true, Interpolator1DFactory.LINEAR, Tenor.THREE_MONTHS, 0, true, StubType.SHORT_START, false, 0);
-    
+        liborConventionId, true, LinearInterpolator1dAdapter.NAME, Tenor.THREE_MONTHS, 0, true, StubType.SHORT_START, false, 0);
+
     final String irsLibor1MLegConventionName = getConventionName(Currency.GBP, TENOR_STR_1M, LIBOR_LEG);
     final VanillaIborLegConvention irsLibor1MLegConvention = new VanillaIborLegConvention(
         irsLibor1MLegConventionName, getIds(Currency.GBP, TENOR_STR_1M, LIBOR_LEG),
-        liborConventionId, true, Interpolator1DFactory.LINEAR, Tenor.ONE_MONTH, 0, true, StubType.SHORT_START, false, 0);
-    
+        liborConventionId, true, LinearInterpolator1dAdapter.NAME, Tenor.ONE_MONTH, 0, true, StubType.SHORT_START, false, 0);
+
     // TODO: Note: Temporally used to retrieve underlying index convention. - To be removed
     final String irsLibor6MLegConventionName2 = getConventionName(Currency.GBP, TENOR_STR_6M, IRS_IBOR_LEG);
     final VanillaIborLegConvention irsLibor6MLegConvention2 = new VanillaIborLegConvention(
         irsLibor6MLegConventionName2, getIds(Currency.GBP, TENOR_STR_6M, IRS_IBOR_LEG),
-        liborConventionId, true, Interpolator1DFactory.LINEAR, Tenor.SIX_MONTHS, 0, true, StubType.SHORT_START, false, 0);
-    
+        liborConventionId, true, LinearInterpolator1dAdapter.NAME, Tenor.SIX_MONTHS, 0, true, StubType.SHORT_START, false, 0);
+
     final String irsLibor3MLegConventionName2 = getConventionName(Currency.GBP, TENOR_STR_3M, IRS_IBOR_LEG);
     final VanillaIborLegConvention irsLibor3MLegConvention2 = new VanillaIborLegConvention(
         irsLibor3MLegConventionName2, getIds(Currency.GBP, TENOR_STR_3M, IRS_IBOR_LEG),
-        liborConventionId, true, Interpolator1DFactory.LINEAR, Tenor.THREE_MONTHS, 0, true, StubType.SHORT_START, false, 0);
-    
+        liborConventionId, true, LinearInterpolator1dAdapter.NAME, Tenor.THREE_MONTHS, 0, true, StubType.SHORT_START, false, 0);
+
     final String irsLibor1MLegConventionName2 = getConventionName(Currency.GBP, TENOR_STR_1M, IRS_IBOR_LEG);
     final VanillaIborLegConvention irsLibor1MLegConvention2 = new VanillaIborLegConvention(
         irsLibor1MLegConventionName2, getIds(Currency.GBP, TENOR_STR_1M, IRS_IBOR_LEG),
-        liborConventionId, true, Interpolator1DFactory.LINEAR, Tenor.ONE_MONTH, 0, true, StubType.SHORT_START, false, 0);
-    
+        liborConventionId, true, LinearInterpolator1dAdapter.NAME, Tenor.ONE_MONTH, 0, true, StubType.SHORT_START, false, 0);
+
     // Futures
-    final String quarterlySTIRFutureConventionName = getConventionName(Currency.GBP, STIR_FUTURES + QUARTERLY);    
+    final String quarterlySTIRFutureConventionName = getConventionName(Currency.GBP, STIR_FUTURES + QUARTERLY);
     final InterestRateFutureConvention quarterlySTIRFutureConvention = new InterestRateFutureConvention(
         quarterlySTIRFutureConventionName, ExternalIdBundle.of(ExternalId.of(SCHEME_NAME, quarterlySTIRFutureConventionName)),
         ExternalId.of(ExchangeTradedInstrumentExpiryCalculator.SCHEME, IMMFutureAndFutureOptionQuarterlyExpiryCalculator.NAME), GB, liborConventionId);

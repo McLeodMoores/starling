@@ -52,9 +52,8 @@ public class ValueRequirementFudgeBuilder implements FudgeBuilder<ValueRequireme
     final FudgeField constraints = message.getByName(CONSTRAINTS_FIELD_NAME);
     if (constraints != null) {
       return new ValueRequirement(valueName, targetReference, deserializer.fieldValueToObject(ValueProperties.class, constraints));
-    } else {
-      return new ValueRequirement(valueName, targetReference);
     }
+    return new ValueRequirement(valueName, targetReference);
   }
 
 }

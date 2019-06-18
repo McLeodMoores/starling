@@ -34,7 +34,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.curve.ConfigDBCurveConstructionConfigurationSource;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
@@ -58,7 +57,7 @@ public class BondZSpreadFromCleanPriceFunction extends BondFromCleanPriceAndCurv
   private InstrumentExposuresProvider _instrumentExposuresProvider;
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#Z_SPREAD}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#Z_SPREAD}.
    */
   public BondZSpreadFromCleanPriceFunction() {
     super(Z_SPREAD);
@@ -105,10 +104,12 @@ public class BondZSpreadFromCleanPriceFunction extends BondFromCleanPriceAndCurv
     }
     final String curveExposureConfig = desiredValue.getConstraint(CURVE_EXPOSURES);
     final String curve = Iterables.getOnlyElement(curves);
-    final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
+    final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig,
+        target.getTrade());
     boolean curveNameFound = false;
     for (final String curveConstructionConfigurationName : curveConstructionConfigurationNames) {
-      final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource.getCurveConstructionConfiguration(curveConstructionConfigurationName);
+      final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource
+          .getCurveConstructionConfiguration(curveConstructionConfigurationName);
       final List<CurveGroupConfiguration> groups = curveConstructionConfiguration.getCurveGroups();
       for (final CurveGroupConfiguration group : groups) {
         for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : group.getTypesForCurves().entrySet()) {
@@ -131,7 +132,8 @@ public class BondZSpreadFromCleanPriceFunction extends BondFromCleanPriceAndCurv
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String curveName = null;
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       if (entry.getKey().getValueName().equals(YIELD_CURVE)) {

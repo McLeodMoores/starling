@@ -16,8 +16,7 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdSupplier;
 
 /**
- * A filter of portfolios. One or more filters are applied to a portfolio to remove trades, positions, or
- * nodes from it.
+ * A filter of portfolios. One or more filters are applied to a portfolio to remove trades, positions, or nodes from it.
  */
 public class PortfolioFilter implements FilteringFunction {
 
@@ -26,7 +25,7 @@ public class PortfolioFilter implements FilteringFunction {
   private final FilteringFunction[] _filteringFunctions;
 
   public PortfolioFilter(final FilteringFunction filteringFunction) {
-    _filteringFunctions = new FilteringFunction[] {filteringFunction };
+    _filteringFunctions = new FilteringFunction[] { filteringFunction };
   }
 
   public PortfolioFilter(final FilteringFunction... filteringFunctions) {
@@ -48,7 +47,7 @@ public class PortfolioFilter implements FilteringFunction {
 
   @Override
   public boolean acceptPosition(final Position position) {
-    for (FilteringFunction function : getFilteringFunctions()) {
+    for (final FilteringFunction function : getFilteringFunctions()) {
       if (!function.acceptPosition(position)) {
         return false;
       }
@@ -58,7 +57,7 @@ public class PortfolioFilter implements FilteringFunction {
 
   @Override
   public boolean acceptPortfolioNode(final PortfolioNode portfolioNode) {
-    for (FilteringFunction function : getFilteringFunctions()) {
+    for (final FilteringFunction function : getFilteringFunctions()) {
       if (!function.acceptPortfolioNode(portfolioNode)) {
         return false;
       }
@@ -70,12 +69,12 @@ public class PortfolioFilter implements FilteringFunction {
     final SimplePortfolioNode newPortfolioNode = new SimplePortfolioNode();
     newPortfolioNode.setUniqueId(createSyntheticIdentifier());
     newPortfolioNode.setName(inputPortfolioNode.getName());
-    for (Position position : inputPortfolioNode.getPositions()) {
+    for (final Position position : inputPortfolioNode.getPositions()) {
       if (acceptPosition(position)) {
         newPortfolioNode.addPosition(position);
       }
     }
-    for (PortfolioNode portfolioNode : inputPortfolioNode.getChildNodes()) {
+    for (final PortfolioNode portfolioNode : inputPortfolioNode.getChildNodes()) {
       final SimplePortfolioNode filteredPortfolioNode = filter(portfolioNode);
       if (acceptPortfolioNode(filteredPortfolioNode)) {
         filteredPortfolioNode.setParentNodeId(newPortfolioNode.getUniqueId());
@@ -86,7 +85,8 @@ public class PortfolioFilter implements FilteringFunction {
   }
 
   public Portfolio filter(final Portfolio inputPortfolio) {
-    return new SimplePortfolio(UniqueId.of(inputPortfolio.getUniqueId().getScheme(), buildPortfolioName(inputPortfolio.getUniqueId().getValue())), buildPortfolioName(inputPortfolio.getName()),
+    return new SimplePortfolio(UniqueId.of(inputPortfolio.getUniqueId().getScheme(), buildPortfolioName(inputPortfolio.getUniqueId().getValue())),
+        buildPortfolioName(inputPortfolio.getName()),
         filter(inputPortfolio.getRootNode()));
   }
 
@@ -96,9 +96,9 @@ public class PortfolioFilter implements FilteringFunction {
 
   @Override
   public String getName() {
-    StringBuilder name = new StringBuilder();
+    final StringBuilder name = new StringBuilder();
     boolean comma = false;
-    for (FilteringFunction function : getFilteringFunctions()) {
+    for (final FilteringFunction function : getFilteringFunctions()) {
       if (comma) {
         name.append(", ");
       } else {

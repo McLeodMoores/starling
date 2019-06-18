@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention.frequency;
@@ -67,35 +67,35 @@ public final class SimpleFrequency implements Frequency, Serializable {
   // TODO where converting to/from say continuously compounded interest rates, can't use Double.MAX_VALUE, but need different formula
   public static final SimpleFrequency CONTINUOUS = new SimpleFrequency(CONTINUOUS_NAME, Double.MAX_VALUE);
   /**
-   * A frequency with a period of four months
+   * A frequency with a period of four months.
    */
   public static final SimpleFrequency FOUR_MONTHS = new SimpleFrequency(FOUR_MONTH_NAME, 3);
   /**
-   * A frequency with a period of five months
+   * A frequency with a period of five months.
    */
   public static final SimpleFrequency FIVE_MONTHS = new SimpleFrequency(FIVE_MONTH_NAME, 2.4);
   /**
-   * A frequency with a period of seven months
+   * A frequency with a period of seven months.
    */
   public static final SimpleFrequency SEVEN_MONTHS = new SimpleFrequency(SEVEN_MONTH_NAME, 12. / 7);
   /**
-   * A frequency with a period of eight months
+   * A frequency with a period of eight months.
    */
   public static final SimpleFrequency EIGHT_MONTHS = new SimpleFrequency(EIGHT_MONTH_NAME, 1.5);
   /**
-   * A frequency with a period of nine months
+   * A frequency with a period of nine months.
    */
   public static final SimpleFrequency NINE_MONTHS = new SimpleFrequency(NINE_MONTH_NAME, 4. / 3);
   /**
-   * A frequency with a period of ten months
+   * A frequency with a period of ten months.
    */
   public static final SimpleFrequency TEN_MONTHS = new SimpleFrequency(TEN_MONTH_NAME, 1.2);
   /**
-   * A frequency with a period of eleven months
+   * A frequency with a period of eleven months.
    */
   public static final SimpleFrequency ELEVEN_MONTHS = new SimpleFrequency(ELEVEN_MONTH_NAME, 12. / 11);
   /**
-   * A frequency with a period of eighteen months
+   * A frequency with a period of eighteen months.
    */
   public static final SimpleFrequency EIGHTEEN_MONTHS = new SimpleFrequency(EIGHTEEN_MONTH_NAME, 12. / 18);
 
@@ -110,13 +110,17 @@ public final class SimpleFrequency implements Frequency, Serializable {
 
   /**
    * Creates an instance.
-   * 
-   * @param name  the convention name, not null
-   * @param periodsPerYear  the number of periods per year, greater than zero
-   * @throws IllegalArgumentException if the name is null
-   * @throws IllegalArgumentException if the frequency is zero or negative
+   *
+   * @param name
+   *          the convention name, not null
+   * @param periodsPerYear
+   *          the number of periods per year, greater than zero
+   * @throws IllegalArgumentException
+   *           if the name is null
+   * @throws IllegalArgumentException
+   *           if the frequency is zero or negative
    */
-  /* package */SimpleFrequency(final String name, final double periodsPerYear) {
+  /* package */ SimpleFrequency(final String name, final double periodsPerYear) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNegative(periodsPerYear, "periods per year");
     _name = name;
@@ -141,7 +145,7 @@ public final class SimpleFrequency implements Frequency, Serializable {
 
   /**
    * Gets the number of periods per year.
-   * 
+   *
    * @return the periods per year
    */
   public double getPeriodsPerYear() {
@@ -176,7 +180,7 @@ public final class SimpleFrequency implements Frequency, Serializable {
   // so I'm going to use PeriodFrequency where possible and see if this class can be eliminated entirely
   /**
    * Converts this to a period frequency.
-   * 
+   *
    * @return the period frequency, not null
    */
   public PeriodFrequency toPeriodFrequency() {

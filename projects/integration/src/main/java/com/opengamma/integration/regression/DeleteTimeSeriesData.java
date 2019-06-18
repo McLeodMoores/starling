@@ -26,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
 
   private final RegressionIO _io;
 
-  public DeleteTimeSeriesData(final RegressionIO io) {
+  DeleteTimeSeriesData(final RegressionIO io) {
     _io = ArgumentChecker.notNull(io, "io");
   }
 

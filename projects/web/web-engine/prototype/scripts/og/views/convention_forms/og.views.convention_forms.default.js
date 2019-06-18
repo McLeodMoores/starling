@@ -12,7 +12,7 @@ $.register_module({
 		constructor = function (config) {
 			var load_handler = config.handler || $.noop, 
 				selector = config.selector, 
-				master = config.data.template_data.conventionXML,
+				master = config.data.template_data.configXML,
 				convention_type = config.type,
 				loading = config.loading || $.noop,
 				deleted = config.data.template_data.deleted,
@@ -37,7 +37,7 @@ $.register_module({
 					return window.alert('Please select a new name.');
 				api.conventions.put({
 					id: as_new ? void 0 : resource_id,
-							name: new_name, xml: editor.getSession().getValue(), type: config_type, loading: loading
+							name: new_name, xml: editor.getSession().getValue(), type: convention_type, loading: loading
 				}).pipe(as_new ? save_new_handler : save_handler);
 			};
 			og.dev.warn('using default convention template for convention type:\n' + convention_type);

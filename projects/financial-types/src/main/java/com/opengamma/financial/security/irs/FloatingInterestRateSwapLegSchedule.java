@@ -30,8 +30,7 @@ import com.opengamma.financial.convention.frequency.PeriodFrequency;
 import com.opengamma.financial.convention.rolldate.RollDateAdjuster;
 
 /**
- * Class to wrap a convention and to allow overrides to the convention to be
- * accessed in a uniform manner.
+ * Class to wrap a convention and to allow overrides to the convention to be accessed in a uniform manner.
  *
  * Currently assumes that all overrides are available if provided for a period.
  */
@@ -67,30 +66,54 @@ public final class FloatingInterestRateSwapLegSchedule implements ImmutableBean 
   @PropertyDefinition
   private final LocalDate[] _calculationDates;
 
-  public LocalDate getPaymentDate(final int date, final LocalDate startDate, final Calendar calendar) {
+  /**
+   * Gets the payment date of the nth period. If an override has been provided, this date is used. Otherwise, the date is calculated using the payment frequency
+   * of the swap leg convention, the roll date adjuster, the business day convention and the number of settlement days.
+   *
+   * @param nthPeriod
+   *          the period for which to get the payment date
+   * @param startDate
+   *          the start date
+   * @param calendar
+   *          the working day calendar
+   * @return the payment date
+   */
+  public LocalDate getPaymentDate(final int nthPeriod, final LocalDate startDate, final Calendar calendar) {
     if (getPaymentDates() != null && getPaymentDates().length != 0) {
-      final int index = Arrays.binarySearch(_dates, date);
+      final int index = Arrays.binarySearch(_dates, nthPeriod);
       if (index >= 0) {
         return _paymentDates[index];
       }
     }
     // override not provided - fall back to convention
-    final int monthsToAdvance = (int) PeriodFrequency.convertToPeriodFrequency(_convention.getPaymentFrequency()).getPeriod().toTotalMonths() * date;
+    final int monthsToAdvance = (int) PeriodFrequency.convertToPeriodFrequency(_convention.getPaymentFrequency()).getPeriod().toTotalMonths() * nthPeriod;
     final RollDateAdjuster adjuster = _convention.getRollConvention().getRollDateAdjuster(monthsToAdvance);
     final BusinessDayConvention convention = _convention.getPaymentDayConvention();
     final int settlementDays = _convention.getSettlementDays();
     return convention.adjustDate(calendar, startDate.plusMonths(adjuster.getMonthsToAdjust()).minusDays(settlementDays).with(adjuster));
   }
 
-  public LocalDate getCalculationDate(final int date, final LocalDate startDate, final Calendar calendar) {
+  /**
+   * Gets the calculation date of the nth period. If an override has been provided, this date is used. Otherwise, the date is calculated using the payment
+   * frequency of the swap leg convention, the roll date adjuster, the business day convention and the number of settlement days.
+   *
+   * @param nthPeriod
+   *          the period for which to get the payment date
+   * @param startDate
+   *          the start date
+   * @param calendar
+   *          the working day calendar
+   * @return the payment date
+   */
+  public LocalDate getCalculationDate(final int nthPeriod, final LocalDate startDate, final Calendar calendar) {
     if (getCalculationDates() != null && getCalculationDates().length != 0) {
-      final int index = Arrays.binarySearch(_dates, date);
+      final int index = Arrays.binarySearch(_dates, nthPeriod);
       if (index >= 0) {
         return _calculationDates[index];
       }
     }
     // override not provided - fall back to convention
-    final int monthsToAdvance = (int) PeriodFrequency.convertToPeriodFrequency(_convention.getCalculationFrequency()).getPeriod().toTotalMonths() * date;
+    final int monthsToAdvance = (int) PeriodFrequency.convertToPeriodFrequency(_convention.getCalculationFrequency()).getPeriod().toTotalMonths() * nthPeriod;
     final RollDateAdjuster adjuster = _convention.getRollConvention().getRollDateAdjuster(monthsToAdvance);
     final BusinessDayConvention convention = _convention.getCalculationBusinessDayConvention();
     return convention.adjustDate(calendar, startDate.plusMonths(adjuster.getMonthsToAdjust()).with(adjuster));

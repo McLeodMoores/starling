@@ -26,11 +26,10 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A tool that allows a convention master to be initialized.
  * <p>
- * Conventions are typically stored in a master database, however they may be
- * initialized from code as they rarely change.
+ * Conventions are typically stored in a master database, however they may be initialized from code as they rarely change.
  *
- * Convention lookup relies on appropriate securities being present see {@code com.opengamma.financial.security.index.IborIndex}.
- * Old style behaviour (without security based lookup) is preserved by calling the deprecated init() and associated functions.
+ * Convention lookup relies on appropriate securities being present see {@code com.opengamma.financial.security.index.IborIndex}. Old style behaviour (without
+ * security based lookup) is preserved by calling the deprecated init() and associated functions.
  */
 public abstract class ConventionMasterInitializer {
 
@@ -40,7 +39,8 @@ public abstract class ConventionMasterInitializer {
   /**
    * Initializes the specified master.
    *
-   * @param master  the master to initialize, not null
+   * @param master
+   *          the master to initialize, not null
    * @deprecated use the init() that also takes a SecurityMaster
    */
   @Deprecated
@@ -51,8 +51,10 @@ public abstract class ConventionMasterInitializer {
    *
    * Default implementation, should be overridden by child if security master should be populated.
    *
-   * @param master  the master to initialize, not null
-   * @param securityMaster the security master, not null
+   * @param master
+   *          the master to initialize, not null
+   * @param securityMaster
+   *          the security master, not null
    */
   public void init(final ConventionMaster master, final SecurityMaster securityMaster) {
     init(master);
@@ -61,8 +63,10 @@ public abstract class ConventionMasterInitializer {
   /**
    * Adds a convention to the specified master.
    *
-   * @param master  the master to initialize, not null
-   * @param convention  the convention to add, null ignored
+   * @param master
+   *          the master to initialize, not null
+   * @param convention
+   *          the convention to add, null ignored
    */
   protected void addConvention(final ConventionMaster master, final ManageableConvention convention) {
     if (convention != null) {
@@ -74,7 +78,7 @@ public abstract class ConventionMasterInitializer {
           master.add(new ConventionDocument(convention));
           break;
         case 1:
-          if (JodaBeanUtils.equalIgnoring(convention, result.getFirstConvention(), ManageableConvention.meta().uniqueId()) == false) {
+          if (!JodaBeanUtils.equalIgnoring(convention, result.getFirstConvention(), ManageableConvention.meta().uniqueId())) {
             final ConventionDocument doc = result.getFirstDocument();
             doc.setConvention(convention);
             master.update(doc);
@@ -85,7 +89,7 @@ public abstract class ConventionMasterInitializer {
           LOGGER.warn("Multiple conventions with the same name in database: " + convention.getName());
           for (final ManageableConvention similar : result.getConventions()) {
             if (JodaBeanUtils.equalIgnoring(convention, similar, ManageableConvention.meta().uniqueId())) {
-              return;  // already in database
+              return; // already in database
             }
           }
           master.add(new ConventionDocument(convention));
@@ -104,17 +108,18 @@ public abstract class ConventionMasterInitializer {
 
   protected void addIborSecurity(final SecurityMaster securityMaster, final VanillaIborLegConvention convention) {
     ArgumentChecker.notEmpty(convention.getExternalIdBundle(), "externalIdBundle");
-    addSecurity(securityMaster, new IborIndex(convention.getName(), convention.getName(), convention.getResetTenor(), convention.getIborIndexConvention(), convention.getExternalIdBundle()));
+    addSecurity(securityMaster, new IborIndex(convention.getName(), convention.getName(), convention.getResetTenor(), convention.getIborIndexConvention(),
+        convention.getExternalIdBundle()));
   }
 
   protected void addOvernightSecurity(final SecurityMaster securityMaster, final OvernightIndexConvention convention) {
     ArgumentChecker.notEmpty(convention.getExternalIdBundle(), "externalIdBundle");
     addSecurity(securityMaster,
-                new OvernightIndex(convention.getName(), convention.getName(), convention.getExternalIdBundle().iterator().next(),
-                                   convention.getExternalIdBundle()));
+        new OvernightIndex(convention.getName(), convention.getName(), convention.getExternalIdBundle().iterator().next(),
+            convention.getExternalIdBundle()));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public String toString() {
     return getClass().getSimpleName();

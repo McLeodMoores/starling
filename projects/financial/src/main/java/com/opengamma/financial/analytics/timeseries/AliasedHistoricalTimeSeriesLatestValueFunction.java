@@ -12,16 +12,17 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.financial.value.ValueRequirementAliasFunction;
 
 /**
- * Function which exposes the latest value of an historical time-series for a given data field under a different value
- * name.
+ * Function which exposes the latest value of an historical time-series for a given data field under a different value name.
  */
 public class AliasedHistoricalTimeSeriesLatestValueFunction extends ValueRequirementAliasFunction {
 
   /**
-   * Constructs an instance
+   * Constructs an instance.
    *
-   * @param htsDataField  the historical time-series data field, not null
-   * @param aliasedValueRequirementName  the value requirement name under which to expose the output, not null
+   * @param htsDataField
+   *          the historical time-series data field, not null
+   * @param aliasedValueRequirementName
+   *          the value requirement name under which to expose the output, not null
    */
   public AliasedHistoricalTimeSeriesLatestValueFunction(final String htsDataField, final String aliasedValueRequirementName) {
     super(aliasedValueRequirementName,

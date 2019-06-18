@@ -42,8 +42,8 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.timeseries.DoubleTimeSeries;
 
 /**
- * Iterates a view client over a window of historical data to get time series of values from which a covariance matrix can be constructed. The target will identify the item(s) for which data should be
- * gathered to build the matrix from.
+ * Iterates a view client over a window of historical data to get time series of values from which a covariance matrix can be constructed. The target will
+ * identify the item(s) for which data should be gathered to build the matrix from.
  */
 public abstract class SampledCovarianceMatrixFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -55,17 +55,20 @@ public abstract class SampledCovarianceMatrixFunction extends AbstractFunction.N
   /**
    * The type supported by this class.
    */
-  protected static final ComputationTargetType TYPE = ComputationTargetType.PORTFOLIO.or(ComputationTargetType.PORTFOLIO_NODE).or(ComputationTargetType.POSITION);
+  protected static final ComputationTargetType TYPE = ComputationTargetType.PORTFOLIO.or(ComputationTargetType.PORTFOLIO_NODE)
+      .or(ComputationTargetType.POSITION);
 
   /**
-   * Returns the type of data used to construct the matrix, and distinguish between different sub-class implementations. For example, this might be market data, risk factors or something else.
+   * Returns the type of data used to construct the matrix, and distinguish between different sub-class implementations. For example, this might be market data,
+   * risk factors or something else.
    *
    * @return the type, not null
    */
   protected abstract String getDataType();
 
   protected Set<ValueRequirement> createRequirements(final ComputationTargetSpecification tempTargetSpec) {
-    return Collections.singleton(new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES, tempTargetSpec, ValueProperties.withAny(ViewEvaluationFunction.PROPERTY_CALC_CONFIG).get()));
+    return Collections.singleton(new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES, tempTargetSpec,
+        ValueProperties.withAny(ViewEvaluationFunction.PROPERTY_CALC_CONFIG).get()));
   }
 
   protected void addValueRequirements(final FunctionCompilationContext context, final Portfolio portfolio, final ViewCalculationConfiguration calcConfig) {
@@ -97,6 +100,7 @@ public abstract class SampledCovarianceMatrixFunction extends AbstractFunction.N
     return new ViewCalculationConfiguration(viewDefinition, calcConfigName);
   }
 
+  @SuppressWarnings("unchecked")
   protected <T extends Comparable<? super T>> DoubleLabelledMatrix2D createCovarianceMatrix(DoubleTimeSeries<T>[] timeSeries, Object[] labels) {
     final CovarianceMatrixCalculator calculator = new CovarianceMatrixCalculator(new HistoricalCovarianceCalculator());
     int len = timeSeries.length;
@@ -209,16 +213,16 @@ public abstract class SampledCovarianceMatrixFunction extends AbstractFunction.N
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    return Collections.singleton(new ValueSpecification(ValueRequirementNames.COVARIANCE_MATRIX, target.toSpecification(), createValueProperties().withAny(ValuePropertyNames.SAMPLING_PERIOD).get()));
+    return Collections.singleton(new ValueSpecification(ValueRequirementNames.COVARIANCE_MATRIX, target.toSpecification(),
+        createValueProperties().withAny(ValuePropertyNames.SAMPLING_PERIOD).get()));
   }
 
   private String anyConstraintOrNull(final ValueProperties constraints, final String name) {
     final Set<String> values = constraints.getValues(name);
     if (values == null || values.isEmpty()) {
       return null;
-    } else {
-      return values.iterator().next();
     }
+    return values.iterator().next();
   }
 
   @Override
@@ -235,9 +239,11 @@ public abstract class SampledCovarianceMatrixFunction extends AbstractFunction.N
       startDate = DateConstraint.VALUATION_TIME.minus(Period.parse(lookbackPeriodString));
     }
     final ViewDefinition viewDefinition = context.getViewCalculationConfiguration().getViewDefinition();
-    final HistoricalViewEvaluationTarget tempTarget = new HistoricalViewEvaluationTarget(viewDefinition.getMarketDataUser(), startDate.toString(), true, DateConstraint.VALUATION_TIME.toString(),
+    final HistoricalViewEvaluationTarget tempTarget = new HistoricalViewEvaluationTarget(viewDefinition.getMarketDataUser(), startDate.toString(), true,
+        DateConstraint.VALUATION_TIME.toString(),
         false, null, HistoricalViewEvaluationMarketDataMode.HISTORICAL);
-    final ViewCalculationConfiguration calcConfig = createViewCalculationConfiguration(tempTarget.getViewDefinition(), context.getViewCalculationConfiguration().getName());
+    final ViewCalculationConfiguration calcConfig = createViewCalculationConfiguration(tempTarget.getViewDefinition(),
+        context.getViewCalculationConfiguration().getName());
     addValueRequirements(context, target, calcConfig);
     tempTarget.getViewDefinition().addViewCalculationConfiguration(calcConfig);
     final TempTargetRepository targets = OpenGammaCompilationContext.getTempTargets(context);
@@ -247,8 +253,10 @@ public abstract class SampledCovarianceMatrixFunction extends AbstractFunction.N
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
-    final TempTarget tempTargetObject = OpenGammaCompilationContext.getTempTargets(context).get(inputs.keySet().iterator().next().getTargetSpecification().getUniqueId());
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
+    final TempTarget tempTargetObject = OpenGammaCompilationContext.getTempTargets(context)
+        .get(inputs.keySet().iterator().next().getTargetSpecification().getUniqueId());
     if (!(tempTargetObject instanceof HistoricalViewEvaluationTarget)) {
       return null;
     }

@@ -19,8 +19,11 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Returns the change in present value of an instrument due to a parallel move of all the curve's parameters, scaled so that the move is one basis point (0.0001).
- * @param <T> The type of the multi-curve provider
+ * Returns the change in present value of an instrument due to a parallel move of all the curve's parameters, scaled so that the move is one basis point
+ * (0.0001).
+ * 
+ * @param <T>
+ *          The type of the multi-curve provider
  */
 public final class PV01CurveParametersInflationCalculator<T extends ParameterInflationProviderInterface> extends
     InstrumentDerivativeVisitorSameMethodAdapter<T, ReferenceAmount<Pair<String, Currency>>> {
@@ -36,7 +39,9 @@ public final class PV01CurveParametersInflationCalculator<T extends ParameterInf
 
   /**
    * Constructs a PV01 calculator that uses a particular sensitivity calculator.
-   * @param curveSensitivityCalculator The curve sensitivity calculator, not null
+   * 
+   * @param curveSensitivityCalculator
+   *          The curve sensitivity calculator, not null
    */
   public PV01CurveParametersInflationCalculator(final InstrumentDerivativeVisitor<T, MultipleCurrencyInflationSensitivity> curveSensitivityCalculator) {
     ArgumentChecker.notNull(curveSensitivityCalculator, "curve sensitivity calculator");
@@ -44,9 +49,13 @@ public final class PV01CurveParametersInflationCalculator<T extends ParameterInf
   }
 
   /**
-   * Calculates the change in present value of an instrument due to a parallel move of each yield curve the instrument is sensitive to, scaled so that the move is 1bp.
-   * @param ird The instrument.
-   * @param multicurves The multi-curves provider.
+   * Calculates the change in present value of an instrument due to a parallel move of each yield curve the instrument is sensitive to, scaled so that the move
+   * is 1bp.
+   * 
+   * @param ird
+   *          The instrument.
+   * @param multicurves
+   *          The multi-curves provider.
    * @return The scale sensitivity for each curve/currency.
    */
   @Override

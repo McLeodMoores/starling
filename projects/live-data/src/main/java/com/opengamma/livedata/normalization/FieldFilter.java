@@ -27,18 +27,38 @@ public class FieldFilter implements NormalizationRule {
   private final Collection<String> _fieldsToAccept;
   private final FudgeContext _context;
 
+  /**
+   * @param fieldsToAccept
+   *          the fields to accept
+   */
   public FieldFilter(final String... fieldsToAccept) {
     this(OpenGammaFudgeContext.getInstance(), fieldsToAccept);
   }
 
+  /**
+   * @param context
+   *          a Fudge context, not null
+   * @param fieldsToAccept
+   *          the fields to accept
+   */
   public FieldFilter(final FudgeContext context, final String... fieldsToAccept) {
     this(Sets.newHashSet(fieldsToAccept), context);
   }
 
+  /**
+   * @param fieldsToAccept
+   *          the fields to accept, not null
+   */
   public FieldFilter(final Collection<String> fieldsToAccept) {
     this(fieldsToAccept, OpenGammaFudgeContext.getInstance());
   }
 
+  /**
+   * @param fieldsToAccept
+   *          the fields to accept, not null
+   * @param fudgeContext
+   *          a Fudge context, not null
+   */
   public FieldFilter(final Collection<String> fieldsToAccept, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(fieldsToAccept, "fieldsToAccept");
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");

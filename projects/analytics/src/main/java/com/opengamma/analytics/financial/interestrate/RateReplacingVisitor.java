@@ -51,7 +51,8 @@ public final class RateReplacingVisitor extends InstrumentDerivativeVisitorAdapt
 
   @Override
   public ForwardRateAgreement visitForwardRateAgreement(final ForwardRateAgreement fra, final Double rate) {
-    return new ForwardRateAgreement(fra.getCurrency(), fra.getPaymentTime(), fra.getPaymentYearFraction(), fra.getNotional(), fra.getIndex(), fra.getFixingTime(),
+    return new ForwardRateAgreement(fra.getCurrency(), fra.getPaymentTime(), fra.getPaymentYearFraction(), fra.getNotional(), fra.getIndex(),
+        fra.getFixingTime(),
         fra.getFixingPeriodStartTime(), fra.getFixingPeriodEndTime(), fra.getFixingYearFraction(), rate);
   }
 
@@ -71,7 +72,8 @@ public final class RateReplacingVisitor extends InstrumentDerivativeVisitorAdapt
     final double accruedInterest = rate * bond.getAccruedInterest() / originalRate;
     final AnnuityCouponFixed originalCoupons = (AnnuityCouponFixed) bond.getCoupon();
     final AnnuityCouponFixed coupons = visitFixedCouponAnnuity(originalCoupons, rate);
-    return new BondFixedSecurity((AnnuityPaymentFixed) bond.getNominal(), coupons, bond.getSettlementTime(), accruedInterest, bond.getFactorToNextCoupon(), bond.getYieldConvention(),
+    return new BondFixedSecurity((AnnuityPaymentFixed) bond.getNominal(), coupons, bond.getSettlementTime(), accruedInterest, bond.getFactorToNextCoupon(),
+        bond.getYieldConvention(),
         bond.getCouponPerYear(), bond.getIssuerEntity());
   }
 }

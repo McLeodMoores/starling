@@ -15,7 +15,6 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
  */
 public final class IborCompoundingInterpolationStubForwardRateProvider implements ForwardRateProvider<IborIndex> {
 
-
   private final IborInterpolatedStubCompoundingCoupon _coupon;
 
   public IborCompoundingInterpolationStubForwardRateProvider(final IborInterpolatedStubCompoundingCoupon coupon) {
@@ -23,12 +22,8 @@ public final class IborCompoundingInterpolationStubForwardRateProvider implement
   }
 
   @Override
-  public <T extends DepositIndexCoupon<IborIndex>> double getRate(
-      final MulticurveProviderInterface multicurves,
-      final T coupon,
-      final double fullFixingPeriodStartTime,
-      final double fullFixingPeriodEndTime,
-      final double fullFixingPeriodYearFraction) {
+  public <T extends DepositIndexCoupon<IborIndex>> double getRate(final MulticurveProviderInterface multicurves, final T coupon,
+      final double fullFixingPeriodStartTime, final double fullFixingPeriodEndTime, final double fullFixingPeriodYearFraction) {
 
     final double[] fixingPeriodStartTimes = _coupon.getFullCoupon().getFixingPeriodStartTimes();
 
@@ -36,17 +31,17 @@ public final class IborCompoundingInterpolationStubForwardRateProvider implement
 
     if (Double.compare(fixingPeriodStartTimes[0], fullFixingPeriodStartTime) == 0) {
       final IborIndex index = _coupon.getFullCoupon().getIndex();
-      final double forwardInterpStart = multicurves.getSimplyCompoundForwardRate(index, fullFixingPeriodStartTime, _coupon.getFirstInterpolatedTime(), _coupon.getFirstInterpolatedYearFraction());
-      final double forwardInterpEnd = multicurves.getSimplyCompoundForwardRate(index, fullFixingPeriodStartTime, _coupon.getSecondInterpolatedTime(), _coupon.getSecondInterpolatedYearFraction());
+      final double forwardInterpStart = multicurves.getSimplyCompoundForwardRate(index, fullFixingPeriodStartTime, _coupon.getFirstInterpolatedTime(),
+          _coupon.getFirstInterpolatedYearFraction());
+      final double forwardInterpEnd = multicurves.getSimplyCompoundForwardRate(index, fullFixingPeriodStartTime, _coupon.getSecondInterpolatedTime(),
+          _coupon.getSecondInterpolatedYearFraction());
 
-      forward = forwardInterpStart + (forwardInterpEnd - forwardInterpStart)
-          * (fullFixingPeriodYearFraction - _coupon.getFirstInterpolatedYearFraction()) /
-          (_coupon.getSecondInterpolatedYearFraction() - _coupon.getFirstInterpolatedYearFraction());
+      forward = forwardInterpStart + (forwardInterpEnd - forwardInterpStart) * (fullFixingPeriodYearFraction - _coupon.getFirstInterpolatedYearFraction())
+          / (_coupon.getSecondInterpolatedYearFraction() - _coupon.getFirstInterpolatedYearFraction());
       return Double.NaN;
-    } else {
-      forward = multicurves.getSimplyCompoundForwardRate(_coupon.getFullCoupon().getIndex(), fullFixingPeriodStartTime, fullFixingPeriodEndTime, fullFixingPeriodYearFraction);
     }
-
+    forward = multicurves.getSimplyCompoundForwardRate(_coupon.getFullCoupon().getIndex(), fullFixingPeriodStartTime, fullFixingPeriodEndTime,
+        fullFixingPeriodYearFraction);
     return forward;
   }
 }

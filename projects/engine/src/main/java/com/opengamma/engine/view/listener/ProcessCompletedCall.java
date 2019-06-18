@@ -8,7 +8,7 @@ package com.opengamma.engine.view.listener;
 import com.google.common.base.Function;
 
 /**
- * Represents a call to {@link ViewResultListener#processCompleted()}
+ * Represents a call to {@link ViewResultListener#processCompleted()}.
  */
 public class ProcessCompletedCall implements Function<ViewResultListener, Object> {
 

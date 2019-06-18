@@ -23,6 +23,7 @@ public final class SwaptionPhysicalFixedIborBasketMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static SwaptionPhysicalFixedIborBasketMethod getInstance() {
@@ -36,10 +37,12 @@ public final class SwaptionPhysicalFixedIborBasketMethod {
   }
 
   /**
-   * Create a calibration basket for the swaption. The basket is made of one swaption for each period on the underlying swap fixed leg. The basket swaptions
-   * are trimmed after the end of the periods. The notional of all the coupons in all the underlying swaps is equal to the absolute notional of the first fixed leg coupon.
-   * All the swaptions are long. The expiry time of all swaptions in the basket are the one of the original one.
-   * @param swaption The swaption.
+   * Create a calibration basket for the swaption. The basket is made of one swaption for each period on the underlying swap fixed leg. The basket swaptions are
+   * trimmed after the end of the periods. The notional of all the coupons in all the underlying swaps is equal to the absolute notional of the first fixed leg
+   * coupon. All the swaptions are long. The expiry time of all swaptions in the basket are the one of the original one.
+   * 
+   * @param swaption
+   *          The swaption.
    * @return The basket.
    */
   public SwaptionPhysicalFixedIbor[] calibrationBasketFixedLegPeriod(final SwaptionPhysicalFixedIbor swaption) {
@@ -57,12 +60,15 @@ public final class SwaptionPhysicalFixedIborBasketMethod {
   }
 
   /**
-   * Create a calibration basket for the swaption. The basket is made of one swaption for each period on the underlying swap fixed leg and for each relative moneyness provided.
-   * The basket swaptions are trimmed after the end of the periods. The notional of all the coupons in all the underlying swaps is equal to the absolute notional of the first fixed leg coupon.
-   * The basket swaptions rates are shifted by the relative moneyness provided.
-   * All the swaptions are long. The expiry time of all swaptions in the basket are the one of the original one.
-   * @param swaption The swaption.
-   * @param relativeMoneyness The relative moneyness.
+   * Create a calibration basket for the swaption. The basket is made of one swaption for each period on the underlying swap fixed leg and for each relative
+   * moneyness provided. The basket swaptions are trimmed after the end of the periods. The notional of all the coupons in all the underlying swaps is equal to
+   * the absolute notional of the first fixed leg coupon. The basket swaptions rates are shifted by the relative moneyness provided. All the swaptions are long.
+   * The expiry time of all swaptions in the basket are the one of the original one.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param relativeMoneyness
+   *          The relative moneyness.
    * @return The basket.
    */
   public SwaptionPhysicalFixedIbor[] calibrationBasketFixedLegPeriod(final SwaptionPhysicalFixedIbor swaption, final double[] relativeMoneyness) {
@@ -77,7 +83,8 @@ public final class SwaptionPhysicalFixedIborBasketMethod {
       final double maturity = legFixed.getNthPayment(loopcal).getPaymentTime();
       final SwapFixedCoupon<? extends Payment> swap = swaption.getUnderlyingSwap().trimAfter(maturity).withNotional(notional);
       for (int loopstrike = 0; loopstrike < nbStrikes; loopstrike++) {
-        basket[loopcal * nbStrikes + loopstrike] = SwaptionPhysicalFixedIbor.from(swaption.getTimeToExpiry(), swap.withRateShifted(relativeMoneyness[loopstrike]),
+        basket[loopcal * nbStrikes + loopstrike] = SwaptionPhysicalFixedIbor.from(swaption.getTimeToExpiry(),
+            swap.withRateShifted(relativeMoneyness[loopstrike]),
             swaption.getSettlementTime(), swaption.isCall(), true);
       }
     }

@@ -80,7 +80,7 @@ public class WatchListRecorder {
 
   public WatchListRecorder(final ViewProcessor viewProcessor, final ComputationTargetResolver targetResolver) {
     _viewProcessor = viewProcessor;
-    _schemes = new ArrayList<String>();
+    _schemes = new ArrayList<>();
     _lookup = new ExternalIdBundleResolver(targetResolver.atVersionCorrection(VersionCorrection.LATEST));
   }
 
@@ -150,7 +150,7 @@ public class WatchListRecorder {
     _writer.println("# Automatically generated");
 
     final ViewClient client = _viewProcessor.createViewClient(UserPrincipal.getLocalUser());
-    final List<CompiledViewDefinition> compilations = new LinkedList<CompiledViewDefinition>();
+    final List<CompiledViewDefinition> compilations = new LinkedList<>();
     client.setResultListener(new AbstractViewResultListener() {
 
       @Override
@@ -219,7 +219,7 @@ public class WatchListRecorder {
   }
 
   private ViewExecutionOptions generateExecutionOptions(final Instant now) {
-    final List<ViewCycleExecutionOptions> executionOptionsList = new ArrayList<ViewCycleExecutionOptions>();
+    final List<ViewCycleExecutionOptions> executionOptionsList = new ArrayList<>();
     final ViewCycleExecutionOptions.Builder builder = ViewCycleExecutionOptions.builder();
     for (int i = 0; i < VALIDITY_PERIOD_DAYS; i++) {
       final Instant valuationTime = now.plus(i, DAYS);

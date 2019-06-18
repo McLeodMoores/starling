@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -13,8 +13,8 @@ import com.opengamma.analytics.math.surface.Surface;
 import com.opengamma.analytics.math.surface.SurfaceShiftFunctionFactory;
 
 /**
- *  A surface that contains the Black (implied) volatility  as a function of time to maturity and moneyness, m, defined
- *  as m = k/F(T), where k is the strike and F(T) is the forward for expiry at time T
+ * A surface that contains the Black (implied) volatility as a function of time to maturity and moneyness, m, defined as m = k/F(T), where k is the strike and
+ * F(T) is the forward for expiry at time T.
  */
 public class BlackVolatilitySurfaceMoneyness extends BlackVolatilitySurface<Moneyness> {
 
@@ -26,8 +26,10 @@ public class BlackVolatilitySurfaceMoneyness extends BlackVolatilitySurface<Mone
   }
 
   /**
-   * @param surface A implied volatility surface parameterised by time and moneyness m = strike/forward
-   * @param forwardCurve the forward curve
+   * @param surface
+   *          A implied volatility surface parameterised by time and moneyness m = strike/forward
+   * @param forwardCurve
+   *          the forward curve
    */
   public BlackVolatilitySurfaceMoneyness(final Surface<Double, Double, Double> surface, final ForwardCurve forwardCurve) {
     super(surface);
@@ -36,10 +38,12 @@ public class BlackVolatilitySurfaceMoneyness extends BlackVolatilitySurface<Mone
   }
 
   /**
-   * Return a volatility for the expiry, strike pair provided.
-   * Interpolation/extrapolation behaviour depends on underlying surface
-   * @param t time to maturity
-   * @param k strike
+   * Return a volatility for the expiry, strike pair provided. Interpolation/extrapolation behaviour depends on underlying surface
+   * 
+   * @param t
+   *          time to maturity
+   * @param k
+   *          strike
    * @return The Black (implied) volatility
    */
   @Override
@@ -50,10 +54,12 @@ public class BlackVolatilitySurfaceMoneyness extends BlackVolatilitySurface<Mone
   }
 
   /**
-   * Return a volatility for the expiry, moneyness pair provided.
-   * Interpolation/extrapolation behaviour depends on underlying surface
-   * @param t time to maturity
-   * @param m the moneyness  m = k/F(T), where k is the strike and F(T) is the forward for expiry at time T
+   * Return a volatility for the expiry, moneyness pair provided. Interpolation/extrapolation behaviour depends on underlying surface
+   * 
+   * @param t
+   *          time to maturity
+   * @param m
+   *          the moneyness m = k/F(T), where k is the strike and F(T) is the forward for expiry at time T
    * @return The Black (implied) volatility
    */
   public double getVolatilityForMoneyness(final double t, final double m) {

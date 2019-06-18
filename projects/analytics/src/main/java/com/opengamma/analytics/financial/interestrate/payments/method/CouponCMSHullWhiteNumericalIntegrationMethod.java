@@ -24,6 +24,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Pricing method of a CMS coupon in the Hull-White (extended Vasicek) model by numerical integration.
+ * 
  * @deprecated {@link HullWhiteOneFactorPiecewiseConstantDataBundle} is deprecated
  */
 @Deprecated
@@ -36,6 +37,7 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod implements Prici
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static CouponCMSHullWhiteNumericalIntegrationMethod getInstance() {
@@ -63,8 +65,11 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod implements Prici
 
   /**
    * Compute the present value of a CMS coupon with the Hull-White (extended Vasicek) model by numerical integration.
-   * @param cmsCoupon The CMS coupon.
-   * @param hwData The Hull-White parameters and the curves.
+   * 
+   * @param cmsCoupon
+   *          The CMS coupon.
+   * @param hwData
+   *          The Hull-White parameters and the curves.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final CouponCMS cmsCoupon, final HullWhiteOneFactorPiecewiseConstantDataBundle hwData) {
@@ -77,16 +82,20 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod implements Prici
     final double[] dfFixed = new double[nbFixed];
     final double[] discountedCashFlowFixed = new double[nbFixed];
     for (int loopcf = 0; loopcf < nbFixed; loopcf++) {
-      alphaFixed[loopcf] = MODEL.alpha(hwData.getHullWhiteParameter(), 0.0, expiryTime, expiryTime, swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime());
-      dfFixed[loopcf] = hwData.getCurve(swap.getFixedLeg().getNthPayment(loopcf).getFundingCurveName()).getDiscountFactor(swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime());
-      discountedCashFlowFixed[loopcf] = dfFixed[loopcf] * swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction() * swap.getFixedLeg().getNthPayment(loopcf).getNotional();
+      alphaFixed[loopcf] = MODEL.alpha(hwData.getHullWhiteParameter(), 0.0, expiryTime, expiryTime,
+          swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime());
+      dfFixed[loopcf] = hwData.getCurve(swap.getFixedLeg().getNthPayment(loopcf).getFundingCurveName())
+          .getDiscountFactor(swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime());
+      discountedCashFlowFixed[loopcf] = dfFixed[loopcf] * swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction()
+          * swap.getFixedLeg().getNthPayment(loopcf).getNotional();
     }
     final AnnuityPaymentFixed cfeIbor = swap.getSecondLeg().accept(CFEC, hwData);
     final double[] alphaIbor = new double[cfeIbor.getNumberOfPayments()];
     final double[] dfIbor = new double[cfeIbor.getNumberOfPayments()];
     final double[] discountedCashFlowIbor = new double[cfeIbor.getNumberOfPayments()];
     for (int loopcf = 0; loopcf < cfeIbor.getNumberOfPayments(); loopcf++) {
-      alphaIbor[loopcf] = MODEL.alpha(hwData.getHullWhiteParameter(), 0.0, expiryTime, expiryTime, cfeIbor.getNthPayment(loopcf).getPaymentTime());
+      alphaIbor[loopcf] = MODEL.alpha(hwData.getHullWhiteParameter(), 0.0, expiryTime, expiryTime,
+          cfeIbor.getNthPayment(loopcf).getPaymentTime());
       dfIbor[loopcf] = hwData.getCurve(cfeIbor.getDiscountCurve()).getDiscountFactor(cfeIbor.getNthPayment(loopcf).getPaymentTime());
       discountedCashFlowIbor[loopcf] = dfIbor[loopcf] * cfeIbor.getNthPayment(loopcf).getAmount();
     }
@@ -100,7 +109,8 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod implements Prici
     final RungeKuttaIntegrator1D integrator = new RungeKuttaIntegrator1D(absoluteTolerance, relativeTolerance, NB_INTEGRATION);
     double pv = 0.0;
     try {
-      pv = 1.0 / Math.sqrt(2.0 * Math.PI) * integrator.integrate(integrant, -limit, limit) * dfPayment * cmsCoupon.getNotional() * cmsCoupon.getPaymentYearFraction();
+      pv = 1.0 / Math.sqrt(2.0 * Math.PI) * integrator.integrate(integrant, -limit, limit) * dfPayment * cmsCoupon.getNotional()
+          * cmsCoupon.getPaymentYearFraction();
     } catch (final Exception e) {
       throw new MathException(e);
     }
@@ -127,13 +137,20 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod implements Prici
 
     /**
      * Constructor to the integrant function.
-     * @param discountedCashFlowFixed The discounted cash flows of the underlying swap fixed leg.
-     * @param alphaFixed The bond volatilities of the underlying swap fixed leg.
-     * @param discountedCashFlowIbor The discounted cash flows of the underlying swap Ibor leg.
-     * @param alphaIbor The bond volatilities of the underlying swap Ibor leg.
-     * @param alphaPayment The bond volatilities of the payment discount factor.
+     * 
+     * @param discountedCashFlowFixed
+     *          The discounted cash flows of the underlying swap fixed leg.
+     * @param alphaFixed
+     *          The bond volatilities of the underlying swap fixed leg.
+     * @param discountedCashFlowIbor
+     *          The discounted cash flows of the underlying swap Ibor leg.
+     * @param alphaIbor
+     *          The bond volatilities of the underlying swap Ibor leg.
+     * @param alphaPayment
+     *          The bond volatilities of the payment discount factor.
      */
-    public CMSIntegrant(final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor, final double alphaPayment) {
+    CMSIntegrant(final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor,
+        final double[] alphaIbor, final double alphaPayment) {
       _discountedCashFlowFixed = discountedCashFlowFixed;
       _alphaFixed = alphaFixed;
       _discountedCashFlowIbor = discountedCashFlowIbor;

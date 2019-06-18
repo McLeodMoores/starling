@@ -29,14 +29,16 @@ import com.opengamma.util.tuple.Pair;
 
 /**
  * Parent class for a family of curves that can have any time of data on the <i>x</i> and <i>y</i> axes, provided that the <i>x</i> data is {@link Comparable}.
- * It is possible to construct a curve using either unsorted (in <i>x</i>) data or sorted (ascending in <i>x</i>). Note that if the constructor
- * is told that unsorted data are sorted then no sorting will take place, which will give unpredictable results.
- * @param <T> The type of the x data
- * @param <U> The type of the y data
+ * It is possible to construct a curve using either unsorted (in <i>x</i>) data or sorted (ascending in <i>x</i>). Note that if the constructor is told that
+ * unsorted data are sorted then no sorting will take place, which will give unpredictable results.
+ * 
+ * @param <T>
+ *          The type of the x data
+ * @param <U>
+ *          The type of the y data
  */
 @BeanDefinition
-public abstract class ObjectsCurve<T extends Comparable<T>, U>
-    extends Curve<T, U> {
+public abstract class ObjectsCurve<T extends Comparable<T>, U> extends Curve<T, U> {
 
   @PropertyDefinition(get = "private", set = "private")
   private int _n;
@@ -56,9 +58,12 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
   /**
    * Creates an instance.
    *
-   * @param xData  the array of <i>x</i> data, not null
-   * @param yData  the array of <i>y</i> data, contains same number of entries as <i>x</i>, not null
-   * @param isSorted  whether the <i>x</i>-data is sorted ascending
+   * @param xData
+   *          the array of <i>x</i> data, not null
+   * @param yData
+   *          the array of <i>y</i> data, contains same number of entries as <i>x</i>, not null
+   * @param isSorted
+   *          whether the <i>x</i>-data is sorted ascending
    */
   public ObjectsCurve(final T[] xData, final U[] yData, final boolean isSorted) {
     super();
@@ -80,8 +85,10 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
   /**
    * Creates an instance.
    *
-   * @param data  the map of <i>x-y</i> data, not null
-   * @param isSorted  whether the <i>x</i>-data is sorted ascending
+   * @param data
+   *          the map of <i>x-y</i> data, not null
+   * @param isSorted
+   *          whether the <i>x</i>-data is sorted ascending
    */
   @SuppressWarnings("unchecked")
   public ObjectsCurve(final Map<T, U> data, final boolean isSorted) {
@@ -100,8 +107,10 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
   /**
    * Creates an instance.
    *
-   * @param data  the set of <i>x-y</i> pairs, not null
-   * @param isSorted  whether the <i>x</i>-data is sorted ascending
+   * @param data
+   *          the set of <i>x-y</i> pairs, not null
+   * @param isSorted
+   *          whether the <i>x</i>-data is sorted ascending
    */
   @SuppressWarnings("unchecked")
   public ObjectsCurve(final Set<Pair<T, U>> data, final boolean isSorted) {
@@ -126,9 +135,12 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
   /**
    * Creates an instance.
    *
-   * @param xData  the list of <i>x</i> data, not null
-   * @param yData  the list of <i>y</i> data, contains same number of entries as <i>x</i>, not null
-   * @param isSorted  whether the <i>x</i>-data is sorted ascending
+   * @param xData
+   *          the list of <i>x</i> data, not null
+   * @param yData
+   *          the list of <i>y</i> data, contains same number of entries as <i>x</i>, not null
+   * @param isSorted
+   *          whether the <i>x</i>-data is sorted ascending
    */
   @SuppressWarnings("unchecked")
   public ObjectsCurve(final List<T> xData, final List<U> yData, final boolean isSorted) {
@@ -144,14 +156,18 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates an instance.
    *
-   * @param xData  the array of <i>x</i> data, not null
-   * @param yData  the array of <i>y</i> data, not null, contains same number of entries as <i>x</i>
-   * @param isSorted  whether the <i>x</i>-data is sorted ascending
-   * @param name  the name of the curve, not null
+   * @param xData
+   *          the array of <i>x</i> data, not null
+   * @param yData
+   *          the array of <i>y</i> data, not null, contains same number of entries as <i>x</i>
+   * @param isSorted
+   *          whether the <i>x</i>-data is sorted ascending
+   * @param name
+   *          the name of the curve, not null
    */
   public ObjectsCurve(final T[] xData, final U[] yData, final boolean isSorted, final String name) {
     super(name);
@@ -169,9 +185,12 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
   /**
    * Creates an instance.
    *
-   * @param data  the map of <i>x-y</i> data, not null
-   * @param isSorted  whether the <i>x</i>-data is sorted ascending
-   * @param name  the name of the curve, not null
+   * @param data
+   *          the map of <i>x-y</i> data, not null
+   * @param isSorted
+   *          whether the <i>x</i>-data is sorted ascending
+   * @param name
+   *          the name of the curve, not null
    */
   @SuppressWarnings("unchecked")
   public ObjectsCurve(final Map<T, U> data, final boolean isSorted, final String name) {
@@ -191,9 +210,12 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
   /**
    * Creates an instance.
    *
-   * @param data the set of <i>x-y</i> pairs, not null
-   * @param isSorted  whether the <i>x</i>-data is sorted ascending
-   * @param name  the name of the curve, not null
+   * @param data
+   *          the set of <i>x-y</i> pairs, not null
+   * @param isSorted
+   *          whether the <i>x</i>-data is sorted ascending
+   * @param name
+   *          the name of the curve, not null
    */
   @SuppressWarnings("unchecked")
   public ObjectsCurve(final Set<Pair<T, U>> data, final boolean isSorted, final String name) {
@@ -219,10 +241,14 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
   /**
    * Creates an instance.
    *
-   * @param xData  the list of <i>x</i> data, not null
-   * @param yData  the list of <i>y</i> data, not null, contains same number of entries as <i>x</i>
-   * @param isSorted  whether the <i>x</i>-data is sorted ascending
-   * @param name  the name of the curve, not null
+   * @param xData
+   *          the list of <i>x</i> data, not null
+   * @param yData
+   *          the list of <i>y</i> data, not null, contains same number of entries as <i>x</i>
+   * @param isSorted
+   *          whether the <i>x</i>-data is sorted ascending
+   * @param name
+   *          the name of the curve, not null
    */
   @SuppressWarnings("unchecked")
   public ObjectsCurve(final List<T> xData, final List<U> yData, final boolean isSorted, final String name) {
@@ -238,7 +264,7 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public T[] getXData() {
     return _xData;
@@ -254,7 +280,7 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
     return _n;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean equals(final Object obj) {
     if (this == obj) {

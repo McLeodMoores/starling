@@ -63,48 +63,44 @@ public final class FunctionParametersDelta {
       if (secondCycleParameters.isEmpty()) {
         // No delta - no parameters
         return EMPTY;
-      } else {
-        // Delta is anything defined in the second parameter set
-        return FunctionParametersDelta.of(secondCycleParameters.keySet());
       }
-    } else {
-      if (secondCycleParameters.isEmpty()) {
-        // Delta is anything defined in the first parameter set
-        return FunctionParametersDelta.of(firstCycleParameters.keySet());
-      } else {
-        // Delta is the negative intersection of market data selectors, plus anything  in the union with different parameters
-        final ArrayList<DistinctMarketDataSelector> delta =
-            new ArrayList<>(firstCycleParameters.size() + secondCycleParameters.size());
-        int union = 0;
-        for (final Map.Entry<DistinctMarketDataSelector, FunctionParameters> first : firstCycleParameters.entrySet()) {
-          final FunctionParameters secondValue = secondCycleParameters.get(first.getKey());
-          if (secondValue != null) {
-            // Intersection - include if parameters are different
-            if (first.getValue().equals(secondValue)) {
-              union++;
-            } else {
-              delta.add(first.getKey());
-            }
-          } else {
-            // Left negative intersection - include
-            delta.add(first.getKey());
-          }
-        }
-        if (union != secondCycleParameters.size()) {
-          // Include the right negative intersection
-          for (final DistinctMarketDataSelector secondKey : secondCycleParameters.keySet()) {
-            if (!firstCycleParameters.containsKey(secondKey)) {
-              delta.add(secondKey);
-            }
-          }
-        }
-        if (delta.isEmpty()) {
-          return EMPTY;
+      // Delta is anything defined in the second parameter set
+      return FunctionParametersDelta.of(secondCycleParameters.keySet());
+    }
+    if (secondCycleParameters.isEmpty()) {
+      // Delta is anything defined in the first parameter set
+      return FunctionParametersDelta.of(firstCycleParameters.keySet());
+    }
+    // Delta is the negative intersection of market data selectors, plus
+    // anything in the union with different parameters
+    final ArrayList<DistinctMarketDataSelector> delta = new ArrayList<>(firstCycleParameters.size() + secondCycleParameters.size());
+    int union = 0;
+    for (final Map.Entry<DistinctMarketDataSelector, FunctionParameters> first : firstCycleParameters.entrySet()) {
+      final FunctionParameters secondValue = secondCycleParameters.get(first.getKey());
+      if (secondValue != null) {
+        // Intersection - include if parameters are different
+        if (first.getValue().equals(secondValue)) {
+          union++;
         } else {
-          return new FunctionParametersDelta(delta);
+          delta.add(first.getKey());
+        }
+      } else {
+        // Left negative intersection - include
+        delta.add(first.getKey());
+      }
+    }
+    if (union != secondCycleParameters.size()) {
+      // Include the right negative intersection
+      for (final DistinctMarketDataSelector secondKey : secondCycleParameters.keySet()) {
+        if (!firstCycleParameters.containsKey(secondKey)) {
+          delta.add(secondKey);
         }
       }
     }
+    if (delta.isEmpty()) {
+      return EMPTY;
+    }
+    return new FunctionParametersDelta(delta);
   }
 
   /* package */static FunctionParametersDelta of(final Collection<DistinctMarketDataSelector> selectors) {

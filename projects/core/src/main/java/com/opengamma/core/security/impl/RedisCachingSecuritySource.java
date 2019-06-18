@@ -36,43 +36,34 @@ import redis.clients.jedis.JedisPool;
 // Note that as unique id lookups never change, we'd probably need a different
 // TTL on the unique ID lookups from any other form of ID lookup.
 /**
- * <bold>DO NOT USE THIS CLASS</bold.
- * This class is a work in progress and cannot be used in its current state.
- * <p/>
- * A caching {@link SecuritySource} which is only capable of satisfying
- * certain very specific calls. It is <em>not</em> intended to be a general purpose
- * cache.
- * <p/>
- * <strong>This class is a work in progress and is <em>NOT</em> production capable.
- * The javadocs below are for indication of expected future functionality when
+ * <em>DO NOT USE THIS CLASS</em>. This class is a work in progress and cannot be used in its current state.
+ * <p>
+ * A caching {@link SecuritySource} which is only capable of satisfying certain very specific calls. It is <em>not</em> intended to be a general purpose cache.
+ * <p>
+ * <strong>This class is a work in progress and is <em>NOT</em> production capable. The javadocs below are for indication of expected future functionality when
  * fully completed.</strong>
- * <p/>
- * While the results of other calls will be used to populate the cache, only three
- * calls can be satisfied from the cache:
+ * <p>
+ * While the results of other calls will be used to populate the cache, only three calls can be satisfied from the cache:
  * <ul>
- *   <li>{@link #get(UniqueId)}</li>
- *   <li>{@link #get(ExternalIdBundle)}</li>
- *   <li>{@link #get(ExternalIdBundle, VersionCorrection)}</li>
+ * <li>{@link #get(UniqueId)}</li>
+ * <li>{@link #get(ExternalIdBundle)}</li>
+ * <li>{@link #get(ExternalIdBundle, VersionCorrection)}</li>
  * </ul>
- * <p/>
- * In addition, this implementation <strong>does not support {@link ExternalId} changes</strong>.
- * While {@link #get(UniqueId)} by definition can always be cached, because a {@link Security}
- * never changes within a particular unique identifier, external identifiers can change over time.
- * <em>This implementation may return incorrect results if used in an environment where
- * external identifiers <strong>that are used for lookups</strong> are used.</em>
- * <p/>
+ * <p>
+ * In addition, this implementation <strong>does not support {@link ExternalId} changes</strong>. While {@link #get(UniqueId)} by definition can always be
+ * cached, because a {@link Security} never changes within a particular unique identifier, external identifiers can change over time. <em>This implementation
+ * may return incorrect results if used in an environment where external identifiers <strong>that are used for lookups</strong> are used.</em>
+ * <p>
  * This fundamentally limits the utility of this source to the the following conditions:
  * <ul>
- *   <li>Identifier changes (such as ticker rolls or corporate actions) happen as part of a
- *       maintenance window, during which time the Redis cache is cleared as well; and/or</li>
- *   <li>The only external identifiers used for lookups are ones that will never change
- *       (because they are surrogate keys into an existing system that guarantees consistency
- *       and uniqueness over time).</li>
+ * <li>Identifier changes (such as ticker rolls or corporate actions) happen as part of a maintenance window, during which time the Redis cache is cleared as
+ * well; and/or</li>
+ * <li>The only external identifiers used for lookups are ones that will never change (because they are surrogate keys into an existing system that guarantees
+ * consistency and uniqueness over time).</li>
  * </ul>
- * <p/>
- * Where there are multiple instances of the same {@code RedisCachingSecuritySource} being
- * pointed at the same repository (given as a combination of the same pool and same prefix),
- * by default, all instances will attempt to update the Redis instance, which is not ideal.
+ * <p>
+ * Where there are multiple instances of the same {@code RedisCachingSecuritySource} being pointed at the same repository (given as a combination of the same
+ * pool and same prefix), by default, all instances will attempt to update the Redis instance, which is not ideal.
  */
 public class RedisCachingSecuritySource extends AbstractSecuritySource {
   private static final Logger LOGGER = LoggerFactory.getLogger(RedisCachingSecuritySource.class);

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -22,8 +22,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  * @param <T>
+ *          The type of the market data
  */
 public class TrinomialOptionModel<T extends StandardOptionDataBundle> extends TreeOptionModel<OptionDefinition, T> {
   private final int _n;
@@ -78,7 +79,7 @@ public class TrinomialOptionModel<T extends StandardOptionDataBundle> extends Tr
   public Function1D<T, RecombiningTrinomialTree<DoublesPair>> getTreeGeneratingFunction(final OptionDefinition definition) {
     return new Function1D<T, RecombiningTrinomialTree<DoublesPair>>() {
 
-      @SuppressWarnings({"synthetic-access" })
+      @SuppressWarnings({ "unchecked" })
       @Override
       public RecombiningTrinomialTree<DoublesPair> evaluate(final T data) {
         final DoublesPair[][] spotAndOptionPrices = new DoublesPair[_maxDepthToSave + 1][_maxWidthToSave];
@@ -108,7 +109,8 @@ public class TrinomialOptionModel<T extends StandardOptionDataBundle> extends Tr
             optionValue = df * (u * tempResults[j + 1].second + m * tempResults[j].second + d * tempResults[j - 1].second);
             spotValue = df * tempResults[j].first;
             newData = (T) data.withSpot(spotValue);
-            tempResults[j - 1] = DoublesPair.of(spotValue, exerciseFunction.shouldExercise(newData, optionValue) ? payoffFunction.getPayoff(newData, optionValue) : optionValue);
+            tempResults[j - 1] = DoublesPair.of(spotValue,
+                exerciseFunction.shouldExercise(newData, optionValue) ? payoffFunction.getPayoff(newData, optionValue) : optionValue);
             if (i <= _maxDepthToSave) {
               spotAndOptionPrices[i][j - 1] = tempResults[j - 1];
             }

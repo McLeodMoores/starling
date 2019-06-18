@@ -28,33 +28,34 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesInfoSearchR
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesInfoSearchResult;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.master.historicaltimeseries.ManageableHistoricalTimeSeries;
-import com.opengamma.master.historicaltimeseries.ManageableHistoricalTimeSeriesInfo;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.auth.AuthUtils;
-import com.opengamma.util.auth.Permissionable;
 
 /**
  * A decorator for a time-series master that applies permissions.
  * <p>
  * Two kinds of permissions are applied by this class.
  * <p>
- * The first kind of permission is master-based.
- * These are provided as static constants on this class and cover
- * the basic view, add, update and remove operations.
+ * The first kind of permission is master-based. These are provided as static
+ * constants on this class and cover the basic view, add, update and remove
+ * operations.
  * <p>
- * The second kind of permission is entity-based.
- * The {@link ManageableHistoricalTimeSeriesInfo} class implements {@link Permissionable}.
- * This provides each security with a set of permissions that a user needs
- * to be able to view the data. This master enforces those permissions.
+ * The second kind of permission is entity-based. The
+ * {@link com.opengamma.master.historicaltimeseries.ManageableHistoricalTimeSeriesInfo}
+ * class implements {@link com.opengamma.util.auth.Permissionable}. This
+ * provides each security with a set of permissions that a user needs to be able
+ * to view the data. This master enforces those permissions.
  * <p>
  * For the {@code search} and {@code history} methods, each restricted document
  * is removed from the result. Since this happens after paging, it is possible
  * to see pages of data that are smaller than the requested page size.
  * <p>
- * For the bulk {@code get} method, each restricted document is removed from the result.
+ * For the bulk {@code get} method, each restricted document is removed from the
+ * result.
  * <p>
- * For the {@code get} methods, a restricted document causes an exception to be thrown.
+ * For the {@code get} methods, a restricted document causes an exception to be
+ * thrown.
  */
 public class PermissionedHistoricalTimeSeriesMaster implements HistoricalTimeSeriesMaster {
 

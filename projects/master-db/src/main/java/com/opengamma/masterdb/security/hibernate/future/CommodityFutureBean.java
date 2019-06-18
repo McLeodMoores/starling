@@ -13,10 +13,9 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.financial.security.future.CommodityFutureSecurity;
-
 /**
- * A Hibernate bean representation of {@link CommodityFutureSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.future.CommodityFutureSecurity}.
  */
 @BeanDefinition
 public abstract class CommodityFutureBean extends FutureSecurityBean {

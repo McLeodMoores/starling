@@ -31,7 +31,7 @@ public class CommodityFutureOptionBlackValueDeltaFunction extends CommodityFutur
   private static final ValueGreekCalculator CALCULATOR = ValueDeltaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public CommodityFutureOptionBlackValueDeltaFunction() {
     super(ValueRequirementNames.VALUE_DELTA);

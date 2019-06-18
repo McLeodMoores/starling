@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.config;
 
@@ -38,8 +38,8 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
  * Creates {@link com.opengamma.financial.analytics.curve.CurveConstructionConfiguration}s,
- * {@link com.opengamma.financial.analytics.curve.AbstractCurveDefinition}s and {@link com.opengamma.financial.analytics.curve.CurveNodeIdMapper}
- * and writes them as xml files or stores them in the config master, depending on the options used.
+ * {@link com.opengamma.financial.analytics.curve.AbstractCurveDefinition}s and {@link com.opengamma.financial.analytics.curve.CurveNodeIdMapper} and writes
+ * them as xml files or stores them in the config master, depending on the options used.
  */
 @Scriptable
 public class QuandlCurveConfigurationsLoader extends AbstractTool<ToolContext> {
@@ -56,7 +56,9 @@ public class QuandlCurveConfigurationsLoader extends AbstractTool<ToolContext> {
 
   /**
    * Main method to run the tool.
-   * @param args The arguments
+   *
+   * @param args
+   *          The arguments
    */
   public static void main(final String[] args) {
     new QuandlCurveConfigurationsLoader().invokeAndTerminate(args);
@@ -72,6 +74,7 @@ public class QuandlCurveConfigurationsLoader extends AbstractTool<ToolContext> {
 
   /**
    * Create the option to save the configurations to file.
+   *
    * @return The option
    */
   private static Option createFileOption() {
@@ -84,6 +87,7 @@ public class QuandlCurveConfigurationsLoader extends AbstractTool<ToolContext> {
 
   /**
    * Creates the option to persist the configurations to the config master.
+   *
    * @return The option
    */
   private static Option createPersistOption() {
@@ -96,7 +100,7 @@ public class QuandlCurveConfigurationsLoader extends AbstractTool<ToolContext> {
 
   @Override
   protected void doRun() throws Exception {
-    try (final ToolContext toolContext = getToolContext()) {
+    try (ToolContext toolContext = getToolContext()) {
       final CommandLine commandLine = getCommandLine();
       final boolean isPersist = commandLine.hasOption(PERSIST_FLAG);
       final boolean isSaveToFile = commandLine.hasOption(FILE_FLAG);
@@ -130,7 +134,7 @@ public class QuandlCurveConfigurationsLoader extends AbstractTool<ToolContext> {
         for (final CurveConstructionConfiguration configuration : cccs) {
           final Path path = Paths.get(configuration.getName() + ".xml");
           final byte[] xmlString = JodaBeanSer.PRETTY.xmlWriter().write(configuration).getBytes();
-          try (final OutputStream out = Files.newOutputStream(path, StandardOpenOption.CREATE_NEW)) {
+          try (OutputStream out = Files.newOutputStream(path, StandardOpenOption.CREATE_NEW)) {
             out.write(xmlString);
           } catch (final IOException e) {
             LOGGER.warn(e.getMessage());
@@ -140,7 +144,7 @@ public class QuandlCurveConfigurationsLoader extends AbstractTool<ToolContext> {
         for (final AbstractCurveDefinition configuration : acds) {
           final Path path = Paths.get(configuration.getName() + ".xml");
           final byte[] xmlString = JodaBeanSer.PRETTY.xmlWriter().write(configuration).getBytes();
-          try (final OutputStream out = Files.newOutputStream(path, StandardOpenOption.CREATE_NEW)) {
+          try (OutputStream out = Files.newOutputStream(path, StandardOpenOption.CREATE_NEW)) {
             out.write(xmlString);
           } catch (final IOException e) {
             LOGGER.warn(e.getMessage());

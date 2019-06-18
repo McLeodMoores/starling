@@ -29,7 +29,7 @@ public abstract class AbstractSortedPositionValues extends AbstractFunction.NonC
 
   protected static String getConstraint(final ValueProperties constraints, final String name) {
     final Set<String> values = constraints.getValues(name);
-    if ((values == null) || (values.size() != 1)) {
+    if (values == null || values.size() != 1) {
       return null;
     }
     return values.iterator().next();
@@ -37,7 +37,7 @@ public abstract class AbstractSortedPositionValues extends AbstractFunction.NonC
 
   protected static Integer getIntegerConstraint(final ValueProperties constraints, final String name) {
     final Set<String> values = constraints.getValues(name);
-    if ((values == null) || (values.size() != 1)) {
+    if (values == null || values.size() != 1) {
       return null;
     }
     return Integer.parseInt(values.iterator().next());
@@ -72,9 +72,11 @@ public abstract class AbstractSortedPositionValues extends AbstractFunction.NonC
 
   /**
    * Initial result set is anything. All behavior is controlled by constraints on the desired value.
-   * 
-   * @param context the function compilation context
-   * @param target the computation target 
+   *
+   * @param context
+   *          the function compilation context
+   * @param target
+   *          the computation target
    * @return a single element set containing the result with the infinite property set
    */
   @Override
@@ -83,18 +85,22 @@ public abstract class AbstractSortedPositionValues extends AbstractFunction.NonC
   }
 
   /**
-   * Resolved output is the value and properties from the input values. Properties from the underlying input values are prefixed with the
-   * value name, e.g. "FairValue.Currency" to avoid any potential collisions with properties defined on this function.
-   * 
-   * @param context the function compilation context
-   * @param target the computation target
-   * @param inputs the resolved inputs
+   * Resolved output is the value and properties from the input values. Properties from the underlying input values are prefixed with the value name, e.g.
+   * "FairValue.Currency" to avoid any potential collisions with properties defined on this function.
+   *
+   * @param context
+   *          the function compilation context
+   * @param target
+   *          the computation target
+   * @param inputs
+   *          the resolved inputs
    * @return a single element set containing the result with the properties from the component positions
    */
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueProperties.Builder properties = createRawResultsProperties();
-    for (ValueSpecification inputValue : inputs.keySet()) {
+    for (final ValueSpecification inputValue : inputs.keySet()) {
       composeValueProperties(properties, inputValue);
     }
     return Collections.singleton(ValueSpecification.of(getValueName(), ComputationTargetType.PORTFOLIO_NODE, target.getUniqueId(), properties.get()));

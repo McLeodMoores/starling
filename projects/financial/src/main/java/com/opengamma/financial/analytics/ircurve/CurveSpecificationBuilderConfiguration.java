@@ -28,13 +28,14 @@ import com.opengamma.util.time.Tenor;
 
 // CSOFF
 /**
- *
+ * @deprecated {@link YieldCurveSpecification}s are deprecated.
  */
+@Deprecated
 @Config(description = "Curve specification builder configuration", group = ConfigGroups.CURVES_LEGACY)
 public class CurveSpecificationBuilderConfiguration {
 
   /**
-   * The names of the curve instrument providers, currently used in CurveSpecificationBuilderConfiguration fudge messages and Web UI
+   * The names of the curve instrument providers, currently used in CurveSpecificationBuilderConfiguration fudge messages and Web UI.
    */
   public static final List<String> s_curveSpecNames = getCurveSpecBuilderConfigurationNames();
 
@@ -59,35 +60,56 @@ public class CurveSpecificationBuilderConfiguration {
   private final Map<Tenor, CurveInstrumentProvider> _continuousZeroDepositInstrumentProviders;
 
   /**
-   * A curve specification builder configuration for a particular currency
-   * @param cashInstrumentProviders a map of tenor to instrument providers for Cash curve instrument e.g. (StaticCurveInstrumentProvider)
-   * @param fra3MInstrumentProviders a map of tenor to instrument providers for 3M FRA curve instruments (e.g. 3M x 6M)
-   * @param fra6MInstrumentProviders a map of tenor to instrument providers for 6M FRA curve instruments (e.g. 3M x 9M)
-   * @param liborInstrumentProviders a map of tenor to instrument providers for Libor curve instruments
-   * @param euriborInstrumentProviders a map of tenor to instrument providers for Euribor curve instruments
-   * @param cdorInstrumentProviders a map of tenor in instrument providers for CDOR curve instruments
-   * @param ciborInstrumentProviders a map of tenor in instrument providers for Cibor curve instruments
-   * @param stiborInstrumentProviders a map of tenor in instrument providers for Stibor curve instruments
-   * @param futureInstrumentProviders a map of tenor to instrument providers for future curve instruments e.g. (BloombergFutureInstrumentProvider)
-   * @param swap6MInstrumentProviders a map of tenor to instrument providers for 6M swap curve instruments where 6M is the floating tenor
-   * @param swap3MInstrumentProviders a map of tenor to instrument providers for 3M swap curve instruments where 3M is the floating tenor
-   * @param basisSwapInstrumentProviders a map of tenor to instrument providers for basis swap instruments
-   * @param tenorSwapInstrumentProviders a map of tenor to instrument providers for tenor swap curve
-   * @param oisSwapInstrumentProviders a map of tenor to instrument providers for OIS swap curve instruments
-   * @param simpleZeroDepositInstrumentProviders a map of tenor to simple zero deposit instruments
-   * @param periodicZeroDepositInstrumentProviders a map of tenor to periodic zero deposit instruments
-   * @param continuousZeroDepositInstrumentProviders a map of tenor to continuous zero deposit instruments
-   * @param swap12MInstrumentProviders a map of tenor to instrument providers for 12M swap curve instruments where 12M is the floating tenor
-   * @param swap28DInstrumentProviders a map of tenor to instrument providers for 28D swap curve instruments where 28D is the floating tenor
+   * A curve specification builder configuration for a particular currency.
+   *
+   * @param cashInstrumentProviders
+   *          a map of tenor to instrument providers for Cash curve instrument e.g. (StaticCurveInstrumentProvider)
+   * @param fra3MInstrumentProviders
+   *          a map of tenor to instrument providers for 3M FRA curve instruments (e.g. 3M x 6M)
+   * @param fra6MInstrumentProviders
+   *          a map of tenor to instrument providers for 6M FRA curve instruments (e.g. 3M x 9M)
+   * @param liborInstrumentProviders
+   *          a map of tenor to instrument providers for Libor curve instruments
+   * @param euriborInstrumentProviders
+   *          a map of tenor to instrument providers for Euribor curve instruments
+   * @param cdorInstrumentProviders
+   *          a map of tenor in instrument providers for CDOR curve instruments
+   * @param ciborInstrumentProviders
+   *          a map of tenor in instrument providers for Cibor curve instruments
+   * @param stiborInstrumentProviders
+   *          a map of tenor in instrument providers for Stibor curve instruments
+   * @param futureInstrumentProviders
+   *          a map of tenor to instrument providers for future curve instruments e.g. (BloombergFutureInstrumentProvider)
+   * @param swap6MInstrumentProviders
+   *          a map of tenor to instrument providers for 6M swap curve instruments where 6M is the floating tenor
+   * @param swap3MInstrumentProviders
+   *          a map of tenor to instrument providers for 3M swap curve instruments where 3M is the floating tenor
+   * @param basisSwapInstrumentProviders
+   *          a map of tenor to instrument providers for basis swap instruments
+   * @param tenorSwapInstrumentProviders
+   *          a map of tenor to instrument providers for tenor swap curve
+   * @param oisSwapInstrumentProviders
+   *          a map of tenor to instrument providers for OIS swap curve instruments
+   * @param simpleZeroDepositInstrumentProviders
+   *          a map of tenor to simple zero deposit instruments
+   * @param periodicZeroDepositInstrumentProviders
+   *          a map of tenor to periodic zero deposit instruments
+   * @param continuousZeroDepositInstrumentProviders
+   *          a map of tenor to continuous zero deposit instruments
+   * @param swap12MInstrumentProviders
+   *          a map of tenor to instrument providers for 12M swap curve instruments where 12M is the floating tenor
+   * @param swap28DInstrumentProviders
+   *          a map of tenor to instrument providers for 28D swap curve instruments where 28D is the floating tenor
    */
-  public CurveSpecificationBuilderConfiguration(final Map<Tenor, CurveInstrumentProvider> cashInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> fra3MInstrumentProviders,
-      final Map<Tenor, CurveInstrumentProvider> fra6MInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> liborInstrumentProviders,
-      final Map<Tenor, CurveInstrumentProvider> euriborInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> cdorInstrumentProviders,
-      final Map<Tenor, CurveInstrumentProvider> ciborInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> stiborInstrumentProviders,
-      final Map<Tenor, CurveInstrumentProvider> futureInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> swap6MInstrumentProviders,
-      final Map<Tenor, CurveInstrumentProvider> swap3MInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> basisSwapInstrumentProviders,
-      final Map<Tenor, CurveInstrumentProvider> tenorSwapInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> oisSwapInstrumentProviders,
-      final Map<Tenor, CurveInstrumentProvider> simpleZeroDepositInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> periodicZeroDepositInstrumentProviders,
+  public CurveSpecificationBuilderConfiguration(final Map<Tenor, CurveInstrumentProvider> cashInstrumentProviders,
+      final Map<Tenor, CurveInstrumentProvider> fra3MInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> fra6MInstrumentProviders,
+      final Map<Tenor, CurveInstrumentProvider> liborInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> euriborInstrumentProviders,
+      final Map<Tenor, CurveInstrumentProvider> cdorInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> ciborInstrumentProviders,
+      final Map<Tenor, CurveInstrumentProvider> stiborInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> futureInstrumentProviders,
+      final Map<Tenor, CurveInstrumentProvider> swap6MInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> swap3MInstrumentProviders,
+      final Map<Tenor, CurveInstrumentProvider> basisSwapInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> tenorSwapInstrumentProviders,
+      final Map<Tenor, CurveInstrumentProvider> oisSwapInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> simpleZeroDepositInstrumentProviders,
+      final Map<Tenor, CurveInstrumentProvider> periodicZeroDepositInstrumentProviders,
       final Map<Tenor, CurveInstrumentProvider> continuousZeroDepositInstrumentProviders, final Map<Tenor, CurveInstrumentProvider> swap12MInstrumentProviders,
       final Map<Tenor, CurveInstrumentProvider> swap28DInstrumentProviders) {
     _cashInstrumentProviders = cashInstrumentProviders;
@@ -114,7 +136,7 @@ public class CurveSpecificationBuilderConfiguration {
   private static List<String> getCurveSpecBuilderConfigurationNames() {
     final List<String> list = new ArrayList<>();
     for (final Field field : CurveSpecificationBuilderConfigurationFudgeBuilder.class.getDeclaredFields()) {
-      if (Modifier.isStatic(field.getModifiers()) && field.isSynthetic() == false) {
+      if (Modifier.isStatic(field.getModifiers()) && !field.isSynthetic()) {
         field.setAccessible(true);
         try {
           list.add((String) field.get(null));
@@ -135,7 +157,8 @@ public class CurveSpecificationBuilderConfiguration {
     throw new OpenGammaRuntimeException("can't find instrument mapper definition for " + tenor);
   }
 
-  private static ExternalId getStaticSecurity(final Map<Tenor, CurveInstrumentProvider> instrumentMappers, final LocalDate curveDate, final FixedIncomeStrip strip) {
+  private static ExternalId getStaticSecurity(final Map<Tenor, CurveInstrumentProvider> instrumentMappers, final LocalDate curveDate,
+      final FixedIncomeStrip strip) {
     final Tenor tenor = strip.getCurveNodePointTime();
     final Tenor payTenor = strip.getPayTenor();
     final Tenor receiveTenor = strip.getReceiveTenor();
@@ -149,9 +172,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a cash security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a cash security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return the identifier of the security to use
    */
   public ExternalId getCashSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -162,9 +188,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a 3M FRA security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a 3M FRA security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return the identifier of the security to use
    */
   public ExternalId getFRA3MSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -175,9 +204,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a 6M FRA security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a 6M FRA security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return the identifier of the security to use
    */
   public ExternalId getFRA6MSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -188,9 +220,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a Swap security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a Swap security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return the identifier of the security to use
    */
   public ExternalId getSwap12MSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -201,9 +236,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a Swap security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a Swap security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return the identifier of the security to use
    */
   public ExternalId getSwap28DSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -214,9 +252,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a Swap security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a Swap security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return the identifier of the security to use
    */
   public ExternalId getSwap6MSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -227,9 +268,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a 3M swap security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a 3M swap security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return the identifier of the security to use
    */
   public ExternalId getSwap3MSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -240,9 +284,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a Basis Swap security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param strip the basis swap strip
+   * Build a Basis Swap security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param strip
+   *          the basis swap strip
    * @return identifier of the security to use
    */
   public ExternalId getBasisSwapSecurity(final LocalDate curveDate, final FixedIncomeStrip strip) {
@@ -253,9 +300,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a Tenor Swap security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a Tenor Swap security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return identifier of the security to use
    */
   public ExternalId getTenorSwapSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -266,9 +316,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a OIS swap security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a OIS swap security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return identifier of the security to use
    */
   public ExternalId getOISSwapSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -279,9 +332,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a Libor security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a Libor security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return the identifier of the security to use
    */
   public ExternalId getLiborSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -292,9 +348,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a Euribor security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a Euribor security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return the identifier of the security to use
    */
   public ExternalId getEuriborSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -305,9 +364,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a CDOR security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a CDOR security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return the identifier of the security to use
    */
   public ExternalId getCDORSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -318,9 +380,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a Cibor security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a Cibor security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return the identifier of the security to use
    */
   public ExternalId getCiborSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -331,9 +396,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a Stibor security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a Stibor security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return the identifier of the security to use
    */
   public ExternalId getStiborSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -344,9 +412,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a simple zero deposit security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a simple zero deposit security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return the identifier of the security to use
    */
   public ExternalId getSimpleZeroDepositSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -357,10 +428,14 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a periodic zero deposit security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
-   * @param periodsPerYear the periods per year
+   * Build a periodic zero deposit security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
+   * @param periodsPerYear
+   *          the periods per year
    * @return the identifier of the security to use
    */
   public ExternalId getPeriodicZeroDepositSecurity(final LocalDate curveDate, final Tenor tenor, final int periodsPerYear) {
@@ -375,9 +450,12 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a continuous security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
+   * Build a continuous security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
    * @return the identifier of the security to use
    */
   public ExternalId getContinuousZeroDepositSecurity(final LocalDate curveDate, final Tenor tenor) {
@@ -388,10 +466,14 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Build a Future security identifier for a curve node point
-   * @param curveDate the date of the start of the curve
-   * @param tenor the time into the curve for this security
-   * @param numberQuarterlyFuturesFromTenor the number of quarterly IR futures to traverse from (curveDate + tenor)
+   * Build a Future security identifier for a curve node point.
+   *
+   * @param curveDate
+   *          the date of the start of the curve
+   * @param tenor
+   *          the time into the curve for this security
+   * @param numberQuarterlyFuturesFromTenor
+   *          the number of quarterly IR futures to traverse from (curveDate + tenor)
    * @return the identifier of the security to use
    */
   public ExternalId getFutureSecurity(final LocalDate curveDate, final Tenor tenor, final int numberQuarterlyFuturesFromTenor) {
@@ -406,7 +488,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the cashInstrumentProviders field for serialisation
+   * Gets the cashInstrumentProviders field for serialisation.
+   *
    * @return the cashInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getCashInstrumentProviders() {
@@ -414,7 +497,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the fra3MInstrumentProviders field for serialisation
+   * Gets the fra3MInstrumentProviders field for serialisation.
+   *
    * @return the fra3MInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getFra3MInstrumentProviders() {
@@ -422,7 +506,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the fra6MInstrumentProviders field for serialisation
+   * Gets the fra6MInstrumentProviders field for serialisation.
+   *
    * @return the fra6MInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getFra6MInstrumentProviders() {
@@ -430,7 +515,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the liborInstrumentProviders field for serialisation
+   * Gets the liborInstrumentProviders field for serialisation.
+   *
    * @return the liborInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getLiborInstrumentProviders() {
@@ -438,7 +524,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the euriborInstrumentProviders field for serialisation
+   * Gets the euriborInstrumentProviders field for serialisation.
+   *
    * @return the euriborInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getEuriborInstrumentProviders() {
@@ -446,7 +533,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the cdorInstrumentProviders field for serialisation
+   * Gets the cdorInstrumentProviders field for serialisation.
+   *
    * @return the cdorInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getCDORInstrumentProviders() {
@@ -454,7 +542,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the ciborInstrumentProviders field for serialisation
+   * Gets the ciborInstrumentProviders field for serialisation.
+   *
    * @return the ciborInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getCiborInstrumentProviders() {
@@ -462,7 +551,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the stiborInstrumentProviders field for serialisation
+   * Gets the stiborInstrumentProviders field for serialisation.
+   *
    * @return the stiborInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getStiborInstrumentProviders() {
@@ -470,7 +560,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the futureInstrumentProviders field for serialisation
+   * Gets the futureInstrumentProviders field for serialisation.
+   *
    * @return the futureInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getFutureInstrumentProviders() {
@@ -478,7 +569,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the swap12MInstrumentProviders field for serialisation
+   * Gets the swap12MInstrumentProviders field for serialisation.
+   *
    * @return the swap12MInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getSwap12MInstrumentProviders() {
@@ -486,7 +578,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the swap28DInstrumentProviders field for serialisation
+   * Gets the swap28DInstrumentProviders field for serialisation.
+   *
    * @return the swap12MInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getSwap28DInstrumentProviders() {
@@ -494,7 +587,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the swap6MInstrumentProviders field for serialisation
+   * Gets the swap6MInstrumentProviders field for serialisation.
+   *
    * @return the swap6MInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getSwap6MInstrumentProviders() {
@@ -502,7 +596,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the swap3MInstrumentProviders field for serialisation
+   * Gets the swap3MInstrumentProviders field for serialisation.
+   *
    * @return the swap3MInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getSwap3MInstrumentProviders() {
@@ -510,7 +605,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the basisSwapInstrumentProviders field for serialisation
+   * Gets the basisSwapInstrumentProviders field for serialisation.
+   *
    * @return the basisSwapInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getBasisSwapInstrumentProviders() {
@@ -518,7 +614,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the tenorSwapInstrumentProviders field for serialisation
+   * Gets the tenorSwapInstrumentProviders field for serialisation.
+   *
    * @return the swapInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getTenorSwapInstrumentProviders() {
@@ -526,7 +623,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the oisSwapInstrumentProviders field for serialisation
+   * Gets the oisSwapInstrumentProviders field for serialisation.
+   *
    * @return the oisSwapInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getOISSwapInstrumentProviders() {
@@ -534,7 +632,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the simpleZeroDepositInstrumentProviders for serialisation
+   * Gets the simpleZeroDepositInstrumentProviders for serialisation.
+   *
    * @return the simpleZeroDepositInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getSimpleZeroDepositInstrumentProviders() {
@@ -542,7 +641,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the periodicZeroDepositInstrumentProviders for serialisation
+   * Gets the periodicZeroDepositInstrumentProviders for serialisation.
+   *
    * @return the periodicZeroDepositInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getPeriodicZeroDepositInstrumentProviders() {
@@ -550,7 +650,8 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Gets the continuousZeroDepositInstrumentProviders for serialisation
+   * Gets the continuousZeroDepositInstrumentProviders for serialisation.
+   *
    * @return the continuousZeroDepositInstrumentProviders
    */
   public Map<Tenor, CurveInstrumentProvider> getContinuousZeroDepositInstrumentProviders() {
@@ -558,7 +659,7 @@ public class CurveSpecificationBuilderConfiguration {
   }
 
   /**
-   * Get all available tenors
+   * Get all available tenors.
    *
    * @return the sorted tenors
    */

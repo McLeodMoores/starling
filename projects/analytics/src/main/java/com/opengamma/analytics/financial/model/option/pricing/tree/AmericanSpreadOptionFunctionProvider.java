@@ -5,17 +5,20 @@
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
 
-
 /**
- * {@link EuropeanSpreadOptionFunctionProvider} with early exercise feature
+ * {@link EuropeanSpreadOptionFunctionProvider} with early exercise feature.
  */
 public class AmericanSpreadOptionFunctionProvider extends OptionFunctionProvider2D {
 
   /**
-   * @param strike Strike price
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
+   * @param strike
+   *          Strike price
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
    */
   public AmericanSpreadOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall) {
     super(strike, timeToExpiry, steps, isCall);
@@ -41,7 +44,8 @@ public class AmericanSpreadOptionFunctionProvider extends OptionFunctionProvider
   }
 
   @Override
-  public double[][] getNextOptionValues(final double discount, final double uuProbability, final double udProbability, final double duProbability, final double ddProbability,
+  public double[][] getNextOptionValues(final double discount, final double uuProbability, final double udProbability, final double duProbability,
+      final double ddProbability,
       final double[][] values, final double baseAssetPrice1, final double baseAssetPrice2, final double downFactor1, final double downFactor2,
       final double upOverDown1, final double upOverDown2, final int steps) {
     final int stepsP = steps + 1;
@@ -54,7 +58,8 @@ public class AmericanSpreadOptionFunctionProvider extends OptionFunctionProvider
     for (int j = 0; j < stepsP; ++j) {
       double assetPrice2 = assetPrice2Rest;
       for (int i = 0; i < stepsP; ++i) {
-        res[j][i] = discount * (uuProbability * values[j + 1][i + 1] + udProbability * values[j + 1][i] + duProbability * values[j][i + 1] + ddProbability * values[j][i]);
+        res[j][i] = discount
+            * (uuProbability * values[j + 1][i + 1] + udProbability * values[j + 1][i] + duProbability * values[j][i + 1] + ddProbability * values[j][i]);
         res[j][i] = Math.max(res[j][i], sign * (assetPrice1 - assetPrice2 - strike));
         assetPrice2 *= upOverDown2;
       }
@@ -83,9 +88,12 @@ public class AmericanSpreadOptionFunctionProvider extends OptionFunctionProvider
   }
 
   @Override
-  public double[][] getNextOptionValues(final double discount, final double uuProbability, final double umProbability, final double udProbability, final double muProbability,
-      final double mmProbability, final double mdProbability, final double duProbability, final double dmProbability, final double ddProbability, final double[][] values,
-      final double baseAssetPrice1, final double baseAssetPrice2, final double downFactor1, final double downFactor2, final double middleOverDown1, final double middleOverDown2, final int steps) {
+  public double[][] getNextOptionValues(final double discount, final double uuProbability, final double umProbability, final double udProbability,
+      final double muProbability,
+      final double mmProbability, final double mdProbability, final double duProbability, final double dmProbability, final double ddProbability,
+      final double[][] values,
+      final double baseAssetPrice1, final double baseAssetPrice2, final double downFactor1, final double downFactor2, final double middleOverDown1,
+      final double middleOverDown2, final int steps) {
     final int nNodes = 2 * steps + 1;
     final double strike = getStrike();
     final double sign = getSign();
@@ -96,8 +104,10 @@ public class AmericanSpreadOptionFunctionProvider extends OptionFunctionProvider
     for (int j = 0; j < nNodes; ++j) {
       double assetPrice2 = assetPrice2Rest;
       for (int i = 0; i < nNodes; ++i) {
-        res[j][i] = discount * (uuProbability * values[j + 2][i + 2] + umProbability * values[j + 2][i + 1] + udProbability * values[j + 2][i] + muProbability * values[j + 1][i + 2] + mmProbability *
-            values[j + 1][i + 1] + mdProbability * values[j + 1][i] + duProbability * values[j][i + 2] + dmProbability * values[j][i + 1] + ddProbability * values[j][i]);
+        res[j][i] = discount * (uuProbability * values[j + 2][i + 2] + umProbability * values[j + 2][i + 1] + udProbability * values[j + 2][i]
+            + muProbability * values[j + 1][i + 2] + mmProbability
+                * values[j + 1][i + 1]
+            + mdProbability * values[j + 1][i] + duProbability * values[j][i + 2] + dmProbability * values[j][i + 1] + ddProbability * values[j][i]);
         res[j][i] = Math.max(res[j][i], sign * (assetPrice1 - assetPrice2 - strike));
         assetPrice2 *= middleOverDown2;
       }

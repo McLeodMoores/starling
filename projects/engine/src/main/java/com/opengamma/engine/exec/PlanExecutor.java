@@ -31,7 +31,7 @@ import com.opengamma.util.async.Cancelable;
 /**
  * Executes a {@link GraphExecutionPlan} by forming jobs and submitting them to the available calculation nodes.
  */
-public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGraphExecutionFuture {
+public class PlanExecutor implements JobResultReceiver, DependencyGraphExecutionFuture {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PlanExecutor.class);
 
@@ -40,7 +40,7 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
     private final CalculationJob _job;
     private volatile Cancelable _cancel;
 
-    public ExecutingJob(final CalculationJob job) {
+    ExecutingJob(final CalculationJob job) {
       _job = job;
     }
 
@@ -60,13 +60,12 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
 
     @Override
     public boolean cancel(final boolean mayInterruptedIfRunning) {
-      Cancelable cancel = getCancel();
+      final Cancelable cancel = getCancel();
       if (cancel != null) {
         LOGGER.debug("Cancelling {} for job {}", _cancel, _job);
         return cancel.cancel(mayInterruptedIfRunning);
-      } else {
-        return false;
       }
+      return false;
     }
 
   }
@@ -78,7 +77,7 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
   private final SingleComputationCycle _cycle;
   private final ExecutingGraph _graph;
   private final AtomicInteger _notifyLock = new AtomicInteger();
-  private Map<CalculationJobSpecification, ExecutingJob> _executing = new HashMap<CalculationJobSpecification, ExecutingJob>();
+  private Map<CalculationJobSpecification, ExecutingJob> _executing = new HashMap<>();
   private State _state;
   private int _nodeCount;
   private long _executionTime;
@@ -107,7 +106,7 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
   }
 
   protected void storeTailJobs(final CalculationJob job) {
-    for (CalculationJob tail : job.getTail()) {
+    for (final CalculationJob tail : job.getTail()) {
       _executing.put(tail.getSpecification(), new ExecutingJob(tail));
       if (tail.getTail() != null) {
         storeTailJobs(tail);
@@ -116,7 +115,7 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
   }
 
   protected void cancelableTailJobs(final CalculationJob job, final Cancelable handle) {
-    for (CalculationJob tail : job.getTail()) {
+    for (final CalculationJob tail : job.getTail()) {
       final ExecutingJob executing = _executing.get(tail.getSpecification());
       if (executing != null) {
         executing.setCancel(handle);
@@ -224,7 +223,7 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
       notifyAll();
     }
     LOGGER.info("Cancelling current jobs of {}", this);
-    for (ExecutingJob job : jobs) {
+    for (final ExecutingJob job : jobs) {
       job.cancel(mayInterruptIfRunning);
     }
     return true;

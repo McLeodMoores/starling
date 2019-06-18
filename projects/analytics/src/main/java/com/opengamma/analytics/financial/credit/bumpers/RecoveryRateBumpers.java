@@ -7,8 +7,9 @@ package com.opengamma.analytics.financial.credit.bumpers;
 
 // CSOFF
 /**
- * Class containing utilities for bumping recovery rates by user defined methods and amounts
- *@deprecated this will be deleted
+ * Class containing utilities for bumping recovery rates by user defined methods and amounts.
+ * 
+ * @deprecated this will be deleted
  */
 @Deprecated
 public class RecoveryRateBumpers {

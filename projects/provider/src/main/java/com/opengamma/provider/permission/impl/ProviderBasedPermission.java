@@ -23,8 +23,7 @@ import com.opengamma.util.auth.ExtendedPermission;
 /**
  * An Apache Shiro permission that uses a {@code PermissionCheckProvider}.
  * <p>
- * This uses the underlying provider to check permissions.
- * See {@link ProviderBasedPermissionResolver} for public access.
+ * This uses the underlying provider to check permissions. See {@link ProviderBasedPermissionResolver} for public access.
  */
 final class ProviderBasedPermission implements ExtendedPermission {
 
@@ -40,25 +39,27 @@ final class ProviderBasedPermission implements ExtendedPermission {
   /**
    * Creates an instance of the permission.
    *
-   * @param provider  the underlying permission check provider, not null
-   * @param permissionString  the permission string, not null
+   * @param provider
+   *          the underlying permission check provider, not null
+   * @param permissionString
+   *          the permission string, not null
    */
   ProviderBasedPermission(final PermissionCheckProvider provider, final String permissionString) {
     _provider = ArgumentChecker.notNull(provider, "provider");
     _permissionString = ArgumentChecker.notNull(permissionString, "permissionString");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private String getPermissionString() {
     return _permissionString;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // this permission is the permission I have
   // the other permission is the permission being checked
   @Override
   public boolean implies(final Permission requiredPermission) {
-    if (requiredPermission instanceof ProviderBasedPermission == false) {
+    if (!(requiredPermission instanceof ProviderBasedPermission)) {
       return false;
     }
     final ProviderBasedPermission requiredPerm = (ProviderBasedPermission) requiredPermission;
@@ -71,7 +72,7 @@ final class ProviderBasedPermission implements ExtendedPermission {
 
   @Override
   public boolean checkImplies(final Permission requiredPermission) {
-    if (requiredPermission instanceof ProviderBasedPermission == false) {
+    if (!(requiredPermission instanceof ProviderBasedPermission)) {
       return false;
     }
     final ProviderBasedPermission requiredPerm = (ProviderBasedPermission) requiredPermission;
@@ -93,7 +94,7 @@ final class ProviderBasedPermission implements ExtendedPermission {
     }
     final Set<String> required = new HashSet<>();
     for (final Permission requiredPermission : requiredPermissions) {
-      if (requiredPermission instanceof ProviderBasedPermission == false) {
+      if (!(requiredPermission instanceof ProviderBasedPermission)) {
         return null;
       }
       required.add(((ProviderBasedPermission) requiredPermission).getPermissionString());
@@ -102,9 +103,8 @@ final class ProviderBasedPermission implements ExtendedPermission {
     if (user == null) {
       if (exceptionsOnError) {
         throw new UnauthenticatedException("Permission denied: User not logged in: " + required);
-      } else {
-        return Boolean.FALSE;
       }
+      return Boolean.FALSE;
     }
     final PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(
         user.getAlternateIds(), user.getNetworkAddress(), required);
@@ -115,7 +115,7 @@ final class ProviderBasedPermission implements ExtendedPermission {
     return Boolean.valueOf(result.isPermittedAll(required));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean equals(final Object obj) {
     if (obj instanceof ProviderBasedPermission) {

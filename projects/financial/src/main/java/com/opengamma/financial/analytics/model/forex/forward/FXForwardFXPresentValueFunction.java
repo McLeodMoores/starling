@@ -24,6 +24,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  * Calculates the FX present value for FX forwards.
+ *
  * @deprecated Use {@link DiscountingFXPVFunction}
  */
 @Deprecated
@@ -32,14 +33,15 @@ public class FXForwardFXPresentValueFunction extends FXForwardMultiValuedFunctio
   private static final PresentValueMCACalculator CALCULATOR = PresentValueMCACalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#FX_PRESENT_VALUE}
+   * Sets the value requirement name to {@link ValueRequirementNames#FX_PRESENT_VALUE}.
    */
   public FXForwardFXPresentValueFunction() {
     super(ValueRequirementNames.FX_PRESENT_VALUE);
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final Forex fxForward, final YieldCurveBundle data, final ComputationTarget target, final Set<ValueRequirement> desiredValues,
+  protected Set<ComputedValue> getResult(final Forex fxForward, final YieldCurveBundle data, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues,
       final FunctionInputs inputs, final ValueSpecification spec, final FunctionExecutionContext executionContext) {
     final MultipleCurrencyAmount result = fxForward.accept(CALCULATOR, data);
     return Collections.singleton(new ComputedValue(spec, FXUtils.getMultipleCurrencyAmountAsMatrix(result)));

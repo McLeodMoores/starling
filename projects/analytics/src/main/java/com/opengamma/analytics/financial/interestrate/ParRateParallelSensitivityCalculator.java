@@ -9,30 +9,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.util.tuple.DoublesPair;
+
 //CSOFF
 /**
- * Calculates the change in par rate of an instrument (the exact meaning of par rate depends on the instrument - for swaps it is the par swap rate) due to a parallel move of each yield curve
- * that the instrument is sensitive to - dPar/dR where dR is a movement of the whole curve. The return format is a Map with curve names (String) as keys and a sensitivities as values.
- * @deprecated Use the calculators that reference {@link ParameterProviderInterface}
+ * Calculates the change in par rate of an instrument (the exact meaning of par rate depends on the instrument - for swaps it is the par swap rate) due to a
+ * parallel move of each yield curve that the instrument is sensitive to - dPar/dR where dR is a movement of the whole curve. The return format is a Map with
+ * curve names (String) as keys and a sensitivities as values.
+ *
+ * @deprecated Use the calculators that reference {@link com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface}
  */
 @Deprecated
 public final class ParRateParallelSensitivityCalculator extends InstrumentDerivativeVisitorSameMethodAdapter<YieldCurveBundle, Map<String, Double>> {
-  private static final ParRateParallelSensitivityCalculator s_instance = new ParRateParallelSensitivityCalculator();
+  private static final ParRateParallelSensitivityCalculator INSTANCE = new ParRateParallelSensitivityCalculator();
   private final ParRateCurveSensitivityCalculator _prcsc = ParRateCurveSensitivityCalculator.getInstance();
 
   public static ParRateParallelSensitivityCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   private ParRateParallelSensitivityCalculator() {
   }
 
   /**
-   * Calculates the change in par rate of an instrument due to a parallel move of each yield curve the instrument is sensitive to
-   * @param ird instrument
-   * @param curves bundle of relevant yield curves
+   * Calculates the change in par rate of an instrument due to a parallel move of each yield curve the instrument is sensitive to.
+   * 
+   * @param ird
+   *          instrument
+   * @param curves
+   *          bundle of relevant yield curves
    * @return a Map between curve name and sensitivity for that curve
    */
   @Override

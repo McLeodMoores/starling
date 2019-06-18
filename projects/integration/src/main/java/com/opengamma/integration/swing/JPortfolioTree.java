@@ -47,9 +47,8 @@ public class JPortfolioTree extends JTree {
           final SortedSet<ExternalId> sorted = new TreeSet<>(_idBundleComparator);
           sorted.addAll(bundle.getExternalIds());
           return sorted.iterator().next() + " (" + position.getQuantity() + ")";
-        } else {
-          return position.getSecurity().getName() + " (" + position.getQuantity() + ")";
         }
+        return position.getSecurity().getName() + " (" + position.getQuantity() + ")";
       } else if (value instanceof Trade) {
         final Trade trade = (Trade) value;
         return trade.getQuantity() + " on " + trade.getTradeDate();

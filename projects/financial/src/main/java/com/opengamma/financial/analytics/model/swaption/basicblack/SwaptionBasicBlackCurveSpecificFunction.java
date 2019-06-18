@@ -58,8 +58,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Base class for functions that return curve-specific values for swaptions using the basic Black model (i.e. using a security-specific volatility and not interpolating volatilities).
- * 
+ * Base class for functions that return curve-specific values for swaptions using the basic Black model (i.e. using a security-specific volatility and not
+ * interpolating volatilities).
+ *
  * @deprecated Use descendants of {@link ConstantBlackDiscountingSwaptionFunction}
  */
 @Deprecated
@@ -73,7 +74,8 @@ public abstract class SwaptionBasicBlackCurveSpecificFunction extends AbstractFu
   private ConfigDBCurveCalculationConfigSource _curveCalculationConfigSource;
 
   /**
-   * @param valueRequirementName The value requirement name, not null
+   * @param valueRequirementName
+   *          The value requirement name, not null
    */
   public SwaptionBasicBlackCurveSpecificFunction(final String valueRequirementName) {
     ArgumentChecker.notNull(valueRequirementName, "value requirement name");
@@ -92,7 +94,8 @@ public abstract class SwaptionBasicBlackCurveSpecificFunction extends AbstractFu
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(executionContext);
@@ -115,17 +118,18 @@ public abstract class SwaptionBasicBlackCurveSpecificFunction extends AbstractFu
     final String curveCalculationMethod = curveCalculationConfig.getCalculationMethod();
     final InstrumentDefinition<?> definition = security.accept(_visitor);
     if (curveNames.length == 1) {
-      curveNames = new String[] {curveNames[0], curveNames[0] };
+      curveNames = new String[] { curveNames[0], curveNames[0] };
     }
     final String[] fullCurveNames = new String[curveNames.length];
     for (int i = 0; i < curveNames.length; i++) {
       fullCurveNames[i] = curveNames[i] + "_" + currency.getCode();
     }
-    final InstrumentDerivative swaption = definition.toDerivative(now, fullCurveNames); //TODO
+    final InstrumentDerivative swaption = definition.toDerivative(now, fullCurveNames); // TODO
     final ValueProperties properties = getResultProperties(currency.getCode(), curveCalculationConfigName, curveName);
     final ValueSpecification spec = new ValueSpecification(_valueRequirementName, target.toSpecification(), properties);
     final YieldCurveBundle curves = YieldCurveFunctionUtils.getYieldCurves(inputs, curveCalculationConfig);
-    final BlackFlatSwaptionParameters parameters = new BlackFlatSwaptionParameters(volatilitySurface.getSurface(), SwaptionUtils.getSwapGenerator(security, definition, securitySource));
+    final BlackFlatSwaptionParameters parameters = new BlackFlatSwaptionParameters(volatilitySurface.getSurface(),
+        SwaptionUtils.getSwapGenerator(security, definition, securitySource));
     final YieldCurveWithBlackSwaptionBundle data = new YieldCurveWithBlackSwaptionBundle(parameters, curves);
     return getResult(swaption, data, curveName, spec, curveCalculationConfigName, curveCalculationMethod, inputs, target);
   }
@@ -177,23 +181,32 @@ public abstract class SwaptionBasicBlackCurveSpecificFunction extends AbstractFu
 
   /**
    * Calculates the results.
-   * 
-   * @param swaption The swaption
-   * @param data The market data bundle
-   * @param curveName The name of the curve
-   * @param spec The result specification
-   * @param curveCalculationConfigName The curve calculation configuration name
-   * @param curveCalculationMethod The curve calculation method name
-   * @param inputs The function inputs
-   * @param target The target
+   *
+   * @param swaption
+   *          The swaption
+   * @param data
+   *          The market data bundle
+   * @param curveName
+   *          The name of the curve
+   * @param spec
+   *          The result specification
+   * @param curveCalculationConfigName
+   *          The curve calculation configuration name
+   * @param curveCalculationMethod
+   *          The curve calculation method name
+   * @param inputs
+   *          The function inputs
+   * @param target
+   *          The target
    * @return A set of results
    */
-  protected abstract Set<ComputedValue> getResult(final InstrumentDerivative swaption, final YieldCurveWithBlackSwaptionBundle data, final String curveName, final ValueSpecification spec,
-      final String curveCalculationConfigName, final String curveCalculationMethod, final FunctionInputs inputs, final ComputationTarget target);
+  protected abstract Set<ComputedValue> getResult(InstrumentDerivative swaption, YieldCurveWithBlackSwaptionBundle data, String curveName,
+      ValueSpecification spec,
+      String curveCalculationConfigName, String curveCalculationMethod, FunctionInputs inputs, ComputationTarget target);
 
   /**
    * Returns the converter.
-   * 
+   *
    * @return The converter
    */
   protected SwaptionSecurityConverterDeprecated getVisitor() {
@@ -206,26 +219,32 @@ public abstract class SwaptionBasicBlackCurveSpecificFunction extends AbstractFu
 
   /**
    * Gets general result properties.
-   * 
-   * @param currency The currency
+   *
+   * @param currency
+   *          The currency
    * @return The result properties
    */
   protected ValueProperties getResultProperties(final String currency) {
-    return createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_BASIC_METHOD).withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG)
+    return createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_BASIC_METHOD)
+        .withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG)
         .with(ValuePropertyNames.CURRENCY, currency).with(ValuePropertyNames.CURVE_CURRENCY, currency).withAny(ValuePropertyNames.CURVE).get();
   }
 
   /**
    * Gets specfic result properties.
-   * 
-   * @param currency The currency
-   * @param curveCalculationConfig The curve calculation configuration name
-   * @param curveName The curve name
+   *
+   * @param currency
+   *          The currency
+   * @param curveCalculationConfig
+   *          The curve calculation configuration name
+   * @param curveName
+   *          The curve name
    * @return The result properties
    */
   protected ValueProperties getResultProperties(final String currency, final String curveCalculationConfig, final String curveName) {
     return createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_BASIC_METHOD)
-        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig).with(ValuePropertyNames.CURRENCY, currency).with(ValuePropertyNames.CURVE_CURRENCY, currency)
+        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig).with(ValuePropertyNames.CURRENCY, currency)
+        .with(ValuePropertyNames.CURVE_CURRENCY, currency)
         .with(ValuePropertyNames.CURVE, curveName).get();
   }
 

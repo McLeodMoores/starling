@@ -66,12 +66,10 @@ import com.opengamma.util.tuple.Pairs;
 /**
  * A user master implementation using a database for persistence.
  * <p>
- * This is a full implementation of the user master using an SQL database.
- * Full details of the API are in {@link UserMaster}.
+ * This is a full implementation of the user master using an SQL database. Full details of the API are in {@link UserMaster}.
  * <p>
- * The SQL is stored externally in {@code DbUserMaster.elsql}.
- * Alternate databases or specific SQL requirements can be handled using database
- * specific overrides, such as {@code DbUserMaster-MySpecialDB.elsql}.
+ * The SQL is stored externally in {@code DbUserMaster.elsql}. Alternate databases or specific SQL requirements can be handled using database specific
+ * overrides, such as {@code DbUserMaster-MySpecialDB.elsql}.
  * <p>
  * This class is mutable but must be treated as immutable after configuration.
  */
@@ -111,7 +109,8 @@ public class DbUserMaster
   /**
    * Creates an instance.
    *
-   * @param dbConnector  the database connector, not null
+   * @param dbConnector
+   *          the database connector, not null
    */
   public DbUserMaster(final DbConnector dbConnector) {
     this(dbConnector, new DbRoleMaster(dbConnector));
@@ -120,8 +119,10 @@ public class DbUserMaster
   /**
    * Creates an instance controlling the role master.
    *
-   * @param dbConnector  the database connector, not null
-   * @param roleMaster  the role master, not null
+   * @param dbConnector
+   *          the database connector, not null
+   * @param roleMaster
+   *          the role master, not null
    */
   public DbUserMaster(final DbConnector dbConnector, final DbRoleMaster roleMaster) {
     super(dbConnector, IDENTIFIER_SCHEME_DEFAULT);
@@ -135,7 +136,7 @@ public class DbUserMaster
     _searchTimer = summaryRegistry.timer(namePrefix + ".search");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean nameExists(final String userName) {
     ArgumentChecker.notNull(userName, "userName");
@@ -160,7 +161,7 @@ public class DbUserMaster
     return doGetById(objectId, new UserExtractor());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public UniqueId add(final ManageableUser user) {
     final UniqueId added = doAdd(user);
@@ -175,7 +176,7 @@ public class DbUserMaster
         if (user.getUserName().equals("admin")) {
           if (roleMaster().nameExists("admin")) {
             role = roleMaster().getByName("admin");
-            if (role.getAssociatedUsers().contains("admin") == false) {
+            if (!role.getAssociatedUsers().contains("admin")) {
               role.getAssociatedUsers().add("admin");
             }
           } else {
@@ -187,7 +188,7 @@ public class DbUserMaster
         } else {
           if (roleMaster().nameExists("registered")) {
             role = roleMaster().getByName("registered");
-            if (role.getAssociatedUsers().contains(caseInsensitive(user.getUserName())) == false) {
+            if (!role.getAssociatedUsers().contains(caseInsensitive(user.getUserName()))) {
               role.getAssociatedUsers().add(caseInsensitive(user.getUserName()));
             }
           } else {
@@ -211,7 +212,8 @@ public class DbUserMaster
   /**
    * Processes the user add, within a retrying transaction.
    *
-   * @param user  the user to add, not null
+   * @param user
+   *          the user to add, not null
    * @return the information, not null
    */
   @Override
@@ -229,12 +231,12 @@ public class DbUserMaster
     insertAlternateIds(docOid, user);
     insertPermissions(docOid, user);
     insertExtensions(docOid, user);
-    final HistoryEvent event = HistoryEvent.of(HistoryEventType.ADDED, uniqueId, "system", now, ImmutableList.<String>of());
+    final HistoryEvent event = HistoryEvent.of(HistoryEventType.ADDED, uniqueId, "system", now, ImmutableList.<String> of());
     insertEvent(event, USR_USER_EVENT_SEQ);
     return Pairs.of(uniqueId, now);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public UniqueId update(final ManageableUser user) {
     return doUpdate(user);
@@ -243,7 +245,8 @@ public class DbUserMaster
   /**
    * Processes the update, within a retrying transaction.
    *
-   * @param user  the updated user, not null
+   * @param user
+   *          the updated user, not null
    * @return the updated document, not null
    */
   @Override
@@ -255,12 +258,12 @@ public class DbUserMaster
     final UniqueId newUniqueId = objectId.atVersion(Integer.toString(newVersion));
     // validate
     if (current.equals(user)) {
-      return Pairs.of(newUniqueId, null);  // no change
+      return Pairs.of(newUniqueId, null); // no change
     }
-    if (current.getUniqueId().getVersion().equals(oldVersion) == false) {
+    if (!current.getUniqueId().getVersion().equals(oldVersion)) {
       throw new DataVersionException("Invalid version, User has already been updated: " + objectId);
     }
-    if (caseInsensitive(user.getUserName()).equals(caseInsensitive(current.getUserName())) == false) {
+    if (!caseInsensitive(user.getUserName()).equals(caseInsensitive(current.getUserName()))) {
       // check if user exists
       if (doNameExists(user.getUserName())) {
         throw new DataDuplicationException("User cannot be renamed, new name already exists: " + user.getUserName());
@@ -270,15 +273,15 @@ public class DbUserMaster
     // update
     final long docOid = extractOid(objectId);
     updateMain(docOid, newVersion, user);
-    if (current.getAlternateIds().equals(user.getAlternateIds()) == false) {
+    if (!current.getAlternateIds().equals(user.getAlternateIds())) {
       deleteAlternateIds(docOid);
       insertAlternateIds(docOid, user);
     }
-    if (current.getAssociatedPermissions().equals(user.getAssociatedPermissions()) == false) {
+    if (!current.getAssociatedPermissions().equals(user.getAssociatedPermissions())) {
       deletePermissions(docOid);
       insertPermissions(docOid, user);
     }
-    if (current.getProfile().getExtensions().equals(user.getProfile().getExtensions()) == false) {
+    if (!current.getProfile().getExtensions().equals(user.getProfile().getExtensions())) {
       deleteExtensions(docOid);
       insertExtensions(docOid, user);
     }
@@ -293,7 +296,7 @@ public class DbUserMaster
     final List<String> changes = new ArrayList<>();
     // changes
     createChange(changes, current, updated, ManageableUser.meta().userName());
-    if (Objects.equals(current.getPasswordHash(), updated.getPasswordHash()) == false) {
+    if (!Objects.equals(current.getPasswordHash(), updated.getPasswordHash())) {
       changes.add("Changed password");
     }
     createChange(changes, current, updated, ManageableUser.meta().status());
@@ -344,19 +347,18 @@ public class DbUserMaster
     return changes;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public UniqueId save(final ManageableUser user) {
     ArgumentChecker.notNull(user, "user");
     LOGGER.debug("save {}", user.getUserName());
     if (user.getUniqueId() != null) {
       return update(user);
-    } else {
-      return add(user);
     }
+    return add(user);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void removeByName(final String userName) {
     doRemoveByName(userName);
@@ -370,7 +372,8 @@ public class DbUserMaster
   /**
    * Processes the document update, within a retrying transaction.
    *
-   * @param objectId  the object identifier to remove, not null
+   * @param objectId
+   *          the object identifier to remove, not null
    * @return the updated document, not null
    */
   @Override
@@ -386,12 +389,12 @@ public class DbUserMaster
     deleteMain(docOid);
     updateNameLookupToDeleted(docOid);
     final Instant now = now();
-    final HistoryEvent event = HistoryEvent.of(HistoryEventType.REMOVED, newUniqueId, "system", now, ImmutableList.<String>of());
+    final HistoryEvent event = HistoryEvent.of(HistoryEventType.REMOVED, newUniqueId, "system", now, ImmutableList.<String> of());
     insertEvent(event, USR_USER_EVENT_SEQ);
     return now;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public UserSearchResult search(final UserSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
@@ -411,12 +414,12 @@ public class DbUserMaster
     final PagingRequest pagingRequest = request.getPagingRequest();
     // setup args
     final DbMapSqlParameterSource args = createParameterSource()
-      .addValueNullIgnored("user_name_ci", caseInsensitive(getDialect().sqlWildcardAdjustValue(request.getUserName())))
-      .addValueNullIgnored("email_address_ci", caseInsensitive(getDialect().sqlWildcardAdjustValue(request.getEmailAddress())))
-      .addValueNullIgnored("display_name_ci", caseInsensitive(getDialect().sqlWildcardAdjustValue(request.getDisplayName())))
-      .addValueNullIgnored("alternate_id_scheme", getDialect().sqlWildcardAdjustValue(request.getAlternateIdScheme()))
-      .addValueNullIgnored("alternate_id_value", getDialect().sqlWildcardAdjustValue(request.getAlternateIdValue()))
-      .addValueNullIgnored("permission_str", request.getAssociatedPermission());
+        .addValueNullIgnored("user_name_ci", caseInsensitive(getDialect().sqlWildcardAdjustValue(request.getUserName())))
+        .addValueNullIgnored("email_address_ci", caseInsensitive(getDialect().sqlWildcardAdjustValue(request.getEmailAddress())))
+        .addValueNullIgnored("display_name_ci", caseInsensitive(getDialect().sqlWildcardAdjustValue(request.getDisplayName())))
+        .addValueNullIgnored("alternate_id_scheme", getDialect().sqlWildcardAdjustValue(request.getAlternateIdScheme()))
+        .addValueNullIgnored("alternate_id_value", getDialect().sqlWildcardAdjustValue(request.getAlternateIdValue()))
+        .addValueNullIgnored("permission_str", request.getAssociatedPermission());
     if (request.getObjectIds() != null) {
       final StringBuilder buf = new StringBuilder(request.getObjectIds().size() * 10);
       for (final ObjectId objectId : request.getObjectIds()) {
@@ -430,7 +433,7 @@ public class DbUserMaster
     args.addValue("paging_offset", pagingRequest.getFirstItem());
     args.addValue("paging_fetch", pagingRequest.getPagingSize());
     // search
-    final String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args)};
+    final String[] sql = { getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args) };
     final NamedParameterJdbcOperations namedJdbc = getJdbcTemplate();
     Paging paging;
     final List<ManageableUser> results = new ArrayList<>();
@@ -441,7 +444,7 @@ public class DbUserMaster
       LOGGER.debug("executing sql {}", sql[1]);
       final int count = namedJdbc.queryForObject(sql[1], args, Integer.class);
       paging = Paging.of(pagingRequest, count);
-      if (count > 0 && pagingRequest.equals(PagingRequest.NONE) == false) {
+      if (count > 0 && !pagingRequest.equals(PagingRequest.NONE)) {
         LOGGER.debug("executing sql {}", sql[0]);
         results.addAll(namedJdbc.query(sql[0], args, new UserExtractor()));
       }
@@ -449,7 +452,7 @@ public class DbUserMaster
     return new UserSearchResult(paging, results);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public UserEventHistoryResult eventHistory(final UserEventHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
@@ -463,7 +466,7 @@ public class DbUserMaster
     return new UserEventHistoryResult(doEventHistory(objectId));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public UserAccount getAccount(final String userName) {
     ArgumentChecker.notNull(userName, "userName");
@@ -482,7 +485,7 @@ public class DbUserMaster
     return _roleMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void insertMain(final long docOid, final ManageableUser user) {
     final DbMapSqlParameterSource docArgs = mainArgs(docOid, 0, user);
     final String sqlDoc = getElSqlBundle().getSql("InsertMain", docArgs);
@@ -495,17 +498,17 @@ public class DbUserMaster
     final String sqlSelectIdKey = getElSqlBundle().getSql("SelectIdKey");
     for (final ExternalId id : user.getAlternateIds()) {
       final DbMapSqlParameterSource assocArgs = createParameterSource()
-        .addValue("doc_id", docOid)
-        .addValue("key_scheme", id.getScheme().getName())
-        .addValue("key_value", id.getValue());
+          .addValue("doc_id", docOid)
+          .addValue("key_scheme", id.getScheme().getName())
+          .addValue("key_value", id.getValue());
       assocList.add(assocArgs);
       if (getJdbcTemplate().queryForList(sqlSelectIdKey, assocArgs).isEmpty()) {
         // select avoids creating unecessary id, but id may still not be used
         final long idKeyId = nextId("usr_user_idkey_seq");
         final DbMapSqlParameterSource idkeyArgs = createParameterSource()
-          .addValue("idkey_id", idKeyId)
-          .addValue("key_scheme", id.getScheme().getName())
-          .addValue("key_value", id.getValue());
+            .addValue("idkey_id", idKeyId)
+            .addValue("key_scheme", id.getScheme().getName())
+            .addValue("key_value", id.getValue());
         idKeyList.add(idkeyArgs);
       }
     }
@@ -519,9 +522,9 @@ public class DbUserMaster
     final List<DbMapSqlParameterSource> argsList = new ArrayList<>();
     for (final String permission : user.getAssociatedPermissions()) {
       argsList.add(createParameterSource()
-        .addValue("id", nextId("usr_user_perm_seq"))
-        .addValue("doc_id", docOid)
-        .addValue("permission_str", permission));
+          .addValue("id", nextId("usr_user_perm_seq"))
+          .addValue("doc_id", docOid)
+          .addValue("permission_str", permission));
     }
     final String sql = getElSqlBundle().getSql("InsertAssocPermission");
     getJdbcTemplate().batchUpdate(sql, argsList.toArray(new DbMapSqlParameterSource[argsList.size()]));
@@ -531,16 +534,16 @@ public class DbUserMaster
     final List<DbMapSqlParameterSource> argsList = new ArrayList<>();
     for (final Entry<String, String> entry : user.getProfile().getExtensions().entrySet()) {
       argsList.add(createParameterSource()
-        .addValue("id", nextId("usr_user_extn_seq"))
-        .addValue("doc_id", docOid)
-        .addValue("extn_key", entry.getKey())
-        .addValue("extn_value", entry.getValue()));
+          .addValue("id", nextId("usr_user_extn_seq"))
+          .addValue("doc_id", docOid)
+          .addValue("extn_key", entry.getKey())
+          .addValue("extn_value", entry.getValue()));
     }
     final String sql = getElSqlBundle().getSql("InsertExtension");
     getJdbcTemplate().batchUpdate(sql, argsList.toArray(new DbMapSqlParameterSource[argsList.size()]));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void updateMain(final long docOid, final int version, final ManageableUser user) {
     final DbMapSqlParameterSource docArgs = mainArgs(docOid, version, user);
     final String sqlDoc = getElSqlBundle().getSql("UpdateMain", docArgs);
@@ -549,24 +552,24 @@ public class DbUserMaster
 
   private DbMapSqlParameterSource mainArgs(final long docOid, final int version, final ManageableUser user) {
     final DbMapSqlParameterSource docArgs = createParameterSource()
-      .addValue("doc_id", docOid)
-      .addValue("version", version)
-      .addValue("user_name", user.getUserName())
-      .addValue("user_name_ci", caseInsensitive(user.getUserName()))
-      .addValue("password_hash", user.getPasswordHash())
-      .addValue("status", user.getStatus().name().substring(0, 1))
-      .addValue("email_address", user.getEmailAddress())
-      .addValue("email_address_ci", caseInsensitive(user.getEmailAddress()))
-      .addValue("display_name", user.getProfile().getDisplayName())
-      .addValue("display_name_ci", caseInsensitive(user.getProfile().getDisplayName()))
-      .addValue("locale_tag", user.getProfile().getLocale().toLanguageTag())
-      .addValue("time_zone", user.getProfile().getZone().getId())
-      .addValue("date_fmt_style", user.getProfile().getDateStyle().name())
-      .addValue("time_fmt_style", user.getProfile().getTimeStyle().name());
+        .addValue("doc_id", docOid)
+        .addValue("version", version)
+        .addValue("user_name", user.getUserName())
+        .addValue("user_name_ci", caseInsensitive(user.getUserName()))
+        .addValue("password_hash", user.getPasswordHash())
+        .addValue("status", user.getStatus().name().substring(0, 1))
+        .addValue("email_address", user.getEmailAddress())
+        .addValue("email_address_ci", caseInsensitive(user.getEmailAddress()))
+        .addValue("display_name", user.getProfile().getDisplayName())
+        .addValue("display_name_ci", caseInsensitive(user.getProfile().getDisplayName()))
+        .addValue("locale_tag", user.getProfile().getLocale().toLanguageTag())
+        .addValue("time_zone", user.getProfile().getZone().getId())
+        .addValue("date_fmt_style", user.getProfile().getDateStyle().name())
+        .addValue("time_fmt_style", user.getProfile().getTimeStyle().name());
     return docArgs;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void deleteMain(final long docOid) {
     final DbMapSqlParameterSource args = createParameterSource()
         .addValue("doc_id", docOid);
@@ -595,7 +598,7 @@ public class DbUserMaster
     getJdbcTemplate().update(sql, args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Mapper from SQL rows to a ManageableUser.
    */

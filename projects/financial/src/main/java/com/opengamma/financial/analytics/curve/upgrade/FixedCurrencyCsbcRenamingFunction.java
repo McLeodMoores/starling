@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -9,10 +9,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.result.Function2;
 
 /**
- * A renaming function for {@link com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration}
- * where the currency string is fixed upon construction. If the name is null, the new name is
- * "[original name] [ISO currency string]. If the name is not null, the new name is
- * "[original name] [_name] [ISO currency string]".
+ * A renaming function for {@link com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration} where the currency string is fixed upon
+ * construction. If the name is null, the new name is "[original name] [ISO currency string]. If the name is not null, the new name is "[original name] [_name]
+ * [ISO currency string]".
  *
  */
 public class FixedCurrencyCsbcRenamingFunction implements Function2<String, String, String> {
@@ -23,15 +22,19 @@ public class FixedCurrencyCsbcRenamingFunction implements Function2<String, Stri
 
   /**
    * Sets the additional string to null.
-   * @param currency  the currency string, not null
+   * 
+   * @param currency
+   *          the currency string, not null
    */
   public FixedCurrencyCsbcRenamingFunction(final String currency) {
     this(currency, null);
   }
 
   /**
-   * @param currency  the currency string, not null
-   * @param name  the additional string, can be null
+   * @param currency
+   *          the currency string, not null
+   * @param name
+   *          the additional string, can be null
    */
   public FixedCurrencyCsbcRenamingFunction(final String currency, final String name) {
     ArgumentChecker.notNull(currency, "currency");

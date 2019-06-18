@@ -1,6 +1,11 @@
+/**
+ * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.financial.security.index;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -34,6 +39,9 @@ public class IndexFamilyFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
     REF.addAttribute("Test", "Value");
   }
 
+  /**
+   * Tests a cycle.
+   */
   @Test
   public void testCycle() {
     assertEquals(REF, cycleObject(IndexFamily.class, REF));

@@ -68,22 +68,20 @@ import com.opengamma.util.tuple.Pairs;
 /**
  * Example code to load a simple swaption portfolio.
  * <p>
- * This code is kept deliberately as simple as possible.
- * There are no checks for the securities or portfolios already existing, so if you run it
- * more than once you will get multiple copies portfolios and securities with the same names.
- * It is designed to run against the HSQLDB example database.
+ * This code is kept deliberately as simple as possible. There are no checks for the securities or portfolios already existing, so if you run it more than once
+ * you will get multiple copies portfolios and securities with the same names. It is designed to run against the HSQLDB example database.
  */
 public class ExampleSwaptionPortfolioLoader extends AbstractTool<IntegrationToolContext> {
 
   /** Logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(ExampleSwaptionPortfolioLoader.class);
-  /** The currencies */
-  public static final Currency[] CCYS = new Currency[] {Currency.USD};
+  /** The currencies. */
+  public static final Currency[] CCYS = new Currency[] { Currency.USD };
   /** The swaption expiries */
-  private static final Tenor[] EXPIRIES = new Tenor[] {Tenor.SIX_MONTHS, Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS};
+  private static final Tenor[] EXPIRIES = new Tenor[] { Tenor.SIX_MONTHS, Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS };
   /** The swap maturities */
-  private static final Tenor[] MATURITIES = new Tenor[] {Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.FIVE_YEARS, Tenor.TEN_YEARS};
-  /** The portfolio name */
+  private static final Tenor[] MATURITIES = new Tenor[] { Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.FIVE_YEARS, Tenor.TEN_YEARS };
+  /** The portfolio name. */
   public static final String PORTFOLIO_NAME = "Swaption Portfolio";
   /** The size of the portfolio */
   private static final int SIZE = 300;
@@ -107,25 +105,25 @@ public class ExampleSwaptionPortfolioLoader extends AbstractTool<IntegrationTool
     REGIONS.put(Currency.USD, ExternalSchemes.countryRegionId(Country.US));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
-   * @param args  the standard tool arguments, not null
+   *
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     try {
-      boolean success = 
-          new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class) &&
-          new ExampleSwaptionPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
+      final boolean success = new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class)
+          && new ExampleSwaptionPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
       ShutdownUtils.exit(success ? 0 : -1);
-    } catch (Throwable ex) {
+    } catch (final Throwable ex) {
       ex.printStackTrace();
       ShutdownUtils.exit(-2);
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final Map<SwaptionSecurity, SwapSecurity> securities = createRandomSwaptions();
@@ -162,7 +160,8 @@ public class ExampleSwaptionPortfolioLoader extends AbstractTool<IntegrationTool
     return securities;
   }
 
-  private Pair<SwaptionSecurity, SwapSecurity> makeSwaptionAndUnderlying(final Random random, final Currency ccy, final LocalDate tradeDate, final Tenor expiry, final Tenor maturity) {
+  private Pair<SwaptionSecurity, SwapSecurity> makeSwaptionAndUnderlying(final Random random, final Currency ccy, final LocalDate tradeDate, final Tenor expiry,
+      final Tenor maturity) {
     final ExternalId region = REGIONS.get(ccy);
     final ExternalId floatingRate = IBOR.get(ccy);
     final String swaptionString;
@@ -187,7 +186,7 @@ public class ExampleSwaptionPortfolioLoader extends AbstractTool<IntegrationTool
     final ZonedDateTime swapMaturity = swaptionExpiry.plus(maturity.getPeriod());
     final double amount = 100000 * (1 + random.nextInt(30));
     final InterestRateNotional notional = new InterestRateNotional(ccy, amount);
-    final double rate = getSwapRate(ccy, tradeDate, maturity) * (1 + ((random.nextDouble() - 0.5) / 30.));
+    final double rate = getSwapRate(ccy, tradeDate, maturity) * (1 + (random.nextDouble() - 0.5) / 30.);
     final Frequency frequency = ccy.equals(Currency.USD) ? PeriodFrequency.QUARTERLY : PeriodFrequency.SEMI_ANNUAL;
     final SwapLeg fixedLeg = new FixedInterestRateLeg(DAY_COUNT, PeriodFrequency.SEMI_ANNUAL, region, BDC, notional, false, rate);
     final SwapLeg floatLeg = new FloatingInterestRateLeg(DAY_COUNT, frequency, region, BDC, notional, false, floatingRate, FloatingRateType.IBOR);
@@ -200,13 +199,15 @@ public class ExampleSwaptionPortfolioLoader extends AbstractTool<IntegrationTool
       payLeg = fixedLeg;
       receiveLeg = floatLeg;
       swapName = swapString + " pay " + ccy + " " + notional.getAmount() + " @ " + STRIKE_FORMATTER.format(rate);
-      swaptionName = (isLong ? "Long " : "Short ") + swaptionString + " x " + swapString + " pay " + ccy + " " + notional.getAmount() + " @ " + STRIKE_FORMATTER.format(rate);
+      swaptionName = (isLong ? "Long " : "Short ") + swaptionString + " x " + swapString + " pay " + ccy + " " + notional.getAmount() + " @ "
+          + STRIKE_FORMATTER.format(rate);
       payer = true;
     } else {
       payLeg = floatLeg;
       receiveLeg = fixedLeg;
       swapName = swapString + " receive " + ccy + " " + notional.getAmount() + " @ " + STRIKE_FORMATTER.format(rate);
-      swaptionName = (isLong ? "Long " : "Short ") + swaptionString + " x " + swapString + " receive " + ccy + " " + notional.getAmount() + " @ " + STRIKE_FORMATTER.format(rate);
+      swaptionName = (isLong ? "Long " : "Short ") + swaptionString + " x " + swapString + " receive " + ccy + " " + notional.getAmount() + " @ "
+          + STRIKE_FORMATTER.format(rate);
       payer = false;
     }
     final SwapSecurity swap = new SwapSecurity(swaptionExpiry, swaptionExpiry.plusDays(2), swapMaturity, COUNTERPARTY, payLeg, receiveLeg);
@@ -248,7 +249,8 @@ public class ExampleSwaptionPortfolioLoader extends AbstractTool<IntegrationTool
   }
 
   private static ExternalId getSwapRateFor(final ConfigSource configSource, final Currency ccy, final LocalDate tradeDate, final Tenor tenor) {
-    final CurveSpecificationBuilderConfiguration curveSpecConfig = configSource.getSingle(CurveSpecificationBuilderConfiguration.class, "DEFAULT_" + ccy.getCode(), VersionCorrection.LATEST);
+    final CurveSpecificationBuilderConfiguration curveSpecConfig = configSource.getSingle(CurveSpecificationBuilderConfiguration.class,
+        "DEFAULT_" + ccy.getCode(), VersionCorrection.LATEST);
     if (curveSpecConfig == null) {
       throw new OpenGammaRuntimeException("No curve spec builder configuration for DEFAULT_" + ccy.getCode());
     }

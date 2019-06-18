@@ -37,13 +37,13 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
 
     private static final long serialVersionUID = 1L;
 
-    public TargetData(final ValueSpecification initialValue) {
+    TargetData(final ValueSpecification initialValue) {
       final Set<ValueSpecification> values = new CopyOnWriteArraySet<>();
       values.add(initialValue);
       put(initialValue.getValueName(), values);
     }
 
-    public TargetData() {
+    TargetData() {
     }
 
     public ValueSpecification getAvailability(final ValueRequirement desiredValue) {
@@ -195,10 +195,11 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
   }
 
   /**
-   * Returns the {@link ValueSpecification} that is a possible resolution of the value requirement. This will be the specification
-   * used by {@link #addValue(ValueRequirement,Object)} or {@link #removeValue(ValueRequirement)}.
+   * Returns the {@link ValueSpecification} that is a possible resolution of the value requirement. This will be the specification used by
+   * {@link #addAvailableData(ValueSpecification)} or {@link #removeAvailableData(ValueSpecification)}.
    *
-   * @param requirement the requirement to resolve, not null
+   * @param requirement
+   *          the requirement to resolve, not null
    * @return the resolved {@code ValueSpecification}, not null
    */
   public ValueSpecification resolveRequirement(final ValueRequirement requirement) {
@@ -254,7 +255,6 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
     ArgumentChecker.notNull(valueSpecification, "valueSpecification");
     removeAvailableData(valueSpecification.getTargetSpecification(), valueSpecification);
   }
-
 
   @Override
   public Serializable getAvailabilityHintKey() {

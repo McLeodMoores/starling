@@ -33,8 +33,9 @@ import com.opengamma.analytics.financial.model.volatility.smile.function.SABRHag
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.math.interpolation.FlatExtrapolator1D;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
-import com.opengamma.analytics.math.interpolation.LinearInterpolator1D;
+import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.statistics.leastsquare.LeastSquareResultsWithTransform;
@@ -64,7 +65,7 @@ public class BlackSensitivityFromSABRSensitivityCalculatorTest {
   private static final double ERROR = 0.0001;
   private static final SABRHaganVolatilityFunction SABR_FUNCTION = new SABRHaganVolatilityFunction();
   private static final DoubleMatrix1D SABR_INITIAL_VALUES = new DoubleMatrix1D(new double[] {0.05, 0.50, 0.70, 0.30 });
-  private static final LinearInterpolator1D LINEAR = (LinearInterpolator1D) Interpolator1DFactory.getInterpolator(Interpolator1DFactory.LINEAR);
+  private static final Interpolator1D LINEAR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME);
   private static final FlatExtrapolator1D FLAT = new FlatExtrapolator1D();
   private static final GridInterpolator2D INTERPOLATOR = new GridInterpolator2D(LINEAR, LINEAR, FLAT, FLAT);
   private static final Calendar NYC = new MondayToFridayCalendar("NYC");
@@ -84,15 +85,15 @@ public class BlackSensitivityFromSABRSensitivityCalculatorTest {
   private static final double[][][] VOLATILITIES_BLACK = new double[NB_EXPIRY][NB_MATURITY][NB_STRIKE];
   static {
     VOLATILITIES_BLACK[0] = new double[][] { {0.30, 0.27, 0.25, 0.23, 0.22, 0.22, 0.23 }, {0.30, 0.27, 0.25, 0.23, 0.22, 0.22, 0.23 }, {0.31, 0.28, 0.26, 0.24, 0.23, 0.23, 0.24 },
-        {0.29, 0.27, 0.26, 0.25, 0.24, 0.24, 0.25 } }; // 6M
-    VOLATILITIES_BLACK[1] = new double[][] { {0.30, 0.27, 0.25, 0.24, 0.24, 0.25, 0.27 }, {0.30, 0.27, 0.25, 0.23, 0.22, 0.22, 0.23 }, {0.31, 0.28, 0.26, 0.24, 0.23, 0.23, 0.24 },
+      {0.29, 0.27, 0.26, 0.25, 0.24, 0.24, 0.25 } }; // 6M
+      VOLATILITIES_BLACK[1] = new double[][] { {0.30, 0.27, 0.25, 0.24, 0.24, 0.25, 0.27 }, {0.30, 0.27, 0.25, 0.23, 0.22, 0.22, 0.23 }, {0.31, 0.28, 0.26, 0.24, 0.23, 0.23, 0.24 },
         {0.29, 0.27, 0.26, 0.25, 0.24, 0.24, 0.25 } }; // 1Y
-    VOLATILITIES_BLACK[2] = new double[][] { {0.33, 0.29, 0.27, 0.25, 0.24, 0.24, 0.24 }, {0.30, 0.27, 0.25, 0.23, 0.22, 0.22, 0.23 }, {0.31, 0.28, 0.26, 0.24, 0.23, 0.23, 0.24 },
-        {0.29, 0.27, 0.26, 0.25, 0.24, 0.24, 0.25 } }; // 5Y
-    for (int loopexpiry = 0; loopexpiry < NB_EXPIRY; loopexpiry++) {
-      EXPIRY_DATE[loopexpiry] = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, EXPIRY_TENOR[loopexpiry], USD6MLIBOR3M.getIborIndex(), NYC);
-      EXPIRY_TIME[loopexpiry] = TimeCalculator.getTimeBetween(REFERENCE_DATE, EXPIRY_DATE[loopexpiry]);
-    }
+        VOLATILITIES_BLACK[2] = new double[][] { {0.33, 0.29, 0.27, 0.25, 0.24, 0.24, 0.24 }, {0.30, 0.27, 0.25, 0.23, 0.22, 0.22, 0.23 }, {0.31, 0.28, 0.26, 0.24, 0.23, 0.23, 0.24 },
+          {0.29, 0.27, 0.26, 0.25, 0.24, 0.24, 0.25 } }; // 5Y
+          for (int loopexpiry = 0; loopexpiry < NB_EXPIRY; loopexpiry++) {
+            EXPIRY_DATE[loopexpiry] = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, EXPIRY_TENOR[loopexpiry], USD6MLIBOR3M.getIborIndex(), NYC);
+            EXPIRY_TIME[loopexpiry] = TimeCalculator.getTimeBetween(REFERENCE_DATE, EXPIRY_DATE[loopexpiry]);
+          }
   }
 
   private static final double NOTIONAL = 1000000;

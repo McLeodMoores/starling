@@ -26,9 +26,9 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   /** The rows in the grid. */
   private final List<PortfolioGridRow> _rows;
 
-  public BlotterColumnRenderer(final SecurityAttribute column,
-                               final SecurityAttributeMapper columnMappings,
-                               final List<PortfolioGridRow> rows) {
+  BlotterColumnRenderer(final SecurityAttribute column,
+      final SecurityAttributeMapper columnMappings,
+      final List<PortfolioGridRow> rows) {
     ArgumentChecker.notNull(column, "column");
     ArgumentChecker.notNull(columnMappings, "blotterColumnMappings");
     ArgumentChecker.notNull(rows, "rows");
@@ -39,10 +39,10 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
 
   @Override
   public ResultsCell getResults(final int rowIndex,
-                                final TypeFormatter.Format format,
-                                final ResultsCache cache,
-                                final Class<?> columnType,
-                                final Object inlineKey) {
+      final TypeFormatter.Format format,
+      final ResultsCache cache,
+      final Class<?> columnType,
+      final Object inlineKey) {
     final PortfolioGridRow row = _rows.get(rowIndex);
     final UniqueId securityId = row.getSecurityId();
     Security security;

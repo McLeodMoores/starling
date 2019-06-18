@@ -94,10 +94,9 @@ public class DataHistoricalDataPointsResource extends AbstractDataResource {
     if (filter != null) {
       final ManageableHistoricalTimeSeries result = getHistoricalTimeSeriesMaster().getTimeSeries(getUrlDataPointsId(), vc, filter);
       return responseOkObject(result);
-    } else {
-      final ManageableHistoricalTimeSeries result = getHistoricalTimeSeriesMaster().getTimeSeries(getUrlDataPointsId(), vc);
-      return responseOkObject(result);
     }
+    final ManageableHistoricalTimeSeries result = getHistoricalTimeSeriesMaster().getTimeSeries(getUrlDataPointsId(), vc);
+    return responseOkObject(result);
   }
 
   @POST
@@ -132,9 +131,8 @@ public class DataHistoricalDataPointsResource extends AbstractDataResource {
     if (filter != null) {
       final ManageableHistoricalTimeSeries result = getHistoricalTimeSeriesMaster().getTimeSeries(getUrlDataPointsId().atVersion(versionId), filter);
       return responseOkObject(result);
-    } else {
-      final ManageableHistoricalTimeSeries result = getHistoricalTimeSeriesMaster().getTimeSeries(getUrlDataPointsId().atVersion(versionId));
-      return responseOkObject(result);
     }
+    final ManageableHistoricalTimeSeries result = getHistoricalTimeSeriesMaster().getTimeSeries(getUrlDataPointsId().atVersion(versionId));
+    return responseOkObject(result);
   }
 }

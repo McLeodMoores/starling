@@ -55,8 +55,7 @@ import com.opengamma.util.time.LocalDateRange;
 /**
  * Loads time-series information from Bloomberg into a master.
  * <p>
- * This loads missing historical time-series data from Bloomberg and stores it
- * into a master.
+ * This loads missing historical time-series data from Bloomberg and stores it into a master.
  */
 public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeSeriesLoader {
   // note that there is relatively little Bloomberg specific code here
@@ -84,9 +83,12 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
   /**
    * Creates an instance.
    *
-   * @param htsMaster  the time-series master, not null
-   * @param underlyingHtsProvider  the time-series provider for the underlying data source, not null
-   * @param identifierProvider  the identifier resolver for the underlying data source, not null
+   * @param htsMaster
+   *          the time-series master, not null
+   * @param underlyingHtsProvider
+   *          the time-series provider for the underlying data source, not null
+   * @param identifierProvider
+   *          the identifier resolver for the underlying data source, not null
    */
   public BloombergHistoricalTimeSeriesLoader(
       final HistoricalTimeSeriesMaster htsMaster,
@@ -100,7 +102,7 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
     _identifierResolver = identifierProvider;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected HistoricalTimeSeriesLoaderResult doBulkLoad(final HistoricalTimeSeriesLoaderRequest request) {
     ArgumentChecker.notNull(request, "request");
@@ -134,13 +136,18 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
   /**
    * Finds those time-series that are not in the master.
    *
-   * @param externalIds  the identifiers to lookup, not null
-   * @param dataProvider  the data provider, not null
-   * @param dataField  the data field, not null
-   * @param result  the result map of identifiers, updated if already in database, not null
+   * @param externalIds
+   *          the identifiers to lookup, not null
+   * @param dataProvider
+   *          the data provider, not null
+   * @param dataField
+   *          the data field, not null
+   * @param result
+   *          the result map of identifiers, updated if already in database, not null
    * @return the missing identifiers, not null
    */
-  protected Set<ExternalId> findTimeSeries(final Set<ExternalId> externalIds, final String dataProvider, final String dataField, final Map<ExternalId, UniqueId> result) {
+  protected Set<ExternalId> findTimeSeries(final Set<ExternalId> externalIds, final String dataProvider, final String dataField,
+      final Map<ExternalId, UniqueId> result) {
     final HistoricalTimeSeriesInfoSearchRequest searchRequest = new HistoricalTimeSeriesInfoSearchRequest();
     searchRequest.addExternalIds(externalIds);
     searchRequest.setDataField(dataField);
@@ -169,15 +176,22 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
   /**
    * Fetches the time-series from Bloomberg and stores them in the master.
    *
-   * @param identifiers  the identifiers to fetch, not null
-   * @param dataField  the data field, not null
-   * @param dataProvider  the data provider, not null
-   * @param startDate  the start date to load, not null
-   * @param endDate  the end date to load, not null
-   * @param result  the result map of identifiers, updated if already in database, not null
+   * @param identifiers
+   *          the identifiers to fetch, not null
+   * @param dataField
+   *          the data field, not null
+   * @param dataProvider
+   *          the data provider, not null
+   * @param startDate
+   *          the start date to load, not null
+   * @param endDate
+   *          the end date to load, not null
+   * @param result
+   *          the result map of identifiers, updated if already in database, not null
    */
   protected void fetchTimeSeries(
-      final Set<ExternalId> identifiers, final String dataField, final String dataProvider, final LocalDate startDate, final LocalDate endDate, final Map<ExternalId, UniqueId> result) {
+      final Set<ExternalId> identifiers, final String dataField, final String dataProvider, final LocalDate startDate, final LocalDate endDate,
+      final Map<ExternalId, UniqueId> result) {
 
     final Map<ExternalIdBundleWithDates, ExternalId> withDates2ExternalId = new HashMap<>();
     final Map<ExternalIdBundle, ExternalIdBundleWithDates> bundle2WithDates = new HashMap<>();
@@ -198,9 +212,11 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
     if (bundle2WithDates.size() > 0) {
       final int identifiersSize = bundle2WithDates.keySet().size();
       if (bundle2WithDates.size() == 1) {
-        System.out.printf("Loading ts for %s: dataField: %s dataProvider: %s startDate: %s endDate: %s\n", Iterables.get(bundle2WithDates.keySet(), 0), dataField, dataProvider, startDate, endDate);
+        System.out.printf("Loading ts for %s: dataField: %s dataProvider: %s startDate: %s endDate: %s\n", Iterables.get(bundle2WithDates.keySet(), 0),
+            dataField, dataProvider, startDate, endDate);
       } else {
-        System.out.printf("Loading %d ts:  dataField: %s dataProvider: %s startDate: %s endDate: %s\n", identifiersSize, dataField, dataProvider, startDate, endDate);
+        System.out.printf("Loading %d ts:  dataField: %s dataProvider: %s startDate: %s endDate: %s\n", identifiersSize, dataField, dataProvider, startDate,
+            endDate);
       }
       OperationTimer timer = new OperationTimer(LOGGER, " loading " + identifiersSize + " timeseries from Bloomberg");
       final HistoricalTimeSeriesProviderGetResult tsResult = provideTimeSeries(bundle2WithDates.keySet(), dataField, dataProvider, startDate, endDate);
@@ -215,16 +231,21 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
   /**
    * Loads time-series from the underlying source.
    *
-   * @param externalIds  the external identifies to load, not null
-   * @param dataField  the data field, not null
-   * @param dataProvider  the data provider, not null
-   * @param startDate  the start date to load, not null
-   * @param endDate  the end date to load, not null
+   * @param externalIds
+   *          the external identifies to load, not null
+   * @param dataField
+   *          the data field, not null
+   * @param dataProvider
+   *          the data provider, not null
+   * @param startDate
+   *          the start date to load, not null
+   * @param endDate
+   *          the end date to load, not null
    * @return the map of results, not null
    */
   protected HistoricalTimeSeriesProviderGetResult provideTimeSeries(
       final Set<ExternalIdBundle> externalIds, final String dataField, final String dataProvider, final LocalDate startDate, final LocalDate endDate) {
-    LOGGER.debug("Loading time series {} ({}-{}) {}: {}", new Object[] {dataField, startDate, endDate, dataProvider, externalIds });
+    LOGGER.debug("Loading time series {} ({}-{}) {}: {}", new Object[] { dataField, startDate, endDate, dataProvider, externalIds });
     final LocalDateRange dateRange = LocalDateRange.of(startDate, endDate, true);
 
     final HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGetBulk(externalIds,
@@ -235,12 +256,18 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
   /**
    * Stores the time-series in the master.
    *
-   * @param tsResult  the time-series result, not null
-   * @param dataField  the data field, not null
-   * @param dataProvider  the data provider, not null
-   * @param bundleToIdentifier  the lookup map, not null
-   * @param identifiersToBundleWithDates  the lookup map, not null
-   * @param result  the result map of identifiers, updated if already in database, not null
+   * @param tsResult
+   *          the time-series result, not null
+   * @param dataField
+   *          the data field, not null
+   * @param dataProvider
+   *          the data provider, not null
+   * @param bundleToIdentifier
+   *          the lookup map, not null
+   * @param identifiersToBundleWithDates
+   *          the lookup map, not null
+   * @param result
+   *          the result map of identifiers, updated if already in database, not null
    */
   protected void storeTimeSeries(
       final HistoricalTimeSeriesProviderGetResult tsResult,
@@ -265,8 +292,9 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
         final String idStr = Objects.firstNonNull(
             bundle.getValue(ExternalSchemes.BLOOMBERG_TICKER),
             Objects.firstNonNull(
-              bundle.getExternalId(ExternalSchemes.BLOOMBERG_BUID),
-              bundle.getExternalIds().iterator().next())).toString();
+                bundle.getExternalId(ExternalSchemes.BLOOMBERG_BUID),
+                bundle.getExternalIds().iterator().next()))
+            .toString();
         info.setName(dataField + " " + idStr);
         info.setDataProvider(dataProvider);
         final String resolvedObservationTime = BloombergDataUtils.resolveObservationTime(dataProvider);
@@ -299,12 +327,13 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
         } else {
           // update existing
           HistoricalTimeSeriesInfoDocument doc = searchResult.getDocuments().get(0);
-          if (info.getRequiredPermissions().equals(doc.getInfo().getRequiredPermissions()) == false) {
+          if (!info.getRequiredPermissions().equals(doc.getInfo().getRequiredPermissions())) {
             doc.setInfo(info);
             doc = _htsMaster.update(doc);
           }
 
-          final HistoricalTimeSeries existingSeries = _htsMaster.getTimeSeries(doc.getInfo().getTimeSeriesObjectId(), VersionCorrection.LATEST, HistoricalTimeSeriesGetFilter.ofLatestPoint());
+          final HistoricalTimeSeries existingSeries = _htsMaster.getTimeSeries(doc.getInfo().getTimeSeriesObjectId(), VersionCorrection.LATEST,
+              HistoricalTimeSeriesGetFilter.ofLatestPoint());
           if (existingSeries.getTimeSeries().size() > 0) {
             final LocalDate latestTime = existingSeries.getTimeSeries().getLatestTime();
             timeSeries = timeSeries.subSeries(latestTime, false, timeSeries.getLatestTime(), true);
@@ -322,7 +351,7 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean updateTimeSeries(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");

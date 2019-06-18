@@ -27,8 +27,8 @@ import com.opengamma.engine.view.ExecutionLogMode;
 /**
  * A subset of an executable dependency graph that corresponds to a single computation job.
  * <p>
- * Fragments are linked to create a graph of fragments that corresponds to the original graph. At the extreme, there could be a fragment
- * for each node in the original graph and the graph of fragments will be the same shape as the graph of nodes.
+ * Fragments are linked to create a graph of fragments that corresponds to the original graph. At the extreme, there could be a fragment for each node in the
+ * original graph and the graph of fragments will be the same shape as the graph of nodes.
  */
 /* package */final class GraphFragment {
 
@@ -43,8 +43,8 @@ import com.opengamma.engine.view.ExecutionLogMode;
   private LinkedList<DependencyNode> _nodes = new LinkedList<>();
 
   /**
-   * The fragments that feed into this subgraph. For any node in this fragment, its input nodes are either also in this fragment
-   * or in one of the input fragments.
+   * The fragments that feed into this subgraph. For any node in this fragment, its input nodes are either also in this fragment or in one of the input
+   * fragments.
    */
   private Set<GraphFragment> _inputFragments = new HashSet<>();
 
@@ -54,14 +54,14 @@ import com.opengamma.engine.view.ExecutionLogMode;
   private Map<ValueSpecification, Integer> _inputValues = new HashMap<>();
 
   /**
-   * The fragments that consume the outputs of this subgraph. For any node in this fragment, its dependent nodes are either also
-   * in this fragment or in one of the output fragments.
+   * The fragments that consume the outputs of this subgraph. For any node in this fragment, its dependent nodes are either also in this fragment or in one of
+   * the output fragments.
    */
   private Set<GraphFragment> _outputFragments = new HashSet<>();
 
   /**
-   * All of the output values for this fragment that are either terminal outputs or required as inputs by the output fragments.
-   * This is a map of the value to its cost.
+   * All of the output values for this fragment that are either terminal outputs or required as inputs by the output fragments. This is a map of the value to
+   * its cost.
    */
   private Map<ValueSpecification, Integer> _outputValues = new HashMap<>();
 
@@ -81,8 +81,8 @@ import com.opengamma.engine.view.ExecutionLogMode;
   private long _dataOutputCost;
 
   /**
-   * The values that are needed for edges between nodes in this subgraph (or a tail) only. These are intermediate values that can be confined to the
-   * private caches of the calculation nodes.
+   * The values that are needed for edges between nodes in this subgraph (or a tail) only. These are intermediate values that can be confined to the private
+   * caches of the calculation nodes.
    * <p>
    * This is not allocated initially to avoid heap churn - at most, only half of the allocations will be used.
    */
@@ -94,14 +94,14 @@ import com.opengamma.engine.view.ExecutionLogMode;
   private long _startTime = -1;
 
   /**
-   * The execution group identifier, written by the graph coloring algorithm. If an output fragment has the same execution identifier then it will
-   * be streamed to the same node.
+   * The execution group identifier, written by the graph coloring algorithm. If an output fragment has the same execution identifier then it will be streamed
+   * to the same node.
    */
   private int _executionId;
 
   /**
-   * The fragments that are logical tails to this one. These are fragments that will consume the outputs of this fragment and should be streamed
-   * to the same node as tail jobs.
+   * The fragments that are logical tails to this one. These are fragments that will consume the outputs of this fragment and should be streamed to the same
+   * node as tail jobs.
    */
   private Collection<GraphFragment> _tail;
 
@@ -110,7 +110,7 @@ import com.opengamma.engine.view.ExecutionLogMode;
    */
   private PlannedJob _job;
 
-  public GraphFragment(final DependencyNode node, final FunctionInvocationStatistics statistics) {
+  GraphFragment(final DependencyNode node, final FunctionInvocationStatistics statistics) {
     _nodes.add(node);
     _invocationCost = (long) statistics.getInvocationCost();
     final Integer inputCost = (int) (statistics.getDataInputCost() * NANOS_PER_BYTE);
@@ -246,6 +246,14 @@ import com.opengamma.engine.view.ExecutionLogMode;
 
   /**
    * Tests whether {@link #appendFragment} would produce a fragment within the maximum limits.
+   *
+   * @param fragment
+   *          the fragment
+   * @param maxItems
+   *          the maximum number of items
+   * @param maxCost
+   *          the maximum cost
+   * @return true if the fragment can be appended
    */
   public boolean canAppendFragment(final GraphFragment fragment, final int maxItems, final long maxCost) {
     if (getJobItems() + fragment.getJobItems() > maxItems) {
@@ -267,8 +275,11 @@ import com.opengamma.engine.view.ExecutionLogMode;
   }
 
   /**
-   * Appends a fragment. A fragment can be appended if it does not require any input from this. If output from one feeds into the other, use the
-   * more expensive prepend operation.
+   * Appends a fragment. A fragment can be appended if it does not require any input from this. If output from one feeds into the other, use the more expensive
+   * prepend operation.
+   *
+   * @param fragment
+   *          the fragment
    */
   public void appendFragment(final GraphFragment fragment) {
     getNodes().addAll(fragment.getNodes());
@@ -279,6 +290,14 @@ import com.opengamma.engine.view.ExecutionLogMode;
 
   /**
    * Tests whether {@link #prependFragment} would produce a fragment within the maximum limits.
+   * 
+   * @param fragment
+   *          the fragment
+   * @param maxItems
+   *          the maximum number of items
+   * @param maxCost
+   *          the maximum cost
+   * @return true if the fragment can be prepended
    */
   public boolean canPrependFragment(final GraphFragment fragment, final int maxItems, final long maxCost) {
     if (getJobItems() + fragment.getJobItems() > maxItems) {
@@ -348,12 +367,13 @@ import com.opengamma.engine.view.ExecutionLogMode;
   }
 
   /**
-   * Updates the shared value map with details of any outputs this fragment produces that are destined for its tails only so can be
-   * considered "private". Once identified the output is removed from the costed output set and added to the "private" set.
+   * Updates the shared value map with details of any outputs this fragment produces that are destined for its tails only so can be considered "private". Once
+   * identified the output is removed from the costed output set and added to the "private" set.
    * <p>
    * This must be called for all fragments prior to job construction as the data collected is needed to construct the cache select hints.
    *
-   * @param sharedValues the shared value map to be updated with any outputs that should be private
+   * @param sharedValues
+   *          the shared value map to be updated with any outputs that should be private
    */
   public void exportPrivateValues(final Map<ValueSpecification, Boolean> sharedValues) {
     if (getTail() != null) {
@@ -388,11 +408,12 @@ import com.opengamma.engine.view.ExecutionLogMode;
   }
 
   /**
-   * Creates the cache hint, indicating which of the input/output values for this job will be in the shared/private caches. Terminal outputs
-   * are explicitly added to the shared value map. Outputs private to a job are flagged internally when fragments get merged. Outputs consumed
-   * only by a tail will be flagged by the calls to {@link #exportPrivateValues} before job construction.
+   * Creates the cache hint, indicating which of the input/output values for this job will be in the shared/private caches. Terminal outputs are explicitly
+   * added to the shared value map. Outputs private to a job are flagged internally when fragments get merged. Outputs consumed only by a tail will be flagged
+   * by the calls to {@link #exportPrivateValues} before job construction.
    *
-   * @param context the current context, not null
+   * @param context
+   *          the current context, not null
    * @return the cache hint, not null
    */
   private CacheSelectHint createCacheSelectHint(final GraphFragmentContext context) {
@@ -418,9 +439,8 @@ import com.opengamma.engine.view.ExecutionLogMode;
     // Create the cheapest hint object
     if (localPrivateValues.size() < localSharedValues.size()) {
       return CacheSelectHint.privateValues(localPrivateValues);
-    } else {
-      return CacheSelectHint.sharedValues(localSharedValues);
     }
+    return CacheSelectHint.sharedValues(localSharedValues);
   }
 
   private PlannedJob createJob(final GraphFragmentContext context) {
@@ -438,9 +458,9 @@ import com.opengamma.engine.view.ExecutionLogMode;
           functionParameters = newParameters;
         }
       }
-      final CalculationJobItem jobItem =
-          new CalculationJobItem(node.getFunction().getFunctionId(), functionParameters, node.getTarget(), DependencyNodeImpl.getInputValueArray(node),
-              outputs, logMode);
+      final CalculationJobItem jobItem = new CalculationJobItem(node.getFunction().getFunctionId(), functionParameters, node.getTarget(),
+          DependencyNodeImpl.getInputValueArray(node),
+          outputs, logMode);
       items.add(jobItem);
     }
     final CacheSelectHint hint = createCacheSelectHint(context);

@@ -15,25 +15,19 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a Ibor-like coupon with compounding and spread. There are three ISDA versions of compounding with spread.
- * The one referred in this class is the "compounding" (not "Flat Compounding" and not "Compounding treating spread as simple interest").
- * The Ibor fixing are compounded over several sub-periods.
- * The amount paid is equal to
- * $$
- * \begin{equation*}
- * \left(\prod_{i=1}^n (1+\delta_i r_i + s) \right)-1
- * \end{equation*}
- * $$
- * where the $\delta_i$ are the accrual factors of the sub periods, the $r_i$ the fixing for the same periods and $s$ the common spread.
- * The fixing have their own start dates, end dates and accrual factors. In general they are close to the accrual
- * dates used to compute the coupon accrual factors.
- * <p> Reference: Mengle, D. (2009). Alternative compounding methods for over-the-counter derivative transactions. ISDA.
+ * Class describing a Ibor-like coupon with compounding and spread. There are three ISDA versions of compounding with spread. The one referred in this class is
+ * the "compounding" (not "Flat Compounding" and not "Compounding treating spread as simple interest"). The Ibor fixing are compounded over several sub-periods.
+ * The amount paid is equal to $$ \begin{equation*} \left(\prod_{i=1}^n (1+\delta_i r_i + s) \right)-1 \end{equation*} $$ where the $\delta_i$ are the accrual
+ * factors of the sub periods, the $r_i$ the fixing for the same periods and $s$ the common spread. The fixing have their own start dates, end dates and accrual
+ * factors. In general they are close to the accrual dates used to compute the coupon accrual factors.
+ * <p>
+ * Reference: Mengle, D. (2009). Alternative compounding methods for over-the-counter derivative transactions. ISDA.
  */
 public class CouponIborCompoundingSpread extends Coupon implements DepositIndexCompoundingCoupon<IborIndex> {
 
   /**
-   * The Ibor-like index on which the coupon fixes. The index currency should be the same as the coupon currency.
-   * All the coupon sub-periods fix on the same index.
+   * The Ibor-like index on which the coupon fixes. The index currency should be the same as the coupon currency. All the coupon sub-periods fix on the same
+   * index.
    */
   private final IborIndex _index;
   /**
@@ -67,22 +61,35 @@ public class CouponIborCompoundingSpread extends Coupon implements DepositIndexC
 
   /**
    * Constructor.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param paymentAccrualFactor The year fraction (or accrual factor) for the coupon payment.
-   * @param notional The coupon notional.
-   * @param notionalAccrued The notional with the interest already fixed accrued.
-   * @param index The Ibor-like index on which the coupon fixes. The index currency should be the same as the coupon currency.
-   * @param paymentAccrualFactors The accrual factors (or year fraction) associated to the sub-periods not yet fixed.
-   * @param fixingTimes The start times of the fixing periods.
-   * @param fixingPeriodStartTimes The start times of the fixing periods.
-   * @param fixingPeriodEndTimes The end times of the fixing periods.
-   * @param fixingPeriodAccrualFactors The accrual factors (or year fraction) associated with the fixing periods in the Index day count convention.
-   * @param spread The spread paid above the Ibor rate.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param paymentAccrualFactor
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param notional
+   *          The coupon notional.
+   * @param notionalAccrued
+   *          The notional with the interest already fixed accrued.
+   * @param index
+   *          The Ibor-like index on which the coupon fixes. The index currency should be the same as the coupon currency.
+   * @param paymentAccrualFactors
+   *          The accrual factors (or year fraction) associated to the sub-periods not yet fixed.
+   * @param fixingTimes
+   *          The start times of the fixing periods.
+   * @param fixingPeriodStartTimes
+   *          The start times of the fixing periods.
+   * @param fixingPeriodEndTimes
+   *          The end times of the fixing periods.
+   * @param fixingPeriodAccrualFactors
+   *          The accrual factors (or year fraction) associated with the fixing periods in the Index day count convention.
+   * @param spread
+   *          The spread paid above the Ibor rate.
    */
-  public CouponIborCompoundingSpread(final Currency currency, final double paymentTime, final double paymentAccrualFactor, final double notional, final double notionalAccrued,
-      final IborIndex index, final double[] paymentAccrualFactors, final double[] fixingTimes, final double[] fixingPeriodStartTimes, final double[] fixingPeriodEndTimes,
-      final double[] fixingPeriodAccrualFactors, final double spread) {
+  public CouponIborCompoundingSpread(final Currency currency, final double paymentTime, final double paymentAccrualFactor, final double notional,
+      final double notionalAccrued, final IborIndex index, final double[] paymentAccrualFactors, final double[] fixingTimes,
+      final double[] fixingPeriodStartTimes, final double[] fixingPeriodEndTimes, final double[] fixingPeriodAccrualFactors, final double spread) {
     super(currency, paymentTime, paymentAccrualFactor, notional);
     ArgumentChecker.isTrue(fixingTimes.length == fixingPeriodStartTimes.length, "Fixing times and fixing period should have same length");
     ArgumentChecker.isTrue(fixingTimes.length == fixingPeriodEndTimes.length, "Fixing times and fixing period should have same length");
@@ -101,6 +108,7 @@ public class CouponIborCompoundingSpread extends Coupon implements DepositIndexC
 
   /**
    * Returns the The notional with the interest already fixed accrued.
+   * 
    * @return The notional accrued.
    */
   public double getNotionalAccrued() {
@@ -109,14 +117,17 @@ public class CouponIborCompoundingSpread extends Coupon implements DepositIndexC
 
   /**
    * Returns the Ibor index underlying the coupon.
+   * 
    * @return The index.
    */
+  @Override
   public IborIndex getIndex() {
     return _index;
   }
 
   /**
    * Returns the payment accrual factors for each sub-period.
+   * 
    * @return The factors.
    */
   public double[] getPaymentAccrualFactors() {
@@ -125,38 +136,47 @@ public class CouponIborCompoundingSpread extends Coupon implements DepositIndexC
 
   /**
    * Returns the fixing times for the different remaining periods.
+   * 
    * @return The times.
    */
+  @Override
   public double[] getFixingTimes() {
     return _fixingTimes;
   }
 
   /**
    * Gets the fixing period start times (in years).
+   * 
    * @return The times.
    */
+  @Override
   public double[] getFixingPeriodStartTimes() {
     return _fixingPeriodStartTimes;
   }
 
   /**
    * Gets the fixing period end times (in years).
+   * 
    * @return The times.
    */
+  @Override
   public double[] getFixingPeriodEndTimes() {
     return _fixingPeriodEndTimes;
   }
 
   /**
    * Returns the fixing period accrual factors for each sub-period.
+   * 
    * @return The factors.
    */
+  @Override
   public double[] getFixingPeriodAccrualFactors() {
     return _fixingPeriodAccrualFactors;
   }
 
   /**
    * Returns the spread.
+   * 
    * @return the spread
    */
   public double getSpread() {
@@ -165,8 +185,8 @@ public class CouponIborCompoundingSpread extends Coupon implements DepositIndexC
 
   @Override
   public Coupon withNotional(final double notional) {
-    return new CouponIborCompoundingSpread(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, _notionalAccrued, _index, _paymentAccrualFactors, _fixingTimes,
-        _fixingPeriodStartTimes, _fixingPeriodEndTimes, _fixingPeriodAccrualFactors, _spread);
+    return new CouponIborCompoundingSpread(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, _notionalAccrued, _index,
+        _paymentAccrualFactors, _fixingTimes, _fixingPeriodStartTimes, _fixingPeriodEndTimes, _fixingPeriodAccrualFactors, _spread);
   }
 
   @Override
@@ -190,10 +210,10 @@ public class CouponIborCompoundingSpread extends Coupon implements DepositIndexC
     result = prime * result + _index.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_notionalAccrued);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_paymentAccrualFactors);
     temp = Double.doubleToLongBits(_spread);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

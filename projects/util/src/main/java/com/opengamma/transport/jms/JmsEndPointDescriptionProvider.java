@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport.jms;
@@ -40,14 +40,14 @@ public class JmsEndPointDescriptionProvider implements EndPointDescriptionProvid
   }
 
   public JmsEndPointDescriptionProvider(final List<String> topics) {
-    _topics = new ArrayList<String>(topics);
+    _topics = new ArrayList<>(topics);
   }
 
   @Override
   public FudgeMsg getEndPointDescription(final FudgeContext fudgeContext) {
     final MutableFudgeMsg msg = fudgeContext.newMessage();
     msg.add(TYPE_KEY, TYPE_VALUE);
-    for (String topic : _topics) {
+    for (final String topic : _topics) {
       msg.add(TOPIC_KEY, topic);
     }
     return msg;
@@ -55,7 +55,7 @@ public class JmsEndPointDescriptionProvider implements EndPointDescriptionProvid
 
   /**
    * Default message production allows simple use in a configuration resource.
-   * 
+   *
    * @param fudgeContext the Fudge context
    * @return the end point description message, as returned by {@link #getEndPointDescription}
    */

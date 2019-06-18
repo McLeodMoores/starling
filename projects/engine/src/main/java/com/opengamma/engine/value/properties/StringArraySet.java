@@ -20,9 +20,10 @@ import java.util.Set;
   /**
    * Creates a new instance.
    *
-   * @param values the values backing the set. This class will use this object but not modify it.
+   * @param values
+   *          the values backing the set. This class will use this object but not modify it.
    */
-  public StringArraySet(final String[] values) {
+  StringArraySet(final String[] values) {
     _values = values;
   }
 
@@ -157,7 +158,7 @@ import java.util.Set;
     return hc;
   }
 
-  @SuppressWarnings({"rawtypes", "unchecked" })
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   @Override
   public boolean equals(final Object o) {
     if (o == this) {

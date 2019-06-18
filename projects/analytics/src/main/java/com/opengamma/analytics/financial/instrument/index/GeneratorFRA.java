@@ -30,9 +30,13 @@ public class GeneratorFRA extends GeneratorInstrument<GeneratorAttributeIR> {
 
   /**
    * Constructor from the details. The business day conventions, end-of-month and spot lag are from the Ibor index.
-   * @param name The generator name. Not null.
-   * @param iborIndex The Ibor index of the floating leg.
-   * @param calendar The holiday calendar for the ibor leg.
+   * 
+   * @param name
+   *          The generator name. Not null.
+   * @param iborIndex
+   *          The Ibor index of the floating leg.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
    */
   public GeneratorFRA(final String name, final IborIndex iborIndex, final Calendar calendar) {
     super(name);
@@ -44,6 +48,7 @@ public class GeneratorFRA extends GeneratorInstrument<GeneratorAttributeIR> {
 
   /**
    * Gets the _iborIndex field.
+   * 
    * @return the _iborIndex
    */
   public IborIndex getIborIndex() {
@@ -52,6 +57,7 @@ public class GeneratorFRA extends GeneratorInstrument<GeneratorAttributeIR> {
 
   /**
    * Gets the generator currency.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -60,6 +66,7 @@ public class GeneratorFRA extends GeneratorInstrument<GeneratorAttributeIR> {
 
   /**
    * Gets the generator calendar.
+   * 
    * @return The calendar.
    */
   public Calendar getCalendar() {
@@ -67,11 +74,11 @@ public class GeneratorFRA extends GeneratorInstrument<GeneratorAttributeIR> {
   }
 
   /**
-   * {@inheritDoc}
-   * The FRA is from spot+(endtenor-_iborIndex.getTenor()) to spot + endtenor. The start period is not used.
+   * {@inheritDoc} The FRA is from spot+(endtenor-_iborIndex.getTenor()) to spot + endtenor. The start period is not used.
    */
   @Override
-  public ForwardRateAgreementDefinition generateInstrument(final ZonedDateTime date, final double rate, final double notional, final GeneratorAttributeIR attribute) {
+  public ForwardRateAgreementDefinition generateInstrument(final ZonedDateTime date, final double rate, final double notional,
+      final GeneratorAttributeIR attribute) {
     ArgumentChecker.notNull(date, "Reference date");
     ArgumentChecker.notNull(attribute, "Attributes");
     final Period startPeriod = attribute.getEndPeriod().minus(_iborIndex.getTenor());

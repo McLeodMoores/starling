@@ -37,8 +37,8 @@ public class YUIBundleCompressorTest {
     _compressor = createCompressor();
   }
 
-  private YUIBundleCompressor createCompressor() {
-    YUICompressorOptions compressorOptions = new YUICompressorOptions();
+  private static YUIBundleCompressor createCompressor() {
+    final YUICompressorOptions compressorOptions = new YUICompressorOptions();
     compressorOptions.setLineBreakPosition(-1);
     compressorOptions.setMunge(false);
     compressorOptions.setPreserveAllSemiColons(true);
@@ -48,24 +48,24 @@ public class YUIBundleCompressorTest {
   }
 
   private Bundle createBundle() throws URISyntaxException {
-    URI scriptsResource = getClass().getResource(SCRIPTS_JS).toURI();
-    Bundle bundle = new Bundle(SCRIPTS_JS);
+    final URI scriptsResource = getClass().getResource(SCRIPTS_JS).toURI();
+    final Bundle bundle = new Bundle(SCRIPTS_JS);
     bundle.addChildNode(new Fragment(scriptsResource, ""));
     return bundle;
   }
 
   public void test() throws Exception {
-    List<Fragment> allFragment = _bundle.getAllFragments();
+    final List<Fragment> allFragment = _bundle.getAllFragments();
     assertNotNull(allFragment);
     assertEquals(1, allFragment.size());
 
-    Fragment fragment = allFragment.get(0);
-    String uncompressed = IOUtils.toString(fragment.getUri());
+    final Fragment fragment = allFragment.get(0);
+    final String uncompressed = IOUtils.toString(fragment.getUri());
     assertNotNull(uncompressed);
     LOGGER.debug("uncompressed length {}", uncompressed.length());
     assertEquals(853389, uncompressed.length());
 
-    String compressed = _compressor.compressBundle(_bundle);
+    final String compressed = _compressor.compressBundle(_bundle);
     assertNotNull(compressed);
     LOGGER.debug("compressed length {}", compressed.length());
     assertEquals(492128, compressed.length());

@@ -46,25 +46,35 @@ public class YearOnYearInflationSwapSecurity extends SwapSecurity {
   private Tenor _maturityTenor;
 
   /**
-   * For the builder
+   * For the builder.
    */
-  /* package */YearOnYearInflationSwapSecurity() {
+  /* package */ YearOnYearInflationSwapSecurity() {
     super(SECURITY_TYPE);
   }
 
   /**
-   * @param tradeDate The trade date, not null
-   * @param effectiveDate The effective date, not null
-   * @param maturityDate The maturity date, not null
-   * @param counterparty The counterparty, not null
-   * @param payLeg The pay leg, not null
-   * @param receiveLeg The receive leg, not null
-   * @param exchangeInitialNotional Whether the initial notional is exchanged
-   * @param exchangeFinalNotional Whether the final notional is exchanged
-   * @param tenor The tenor, not null
+   * @param tradeDate
+   *          The trade date, not null
+   * @param effectiveDate
+   *          The effective date, not null
+   * @param maturityDate
+   *          The maturity date, not null
+   * @param counterparty
+   *          The counterparty, not null
+   * @param payLeg
+   *          The pay leg, not null
+   * @param receiveLeg
+   *          The receive leg, not null
+   * @param exchangeInitialNotional
+   *          Whether the initial notional is exchanged
+   * @param exchangeFinalNotional
+   *          Whether the final notional is exchanged
+   * @param tenor
+   *          The tenor, not null
    */
   public YearOnYearInflationSwapSecurity(final ZonedDateTime tradeDate, final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate,
-      final String counterparty, final SwapLeg payLeg, final SwapLeg receiveLeg, final boolean exchangeInitialNotional, final boolean exchangeFinalNotional, final Tenor tenor) {
+      final String counterparty, final SwapLeg payLeg, final SwapLeg receiveLeg, final boolean exchangeInitialNotional, final boolean exchangeFinalNotional,
+      final Tenor tenor) {
     super(SECURITY_TYPE, tradeDate, effectiveDate, maturityDate, counterparty, payLeg, receiveLeg);
     setExchangeInitialNotional(exchangeInitialNotional);
     setExchangeFinalNotional(exchangeFinalNotional);

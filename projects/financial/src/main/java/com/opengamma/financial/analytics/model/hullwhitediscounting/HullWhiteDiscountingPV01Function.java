@@ -34,7 +34,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
@@ -46,11 +45,11 @@ public class HullWhiteDiscountingPV01Function extends HullWhiteDiscountingFuncti
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(HullWhiteDiscountingPV01Function.class);
   /** The PV01 calculator */
-  private static final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR = new PV01CurveParametersCalculator<>(
-      PresentValueCurveSensitivityHullWhiteCalculator.getInstance());
+  private static final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
+      new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityHullWhiteCalculator.getInstance());
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#PV01}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PV01}.
    */
   public HullWhiteDiscountingPV01Function() {
     super(PV01);
@@ -89,7 +88,7 @@ public class HullWhiteDiscountingPV01Function extends HullWhiteDiscountingFuncti
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Collection<ValueProperties.Builder> properties = super.getResultProperties(compilationContext, target);
-        for (ValueProperties.Builder builder : properties) {
+        for (final ValueProperties.Builder builder : properties) {
           builder.withAny(CURVE);
         }
         return properties;

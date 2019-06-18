@@ -95,7 +95,7 @@ public class InflationBondSecurityConverter extends FinancialSecurityVisitorAdap
     }
     final boolean isEOM = convention.isEOMConvention();
     final YieldConvention yieldConvention = security.getYieldConvention();
-    if (security.getCouponType().equals("NONE") || security.getCouponType().equals("ZERO COUPON")) { //TODO find where string is
+    if (security.getCouponType().equals("NONE") || security.getCouponType().equals("ZERO COUPON")) { // TODO find where string is
       return new PaymentFixedDefinition(currency, maturityDate, 1);
     }
     if (convention.getBondSettlementDays(firstAccrualDate, maturityDate) == null) {
@@ -104,7 +104,8 @@ public class InflationBondSecurityConverter extends FinancialSecurityVisitorAdap
     final int settlementDays = convention.getBondSettlementDays(firstAccrualDate, maturityDate);
     final Period paymentPeriod = ConversionUtils.getTenor(security.getCouponFrequency());
     final ZonedDateTime firstCouponDate = ZonedDateTime.of(security.getFirstCouponDate().toLocalDate().atStartOfDay(), zone);
-    return BondFixedSecurityDefinition.from(currency, firstAccrualDate, firstCouponDate, maturityDate, paymentPeriod, rate, settlementDays, calendar, dayCount, businessDay,
+    return BondFixedSecurityDefinition.from(currency, firstAccrualDate, firstCouponDate, maturityDate, paymentPeriod, rate, settlementDays, calendar, dayCount,
+        businessDay,
         yieldConvention, isEOM, security.getIssuerName());
   }
 

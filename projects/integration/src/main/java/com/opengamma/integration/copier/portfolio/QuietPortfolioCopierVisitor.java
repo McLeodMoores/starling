@@ -9,7 +9,7 @@ import com.opengamma.master.position.ManageablePosition;
 import com.opengamma.master.security.ManageableSecurity;
 
 /**
- * Portfolio copier visitor that stays quiet
+ * Portfolio copier visitor that stays quiet.
  */
 public class QuietPortfolioCopierVisitor implements PortfolioCopierVisitor {
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.carrlee;
@@ -26,11 +26,10 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * 
+ *
  */
 public class CarrLeeThetaFXVolatilitySwapFunction extends CarrLeeFXVolatilitySwapFunction {
 
@@ -38,7 +37,8 @@ public class CarrLeeThetaFXVolatilitySwapFunction extends CarrLeeFXVolatilitySwa
   private static final InstrumentDerivativeVisitor<CarrLeeFXData, Double> CALCULATOR = new CarrLeeFXVolatilitySwapThetaCalculator();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#THETA}.
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#THETA}.
    */
   public CarrLeeThetaFXVolatilitySwapFunction() {
     super(THETA);

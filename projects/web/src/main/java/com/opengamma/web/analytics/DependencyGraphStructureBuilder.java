@@ -40,13 +40,23 @@ import com.opengamma.engine.view.cycle.ViewCycle;
   private int _lastRow;
 
   /**
-   * @param compiledViewDef The compiled view definition containing the dependency graph
-   * @param rootValueRequirement value requirement for the root cell
-   * @param calcConfigName The calculation configuration used when calculating the value
-   * @param targetResolver For looking up calculation targets given their specification
-   * @param cycle The most recent view cycle
+   * @param compiledViewDef
+   *          The compiled view definition containing the dependency graph
+   * @param rootValueRequirement
+   *          value requirement for the root cell
+   * @param calcConfigName
+   *          The calculation configuration used when calculating the value
+   * @param targetResolver
+   *          For looking up calculation targets given their specification
+   * @param functions
+   *          the function repository
+   * @param cycle
+   *          The most recent view cycle
+   * @param valueMappings
+   *          the mappings between requirements and specifcations
    */
-  /* package */DependencyGraphStructureBuilder(final CompiledViewDefinition compiledViewDef, final ValueRequirement rootValueRequirement, final String calcConfigName,
+  /* package */ DependencyGraphStructureBuilder(final CompiledViewDefinition compiledViewDef, final ValueRequirement rootValueRequirement,
+      final String calcConfigName,
       final ComputationTargetResolver targetResolver, final FunctionRepository functions, final ViewCycle cycle, final ValueMappings valueMappings) {
     // TODO see [PLAT-2478] this is a bit nasty
     // with this hack in place the user can open a dependency graph before the first set of results arrives
@@ -76,18 +86,20 @@ import com.opengamma.engine.view.cycle.ViewCycle;
     final FunctionDefinition function = _functions.getFunction(functionId);
     if (function != null) {
       return function.getShortName();
-    } else {
-      return functionId;
     }
+    return functionId;
   }
 
   /**
-   * Builds the tree structure of the graph starting at a node and working up the dependency graph through all the nodes it depends on. Recursively builds up the node structure representing whole the
-   * dependency graph.
+   * Builds the tree structure of the graph starting at a node and working up the dependency graph through all the nodes it depends on. Recursively builds up
+   * the node structure representing whole the dependency graph.
    *
-   * @param valueSpecification The value specification of the target that is the current root
-   * @param targetNode The node producing {@code valueSpec}, not null
-   * @param rootNode Whether the value specification is for the root node of the dependency graph
+   * @param valueSpecification
+   *          The value specification of the target that is the current root
+   * @param targetNode
+   *          The node producing {@code valueSpec}, not null
+   * @param rootNode
+   *          Whether the value specification is for the root node of the dependency graph
    * @return Root node of the grid structure representing the dependency graph for the value
    */
   private AnalyticsNode createNode(final ValueSpecification valueSpecification, final DependencyNode targetNode, final boolean rootNode) {
@@ -99,21 +111,19 @@ import com.opengamma.engine.view.cycle.ViewCycle;
     if (inputCount == 0) {
       if (rootNode) {
         // the root node should never be null even if it has no children
-        return new AnalyticsNode(nodeStart, _lastRow, Collections.<AnalyticsNode>emptyList(), false);
-      } else {
-        // non-root leaf nodes don't need a node of their own, their place in the structure is handled by their parent
-        return null;
+        return new AnalyticsNode(nodeStart, _lastRow, Collections.<AnalyticsNode> emptyList(), false);
       }
-    } else {
-      for (int i = 0; i < inputCount; i++) {
-        ++_lastRow;
-        final AnalyticsNode newNode = createNode(targetNode.getInputValue(i), targetNode.getInputNode(i), false);
-        if (newNode != null) {
-          nodes.add(newNode);
-        }
-      }
-      return new AnalyticsNode(nodeStart, _lastRow, Collections.unmodifiableList(nodes), false);
+      // non-root leaf nodes don't need a node of their own, their place in the structure is handled by their parent
+      return null;
     }
+    for (int i = 0; i < inputCount; i++) {
+      ++_lastRow;
+      final AnalyticsNode newNode = createNode(targetNode.getInputValue(i), targetNode.getInputNode(i), false);
+      if (newNode != null) {
+        nodes.add(newNode);
+      }
+    }
+    return new AnalyticsNode(nodeStart, _lastRow, Collections.unmodifiableList(nodes), false);
   }
 
   /**

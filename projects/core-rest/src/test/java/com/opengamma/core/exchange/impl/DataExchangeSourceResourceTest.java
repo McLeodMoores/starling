@@ -5,6 +5,7 @@
  */
 package com.opengamma.core.exchange.impl;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -46,6 +47,9 @@ public class DataExchangeSourceResourceTest {
   private UriInfo _uriInfo;
   private DataExchangeSourceResource _resource;
 
+  /**
+   * Sets up the underlying source.
+   */
   @BeforeMethod
   public void setUp() {
     _underlying = mock(ExchangeSource.class);
@@ -55,45 +59,84 @@ public class DataExchangeSourceResourceTest {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests getting an exchange by unique id.
+   */
   @Test
   public void testGetExchangeByUid() {
     final SimpleExchange target = new SimpleExchange();
     target.setExternalIdBundle(BUNDLE);
     target.setName("Test");
-    
+
     when(_underlying.get(eq(UID))).thenReturn(target);
-    
-    Response test = _resource.get(OID.toString(), UID.getVersion(), "", "");
+
+    final Response test = _resource.get(OID.toString(), UID.getVersion(), "", "");
     assertEquals(Status.OK.getStatusCode(), test.getStatus());
     assertSame(target, test.getEntity());
   }
 
+  /**
+   * Tests getting an exchange by object id and version.
+   */
+  @Test
+  public void testGetExchangeByOidVersion() {
+    final SimpleExchange target = new SimpleExchange();
+    target.setExternalIdBundle(BUNDLE);
+    target.setName("Test");
+
+    when(_underlying.get(eq(OID), eq(VC))).thenReturn(target);
+
+    final Response test = _resource.get(OID.toString(), null, VC.getVersionAsOfString(), VC.getCorrectedToString());
+    assertEquals(Status.OK.getStatusCode(), test.getStatus());
+    assertSame(target, test.getEntity());
+  }
+
+  /**
+   * Tests getting an exchange by object id.
+   */
   @Test
   public void testGetExchangeByOid() {
     final SimpleExchange target = new SimpleExchange();
     target.setExternalIdBundle(BUNDLE);
     target.setName("Test");
-    
-    when(_underlying.get(eq(OID), eq(VC))).thenReturn(target);
-    
-    Response test = _resource.get(OID.toString(), null, VC.getVersionAsOfString(), VC.getCorrectedToString());
+
+    when(_underlying.get(eq(OID), any(VersionCorrection.class))).thenReturn(target);
+
+    final Response test = _resource.get(OID.toString(), null, null, null);
     assertEquals(Status.OK.getStatusCode(), test.getStatus());
     assertSame(target, test.getEntity());
   }
 
+  /**
+   * Tests searching for an exchange by external identifiers and version.
+   */
   @SuppressWarnings({"rawtypes", "unchecked" })
   @Test
   public void testSearch() {
     final SimpleExchange target = new SimpleExchange();
     target.setExternalIdBundle(BUNDLE);
     target.setName("Test");
-    Collection targetColl = ImmutableList.<Exchange>of(target);
-    
+    final Collection targetColl = ImmutableList.<Exchange>of(target);
+
     when(_underlying.get(eq(BUNDLE), eq(VC))).thenReturn(targetColl);
-    
-    Response test = _resource.search(VC.getVersionAsOfString(), VC.getCorrectedToString(), BUNDLE.toStringList());
+
+    final Response test = _resource.search(VC.getVersionAsOfString(), VC.getCorrectedToString(), BUNDLE.toStringList());
     assertEquals(Status.OK.getStatusCode(), test.getStatus());
     assertEquals(FudgeListWrapper.of(targetColl), test.getEntity());
   }
 
+  /**
+   * Tests searching for a single exchange by external identifiers and version.
+   */
+  @Test
+  public void testSearchSingle() {
+    final SimpleExchange target = new SimpleExchange();
+    target.setExternalIdBundle(BUNDLE);
+    target.setName("Test");
+    when(_underlying.getSingle(eq(BUNDLE))).thenReturn(target);
+
+    final Response test = _resource.searchSingle(BUNDLE.toStringList());
+    assertEquals(Status.OK.getStatusCode(), test.getStatus());
+    assertEquals(target, test.getEntity());
+  }
 }

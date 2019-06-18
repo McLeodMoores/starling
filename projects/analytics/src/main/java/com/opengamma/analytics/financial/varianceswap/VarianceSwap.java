@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.varianceswap;
@@ -13,8 +13,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * A variance swap is a forward contract on the realised variance of a generic underlying. This could be a single equity price, the value of an equity index,
- * an FX rate or <b>any</b> other financial metric on which a variance swap contract is based.<p>
+ * A variance swap is a forward contract on the realised variance of a generic underlying. This could be a single equity price, the value of an equity index, an
+ * FX rate or <b>any</b> other financial metric on which a variance swap contract is based.
+ * <p>
  * The floating leg of a variance swap is the realized variance and is calculated using the second moment of log returns of the underlying asset.
  * <p>
  * Because variance is additive in time, the value of a variance swap can be decomposed at any point in time between realized and implied variance as
@@ -45,17 +46,28 @@ public class VarianceSwap implements InstrumentDerivative {
   private final double[] _observationWeights;
 
   /**
-   * @param timeToObsStart Time of first observation. Negative if observations have begun.
-   * @param timeToObsEnd Time of final observation. Negative if observations have finished.
-   * @param timeToSettlement Time of cash settlement. If negative, the swap has expired.
-   * @param varStrike Fair value of Variance struck at trade date
-   * @param varNotional Trade pays the difference between realized and strike variance multiplied by this
-   * @param currency Currency of cash settlement
-   * @param annualizationFactor Number of business days per year
-   * @param nObsExpected Number of observations expected as of trade inception
-   * @param nObsDisrupted Number of expected observations that did not occur because of a market disruption
-   * @param observations Array of observations of the underlying spot
-   * @param observationWeights Array of weights to give observation returns. If null, all weights are 1. Else, length must be: observations.length-1
+   * @param timeToObsStart
+   *          Time of first observation. Negative if observations have begun.
+   * @param timeToObsEnd
+   *          Time of final observation. Negative if observations have finished.
+   * @param timeToSettlement
+   *          Time of cash settlement. If negative, the swap has expired.
+   * @param varStrike
+   *          Fair value of Variance struck at trade date
+   * @param varNotional
+   *          Trade pays the difference between realized and strike variance multiplied by this
+   * @param currency
+   *          Currency of cash settlement
+   * @param annualizationFactor
+   *          Number of business days per year
+   * @param nObsExpected
+   *          Number of observations expected as of trade inception
+   * @param nObsDisrupted
+   *          Number of expected observations that did not occur because of a market disruption
+   * @param observations
+   *          Array of observations of the underlying spot
+   * @param observationWeights
+   *          Array of weights to give observation returns. If null, all weights are 1. Else, length must be: observations.length-1
    */
   public VarianceSwap(final double timeToObsStart, final double timeToObsEnd, final double timeToSettlement,
       final double varStrike, final double varNotional, final Currency currency, final double annualizationFactor,
@@ -77,14 +89,17 @@ public class VarianceSwap implements InstrumentDerivative {
       final int nObs = _observations.length;
       ArgumentChecker.isTrue(nWeights + 1 == nObs,
           "If provided, observationWeights must be of length one less than observations, as they weight returns log(obs[i]/obs[i-1])."
-              + " Found {} weights and {} observations.", nWeights, nObs);
+              + " Found {} weights and {} observations.",
+          nWeights, nObs);
     }
     ArgumentChecker.isTrue(_nObsExpected > 0, "Encountered a VarianceSwap with 0 expected observations");
   }
 
   /**
-   * Copy constructor
-   * @param other VarianceSwap to copy from
+   * Copy constructor.
+   * 
+   * @param other
+   *          VarianceSwap to copy from
    */
   public VarianceSwap(final VarianceSwap other) {
     ArgumentChecker.notNull(other, "variance swap to copy");
@@ -103,6 +118,7 @@ public class VarianceSwap implements InstrumentDerivative {
 
   /**
    * Gets the timeToObsStart.
+   * 
    * @return the timeToObsStart
    */
   public double getTimeToObsStart() {
@@ -111,6 +127,7 @@ public class VarianceSwap implements InstrumentDerivative {
 
   /**
    * Gets the timeToObsEnd.
+   * 
    * @return the timeToObsEnd
    */
   public double getTimeToObsEnd() {
@@ -119,6 +136,7 @@ public class VarianceSwap implements InstrumentDerivative {
 
   /**
    * Gets the timeToSettlement.
+   * 
    * @return the timeToSettlement
    */
   public double getTimeToSettlement() {
@@ -127,6 +145,7 @@ public class VarianceSwap implements InstrumentDerivative {
 
   /**
    * Gets the nObsExpected.
+   * 
    * @return the nObsExpected
    */
   public int getObsExpected() {
@@ -135,6 +154,7 @@ public class VarianceSwap implements InstrumentDerivative {
 
   /**
    * Gets the nObsDisrupted.
+   * 
    * @return the nObsDisrupted
    */
   public int getObsDisrupted() {
@@ -143,6 +163,7 @@ public class VarianceSwap implements InstrumentDerivative {
 
   /**
    * Gets the currency.
+   * 
    * @return the currency
    */
   public Currency getCurrency() {
@@ -151,6 +172,7 @@ public class VarianceSwap implements InstrumentDerivative {
 
   /**
    * Gets the varStrike.
+   * 
    * @return the varStrike
    */
   public double getVarStrike() {
@@ -159,6 +181,7 @@ public class VarianceSwap implements InstrumentDerivative {
 
   /**
    * Gets the varNotional.
+   * 
    * @return the varNotional
    */
   public double getVarNotional() {
@@ -167,6 +190,7 @@ public class VarianceSwap implements InstrumentDerivative {
 
   /**
    * Gets the volStrike.
+   * 
    * @return the volStrike
    */
   public double getVolStrike() {
@@ -175,6 +199,7 @@ public class VarianceSwap implements InstrumentDerivative {
 
   /**
    * Gets the volNotional.
+   * 
    * @return the volNotional
    */
   public double getVolNotional() {
@@ -183,6 +208,7 @@ public class VarianceSwap implements InstrumentDerivative {
 
   /**
    * Gets the annualizationFactor.
+   * 
    * @return the annualizationFactor
    */
   public double getAnnualizationFactor() {
@@ -191,6 +217,7 @@ public class VarianceSwap implements InstrumentDerivative {
 
   /**
    * Gets the observations.
+   * 
    * @return the observations
    */
   public double[] getObservations() {
@@ -199,6 +226,7 @@ public class VarianceSwap implements InstrumentDerivative {
 
   /**
    * Gets the observationWeights.
+   * 
    * @return the observationWeights
    */
   public final double[] getObservationWeights() {
@@ -211,22 +239,22 @@ public class VarianceSwap implements InstrumentDerivative {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_annualizationFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_currency == null) ? 0 : _currency.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_currency == null ? 0 : _currency.hashCode());
     result = prime * result + _nObsDisrupted;
     result = prime * result + _nObsExpected;
-    result = prime * result + ((_observations == null) ? 0 : Arrays.hashCode(_observations));
-    result = prime * result + ((_observationWeights == null) ? 0 : Arrays.hashCode(_observations));
+    result = prime * result + (_observations == null ? 0 : Arrays.hashCode(_observations));
+    result = prime * result + (_observationWeights == null ? 0 : Arrays.hashCode(_observations));
     temp = Double.doubleToLongBits(_timeToObsEnd);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_timeToObsStart);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_timeToSettlement);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_varNotional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_varStrike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

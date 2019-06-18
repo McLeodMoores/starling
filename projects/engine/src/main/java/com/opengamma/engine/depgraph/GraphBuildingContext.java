@@ -36,8 +36,8 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Algorithm state. A context object is used by a single job thread. The root context is not used by any builder thread. The synchronization on the
- * collation methods only is therefore sufficient.
+ * Algorithm state. A context object is used by a single job thread. The root context is not used by any builder thread. The synchronization on the collation
+ * methods only is therefore sufficient.
  */
 /* package */final class GraphBuildingContext {
 
@@ -49,7 +49,7 @@ import com.opengamma.util.tuple.Pairs;
   private Map<ExceptionWrapper, ExceptionWrapper> _exceptions;
   private int _stackDepth;
 
-  public GraphBuildingContext(final DependencyGraphBuilder builder) {
+  GraphBuildingContext(final DependencyGraphBuilder builder) {
     _builder = builder;
   }
 
@@ -88,7 +88,8 @@ import com.opengamma.util.tuple.Pairs;
   /**
    * Schedule the task for execution.
    *
-   * @param runnable task to execute, not null
+   * @param runnable
+   *          task to execute, not null
    */
   public void run(final ResolveTask runnable) {
     // Run inline unless the stack is full, or the task attempts to defer execution. Only run if the task hasn't been discarded (ie
@@ -105,7 +106,8 @@ import com.opengamma.util.tuple.Pairs;
   /**
    * Trigger an underlying pump operation. This may happen before returning or be deferred if the stack is past a depth threshold.
    *
-   * @param pump underlying operation
+   * @param pump
+   *          underlying operation
    */
   public void pump(final ResolutionPump pump) {
     LOGGER.debug("Pumping {}", pump);
@@ -120,7 +122,8 @@ import com.opengamma.util.tuple.Pairs;
   /**
    * Trigger an underlying close operation. This may happen before returning or be deferred if the stack is past a depth threshold.
    *
-   * @param pump underlying operation
+   * @param pump
+   *          underlying operation
    */
   public void close(final ResolutionPump pump) {
     LOGGER.debug("Closing {}", pump);
@@ -135,10 +138,14 @@ import com.opengamma.util.tuple.Pairs;
   /**
    * Trigger a resolved callback.
    *
-   * @param callback callback object
-   * @param valueRequirement requirement resolved
-   * @param resolvedValue value resolved to
-   * @param pump source of the next value
+   * @param callback
+   *          callback object
+   * @param valueRequirement
+   *          requirement resolved
+   * @param resolvedValue
+   *          value resolved to
+   * @param pump
+   *          source of the next value
    */
   public void resolved(final ResolvedValueCallback callback, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue,
       final ResolutionPump pump) {
@@ -152,9 +159,12 @@ import com.opengamma.util.tuple.Pairs;
   /**
    * Trigger a resolution failure.
    *
-   * @param callback callback object
-   * @param valueRequirement requirement that failed to resolve or for which there are no further resolutions
-   * @param failure description of the failure
+   * @param callback
+   *          callback object
+   * @param valueRequirement
+   *          requirement that failed to resolve or for which there are no further resolutions
+   * @param failure
+   *          description of the failure
    */
   public void failed(final ResolvedValueCallback callback, final ValueRequirement valueRequirement, final ResolutionFailure failure) {
     LOGGER.debug("Couldn't resolve {}", valueRequirement);
@@ -165,10 +175,11 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Stores an exception that should be reported to the user. Only store the first copy of an exception; after that increment
-   * the count of times that it occurred.
+   * Stores an exception that should be reported to the user. Only store the first copy of an exception; after that increment the count of times that it
+   * occurred.
    *
-   * @param t exception to store, not null
+   * @param t
+   *          exception to store, not null
    */
   public void exception(final Throwable t) {
     LOGGER.debug("Caught exception", t);
@@ -229,10 +240,9 @@ import com.opengamma.util.tuple.Pairs;
     if (resolver != null) {
       resolver.start(this);
       return resolver;
-    } else {
-      LOGGER.debug("Using direct resolution {}/{}", requirement, dependent);
-      return getOrCreateTaskResolving(requirement, dependent, functionExclusion);
     }
+    LOGGER.debug("Using direct resolution {}/{}", requirement, dependent);
+    return getOrCreateTaskResolving(requirement, dependent, functionExclusion);
   }
 
   public ResolveTask getOrCreateTaskResolving(final ValueRequirement valueRequirement, final ResolveTask parentTask,
@@ -258,13 +268,13 @@ import com.opengamma.util.tuple.Pairs;
         LOGGER.debug("Using existing task {}", task);
         newTask.release(this); // Discard local allocation
         return task;
-      } else {
-        getBuilder().incrementActiveResolveTasks();
-        // Don't call run; we want to fork this out to a new worker thread, never call inline
-        newTask.addRef(); // Reference held by the run queue
-        submit(newTask);
-        return newTask;
       }
+      getBuilder().incrementActiveResolveTasks();
+      // Don't call run; we want to fork this out to a new worker thread, never
+      // call inline
+      newTask.addRef(); // Reference held by the run queue
+      submit(newTask);
+      return newTask;
     } while (true);
   }
 
@@ -291,7 +301,6 @@ import com.opengamma.util.tuple.Pairs;
     } while (true);
   }
 
-  @SuppressWarnings("unchecked")
   public Pair<ResolveTask[], ResolvedValueProducer[]> getTasksProducing(final ValueSpecification valueSpecification) {
     do {
       final MapEx<ResolveTask, ResolvedValueProducer> tasks = getBuilder().getTasks(valueSpecification);
@@ -316,9 +325,8 @@ import com.opengamma.util.tuple.Pairs;
           }
         }
         return Pairs.of(resultTasks, resultProducers);
-      } else {
-        return null;
       }
+      return null;
     } while (true);
   }
 
@@ -327,7 +335,8 @@ import com.opengamma.util.tuple.Pairs;
    * <p>
    * The {@code valueSpecification} parameter must be normalized.
    *
-   * @param valueSpecification the specification to search for, not null
+   * @param valueSpecification
+   *          the specification to search for, not null
    * @return the resolved value, or null if not resolved
    */
   public ResolvedValue getProduction(final ValueSpecification valueSpecification) {
@@ -359,17 +368,15 @@ import com.opengamma.util.tuple.Pairs;
     public ValueProperties getValueProperties() {
       if (_length == 1) {
         return (ValueProperties) _properties;
-      } else {
-        return ((ValueProperties[]) _properties)[_index];
       }
+      return ((ValueProperties[]) _properties)[_index];
     }
 
     public ParameterizedFunction getFunction() {
       if (_length == 1) {
         return (ParameterizedFunction) _functions;
-      } else {
-        return ((ParameterizedFunction[]) _functions)[_index];
       }
+      return ((ParameterizedFunction[]) _functions)[_index];
     }
 
   }
@@ -377,8 +384,10 @@ import com.opengamma.util.tuple.Pairs;
   /**
    * Returns an iterator over previous resolutions (that are present in the dependency graph) on the same target digest for the same value name.
    *
-   * @param targetDigest the target's digest, not null
-   * @param desiredValue the value requirement name, not null
+   * @param targetSpec
+   *          the target's specification, not null
+   * @param desiredValue
+   *          the value requirement name, not null
    * @return any existing resolutions, null if there are none
    */
   public ResolutionIterator getResolutions(final ComputationTargetSpecification targetSpec, final String desiredValue) {
@@ -432,9 +441,12 @@ import com.opengamma.util.tuple.Pairs;
    * <p>
    * The {@code valueSpecification} parameter must be normalized
    *
-   * @param valueSpecification the tentative resolution the value producer will attempt to deliver, not null
-   * @param task the task to perform the resolution, not null
-   * @param producer the value producer managed by the task which will deliver the value specification, not null
+   * @param valueSpecification
+   *          the tentative resolution the value producer will attempt to deliver, not null
+   * @param task
+   *          the task to perform the resolution, not null
+   * @param producer
+   *          the value producer managed by the task which will deliver the value specification, not null
    * @return an existing producer, otherwise null if the new task is now declared for the work
    */
   public ResolvedValueProducer declareTaskProducing(final ValueSpecification valueSpecification, final ResolveTask task, final ResolvedValueProducer producer) {
@@ -524,13 +536,14 @@ import com.opengamma.util.tuple.Pairs;
    * <p>
    * This returns a normalized form of the value specification.
    *
-   * @param valueSpec the specification to process, not null
+   * @param valueSpec
+   *          the specification to process, not null
    * @return the possibly simplified specification, not null
    */
   public ValueSpecification simplifyType(final ValueSpecification valueSpec) {
     final ComputationTargetSpecification oldTargetSpec = valueSpec.getTargetSpecification();
-    final ComputationTargetSpecification newTargetSpec =
-        ComputationTargetResolverUtils.simplifyType(oldTargetSpec, getCompilationContext().getComputationTargetResolver());
+    final ComputationTargetSpecification newTargetSpec = ComputationTargetResolverUtils.simplifyType(oldTargetSpec,
+        getCompilationContext().getComputationTargetResolver());
     if (newTargetSpec == oldTargetSpec) {
       return MemoryUtils.instance(valueSpec);
     }
@@ -540,7 +553,8 @@ import com.opengamma.util.tuple.Pairs;
   /**
    * Bulk form of {@link #simplifyType(ValueSpecification)}. If the values are already in their simplified form then the original collection is returned.
    *
-   * @param specifications the specifications to process, not null
+   * @param specifications
+   *          the specifications to process, not null
    * @return the possibly simplified specifications, not null
    */
   public Collection<ValueSpecification> simplifyTypes(final Collection<ValueSpecification> specifications) {
@@ -549,28 +563,27 @@ import com.opengamma.util.tuple.Pairs;
       final ValueSpecification reducedSpecification = simplifyType(specification);
       if (specification == reducedSpecification) {
         return specifications;
-      } else {
-        return Collections.singleton(reducedSpecification);
       }
-    } else {
-      final Collection<ValueSpecification> result = new ArrayList<>(specifications.size());
-      for (final ValueSpecification specification : specifications) {
-        result.add(simplifyType(specification));
-      }
-      return result;
+      return Collections.singleton(reducedSpecification);
     }
+    final Collection<ValueSpecification> result = new ArrayList<>(specifications.size());
+    for (final ValueSpecification specification : specifications) {
+      result.add(simplifyType(specification));
+    }
+    return result;
   }
 
   /**
    * Simplifies the type based on the associated {@link ComputationTargetResolver}.
    *
-   * @param valueReq the requirement to process, not null
+   * @param valueReq
+   *          the requirement to process, not null
    * @return the possibly simplified requirement, not null
    */
   public ValueRequirement simplifyType(final ValueRequirement valueReq) {
     final ComputationTargetReference oldTargetRef = valueReq.getTargetReference();
-    final ComputationTargetReference newTargetRef =
-        ComputationTargetResolverUtils.simplifyType(oldTargetRef, getCompilationContext().getComputationTargetResolver());
+    final ComputationTargetReference newTargetRef = ComputationTargetResolverUtils.simplifyType(oldTargetRef,
+        getCompilationContext().getComputationTargetResolver());
     if (newTargetRef == oldTargetRef) {
       return valueReq;
     }
@@ -627,7 +640,8 @@ import com.opengamma.util.tuple.Pairs;
   /**
    * Merge information from the other context into this (a root context). The caller must be the thread that was working with the other context.
    *
-   * @param context the other context
+   * @param context
+   *          the other context
    */
   public synchronized void mergeThreadContext(final GraphBuildingContext context) {
     if (_exceptions == null) {

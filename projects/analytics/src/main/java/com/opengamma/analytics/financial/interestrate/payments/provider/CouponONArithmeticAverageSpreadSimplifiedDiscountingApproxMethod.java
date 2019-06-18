@@ -21,19 +21,22 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Class describing the pricing of Fed Fund swap-like floating coupon (arithmetic average on overnight rates) by estimation and discounting (no convexity adjustment is computed).
- * The estimation is done through an approximation.
- * <p>Reference: Overnight Indexes Related Products. OpenGamma Documentation n. 20, Version 1.0, February 2013.
+ * Class describing the pricing of Fed Fund swap-like floating coupon (arithmetic average on overnight rates) by estimation and discounting (no convexity
+ * adjustment is computed). The estimation is done through an approximation.
+ * <p>
+ * Reference: Overnight Indexes Related Products. OpenGamma Documentation n. 20, Version 1.0, February 2013.
  */
 public final class CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod {
 
   /**
    * The method unique instance.
    */
-  private static final CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod INSTANCE = new CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod();
+  private static final CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod INSTANCE =
+      new CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod();
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod getInstance() {
@@ -48,8 +51,11 @@ public final class CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMet
 
   /**
    * Computes the present value.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponONArithmeticAverageSpreadSimplified coupon, final MulticurveProviderInterface multicurve) {
@@ -67,11 +73,15 @@ public final class CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMet
 
   /**
    * Computes the present value curve sensitivity.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The present value curve sensitivities.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponONArithmeticAverageSpreadSimplified coupon, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponONArithmeticAverageSpreadSimplified coupon,
+      final MulticurveProviderInterface multicurve) {
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(multicurve, "Multi-curve provider");
     // Forward sweep
@@ -81,7 +91,7 @@ public final class CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMet
     final double rateAccruedCompounded = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), tStart, tEnd, delta) * delta;
     final double rateAccrued = Math.log(1.0 + rateAccruedCompounded);
     final double df = multicurve.getDiscountFactor(coupon.getCurrency(), coupon.getPaymentTime());
-    //    final double pv = df * (rateAccrued * coupon.getNotional() + coupon.getSpreadAmount());
+    // final double pv = df * (rateAccrued * coupon.getNotional() + coupon.getSpreadAmount());
     // Backward sweep
     final double pvBar = 1.0;
     final double dfBar = (rateAccrued * coupon.getNotional() + coupon.getSpreadAmount()) * pvBar;
@@ -96,7 +106,8 @@ public final class CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMet
     final List<ForwardSensitivity> listForward = new ArrayList<>();
     listForward.add(new SimplyCompoundedForwardSensitivity(tStart, tEnd, delta, forwardBar));
     mapFwd.put(multicurve.getName(coupon.getIndex()), listForward);
-    final MultipleCurrencyMulticurveSensitivity result = MultipleCurrencyMulticurveSensitivity.of(coupon.getCurrency(), MulticurveSensitivity.of(mapDsc, mapFwd));
+    final MultipleCurrencyMulticurveSensitivity result = MultipleCurrencyMulticurveSensitivity.of(coupon.getCurrency(),
+        MulticurveSensitivity.of(mapDsc, mapFwd));
     return result;
   }
 

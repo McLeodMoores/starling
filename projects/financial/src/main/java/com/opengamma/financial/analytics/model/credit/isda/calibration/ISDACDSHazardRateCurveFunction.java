@@ -53,8 +53,6 @@ import com.opengamma.financial.analytics.model.credit.CreditSecurityToIdentifier
 import com.opengamma.financial.analytics.model.credit.CreditSecurityToRecoveryRateVisitor;
 import com.opengamma.financial.analytics.model.credit.IMMDateGenerator;
 import com.opengamma.financial.convention.HolidaySourceCalendarAdapter;
-import com.opengamma.financial.convention.businessday.BusinessDayConvention;
-import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.credit.CdsRecoveryRateIdentifier;
 import com.opengamma.financial.security.FinancialSecurity;
@@ -67,9 +65,10 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class ISDACDSHazardRateCurveFunction extends ISDAHazardRateCurveFunction {
-  private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
   private static final FastCreditCurveBuilder CREDIT_CURVE_BUILDER = new FastCreditCurveBuilder();
 
   @Override
@@ -84,16 +83,19 @@ public class ISDACDSHazardRateCurveFunction extends ISDAHazardRateCurveFunction 
     final CreditDefaultSwapSecurity security = (CreditDefaultSwapSecurity) target.getSecurity();
     final Calendar calendar = new HolidaySourceCalendarAdapter(holidaySource, FinancialSecurityUtils.getCurrency(security));
     final CdsRecoveryRateIdentifier recoveryRateIdentifier = security.accept(new CreditSecurityToRecoveryRateVisitor(securitySource));
-    final Object recoveryRateObject = inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, recoveryRateIdentifier.getExternalId()));
+    final Object recoveryRateObject = inputs
+        .getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, recoveryRateIdentifier.getExternalId()));
     if (recoveryRateObject == null) {
       throw new OpenGammaRuntimeException("Could not get recovery rate with identifier " + recoveryRateIdentifier.getExternalId());
     }
     final double recoveryRate = (Double) recoveryRateObject;
-    final CreditDefaultSwapSecurityConverter converter = new CreditDefaultSwapSecurityConverter(holidaySource, regionSource, legalEntitySource, recoveryRate, valuationTime);
+    final CreditDefaultSwapSecurityConverter converter = new CreditDefaultSwapSecurityConverter(holidaySource, regionSource, legalEntitySource, recoveryRate,
+        valuationTime);
     final LegacyVanillaCreditDefaultSwapDefinition cds = (LegacyVanillaCreditDefaultSwapDefinition) security.accept(converter);
     final Object yieldCurveObject = inputs.getValue(ValueRequirementNames.YIELD_CURVE);
     if (yieldCurveObject == null) {
-      throw new OpenGammaRuntimeException("Could not get yield curve called " + desiredValue.getConstraint(CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE));
+      throw new OpenGammaRuntimeException(
+          "Could not get yield curve called " + desiredValue.getConstraint(CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE));
     }
     final Object spreadCurveObject = inputs.getValue(ValueRequirementNames.CREDIT_SPREAD_CURVE);
     if (spreadCurveObject == null) {
@@ -106,7 +108,8 @@ public class ISDACDSHazardRateCurveFunction extends ISDAHazardRateCurveFunction 
     ParallelArrayBinarySort.parallelBinarySort(tenors, marketSpreadObjects);
     final int n = tenors.length;
     // assume new style IMM maturities
-    final CDSAnalyticFactory analyticFactory = new CDSAnalyticFactory(cds.getRecoveryRate(), cds.getCouponFrequency().getPeriod()).with(cds.getBusinessDayAdjustmentConvention()).with(calendar)
+    final CDSAnalyticFactory analyticFactory = new CDSAnalyticFactory(cds.getRecoveryRate(), cds.getCouponFrequency().getPeriod())
+        .with(cds.getBusinessDayAdjustmentConvention()).with(calendar)
         .with(cds.getStubType()).withAccrualDCC(cds.getDayCountFractionConvention());
 
     final CDSAnalytic[] creditAnalytics = new CDSAnalytic[n];
@@ -155,7 +158,8 @@ public class ISDACDSHazardRateCurveFunction extends ISDAHazardRateCurveFunction 
     final String yieldCurveCalculationMethodName = Iterables.getOnlyElement(yieldCurveCalculationMethodNames);
     final CreditSecurityToIdentifierVisitor identifierVisitor = new CreditSecurityToIdentifierVisitor(OpenGammaCompilationContext.getSecuritySource(context));
     final String spreadCurveName = security.accept(identifierVisitor).getUniqueId().getValue();
-    final ValueRequirement yieldCurveRequirement = YieldCurveFunctionUtils.getCurveRequirement(currencyTarget, yieldCurveName, yieldCurveCalculationConfigName, yieldCurveCalculationMethodName);
+    final ValueRequirement yieldCurveRequirement = YieldCurveFunctionUtils.getCurveRequirement(currencyTarget, yieldCurveName, yieldCurveCalculationConfigName,
+        yieldCurveCalculationMethodName);
 
     final ValueProperties.Builder spreadCurveProperties = ValueProperties.builder().with(ValuePropertyNames.CURVE, spreadCurveName);
     final Set<String> spreadCurveShift = constraints.getValues(PROPERTY_SPREAD_CURVE_SHIFT);
@@ -168,14 +172,18 @@ public class ISDACDSHazardRateCurveFunction extends ISDAHazardRateCurveFunction 
     }
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final CdsRecoveryRateIdentifier recoveryRateIdentifier = security.accept(new CreditSecurityToRecoveryRateVisitor(securitySource));
-    final ValueRequirement recoveryRateRequirement = new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, recoveryRateIdentifier.getExternalId());
-    final ValueRequirement creditSpreadCurveRequirement = new ValueRequirement(ValueRequirementNames.CREDIT_SPREAD_CURVE, ComputationTargetSpecification.NULL, spreadCurveProperties.get());
+    final ValueRequirement recoveryRateRequirement = new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE,
+        recoveryRateIdentifier.getExternalId());
+    final ValueRequirement creditSpreadCurveRequirement = new ValueRequirement(ValueRequirementNames.CREDIT_SPREAD_CURVE, ComputationTargetSpecification.NULL,
+        spreadCurveProperties.get());
     return Sets.newHashSet(yieldCurveRequirement, creditSpreadCurveRequirement, recoveryRateRequirement);
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
-    final ValueProperties.Builder propertiesBuilder = createValueProperties().with(ValuePropertyNames.CURVE_CALCULATION_METHOD, ISDAFunctionConstants.ISDA_METHOD_NAME);
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
+    final ValueProperties.Builder propertiesBuilder = createValueProperties().with(ValuePropertyNames.CURVE_CALCULATION_METHOD,
+        ISDAFunctionConstants.ISDA_METHOD_NAME);
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       final ValueSpecification spec = entry.getKey();
       final ValueProperties.Builder inputPropertiesBuilder = spec.getProperties().copy();
@@ -183,9 +191,11 @@ public class ISDACDSHazardRateCurveFunction extends ISDAHazardRateCurveFunction 
       if (spec.getValueName().equals(ValueRequirementNames.YIELD_CURVE)) {
         propertiesBuilder.with(CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE, inputPropertiesBuilder.get().getValues(ValuePropertyNames.CURVE));
         inputPropertiesBuilder.withoutAny(ValuePropertyNames.CURVE);
-        propertiesBuilder.with(CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE_CALCULATION_CONFIG, inputPropertiesBuilder.get().getValues(ValuePropertyNames.CURVE_CALCULATION_CONFIG));
+        propertiesBuilder.with(CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE_CALCULATION_CONFIG,
+            inputPropertiesBuilder.get().getValues(ValuePropertyNames.CURVE_CALCULATION_CONFIG));
         inputPropertiesBuilder.withoutAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
-        propertiesBuilder.with(CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE_CALCULATION_METHOD, inputPropertiesBuilder.get().getValues(ValuePropertyNames.CURVE_CALCULATION_METHOD));
+        propertiesBuilder.with(CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE_CALCULATION_METHOD,
+            inputPropertiesBuilder.get().getValues(ValuePropertyNames.CURVE_CALCULATION_METHOD));
         inputPropertiesBuilder.withoutAny(ValuePropertyNames.CURVE_CALCULATION_METHOD);
       } else if (spec.getValueName().equals(ValueRequirementNames.CREDIT_SPREAD_CURVE)) {
         propertiesBuilder.with(ValuePropertyNames.CURVE, inputPropertiesBuilder.get().getValues(ValuePropertyNames.CURVE));

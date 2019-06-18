@@ -54,21 +54,22 @@ import com.opengamma.financial.security.bond.GovernmentBondSecurity;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
-  /** Name of the property type*/
+  /** Name of the property type. */
   public static final String PROPERTY_CURVE_CALCULATION_TYPE = "Nelson_Siegel_Svennson_Bond_Curve";
-  /** Name of the property*/
+  /** Name of the property. */
   public static final String PROPERTY_PREFIX = "Nelson-Siegel-Svennson";
   private static final Logger LOGGER = LoggerFactory.getLogger(NelsonSiegelSvenssonBondCurveFunction.class);
   private static final NonLinearLeastSquare MINIMISER = new NonLinearLeastSquare();
   private static final LastTimeCalculator LAST_DATE = LastTimeCalculator.getInstance();
   private static final NelsonSiegelSvennsonBondCurveModel MODEL = new NelsonSiegelSvennsonBondCurveModel();
-  //private static final ParameterLimitsTransform[] TRANSFORMS = new ParameterLimitsTransform[] {new SingleRangeLimitTransform(0, LimitType.GREATER_THAN), new NullTransform(), new NullTransform(),
-  //  new NullTransform(), new NullTransform(), new NullTransform()};
+  // private static final ParameterLimitsTransform[] TRANSFORMS = new ParameterLimitsTransform[] {new SingleRangeLimitTransform(0, LimitType.GREATER_THAN), new
+  // NullTransform(), new NullTransform(),
+  // new NullTransform(), new NullTransform(), new NullTransform()};
   private static final BitSet FIXED_PARAMETERS = new BitSet(6);
-  //TODO remove this hard-coding
+  // TODO remove this hard-coding
   private static final String ISSUER_NAME = "US TREASURY N/B";
   private static final Currency CURRENCY = Currency.USD;
 
@@ -97,7 +98,8 @@ public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+      public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+          final Set<ValueRequirement> desiredValues) {
         final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
         final ConventionBundleSource conventionSource = OpenGammaExecutionContext.getConventionBundleSource(executionContext);
         final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(executionContext);
@@ -105,7 +107,7 @@ public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
         final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
         final BondSecurityConverter converter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
         final FinancialSecuritySource securitySource = executionContext.getSecuritySource(FinancialSecuritySource.class);
-        final Collection<Security> allBonds = new ArrayList<Security>(securitySource.getBondsWithIssuerName(ISSUER_NAME));
+        final Collection<Security> allBonds = new ArrayList<>(securitySource.getBondsWithIssuerName(ISSUER_NAME));
         final Iterator<Security> iter = allBonds.iterator();
         while (iter.hasNext()) {
           final Security sec = iter.next();
@@ -137,9 +139,9 @@ public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
           final String bondStringName = PROPERTY_PREFIX + "_" + CURRENCY.getCode();
           final InstrumentDerivative bond = definition.toDerivative(now, bondStringName);
           t[i] = bond.accept(LAST_DATE);
-          ytm[i++] = ((Double) ytmObject / 100);
+          ytm[i++] = (Double) ytmObject / 100;
         }
-        final DoubleMatrix1D initialValues = new DoubleMatrix1D(new double[] {1, 2, 3, 4, 2, 3 });
+        final DoubleMatrix1D initialValues = new DoubleMatrix1D(new double[] { 1, 2, 3, 4, 2, 3 });
         final ParameterizedFunction<Double, DoubleMatrix1D, Double> parameterizedFunction = MODEL.getParameterizedFunction();
         final LeastSquareResults result = MINIMISER.solve(new DoubleMatrix1D(t), new DoubleMatrix1D(ytm), parameterizedFunction, initialValues);
         final DoubleMatrix1D parameters = result.getFitParameters();
@@ -161,10 +163,11 @@ public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         if (canApplyTo(context, target)) {
           final FinancialSecuritySource securitySource = context.getSecuritySource(FinancialSecuritySource.class);
-          final Collection<Security> allBonds = new ArrayList<Security>(securitySource.getBondsWithIssuerName("US TREASURY N/B"));
+          final Collection<Security> allBonds = new ArrayList<>(securitySource.getBondsWithIssuerName("US TREASURY N/B"));
           final Iterator<Security> iter = allBonds.iterator();
           while (iter.hasNext()) {
             final Security sec = iter.next();
@@ -178,12 +181,13 @@ public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
               throw new OpenGammaRuntimeException("non-bond security " + sec + " returned by getAllBondsOfIssuerType()");
             }
           }
-          final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+          final Set<ValueRequirement> requirements = new HashSet<>();
           for (final Security sec : allBonds) {
             if (sec instanceof BondSecurity) {
               final BondSecurity bond = (BondSecurity) sec;
               if (!bond.getCurrency().equals(CURRENCY)) {
-                throw new OpenGammaRuntimeException("Currency for bond " + bond.getUniqueId() + " (" + bond.getCurrency() + ") did not match that required (" + CURRENCY + ")");
+                throw new OpenGammaRuntimeException(
+                    "Currency for bond " + bond.getUniqueId() + " (" + bond.getCurrency() + ") did not match that required (" + CURRENCY + ")");
               }
               requirements.add(new ValueRequirement(ValueRequirementNames.YTM, ComputationTargetType.SECURITY, bond.getUniqueId()));
             } else {

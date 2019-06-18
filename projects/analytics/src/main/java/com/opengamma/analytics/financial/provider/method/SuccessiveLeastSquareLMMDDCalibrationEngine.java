@@ -23,7 +23,9 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  * Specific calibration engine for the LMM model with swaption.
- * @param <DATA_TYPE>  The type of the data for the base calculator.
+ *
+ * @param <DATA_TYPE>
+ *          The type of the data for the base calculator.
  */
 public class SuccessiveLeastSquareLMMDDCalibrationEngine<DATA_TYPE extends ParameterProviderInterface> extends CalibrationEngineWithCalculators<DATA_TYPE> {
 
@@ -47,8 +49,11 @@ public class SuccessiveLeastSquareLMMDDCalibrationEngine<DATA_TYPE extends Param
 
   /**
    * Constructor of the calibration engine.
-   * @param calibrationObjective The calibration objective.
-   * @param nbInstrumentsBlock The number of instruments in a calibration block.
+   *
+   * @param calibrationObjective
+   *          The calibration objective.
+   * @param nbInstrumentsBlock
+   *          The number of instruments in a calibration block.
    */
   public SuccessiveLeastSquareLMMDDCalibrationEngine(final SuccessiveLeastSquareLMMDDCalibrationObjective calibrationObjective, final int nbInstrumentsBlock) {
     super(calibrationObjective.getFXMatrix(), calibrationObjective.getCcy());
@@ -59,6 +64,7 @@ public class SuccessiveLeastSquareLMMDDCalibrationEngine<DATA_TYPE extends Param
 
   /**
    * Gets the instrument index.
+   *
    * @return The instrument index.
    */
   public List<Integer> getInstrumentIndex() {
@@ -67,6 +73,7 @@ public class SuccessiveLeastSquareLMMDDCalibrationEngine<DATA_TYPE extends Param
 
   /**
    * Returns the number of instruments in a calibration block.
+   *
    * @return The number.
    */
   public int getNbInstrumentsBlock() {
@@ -80,7 +87,8 @@ public class SuccessiveLeastSquareLMMDDCalibrationEngine<DATA_TYPE extends Param
     getBasket().add(instrument);
     getMethod().add(calculator);
     getCalibrationPrices().add(0.0);
-    _instrumentIndex.add(Arrays.binarySearch(((SuccessiveLeastSquareLMMDDCalibrationObjective) _calibrationObjective).getLMMParameters().getIborTime(), swaption.getUnderlyingSwap().getSecondLeg()
+    _instrumentIndex.add(Arrays.binarySearch(((SuccessiveLeastSquareLMMDDCalibrationObjective) _calibrationObjective).getLMMParameters().getIborTime(),
+        swaption.getUnderlyingSwap().getSecondLeg()
         .getNthPayment(swaption.getUnderlyingSwap().getSecondLeg().getNumberOfPayments() - 1).getPaymentTime()));
   }
 
@@ -93,7 +101,7 @@ public class SuccessiveLeastSquareLMMDDCalibrationEngine<DATA_TYPE extends Param
     _calibrationObjective.setMulticurves(data.getMulticurveProvider());
     final SuccessiveLeastSquareLMMDDCalibrationObjective objective = (SuccessiveLeastSquareLMMDDCalibrationObjective) _calibrationObjective;
     final NonLinearLeastSquare ls = new NonLinearLeastSquare(DecompositionFactory.SV_COMMONS, MatrixAlgebraFactory.OG_ALGEBRA, DEFAULT_PRECISION);
-    //    final NonLinearLeastSquare ls = new NonLinearLeastSquare();
+    // final NonLinearLeastSquare ls = new NonLinearLeastSquare();
     for (int loopblock = 0; loopblock < nbBlocks; loopblock++) {
       final InstrumentDerivative[] instruments = new InstrumentDerivative[_nbInstrumentsBlock];
       final double[] prices = new double[_nbInstrumentsBlock];
@@ -108,10 +116,9 @@ public class SuccessiveLeastSquareLMMDDCalibrationEngine<DATA_TYPE extends Param
       // Implementation note: the index start is from the first instrument of the block and the index end is from the last instrument of the block.
       final DoubleMatrix1D observedValues = new DoubleMatrix1D(_nbInstrumentsBlock, 0.0);
       @SuppressWarnings("unused")
-      final
-      LeastSquareResults result = ls.solve(observedValues, _calibrationObjective, new DoubleMatrix1D(1.0, 0.0));
+      final LeastSquareResults result = ls.solve(observedValues, _calibrationObjective, new DoubleMatrix1D(1.0, 0.0));
       // Implementation note: the start value is a multiplicative factor of one and an additive term of 0 (parameters unchanged).
-      //   The observed values are 0 as the function returns the difference between the calculated prices and the targets.
+      // The observed values are 0 as the function returns the difference between the calculated prices and the targets.
     }
   }
 

@@ -182,11 +182,11 @@ public class DbMarketDataSnapshotMasterTest extends AbstractDbTest {
   @Test
   public void test_alternative_snapshot() throws Exception {
 
-    NamedSnapshot snapshot1 = new MockNamedSnapshot(null, "Test 1", 42);
+    final NamedSnapshot snapshot1 = new MockNamedSnapshot(null, "Test 1", 42);
     MarketDataSnapshotDocument doc1 = new MarketDataSnapshotDocument(snapshot1);
     doc1 = _snpMaster.add(doc1);
 
-    NamedSnapshot snapshot2 = new MockNamedSnapshot(null, "Test 2", 84);
+    final NamedSnapshot snapshot2 = new MockNamedSnapshot(null, "Test 2", 84);
     MarketDataSnapshotDocument doc2 = new MarketDataSnapshotDocument(snapshot2);
     doc2 = _snpMaster.add(doc2);
 
@@ -200,50 +200,50 @@ public class DbMarketDataSnapshotMasterTest extends AbstractDbTest {
   @Test
   public void test_find_alternative_snapshot_by_name() throws Exception {
 
-    NamedSnapshot snapshot1 = new MockNamedSnapshot(null, "Test 1", 42);
-    MarketDataSnapshotDocument doc1 = new MarketDataSnapshotDocument(snapshot1);
+    final NamedSnapshot snapshot1 = new MockNamedSnapshot(null, "Test 1", 42);
+    final MarketDataSnapshotDocument doc1 = new MarketDataSnapshotDocument(snapshot1);
     _snpMaster.add(doc1);
 
-    NamedSnapshot snapshot2 = new MockNamedSnapshot(null, "Test 2", 84);
-    MarketDataSnapshotDocument doc2 = new MarketDataSnapshotDocument(snapshot2);
+    final NamedSnapshot snapshot2 = new MockNamedSnapshot(null, "Test 2", 84);
+    final MarketDataSnapshotDocument doc2 = new MarketDataSnapshotDocument(snapshot2);
     _snpMaster.add(doc2);
 
-    MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
+    final MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
     request.setName(doc1.getName());
 
-    MarketDataSnapshotSearchResult result = _snpMaster.search(request);
+    final MarketDataSnapshotSearchResult result = _snpMaster.search(request);
     assertTrue(result.getDocuments().size() > 0);
   }
 
   @Test
   public void test_find_alternative_snapshot_by_name_and_type() throws Exception {
 
-    NamedSnapshot snapshot1 = new MockAlternativeNamedSnapshot(null, "TestSameName", 42);
-    MarketDataSnapshotDocument doc1 = new MarketDataSnapshotDocument(snapshot1);
+    final NamedSnapshot snapshot1 = new MockAlternativeNamedSnapshot(null, "TestSameName", 42);
+    final MarketDataSnapshotDocument doc1 = new MarketDataSnapshotDocument(snapshot1);
     _snpMaster.add(doc1);
 
-    NamedSnapshot snapshot2 = new MockNamedSnapshot(null, "TestSameName", 84);
-    MarketDataSnapshotDocument doc2 = new MarketDataSnapshotDocument(snapshot2);
+    final NamedSnapshot snapshot2 = new MockNamedSnapshot(null, "TestSameName", 84);
+    final MarketDataSnapshotDocument doc2 = new MarketDataSnapshotDocument(snapshot2);
     _snpMaster.add(doc2);
 
-    MarketDataSnapshotSearchRequest request1 = new MarketDataSnapshotSearchRequest();
+    final MarketDataSnapshotSearchRequest request1 = new MarketDataSnapshotSearchRequest();
     request1.setType(MockNamedSnapshot.class);
     request1.setName("TestSameName");
 
-    MarketDataSnapshotSearchResult result1 = _snpMaster.search(request1);
+    final MarketDataSnapshotSearchResult result1 = _snpMaster.search(request1);
     assertTrue(result1.getDocuments().size() == 1);
 
     // Search with just name and we should get both instances back
-    MarketDataSnapshotSearchRequest request2 = new MarketDataSnapshotSearchRequest();
+    final MarketDataSnapshotSearchRequest request2 = new MarketDataSnapshotSearchRequest();
     request2.setName("TestSameName");
 
-    MarketDataSnapshotSearchResult result2 = _snpMaster.search(request2);
+    final MarketDataSnapshotSearchResult result2 = _snpMaster.search(request2);
     assertTrue(result2.getDocuments().size() == 2);
   }
 
   private void assertEquivalent(final MarketDataSnapshotDocument added, final MarketDataSnapshotDocument loaded) {
-    NamedSnapshot addedSnapshot = added.getNamedSnapshot(NamedSnapshot.class);
-    NamedSnapshot loadedSnapshot = loaded.getNamedSnapshot(NamedSnapshot.class);
+    final NamedSnapshot addedSnapshot = added.getNamedSnapshot(NamedSnapshot.class);
+    final NamedSnapshot loadedSnapshot = loaded.getNamedSnapshot(NamedSnapshot.class);
 
     if (addedSnapshot instanceof ManageableMarketDataSnapshot && loadedSnapshot instanceof ManageableMarketDataSnapshot) {
       assertMarketDataSnapshotsEquivalent((ManageableMarketDataSnapshot) addedSnapshot, (ManageableMarketDataSnapshot) loadedSnapshot);
@@ -259,11 +259,11 @@ public class DbMarketDataSnapshotMasterTest extends AbstractDbTest {
     // TODO check yield curves and vol cubes
   }
 
-  private void assertEquivalent(final UnstructuredMarketDataSnapshot addedGlobalValues, final UnstructuredMarketDataSnapshot loadedGlobalValues) {
-    if (addedGlobalValues == null && loadedGlobalValues == null) {
-      return;
-    }
-    if (addedGlobalValues == null && loadedGlobalValues != null) {
+  private static void assertEquivalent(final UnstructuredMarketDataSnapshot addedGlobalValues, final UnstructuredMarketDataSnapshot loadedGlobalValues) {
+    if (addedGlobalValues == null) {
+      if (loadedGlobalValues == null) {
+        return;
+      }
       throw new AssertionError(null);
     }
     assertEquals(addedGlobalValues.getTargets(), loadedGlobalValues.getTargets());

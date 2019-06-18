@@ -11,8 +11,8 @@ import com.opengamma.analytics.financial.model.volatility.BlackFormulaRepository
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class describing the data required to describe a delta dependent smile from ATM, risk reversal and strangle as used in Forex market.
- * The delta used is the delta with respect to forward.
+ * Class describing the data required to describe a delta dependent smile from ATM, risk reversal and strangle as used in Forex market. The delta used is the
+ * delta with respect to forward.
  */
 public class SmileDeltaParameters {
 
@@ -30,15 +30,20 @@ public class SmileDeltaParameters {
   private final double[] _volatility;
 
   /**
-   * Constructor from volatility
-   * @param timeToExpiration The time to expiration associated to the data.
-   * @param delta Delta of the different data points. Must be positive and sorted in ascending order. The put will have as delta the opposite of the numbers.
-   * @param volatility The volatilities.
+   * Constructor from volatility.
+   *
+   * @param timeToExpiration
+   *          The time to expiration associated to the data.
+   * @param delta
+   *          Delta of the different data points. Must be positive and sorted in ascending order. The put will have as delta the opposite of the numbers.
+   * @param volatility
+   *          The volatilities.
    */
   public SmileDeltaParameters(final double timeToExpiration, final double[] delta, final double[] volatility) {
     ArgumentChecker.notNull(delta, "Delta");
     ArgumentChecker.notNull(volatility, "Volatility");
-    ArgumentChecker.isTrue(2 * delta.length + 1 == volatility.length, "Length of delta {} should be coherent with volatility length {}", 2 * delta.length + 1, volatility.length);
+    ArgumentChecker.isTrue(2 * delta.length + 1 == volatility.length, "Length of delta {} should be coherent with volatility length {}", 2 * delta.length + 1,
+        volatility.length);
     _timeToExpiry = timeToExpiration;
     _delta = delta;
     _volatility = volatility;
@@ -46,20 +51,27 @@ public class SmileDeltaParameters {
 
   /**
    * Constructor from market data ATM, RR, Strangle.
-   * @param timeToExpiry The time to expiration associated to the data.
-   * @param atm The ATM volatility.
-   * @param delta Delta of the different data points. Must be positive and sorted in ascending order. The put will have as delta the opposite of the numbers.
-   * @param riskReversal The risk reversal volatility figures, in the same order as the delta.
-   * @param strangle The strangle volatility figures, in the same order as the delta.
+   *
+   * @param timeToExpiry
+   *          The time to expiration associated to the data.
+   * @param atm
+   *          The ATM volatility.
+   * @param delta
+   *          Delta of the different data points. Must be positive and sorted in ascending order. The put will have as delta the opposite of the numbers.
+   * @param riskReversal
+   *          The risk reversal volatility figures, in the same order as the delta.
+   * @param strangle
+   *          The strangle volatility figures, in the same order as the delta.
    */
   public SmileDeltaParameters(final double timeToExpiry, final double atm, final double[] delta, final double[] riskReversal, final double[] strangle) {
     ArgumentChecker.notNull(delta, "Delta");
     ArgumentChecker.notNull(riskReversal, "Risk Reversal");
     ArgumentChecker.notNull(strangle, "Strangle");
-    ArgumentChecker.isTrue(delta.length == riskReversal.length, "Length of delta {} should be equal to length of risk reversal {}", delta.length, riskReversal.length);
+    ArgumentChecker.isTrue(delta.length == riskReversal.length, "Length of delta {} should be equal to length of risk reversal {}", delta.length,
+        riskReversal.length);
     ArgumentChecker.isTrue(delta.length == strangle.length, "Length of delta {} should be equal to length of strangle {} ", delta.length, strangle.length);
-    //TODO: check that delta is sorted (ascending).
-    //REVIEW 6-7-2011 emcleod better to do a parallel sort of delta, risk reversal and strangle and have another constructor
+    // TODO: check that delta is sorted (ascending).
+    // REVIEW 6-7-2011 emcleod better to do a parallel sort of delta, risk reversal and strangle and have another constructor
     // with an isSorted parameter that will not attempt the sort
     this._timeToExpiry = timeToExpiry;
     this._delta = delta;
@@ -74,7 +86,9 @@ public class SmileDeltaParameters {
 
   /**
    * Computes the strikes in ascending order. Put with lower delta (in absolute value) first, ATM and call with larger delta first
-   * @param forward The forward.
+   *
+   * @param forward
+   *          The forward.
    * @return The strikes.
    */
   public double[] getStrike(final double forward) {
@@ -83,13 +97,15 @@ public class SmileDeltaParameters {
     strike[nbDelta] = forward * Math.exp(_volatility[nbDelta] * _volatility[nbDelta] * _timeToExpiry / 2.0);
     for (int loopdelta = 0; loopdelta < nbDelta; loopdelta++) {
       strike[loopdelta] = BlackFormulaRepository.impliedStrike(-_delta[loopdelta], false, forward, _timeToExpiry, _volatility[loopdelta]); // Put
-      strike[2 * nbDelta - loopdelta] = BlackFormulaRepository.impliedStrike(_delta[loopdelta], true, forward, _timeToExpiry, _volatility[2 * nbDelta - loopdelta]); // Call
+      strike[2 * nbDelta - loopdelta] = BlackFormulaRepository.impliedStrike(_delta[loopdelta], true, forward, _timeToExpiry,
+          _volatility[2 * nbDelta - loopdelta]); // Call
     }
     return strike;
   }
 
   /**
    * Gets the time to expiry associated to the data.
+   *
    * @return The time to expiry.
    */
   public double getTimeToExpiry() {
@@ -98,6 +114,7 @@ public class SmileDeltaParameters {
 
   /**
    * Gets the delta of the different data points. Must be positive and sorted in ascending order. The put will have as delta the opposite of the numbers.
+   *
    * @return The delta.
    */
   public double[] getDelta() {
@@ -106,6 +123,7 @@ public class SmileDeltaParameters {
 
   /**
    * Gets the volatilities associated to the strikes.
+   *
    * @return The volatilities,
    */
   public double[] getVolatility() {

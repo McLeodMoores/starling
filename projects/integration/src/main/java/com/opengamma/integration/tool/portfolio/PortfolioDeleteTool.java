@@ -25,9 +25,9 @@ import com.opengamma.master.portfolio.PortfolioSearchRequest;
 import com.opengamma.master.portfolio.PortfolioSearchResult;
 
 /**
- * The portfolio loader tool
+ * The portfolio loader tool.
  */
-//@Scriptable disabled because this tool basically doesn't work properly and leaves orphaned positions.
+// @Scriptable disabled because this tool basically doesn't work properly and leaves orphaned positions.
 public class PortfolioDeleteTool extends AbstractTool<ToolContext> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioDeleteTool.class);
@@ -47,17 +47,18 @@ public class PortfolioDeleteTool extends AbstractTool<ToolContext> {
   /** Verbose option flag */
   private static final String VERBOSE_OPT = "v";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new PortfolioDeleteTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final PortfolioSearchRequest portfolioSearchRequest = new PortfolioSearchRequest();
@@ -79,11 +80,10 @@ public class PortfolioDeleteTool extends AbstractTool<ToolContext> {
 
     for (final PortfolioDocument portfolioDocument : portSearchResult.getDocuments()) {
 
-      final DeletingPortfolioCopier deletingPortfolioCopier =
-          new DeletingPortfolioCopier(
-              getToolContext().getSecurityMaster(),
-              getToolContext().getPositionMaster(),
-              getCommandLine().hasOption(WRITE_OPT));
+      final DeletingPortfolioCopier deletingPortfolioCopier = new DeletingPortfolioCopier(
+          getToolContext().getSecurityMaster(),
+          getToolContext().getPositionMaster(),
+          getCommandLine().hasOption(WRITE_OPT));
 
       deletingPortfolioCopier.copy(
           new MasterPositionReader(
@@ -98,11 +98,11 @@ public class PortfolioDeleteTool extends AbstractTool<ToolContext> {
       if (getCommandLine().hasOption(DELETE_PORTFOLIOS_OPT)) {
         if (getCommandLine().hasOption(WRITE_OPT)) {
           getToolContext().getPortfolioMaster().remove(portfolioDocument.getUniqueId());
-          LOGGER.warn("Deleted " + portfolioDocument.getPortfolio().getUniqueId() +
-              " (" + portfolioDocument.getPortfolio().getName() + ")");
+          LOGGER.warn("Deleted " + portfolioDocument.getPortfolio().getUniqueId()
+              + " (" + portfolioDocument.getPortfolio().getName() + ")");
         } else {
-          LOGGER.warn("Matched " + portfolioDocument.getPortfolio().getUniqueId() +
-              " (" + portfolioDocument.getPortfolio().getName() + ")");
+          LOGGER.warn("Matched " + portfolioDocument.getPortfolio().getUniqueId()
+              + " (" + portfolioDocument.getPortfolio().getName() + ")");
         }
       }
     }
@@ -115,11 +115,11 @@ public class PortfolioDeleteTool extends AbstractTool<ToolContext> {
 
     final Option portfolioNamesOption = new Option(
         PORTFOLIO_NAMES_OPT, "name", true, "Regular expression to match portfolio names");
-//    options.addOption(portfolioNamesOption);
+    // options.addOption(portfolioNamesOption);
 
     final Option deletePortfolioIdsOption = new Option(
         PORTFOLIO_IDS_OPT, "portfolioid", true, "Portfolio IDs to match");
-//    options.addOption(deletePortfolioIdsOption);
+    // options.addOption(deletePortfolioIdsOption);
 
     final OptionGroup group = new OptionGroup();
     group.addOption(deletePortfolioIdsOption);

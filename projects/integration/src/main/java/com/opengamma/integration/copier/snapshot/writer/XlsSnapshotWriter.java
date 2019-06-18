@@ -35,7 +35,7 @@ import com.opengamma.util.tuple.ObjectsPair;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Export snapshot to XLS, separating snapshot elements into workbook sheets
+ * Export snapshot to XLS, separating snapshot elements into workbook sheets.
  */
 public class XlsSnapshotWriter implements SnapshotWriter {
 
@@ -64,20 +64,21 @@ public class XlsSnapshotWriter implements SnapshotWriter {
   }
 
   /**
-   * @param snapshot UnstructuredMarketDataSnapshot
+   * @param snapshot
+   *          UnstructuredMarketDataSnapshot
    * @return Map of ID Bundle (delimited with |) to Pair of market and override value
    */
   private Map<String, ObjectsPair<String, String>> buildUnstructuredMarketDataSnapshotMap(final UnstructuredMarketDataSnapshot snapshot) {
     final Map<String, ObjectsPair<String, String>> values = new LinkedHashMap<>();
     values.put(SnapshotColumns.ID_BUNDLE.get(),
-               ObjectsPair.of(SnapshotColumns.MARKET_VALUE.get(), SnapshotColumns.OVERRIDE_VALUE.get()));
+        ObjectsPair.of(SnapshotColumns.MARKET_VALUE.get(), SnapshotColumns.OVERRIDE_VALUE.get()));
 
     for (final ExternalIdBundle eib : snapshot.getTargets()) {
-      final Map<String, ValueSnapshot> valueSnapshots =  snapshot.getTargetValues(eib);
+      final Map<String, ValueSnapshot> valueSnapshots = snapshot.getTargetValues(eib);
       if (valueSnapshots.size() > 1) {
-        throw new OpenGammaRuntimeException("XML export only supports a single value snapshot for UnstructuredMarketDataSnapshot. " +
-                                                eib.toString() + " contains " + valueSnapshots.size() + " ValueSnapshots. " +
-                                                "Export to CSV in this instance.");
+        throw new OpenGammaRuntimeException("XML export only supports a single value snapshot for UnstructuredMarketDataSnapshot. "
+            + eib.toString() + " contains " + valueSnapshots.size() + " ValueSnapshots. "
+            + "Export to CSV in this instance.");
       }
       final ValueSnapshot valueSnapshot = valueSnapshots.entrySet().iterator().next().getValue();
       final String market = valueSnapshot.getMarketValue() == null ? "" : valueSnapshot.getMarketValue().toString();
@@ -143,7 +144,6 @@ public class XlsSnapshotWriter implements SnapshotWriter {
     _globalsSheet.writeKeyPairBlock(buildUnstructuredMarketDataSnapshotMap(globalValues));
   }
 
-
   @Override
   public void writeYieldCurves(final Map<YieldCurveKey, YieldCurveSnapshot> yieldCurves) {
 
@@ -186,7 +186,7 @@ public class XlsSnapshotWriter implements SnapshotWriter {
     final Map<String, String> detail = new HashMap<>();
     detail.put(SnapshotType.NAME.get(), name);
     _nameSheet.writeKeyValueBlock(detail);
-    _nameSheet.decrementCurrentRowIndex(); //this ensures basis name is directly after name, rather than a new block
+    _nameSheet.decrementCurrentRowIndex(); // this ensures basis name is directly after name, rather than a new block
   }
 
   @Override

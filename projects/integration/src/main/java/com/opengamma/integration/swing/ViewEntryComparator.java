@@ -8,7 +8,8 @@ package com.opengamma.integration.swing;
 import java.util.Comparator;
 
 /**
- * Simple comparator for ViewEntry
+ * Simple comparator for ViewEntry.
+ * 
  * @author jim
  */
 public final class ViewEntryComparator implements Comparator<ViewEntry> {

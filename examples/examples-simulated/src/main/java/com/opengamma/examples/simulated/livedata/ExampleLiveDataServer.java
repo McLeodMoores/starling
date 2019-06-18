@@ -50,10 +50,8 @@ import au.com.bytecode.opencsv.CSVReader;
 import net.sf.ehcache.CacheManager;
 
 /**
- * An ultra-simple market data simulator, we load the initial values from a CSV file (with a header row)
- * and the format
- * identification-scheme, identifier-value, requirement-name, value
- * typically, for last price, you'd use "Market_Value" @see MarketDataRequirementNames
+ * An ultra-simple market data simulator, we load the initial values from a CSV file (with a header row) and the format identification-scheme, identifier-value,
+ * requirement-name, value typically, for last price, you'd use "Market_Value" @see MarketDataRequirementNames.
  */
 public class ExampleLiveDataServer extends StandardLiveDataServer {
 
@@ -62,11 +60,11 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   private static final int NUM_FIELDS = 3;
   /**
-   * Default scaling factor
+   * Default scaling factor.
    */
   public static final double SCALING_FACTOR = 0.005; // i.e. 0.5% * 1SD
   /**
-   * Default max millis between ticks
+   * Default max millis between ticks.
    */
   public static final int MAX_MILLIS_BETWEEN_TICKS = 500;
 
@@ -88,7 +86,7 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
     _maxMillisBetweenTicks = maxMillisBetweenTicks;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void readInitialValues(final Resource initialValuesFile) {
     CSVReader reader = null;
     try {
@@ -127,6 +125,7 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
 
   /**
    * Gets the marketValues.
+   *
    * @return the marketValues
    */
   public Map<String, FudgeMsg> getMarketValues() {
@@ -135,6 +134,7 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
 
   /**
    * Gets the scalingFactor.
+   *
    * @return the scalingFactor
    */
   public double getScalingFactor() {
@@ -143,7 +143,9 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
 
   /**
    * Sets the scalingFactor.
-   * @param scalingFactor  the scalingFactor
+   *
+   * @param scalingFactor
+   *          the scalingFactor
    */
   public void setScalingFactor(final double scalingFactor) {
     _scalingFactor = scalingFactor;
@@ -151,6 +153,7 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
 
   /**
    * Gets the maxMillisBetweenTicks.
+   *
    * @return the maxMillisBetweenTicks
    */
   public int getMaxMillisBetweenTicks() {
@@ -159,16 +162,21 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
 
   /**
    * Sets the maxMillisBetweenTicks.
-   * @param maxMillisBetweenTicks  the maxMillisBetweenTicks
+   *
+   * @param maxMillisBetweenTicks
+   *          the maxMillisBetweenTicks
    */
   public void setMaxMillisBetweenTicks(final int maxMillisBetweenTicks) {
     _maxMillisBetweenTicks = maxMillisBetweenTicks;
   }
 
   /**
-   * @param uniqueId the uniqueId, not null
-   * @param fieldName the field name, not null
-   * @param value the market value, not null
+   * @param uniqueId
+   *          the uniqueId, not null
+   * @param fieldName
+   *          the field name, not null
+   * @param value
+   *          the market value, not null
    */
   public void addTicks(final String uniqueId, final String fieldName, final Double value) {
     ArgumentChecker.notNull(uniqueId, "unique identifier");
@@ -232,7 +240,16 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
   @Override
   protected void doConnect() {
     LOGGER.info("ExampleLiveDataServer connecting..");
-    _executorService.submit(_marketDataSimulatorJob);
+    _executorService.submit(getMarketDataSimulatorJob());
+  }
+
+  /**
+   * Gets the market data simulator.
+   *
+   * @return the market data simulator
+   */
+  protected TerminatableJob getMarketDataSimulatorJob() {
+    return _marketDataSimulatorJob;
   }
 
   @Override
@@ -252,11 +269,23 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
     return true;
   }
 
-  private class SimulatedMarketDataJob extends TerminatableJob {
+  /**
+   * Provides market data perturbed by a normally-distributed random variable.
+   */
+  protected class SimulatedMarketDataJob extends TerminatableJob {
 
     private final Random _random = new Random();
 
-    private double wiggleValue(final double value, final double centre) {
+    /**
+     * Perturbs the value by a normally-distributed random variable.
+     *
+     * @param value
+     *          the initial value
+     * @param centre
+     *          the central point
+     * @return a new value
+     */
+    protected double wiggleValue(final double value, final double centre) {
       return (9 * value + centre) / 10 + _random.nextGaussian() * (value * _scalingFactor);
     }
 
@@ -282,7 +311,7 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
             }
             _marketValues.put(identifier, nextValues);
             liveDataReceived(identifier, nextValues);
-            LOGGER.debug("{} lastValues: {} nextValues: {}", new Object[] {identifier, lastValues, nextValues});
+            LOGGER.debug("{} lastValues: {} nextValues: {}", new Object[] { identifier, lastValues, nextValues });
           } else {
             LOGGER.error("Active subscription for {} is missing in example market data server initial database", identifier);
           }

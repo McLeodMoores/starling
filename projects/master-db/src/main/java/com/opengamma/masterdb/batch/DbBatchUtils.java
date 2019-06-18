@@ -81,9 +81,9 @@ public class DbBatchUtils {
     return source;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Spring ParameterizedRowMapper
+   * Spring ParameterizedRowMapper.
    */
   public static final RowMapper<StatusEntry> ROW_MAPPER = new RowMapper<StatusEntry>() {
     @Override

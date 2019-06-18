@@ -37,9 +37,8 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
   /**
    * Gets the map of registered transformations.
    * <p>
-   * The map is keyed by short function name, with the value being the the action to be applied.
-   * If multiple actions are applied, the function will be advertised by multiple new rules in
-   * place of the original. If a function is omitted from the set, the original rule is preserved.
+   * The map is keyed by short function name, with the value being the the action to be applied. If multiple actions are applied, the function will be
+   * advertised by multiple new rules in place of the original. If a function is omitted from the set, the original rule is preserved.
    *
    * @return the set of transformations, not null
    */
@@ -47,11 +46,12 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
     return Collections.unmodifiableMap(_functionTransformations);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Suppress any rules using the given function name.
    *
-   * @param shortFunctionName  the function to suppress, not null
+   * @param shortFunctionName
+   *          the function to suppress, not null
    */
   public void suppressRule(final String shortFunctionName) {
     registerAction(shortFunctionName, DontUse.INSTANCE);
@@ -60,10 +60,14 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
   /**
    * Adjust the rules using the given function name.
    *
-   * @param shortFunctionName  the function to adjust, not null
-   * @param parameters  the function parameters, null to use the original rule default
-   * @param priorityAdjustment  the priority shift, null to use the original rule default
-   * @param computationTargetFilter  the computation target filter, null to use the original rule default
+   * @param shortFunctionName
+   *          the function to adjust, not null
+   * @param parameters
+   *          the function parameters, null to use the original rule default
+   * @param priorityAdjustment
+   *          the priority shift, null to use the original rule default
+   * @param computationTargetFilter
+   *          the computation target filter, null to use the original rule default
    */
   public void adjustRule(final String shortFunctionName, final FunctionParameters parameters, final ComputationTargetFilter computationTargetFilter,
       final Integer priorityAdjustment) {
@@ -79,7 +83,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Collection<ResolutionRule> transform(final Collection<ResolutionRule> rules) {
     final Collection<ResolutionRule> result = Lists.newArrayListWithCapacity(rules.size());
@@ -97,7 +101,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean equals(final Object obj) {
     if (obj == this) {
@@ -112,7 +116,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
 
   @Override
   public int hashCode() {
-    return 0;  // not intended to be hashed
+    return 0; // not intended to be hashed
   }
 
   @Override
@@ -120,7 +124,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
     return getClass().getSimpleName() + _functionTransformations;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Describes an action as part of a rule's transformation.
    */
@@ -128,14 +132,14 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
 
     protected abstract Action with(Action other);
 
-    protected abstract void apply(final ResolutionRule originalRule, final Collection<ResolutionRule> output);
+    protected abstract void apply(ResolutionRule originalRule, Collection<ResolutionRule> output);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Describes a rule that should be suppressed.
    */
-  public static final class DontUse extends Action {
+  public static class DontUse extends Action {
 
     private static final Action INSTANCE = new DontUse();
 
@@ -169,11 +173,11 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Describes a rule that should be adjusted.
    */
-  public static final class Adjust extends Action {
+  public static class Adjust extends Action {
 
     private final Integer _priorityAdjustment;
     private final FunctionParameters _parameters;
@@ -208,7 +212,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
       if (_parameters != null) {
         function = new ParameterizedFunction(originalRule.getParameterizedFunction().getFunction(), _parameters);
       }
-      final ComputationTargetFilter computationTargetFilter;
+      ComputationTargetFilter computationTargetFilter;
       if (_computationTargetFilter != null) {
         computationTargetFilter = _computationTargetFilter;
       } else {
@@ -269,11 +273,11 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Describes a set of adjustments for a single rule.
    */
-  public static final class MultipleAdjust extends Action {
+  public static class MultipleAdjust extends Action {
 
     private final List<Adjust> _adjusts = new ArrayList<>();
 

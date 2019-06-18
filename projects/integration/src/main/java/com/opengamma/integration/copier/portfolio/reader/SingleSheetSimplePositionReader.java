@@ -89,10 +89,9 @@ public class SingleSheetSimplePositionReader extends SingleSheetPositionReader {
       }
       return ObjectsPair.of(position, securities);
 
-    } else {
-      LOGGER.warn("Row parser was unable to construct a security from row " + row);
-      return ObjectsPair.of(null, null);
     }
+    LOGGER.warn("Row parser was unable to construct a security from row " + row);
+    return ObjectsPair.of(null, null);
 
   }
 

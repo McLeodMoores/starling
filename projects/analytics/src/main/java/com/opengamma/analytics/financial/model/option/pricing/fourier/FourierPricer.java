@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.fourier;
@@ -16,7 +16,7 @@ import com.opengamma.analytics.math.integration.RungeKuttaIntegrator1D;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * 
+ *
  */
 public class FourierPricer {
   private static final IntegralLimitCalculator LIMIT_CALCULATOR = new IntegralLimitCalculator();
@@ -32,18 +32,21 @@ public class FourierPricer {
     _integrator = integrator;
   }
 
-  public double price(final BlackFunctionData data, final EuropeanVanillaOption option, final MartingaleCharacteristicExponent ce, final double alpha, final double limitTolerance) {
+  public double price(final BlackFunctionData data, final EuropeanVanillaOption option, final MartingaleCharacteristicExponent ce, final double alpha,
+      final double limitTolerance) {
     return price(data, option, ce, alpha, limitTolerance, false);
   }
 
-  public double price(final BlackFunctionData data, final EuropeanVanillaOption option, final MartingaleCharacteristicExponent ce, final double alpha, final double limitTolerance,
+  public double price(final BlackFunctionData data, final EuropeanVanillaOption option, final MartingaleCharacteristicExponent ce, final double alpha,
+      final double limitTolerance,
       final boolean useVarianceReduction) {
     Validate.notNull(data, "data");
     Validate.notNull(option, "option");
     Validate.notNull(ce, "characteristic exponent");
     Validate.isTrue(limitTolerance > 0, "limit tolerance must be > 0");
     Validate.isTrue(alpha <= ce.getLargestAlpha() && alpha >= ce.getSmallestAlpha(),
-        "The value of alpha is not valid for the Characteristic Exponent and will most likely lead to mispricing. Choose a value between " + ce.getSmallestAlpha() + " and " + ce.getLargestAlpha());
+        "The value of alpha is not valid for the Characteristic Exponent and will most likely lead to mispricing. Choose a value between "
+            + ce.getSmallestAlpha() + " and " + ce.getLargestAlpha());
     final EuropeanPriceIntegrand integrand = new EuropeanPriceIntegrand(ce, alpha, useVarianceReduction);
     final EuropeanCallFourierTransform psi = new EuropeanCallFourierTransform(ce);
     final double strike = option.getStrike();
@@ -60,7 +63,7 @@ public class FourierPricer {
       final double diff = discountFactor * forward * integral;
       return diff + black;
     }
-    
+
     if (isCall) {
       if (alpha > 0.0) {
         return discountFactor * forward * integral;
@@ -78,7 +81,8 @@ public class FourierPricer {
     return discountFactor * (forward * integral + strike);
   }
 
-  public double priceFromVol(final BlackFunctionData data, final EuropeanVanillaOption option, final MartingaleCharacteristicExponent ce, final double alpha, final double limitTolerance,
+  public double priceFromVol(final BlackFunctionData data, final EuropeanVanillaOption option, final MartingaleCharacteristicExponent ce, final double alpha,
+      final double limitTolerance,
       final boolean useVarianceReduction) {
     final double forward = data.getForward();
     final double discountFactor = data.getDiscountFactor();

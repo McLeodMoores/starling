@@ -43,13 +43,13 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 // CSOFF
 /**
- * Computes the difference in present value between one day and the next, without volatility or rate slide.
- * That is, the market moves in such a way that the discount rates or implied volatility requested
- * for the same maturity DATE will be equal on both dates. <p>
+ * Computes the difference in present value between one day and the next, without volatility or rate slide. That is, the market moves in such a way that the
+ * discount rates or implied volatility requested for the same maturity DATE will be equal on both dates.
+ * <p>
  *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
-//TODO Rethink daysForward as it is only safely handles 1/-1.
+// TODO Rethink daysForward as it is only safely handles 1/-1.
 @Deprecated
 public final class ConstantSpreadHorizonThetaCalculator {
   /** Rolls down a yield curve */
@@ -57,7 +57,8 @@ public final class ConstantSpreadHorizonThetaCalculator {
   /** Rolls down swaption data (curves and surface) */
   private static final ConstantSpreadSwaptionBlackRolldown SWAPTION_ROLLDOWN = ConstantSpreadSwaptionBlackRolldown.getInstance();
   /** Rolls down interest rate future option data (curves and surface) */
-  private static final ConstantSpreadInterestRateFutureOptionBlackDataRolldown IR_FUTURE_OPTION_ROLLDOWN = ConstantSpreadInterestRateFutureOptionBlackDataRolldown.getInstance();
+  private static final ConstantSpreadInterestRateFutureOptionBlackDataRolldown IR_FUTURE_OPTION_ROLLDOWN =
+      ConstantSpreadInterestRateFutureOptionBlackDataRolldown.getInstance();
   /** Rolls down FX option data (surfaces and surface) */
   private static final ConstantSpreadFXOptionBlackRolldown FX_OPTION_ROLLDOWN = ConstantSpreadFXOptionBlackRolldown.getInstance();
   /** Singleton instance */
@@ -65,6 +66,7 @@ public final class ConstantSpreadHorizonThetaCalculator {
 
   /**
    * Gets the singleton instance.
+   *
    * @return The instance
    */
   public static ConstantSpreadHorizonThetaCalculator getInstance() {
@@ -79,12 +81,19 @@ public final class ConstantSpreadHorizonThetaCalculator {
 
   /**
    * Calculates the theta for a swap without rate slide. This method does not take holidays into account.
-   * @param definition The swap definition, not null
-   * @param date The calculation date, not null
-   * @param yieldCurveNames The yield curve names, not null
-   * @param data The initial yield curve data, not null
-   * @param fixingSeries The fixing series, not null
-   * @param daysForward The number of days to roll forward, must be +/-1
+   *
+   * @param definition
+   *          The swap definition, not null
+   * @param date
+   *          The calculation date, not null
+   * @param yieldCurveNames
+   *          The yield curve names, not null
+   * @param data
+   *          The initial yield curve data, not null
+   * @param fixingSeries
+   *          The fixing series, not null
+   * @param daysForward
+   *          The number of days to roll forward, must be +/-1
    * @return The theta
    */
   public MultipleCurrencyAmount getTheta(final SwapDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames, final YieldCurveBundle data,
@@ -109,13 +118,21 @@ public final class ConstantSpreadHorizonThetaCalculator {
 
   /**
    * Calculates the theta for a swap without rate slide. This method takes holidays into account when rolling forward.
-   * @param definition The swap definition, not null
-   * @param date The calculation date, not null
-   * @param yieldCurveNames The yield curve names, not null
-   * @param data The initial yield curve data, not null
-   * @param fixingSeries The fixing series, not null
-   * @param daysForward The number of days to roll forward, must be +/-1
-   * @param calendar The holiday calendar, not null
+   *
+   * @param definition
+   *          The swap definition, not null
+   * @param date
+   *          The calculation date, not null
+   * @param yieldCurveNames
+   *          The yield curve names, not null
+   * @param data
+   *          The initial yield curve data, not null
+   * @param fixingSeries
+   *          The fixing series, not null
+   * @param daysForward
+   *          The number of days to roll forward, must be +/-1
+   * @param calendar
+   *          The holiday calendar, not null
    * @return The theta
    */
   public MultipleCurrencyAmount getTheta(final SwapDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames, final YieldCurveBundle data,
@@ -151,11 +168,17 @@ public final class ConstantSpreadHorizonThetaCalculator {
 
   /**
    * Calculates the theta for a fixed / ibor physically-settled swaption without volatility or rate slide.
-   * @param definition The swap definition, not null
-   * @param date The calculation date, not null
-   * @param yieldCurveNames The yield curve names, not null
-   * @param data The initial yield curve data, not null
-   * @param daysForward The number of days to roll forward, must be +/-1
+   *
+   * @param definition
+   *          The swap definition, not null
+   * @param date
+   *          The calculation date, not null
+   * @param yieldCurveNames
+   *          The yield curve names, not null
+   * @param data
+   *          The initial yield curve data, not null
+   * @param daysForward
+   *          The number of days to roll forward, must be +/-1
    * @return The theta
    */
   public MultipleCurrencyAmount getTheta(final SwaptionPhysicalFixedIborDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
@@ -178,11 +201,17 @@ public final class ConstantSpreadHorizonThetaCalculator {
 
   /**
    * Calculates the theta for a fixed / ibor cash-settled swaption without volatility or rate slide.
-   * @param definition The swap definition, not null
-   * @param date The calculation date, not null
-   * @param yieldCurveNames The yield curve names, not null
-   * @param data The initial yield curve data, not null
-   * @param daysForward The number of days to roll forward, must be +/-1
+   *
+   * @param definition
+   *          The swap definition, not null
+   * @param date
+   *          The calculation date, not null
+   * @param yieldCurveNames
+   *          The yield curve names, not null
+   * @param data
+   *          The initial yield curve data, not null
+   * @param daysForward
+   *          The number of days to roll forward, must be +/-1
    * @return The theta
    */
   public MultipleCurrencyAmount getTheta(final SwaptionCashFixedIborDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
@@ -205,15 +234,23 @@ public final class ConstantSpreadHorizonThetaCalculator {
 
   /**
    * Calculates the theta for an interest rate future without rate slide.
-   * @param definition The swap definition, not null
-   * @param date The calculation date, not null
-   * @param yieldCurveNames The yield curve names, not null
-   * @param data The initial yield curve data, not null
-   * @param lastMarginPrice Last margin price, not null
-   * @param daysForward The number of days to roll forward, must be +/-1
+   *
+   * @param definition
+   *          The swap definition, not null
+   * @param date
+   *          The calculation date, not null
+   * @param yieldCurveNames
+   *          The yield curve names, not null
+   * @param data
+   *          The initial yield curve data, not null
+   * @param lastMarginPrice
+   *          Last margin price, not null
+   * @param daysForward
+   *          The number of days to roll forward, must be +/-1
    * @return The theta
    */
-  public MultipleCurrencyAmount getTheta(final InterestRateFutureTransactionDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames, final YieldCurveBundle data,
+  public MultipleCurrencyAmount getTheta(final InterestRateFutureTransactionDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
+      final YieldCurveBundle data,
       final Double lastMarginPrice, final int daysForward) {
     ArgumentChecker.notNull(definition, "definition");
     ArgumentChecker.notNull(date, "date");
@@ -234,15 +271,23 @@ public final class ConstantSpreadHorizonThetaCalculator {
 
   /**
    * Calculates the theta for an interest rate future option without volatility or rate slide.
-   * @param definition The swap definition, not null
-   * @param date The calculation date, not null
-   * @param yieldCurveNames The yield curve names, not null
-   * @param data The initial yield curve data, not null
-   * @param lastMarginPrice Last margin price, not null
-   * @param daysForward The number of days to roll forward, must be +/-1
+   *
+   * @param definition
+   *          The swap definition, not null
+   * @param date
+   *          The calculation date, not null
+   * @param yieldCurveNames
+   *          The yield curve names, not null
+   * @param data
+   *          The initial yield curve data, not null
+   * @param lastMarginPrice
+   *          Last margin price, not null
+   * @param daysForward
+   *          The number of days to roll forward, must be +/-1
    * @return The theta
    */
-  public MultipleCurrencyAmount getTheta(final InterestRateFutureOptionMarginTransactionDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
+  public MultipleCurrencyAmount getTheta(final InterestRateFutureOptionMarginTransactionDefinition definition, final ZonedDateTime date,
+      final String[] yieldCurveNames,
       final YieldCurveWithBlackCubeBundle data, final Double lastMarginPrice, final int daysForward) {
     ArgumentChecker.notNull(definition, "definition");
     ArgumentChecker.notNull(date, "date");
@@ -277,14 +322,21 @@ public final class ConstantSpreadHorizonThetaCalculator {
 
   /**
    * Calculates the theta for a FX spot or forward trade without rate slide.
-   * @param definition The swap definition, not null
-   * @param date The calculation date, not null
-   * @param yieldCurveNames The yield curve names, not null
-   * @param data The initial yield curve data, not null
-   * @param daysForward The number of days to roll forward, must be +/-1
+   *
+   * @param definition
+   *          The swap definition, not null
+   * @param date
+   *          The calculation date, not null
+   * @param yieldCurveNames
+   *          The yield curve names, not null
+   * @param data
+   *          The initial yield curve data, not null
+   * @param daysForward
+   *          The number of days to roll forward, must be +/-1
    * @return The theta
    */
-  public MultipleCurrencyAmount getTheta(final ForexDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames, final YieldCurveBundle data,
+  public MultipleCurrencyAmount getTheta(final ForexDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
+      final YieldCurveBundle data,
       final int daysForward) {
     ArgumentChecker.notNull(definition, "definition");
     ArgumentChecker.notNull(date, "date");
@@ -302,11 +354,17 @@ public final class ConstantSpreadHorizonThetaCalculator {
 
   /**
    * Calculates the theta for a vanilla FX option without volatility or rate slide.
-   * @param definition The swap definition, not null
-   * @param date The calculation date, not null
-   * @param yieldCurveNames The yield curve names, not null
-   * @param data The initial yield curve data, not null
-   * @param daysForward The number of days to roll forward, must be +/-1
+   *
+   * @param definition
+   *          The swap definition, not null
+   * @param date
+   *          The calculation date, not null
+   * @param yieldCurveNames
+   *          The yield curve names, not null
+   * @param data
+   *          The initial yield curve data, not null
+   * @param daysForward
+   *          The number of days to roll forward, must be +/-1
    * @return The theta
    */
   public MultipleCurrencyAmount getTheta(final ForexOptionVanillaDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
@@ -327,12 +385,19 @@ public final class ConstantSpreadHorizonThetaCalculator {
 
   /**
    * Calculates the theta for a digital FX option without volatility or rate slide.
-   * @param definition The swap definition, not null
-   * @param date The calculation date, not null
-   * @param yieldCurveNames The yield curve names, not null
-   * @param data The initial yield curve data, not null
-   * @param pvCalculator The present value calculator to use, not null
-   * @param daysForward The number of days to roll forward, must be +/-1
+   *
+   * @param definition
+   *          The swap definition, not null
+   * @param date
+   *          The calculation date, not null
+   * @param yieldCurveNames
+   *          The yield curve names, not null
+   * @param data
+   *          The initial yield curve data, not null
+   * @param pvCalculator
+   *          The present value calculator to use, not null
+   * @param daysForward
+   *          The number of days to roll forward, must be +/-1
    * @return The theta
    */
   public MultipleCurrencyAmount getTheta(final ForexOptionDigitalDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
@@ -352,9 +417,13 @@ public final class ConstantSpreadHorizonThetaCalculator {
   }
 
   /**
-   * Create a new time series with the same data up to tomorrow (tomorrow excluded) and with an extra data for tomorrow equal to the last value in the time series.
-   * @param fixingSeries The time series.
-   * @param tomorrow Tomorrow date.
+   * Create a new time series with the same data up to tomorrow (tomorrow excluded) and with an extra data for tomorrow equal to the last value in the time
+   * series.
+   *
+   * @param fixingSeries
+   *          The time series.
+   * @param tomorrow
+   *          Tomorrow date.
    * @return The time series with added data.
    */
   private ZonedDateTimeDoubleTimeSeries[] getDateShiftedTimeSeries(final ZonedDateTimeDoubleTimeSeries[] fixingSeries, final ZonedDateTime tomorrow) {
@@ -382,8 +451,11 @@ public final class ConstantSpreadHorizonThetaCalculator {
 
   /**
    * Subtracts two multiple currency amounts.
-   * @param a The first multiple currency amount
-   * @param b The second multiple currency amount
+   *
+   * @param a
+   *          The first multiple currency amount
+   * @param b
+   *          The second multiple currency amount
    * @return The difference
    */
   private MultipleCurrencyAmount subtract(final MultipleCurrencyAmount a, final MultipleCurrencyAmount b) {

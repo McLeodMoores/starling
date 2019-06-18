@@ -59,7 +59,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Base class for a range of functions computing values on an IRFuturesOption using the Black Model
+ * Base class for a range of functions computing values on an IRFuturesOption using the Black Model.
  *
  * @deprecated Use classes that descend from {@link BlackDiscountingIRFutureOptionFunction}
  */
@@ -76,8 +76,10 @@ public abstract class InterestRateFutureOptionBlackFunction extends AbstractFunc
   private ConfigDBCurveCalculationConfigSource _curveCalculationConfigSource;
 
   /**
-   * @param valueRequirementName The value requirement name, not null
-   * @param setCurrencyProperty True if the result properties include {@link ValuePropertyNames#CURRENCY}
+   * @param valueRequirementName
+   *          The value requirement name, not null
+   * @param setCurrencyProperty
+   *          True if the result properties include {@link ValuePropertyNames#CURRENCY}
    */
   public InterestRateFutureOptionBlackFunction(final String valueRequirementName, final boolean setCurrencyProperty) {
     ArgumentChecker.notNull(valueRequirementName, "value requirement name");
@@ -88,7 +90,8 @@ public abstract class InterestRateFutureOptionBlackFunction extends AbstractFunc
   /**
    * Gets the interest rate future option trade converter.
    *
-   * @param context The compilation context
+   * @param context
+   *          The compilation context
    * @return The converter
    */
   private static InterestRateFutureOptionTradeConverterDeprecated getConverter(final FunctionCompilationContext context) {
@@ -96,14 +99,16 @@ public abstract class InterestRateFutureOptionBlackFunction extends AbstractFunc
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context); // TODO [PLAT-5966] Remove
-    return new InterestRateFutureOptionTradeConverterDeprecated(new InterestRateFutureOptionSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, securitySource,
-        context.getComputationTargetResolver().getVersionCorrection()));
+    return new InterestRateFutureOptionTradeConverterDeprecated(
+        new InterestRateFutureOptionSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, securitySource,
+            context.getComputationTargetResolver().getVersionCorrection()));
   }
 
   /**
    * Gets the interest rate future option trade converter.
    *
-   * @param context The execution context
+   * @param context
+   *          The execution context
    * @return The converter
    */
   private static InterestRateFutureOptionTradeConverterDeprecated getConverter(final FunctionExecutionContext context) {
@@ -111,8 +116,9 @@ public abstract class InterestRateFutureOptionBlackFunction extends AbstractFunc
     final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(context);
     final ConventionBundleSource conventionSource = OpenGammaExecutionContext.getConventionBundleSource(context);
     final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(context);
-    return new InterestRateFutureOptionTradeConverterDeprecated(new InterestRateFutureOptionSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, securitySource,
-        context.getComputationTargetResolver().getVersionCorrection()));
+    return new InterestRateFutureOptionTradeConverterDeprecated(
+        new InterestRateFutureOptionSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, securitySource,
+            context.getComputationTargetResolver().getVersionCorrection()));
   }
 
   @Override
@@ -125,7 +131,8 @@ public abstract class InterestRateFutureOptionBlackFunction extends AbstractFunc
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final HistoricalTimeSeriesBundle timeSeries = HistoricalTimeSeriesFunctionUtils.getHistoricalTimeSeriesInputs(executionContext, inputs);
@@ -134,7 +141,9 @@ public abstract class InterestRateFutureOptionBlackFunction extends AbstractFunc
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final Currency currency = FinancialSecurityUtils.getCurrency(security);
     final String surfaceName = desiredValue.getConstraint(ValuePropertyNames.SURFACE);
-    final String surfaceNameWithPrefix = surfaceName + "_" + IRFutureOptionFunctionHelper.getFutureOptionPrefix(target); // Done to enable standard and midcurve options to share the same default name
+    final String surfaceNameWithPrefix = surfaceName + "_" + IRFutureOptionFunctionHelper.getFutureOptionPrefix(target); // Done to enable standard and midcurve
+                                                                                                                         // options to share the same default
+                                                                                                                         // name
     final String curveCalculationConfigName = desiredValue.getConstraint(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
@@ -207,8 +216,8 @@ public abstract class InterestRateFutureOptionBlackFunction extends AbstractFunc
     requirements.addAll(YieldCurveFunctionUtils.getCurveRequirements(curveCalculationConfig, _curveCalculationConfigSource));
     requirements.add(getVolatilityRequirement(surfaceName, currency));
     try {
-      final Set<ValueRequirement> tsRequirements =
-          _dataConverter.getConversionTimeSeriesRequirements(trade.getSecurity(), getConverter(context).convert(trade));
+      final Set<ValueRequirement> tsRequirements = _dataConverter.getConversionTimeSeriesRequirements(trade.getSecurity(),
+          getConverter(context).convert(trade));
       if (tsRequirements != null) {
         requirements.addAll(tsRequirements);
       }
@@ -222,19 +231,24 @@ public abstract class InterestRateFutureOptionBlackFunction extends AbstractFunc
   /**
    * Calculates the result.
    *
-   * @param irFutureOption The IR future option
-   * @param data The data used in pricing
-   * @param spec The value specification of the result
-   * @param desiredValues The constraints on the function
+   * @param irFutureOption
+   *          The IR future option
+   * @param data
+   *          The data used in pricing
+   * @param spec
+   *          The value specification of the result
+   * @param desiredValues
+   *          The constraints on the function
    * @return The result
    */
-  protected abstract Set<ComputedValue> getResult(final InstrumentDerivative irFutureOption, final YieldCurveWithBlackCubeBundle data, final ValueSpecification spec,
+  protected abstract Set<ComputedValue> getResult(InstrumentDerivative irFutureOption, YieldCurveWithBlackCubeBundle data, ValueSpecification spec,
       Set<ValueRequirement> desiredValues);
 
   /**
    * Gets the result properties.
    *
-   * @param currency The currency
+   * @param currency
+   *          The currency
    * @return The result properties
    */
   protected ValueProperties.Builder getResultProperties(final String currency) {
@@ -249,8 +263,10 @@ public abstract class InterestRateFutureOptionBlackFunction extends AbstractFunc
   /**
    * Gets the volatility surface requirement.
    *
-   * @param surface The surface name
-   * @param currency The currency
+   * @param surface
+   *          The surface name
+   * @param currency
+   *          The currency
    * @return The volatility surface requirement
    */
   private static ValueRequirement getVolatilityRequirement(final String surface, final Currency currency) {

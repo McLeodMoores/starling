@@ -44,16 +44,25 @@ public class CalendarSwapNodeConverter extends CurveNodeVisitorAdapter<Instrumen
   private final ConfigSourceQuery<DateSet> _calendarQuery;
 
   /**
-   * @param securitySource The security source, not null
-   * @param conventionSource The convention source, not null
-   * @param holidaySource The holiday source, not null
-   * @param regionSource The region source, not null
-   * @param marketData The market data, not null
-   * @param dataId The id of the market data, not null
-   * @param valuationTime The valuation time, not null
-   * @param calendarQuery The calendar config query, not null.
+   * @param securitySource
+   *          The security source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param regionSource
+   *          The region source, not null
+   * @param marketData
+   *          The market data, not null
+   * @param dataId
+   *          The id of the market data, not null
+   * @param valuationTime
+   *          The valuation time, not null
+   * @param calendarQuery
+   *          The calendar config query, not null.
    */
-  public CalendarSwapNodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource, final RegionSource regionSource,
+  public CalendarSwapNodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource,
+      final RegionSource regionSource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime, final ConfigSourceQuery<DateSet> calendarQuery) {
     ArgumentChecker.notNull(securitySource, "security source");
     ArgumentChecker.notNull(conventionSource, "convention source");
@@ -86,5 +95,5 @@ public class CalendarSwapNodeConverter extends CurveNodeVisitorAdapter<Instrumen
     return NodeConverterUtils.getSwapCalendarDefinition(payLegConvention, receiveLegConvention, unadjustedStartDate, calendarSwapNode.getStartDateNumber(),
         calendarSwapNode.getEndDateNumber(), calendar, _securitySource, _regionSource, _holidaySource, _conventionSource, _marketData, _dataId, _valuationTime);
   }
-  
+
 }

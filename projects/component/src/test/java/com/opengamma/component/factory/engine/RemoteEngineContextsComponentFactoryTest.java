@@ -44,7 +44,7 @@ public class RemoteEngineContextsComponentFactoryTest {
     factory.setClassifier("test");
     factory.setStrict(true);
     final ComponentRepository repo = new ComponentRepository(null);
-    final LinkedHashMap<String, String> localConfiguration = new LinkedHashMap<String, String>();
+    final LinkedHashMap<String, String> localConfiguration = new LinkedHashMap<>();
     localConfiguration.put("ignorePnlRequirementsGatherer", "true"); // TODO: Implement this properly
     localConfiguration.put("ignoreRiskFactorsGatherer", "true"); // TODO: Implement this properly
     localConfiguration.put("permissive", "false");

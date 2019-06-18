@@ -35,13 +35,17 @@ public class LiveDataDeltaCalculator {
   private boolean _done; // = false
 
   /**
-   * For the delta calculation to be meaningful, the caches should be populated with LiveData inputs required to compute the given dependency
-   * graph. See {@link DependencyNode#getRequiredLiveData()} and {@link ViewComputationCache#getValue(ValueSpecification)}.
+   * For the delta calculation to be meaningful, the caches should be populated with LiveData inputs required to compute the given dependency graph. See
+   * {@link DependencyNode#getInputValue(int)} and {@link ViewComputationCache#getValue(ValueSpecification)}.
    *
-   * @param graph Dependency graph
-   * @param cache Contains CurrentLiveDataInputs (for the given graph)
-   * @param previousCache Contains PreviousLiveDataInputs (for the given graph)
-   * @param dirtySpecifications Value specifications that are to be considered "changed"
+   * @param graph
+   *          Dependency graph
+   * @param cache
+   *          Contains CurrentLiveDataInputs (for the given graph)
+   * @param previousCache
+   *          Contains PreviousLiveDataInputs (for the given graph)
+   * @param dirtySpecifications
+   *          Value specifications that are to be considered "changed"
    */
   public LiveDataDeltaCalculator(final DependencyGraph graph, final ViewComputationCache cache, final ViewComputationCache previousCache,
       final Set<ValueSpecification> dirtySpecifications) {

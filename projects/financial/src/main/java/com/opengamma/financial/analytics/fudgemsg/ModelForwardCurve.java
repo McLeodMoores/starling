@@ -30,7 +30,7 @@ import com.opengamma.analytics.math.curve.Curve;
   }
 
   /**
-   * Fudge builder for {@code ForwardCurve}
+   * Fudge builder for {@code ForwardCurve}.
    */
   @FudgeBuilderFor(ForwardCurve.class)
   public static final class ForwardCurveBuilder extends AbstractFudgeBuilder<ForwardCurve> {
@@ -55,7 +55,7 @@ import com.opengamma.analytics.math.curve.Curve;
   }
 
   /**
-   * Fudge builder for {@code ForwardCurveYieldImplied}
+   * Fudge builder for {@code ForwardCurveYieldImplied}.
    */
   @FudgeBuilderFor(ForwardCurveYieldImplied.class)
   public static final class ForwardCurveYieldImpliedBuilder extends AbstractFudgeBuilder<ForwardCurveYieldImplied> {
@@ -80,7 +80,7 @@ import com.opengamma.analytics.math.curve.Curve;
   }
 
   /**
-   * Fudge builder for {@code ForwardCurveAffineDividends}
+   * Fudge builder for {@code ForwardCurveAffineDividends}.
    */
   @FudgeBuilderFor(ForwardCurveAffineDividends.class)
   public static final class ForwardCurveAffineDividendsBuilder extends AbstractFudgeBuilder<ForwardCurveAffineDividends> {

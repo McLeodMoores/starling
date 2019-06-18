@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate;
@@ -64,7 +64,7 @@ public final class Converters {
     }
     return new ExternalIdBean(identifier.getScheme().getName(), identifier.getValue());
   }
-  
+
   public static CreditDefaultSwapIndexComponent cdsIndexComponentBeanToCDSIndexComponent(final CDSIndexComponentBean componentBean) {
     final ExternalId obligor = externalIdBeanToExternalId(componentBean.getObligor());
     final ExternalId bondId = externalIdBeanToExternalId(componentBean.getBondId());
@@ -116,15 +116,14 @@ public final class Converters {
   }
 
   public static ZonedDateTime zonedDateTimeBeanToDateTimeWithZone(final ZonedDateTimeBean date) {
-    if ((date == null) || (date.getDate() == null)) {
+    if (date == null || date.getDate() == null) {
       return null;
     }
     final long epochSeconds = date.getDate().getTime() / 1000;
     if (date.getZone() == null) {
       return ZonedDateTime.ofInstant(Instant.ofEpochSecond(epochSeconds), ZoneOffset.UTC);
-    } else {
-      return ZonedDateTime.ofInstant(Instant.ofEpochSecond(epochSeconds), ZoneId.of(date.getZone()));
     }
+    return ZonedDateTime.ofInstant(Instant.ofEpochSecond(epochSeconds), ZoneId.of(date.getZone()));
   }
 
   public static ZonedDateTimeBean dateTimeWithZoneToZonedDateTimeBean(final ZonedDateTime zdt) {
@@ -158,7 +157,7 @@ public final class Converters {
     }
     return SimpleFrequencyFactory.of(frequencyBean.getName());
   }
-  
+
   public static void validateFrequency(final String name) {
     SimpleFrequencyFactory.of(name);
   }

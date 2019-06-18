@@ -8,7 +8,6 @@ package com.opengamma.masterdb.security.hibernate.swap;
 
 import com.opengamma.financial.security.swap.FloatingRateType;
 import com.opengamma.financial.security.swap.InterpolationMethod;
-import com.opengamma.financial.security.swap.SwapLeg;
 import com.opengamma.financial.security.swap.VarianceSwapType;
 import com.opengamma.masterdb.security.hibernate.BusinessDayConventionBean;
 import com.opengamma.masterdb.security.hibernate.DayCountBean;
@@ -16,7 +15,8 @@ import com.opengamma.masterdb.security.hibernate.ExternalIdBean;
 import com.opengamma.masterdb.security.hibernate.FrequencyBean;
 
 /**
- * A Hibernate bean representation of {@link SwapLeg}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.swap.SwapLeg}.
  */
 public class SwapLegBean {
 

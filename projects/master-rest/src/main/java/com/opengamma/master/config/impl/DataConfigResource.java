@@ -56,8 +56,10 @@ public class DataConfigResource extends AbstractDataResource {
   /**
    * Creates the resource.
    *
-   * @param configsResource  the parent resource, not null
-   * @param configId  the config unique identifier, not null
+   * @param configsResource
+   *          the parent resource, not null
+   * @param configId
+   *          the config unique identifier, not null
    */
   public DataConfigResource(final DataConfigMasterResource configsResource, final ObjectId configId) {
     ArgumentChecker.notNull(configsResource, "configsResource");
@@ -66,7 +68,7 @@ public class DataConfigResource extends AbstractDataResource {
     _urlResourceId = configId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the configs resource.
@@ -86,7 +88,7 @@ public class DataConfigResource extends AbstractDataResource {
     return _urlResourceId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the config master.
@@ -97,7 +99,7 @@ public class DataConfigResource extends AbstractDataResource {
     return getConfigsResource().getConfigMaster();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public Response get(@QueryParam("versionAsOf") final String versionAsOf, @QueryParam("correctedTo") final String correctedTo) {
     final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
@@ -107,7 +109,7 @@ public class DataConfigResource extends AbstractDataResource {
 
   @POST
   public Response update(@Context final UriInfo uriInfo, final ConfigDocument request) {
-    if (getUrlConfigId().equals(request.getUniqueId().getObjectId()) == false) {
+    if (!getUrlConfigId().equals(request.getUniqueId().getObjectId())) {
       throw new IllegalArgumentException("Document objectId does not match URI");
     }
     final ConfigDocument result = getConfigMaster().update(request);
@@ -120,12 +122,12 @@ public class DataConfigResource extends AbstractDataResource {
     getConfigMaster().remove(getUrlConfigId().atLatestVersion());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("versions")
   public Response history(@Context final UriInfo uriInfo) {
     final ConfigHistoryRequest<?> request = RestUtils.decodeQueryParams(uriInfo, ConfigHistoryRequest.class);
-    if (getUrlConfigId().equals(request.getObjectId()) == false) {
+    if (!getUrlConfigId().equals(request.getObjectId())) {
       throw new IllegalArgumentException("Document objectId does not match URI");
     }
     final ConfigHistoryResult<?> result = getConfigMaster().history(request);
@@ -162,7 +164,7 @@ public class DataConfigResource extends AbstractDataResource {
   }
 
   @PUT
-  public <T> Response replaceAllVersions(final List<ConfigDocument> replacementDocuments) {
+  public Response replaceAllVersions(final List<ConfigDocument> replacementDocuments) {
     final ObjectId objectId = getUrlConfigId();
     final List<UniqueId> result = getConfigMaster().replaceAllVersions(objectId, replacementDocuments);
     return responseOkObject(result);

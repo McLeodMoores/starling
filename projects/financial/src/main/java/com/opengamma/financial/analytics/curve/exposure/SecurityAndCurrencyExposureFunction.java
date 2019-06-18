@@ -36,9 +36,10 @@ public class SecurityAndCurrencyExposureFunction implements ExposureFunction {
   private final SecurityAndCurrencyVisitor _visitor;
 
   /**
-   * Constructor that uses a security source to look up the underlying contract for the security type and currency, if
-   * necessary.
-   * @param securitySource the security source containing the security definitions.
+   * Constructor that uses a security source to look up the underlying contract for the security type and currency, if necessary.
+   *
+   * @param securitySource
+   *          the security source containing the security definitions.
    */
   public SecurityAndCurrencyExposureFunction(final SecuritySource securitySource) {
     _visitor = new SecurityAndCurrencyVisitor(ArgumentChecker.notNull(securitySource, "security source"));
@@ -62,7 +63,7 @@ public class SecurityAndCurrencyExposureFunction implements ExposureFunction {
 
     private final SecuritySource _securitySource;
 
-    public DefaultSecurityAndCurrencyVisitor(final SecuritySource securitySource) {
+    DefaultSecurityAndCurrencyVisitor(final SecuritySource securitySource) {
       _securitySource = ArgumentChecker.notNull(securitySource, "securitySource");
     }
 
@@ -86,7 +87,7 @@ public class SecurityAndCurrencyExposureFunction implements ExposureFunction {
 
     private final SecuritySource _securitySource;
 
-    public SecurityAndCurrencyVisitor(final SecuritySource securitySource) {
+    SecurityAndCurrencyVisitor(final SecuritySource securitySource) {
       super(new DefaultSecurityAndCurrencyVisitor(ArgumentChecker.notNull(securitySource, "securitySource")));
       _securitySource = securitySource;
     }

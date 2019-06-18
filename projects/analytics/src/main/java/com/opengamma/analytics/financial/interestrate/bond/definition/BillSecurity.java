@@ -7,7 +7,6 @@ package com.opengamma.analytics.financial.interestrate.bond.definition;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
@@ -65,15 +64,25 @@ public class BillSecurity implements InstrumentDerivative {
 
   /**
    * Constructor from all details. The legal entity contains only the issuer name.
-   * @param currency The bill currency.
-   * @param settlementTime The bill time to settlement.
-   * @param endTime The bill end or maturity time.
-   * @param notional The bill nominal.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param accrualFactor The accrual factor in the bill day count between settlement and maturity.
-   * @param issuer The bill issuer name.
-   * @param creditCurveName The name of the curve used for the bill cash flows (issuer credit).
-   * @param discountingCurveName The name of the curve used for settlement amount discounting.
+   * 
+   * @param currency
+   *          The bill currency.
+   * @param settlementTime
+   *          The bill time to settlement.
+   * @param endTime
+   *          The bill end or maturity time.
+   * @param notional
+   *          The bill nominal.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param accrualFactor
+   *          The accrual factor in the bill day count between settlement and maturity.
+   * @param issuer
+   *          The bill issuer name.
+   * @param creditCurveName
+   *          The name of the curve used for the bill cash flows (issuer credit).
+   * @param discountingCurveName
+   *          The name of the curve used for settlement amount discounting.
    * @deprecated Use the constructor that does not take curve names
    */
   @Deprecated
@@ -85,15 +94,25 @@ public class BillSecurity implements InstrumentDerivative {
 
   /**
    * Constructor from all details.
-   * @param currency The bill currency.
-   * @param settlementTime The bill time to settlement.
-   * @param endTime The bill end or maturity time.
-   * @param notional The bill nominal.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param accrualFactor The accrual factor in the bill day count between settlement and maturity.
-   * @param issuer The bill issuer name.
-   * @param creditCurveName The name of the curve used for the bill cash flows (issuer credit).
-   * @param discountingCurveName The name of the curve used for settlement amount discounting.
+   * 
+   * @param currency
+   *          The bill currency.
+   * @param settlementTime
+   *          The bill time to settlement.
+   * @param endTime
+   *          The bill end or maturity time.
+   * @param notional
+   *          The bill nominal.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param accrualFactor
+   *          The accrual factor in the bill day count between settlement and maturity.
+   * @param issuer
+   *          The bill issuer name.
+   * @param creditCurveName
+   *          The name of the curve used for the bill cash flows (issuer credit).
+   * @param discountingCurveName
+   *          The name of the curve used for settlement amount discounting.
    * @deprecated Use the constructor that does not take curve names
    */
   @Deprecated
@@ -121,28 +140,45 @@ public class BillSecurity implements InstrumentDerivative {
 
   /**
    * Constructor from all details. The legal entity contains only the issuer name.
-   * @param currency The bill currency.
-   * @param settlementTime The bill time to settlement.
-   * @param endTime The bill end or maturity time.
-   * @param notional The bill nominal.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param accrualFactor The accrual factor in the bill day count between settlement and maturity.
-   * @param issuer The bill issuer name.
+   * 
+   * @param currency
+   *          The bill currency.
+   * @param settlementTime
+   *          The bill time to settlement.
+   * @param endTime
+   *          The bill end or maturity time.
+   * @param notional
+   *          The bill nominal.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param accrualFactor
+   *          The accrual factor in the bill day count between settlement and maturity.
+   * @param issuer
+   *          The bill issuer name.
    */
-  public BillSecurity(final Currency currency, final double settlementTime, final double endTime, final double notional, final YieldConvention yieldConvention, final double accrualFactor,
+  public BillSecurity(final Currency currency, final double settlementTime, final double endTime, final double notional, final YieldConvention yieldConvention,
+      final double accrualFactor,
       final String issuer) {
     this(currency, settlementTime, endTime, notional, yieldConvention, accrualFactor, new LegalEntity(null, issuer, null, null, null));
   }
 
   /**
    * Constructor from all details.
-   * @param currency The bill currency.
-   * @param settlementTime The bill time to settlement.
-   * @param endTime The bill end or maturity time.
-   * @param notional The bill nominal.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param accrualFactor The accrual factor in the bill day count between settlement and maturity.
-   * @param issuer The bill issuer name.
+   * 
+   * @param currency
+   *          The bill currency.
+   * @param settlementTime
+   *          The bill time to settlement.
+   * @param endTime
+   *          The bill end or maturity time.
+   * @param notional
+   *          The bill nominal.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param accrualFactor
+   *          The accrual factor in the bill day count between settlement and maturity.
+   * @param issuer
+   *          The bill issuer name.
    */
   public BillSecurity(final Currency currency, final double settlementTime, final double endTime, final double notional,
       final YieldConvention yieldConvention, final double accrualFactor,
@@ -167,6 +203,7 @@ public class BillSecurity implements InstrumentDerivative {
 
   /**
    * Get the bill currency.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -175,6 +212,7 @@ public class BillSecurity implements InstrumentDerivative {
 
   /**
    * Gets the bill time to settlement.
+   * 
    * @return The time.
    */
   public double getSettlementTime() {
@@ -183,6 +221,7 @@ public class BillSecurity implements InstrumentDerivative {
 
   /**
    * Gets the bill end or maturity time.
+   * 
    * @return The time.
    */
   public double getEndTime() {
@@ -191,6 +230,7 @@ public class BillSecurity implements InstrumentDerivative {
 
   /**
    * Gets the bill notional.
+   * 
    * @return The notional.
    */
   public double getNotional() {
@@ -199,6 +239,7 @@ public class BillSecurity implements InstrumentDerivative {
 
   /**
    * Gets the yield (to maturity) computation convention.
+   * 
    * @return The convention.
    */
   public YieldConvention getYieldConvention() {
@@ -207,6 +248,7 @@ public class BillSecurity implements InstrumentDerivative {
 
   /**
    * Gets the accrual factor in the bill day count between settlement and maturity.
+   * 
    * @return The accrual factor.
    */
   public double getAccrualFactor() {
@@ -215,6 +257,7 @@ public class BillSecurity implements InstrumentDerivative {
 
   /**
    * Gets the bill issuer name.
+   * 
    * @return The name.
    */
   public String getIssuer() {
@@ -223,6 +266,7 @@ public class BillSecurity implements InstrumentDerivative {
 
   /**
    * Gets the issuer.
+   * 
    * @return The issuer
    */
   public LegalEntity getIssuerEntity() {
@@ -231,6 +275,7 @@ public class BillSecurity implements InstrumentDerivative {
 
   /**
    * Gets the bill issuer name and currency.
+   * 
    * @return The name/currency.
    * @deprecated This information is no longer used in the curve providers.
    */
@@ -241,6 +286,7 @@ public class BillSecurity implements InstrumentDerivative {
 
   /**
    * Gets the name of the curve used for settlement amount discounting.
+   * 
    * @return The name.
    * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
@@ -254,8 +300,9 @@ public class BillSecurity implements InstrumentDerivative {
 
   /**
    * Gets the name of the curve used for the bill cash flows (issuer credit).
+   *
    * @return The name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getCreditCurveName() {

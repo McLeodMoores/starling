@@ -87,15 +87,15 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
   //-------------------------------------------------------------------------
   @Override
   protected void doSetUp() {
-    MapComputationTargetResolver computationTargetResolver = new MapComputationTargetResolver();
+    final MapComputationTargetResolver computationTargetResolver = new MapComputationTargetResolver();
     _batchMaster = new DbBatchMaster(getDbConnector(), computationTargetResolver);
     _batchWriter = new DbBatchWriter(_batchMaster.getDbConnector(), computationTargetResolver);
 
     final String calculationConfigName = "config_1";
 
-    EquitySecurity aapl = new EquitySecurity("EXCH", "EXCH_CODE", "APPLE", Currency.USD);
+    final EquitySecurity aapl = new EquitySecurity("EXCH", "EXCH_CODE", "APPLE", Currency.USD);
     aapl.setUniqueId(UniqueId.of("Sec", "APPL"));
-    ComputationTarget target = new ComputationTarget(ComputationTargetType.SECURITY, aapl);
+    final ComputationTarget target = new ComputationTarget(ComputationTargetType.SECURITY, aapl);
     computationTargetResolver.addTarget(target);
 
     _compTargetSpec = target.getLeafSpecification();
@@ -120,9 +120,8 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
       public Collection<com.opengamma.engine.ComputationTargetSpecification> getComputationTargets(final String calcConfName) {
         if (calcConfName.equals(calculationConfigName)) {
           return Arrays.asList(ComputationTargetSpecification.of(UniqueId.of("Primitive", "Value")), _compTargetSpec);
-        } else {
-          return emptyList();
         }
+        return emptyList();
       }
 
       @Override
@@ -181,8 +180,8 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
     specs.add(ComputationTargetSpecification.of(UniqueId.of("BUID", "EQ12347", "2")));
 
 
-    final Map<ComputationTargetSpecification, Long> compTargetSpecIdx = new HashMap<ComputationTargetSpecification, Long>();
-    final Map<Long, ComputationTargetSpecification> reversedCompTargetSpecIdx = new HashMap<Long, ComputationTargetSpecification>();
+    final Map<ComputationTargetSpecification, Long> compTargetSpecIdx = new HashMap<>();
+    final Map<Long, ComputationTargetSpecification> reversedCompTargetSpecIdx = new HashMap<>();
 
 
     _batchMaster.getDbConnector().getTransactionTemplate().execute(new TransactionCallback<Void>() {
@@ -197,8 +196,9 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
         return null;
       }
     });
+    _batchMaster.getDbConnector().getHibernateTemplate().setCheckWriteOperations(false);
 
-    Set<MarketDataValue> values = new HashSet<MarketDataValue>();
+    Set<MarketDataValue> values = new HashSet<>();
     for (final ComputationTargetSpecification spec : specs) {
       values.add(new MarketDataValue(spec, 123.45, "value_name"));
     }
@@ -229,7 +229,7 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
     assertEquals(3, marketDataValues.size());
 
     // should update 2, add 1
-    values = new HashSet<MarketDataValue>();
+    values = new HashSet<>();
     values.add(new MarketDataValue(ComputationTargetSpecification.of(UniqueId.of("BUID", "EQ12345", null)), 123.46, "value_name"));
     values.add(new MarketDataValue(ComputationTargetSpecification.of(UniqueId.of("BUID", "EQ12347", "2")), 123.47, "value_name"));
     values.add(new MarketDataValue(ComputationTargetSpecification.of(UniqueId.of("BUID", "EQ12348")), 123.45, "value_name"));
@@ -292,14 +292,14 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
     //assertEquals(ZonedDateTime.ofInstant(run2.getCreateInstant(), ZoneOffset.UTC).getZone().toString(), props.getId("timeZone"));
     //assertEquals(ZonedDateTime.ofInstant(run2.getCreateInstant(), ZoneOffset.UTC).toLocalTime().toString(), props.getId("staticDataTime"));
     //assertEquals(ZonedDateTime.ofInstant(run2.getCreateInstant(), ZoneOffset.UTC).toLocalTime().toString(), props.getId("configDbTime"));
-//    assertEquals("Manual run2 started on "
-//        + run2.getCreateInstant().toString()
-//        + " by "
-//        + System.getProperty("user.name"),
-//        props.getId("reason"));
-//    assertEquals(run2.getCreateInstant().toString(), props.getId("valuationInstant"));
-//    assertEquals(run2.getCreateInstant().toInstant().toString(), props.getId("configDbInstant"));
-//    assertEquals(run2.getCreateInstant().toString(), props.getId("staticDataInstant"));
+    //    assertEquals("Manual run2 started on "
+    //        + run2.getCreateInstant().toString()
+    //        + " by "
+    //        + System.getProperty("user.name"),
+    //        props.getId("reason"));
+    //    assertEquals(run2.getCreateInstant().toString(), props.getId("valuationInstant"));
+    //    assertEquals(run2.getCreateInstant().toInstant().toString(), props.getId("configDbInstant"));
+    //    assertEquals(run2.getCreateInstant().toString(), props.getId("staticDataInstant"));
     //assertEquals(run2.getCreateInstant().toInstant(), _riskRun.getOriginalCreationTime());
 
     // getId
@@ -361,7 +361,7 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
       @Override
       public Void doInTransaction(final TransactionStatus status) {
         final HbComputationTargetSpecification portfolio = _batchWriter.getOrCreateComputationTargetInTransaction(
-          new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, uniqueId));
+            new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, uniqueId));
 
 
         assertNotNull(portfolio);
@@ -369,11 +369,11 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
         assertEquals(uniqueId, portfolio.getUniqueId());
 
         final HbComputationTargetSpecification position = _batchWriter.getComputationTargetIntransaction(
-          new ComputationTargetSpecification(ComputationTargetType.POSITION, uniqueId));
+            new ComputationTargetSpecification(ComputationTargetType.POSITION, uniqueId));
         assertNull(position);
 
         final HbComputationTargetSpecification security = _batchWriter.getComputationTargetIntransaction(
-          new ComputationTargetSpecification(ComputationTargetType.SECURITY, uniqueId));
+            new ComputationTargetSpecification(ComputationTargetType.SECURITY, uniqueId));
         assertNull(security);
 
         final HbComputationTargetSpecification primitive = _batchWriter.getComputationTargetIntransaction(
@@ -401,7 +401,7 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
       @Override
       public Void doInTransaction(final TransactionStatus status) {
         final HbComputationTargetSpecification security = _batchWriter.getOrCreateComputationTargetInTransaction(
-          new ComputationTargetSpecification(ComputationTargetType.SECURITY, uniqueId));
+            new ComputationTargetSpecification(ComputationTargetType.SECURITY, uniqueId));
 
         assertEquals(ComputationTargetType.SECURITY, security.getType());
 
@@ -428,7 +428,7 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
       @Override
       public Void doInTransaction(final TransactionStatus status) {
         HbComputationTargetSpecification security = _batchWriter.getOrCreateComputationTargetInTransaction(
-          new ComputationTargetSpecification(ComputationTargetType.SECURITY, uniqueId));
+            new ComputationTargetSpecification(ComputationTargetType.SECURITY, uniqueId));
         assertEquals(ComputationTargetType.SECURITY, security.getType());
 
         final com.opengamma.engine.ComputationTarget target = new com.opengamma.engine.ComputationTarget(ComputationTargetType.SECURITY, mockSecurity);
@@ -533,8 +533,8 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
     final ComputedValueResult cvr = new ComputedValueResult(valueSpec, 1000.0, AggregatedExecutionLog.EMPTY, null, null, InvocationResult.SUCCESS);
     //cvr.setRequirements(newHashSet(_requirement));
     result.addValue("config_1", cvr);
-    
-    // Result will be skipped but should not cause any exception to be thrown 
+
+    // Result will be skipped but should not cause any exception to be thrown
     _batchMaster.addJobResults(run.getObjectId(), result);
   }
 
@@ -549,7 +549,7 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
     result.addValue("config_1", cvr);
     _batchMaster.addJobResults(run.getObjectId(), result);
   }
-  
+
   @Test
   public void truncateSmallValueToZero() {
     final UniqueId marketDataUid = _cycleMetadataStub.getMarketDataSnapshotId();
@@ -560,10 +560,10 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
     //cvr.setRequirements(newHashSet(_requirement));
     result.addValue("config_1", cvr);
     _batchMaster.addJobResults(run.getObjectId(), result);
-    
-    List<ViewResultEntry> resultEntries = _batchMaster.getBatchValues(run.getObjectId(), PagingRequest.ALL).getFirst();
-    ViewResultEntry resultEntry = Iterables.getOnlyElement(resultEntries);
+
+    final List<ViewResultEntry> resultEntries = _batchMaster.getBatchValues(run.getObjectId(), PagingRequest.ALL).getFirst();
+    final ViewResultEntry resultEntry = Iterables.getOnlyElement(resultEntries);
     assertEquals(0d, resultEntry.getComputedValue().getValue());
   }
-  
+
 }

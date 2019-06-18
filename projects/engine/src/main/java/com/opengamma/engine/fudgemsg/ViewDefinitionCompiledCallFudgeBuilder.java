@@ -16,7 +16,7 @@ import com.opengamma.engine.view.compilation.CompiledViewDefinition;
 import com.opengamma.engine.view.listener.ViewDefinitionCompiledCall;
 
 /**
- * Fudge message builder for {@link ViewDefinitionCompiledCall}
+ * Fudge message builder for {@link ViewDefinitionCompiledCall}.
  */
 @FudgeBuilderFor(ViewDefinitionCompiledCall.class)
 public class ViewDefinitionCompiledCallFudgeBuilder implements FudgeBuilder<ViewDefinitionCompiledCall> {
@@ -34,8 +34,8 @@ public class ViewDefinitionCompiledCallFudgeBuilder implements FudgeBuilder<View
 
   @Override
   public ViewDefinitionCompiledCall buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
-    final CompiledViewDefinition compiledViewDefinition =
-        deserializer.fieldValueToObject(CompiledViewDefinition.class, msg.getByName(COMPILED_VIEW_DEFINITION_FIELD));
+    final CompiledViewDefinition compiledViewDefinition = deserializer.fieldValueToObject(CompiledViewDefinition.class,
+        msg.getByName(COMPILED_VIEW_DEFINITION_FIELD));
     final boolean hasMarketDataPermissions = msg.getBoolean(HAS_MARKET_DATA_PERMISSIONS_FIELD);
     return new ViewDefinitionCompiledCall(compiledViewDefinition, hasMarketDataPermissions);
   }

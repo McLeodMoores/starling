@@ -41,11 +41,16 @@ public final class GoldenCopy implements ImmutableBean {
   private final CalculationResults _calculationResults;
 
   /**
-   * Creates a new instance
-   * @param snapshotName snapshot name
-   * @param viewName viewName
+   * Creates a new instance.
+   *
+   * @param snapshotName
+   *          snapshot name
+   * @param viewName
+   *          viewName
    * @param valuationTime
-   * @param calculationResults calculationResults
+   *          the valuation time
+   * @param calculationResults
+   *          calculationResults
    * @return a GoldenCopy
    */
   public static GoldenCopy create(

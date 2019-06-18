@@ -13,7 +13,7 @@ import com.opengamma.financial.security.swap.ZeroCouponInflationSwapSecurity;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the SwapType enum
+ * Custom Hibernate usertype for the SwapType enum.
  */
 public class SwapTypeUserType extends EnumUserType<SwapType> {
 

@@ -33,7 +33,7 @@ import com.opengamma.scripts.Scriptable;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
- * Replaces given timeseries data provider with a given one
+ * Replaces given timeseries data provider with a given one.
  */
 @Scriptable
 public class TimeSeriesDataProviderReplaceTool extends AbstractTool<IntegrationToolContext> {
@@ -44,17 +44,18 @@ public class TimeSeriesDataProviderReplaceTool extends AbstractTool<IntegrationT
   private static final String REPLACE_WITH_PROVIDER_OPTION = "replaceWith";
   private static final String FIND_PROVIDER_OPTION = "find";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new TimeSeriesDataProviderReplaceTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
     final CommandLine commandLine = getCommandLine();
@@ -82,7 +83,7 @@ public class TimeSeriesDataProviderReplaceTool extends AbstractTool<IntegrationT
             final Map<ExternalId, UniqueId> addedTS = loader.loadTimeSeries(Sets.newHashSet(buid), replaceWithProvider, dataField, null, null);
             if (addedTS.get(buid) != null) {
               htsMaster.remove(infoDoc.getUniqueId());
-              LOGGER.info("removed TS with buid={}, ticker={}, dataProvider={}, dataField={}", new Object[] {buid, ticker, findProvider, dataField});
+              LOGGER.info("removed TS with buid={}, ticker={}, dataProvider={}, dataField={}", new Object[] { buid, ticker, findProvider, dataField });
             }
           }
         } catch (final Exception ex) {

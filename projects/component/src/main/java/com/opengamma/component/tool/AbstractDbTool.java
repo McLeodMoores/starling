@@ -88,10 +88,10 @@ public abstract class AbstractDbTool<T extends DbToolContext> {
   /**
    * Initializes and runs the tool from standard command-line arguments.
    * <p>
-   * The base class defined three options:<br />
-   * c/config - the config file, mandatory unless default specified<br />
-   * l/logback - the logback configuration, default tool-logback.xml<br />
-   * h/help - prints the help tool<br />
+   * The base class defined three options:<br>
+   * c/config - the config file, mandatory unless default specified<br>
+   * l/logback - the logback configuration, default tool-logback.xml<br>
+   * h/help - prints the help tool<br>
    *
    * @param args the command-line arguments, not null
    * @param toolContextClass the type of database tool context to create, should match the generic type argument

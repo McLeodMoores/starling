@@ -17,7 +17,7 @@ import com.opengamma.util.ArgumentChecker;
   /** The scenario to which manipulations are added. */
   private final Scenario _scenario;
 
-  public VolatilityCubeManipulatorBuilder(final VolatilityCubeSelector selector, final Scenario scenario) {
+  VolatilityCubeManipulatorBuilder(final VolatilityCubeSelector selector, final Scenario scenario) {
     ArgumentChecker.notNull(selector, "selector");
     ArgumentChecker.notNull(scenario, "scenario");
     _selector = selector;

@@ -20,16 +20,8 @@ import com.opengamma.analytics.math.function.special.GammaFunction;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * This class represents the characteristic function of the
- * Carr-Madan-Geman-Yor (CGMY) process. This process is a pure jump process
- * (i.e.  there is no Brownian component).
- * <p>
- * The characteristic function is given by:
- * $$
- * \begin{align*}
- * \phi(u; C, G, M, Y) = \exp\left(C \Gamma(-Y)\left[(M - iu)^Y - M^Y + (G + iu)^Y - G^Y\right]\right)
- * \end{align*}
- * $$
+ * This class represents the characteristic function of the Carr-Madan-Geman-Yor (CGMY) process. This process is a pure jump process (i.e. there is no Brownian
+ * component).
  */
 public class CGMYCharacteristicExponent implements CharacteristicExponent {
   private static final GammaFunction GAMMA_FUNCTION = new GammaFunction();
@@ -44,11 +36,16 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
   private final double _r3;
 
   /**
-   * The parameters for the CGMY process
-   * @param c C, > 0
-   * @param g G, > 0
-   * @param m M, > 1
-   * @param y Y, < 2
+   * The parameters for the CGMY process.
+   *
+   * @param c
+   *          C, greater than 0
+   * @param g
+   *          G, greater than 0
+   * @param m
+   *          M, greater than 1
+   * @param y
+   *          Y, less than 2
    */
   public CGMYCharacteristicExponent(final double c, final double g, final double m, final double y) {
     Validate.isTrue(c > 0, "C > 0");
@@ -98,7 +95,8 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
   }
 
   /**
-   * Gets C
+   * Gets C.
+   *
    * @return C
    */
   public double getC() {
@@ -106,7 +104,8 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
   }
 
   /**
-   * Gets G
+   * Gets G.
+   *
    * @return G
    */
   public double getG() {
@@ -114,7 +113,8 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
   }
 
   /**
-   * Gets M
+   * Gets M.
+   *
    * @return M
    */
   public double getM() {
@@ -122,7 +122,8 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
   }
 
   /**
-   * Gets Y
+   * Gets Y.
+   *
    * @return Y
    */
   public double getY() {

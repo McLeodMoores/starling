@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.json;
@@ -15,12 +15,12 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Custom JSON builder to convert YieldCurveDefinition to JSON object and back again
+ * Custom JSON builder to convert YieldCurveDefinition to JSON object and back again.
  */
 public final class YieldCurveDefinitionJSONBuilder extends AbstractJSONBuilder<YieldCurveDefinition> {
-  
+
   /**
-   * Singleton
+   * Singleton.
    */
   public static final YieldCurveDefinitionJSONBuilder INSTANCE = new YieldCurveDefinitionJSONBuilder();
   /**
@@ -29,11 +29,11 @@ public final class YieldCurveDefinitionJSONBuilder extends AbstractJSONBuilder<Y
   private static final String TEMPLATE = createTemplate();
 
   /**
-   * Restricted constructor 
+   * Restricted constructor
    */
   private YieldCurveDefinitionJSONBuilder() {
   }
-  
+
   @Override
   public YieldCurveDefinition fromJSON(final String json) {
     ArgumentChecker.notNull(json, "JSON document");
@@ -45,13 +45,13 @@ public final class YieldCurveDefinitionJSONBuilder extends AbstractJSONBuilder<Y
     ArgumentChecker.notNull(object, "yield curve definition");
     return fudgeToJson(object);
   }
-  
+
   private static String createTemplate() {
     return YieldCurveDefinitionJSONBuilder.INSTANCE.toJSON(getDummyYieldCurveDefinition());
   }
 
   private static YieldCurveDefinition getDummyYieldCurveDefinition() {
-    YieldCurveDefinition dummy = new YieldCurveDefinition(Currency.GBP, ExternalSchemes.countryRegionId(Country.US), "", "", "", "", true);
+    final YieldCurveDefinition dummy = new YieldCurveDefinition(Currency.GBP, ExternalSchemes.countryRegionId(Country.US), "", "", "", "", true);
     dummy.addStrip(new FixedIncomeStrip(StripInstrumentType.LIBOR, Tenor.DAY, ""));
     return dummy;
   }

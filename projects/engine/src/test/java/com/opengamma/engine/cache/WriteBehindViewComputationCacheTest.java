@@ -47,8 +47,8 @@ public class WriteBehindViewComputationCacheTest {
   @DataProvider(name = "cacheHints")
   public static Object[][] dataCacheHints() {
     return new Object[][] {
-        {CacheSelectHint.allPrivate() },
-        {CacheSelectHint.allShared() },
+      {CacheSelectHint.allPrivate() },
+      {CacheSelectHint.allShared() },
     };
   }
 
@@ -197,9 +197,9 @@ public class WriteBehindViewComputationCacheTest {
     _cache.putValue(new ComputedValue(VALUE_SPEC_3, "cow"), _filter);
     final Collection<Pair<ValueSpecification, Object>> values = _cache.getValues(valueSpec);
     assertEquals(valueSpec.size(), values.size());
-    assertTrue(values.contains(Pairs.of(VALUE_SPEC_1, "foo")));
-    assertTrue(values.contains(Pairs.of(VALUE_SPEC_2, "bar")));
-    assertTrue(values.contains(Pairs.of(VALUE_SPEC_3, "cow")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(VALUE_SPEC_1, "foo")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(VALUE_SPEC_2, "bar")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(VALUE_SPEC_3, "cow")));
     assertNull(_underlying._putValue);
     assertNull(_underlying._putValues);
     assertNull(_underlying._getValues);
@@ -224,7 +224,7 @@ public class WriteBehindViewComputationCacheTest {
     _cache.putValue(new ComputedValue(VALUE_SPEC_1, "foo"), _filter);
     final Collection<Pair<ValueSpecification, Object>> values = _cache.getValues(valueSpec);
     assertEquals(1, values.size());
-    assertTrue(values.contains(Pairs.of(VALUE_SPEC_1, "foo")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(VALUE_SPEC_1, "foo")));
     assertNull(_underlying._putValue);
     assertNull(_underlying._putValues);
     assertEquals(Arrays.asList(VALUE_SPEC_2, VALUE_SPEC_3), _underlying._getValues);

@@ -30,7 +30,7 @@ import com.opengamma.util.db.DbDateUtils;
 import com.opengamma.util.db.tool.DbToolContext;
 
 /**
- * Tool converting Organistaion Database to Legal Entity Database
+ * Tool converting Organistaion Database to Legal Entity Database.
  */
 @Scriptable
 public class DbConvertOrganisationsToLegalEntitiesTool extends AbstractDbTool<DbToolContext> {

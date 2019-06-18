@@ -25,7 +25,8 @@ public class BlackVolatilitySurfaceMoneynessConverter implements ResultConverter
   private static final DecimalFormat LABEL_FORMAT = new DecimalFormat("##.##");
 
   @Override
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final BlackVolatilitySurfaceMoneyness value, final ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final BlackVolatilitySurfaceMoneyness value,
+      final ConversionMode mode) {
     final Map<String, Object> result = new HashMap<>();
     if (value.getSurface() instanceof InterpolatedDoublesSurface) {
       final InterpolatedDoublesSurface interpolated = (InterpolatedDoublesSurface) value.getSurface();
@@ -81,7 +82,7 @@ public class BlackVolatilitySurfaceMoneynessConverter implements ResultConverter
         final double[][] surface = new double[20][20];
         final boolean[][] missingValues = new boolean[20][20];
 
-        final double[] expiries = {0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3., 4., 5., 6., 7., 8., 9., 10., 12., 15., 20., 30.};
+        final double[] expiries = { 0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3., 4., 5., 6., 7., 8., 9., 10., 12., 15., 20., 30. };
         for (int i = 0; i < 20; i++) {
           final double t = expiries[i];
           xLabels[i] = LABEL_FORMAT.format(t);

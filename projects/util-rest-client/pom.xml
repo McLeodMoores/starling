@@ -74,10 +74,10 @@
       <groupId>org.fudgemsg</groupId>
       <artifactId>fudge-java</artifactId>
     </dependency>
-    <dependency>
+    <!-- dependency>
       <groupId>org.fudgemsg</groupId>
       <artifactId>fudge-proto</artifactId>
-    </dependency>
+    </dependency-->
     <dependency>
       <groupId>org.threeten</groupId>
       <artifactId>threetenbp</artifactId>

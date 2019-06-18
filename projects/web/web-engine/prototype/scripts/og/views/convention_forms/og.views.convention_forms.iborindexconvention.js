@@ -51,9 +51,9 @@ $.register_module({
             	save_new_handler = config.save_new_handler, 
             	save_handler = config.save_handler,
             	master = config.data.template_data.configJSON.data, 
-            	sep = '~', 
             	convention_type = config.type,
             	isEom = master.isEOM,
+            	sep = '~',
             	form = new Form({
             		module: 'og.views.forms.ibor-index-convention_tash',
             		data: master, 
@@ -74,7 +74,8 @@ $.register_module({
             			meta = result.meta,
             			as_new = result.extras.as_new;
             		data.isEOM = isEom;
-            		if (as_new && (orig.name === data.name)) { return window.alert('Please select a new name.') };
+            		if (as_new && (orig_name === data.name)) { return window.alert('Please select a new name.') };
+        			if (!data.externalIdBundle.ID.length) { return window.alert('Please add at least one external identifier') }; 
             		api.conventions.put({
             			id: as_new ? void 0 : resource_id,
             			name: data.name,

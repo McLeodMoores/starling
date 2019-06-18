@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -26,7 +26,7 @@ public final class LazyResolvedPosition extends LazyResolvedPositionOrTrade<Posi
 
   /**
    * Creates a new lazily resolved position.
-   * 
+   *
    * @param underlying the underlying, un-resolved position
    * @param context the lazy resolution context
    */
@@ -44,8 +44,8 @@ public final class LazyResolvedPosition extends LazyResolvedPositionOrTrade<Posi
           if (trades.isEmpty()) {
             _trades = Collections.emptySet();
           } else {
-            newTrades = new ArrayList<Trade>(trades.size());
-            for (Trade trade : trades) {
+            newTrades = new ArrayList<>(trades.size());
+            for (final Trade trade : trades) {
               newTrades.add(new LazyResolvedTrade(getLazyResolveContext(), trade));
             }
             _trades = newTrades;

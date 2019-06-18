@@ -42,42 +42,42 @@ public class BundleManagerTest {
 
   private final BundleManager _manager = new BundleManager();
 
-  public void test_addBundle_with_fragments() {
+  public void testAddBundleWithFragments() {
     _manager.addBundle(makeCssBundleCommon());
     _manager.addBundle(makeCssUtil());
     _manager.addBundle(makejsBundleCommon());
-      
+
     Bundle bundle = _manager.getBundle(OG_COMMON_CSS);
     assertNotNull(bundle);
     assertEquals(EXPECTED_CSS_BUNDLE_COMMON, bundle.getAllFragments());
-    
+
     bundle = _manager.getBundle(CSS_UTIL_CSS);
     assertNotNull(bundle);
     assertEquals(EXPECTED_CSS_UTIL, bundle.getAllFragments());
-    
+
     bundle = _manager.getBundle(JS_BUNDLE_COMMON_JS);
     assertNotNull(bundle);
     assertEquals(EXPECTED_JS_BUNDLE_COMMON, bundle.getAllFragments());
   }
-  
-  public void test_addBundle_with_bundles() {
-    Bundle test = new Bundle("Composite");
+
+  public void testAddBundleWithBundles() {
+    final Bundle test = new Bundle("Composite");
     test.addChildNode(makeCssBundleCommon());
     test.addChildNode(makeCssUtil());
-    
+
     _manager.addBundle(test);
-    
-    Bundle cssBundleCommon = _manager.getBundle(OG_COMMON_CSS);
+
+    final Bundle cssBundleCommon = _manager.getBundle(OG_COMMON_CSS);
     assertNotNull(cssBundleCommon);
     assertEquals(EXPECTED_CSS_BUNDLE_COMMON, cssBundleCommon.getAllFragments());
-    
-    Bundle cssUtil = _manager.getBundle(CSS_UTIL_CSS);
+
+    final Bundle cssUtil = _manager.getBundle(CSS_UTIL_CSS);
     assertNotNull(cssUtil);
     assertEquals(EXPECTED_CSS_UTIL, cssUtil.getAllFragments());
-    
-    Bundle composite = _manager.getBundle("Composite");
+
+    final Bundle composite = _manager.getBundle("Composite");
     assertNotNull(cssBundleCommon);
-    List<Fragment> expectedComposite = new ArrayList<Fragment>(EXPECTED_CSS_BUNDLE_COMMON);
+    final List<Fragment> expectedComposite = new ArrayList<>(EXPECTED_CSS_BUNDLE_COMMON);
     expectedComposite.addAll(EXPECTED_CSS_UTIL);
     assertEquals(expectedComposite, composite.getAllFragments());
   }

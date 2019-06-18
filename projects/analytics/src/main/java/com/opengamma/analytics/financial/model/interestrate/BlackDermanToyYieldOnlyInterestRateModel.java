@@ -17,7 +17,7 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * 
+ *
  */
 public class BlackDermanToyYieldOnlyInterestRateModel {
   private final RealSingleRootFinder _rootFinder = new BrentSingleRootFinder();
@@ -52,7 +52,7 @@ public class BlackDermanToyYieldOnlyInterestRateModel {
         final double sigma = data.getShortRateVolatility(dt);
         p[0] = 1.0;
         for (int i = 1; i <= _n + 1; i++) {
-          p[i] = 1. / Math.pow((1 + data.getShortRate(i) * dt), dt * i);
+          p[i] = 1. / Math.pow(1 + data.getShortRate(i) * dt, dt * i);
         }
         q[0][0] = 1.;
         u[0] = r1;
@@ -73,7 +73,7 @@ public class BlackDermanToyYieldOnlyInterestRateModel {
         final Triple<Double, Double, Double>[][] result = new Triple[_n + 1][_j];
         for (int i = 0; i <= _n; i++) {
           for (int j = 0; j < _j; j++) {
-            result[i][j] = new Triple<>(r[i][j], d[i][j], q[i][j]);
+            result[i][j] = Triple.of(r[i][j], d[i][j], q[i][j]);
           }
         }
         return new RecombiningBinomialTree<>(result);

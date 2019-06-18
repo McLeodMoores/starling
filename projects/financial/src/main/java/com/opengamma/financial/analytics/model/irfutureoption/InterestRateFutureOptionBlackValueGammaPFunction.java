@@ -24,30 +24,36 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.black.BlackDiscountingValueGammaIRFutureOptionFunction;
 
 /**
- * Calculates the "ValueGammaP" ({@link ValueRequirementNames#VALUE_GAMMA_P}) of an interest rate future option.
- * The underlying Futures price is computed from the futures curve.
+ * Calculates the "ValueGammaP" ({@link ValueRequirementNames#VALUE_GAMMA_P}) of an interest rate future option. The underlying Futures price is computed from
+ * the futures curve.
+ *
  * @deprecated Use {@link BlackDiscountingValueGammaIRFutureOptionFunction}
  */
 @Deprecated
 public class InterestRateFutureOptionBlackValueGammaPFunction extends InterestRateFutureOptionBlackFunction {
   /** Calculates gamma for margined future options */
-  private static final InterestRateFutureOptionMarginTransactionBlackSurfaceMethod MARGINED_TRANSACTION_METHOD = InterestRateFutureOptionMarginTransactionBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionMarginTransactionBlackSurfaceMethod MARGINED_TRANSACTION_METHOD =
+      InterestRateFutureOptionMarginTransactionBlackSurfaceMethod.getInstance();
   /** Calculates the underlying forward rate for margined future options */
-  private static final InterestRateFutureOptionMarginSecurityBlackSurfaceMethod MARGINED_SECURITY_METHOD = InterestRateFutureOptionMarginSecurityBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionMarginSecurityBlackSurfaceMethod MARGINED_SECURITY_METHOD =
+      InterestRateFutureOptionMarginSecurityBlackSurfaceMethod.getInstance();
   /** Calculates gamma for future options with a premium */
-  private static final InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod PREMIUM_TRANSACTION_METHOD = InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod PREMIUM_TRANSACTION_METHOD =
+      InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod.getInstance();
   /** Calculates the underlying forward rate for future options with a premium */
-  private static final InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_SECURITY_METHOD = InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_SECURITY_METHOD =
+      InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_GAMMA_P}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_GAMMA_P}.
    */
   public InterestRateFutureOptionBlackValueGammaPFunction() {
     super(ValueRequirementNames.VALUE_GAMMA_P, true);
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative derivative, final YieldCurveWithBlackCubeBundle data, final ValueSpecification spec, final Set<ValueRequirement> desiredValues) {
+  protected Set<ComputedValue> getResult(final InstrumentDerivative derivative, final YieldCurveWithBlackCubeBundle data, final ValueSpecification spec,
+      final Set<ValueRequirement> desiredValues) {
     final double gamma, spot;
     if (derivative instanceof InterestRateFutureOptionMarginTransaction) {
       final InterestRateFutureOptionMarginTransaction transaction = (InterestRateFutureOptionMarginTransaction) derivative;

@@ -41,12 +41,10 @@ import com.opengamma.util.ArgumentChecker;
  * <p>
  * This is the simplest possible implementation of the {@link LegalEntity} interface.
  * <p>
- * This class is mutable and not thread-safe.
- * It is intended to be used in the engine via the read-only {@code LegalEntity} interface.
+ * This class is mutable and not thread-safe. It is intended to be used in the engine via the read-only {@code LegalEntity} interface.
  */
 @BeanDefinition
-public class SimpleLegalEntity extends DirectBean
-    implements LegalEntity, MutableUniqueIdentifiable, Serializable {
+public class SimpleLegalEntity extends DirectBean implements LegalEntity, MutableUniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -116,8 +114,10 @@ public class SimpleLegalEntity extends DirectBean
   /**
    * Creates a legal entity specifying the values of the main fields.
    *
-   * @param name the name of the legal entity, not null
-   * @param externalIdBundle the bundle of identifiers that define the legal entity, not null
+   * @param name
+   *          the name of the legal entity, not null
+   * @param externalIdBundle
+   *          the bundle of identifiers that define the legal entity, not null
    */
   public SimpleLegalEntity(final String name, final ExternalIdBundle externalIdBundle) {
     ArgumentChecker.notNull(name, "name");
@@ -129,9 +129,12 @@ public class SimpleLegalEntity extends DirectBean
   /**
    * Creates a legal entity specifying the values of the main fields.
    *
-   * @param uniqueId the unique identifier, not null
-   * @param name the name of the legal entity, not null
-   * @param externalIdBundle the bundle of identifiers that define the legal entity, not null
+   * @param uniqueId
+   *          the unique identifier, not null
+   * @param name
+   *          the name of the legal entity, not null
+   * @param externalIdBundle
+   *          the bundle of identifiers that define the legal entity, not null
    */
   protected SimpleLegalEntity(final UniqueId uniqueId, final String name, final ExternalIdBundle externalIdBundle) {
     ArgumentChecker.notNull(name, "name");
@@ -141,11 +144,12 @@ public class SimpleLegalEntity extends DirectBean
     setExternalIdBundle(externalIdBundle);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle representing this legal entity.
    *
-   * @param legalEntityId the identifier to add, not null
+   * @param legalEntityId
+   *          the identifier to add, not null
    */
   public void addExternalId(final ExternalId legalEntityId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(legalEntityId));

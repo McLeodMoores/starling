@@ -44,10 +44,10 @@ public final class EquitySecurityBeanOperation extends AbstractSecurityBeanOpera
     }
     final EquitySecurityBean bean = createBean(
         secMasterSession.getOrCreateExchangeBean(security.getExchangeCode(), security.getExchange()),
-          security.getCompanyName(),
-          secMasterSession.getOrCreateCurrencyBean(security.getCurrency().getCode()),
-          gicsCodeBean,
-          security.isPreferred());
+        security.getCompanyName(),
+        secMasterSession.getOrCreateCurrencyBean(security.getCurrency().getCode()),
+        gicsCodeBean,
+        security.isPreferred());
     bean.setShortName(security.getShortName());
     return bean;
   }
@@ -66,7 +66,8 @@ public final class EquitySecurityBeanOperation extends AbstractSecurityBeanOpera
 
   @Override
   public EquitySecurity createSecurity(final OperationContext context, final EquitySecurityBean bean) {
-    final EquitySecurity security = new EquitySecurity(bean.getExchange().getDescription(), bean.getExchange().getName(), bean.getCompanyName(), currencyBeanToCurrency(bean.getCurrency()));
+    final EquitySecurity security = new EquitySecurity(bean.getExchange().getDescription(), bean.getExchange().getName(), bean.getCompanyName(),
+        currencyBeanToCurrency(bean.getCurrency()));
     security.setShortName(bean.getShortName());
     security.setGicsCode(gicsCodeBeanToGICSCode(bean.getGicsCode()));
     security.setPreferred(bean.isPreferred());

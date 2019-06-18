@@ -87,11 +87,36 @@ public class NonDeliverableFXOptionSecurity extends FinancialSecurity {
   @PropertyDefinition
   private boolean _deliveryInCallCurrency;
 
-  NonDeliverableFXOptionSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  NonDeliverableFXOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public NonDeliverableFXOptionSecurity(final Currency putCurrency, final Currency callCurrency, final double putAmount, final double callAmount, final Expiry expiry,
+  /**
+   * @param putCurrency
+   *          the put currency, not null
+   * @param callCurrency
+   *          the call currency, not null
+   * @param putAmount
+   *          the put amount
+   * @param callAmount
+   *          the call amount
+   * @param expiry
+   *          the expiry, not null
+   * @param settlementDate
+   *          the settlement date, not null
+   * @param isLong
+   *          true if the option is long, false if it is short
+   * @param exerciseType
+   *          the exercise type, not null
+   * @param deliveryInCallCurrency
+   *          true to deliver the call currency, false to deliver in the put
+   *          currency
+   */
+  public NonDeliverableFXOptionSecurity(final Currency putCurrency, final Currency callCurrency, final double putAmount, final double callAmount,
+      final Expiry expiry,
       final ZonedDateTime settlementDate, final boolean isLong, final ExerciseType exerciseType, final boolean deliveryInCallCurrency) {
     super(SECURITY_TYPE);
     setPutCurrency(putCurrency);
@@ -105,6 +130,11 @@ public class NonDeliverableFXOptionSecurity extends FinancialSecurity {
     setDeliveryInCallCurrency(deliveryInCallCurrency);
   }
 
+  /**
+   * Gets the delivery currency.
+   *
+   * @return the delivery currency
+   */
   public Currency getDeliveryCurrency() {
     return isDeliveryInCallCurrency() ? getCallCurrency() : getPutCurrency();
   }

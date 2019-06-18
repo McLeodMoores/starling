@@ -43,7 +43,7 @@ import com.opengamma.util.metric.MetricProducer;
 
 /**
  * The base server process for any Cogda Live Data Server.
- * <p/>
+ * <p>
  * By default, it will operate in a completely unauthenticated mode. User names and passwords
  * in connection requests will be ignored, and all fields will be accessible by any connection.
  * However, in combination with an injected {@link UserSource} (see {@link #setUserSource(UserSource)}),
@@ -52,7 +52,7 @@ import com.opengamma.util.metric.MetricProducer;
  * is set to false (see {@link #setCheckPassword(boolean)}) then only authorization will be provided and it is assumed
  * that authentication is handled elsewhere in the overall application and so user credentials
  * can be assumed to be valid without a password being provided.
- * <p/>
+ * <p>
  * Because the {@link UserSource} will be hit for every authorization question, it is <strong>critical</strong>
  * that the source caches requests in some form.
  */

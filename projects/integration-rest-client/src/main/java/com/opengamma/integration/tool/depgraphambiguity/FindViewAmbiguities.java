@@ -29,7 +29,6 @@ import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.engine.RemoteEngineContextsComponentFactory;
 import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.config.impl.ConfigItem;
-import com.opengamma.core.position.impl.SimplePortfolioNode;
 import com.opengamma.engine.depgraph.ambiguity.FullRequirementResolution;
 import com.opengamma.engine.depgraph.ambiguity.FullRequirementResolutionPrinter;
 import com.opengamma.engine.depgraph.ambiguity.RequirementResolution;
@@ -55,11 +54,12 @@ import com.opengamma.util.ClassUtils;
 /**
  * Tool class that compiles a view against a function repository to identify any ambiguities.
  * <p>
- * The configuration is fetched from the server, but the function exclusion groups and priorities must be specified manually as these are not readily available via REST interfaces (at the moment -
- * there is no reason why the data couldn't be available). Any ambiguities are written to a nominated output file.
+ * The configuration is fetched from the server, but the function exclusion groups and priorities must be specified manually as these are not readily available
+ * via REST interfaces (at the moment - there is no reason why the data couldn't be available). Any ambiguities are written to a nominated output file.
  * <p>
- * Note that this can be an expensive operation - very expensive if there are multiple deep ambiguities which will cause an incredibly large number of possible terminal output resolutions (based on
- * the cross product of all possible inputs). It is normally only necessary to run on small portfolio samples, for example by setting {@link SimplePortfolioNode#DEBUG_FLAG}.
+ * Note that this can be an expensive operation - very expensive if there are multiple deep ambiguities which will cause an incredibly large number of possible
+ * terminal output resolutions (based on the cross product of all possible inputs). It is normally only necessary to run on small portfolio samples, for example
+ * by setting the system property <code>SimplePortfolioNode.debugFlag</code> to <code>TRUE</code>.
  */
 @Scriptable
 public class FindViewAmbiguities extends AbstractTool<ToolContext> {
@@ -83,23 +83,24 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
   private final AtomicInteger _resolutions = new AtomicInteger();
   private final AtomicInteger _ambiguities = new AtomicInteger();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     new FindViewAmbiguities().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private final class ViewDefinitionAmbiguityTestImpl extends ViewDefinitionAmbiguityTest {
 
     private final PrintStream _out;
     private FunctionResolver _functionResolver;
 
-    public ViewDefinitionAmbiguityTestImpl(final PrintStream out) {
+    ViewDefinitionAmbiguityTestImpl(final PrintStream out) {
       _out = out;
     }
 
@@ -210,8 +211,8 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
       }
       _out.println(resolution.getRequirement());
       for (final Collection<RequirementResolution> nestedResolutions : resolution.getResolutions()) {
-        final List<String> functions = new ArrayList<String>();
-        final List<ValueSpecification> specifications = new ArrayList<ValueSpecification>();
+        final List<String> functions = new ArrayList<>();
+        final List<ValueSpecification> specifications = new ArrayList<>();
         boolean failure = false;
         for (final RequirementResolution nestedResolution : nestedResolutions) {
           if (nestedResolution != null) {

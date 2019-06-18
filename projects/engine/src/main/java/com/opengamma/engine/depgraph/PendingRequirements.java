@@ -46,7 +46,7 @@ import com.opengamma.engine.value.ValueRequirement;
   private final ConcurrentMap<ValueRequirement, ValueRequirement> _valueRequirements = new ConcurrentHashMap<>();
   private int _tick;
 
-  public PendingRequirements(final DependencyGraphBuilder builder) {
+  PendingRequirements(final DependencyGraphBuilder builder) {
     _monitor = Housekeeper.of(builder, REPORT, this);
   }
 

@@ -35,20 +35,26 @@ import com.opengamma.financial.security.equity.EquityVarianceSwapSecurity;
 import com.opengamma.util.money.Currency;
 
 /**
- * Calculates the sensitivity of the present value (PV) to a change in the funding rate from valuation to settlement.
- * In this formulation, Rates enter the pricing of a VarianceSwap in two places: in the discounting and forward projection.<p>
+ * Calculates the sensitivity of the present value (PV) to a change in the funding rate from valuation to settlement. In this formulation, Rates enter the
+ * pricing of a VarianceSwap in two places: in the discounting and forward projection.
+ * <p>
  * i.e. We are using the rates to infer the forward: spot / Z(t,T).
-*/
+ * 
+ * @deprecated Deprecated
+ */
+@Deprecated
 public class EquityVarianceSwapStaticReplicationYCNSFunction extends EquityVarianceSwapStaticReplicationFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityVarianceSwapStaticReplicationYCNSFunction.class);
-  private static final EquityDerivativeSensitivityCalculator CALCULATOR = new EquityDerivativeSensitivityCalculator(VarianceSwapPresentValueCalculator.getInstance());
+  private static final EquityDerivativeSensitivityCalculator CALCULATOR = new EquityDerivativeSensitivityCalculator(
+      VarianceSwapPresentValueCalculator.getInstance());
 
   public EquityVarianceSwapStaticReplicationYCNSFunction() {
     super(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES);
   }
 
   @Override
-  protected Set<ComputedValue> computeValues(final ValueSpecification resultSpec, final FunctionInputs inputs, final VarianceSwap derivative, final StaticReplicationDataBundle market) {
+  protected Set<ComputedValue> computeValues(final ValueSpecification resultSpec, final FunctionInputs inputs, final VarianceSwap derivative,
+      final StaticReplicationDataBundle market) {
     final DoubleMatrix1D sensitivities = CALCULATOR.calcDeltaBucketed(derivative, market);
     final String curveName = resultSpec.getProperty(ValuePropertyNames.CURVE);
     final Object curveSpecObject = inputs.getValue(getCurveSpecRequirement(derivative.getCurrency(), curveName));
@@ -92,7 +98,8 @@ public class EquityVarianceSwapStaticReplicationYCNSFunction extends EquityVaria
   }
 
   @Override
-  protected ValueSpecification getValueSpecification(final ComputationTarget target, final String curveName, final String curveCalculationConfig, final String surfaceName) {
+  protected ValueSpecification getValueSpecification(final ComputationTarget target, final String curveName, final String curveCalculationConfig,
+      final String surfaceName) {
     final EquityVarianceSwapSecurity security = (EquityVarianceSwapSecurity) target.getSecurity();
     final ValueProperties properties = createValueProperties()
         .with(ValuePropertyNames.CURVE, curveName)

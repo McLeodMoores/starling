@@ -14,15 +14,11 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Differentiates a vector field (i.e. there is a vector value for every point
- * in some vector space) with respect to the vector space using finite
- * difference.
+ * Differentiates a vector field (i.e. there is a vector value for every point in some vector space) with respect to the vector space using finite difference.
  * <p>
- * For a function $\mathbf{y} = f(\mathbf{x})$ where $\mathbf{x}$ is a
- * n-dimensional vector and $\mathbf{y}$ is a m-dimensional vector, this class
- * produces the Jacobian function $\mathbf{J}(\mathbf{x})$, i.e. a function
- * that returns the Jacobian for each point $\mathbf{x}$, where
- * $\mathbf{J}$ is the $m \times n$ matrix $\frac{dy_i}{dx_j}$
+ * For a function $\mathbf{y} = f(\mathbf{x})$ where $\mathbf{x}$ is a n-dimensional vector and $\mathbf{y}$ is a m-dimensional vector, this class produces the
+ * Jacobian function $\mathbf{J}(\mathbf{x})$, i.e. a function that returns the Jacobian for each point $\mathbf{x}$, where $\mathbf{J}$ is the $m \times n$
+ * matrix $\frac{dy_i}{dx_j}$
  */
 public class VectorFieldFirstOrderDifferentiator implements Differentiator<DoubleMatrix1D, DoubleMatrix1D, DoubleMatrix2D> {
   private static final double DEFAULT_EPS = 1e-5;
@@ -40,8 +36,10 @@ public class VectorFieldFirstOrderDifferentiator implements Differentiator<Doubl
   }
 
   /**
-   * Uses the default value of eps (10<sup>-5</sup>)
-   * @param differenceType The differencing type to be used in calculating the gradient function
+   * Uses the default value of eps (10<sup>-5</sup>).
+   *
+   * @param differenceType
+   *          The differencing type to be used in calculating the gradient function
    */
   public VectorFieldFirstOrderDifferentiator(final FiniteDifferenceType differenceType) {
     this(differenceType, DEFAULT_EPS);
@@ -49,10 +47,13 @@ public class VectorFieldFirstOrderDifferentiator implements Differentiator<Doubl
 
   /**
    * Approximates the derivative of a vector function by finite difference. If the size of the domain is very small or very large, consider re-scaling first.
-   * @param differenceType {@link FiniteDifferenceType#FORWARD}, {@link FiniteDifferenceType#BACKWARD}, or {@link FiniteDifferenceType#CENTRAL}. In most situations,
-   * {@link FiniteDifferenceType#CENTRAL} is preferable. Not null
-   * @param eps The step size used to approximate the derivative. If this value is too small, the result will most likely be dominated by noise.
-   * Use around 10<sup>-5</sup> times the domain size.
+   *
+   * @param differenceType
+   *          {@link FiniteDifferenceType#FORWARD}, {@link FiniteDifferenceType#BACKWARD}, or {@link FiniteDifferenceType#CENTRAL}. In most situations,
+   *          {@link FiniteDifferenceType#CENTRAL} is preferable. Not null
+   * @param eps
+   *          The step size used to approximate the derivative. If this value is too small, the result will most likely be dominated by noise. Use around
+   *          10<sup>-5</sup> times the domain size.
    */
   public VectorFieldFirstOrderDifferentiator(final FiniteDifferenceType differenceType, final double eps) {
     Validate.notNull(differenceType);
@@ -63,8 +64,10 @@ public class VectorFieldFirstOrderDifferentiator implements Differentiator<Doubl
 
   /**
    * Approximates the derivative of a vector function by finite difference. If the size of the domain is very small or very large, consider re-scaling first.
-   * @param eps The step size used to approximate the derivative. If this value is too small, the result will most likely be dominated by noise.
-   * Use around 10<sup>-5</sup> times the domain size.
+   *
+   * @param eps
+   *          The step size used to approximate the derivative. If this value is too small, the result will most likely be dominated by noise. Use around
+   *          10<sup>-5</sup> times the domain size.
    */
   public VectorFieldFirstOrderDifferentiator(final double eps) {
     this(DIFF_TYPE, eps);
@@ -163,13 +166,14 @@ public class VectorFieldFirstOrderDifferentiator implements Differentiator<Doubl
   }
 
   @Override
-  public Function1D<DoubleMatrix1D, DoubleMatrix2D> differentiate(final Function1D<DoubleMatrix1D, DoubleMatrix1D> function, final Function1D<DoubleMatrix1D, Boolean> domain) {
+  public Function1D<DoubleMatrix1D, DoubleMatrix2D> differentiate(final Function1D<DoubleMatrix1D, DoubleMatrix1D> function,
+      final Function1D<DoubleMatrix1D, Boolean> domain) {
     Validate.notNull(function);
     Validate.notNull(domain);
 
-    final double[] wFwd = new double[] {-3., 4., -1. };
-    final double[] wCent = new double[] {-1., 0., 1. };
-    final double[] wBack = new double[] {1., -4., 3. };
+    final double[] wFwd = new double[] { -3., 4., -1. };
+    final double[] wCent = new double[] { -1., 0., 1. };
+    final double[] wBack = new double[] { 1., -4., 3. };
 
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
 

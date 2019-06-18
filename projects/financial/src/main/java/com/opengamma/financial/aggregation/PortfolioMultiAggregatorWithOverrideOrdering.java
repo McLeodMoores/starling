@@ -62,12 +62,12 @@ public class PortfolioMultiAggregatorWithOverrideOrdering {
     }
   }
 
-  protected void aggregate(final SimplePortfolioNode inputNode, final List<Position> flattenedPortfolio, final Queue<AggregationFunction<?>> functionList, final Comparator<Position> comparator) {
+  protected void aggregate(final SimplePortfolioNode inputNode, final List<Position> flattenedPortfolio, final Queue<AggregationFunction<?>> functionList,
+      final Comparator<Position> comparator) {
     final AggregationFunction<?> nextFunction = functionList.remove();
     LOGGER.debug("Aggregating {} positions by {}", flattenedPortfolio, nextFunction);
     @SuppressWarnings("unchecked")
-    final
-    Map<String, List<Position>> buckets = new TreeMap<>((Comparator<? super String>) nextFunction);
+    final Map<String, List<Position>> buckets = new TreeMap<>((Comparator<? super String>) nextFunction);
     for (final Object entry : nextFunction.getRequiredEntries()) {
       buckets.put(entry.toString(), new ArrayList<Position>());
     }
@@ -92,7 +92,7 @@ public class PortfolioMultiAggregatorWithOverrideOrdering {
       inputNode.addChildNode(newNode);
       final List<Position> bucket = buckets.get(bucketName);
       Collections.sort(bucket, comparator);
-      if (functionList.isEmpty() || bucket.isEmpty()) { //IGN-138 - don't build huge empty portfolios
+      if (functionList.isEmpty() || bucket.isEmpty()) { // IGN-138 - don't build huge empty portfolios
         for (final Position position : bucket) {
           newNode.addPosition(position);
         }

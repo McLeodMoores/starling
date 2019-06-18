@@ -26,8 +26,10 @@ public abstract class MeanCorrection implements MartingaleCharacteristicExponent
   }
 
   /**
-   * Returns the mean (drift) corrected characteristic exponent
-   * @param t The time
+   * Returns the mean (drift) corrected characteristic exponent.
+   * 
+   * @param t
+   *          The time
    * @return A function to calculate the characteristic exponent
    */
   @Override

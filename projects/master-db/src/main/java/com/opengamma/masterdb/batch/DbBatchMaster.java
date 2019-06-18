@@ -106,9 +106,8 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
         final RiskRun run = _dbBatchWriter.getRiskRunById(id);
         if (run != null) {
           return run;
-        } else {
-          throw new DataNotFoundException("Batch run not found: " + id);
         }
+        throw new DataNotFoundException("Batch run not found: " + id);
       }
     });
   }

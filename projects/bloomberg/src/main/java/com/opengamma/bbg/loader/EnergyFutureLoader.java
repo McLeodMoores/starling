@@ -71,19 +71,21 @@ public final class EnergyFutureLoader extends SecurityLoader {
       FIELD_FUT_VAL_PT);
 
   /**
-   * The valid Bloomberg future categories for Energy Futures
+   * The valid Bloomberg future categories for Energy Futures.
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = ImmutableSet.of(BBG_REFINED_PRODUCTS, BBG_ELECTRICITY, BBG_COAL, BBG_CRUDE_OIL, BBG_NATURAL_GAS);
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   * 
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public EnergyFutureLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.ENERGY_FUTURE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     final String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
@@ -132,7 +134,7 @@ public final class EnergyFutureLoader extends SecurityLoader {
     }
     ExternalId underlying = null;
     if (underlyingTicker != null) {
-      //Blindly copied from EquityDividendFutureLoader, not sure if necessary here
+      // Blindly copied from EquityDividendFutureLoader, not sure if necessary here
       if (BloombergDataUtils.isValidBloombergTicker(underlyingTicker)) {
         underlying = ExternalSchemes.bloombergTickerSecurityId(underlyingTicker);
       } else {

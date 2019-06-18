@@ -19,7 +19,7 @@ import com.opengamma.util.money.Currency;
 public class CapFloorInflationZeroCouponInterpolation extends CouponInflation implements CapFloor {
 
   /**
-   *  The fixing time of the last known fixing.
+   * The fixing time of the last known fixing.
    */
   private final double _lastKnownFixingTime;
   /**
@@ -27,22 +27,20 @@ public class CapFloorInflationZeroCouponInterpolation extends CouponInflation im
    */
   private final double _indexStartValue;
   /**
-   * The reference times for the index at the coupon end.  Two months are required for the interpolation.
-   * There is usually a difference of two or three month between the reference date and the payment date.
-   * The time can be negative (when the price index for the current and last month is not yet published).
+   * The reference times for the index at the coupon end. Two months are required for the interpolation. There is usually a difference of two or three month
+   * between the reference date and the payment date. The time can be negative (when the price index for the current and last month is not yet published).
    */
   private final double[] _referenceEndTime;
 
   /**
-   * The time for which the index at the coupon end is paid by the standard corresponding  zero coupon.
-   * There is usually a difference of two or three month between the reference date and the natural payment date.
-   * the natural payment date is equal to the payment date when the lag is the conventional one.
-   * The time can be negative (when the price index for the current and last month is not yet published).
+   * The time for which the index at the coupon end is paid by the standard corresponding zero coupon. There is usually a difference of two or three month
+   * between the reference date and the natural payment date. the natural payment date is equal to the payment date when the lag is the conventional one. The
+   * time can be negative (when the price index for the current and last month is not yet published).
    */
   private final double _naturalPaymentTime;
 
   /**
-   *  The cap/floor maturity in years.
+   * The cap/floor maturity in years.
    */
   private final int _maturity;
 
@@ -61,22 +59,38 @@ public class CapFloorInflationZeroCouponInterpolation extends CouponInflation im
 
   /**
    * Constructor from all the cap/floor details.
-   *  @param currency The coupon currency.
-   * @param paymentTime The time to payment.
-   * @param paymentYearFraction Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param lastKnownFixingTime The fixing time of the last known fixing.
-   * @param indexStartValue The index value at the start of the coupon.
-   * @param referenceEndTime The reference time for the index at the coupon end.
-   * @param naturalPaymentTime The time for which the index at the coupon end is paid by the standard corresponding  zero coupon.
-   * @param maturity The cap/floor maturity in years.
-   * @param weight The weight on the first month index in the interpolation.
-   * @param strike The strike
-   * @param isCap The cap/floor flag.
+   * 
+   * @param currency
+   *          The coupon currency.
+   * @param paymentTime
+   *          The time to payment.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param lastKnownFixingTime
+   *          The fixing time of the last known fixing.
+   * @param indexStartValue
+   *          The index value at the start of the coupon.
+   * @param referenceEndTime
+   *          The reference time for the index at the coupon end.
+   * @param naturalPaymentTime
+   *          The time for which the index at the coupon end is paid by the standard corresponding zero coupon.
+   * @param maturity
+   *          The cap/floor maturity in years.
+   * @param weight
+   *          The weight on the first month index in the interpolation.
+   * @param strike
+   *          The strike
+   * @param isCap
+   *          The cap/floor flag.
    */
-  public CapFloorInflationZeroCouponInterpolation(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final IndexPrice priceIndex,
-      final double lastKnownFixingTime, final double indexStartValue, final double[] referenceEndTime, final double naturalPaymentTime, final int maturity, final double weight, final double strike,
+  public CapFloorInflationZeroCouponInterpolation(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional,
+      final IndexPrice priceIndex,
+      final double lastKnownFixingTime, final double indexStartValue, final double[] referenceEndTime, final double naturalPaymentTime, final int maturity,
+      final double weight, final double strike,
       final boolean isCap) {
     super(currency, paymentTime, paymentYearFraction, notional, priceIndex);
     _lastKnownFixingTime = lastKnownFixingTime;
@@ -91,7 +105,9 @@ public class CapFloorInflationZeroCouponInterpolation extends CouponInflation im
 
   /**
    * Create a new cap/floor with the same characteristics except the strike.
-   * @param strike The new strike.
+   * 
+   * @param strike
+   *          The new strike.
    * @return The cap/floor.
    */
   public CapFloorInflationZeroCouponInterpolation withStrike(final double strike) {
@@ -101,17 +117,26 @@ public class CapFloorInflationZeroCouponInterpolation extends CouponInflation im
 
   /**
    * Builder from a Ibor coupon, the strike and the cap/floor flag.
-   * @param coupon An Ibor coupon.
-   * @param lastKnownFixingTime The fixing time of the last known fixing.
-   * @param maturity The cap/floor maturity in years.
-   * @param strike The strike.
-   * @param isCap The cap/floor flag.
+   * 
+   * @param coupon
+   *          An Ibor coupon.
+   * @param lastKnownFixingTime
+   *          The fixing time of the last known fixing.
+   * @param maturity
+   *          The cap/floor maturity in years.
+   * @param strike
+   *          The strike.
+   * @param isCap
+   *          The cap/floor flag.
    * @return The cap/floor.
    */
-  public static CapFloorInflationZeroCouponInterpolation from(final CouponInflationZeroCouponInterpolation coupon, final double lastKnownFixingTime, final int maturity, final double strike,
+  public static CapFloorInflationZeroCouponInterpolation from(final CouponInflationZeroCouponInterpolation coupon, final double lastKnownFixingTime,
+      final int maturity, final double strike,
       final boolean isCap) {
-    return new CapFloorInflationZeroCouponInterpolation(coupon.getCurrency(), coupon.getPaymentTime(), coupon.getPaymentYearFraction(), coupon.getNotional(), coupon.getPriceIndex(),
-        lastKnownFixingTime, coupon.getIndexStartValue(), coupon.getReferenceEndTime(), coupon.getNaturalPaymentTime(), maturity, coupon.getWeight(), strike, isCap);
+    return new CapFloorInflationZeroCouponInterpolation(coupon.getCurrency(), coupon.getPaymentTime(), coupon.getPaymentYearFraction(), coupon.getNotional(),
+        coupon.getPriceIndex(),
+        lastKnownFixingTime, coupon.getIndexStartValue(), coupon.getReferenceEndTime(), coupon.getNaturalPaymentTime(), maturity, coupon.getWeight(), strike,
+        isCap);
   }
 
   public double getLastKnownFixingTime() {
@@ -150,7 +175,8 @@ public class CapFloorInflationZeroCouponInterpolation extends CouponInflation im
 
   @Override
   public Coupon withNotional(final double notional) {
-    return new CapFloorInflationZeroCouponInterpolation(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getPriceIndex(), _lastKnownFixingTime, _indexStartValue,
+    return new CapFloorInflationZeroCouponInterpolation(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getPriceIndex(),
+        _lastKnownFixingTime, _indexStartValue,
         _referenceEndTime, _naturalPaymentTime, _maturity, _weight, _strike, _isCap);
   }
 

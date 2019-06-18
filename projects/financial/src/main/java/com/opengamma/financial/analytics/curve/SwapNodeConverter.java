@@ -21,15 +21,11 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Convert a swap node into an Instrument definition.
- * The dates of the swap are computed in the following way:
- * - The spot date is computed from the valuation date adding the "Settlement Days" (i.e. the number of business days) of the convention.
- * - The start date is computed from the spot date adding the "StartTenor" of the node and using the business-day-convention, calendar
- *   and EOM of the convention.
- * - The end date is computed from the start date adding the "MaturityTenor" of the node and using Annuity constructor.
- * The swap notional for each leg is 1.
- * A fixed leg always has the market quote as fixed rate.
- * If both legs are floating (VanillaIborLegConvention or OISLegConvention), the receive leg has a spread equal to the market quote.
+ * Convert a swap node into an Instrument definition. The dates of the swap are computed in the following way: - The spot date is computed from the valuation
+ * date adding the "Settlement Days" (i.e. the number of business days) of the convention. - The start date is computed from the spot date adding the
+ * "StartTenor" of the node and using the business-day-convention, calendar and EOM of the convention. - The end date is computed from the start date adding the
+ * "MaturityTenor" of the node and using Annuity constructor. The swap notional for each leg is 1. A fixed leg always has the market quote as fixed rate. If
+ * both legs are floating (VanillaIborLegConvention or OISLegConvention), the receive leg has a spread equal to the market quote.
  */
 public class SwapNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinition<?>> {
   /** The security source */
@@ -50,16 +46,25 @@ public class SwapNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
   private final FXMatrix _fx;
 
   /**
-   * @param securitySource The security source, not null
-   * @param conventionSource The convention source, not null
-   * @param holidaySource The holiday source, not null
-   * @param regionSource The region source, not null
-   * @param marketData The market data, not null
-   * @param dataId The id of the market data, not null
-   * @param valuationTime The valuation time, not null
-   * @param fx The FXMatrix with the exchange rates. Not null.
+   * @param securitySource
+   *          The security source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param regionSource
+   *          The region source, not null
+   * @param marketData
+   *          The market data, not null
+   * @param dataId
+   *          The id of the market data, not null
+   * @param valuationTime
+   *          The valuation time, not null
+   * @param fx
+   *          The FXMatrix with the exchange rates. Not null.
    */
-  public SwapNodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource, final RegionSource regionSource,
+  public SwapNodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource,
+      final RegionSource regionSource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime, final FXMatrix fx) {
     ArgumentChecker.notNull(securitySource, "security source");
     ArgumentChecker.notNull(conventionSource, "convention source");
@@ -81,7 +86,7 @@ public class SwapNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
   @Override
   public InstrumentDefinition<?> visitSwapNode(final SwapNode swapNode) {
     final FinancialConvention payLegConvention = _conventionSource.getSingle(swapNode.getPayLegConvention(), FinancialConvention.class);
-    final FinancialConvention receiveLegConvention =  _conventionSource.getSingle(swapNode.getReceiveLegConvention(), FinancialConvention.class);
+    final FinancialConvention receiveLegConvention = _conventionSource.getSingle(swapNode.getReceiveLegConvention(), FinancialConvention.class);
     final Period startTenor = swapNode.getStartTenor().getPeriod();
     final Period maturityTenor = swapNode.getMaturityTenor().getPeriod();
     return NodeConverterUtils.getSwapDefinition(payLegConvention, receiveLegConvention, startTenor, maturityTenor, _securitySource, _regionSource,

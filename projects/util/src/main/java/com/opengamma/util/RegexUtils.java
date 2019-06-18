@@ -26,13 +26,13 @@ public final class RegexUtils {
   /**
    * Converts a simple wildcard style pattern to a regex pattern.
    * <p>
-   * The asterisk (<code>*</code>) matches zero or more characters.<br />
-   * The question mark (<code>?</code>) matches one character.<br />
+   * The asterisk (<code>*</code>) matches zero or more characters.<br>
+   * The question mark (<code>?</code>) matches one character.<br>
    * <p>
-   * The returned pattern will be setup to match a whole string using
-   * <code>^</code> and <code>$</code>.
+   * The returned pattern will be setup to match a whole string using <code>^</code> and <code>$</code>.
    *
-   * @param text  the text to match, not null
+   * @param text
+   *          the text to match, not null
    * @return the pattern, not null
    */
   public static Pattern wildcardsToPattern(final String text) {
@@ -63,11 +63,13 @@ public final class RegexUtils {
   /**
    * Checks if a string matches a potentially wildcard string.
    * <p>
-   * The asterisk (<code>*</code>) matches zero or more characters.<br />
-   * The question mark (<code>?</code>) matches one character.<br />
+   * The asterisk (<code>*</code>) matches zero or more characters.<br>
+   * The question mark (<code>?</code>) matches one character.<br>
    *
-   * @param searchCriteriaWithWildcard  the search criteria text with wildcards, null returns false
-   * @param textToMatchAgainst  the text without wildcards to match against, null returns false
+   * @param searchCriteriaWithWildcard
+   *          the search criteria text with wildcards, null returns false
+   * @param textToMatchAgainst
+   *          the text without wildcards to match against, null returns false
    * @return true if the text
    */
   public static boolean wildcardMatch(final String searchCriteriaWithWildcard, final String textToMatchAgainst) {

@@ -5,7 +5,6 @@
  */
 package com.opengamma.bbg;
 
-
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -45,17 +44,16 @@ public class BloombergContractID extends DirectBean {
   private static final DateTimeFormatter MONTH_YEAR_FORMATTER = DateTimeFormatter.ofPattern("MM/yyyy");
 
   /**
-   * The prefix in classic bloomberg ticker
+   * The prefix in classic bloomberg ticker.
    */
   @PropertyDefinition
   private String _contractCode;
 
   /**
-   * The yellow key also know as market sector;
+   * The yellow key also know as market sector.
    */
   @PropertyDefinition
   private String _marketSector;
-
 
   /*
    * Constructor for builder
@@ -149,7 +147,7 @@ public class BloombergContractID extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the prefix in classic bloomberg ticker
+   * Gets the prefix in classic bloomberg ticker.
    * @return the value of the property
    */
   public String getContractCode() {
@@ -157,7 +155,7 @@ public class BloombergContractID extends DirectBean {
   }
 
   /**
-   * Sets the prefix in classic bloomberg ticker
+   * Sets the prefix in classic bloomberg ticker.
    * @param contractCode  the new value of the property
    */
   public void setContractCode(String contractCode) {
@@ -174,7 +172,7 @@ public class BloombergContractID extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the yellow key also know as market sector;
+   * Gets the yellow key also know as market sector.
    * @return the value of the property
    */
   public String getMarketSector() {
@@ -182,7 +180,7 @@ public class BloombergContractID extends DirectBean {
   }
 
   /**
-   * Sets the yellow key also know as market sector;
+   * Sets the yellow key also know as market sector.
    * @param marketSector  the new value of the property
    */
   public void setMarketSector(String marketSector) {

@@ -23,52 +23,52 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class MultimapBeanFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
 
-  public void test_empty_simple_multimap() {
-    final SimpleMultimapMockBean bean = SimpleMultimapMockBean.builder()
-        .simpleMultimap(ArrayListMultimap.<String, String>create())
-        .build();
+  /**
+   *
+   */
+  public void testEmptySimpleMultimap() {
+    final SimpleMultimapMockBean bean = SimpleMultimapMockBean.builder().simpleMultimap(ArrayListMultimap.<String, String> create()).build();
     assertThat(cycleObject(SimpleMultimapMockBean.class, bean), is(bean));
   }
 
-  public void test_non_empty_simple_multimap() {
+  /**
+   *
+   */
+  public void testNonEmptySimpleMultimap() {
     final Multimap<String, String> mmap = HashMultimap.create();
     mmap.put("one", "1");
     mmap.put("one", "42");
     mmap.put("two", "2");
 
-    final SimpleMultimapMockBean bean = SimpleMultimapMockBean.builder()
-        .simpleMultimap(mmap)
-        .build();
+    final SimpleMultimapMockBean bean = SimpleMultimapMockBean.builder().simpleMultimap(mmap).build();
     assertThat(cycleObject(SimpleMultimapMockBean.class, bean), is(bean));
   }
 
-  public void test_empty_list_multimap() {
-    final ListMultimapMockBean bean = ListMultimapMockBean.builder()
-        .listMultimap(ArrayListMultimap.<String, String>create())
-        .build();
+  /**
+   *
+   */
+  public void testEmptyListMultimap() {
+    final ListMultimapMockBean bean = ListMultimapMockBean.builder().listMultimap(ArrayListMultimap.<String, String> create()).build();
     assertThat(cycleObject(ListMultimapMockBean.class, bean), is(bean));
   }
 
-  public void test_non_empty_list_multimap() {
+  /**
+   *
+   */
+  public void testNonEmptyListMultimap() {
     final ListMultimap<String, String> mmap = ArrayListMultimap.create();
     mmap.put("one", "1");
     mmap.put("one", "42");
     mmap.put("two", "2");
 
-    final ListMultimapMockBean bean = ListMultimapMockBean.builder()
-        .listMultimap(mmap)
-        .build();
+    final ListMultimapMockBean bean = ListMultimapMockBean.builder().listMultimap(mmap).build();
     assertThat(cycleObject(ListMultimapMockBean.class, bean), is(bean));
   }
 
   /**
-   * This test is unreliable at the moment and so disabled. This is due
-   * to the way joda-beans treats a property of Multimap. Joda-beans
-   * creates a HashMultiMap, but this gets copied by ImmutableMultimap.copyOf()
-   * which uses a ListMultimap which depending on JVM means that
-   * the created multimaps don't compare as equals.
-   * If https://github.com/JodaOrg/joda-beans/issues/64 gets fixed, it should
-   * be possible to enable this test.
+   * This test is unreliable at the moment and so disabled. This is due to the way joda-beans treats a property of Multimap. Joda-beans creates a HashMultiMap,
+   * but this gets copied by ImmutableMultimap.copyOf() which uses a ListMultimap which depending on JVM means that the created multimaps don't compare as
+   * equals. If https://github.com/JodaOrg/joda-beans/issues/64 gets fixed, it should be possible to enable this test.
    */
   @Test(enabled = false)
   public void testCombinedMultimap() {
@@ -87,11 +87,7 @@ public class MultimapBeanFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
     mmap.put("seven", "-423");
     mmap.put("eight", "-24");
 
-    final CombinedMultimapMockBean bean = CombinedMultimapMockBean.builder()
-        .listMultimap(lmmap)
-        .setMultimap(hmmap)
-        .noTypeMultimap(mmap)
-        .build();
+    final CombinedMultimapMockBean bean = CombinedMultimapMockBean.builder().listMultimap(lmmap).setMultimap(hmmap).noTypeMultimap(mmap).build();
     assertThat(cycleObject(CombinedMultimapMockBean.class, bean), is(bean));
   }
 

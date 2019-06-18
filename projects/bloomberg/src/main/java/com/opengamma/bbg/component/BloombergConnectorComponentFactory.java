@@ -54,17 +54,17 @@ public class BloombergConnectorComponentFactory extends AbstractComponentFactory
   @PropertyDefinition
   private Integer _port;
   /**
-   * The bpipe application name, if applicable
+   * The bpipe application name, if applicable.
    */
   @PropertyDefinition
   private String _applicationName;
   /**
-   * The auto restart on disconnection
+   * The auto restart on disconnection.
    */
   @PropertyDefinition
   private boolean _autoRestartOnDisconnection = true;
   /**
-   * The bloomberg reference data statistics
+   * The bloomberg reference data statistics.
    */
   @PropertyDefinition(validate = "notNull")
   private BloombergReferenceDataStatistics _referenceDataStatistics;
@@ -215,7 +215,7 @@ public class BloombergConnectorComponentFactory extends AbstractComponentFactory
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bpipe application name, if applicable
+   * Gets the bpipe application name, if applicable.
    * @return the value of the property
    */
   public String getApplicationName() {
@@ -223,7 +223,7 @@ public class BloombergConnectorComponentFactory extends AbstractComponentFactory
   }
 
   /**
-   * Sets the bpipe application name, if applicable
+   * Sets the bpipe application name, if applicable.
    * @param applicationName  the new value of the property
    */
   public void setApplicationName(String applicationName) {
@@ -240,7 +240,7 @@ public class BloombergConnectorComponentFactory extends AbstractComponentFactory
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the auto restart on disconnection
+   * Gets the auto restart on disconnection.
    * @return the value of the property
    */
   public boolean isAutoRestartOnDisconnection() {
@@ -248,7 +248,7 @@ public class BloombergConnectorComponentFactory extends AbstractComponentFactory
   }
 
   /**
-   * Sets the auto restart on disconnection
+   * Sets the auto restart on disconnection.
    * @param autoRestartOnDisconnection  the new value of the property
    */
   public void setAutoRestartOnDisconnection(boolean autoRestartOnDisconnection) {
@@ -265,7 +265,7 @@ public class BloombergConnectorComponentFactory extends AbstractComponentFactory
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bloomberg reference data statistics
+   * Gets the bloomberg reference data statistics.
    * @return the value of the property, not null
    */
   public BloombergReferenceDataStatistics getReferenceDataStatistics() {
@@ -273,7 +273,7 @@ public class BloombergConnectorComponentFactory extends AbstractComponentFactory
   }
 
   /**
-   * Sets the bloomberg reference data statistics
+   * Sets the bloomberg reference data statistics.
    * @param referenceDataStatistics  the new value of the property, not null
    */
   public void setReferenceDataStatistics(BloombergReferenceDataStatistics referenceDataStatistics) {

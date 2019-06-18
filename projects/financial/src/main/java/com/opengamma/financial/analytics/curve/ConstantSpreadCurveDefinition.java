@@ -25,8 +25,8 @@ import com.opengamma.id.ExternalId;
 /**
  * Definition for spread curves. There are two forms supported:
  * <ul>
- *   <li> Two curves and the operation to perform on these curves.
- *   <li> One curve, a constant spread value with units, and the operation.
+ * <li>Two curves and the operation to perform on these curves.
+ * <li>One curve, a constant spread value with units, and the operation.
  * </ul>
  * <p>
  * Note that the operation might not be commutative, so the order of the inputs is important.
@@ -83,10 +83,15 @@ public class ConstantSpreadCurveDefinition extends AbstractCurveDefinition {
 
   /**
    * Constructor that creates a curve definition with the supplied spread.
-   * @param name The curve definition name, not null
-   * @param curve The curve, not null
-   * @param spreadValue The spread value
-   * @param operationName The operation name, not null
+   * 
+   * @param name
+   *          The curve definition name, not null
+   * @param curve
+   *          The curve, not null
+   * @param spreadValue
+   *          The spread value
+   * @param operationName
+   *          The operation name, not null
    */
   public ConstantSpreadCurveDefinition(final String name, final String curve, final double spreadValue, final String operationName) {
     super(name);
@@ -99,11 +104,16 @@ public class ConstantSpreadCurveDefinition extends AbstractCurveDefinition {
   }
 
   /**
-   * Constructor that creates a curve definition with a
-   * @param name The curve definition name, not null
-   * @param curve The curve, not null
-   * @param spreadId The spread, not null
-   * @param operationName The operation name, not null
+   * Constructor that creates a curve definition.
+   * 
+   * @param name
+   *          The curve definition name, not null
+   * @param curve
+   *          The curve, not null
+   * @param spreadId
+   *          The spread, not null
+   * @param operationName
+   *          The operation name, not null
    */
   public ConstantSpreadCurveDefinition(final String name, final String curve, final ExternalId spreadId, final String operationName) {
     super(name);
@@ -115,13 +125,17 @@ public class ConstantSpreadCurveDefinition extends AbstractCurveDefinition {
     setOperationName(operationName);
   }
 
-
   /**
-   * @param name The curve definition name, not null
-   * @param curve The curve, not null
-   * @param valueRequirementName The value requirement name, not null
-   * @param valueProperties The value properties, not null
-   * @param operationName The operation name, not null
+   * @param name
+   *          The curve definition name, not null
+   * @param curve
+   *          The curve, not null
+   * @param valueRequirementName
+   *          The value requirement name, not null
+   * @param valueProperties
+   *          The value properties, not null
+   * @param operationName
+   *          The operation name, not null
    */
   public ConstantSpreadCurveDefinition(final String name, final String curve, final String valueRequirementName,
       final Map<String, String> valueProperties, final String operationName) {

@@ -64,14 +64,22 @@ public class BondFuturesSecurityDefinition extends FuturesSecurityDefinition<Bon
 
   /**
    * Constructor from the trading and notice dates and the basket.
-   * @param tradingLastDate The last trading date.
-   * @param noticeFirstDate The first notice date.
-   * @param noticeLastDate The last notice date.
-   * @param notional The bond future notional.
-   * @param deliveryBasket The basket of deliverable bonds.
-   * @param conversionFactor The conversion factor of each bond in the basket.
+   *
+   * @param tradingLastDate
+   *          The last trading date.
+   * @param noticeFirstDate
+   *          The first notice date.
+   * @param noticeLastDate
+   *          The last notice date.
+   * @param notional
+   *          The bond future notional.
+   * @param deliveryBasket
+   *          The basket of deliverable bonds.
+   * @param conversionFactor
+   *          The conversion factor of each bond in the basket.
    */
-  public BondFuturesSecurityDefinition(final ZonedDateTime tradingLastDate, final ZonedDateTime noticeFirstDate, final ZonedDateTime noticeLastDate, final double notional,
+  public BondFuturesSecurityDefinition(final ZonedDateTime tradingLastDate, final ZonedDateTime noticeFirstDate, final ZonedDateTime noticeLastDate,
+      final double notional,
       final BondFixedSecurityDefinition[] deliveryBasket, final double[] conversionFactor) {
     super(tradingLastDate);
     ArgumentChecker.notNull(noticeFirstDate, "First notice date");
@@ -93,6 +101,7 @@ public class BondFuturesSecurityDefinition extends FuturesSecurityDefinition<Bon
 
   /**
    * Gets the first notice date.
+   *
    * @return The first notice date.
    */
   public ZonedDateTime getNoticeFirstDate() {
@@ -101,6 +110,7 @@ public class BondFuturesSecurityDefinition extends FuturesSecurityDefinition<Bon
 
   /**
    * Gets the last notice date.
+   *
    * @return The last notice date.
    */
   public ZonedDateTime getNoticeLastDate() {
@@ -109,6 +119,7 @@ public class BondFuturesSecurityDefinition extends FuturesSecurityDefinition<Bon
 
   /**
    * Gets the first delivery date. It is the first notice date plus the settlement days.
+   *
    * @return The first delivery date.
    */
   public ZonedDateTime getDeliveryFirstDate() {
@@ -117,6 +128,7 @@ public class BondFuturesSecurityDefinition extends FuturesSecurityDefinition<Bon
 
   /**
    * Gets the last delivery date. It is the last notice date plus the settlement days.
+   *
    * @return The last delivery date.
    */
   public ZonedDateTime getDeliveryLastDate() {
@@ -125,6 +137,7 @@ public class BondFuturesSecurityDefinition extends FuturesSecurityDefinition<Bon
 
   /**
    * Gets the number of days between notice date and delivery date.
+   *
    * @return The number of days between notice date and delivery date.
    */
   public int getSettlementDays() {
@@ -133,6 +146,7 @@ public class BondFuturesSecurityDefinition extends FuturesSecurityDefinition<Bon
 
   /**
    * Gets the notional.
+   *
    * @return The notional.
    */
   public double getNotional() {
@@ -141,6 +155,7 @@ public class BondFuturesSecurityDefinition extends FuturesSecurityDefinition<Bon
 
   /**
    * Gets the basket of deliverable bonds.
+   *
    * @return The basket of deliverable bonds.
    */
   public BondFixedSecurityDefinition[] getDeliveryBasket() {
@@ -149,6 +164,7 @@ public class BondFuturesSecurityDefinition extends FuturesSecurityDefinition<Bon
 
   /**
    * Gets the conversion factor of each bond in the basket.
+   *
    * @return The conversion factors.
    */
   public double[] getConversionFactor() {
@@ -157,6 +173,7 @@ public class BondFuturesSecurityDefinition extends FuturesSecurityDefinition<Bon
 
   /**
    * Gets the holiday calendar.
+   *
    * @return The holiday calendar
    */
   public Calendar getCalendar() {
@@ -165,6 +182,7 @@ public class BondFuturesSecurityDefinition extends FuturesSecurityDefinition<Bon
 
   /**
    * Returns the futures' currency.
+   *
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -173,6 +191,7 @@ public class BondFuturesSecurityDefinition extends FuturesSecurityDefinition<Bon
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -238,7 +257,7 @@ public class BondFuturesSecurityDefinition extends FuturesSecurityDefinition<Bon
     result = prime * result + _noticeLastDate.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _settlementDays;
     return result;
   }

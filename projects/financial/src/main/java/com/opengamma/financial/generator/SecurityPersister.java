@@ -22,7 +22,7 @@ import com.opengamma.util.GUIDGenerator;
  */
 public abstract class SecurityPersister {
 
-  private final Map<ManageableSecurity, ExternalIdBundle> _securities = new HashMap<ManageableSecurity, ExternalIdBundle>();
+  private final Map<ManageableSecurity, ExternalIdBundle> _securities = new HashMap<>();
   private final ExternalScheme _scheme;
 
   public SecurityPersister(final ExternalScheme scheme) {
@@ -45,11 +45,12 @@ public abstract class SecurityPersister {
 
   /**
    * Produces an {@link ExternalIdBundle} referencing the security.
-   * 
-   * @param security the security to store, not null
+   *
+   * @param security
+   *          the security to store, not null
    * @return the identifier bundle, not null
    */
-  public final ExternalIdBundle storeSecurity(final ManageableSecurity security) {
+  public ExternalIdBundle storeSecurity(final ManageableSecurity security) {
     ArgumentChecker.notNull(security, "security");
     final ManageableSecurity clone = JodaBeanUtils.clone(security);
     clone.setUniqueId(null);

@@ -41,18 +41,22 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * This Function provides the sensitivity to the discount rate. <p>
- * We have two dates of interest, expiry and settlement.
- * Sensitivity to the expiry rate might be implicit in the estimation of the underlying equity's forward, but we don't include this here.
- * The sensitivity to settlement rate is in the discounting, the ZeroBond price: PV = Z(t,S) * C(F,K,sig,T) <p>
+ * This Function provides the sensitivity to the discount rate.
+ * <p>
+ * We have two dates of interest, expiry and settlement. Sensitivity to the expiry rate might be implicit in the estimation of the underlying equity's forward,
+ * but we don't include this here. The sensitivity to settlement rate is in the discounting, the ZeroBond price: PV = Z(t,S) * C(F,K,sig,T)
+ * <p>
  * We use chain rule to distribute closed-form model sensitivity across the curve
+ * 
+ * @deprecated Deprecated
  */
+@Deprecated
 public class EquityVanillaBarrierOptionFundingCurveSensitivitiesFunction extends EquityVanillaBarrierOptionBlackFunction {
   /** The present value calculator */
   private static final EquityOptionBlackPresentValueCalculator PV_CALCULATOR = EquityOptionBlackPresentValueCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityVanillaBarrierOptionFundingCurveSensitivitiesFunction() {
     super(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES);
@@ -112,7 +116,7 @@ public class EquityVanillaBarrierOptionFundingCurveSensitivitiesFunction extends
         throw new OpenGammaRuntimeException("EquityBarrierOptionSecurity has already settled.");
       }
       final double rhoSettle = -1 * settlementTime * pv;
-      //  We use PresentValueNodeSensitivityCalculator to distribute this risk across the curve
+      // We use PresentValueNodeSensitivityCalculator to distribute this risk across the curve
       final NodeYieldSensitivityCalculator distributor = PresentValueNodeSensitivityCalculator.getDefaultInstance();
       // What's left is to package up the inputs to the distributor, a YieldCurveBundle and a Map of Sensitivities
       final Map<String, List<DoublesPair>> curveSensMap = new HashMap<>();

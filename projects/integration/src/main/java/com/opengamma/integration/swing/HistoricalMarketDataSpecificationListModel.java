@@ -22,7 +22,7 @@ import com.opengamma.master.config.ConfigSearchResult;
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesRating;
 
 /**
- * List/ComboBox model for historical market data specifications
+ * List/ComboBox model for historical market data specifications.
  */
 public class HistoricalMarketDataSpecificationListModel extends AbstractListModel<String> implements ComboBoxModel<String> {
   private static final long serialVersionUID = 1L;
@@ -58,7 +58,6 @@ public class HistoricalMarketDataSpecificationListModel extends AbstractListMode
     };
     worker.execute();
   }
-
 
   @Override
   public int getSize() {

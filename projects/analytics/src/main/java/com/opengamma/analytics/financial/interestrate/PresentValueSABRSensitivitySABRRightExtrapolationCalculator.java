@@ -30,10 +30,12 @@ import com.opengamma.analytics.financial.model.option.definition.SABRInterestRat
 
 /**
  * Present value sensitivity to SABR parameters calculator for interest rate instruments using SABR volatility formula.
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
-public final class PresentValueSABRSensitivitySABRRightExtrapolationCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, PresentValueSABRSensitivityDataBundle> {
+public final class PresentValueSABRSensitivitySABRRightExtrapolationCalculator
+extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, PresentValueSABRSensitivityDataBundle> {
 
   /**
    * The cut-off strike. The smile is extrapolated above that level.
@@ -52,8 +54,11 @@ public final class PresentValueSABRSensitivitySABRRightExtrapolationCalculator e
 
   /**
    * Constructor.
-   * @param cutOffStrike The cut-off strike.
-   * @param mu The tail thickness parameter.
+   *
+   * @param cutOffStrike
+   *          The cut-off strike.
+   * @param mu
+   *          The tail thickness parameter.
    */
   public PresentValueSABRSensitivitySABRRightExtrapolationCalculator(final double cutOffStrike, final double mu) {
     _mu = mu;
@@ -72,7 +77,8 @@ public final class PresentValueSABRSensitivitySABRRightExtrapolationCalculator e
       return method.presentValueSABRSensitivity(cap, sabr);
 
     }
-    throw new UnsupportedOperationException("The PresentValueSABRSensitivitySABRExtrapolationRightCalculator visitor visitCapFloorIbor requires a SABRInterestRateDataBundle as data.");
+    throw new UnsupportedOperationException(
+        "The PresentValueSABRSensitivitySABRExtrapolationRightCalculator visitor visitCapFloorIbor requires a SABRInterestRateDataBundle as data.");
   }
 
   @Override
@@ -85,7 +91,8 @@ public final class PresentValueSABRSensitivitySABRRightExtrapolationCalculator e
       return method.presentValueSABRSensitivity(swaption, sabr);
 
     }
-    throw new UnsupportedOperationException("The PresentValueSABRSensitivitySABRExtrapolationRightCalculator visitor visitSwaptionCashFixedIbor requires a SABRInterestRateDataBundle as data.");
+    throw new UnsupportedOperationException(
+        "The PresentValueSABRSensitivitySABRExtrapolationRightCalculator visitor visitSwaptionCashFixedIbor requires a SABRInterestRateDataBundle as data.");
   }
 
   @Override
@@ -98,7 +105,9 @@ public final class PresentValueSABRSensitivitySABRRightExtrapolationCalculator e
       return method.presentValueSABRSensitivity(swaption, sabr);
 
     }
-    throw new UnsupportedOperationException("The PresentValueSABRSensitivitySABRExtrapolationRightCalculator visitor visitSwaptionPhysicalFixedIbor requires a SABRInterestRateDataBundle as data.");
+    throw new UnsupportedOperationException(
+        "The PresentValueSABRSensitivitySABRExtrapolationRightCalculator visitor visitSwaptionPhysicalFixedIbor "
+            + "requires a SABRInterestRateDataBundle as data.");
 
   }
 
@@ -111,7 +120,8 @@ public final class PresentValueSABRSensitivitySABRRightExtrapolationCalculator e
       return _methodExtraCMSCpn.presentValueSABRSensitivity(payment, sabr);
 
     }
-    throw new UnsupportedOperationException("The PresentValueSABRSensitivitySABRExtrapolationRightCalculator visitor visitCouponCMS requires a SABRInterestRateDataBundle as data.");
+    throw new UnsupportedOperationException(
+        "The PresentValueSABRSensitivitySABRExtrapolationRightCalculator visitor visitCouponCMS requires a SABRInterestRateDataBundle as data.");
   }
 
   @Override
@@ -123,7 +133,8 @@ public final class PresentValueSABRSensitivitySABRRightExtrapolationCalculator e
       return _methodExtraCMSCap.presentValueSABRSensitivity(payment, sabr);
 
     }
-    throw new UnsupportedOperationException("The PresentValueSABRSensitivitySABRExtrapolationRightCalculator visitor visitCapFloorCMS requires a SABRInterestRateDataBundle as data.");
+    throw new UnsupportedOperationException(
+        "The PresentValueSABRSensitivitySABRExtrapolationRightCalculator visitor visitCapFloorCMS requires a SABRInterestRateDataBundle as data.");
   }
 
   @Override
@@ -134,12 +145,14 @@ public final class PresentValueSABRSensitivitySABRRightExtrapolationCalculator e
       final SABRInterestRateDataBundle sabrBundle = (SABRInterestRateDataBundle) curves;
       if (sabrBundle.getSABRParameter() instanceof SABRInterestRateCorrelationParameters) {
         final SABRInterestRateCorrelationParameters sabrCorrelation = (SABRInterestRateCorrelationParameters) sabrBundle.getSABRParameter();
-        final CapFloorCMSSpreadSABRBinormalMethod method = new CapFloorCMSSpreadSABRBinormalMethod(sabrCorrelation.getCorrelation(), _methodExtraCMSCap, _methodExtraCMSCpn);
+        final CapFloorCMSSpreadSABRBinormalMethod method = new CapFloorCMSSpreadSABRBinormalMethod(sabrCorrelation.getCorrelation(), _methodExtraCMSCap,
+            _methodExtraCMSCpn);
         return method.presentValueSABRSensitivity(payment, sabrBundle);
       }
     }
     throw new UnsupportedOperationException(
-        "The PresentValueSABRSensitivitySABRExtrapolationRightCalculator visitor visitCapFloorCMSSpread requires a SABRInterestRateDataBundle with correlation as data.");
+        "The PresentValueSABRSensitivitySABRExtrapolationRightCalculator visitor visitCapFloorCMSSpread requires a "
+            + "SABRInterestRateDataBundle with correlation as data.");
   }
 
   @Override

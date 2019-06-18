@@ -13,7 +13,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.time.DateUtils;
 
 /**
- * 
+ *
  */
 public class HullWhiteTwoFactorInterestRateModel implements DiscountBondModel<HullWhiteTwoFactorDataBundle> {
 
@@ -58,7 +58,8 @@ public class HullWhiteTwoFactorInterestRateModel implements DiscountBondModel<Hu
     return Math.exp(-a * dt) / (a * (a - b)) - Math.exp(-b * dt) / (b * (a - b)) + 1. / (a * b);
   }
 
-  protected Double getEta(final double t1, final double t2, final double t3, final double a, final double b, final double sigma1, final double sigma2, final double rho) {
+  protected Double getEta(final double t1, final double t2, final double t3, final double a, final double b, final double sigma1, final double sigma2,
+      final double rho) {
     final double dt12 = t2 - t1;
     final double dt13 = t3 - t1;
     final double dt23 = t3 - t2;
@@ -76,12 +77,14 @@ public class HullWhiteTwoFactorInterestRateModel implements DiscountBondModel<Hu
     final double c23Sq = c23 * c23;
     final double abP = a + b;
     final double abM = a - b;
-    final double gamma1 = Math.exp(-abP * dt13) * (Math.exp(abP * dt12) - 1) / (abP * abM) - Math.exp(-2 * a * dt13) * (Math.exp(2 * a * dt12) - 1) / (2 * a * abM);
+    final double gamma1 = Math.exp(-abP * dt13) * (Math.exp(abP * dt12) - 1) / (abP * abM)
+        - Math.exp(-2 * a * dt13) * (Math.exp(2 * a * dt12) - 1) / (2 * a * abM);
     final double gamma2 = (gamma1 + c23 - c13 + 0.5 * b23Sq - 0.5 * b13Sq + dt12 / a - (Math.exp(-a * dt23) - Math.exp(-a * dt13)) / (a * a)) / (a * b);
     final double gamma3 = -(Math.exp(-abP * dt12) - 1) / (abP * abM) + (Math.exp(-2 * a * dt12) - 1) / (2 * a * abM);
     final double gamma4 = (gamma3 - c12 - 0.5 * b12Sq + dt12 / a + (Math.exp(-a * dt12) - 1) / (a * a)) / (a * b);
     final double gamma5 = (0.5 * (c23Sq - c13Sq) + gamma2) / b;
     final double gamma6 = (gamma4 - 0.5 * c12Sq) / b;
-    return sigma1 * sigma1 * (1 - Math.exp(-2 * a * dt12)) * b23Sq / (4 * a) - rho * sigma1 * sigma2 * (b12 * c12 * b23 + gamma4 - gamma2) - 0.5 * sigma2 * sigma2 * (c12Sq * b23 + gamma6 - gamma5);
+    return sigma1 * sigma1 * (1 - Math.exp(-2 * a * dt12)) * b23Sq / (4 * a) - rho * sigma1 * sigma2 * (b12 * c12 * b23 + gamma4 - gamma2)
+        - 0.5 * sigma2 * sigma2 * (c12Sq * b23 + gamma6 - gamma5);
   }
 }

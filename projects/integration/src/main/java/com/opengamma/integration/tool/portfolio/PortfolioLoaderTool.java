@@ -28,14 +28,14 @@ import com.opengamma.scripts.Scriptable;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * The portfolio loader tool
+ * The portfolio loader tool.
  */
 @Scriptable
 public class PortfolioLoaderTool extends AbstractTool<ToolContext> {
 
   /** File name option flag */
   private static final String FILE_NAME_OPT = "f";
-  /** Portfolio name option flag*/
+  /** Portfolio name option flag */
   private static final String PORTFOLIO_NAME_OPT = "n";
   /** Write option flag */
   private static final String WRITE_OPT = "w";
@@ -45,9 +45,10 @@ public class PortfolioLoaderTool extends AbstractTool<ToolContext> {
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new PortfolioLoaderTool().invokeAndTerminate(args);
   }
 
@@ -67,10 +68,9 @@ public class PortfolioLoaderTool extends AbstractTool<ToolContext> {
     }
 
     final PortfolioWriter persister = new PortfolioWriter(write,
-                                                          getToolContext().getPortfolioMaster(),
-                                                          getToolContext().getPositionMaster(),
-                                                          getToolContext().getSecurityMaster());
-
+        getToolContext().getPortfolioMaster(),
+        getToolContext().getPositionMaster(),
+        getToolContext().getSecurityMaster());
 
     final String filename = getOptionValue(FILE_NAME_OPT);
     final String securityType = getOptionValue(SECURITY_TYPE_OPT);
@@ -101,13 +101,12 @@ public class PortfolioLoaderTool extends AbstractTool<ToolContext> {
         // Check that the asset class was specified on the command line
         if (securityType == null) {
           throw new OpenGammaRuntimeException("Could not import as no asset class was specified for file " + filename);
-        } else {
-//          if (securityType.equalsIgnoreCase("exchangetraded")) {
-//            return new SingleSheetSimplePositionReader(filename, new ExchangeTradedRowParser(s_context.getBloombergSecuritySource()));
-//          } else {
-          return ImmutableList.of(new SingleSheetSimplePositionReader(filename, securityType));
-//          }
         }
+        // if (securityType.equalsIgnoreCase("exchangetraded")) {
+        // return new SingleSheetSimplePositionReader(filename, new ExchangeTradedRowParser(s_context.getBloombergSecuritySource()));
+        // } else {
+        return ImmutableList.of(new SingleSheetSimplePositionReader(filename, securityType));
+      // }
       case XML:
         // XMl multi-asset portfolio
         try {

@@ -38,9 +38,12 @@ public class ValueRenamingFunction extends AbstractFunction.NonCompiledInvoker {
   /**
    * Constructs an instance.
    *
-   * @param valueNamesToChange the set of mutually exclusive value names (for a given target) which the function will change, not null or empty
-   * @param newValueName the new name for any matching value, not null
-   * @param targetType the computation target type for which the function will apply, not null
+   * @param valueNamesToChange
+   *          the set of mutually exclusive value names (for a given target) which the function will change, not null or empty
+   * @param newValueName
+   *          the new name for any matching value, not null
+   * @param targetType
+   *          the computation target type for which the function will apply, not null
    */
   public ValueRenamingFunction(final Set<String> valueNamesToChange, final String newValueName, final ComputationTargetType targetType) {
     this(valueNamesToChange, newValueName, targetType, null);
@@ -49,12 +52,17 @@ public class ValueRenamingFunction extends AbstractFunction.NonCompiledInvoker {
   /**
    * Constructs an instance.
    *
-   * @param valueNamesToChange the set of mutually exclusive value names (for a given target) which the function will change, not null or empty
-   * @param newValueName the new name for any matching value, not null
-   * @param targetType the computation target type for which the function will apply, not null
-   * @param additionalConstraints additional constraints to set on the origin requirement, null for none
+   * @param valueNamesToChange
+   *          the set of mutually exclusive value names (for a given target) which the function will change, not null or empty
+   * @param newValueName
+   *          the new name for any matching value, not null
+   * @param targetType
+   *          the computation target type for which the function will apply, not null
+   * @param additionalConstraints
+   *          additional constraints to set on the origin requirement, null for none
    */
-  public ValueRenamingFunction(final Set<String> valueNamesToChange, final String newValueName, final ComputationTargetType targetType, final ValueProperties additionalConstraints) {
+  public ValueRenamingFunction(final Set<String> valueNamesToChange, final String newValueName, final ComputationTargetType targetType,
+      final ValueProperties additionalConstraints) {
     ArgumentChecker.notNull(valueNamesToChange, "valueNamesToChange");
     ArgumentChecker.notEmpty(valueNamesToChange, "valueNamesToChange");
     ArgumentChecker.notNull(newValueName, "newValueName");
@@ -70,7 +78,8 @@ public class ValueRenamingFunction extends AbstractFunction.NonCompiledInvoker {
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Set<ComputedValue> result = new HashSet<>();
     Object prevValue = null;
     for (final ComputedValue inputValue : inputs.getAllValues()) {
@@ -138,7 +147,8 @@ public class ValueRenamingFunction extends AbstractFunction.NonCompiledInvoker {
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.size() != 1) {
       final Set<ValueSpecification> result = new HashSet<>();
       for (final ValueSpecification spec : inputs.keySet()) {

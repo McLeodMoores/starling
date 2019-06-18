@@ -6,18 +6,15 @@
 package com.opengamma.master.config.impl;
 
 import static com.google.common.collect.Maps.newHashMap;
-import static com.opengamma.lambdava.streams.Lambdava.functional;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.threeten.bp.Instant;
 
@@ -35,7 +32,6 @@ import com.opengamma.id.ObjectIdSupplier;
 import com.opengamma.id.ObjectIdentifiable;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
-import com.opengamma.lambdava.functions.Function1;
 import com.opengamma.master.MasterUtils;
 import com.opengamma.master.config.ConfigDocument;
 import com.opengamma.master.config.ConfigHistoryRequest;
@@ -47,7 +43,6 @@ import com.opengamma.master.config.ConfigSearchRequest;
 import com.opengamma.master.config.ConfigSearchResult;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.paging.Paging;
-import com.opengamma.util.paging.PagingRequest;
 
 /**
  * A simple, in-memory implementation of {@code ConfigMaster}.
@@ -75,10 +70,6 @@ public class InMemoryConfigMaster implements ConfigMaster {
    * The change manager.
    */
   private final ChangeManager _changeManager;
-  /**
-   * A source of version strings so that updates to an object identifier get a new unique identifier.
-   */
-  private final AtomicLong _versions = new AtomicLong();
 
   /**
    * Creates an instance.
@@ -140,18 +131,6 @@ public class InMemoryConfigMaster implements ConfigMaster {
 
   //-------------------------------------------------------------------------
   @Override
-  public ConfigDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
-    ArgumentChecker.notNull(objectId, "objectId");
-    ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    final ConfigDocument document = _store.get(objectId.getObjectId());
-    if (document == null) {
-      throw new DataNotFoundException("Config not found: " + objectId);
-    }
-    return document;
-  }
-
-  //-------------------------------------------------------------------------
-  @Override
   public ConfigDocument add(final ConfigDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getConfig(), "document.object");
@@ -160,7 +139,7 @@ public class InMemoryConfigMaster implements ConfigMaster {
 
     final ConfigItem<?> item = document.getConfig();
     final ObjectId objectId = _objectIdSupplier.get();
-    final UniqueId uniqueId = objectId.atVersion(Long.toString(_versions.incrementAndGet()));
+    final UniqueId uniqueId = objectId.atVersion("");
     final Instant now = Instant.now();
     item.setUniqueId(uniqueId);
     IdUtils.setInto(item.getValue(), uniqueId);
@@ -181,7 +160,7 @@ public class InMemoryConfigMaster implements ConfigMaster {
     ArgumentChecker.notNull(document.getConfig(), "document.object");
     ArgumentChecker.notNull(document.getConfig().getValue(), "document.object.value");
 
-    UniqueId uniqueId = document.getUniqueId();
+    final UniqueId uniqueId = document.getUniqueId();
     final Instant now = Instant.now();
     final ConfigDocument storedDocument = _store.get(uniqueId.getObjectId());
     if (storedDocument == null) {
@@ -191,7 +170,6 @@ public class InMemoryConfigMaster implements ConfigMaster {
     document.setVersionToInstant(null);
     document.setCorrectionFromInstant(now);
     document.setCorrectionToInstant(null);
-    uniqueId = uniqueId.withVersion(Long.toString(_versions.incrementAndGet()));
     document.setUniqueId(uniqueId);
     IdUtils.setInto(document.getConfig().getValue(), uniqueId);
     if (!_store.replace(uniqueId.getObjectId(), storedDocument, document)) {
@@ -235,6 +213,26 @@ public class InMemoryConfigMaster implements ConfigMaster {
       throw new DataNotFoundException("Config not found: " + uniqueId.getObjectId());
     }
     return document;
+  }
+
+  @Override
+  public ConfigDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
+    ArgumentChecker.notNull(objectId, "objectId");
+    ArgumentChecker.notNull(versionCorrection, "versionCorrection");
+    final ConfigDocument document = _store.get(objectId.getObjectId());
+    if (document == null) {
+      throw new DataNotFoundException("Config not found: " + objectId);
+    }
+    return document;
+  }
+
+  @Override
+  public Map<UniqueId, ConfigDocument> get(final Collection<UniqueId> uniqueIds) {
+    final Map<UniqueId, ConfigDocument> resultMap = newHashMap();
+    for (final UniqueId uniqueId : uniqueIds) {
+      resultMap.put(uniqueId, _store.get(uniqueId.getObjectId()));
+    }
+    return resultMap;
   }
 
   //-------------------------------------------------------------------------
@@ -318,7 +316,7 @@ public class InMemoryConfigMaster implements ConfigMaster {
     return result.get(0);
   }
 
-  private void validateDocument(final ConfigDocument document) {
+  private static void validateDocument(final ConfigDocument document) {
     ArgumentChecker.notNull(document.getConfig(), "document.object");
     ArgumentChecker.notNull(document.getConfig().getValue(), "document.object.value");
     ArgumentChecker.notNull(document.getName(), "document.name");
@@ -327,42 +325,16 @@ public class InMemoryConfigMaster implements ConfigMaster {
   //-------------------------------------------------------------------------
   @Override
   public <R> ConfigHistoryResult<R> history(final ConfigHistoryRequest<R> request) {
-    final Class<?> type = request.getType();
-    final ObjectId oid = request.getObjectId();
-    final PagingRequest pagingRequest = request.getPagingRequest();
+    ArgumentChecker.notNull(request, "request");
+    ArgumentChecker.notNull(request.getObjectId(), "request.objectId");
 
-    return new ConfigHistoryResult<>(
-        pagingRequest.select(
-            functional(_store.keySet())
-            .map(new Function1<ObjectId, ConfigDocument>() {
-              @Override
-              public ConfigDocument execute(final ObjectId objectId) {
-                return _store.get(objectId);
-              }
-            })
-            .filter(new Function1<ConfigDocument, Boolean>() {
-              @Override
-              public Boolean execute(final ConfigDocument configDocument) {
-                return (oid == null || configDocument.getObjectId().equals(oid))
-                    && (type == null || type.isAssignableFrom(configDocument.getType()));
-              }
-            })
-            .sortBy(new Comparator<ConfigDocument>() {
-              @Override
-              public int compare(final ConfigDocument configDocument, final ConfigDocument configDocument1) {
-                return configDocument.getVersionFromInstant().compareTo(configDocument1.getVersionFromInstant());
-              }
-            })
-            .asList()));
-  }
-
-  @Override
-  public Map<UniqueId, ConfigDocument> get(final Collection<UniqueId> uniqueIds) {
-    final Map<UniqueId, ConfigDocument> resultMap = newHashMap();
-    for (final UniqueId uniqueId : uniqueIds) {
-      resultMap.put(uniqueId, _store.get(uniqueId.getObjectId()));
+    final ConfigDocument doc = get(request.getObjectId(), VersionCorrection.LATEST);
+    final ConfigHistoryResult<R> result = new ConfigHistoryResult<>();
+    if (doc != null) {
+      result.getDocuments().add(doc);
     }
-    return resultMap;
+    result.setPaging(Paging.ofAll(result.getDocuments()));
+    return result;
   }
 
 }

@@ -61,9 +61,8 @@ import com.opengamma.util.ArgumentChecker;
       final Bean bean = (Bean) value;
       final BuildingBeanVisitor<JSONObject> visitor = new BuildingBeanVisitor<>(bean, new JsonDataSink(_converters));
       return traverser.traverse(bean.metaBean(), visitor);
-    } else {
-      throw new IllegalArgumentException("Unable to convert " + value.getClass().getName());
     }
+    throw new IllegalArgumentException("Unable to convert " + value.getClass().getName());
   }
 
   @Override

@@ -8,7 +8,6 @@ package com.opengamma.financial.analytics.model.curve;
 import static com.opengamma.engine.value.ValueRequirementNames.HULL_WHITE_ONE_FACTOR_PARAMETERS;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_HULL_WHITE_CURRENCY;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_HULL_WHITE_PARAMETERS;
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -49,6 +48,8 @@ import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  * Function that supplies Hull-White one factor parameters.
  */
@@ -78,8 +79,10 @@ public class HullWhiteOneFactorParametersFunction extends AbstractFunction {
   private ConfigSourceQuery<HullWhiteOneFactorParameters> _hullWhiteOneFactorParameters;
 
   /**
-   * @param name The name of the Hull-White parameter set, not null
-   * @param currency The currency for which the parameters are valid, not null
+   * @param name
+   *          The name of the Hull-White parameter set, not null
+   * @param currency
+   *          The currency for which the parameters are valid, not null
    */
   public HullWhiteOneFactorParametersFunction(final String name, final String currency) {
     ArgumentChecker.notNull(name, "name");
@@ -95,7 +98,8 @@ public class HullWhiteOneFactorParametersFunction extends AbstractFunction {
 
   @Override
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
-    final ValueProperties properties = createValueProperties().with(PROPERTY_HULL_WHITE_PARAMETERS, _name).with(PROPERTY_HULL_WHITE_CURRENCY, _currency.getCode()).get();
+    final ValueProperties properties = createValueProperties().with(PROPERTY_HULL_WHITE_PARAMETERS, _name)
+        .with(PROPERTY_HULL_WHITE_CURRENCY, _currency.getCode()).get();
     final ValueSpecification result = new ValueSpecification(HULL_WHITE_ONE_FACTOR_PARAMETERS, ComputationTargetSpecification.of(_currency), properties);
     final Set<ValueRequirement> requirements = new HashSet<>();
     final HullWhiteOneFactorParameters parameters = _hullWhiteOneFactorParameters.get(_name);
@@ -120,13 +124,15 @@ public class HullWhiteOneFactorParametersFunction extends AbstractFunction {
           final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
         final Clock snapshotClock = executionContext.getValuationClock();
         final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
-        Object meanReversionObject = inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, parameters.getMeanReversionId()));
+        Object meanReversionObject = inputs
+            .getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, parameters.getMeanReversionId()));
         if (meanReversionObject == null) {
           // TODO Jim - these are hacks that should be removed.
           meanReversionObject = MEAN_REVERSION_DEFAULT;
           LOGGER.info("Using default mean reversion");
         }
-        Object initialVolatilityObject = inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, parameters.getInitialVolatilityId()));
+        Object initialVolatilityObject = inputs
+            .getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, parameters.getInitialVolatilityId()));
         if (initialVolatilityObject == null) {
           // TODO Jim - these are hacks that should be removed.
           initialVolatilityObject = INITIAL_VOLATILITY_DEFAULT;
@@ -141,7 +147,8 @@ public class HullWhiteOneFactorParametersFunction extends AbstractFunction {
           final ExternalScheme scheme = entry.getValue().getScheme();
           final String id = entry.getValue().getValue();
           final ExternalId tenorAppendedId = ExternalId.of(scheme, createId(entry.getKey(), id));
-          Object volatilityObject = inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, tenorAppendedId));
+          Object volatilityObject = inputs
+              .getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, tenorAppendedId));
           // TODO Jim - next block is a hack that should be removed.
           if (volatilityObject == null) {
             volatilityObject = VOLATILITY_TERMS.get(entry.getKey());
@@ -154,7 +161,8 @@ public class HullWhiteOneFactorParametersFunction extends AbstractFunction {
             volatilityTime.add(t);
           }
         }
-        final HullWhiteOneFactorPiecewiseConstantParameters hullWhiteParameters = new HullWhiteOneFactorPiecewiseConstantParameters(meanReversion, volatility.toDoubleArray(),
+        final HullWhiteOneFactorPiecewiseConstantParameters hullWhiteParameters = new HullWhiteOneFactorPiecewiseConstantParameters(meanReversion,
+            volatility.toDoubleArray(),
             volatilityTime.toDoubleArray());
         return Collections.singleton(new ComputedValue(result, hullWhiteParameters));
       }
@@ -176,7 +184,8 @@ public class HullWhiteOneFactorParametersFunction extends AbstractFunction {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> names = constraints.getValues(PROPERTY_HULL_WHITE_PARAMETERS);
         if (names == null || names.size() != 1) {
@@ -200,9 +209,11 @@ public class HullWhiteOneFactorParametersFunction extends AbstractFunction {
 
   /**
    * Appends the tenor to an id to create the market data identifier.
-   * 
-   * @param tenor The tenor
-   * @param id The id
+   *
+   * @param tenor
+   *          The tenor
+   * @param id
+   *          The id
    * @return The market data id
    */
   static String createId(final Tenor tenor, final String id) {

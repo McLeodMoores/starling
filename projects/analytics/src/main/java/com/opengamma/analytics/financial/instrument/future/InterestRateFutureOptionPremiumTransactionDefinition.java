@@ -40,10 +40,15 @@ public class InterestRateFutureOptionPremiumTransactionDefinition implements Ins
 
   /**
    * Constructor of the future option transaction from details.
-   * @param underlyingOption The underlying option future security.
-   * @param quantity The quantity of the transaction. Can be positive or negative.
-   * @param premiumDate The transaction date.
-   * @param tradePrice The transaction price.
+   *
+   * @param underlyingOption
+   *          The underlying option future security.
+   * @param quantity
+   *          The quantity of the transaction. Can be positive or negative.
+   * @param premiumDate
+   *          The transaction date.
+   * @param tradePrice
+   *          The transaction price.
    */
   public InterestRateFutureOptionPremiumTransactionDefinition(final InterestRateFutureOptionPremiumSecurityDefinition underlyingOption, final int quantity,
       final ZonedDateTime premiumDate, final double tradePrice) {
@@ -52,12 +57,14 @@ public class InterestRateFutureOptionPremiumTransactionDefinition implements Ins
     _underlyingOption = underlyingOption;
     _quantity = quantity;
     _tradePrice = tradePrice;
-    final double premiumAmount = _tradePrice * _underlyingOption.getUnderlyingFuture().getNotional() * _underlyingOption.getUnderlyingFuture().getPaymentAccrualFactor();
+    final double premiumAmount = _tradePrice * _underlyingOption.getUnderlyingFuture().getNotional()
+        * _underlyingOption.getUnderlyingFuture().getPaymentAccrualFactor();
     _premium = new PaymentFixedDefinition(underlyingOption.getCurrency(), premiumDate, premiumAmount);
   }
 
   /**
    * Gets the underlying option future security.
+   *
    * @return The underlying.
    */
   public InterestRateFutureOptionPremiumSecurityDefinition getUnderlyingOption() {
@@ -66,6 +73,7 @@ public class InterestRateFutureOptionPremiumTransactionDefinition implements Ins
 
   /**
    * Gets the quantity of the transaction. Can be positive or negative.
+   *
    * @return The quantity of the transaction.
    */
   public int getQuantity() {
@@ -74,6 +82,7 @@ public class InterestRateFutureOptionPremiumTransactionDefinition implements Ins
 
   /**
    * Gets the transaction price.
+   *
    * @return The transaction price.
    */
   public double getTradePrice() {
@@ -82,6 +91,7 @@ public class InterestRateFutureOptionPremiumTransactionDefinition implements Ins
 
   /**
    * Gets the premium.
+   *
    * @return The premium.
    */
   public PaymentFixedDefinition getPremium() {
@@ -90,6 +100,7 @@ public class InterestRateFutureOptionPremiumTransactionDefinition implements Ins
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -135,7 +146,7 @@ public class InterestRateFutureOptionPremiumTransactionDefinition implements Ins
     result = prime * result + _quantity;
     long temp;
     temp = Double.doubleToLongBits(_tradePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlyingOption.hashCode();
     return result;
   }

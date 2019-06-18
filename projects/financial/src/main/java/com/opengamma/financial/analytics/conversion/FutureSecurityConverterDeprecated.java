@@ -36,7 +36,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 @Deprecated
 public class FutureSecurityConverterDeprecated extends FinancialSecurityVisitorAdapter<InstrumentDefinitionWithData<?, Double>>
-    implements FinancialSecurityVisitorWithData<Double, InstrumentDefinitionWithData<?, Double>> {
+implements FinancialSecurityVisitorWithData<Double, InstrumentDefinitionWithData<?, Double>> {
   private final BondFutureSecurityConverter _bondFutureConverter;
 
   public FutureSecurityConverterDeprecated(final BondFutureSecurityConverter bondFutureConverter) {
@@ -46,7 +46,8 @@ public class FutureSecurityConverterDeprecated extends FinancialSecurityVisitorA
   @Override
   public InstrumentDefinitionWithData<?, Double> visit(final FutureSecurity future, final Double referencePrice) {
 
-    final FinancialSecurityVisitor<InstrumentDefinitionWithData<?, Double>> visitor = new FinancialSecurityVisitorAdapter<InstrumentDefinitionWithData<?, Double>>() {
+    final FinancialSecurityVisitor<InstrumentDefinitionWithData<?, Double>> visitor =
+        new FinancialSecurityVisitorAdapter<InstrumentDefinitionWithData<?, Double>>() {
 
       @Override
       public InstrumentDefinitionWithData<?, Double> visitAgricultureFutureSecurity(final AgricultureFutureSecurity security) {

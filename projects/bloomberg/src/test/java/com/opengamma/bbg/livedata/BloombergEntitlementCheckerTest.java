@@ -42,15 +42,15 @@ public class BloombergEntitlementCheckerTest {
 
   @BeforeClass(enabled = false)
   public void setUpClass() {
-    BloombergConnector connector = BloombergTestUtils.getBloombergConnector();
-    BloombergReferenceDataProvider rdp = new BloombergReferenceDataProvider(connector);
+    final BloombergConnector connector = BloombergTestUtils.getBloombergConnector();
+    final BloombergReferenceDataProvider rdp = new BloombergReferenceDataProvider(connector);
     rdp.start();
-    
-    Map<LiveDataSpecification, DistributionSpecification> fixes = new HashMap<LiveDataSpecification, DistributionSpecification>();
-    fixes.put(DIST_SPEC.getFullyQualifiedLiveDataSpecification(), DIST_SPEC);    
-    FixedDistributionSpecificationResolver resolver = new FixedDistributionSpecificationResolver(fixes);
-    
-    BloombergEntitlementChecker entitlementChecker = new BloombergEntitlementChecker(connector, rdp, resolver);
+
+    final Map<LiveDataSpecification, DistributionSpecification> fixes = new HashMap<>();
+    fixes.put(DIST_SPEC.getFullyQualifiedLiveDataSpecification(), DIST_SPEC);
+    final FixedDistributionSpecificationResolver resolver = new FixedDistributionSpecificationResolver(fixes);
+
+    final BloombergEntitlementChecker entitlementChecker = new BloombergEntitlementChecker(connector, rdp, resolver);
     entitlementChecker.start();
     _entitlementChecker = entitlementChecker;
   }
@@ -58,13 +58,13 @@ public class BloombergEntitlementCheckerTest {
   //-------------------------------------------------------------------------
   @Test(enabled = false)
   public void entitled() throws Exception {
-    UserPrincipal user = new UserPrincipal("6926421", InetAddress.getLocalHost().getHostAddress());
+    final UserPrincipal user = new UserPrincipal("6926421", InetAddress.getLocalHost().getHostAddress());
     assertTrue(_entitlementChecker.isEntitled(user, DIST_SPEC.getFullyQualifiedLiveDataSpecification()));
   }
 
   @Test(enabled = false)
   public void notEntitled() {
-    UserPrincipal user = new UserPrincipal("impostor", "127.0.0.1");
+    final UserPrincipal user = new UserPrincipal("impostor", "127.0.0.1");
     assertFalse(_entitlementChecker.isEntitled(user, DIST_SPEC.getFullyQualifiedLiveDataSpecification()));
   }
 

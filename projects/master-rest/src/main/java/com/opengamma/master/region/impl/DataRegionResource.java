@@ -54,8 +54,10 @@ public class DataRegionResource
   /**
    * Creates the resource.
    *
-   * @param regionsResource  the parent resource, not null
-   * @param regionId  the region unique identifier, not null
+   * @param regionsResource
+   *          the parent resource, not null
+   * @param regionId
+   *          the region unique identifier, not null
    */
   public DataRegionResource(final DataRegionMasterResource regionsResource, final ObjectId regionId) {
     ArgumentChecker.notNull(regionsResource, "regionsResource");
@@ -64,7 +66,7 @@ public class DataRegionResource
     _urlResourceId = regionId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the regions resource.
@@ -85,7 +87,7 @@ public class DataRegionResource
     return _urlResourceId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the region master.
@@ -97,12 +99,11 @@ public class DataRegionResource
     return getRegionsResource().getRegionMaster();
   }
 
-
   @GET
   @Path("versions")
   public Response history(@Context final UriInfo uriInfo) {
     final RegionHistoryRequest request = RestUtils.decodeQueryParams(uriInfo, RegionHistoryRequest.class);
-    if (getUrlId().equals(request.getObjectId()) == false) {
+    if (!getUrlId().equals(request.getObjectId())) {
       throw new IllegalArgumentException("Document objectId does not match URI");
     }
     final RegionHistoryResult result = getMaster().history(request);
@@ -133,7 +134,6 @@ public class DataRegionResource
   public Response getVersioned(@PathParam("versionId") final String versionId) {
     return super.getVersioned(versionId);
   }
-
 
   @Override
   @PUT

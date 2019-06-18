@@ -23,7 +23,6 @@ import org.fudgemsg.FudgeRuntimeException;
 import org.fudgemsg.taxonomy.FudgeTaxonomy;
 import org.fudgemsg.types.SecondaryFieldTypeBase;
 import org.fudgemsg.wire.FudgeRuntimeIOException;
-import org.fudgemsg.wire.FudgeSize;
 import org.fudgemsg.wire.json.FudgeJSONSettings;
 import org.fudgemsg.wire.types.FudgeWireType;
 import org.json.JSONException;
@@ -34,12 +33,10 @@ import com.google.common.collect.Lists;
 /**
  * A Fudge writer that produces JSON.
  * <p>
- * This writer writes a Fudge message as JSON.
- * This can be used for JSON output, or can be used to assist in developing/debugging
- * a streaming serializer without having to inspect the binary output.
+ * This writer writes a Fudge message as JSON. This can be used for JSON output, or can be used to assist in developing/debugging a streaming serializer without
+ * having to inspect the binary output.
  * <p>
- * Please refer to <a href="http://wiki.fudgemsg.org/display/FDG/JSON+Fudge+Messages">JSON Fudge Messages</a>
- * for details on the representation.
+ * Please refer to <a href="http://wiki.fudgemsg.org/display/FDG/JSON+Fudge+Messages">JSON Fudge Messages</a> for details on the representation.
  */
 public class FudgeMsgJSONWriter implements Flushable, Closeable {
 
@@ -78,20 +75,24 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
   /**
    * Creates a new instance for writing a Fudge stream to a JSON writer.
    *
-   * @param fudgeContext  the Fudge context, not null
-   * @param writer  the underlying writer, not null
+   * @param fudgeContext
+   *          the Fudge context, not null
+   * @param writer
+   *          the underlying writer, not null
    */
   public FudgeMsgJSONWriter(final FudgeContext fudgeContext, final Writer writer) {
     this(fudgeContext, writer, new FudgeJSONSettings());
   }
 
   /**
-   * Creates a new stream writer for writing Fudge messages in JSON format to a given
-   * {@link Writer}.
+   * Creates a new stream writer for writing Fudge messages in JSON format to a given {@link Writer}.
    *
-   * @param fudgeContext  the Fudge context, not null
-   * @param writer  the underlying writer, not null
-   * @param settings  the JSON settings, not null
+   * @param fudgeContext
+   *          the Fudge context, not null
+   * @param writer
+   *          the underlying writer, not null
+   * @param settings
+   *          the JSON settings, not null
    */
   public FudgeMsgJSONWriter(final FudgeContext fudgeContext, final Writer writer, final FudgeJSONSettings settings) {
     if (fudgeContext == null) {
@@ -110,6 +111,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
 
   /**
    * Gets the taxonomy.
+   * 
    * @return the taxonomy
    */
   private FudgeTaxonomy getTaxonomy(final int taxonomyId) {
@@ -119,11 +121,16 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
     return null;
   }
 
+  /**
+   * Gets the Fudge context.
+   *
+   * @return the Fudge context
+   */
   public FudgeContext getFudgeContext() {
     return _fudgeContext;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the JSON settings.
    *
@@ -146,9 +153,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
   }
 
   /**
-   * Discards the JSON writer.
-   * The implementation only allows a single use so we must drop the instance
-   * after each message envelope completes.
+   * Discards the JSON writer. The implementation only allows a single use so we must drop the instance after each message envelope completes.
    */
   private void clearWriter() {
     _writer = null;
@@ -163,15 +168,19 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
     return _underlyingWriter;
   }
 
-
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Writes a message with the given taxonomy, schema version and processing directive flags.
    *
-   * @param message  message to write
-   * @param taxonomyId  identifier of the taxonomy to use. If the taxonomy is recognized by the {@link FudgeContext} it will be used to reduce field names to ordinals where possible.
-   * @param version  schema version
-   * @param processingDirectives  processing directive flags
+   * @param message
+   *          message to write
+   * @param taxonomyId
+   *          identifier of the taxonomy to use. If the taxonomy is recognized by the {@link FudgeContext} it will be used to reduce field names to ordinals
+   *          where possible.
+   * @param version
+   *          schema version
+   * @param processingDirectives
+   *          processing directive flags
    */
   public void writeMessage(final FudgeMsg message, final int taxonomyId, final int version, final int processingDirectives) {
     writeMessageEnvelope(new FudgeMsgEnvelope(message, version, processingDirectives), taxonomyId);
@@ -180,9 +189,11 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
   /**
    * Writes a message with the given taxonomy. Default schema version and processing directive flags are used.
    *
-   * @param message  message to write
-   * @param taxonomyId  the identifier of the taxonomy to use, if the taxonomy is recognized
-   *   by the {@link FudgeContext} it will be used to reduce field names to ordinals where possible.
+   * @param message
+   *          message to write
+   * @param taxonomyId
+   *          the identifier of the taxonomy to use, if the taxonomy is recognized by the {@link FudgeContext} it will be used to reduce field names to ordinals
+   *          where possible.
    */
   public void writeMessage(final FudgeMsg message, final int taxonomyId) {
     writeMessage(message, taxonomyId, DEFAULT_MESSAGE_VERSION, DEFAULT_MESSAGE_PROCESSING_DIRECTIVES);
@@ -191,8 +202,10 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
   /**
    * Writes a message. Default taxonomy, schema version and processing directive flags are used.
    *
-   * @param message  message to write
-   * @throws NullPointerException if the default taxonomy has not been specified
+   * @param message
+   *          message to write
+   * @throws NullPointerException
+   *           if the default taxonomy has not been specified
    */
   public void writeMessage(final FudgeMsg message) {
     writeMessage(message, DEFAULT_TAXONOMY_ID);
@@ -201,16 +214,17 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
   /**
    * Writes a message envelope with the given taxonomy.
    *
-   * @param envelope message envelope to write
-   * @param taxonomyId  the identifier of the taxonomy to use, if the taxonomy is recognized
-   *   by the {@link FudgeContext} it will be used to reduce field names to ordinals where possible.
+   * @param envelope
+   *          message envelope to write
+   * @param taxonomyId
+   *          the identifier of the taxonomy to use, if the taxonomy is recognized by the {@link FudgeContext} it will be used to reduce field names to ordinals
+   *          where possible.
    */
   public void writeMessageEnvelope(final FudgeMsgEnvelope envelope, final int taxonomyId) {
     if (envelope == null) {
       return;
     }
-    final int messageSize = FudgeSize.calculateMessageEnvelopeSize(getTaxonomy(taxonomyId), envelope);
-    writeEnvelopeHeader(envelope.getProcessingDirectives(), envelope.getVersion(), messageSize, taxonomyId);
+    writeEnvelopeHeader(envelope.getProcessingDirectives(), envelope.getVersion(), taxonomyId);
     writeData(envelope.getMessage(), taxonomyId);
     writeMeta(envelope.getMessage(), taxonomyId);
     envelopeComplete();
@@ -304,7 +318,8 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
     }
   }
 
-  private void writeField(final String name, final Integer ordinal, final FudgeFieldType type, final Object fieldValue, final int taxonomyId, final boolean meta) {
+  private void writeField(final String name, final Integer ordinal, final FudgeFieldType type, final Object fieldValue, final int taxonomyId,
+      final boolean meta) {
     if (fudgeFieldStart(ordinal, name, taxonomyId) != null) {
       if (type.getTypeId() == FudgeWireType.SUB_MESSAGE_TYPE_ID) {
         fudgeSubMessageStart();
@@ -318,14 +333,17 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
   }
 
   @SuppressWarnings("unchecked")
-  private void fudgeFieldValue(final FudgeFieldType type, Object fieldValue, final boolean meta) {
+  private void fudgeFieldValue(final FudgeFieldType type, final Object fieldValue, final boolean meta) {
     try {
       if (meta) {
         final String typeIdToString = getSettings().fudgeTypeIdToString(type.getTypeId());
         getWriter().value(typeIdToString);
       } else {
+        Object actualFieldValue;
         if (type instanceof SecondaryFieldTypeBase<?, ?, ?>) {
-          fieldValue = ((SecondaryFieldTypeBase<Object, Object, Object>) type).secondaryToPrimary(fieldValue);
+          actualFieldValue = ((SecondaryFieldTypeBase<Object, Object, Object>) type).secondaryToPrimary(fieldValue);
+        } else {
+          actualFieldValue = fieldValue;
         }
         switch (type.getTypeId()) {
           case FudgeWireType.INDICATOR_TYPE_ID:
@@ -341,25 +359,25 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
           case FudgeWireType.BYTE_ARRAY_128_TYPE_ID:
           case FudgeWireType.BYTE_ARRAY_256_TYPE_ID:
           case FudgeWireType.BYTE_ARRAY_512_TYPE_ID:
-            writeArray((byte[]) fieldValue);
+            writeArray((byte[]) actualFieldValue);
             break;
           case FudgeWireType.SHORT_ARRAY_TYPE_ID:
-            writeArray((short[]) fieldValue);
+            writeArray((short[]) actualFieldValue);
             break;
           case FudgeWireType.INT_ARRAY_TYPE_ID:
-            writeArray((int[]) fieldValue);
+            writeArray((int[]) actualFieldValue);
             break;
           case FudgeWireType.LONG_ARRAY_TYPE_ID:
-            writeArray((long[]) fieldValue);
+            writeArray((long[]) actualFieldValue);
             break;
           case FudgeWireType.FLOAT_ARRAY_TYPE_ID:
-            writeArray((float[]) fieldValue);
+            writeArray((float[]) actualFieldValue);
             break;
           case FudgeWireType.DOUBLE_ARRAY_TYPE_ID:
-            writeArray((double[]) fieldValue);
+            writeArray((double[]) actualFieldValue);
             break;
           default:
-            getWriter().value(fieldValue);
+            getWriter().value(actualFieldValue);
             break;
         }
       }
@@ -483,7 +501,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
     return result;
   }
 
-  private List<FudgeField> getFieldList(final Map<String, List<FudgeField>> fieldName2Fields, final String fieldName) {
+  private static List<FudgeField> getFieldList(final Map<String, List<FudgeField>> fieldName2Fields, final String fieldName) {
     List<FudgeField> fields = fieldName2Fields.get(fieldName);
     if (fields == null) {
       fields = Lists.newArrayList();
@@ -508,35 +526,37 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
     }
   }
 
-  private void writeEnvelopeHeader(final int processingDirectives, final int version, final int messageSize, final int taxonomyId) {
+  private void writeEnvelopeHeader(final int processingDirectives, final int version, final int taxonomyId) {
     fudgeEnvelopeStart(processingDirectives, version, taxonomyId);
   }
 
   /**
    * Writes a message envelope using the default taxonomy.
    *
-   * @param envelope message envelope to write
-   * @throws NullPointerException if the default taxonomy has not been specified
+   * @param envelope
+   *          message envelope to write
+   * @throws NullPointerException
+   *           if the default taxonomy has not been specified
    */
   public void writeMessageEnvelope(final FudgeMsgEnvelope envelope) {
     writeMessageEnvelope(envelope, DEFAULT_TAXONOMY_ID);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Wraps a JSON exception (which may in turn wrap {@link IOException} into
-   * either a {@link FudgeRuntimeException} or {@link FudgeRuntimeIOException}.
+   * Wraps a JSON exception (which may in turn wrap {@link IOException} into either a {@link FudgeRuntimeException} or {@link FudgeRuntimeIOException}.
    *
-   * @param message message describing the current operation
-   * @param e the originating exception
+   * @param message
+   *          message describing the current operation
+   * @param e
+   *          the originating exception
    */
-  private void wrapException(String message, final JSONException e) {
-    message = "Error writing " + message + " to JSON";
+  private static void wrapException(final String message, final JSONException e) {
+    final String newMessage = "Error writing " + message + " to JSON";
     if (e.getCause() instanceof IOException) {
-      throw new FudgeRuntimeIOException(message, (IOException) e.getCause());
-    } else {
-      throw new FudgeRuntimeException(message, e);
+      throw new FudgeRuntimeIOException(newMessage, (IOException) e.getCause());
     }
+    throw new FudgeRuntimeException(newMessage, e);
   }
 
   /**
@@ -570,6 +590,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
 
   /**
    * Begins a JSON object with the processing directives, schema and taxonomy.
+   * 
    * @param taxonomyId
    */
   private void fudgeEnvelopeStart(final int processingDirectives, final int schemaVersion, final int taxonomyId) {

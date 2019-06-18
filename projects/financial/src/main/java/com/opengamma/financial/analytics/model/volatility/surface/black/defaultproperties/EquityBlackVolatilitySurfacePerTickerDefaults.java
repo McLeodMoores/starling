@@ -36,27 +36,27 @@ public class EquityBlackVolatilitySurfacePerTickerDefaults extends DefaultProper
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityBlackVolatilitySurfacePerTickerDefaults.class);
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-      ValueRequirementNames.BLACK_VOLATILITY_SURFACE,
-      ValueRequirementNames.LOCAL_VOLATILITY_SURFACE,
-      ValueRequirementNames.PURE_VOLATILITY_SURFACE,
-      ValueRequirementNames.FORWARD_DELTA,
-      ValueRequirementNames.DUAL_DELTA,
-      ValueRequirementNames.DUAL_GAMMA,
-      ValueRequirementNames.FORWARD_GAMMA,
-      ValueRequirementNames.FORWARD_VEGA,
-      ValueRequirementNames.FORWARD_VOMMA,
-      ValueRequirementNames.FORWARD_VANNA,
-      ValueRequirementNames.PRESENT_VALUE,
-      ValueRequirementNames.IMPLIED_VOLATILITY,
-      ValueRequirementNames.GRID_DUAL_DELTA,
-      ValueRequirementNames.GRID_DUAL_GAMMA,
-      ValueRequirementNames.GRID_FORWARD_DELTA,
-      ValueRequirementNames.GRID_FORWARD_GAMMA,
-      ValueRequirementNames.GRID_FORWARD_VEGA,
-      ValueRequirementNames.GRID_FORWARD_VANNA,
-      ValueRequirementNames.GRID_FORWARD_VOMMA,
-      ValueRequirementNames.GRID_IMPLIED_VOLATILITY,
-      ValueRequirementNames.GRID_PRESENT_VALUE
+                ValueRequirementNames.BLACK_VOLATILITY_SURFACE,
+                ValueRequirementNames.LOCAL_VOLATILITY_SURFACE,
+                ValueRequirementNames.PURE_VOLATILITY_SURFACE,
+                ValueRequirementNames.FORWARD_DELTA,
+                ValueRequirementNames.DUAL_DELTA,
+                ValueRequirementNames.DUAL_GAMMA,
+                ValueRequirementNames.FORWARD_GAMMA,
+                ValueRequirementNames.FORWARD_VEGA,
+                ValueRequirementNames.FORWARD_VOMMA,
+                ValueRequirementNames.FORWARD_VANNA,
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.IMPLIED_VOLATILITY,
+                ValueRequirementNames.GRID_DUAL_DELTA,
+                ValueRequirementNames.GRID_DUAL_GAMMA,
+                ValueRequirementNames.GRID_FORWARD_DELTA,
+                ValueRequirementNames.GRID_FORWARD_GAMMA,
+                ValueRequirementNames.GRID_FORWARD_VEGA,
+                ValueRequirementNames.GRID_FORWARD_VANNA,
+                ValueRequirementNames.GRID_FORWARD_VOMMA,
+                ValueRequirementNames.GRID_IMPLIED_VOLATILITY,
+                ValueRequirementNames.GRID_PRESENT_VALUE
   };
   /** Ids to forward curve names */
   private final Map<String, Set<String>> _idToForwardCurveName;
@@ -68,8 +68,10 @@ public class EquityBlackVolatilitySurfacePerTickerDefaults extends DefaultProper
   private final PriorityClass _priority;
 
   /**
-   * @param priority The priority of these defaults, not null
-   * @param defaultsPerId The defaults per id, not null.
+   * @param priority
+   *          The priority of these defaults, not null
+   * @param defaultsPerId
+   *          The defaults per id, not null.
    */
   public EquityBlackVolatilitySurfacePerTickerDefaults(final String priority, final String... defaultsPerId) {
     super(ComputationTargetType.PRIMITIVE, true);
@@ -91,11 +93,11 @@ public class EquityBlackVolatilitySurfacePerTickerDefaults extends DefaultProper
 
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
-    //FIXME: Modify to take ExternalId to avoid incorrect cast to UniqueId
+    // FIXME: Modify to take ExternalId to avoid incorrect cast to UniqueId
     if (!(target.getValue() instanceof ExternalIdentifiable)) {
       return false;
     }
-    ExternalId id = ((ExternalIdentifiable) target.getValue()).getExternalId();
+    final ExternalId id = ((ExternalIdentifiable) target.getValue()).getExternalId();
     final String equityId = EquitySecurityUtils.getIndexOrEquityName(id);
     if (equityId == null) {
       return false;
@@ -113,7 +115,8 @@ public class EquityBlackVolatilitySurfacePerTickerDefaults extends DefaultProper
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (!desiredValue.getConstraint(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE).equals(InstrumentTypeProperties.EQUITY_OPTION)) {
       return null;
     }

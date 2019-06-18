@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.surface;
-
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.Collections;
 import java.util.Set;
@@ -18,9 +16,9 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurface;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
 import com.opengamma.analytics.math.surface.Surface;
 import com.opengamma.core.marketdatasnapshot.VolatilitySurfaceData;
@@ -41,11 +39,14 @@ import com.opengamma.financial.analytics.model.InstrumentTypeProperties;
 import com.opengamma.financial.analytics.model.equity.varianceswap.EquityVarianceSwapStaticReplicationFunction;
 import com.opengamma.util.time.DateUtils;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  * @deprecated This has been replaced by the pair, RawEquityOptionVolatilitySurfaceDataFunction, EquityFutureOptionVolatilitySurfaceDataFunction
  */
 @Deprecated
-public class Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated extends AbstractFunction.NonCompiledInvoker { //TODO rename or make less specific to equity vol surfaces
+public class Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated extends AbstractFunction.NonCompiledInvoker { // TODO rename or make less specific to equity
+                                                                                                                 // vol surfaces
   private final String _definitionName;
   private final String _instrumentType;
   private final GridInterpolator2D _interpolator;
@@ -54,7 +55,8 @@ public class Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated extends Abstr
   private Set<ValueSpecification> _results;
   private ValueRequirement _requirement;
 
-  public Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated(final String definitionName, final String instrumentType, final String tInterpolatorName, final String tLeftExtrapolatorName,
+  public Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated(final String definitionName, final String instrumentType, final String tInterpolatorName,
+      final String tLeftExtrapolatorName,
       final String tRightExtrapolatorName, final String kInterpolatorName, final String kLeftExtrapolatorName, final String kRightExtrapolatorName) {
     Validate.notNull(definitionName, "definition name");
     Validate.notNull(instrumentType, "instrument type");
@@ -66,8 +68,8 @@ public class Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated extends Abstr
     Validate.notNull(kRightExtrapolatorName, "k right extrapolator name");
     _definitionName = definitionName;
     _instrumentType = instrumentType;
-    final Interpolator1D tInterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(tInterpolatorName, tLeftExtrapolatorName, tRightExtrapolatorName);
-    final Interpolator1D kInterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(kInterpolatorName, kLeftExtrapolatorName, kRightExtrapolatorName);
+    final Interpolator1D tInterpolator = NamedInterpolator1dFactory.of(tInterpolatorName, tLeftExtrapolatorName, tRightExtrapolatorName);
+    final Interpolator1D kInterpolator = NamedInterpolator1dFactory.of(kInterpolatorName, kLeftExtrapolatorName, kRightExtrapolatorName);
     _interpolator = new GridInterpolator2D(tInterpolator, kInterpolator);
   }
 
@@ -79,17 +81,25 @@ public class Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated extends Abstr
     }
     final ValueProperties surfaceProperties = ValueProperties.builder().with(ValuePropertyNames.SURFACE, _definitionName)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)
-        .withAny(EquityVarianceSwapStaticReplicationFunction.STRIKE_PARAMETERIZATION_METHOD/*, VarianceSwapStaticReplication.StrikeParameterization.STRIKE.toString()*/).get();
+        .withAny(EquityVarianceSwapStaticReplicationFunction.STRIKE_PARAMETERIZATION_METHOD/*
+                                                                                            * , VarianceSwapStaticReplication.StrikeParameterization.STRIKE.
+                                                                                            * toString()
+                                                                                            */).get();
     final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(_definition.getTarget().getUniqueId());
     _requirement = new ValueRequirement(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, targetSpec, surfaceProperties);
-    _result = new ValueSpecification(ValueRequirementNames.INTERPOLATED_VOLATILITY_SURFACE, targetSpec, createValueProperties().with(ValuePropertyNames.SURFACE, _definitionName)
-        .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)
-        .withAny(EquityVarianceSwapStaticReplicationFunction.STRIKE_PARAMETERIZATION_METHOD/*, VarianceSwapStaticReplication.StrikeParameterization.STRIKE.toString()*/).get());
+    _result = new ValueSpecification(ValueRequirementNames.INTERPOLATED_VOLATILITY_SURFACE, targetSpec,
+        createValueProperties().with(ValuePropertyNames.SURFACE, _definitionName)
+            .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)
+            .withAny(EquityVarianceSwapStaticReplicationFunction.STRIKE_PARAMETERIZATION_METHOD/*
+                                                                                                * , VarianceSwapStaticReplication.StrikeParameterization.STRIKE.
+                                                                                                * toString()
+                                                                                                */).get());
     _results = Collections.singleton(_result);
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final Object volatilitySurfaceDataObject = inputs.getValue(_requirement);
@@ -110,7 +120,7 @@ public class Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated extends Abstr
       for (int j = 0; j < m; j++) {
         final Double strike = y[j];
         final Double vol = volatilitySurfaceData.getVolatility(xDates[i], y[j]);
-        if (time != null && strike != null && vol != null) {
+        if (strike != null && vol != null) {
           t.add(time);
           k.add(strike);
           sigma.add(vol);

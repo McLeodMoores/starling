@@ -90,7 +90,8 @@ public class ExampleDatabaseCreatorGui {
     try {
       line = parser.parse(options, args);
       // if no command line arguments, then use default arguments suitable for development in an IDE
-      final String configFile = line.hasOption(CMD_CONFIG_OPTION) ? line.getOptionValue(CMD_CONFIG_OPTION) : "classpath:/toolcontext/toolcontext-examplesbloomberg.properties";
+      final String configFile = line.hasOption(CMD_CONFIG_OPTION) ? line.getOptionValue(CMD_CONFIG_OPTION)
+          : "classpath:/toolcontext/toolcontext-examplesbloomberg.properties";
       if (line.hasOption(CMD_GUI_OPTION)) {
         final List<String> tables = ExampleDatabaseChecker.run(configFile);
         final boolean dbExists = !tables.isEmpty();
@@ -113,9 +114,9 @@ public class ExampleDatabaseCreatorGui {
   private static Options createOptions() {
     final Options options = new Options();
     final Option guiOption = new Option(CMD_GUI_OPTION,
-                                  CMD_GUI_OPTION,
-                                  false,
-                                  "flag to indicate to run the tool in gui mode");
+        CMD_GUI_OPTION,
+        false,
+        "flag to indicate to run the tool in gui mode");
     guiOption.setArgName(CMD_GUI_OPTION);
     guiOption.setRequired(false);
     options.addOption(guiOption);
@@ -253,16 +254,13 @@ public class ExampleDatabaseCreatorGui {
     p.add(new Checkbox2(2, "Create blank database, populated only with configuration data.", group, radiobuttonChangeListener));
     p.add(new Checkbox2(3, "Create database, populated with configuration and with example portfolio.", group, radiobuttonChangeListener));
 
-
     final Panel dBRestorePannel = new Panel(new BorderLayout());
     p.add(dBRestorePannel);
 
-
     final Checkbox2 dbRestoreOption = new Checkbox2(5,
-                                                    "Restore database from files.",
-                                                    group,
-                                                    radiobuttonChangeListener);
-
+        "Restore database from files.",
+        group,
+        radiobuttonChangeListener);
 
     final Button restoreDbButton = new Button("Restore DB location");
     dBRestorePannel.add(restoreDbButton, BorderLayout.EAST);
@@ -310,18 +308,32 @@ public class ExampleDatabaseCreatorGui {
 
     p.add(new Panel());
 
-
     final Panel buttonPannel = new Panel(new BorderLayout());
     p.add(buttonPannel, BorderLayout.CENTER);
 
     buttonPannel.add(confiramtionButton, BorderLayout.EAST);
     buttonPannel.add(cancellationButton, BorderLayout.WEST);
 
-
-    dialog.add(new Panel() { { setSize(new Dimension(100, 100)); } }, BorderLayout.NORTH);
-    dialog.add(new Panel() { { setSize(new Dimension(100, 100)); } }, BorderLayout.SOUTH);
-    dialog.add(new Panel() { { setSize(new Dimension(100, 100)); } }, BorderLayout.EAST);
-    dialog.add(new Panel() { { setSize(new Dimension(100, 100)); } }, BorderLayout.WEST);
+    dialog.add(new Panel() {
+      {
+        setSize(new Dimension(100, 100));
+      }
+    }, BorderLayout.NORTH);
+    dialog.add(new Panel() {
+      {
+        setSize(new Dimension(100, 100));
+      }
+    }, BorderLayout.SOUTH);
+    dialog.add(new Panel() {
+      {
+        setSize(new Dimension(100, 100));
+      }
+    }, BorderLayout.EAST);
+    dialog.add(new Panel() {
+      {
+        setSize(new Dimension(100, 100));
+      }
+    }, BorderLayout.WEST);
     dialog.add(p, BorderLayout.CENTER);
 
     dialog.setSize(800, 600);
@@ -378,16 +390,16 @@ public class ExampleDatabaseCreatorGui {
 
     final ToolContext toolContext = ToolContextUtils.getToolContext(configFile, IntegrationToolContext.class);
     final DatabaseRestore databaseRestore = new DatabaseRestore(dataDir,
-                                                          toolContext.getSecurityMaster(),
-                                                          toolContext.getPositionMaster(),
-                                                          toolContext.getPortfolioMaster(),
-                                                          toolContext.getConfigMaster(),
-                                                          toolContext.getHistoricalTimeSeriesMaster(),
-                                                          toolContext.getHolidayMaster(),
-                                                          toolContext.getExchangeMaster(),
-                                                          toolContext.getMarketDataSnapshotMaster(),
-                                                          toolContext.getLegalEntityMaster(),
-                                                          toolContext.getConventionMaster());
+        toolContext.getSecurityMaster(),
+        toolContext.getPositionMaster(),
+        toolContext.getPortfolioMaster(),
+        toolContext.getConfigMaster(),
+        toolContext.getHistoricalTimeSeriesMaster(),
+        toolContext.getHolidayMaster(),
+        toolContext.getExchangeMaster(),
+        toolContext.getMarketDataSnapshotMaster(),
+        toolContext.getLegalEntityMaster(),
+        toolContext.getConventionMaster());
     databaseRestore.restoreDatabase();
   }
 

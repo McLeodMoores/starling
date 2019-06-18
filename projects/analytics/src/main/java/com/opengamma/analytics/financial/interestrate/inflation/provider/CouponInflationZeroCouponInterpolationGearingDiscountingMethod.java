@@ -25,8 +25,11 @@ public class CouponInflationZeroCouponInterpolationGearingDiscountingMethod {
 
   /**
    * Computes the present value of the zero-coupon coupon with reference index at start of the month.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   * 
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponInflationZeroCouponInterpolationGearing coupon, final InflationProviderInterface inflation) {
@@ -34,14 +37,18 @@ public class CouponInflationZeroCouponInterpolationGearingDiscountingMethod {
     ArgumentChecker.notNull(inflation, "Inflation");
     final double estimatedIndex = indexEstimation(coupon, inflation);
     final double discountFactor = inflation.getDiscountFactor(coupon.getCurrency(), coupon.getPaymentTime());
-    final double pv = coupon.getFactor() * (estimatedIndex / coupon.getIndexStartValue() - (coupon.payNotional() ? 0.0 : 1.0)) * discountFactor * coupon.getNotional();
+    final double pv = coupon.getFactor() * (estimatedIndex / coupon.getIndexStartValue() - (coupon.payNotional() ? 0.0 : 1.0)) * discountFactor
+        * coupon.getNotional();
     return MultipleCurrencyAmount.of(coupon.getCurrency(), pv);
   }
 
   /**
    * Computes the net amount of the zero-coupon coupon with reference index at start of the month.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   * 
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The net amount.
    */
   public MultipleCurrencyAmount netAmount(final CouponInflationZeroCouponInterpolationGearing coupon, final InflationProviderInterface inflation) {
@@ -54,8 +61,11 @@ public class CouponInflationZeroCouponInterpolationGearingDiscountingMethod {
 
   /**
    * Computes the estimated index with the weight and the two reference end dates.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   * 
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The net amount.
    */
   public double indexEstimation(final CouponInflationZeroCouponInterpolationGearing coupon, final InflationProviderInterface inflation) {
@@ -66,11 +76,15 @@ public class CouponInflationZeroCouponInterpolationGearingDiscountingMethod {
 
   /**
    * Compute the present value sensitivity to rates of a Inflation coupon.
-   * @param coupon The coupon.
-   * @param inflation The inflation provider.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param inflation
+   *          The inflation provider.
    * @return The present value sensitivity.
    */
-  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CouponInflationZeroCouponInterpolationGearing coupon, final InflationProviderInterface inflation) {
+  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CouponInflationZeroCouponInterpolationGearing coupon,
+      final InflationProviderInterface inflation) {
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(inflation, "Inflation");
     final double estimatedIndexMonth0 = inflation.getPriceIndex(coupon.getPriceIndex(), coupon.getReferenceEndTime()[0]);
@@ -79,7 +93,8 @@ public class CouponInflationZeroCouponInterpolationGearingDiscountingMethod {
     final double discountFactor = inflation.getDiscountFactor(coupon.getCurrency(), coupon.getPaymentTime());
     // Backward sweep
     final double pvBar = 1.0;
-    final double discountFactorBar = coupon.getFactor() * (estimatedIndex / coupon.getIndexStartValue() - (coupon.payNotional() ? 0.0 : 1.0)) * coupon.getNotional() * pvBar;
+    final double discountFactorBar = coupon.getFactor() * (estimatedIndex / coupon.getIndexStartValue() - (coupon.payNotional() ? 0.0 : 1.0))
+        * coupon.getNotional() * pvBar;
     final double estimatedIndexBar = coupon.getFactor() / coupon.getIndexStartValue() * discountFactor * coupon.getNotional() * pvBar;
     final double estimatedIndexMonth1Bar = (1 - coupon.getWeight()) * estimatedIndexBar;
     final double estimatedIndexMonth0Bar = coupon.getWeight() * estimatedIndexBar;

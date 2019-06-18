@@ -18,6 +18,7 @@ import com.opengamma.analytics.financial.interestrate.swaption.method.SwaptionPh
 
 /**
  * Interpolates, for interest rate instruments using Black model, and returns the implied volatility required.
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -30,6 +31,7 @@ public final class ImpliedVolatilityBlackCalculator extends InstrumentDerivative
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static ImpliedVolatilityBlackCalculator getInstance() {
@@ -47,11 +49,14 @@ public final class ImpliedVolatilityBlackCalculator extends InstrumentDerivative
   /** Cash-settled swaption methods */
   private static final SwaptionCashFixedIborBlackMethod METHOD_SWAPTION_CASH = SwaptionCashFixedIborBlackMethod.getInstance();
   /** Physical fixed compounded / overnight compounded methods */
-  private static final SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod PHYSICAL_COMPOUNDED_SWAPTION = SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod.getInstance();
+  private static final SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod PHYSICAL_COMPOUNDED_SWAPTION =
+      SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod.getInstance();
   /** Margined interest rate future option methods */
-  private static final InterestRateFutureOptionMarginTransactionBlackSurfaceMethod METHOD_MARGINED_IR_FUTURE_OPTION_TXN = InterestRateFutureOptionMarginTransactionBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionMarginTransactionBlackSurfaceMethod METHOD_MARGINED_IR_FUTURE_OPTION_TXN =
+      InterestRateFutureOptionMarginTransactionBlackSurfaceMethod.getInstance();
   /** Margined interest rate future option methods */
-  private static final InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod METHOD_PREMIUM_IR_FUTURE_OPTION_TXN = InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod METHOD_PREMIUM_IR_FUTURE_OPTION_TXN =
+      InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod.getInstance();
 
   @Override
   public Double visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption, final YieldCurveBundle curves) {

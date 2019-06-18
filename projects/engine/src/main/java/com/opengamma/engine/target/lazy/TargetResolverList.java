@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -20,7 +20,7 @@ import com.opengamma.engine.ComputationTargetSpecification;
   private final ComputationTargetSpecification[] _specifications;
   private final Object[] _resolved;
 
-  public TargetResolverList(final ComputationTargetResolver.AtVersionCorrection resolver, final ComputationTargetSpecification[] specifications) {
+  TargetResolverList(final ComputationTargetResolver.AtVersionCorrection resolver, final ComputationTargetSpecification[] specifications) {
     _resolver = resolver;
     _specifications = specifications;
     _resolved = new Object[specifications.length];

@@ -28,8 +28,8 @@ import com.sun.jersey.api.client.GenericType;
  * Provides access to a remote {@link ExchangeMaster}.
  */
 public class RemoteExchangeMaster
-    extends AbstractRemoteDocumentMaster<ExchangeDocument>
-    implements ExchangeMaster {
+extends AbstractRemoteDocumentMaster<ExchangeDocument>
+implements ExchangeMaster {
 
   /**
    * Creates an instance.
@@ -67,9 +67,8 @@ public class RemoteExchangeMaster
     if (uniqueId.isVersioned()) {
       final URI uri = new DataExchangeUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(ExchangeDocument.class);
-    } else {
-      return get(uniqueId, VersionCorrection.LATEST);
     }
+    return get(uniqueId, VersionCorrection.LATEST);
   }
 
   //-------------------------------------------------------------------------

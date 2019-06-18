@@ -105,8 +105,8 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponFixedCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIbor;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverage;
-import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDates;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompoundingFlatSpread;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborCompoundingFlatSpread;
@@ -141,8 +141,10 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  *
- * @param <DATA_TYPE> The type of the data
- * @param <RESULT_TYPE> The return type of the calculation
+ * @param <DATA_TYPE>
+ *          The type of the data
+ * @param <RESULT_TYPE>
+ *          The return type of the calculation
  */
 @SuppressWarnings("deprecation")
 public class InstrumentDerivativeVisitorDelegate<DATA_TYPE, RESULT_TYPE> implements InstrumentDerivativeVisitor<DATA_TYPE, RESULT_TYPE> {
@@ -150,7 +152,8 @@ public class InstrumentDerivativeVisitorDelegate<DATA_TYPE, RESULT_TYPE> impleme
   private final InstrumentDerivativeVisitor<DATA_TYPE, RESULT_TYPE> _delegate;
 
   /**
-   * @param delegate The delegate, not null
+   * @param delegate
+   *          The delegate, not null
    */
   public InstrumentDerivativeVisitorDelegate(final InstrumentDerivativeVisitor<DATA_TYPE, RESULT_TYPE> delegate) {
     ArgumentChecker.notNull(delegate, "delegate");
@@ -478,12 +481,14 @@ public class InstrumentDerivativeVisitorDelegate<DATA_TYPE, RESULT_TYPE> impleme
   }
 
   @Override
-  public RESULT_TYPE visitInterpolatedStubCoupon(final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> payment, final DATA_TYPE data) {
+  public RESULT_TYPE visitInterpolatedStubCoupon(
+      final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> payment, final DATA_TYPE data) {
     return _delegate.visitInterpolatedStubCoupon(payment, data);
   }
 
   @Override
-  public RESULT_TYPE visitInterpolatedStubCoupon(final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> payment) {
+  public RESULT_TYPE visitInterpolatedStubCoupon(
+      final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> payment) {
     return _delegate.visitInterpolatedStubCoupon(payment);
   }
 
@@ -748,7 +753,8 @@ public class InstrumentDerivativeVisitorDelegate<DATA_TYPE, RESULT_TYPE> impleme
   }
 
   @Override
-  public RESULT_TYPE visitCouponInflationYearOnYearInterpolationWithMargin(final CouponInflationYearOnYearInterpolationWithMargin coupon, final DATA_TYPE data) {
+  public RESULT_TYPE visitCouponInflationYearOnYearInterpolationWithMargin(final CouponInflationYearOnYearInterpolationWithMargin coupon,
+      final DATA_TYPE data) {
     return _delegate.visitCouponInflationYearOnYearInterpolationWithMargin(coupon, data);
   }
 

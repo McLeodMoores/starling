@@ -16,10 +16,17 @@ import com.opengamma.master.security.SecuritySearchRequest;
 import com.opengamma.master.security.SecuritySearchResult;
 
 /**
- * Security master which tracks accesses using UniqueIds.
+ * Security master which tracks accesses using
+ * {@link com.opengamma.id.UniqueId}s.
  */
 public class DataTrackingSecurityMaster extends AbstractDataTrackingMaster<SecurityDocument, SecurityMaster> implements SecurityMaster {
 
+  /**
+   * Sets up the delegate security master.
+   *
+   * @param delegate
+   *          the delegate, not null
+   */
   public DataTrackingSecurityMaster(final SecurityMaster delegate) {
     super(delegate);
   }

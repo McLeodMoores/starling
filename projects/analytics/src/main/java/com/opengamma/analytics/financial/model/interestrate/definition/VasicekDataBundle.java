@@ -12,13 +12,14 @@ import com.opengamma.analytics.financial.model.volatility.curve.VolatilityCurve;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class VasicekDataBundle extends StandardDiscountBondModelDataBundle {
   private final double _longTermInterestRate;
   private final double _reversionSpeed;
 
-  public VasicekDataBundle(final YieldAndDiscountCurve shortRateCurve, final VolatilityCurve shortRateVolatilityCurve, final ZonedDateTime date, final double longTermInterestRate,
+  public VasicekDataBundle(final YieldAndDiscountCurve shortRateCurve, final VolatilityCurve shortRateVolatilityCurve, final ZonedDateTime date,
+      final double longTermInterestRate,
       final double reversionSpeed) {
     super(shortRateCurve, shortRateVolatilityCurve, date);
     ArgumentChecker.notZero(reversionSpeed, 1e-15, "reversion speed");
@@ -40,9 +41,9 @@ public class VasicekDataBundle extends StandardDiscountBondModelDataBundle {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_longTermInterestRate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_reversionSpeed);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

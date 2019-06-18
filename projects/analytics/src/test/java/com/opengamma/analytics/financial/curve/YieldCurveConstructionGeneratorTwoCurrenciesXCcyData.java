@@ -16,8 +16,8 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class YieldCurveConstructionGeneratorTwoCurrenciesXCcyData {
 
-  //  private static final Interpolator1D INTERPOLATOR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.DOUBLE_QUADRATIC, Interpolator1DFactory.LINEAR_EXTRAPOLATOR,
-  //      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  //  private static final Interpolator1D INTERPOLATOR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.DOUBLE_QUADRATIC, LinearExtrapolator1dAdapter.NAME,
+  //      FlatExtrapolator1dAdapter.NAME);
   //  private static final MatrixAlgebra MATRIX_ALGEBRA = new CommonsMatrixAlgebra();
   //
   //  private static final LastTimeCalculator MATURITY_CALCULATOR = LastTimeCalculator.getInstance();

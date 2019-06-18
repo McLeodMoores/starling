@@ -37,8 +37,8 @@ import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.conversion.DefaultTradeConverter;
+import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.currency.CurrencyPair;
 import com.opengamma.financial.security.fx.FXVolatilitySwapSecurity;
 import com.opengamma.util.money.Currency;
@@ -52,7 +52,8 @@ import com.opengamma.util.tuple.Pairs;
 public abstract class CarrLeeFXVolatilitySwapFunction extends CarrLeeVolatilitySwapFunction {
 
   /**
-   * @param valueRequirementNames The value requirement names, not null
+   * @param valueRequirementNames
+   *          The value requirement names, not null
    */
   public CarrLeeFXVolatilitySwapFunction(final String... valueRequirementNames) {
     super(valueRequirementNames);
@@ -64,9 +65,12 @@ public abstract class CarrLeeFXVolatilitySwapFunction extends CarrLeeVolatilityS
   protected abstract class CarrLeeFXVolatilitySwapCompiledFunction extends CarrLeeVolatilitySwapCompiledFunction {
 
     /**
-     * @param tradeToDefinitionConverter Converts targets to definitions, not null
-     * @param definitionToDerivativeConverter Converts definitions to derivatives, not null
-     * @param withCurrency True if the {@link ValuePropertyNames#CURRENCY} result property is set
+     * @param tradeToDefinitionConverter
+     *          Converts targets to definitions, not null
+     * @param definitionToDerivativeConverter
+     *          Converts definitions to derivatives, not null
+     * @param withCurrency
+     *          True if the {@link ValuePropertyNames#CURRENCY} result property is set
      */
     protected CarrLeeFXVolatilitySwapCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter,
         final FixedIncomeConverterDataProvider definitionToDerivativeConverter, final boolean withCurrency) {
@@ -118,8 +122,8 @@ public abstract class CarrLeeFXVolatilitySwapFunction extends CarrLeeVolatilityS
         properties.with(PROPERTY_REALIZED_VARIANCE_METHOD, MARKET_REALIZED_VARIANCE);
       } else if (HISTORICAL_REALIZED_VARIANCE.equals(varianceCalculationMethod)) {
         properties.with(PROPERTY_REALIZED_VARIANCE_METHOD, HISTORICAL_REALIZED_VARIANCE)
-          .with(HISTORICAL_VARIANCE_START, firstObservationDate.toString())
-          .with(HISTORICAL_VARIANCE_END, lastObservationDate.toString());
+            .with(HISTORICAL_VARIANCE_START, firstObservationDate.toString())
+            .with(HISTORICAL_VARIANCE_END, lastObservationDate.toString());
       }
       final FXVolatilitySwapSecurity swap = (FXVolatilitySwapSecurity) target.getTrade().getSecurity();
       final Currency counterCurrency = swap.getCounterCurrency();
@@ -129,10 +133,12 @@ public abstract class CarrLeeFXVolatilitySwapFunction extends CarrLeeVolatilityS
     }
 
     @Override
-    protected CarrLeeFXData getCarrLeeData(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final FXMatrix fxMatrix) {
+    protected CarrLeeFXData getCarrLeeData(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final FXMatrix fxMatrix) {
       final FXVolatilitySwapSecurity security = (FXVolatilitySwapSecurity) target.getTrade().getSecurity();
       final MulticurveProviderInterface data = getMergedProviders(inputs, fxMatrix);
-      final SmileDeltaTermStructureParametersStrikeInterpolation volatilitySurface = (SmileDeltaTermStructureParametersStrikeInterpolation) inputs.getValue(STANDARD_VOLATILITY_SURFACE_DATA);
+      final SmileDeltaTermStructureParametersStrikeInterpolation volatilitySurface = (SmileDeltaTermStructureParametersStrikeInterpolation) inputs
+          .getValue(STANDARD_VOLATILITY_SURFACE_DATA);
       final Pair<Currency, Currency> currencyPair = Pairs.of(security.getBaseCurrency(), security.getCounterCurrency());
       final Clock snapshotClock = executionContext.getValuationClock();
       final ZonedDateTime now = ZonedDateTime.now(snapshotClock);

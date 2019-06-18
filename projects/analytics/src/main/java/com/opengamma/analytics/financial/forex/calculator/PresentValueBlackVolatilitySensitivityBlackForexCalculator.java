@@ -18,22 +18,25 @@ import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 // CSOFF
 /**
  * Calculator of the volatility sensitivity for Forex derivatives in the Black (Garman-Kohlhagen) world.
+ * 
  * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.
  */
 @Deprecated
-public class PresentValueBlackVolatilitySensitivityBlackForexCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, PresentValueForexBlackVolatilitySensitivity> {
+public class PresentValueBlackVolatilitySensitivityBlackForexCalculator
+    extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, PresentValueForexBlackVolatilitySensitivity> {
 
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueBlackVolatilitySensitivityBlackForexCalculator s_instance = new PresentValueBlackVolatilitySensitivityBlackForexCalculator();
+  private static final PresentValueBlackVolatilitySensitivityBlackForexCalculator INSTANCE = new PresentValueBlackVolatilitySensitivityBlackForexCalculator();
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static PresentValueBlackVolatilitySensitivityBlackForexCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

@@ -34,7 +34,8 @@ public class InterestRateFutureOptionBlackPV01Function extends InterestRateFutur
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative irFutureOption, final YieldCurveWithBlackCubeBundle data, final String curveName, final ValueSpecification spec,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative irFutureOption, final YieldCurveWithBlackCubeBundle data, final String curveName,
+      final ValueSpecification spec,
       final Security security) {
     final Map<String, Double> pv01 = CALCULATOR.visit(irFutureOption, data);
     final String fullCurveName = curveName + "_" + FinancialSecurityUtils.getCurrency(security).getCode();

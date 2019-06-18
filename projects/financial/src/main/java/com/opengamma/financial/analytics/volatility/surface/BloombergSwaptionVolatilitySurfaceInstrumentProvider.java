@@ -26,17 +26,21 @@ public class BloombergSwaptionVolatilitySurfaceInstrumentProvider implements Sur
   private final String _dataFieldName; // expecting MarketDataRequirementNames.MARKET_VALUE or PX_LAST
   private final String _scheme;
 
-  public BloombergSwaptionVolatilitySurfaceInstrumentProvider(final String countryPrefix, final String typePrefix, final boolean zeroPadSwapMaturityTenor, final boolean zeroPadSwaptionExpiryTenor,
+  public BloombergSwaptionVolatilitySurfaceInstrumentProvider(final String countryPrefix, final String typePrefix, final boolean zeroPadSwapMaturityTenor,
+      final boolean zeroPadSwaptionExpiryTenor,
       final String postfix) {
     this(countryPrefix, typePrefix, zeroPadSwapMaturityTenor, zeroPadSwaptionExpiryTenor, postfix, MarketDataRequirementNames.MARKET_VALUE);
   }
 
-  public BloombergSwaptionVolatilitySurfaceInstrumentProvider(final String countryPrefix, final String typePrefix, final boolean zeroPadSwapMaturityTenor, final boolean zeroPadSwaptionExpiryTenor,
+  public BloombergSwaptionVolatilitySurfaceInstrumentProvider(final String countryPrefix, final String typePrefix, final boolean zeroPadSwapMaturityTenor,
+      final boolean zeroPadSwaptionExpiryTenor,
       final String postfix, final String dataFieldName) {
-    this(countryPrefix, typePrefix, zeroPadSwapMaturityTenor, zeroPadSwaptionExpiryTenor, postfix, dataFieldName, ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
+    this(countryPrefix, typePrefix, zeroPadSwapMaturityTenor, zeroPadSwaptionExpiryTenor, postfix, dataFieldName,
+        ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
   }
 
-  public BloombergSwaptionVolatilitySurfaceInstrumentProvider(final String countryPrefix, final String typePrefix, final boolean zeroPadSwapMaturityTenor, final boolean zeroPadSwaptionExpiryTenor,
+  public BloombergSwaptionVolatilitySurfaceInstrumentProvider(final String countryPrefix, final String typePrefix, final boolean zeroPadSwapMaturityTenor,
+      final boolean zeroPadSwaptionExpiryTenor,
       final String postfix, final String dataFieldName, final String scheme) {
     ArgumentChecker.notNull(countryPrefix, "country prefix");
     ArgumentChecker.notNull(typePrefix, "type prefix");
@@ -72,7 +76,8 @@ public class BloombergSwaptionVolatilitySurfaceInstrumentProvider implements Sur
     if (tenor.getPeriod().getYears() == 0) {
       final int months = tenor.getPeriod().getMonths();
       if (months > 0) {
-        final String[] monthsTable = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "1A", "1B", "1C", "1D", "1E", "1F", "1G", "1H", "1I", "1J", "1K", "1L"};
+        final String[] monthsTable = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "1A", "1B", "1C", "1D", "1E", "1F", "1G", "1H", "1I", "1J",
+                      "1K", "1L" };
 
         final String result = monthsTable[months - 1];
         if (result.length() == 1 && prepadWithZero) {
@@ -90,6 +95,7 @@ public class BloombergSwaptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the countryPrefix field.
+   *
    * @return the countryPrefix
    */
   public String getCountryPrefix() {
@@ -98,6 +104,7 @@ public class BloombergSwaptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the typePrefix field.
+   *
    * @return the typePrefix
    */
   public String getTypePrefix() {
@@ -106,6 +113,7 @@ public class BloombergSwaptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the postfix field.
+   *
    * @return the postfix
    */
   public String getPostfix() {
@@ -114,6 +122,7 @@ public class BloombergSwaptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the zeroPadSwaptionMaturityTenor field.
+   *
    * @return the zeroPadSwaptionMaturityTenor
    */
   public boolean isZeroPadSwapMaturityTenor() {
@@ -122,6 +131,7 @@ public class BloombergSwaptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the zeroPadSwaptionExpiryTenor field.
+   *
    * @return the zeroPadSwaptionExpiryTenor
    */
   public boolean isZeroPadSwaptionExpiryTenor() {
@@ -146,13 +156,13 @@ public class BloombergSwaptionVolatilitySurfaceInstrumentProvider implements Sur
     }
     final BloombergSwaptionVolatilitySurfaceInstrumentProvider other = (BloombergSwaptionVolatilitySurfaceInstrumentProvider) o;
     // we can avoid using ObjectUtil.equals because we validated the strings as not null.
-    return getCountryPrefix().equals(other.getCountryPrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getTypePrefix().equals(other.getTypePrefix()) &&
-        isZeroPadSwapMaturityTenor() == other.isZeroPadSwapMaturityTenor() &&
-        isZeroPadSwaptionExpiryTenor() == other.isZeroPadSwaptionExpiryTenor() &&
-        getDataFieldName().equals(other.getDataFieldName()) &&
-        _scheme.equals(other._scheme);
+    return getCountryPrefix().equals(other.getCountryPrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getTypePrefix().equals(other.getTypePrefix())
+        && isZeroPadSwapMaturityTenor() == other.isZeroPadSwapMaturityTenor()
+        && isZeroPadSwaptionExpiryTenor() == other.isZeroPadSwaptionExpiryTenor()
+        && getDataFieldName().equals(other.getDataFieldName())
+        && _scheme.equals(other._scheme);
   }
 
   @Override

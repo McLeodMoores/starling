@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.convention;
@@ -12,6 +12,7 @@ import org.apache.commons.lang.Validate;
 import org.threeten.bp.Period;
 
 import com.opengamma.core.id.ExternalSchemes;
+import com.opengamma.financial.convention.ConventionBundle;
 import com.opengamma.financial.convention.ConventionBundleMaster;
 import com.opengamma.financial.convention.ConventionBundleMasterUtils;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -25,7 +26,10 @@ import com.opengamma.id.ExternalIdBundle;
 
 /**
  * Standard conventions for EUR.
+ *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class SyntheticEUConventions {
 
   public static synchronized void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {
@@ -38,21 +42,30 @@ public class SyntheticEUConventions {
     final Frequency semiAnnual = SimpleFrequencyFactory.INSTANCE.getFrequency(Frequency.SEMI_ANNUAL_NAME);
     final Frequency quarterly = SimpleFrequencyFactory.INSTANCE.getFrequency(Frequency.QUARTERLY_NAME);
 
-    //TODO holiday associated with EUR swaps is TARGET
+    // TODO holiday associated with EUR swaps is TARGET
     final ExternalId eu = ExternalSchemes.financialRegionId("EU");
     final ConventionBundleMasterUtils utils = new ConventionBundleMasterUtils(conventionMaster);
-    //EURO LIBOR
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EURLIBORP3M"), simpleNameSecurityId("EUR LIBOR 3m")), "EUR LIBOR 3m", act360, modified, Period.ofMonths(3), 2, false, eu);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EURLIBORP6M"), simpleNameSecurityId("EUR LIBOR 6m")), "EUR LIBOR 6m", act360, modified, Period.ofMonths(6), 2, false, eu);
+    // EURO LIBOR
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EURLIBORP3M"), simpleNameSecurityId("EUR LIBOR 3m")), "EUR LIBOR 3m", act360, modified,
+        Period.ofMonths(3), 2, false, eu);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EURLIBORP6M"), simpleNameSecurityId("EUR LIBOR 6m")), "EUR LIBOR 6m", act360, modified,
+        Period.ofMonths(6), 2, false, eu);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EURLIBORP12M")), "EUR LIBOR 12m", act360, modified, Period.ofMonths(12), 2, false, eu);
 
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EUREURIBORP7D"), simpleNameSecurityId("EURIBOR 7d")), "EURIBOR 7d", act360, modified, Period.ofDays(7), 2, false, eu);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EUREURIBORP14D"), simpleNameSecurityId("EURIBOR 14d")), "EURIBOR 14d", act360, modified, Period.ofDays(14), 2, false, eu);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EUREURIBORP1M"), simpleNameSecurityId("EURIBOR 1m")), "EURIBOR 1m", act360, modified, Period.ofMonths(1), 2, false, eu);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EUREURIBORP2M"), simpleNameSecurityId("EURIBOR 2m")), "EURIBOR 2m", act360, modified, Period.ofMonths(2), 2, false, eu);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EUREURIBORP3M"), simpleNameSecurityId("EURIBOR 3m")), "EURIBOR 3m", act360, modified, Period.ofMonths(3), 2, false, eu);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EUREURIBORP6M"), simpleNameSecurityId("EURIBOR 6m")), "EURIBOR 6m", act360, modified, Period.ofMonths(6), 2, false, eu);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EUREURIBORP12M"), simpleNameSecurityId("EURIBOR 12m")), "EURIBOR 12m", act360, modified, Period.ofMonths(12), 2, false, eu);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EUREURIBORP7D"), simpleNameSecurityId("EURIBOR 7d")), "EURIBOR 7d", act360, modified,
+        Period.ofDays(7), 2, false, eu);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EUREURIBORP14D"), simpleNameSecurityId("EURIBOR 14d")), "EURIBOR 14d", act360, modified,
+        Period.ofDays(14), 2, false, eu);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EUREURIBORP1M"), simpleNameSecurityId("EURIBOR 1m")), "EURIBOR 1m", act360, modified,
+        Period.ofMonths(1), 2, false, eu);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EUREURIBORP2M"), simpleNameSecurityId("EURIBOR 2m")), "EURIBOR 2m", act360, modified,
+        Period.ofMonths(2), 2, false, eu);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EUREURIBORP3M"), simpleNameSecurityId("EURIBOR 3m")), "EURIBOR 3m", act360, modified,
+        Period.ofMonths(3), 2, false, eu);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EUREURIBORP6M"), simpleNameSecurityId("EURIBOR 6m")), "EURIBOR 6m", act360, modified,
+        Period.ofMonths(6), 2, false, eu);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EUREURIBORP12M"), simpleNameSecurityId("EURIBOR 12m")), "EURIBOR 12m", act360, modified,
+        Period.ofMonths(12), 2, false, eu);
 
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EURCASHP1D")),
         "EURCASHP1D", act360, following, Period.ofDays(1), 0, false, eu);
@@ -101,8 +114,10 @@ public class SyntheticEUConventions {
         2, true, null);
 
     final int publicationLagON = 0;
-    utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("EUROVERNIGHT")), "EUROVERNIGHT", act360, following, Period.ofDays(1), 2, false, eu, publicationLagON);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EONIA"), simpleNameSecurityId("EUR EONIA")), "EUR EONIA", act360, modified, Period.ofDays(1), 0, false, eu, publicationLagON);
+    utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("EUROVERNIGHT")), "EUROVERNIGHT", act360, following, Period.ofDays(1), 2, false, eu,
+        publicationLagON);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("EONIA"), simpleNameSecurityId("EUR EONIA")), "EUR EONIA", act360, modified,
+        Period.ofDays(1), 0, false, eu, publicationLagON);
     // OIS - EONIA
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("EUR_OIS_SWAP")), "EUR_OIS_SWAP", act360, modified, annual, 2, eu, act360, modified,
         annual, 2, simpleNameSecurityId("EUR EONIA"), eu, true, publicationLagON);

@@ -49,14 +49,23 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
 
   /**
    * Constructor from all the details.
-   * @param name The generator name. Not null.
-   * @param indexPrice The Price index..
-   * @param businessDayConvention The business day convention associated to fix leg.
-   * @param calendar  The calendar used to compute the payment date.
-   * @param endOfMonth The end-of-month flag.
-   * @param monthLag The price index fixing lag in months(usually 3).
-   * @param spotLag Lag between today and the spot date.
-   * @param isLinear True if the price index is interpolated linearly.
+   * 
+   * @param name
+   *          The generator name. Not null.
+   * @param indexPrice
+   *          The Price index..
+   * @param businessDayConvention
+   *          The business day convention associated to fix leg.
+   * @param calendar
+   *          The calendar used to compute the payment date.
+   * @param endOfMonth
+   *          The end-of-month flag.
+   * @param monthLag
+   *          The price index fixing lag in months(usually 3).
+   * @param spotLag
+   *          Lag between today and the spot date.
+   * @param isLinear
+   *          True if the price index is interpolated linearly.
    */
   public GeneratorSwapFixedInflationZeroCoupon(final String name, final IndexPrice indexPrice, final BusinessDayConvention businessDayConvention,
       final Calendar calendar, final boolean endOfMonth, final int monthLag, final int spotLag, final boolean isLinear) {
@@ -75,6 +84,7 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
 
   /**
    * Gets the _indexPrice field.
+   * 
    * @return the _indexPrice
    */
   public IndexPrice getIndexPrice() {
@@ -83,6 +93,7 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
 
   /**
    * Gets the _businessDayConvention field.
+   * 
    * @return the _businessDayConvention
    */
   public BusinessDayConvention getBusinessDayConvention() {
@@ -91,6 +102,7 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
 
   /**
    * Gets the _calendar field.
+   * 
    * @return the _calendar
    */
   public Calendar getCalendar() {
@@ -99,6 +111,7 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
 
   /**
    * Gets the _endOfMonth field.
+   * 
    * @return the _endOfMonth
    */
   public boolean isEndOfMonth() {
@@ -107,6 +120,7 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
 
   /**
    * Gets the _monthLag field.
+   * 
    * @return the _monthLag
    */
   public int getMonthLag() {
@@ -115,6 +129,7 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
 
   /**
    * Gets the swap generator spot lag.
+   * 
    * @return The lag (in days).
    */
   public int getSpotLag() {
@@ -123,6 +138,7 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
 
   /**
    * Gets the _isLinear field.
+   * 
    * @return the _isLinear
    */
   public boolean isLinear() {
@@ -130,11 +146,11 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
   }
 
   /**
-   * {@inheritDoc}
-   * The effective date is spot+startTenor. The maturity date is effective date + endTenor
+   * {@inheritDoc} The effective date is spot+startTenor. The maturity date is effective date + endTenor
    */
   @Override
-  public SwapFixedInflationZeroCouponDefinition generateInstrument(final ZonedDateTime date, final double rate, final double notional, final GeneratorAttributeIR attribute) {
+  public SwapFixedInflationZeroCouponDefinition generateInstrument(final ZonedDateTime date, final double rate, final double notional,
+      final GeneratorAttributeIR attribute) {
     ArgumentChecker.notNull(date, "Reference date");
     ArgumentChecker.notNull(attribute, "Attributes");
     final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, _spotLag, _calendar);
@@ -154,10 +170,10 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_businessDayConvention == null) ? 0 : _businessDayConvention.hashCode());
-    result = prime * result + ((_calendar == null) ? 0 : _calendar.hashCode());
+    result = prime * result + (_businessDayConvention == null ? 0 : _businessDayConvention.hashCode());
+    result = prime * result + (_calendar == null ? 0 : _calendar.hashCode());
     result = prime * result + (_endOfMonth ? 1231 : 1237);
-    result = prime * result + ((_indexPrice == null) ? 0 : _indexPrice.hashCode());
+    result = prime * result + (_indexPrice == null ? 0 : _indexPrice.hashCode());
     result = prime * result + (_isLinear ? 1231 : 1237);
     result = prime * result + _monthLag;
     result = prime * result + _spotLag;

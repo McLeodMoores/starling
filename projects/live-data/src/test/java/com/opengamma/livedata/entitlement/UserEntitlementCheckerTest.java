@@ -48,6 +48,9 @@ public class UserEntitlementCheckerTest {
   private UserPrincipal _mike;
   private LiveDataEntitlementChecker _userEntitlementChecker;
 
+  /**
+   * Sets up the authorities before each method.
+   */
   @BeforeMethod
   public void setup() {
     final Set<UserGroup> userGroups = new HashSet<>();
@@ -103,13 +106,13 @@ public class UserEntitlementCheckerTest {
     final Map<LiveDataSpecification, DistributionSpecification> fixes = new HashMap<>();
     fixes.put(_aaplOnBloomberg.getFullyQualifiedLiveDataSpecification(), _aaplOnBloomberg);
     fixes.put(_aaplOnBloombergWithNormalization.getFullyQualifiedLiveDataSpecification(),
-              _aaplOnBloombergWithNormalization);
+        _aaplOnBloombergWithNormalization);
     fixes.put(_bondOnBloomberg.getFullyQualifiedLiveDataSpecification(), _bondOnBloomberg);
     fixes.put(_bondOnBloombergWithNormalization.getFullyQualifiedLiveDataSpecification(),
-              _bondOnBloombergWithNormalization);
+        _bondOnBloombergWithNormalization);
     fixes.put(_fxOnBloomberg.getFullyQualifiedLiveDataSpecification(), _fxOnBloomberg);
     fixes.put(_fxOnBloombergWithNormalization.getFullyQualifiedLiveDataSpecification(),
-              _fxOnBloombergWithNormalization);
+        _fxOnBloombergWithNormalization);
 
     final FixedDistributionSpecificationResolver resolver = new FixedDistributionSpecificationResolver(fixes);
 
@@ -121,49 +124,77 @@ public class UserEntitlementCheckerTest {
     _mike = new UserPrincipal("mike", "127.0.0.1");
   }
 
+  /**
+   * Checks that the user is entitled to access LiveData/Bloomberg/Equity/*.
+   */
   @Test
   public void equityWithoutNormalizationForAuthorizedUser() {
     checkUserIsEntitled(_john, _aaplOnBloomberg);
   }
 
+  /**
+   * Checks that the user is entitled to access LiveData/Bloomberg/Equity/**.
+   */
   @Test
   public void equityWithNormalizationForAuthorizedUser() {
     checkUserIsEntitled(_john, _aaplOnBloombergWithNormalization);
   }
 
+  /**
+   * Checks that the user is entitled to access LiveData/Bloomberg/Bond/*.
+   */
   @Test
   public void bondWithoutNormalizationForAuthorizedUser() {
     checkUserIsEntitled(_john, _bondOnBloomberg);
   }
 
+  /**
+   * Checks that the user is not entitled to access LiveData/Bloomberg/Bond/**.
+   */
   @Test
   public void bondWithNormalizationForAuthorizedUser() {
     checkUserIsNotEntitled(_john, _bondOnBloombergWithNormalization);
   }
 
+  /**
+   * Checks that the user is not entitled to access LiveData/Bloomberg/FX/*.
+   */
   @Test
   public void fxWithoutNormalizationForAuthorizedUser() {
     checkUserIsNotEntitled(_john, _fxOnBloomberg);
   }
 
+  /**
+   * Checks that the user is not entitled to access LiveData/Bloomberg/FX/**.
+   */
   @Test
   public void fxWithNormalizationForAuthorizedUser() {
     checkUserIsNotEntitled(_john, _fxOnBloombergWithNormalization);
   }
 
+  /**
+   * Checks that a non-existent user is not entitled to access
+   * LiveData/Bloomberg/FX/*.
+   */
   @Test
   public void equityWithoutNormalizationForUnauthorizedUser() {
     checkUserIsNotEntitled(_mike, _aaplOnBloomberg);
   }
 
+  /**
+   * Checks that a non-existent user is not entitled to access
+   * LiveData/Bloomberg/FX/**.
+   */
   @Test
   public void fxWithoutNormalizationForUnauthorizedUser() {
     checkUserIsNotEntitled(_mike, _fxOnBloomberg);
   }
 
+  /**
+   * Checks that permission is granted for a non-existent specification.
+   */
   @Test
   public void nonExistentSpecIsPermissioned() {
-
     final LiveDataSpecification bogusSpec =
         new LiveDataSpecification(StandardRules.getOpenGammaRuleSetId(), ExternalId.of("RIC", "bar"));
     checkUserIsEntitled(_john, bogusSpec);

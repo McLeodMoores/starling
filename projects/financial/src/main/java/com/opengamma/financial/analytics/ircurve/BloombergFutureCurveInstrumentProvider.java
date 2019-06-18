@@ -54,22 +54,28 @@ public class BloombergFutureCurveInstrumentProvider implements CurveInstrumentPr
   }
 
   /**
-   * Sets the market data field to {@link MarketDataRequirementNames#MARKET_VALUE}
-   * @param futurePrefix The future prefix, not null
-   * @param marketSector The market sector postfix, not null
+   * Sets the market data field to {@link MarketDataRequirementNames#MARKET_VALUE}.
+   *
+   * @param futurePrefix
+   *          The future prefix, not null
+   * @param marketSector
+   *          The market sector postfix, not null
    */
   public BloombergFutureCurveInstrumentProvider(final String futurePrefix, final String marketSector) {
     this(futurePrefix, marketSector, MarketDataRequirementNames.MARKET_VALUE, DataFieldType.OUTRIGHT);
   }
 
   /**
-   * @param futurePrefix The future prefix, not null
-   * @param marketSector The market sector postfix, not null
-   * @param dataField The market data field, not null
-   * @param fieldType The data field type, not null
+   * @param futurePrefix
+   *          The future prefix, not null
+   * @param marketSector
+   *          The market sector postfix, not null
+   * @param dataField
+   *          The market data field, not null
+   * @param fieldType
+   *          The data field type, not null
    */
-  public BloombergFutureCurveInstrumentProvider(final String futurePrefix, final String marketSector,
-      final String dataField, final DataFieldType fieldType) {
+  public BloombergFutureCurveInstrumentProvider(final String futurePrefix, final String marketSector, final String dataField, final DataFieldType fieldType) {
     ArgumentChecker.notNull(futurePrefix, "future prefix");
     ArgumentChecker.notNull(marketSector, "market sector");
     ArgumentChecker.notNull(dataField, "data field");
@@ -97,7 +103,7 @@ public class BloombergFutureCurveInstrumentProvider implements CurveInstrumentPr
 
   @Override
   public ExternalId getInstrument(final LocalDate curveDate, final Tenor startTenor, final Tenor futureTenor, final int numFuturesFromTenor) {
-    //TODO there must be a more elegant way to do this
+    // TODO there must be a more elegant way to do this
     if (futureTenor.equals(Tenor.THREE_MONTHS)) {
       return createQuarterlyIRFutureStrips(curveDate, startTenor, numFuturesFromTenor, _futurePrefix, " " + _marketSector);
     } else if (futureTenor.equals(Tenor.ONE_MONTH)) {
@@ -131,7 +137,9 @@ public class BloombergFutureCurveInstrumentProvider implements CurveInstrumentPr
   public DataFieldType getDataFieldType() {
     return _fieldType;
   }
-  private ExternalId createQuarterlyIRFutureStrips(final LocalDate curveDate, final Tenor tenor, final int numQuartlyFuturesFromTenor, final String prefix, final String postfix) {
+
+  private ExternalId createQuarterlyIRFutureStrips(final LocalDate curveDate, final Tenor tenor, final int numQuartlyFuturesFromTenor, final String prefix,
+      final String postfix) {
     final StringBuilder futureCode = new StringBuilder();
     futureCode.append(prefix);
     final LocalDate curveFutureStartDate = curveDate.plus(tenor.getPeriod());
@@ -141,7 +149,8 @@ public class BloombergFutureCurveInstrumentProvider implements CurveInstrumentPr
     return ExternalId.of(SCHEME, futureCode.toString());
   }
 
-  private ExternalId createMonthlyIRFutureStrips(final LocalDate curveDate, final Tenor tenor, final int numMonthlyFuturesFromTenor, final String prefix, final String postfix) {
+  private ExternalId createMonthlyIRFutureStrips(final LocalDate curveDate, final Tenor tenor, final int numMonthlyFuturesFromTenor, final String prefix,
+      final String postfix) {
     final StringBuilder futureCode = new StringBuilder();
     futureCode.append(prefix);
     final LocalDate curveFutureStartDate = curveDate.plus(tenor.getPeriod());
@@ -153,6 +162,7 @@ public class BloombergFutureCurveInstrumentProvider implements CurveInstrumentPr
 
   /**
    * Gets the future prefix.
+   *
    * @return The future prefix
    */
   public String getFuturePrefix() {
@@ -161,6 +171,7 @@ public class BloombergFutureCurveInstrumentProvider implements CurveInstrumentPr
 
   /**
    * Gets the market sector postfix.
+   *
    * @return The market sector postfix
    */
   public String getMarketSector() {
@@ -176,15 +187,12 @@ public class BloombergFutureCurveInstrumentProvider implements CurveInstrumentPr
       return false;
     }
     final BloombergFutureCurveInstrumentProvider other = (BloombergFutureCurveInstrumentProvider) o;
-    return getFuturePrefix().equals(other.getFuturePrefix()) &&
-        getMarketSector().equals(other.getMarketSector()) &&
-        getMarketDataField().equals(other.getMarketDataField()) &&
-        getDataFieldType() == other.getDataFieldType();
+    return getFuturePrefix().equals(other.getFuturePrefix()) && getMarketSector().equals(other.getMarketSector())
+        && getMarketDataField().equals(other.getMarketDataField()) && getDataFieldType() == other.getDataFieldType();
   }
 
   @Override
   public int hashCode() {
-    return getFuturePrefix().hashCode() ^ getMarketSector().hashCode() ^ getMarketDataField().hashCode()
-        ^ getDataFieldType().hashCode() * (2 ^ 16);
+    return getFuturePrefix().hashCode() ^ getMarketSector().hashCode() ^ getMarketDataField().hashCode() ^ getDataFieldType().hashCode() * (2 ^ 16);
   }
 }

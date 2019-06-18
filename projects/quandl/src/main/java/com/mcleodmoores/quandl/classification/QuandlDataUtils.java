@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.classification;
 
@@ -34,10 +34,11 @@ public final class QuandlDataUtils {
   }
 
   /**
-   * Creates a list of historical time series field adjustments, which map Quandl data fields to OpenGamma
-   * equivalents and caches any results.
-   * @param cacheManager  the cache manager, not null
-   * @return  a list of field adjustment maps.
+   * Creates a list of historical time series field adjustments, which map Quandl data fields to OpenGamma equivalents and caches any results.
+   * 
+   * @param cacheManager
+   *          the cache manager, not null
+   * @return a list of field adjustment maps.
    */
   public static List<HistoricalTimeSeriesFieldAdjustmentMap> createFieldAdjustmentMap(final CacheManager cacheManager) {
     ArgumentChecker.notNull(cacheManager, "cacheManager");

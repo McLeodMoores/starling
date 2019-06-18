@@ -12,7 +12,7 @@ import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurf
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class SABRDataBundle extends StandardOptionDataBundle {
   private final double _alpha;
@@ -20,7 +20,8 @@ public class SABRDataBundle extends StandardOptionDataBundle {
   private final double _rho;
   private final double _volOfVol;
 
-  public SABRDataBundle(final YieldAndDiscountCurve interestRateCurve, final double b, final VolatilitySurface volatilitySurface, final double spot, final ZonedDateTime date, final double alpha,
+  public SABRDataBundle(final YieldAndDiscountCurve interestRateCurve, final double b, final VolatilitySurface volatilitySurface, final double spot,
+      final ZonedDateTime date, final double alpha,
       final double beta, final double rho, final double volOfVol) {
     super(interestRateCurve, b, volatilitySurface, spot, date);
     if (!ArgumentChecker.isInRangeInclusive(-1, 1, rho)) {
@@ -74,7 +75,8 @@ public class SABRDataBundle extends StandardOptionDataBundle {
 
   @Override
   public SABRDataBundle withCostOfCarry(final double costOfCarry) {
-    return new SABRDataBundle(getInterestRateCurve(), costOfCarry, getVolatilitySurface(), getSpot(), getDate(), getAlpha(), getBeta(), getRho(), getVolOfVol());
+    return new SABRDataBundle(getInterestRateCurve(), costOfCarry, getVolatilitySurface(), getSpot(), getDate(), getAlpha(), getBeta(), getRho(),
+        getVolOfVol());
   }
 
   @Override
@@ -84,31 +86,37 @@ public class SABRDataBundle extends StandardOptionDataBundle {
 
   @Override
   public SABRDataBundle withDate(final ZonedDateTime date) {
-    return new SABRDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), date, getAlpha(), getBeta(), getRho(), getVolOfVol());
+    return new SABRDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), date, getAlpha(), getBeta(), getRho(),
+        getVolOfVol());
   }
 
   @Override
   public SABRDataBundle withSpot(final double spot) {
-    return new SABRDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), spot, getDate(), getAlpha(), getBeta(), getRho(), getVolOfVol());
+    return new SABRDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), spot, getDate(), getAlpha(), getBeta(), getRho(),
+        getVolOfVol());
   }
 
   public SABRDataBundle withAlpha(final double alpha) {
-    return new SABRDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), getDate(), alpha, getBeta(), getRho(), getVolOfVol());
+    return new SABRDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), getDate(), alpha, getBeta(), getRho(),
+        getVolOfVol());
   }
 
   public SABRDataBundle withBeta(final double beta) {
-    return new SABRDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), getDate(), getAlpha(), beta, getRho(), getVolOfVol());
+    return new SABRDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), getDate(), getAlpha(), beta, getRho(),
+        getVolOfVol());
   }
 
   public SABRDataBundle withRho(final double rho) {
     if (!ArgumentChecker.isInRangeInclusive(-1, 1, rho)) {
       throw new IllegalArgumentException("Correlation must be >= -1 and <= 1");
     }
-    return new SABRDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), getDate(), getAlpha(), getBeta(), rho, getVolOfVol());
+    return new SABRDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), getDate(), getAlpha(), getBeta(), rho,
+        getVolOfVol());
   }
 
   public SABRDataBundle withVolOfVol(final double volOfVol) {
-    return new SABRDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), getDate(), getAlpha(), getBeta(), getRho(), volOfVol);
+    return new SABRDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), getDate(), getAlpha(), getBeta(), getRho(),
+        volOfVol);
   }
 
   @Override
@@ -117,13 +125,13 @@ public class SABRDataBundle extends StandardOptionDataBundle {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_alpha);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_beta);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_rho);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_volOfVol);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

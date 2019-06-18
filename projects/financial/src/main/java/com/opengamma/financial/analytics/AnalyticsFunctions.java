@@ -7,7 +7,7 @@ package com.opengamma.financial.analytics;
 
 import java.util.List;
 
-import com.mcleodmoores.financial.function.trade.TradeFunctions;
+import com.mcleodmoores.financial.function.trade.functions.TradeFunctions;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
@@ -43,8 +43,10 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
   /**
    * Adds an aggregation function for the given requirement name that produces the sum of the child position values.
    *
-   * @param functions the function configuration list to update, not null
-   * @param requirementName the requirement name, not null
+   * @param functions
+   *          the function configuration list to update, not null
+   * @param requirementName
+   *          the requirement name, not null
    */
   public static void addSummingFunction(final List<FunctionConfiguration> functions, final String requirementName) {
     functions.add(functionConfiguration(FilteringSummingFunction.class, requirementName));
@@ -57,11 +59,13 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Adds a unit scaling function to deliver the value from position's underlying security or trade at the position level. This is normally used for positions in OTC instruments that are stored with a
-   * quantity of 1 in OpenGamma.
+   * Adds a unit scaling function to deliver the value from position's underlying security or trade at the position level. This is normally used for positions
+   * in OTC instruments that are stored with a quantity of 1 in OpenGamma.
    *
-   * @param functions the function configuration list to update, not null
-   * @param requirementName the requirement name, not null
+   * @param functions
+   *          the function configuration list to update, not null
+   * @param requirementName
+   *          the requirement name, not null
    */
   public static void addUnitScalingFunction(final List<FunctionConfiguration> functions, final String requirementName) {
     functions.add(functionConfiguration(UnitPositionOrTradeScalingFunction.class, requirementName));
@@ -75,11 +79,13 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Adds a scaling function to deliver the value from a position's underlying security or trade multiplied by the quantity at the position level. This is used for positions in exchange traded
-   * instruments.
+   * Adds a scaling function to deliver the value from a position's underlying security or trade multiplied by the quantity at the position level. This is used
+   * for positions in exchange traded instruments.
    *
-   * @param functions the function configuration list to update, not null
-   * @param requirementName the requirement name, not null
+   * @param functions
+   *          the function configuration list to update, not null
+   * @param requirementName
+   *          the requirement name, not null
    */
   public static void addScalingFunction(final List<FunctionConfiguration> functions, final String requirementName) {
     functions.add(functionConfiguration(PositionOrTradeScalingFunction.class, requirementName));
@@ -107,9 +113,10 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(PositionWeightFunction.class));
     functions.add(functionConfiguration(BucketedPV01Function.class));
 
-    //security attribute functions
+    // security attribute functions
     functions.add(functionConfiguration(DefaultSecurityAttributeFunction.class, SecurityAttribute.DIRECTION.name(), ValueRequirementNames.PAY_REC));
-    functions.add(functionConfiguration(DefaultSecurityAttributeFunction.class, SecurityAttribute.FLOAT_FREQUENCY.name(), ValueRequirementNames.FLOAT_FREQUENCY));
+    functions
+    .add(functionConfiguration(DefaultSecurityAttributeFunction.class, SecurityAttribute.FLOAT_FREQUENCY.name(), ValueRequirementNames.FLOAT_FREQUENCY));
     functions.add(functionConfiguration(DefaultSecurityAttributeFunction.class, SecurityAttribute.FREQUENCY.name(), ValueRequirementNames.FREQUENCY));
     functions.add(functionConfiguration(DefaultSecurityAttributeFunction.class, SecurityAttribute.INDEX.name(), ValueRequirementNames.INDEX));
     functions.add(functionConfiguration(DefaultSecurityAttributeFunction.class, SecurityAttribute.MATURITY.name(), ValueRequirementNames.MATURITY));

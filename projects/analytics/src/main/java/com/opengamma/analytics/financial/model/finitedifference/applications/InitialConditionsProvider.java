@@ -17,13 +17,16 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class InitialConditionsProvider {
 
-  //*********************************************************************************************************
+  // *********************************************************************************************************
   // Backwards PDE initial conditions
-  //*********************************************************************************************************
+  // *********************************************************************************************************
   /**
-   * The payoff of a standard call or put option
-   * @param strike The strike
-   * @param isCall true for call
+   * The payoff of a standard call or put option.
+   * 
+   * @param strike
+   *          The strike
+   * @param isCall
+   *          true for call
    * @return the payoff function
    */
   public Function1D<Double, Double> getEuropeanPayoff(final double strike, final boolean isCall) {
@@ -40,9 +43,12 @@ public class InitialConditionsProvider {
   }
 
   /**
-   * The payoff of a standard call or put option when the spatial variable is the log-spot
-   * @param strike The strike
-   * @param isCall true for call
+   * The payoff of a standard call or put option when the spatial variable is the log-spot.
+   * 
+   * @param strike
+   *          The strike
+   * @param isCall
+   *          true for call
    * @return the payoff function
    */
   public Function1D<Double, Double> getLogEuropeanPayoff(final double strike, final boolean isCall) {
@@ -60,7 +66,8 @@ public class InitialConditionsProvider {
   }
 
   /**
-   * The payoff $\log(S_T)$ where $S_T$ is the price of the underlying at expiry
+   * The payoff $\log(S_T)$ where $S_T$ is the price of the underlying at expiry.
+   * 
    * @return The initial condition for PDE with underlying as spatial variable
    */
   public Function1D<Double, Double> getLogContractPayoff() {
@@ -73,7 +80,8 @@ public class InitialConditionsProvider {
   }
 
   /**
-   * The payoff $\log(S_T)$ where $S_T$ is the price of the underlying at expiry
+   * The payoff $\log(S_T)$ where $S_T$ is the price of the underlying at expiry.
+   * 
    * @return The initial condition for PDE with log-underlying as spatial variable coordinate
    */
   public Function1D<Double, Double> getLogContractPayoffInLogCoordinate() {
@@ -85,13 +93,16 @@ public class InitialConditionsProvider {
     };
   }
 
-  //*********************************************************************************************************
+  // *********************************************************************************************************
   // forward PDE initial conditions
-  //*********************************************************************************************************
+  // *********************************************************************************************************
   /**
-   * The initial condition for the forward PDE for standard call or put option prices
-   * @param spot The initial level of the underlying
-   * @param isCall true for call
+   * The initial condition for the forward PDE for standard call or put option prices.
+   * 
+   * @param spot
+   *          The initial level of the underlying
+   * @param isCall
+   *          true for call
    * @return the initial condition
    */
   public Function1D<Double, Double> getForwardCallPut(final double spot, final boolean isCall) {
@@ -108,8 +119,10 @@ public class InitialConditionsProvider {
   }
 
   /**
-   * The initial condition for the forward PDE for standard call or put option prices, when the spatial variable is moneyness
-   * @param isCall true for call
+   * The initial condition for the forward PDE for standard call or put option prices, when the spatial variable is moneyness.
+   * 
+   * @param isCall
+   *          true for call
    * @return the initial condition as a function of <b>moneyness</b> (strike/spot)
    */
   public Function1D<Double, Double> getForwardCallPut(final boolean isCall) {
@@ -144,9 +157,9 @@ public class InitialConditionsProvider {
     };
   }
 
-  //************
+  // ************
   // Free boundary
-  //***********
+  // ***********
   public Surface<Double, Double, Double> getAmericanEarlyExcise(final double strike, final boolean isCall) {
     final Function1D<Double, Double> payoff = getEuropeanPayoff(strike, isCall);
     final Function<Double, Double> temp = new Function<Double, Double>() {

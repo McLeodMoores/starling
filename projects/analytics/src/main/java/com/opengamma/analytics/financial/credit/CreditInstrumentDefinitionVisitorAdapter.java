@@ -24,10 +24,13 @@ import com.opengamma.analytics.financial.credit.creditdefaultswap.definition.sta
 import com.opengamma.analytics.financial.credit.creditdefaultswap.definition.standard.StandardSovereignCreditDefaultSwapDefinition;
 import com.opengamma.analytics.financial.credit.creditdefaultswap.definition.standard.StandardVanillaCreditDefaultSwapDefinition;
 
-// CSOFF
 /**
- *
+ * Visitor interface for credit instruments.
+ * @param <DATA_TYPE> The type of the market data
+ * @param <RESULT_TYPE> The type of the result
+ * @deprecated The instruments that are visited are deprecated
  */
+@Deprecated
 public abstract class CreditInstrumentDefinitionVisitorAdapter<DATA_TYPE, RESULT_TYPE> implements CreditInstrumentDefinitionVisitor<DATA_TYPE, RESULT_TYPE> {
 
   @Override

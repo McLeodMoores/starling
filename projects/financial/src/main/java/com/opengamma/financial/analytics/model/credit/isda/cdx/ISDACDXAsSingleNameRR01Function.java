@@ -38,7 +38,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class ISDACDXAsSingleNameRR01Function extends ISDACDXAsSingleNameFunction {
 
   public ISDACDXAsSingleNameRR01Function() {
@@ -47,15 +49,15 @@ public class ISDACDXAsSingleNameRR01Function extends ISDACDXAsSingleNameFunction
 
   @Override
   protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition,
-                                                final ISDACompliantYieldCurve yieldCurve,
-                                                final ZonedDateTime[] times,
-                                                final double[] marketSpreads,
-                                                final ZonedDateTime valuationDate,
-                                                final ComputationTarget target,
-                                                final ValueProperties properties,
-                                                final FunctionInputs inputs,
-                                                final ISDACompliantCreditCurve hazardCurve,
-                                                final CDSAnalytic analytic, final Tenor[] tenors) {
+      final ISDACompliantYieldCurve yieldCurve,
+      final ZonedDateTime[] times,
+      final double[] marketSpreads,
+      final ZonedDateTime valuationDate,
+      final ComputationTarget target,
+      final ValueProperties properties,
+      final FunctionInputs inputs,
+      final ISDACompliantCreditCurve hazardCurve,
+      final CDSAnalytic analytic, final Tenor[] tenors) {
     final double rr01 = StandardVanillaRR01CDSFunction.getRR01(definition, yieldCurve, properties, hazardCurve, analytic);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.RR01, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, rr01));
@@ -94,7 +96,8 @@ public class ISDACDXAsSingleNameRR01Function extends ISDACDXAsSingleNameFunction
       final Set<String> creditSpreadCurveShiftTypes = constraints.getValues(PROPERTY_SPREAD_CURVE_SHIFT_TYPE);
       hazardRateCurveProperties.with(PROPERTY_SPREAD_CURVE_SHIFT, creditSpreadCurveShifts).with(PROPERTY_SPREAD_CURVE_SHIFT_TYPE, creditSpreadCurveShiftTypes);
     }
-    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(), hazardRateCurveProperties.get());
+    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(),
+        hazardRateCurveProperties.get());
     requirements.add(hazardRateCurveRequirement);
     return requirements;
   }

@@ -49,11 +49,12 @@ public abstract class FXDigitalCallSpreadBlackMultiValuedFunction extends FXOpti
   @Override
   protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final String putCurve, final String putCurveCalculationConfig,
       final String callCurve, final String callCurveCalculationConfig, final CurrencyPair baseQuotePair, final ValueProperties optionalProperties) {
-    final ValueProperties.Builder properties = super.getResultProperties(target, putCurve, putCurveCalculationConfig, callCurve, callCurveCalculationConfig, baseQuotePair,
+    final ValueProperties.Builder properties = super.getResultProperties(target, putCurve, putCurveCalculationConfig, callCurve, callCurveCalculationConfig,
+        baseQuotePair,
         optionalProperties)
-        .withoutAny(CALCULATION_METHOD)
-        .with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.CALL_SPREAD_BLACK_METHOD)
-        .withAny(CalculationPropertyNamesAndValues.PROPERTY_CALL_SPREAD_VALUE);
+            .withoutAny(CALCULATION_METHOD)
+            .with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.CALL_SPREAD_BLACK_METHOD)
+            .withAny(CalculationPropertyNamesAndValues.PROPERTY_CALL_SPREAD_VALUE);
     return properties;
   }
 

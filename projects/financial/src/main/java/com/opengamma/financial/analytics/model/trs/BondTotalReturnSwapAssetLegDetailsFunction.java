@@ -43,7 +43,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.model.fixedincome.FixedSwapLegDetails;
@@ -58,7 +57,7 @@ import com.opengamma.util.tuple.Pair;
 public class BondTotalReturnSwapAssetLegDetailsFunction extends BondTotalReturnSwapFunction {
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#BOND_DETAILS}.
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#BOND_DETAILS}.
    */
   public BondTotalReturnSwapAssetLegDetailsFunction() {
     super(BOND_DETAILS);
@@ -79,7 +78,7 @@ public class BondTotalReturnSwapAssetLegDetailsFunction extends BondTotalReturnS
         final BondTotalReturnSwapDefinition trsDefinition = (BondTotalReturnSwapDefinition) getTargetToDefinitionConverter(context).convert(trade);
         final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(executionContext);
         final IssuerProviderInterface issuerCurves = getMergedWithIssuerProviders(inputs, getFXMatrix(inputs, target, securitySource));
-        final BondFixedSecurityDefinition bondDefinition = (BondFixedSecurityDefinition) trsDefinition.getAsset();
+        final BondFixedSecurityDefinition bondDefinition = trsDefinition.getAsset();
         final BondSecurity<? extends Payment, ? extends Coupon> bondDerivative = bondDefinition.toDerivative(now);
         final AnnuityDefinition<? extends CouponDefinition> couponDefinitions = bondDefinition.getCoupons();
         final Annuity<? extends Payment> couponDerivatives = couponDefinitions.toDerivative(now);
@@ -90,13 +89,15 @@ public class BondTotalReturnSwapAssetLegDetailsFunction extends BondTotalReturnS
         final CurrencyAmount[] paymentAmounts = couponDerivatives.accept(AnnuityPaymentAmountsVisitor.getInstance());
         final Double[] fixedRates = couponDerivatives.accept(AnnuityFixedRatesVisitor.getInstance());
         final double[] discountFactors = bondDerivative.accept(BondDiscountFactorsVisitor.getInstance(), issuerCurves);
-        final FixedSwapLegDetails details = new FixedSwapLegDetails(accrualDates.getFirst(), accrualDates.getSecond(), discountFactors, paymentTimes, paymentFractions, paymentAmounts,
+        final FixedSwapLegDetails details = new FixedSwapLegDetails(accrualDates.getFirst(), accrualDates.getSecond(), discountFactors, paymentTimes,
+            paymentFractions, paymentAmounts,
             notionals, fixedRates);
         return Collections.singleton(new ComputedValue(spec, details));
       }
 
       @Override
-      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues,
+      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+          final Set<ValueRequirement> desiredValues,
           final InstrumentDerivative derivative, final FXMatrix fxMatrix) {
         throw new IllegalStateException("Should never reach this method");
       }

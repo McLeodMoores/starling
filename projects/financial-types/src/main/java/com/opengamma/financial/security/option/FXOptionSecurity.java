@@ -82,10 +82,31 @@ public class FXOptionSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private ExerciseType _exerciseType;
 
-  FXOptionSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  FXOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
+  /**
+   * @param putCurrency
+   *          the put currency, not null
+   * @param callCurrency
+   *          the call currency, not null
+   * @param putAmount
+   *          the put amount
+   * @param callAmount
+   *          the call amount
+   * @param expiry
+   *          the expiry, not null
+   * @param settlementDate
+   *          the settlement date, not null
+   * @param isLong
+   *          true if the option is long, false if it is short
+   * @param exerciseType
+   *          the exercise type, not null
+   */
   public FXOptionSecurity(final Currency putCurrency, final Currency callCurrency, final double putAmount, final double callAmount, final Expiry expiry,
       final ZonedDateTime settlementDate, final boolean isLong, final ExerciseType exerciseType) {
     super(SECURITY_TYPE);

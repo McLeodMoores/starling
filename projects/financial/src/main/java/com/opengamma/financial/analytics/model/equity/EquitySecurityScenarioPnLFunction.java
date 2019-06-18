@@ -38,7 +38,8 @@ import com.opengamma.util.async.AsynchronousExecution;
  * Shift to option volatilities clearly have no effect.
  * <p>
  * For this function to resolve, at least one of the following properties must be set. {@link ScenarioPnLPropertyNamesAndValues#PROPERTY_PRICE_SHIFT}
- * {@link ScenarioPnLPropertyNamesAndValues#PROPERTY_VOL_SHIFT} {@link ScenarioPnLPropertyNamesAndValues#PROPERTY_PRICE_SHIFT_TYPE} {@link ScenarioPnLPropertyNamesAndValues#PROPERTY_VOL_SHIFT_TYPE}
+ * {@link ScenarioPnLPropertyNamesAndValues#PROPERTY_VOL_SHIFT} {@link ScenarioPnLPropertyNamesAndValues#PROPERTY_PRICE_SHIFT_TYPE}
+ * {@link ScenarioPnLPropertyNamesAndValues#PROPERTY_VOL_SHIFT_TYPE}
  */
 public class EquitySecurityScenarioPnLFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -52,11 +53,13 @@ public class EquitySecurityScenarioPnLFunction extends AbstractFunction.NonCompi
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
 
     // Get equity price (market value)
     final EquitySecurity equity = (EquitySecurity) target.getSecurity();
-    final double price = (Double) inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, equity.getUniqueId()));
+    final double price = (Double) inputs
+        .getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, equity.getUniqueId()));
 
     // Get shift to price, if provided, and hence PNL
     final double pnl;
@@ -105,18 +108,19 @@ public class EquitySecurityScenarioPnLFunction extends AbstractFunction.NonCompi
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     if (getValueRequirementName().equals(input.getValueName())) {
       return inputs.keySet();
-    } else {
-      return getResults(context, target);
     }
+    return getResults(context, target);
   }
 
   @Override
   /**
-   * The only requirement for the present value of an EquitySecurity is the MARKET_VALUE. <p>
+   * The only requirement for the present value of an EquitySecurity is the MARKET_VALUE.
+   * <p>
    * We also use getRequirements to set defaults for the shift properties.
    */
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
@@ -169,9 +173,9 @@ public class EquitySecurityScenarioPnLFunction extends AbstractFunction.NonCompi
     // If defaults have been added, this adds additional copy of the Function into dep graph with the adjusted constraints
     if (scenarioDefaults != null) {
       return Collections.singleton(new ValueRequirement(getValueRequirementName(), target.toSpecification(), scenarioDefaults.get()));
-    } else { // Scenarios are defined, so we're satisfied
-      return Collections.singleton(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, target.getSecurity().getUniqueId()));
     }
+    return Collections
+        .singleton(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, target.getSecurity().getUniqueId()));
   }
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EquitySecurityScenarioPnLFunction.class);

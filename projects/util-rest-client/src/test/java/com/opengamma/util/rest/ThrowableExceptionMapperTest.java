@@ -76,7 +76,7 @@ public class ThrowableExceptionMapperTest extends AbstractExceptionMapperTestHel
     assertEquals(data.size(), 2);
     assertEquals(data.get("message"), "");
     assertTrue(data.get("locator").startsWith(
-        "<p>IllegalArgumentException<br />&nbsp;&nbsp;at com.opengamma.util.rest.ThrowableExceptionMapperTest.testNoOutputMessage()"));
+        "<p>IllegalArgumentException<br>&nbsp;&nbsp;at com.opengamma.util.rest.ThrowableExceptionMapperTest.testNoOutputMessage()"));
     assertTrue(data.get("locator").endsWith("</p>"));
   }
 
@@ -97,7 +97,7 @@ public class ThrowableExceptionMapperTest extends AbstractExceptionMapperTestHel
     assertEquals(data.size(), 2);
     assertEquals(data.get("message"), message);
     assertTrue(data.get("locator").startsWith(
-        "<p>OpenGammaRuntimeException<br />&nbsp;&nbsp;at com.opengamma.util.rest.ThrowableExceptionMapperTest.testOutputMessage()"));
+        "<p>OpenGammaRuntimeException<br>&nbsp;&nbsp;at com.opengamma.util.rest.ThrowableExceptionMapperTest.testOutputMessage()"));
     assertTrue(data.get("locator").endsWith("</p>"));
   }
 

@@ -28,7 +28,7 @@ public class ExampleCurveAndSurfaceDefinitionLoader extends AbstractTool<ToolCon
 
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
@@ -48,7 +48,7 @@ public class ExampleCurveAndSurfaceDefinitionLoader extends AbstractTool<ToolCon
       swaptionSurfaces.put(ccy, "DEFAULT");
     }
     final Map<UnorderedCurrencyPair, Triple<String, String, String>> fxForward = new HashMap<>();
-    fxForward.put(UnorderedCurrencyPair.of(Currency.USD, Currency.JPY), new Triple<>("DEFAULT", "JPY", "JPY"));
+    fxForward.put(UnorderedCurrencyPair.of(Currency.USD, Currency.JPY), Triple.of("DEFAULT", "JPY", "JPY"));
     new YieldCurveConfigPopulator(configMaster, false);
     FXOptionVolatilitySurfaceConfigPopulator.populateVolatilitySurfaceConfigMaster(configMaster, fxSurfaces);
     SwaptionVolatilitySurfaceConfigPopulator.populateVolatilitySurfaceConfigMaster(configMaster, swaptionSurfaces);

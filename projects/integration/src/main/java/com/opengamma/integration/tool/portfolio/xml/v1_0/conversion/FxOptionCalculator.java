@@ -20,8 +20,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * Calculator class allowing calculations performed for FxOptions to be defined once. Not
- * intended for use outside of the TradeSecurityExtractors for FxOption.
+ * Calculator class allowing calculations performed for FxOptions to be defined once. Not intended for use outside of the TradeSecurityExtractors for FxOption.
  */
 /* package */
 class FxOptionCalculator {
@@ -34,7 +33,7 @@ class FxOptionCalculator {
   private final ZonedDateTime _settlementDate;
   private final boolean _long;
 
-  public FxOptionCalculator(final AbstractFxOptionTrade trade, final BigDecimal amount, final Currency currency) {
+  FxOptionCalculator(final AbstractFxOptionTrade trade, final BigDecimal amount, final Currency currency) {
 
     final CurrencyPair cp = CurrencyPair.parse(trade.getCurrencyPair());
 

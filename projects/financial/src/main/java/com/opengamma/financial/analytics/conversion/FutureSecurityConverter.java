@@ -34,7 +34,7 @@ import com.opengamma.util.ArgumentChecker;
  * Converts {@link FutureSecurity} to the {@link InstrumentDefinition} form needed by the analytics library.
  */
 public class FutureSecurityConverter extends FinancialSecurityVisitorAdapter<InstrumentDefinitionWithData<?, Double>>
-    implements FinancialSecurityVisitorWithData<Double, InstrumentDefinitionWithData<?, Double>> {
+implements FinancialSecurityVisitorWithData<Double, InstrumentDefinitionWithData<?, Double>> {
 
   /**
    * Constructor.
@@ -45,7 +45,8 @@ public class FutureSecurityConverter extends FinancialSecurityVisitorAdapter<Ins
   @Override
   public InstrumentDefinitionWithData<?, Double> visit(final FutureSecurity future, final Double referencePrice) {
 
-    final FinancialSecurityVisitor<InstrumentDefinitionWithData<?, Double>> visitor = new FinancialSecurityVisitorAdapter<InstrumentDefinitionWithData<?, Double>>() {
+    final FinancialSecurityVisitor<InstrumentDefinitionWithData<?, Double>> visitor =
+        new FinancialSecurityVisitorAdapter<InstrumentDefinitionWithData<?, Double>>() {
 
       @Override
       public InstrumentDefinitionWithData<?, Double> visitAgricultureFutureSecurity(final AgricultureFutureSecurity security) {
@@ -94,7 +95,6 @@ public class FutureSecurityConverter extends FinancialSecurityVisitorAdapter<Ins
         final ZonedDateTime expiry = security.getExpiry().getExpiry();
         return new EquityFutureDefinition(expiry, expiry, referencePrice, security.getCurrency(), security.getUnitAmount());
       }
-
 
       @Override
       public InstrumentDefinitionWithData<?, Double> visitIndexFutureSecurity(final IndexFutureSecurity security) {

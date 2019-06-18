@@ -48,14 +48,14 @@ import com.opengamma.util.paging.Paging;
 import com.opengamma.util.paging.PagingRequest;
 
 /**
- * An abstract master for rapid implementation of a standard version-correction
- * document database backed master.
+ * An abstract master for rapid implementation of a standard version-correction document database backed master.
  * <p>
  * This provides common implementations of methods in a standard {@link AbstractMaster}.
  * <p>
  * This class is mutable but must be treated as immutable after configuration.
  *
- * @param <D>  the type of the document
+ * @param <D>
+ *          the type of the document
  */
 public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     extends AbstractDbMaster
@@ -88,8 +88,10 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   /**
    * Creates an instance.
    *
-   * @param dbConnector  the database connector, not null
-   * @param defaultScheme  the default scheme for unique identifier, not null
+   * @param dbConnector
+   *          the database connector, not null
+   * @param defaultScheme
+   *          the default scheme for unique identifier, not null
    */
   public AbstractDocumentDbMaster(final DbConnector dbConnector, final String defaultScheme) {
     super(dbConnector, defaultScheme);
@@ -110,7 +112,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     _replaceAllVersionsTimer = summaryRegistry.timer(namePrefix + ".replaceAllVersions");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the change manager.
    *
@@ -124,7 +126,8 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   /**
    * Sets the change manager.
    *
-   * @param changeManager  the change manager, not null
+   * @param changeManager
+   *          the change manager, not null
    */
   @Override
   public void setChangeManager(final ChangeManager changeManager) {
@@ -132,7 +135,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     _changeManager = changeManager;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the change manager that handles events.
    *
@@ -142,13 +145,16 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     return getChangeManager();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Performs a standard get by unique identifier, handling exact version or latest.
    *
-   * @param uniqueId  the unique identifier, not null
-   * @param extractor  the extractor to use, not null
-   * @param masterName  a name describing the contents of the master for an error message, not null
+   * @param uniqueId
+   *          the unique identifier, not null
+   * @param extractor
+   *          the extractor to use, not null
+   * @param masterName
+   *          a name describing the contents of the master for an error message, not null
    * @return the document, null if not found
    */
   protected D doGet(final UniqueId uniqueId, final ResultSetExtractor<List<D>> extractor, final String masterName) {
@@ -157,23 +163,26 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
 
     if (uniqueId.isVersioned()) {
       return doGetById(uniqueId, extractor, masterName);
-    } else {
-      return doGetByOidInstants(uniqueId, VersionCorrection.LATEST, extractor, masterName);
     }
+    return doGetByOidInstants(uniqueId, VersionCorrection.LATEST, extractor, masterName);
   }
 
   /**
    * Performs a standard get by object identifier at instants.
    *
-   * @param objectId  the object identifier, not null
-   * @param versionCorrection  the version-correction locator, not null
-   * @param extractor  the extractor to use, not null
-   * @param masterName  a name describing the contents of the master for an error message, not null
+   * @param objectId
+   *          the object identifier, not null
+   * @param versionCorrection
+   *          the version-correction locator, not null
+   * @param extractor
+   *          the extractor to use, not null
+   * @param masterName
+   *          a name describing the contents of the master for an error message, not null
    * @return the document, null if not found
    */
   protected D doGetByOidInstants(
-    final ObjectIdentifiable objectId, final VersionCorrection versionCorrection,
-    final ResultSetExtractor<List<D>> extractor, final String masterName) {
+      final ObjectIdentifiable objectId, final VersionCorrection versionCorrection,
+      final ResultSetExtractor<List<D>> extractor, final String masterName) {
     ArgumentChecker.notNull(objectId, "oid");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     ArgumentChecker.notNull(extractor, "extractor");
@@ -198,25 +207,30 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   /**
    * Gets the SQL arguments to use for a standard get by object identifier at instants.
    *
-   * @param objectId  the object identifier, not null
-   * @param versionCorrection  the version-correction locator with instants fixed, not null
+   * @param objectId
+   *          the object identifier, not null
+   * @param versionCorrection
+   *          the version-correction locator with instants fixed, not null
    * @return the SQL arguments, not null
    */
   protected DbMapSqlParameterSource argsGetByOidInstants(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     final long docOid = extractOid(objectId);
     final DbMapSqlParameterSource args = createParameterSource()
-      .addValue("doc_oid", docOid)
-      .addTimestamp("version_as_of", versionCorrection.getVersionAsOf())
-      .addTimestamp("corrected_to", versionCorrection.getCorrectedTo());
+        .addValue("doc_oid", docOid)
+        .addTimestamp("version_as_of", versionCorrection.getVersionAsOf())
+        .addTimestamp("corrected_to", versionCorrection.getCorrectedTo());
     return args;
   }
 
   /**
    * Performs a standard get by versioned unique identifier.
    *
-   * @param uniqueId  the versioned unique identifier, not null
-   * @param extractor  the extractor to use, not null
-   * @param masterName  a name describing the contents of the master for an error message, not null
+   * @param uniqueId
+   *          the versioned unique identifier, not null
+   * @param extractor
+   *          the extractor to use, not null
+   * @param masterName
+   *          a name describing the contents of the master for an error message, not null
    * @return the document, null if not found
    */
   protected D doGetById(final UniqueId uniqueId, final ResultSetExtractor<List<D>> extractor, final String masterName) {
@@ -242,30 +256,35 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   /**
    * Gets the SQL arguments to use for a standard get by versioned unique identifier.
    *
-   * @param uniqueId  the versioned unique identifier, not null
+   * @param uniqueId
+   *          the versioned unique identifier, not null
    * @return the SQL arguments, not null
    */
   protected DbMapSqlParameterSource argsGetById(final UniqueId uniqueId) {
     final DbMapSqlParameterSource args = createParameterSource()
-      .addValue("doc_oid", extractOid(uniqueId))
-      .addValue("doc_id", extractRowId(uniqueId));
+        .addValue("doc_oid", extractOid(uniqueId))
+        .addValue("doc_id", extractRowId(uniqueId));
     return args;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Performs a standard history search.
    *
-   * @param <R>  the document result type
-   * @param request  the request, not null
-   * @param result  the result to populate, not null
-   * @param extractor  the extractor to use, not null
+   * @param <R>
+   *          the document result type
+   * @param request
+   *          the request, not null
+   * @param result
+   *          the result to populate, not null
+   * @param extractor
+   *          the extractor to use, not null
    * @return the populated result, not null
    */
   protected <R extends AbstractHistoryResult<D>> R doHistory(
-    final AbstractHistoryRequest request, final R result,
-    final ResultSetExtractor<List<D>> extractor) {
+      final AbstractHistoryRequest request, final R result,
+      final ResultSetExtractor<List<D>> extractor) {
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(result, "result");
     ArgumentChecker.notNull(extractor, "extractor");
@@ -276,7 +295,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     final Timer.Context context = _historyTimer.time();
     try {
       final DbMapSqlParameterSource args = argsHistory(request);
-      final String[] sql = {getElSqlBundle().getSql("History", args), getElSqlBundle().getSql("HistoryCount", args)};
+      final String[] sql = { getElSqlBundle().getSql("History", args), getElSqlBundle().getSql("HistoryCount", args) };
       searchWithPaging(request.getPagingRequest(), sql, args, extractor, result);
       return result;
     } finally {
@@ -287,16 +306,17 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   /**
    * Gets the SQL arguments to use for searching the history of a document.
    *
-   * @param request  the request, not null
+   * @param request
+   *          the request, not null
    * @return the SQL arguments, not null
    */
   protected DbMapSqlParameterSource argsHistory(final AbstractHistoryRequest request) {
     final DbMapSqlParameterSource args = createParameterSource()
-      .addValue("doc_oid", extractOid(request.getObjectId()))
-      .addTimestampNullIgnored("versions_from_instant", request.getVersionsFromInstant())
-      .addTimestampNullIgnored("versions_to_instant", request.getVersionsToInstant())
-      .addTimestampNullIgnored("corrections_from_instant", request.getCorrectionsFromInstant())
-      .addTimestampNullIgnored("corrections_to_instant", request.getCorrectionsToInstant());
+        .addValue("doc_oid", extractOid(request.getObjectId()))
+        .addTimestampNullIgnored("versions_from_instant", request.getVersionsFromInstant())
+        .addTimestampNullIgnored("versions_to_instant", request.getVersionsToInstant())
+        .addTimestampNullIgnored("corrections_from_instant", request.getCorrectionsFromInstant())
+        .addTimestampNullIgnored("corrections_to_instant", request.getCorrectionsToInstant());
     if (request.getVersionsFromInstant() != null && request.getVersionsFromInstant().equals(request.getVersionsToInstant())) {
       args.addValue("sql_history_versions", "Point");
     } else {
@@ -312,16 +332,22 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     return args;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Searches for documents with paging.
    *
-   * @param <T>  the type of the document
-   * @param pagingRequest  the paging request, not null
-   * @param sql  the array of SQL, query and count, not null
-   * @param args  the query arguments, not null
-   * @param extractor  the extractor of results, not null
-   * @param result  the object to populate, not null
+   * @param <T>
+   *          the type of the document
+   * @param pagingRequest
+   *          the paging request, not null
+   * @param sql
+   *          the array of SQL, query and count, not null
+   * @param args
+   *          the query arguments, not null
+   * @param extractor
+   *          the extractor of results, not null
+   * @param result
+   *          the object to populate, not null
    */
   protected <T extends AbstractDocument> void doSearch(
       final PagingRequest pagingRequest, final String[] sql, final DbMapSqlParameterSource args,
@@ -338,12 +364,18 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   /**
    * Searches for documents with paging.
    *
-   * @param <T>  the type of the document
-   * @param pagingRequest  the paging request, not null
-   * @param sql  the array of SQL, query and count, not null
-   * @param args  the query arguments, not null
-   * @param extractor  the extractor of results, not null
-   * @param result  the object to populate, not null
+   * @param <T>
+   *          the type of the document
+   * @param pagingRequest
+   *          the paging request, not null
+   * @param sql
+   *          the array of SQL, query and count, not null
+   * @param args
+   *          the query arguments, not null
+   * @param extractor
+   *          the extractor of results, not null
+   * @param result
+   *          the object to populate, not null
    */
   protected <T extends AbstractDocument> void searchWithPaging(
       final PagingRequest pagingRequest, final String[] sql, final DbMapSqlParameterSource args,
@@ -358,14 +390,14 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
       LOGGER.debug("executing sql {}", sql[1]);
       final int count = namedJdbc.queryForObject(sql[1], args, Integer.class);
       result.setPaging(Paging.of(pagingRequest, count));
-      if (count > 0 && pagingRequest.equals(PagingRequest.NONE) == false) {
+      if (count > 0 && !pagingRequest.equals(PagingRequest.NONE)) {
         LOGGER.debug("executing sql {}", sql[0]);
         result.getDocuments().addAll(namedJdbc.query(sql[0], args, extractor));
       }
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public D add(final D document) {
     ArgumentChecker.notNull(document, "document");
@@ -389,7 +421,8 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   /**
    * Processes the document add, within a retrying transaction.
    *
-   * @param document  the document to add, not null
+   * @param document
+   *          the document to add, not null
    * @return the added document, not null
    */
   protected D doAddInTransaction(final D document) {
@@ -404,7 +437,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     return document;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public D update(final D document) {
     ArgumentChecker.notNull(document, "document");
@@ -432,8 +465,10 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   /**
    * Processes the document update, within a retrying transaction.
    *
-   * @param beforeId the original identifier of the document, not null
-   * @param document the document to update, not null
+   * @param beforeId
+   *          the original identifier of the document, not null
+   * @param document
+   *          the document to update, not null
    * @return the updated document, not null
    */
   protected D doUpdateInTransaction(final UniqueId beforeId, final D document) {
@@ -455,7 +490,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     return document;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
@@ -479,7 +514,8 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   /**
    * Processes the document update, within a retrying transaction.
    *
-   * @param objectIdentifiable the objectIdentifiable to remove, not null
+   * @param objectIdentifiable
+   *          the objectIdentifiable to remove, not null
    * @return the updated document, not null
    */
   protected D doRemoveInTransaction(final ObjectIdentifiable objectIdentifiable) {
@@ -496,7 +532,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     return oldDoc;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public D correct(final D document) {
     ArgumentChecker.notNull(document, "document");
@@ -524,8 +560,10 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   /**
    * Processes the document correction, within a retrying transaction.
    *
-   * @param beforeId  the ID before
-   * @param document  the document to correct, not null
+   * @param beforeId
+   *          the ID before
+   * @param document
+   *          the document to correct, not null
    * @return the corrected document, not null
    */
   protected D doCorrectInTransaction(final UniqueId beforeId, final D document) {
@@ -565,14 +603,15 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
           if (storedDocument == null) {
             throw new DataNotFoundException("Document not found: " + uniqueId.getObjectId());
           }
-          ArgumentChecker.isTrue(storedDocument.getCorrectionToInstant() == null, "we can replace only current document. The " + storedDocument.getUniqueId() + " is not current.");
+          ArgumentChecker.isTrue(storedDocument.getCorrectionToInstant() == null,
+              "we can replace only current document. The " + storedDocument.getUniqueId() + " is not current.");
 
           final Instant storedVersionFrom = storedDocument.getVersionFromInstant();
           final Instant storedVersionTo = storedDocument.getVersionToInstant();
 
           ArgumentChecker.isTrue(
-            MasterUtils.checkVersionInstantsWithinRange(storedVersionFrom, storedVersionFrom, storedVersionTo, replacementDocuments, true),
-            "The versions must exactly match the version range of the original version being replaced.");
+              MasterUtils.checkVersionInstantsWithinRange(storedVersionFrom, storedVersionFrom, storedVersionTo, replacementDocuments, true),
+              "The versions must exactly match the version range of the original version being replaced.");
 
           // we terminate the stored docuemnt (correction)
           storedDocument.setCorrectionToInstant(now);
@@ -716,40 +755,39 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     }).getDocuments();
   }
 
-//  private D getNextDocument(final ObjectId oid, final Instant now, final Instant thisVersionTo) {
-//    return historyByVersionsCorrections(new AbstractHistoryRequest() {
-//      @Override
-//      public Instant getCorrectionsFromInstant() {
-//        return now;
-//      }
-//
-//      @Override
-//      public Instant getCorrectionsToInstant() {
-//        return now;
-//      }
-//
-//      @Override
-//      public ObjectId getObjectId() {
-//        return oid;
-//      }
-//
-//      @Override
-//      public PagingRequest getPagingRequest() {
-//        return PagingRequest.ONE;
-//      }
-//
-//      @Override
-//      public Instant getVersionsFromInstant() {
-//        return thisVersionTo;
-//      }
-//
-//      @Override
-//      public Instant getVersionsToInstant() {
-//        return thisVersionTo;
-//      }
-//    }).getFirstDocument();
-//  }
-
+  // private D getNextDocument(final ObjectId oid, final Instant now, final Instant thisVersionTo) {
+  // return historyByVersionsCorrections(new AbstractHistoryRequest() {
+  // @Override
+  // public Instant getCorrectionsFromInstant() {
+  // return now;
+  // }
+  //
+  // @Override
+  // public Instant getCorrectionsToInstant() {
+  // return now;
+  // }
+  //
+  // @Override
+  // public ObjectId getObjectId() {
+  // return oid;
+  // }
+  //
+  // @Override
+  // public PagingRequest getPagingRequest() {
+  // return PagingRequest.ONE;
+  // }
+  //
+  // @Override
+  // public Instant getVersionsFromInstant() {
+  // return thisVersionTo;
+  // }
+  //
+  // @Override
+  // public Instant getVersionsToInstant() {
+  // return thisVersionTo;
+  // }
+  // }).getFirstDocument();
+  // }
 
   @Override
   public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<D> replacementDocuments) {
@@ -771,7 +809,8 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
           final List<D> storedDocuments = getAllCurrentDocuments(objectId.getObjectId(), now);
 
           for (final D storedDocument : storedDocuments) {
-            ArgumentChecker.isTrue(storedDocument.getCorrectionToInstant() == null, "we can replace only current documents. The " + storedDocument.getUniqueId() + " is not current.");
+            ArgumentChecker.isTrue(storedDocument.getCorrectionToInstant() == null,
+                "we can replace only current documents. The " + storedDocument.getUniqueId() + " is not current.");
           }
           // terminating all current documents
           for (final D storedDocument : storedDocuments) {
@@ -783,17 +822,16 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
           if (terminatedAny && replacementDocuments.isEmpty()) {
             changeManager().entityChanged(ChangeType.REMOVED, objectId.getObjectId(), null, null, now);
             return Collections.emptyList();
-          } else {
-            final List<D> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, null, null, replacementDocuments);
-            for (final D replacementDocument : orderedReplacementDocuments) {
-              replacementDocument.setUniqueId(objectId.getObjectId().atLatestVersion());
-              insert(replacementDocument);
-            }
-            final Instant versionFromInstant = functional(orderedReplacementDocuments).first().getVersionFromInstant();
-            final Instant versionToInstant = functional(orderedReplacementDocuments).last().getVersionToInstant();
-            changeManager().entityChanged(ChangeType.CHANGED, objectId.getObjectId(), versionFromInstant, versionToInstant, now);
-            return MasterUtils.mapToUniqueIDs(orderedReplacementDocuments);
           }
+          final List<D> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, null, null, replacementDocuments);
+          for (final D replacementDocument : orderedReplacementDocuments) {
+            replacementDocument.setUniqueId(objectId.getObjectId().atLatestVersion());
+            insert(replacementDocument);
+          }
+          final Instant versionFromInstant = functional(orderedReplacementDocuments).first().getVersionFromInstant();
+          final Instant versionToInstant = functional(orderedReplacementDocuments).last().getVersionToInstant();
+          changeManager().entityChanged(ChangeType.CHANGED, objectId.getObjectId(), versionFromInstant, versionToInstant, now);
+          return MasterUtils.mapToUniqueIDs(orderedReplacementDocuments);
         }
       });
     } finally {
@@ -825,12 +863,12 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
 
             if (!storedDocuments.isEmpty()) {
               for (final D storedDocument : storedDocuments) {
-                ArgumentChecker.isTrue(storedDocument.getCorrectionToInstant() == null, "we can replace only current documents. The " + storedDocument.getUniqueId() + " is not current.");
+                ArgumentChecker.isTrue(storedDocument.getCorrectionToInstant() == null,
+                    "we can replace only current documents. The " + storedDocument.getUniqueId() + " is not current.");
               }
 
               final D earliestStoredDocument = storedDocuments.get(storedDocuments.size() - 1);
               final D latestStoredDocument = storedDocuments.get(0);
-
 
               // terminating all current documents
               for (final D storedDocument : storedDocuments) {
@@ -860,16 +898,15 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
             if (terminatedAny && replacementDocuments.isEmpty()) {
               changeManager().entityChanged(ChangeType.REMOVED, objectId.getObjectId(), null, null, now);
               return Collections.emptyList();
-            } else {
-              for (final D replacementDocument : orderedReplacementDocuments) {
-                replacementDocument.setUniqueId(objectId.getObjectId().atLatestVersion());
-                insert(replacementDocument);
-              }
-              final Instant versionFromInstant = functional(orderedReplacementDocuments).first().getVersionFromInstant();
-              final Instant versionToInstant = functional(orderedReplacementDocuments).last().getVersionToInstant();
-              changeManager().entityChanged(ChangeType.CHANGED, objectId.getObjectId(), versionFromInstant, versionToInstant, now);
-              return MasterUtils.mapToUniqueIDs(orderedReplacementDocuments);
             }
+            for (final D replacementDocument : orderedReplacementDocuments) {
+              replacementDocument.setUniqueId(objectId.getObjectId().atLatestVersion());
+              insert(replacementDocument);
+            }
+            final Instant versionFromInstant = functional(orderedReplacementDocuments).first().getVersionFromInstant();
+            final Instant versionToInstant = functional(orderedReplacementDocuments).last().getVersionToInstant();
+            changeManager().entityChanged(ChangeType.CHANGED, objectId.getObjectId(), versionFromInstant, versionToInstant, now);
+            return MasterUtils.mapToUniqueIDs(orderedReplacementDocuments);
 
           }
         });
@@ -884,7 +921,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
 
   @Override
   public final void removeVersion(final UniqueId uniqueId) {
-    replaceVersion(uniqueId, Collections.<D>emptyList());
+    replaceVersion(uniqueId, Collections.<D> emptyList());
   }
 
   @Override
@@ -893,9 +930,8 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     final List<UniqueId> result = replaceVersion(replacementDocument.getUniqueId(), Collections.singletonList(replacementDocument));
     if (result.isEmpty()) {
       return null;
-    } else {
-      return result.get(0);
     }
+    return result.get(0);
   }
 
   @Override
@@ -903,47 +939,50 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     final List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
     if (result.isEmpty()) {
       return null;
-    } else {
-      return result.get(0);
     }
+    return result.get(0);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Merges any fields from the old document that have not been updated.
    * <p>
    * Masters can choose to accept a null value for a field to mean
    *
-   * @param newDocument  the new document to merge into, not null
-   * @param oldDocument  the old document to merge from, not null
+   * @param newDocument
+   *          the new document to merge into, not null
+   * @param oldDocument
+   *          the old document to merge from, not null
    */
   protected void mergeNonUpdatedFields(final D newDocument, final D oldDocument) {
     // do nothing (override in subclass)
     // the following code would merge all null fields, but not sure if that makes sense
-//    for (MetaProperty<Object> prop : newDocument.metaBean().metaPropertyIterable()) {
-//      if (prop.get(newDocument) == null) {
-//        prop.set(newDocument, prop.get(oldDocument));
-//      }
-//    }
+    // for (MetaProperty<Object> prop : newDocument.metaBean().metaPropertyIterable()) {
+    // if (prop.get(newDocument) == null) {
+    // prop.set(newDocument, prop.get(oldDocument));
+    // }
+    // }
   }
 
   /**
    * Inserts a new document.
    *
-   * @param document  the document to insert, not null
+   * @param document
+   *          the document to insert, not null
    * @return the new document, not null
    */
   protected abstract D insert(D document);
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the document ensuring that it is the latest version.
    *
-   * @param uniqueId  the unique identifier to load, not null
+   * @param uniqueId
+   *          the unique identifier to load, not null
    * @return the loaded document, not null
    */
   protected D getCheckLatestVersion(final UniqueId uniqueId) {
-    final D oldDoc = get(uniqueId);  // checks uniqueId exists
+    final D oldDoc = get(uniqueId); // checks uniqueId exists
     if (oldDoc.getVersionToInstant() != null) {
       throw new IllegalArgumentException("UniqueId is not latest version: " + uniqueId);
     }
@@ -953,13 +992,14 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   /**
    * Updates the document row to mark the version as ended.
    *
-   * @param document  the document to update, not null
+   * @param document
+   *          the document to update, not null
    */
   protected void updateVersionToInstant(final D document) {
     final DbMapSqlParameterSource args = createParameterSource()
-      .addValue("doc_id", extractRowId(document.getUniqueId()))
-      .addTimestamp("ver_to_instant", document.getVersionToInstant())
-      .addValue("max_instant", DbDateUtils.MAX_SQL_TIMESTAMP);
+        .addValue("doc_id", extractRowId(document.getUniqueId()))
+        .addTimestamp("ver_to_instant", document.getVersionToInstant())
+        .addValue("max_instant", DbDateUtils.MAX_SQL_TIMESTAMP);
     final String sql = getElSqlBundle().getSql("UpdateVersionToInstant", args);
     final int rowsUpdated = getJdbcTemplate().update(sql, args);
     if (rowsUpdated != 1) {
@@ -967,16 +1007,17 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the document ensuring that it is the latest version.
    *
-   * @param uniqueId  the unique identifier to load, not null
+   * @param uniqueId
+   *          the unique identifier to load, not null
    * @return the loaded document, not null
    */
   protected D getCheckLatestCorrection(final UniqueId uniqueId) {
-    final D oldDoc = get(uniqueId);  // checks uniqueId exists
+    final D oldDoc = get(uniqueId); // checks uniqueId exists
     if (oldDoc.getCorrectionToInstant() != null) {
       throw new IllegalArgumentException("UniqueId is not latest correction: " + uniqueId);
     }
@@ -986,13 +1027,14 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   /**
    * Updates the document row to mark the correction as ended.
    *
-   * @param document  the document to update, not null
+   * @param document
+   *          the document to update, not null
    */
   protected void updateCorrectionToInstant(final AbstractDocument document) {
     final DbMapSqlParameterSource args = createParameterSource()
-      .addValue("doc_id", extractRowId(document.getUniqueId()))
-      .addTimestamp("corr_to_instant", document.getCorrectionToInstant())
-      .addValue("max_instant", DbDateUtils.MAX_SQL_TIMESTAMP);
+        .addValue("doc_id", extractRowId(document.getUniqueId()))
+        .addTimestamp("corr_to_instant", document.getCorrectionToInstant())
+        .addValue("max_instant", DbDateUtils.MAX_SQL_TIMESTAMP);
     final String sql = getElSqlBundle().getSql("UpdateCorrectionToInstant", args);
     final int rowsUpdated = getJdbcTemplate().update(sql, args);
     if (rowsUpdated != 1) {
@@ -1008,9 +1050,11 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
    * <p>
    * The request must contain an object identifier to identify the object.
    *
-   * @param request  the history request, not null
+   * @param request
+   *          the history request, not null
    * @return the object history, not null
-   * @throws IllegalArgumentException if the request is invalid
+   * @throws IllegalArgumentException
+   *           if the request is invalid
    */
   protected abstract AbstractHistoryResult<D> historyByVersionsCorrections(AbstractHistoryRequest request);
 

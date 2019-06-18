@@ -58,6 +58,16 @@ public class EquityBarrierOptionSecurityFudgeBuilder extends AbstractFudgeBuilde
     return msg;
   }
 
+  /**
+   * Converts an equity barrier option security to a Fudge message.
+   *
+   * @param serializer
+   *          the serializer, not null
+   * @param object
+   *          the security, not null
+   * @param msg
+   *          the message, not null
+   */
   public static void toFudgeMsg(final FudgeSerializer serializer, final EquityBarrierOptionSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, OPTION_TYPE_FIELD_NAME, object.getOptionType());
@@ -82,6 +92,16 @@ public class EquityBarrierOptionSecurityFudgeBuilder extends AbstractFudgeBuilde
     return object;
   }
 
+  /**
+   * Converts a Fudge message to an equity barrier option security.
+   * 
+   * @param deserializer
+   *          the deserializer, not null
+   * @param msg
+   *          the message, not null
+   * @param object
+   *          an empty security, not null
+   */
   public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final EquityBarrierOptionSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setOptionType(msg.getFieldValue(OptionType.class, msg.getByName(OPTION_TYPE_FIELD_NAME)));

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.convention;
@@ -12,6 +12,7 @@ import org.apache.commons.lang.Validate;
 import org.threeten.bp.Period;
 
 import com.opengamma.core.id.ExternalSchemes;
+import com.opengamma.financial.convention.ConventionBundle;
 import com.opengamma.financial.convention.ConventionBundleMaster;
 import com.opengamma.financial.convention.ConventionBundleMasterUtils;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -26,8 +27,11 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Synthetic US Conventions
+ * Synthetic US Conventions.
+ *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class SyntheticUSConventions {
 
   public static synchronized void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {
@@ -44,13 +48,19 @@ public class SyntheticUSConventions {
 
     final ConventionBundleMasterUtils utils = new ConventionBundleMasterUtils(conventionMaster);
 
-    //LIBOR
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("USDLIBORP7D"), simpleNameSecurityId("USD LIBOR 7d")), "USD LIBOR 7d", act360, modified, Period.ofDays(7), 2, false, us);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("USDLIBORP14D"), simpleNameSecurityId("USD LIBOR 14d")), "USD LIBOR 14d", act360, modified, Period.ofDays(14), 2, false, us);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("USDLIBORP1M"), simpleNameSecurityId("USD LIBOR 1m")), "USD LIBOR 1m", act360, modified, Period.ofMonths(1), 2, false, us);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("USDLIBORP2M"), simpleNameSecurityId("USD LIBOR 2m")), "USD LIBOR 2m", act360, modified, Period.ofMonths(2), 2, false, us);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("USDLIBORP3M"), simpleNameSecurityId("USD LIBOR 3m")), "USD LIBOR 3m", act360, modified, Period.ofMonths(3), 2, false, us);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("USDLIBORP6M"), simpleNameSecurityId("USD LIBOR 6m")), "USD LIBOR 6m", act360, modified, Period.ofMonths(6), 2, false, us);
+    // LIBOR
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("USDLIBORP7D"), simpleNameSecurityId("USD LIBOR 7d")), "USD LIBOR 7d", act360, modified,
+        Period.ofDays(7), 2, false, us);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("USDLIBORP14D"), simpleNameSecurityId("USD LIBOR 14d")), "USD LIBOR 14d", act360,
+        modified, Period.ofDays(14), 2, false, us);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("USDLIBORP1M"), simpleNameSecurityId("USD LIBOR 1m")), "USD LIBOR 1m", act360, modified,
+        Period.ofMonths(1), 2, false, us);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("USDLIBORP2M"), simpleNameSecurityId("USD LIBOR 2m")), "USD LIBOR 2m", act360, modified,
+        Period.ofMonths(2), 2, false, us);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("USDLIBORP3M"), simpleNameSecurityId("USD LIBOR 3m")), "USD LIBOR 3m", act360, modified,
+        Period.ofMonths(3), 2, false, us);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("USDLIBORP6M"), simpleNameSecurityId("USD LIBOR 6m")), "USD LIBOR 6m", act360, modified,
+        Period.ofMonths(6), 2, false, us);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("USDLIBORP12M")), "USD LIBOR 12m", act360, modified, Period.ofMonths(12), 2, false, us);
 
     final DayCount swapFixedDayCount = thirty360;
@@ -61,7 +71,7 @@ public class SyntheticUSConventions {
     final Frequency swapFloatPaymentFrequency = quarterly;
     final Frequency annual = PeriodFrequency.ANNUAL;
 
-    final int[] isdaFixTenor = new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30 };
+    final int[] isdaFixTenor = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30 };
     // ISDA fixing 11.00 New-York
     for (final int element : isdaFixTenor) {
       final String tenorString = element + "Y";
@@ -96,10 +106,12 @@ public class SyntheticUSConventions {
 
     final int publicationLag = 1;
     // Fed Fund effective
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("USDFF"), simpleNameSecurityId("USD FF EFFECTIVE")), "USD FF EFFECTIVE", act360, following, Period.ofDays(1), 2, false, us,
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("USDFF"), simpleNameSecurityId("USD FF EFFECTIVE")), "USD FF EFFECTIVE", act360,
+        following, Period.ofDays(1), 2, false, us,
         publicationLag);
     // OIS swap
-    utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("USD_OIS_SWAP")), "USD_OIS_SWAP", thirty360, modified, annual, 2, usgb, thirty360, modified, annual, 2,
+    utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("USD_OIS_SWAP")), "USD_OIS_SWAP", thirty360, modified, annual, 2, usgb, thirty360,
+        modified, annual, 2,
         simpleNameSecurityId("USD FF EFFECTIVE"), usgb, true, publicationLag);
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("USDOVERNIGHT")), "USDOVERNIGHT", act360, following, Period.ofDays(1), 2, false,
         us, publicationLag);
@@ -119,9 +131,10 @@ public class SyntheticUSConventions {
   }
 
   /**
-   * Adds conventions for US Treasury bonds,
-   * 
-   * @param conventionMaster The convention master, not null
+   * Adds conventions for US Treasury bonds.
+   *
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static void addTreasuryBondConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");

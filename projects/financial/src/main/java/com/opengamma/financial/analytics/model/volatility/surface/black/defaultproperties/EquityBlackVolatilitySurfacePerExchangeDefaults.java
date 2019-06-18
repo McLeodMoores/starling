@@ -36,27 +36,27 @@ public class EquityBlackVolatilitySurfacePerExchangeDefaults extends DefaultProp
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityBlackVolatilitySurfacePerExchangeDefaults.class);
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-      ValueRequirementNames.BLACK_VOLATILITY_SURFACE,
-      ValueRequirementNames.LOCAL_VOLATILITY_SURFACE,
-      ValueRequirementNames.PURE_VOLATILITY_SURFACE,
-      ValueRequirementNames.FORWARD_DELTA,
-      ValueRequirementNames.DUAL_DELTA,
-      ValueRequirementNames.DUAL_GAMMA,
-      ValueRequirementNames.FORWARD_GAMMA,
-      ValueRequirementNames.FORWARD_VEGA,
-      ValueRequirementNames.FORWARD_VOMMA,
-      ValueRequirementNames.FORWARD_VANNA,
-      ValueRequirementNames.PRESENT_VALUE,
-      ValueRequirementNames.IMPLIED_VOLATILITY,
-      ValueRequirementNames.GRID_DUAL_DELTA,
-      ValueRequirementNames.GRID_DUAL_GAMMA,
-      ValueRequirementNames.GRID_FORWARD_DELTA,
-      ValueRequirementNames.GRID_FORWARD_GAMMA,
-      ValueRequirementNames.GRID_FORWARD_VEGA,
-      ValueRequirementNames.GRID_FORWARD_VANNA,
-      ValueRequirementNames.GRID_FORWARD_VOMMA,
-      ValueRequirementNames.GRID_IMPLIED_VOLATILITY,
-      ValueRequirementNames.GRID_PRESENT_VALUE
+                ValueRequirementNames.BLACK_VOLATILITY_SURFACE,
+                ValueRequirementNames.LOCAL_VOLATILITY_SURFACE,
+                ValueRequirementNames.PURE_VOLATILITY_SURFACE,
+                ValueRequirementNames.FORWARD_DELTA,
+                ValueRequirementNames.DUAL_DELTA,
+                ValueRequirementNames.DUAL_GAMMA,
+                ValueRequirementNames.FORWARD_GAMMA,
+                ValueRequirementNames.FORWARD_VEGA,
+                ValueRequirementNames.FORWARD_VOMMA,
+                ValueRequirementNames.FORWARD_VANNA,
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.IMPLIED_VOLATILITY,
+                ValueRequirementNames.GRID_DUAL_DELTA,
+                ValueRequirementNames.GRID_DUAL_GAMMA,
+                ValueRequirementNames.GRID_FORWARD_DELTA,
+                ValueRequirementNames.GRID_FORWARD_GAMMA,
+                ValueRequirementNames.GRID_FORWARD_VEGA,
+                ValueRequirementNames.GRID_FORWARD_VANNA,
+                ValueRequirementNames.GRID_FORWARD_VOMMA,
+                ValueRequirementNames.GRID_IMPLIED_VOLATILITY,
+                ValueRequirementNames.GRID_PRESENT_VALUE
   };
   /** Ids to forward curve names */
   private final Map<String, Set<String>> _forwardCurveNames;
@@ -68,8 +68,10 @@ public class EquityBlackVolatilitySurfacePerExchangeDefaults extends DefaultProp
   private final PriorityClass _priority;
 
   /**
-   * @param priority The priority of these defaults, not null
-   * @param defaults The defaults, not null.
+   * @param priority
+   *          The priority of these defaults, not null
+   * @param defaults
+   *          The defaults, not null.
    */
   public EquityBlackVolatilitySurfacePerExchangeDefaults(final String priority, final String... defaults) {
     super(ComputationTargetType.PRIMITIVE, true);
@@ -110,7 +112,8 @@ public class EquityBlackVolatilitySurfacePerExchangeDefaults extends DefaultProp
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final String exchange = EquitySecurityUtils.getExchange(securitySource, target.getUniqueId());
     switch (propertyName) {

@@ -20,9 +20,9 @@ import com.sun.jersey.spi.container.ContainerResponseFilter;
 import com.sun.jersey.spi.container.ResourceFilter;
 
 /**
- * Jersey filter that sets up subscriptions for masters that are queried via the REST interface.  When any data changes
- * in the master a notification is sent to the client containing the REST URL used to perform the original query.
- * An instance of the filter is associated with each REST method annotated with {@link SubscribeMaster}.
+ * Jersey filter that sets up subscriptions for masters that are queried via the REST interface. When any data changes in the master a notification is sent to
+ * the client containing the REST URL used to perform the original query. An instance of the filter is associated with each REST method annotated with
+ * {@link SubscribeMaster}.
  */
 public class MasterSubscriptionFilter implements ResourceFilter {
 
@@ -32,9 +32,9 @@ public class MasterSubscriptionFilter implements ResourceFilter {
   private final HttpServletRequest _servletRequest;
 
   public MasterSubscriptionFilter(final ConnectionManager updateManager,
-                                  final List<MasterType> masterTypes,
-                                  final HttpContext httpContext,
-                                  final HttpServletRequest servletRequest) {
+      final List<MasterType> masterTypes,
+      final HttpContext httpContext,
+      final HttpServletRequest servletRequest) {
     _httpContext = httpContext;
     _updateManager = updateManager;
     _masterTypes = masterTypes;
@@ -58,26 +58,29 @@ public class MasterSubscriptionFilter implements ResourceFilter {
   }
 
   /**
-   * Filter that examines the response and sets up a subscription with
-   * {@link ConnectionManager#subscribe(String, String, MasterType, String)}.
+   * Filter that examines the response and sets up a subscription with {@link ConnectionManager#subscribe(String, String, MasterType, String)}.
    */
   private class ResponseFilter implements ContainerResponseFilter {
 
     /** The masters whose data is returned by the REST method */
-    private final List<MasterType> _masterTypes;
+    private final List<MasterType> _mastersTypes;
 
     /**
-     * @param masterTypes The masters whose data is returned by the REST method
+     * @param masterTypes
+     *          The masters whose data is returned by the REST method
      */
-    public ResponseFilter(final List<MasterType> masterTypes) {
-      _masterTypes = masterTypes;
+    ResponseFilter(final List<MasterType> masterTypes) {
+      _mastersTypes = masterTypes;
     }
 
     /**
-     * Extracts the client ID from the query parameter named {@link LongPollingServlet#CLIENT_ID} and subscribes
-     * for updates when the data changes in any of the masters in {@link #_masterTypes}.
-     * @param request The request
-     * @param response The response
+     * Extracts the client ID from the query parameter named {@link LongPollingServlet#CLIENT_ID} and subscribes for updates when the data changes in any of the
+     * masters in {@link #_mastersTypes}.
+     * 
+     * @param request
+     *          The request
+     * @param response
+     *          The response
      * @return The unmodified response
      */
     @Override
@@ -91,7 +94,7 @@ public class MasterSubscriptionFilter implements ResourceFilter {
       final String userId = AuthUtils.isPermissive() ? null : FilterUtils.getUserId(_httpContext);
       final String url = _servletRequest.getRequestURI();
       // TODO should we only subscribe if there were query params, i.e. it was a search request, not just a request for the search page
-      for (final MasterType masterType : _masterTypes) {
+      for (final MasterType masterType : _mastersTypes) {
         _updateManager.subscribe(userId, clientId, masterType, url);
       }
       return response;

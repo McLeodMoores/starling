@@ -43,9 +43,8 @@ public class FixedHistoricalMarketDataSpecificationFudgeBuilder implements Fudge
     if (msg.hasField(TIME_SERIES_RESOLVER_KEY_FIELD)) {
       final String timeSeriesResolverKey = msg.getString(TIME_SERIES_RESOLVER_KEY_FIELD);
       return new FixedHistoricalMarketDataSpecification(timeSeriesResolverKey, snapshotDate);
-    } else {
-      return new FixedHistoricalMarketDataSpecification(snapshotDate);
     }
+    return new FixedHistoricalMarketDataSpecification(snapshotDate);
   }
 
 }

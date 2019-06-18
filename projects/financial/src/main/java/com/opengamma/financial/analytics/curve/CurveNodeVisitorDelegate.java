@@ -26,16 +26,18 @@ import com.opengamma.financial.analytics.ircurve.strips.ZeroCouponInflationNode;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Delegate class for curve node visitors
+ * Delegate class for curve node visitors.
  *
- * @param <T> The return type of the visitor.
+ * @param <T>
+ *          The return type of the visitor.
  */
 public class CurveNodeVisitorDelegate<T> implements CurveNodeVisitor<T> {
   /** The delegate */
   private final CurveNodeVisitor<T> _delegate;
 
   /**
-   * @param delegate The delegate, not null
+   * @param delegate
+   *          The delegate, not null
    */
   public CurveNodeVisitorDelegate(final CurveNodeVisitor<T> delegate) {
     ArgumentChecker.notNull(delegate, "delegate");

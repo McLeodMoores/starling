@@ -25,10 +25,11 @@ public class UnversionedValueMappings extends ValueMappings {
   }
 
   /**
-   * As a subclasses of ValueMappings if the ComputationTargetReference is an instance of ComputationTargetSpecification
-   * and the unique id is versioned then a new ValueRequirement is created with a unversioned
-   * ComputationTargetSpecification
-   * @param valueRequirement to check for versioning
+   * As a subclasses of ValueMappings if the ComputationTargetReference is an instance of ComputationTargetSpecification and the unique id is versioned then a
+   * new ValueRequirement is created with a unversioned ComputationTargetSpecification.
+   *
+   * @param valueRequirement
+   *          to check for versioning
    * @return either 'unversioned' or returned unaltered
    */
   @Override
@@ -40,24 +41,27 @@ public class UnversionedValueMappings extends ValueMappings {
         return valueRequirement;
       }
       final Boolean isVersioned = ((ComputationTargetSpecification) ref).getUniqueId().isVersioned();
-      final Boolean isParentVersionedAndNotNull = ref.getParent() == null ? false : ((ComputationTargetSpecification) ref.getParent()).getUniqueId().isVersioned();
-
+      final Boolean isParentVersionedAndNotNull = ref.getParent() == null ? false
+          : ((ComputationTargetSpecification) ref.getParent()).getUniqueId().isVersioned();
 
       if (isVersioned || isParentVersionedAndNotNull) {
-        /* If the parent is versioned and exists create an unversioned copy and create the valueRequirement
-         * else if the parent is not versioned or does not exist and the passed in valueRequirement is versioned then
-         * create an unversioned copy
-         * otherwise return the original
+        /*
+         * If the parent is versioned and exists create an unversioned copy and create the valueRequirement else if the parent is not versioned or does not
+         * exist and the passed in valueRequirement is versioned then create an unversioned copy otherwise return the original
          */
         if (isParentVersionedAndNotNull) {
           final ComputationTargetSpecification parent = ref.getParent().getSpecification();
           final ComputationTargetSpecification newParentTargetSpec = new ComputationTargetSpecification(parent.getType(), parent.getUniqueId().toLatest());
-          final ComputationTargetSpecification newTargetSpec = new ComputationTargetSpecification(newParentTargetSpec, ref.getType(), ((ComputationTargetSpecification) ref).getUniqueId().toLatest());
-          final ValueRequirement undersionedvalueRequirement = new ValueRequirement(valueRequirement.getValueName(), newTargetSpec, valueRequirement.getConstraints());
+          final ComputationTargetSpecification newTargetSpec = new ComputationTargetSpecification(newParentTargetSpec, ref.getType(),
+              ((ComputationTargetSpecification) ref).getUniqueId().toLatest());
+          final ValueRequirement undersionedvalueRequirement = new ValueRequirement(valueRequirement.getValueName(), newTargetSpec,
+              valueRequirement.getConstraints());
           return undersionedvalueRequirement;
         } else if (isVersioned) {
-          final ComputationTargetSpecification newTargetSpec = new ComputationTargetSpecification(ref.getType(), ((ComputationTargetSpecification) ref).getUniqueId().toLatest());
-          final ValueRequirement undersionedvalueRequirement = new ValueRequirement(valueRequirement.getValueName(), newTargetSpec, valueRequirement.getConstraints());
+          final ComputationTargetSpecification newTargetSpec = new ComputationTargetSpecification(ref.getType(),
+              ((ComputationTargetSpecification) ref).getUniqueId().toLatest());
+          final ValueRequirement undersionedvalueRequirement = new ValueRequirement(valueRequirement.getValueName(), newTargetSpec,
+              valueRequirement.getConstraints());
           return undersionedvalueRequirement;
         } else {
           return valueRequirement;
@@ -65,8 +69,7 @@ public class UnversionedValueMappings extends ValueMappings {
 
       }
       return valueRequirement;
-    } else {
-      return valueRequirement;
     }
+    return valueRequirement;
   }
 }

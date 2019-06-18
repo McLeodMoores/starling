@@ -18,8 +18,9 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Function computes the {@link ValueRequirementNames#VEGA}, first order derivative of {@link Security} price with respect to the implied vol,
- * for interest rate future options in the Black world.
+ * Function computes the {@link ValueRequirementNames#VEGA}, first order derivative of {@link Security} price with respect to the implied vol, for interest rate
+ * future options in the Black world.
+ *
  * @deprecated The parent class is deprecated
  */
 @Deprecated
@@ -28,14 +29,15 @@ public class InterestRateFutureOptionBlackVegaFunction extends InterestRateFutur
   private static final PresentValueBlackTheoreticalVegaCalculator CALCULATOR = PresentValueBlackTheoreticalVegaCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VEGA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VEGA}.
    */
   public InterestRateFutureOptionBlackVegaFunction() {
     super(ValueRequirementNames.VEGA, false);
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative irFutureOptionTransaction, final YieldCurveWithBlackCubeBundle curveBundle, final ValueSpecification spec,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative irFutureOptionTransaction, final YieldCurveWithBlackCubeBundle curveBundle,
+      final ValueSpecification spec,
       final Set<ValueRequirement> desiredValues) {
     final double vega = irFutureOptionTransaction.accept(CALCULATOR, curveBundle);
     return Collections.singleton(new ComputedValue(spec, vega));

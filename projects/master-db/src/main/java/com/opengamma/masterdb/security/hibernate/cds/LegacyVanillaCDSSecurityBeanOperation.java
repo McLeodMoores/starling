@@ -28,7 +28,7 @@ public final class LegacyVanillaCDSSecurityBeanOperation extends AbstractSecurit
 
   /**
    * Singleton.
-   * */
+   */
   public static final LegacyVanillaCDSSecurityBeanOperation INSTANCE = new LegacyVanillaCDSSecurityBeanOperation();
 
   private LegacyVanillaCDSSecurityBeanOperation() {
@@ -36,7 +36,8 @@ public final class LegacyVanillaCDSSecurityBeanOperation extends AbstractSecurit
   }
 
   @Override
-  public LegacyVanillaCDSSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final LegacyVanillaCDSSecurity security) {
+  public LegacyVanillaCDSSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final LegacyVanillaCDSSecurity security) {
     final LegacyVanillaCDSSecurityBean bean = new LegacyVanillaCDSSecurityBean();
     CreditDefaultSwapBeanOperation.createBean(secMasterSession, bean, security);
     bean.setParSpread(security.getParSpread());

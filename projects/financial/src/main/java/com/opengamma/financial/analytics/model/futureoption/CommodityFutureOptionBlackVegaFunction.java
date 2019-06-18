@@ -25,7 +25,7 @@ import com.opengamma.engine.value.ValueSpecification;
 public class CommodityFutureOptionBlackVegaFunction extends CommodityFutureOptionBlackFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public CommodityFutureOptionBlackVegaFunction() {
     super(ValueRequirementNames.VEGA);

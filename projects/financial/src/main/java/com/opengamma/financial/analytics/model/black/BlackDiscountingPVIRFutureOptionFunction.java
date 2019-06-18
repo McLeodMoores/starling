@@ -26,15 +26,13 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of interest rate future options using a Black surface and
- * curves constructed using the discounting method.
+ * Calculates the present value of interest rate future options using a Black surface and curves constructed using the discounting method.
  */
 public class BlackDiscountingPVIRFutureOptionFunction extends BlackDiscountingIRFutureOptionFunction {
   /** The position gamma calculator */
@@ -42,7 +40,7 @@ public class BlackDiscountingPVIRFutureOptionFunction extends BlackDiscountingIR
       PresentValueBlackSTIRFutureOptionCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public BlackDiscountingPVIRFutureOptionFunction() {
     super(PRESENT_VALUE);

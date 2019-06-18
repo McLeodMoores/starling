@@ -24,8 +24,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  *
- *
+ * @deprecated {@link YieldCurveSpecification}s are deprecated.
  */
+@Deprecated
 public class InterpolatedYieldCurveSpecificationWithSecurities implements Serializable {
 
   /** Serialization version. */
@@ -36,15 +37,15 @@ public class InterpolatedYieldCurveSpecificationWithSecurities implements Serial
   private final String _name;
   private final Interpolator1D _interpolator;
   private final boolean _interpolateYield;
-  private final SortedSet<FixedIncomeStripWithSecurity> _strips = new TreeSet<FixedIncomeStripWithSecurity>();
+  private final SortedSet<FixedIncomeStripWithSecurity> _strips = new TreeSet<>();
 
-  public InterpolatedYieldCurveSpecificationWithSecurities(final LocalDate curveDate, final String name, final Currency currency, final Interpolator1D interpolator,
-      final Collection<FixedIncomeStripWithSecurity> resolvedStrips) {
+  public InterpolatedYieldCurveSpecificationWithSecurities(final LocalDate curveDate, final String name, final Currency currency,
+      final Interpolator1D interpolator, final Collection<FixedIncomeStripWithSecurity> resolvedStrips) {
     this(curveDate, name, currency, interpolator, true, resolvedStrips);
   }
 
-  public InterpolatedYieldCurveSpecificationWithSecurities(final LocalDate curveDate, final String name, final Currency currency, final Interpolator1D interpolator,
-      final boolean interpolateYield, final Collection<FixedIncomeStripWithSecurity> resolvedStrips) {
+  public InterpolatedYieldCurveSpecificationWithSecurities(final LocalDate curveDate, final String name, final Currency currency,
+      final Interpolator1D interpolator, final boolean interpolateYield, final Collection<FixedIncomeStripWithSecurity> resolvedStrips) {
     Validate.notNull(curveDate, "CurveDate");
     Validate.notNull(currency, "Currency");
     Validate.notNull(interpolator, "Interpolator1D");
@@ -96,6 +97,7 @@ public class InterpolatedYieldCurveSpecificationWithSecurities implements Serial
   public boolean interpolateYield() {
     return _interpolateYield;
   }
+
   /**
    * @return the strips
    */
@@ -137,9 +139,9 @@ public class InterpolatedYieldCurveSpecificationWithSecurities implements Serial
   public int hashCode() {
     final int prime = 37;
     int result = 1;
-    result = (result * prime) + _currency.hashCode();
+    result = result * prime + _currency.hashCode();
     if (_name != null) {
-      result = (result * prime) + _name.hashCode();
+      result = result * prime + _name.hashCode();
     }
     // since currency/name/date are a candidate key we leave it at that.
     return result;

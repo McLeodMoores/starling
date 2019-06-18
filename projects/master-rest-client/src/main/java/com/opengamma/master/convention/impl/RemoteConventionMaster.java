@@ -29,8 +29,8 @@ import com.sun.jersey.api.client.GenericType;
  * Provides access to a remote {@link ConventionMaster}.
  */
 public class RemoteConventionMaster
-    extends AbstractRemoteDocumentMaster<ConventionDocument>
-    implements ConventionMaster {
+extends AbstractRemoteDocumentMaster<ConventionDocument>
+implements ConventionMaster {
 
   /**
    * Creates an instance.
@@ -77,9 +77,8 @@ public class RemoteConventionMaster
     if (uniqueId.isVersioned()) {
       final URI uri = new DataConventionUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(ConventionDocument.class);
-    } else {
-      return get(uniqueId, VersionCorrection.LATEST);
     }
+    return get(uniqueId, VersionCorrection.LATEST);
   }
 
   //-------------------------------------------------------------------------

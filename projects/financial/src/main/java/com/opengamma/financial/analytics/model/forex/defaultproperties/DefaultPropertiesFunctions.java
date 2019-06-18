@@ -11,7 +11,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.util.ArgumentChecker;
@@ -33,6 +34,7 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
     /**
      * Gets the curve configuration name.
+     *
      * @return The curve configuration name
      */
     public String getCurveConfiguration() {
@@ -41,14 +43,17 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
     /**
      * Sets the curve configuration name.
-     * @param curveConfiguration The curve configuration name, not null
+     *
+     * @param curveConfiguration
+     *          The curve configuration name, not null
      */
     public void setCurveConfiguration(final String curveConfiguration) {
       _curveConfiguration = curveConfiguration;
     }
 
     /**
-     * Gets the discounting curve name
+     * Gets the discounting curve name.
+     *
      * @return The discounting curve name
      */
     public String getDiscountingCurve() {
@@ -57,7 +62,9 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
     /**
      * Sets the discounting curve name.
-     * @param discountingCurve The discounting curve name, not null
+     *
+     * @param discountingCurve
+     *          The discounting curve name, not null
      */
     public void setDiscountingCurve(final String discountingCurve) {
       _discountingCurve = discountingCurve;
@@ -81,8 +88,10 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
     private String _forwardCurveName;
 
     /**
-     * Sets the surface name
-     * @param surfaceName The surface name, not null
+     * Sets the surface name.
+     *
+     * @param surfaceName
+     *          The surface name, not null
      */
     public void setSurfaceName(final String surfaceName) {
       _surfaceName = surfaceName;
@@ -90,6 +99,7 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
     /**
      * Gets the surface name.
+     *
      * @return The surface name
      */
     public String getSurfaceName() {
@@ -98,6 +108,7 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
     /**
      * Gets the forward curve name.
+     *
      * @return The forward curve name
      */
     public String getForwardCurveName() {
@@ -105,8 +116,10 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
     }
 
     /**
-     * Sets the forward curve name
-     * @param forwardCurveName The forward curve name, not null
+     * Sets the forward curve name.
+     *
+     * @param forwardCurveName
+     *          The forward curve name, not null
      */
     public void setForwardCurveName(final String forwardCurveName) {
       _forwardCurveName = forwardCurveName;
@@ -119,20 +132,23 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
     }
 
   }
+
   /** The per-currency defaults */
   private final Map<String, CurrencyInfo> _perCurrencyInfo = new HashMap<>();
   /** The per-currency pair defaults */
   private final Map<Pair<String, String>, CurrencyPairInfo> _perCurrencyPairInfo = new HashMap<>();
   /** The default interpolator name */
-  private String _interpolatorName = Interpolator1DFactory.DOUBLE_QUADRATIC;
+  private String _interpolatorName = DoubleQuadraticInterpolator1dAdapter.NAME;
   /** The default left extrapolator name */
-  private String _leftExtrapolatorName = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
+  private String _leftExtrapolatorName = LinearExtrapolator1dAdapter.NAME;
   /** The default right extrapolator name */
-  private String _rightExtrapolatorName = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
+  private String _rightExtrapolatorName = LinearExtrapolator1dAdapter.NAME;
 
   /**
    * Sets the defaults for a set of currencies.
-   * @param perCurrencyInfo The currency pair defaults
+   *
+   * @param perCurrencyInfo
+   *          The currency pair defaults
    */
   public void setPerCurrencyInfo(final Map<String, CurrencyInfo> perCurrencyInfo) {
     _perCurrencyInfo.clear();
@@ -141,6 +157,7 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Gets the defaults for a currency.
+   *
    * @return The currency defaults
    */
   public Map<String, CurrencyInfo> getPerCurrencyInfo() {
@@ -149,8 +166,11 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Sets the defaults for a currency.
-   * @param currency The currency
-   * @param info The defaults
+   *
+   * @param currency
+   *          The currency
+   * @param info
+   *          The defaults
    */
   public void setCurrencyInfo(final String currency, final CurrencyInfo info) {
     _perCurrencyInfo.put(currency, info);
@@ -158,7 +178,9 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Gets the defaults for a currency.
-   * @param currency The currency
+   *
+   * @param currency
+   *          The currency
    * @return The defaults
    */
   public CurrencyInfo getCurrencyInfo(final String currency) {
@@ -167,7 +189,9 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Sets the defaults for a set of currency pairs.
-   * @param perCurrencyPairInfo The currency pairs and defaults
+   *
+   * @param perCurrencyPairInfo
+   *          The currency pairs and defaults
    */
   public void setPerCurrencyPairInfo(final Map<Pair<String, String>, CurrencyPairInfo> perCurrencyPairInfo) {
     _perCurrencyPairInfo.clear();
@@ -176,6 +200,7 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Gets the defaults for a currency pair.
+   *
    * @return The defaults
    */
   public Map<Pair<String, String>, CurrencyPairInfo> getPerCurrencyPairInfo() {
@@ -184,8 +209,11 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Sets defaults for a currency pair.
-   * @param currencyPair The currency pair
-   * @param info The currency pair defaults
+   *
+   * @param currencyPair
+   *          The currency pair
+   * @param info
+   *          The currency pair defaults
    */
   public void setCurrencyPairInfo(final Pair<String, String> currencyPair, final CurrencyPairInfo info) {
     _perCurrencyPairInfo.put(currencyPair, info);
@@ -193,7 +221,9 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Gets defaults for a currency pair.
-   * @param currencyPair The currency pair
+   *
+   * @param currencyPair
+   *          The currency pair
    * @return The currency pair defaults
    */
   public CurrencyPairInfo getCurrencyPairInfo(final Pair<String, String> currencyPair) {
@@ -202,14 +232,17 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Sets the interpolator name.
-   * @param interpolatorName The interpolator name, not null
+   *
+   * @param interpolatorName
+   *          The interpolator name, not null
    */
   public void setInterpolatorName(final String interpolatorName) {
     _interpolatorName = interpolatorName;
   }
 
- /**
+  /**
    * Gets the interpolator name.
+   *
    * @return The interpolator name
    */
   public String getInterpolatorName() {
@@ -218,7 +251,9 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Sets the left extrapolator name.
-   * @param leftExtrapolatorName The left extrapolator name, not null
+   *
+   * @param leftExtrapolatorName
+   *          The left extrapolator name, not null
    */
   public void setLeftExtrapolatorName(final String leftExtrapolatorName) {
     _leftExtrapolatorName = leftExtrapolatorName;
@@ -226,6 +261,7 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Gets the left extrapolator name.
+   *
    * @return The left extrapolator name
    */
   public String getLeftExtrapolatorName() {
@@ -234,7 +270,9 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Sets the right extrapolator name.
-   * @param rightExtrapolatorName The right extrapolator name, not null
+   *
+   * @param rightExtrapolatorName
+   *          The right extrapolator name, not null
    */
   public void setRightExtrapolatorName(final String rightExtrapolatorName) {
     _rightExtrapolatorName = rightExtrapolatorName;
@@ -242,6 +280,7 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Gets the right extrapolator name.
+   *
    * @return The right extrapolator name
    */
   public String getRightExtrapolatorName() {
@@ -258,7 +297,9 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Adds defaults for FX forwards relevant to the discounting calculation method.
-   * @param functions The list of functions
+   *
+   * @param functions
+   *          The list of functions
    */
   protected void addFXForwardDefaults(final List<FunctionConfiguration> functions) {
     final String[] args = new String[getPerCurrencyInfo().size() * 3];
@@ -273,7 +314,9 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Adds defaults for FX forwards relevant to the forward point calculation method.
-   * @param functions The list of functions
+   *
+   * @param functions
+   *          The list of functions
    */
   protected void addFXForwardPointsDefaults(final List<FunctionConfiguration> functions) {
     final String[] args = new String[getPerCurrencyPairInfo().size() * 3];
@@ -288,7 +331,9 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Adds defaults for FX options relevant to the curves.
-   * @param functions The list of functions
+   *
+   * @param functions
+   *          The list of functions
    */
   protected void addFXOptionBlackCurveDefaults(final List<FunctionConfiguration> functions) {
     final String[] args = new String[getPerCurrencyInfo().size() * 3];
@@ -303,7 +348,9 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   /**
    * Adds defaults for FX options relevant to FX volatility surfaces.
-   * @param functions The list of functions
+   *
+   * @param functions
+   *          The list of functions
    */
   protected void addFXOptionBlackSurfaceDefaults(final List<FunctionConfiguration> functions) {
     final String[] args = new String[3 + getPerCurrencyPairInfo().size() * 3];

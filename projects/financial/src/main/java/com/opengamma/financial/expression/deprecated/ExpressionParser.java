@@ -25,7 +25,7 @@ import com.opengamma.financial.expression.UserExpressionParser;
 /**
  * Parses a user expression into an AST. User expressions are a VB/Excel style function syntax to allow
  * custom code to be executed within the Java stack. For example portolfio filtering and aggregation.
- * 
+ *
  * @deprecated Use the EL based form instead
  */
 @Deprecated
@@ -33,7 +33,7 @@ public final class ExpressionParser extends UserExpressionParser {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ExpressionParser.class);
 
-  private final Map<String, Object> _constants = new HashMap<String, Object>();
+  private final Map<String, Object> _constants = new HashMap<>();
 
   public ExpressionParser() {
   }
@@ -68,9 +68,8 @@ public final class ExpressionParser extends UserExpressionParser {
         final String var = tree.getText();
         if (_constants.containsKey(var)) {
           return new Expression.Literal(_constants.get(var));
-        } else {
-          return new Expression.Identifier(var);
         }
+        return new Expression.Identifier(var);
       }
       case ExprParser.INTEGER:
         return new Expression.Literal(Integer.parseInt(tree.getText()));
@@ -106,7 +105,7 @@ public final class ExpressionParser extends UserExpressionParser {
       };
       final ExprParser.root_return root = parser.root();
       return build(((Tree) root.getTree()).getChild(0));
-    } catch (Throwable e) {
+    } catch (final Throwable e) {
       LOGGER.warn("Couldn't parse expression {} - {}", expression, e);
       throw new IllegalArgumentException(expression);
     }

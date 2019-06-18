@@ -45,8 +45,8 @@ public class VolatilitySurfaceMultipleAdditiveShifts implements StructureManipul
 
   @Override
   public VolatilitySurface execute(final VolatilitySurface surface,
-                                   final ValueSpecification valueSpecification,
-                                   final FunctionExecutionContext executionContext) {
+      final ValueSpecification valueSpecification,
+      final FunctionExecutionContext executionContext) {
     return surface.withMultipleAdditiveShifts(_x, _y, _shifts);
   }
 
@@ -84,17 +84,17 @@ public class VolatilitySurfaceMultipleAdditiveShifts implements StructureManipul
       return false;
     }
     final VolatilitySurfaceMultipleAdditiveShifts other = (VolatilitySurfaceMultipleAdditiveShifts) obj;
-    return Arrays.equals(this._x, other._x) &&
-        Arrays.equals(this._y, other._y) &&
-        Arrays.equals(this._shifts, other._shifts);
+    return Arrays.equals(this._x, other._x)
+        && Arrays.equals(this._y, other._y)
+        && Arrays.equals(this._shifts, other._shifts);
   }
 
   @Override
   public String toString() {
-    return "VolatilitySurfaceMultipleAdditiveShifts [" +
-        "_x=" + Arrays.toString(_x) +
-        ", _y=" + Arrays.toString(_y) +
-        ", _shifts=" + Arrays.toString(_shifts) +
-        "]";
+    return "VolatilitySurfaceMultipleAdditiveShifts ["
+        + "_x=" + Arrays.toString(_x)
+        + ", _y=" + Arrays.toString(_y)
+        + ", _shifts=" + Arrays.toString(_shifts)
+        + "]";
   }
 }

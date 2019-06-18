@@ -30,7 +30,7 @@ public class NormalPriceFunction implements OptionPriceFunction<NormalFunctionDa
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public final Double evaluate(final NormalFunctionData data) {
+      public Double evaluate(final NormalFunctionData data) {
         Validate.notNull(data, "data");
         final double forward = data.getForward();
         final double numeraire = data.getNumeraire();
@@ -49,9 +49,13 @@ public class NormalPriceFunction implements OptionPriceFunction<NormalFunctionDa
 
   /**
    * Computes the price of an option in the normally distributed assets hypothesis (Bachelier model). The first order price derivatives are also provided.
-   * @param option The option description.
-   * @param data The model data.
-   * @param priceDerivative Array used to output the derivative of the price with respect to [0] forward, [1] volatility, [2] strike. The length of the array should be 3.
+   * 
+   * @param option
+   *          The option description.
+   * @param data
+   *          The model data.
+   * @param priceDerivative
+   *          Array used to output the derivative of the price with respect to [0] forward, [1] volatility, [2] strike. The length of the array should be 3.
    * @return The price.
    */
   public double getPriceAdjoint(final EuropeanVanillaOption option, final NormalFunctionData data, final double[] priceDerivative) {

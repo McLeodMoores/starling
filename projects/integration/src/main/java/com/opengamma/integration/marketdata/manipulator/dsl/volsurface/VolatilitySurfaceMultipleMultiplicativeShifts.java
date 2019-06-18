@@ -45,8 +45,8 @@ public class VolatilitySurfaceMultipleMultiplicativeShifts implements StructureM
 
   @Override
   public VolatilitySurface execute(final VolatilitySurface surface,
-                                   final ValueSpecification valueSpecification,
-                                   final FunctionExecutionContext executionContext) {
+      final ValueSpecification valueSpecification,
+      final FunctionExecutionContext executionContext) {
     return surface.withMultipleMultiplicativeShifts(_x, _y, _shifts);
   }
 
@@ -84,17 +84,17 @@ public class VolatilitySurfaceMultipleMultiplicativeShifts implements StructureM
       return false;
     }
     final VolatilitySurfaceMultipleMultiplicativeShifts other = (VolatilitySurfaceMultipleMultiplicativeShifts) obj;
-    return Arrays.equals(this._x, other._x) &&
-        Arrays.equals(this._y, other._y) &&
-        Arrays.equals(this._shifts, other._shifts);
+    return Arrays.equals(this._x, other._x)
+        && Arrays.equals(this._y, other._y)
+        && Arrays.equals(this._shifts, other._shifts);
   }
 
   @Override
   public String toString() {
-    return "VolatilitySurfaceMultipleMultiplicativeShifts [" +
-        "_x=" + Arrays.toString(_x) +
-        ", _y=" + Arrays.toString(_y) +
-        ", _shifts=" + Arrays.toString(_shifts) +
-        "]";
+    return "VolatilitySurfaceMultipleMultiplicativeShifts ["
+        + "_x=" + Arrays.toString(_x)
+        + ", _y=" + Arrays.toString(_y)
+        + ", _shifts=" + Arrays.toString(_shifts)
+        + "]";
   }
 }

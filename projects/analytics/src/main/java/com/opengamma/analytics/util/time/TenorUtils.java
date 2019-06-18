@@ -243,7 +243,7 @@ public class TenorUtils {
     if (tenor2.equals(Tenor.of(Period.ZERO))) { // Second tenor is ZERO
       return tenor1;
     }
-    if (tenor1.equals(Tenor.ON) && tenor1.equals(Tenor.ON)) { // Both tenors are ON
+    if (tenor1.equals(Tenor.ON) && tenor2.equals(Tenor.ON)) { // Both tenors are ON
       return Tenor.TN;
     }
     throw new IllegalArgumentException("Cannot add " + tenor1 + " and " + tenor2);

@@ -5,7 +5,7 @@
  */
 package com.opengamma.financial.security.equity;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import org.fudgemsg.UnmodifiableFudgeField;
 import org.fudgemsg.wire.types.FudgeWireType;
@@ -22,11 +22,17 @@ public class GICSCodeFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
   private static final GICSCode GICS = GICSCode.of("10203040");
 
+  /**
+   * Tests a cycle.
+   */
   @Test
   public void testCycle() {
     assertEquals(GICS, cycleObject(GICSCode.class, GICS));
   }
 
+  /**
+   * Tests the secondary type (an integer).
+   */
   @Test
   public void testFromInteger() {
     assertEquals(GICS, getFudgeContext().getFieldValue(GICSCode.class,

@@ -15,7 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-import org.apache.http.concurrent.Cancellable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -219,16 +218,15 @@ public class JobDispatcher implements JobInvokerRegister {
             iterator.remove();
             getInvokers().add(jobInvoker);
             return true;
-          } else {
-            LOGGER.debug("Invoker {} refused to execute job {}", jobInvoker, job);
-            iterator.remove();
-            if (jobInvoker.notifyWhenAvailable(this)) {
-              LOGGER.info("Invoker {} requested immediate retry", jobInvoker);
-              if (retry == null) {
-                retry = new LinkedList<>();
-              }
-              retry.add(jobInvoker);
+          }
+          LOGGER.debug("Invoker {} refused to execute job {}", jobInvoker, job);
+          iterator.remove();
+          if (jobInvoker.notifyWhenAvailable(this)) {
+            LOGGER.info("Invoker {} requested immediate retry", jobInvoker);
+            if (retry == null) {
+              retry = new LinkedList<>();
             }
+            retry.add(jobInvoker);
           }
         }
       }
@@ -254,15 +252,16 @@ public class JobDispatcher implements JobInvokerRegister {
   }
 
   /**
-   * Puts the job into the ready queue, sent to an invoker as soon as one is available. Completion (or timeout)
-   * of the job will result in one or more callbacks to the result receiver. There is always the callback for the
-   * main job. If the job had a tail, a callback will also occur for each tail job. The {@link Cancellable}
-   * callback returned may be used to abort operation. If operation is aborted, results may still be received
-   * if they were too far in the pipeline to be stopped.
+   * Puts the job into the ready queue, sent to an invoker as soon as one is available. Completion (or timeout) of the job will result in one or more callbacks
+   * to the result receiver. There is always the callback for the main job. If the job had a tail, a callback will also occur for each tail job. The
+   * {@link Cancelable} callback returned may be used to abort operation. If operation is aborted, results may still be received if they were too far in the
+   * pipeline to be stopped.
    *
-   * @param job The job to dispatch
-   * @param resultReceiver callback to receive the results
-   * @return A {@link Cancellable} callback to attempt to abort the job
+   * @param job
+   *          The job to dispatch
+   * @param resultReceiver
+   *          callback to receive the results
+   * @return A {@link Cancelable} callback to attempt to abort the job
    */
   public Cancelable dispatchJob(final CalculationJob job, final JobResultReceiver resultReceiver) {
     ArgumentChecker.notNull(job, "job");

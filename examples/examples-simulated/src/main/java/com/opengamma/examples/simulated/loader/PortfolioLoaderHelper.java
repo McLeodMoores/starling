@@ -44,23 +44,23 @@ public class PortfolioLoaderHelper {
    */
   private static final String LIBOR_RATE_SECURITY_TYPE = "LIBOR_RATE";
 
-  /** File name option flag */
+  /** File name option flag. */
   public static final String FILE_NAME_OPT = "f";
-  /** Portfolio name option flag*/
+  /** Portfolio name option flag. */
   public static final String PORTFOLIO_NAME_OPT = "n";
-  /** Run mode option flag */
+  /** Run mode option flag. */
   public static final String RUN_MODE_OPT = "r";
-  /** Write option flag */
+  /** Write option flag. */
   public static final String WRITE_OPT = "w";
-  /** Standard date-time formatter for the input */
+  /** Standard date-time formatter for the input. */
   public static final DateTimeFormatter CSV_DATE_FORMATTER;
-  /** Standard date-time formatter for the output */
+  /** Standard date-time formatter for the output. */
   public static final DateTimeFormatter OUTPUT_DATE_FORMATTER;
-  /** Command-line options */
+  /** Command-line options. */
   public static final Options OPTIONS;
-  /** Standard rate formatter */
+  /** Standard rate formatter. */
   public static final DecimalFormat RATE_FORMATTER = new DecimalFormat("0.###%");
-  /** Standard notional formatter */
+  /** Standard notional formatter. */
   public static final DecimalFormat NOTIONAL_FORMATTER = new DecimalFormat("0,000");
 
   static {
@@ -82,7 +82,8 @@ public class PortfolioLoaderHelper {
   /**
    * Builds the set of options.
    *
-   * @param options  the options to add to, not null
+   * @param options
+   *          the options to add to, not null
    */
   public static void buildOptions(final Options options) {
     final Option filenameOption = new Option(FILE_NAME_OPT, "filename", true, "The path to the CSV file of cash details");
@@ -93,9 +94,9 @@ public class PortfolioLoaderHelper {
     portfolioNameOption.setRequired(true);
     options.addOption(portfolioNameOption);
 
-    //    Option runModeOption = new Option(RUN_MODE_OPT, "runmode", true, "The run mode: shareddev, standalone");
-    //    runModeOption.setRequired(true);
-    //    options.addOption(runModeOption);
+    // Option runModeOption = new Option(RUN_MODE_OPT, "runmode", true, "The run mode: shareddev, standalone");
+    // runModeOption.setRequired(true);
+    // options.addOption(runModeOption);
 
     final Option writeOption = new Option(WRITE_OPT, "write", false, "Actually persists the portfolio to the database");
     options.addOption(writeOption);
@@ -128,7 +129,7 @@ public class PortfolioLoaderHelper {
 
   public static void persistLiborRawSecurities(final Set<Currency> currencies, final ToolContext toolContext) {
     final SecurityMaster securityMaster = toolContext.getSecurityMaster();
-    final byte[] rawData = new byte[] {0};
+    final byte[] rawData = new byte[] { 0 };
     final StringBuilder sb = new StringBuilder();
     sb.append("Created ").append(currencies.size()).append(" libor securities:\n");
     for (final Currency ccy : currencies) {
@@ -145,7 +146,8 @@ public class PortfolioLoaderHelper {
   }
 
   private static ConventionBundle getSwapConventionBundle(final Currency ccy, final ConventionBundleSource conventionSource) {
-    final ConventionBundle swapConvention = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
+    final ConventionBundle swapConvention = conventionSource
+        .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
     if (swapConvention == null) {
       throw new OpenGammaRuntimeException("Couldn't get swap convention for " + ccy.getCode());
     }

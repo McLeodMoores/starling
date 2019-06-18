@@ -17,7 +17,10 @@ import com.opengamma.util.time.Tenor;
 
 /**
  * This should be pulled from the configuration.
+ *
+ * @deprecated {@link YieldCurveSpecification}s are deprecated.
  */
+@Deprecated
 public class SyntheticIdentifierCurveInstrumentProvider implements CurveInstrumentProvider {
   private final Currency _ccy;
   private final StripInstrumentType _type;
@@ -30,8 +33,8 @@ public class SyntheticIdentifierCurveInstrumentProvider implements CurveInstrume
     this(ccy, type, scheme, MarketDataRequirementNames.MARKET_VALUE, DataFieldType.OUTRIGHT);
   }
 
-  public SyntheticIdentifierCurveInstrumentProvider(final Currency ccy, final StripInstrumentType type, final ExternalScheme scheme,
-      final String dataField, final DataFieldType fieldType) {
+  public SyntheticIdentifierCurveInstrumentProvider(final Currency ccy, final StripInstrumentType type, final ExternalScheme scheme, final String dataField,
+      final DataFieldType fieldType) {
     ArgumentChecker.notNull(ccy, "currency");
     ArgumentChecker.notNull(type, "instrument type");
     ArgumentChecker.notNull(scheme, "generated identifier scheme");
@@ -126,16 +129,13 @@ public class SyntheticIdentifierCurveInstrumentProvider implements CurveInstrume
       return false;
     }
     final SyntheticIdentifierCurveInstrumentProvider other = (SyntheticIdentifierCurveInstrumentProvider) o;
-    return _ccy.equals(other._ccy) &&
-        _type.equals(other._type) &&
-        _scheme.equals(other._scheme) &&
-        _dataField.equals(other._dataField) &&
-        _fieldType.equals(other._fieldType);
+    return _ccy.equals(other._ccy) && _type.equals(other._type) && _scheme.equals(other._scheme) && _dataField.equals(other._dataField)
+        && _fieldType.equals(other._fieldType);
   }
 
   @Override
   public int hashCode() {
-    return _ccy.hashCode() ^ (_type.hashCode() * 64);
+    return _ccy.hashCode() ^ _type.hashCode() * 64;
   }
 
 }

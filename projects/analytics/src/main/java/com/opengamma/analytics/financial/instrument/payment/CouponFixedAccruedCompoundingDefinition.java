@@ -15,22 +15,15 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a fixed compounded coupon. The fixed rate is compounded over several sub-periods.
- * The amount paid is equal to
- * $$
- * \begin{equation*}
- *  (1+ r)^(\delta)
- * \end{equation*}
- * $$
- * where $\delta$ is the accrual factor of the period and the $r$ the fixed rate for the same periods.
- * 
+ * Class describing a fixed compounded coupon. The fixed rate is compounded over several sub-periods. The amount paid is equal to $$ \begin{equation*} (1+
+ * r)^(\delta) \end{equation*} $$ where $\delta$ is the accrual factor of the period and the $r$ the fixed rate for the same periods.
+ *
  * This coupon is especially used for Brazilian swaps with the day count business/252.
  */
 public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
 
   /**
-   * The fixed rate.
-   * All the coupon sub-periods use the same fixed rate.
+   * The fixed rate. All the coupon sub-periods use the same fixed rate.
    */
   private final double _rate;
   /**
@@ -44,17 +37,27 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
   private final Calendar _calendar;
 
   /**
-   * Constructor from all details
-   * @param currency The coupon currency.
-   * @param paymentDate The coupon payment date.
-   * @param accrualStartDate The start date of the accrual period.
-   * @param accrualEndDate The end date of the accrual period.
-   * @param paymentYearFraction The accrual factor of the accrual period.
-   * @param notional The coupon notional.
-   * @param rate Fixed rate.
-   * @param calendar the calendar
+   * Constructor from all details.
+   *
+   * @param currency
+   *          The coupon currency.
+   * @param paymentDate
+   *          The coupon payment date.
+   * @param accrualStartDate
+   *          The start date of the accrual period.
+   * @param accrualEndDate
+   *          The end date of the accrual period.
+   * @param paymentYearFraction
+   *          The accrual factor of the accrual period.
+   * @param notional
+   *          The coupon notional.
+   * @param rate
+   *          Fixed rate.
+   * @param calendar
+   *          the calendar
    */
-  public CouponFixedAccruedCompoundingDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
+  public CouponFixedAccruedCompoundingDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
+      final ZonedDateTime accrualEndDate,
       final double paymentYearFraction, final double notional, final double rate, final Calendar calendar) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, paymentYearFraction, notional);
     _rate = rate;
@@ -64,12 +67,17 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
 
   /**
    * Fixed coupon constructor from a coupon and the fixed rate.
-   * @param coupon Underlying coupon.
-   * @param rate Fixed rate.
-   * @param calendar the calendar
+   *
+   * @param coupon
+   *          Underlying coupon.
+   * @param rate
+   *          Fixed rate.
+   * @param calendar
+   *          the calendar
    */
   public CouponFixedAccruedCompoundingDefinition(final CouponDefinition coupon, final double rate, final Calendar calendar) {
-    super(coupon.getCurrency(), coupon.getPaymentDate(), coupon.getAccrualStartDate(), coupon.getAccrualEndDate(), coupon.getPaymentYearFraction(), coupon.getNotional());
+    super(coupon.getCurrency(), coupon.getPaymentDate(), coupon.getAccrualStartDate(), coupon.getAccrualEndDate(), coupon.getPaymentYearFraction(),
+        coupon.getNotional());
     _rate = rate;
     _amount = coupon.getNotional() * Math.pow(1 + rate, coupon.getPaymentYearFraction());
     _calendar = calendar;
@@ -77,14 +85,23 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
 
   /**
    * Static constructor for a fixed coupon definition.
-   * @param currency The payment currency.
-   * @param paymentDate Coupon payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param paymentYearFraction Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param rate Fixed rate.
-   * @param calendar the calendar
+   *
+   * @param currency
+   *          The payment currency.
+   * @param paymentDate
+   *          Coupon payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param rate
+   *          Fixed rate.
+   * @param calendar
+   *          the calendar
    * @return The fixed coupon definition
    */
   public static CouponFixedAccruedCompoundingDefinition from(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
@@ -94,6 +111,7 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
 
   /**
    * Gets the fixed rate.
+   *
    * @return The fixed rate
    */
   public double getRate() {
@@ -102,6 +120,7 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
 
   /**
    * Gets the amount.
+   *
    * @return The amount
    */
   public double getAmount() {
@@ -110,6 +129,7 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
 
   /**
    * Gets the calendar.
+   *
    * @return The calendar
    */
   public Calendar getCalendar() {
@@ -123,6 +143,7 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -131,19 +152,23 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");
     ArgumentChecker.isTrue(yieldCurveNames.length > 0, "at least one curve required");
-    ArgumentChecker.isTrue(!date.isAfter(getPaymentDate()), "date {} is after payment date {}", date, getPaymentDate()); // Required: reference date <= payment date
+    ArgumentChecker.isTrue(!date.isAfter(getPaymentDate()), "date {} is after payment date {}", date, getPaymentDate()); // Required: reference date <= payment
+                                                                                                                         // date
     final String fundingCurveName = yieldCurveNames[0];
     final double paymentTime = TimeCalculatorBUS252.getTimeBetween(date, getPaymentDate(), _calendar);
 
-    return new CouponFixedAccruedCompounding(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), getRate(), getAccrualStartDate(), getAccrualEndDate());
+    return new CouponFixedAccruedCompounding(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), getRate(),
+        getAccrualStartDate(), getAccrualEndDate());
   }
 
   @Override
   public CouponFixedAccruedCompounding toDerivative(final ZonedDateTime date) {
     ArgumentChecker.notNull(date, "date");
-    ArgumentChecker.isTrue(!date.isAfter(getPaymentDate()), "date {} is after payment date {}", date, getPaymentDate()); // Required: reference date <= payment date
+    ArgumentChecker.isTrue(!date.isAfter(getPaymentDate()), "date {} is after payment date {}", date, getPaymentDate()); // Required: reference date <= payment
+                                                                                                                         // date
     final double paymentTime = TimeCalculatorBUS252.getTimeBetween(date, getPaymentDate(), _calendar);
-    return new CouponFixedAccruedCompounding(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getRate(), getAccrualStartDate(), getAccrualEndDate());
+    return new CouponFixedAccruedCompounding(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getRate(), getAccrualStartDate(),
+        getAccrualEndDate());
   }
 
   @Override
@@ -158,7 +183,9 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
     return visitor.visitCouponFixedAccruedCompoundingDefinition(this);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   *
    * @see java.lang.Object#hashCode()
    */
   @Override
@@ -167,14 +194,16 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_amount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_calendar == null) ? 0 : _calendar.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_calendar == null ? 0 : _calendar.hashCode());
     temp = Double.doubleToLongBits(_rate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   *
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override

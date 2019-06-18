@@ -50,7 +50,7 @@ import com.opengamma.id.UniqueIdentifiable;
 
   private final Map<UniqueId, UniqueId> _map;
 
-  public ComputationTargetIdentifierRemapVisitor(final Map<UniqueId, UniqueId> map) {
+  ComputationTargetIdentifierRemapVisitor(final Map<UniqueId, UniqueId> map) {
     _map = map;
   }
 

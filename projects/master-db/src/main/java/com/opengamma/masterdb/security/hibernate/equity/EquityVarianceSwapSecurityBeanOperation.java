@@ -38,7 +38,8 @@ public final class EquityVarianceSwapSecurityBeanOperation extends AbstractSecur
   }
 
   @Override
-  public EquityVarianceSwapSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final EquityVarianceSwapSecurity security) {
+  public EquityVarianceSwapSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final EquityVarianceSwapSecurity security) {
     validateFrequency(security.getObservationFrequency().getName());
 
     final EquityVarianceSwapSecurityBean securityBean = new EquityVarianceSwapSecurityBean();
@@ -68,7 +69,8 @@ public final class EquityVarianceSwapSecurityBeanOperation extends AbstractSecur
     final ExternalId spotUnderlingId = externalIdBeanToExternalId(bean.getSpotUnderlyingIdentifier());
 
     return new EquityVarianceSwapSecurity(spotUnderlingId, currency, bean.getStrike(), bean.getNotional(),
-        bean.isParameterisedAsVariance(), bean.getAnnualizationFactor(), firstObservationDate, lastObservationDate, settlementDate, region, observationFrequency);
+        bean.isParameterisedAsVariance(), bean.getAnnualizationFactor(), firstObservationDate, lastObservationDate, settlementDate, region,
+        observationFrequency);
   }
 
 }

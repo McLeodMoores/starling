@@ -10,33 +10,34 @@
 package com.opengamma.integration.copier.sheet;
 
 /**
- * Known sheet formats
+ * Known sheet formats.
  */
 public enum SheetFormat {
 
-  /** CSV sheet */
+  /** CSV sheet. */
   CSV,
 
-  /** XLS sheet */
+  /** XLS sheet. */
   XLS,
 
-  /** XLSX sheet */
+  /** XLSX sheet. */
   XLSX,
 
-  /** XLS sheet */
+  /** XLS sheet. */
   XML,
 
-  /** ZIP sheet */
+  /** ZIP sheet. */
   ZIP,
 
-  /** Unknown sheet */
+  /** Unknown sheet. */
   UNKNOWN;
 
   /**
    * Returns the sheet format from the file extension.
    *
-   * @param filename  the file name
-   * @return  the sheet format
+   * @param filename
+   *          the file name
+   * @return the sheet format
    */
   public static SheetFormat of(final String filename) {
     if (filename.lastIndexOf('.') < 0) {

@@ -26,6 +26,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.core.config.Config;
 import com.opengamma.core.config.ConfigGroups;
+import com.opengamma.financial.analytics.curve.AbstractCurveDefinition;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.MutableUniqueIdentifiable;
 import com.opengamma.id.UniqueId;
@@ -39,11 +40,13 @@ import com.opengamma.util.money.Currency;
  * This definition uses a set of {@code FixedIncomeStrip} instances.
  * <p>
  * This class is mutable.
+ *
+ * @deprecated Use classes that implement {@link AbstractCurveDefinition}.
  */
+@Deprecated
 @Config(description = "Yield curve definition", group = ConfigGroups.CURVES_LEGACY)
 @BeanDefinition
-public class YieldCurveDefinition extends DirectBean implements Serializable, UniqueIdentifiable,
-    MutableUniqueIdentifiable {
+public class YieldCurveDefinition extends DirectBean implements Serializable, UniqueIdentifiable, MutableUniqueIdentifiable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -84,7 +87,7 @@ public class YieldCurveDefinition extends DirectBean implements Serializable, Un
   @PropertyDefinition(validate = "notNull")
   private String _rightExtrapolatorName;
   /**
-   * Whether to interpolate between yields (true) or discount factors (false)
+   * Whether to interpolate between yields (true) or discount factors (false).
    */
   @PropertyDefinition
   private boolean _interpolateYields;
@@ -103,36 +106,49 @@ public class YieldCurveDefinition extends DirectBean implements Serializable, Un
   /**
    * Creates an instance.
    *
-   * @param currency  the currency of the curve, not null
-   * @param region  the region of the curve, may be null
-   * @param name  the display name, may be null
-   * @param interpolatorName  the interpolator name, not null
-   * @param leftExtrapolatorName  the left extrapolator name, not null
-   * @param rightExtrapolatorName  the right extrapolator name, not null
-   * @param interpolateYields  whether to interpolate yields (true) or discount factors (false)
+   * @param currency
+   *          the currency of the curve, not null
+   * @param region
+   *          the region of the curve, may be null
+   * @param name
+   *          the display name, may be null
+   * @param interpolatorName
+   *          the interpolator name, not null
+   * @param leftExtrapolatorName
+   *          the left extrapolator name, not null
+   * @param rightExtrapolatorName
+   *          the right extrapolator name, not null
+   * @param interpolateYields
+   *          whether to interpolate yields (true) or discount factors (false)
    */
-  public YieldCurveDefinition(final Currency currency, final ExternalId region, final String name,
-      final String interpolatorName, final String leftExtrapolatorName, final String rightExtrapolatorName,
-      final boolean interpolateYields) {
-    this(currency, region, name, interpolatorName, leftExtrapolatorName, rightExtrapolatorName,
-        interpolateYields, Collections.<FixedIncomeStrip>emptySet());
+  public YieldCurveDefinition(final Currency currency, final ExternalId region, final String name, final String interpolatorName,
+      final String leftExtrapolatorName, final String rightExtrapolatorName, final boolean interpolateYields) {
+    this(currency, region, name, interpolatorName, leftExtrapolatorName, rightExtrapolatorName, interpolateYields, Collections.<FixedIncomeStrip> emptySet());
   }
 
   /**
    * Creates an instance.
    *
-   * @param currency  the currency of the curve, not null
-   * @param region  the region of the curve, may be null
-   * @param name  the display name, may be null
-   * @param interpolatorName  the interpolator name, not null
-   * @param leftExtrapolatorName  the left extrapolator name, not null
-   * @param rightExtrapolatorName  the right extrapolator name, not null
-   * @param interpolateYields  whether to interpolate yields (true) or discount factors (false)
-   * @param strips  the underlying strips, null treated as empty list
+   * @param currency
+   *          the currency of the curve, not null
+   * @param region
+   *          the region of the curve, may be null
+   * @param name
+   *          the display name, may be null
+   * @param interpolatorName
+   *          the interpolator name, not null
+   * @param leftExtrapolatorName
+   *          the left extrapolator name, not null
+   * @param rightExtrapolatorName
+   *          the right extrapolator name, not null
+   * @param interpolateYields
+   *          whether to interpolate yields (true) or discount factors (false)
+   * @param strips
+   *          the underlying strips, null treated as empty list
    */
-  public YieldCurveDefinition(final Currency currency, final ExternalId region, final String name,
-      final String interpolatorName, final String leftExtrapolatorName, final String rightExtrapolatorName,
-      final boolean interpolateYields, final Iterable<? extends FixedIncomeStrip> strips) {
+  public YieldCurveDefinition(final Currency currency, final ExternalId region, final String name, final String interpolatorName,
+      final String leftExtrapolatorName, final String rightExtrapolatorName, final boolean interpolateYields,
+      final Iterable<? extends FixedIncomeStrip> strips) {
     ArgumentChecker.notNull(currency, "currency");
     ArgumentChecker.notNull(interpolatorName, "interpolatorName");
     _currency = currency;
@@ -149,11 +165,12 @@ public class YieldCurveDefinition extends DirectBean implements Serializable, Un
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds a strip to the yield curve definition.
    *
-   * @param strip  the strip to add, not null
+   * @param strip
+   *          the strip to add, not null
    */
   public void addStrip(final FixedIncomeStrip strip) {
     ArgumentChecker.notNull(strip, "Strip");
@@ -360,7 +377,7 @@ public class YieldCurveDefinition extends DirectBean implements Serializable, Un
 
   //-----------------------------------------------------------------------
   /**
-   * Gets whether to interpolate between yields (true) or discount factors (false)
+   * Gets whether to interpolate between yields (true) or discount factors (false).
    * @return the value of the property
    */
   public boolean isInterpolateYields() {
@@ -368,7 +385,7 @@ public class YieldCurveDefinition extends DirectBean implements Serializable, Un
   }
 
   /**
-   * Sets whether to interpolate between yields (true) or discount factors (false)
+   * Sets whether to interpolate between yields (true) or discount factors (false).
    * @param interpolateYields  the new value of the property
    */
   public void setInterpolateYields(boolean interpolateYields) {

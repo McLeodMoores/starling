@@ -20,17 +20,21 @@ import com.opengamma.util.ParallelArrayBinarySort;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * A cube that is constructed from a set of parallel surfaces (see {@link Surface}), with an interpolator to find points between these surfaces. The surfaces are assumed to
- * be coplanar (<i>x-y</i>, <i>x-z</i> or <i>y-z</i>), with their orientation supplied on construction of the cube.
+ * A cube that is constructed from a set of parallel surfaces (see {@link Surface}), with an interpolator to find points between these surfaces. The surfaces
+ * are assumed to be coplanar (<i>x-y</i>, <i>x-z</i> or <i>y-z</i>), with their orientation supplied on construction of the cube.
  */
 public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Double, Double> {
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Not null
-   * @param surfaces An array of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Not null
+   * @param surfaces
+   *          An array of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
    * @return A cube with an automatically-generated name
    */
   public static InterpolatedFromSurfacesDoublesCube from(final Plane plane, final double[] points, final Surface<Double, Double, Double>[] surfaces,
@@ -39,11 +43,15 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Not null
-   * @param surfaces An array of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Not null
+   * @param surfaces
+   *          An array of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
    * @return A cube with an automatically-generated name
    */
   public static InterpolatedFromSurfacesDoublesCube from(final Plane plane, final Double[] points, final Surface<Double, Double, Double>[] surfaces,
@@ -52,11 +60,15 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points A list of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Not null
-   * @param surfaces A list of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          A list of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Not null
+   * @param surfaces
+   *          A list of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
    * @return A cube with an automatically-generated name
    */
   public static InterpolatedFromSurfacesDoublesCube from(final Plane plane, final List<Double> points, final List<Surface<Double, Double, Double>> surfaces,
@@ -65,10 +77,13 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param surfaces A map of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis) to surfaces. Not null
-   * @param interpolator The interpolator
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param surfaces
+   *          A map of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
+   *          the surfaces cross the <i>z</i> axis) to surfaces. Not null
+   * @param interpolator
+   *          The interpolator
    * @return A cube with an automatically-generated name
    */
   public static InterpolatedFromSurfacesDoublesCube from(final Plane plane, final Map<Double, Surface<Double, Double, Double>> surfaces,
@@ -77,13 +92,18 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Not null
-   * @param surfaces An array of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param name The name of the cube
-   * @return A cube 
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Not null
+   * @param surfaces
+   *          An array of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the cube
+   * @return A cube
    */
   public static InterpolatedFromSurfacesDoublesCube from(final Plane plane, final double[] points, final Surface<Double, Double, Double>[] surfaces,
       final Interpolator1D interpolator, final String name) {
@@ -91,13 +111,18 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Not null
-   * @param surfaces An array of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param name The name of the cube
-   * @return A cube 
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Not null
+   * @param surfaces
+   *          An array of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the cube
+   * @return A cube
    */
   public static InterpolatedFromSurfacesDoublesCube from(final Plane plane, final Double[] points, final Surface<Double, Double, Double>[] surfaces,
       final Interpolator1D interpolator, final String name) {
@@ -105,12 +130,17 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points A list of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Not null
-   * @param surfaces A list of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param name The name of the cube
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          A list of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Not null
+   * @param surfaces
+   *          A list of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the cube
    * @return A cube
    */
   public static InterpolatedFromSurfacesDoublesCube from(final Plane plane, final List<Double> points, final List<Surface<Double, Double, Double>> surfaces,
@@ -119,11 +149,15 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param surfaces A map of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis) to surfaces. Not null
-   * @param interpolator The interpolator
-   * @param name The name of the cube
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param surfaces
+   *          A map of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
+   *          the surfaces cross the <i>z</i> axis) to surfaces. Not null
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the cube
    * @return A cube
    */
   public static InterpolatedFromSurfacesDoublesCube from(final Plane plane, final Map<Double, Surface<Double, Double, Double>> surfaces,
@@ -132,11 +166,15 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Assumed to be sorted ascending. Not null
-   * @param surfaces An array of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Assumed to be sorted ascending. Not null
+   * @param surfaces
+   *          An array of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
    * @return A cube with an automatically-generated name
    */
   public static InterpolatedFromSurfacesDoublesCube fromSorted(final Plane plane, final double[] points, final Surface<Double, Double, Double>[] surfaces,
@@ -145,11 +183,15 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Assumed to be sorted ascending. Not null
-   * @param surfaces An array of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Assumed to be sorted ascending. Not null
+   * @param surfaces
+   *          An array of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
    * @return A cube with an automatically-generated name
    */
   public static InterpolatedFromSurfacesDoublesCube fromSorted(final Plane plane, final Double[] points, final Surface<Double, Double, Double>[] surfaces,
@@ -158,23 +200,30 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points A list of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Assumed to be sorted ascending. Not null
-   * @param surfaces A list of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          A list of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Assumed to be sorted ascending. Not null
+   * @param surfaces
+   *          A list of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
    * @return A cube with an automatically-generated name
    */
-  public static InterpolatedFromSurfacesDoublesCube fromSorted(final Plane plane, final List<Double> points, final List<Surface<Double, Double, Double>> surfaces,
-      final Interpolator1D interpolator) {
+  public static InterpolatedFromSurfacesDoublesCube fromSorted(final Plane plane, final List<Double> points,
+      final List<Surface<Double, Double, Double>> surfaces, final Interpolator1D interpolator) {
     return new InterpolatedFromSurfacesDoublesCube(plane, points, surfaces, interpolator, true);
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param surfaces A map of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis) to surfaces. The points of intersection are assume to be sorted ascending. Not null
-   * @param interpolator The interpolator
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param surfaces
+   *          A map of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
+   *          the surfaces cross the <i>z</i> axis) to surfaces. The points of intersection are assume to be sorted ascending. Not null
+   * @param interpolator
+   *          The interpolator
    * @return A cube with an automatically-generated name
    */
   public static InterpolatedFromSurfacesDoublesCube fromSorted(final Plane plane, final Map<Double, Surface<Double, Double, Double>> surfaces,
@@ -183,12 +232,17 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Assumed to be sorted ascending. Not null
-   * @param surfaces An array of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param name The name of the cube
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Assumed to be sorted ascending. Not null
+   * @param surfaces
+   *          An array of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the cube
    * @return A cube
    */
   public static InterpolatedFromSurfacesDoublesCube fromSorted(final Plane plane, final double[] points, final Surface<Double, Double, Double>[] surfaces,
@@ -197,12 +251,17 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Assumed to be sorted ascending. Not null
-   * @param surfaces An array of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param name The name of the cube
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Assumed to be sorted ascending. Not null
+   * @param surfaces
+   *          An array of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the cube
    * @return A cube
    */
   public static InterpolatedFromSurfacesDoublesCube fromSorted(final Plane plane, final Double[] points, final Surface<Double, Double, Double>[] surfaces,
@@ -211,25 +270,34 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points A list of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Assumed to be sorted ascending. Not null
-   * @param surfaces A list of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param name The name of the cube
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          A list of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Assumed to be sorted ascending. Not null
+   * @param surfaces
+   *          A list of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the cube
    * @return A cube
    */
-  public static InterpolatedFromSurfacesDoublesCube fromSorted(final Plane plane, final List<Double> points, final List<Surface<Double, Double, Double>> surfaces,
-      final Interpolator1D interpolator, final String name) {
+  public static InterpolatedFromSurfacesDoublesCube fromSorted(final Plane plane, final List<Double> points,
+      final List<Surface<Double, Double, Double>> surfaces, final Interpolator1D interpolator, final String name) {
     return new InterpolatedFromSurfacesDoublesCube(plane, points, surfaces, interpolator, false, name);
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param surfaces A map of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis) to surfaces. The points of intersection are assume to be sorted ascending. Not null
-   * @param interpolator The interpolator
-   * @param name The name of the cube
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param surfaces
+   *          A map of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
+   *          the surfaces cross the <i>z</i> axis) to surfaces. The points of intersection are assume to be sorted ascending. Not null
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the cube
    * @return A cube
    */
   public static InterpolatedFromSurfacesDoublesCube fromSorted(final Plane plane, final Map<Double, Surface<Double, Double, Double>> surfaces,
@@ -244,12 +312,17 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   private final Interpolator1D _interpolator;
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Not null
-   * @param surfaces An array of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param isSorted Is the intersection point data sorted
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Not null
+   * @param surfaces
+   *          An array of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Is the intersection point data sorted
    */
   public InterpolatedFromSurfacesDoublesCube(final Plane plane, final double[] points, final Surface<Double, Double, Double>[] surfaces,
       final Interpolator1D interpolator, final boolean isSorted) {
@@ -273,12 +346,17 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Not null
-   * @param surfaces An array of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param isSorted Is the intersection point data sorted
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Not null
+   * @param surfaces
+   *          An array of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Is the intersection point data sorted
    */
   @SuppressWarnings("unchecked")
   public InterpolatedFromSurfacesDoublesCube(final Plane plane, final Double[] points, final Surface<Double, Double, Double>[] surfaces,
@@ -308,12 +386,17 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points A list of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Not null
-   * @param surfaces A list of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param isSorted Is the intersection point data sorted
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          A list of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Not null
+   * @param surfaces
+   *          A list of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Is the intersection point data sorted
    */
   @SuppressWarnings("unchecked")
   public InterpolatedFromSurfacesDoublesCube(final Plane plane, final List<Double> points, final List<Surface<Double, Double, Double>> surfaces,
@@ -343,15 +426,19 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param surfaces A map of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis) to surfaces. Not null
-   * @param interpolator The interpolator
-   * @param isSorted Is the intersection point data sorted
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param surfaces
+   *          A map of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
+   *          the surfaces cross the <i>z</i> axis) to surfaces. Not null
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Is the intersection point data sorted
    */
   @SuppressWarnings("unchecked")
-  public InterpolatedFromSurfacesDoublesCube(final Plane plane, final Map<Double, Surface<Double, Double, Double>> surfaces,
-      final Interpolator1D interpolator, final boolean isSorted) {
+  public InterpolatedFromSurfacesDoublesCube(final Plane plane, final Map<Double, Surface<Double, Double, Double>> surfaces, final Interpolator1D interpolator,
+      final boolean isSorted) {
     super();
     Validate.notNull(plane, "plane");
     Validate.notNull(surfaces, "surfaces");
@@ -377,13 +464,19 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Not null
-   * @param surfaces An array of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param isSorted Is the intersection point data sorted
-   * @param name The name of the cube
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Not null
+   * @param surfaces
+   *          An array of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Is the intersection point data sorted
+   * @param name
+   *          The name of the cube
    */
   public InterpolatedFromSurfacesDoublesCube(final Plane plane, final double[] points, final Surface<Double, Double, Double>[] surfaces,
       final Interpolator1D interpolator, final boolean isSorted, final String name) {
@@ -407,13 +500,19 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Not null
-   * @param surfaces An array of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param isSorted Is the intersection point data sorted
-   * @param name The name of the cube
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          An array of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Not null
+   * @param surfaces
+   *          An array of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Is the intersection point data sorted
+   * @param name
+   *          The name of the cube
    */
   @SuppressWarnings("unchecked")
   public InterpolatedFromSurfacesDoublesCube(final Plane plane, final Double[] points, final Surface<Double, Double, Double>[] surfaces,
@@ -443,13 +542,19 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param points A list of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis). Not null
-   * @param surfaces A list of surfaces, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param isSorted Is the intersection point data sorted
-   * @param name The name of the cube
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param points
+   *          A list of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate
+   *          where the surfaces cross the <i>z</i> axis). Not null
+   * @param surfaces
+   *          A list of surfaces, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Is the intersection point data sorted
+   * @param name
+   *          The name of the cube
    */
   @SuppressWarnings("unchecked")
   public InterpolatedFromSurfacesDoublesCube(final Plane plane, final List<Double> points, final List<Surface<Double, Double, Double>> surfaces,
@@ -479,16 +584,21 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
   }
 
   /**
-   * @param plane The plane in which the surfaces lie
-   * @param surfaces A map of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
-   * the surfaces cross the <i>z</i> axis) to surfaces. Not null
-   * @param interpolator The interpolator
-   * @param isSorted Is the intersection point data sorted
-   * @param name The name of the cube
+   * @param plane
+   *          The plane in which the surfaces lie
+   * @param surfaces
+   *          A map of points of intersection of the surfaces on the remaining axis (e.g. if the surfaces are in the <i>x-y</i> plane, the points indicate where
+   *          the surfaces cross the <i>z</i> axis) to surfaces. Not null
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Is the intersection point data sorted
+   * @param name
+   *          The name of the cube
    */
   @SuppressWarnings("unchecked")
-  public InterpolatedFromSurfacesDoublesCube(final Plane plane, final Map<Double, Surface<Double, Double, Double>> surfaces,
-      final Interpolator1D interpolator, final boolean isSorted, final String name) {
+  public InterpolatedFromSurfacesDoublesCube(final Plane plane, final Map<Double, Surface<Double, Double, Double>> surfaces, final Interpolator1D interpolator,
+      final boolean isSorted, final String name) {
     super(name);
     Validate.notNull(plane, "plane");
     Validate.notNull(surfaces, "surfaces");
@@ -515,7 +625,6 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
 
   /**
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public Double[] getXData() {
@@ -524,7 +633,6 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
 
   /**
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public Double[] getYData() {
@@ -533,7 +641,6 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
 
   /**
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public Double[] getZData() {
@@ -542,7 +649,6 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
 
   /**
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public Double[] getValues() {
@@ -551,7 +657,6 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
 
   /**
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public int size() {
@@ -600,7 +705,6 @@ public class InterpolatedFromSurfacesDoublesCube extends Cube<Double, Double, Do
     Validate.notNull(xyz, "xyz");
     return getValue(xyz.getFirst(), xyz.getSecond(), xyz.getThird());
   }
-
 
   /**
    * @return The plane of the surfaces

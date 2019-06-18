@@ -50,7 +50,8 @@ public class HistoricalViewEvaluationFunction extends ViewEvaluationFunction<His
   }
 
   protected ValueSpecification getMarketDataResultSpec(final ComputationTargetSpecification targetSpec) {
-    return new ValueSpecification(ValueRequirementNames.HISTORICAL_TIME_SERIES, targetSpec, createValueProperties().with(MARKET_DATA_PROPERTY_NAME, MARKET_DATA_PROPERTY_VALUE).get());
+    return new ValueSpecification(ValueRequirementNames.HISTORICAL_TIME_SERIES, targetSpec,
+        createValueProperties().with(MARKET_DATA_PROPERTY_NAME, MARKET_DATA_PROPERTY_VALUE).get());
   }
 
   // CompiledFunctionDefinition
@@ -66,7 +67,8 @@ public class HistoricalViewEvaluationFunction extends ViewEvaluationFunction<His
 
   @Override
   protected ViewCycleExecutionOptions getDefaultCycleOptions(final FunctionExecutionContext context) {
-    return ViewCycleExecutionOptions.builder().setValuationTime(context.getValuationTime()).setResolverVersionCorrection(context.getComputationTargetResolver().getVersionCorrection()).create();
+    return ViewCycleExecutionOptions.builder().setValuationTime(context.getValuationTime())
+        .setResolverVersionCorrection(context.getComputationTargetResolver().getVersionCorrection()).create();
   }
 
   @Override
@@ -121,13 +123,13 @@ public class HistoricalViewEvaluationFunction extends ViewEvaluationFunction<His
     return results;
   }
 
-  //-------------------------------------------------------------------------
-  private LocalDate getResultsDate(final ViewCycleExecutionOptions cycleExecutionOptions) {
+  // -------------------------------------------------------------------------
+  private static LocalDate getResultsDate(final ViewCycleExecutionOptions cycleExecutionOptions) {
     // NOTE jonathan 2013-02-28 -- could imagine using constraints
     final List<MarketDataSpecification> marketDataSpecifications = cycleExecutionOptions.getMarketDataSpecifications();
     if (marketDataSpecifications.size() != 1) {
-      throw new OpenGammaRuntimeException("Expected cycle execution options to contain exactly 1 market data specification but found " +
-          marketDataSpecifications.size() + ": " + cycleExecutionOptions);
+      throw new OpenGammaRuntimeException("Expected cycle execution options to contain exactly 1 market data specification but found "
+          + marketDataSpecifications.size() + ": " + cycleExecutionOptions);
     }
     final MarketDataSpecification marketDataSpec = marketDataSpecifications.get(0);
     if (marketDataSpec instanceof FixedHistoricalMarketDataSpecification) {
@@ -136,9 +138,8 @@ public class HistoricalViewEvaluationFunction extends ViewEvaluationFunction<His
       final MarketDataSpecification spec2 = ((HistoricalShockMarketDataSpecification) marketDataSpec).getHistoricalSpecification2();
       if (spec2 instanceof FixedHistoricalMarketDataSpecification) {
         return ((FixedHistoricalMarketDataSpecification) spec2).getSnapshotDate();
-      } else {
-        throw new OpenGammaRuntimeException("Unsupported inner market data specification: " + spec2);
       }
+      throw new OpenGammaRuntimeException("Unsupported inner market data specification: " + spec2);
     } else {
       throw new OpenGammaRuntimeException("Unsupported market data specification: " + marketDataSpec);
     }

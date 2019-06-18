@@ -26,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.ObjectsPair;
 
 /**
- * Writes positions of a single security type to a single sheet
+ * Writes positions of a single security type to a single sheet.
  */
 public class SingleSheetSimplePositionWriter extends SingleSheetPositionWriter {
 
@@ -35,7 +35,7 @@ public class SingleSheetSimplePositionWriter extends SingleSheetPositionWriter {
   private final RowParser _rowParser;
 
   // current row context
-  private Map<String, String> _currentRow  = new HashMap<>();
+  private Map<String, String> _currentRow = new HashMap<>();
 
   private final ManageablePortfolioNode _currentNode;
   private final ManageablePortfolio _portfolio;
@@ -70,7 +70,7 @@ public class SingleSheetSimplePositionWriter extends SingleSheetPositionWriter {
   }
 
   public SingleSheetSimplePositionWriter(final SheetFormat sheetFormat, final OutputStream outputStream, final RowParser rowParser,
-                                         final boolean includeTrades) {
+      final boolean includeTrades) {
     this(SheetWriter.newSheetWriter(sheetFormat, outputStream, rowParser.getColumns()), rowParser, includeTrades);
   }
 
@@ -95,7 +95,7 @@ public class SingleSheetSimplePositionWriter extends SingleSheetPositionWriter {
   }
 
   public SingleSheetSimplePositionWriter(final SheetFormat sheetFormat, final OutputStream outputStream, final String securityType,
-                                         final boolean includeTrades) {
+      final boolean includeTrades) {
     this(sheetFormat, outputStream, JodaBeanRowParser.newJodaBeanRowParser(securityType), includeTrades);
   }
 

@@ -70,12 +70,12 @@ public class ExampleMarketDataComponentFactory extends AbstractComponentFactory 
   @PropertyDefinition(validate = "notNull")
   private JmsConnector _jmsConnector;
   /**
-   * JMS topic for notifications when market data providers become available
+   * JMS topic for notifications when market data providers become available.
    */
   @PropertyDefinition
   private String _jmsMarketDataAvailabilityTopic;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     initLiveMarketDataProviderFactory(repo);
@@ -93,8 +93,8 @@ public class ExampleMarketDataComponentFactory extends AbstractComponentFactory 
 
     // notifies LiveDataFactories when market data providers come up so they can retry failed subscriptions
     final List<LiveDataFactory> factoryList = ImmutableList.of(defaultFactory);
-    final LiveDataAvailabilityNotificationListener availabilityNotificationListener =
-        new LiveDataAvailabilityNotificationListener(getJmsMarketDataAvailabilityTopic(), factoryList, getJmsConnector());
+    final LiveDataAvailabilityNotificationListener availabilityNotificationListener = new LiveDataAvailabilityNotificationListener(
+        getJmsMarketDataAvailabilityTopic(), factoryList, getJmsConnector());
     repo.registerLifecycle(availabilityNotificationListener);
 
     final ComponentInfo info = new ComponentInfo(MarketDataProviderFactory.class, getClassifier());
@@ -109,7 +109,7 @@ public class ExampleMarketDataComponentFactory extends AbstractComponentFactory 
       throw new IllegalStateException();
     }
     JmsConnector jmsConnector = getJmsConnector();
-    if (jmsConnector.getClientBrokerUri().equals(jmsUri) == false) {
+    if (!jmsConnector.getClientBrokerUri().equals(jmsUri)) {
       final JmsConnectorFactoryBean jmsFactory = new JmsConnectorFactoryBean(jmsConnector);
       jmsFactory.setClientBrokerUri(jmsUri);
       jmsConnector = jmsFactory.getObjectCreating();
@@ -232,7 +232,7 @@ public class ExampleMarketDataComponentFactory extends AbstractComponentFactory 
 
   //-----------------------------------------------------------------------
   /**
-   * Gets jMS topic for notifications when market data providers become available
+   * Gets jMS topic for notifications when market data providers become available.
    * @return the value of the property
    */
   public String getJmsMarketDataAvailabilityTopic() {
@@ -240,7 +240,7 @@ public class ExampleMarketDataComponentFactory extends AbstractComponentFactory 
   }
 
   /**
-   * Sets jMS topic for notifications when market data providers become available
+   * Sets jMS topic for notifications when market data providers become available.
    * @param jmsMarketDataAvailabilityTopic  the new value of the property
    */
   public void setJmsMarketDataAvailabilityTopic(String jmsMarketDataAvailabilityTopic) {

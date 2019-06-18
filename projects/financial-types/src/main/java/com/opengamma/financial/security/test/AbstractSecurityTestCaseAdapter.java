@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.test;
 
 /**
- * Adapter provides empty method implementation for subclasses to overide
+ * Adapter provides empty method implementation for subclasses to override.
  */
 public abstract class AbstractSecurityTestCaseAdapter implements SecurityTestCaseMethods {
 
@@ -27,7 +27,7 @@ public abstract class AbstractSecurityTestCaseAdapter implements SecurityTestCas
   }
 
   @Override
-  public void testEquitySecurity() throws Exception {
+  public void testEquitySecurity() {
   }
 
   @Override
@@ -39,7 +39,7 @@ public abstract class AbstractSecurityTestCaseAdapter implements SecurityTestCas
   }
 
   @Override
-  public void testBondFutureSecurity() throws Exception {
+  public void testBondFutureSecurity() {
   }
 
   @Override
@@ -193,25 +193,25 @@ public abstract class AbstractSecurityTestCaseAdapter implements SecurityTestCas
   @Override
   public void testCreditDefaultSwapOptionSecurity() {
   }
-  
+
   @Override
   public void testBondIndex() {
   }
-  
+
   @Override
   public void testEquityIndex() {
   }
-  
+
   @Override
   public void testIborIndex() {
   }
-  
+
   @Override
   public void testOvernightIndex() {
   }
-  
+
   @Override
   public void testIndexFamily() {
   }
-  
+
 }

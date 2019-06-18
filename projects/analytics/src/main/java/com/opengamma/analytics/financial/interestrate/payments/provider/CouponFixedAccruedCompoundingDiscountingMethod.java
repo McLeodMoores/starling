@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments.provider;
@@ -32,6 +32,7 @@ public final class CouponFixedAccruedCompoundingDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static CouponFixedAccruedCompoundingDiscountingMethod getInstance() {
@@ -46,8 +47,11 @@ public final class CouponFixedAccruedCompoundingDiscountingMethod {
 
   /**
    * Compute the present value of a Fixed coupon by discounting.
-   * @param coupon The coupon.
-   * @param multicurves The multi-curve provider.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param multicurves
+   *          The multi-curve provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponFixedAccruedCompounding coupon, final MulticurveProviderInterface multicurves) {
@@ -60,8 +64,11 @@ public final class CouponFixedAccruedCompoundingDiscountingMethod {
 
   /**
    * Computes the present value of the fixed coupon with positive notional (abs(notional) is used) by discounting.
-   * @param coupon The coupon.
-   * @param multicurves The multi-curve provider.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param multicurves
+   *          The multi-curve provider.
    * @return The present value.
    */
   public CurrencyAmount presentValuePositiveNotional(final CouponFixedAccruedCompounding coupon, final MulticurveProviderInterface multicurves) {
@@ -72,11 +79,15 @@ public final class CouponFixedAccruedCompoundingDiscountingMethod {
 
   /**
    * Computes the present value curve sensitivity of a fixed coupon by discounting.
-   * @param cpn The coupon.
-   * @param multicurve The multi-curve provider.
+   *
+   * @param cpn
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponFixedAccruedCompounding cpn, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponFixedAccruedCompounding cpn,
+      final MulticurveProviderInterface multicurve) {
     final double time = cpn.getPaymentTime();
     final Map<String, List<DoublesPair>> mapDsc = new HashMap<>();
     final DoublesPair s = DoublesPair.of(time, -time * cpn.getAmount() * multicurve.getDiscountFactor(cpn.getCurrency(), time));

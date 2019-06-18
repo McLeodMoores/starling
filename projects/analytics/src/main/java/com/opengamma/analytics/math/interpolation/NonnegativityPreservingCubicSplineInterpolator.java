@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -15,12 +15,12 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ParallelArrayBinarySort;
 
 /**
- * Filter for nonnegativity of cubic spline interpolation based on 
- * R. L. Dougherty, A. Edelman, and J. M. Hyman, "Nonnegativity-, Monotonicity-, or Convexity-Preserving Cubic and Quintic Hermite Interpolation" 
- * Mathematics Of Computation, v. 52, n. 186, April 1989, pp. 471-494. 
- * 
- * First, interpolant is computed by another cubic interpolation method. Then the first derivatives are modified such that non-negativity conditions are satisfied. 
- * Note that shape-preserving three-point formula is used at endpoints in order to ensure positivity of an interpolant in the first interval and the last interval 
+ * Filter for nonnegativity of cubic spline interpolation based on R. L. Dougherty, A. Edelman, and J. M. Hyman, "Nonnegativity-, Monotonicity-, or
+ * Convexity-Preserving Cubic and Quintic Hermite Interpolation" Mathematics Of Computation, v. 52, n. 186, April 1989, pp. 471-494.
+ *
+ * First, interpolant is computed by another cubic interpolation method. Then the first derivatives are modified such that non-negativity conditions are
+ * satisfied. Note that shape-preserving three-point formula is used at endpoints in order to ensure positivity of an interpolant in the first interval and the
+ * last interval
  */
 public class NonnegativityPreservingCubicSplineInterpolator extends PiecewisePolynomialInterpolator {
 
@@ -28,11 +28,13 @@ public class NonnegativityPreservingCubicSplineInterpolator extends PiecewisePol
 
   private final HermiteCoefficientsProvider _solver = new HermiteCoefficientsProvider();
   private final PiecewisePolynomialWithSensitivityFunction1D _function = new PiecewisePolynomialWithSensitivityFunction1D();
-  private PiecewisePolynomialInterpolator _method;
+  private final PiecewisePolynomialInterpolator _method;
 
   /**
-   * Primary interpolation method should be passed
-   * @param method PiecewisePolynomialInterpolator
+   * Primary interpolation method should be passed.
+   *
+   * @param method
+   *          PiecewisePolynomialInterpolator
    */
   public NonnegativityPreservingCubicSplineInterpolator(final PiecewisePolynomialInterpolator method) {
     _method = method;
@@ -43,7 +45,8 @@ public class NonnegativityPreservingCubicSplineInterpolator extends PiecewisePol
     ArgumentChecker.notNull(xValues, "xValues");
     ArgumentChecker.notNull(yValues, "yValues");
 
-    ArgumentChecker.isTrue(xValues.length == yValues.length | xValues.length + 2 == yValues.length, "(xValues length = yValues length) or (xValues length + 2 = yValues length)");
+    ArgumentChecker.isTrue(xValues.length == yValues.length | xValues.length + 2 == yValues.length,
+        "(xValues length = yValues length) or (xValues length + 2 = yValues length)");
     ArgumentChecker.isTrue(xValues.length > 2, "Data points should be more than 2");
 
     final int nDataPts = xValues.length;
@@ -64,7 +67,7 @@ public class NonnegativityPreservingCubicSplineInterpolator extends PiecewisePol
       }
     }
 
-    double[] xValuesSrt = Arrays.copyOf(xValues, nDataPts);
+    final double[] xValuesSrt = Arrays.copyOf(xValues, nDataPts);
     double[] yValuesSrt = new double[nDataPts];
     if (nDataPts == yValuesLen) {
       yValuesSrt = Arrays.copyOf(yValues, nDataPts);
@@ -123,7 +126,7 @@ public class NonnegativityPreservingCubicSplineInterpolator extends PiecewisePol
     }
 
     double[] xValuesSrt = new double[nDataPts];
-    DoubleMatrix2D[] coefMatrix = new DoubleMatrix2D[dim];
+    final DoubleMatrix2D[] coefMatrix = new DoubleMatrix2D[dim];
 
     for (int i = 0; i < dim; ++i) {
       xValuesSrt = Arrays.copyOf(xValues, nDataPts);
@@ -149,7 +152,7 @@ public class NonnegativityPreservingCubicSplineInterpolator extends PiecewisePol
 
     final int nIntervals = coefMatrix[0].getNumberOfRows();
     final int nCoefs = coefMatrix[0].getNumberOfColumns();
-    double[][] resMatrix = new double[dim * nIntervals][nCoefs];
+    final double[][] resMatrix = new double[dim * nIntervals][nCoefs];
 
     for (int i = 0; i < nIntervals; ++i) {
       for (int j = 0; j < dim; ++j) {
@@ -157,7 +160,7 @@ public class NonnegativityPreservingCubicSplineInterpolator extends PiecewisePol
       }
     }
 
-    for (int i = 0; i < (nIntervals * dim); ++i) {
+    for (int i = 0; i < nIntervals * dim; ++i) {
       for (int j = 0; j < nCoefs; ++j) {
         ArgumentChecker.isFalse(Double.isNaN(resMatrix[i][j]), "Too large input");
         ArgumentChecker.isFalse(Double.isInfinite(resMatrix[i][j]), "Too large input");
@@ -172,7 +175,8 @@ public class NonnegativityPreservingCubicSplineInterpolator extends PiecewisePol
     ArgumentChecker.notNull(xValues, "xValues");
     ArgumentChecker.notNull(yValues, "yValues");
 
-    ArgumentChecker.isTrue(xValues.length == yValues.length | xValues.length + 2 == yValues.length, "(xValues length = yValues length) or (xValues length + 2 = yValues length)");
+    ArgumentChecker.isTrue(xValues.length == yValues.length | xValues.length + 2 == yValues.length,
+        "(xValues length = yValues length) or (xValues length + 2 = yValues length)");
     ArgumentChecker.isTrue(xValues.length > 2, "Data points should be more than 2");
 
     final int nDataPts = xValues.length;
@@ -213,7 +217,7 @@ public class NonnegativityPreservingCubicSplineInterpolator extends PiecewisePol
     final DoubleMatrix2D[] resMatrix = _solver.solveWithSensitivity(yValuesSrt, intervals, slopes, slopeSensitivity, firstWithSensitivity);
 
     for (int k = 0; k < nDataPts; k++) {
-      DoubleMatrix2D m = resMatrix[k];
+      final DoubleMatrix2D m = resMatrix[k];
       final int rows = m.getNumberOfRows();
       final int cols = m.getNumberOfColumns();
       for (int i = 0; i < rows; ++i) {
@@ -237,27 +241,31 @@ public class NonnegativityPreservingCubicSplineInterpolator extends PiecewisePol
   }
 
   /**
-   * First derivatives are modified such that cubic interpolant has the same sign as linear interpolator 
-   * @param yValues 
-   * @param intervals 
-   * @param slopes 
-   * @param initialFirst 
-   * @return first derivative 
+   * First derivatives are modified such that cubic interpolant has the same sign as linear interpolator
+   *
+   * @param yValues
+   * @param intervals
+   * @param slopes
+   * @param initialFirst
+   * @return first derivative
    */
   private double[] firstDerivativeCalculator(final double[] yValues, final double[] intervals, final double[] slopes, final double[] initialFirst) {
     final int nDataPts = yValues.length;
-    double[] res = new double[nDataPts];
+    final double[] res = new double[nDataPts];
 
     for (int i = 1; i < nDataPts - 1; ++i) {
       final double tau = Math.signum(yValues[i]);
-      res[i] = tau == 0. ? initialFirst[i] : Math.min(3. * tau * yValues[i] / intervals[i - 1], Math.max(-3. * tau * yValues[i] / intervals[i], tau * initialFirst[i])) / tau;
+      res[i] = tau == 0. ? initialFirst[i]
+          : Math.min(3. * tau * yValues[i] / intervals[i - 1], Math.max(-3. * tau * yValues[i] / intervals[i], tau * initialFirst[i])) / tau;
     }
     final double tauIni = Math.signum(yValues[0]);
     final double tauFin = Math.signum(yValues[nDataPts - 1]);
-    res[0] = tauIni == 0. ? initialFirst[0] : Math.min(3. * tauIni * yValues[0] / intervals[0], Math.max(-3. * tauIni * yValues[0] / intervals[0], tauIni * initialFirst[0])) / tauIni;
-    res[nDataPts - 1] = tauFin == 0. ? initialFirst[nDataPts - 1] : Math.min(3. * tauFin * yValues[nDataPts - 1] / intervals[nDataPts - 2],
-        Math.max(-3. * tauFin * yValues[nDataPts - 1] / intervals[nDataPts - 2], tauFin * initialFirst[nDataPts - 1])) /
-        tauFin;
+    res[0] = tauIni == 0. ? initialFirst[0]
+        : Math.min(3. * tauIni * yValues[0] / intervals[0], Math.max(-3. * tauIni * yValues[0] / intervals[0], tauIni * initialFirst[0])) / tauIni;
+    res[nDataPts - 1] = tauFin == 0. ? initialFirst[nDataPts - 1]
+        : Math.min(3. * tauFin * yValues[nDataPts - 1] / intervals[nDataPts - 2],
+            Math.max(-3. * tauFin * yValues[nDataPts - 1] / intervals[nDataPts - 2], tauFin * initialFirst[nDataPts - 1]))
+            / tauFin;
 
     return res;
   }

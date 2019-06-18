@@ -22,7 +22,7 @@ public class DefaultComputationTargetCollapser implements ComputationTargetColla
     private final ComputationTargetCollapser _first;
     private final ComputationTargetCollapser _second;
 
-    public ChainedCollapser(final ComputationTargetCollapser first, final ComputationTargetCollapser second) {
+    ChainedCollapser(final ComputationTargetCollapser first, final ComputationTargetCollapser second) {
       _first = first;
       _second = second;
     }
@@ -53,8 +53,8 @@ public class DefaultComputationTargetCollapser implements ComputationTargetColla
       });
 
   /**
-   * Creates a new instance with no underlying collapsers. Unless one or more collapser instances are added to it by {@link #addCollapser},
-   * {@link #canApplyTo} will always return false.
+   * Creates a new instance with no underlying collapsers. Unless one or more collapser instances are added to it by {@link #addCollapser}, {@link #canApplyTo}
+   * will always return false.
    */
   public DefaultComputationTargetCollapser() {
   }

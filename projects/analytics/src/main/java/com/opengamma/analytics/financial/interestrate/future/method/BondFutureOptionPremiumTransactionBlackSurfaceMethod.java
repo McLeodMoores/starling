@@ -28,6 +28,7 @@ public final class BondFutureOptionPremiumTransactionBlackSurfaceMethod {
 
   /**
    * Return the method unique instance.
+   *
    * @return The instance.
    */
   public static BondFutureOptionPremiumTransactionBlackSurfaceMethod getInstance() {
@@ -49,9 +50,13 @@ public final class BondFutureOptionPremiumTransactionBlackSurfaceMethod {
 
   /**
    * Compute the present value of a bond future option transaction from the quoted option price.
-   * @param option The future option, not null
-   * @param curves The curves, not null
-   * @param price The quoted price
+   *
+   * @param option
+   *          The future option, not null
+   * @param curves
+   *          The curves, not null
+   * @param price
+   *          The quoted price
    * @return The present value.
    */
   public CurrencyAmount presentValueFromPrice(final BondFutureOptionPremiumTransaction option, final YieldCurveBundle curves, final double price) {
@@ -64,10 +69,13 @@ public final class BondFutureOptionPremiumTransactionBlackSurfaceMethod {
   }
 
   /**
-   * Computes the present value of a bond future option. The option security price is computed according to the data available in the bundle.
-   * If the underlying future price is available it is used, if not it is computed from the curves.
-   * @param transaction The option transaction.
-   * @param curves The curves bundle.
+   * Computes the present value of a bond future option. The option security price is computed according to the data available in the bundle. If the underlying
+   * future price is available it is used, if not it is computed from the curves.
+   *
+   * @param transaction
+   *          The option transaction.
+   * @param curves
+   *          The curves bundle.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final BondFutureOptionPremiumTransaction transaction, final YieldCurveBundle curves) {
@@ -80,8 +88,11 @@ public final class BondFutureOptionPremiumTransactionBlackSurfaceMethod {
 
   /**
    * Computes the present value curve sensitivity of a transaction.
-   * @param transaction The future option transaction.
-   * @param curves The yield curve bundle.
+   *
+   * @param transaction
+   *          The future option transaction.
+   * @param curves
+   *          The yield curve bundle.
    * @return The present value curve sensitivity.
    */
   public InterestRateCurveSensitivity presentValueCurveSensitivity(final BondFutureOptionPremiumTransaction transaction, final YieldCurveBundle curves) {
@@ -89,14 +100,17 @@ public final class BondFutureOptionPremiumTransactionBlackSurfaceMethod {
     ArgumentChecker.notNull(curves, "curves");
     final InterestRateCurveSensitivity premiumSensitivity = PVCSC.visit(transaction.getPremium(), curves);
     final InterestRateCurveSensitivity securitySensitivity = METHOD_SECURITY.priceCurveSensitivity(transaction.getUnderlyingOption(), curves);
-    return premiumSensitivity.plus(securitySensitivity.multipliedBy(transaction.getQuantity() * transaction.getUnderlyingOption().getUnderlyingFuture().getNotional()));
+    return premiumSensitivity
+        .plus(securitySensitivity.multipliedBy(transaction.getQuantity() * transaction.getUnderlyingOption().getUnderlyingFuture().getNotional()));
   }
 
   /**
-   * Computes the present value gamma of a transaction.
-   * This is with respect to futures rate
-   * @param transaction The future option transaction.
-   * @param blackData The curve and Black volatility data.
+   * Computes the present value gamma of a transaction. This is with respect to futures rate
+   *
+   * @param transaction
+   *          The future option transaction.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return The gamma.
    */
   public double presentValueGamma(final BondFutureOptionPremiumTransaction transaction, final YieldCurveWithBlackCubeBundle blackData) {
@@ -108,10 +122,12 @@ public final class BondFutureOptionPremiumTransactionBlackSurfaceMethod {
   }
 
   /**
-   * Computes the present value delta of a transaction.
-   * This is with respect to futures rate
-   * @param transaction The future option transaction.
-   * @param blackData The curve and Black volatility data.
+   * Computes the present value delta of a transaction. This is with respect to futures rate
+   *
+   * @param transaction
+   *          The future option transaction.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return The delta.
    */
   public double presentValueDelta(final BondFutureOptionPremiumTransaction transaction, final YieldCurveWithBlackCubeBundle blackData) {
@@ -124,8 +140,11 @@ public final class BondFutureOptionPremiumTransactionBlackSurfaceMethod {
 
   /**
    * Computes the present value vega of a transaction.
-   * @param transaction The future option transaction.
-   * @param blackData The curve and Black volatility data.
+   *
+   * @param transaction
+   *          The future option transaction.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return The delta.
    */
   public double presentValueVega(final BondFutureOptionPremiumTransaction transaction, final YieldCurveWithBlackCubeBundle blackData) {

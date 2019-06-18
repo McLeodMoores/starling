@@ -5,31 +5,37 @@
  */
 package com.opengamma.financial.analytics.model.irfutureoption;
 
-import org.apache.commons.lang.Validate;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.TemporalAdjuster;
 import org.threeten.bp.temporal.TemporalAdjusters;
 
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.financial.convention.expirycalc.IMMFutureAndFutureOptionMonthlyExpiryCalculator;
 import com.opengamma.financial.convention.expirycalc.IMMFutureAndFutureOptionQuarterlyExpiryCalculator;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Utility Class for computing Expiries of IR Future Options from ordinals (i.e. nth future after valuationDate)
  */
 public class FutureOptionUtils {
   private static final TemporalAdjuster THIRD_WED_ADJUSTER = TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.WEDNESDAY);
-  /** Calendar containing weekdays */
-  public static final Calendar WEEKDAYS = new MondayToFridayCalendar("MTWThF");
+  /** Calendar containing weekdays. */
+  public static final WorkingDayCalendar WEEKDAYS = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
+
   /**
-   * Compute time between now and future or future option's settlement date,
-   * typically two business days before the third Wednesday of the expiry month.
-   * @param n nth Future after now
-   * @param today Valuation Date
-   * @param holidayCalendar The holiday calendar
+   * Compute time between now and future or future option's settlement date, typically two business days before the third Wednesday of the expiry month.
+   *
+   * @param n
+   *          nth Future after now
+   * @param today
+   *          Valuation Date
+   * @param holidayCalendar
+   *          The holiday calendar
    * @return OG-Analytic Time in years between now and the future's settlement date
    */
   public static Double getIRFutureOptionTtm(final int n, final LocalDate today, final Calendar holidayCalendar) {
@@ -38,11 +44,14 @@ public class FutureOptionUtils {
   }
 
   /**
-   * Compute time between now and future or future option's settlement date,
-   * typically two business days before the third Wednesday of the expiry month.
-   * @param n nth Future after now
-   * @param today Valuation Date
-   * @param holidayCalendar The holiday calendar
+   * Compute time between now and future or future option's settlement date, typically two business days before the third Wednesday of the expiry month.
+   *
+   * @param n
+   *          nth Future after now
+   * @param today
+   *          Valuation Date
+   * @param holidayCalendar
+   *          The holiday calendar
    * @return OG-Analytic Time in years between now and the future's settlement date
    */
   public static Double getIRFutureTtm(final int n, final LocalDate today, final Calendar holidayCalendar) {
@@ -51,40 +60,48 @@ public class FutureOptionUtils {
   }
 
   public static LocalDate getIRFutureOptionWithSerialOptionsExpiry(final int nthFuture, final LocalDate valDate, final Calendar holidayCalendar) {
-    Validate.isTrue(nthFuture > 0, "nthFuture must be greater than 0.");
+    return getIRFutureOptionWithSerialOptionsExpiry(nthFuture, valDate, WorkingDayCalendarAdapter.of(holidayCalendar));
+  }
+
+  public static LocalDate getIRFutureOptionWithSerialOptionsExpiry(final int nthFuture, final LocalDate valDate, final WorkingDayCalendar holidayCalendar) {
+    ArgumentChecker.isTrue(nthFuture > 0, "nthFuture must be greater than 0.");
     if (nthFuture <= 6) { // We look for expiries in the first 6 serial months after curveDate
       return getIRFutureMonthlyExpiryDate(nthFuture, valDate, holidayCalendar);
-    }   // And for Quarterly expiries thereafter
+    } // And for Quarterly expiries thereafter
     final int nthExpiryAfterSixMonths = nthFuture - 6;
     final LocalDate sixMonthsForward = valDate.plusMonths(6);
     return getIRFutureQuarterlyExpiryDate(nthExpiryAfterSixMonths, sixMonthsForward, holidayCalendar);
   }
 
   public static LocalDate getApproximateIRFutureOptionWithSerialOptionsExpiry(final int nthFuture, final LocalDate valDate) {
-    Validate.isTrue(nthFuture > 0, "nthFuture must be greater than 0.");
+    ArgumentChecker.isTrue(nthFuture > 0, "nthFuture must be greater than 0.");
     if (nthFuture <= 6) { // We look for expiries in the first 6 serial months after curveDate
       final LocalDate expiry = getIRFutureMonthlyExpiry(nthFuture, valDate);
       final LocalDate previousMonday = expiry.minusDays(2);
       return previousMonday;
-    }   // And for Quarterly expiries thereafter
+    } // And for Quarterly expiries thereafter
     final int nthExpiryAfterSixMonths = nthFuture - 6;
     final LocalDate sixMonthsForward = valDate.plusMonths(6);
     return getApproximateIRFutureQuarterlyExpiry(nthExpiryAfterSixMonths, sixMonthsForward);
   }
 
   public static LocalDate getIRFutureMonthlyExpiry(final int nthMonth, final LocalDate valDate) {
-    Validate.isTrue(nthMonth > 0, "nthFuture must be greater than 0.");
+    ArgumentChecker.isTrue(nthMonth > 0, "nthFuture must be greater than 0.");
     LocalDate expiry = valDate.with(THIRD_WED_ADJUSTER);
     if (!expiry.isAfter(valDate)) { // If it is not strictly after valuationDate...
-      expiry = (valDate.plusMonths(1)).with(THIRD_WED_ADJUSTER);  // nextExpiry is third Wednesday of next month
+      expiry = valDate.plusMonths(1).with(THIRD_WED_ADJUSTER); // nextExpiry is third Wednesday of next month
     }
     if (nthMonth > 1) {
-      expiry = (expiry.plusMonths(nthMonth - 1)).with(THIRD_WED_ADJUSTER);
+      expiry = expiry.plusMonths(nthMonth - 1).with(THIRD_WED_ADJUSTER);
     }
     return expiry;
   }
 
   public static LocalDate getIRFutureQuarterlyExpiryDate(final int nthFuture, final LocalDate valDate, final Calendar holidayCalendar) {
+    return getIRFutureQuarterlyExpiryDate(nthFuture, valDate, WorkingDayCalendarAdapter.of(holidayCalendar));
+  }
+
+  public static LocalDate getIRFutureQuarterlyExpiryDate(final int nthFuture, final LocalDate valDate, final WorkingDayCalendar holidayCalendar) {
     return IMMFutureAndFutureOptionQuarterlyExpiryCalculator.getInstance().getExpiryDate(nthFuture, valDate, holidayCalendar);
   }
 
@@ -93,6 +110,10 @@ public class FutureOptionUtils {
   }
 
   public static LocalDate getIRFutureMonthlyExpiryDate(final int nthFuture, final LocalDate valDate, final Calendar holidayCalendar) {
+    return getIRFutureMonthlyExpiryDate(nthFuture, valDate, WorkingDayCalendarAdapter.of(holidayCalendar));
+  }
+
+  public static LocalDate getIRFutureMonthlyExpiryDate(final int nthFuture, final LocalDate valDate, final WorkingDayCalendar holidayCalendar) {
     return IMMFutureAndFutureOptionMonthlyExpiryCalculator.getInstance().getExpiryDate(nthFuture, valDate, holidayCalendar);
   }
 

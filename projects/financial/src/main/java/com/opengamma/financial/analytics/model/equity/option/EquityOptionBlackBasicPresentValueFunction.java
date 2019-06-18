@@ -20,15 +20,14 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the present value of an equity index or equity option using the Black formula.
- * In BLACK_BASIC_METHOD, volatility is implied from MARKET_VALUE.
+ * Calculates the present value of an equity index or equity option using the Black formula. In BLACK_BASIC_METHOD, volatility is implied from MARKET_VALUE.
  */
 public class EquityOptionBlackBasicPresentValueFunction extends EquityOptionBlackBasicFunction {
   /** The Black present value calculator */
   private static final EquityOptionBlackPresentValueCalculator CALCULATOR = EquityOptionBlackPresentValueCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBlackBasicPresentValueFunction() {
     super(ValueRequirementNames.PRESENT_VALUE);

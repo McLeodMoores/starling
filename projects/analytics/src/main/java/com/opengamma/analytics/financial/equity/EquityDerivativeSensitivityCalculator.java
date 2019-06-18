@@ -69,7 +69,7 @@ public class EquityDerivativeSensitivityCalculator {
     // Shift UP
     StaticReplicationDataBundle bumpedMarket =
         new StaticReplicationDataBundle(market.getVolatilitySurface(), market.getDiscountCurve(), market.getForwardCurve()
-        .withFractionalShift(relShift));
+            .withFractionalShift(relShift));
     final double pvUp = derivative.accept(_pricer, bumpedMarket);
 
     // Shift Down
@@ -95,17 +95,21 @@ public class EquityDerivativeSensitivityCalculator {
   }
 
   /**
-   * Calculates the sensitivity of the present value (PV) to a change in the funding rate from valuation to settlement.
-   * Also know as PVBP and DV01, though note this return per UNIT change in rate. calcPV01 returns per basis point change in rates.  <p>
+   * Calculates the sensitivity of the present value (PV) to a change in the funding rate from valuation to settlement. Also know as PVBP and DV01, though note
+   * this return per UNIT change in rate. calcPV01 returns per basis point change in rates.
    * <p>
-   * Rates enter the pricing of a EquityDerivative in two places: in the discounting and forward projection.<p>
-   * The presentValue has been structured such that the form of the PV = Z(t,T) * FwdPrice(t,T) with Z a zero coupon bond,
-   * and t and T the valuation and settlement times respectively.
-   * The form of our discounting rates is such that Z(t,T) = exp[- R(t,T) * (T-t)], hence  dZ/dR = -(T-t)*Z(t,T) and d(PV)/dR = PV * dZ/dR
-   * The forward's dependence on the discounting rate is similar to the zero coupon bonds, but of opposite sign, dF/dR = (T-t)*F(t,T)
-   * @param derivative the EquityDerivative
-   * @param market the EquityOptionDataBundle
-   * @param shift Relative size of shift made in centered-finite difference approximation.
+   * Rates enter the pricing of a EquityDerivative in two places: in the discounting and forward projection.
+   * <p>
+   * The presentValue has been structured such that the form of the PV = Z(t,T) * FwdPrice(t,T) with Z a zero coupon bond, and t and T the valuation and
+   * settlement times respectively. The form of our discounting rates is such that Z(t,T) = exp[- R(t,T) * (T-t)], hence dZ/dR = -(T-t)*Z(t,T) and d(PV)/dR = PV
+   * * dZ/dR The forward's dependence on the discounting rate is similar to the zero coupon bonds, but of opposite sign, dF/dR = (T-t)*F(t,T)
+   *
+   * @param derivative
+   *          the EquityDerivative
+   * @param market
+   *          the EquityOptionDataBundle
+   * @param shift
+   *          Relative size of shift made in centered-finite difference approximation.
    * @return A Double in the currency, deriv.getCurrency(). Currency amount per unit amount change in discount rate
    */
   public Double calcDiscountRateSensitivity(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final double shift) {
@@ -124,16 +128,19 @@ public class EquityDerivativeSensitivityCalculator {
   }
 
   /**
-   * Calculates the sensitivity of the present value (PV) to a change in the funding rate from valuation to settlement.
-   * Also know as PVBP and DV01, though note this return per UNIT change in rate. calcPV01 returns per basis point change in rates.  <p>
+   * Calculates the sensitivity of the present value (PV) to a change in the funding rate from valuation to settlement. Also know as PVBP and DV01, though note
+   * this return per UNIT change in rate. calcPV01 returns per basis point change in rates.
    * <p>
-   * Rates enter the pricing of a EquityDerivative in two places: in the discounting and forward projection.<p>
-   * The presentValue has been structured such that the form of the PV = Z(t,T) * FwdPrice(t,T) with Z a zero coupon bond,
-   * and t and T the valuation and settlement times respectively.
-   * The form of our discounting rates is such that Z(t,T) = exp[- R(t,T) * (T-t)], hence  dZ/dR = (t-T)*Z(t,T) and d(PV)/dR = PV * dZ/dR
-   * The forward's dependence on the discounting rate is similar to the zero coupon bonds, but of opposite sign, dF/dR = (T-t)*F(t,T)
-   * @param derivative the EquityDerivative
-   * @param market the EquityOptionDataBundle
+   * Rates enter the pricing of a EquityDerivative in two places: in the discounting and forward projection.
+   * <p>
+   * The presentValue has been structured such that the form of the PV = Z(t,T) * FwdPrice(t,T) with Z a zero coupon bond, and t and T the valuation and
+   * settlement times respectively. The form of our discounting rates is such that Z(t,T) = exp[- R(t,T) * (T-t)], hence dZ/dR = (t-T)*Z(t,T) and d(PV)/dR = PV
+   * * dZ/dR The forward's dependence on the discounting rate is similar to the zero coupon bonds, but of opposite sign, dF/dR = (T-t)*F(t,T)
+   * 
+   * @param derivative
+   *          the EquityDerivative
+   * @param market
+   *          the EquityOptionDataBundle
    * @return A Double in the currency, deriv.getCurrency(). Currency amount per unit amount change in discount rate
    */
   public Double calcDiscountRateSensitivity(final InstrumentDerivative derivative, final StaticReplicationDataBundle market) {
@@ -344,7 +351,7 @@ public class EquityDerivativeSensitivityCalculator {
     final InterpolatedDoublesSurface bumpedVolUp = volShifter.evaluate(blackSurf, maturity, strike, shift);
     StaticReplicationDataBundle bumpedMarket =
         new StaticReplicationDataBundle(market.getVolatilitySurface().withSurface(bumpedVolUp), market.getDiscountCurve(),
-        market.getForwardCurve());
+            market.getForwardCurve());
     final double pvUp = derivative.accept(_pricer, bumpedMarket);
 
     // shift DOWN

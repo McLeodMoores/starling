@@ -33,8 +33,8 @@ public class ConstantCubeMultiplicativeShiftFunction implements CubeShiftFunctio
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public ConstantDoublesCube evaluate(final ConstantDoublesCube cube, final double x, final double y, final double z, final double shift) {
@@ -43,31 +43,34 @@ public class ConstantCubeMultiplicativeShiftFunction implements CubeShiftFunctio
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
-  public ConstantDoublesCube evaluate(final ConstantDoublesCube cube, final double x, final double y, final double z, final double percentage, final String newName) {
+  public ConstantDoublesCube evaluate(final ConstantDoublesCube cube, final double x, final double y, final double z, final double percentage,
+      final String newName) {
     throw new UnsupportedOperationException();
   }
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
-  public ConstantDoublesCube evaluate(final ConstantDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift, final double[] percentage) {
+  public ConstantDoublesCube evaluate(final ConstantDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift,
+      final double[] percentage) {
     throw new UnsupportedOperationException();
   }
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
-  public ConstantDoublesCube evaluate(final ConstantDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift, final double[] percentage, final String newName) {
+  public ConstantDoublesCube evaluate(final ConstantDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift,
+      final double[] percentage, final String newName) {
     throw new UnsupportedOperationException();
   }
 

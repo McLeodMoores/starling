@@ -83,7 +83,8 @@ public class MinimalWebHomeResource extends AbstractSingletonWebResource {
     builder.add(new ResourceConfig(WebConventionsResource.class, WebConventionData.class, WebConventionUris.class, "conventionUris"));
     builder.add(new ResourceConfig(WebExchangesResource.class, WebExchangeData.class, WebExchangeUris.class, "exchangeUris"));
     builder.add(new ResourceConfig(WebFunctionsResource.class, WebFunctionData.class, WebFunctionUris.class, "functionUris"));
-    builder.add(new ResourceConfig(WebAllHistoricalTimeSeriesResource.class, WebHistoricalTimeSeriesData.class, WebHistoricalTimeSeriesUris.class, "timeseriesUris"));
+    builder.add(
+        new ResourceConfig(WebAllHistoricalTimeSeriesResource.class, WebHistoricalTimeSeriesData.class, WebHistoricalTimeSeriesUris.class, "timeseriesUris"));
     builder.add(new ResourceConfig(WebHolidaysResource.class, WebHolidayData.class, WebHolidayUris.class, "holidayUris"));
     builder.add(new ResourceConfig(WebLegalEntitiesResource.class, WebLegalEntityData.class, WebLegalEntityUris.class, "legalEntityUris"));
     builder.add(new ResourceConfig(MinimalWebPortfoliosResource.class, WebPortfoliosData.class, MinimalWebPortfoliosUris.class, "portfolioUris"));
@@ -103,10 +104,14 @@ public class MinimalWebHomeResource extends AbstractSingletonWebResource {
    * <p>
    * This method is not intended for general use and may disappear without warning in the future.
    *
-   * @param resourceType  the resource type
-   * @param dataType  the type of the web data class
-   * @param urisType  the type of the web uri class
-   * @param name  the name exposed to Freemarker
+   * @param resourceType
+   *          the resource type
+   * @param dataType
+   *          the type of the web data class
+   * @param urisType
+   *          the type of the web uri class
+   * @param name
+   *          the name exposed to Freemarker
    */
   public static void registerHomePageLink(
       final Class<?> resourceType, final Class<? extends Bean> dataType, final Class<?> urisType, final String name) {
@@ -115,16 +120,18 @@ public class MinimalWebHomeResource extends AbstractSingletonWebResource {
     RESOURCE_CONFIG_LIST.add(config);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the resource.
+   *
    * @param publishedTypes
+   *          the published types
    */
   public MinimalWebHomeResource(final Set<Class<?>> publishedTypes) {
     _publishedTypes = publishedTypes;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String get(@Context final ServletContext servletContext, @Context final UriInfo uriInfo) {
@@ -132,11 +139,12 @@ public class MinimalWebHomeResource extends AbstractSingletonWebResource {
     return getFreemarker(servletContext).build("home.ftl", out);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
    *
-   * @param uriInfo  the URI information, not null
+   * @param uriInfo
+   *          the URI information, not null
    * @return the output root data, not null
    */
   @Override
@@ -157,7 +165,7 @@ public class MinimalWebHomeResource extends AbstractSingletonWebResource {
     return out;
   }
 
-  private Object createUriObj(final ResourceConfig resourceConfig, final UriInfo uriInfo) {
+  private static Object createUriObj(final ResourceConfig resourceConfig, final UriInfo uriInfo) {
     try {
       final Bean dataInstance = resourceConfig._dataClazz.newInstance();
       dataInstance.property("uriInfo").set(uriInfo);
@@ -173,7 +181,7 @@ public class MinimalWebHomeResource extends AbstractSingletonWebResource {
     private final Class<?> _uris;
     private final String _name;
 
-    public ResourceConfig(final Class<?> resourceType, final Class<? extends Bean> dataClazz, final Class<?> uris, final String name) {
+    ResourceConfig(final Class<?> resourceType, final Class<? extends Bean> dataClazz, final Class<?> uris, final String name) {
       _resourceType = resourceType;
       _dataClazz = dataClazz;
       _uris = uris;
@@ -181,10 +189,12 @@ public class MinimalWebHomeResource extends AbstractSingletonWebResource {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this page.
-   * @param uriInfo  the uriInfo, not null
+   * 
+   * @param uriInfo
+   *          the uriInfo, not null
    * @return the URI, not null
    */
   public static URI uri(final UriInfo uriInfo) {

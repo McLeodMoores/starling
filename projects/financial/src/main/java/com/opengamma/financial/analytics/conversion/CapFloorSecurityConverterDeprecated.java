@@ -28,6 +28,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Converts cap/floors from {@link CapFloorSecurity} to the {@link InstrumentDefinition}s.
+ * 
  * @deprecated Replaced by {@link CapFloorSecurityConverter}, which does not use curve name information
  */
 @Deprecated
@@ -65,9 +66,11 @@ public class CapFloorSecurityConverterDeprecated extends FinancialSecurityVisito
       }
       regionId = iborIndexConvention.getRegion();
       final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, regionId);
-      final IborIndex index = new IborIndex(currency, iborIndexConvention.getPeriod(), iborIndexConvention.getSettlementDays(), iborIndexConvention.getDayCount(),
+      final IborIndex index = new IborIndex(currency, iborIndexConvention.getPeriod(), iborIndexConvention.getSettlementDays(),
+          iborIndexConvention.getDayCount(),
           iborIndexConvention.getBusinessDayConvention(), iborIndexConvention.isEOMConvention(), "Ibor");
-      return AnnuityCapFloorIborDefinition.from(startDate, endDate, notional, index, capFloorSecurity.getDayCount(), tenorPayment, capFloorSecurity.isPayer(), capFloorSecurity.getStrike(),
+      return AnnuityCapFloorIborDefinition.from(startDate, endDate, notional, index, capFloorSecurity.getDayCount(), tenorPayment, capFloorSecurity.isPayer(),
+          capFloorSecurity.getStrike(),
           capFloorSecurity.isCap(), calendar);
     }
     // Cap/floor on CMS
@@ -84,8 +87,10 @@ public class CapFloorSecurityConverterDeprecated extends FinancialSecurityVisito
     final IborIndex iborIndex = new IborIndex(currency, tenorPayment, iborIndexConvention.getSettlementDays(), iborIndexConvention.getDayCount(),
         iborIndexConvention.getBusinessDayConvention(), iborIndexConvention.isEOMConvention());
     final Period fixedLegPaymentPeriod = ConversionUtils.getTenor(swapIndexConvention.getSwapFixedLegFrequency());
-    final IndexSwap swapIndex = new IndexSwap(fixedLegPaymentPeriod, swapIndexConvention.getSwapFixedLegDayCount(), iborIndex, swapIndexConvention.getPeriod(), calendar);
-    return AnnuityCapFloorCMSDefinition.from(startDate, endDate, notional, swapIndex, tenorPayment, capFloorSecurity.getDayCount(), capFloorSecurity.isPayer(), capFloorSecurity.getStrike(),
+    final IndexSwap swapIndex = new IndexSwap(fixedLegPaymentPeriod, swapIndexConvention.getSwapFixedLegDayCount(), iborIndex, swapIndexConvention.getPeriod(),
+        calendar);
+    return AnnuityCapFloorCMSDefinition.from(startDate, endDate, notional, swapIndex, tenorPayment, capFloorSecurity.getDayCount(), capFloorSecurity.isPayer(),
+        capFloorSecurity.getStrike(),
         capFloorSecurity.isCap(), calendar);
   }
 

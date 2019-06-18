@@ -52,8 +52,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Base class for functions that calculate price and risk for interest rate futures
- * 
+ * Base class for functions that calculate price and risk for interest rate futures.
+ *
  * @deprecated Use descendants of {@link MultiCurvePricingFunction}
  */
 @Deprecated
@@ -76,13 +76,15 @@ public abstract class InterestRateFutureFunction extends AbstractFunction.NonCom
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context); // TODO [PLAT-5966] Remove
     final HistoricalTimeSeriesResolver timeSeriesResolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
-    _converter = new InterestRateFutureTradeConverterDeprecated(new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource));
+    _converter = new InterestRateFutureTradeConverterDeprecated(
+        new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource));
     _dataConverter = new FixedIncomeConverterDataProvider(conventionSource, securitySource, timeSeriesResolver);
     _curveConfigSource = ConfigDBCurveCalculationConfigSource.init(context, this);
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final HistoricalTimeSeriesBundle timeSeries = HistoricalTimeSeriesFunctionUtils.getHistoricalTimeSeriesInputs(executionContext, inputs);
@@ -95,7 +97,7 @@ public abstract class InterestRateFutureFunction extends AbstractFunction.NonCom
     }
     final String currency = FinancialSecurityUtils.getCurrency(trade.getSecurity()).getCode();
     final String[] curveNames = curveCalculationConfig.getYieldCurveNames();
-    final String[] yieldCurveNames = curveNames.length == 1 ? new String[] {curveNames[0], curveNames[0] } : curveNames;
+    final String[] yieldCurveNames = curveNames.length == 1 ? new String[] { curveNames[0], curveNames[0] } : curveNames;
     final String[] fullYieldCurveNames = new String[yieldCurveNames.length];
     for (int i = 0; i < yieldCurveNames.length; i++) {
       fullYieldCurveNames[i] = yieldCurveNames[i] + "_" + currency;
@@ -107,7 +109,7 @@ public abstract class InterestRateFutureFunction extends AbstractFunction.NonCom
     return getResults(irFuture, data, spec);
   }
 
-  protected abstract Set<ComputedValue> getResults(final InstrumentDerivative irFuture, final YieldCurveBundle data, final ValueSpecification spec);
+  protected abstract Set<ComputedValue> getResults(InstrumentDerivative irFuture, YieldCurveBundle data, ValueSpecification spec);
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -154,7 +156,8 @@ public abstract class InterestRateFutureFunction extends AbstractFunction.NonCom
 
   private ValueSpecification getSpecification(final ComputationTarget target) {
     return new ValueSpecification(_valueRequirement, target.toSpecification(), createValueProperties()
-        .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode()).withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG).get());
+        .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode())
+        .withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG).get());
   }
 
   private ValueSpecification getSpecification(final ComputationTarget target, final String curveCalculationConfig) {

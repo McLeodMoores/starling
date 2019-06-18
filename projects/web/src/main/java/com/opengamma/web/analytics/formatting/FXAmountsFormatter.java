@@ -24,8 +24,8 @@ import com.opengamma.util.ArgumentChecker;
 
   @Override
   public Object formatCell(final FXAmounts amounts, final ValueSpecification valueSpec, final Object inlineKey) {
-    return _doubleFormatter.formatCell(amounts.getBaseAmount(), valueSpec, inlineKey) + " " + amounts.getBaseCurrency() + " / " +
-        _doubleFormatter.formatCell(amounts.getCounterAmount(), valueSpec, inlineKey) + " " + amounts.getCounterCurrency();
+    return _doubleFormatter.formatCell(amounts.getBaseAmount(), valueSpec, inlineKey) + " " + amounts.getBaseCurrency() + " / "
+        + _doubleFormatter.formatCell(amounts.getCounterAmount(), valueSpec, inlineKey) + " " + amounts.getCounterCurrency();
   }
 
   @Override

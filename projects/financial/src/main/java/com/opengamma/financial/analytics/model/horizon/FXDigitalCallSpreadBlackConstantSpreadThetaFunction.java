@@ -56,7 +56,9 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXDigitalCallSpreadBlackConstantSpreadThetaFunction extends FXDigitalCallSpreadBlackMultiValuedFunction {
   private static final ConstantSpreadHorizonThetaCalculator CALCULATOR = ConstantSpreadHorizonThetaCalculator.getInstance();
 
@@ -65,7 +67,8 @@ public class FXDigitalCallSpreadBlackConstantSpreadThetaFunction extends FXDigit
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
@@ -113,11 +116,11 @@ public class FXDigitalCallSpreadBlackConstantSpreadThetaFunction extends FXDigit
     if (baseQuotePair.getBase().equals(putCurrency)) { // To get Base/quote in market standard order.
       ccy1 = putCurrency;
       ccy2 = callCurrency;
-      curves = new YieldAndDiscountCurve[] {putFundingCurve, callFundingCurve};
-      allCurveNames = new String[] {fullPutCurveName, fullCallCurveName};
+      curves = new YieldAndDiscountCurve[] { putFundingCurve, callFundingCurve };
+      allCurveNames = new String[] { fullPutCurveName, fullCallCurveName };
     } else {
-      curves = new YieldAndDiscountCurve[] {callFundingCurve, putFundingCurve};
-      allCurveNames = new String[] {fullCallCurveName, fullPutCurveName};
+      curves = new YieldAndDiscountCurve[] { callFundingCurve, putFundingCurve };
+      allCurveNames = new String[] { fullCallCurveName, fullPutCurveName };
       ccy1 = callCurrency;
       ccy2 = putCurrency;
     }
@@ -127,7 +130,8 @@ public class FXDigitalCallSpreadBlackConstantSpreadThetaFunction extends FXDigit
       throw new OpenGammaRuntimeException("Could not get spot requirement");
     }
     final double spot = (Double) spotObject;
-    final ValueRequirement fxVolatilitySurfaceRequirement = getSurfaceRequirement(surfaceName, putCurrency, callCurrency, interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+    final ValueRequirement fxVolatilitySurfaceRequirement = getSurfaceRequirement(surfaceName, putCurrency, callCurrency, interpolatorName,
+        leftExtrapolatorName, rightExtrapolatorName);
     final Object volatilitySurfaceObject = inputs.getValue(fxVolatilitySurfaceRequirement);
     if (volatilitySurfaceObject == null) {
       throw new OpenGammaRuntimeException("Could not get " + fxVolatilitySurfaceRequirement);
@@ -144,7 +148,8 @@ public class FXDigitalCallSpreadBlackConstantSpreadThetaFunction extends FXDigit
       return Collections.singleton(new ComputedValue(spec, HorizonUtils.getNonZeroValue(theta)));
     } else if (security instanceof FXDigitalOptionSecurity) {
       final ForexOptionDigitalDefinition definition = (ForexOptionDigitalDefinition) security.accept(converter);
-      final MultipleCurrencyAmount theta = CALCULATOR.getTheta(definition, now, allCurveNames, smileBundle, PresentValueBlackSmileForexCalculator.getInstance(), daysFwdOrBackward);
+      final MultipleCurrencyAmount theta = CALCULATOR.getTheta(definition, now, allCurveNames, smileBundle, PresentValueBlackSmileForexCalculator.getInstance(),
+          daysFwdOrBackward);
       return Collections.singleton(new ComputedValue(spec, HorizonUtils.getNonZeroValue(theta)));
     }
     throw new OpenGammaRuntimeException("Should never get here; canApplyTo specifies vanilla and digital options only");

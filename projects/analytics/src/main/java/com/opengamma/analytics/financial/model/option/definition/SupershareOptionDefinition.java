@@ -12,18 +12,6 @@ import com.opengamma.util.time.Expiry;
 
 /**
  * Class defining a supershare option.
- * <p>
- * Supershare options have European-style exercise with payoff
- * $$
- * \begin{align*}
- * \mathrm{payoff} =
- * \begin{cases}
- * \frac{S}{K_L} \quad & \mathrm{if} \quad K_L \leq S \leq K_H\\
- * 0\quad & \mathrm{otherwise}
- * \end{cases}
- * \end{align*}
- * $$
- * where $K_L$ is the lower bound, $K_H$ the upper bound and $S$ the spot.
  */
 public class SupershareOptionDefinition extends OptionDefinition {
   private final OptionExerciseFunction<StandardOptionDataBundle> _exerciseFunction = new EuropeanExerciseFunction<>();
@@ -90,9 +78,9 @@ public class SupershareOptionDefinition extends OptionDefinition {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_lowerBound);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_upperBound);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

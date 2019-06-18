@@ -32,26 +32,27 @@ import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 
 /**
- * Interpolate a smile, i.e. fit every data point (market volatility/price), by fitting a smile model (e.g. SABR) through consecutive sets of 3 strikes, so for N data points (prices) there will be N-2
- * 3-point fits. In the interior where smile fits overlap, a weighting between the two smiles is taken, which varies from giving 100% weight to the left smile at the mid point of that fit, down to 0%
- * at the mid point of the right fit.
+ * Interpolate a smile, i.e. fit every data point (market volatility/price), by fitting a smile model (e.g. SABR) through consecutive sets of 3 strikes, so for
+ * N data points (prices) there will be N-2 3-point fits. In the interior where smile fits overlap, a weighting between the two smiles is taken, which varies
+ * from giving 100% weight to the left smile at the mid point of that fit, down to 0% at the mid point of the right fit.
  *
- * @param <T> The type of the smile model data
+ * @param <T>
+ *          The type of the smile model data
  */
 public abstract class SmileInterpolator<T extends SmileModelData> implements GeneralSmileInterpolator {
 
-  private static final double FIT_ERROR = 1e-4; //1bps
+  private static final double FIT_ERROR = 1e-4; // 1bps
   private static final double LARGE_ERROR = 0.1;
   private static final WeightingFunction DEFAULT_WEIGHTING_FUNCTION = WeightingFunctionFactory.SINE_WEIGHTING_FUNCTION;
 
   /**
-   * The logger
+   * The logger.
    */
   protected static final Logger LOGGER = LoggerFactory.getLogger(SmileInterpolator.class);
 
-  private final VolatilityFunctionProvider<T> _model;
-  private final WeightingFunction _weightingFunction;
-  private final RandomEngine _random;
+  private VolatilityFunctionProvider<T> _model;
+  private WeightingFunction _weightingFunction;
+  private RandomEngine _random;
 
   public SmileInterpolator(final VolatilityFunctionProvider<T> model) {
     this(MersenneTwister.DEFAULT_SEED, model);
@@ -91,10 +92,10 @@ public abstract class SmileInterpolator<T extends SmileModelData> implements Gen
     LeastSquareResultsWithTransform gBest = null;
     double chiSqr = Double.POSITIVE_INFINITY;
 
-    //TODO set these in sub classes
+    // TODO set these in sub classes
     int tries = 0;
     int count = 0;
-    while (chiSqr > 100.0 * n && count < 5) { //10bps average error
+    while (chiSqr > 100.0 * n && count < 5) { // 10bps average error
       final DoubleMatrix1D gStart = getGlobalStart(forward, strikes, expiry, impliedVols);
       try {
         final LeastSquareResultsWithTransform glsRes = globalFitter.solve(gStart, gFixed);
@@ -171,13 +172,17 @@ public abstract class SmileInterpolator<T extends SmileModelData> implements Gen
   }
 
   /**
-   * Use this for models that can be expressed as having 3 parameters (e.g. SABR with beta fixed). It picks out 3 consecutive
-   * strike-volatility pairs for the 3 parameter fit (so the chi^2 should be zero if the model is capable of fitting the data)
+   * Use this for models that can be expressed as having 3 parameters (e.g. SABR with beta fixed). It picks out 3 consecutive strike-volatility pairs for the 3
+   * parameter fit (so the chi^2 should be zero if the model is capable of fitting the data)
    *
-   * @param index Index of first strike
-   * @param strikes Array of all strikes
-   * @param impliedVols Array of all vols
-   * @param errors Array of all errors
+   * @param index
+   *          Index of first strike
+   * @param strikes
+   *          Array of all strikes
+   * @param impliedVols
+   *          Array of all vols
+   * @param errors
+   *          Array of all errors
    * @return array containing the 3 strikes, vols and errors
    */
   protected static double[][] getStrikesVolsAndErrorsForThreePoints(final int index, final double[] strikes, final double[] impliedVols,
@@ -191,19 +196,24 @@ public abstract class SmileInterpolator<T extends SmileModelData> implements Gen
     tStrikes = Arrays.copyOfRange(strikes, index, index + 3);
     tVols = Arrays.copyOfRange(impliedVols, index, index + 3);
     tErrors = Arrays.copyOfRange(errors, index, index + 3);
-    final double[][] res = new double[][] {tStrikes, tVols, tErrors };
+    final double[][] res = new double[][] { tStrikes, tVols, tErrors };
     return res;
   }
 
   /**
-   * Use this for models that cannot be easily expressed as having 3 parameters (e.g. mixed log-normal). It picks out 3 consecutive strikes and gives them a small error (1bps by default), while the
-   * rest of the data has a relatively large error (100bps by default). The fit is then made to all data (n > 3) which allows more than 3 parameters to be fitted (recall, the start position is set
-   * from a true global fit). The chi^2 should be close to zero if the model is capable of fitting the data.
+   * Use this for models that cannot be easily expressed as having 3 parameters (e.g. mixed log-normal). It picks out 3 consecutive strikes and gives them a
+   * small error (1bps by default), while the rest of the data has a relatively large error (100bps by default). The fit is then made to all data (n &gt; 3)
+   * which allows more than 3 parameters to be fitted (recall, the start position is set from a true global fit). The chi^2 should be close to zero if the model
+   * is capable of fitting the data.
    *
-   * @param index Index of first strike
-   * @param strikes Array of all strikes
-   * @param impliedVols Array of all vols
-   * @param errors Array of all errors
+   * @param index
+   *          Index of first strike
+   * @param strikes
+   *          Array of all strikes
+   * @param impliedVols
+   *          Array of all vols
+   * @param errors
+   *          Array of all errors
    * @return array containing the 3 strikes, vols and errors
    */
   protected static double[][] getStrikesVolsAndErrorsForAllPoints(final int index, final double[] strikes, final double[] impliedVols, final double[] errors) {
@@ -213,12 +223,12 @@ public abstract class SmileInterpolator<T extends SmileModelData> implements Gen
     final int n = errors.length;
     final double[] lErrors = new double[n];
     Arrays.fill(lErrors, LARGE_ERROR);
-    System.arraycopy(errors, index, lErrors, index, 3); //copy the original errors for the points we really want to fit
-    final double[][] res = new double[][] {strikes, impliedVols, lErrors };
+    System.arraycopy(errors, index, lErrors, index, 3); // copy the original errors for the points we really want to fit
+    final double[][] res = new double[][] { strikes, impliedVols, lErrors };
     return res;
   }
 
-  protected abstract DoubleMatrix1D getGlobalStart(final double forward, final double[] strikes, final double expiry, final double[] impliedVols);
+  protected abstract DoubleMatrix1D getGlobalStart(double forward, double[] strikes, double expiry, double[] impliedVols);
 
   protected BitSet getGlobalFixedValues() {
     return new BitSet();
@@ -228,9 +238,9 @@ public abstract class SmileInterpolator<T extends SmileModelData> implements Gen
     return new BitSet();
   }
 
-  protected abstract T toSmileModelData(final DoubleMatrix1D modelParameters); //TODO have the same thing in SmileModelFitter - could combine
+  protected abstract T toSmileModelData(DoubleMatrix1D modelParameters); // TODO have the same thing in SmileModelFitter - could combine
 
-  protected abstract SmileModelFitter<T> getFitter(final double forward, final double[] strikes, final double expiry, final double[] impliedVols, final double[] errors);
+  protected abstract SmileModelFitter<T> getFitter(double forward, double[] strikes, double expiry, double[] impliedVols, double[] errors);
 
   @Override
   public Function1D<Double, Double> getVolatilityFunction(final double forward, final double[] strikes, final double expiry, final double[] impliedVols) {
@@ -280,7 +290,7 @@ public abstract class SmileInterpolator<T extends SmileModelData> implements Gen
       }
     };
 
-    //TODO replace this with an explicit polynomial fitter
+    // TODO replace this with an explicit polynomial fitter
     final NonLinearLeastSquare ls = new NonLinearLeastSquare();
     final LeastSquareResults lsRes = ls.solve(new DoubleMatrix1D(x), new DoubleMatrix1D(impliedVols), func, new DoubleMatrix1D(0.1, 0.0, 0.0));
     final DoubleMatrix1D fitP = lsRes.getFitParameters();

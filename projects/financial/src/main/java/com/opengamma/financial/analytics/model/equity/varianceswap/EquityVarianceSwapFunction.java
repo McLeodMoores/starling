@@ -49,11 +49,11 @@ import com.opengamma.util.money.Currency;
  *
  */
 public abstract class EquityVarianceSwapFunction extends AbstractFunction.NonCompiledInvoker {
-  /** Property for the type of volatility surface to use */
+  /** Property for the type of volatility surface to use. */
   public static final String PROPERTY_VOLATILITY_SURFACE_TYPE = "VolatilitySurfaceType";
-  /** Pure implied volatility calculation method */
+  /** Pure implied volatility calculation method. */
   public static final String PURE_IMPLIED_VOLATILITY = "PureImpliedVolatility";
-  /** Pure local volatility calculation method */
+  /** Pure local volatility calculation method. */
   public static final String PURE_LOCAL_VOLATILITY = "PureLocalVolatility";
   private EquityVarianceSwapConverter _converter;
 
@@ -123,8 +123,9 @@ public abstract class EquityVarianceSwapFunction extends AbstractFunction.NonCom
     final ValueRequirement forwardCurveRequirement = getForwardCurveRequirement(underlyingTarget, desiredValue);
     final ValueRequirement volatilityRequirement = getVolatilityRequirement(underlyingTarget, desiredValue);
     final ValueRequirement underlyingTSRequirement = getTimeSeriesRequirement(context, security);
-    return Sets.newHashSet(spotRequirement, discountingCurveRequirement, forwardCurveRequirement, volatilityRequirement, underlyingTSRequirement, dividendsRequirement);
-    //dividendsRequirement
+    return Sets.newHashSet(spotRequirement, discountingCurveRequirement, forwardCurveRequirement, volatilityRequirement, underlyingTSRequirement,
+        dividendsRequirement);
+    // dividendsRequirement
   }
 
   private ValueRequirement getCurveRequirement(final Currency currency, final ValueRequirement desiredValue) {
@@ -166,11 +167,13 @@ public abstract class EquityVarianceSwapFunction extends AbstractFunction.NonCom
 
   private ValueRequirement getTimeSeriesRequirement(final FunctionCompilationContext context, final EquityVarianceSwapSecurity security) {
     final HistoricalTimeSeriesResolver resolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
-    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(security.getSpotUnderlyingId().toBundle(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, null);
+    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(security.getSpotUnderlyingId().toBundle(), null, null, null,
+        MarketDataRequirementNames.MARKET_VALUE, null);
     if (timeSeries == null) {
       return null;
     }
-    return HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries, MarketDataRequirementNames.MARKET_VALUE, DateConstraint.NULL, true, DateConstraint.VALUATION_TIME, true);
+    return HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries, MarketDataRequirementNames.MARKET_VALUE, DateConstraint.NULL, true,
+        DateConstraint.VALUATION_TIME, true);
   }
 
   protected SmileSurfaceDataBundle getData(final FunctionInputs inputs) {

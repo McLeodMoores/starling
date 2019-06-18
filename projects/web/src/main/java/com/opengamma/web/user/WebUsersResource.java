@@ -71,6 +71,33 @@ public class WebUsersResource extends AbstractWebUserResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Produces an HTML GET request.
+   * 
+   * @param pgIdx
+   *          the paging first-item index, can be null
+   * @param pgNum
+   *          the paging page, can be null
+   * @param pgSze
+   *          the page size, can be null
+   * @param sort
+   *          the sorting type, can be null
+   * @param username
+   *          the user name, can be null
+   * @param name
+   *          the name, can be null
+   * @param email
+   *          the email, can be null
+   * @param idScheme
+   *          the id scheme, can be null
+   * @param idValue
+   *          the id value, can be null
+   * @param userIdStrs
+   *          the identifiers of the user, not null
+   * @param uriInfo
+   *          the URI info, not null
+   * @return the Freemarker output
+   */
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML(
@@ -125,6 +152,27 @@ public class WebUsersResource extends AbstractWebUserResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Creates an HTML POST response.
+   * 
+   * @param userName
+   *          the user name, can be null
+   * @param password
+   *          the password, can be null
+   * @param email
+   *          the email, can be null
+   * @param displayName
+   *          the display name, can be null
+   * @param locale
+   *          the locale, can be null
+   * @param zone
+   *          the time zone, can be null
+   * @param dateStyle
+   *          the date style, can be null
+   * @param timeStyle
+   *          the time style, can be null
+   * @return the Freemarker output
+   */
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
@@ -158,6 +206,15 @@ public class WebUsersResource extends AbstractWebUserResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Finds a user by user name. If the user is not present in the master, the
+   * latest version in the history is returned. If this is not available, an
+   * exception is thrown.
+   *
+   * @param userName
+   *          the user name
+   * @return the user resource
+   */
   @Path("name/{userName}")
   public WebUserResource findUser(@PathParam("userName") final String userName) {
     data().setUriUserName(userName);

@@ -15,6 +15,7 @@ public interface SABRSwaptionProviderInterface extends ParameterProviderInterfac
 
   /**
    * Create a new copy of the provider.
+   *
    * @return The bundle.
    */
   @Override
@@ -22,12 +23,15 @@ public interface SABRSwaptionProviderInterface extends ParameterProviderInterfac
 
   /**
    * Gets the parameters of the SABR grid.
+   *
    * @return The SABR parameters.
    */
   SABRInterestRateParameters getSABRParameter();
 
   /**
-   * Returns the swap generator for which the SABR data is valid, i.e. the data is calibrated to swaption on vanilla swaps with the description contains in the generator.
+   * Returns the swap generator for which the SABR data is valid, i.e. the data is calibrated to swaption on vanilla swaps with the description contains in the
+   * generator.
+   *
    * @return The generator.
    */
   GeneratorSwapFixedIbor getSABRGenerator();

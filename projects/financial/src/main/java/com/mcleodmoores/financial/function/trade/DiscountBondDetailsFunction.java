@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.financial.function.trade;
 
@@ -52,15 +52,12 @@ public class DiscountBondDetailsFunction extends BondAndBondFutureFromCurvesFunc
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
     final ValueProperties properties = desiredValue.getConstraints();
     final ZonedDateTime now = ZonedDateTime.now(executionContext.getValuationClock());
-    final BillTransactionDefinition definition =
-        (BillTransactionDefinition) BondAndBondFutureFunctionUtils.getDefinition(executionContext, target, now);
-    final BillTransaction derivative =
-        (BillTransaction) BondAndBondFutureFunctionUtils.getBondOrBondFutureDerivative(executionContext, target, now, inputs);
+    final BillTransactionDefinition definition = (BillTransactionDefinition) BondAndBondFutureFunctionUtils.getDefinition(executionContext, target, now);
+    final BillTransaction derivative = (BillTransaction) BondAndBondFutureFunctionUtils.getBondOrBondFutureDerivative(executionContext, target, now, inputs);
     final IssuerProvider curves = (IssuerProvider) inputs.getValue(CURVE_BUNDLE);
     final DiscountBondDetailsProvider provider = new DiscountBondDetailsProvider(curves, now, definition);
     final ValueSpecification spec = new ValueSpecification(BOND_DETAILS, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, derivative.accept(DiscountBondDetailsCalculator.INSTANCE, provider)));
   }
-
 
 }

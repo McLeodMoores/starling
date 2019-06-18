@@ -16,10 +16,11 @@ import com.opengamma.analytics.financial.provider.calculator.generic.TodayPaymen
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
+
 //CSOFF
 /**
- * Calculates the change in value of a FX option when the yield curves have been
- * shifted forward in time without slide.
+ * Calculates the change in value of a FX option when the yield curves have been shifted forward in time without slide.
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -37,7 +38,8 @@ public final class YieldCurvesConstantSpreadThetaCalculator {
 
   public MultipleCurrencyAmount getTheta(final ForexOptionVanillaDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
       final SmileDeltaTermStructureDataBundle data, final int daysForward) {
-    ArgumentChecker.isTrue(daysForward == 1 || daysForward == -1, "daysForward must be either 1 or -1"); // TODO: Update signature of function to take ForwardOrBack
+    ArgumentChecker.isTrue(daysForward == 1 || daysForward == -1, "daysForward must be either 1 or -1"); // TODO: Update signature of function to take
+                                                                                                         // ForwardOrBack
     final InstrumentDerivative instrumentToday = definition.toDerivative(date, yieldCurveNames);
     final ZonedDateTime horizonDate = date.plusDays(daysForward);
     final double shiftTime = TimeCalculator.getTimeBetween(date, horizonDate);

@@ -139,6 +139,9 @@ public class PoolExecutor implements Executor, Lifecycle {
 
     /**
      * Waits for all submitted jobs to complete. This thread may execute one or more of the submitted jobs.
+     * 
+     * @throws InterruptedException
+     *           if there is an interruption before the jobs are complete
      */
     public void join() throws InterruptedException {
       LOGGER.info("Joining");

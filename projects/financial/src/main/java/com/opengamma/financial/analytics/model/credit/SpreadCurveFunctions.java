@@ -32,10 +32,11 @@ import com.opengamma.util.time.Tenor;
 /**
  *
  */
+@SuppressWarnings("deprecation")
 public class SpreadCurveFunctions {
 
-  //private final static PresentValueCreditDefaultSwap cdsPresentValueCalculator = new PresentValueCreditDefaultSwap();
- // private static PresentValueStandardCreditDefaultSwap cdsPresentValueCalculator = new PresentValueStandardCreditDefaultSwap();
+  // private final static PresentValueCreditDefaultSwap cdsPresentValueCalculator = new PresentValueCreditDefaultSwap();
+  // private static PresentValueStandardCreditDefaultSwap cdsPresentValueCalculator = new PresentValueStandardCreditDefaultSwap();
 
   private static final Collection<Tenor> BUCKET_TENORS = new ArrayList<>();
   private static final double TEN_MINUS_4 = 1e-4;
@@ -109,24 +110,33 @@ public class SpreadCurveFunctions {
     return tenors.toArray(new Tenor[tenors.size()]);
   }
 
-
-
   /**
-   * Format the spread curve for a given cds.
-   * For IMM dates set all spreads to bucket maturity is in.
-   * For non-IMM dates take subset of spreads that correspond to buckets.
+   * Format the spread curve for a given cds. For IMM dates set all spreads to bucket maturity is in. For non-IMM dates take subset of spreads that correspond
+   * to buckets.
    *
    * Doesn't handle PUF and non-IMM.
    *
-   * @param cds the cds security
-   * @param spreadCurve the spread curve
-   * @param bucketDates the bucket dates
-   * @param quoteConvention the quote convention (e.g Spread, points upfront etc)
+   * @param cds
+   *          the cds security
+   * @param spreadCurve
+   *          the spread curve
+   * @param bucketDates
+   *          the bucket dates
+   * @param quoteConvention
+   *          the quote convention (e.g Spread, points upfront etc)
+   * @param valuationDate
+   *          the valuationDate
+   * @param isdaCurve
+   *          the interest rate curve
+   * @param startDate
+   *          the start date
    * @return the spread curve for the given cds
    */
   @Deprecated
-  public static double[] getSpreadCurve(final LegacyVanillaCreditDefaultSwapDefinition cds, final NodalTenorDoubleCurve spreadCurve, final ZonedDateTime[] bucketDates,
-      final StandardCDSQuotingConvention quoteConvention, final ZonedDateTime valuationDate, final ISDACompliantYieldCurve isdaCurve, final ZonedDateTime startDate) {
+  public static double[] getSpreadCurve(final LegacyVanillaCreditDefaultSwapDefinition cds, final NodalTenorDoubleCurve spreadCurve,
+      final ZonedDateTime[] bucketDates,
+      final StandardCDSQuotingConvention quoteConvention, final ZonedDateTime valuationDate, final ISDACompliantYieldCurve isdaCurve,
+      final ZonedDateTime startDate) {
     ArgumentChecker.notNull(spreadCurve, "spread curve");
     ArgumentChecker.notNull(bucketDates, "bucket dates");
     ArgumentChecker.isTrue(spreadCurve.size() > 0, "spread curve had no values");
@@ -151,7 +161,7 @@ public class SpreadCurveFunctions {
           break;
         case POINTS_UPFRONT:
           // can price type vary?
-          //FIXME: Conversion to percentage should happen upstream or in analytics
+          // FIXME: Conversion to percentage should happen upstream or in analytics
           final CDSAnalytic analytic = CDSAnalyticConverter.create(cds, valuationDate.toLocalDate());
           spreadRate = PUF_CONVERTER.pufToQuotedSpread(analytic, cds.getParSpread() * TEN_MINUS_4, isdaCurve, spreadRate / 100.0);
           break;
@@ -185,15 +195,20 @@ public class SpreadCurveFunctions {
   }
 
   /**
-   * Get spread curve for the given tenors
+   * Get spread curve for the given tenors.
    *
-   * @param spreadCurve the spread curve
-   * @param bucketDates the bucket dates
-   * @param quoteConvention the convention, spread or puf
+   * @param spreadCurve
+   *          the spread curve
+   * @param bucketDates
+   *          the bucket dates
+   * @param startDate
+   *          the start date
+   * @param quoteConvention
+   *          the convention, spread or puf
    * @return the spread curve
    */
   public static double[] getSpreadCurveNew(final NodalTenorDoubleCurve spreadCurve, final ZonedDateTime[] bucketDates,
-                                           final ZonedDateTime startDate, final StandardCDSQuotingConvention quoteConvention) {
+      final ZonedDateTime startDate, final StandardCDSQuotingConvention quoteConvention) {
     ArgumentChecker.notNull(spreadCurve, "spread curve");
     ArgumentChecker.notNull(bucketDates, "bucket dates");
     ArgumentChecker.isTrue(spreadCurve.size() > 0, "spread curve had no values");
@@ -223,18 +238,24 @@ public class SpreadCurveFunctions {
   }
 
   /**
-   * Get analytic quote objects for the spread / credit curve.
-   * If priced cds matures on an IMM date set spreads to quoted otherwise take them as par.
+   * Get analytic quote objects for the spread / credit curve. If priced cds matures on an IMM date set spreads to quoted otherwise take them as par.
    *
    * If quoteConvention is SPREAD, set quoted vs. par spread based on IMM maturity
    *
-   * @param pricedCDSMaturity the maturity of the priced cds
-   * @param values the quotes
-   * @param quoteConvention the quote convention e.g. SPREAD or PUF
-   * @param normalise control whether to normalise spreads to fractional vlaues
+   * @param pricedCDSMaturity
+   *          the maturity of the priced cds
+   * @param values
+   *          the quotes
+   * @param coupon
+   *          the coupon
+   * @param quoteConvention
+   *          the quote convention e.g. SPREAD or PUF
+   * @param normalise
+   *          control whether to normalise spreads to fractional vlaues
    * @return the cds quote conventions
    */
-  public static CDSQuoteConvention[] getQuotes(final ZonedDateTime pricedCDSMaturity, final double[] values, final double coupon, final StandardCDSQuotingConvention quoteConvention, final boolean normalise) {
+  public static CDSQuoteConvention[] getQuotes(final ZonedDateTime pricedCDSMaturity, final double[] values, final double coupon,
+      final StandardCDSQuotingConvention quoteConvention, final boolean normalise) {
     final CDSQuoteConvention[] result = new CDSQuoteConvention[values.length];
     // PUF normalised to 1%, spreads to 1 BP
     double multiplier = 1;
@@ -243,7 +264,8 @@ public class SpreadCurveFunctions {
     }
     for (int i = 0; i < values.length; i++) {
       if (StandardCDSQuotingConvention.SPREAD.equals(quoteConvention)) {
-        result[i] = IMMDateGenerator.isIMMDate(pricedCDSMaturity) ? new QuotedSpread(coupon * TEN_MINUS_4, values[i] * multiplier) : new ParSpread(values[i] * multiplier);
+        result[i] = IMMDateGenerator.isIMMDate(pricedCDSMaturity) ? new QuotedSpread(coupon * TEN_MINUS_4, values[i] * multiplier)
+            : new ParSpread(values[i] * multiplier);
       } else if (StandardCDSQuotingConvention.POINTS_UPFRONT.equals(quoteConvention)) {
         result[i] = new PointsUpFront(coupon * TEN_MINUS_4, values[i] * multiplier);
       } else {

@@ -27,7 +27,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Fudge builder for {@link G2ppParameters}
+ * Fudge builder for {@link G2ppParameters}.
  */
 @FudgeBuilderFor(G2ppParameters.class)
 public class G2ppParametersBuilder extends AbstractFudgeBuilder<G2ppParameters> {

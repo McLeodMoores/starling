@@ -31,6 +31,7 @@ public final class BondFuturesSecurityHullWhiteNumericalIntegrationMethod {
 
   /**
    * Return the method unique instance.
+   * 
    * @return The instance.
    */
   public static BondFuturesSecurityHullWhiteNumericalIntegrationMethod getInstance() {
@@ -61,9 +62,13 @@ public final class BondFuturesSecurityHullWhiteNumericalIntegrationMethod {
   private static final Min MIN_FUNCTION = new Min();
 
   /**
-   * Computes the future price from the curves used to price the underlying bonds and a Hull-White one factor model. Computation by numerical integration.
-   * @param futures The future security.
-   * @param data The curve and Hull-White parameters.
+   * Computes the future price from the curves used to price the underlying bonds and a Hull-White one factor model. Computation by
+   * numerical integration.
+   * 
+   * @param futures
+   *          The future security.
+   * @param data
+   *          The curve and Hull-White parameters.
    * @return The future price.
    */
   public double price(final BondFuturesSecurity futures, final HullWhiteIssuerProviderInterface data) {
@@ -94,10 +99,13 @@ public final class BondFuturesSecurityHullWhiteNumericalIntegrationMethod {
       df[loopb] = new double[nbPayments[loopb] + 1];
       discountedCashFlow[loopb] = new double[nbPayments[loopb] + 1];
       for (int loopcf = 0; loopcf < cfe[loopb].getNumberOfPayments(); loopcf++) {
-        alpha[loopb][loopcf] = MODEL.alpha(data.getHullWhiteParameters(), 0.0, expiryTime, deliveryTime, cfe[loopb].getNthPayment(loopcf).getPaymentTime());
-        beta[loopb][loopcf] = MODEL.futuresConvexityFactor(data.getHullWhiteParameters(), expiryTime, cfe[loopb].getNthPayment(loopcf).getPaymentTime(), deliveryTime);
+        alpha[loopb][loopcf] = MODEL.alpha(data.getHullWhiteParameters(), 0.0, expiryTime, deliveryTime,
+            cfe[loopb].getNthPayment(loopcf).getPaymentTime());
+        beta[loopb][loopcf] = MODEL.futuresConvexityFactor(data.getHullWhiteParameters(), expiryTime,
+            cfe[loopb].getNthPayment(loopcf).getPaymentTime(), deliveryTime);
         df[loopb][loopcf] = data.getIssuerProvider().getDiscountFactor(issuer, cfe[loopb].getNthPayment(loopcf).getPaymentTime());
-        discountedCashFlow[loopb][loopcf] = df[loopb][loopcf] / df[loopb][0] * cfe[loopb].getNthPayment(loopcf).getAmount() * beta[loopb][loopcf]
+        discountedCashFlow[loopb][loopcf] = df[loopb][loopcf] / df[loopb][0] * cfe[loopb].getNthPayment(loopcf).getAmount()
+            * beta[loopb][loopcf]
             / futures.getConversionFactor()[loopb];
       }
     }
@@ -127,10 +135,13 @@ public final class BondFuturesSecurityHullWhiteNumericalIntegrationMethod {
 
     /**
      * Constructor to the integrant function.
-     * @param discountedCashFlow The discounted cash flows.
-     * @param alpha The bond volatilities.
+     * 
+     * @param discountedCashFlow
+     *          The discounted cash flows.
+     * @param alpha
+     *          The bond volatilities.
      */
-    public FuturesIntegrant(final double[][] discountedCashFlow, final double[][] alpha) {
+    FuturesIntegrant(final double[][] discountedCashFlow, final double[][] alpha) {
       _discountedCashFlow = discountedCashFlow;
       _alpha = alpha;
       _nbBonds = discountedCashFlow.length;
@@ -138,7 +149,7 @@ public final class BondFuturesSecurityHullWhiteNumericalIntegrationMethod {
 
     @Override
     public Double evaluate(final Double x) {
-      double[] bond = new double[_nbBonds];
+      final double[] bond = new double[_nbBonds];
       for (int loopb = 0; loopb < _nbBonds; loopb++) {
         for (int loopcf = 0; loopcf < _discountedCashFlow[loopb].length; loopcf++) {
           bond[loopb] += _discountedCashFlow[loopb][loopcf] * Math.exp(-(x + _alpha[loopb][loopcf]) * (x + _alpha[loopb][loopcf]) / 2.0);

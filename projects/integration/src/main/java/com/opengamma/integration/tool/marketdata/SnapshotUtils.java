@@ -46,7 +46,8 @@ public final class SnapshotUtils {
   }
 
   /**
-   * Get a list of all available snapshots
+   * Get a list of all available snapshots.
+   *
    * @return the list of all available snapshot ids and names or an empty list if no snapshots found
    */
   public List<String> allSnapshots() {
@@ -61,8 +62,10 @@ public final class SnapshotUtils {
   }
 
   /**
-   * Get a list of snapshot according to a glob query string
-   * @param query the query string, which can contain wildcards
+   * Get a list of snapshot according to a glob query string.
+   *
+   * @param query
+   *          the query string, which can contain wildcards
    * @return the list of resulting snapshot ids and names or an empty list if no matches
    */
   public List<String> snapshotByGlob(final String query) {
@@ -78,10 +81,13 @@ public final class SnapshotUtils {
   }
 
   /**
-   * Get the latest snapshot by name
-   * @param name exact name of the snapshot, not null
+   * Get the latest snapshot by name.
+   *
+   * @param name
+   *          exact name of the snapshot, not null
    * @return the UniqueId of the matched snapshot, or null if no match found
-   * @throws OpenGammaRuntimeException if multiple matches are found
+   * @throws OpenGammaRuntimeException
+   *           if multiple matches are found
    */
   public UniqueId latestSnapshotByName(final String name) {
     final MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
@@ -98,11 +104,15 @@ public final class SnapshotUtils {
   }
 
   /**
-   * Get the latest snapshot by name
-   * @param name exact name of the snapshot, not null
-   * @param dateTime the date/time of the version of the snapshot to fetch
+   * Get the latest snapshot by name.
+   *
+   * @param name
+   *          exact name of the snapshot, not null
+   * @param dateTime
+   *          the date/time of the version of the snapshot to fetch
    * @return the UniqueId of the matched snapshot, or null if no match found
-   * @throws OpenGammaRuntimeException if multiple matches are found
+   * @throws OpenGammaRuntimeException
+   *           if multiple matches are found
    */
   public UniqueId latestSnapshotByNameAndDate(final String name, final ZonedDateTime dateTime) {
     final MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
@@ -120,10 +130,13 @@ public final class SnapshotUtils {
   }
 
   /**
-   * Get meta data about available versions of a snapshot by it's name
-   * @param name exact name of the snapshot, not null
+   * Get meta data about available versions of a snapshot by it's name.
+   *
+   * @param name
+   *          exact name of the snapshot, not null
    * @return a list of VersionInfo meta data objects containing version correction ranges and unique ids
-   * @throws OpenGammaRuntimeException if multiple name matches are found
+   * @throws OpenGammaRuntimeException
+   *           if multiple name matches are found
    */
   public List<VersionInfo> snapshotVersionsByName(final String name) {
     final MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
@@ -140,7 +153,8 @@ public final class SnapshotUtils {
     final MarketDataSnapshotHistoryResult historyResult = _snapshotMaster.history(new MarketDataSnapshotHistoryRequest(objectId));
     final List<VersionInfo> results = new ArrayList<>();
     for (final MarketDataSnapshotDocument doc : historyResult.getDocuments()) {
-      results.add(new VersionInfo(doc.getVersionFromInstant(), doc.getCorrectionFromInstant(), doc.getVersionToInstant(), doc.getCorrectionToInstant(), doc.getUniqueId()));
+      results.add(new VersionInfo(doc.getVersionFromInstant(), doc.getCorrectionFromInstant(), doc.getVersionToInstant(), doc.getCorrectionToInstant(),
+          doc.getUniqueId()));
     }
     return results;
   }

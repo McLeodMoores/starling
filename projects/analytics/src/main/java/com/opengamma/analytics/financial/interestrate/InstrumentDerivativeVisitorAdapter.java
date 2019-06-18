@@ -105,8 +105,8 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponFixedCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIbor;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverage;
-import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDates;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompoundingFlatSpread;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborCompoundingFlatSpread;
@@ -140,8 +140,10 @@ import com.opengamma.analytics.financial.volatilityswap.VolatilitySwap;
 
 /**
  *
- * @param <DATA_TYPE> The type of the data
- * @param <RESULT_TYPE> The return type of the calculation
+ * @param <DATA_TYPE>
+ *          The type of the data
+ * @param <RESULT_TYPE>
+ *          The return type of the calculation
  */
 @SuppressWarnings("deprecation")
 public abstract class InstrumentDerivativeVisitorAdapter<DATA_TYPE, RESULT_TYPE> implements InstrumentDerivativeVisitor<DATA_TYPE, RESULT_TYPE> {
@@ -376,7 +378,7 @@ public abstract class InstrumentDerivativeVisitorAdapter<DATA_TYPE, RESULT_TYPE>
     return getException(cds);
   }
 
-  // -----     Payment and coupon     -----
+  // ----- Payment and coupon -----
 
   @Override
   public RESULT_TYPE visitCouponFixed(final CouponFixed payment, final DATA_TYPE data) {
@@ -409,12 +411,14 @@ public abstract class InstrumentDerivativeVisitorAdapter<DATA_TYPE, RESULT_TYPE>
   }
 
   @Override
-  public RESULT_TYPE visitInterpolatedStubCoupon(final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> payment, final DATA_TYPE data) {
+  public RESULT_TYPE visitInterpolatedStubCoupon(
+      final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> payment, final DATA_TYPE data) {
     return getException(payment, data);
   }
 
   @Override
-  public RESULT_TYPE visitInterpolatedStubCoupon(final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> payment) {
+  public RESULT_TYPE visitInterpolatedStubCoupon(
+      final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> payment) {
     return getException(payment);
   }
 
@@ -598,7 +602,7 @@ public abstract class InstrumentDerivativeVisitorAdapter<DATA_TYPE, RESULT_TYPE>
     return getException(payment);
   }
 
-  // -----     Inflation     -----
+  // ----- Inflation -----
 
   @Override
   public RESULT_TYPE visitCouponInflationZeroCouponMonthly(final CouponInflationZeroCouponMonthly coupon) {
@@ -676,7 +680,8 @@ public abstract class InstrumentDerivativeVisitorAdapter<DATA_TYPE, RESULT_TYPE>
   }
 
   @Override
-  public RESULT_TYPE visitCouponInflationYearOnYearInterpolationWithMargin(final CouponInflationYearOnYearInterpolationWithMargin coupon, final DATA_TYPE data) {
+  public RESULT_TYPE visitCouponInflationYearOnYearInterpolationWithMargin(final CouponInflationYearOnYearInterpolationWithMargin coupon,
+      final DATA_TYPE data) {
     return getException(coupon, data);
   }
 
@@ -760,7 +765,7 @@ public abstract class InstrumentDerivativeVisitorAdapter<DATA_TYPE, RESULT_TYPE>
     return getException(bond, data);
   }
 
-  // -----     Futures     -----
+  // ----- Futures -----
 
   @Override
   public RESULT_TYPE visitCashSettledFuture(final CashSettledFuture future, final DATA_TYPE data) {
@@ -962,7 +967,7 @@ public abstract class InstrumentDerivativeVisitorAdapter<DATA_TYPE, RESULT_TYPE>
     return getException(option);
   }
 
-  // -----     Swap     -----
+  // ----- Swap -----
 
   @Override
   public RESULT_TYPE visitSwap(final Swap<?, ?> swap, final DATA_TYPE data) {
@@ -984,7 +989,7 @@ public abstract class InstrumentDerivativeVisitorAdapter<DATA_TYPE, RESULT_TYPE>
     return getException(swap);
   }
 
-  // -----     Deposit     -----
+  // ----- Deposit -----
 
   @Override
   public RESULT_TYPE visitDepositIbor(final DepositIbor deposit, final DATA_TYPE data) {
@@ -1016,7 +1021,7 @@ public abstract class InstrumentDerivativeVisitorAdapter<DATA_TYPE, RESULT_TYPE>
     return getException(deposit);
   }
 
-  // -----     Forex     -----
+  // ----- Forex -----
 
   @Override
   public RESULT_TYPE visitForex(final Forex derivative, final DATA_TYPE data) {
@@ -1088,7 +1093,7 @@ public abstract class InstrumentDerivativeVisitorAdapter<DATA_TYPE, RESULT_TYPE>
     return getException(derivative);
   }
 
-  //-----     Commodity     -----
+  // ----- Commodity -----
 
   @Override
   public RESULT_TYPE visitMetalForward(final MetalForward future, final DATA_TYPE data) {
@@ -1280,7 +1285,7 @@ public abstract class InstrumentDerivativeVisitorAdapter<DATA_TYPE, RESULT_TYPE>
     return getException(forward);
   }
 
-  //  -----     Equity     -----
+  // ----- Equity -----
 
   @Override
   public RESULT_TYPE visitEquityFuture(final EquityFuture future, final DATA_TYPE data) {
@@ -1362,7 +1367,7 @@ public abstract class InstrumentDerivativeVisitorAdapter<DATA_TYPE, RESULT_TYPE>
     return getException(option);
   }
 
-  //  -----     Variance and volatility swaps     -----
+  // ----- Variance and volatility swaps -----
 
   @Override
   public RESULT_TYPE visitVarianceSwap(final VarianceSwap varianceSwap, final DATA_TYPE data) {
@@ -1444,7 +1449,7 @@ public abstract class InstrumentDerivativeVisitorAdapter<DATA_TYPE, RESULT_TYPE>
     return getException(equity, data);
   }
 
-  //  -----     Deprecated     -----
+  // ----- Deprecated -----
 
   @Override
   public RESULT_TYPE visitForexForward(final ForexForward fx, final DATA_TYPE data) {
@@ -1458,28 +1463,35 @@ public abstract class InstrumentDerivativeVisitorAdapter<DATA_TYPE, RESULT_TYPE>
 
   /**
    * Default result of calling a visit method, which is to throw an {@link UnsupportedOperationException}
-   * @param derivative The derivative
-   * @param data The data
+   * 
+   * @param derivative
+   *          The derivative
+   * @param data
+   *          The data
    * @return Throws an exception
    * @throws UnsupportedOperationException
    */
   private RESULT_TYPE getException(final InstrumentDerivative derivative, final DATA_TYPE data) {
     if (derivative != null && data != null) {
-      throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support derivatives of type " + derivative.getClass().getSimpleName() + " with data of type "
-          + data.getClass().getSimpleName());
+      throw new UnsupportedOperationException(
+          getClass().getSimpleName() + " does not support derivatives of type " + derivative.getClass().getSimpleName() + " with data of type "
+              + data.getClass().getSimpleName());
     }
     throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support this method");
   }
 
   /**
    * Default result of calling a visit method, which is to throw an {@link UnsupportedOperationException}
-   * @param derivative The derivative
+   * 
+   * @param derivative
+   *          The derivative
    * @return Throws an exception
    * @throws UnsupportedOperationException
    */
   private RESULT_TYPE getException(final InstrumentDerivative derivative) {
     if (derivative != null) {
-      throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support derivatives of type " + derivative.getClass().getSimpleName() + " without data");
+      throw new UnsupportedOperationException(
+          getClass().getSimpleName() + " does not support derivatives of type " + derivative.getClass().getSimpleName() + " without data");
     }
     throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support this method");
   }

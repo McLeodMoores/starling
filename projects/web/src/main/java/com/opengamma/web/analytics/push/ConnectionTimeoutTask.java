@@ -40,10 +40,14 @@ of knowing the client is still there.
   private final ConnectionManager _connectionManager;
 
   /**
-   * @param connectionManager The manager of the connection being timed
-   * @param userId The ID of the user who owns the connection
-   * @param clientId The ID of the connection
-   * @param timeout The maximum time in milliseconds the connection is allowed to be idle
+   * @param connectionManager
+   *          The manager of the connection being timed
+   * @param userId
+   *          The ID of the user who owns the connection
+   * @param clientId
+   *          The ID of the connection
+   * @param timeout
+   *          The maximum time in milliseconds the connection is allowed to be idle
    */
   ConnectionTimeoutTask(final ConnectionManager connectionManager, final String userId, final String clientId, final long timeout) {
     _connectionManager = connectionManager;
@@ -74,11 +78,11 @@ of knowing the client is still there.
 
   @Override
   public String toString() {
-    return "ConnectionTimeoutTask [" +
-        "_userId='" + _userId + '\'' +
-        ", _clientId='" + _clientId + '\'' +
-        ", _lastAccessTime=" + _lastAccessTime +
-        ", _timeout=" + _timeout +
-        "]";
+    return "ConnectionTimeoutTask ["
+        + "_userId='" + _userId + '\''
+        + ", _clientId='" + _clientId + '\''
+        + ", _lastAccessTime=" + _lastAccessTime
+        + ", _timeout=" + _timeout
+        + "]";
   }
 }

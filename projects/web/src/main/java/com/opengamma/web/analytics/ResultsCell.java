@@ -27,13 +27,13 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   private final TypeFormatter.Format _format;
 
   private ResultsCell(final Object value,
-                      final ValueSpecification valueSpecification,
-                      final Collection<Object> history,
-                      final AggregatedExecutionLog executionLog,
-                      final boolean updated,
-                      final Class<?> type,
-                      final Object inlineKey,
-                      final TypeFormatter.Format format) {
+      final ValueSpecification valueSpecification,
+      final Collection<Object> history,
+      final AggregatedExecutionLog executionLog,
+      final boolean updated,
+      final Class<?> type,
+      final Object inlineKey,
+      final TypeFormatter.Format format) {
     _value = value;
     _valueSpecification = valueSpecification;
     _history = history;
@@ -46,9 +46,15 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
 
   /**
    * Factory method that creates a grid cell for displaying a static value.
-   * @param value The cell's value
-   * @param updated true if the value was updated in the last calculation cycle
-   * @param type TODO remove
+   * 
+   * @param value
+   *          The cell's value
+   * @param updated
+   *          true if the value was updated in the last calculation cycle
+   * @param type
+   *          the type
+   * @param format
+   *          the type formatter
    * @return A cell for displaying the value
    */
   /* package */ static ResultsCell forStaticValue(final Object value, final Class<?> type, final TypeFormatter.Format format, final boolean updated) {
@@ -58,8 +64,13 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   // TODO is this version still required? or should all callers be specifying whether the value was updated?
   /**
    * Factory method that creates a grid cell for displaying a static value.
-   * @param value The cell's value
-   * @param type TODO remove
+   * 
+   * @param value
+   *          The cell's value
+   * @param type
+   *          the type
+   * @param format
+   *          the type formatter
    * @return A cell for displaying the value
    */
   /* package */ static ResultsCell forStaticValue(final Object value, final Class<?> type, final TypeFormatter.Format format) {
@@ -68,31 +79,41 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
 
   /**
    * Factory method that creates a grid cell for displaying a calculated value.
-   * @param value The value
-   * @param valueSpecification The value's specification
-   * @param history The value's history
-   * @param updated true if the value was updated in the last calculation cycle
-   * @param type TODO remove this parameter
+   *
+   * @param value
+   *          The value
+   * @param valueSpecification
+   *          The value's specification
+   * @param history
+   *          The value's history
+   * @param executionLog
+   *          the execution log
+   * @param updated
+   *          true if the value was updated in the last calculation cycle
+   * @param type
+   *          the type
+   * @param format
+   *          the type formatter
    * @return A cell for displaying the value
    */
   /* package */ static ResultsCell forCalculatedValue(final Object value,
-                                                      final ValueSpecification valueSpecification,
-                                                      final Collection<Object> history,
-                                                      final AggregatedExecutionLog executionLog,
-                                                      final boolean updated,
-                                                      final Class<?> type,
-                                                      final TypeFormatter.Format format) {
+      final ValueSpecification valueSpecification,
+      final Collection<Object> history,
+      final AggregatedExecutionLog executionLog,
+      final boolean updated,
+      final Class<?> type,
+      final TypeFormatter.Format format) {
     return new ResultsCell(value, valueSpecification, history, executionLog, updated, type, null, format);
   }
 
   /* package */ static ResultsCell forCalculatedValue(final Object value,
-                                                      final ValueSpecification valueSpecification,
-                                                      final Collection<Object> history,
-                                                      final AggregatedExecutionLog executionLog,
-                                                      final boolean updated,
-                                                      final Class<?> type,
-                                                      final Object inlineKey,
-                                                      final TypeFormatter.Format format) {
+      final ValueSpecification valueSpecification,
+      final Collection<Object> history,
+      final AggregatedExecutionLog executionLog,
+      final boolean updated,
+      final Class<?> type,
+      final Object inlineKey,
+      final TypeFormatter.Format format) {
     return new ResultsCell(value, valueSpecification, history, executionLog, updated, type, inlineKey, format);
   }
 

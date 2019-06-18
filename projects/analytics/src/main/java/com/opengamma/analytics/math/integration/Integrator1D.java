@@ -13,9 +13,11 @@ import com.opengamma.analytics.math.function.Function1D;
 
 /**
  * Class for defining the integration of 1-D functions.
- *  
- * @param <T> Type of the function output and result
- * @param <U> Type of the function inputs and integration bounds
+ * 
+ * @param <T>
+ *          Type of the function output and result
+ * @param <U>
+ *          Type of the function inputs and integration bounds
  */
 public abstract class Integrator1D<T, U> implements Integrator<T, U, Function1D<U, T>> {
   private static final Logger LOGGER = LoggerFactory.getLogger(Integrator1D.class);
@@ -42,10 +44,14 @@ public abstract class Integrator1D<T, U> implements Integrator<T, U, Function1D<
   }
 
   /**
-   * 1-D integration method
-   * @param f The function to integrate, not null
-   * @param lower The lower bound, not null
-   * @param upper The upper bound, not null
+   * 1-D integration method.
+   * 
+   * @param f
+   *          The function to integrate, not null
+   * @param lower
+   *          The lower bound, not null
+   * @param upper
+   *          The upper bound, not null
    * @return The result of the integration
    */
   public abstract T integrate(Function1D<U, T> f, U lower, U upper);

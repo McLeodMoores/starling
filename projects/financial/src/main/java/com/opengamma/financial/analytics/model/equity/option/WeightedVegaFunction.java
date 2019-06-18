@@ -96,9 +96,11 @@ public class WeightedVegaFunction extends AbstractFunction.NonCompiledInvoker {
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification vega = inputs.keySet().iterator().next();
-    final ValueProperties properties = vega.getProperties().copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, getUniqueId()).get();
+    final ValueProperties properties = vega.getProperties().copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, getUniqueId())
+        .get();
     return Collections.singleton(new ValueSpecification(WEIGHTED_VEGA, target.toSpecification(), properties));
   }
 

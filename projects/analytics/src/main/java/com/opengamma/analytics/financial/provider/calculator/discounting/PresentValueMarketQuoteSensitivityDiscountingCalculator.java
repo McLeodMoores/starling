@@ -25,12 +25,9 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Computes the present value change when the market quote changes by 1 (it is not rescaled to 1 basis point).
- * The meaning of "market quote" will change for each instrument.
- * For PaymentFixed, it is 0 (there is no rate).
- * For coupons, it is the discounted notional times the accrual factor.
- * For annuities, it is the sum of sensitivities of all payments.
- * For swaps it is the pvbp of the first leg.
+ * Computes the present value change when the market quote changes by 1 (it is not rescaled to 1 basis point). The meaning of "market quote" will change for
+ * each instrument. For PaymentFixed, it is 0 (there is no rate). For coupons, it is the discounted notional times the accrual factor. For annuities, it is the
+ * sum of sensitivities of all payments. For swaps it is the pvbp of the first leg.
  */
 public final class PresentValueMarketQuoteSensitivityDiscountingCalculator extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Double> {
 
@@ -41,6 +38,7 @@ public final class PresentValueMarketQuoteSensitivityDiscountingCalculator exten
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueMarketQuoteSensitivityDiscountingCalculator getInstance() {
@@ -55,7 +53,7 @@ public final class PresentValueMarketQuoteSensitivityDiscountingCalculator exten
 
   private static final CouponIborCompoundingFlatSpreadDiscountingMethod METHOD_IBOR_CMP_FLAT = CouponIborCompoundingFlatSpreadDiscountingMethod.getInstance();
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public Double visitFixedPayment(final PaymentFixed payment, final MulticurveProviderInterface multicurve) {
@@ -79,7 +77,8 @@ public final class PresentValueMarketQuoteSensitivityDiscountingCalculator exten
   }
 
   @Override
-  public Double visitCouponONArithmeticAverageSpreadSimplified(final CouponONArithmeticAverageSpreadSimplified coupon, final MulticurveProviderInterface multicurve) {
+  public Double visitCouponONArithmeticAverageSpreadSimplified(final CouponONArithmeticAverageSpreadSimplified coupon,
+      final MulticurveProviderInterface multicurve) {
     return visitCoupon(coupon, multicurve);
   }
 
@@ -103,7 +102,7 @@ public final class PresentValueMarketQuoteSensitivityDiscountingCalculator exten
     return METHOD_IBOR_CMP_FLAT.presentValueSpreadSensitivity(coupon, multicurve);
   }
 
-  // -----     Annuity     ------
+  // ----- Annuity ------
 
   @Override
   public Double visitGenericAnnuity(final Annuity<? extends Payment> annuity, final MulticurveProviderInterface multicurve) {
@@ -121,7 +120,7 @@ public final class PresentValueMarketQuoteSensitivityDiscountingCalculator exten
     return visitGenericAnnuity(annuity, multicurve);
   }
 
-  // -----     Swap     ------
+  // ----- Swap ------
 
   @Override
   public Double visitSwap(final Swap<?, ?> swap, final MulticurveProviderInterface multicurve) {

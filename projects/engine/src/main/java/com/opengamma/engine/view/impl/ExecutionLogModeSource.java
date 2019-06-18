@@ -26,7 +26,6 @@ public class ExecutionLogModeSource {
   private final ReentrantLock _lock = new ReentrantLock();
   private final Map<Pair<String, ValueSpecification>, Integer> _elevatedLogTargets = new HashMap<>();
   private final Map<String, Map<ValueSpecification, Integer>> _elevatedLogNodes = new ConcurrentHashMap<>();
-  private final Map<ValueSpecification, Integer> _elevatedLogSpecs = new ConcurrentHashMap<>();
   private CompiledViewDefinitionWithGraphs _compiledViewDefinition;
 
   /**
@@ -172,10 +171,9 @@ public class ExecutionLogModeSource {
     if (refCount == null) {
       refMap.put(key, 1);
       return true;
-    } else {
-      refMap.put(key, refCount + 1);
-      return false;
     }
+    refMap.put(key, refCount + 1);
+    return false;
   }
 
   private static <T> boolean decrementRefCount(final T key, final Map<T, Integer> refMap) {
@@ -186,10 +184,9 @@ public class ExecutionLogModeSource {
     if (value == 1) {
       refMap.remove(key);
       return true;
-    } else {
-      refMap.put(key, value - 1);
-      return false;
     }
+    refMap.put(key, value - 1);
+    return false;
   }
 
 }

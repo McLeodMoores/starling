@@ -73,7 +73,7 @@ public class UnsupportedOperationExceptionMapperTest extends AbstractExceptionMa
     assertEquals(data.size(), 2);
     assertEquals(data.get("message"), "");
     assertTrue(data.get("locator").startsWith(
-        "<p>UnsupportedOperationException<br />&nbsp;&nbsp;at com.opengamma.util.rest.UnsupportedOperationExceptionMapperTest.testNoOutputMessage()"));
+        "<p>UnsupportedOperationException<br>&nbsp;&nbsp;at com.opengamma.util.rest.UnsupportedOperationExceptionMapperTest.testNoOutputMessage()"));
     assertTrue(data.get("locator").endsWith("</p>"));
   }
 
@@ -94,7 +94,7 @@ public class UnsupportedOperationExceptionMapperTest extends AbstractExceptionMa
     assertEquals(data.size(), 2);
     assertEquals(data.get("message"), message);
     assertTrue(data.get("locator").startsWith(
-        "<p>UnsupportedOperationException<br />&nbsp;&nbsp;at com.opengamma.util.rest.UnsupportedOperationExceptionMapperTest.testOutputMessage()"));
+        "<p>UnsupportedOperationException<br>&nbsp;&nbsp;at com.opengamma.util.rest.UnsupportedOperationExceptionMapperTest.testOutputMessage()"));
     assertTrue(data.get("locator").endsWith("</p>"));
   }
 

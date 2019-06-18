@@ -59,25 +59,21 @@ public class WebConfigsResource extends AbstractWebConfigResource {
 
   /**
    * Creates the resource.
-   * @param configMaster  the config master, not null
+   *
+   * @param configMaster
+   *          the config master, not null
    */
   public WebConfigsResource(final ConfigMaster configMaster) {
     super(configMaster);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   @SubscribeMaster(MasterType.CONFIG)
-  public String getHTML(
-      @QueryParam("pgIdx") final Integer pgIdx,
-      @QueryParam("pgNum") final Integer pgNum,
-      @QueryParam("pgSze") final Integer pgSze,
-      @QueryParam("sort") final String sort,
-      @QueryParam("name") final String name,
-      @QueryParam("type") final String type,
-      @QueryParam("configId") final List<String> configIdStrs,
-      @Context final UriInfo uriInfo) {
+  public String getHTML(@QueryParam("pgIdx") final Integer pgIdx, @QueryParam("pgNum") final Integer pgNum, @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("sort") final String sort, @QueryParam("name") final String name, @QueryParam("type") final String type,
+      @QueryParam("configId") final List<String> configIdStrs, @Context final UriInfo uriInfo) {
     final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
     final ConfigSearchSortOrder so = buildSortOrder(sort, ConfigSearchSortOrder.NAME_ASC);
     final FlexiBean out = search(pr, so, name, type, configIdStrs, uriInfo);
@@ -87,15 +83,9 @@ public class WebConfigsResource extends AbstractWebConfigResource {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @SubscribeMaster(MasterType.CONFIG)
-  public String getJSON(
-      @QueryParam("pgIdx") final Integer pgIdx,
-      @QueryParam("pgNum") final Integer pgNum,
-      @QueryParam("pgSze") final Integer pgSze,
-      @QueryParam("sort") final String sort,
-      @QueryParam("name") final String name,
-      @QueryParam("type") final String type,
-      @QueryParam("configId") final List<String> configIdStrs,
-      @Context final UriInfo uriInfo) {
+  public String getJSON(@QueryParam("pgIdx") final Integer pgIdx, @QueryParam("pgNum") final Integer pgNum, @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("sort") final String sort, @QueryParam("name") final String name, @QueryParam("type") final String type,
+      @QueryParam("configId") final List<String> configIdStrs, @Context final UriInfo uriInfo) {
     final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
     final ConfigSearchSortOrder so = buildSortOrder(sort, ConfigSearchSortOrder.NAME_ASC);
     final FlexiBean out = search(pr, so, name, type, configIdStrs, uriInfo);
@@ -103,17 +93,18 @@ public class WebConfigsResource extends AbstractWebConfigResource {
   }
 
   @SuppressWarnings("unchecked")
-  private FlexiBean search(final PagingRequest request, final ConfigSearchSortOrder so, final String name,
-      String typeName, final List<String> configIdStrs, final UriInfo uriInfo) {
+  private FlexiBean search(final PagingRequest request, final ConfigSearchSortOrder so, final String name, final String typeName,
+      final List<String> configIdStrs, final UriInfo uriInfo) {
     final FlexiBean out = createRootData();
 
     @SuppressWarnings("rawtypes")
-    final
-    ConfigSearchRequest searchRequest = new ConfigSearchRequest();
-    typeName = StringUtils.trimToNull(typeName);
-    if (typeName != null) {
-      final Class<?> typeClazz = data().getTypeMap().get(typeName);
-      searchRequest.setType(typeClazz);
+    final ConfigSearchRequest searchRequest = new ConfigSearchRequest();
+    final String trimmedTypeName = StringUtils.trimToNull(typeName);
+    if (trimmedTypeName != null) {
+      final Class<?> typeClazz = data().getTypeMap().get(trimmedTypeName);
+      if (typeClazz != null) {
+        searchRequest.setType(typeClazz);
+      }
     } else {
       searchRequest.setType(Object.class);
     }
@@ -121,7 +112,7 @@ public class WebConfigsResource extends AbstractWebConfigResource {
     searchRequest.setSortOrder(so);
     searchRequest.setName(StringUtils.trimToNull(name));
     out.put("searchRequest", searchRequest);
-    out.put("type", typeName);
+    out.put("type", trimmedTypeName);
     for (final String configIdStr : configIdStrs) {
       searchRequest.addConfigId(ObjectId.parse(configIdStr));
     }
@@ -140,14 +131,11 @@ public class WebConfigsResource extends AbstractWebConfigResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
-  public Response postHTML(
-      @FormParam("name") final String name,
-      @FormParam(CONFIG_XML) final String configXml,
-      @FormParam("type") final String typeName) {
+  public Response postHTML(@FormParam("name") final String name, @FormParam(CONFIG_XML) final String configXml, @FormParam("type") final String typeName) {
     final String trimmedName = StringUtils.trimToNull(name);
     final String trimmedConfigXml = StringUtils.trimToNull(configXml);
     final String trimmedTypeName = StringUtils.trimToNull(typeName);
@@ -190,10 +178,7 @@ public class WebConfigsResource extends AbstractWebConfigResource {
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response postJSON(
-      @FormParam("name") final String name,
-      @FormParam("configJSON") final String json,
-      @FormParam(CONFIG_XML) final String configXml,
+  public Response postJSON(@FormParam("name") final String name, @FormParam("configJSON") final String json, @FormParam(CONFIG_XML) final String configXml,
       @FormParam("type") final String typeName) {
     final String trimmedName = StringUtils.trimToNull(name);
     final String trimmedJson = StringUtils.trimToNull(json);
@@ -226,11 +211,11 @@ public class WebConfigsResource extends AbstractWebConfigResource {
     return result;
   }
 
-  private boolean isEmptyConfigData(final String json, final String xml) {
+  private static boolean isEmptyConfigData(final String json, final String xml) {
     return json == null && xml == null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("metaData")
   @Produces(MediaType.APPLICATION_JSON)
@@ -239,7 +224,7 @@ public class WebConfigsResource extends AbstractWebConfigResource {
     return getFreemarker().build(JSON_DIR + "metadata.ftl", out);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("templates/{configType}")
   @Produces(MediaType.APPLICATION_JSON)
@@ -261,7 +246,7 @@ public class WebConfigsResource extends AbstractWebConfigResource {
     return getFreemarker().build(JSON_DIR + "template.ftl", out);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{configId}")
   public WebConfigResource findConfig(@Subscribe @PathParam("configId") final String idStr) {
     data().setUriConfigId(idStr);
@@ -281,9 +266,10 @@ public class WebConfigsResource extends AbstractWebConfigResource {
     return new WebConfigResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   *
    * @return the output root data, not null
    */
   @Override
@@ -299,10 +285,12 @@ public class WebConfigsResource extends AbstractWebConfigResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for configs.
-   * @param data  the data, not null
+   *
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebConfigData data) {

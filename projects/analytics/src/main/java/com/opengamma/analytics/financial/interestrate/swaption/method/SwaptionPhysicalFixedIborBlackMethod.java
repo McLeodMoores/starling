@@ -33,10 +33,10 @@ import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- *  Class used to compute the price and sensitivity of a physical delivery swaption with Black model.
- *  The implied Black volatilities are expiry and underlying maturity dependent.
- *  The swap underlying the swaption should be a Fixed for Ibor (without spread) swap.
- *  @deprecated Use {@link SwaptionPhysicalFixedIborBlackMethod}
+ * Class used to compute the price and sensitivity of a physical delivery swaption with Black model. The implied Black volatilities are expiry and underlying
+ * maturity dependent. The swap underlying the swaption should be a Fixed for Ibor (without spread) swap.
+ *
+ * @deprecated Use {@link SwaptionPhysicalFixedIborBlackMethod}
  */
 @Deprecated
 public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod {
@@ -48,6 +48,7 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static SwaptionPhysicalFixedIborBlackMethod getInstance() {
@@ -75,8 +76,11 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
 
   /**
    * Computes the present value of a physical delivery European swaption in the Black model.
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
@@ -103,8 +107,11 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
 
   /**
    * Computes the present value of a physical delivery European swaption in the Black model.
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The present value.
    */
   public double forward(final SwaptionPhysicalFixedIbor swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
@@ -126,8 +133,11 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
 
   /**
    * Computes the implied Black volatility of the vanilla swaption.
-   * @param swaption The swaption.
-   * @param curves The yield curve bundle.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curves
+   *          The yield curve bundle.
    * @return The implied volatility.
    */
   public double impliedVolatility(final SwaptionPhysicalFixedIbor swaption, final YieldCurveBundle curves) {
@@ -142,11 +152,15 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
 
   /**
    * Computes the present value rate sensitivity to rates of a physical delivery European swaption in the SABR model.
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The present value curve sensitivity.
    */
-  public InterestRateCurveSensitivity presentValueCurveSensitivity(final SwaptionPhysicalFixedIbor swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
+  public InterestRateCurveSensitivity presentValueCurveSensitivity(final SwaptionPhysicalFixedIbor swaption,
+      final YieldCurveWithBlackSwaptionBundle curveBlack) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(curveBlack, "Curves with Black volatility");
     final GeneratorInstrument<GeneratorAttributeIR> generatorSwap = curveBlack.getBlackParameters().getGeneratorSwap();
@@ -158,8 +172,10 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
     final double strikeModified = METHOD_SWAP.couponEquivalent(swaption.getUnderlyingSwap(), pvbpModified, curveBlack);
     final double maturity = swaption.getMaturityTime();
     // Derivative of the forward and pvbp with respect to the rates.
-    final InterestRateCurveSensitivity pvbpModifiedDr = METHOD_SWAP.presentValueBasisPointCurveSensitivity(swaption.getUnderlyingSwap(), dayCountModification, calendar, curveBlack);
-    final InterestRateCurveSensitivity forwardModifiedDr = new InterestRateCurveSensitivity(PRSC.visitFixedCouponSwap(swaption.getUnderlyingSwap(), dayCountModification, curveBlack));
+    final InterestRateCurveSensitivity pvbpModifiedDr = METHOD_SWAP.presentValueBasisPointCurveSensitivity(swaption.getUnderlyingSwap(), dayCountModification,
+        calendar, curveBlack);
+    final InterestRateCurveSensitivity forwardModifiedDr = new InterestRateCurveSensitivity(
+        PRSC.visitFixedCouponSwap(swaption.getUnderlyingSwap(), dayCountModification, curveBlack));
     // Implementation note: strictly speaking, the strike equivalent is curve dependent; that dependency is ignored.
     final EuropeanVanillaOption option = new EuropeanVanillaOption(strikeModified, swaption.getTimeToExpiry(), swaption.isCall());
     // Implementation note: option required to pass the strike (in case the swap has non-constant coupon).
@@ -177,11 +193,15 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
 
   /**
    * Computes the present value sensitivity to the Black volatility (also called vega) of a physical delivery European swaption in the Black swaption model.
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The present value Black sensitivity.
    */
-  public PresentValueBlackSwaptionSensitivity presentValueBlackSensitivity(final SwaptionPhysicalFixedIbor swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
+  public PresentValueBlackSwaptionSensitivity presentValueBlackSensitivity(final SwaptionPhysicalFixedIbor swaption,
+      final YieldCurveWithBlackSwaptionBundle curveBlack) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(curveBlack, "Curves with Black volatility");
     final GeneratorInstrument<GeneratorAttributeIR> generatorSwap = curveBlack.getBlackParameters().getGeneratorSwap();
@@ -206,9 +226,12 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
   }
 
   /**
-   * Compute first derivative of present value with respect to forward rate
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   * Compute first derivative of present value with respect to forward rate.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The forward delta
    */
   public double forwardDeltaTheoretical(final SwaptionPhysicalFixedIbor swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
@@ -231,9 +254,12 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
   }
 
   /**
-   * Calculates the delta
-   * @param swaption The swaption, not null
-   * @param curves Yield curves and swaption volatility surface, not null
+   * Calculates the delta.
+   *
+   * @param swaption
+   *          The swaption, not null
+   * @param curves
+   *          Yield curves and swaption volatility surface, not null
    * @return The delta
    */
   public CurrencyAmount delta(final SwaptionPhysicalFixedIbor swaption, final YieldCurveWithBlackSwaptionBundle curves) {
@@ -250,8 +276,11 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
 
   /**
    * Computes the gamma of the swaption. The gamma is the second order derivative of the option present value to the spot fx rate.
-   * @param swaption The Forex option.
-   * @param curves The yield curve bundle.
+   *
+   * @param swaption
+   *          The Forex option.
+   * @param curves
+   *          The yield curve bundle.
    * @return The gamma.
    */
   public CurrencyAmount gamma(final SwaptionPhysicalFixedIbor swaption, final YieldCurveWithBlackSwaptionBundle curves) {
@@ -267,9 +296,12 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
   }
 
   /**
-   * Calculates the theta
-   * @param swaption The swaption, not null
-   * @param curves Yield curves and swaption volatility surface, not null
+   * Calculates the theta.
+   *
+   * @param swaption
+   *          The swaption, not null
+   * @param curves
+   *          Yield curves and swaption volatility surface, not null
    * @return The delta
    */
   public CurrencyAmount theta(final SwaptionPhysicalFixedIbor swaption, final YieldCurveWithBlackSwaptionBundle curves) {
@@ -280,9 +312,12 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
   }
 
   /**
-   * Compute second derivative of present value with respect to forward rate
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   * Compute second derivative of present value with respect to forward rate.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The forward gamma
    */
   public double forwardGammaTheoretical(final SwaptionPhysicalFixedIbor swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
@@ -305,9 +340,12 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
   }
 
   /**
-   * Compute minus of first derivative of present value with respect to time, setting drift term to be 0
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   * Compute minus of first derivative of present value with respect to time, setting drift term to be 0.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The driftless theta
    */
   public double driftlessThetaTheoretical(final SwaptionPhysicalFixedIbor swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
@@ -330,9 +368,12 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
   }
 
   /**
-   * Compute minus of first derivative of present value with respect to time
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   * Compute minus of first derivative of present value with respect to time.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The forward theta
    */
   public double forwardThetaTheoretical(final SwaptionPhysicalFixedIbor swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
@@ -355,9 +396,12 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
   }
 
   /**
-   * Compute first derivative of present value with respect to volatility
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   * Compute first derivative of present value with respect to volatility.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The forward vega
    */
   public double forwardVegaTheoretical(final SwaptionPhysicalFixedIbor swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {

@@ -214,9 +214,9 @@ import com.opengamma.web.server.conversion.PercentageValueSignificantFiguresForm
   private static void addBulkConversion(final String valueRequirementFieldNamePattern, final DoubleValueFormatter conversionSettings) {
     final Pattern pattern = Pattern.compile(valueRequirementFieldNamePattern);
     for (final Field field : ValueRequirementNames.class.getFields()) {
-      if ((field.getModifiers() & (Modifier.STATIC | Modifier.PUBLIC)) == (Modifier.STATIC | Modifier.PUBLIC) &&
-          field.isSynthetic() == false &&
-          String.class.equals(field.getType()) && pattern.matcher(field.getName()).matches()) {
+      if ((field.getModifiers() & (Modifier.STATIC | Modifier.PUBLIC)) == (Modifier.STATIC | Modifier.PUBLIC)
+          && !field.isSynthetic()
+          && String.class.equals(field.getType()) && pattern.matcher(field.getName()).matches()) {
         String fieldValue;
         try {
           fieldValue = (String) field.get(null);
@@ -235,12 +235,11 @@ import com.opengamma.web.server.conversion.PercentageValueSignificantFiguresForm
     final DoubleValueFormatter valueNameFormatter = FORMATTERS.get(valueSpec.getValueName());
     if (valueNameFormatter != null) {
       return valueNameFormatter;
-    } else {
-      if (valueSpec.getProperties().getValues(ValuePropertyNames.CURRENCY) != null) {
-        return DEFAULT_CCY_FORMATTER;
-      }
-      return DEFAULT_FORMATTER;
     }
+    if (valueSpec.getProperties().getValues(ValuePropertyNames.CURRENCY) != null) {
+      return DEFAULT_CCY_FORMATTER;
+    }
+    return DEFAULT_FORMATTER;
   }
 
   @Override
@@ -252,15 +251,13 @@ import com.opengamma.web.server.conversion.PercentageValueSignificantFiguresForm
   public String formatCell(final BigDecimal value, final ValueSpecification valueSpec, final Object inlineKey) {
     final DoubleValueFormatter formatter = getDoubleValueFormatter(valueSpec);
     final String formattedNumber = formatter.format(value);
-    return formatter.isCurrencyAmount() && _currencyDisplay == DISPLAY_CURRENCY ?
-        formatWithCurrency(formattedNumber, valueSpec) :
-          formattedNumber;
+    return formatter.isCurrencyAmount() && _currencyDisplay == DISPLAY_CURRENCY
+        ? formatWithCurrency(formattedNumber, valueSpec)
+        : formattedNumber;
   }
 
-  private String formatWithCurrency(final String formattedNumber, final ValueSpecification valueSpec) {
+  private static String formatWithCurrency(final String formattedNumber, final ValueSpecification valueSpec) {
     final Set<String> currencyValues = valueSpec.getProperties().getValues(ValuePropertyNames.CURRENCY);
-    return currencyValues == null || currencyValues.isEmpty() ?
-        formattedNumber :
-          currencyValues.iterator().next() + " " + formattedNumber;
+    return currencyValues == null || currencyValues.isEmpty() ? formattedNumber : currencyValues.iterator().next() + " " + formattedNumber;
   }
 }

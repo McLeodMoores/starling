@@ -32,11 +32,13 @@ public class MulticurveSensitivityUtils {
 
   /**
    * Clean a map by sorting the times and adding the values at duplicated times.
-   * @param map The map.
+   *
+   * @param map
+   *          The map.
    * @return The cleaned map.
    */
   public static Map<String, List<DoublesPair>> cleaned(final Map<String, List<DoublesPair>> map) {
-    //TODO: improve the sorting algorithm.
+    // TODO: improve the sorting algorithm.
     final Map<String, List<DoublesPair>> result = new HashMap<>();
     for (final Map.Entry<String, List<DoublesPair>> entry : map.entrySet()) {
       final List<DoublesPair> list = entry.getValue();
@@ -61,12 +63,15 @@ public class MulticurveSensitivityUtils {
 
   /**
    * Clean a map by sorting the times and adding the values at duplicated times. The total value below the tolerance threshold are removed.
-   * @param map The map.
-   * @param tolerance The tolerance.
+   *
+   * @param map
+   *          The map.
+   * @param tolerance
+   *          The tolerance.
    * @return The cleaned map.
    */
   public static Map<String, List<DoublesPair>> cleaned(final Map<String, List<DoublesPair>> map, final double tolerance) {
-    //TODO: improve the sorting algorithm.
+    // TODO: improve the sorting algorithm.
     final Map<String, List<DoublesPair>> result = new HashMap<>();
     for (final Map.Entry<String, List<DoublesPair>> entry : map.entrySet()) {
       final List<DoublesPair> list = entry.getValue();
@@ -92,7 +97,7 @@ public class MulticurveSensitivityUtils {
   }
 
   public static Map<String, List<ForwardSensitivity>> cleanedFwd(final Map<String, List<ForwardSensitivity>> map) {
-    //TODO: improve the sorting algorithm.
+    // TODO: improve the sorting algorithm.
     final Map<String, List<ForwardSensitivity>> result = new HashMap<>();
     for (final Map.Entry<String, List<ForwardSensitivity>> entry : map.entrySet()) {
       final List<ForwardSensitivity> list = entry.getValue();
@@ -105,8 +110,8 @@ public class MulticurveSensitivityUtils {
         double sensi = 0;
         for (int looplist = 0; looplist < list.size(); looplist++) {
           final ForwardSensitivity fwdSensitivity = list.get(looplist);
-          final Triple<Double, Double, Double> triple =
-              Triple.of(fwdSensitivity.getStartTime(), fwdSensitivity.getEndTime(), fwdSensitivity.getAccrualFactor());
+          final Triple<Double, Double, Double> triple = Triple.of(fwdSensitivity.getStartTime(), fwdSensitivity.getEndTime(),
+              fwdSensitivity.getAccrualFactor());
           if (triple.equals(time)) {
             sensi += list.get(looplist).getValue();
           }
@@ -119,7 +124,7 @@ public class MulticurveSensitivityUtils {
   }
 
   public static Map<String, List<ForwardSensitivity>> cleanedFwd(final Map<String, List<ForwardSensitivity>> map, final double tolerance) {
-    //TODO: improve the sorting algorithm.
+    // TODO: improve the sorting algorithm.
     final Map<String, List<ForwardSensitivity>> result = new HashMap<>();
     for (final Map.Entry<String, List<ForwardSensitivity>> entry : map.entrySet()) {
       final List<ForwardSensitivity> list = entry.getValue();
@@ -132,8 +137,8 @@ public class MulticurveSensitivityUtils {
         double sensi = 0;
         for (int looplist = 0; looplist < list.size(); looplist++) {
           final ForwardSensitivity fwdSensitivity = list.get(looplist);
-          final Triple<Double, Double, Double> triple =
-              Triple.of(fwdSensitivity.getStartTime(), fwdSensitivity.getEndTime(), fwdSensitivity.getAccrualFactor());
+          final Triple<Double, Double, Double> triple = Triple.of(fwdSensitivity.getStartTime(), fwdSensitivity.getEndTime(),
+              fwdSensitivity.getAccrualFactor());
           if (triple.equals(time)) {
             sensi += list.get(looplist).getValue();
           }
@@ -148,10 +153,12 @@ public class MulticurveSensitivityUtils {
   }
 
   /**
-   * Add two list representing sensitivities into one. No attempt is made to net off sensitivities occurring at the same time - Use clean()
-   * to do this
-   * @param sensi1 First list of sensitivities
-   * @param sensi2 Second list of sensitivities
+   * Add two list representing sensitivities into one. No attempt is made to net off sensitivities occurring at the same time - Use clean() to do this
+   *
+   * @param sensi1
+   *          First list of sensitivities
+   * @param sensi2
+   *          Second list of sensitivities
    * @return combined list
    */
   public static List<DoublesPair> plus(final List<DoublesPair> sensi1, final List<DoublesPair> sensi2) {
@@ -160,12 +167,14 @@ public class MulticurveSensitivityUtils {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Add two maps representing sensitivities into one.
    *
-   * @param sensi1  the first sensitivity, not null
-   * @param sensi2  the second sensitivity, not null
+   * @param sensi1
+   *          the first sensitivity, not null
+   * @param sensi2
+   *          the second sensitivity, not null
    * @return the total sensitivity, not null
    */
   public static Map<String, List<DoublesPair>> plus(final Map<String, List<DoublesPair>> sensi1, final Map<String, List<DoublesPair>> sensi2) {
@@ -191,9 +200,13 @@ public class MulticurveSensitivityUtils {
 
   /**
    * Add the list representing the sensitivity to one curve to the map of sensitivities to several curves.
-   * @param sensi The multi-curves sensitivity. Not null.
-   * @param curveName  The name of the curve the sensitivity of which is added. Not null.
-   * @param list The sensitivity as a list. Not null.
+   *
+   * @param sensi
+   *          The multi-curves sensitivity. Not null.
+   * @param curveName
+   *          The name of the curve the sensitivity of which is added. Not null.
+   * @param list
+   *          The sensitivity as a list. Not null.
    * @return The total sensitivity, not null
    */
   public static Map<String, List<DoublesPair>> plus(final Map<String, List<DoublesPair>> sensi, final String curveName, final List<DoublesPair> list) {
@@ -216,11 +229,15 @@ public class MulticurveSensitivityUtils {
 
   /**
    * Add two maps links to forward curves.
-   * @param map1 The first map.
-   * @param map2 The second map.
+   *
+   * @param map1
+   *          The first map.
+   * @param map2
+   *          The second map.
    * @return The sum.
    */
-  public static Map<String, List<ForwardSensitivity>> plusFwd(final Map<String, List<ForwardSensitivity>> map1, final Map<String, List<ForwardSensitivity>> map2) {
+  public static Map<String, List<ForwardSensitivity>> plusFwd(final Map<String, List<ForwardSensitivity>> map1,
+      final Map<String, List<ForwardSensitivity>> map2) {
     final Map<String, List<ForwardSensitivity>> result = new HashMap<>();
     for (final Map.Entry<String, List<ForwardSensitivity>> entry : map1.entrySet()) {
       final List<ForwardSensitivity> temp = new ArrayList<>();
@@ -251,8 +268,10 @@ public class MulticurveSensitivityUtils {
   /**
    * Multiply a sensitivity map by a common factor.
    *
-   * @param sensitivity  the original sensitivity, not null
-   * @param factor  the multiplicative factor, not null
+   * @param sensitivity
+   *          the original sensitivity, not null
+   * @param factor
+   *          the multiplicative factor, not null
    * @return the multiplied sensitivity, not null
    */
   public static Map<String, List<DoublesPair>> multipliedBy(final Map<String, List<DoublesPair>> sensitivity, final double factor) {
@@ -274,10 +293,12 @@ public class MulticurveSensitivityUtils {
   }
 
   /**
-   * Product of two sensitivities
+   * Product of two sensitivities.
    *
-   * @param sensi1  the original sensitivity, not null
-   * @param sensi2  the other sensitivity, not null
+   * @param sensi1
+   *          the original sensitivity, not null
+   * @param sensi2
+   *          the other sensitivity, not null
    * @return the product sensitivity, not null
    */
   public static Map<String, List<DoublesPair>> productOf(final Map<String, List<DoublesPair>> sensi1, final Map<String, List<DoublesPair>> sensi2) {
@@ -319,12 +340,16 @@ public class MulticurveSensitivityUtils {
   }
 
   /**
-   * Product of two sensitivities
-   * @param map1 the original sensitivity
-   * @param map2 the other sensitivity
+   * Product of two sensitivities.
+   *
+   * @param map1
+   *          the original sensitivity
+   * @param map2
+   *          the other sensitivity
    * @return the new sensitivity
    */
-  public static Map<String, List<ForwardSensitivity>> productOfFwd(final Map<String, List<ForwardSensitivity>> map1, final Map<String, List<ForwardSensitivity>> map2) {
+  public static Map<String, List<ForwardSensitivity>> productOfFwd(final Map<String, List<ForwardSensitivity>> map1,
+      final Map<String, List<ForwardSensitivity>> map2) {
     final Map<String, List<ForwardSensitivity>> result = new HashMap<>();
     for (final Map.Entry<String, List<ForwardSensitivity>> entry : map1.entrySet()) {
       final List<ForwardSensitivity> curveSensi = new ArrayList<>();
@@ -334,7 +359,8 @@ public class MulticurveSensitivityUtils {
         for (final ForwardSensitivity pair1 : entry.getValue()) {
           for (int i = 0; i < length2; ++i) {
             if (pair1.getStartTime() == map2.get(name).get(i).getStartTime() && pair1.getEndTime() == map2.get(name).get(i).getEndTime()) {
-              curveSensi.add(new SimplyCompoundedForwardSensitivity(pair1.getStartTime(), pair1.getEndTime(), pair1.getAccrualFactor(), pair1.getValue() * map2.get(name).get(i).getValue()));
+              curveSensi.add(new SimplyCompoundedForwardSensitivity(pair1.getStartTime(), pair1.getEndTime(), pair1.getAccrualFactor(),
+                  pair1.getValue() * map2.get(name).get(i).getValue()));
             }
           }
         }

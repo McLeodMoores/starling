@@ -14,7 +14,8 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
 /**
  * Calculator of the present value as a multiple currency amount using cash-flow discounting and forward estimation.
  */
-public final class PresentValueCurveSensitivityEquityDiscountingCalculator extends InstrumentDerivativeVisitorAdapter<EquityTrsDataBundle, MultipleCurrencyMulticurveSensitivity> {
+public final class PresentValueCurveSensitivityEquityDiscountingCalculator
+extends InstrumentDerivativeVisitorAdapter<EquityTrsDataBundle, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -23,6 +24,7 @@ public final class PresentValueCurveSensitivityEquityDiscountingCalculator exten
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityEquityDiscountingCalculator getInstance() {
@@ -40,7 +42,7 @@ public final class PresentValueCurveSensitivityEquityDiscountingCalculator exten
    */
   private static final EquityTotalReturnSwapDiscountingMethod METHOD_TRS = EquityTotalReturnSwapDiscountingMethod.getInstance();
 
-  //     -----     TRS     -----
+  // ----- TRS -----
 
   @Override
   public MultipleCurrencyMulticurveSensitivity visitEquityTotalReturnSwap(final EquityTotalReturnSwap trs, final EquityTrsDataBundle multicurve) {

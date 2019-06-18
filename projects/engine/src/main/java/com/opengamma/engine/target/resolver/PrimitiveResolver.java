@@ -15,7 +15,6 @@ import java.util.Map;
 
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.change.DummyChangeManager;
-import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.target.Primitive;
 import com.opengamma.engine.target.Primitive.ExternalBundleIdentifiablePrimitive;
 import com.opengamma.engine.target.Primitive.ExternalIdentifiablePrimitive;
@@ -26,7 +25,7 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * A {@link ObjectResolver} for {@link ComputationTargetType#PRIMITIVE}.
+ * A {@link ObjectResolver} for {@link com.opengamma.engine.target.ComputationTargetType#PRIMITIVE}.
  */
 public class PrimitiveResolver extends AbstractIdentifierResolver implements Resolver<Primitive> {
   /**
@@ -64,7 +63,7 @@ public class PrimitiveResolver extends AbstractIdentifierResolver implements Res
       }
     }
     if (count == 1 && !backslash) {
-      return new String[] {str.substring(i) };
+      return new String[] { str.substring(i) };
     }
     final String[] result = new String[count];
     final StringBuilder sb = new StringBuilder();
@@ -128,9 +127,12 @@ public class PrimitiveResolver extends AbstractIdentifierResolver implements Res
   // ObjectResolver
 
   /**
-   * Utility function for resolving external ids from unique identifier
-   * @param uniqueId unique identifier
-   * @param schemePrefix the scheme prefix
+   * Utility function for resolving external ids from unique identifier.
+   * 
+   * @param uniqueId
+   *          unique identifier
+   * @param schemePrefix
+   *          the scheme prefix
    * @return external id bundle
    */
   public static ExternalIdBundle resolveExternalIds(final UniqueId uniqueId, final String schemePrefix) {
@@ -143,13 +145,12 @@ public class PrimitiveResolver extends AbstractIdentifierResolver implements Res
         if (schemes.length == values.length) {
           if (schemes.length == 1) {
             return ExternalIdBundle.of(schemes[0], values[0]);
-          } else {
-            final ExternalId[] identifiers = new ExternalId[schemes.length];
-            for (int i = 0; i < schemes.length; i++) {
-              identifiers[i] = ExternalId.of(schemes[i], values[i]);
-            }
-            return ExternalIdBundle.of(identifiers);
           }
+          final ExternalId[] identifiers = new ExternalId[schemes.length];
+          for (int i = 0; i < schemes.length; i++) {
+            identifiers[i] = ExternalId.of(schemes[i], values[i]);
+          }
+          return ExternalIdBundle.of(identifiers);
         }
       }
     }
@@ -163,12 +164,10 @@ public class PrimitiveResolver extends AbstractIdentifierResolver implements Res
       final ExternalIdBundle externalIdBundle = resolveExternalIds(uniqueId, SCHEME_PREFIX);
       if (externalIdBundle.size() == 1) {
         return new ExternalIdentifiablePrimitive(uniqueId, functional(externalIdBundle.getExternalIds()).first());
-      } else {
-        return new ExternalBundleIdentifiablePrimitive(uniqueId, externalIdBundle);
       }
-    } else {
-      return new Primitive(uniqueId);
+      return new ExternalBundleIdentifiablePrimitive(uniqueId, externalIdBundle);
     }
+    return new Primitive(uniqueId);
 
   }
 

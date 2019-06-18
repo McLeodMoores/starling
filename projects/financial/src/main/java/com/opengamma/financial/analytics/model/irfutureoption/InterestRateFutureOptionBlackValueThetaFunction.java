@@ -21,26 +21,30 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the value theta ({@link ValueRequirementNames#VALUE_THETA}) of an interest rate future option.
- * The underlying Futures price is computed from the futures curve.
+ * Calculates the value theta ({@link ValueRequirementNames#VALUE_THETA}) of an interest rate future option. The underlying Futures price is computed from the
+ * futures curve.
+ *
  * @deprecated The parent is deprecated
  */
 @Deprecated
 public class InterestRateFutureOptionBlackValueThetaFunction extends InterestRateFutureOptionBlackFunction {
-  /** Calculates theta  */
-  private static final InterestRateFutureOptionMarginTransactionBlackSurfaceMethod MARGINED_TRANSACTION_METHOD = InterestRateFutureOptionMarginTransactionBlackSurfaceMethod.getInstance();
-  /** Calculates theta  */
-  private static final InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod PREMIUM_TRANSACTION_METHOD = InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod.getInstance();
+  /** Calculates theta */
+  private static final InterestRateFutureOptionMarginTransactionBlackSurfaceMethod MARGINED_TRANSACTION_METHOD =
+      InterestRateFutureOptionMarginTransactionBlackSurfaceMethod.getInstance();
+  /** Calculates theta */
+  private static final InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod PREMIUM_TRANSACTION_METHOD =
+      InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_THETA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_THETA}.
    */
   public InterestRateFutureOptionBlackValueThetaFunction() {
     super(ValueRequirementNames.VALUE_THETA, true);
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative derivative, final YieldCurveWithBlackCubeBundle data, final ValueSpecification spec, final Set<ValueRequirement> desiredValues) {
+  protected Set<ComputedValue> getResult(final InstrumentDerivative derivative, final YieldCurveWithBlackCubeBundle data, final ValueSpecification spec,
+      final Set<ValueRequirement> desiredValues) {
     // Get scaling and adjust properties to reflect
     final double theta;
     if (derivative instanceof InterestRateFutureOptionMarginTransaction) {

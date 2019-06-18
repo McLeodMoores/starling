@@ -24,7 +24,6 @@ import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
@@ -37,7 +36,8 @@ public class EquityTotalReturnSwapCurrencyExposureFunction extends EquityTotalRe
       EqyTrsCurrencyExposureCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#FX_CURRENCY_EXPOSURE}.
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#FX_CURRENCY_EXPOSURE}.
    */
   public EquityTotalReturnSwapCurrencyExposureFunction() {
     super(FX_CURRENCY_EXPOSURE);
@@ -47,23 +47,23 @@ public class EquityTotalReturnSwapCurrencyExposureFunction extends EquityTotalRe
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
 
     return new EquityTotalReturnSwapCompiledFunction(getTargetToDefinitionConverter(context),
-                                                     getDefinitionToDerivativeConverter(context),
-                                                     false) {
+        getDefinitionToDerivativeConverter(context),
+        false) {
 
       @Override
       protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext,
-                                             final FunctionInputs inputs,
-                                             final ComputationTarget target,
-                                             final Set<ValueRequirement> desiredValues,
-                                             final InstrumentDerivative derivative,
-                                             final FXMatrix fxMatrix) {
+          final FunctionInputs inputs,
+          final ComputationTarget target,
+          final Set<ValueRequirement> desiredValues,
+          final InstrumentDerivative derivative,
+          final FXMatrix fxMatrix) {
         final Set<ComputedValue> results = Sets.newHashSet();
         for (final ValueRequirement desiredValue : desiredValues) {
           final EquityTrsDataBundle data = getDataBundle(inputs, fxMatrix);
           final MultipleCurrencyAmount exposure = derivative.accept(CALCULATOR, data);
           final ComputedValue result = new ComputedValue(ValueSpecification.of(FX_CURRENCY_EXPOSURE,
-                                                                         target.toSpecification(),
-                                                                         desiredValue.getConstraints()), exposure);
+              target.toSpecification(),
+              desiredValue.getConstraints()), exposure);
           results.add(result);
         }
         return results;

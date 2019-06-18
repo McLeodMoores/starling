@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -22,11 +22,13 @@ import com.opengamma.id.UniqueId;
 
   /**
    * Creates a new lazily resolved position.
-   * 
-   * @param underlying the underlying, un-resolved position
-   * @param context the lazy resolution context
+   *
+   * @param underlying
+   *          the underlying, un-resolved position
+   * @param context
+   *          the lazy resolution context
    */
-  public LazyResolvedPositionOrTrade(final LazyResolveContext.AtVersionCorrection context, final T underlying) {
+  LazyResolvedPositionOrTrade(final LazyResolveContext.AtVersionCorrection context, final T underlying) {
     super(context, underlying);
   }
 
@@ -50,14 +52,13 @@ import com.opengamma.id.UniqueId;
     final SecurityLink link = getSecurityLink();
     if (_resolved) {
       return link.getTarget();
-    } else {
-      Security target = getLazyResolveContext().resolveLink(link);
-      if (target == null) {
-        throw new OpenGammaRuntimeException("Couldn't resolve " + link);
-      }
-      _resolved = true;
-      return target;
     }
+    final Security target = getLazyResolveContext().resolveLink(link);
+    if (target == null) {
+      throw new OpenGammaRuntimeException("Couldn't resolve " + link);
+    }
+    _resolved = true;
+    return target;
   }
 
 }

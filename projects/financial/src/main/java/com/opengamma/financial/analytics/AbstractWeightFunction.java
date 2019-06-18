@@ -32,7 +32,8 @@ import com.opengamma.id.UniqueId;
 public abstract class AbstractWeightFunction extends AbstractFunction.NonCompiledInvoker {
 
   /**
-   * The property name that describes the value used to construct the weight. The full set of output properties will include those of the target and its parent node.
+   * The property name that describes the value used to construct the weight. The full set of output properties will include those of the target and its parent
+   * node.
    */
   public static final String VALUE_PROPERTY_NAME = "Value";
 
@@ -69,15 +70,17 @@ public abstract class AbstractWeightFunction extends AbstractFunction.NonCompile
     }
     // Request value on the value and parent
     final ValueProperties requirementConstraints = requirementConstraintsBuilder.get();
-    return ImmutableSet.of(new ValueRequirement(inputValue, getValueTarget(target), requirementConstraints), new ValueRequirement(inputValue, getParentTarget(target), requirementConstraints));
+    return ImmutableSet.of(new ValueRequirement(inputValue, getValueTarget(target), requirementConstraints),
+        new ValueRequirement(inputValue, getParentTarget(target), requirementConstraints));
   }
 
-  protected abstract ComputationTargetSpecification getValueTarget(final ComputationTarget target);
+  protected abstract ComputationTargetSpecification getValueTarget(ComputationTarget target);
 
-  protected abstract ComputationTargetReference getParentTarget(final ComputationTarget target);
+  protected abstract ComputationTargetReference getParentTarget(ComputationTarget target);
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     ValueSpecification inputValue = null;
     ValueSpecification inputParent = null;
     final UniqueId value = target.getUniqueId();

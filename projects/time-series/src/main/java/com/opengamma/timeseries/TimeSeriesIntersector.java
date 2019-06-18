@@ -12,15 +12,17 @@ public final class TimeSeriesIntersector {
 
   /**
    * Performs the intersection of two or more time series.
-   * <p>
    * <ul>
    * <li>If one series is provided, the original series is returned.</li>
-   * <li>Create the smallest possible series by calculating the intersection of series 1, 2, 3 etc. on series 0</li>
-   * <li>Ensure all series are the same size by calculating the intersection of this new series 0 on all other series.
+   * <li>Create the smallest possible series by calculating the intersection of
+   * series 1, 2, 3 etc. on series 0</li>
+   * <li>Ensure all series are the same size by calculating the intersection of
+   * this new series 0 on all other series.
    * </ul>
    * The original array is altered.
    *
-   * @param  series  one or more input series, not null
+   * @param series
+   *          one or more input series, not null
    * @return the original array with the series replaced with the intersections
    */
   public static DoubleTimeSeries<?>[] intersect(final DoubleTimeSeries<?>... series) {

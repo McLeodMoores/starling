@@ -24,11 +24,12 @@ import com.opengamma.masterdb.security.hibernate.OperationContext;
 /**
  *
  */
-public final class LegacyRecoveryLockCDSSecurityBeanOperation extends AbstractSecurityBeanOperation<LegacyRecoveryLockCDSSecurity, LegacyRecoveryLockCDSSecurityBean> {
+public final class LegacyRecoveryLockCDSSecurityBeanOperation
+    extends AbstractSecurityBeanOperation<LegacyRecoveryLockCDSSecurity, LegacyRecoveryLockCDSSecurityBean> {
 
   /**
    * Singleton.
-   * */
+   */
   public static final LegacyRecoveryLockCDSSecurityBeanOperation INSTANCE = new LegacyRecoveryLockCDSSecurityBeanOperation();
 
   private LegacyRecoveryLockCDSSecurityBeanOperation() {
@@ -36,7 +37,8 @@ public final class LegacyRecoveryLockCDSSecurityBeanOperation extends AbstractSe
   }
 
   @Override
-  public LegacyRecoveryLockCDSSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final LegacyRecoveryLockCDSSecurity security) {
+  public LegacyRecoveryLockCDSSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final LegacyRecoveryLockCDSSecurity security) {
     final LegacyRecoveryLockCDSSecurityBean bean = new LegacyRecoveryLockCDSSecurityBean();
     CreditDefaultSwapBeanOperation.createBean(secMasterSession, bean, security);
     bean.setParSpread(security.getParSpread());

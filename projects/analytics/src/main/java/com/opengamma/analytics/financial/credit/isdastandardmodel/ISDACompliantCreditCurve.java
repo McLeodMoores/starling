@@ -42,8 +42,10 @@ public class ISDACompliantCreditCurve extends ISDACompliantCurve {
   /**
    * Creates a flat credit (hazard) curve at hazard rate h.
    *
-   * @param t  the (arbitrary) single knot point (t > 0)
-   * @param h  the level
+   * @param t
+   *          the (arbitrary) single knot point (t &gt; 0)
+   * @param h
+   *          the level
    */
   public ISDACompliantCreditCurve(final double t, final double h) {
     super(t, h);

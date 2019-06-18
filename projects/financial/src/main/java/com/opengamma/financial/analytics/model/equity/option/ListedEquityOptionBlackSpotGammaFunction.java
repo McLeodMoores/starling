@@ -24,15 +24,15 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Returns the spot gamma w.r.t. the spot underlying, i.e. the 2nd order sensitivity of the present value to the spot value of the underlying,
- * $\frac{\partial^2 (PV)}{\partial S^2}$
+ * Returns the spot gamma w.r.t. the spot underlying, i.e. the 2nd order sensitivity of the present value to the spot value of the underlying, $\frac{\partial^2
+ * (PV)}{\partial S^2}$
  */
 public class ListedEquityOptionBlackSpotGammaFunction extends ListedEquityOptionBlackFunction {
   /** Spot gamma calculator */
   private static final InstrumentDerivativeVisitor<StaticReplicationDataBundle, Double> CALCULATOR = EquityOptionBlackSpotGammaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public ListedEquityOptionBlackSpotGammaFunction() {
     super(ValueRequirementNames.GAMMA);
@@ -47,9 +47,9 @@ public class ListedEquityOptionBlackSpotGammaFunction extends ListedEquityOption
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> resultsWithCcy = super.getResults(context, target, inputs);
     return getResultsWithoutCurrency(resultsWithCcy);
   }
 }
-

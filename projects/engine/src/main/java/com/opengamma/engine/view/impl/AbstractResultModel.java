@@ -19,7 +19,8 @@ import com.opengamma.util.tuple.Pairs;
 /**
  * A simple implementation of the calculation result model.
  *
- * <T> the type of the name
+ * @param <T>
+ *          the type of the name
  */
 /*package*/ abstract class AbstractResultModel<T> implements Serializable {
 

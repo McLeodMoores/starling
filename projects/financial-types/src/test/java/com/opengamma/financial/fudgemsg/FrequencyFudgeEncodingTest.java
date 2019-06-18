@@ -5,7 +5,7 @@
  */
 package com.opengamma.financial.fudgemsg;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import org.fudgemsg.UnmodifiableFudgeField;
 import org.fudgemsg.wire.types.FudgeWireType;
@@ -24,15 +24,20 @@ public class FrequencyFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
   private static final Frequency REF = SimpleFrequency.BIMONTHLY;
 
+  /**
+   *
+   */
   @Test
   public void testCycle() {
     assertEquals(REF, cycleObject(Frequency.class, REF));
   }
 
+  /**
+   *
+   */
   @Test
   public void testFromString() {
-    assertEquals(REF, getFudgeContext().getFieldValue(Frequency.class,
-        UnmodifiableFudgeField.of(FudgeWireType.STRING, REF.getName())));
+    assertEquals(REF, getFudgeContext().getFieldValue(Frequency.class, UnmodifiableFudgeField.of(FudgeWireType.STRING, REF.getName())));
   }
 
 }

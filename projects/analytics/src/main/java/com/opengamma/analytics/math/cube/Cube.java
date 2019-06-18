@@ -12,33 +12,39 @@ import org.apache.commons.lang.ObjectUtils;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * Defines a general cube <i>(x, y, z, value)</i> class. The data data be of any type. The cubes are named; if a name is not provided then a unique ID will
- * be generated.
- * @param <S> The type of the x data
- * @param <T> The type of the y data
- * @param <U> The type of the z data
- * @param <V> The type of the values
+ * Defines a general cube <i>(x, y, z, value)</i> class. The data may be of any type. The cubes are named; if a name is not provided then a unique ID will be
+ * generated.
+ *
+ * @param <S>
+ *          The type of the x data
+ * @param <T>
+ *          The type of the y data
+ * @param <U>
+ *          The type of the z data
+ * @param <V>
+ *          The type of the values
  */
 public abstract class Cube<S, T, U, V> {
   private static final AtomicLong ATOMIC = new AtomicLong();
   private final String _name;
 
   /**
-   * Constructs a cube with an automatically-generated name
+   * Constructs a cube with an automatically-generated name.
    */
   public Cube() {
     this(Long.toString(ATOMIC.getAndIncrement()));
   }
 
   /**
-   * Constructs a cube with the supplied name
-   * @param name The name of the cube
+   * Constructs a cube with the supplied name..
+   *
+   * @param name
+   *          The name of the cube
    */
   public Cube(final String name) {
     _name = name;
   }
 
-  
   /**
    * @return The name of the cube
    */
@@ -72,17 +78,23 @@ public abstract class Cube<S, T, U, V> {
   public abstract int size();
 
   /**
-   * Given <i>(x, y, z)</i>, returns the value at that point
-   * @param x The <i>x</i> value, not null
-   * @param y The <i>y</i> value, not null
-   * @param z The <i>z</i> value, not null
+   * Given <i>(x, y, z)</i>, returns the value at that point.
+   *
+   * @param x
+   *          The <i>x</i> value, not null
+   * @param y
+   *          The <i>y</i> value, not null
+   * @param z
+   *          The <i>z</i> value, not null
    * @return The value
    */
   public abstract V getValue(S x, T y, U z);
 
   /**
-   * Given <i>(x, y, z)</i>, returns the value at that point
-   * @param xyz An <i>(x, y, z)</i> triple, not null and with no null elements
+   * Given <i>(x, y, z)</i>, returns the value at that point.
+   *
+   * @param xyz
+   *          An <i>(x, y, z)</i> triple, not null and with no null elements
    * @return The value
    */
   public abstract V getValue(Triple<S, T, U> xyz);
@@ -91,7 +103,7 @@ public abstract class Cube<S, T, U, V> {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_name == null) ? 0 : _name.hashCode());
+    result = prime * result + (_name == null ? 0 : _name.hashCode());
     return result;
   }
 

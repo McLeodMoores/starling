@@ -47,22 +47,22 @@ public class PrimitivesGridStructureMessageBodyWriter implements MessageBodyWrit
 
   @Override
   public long getSize(final PrimitivesGridStructure gridStructure,
-                      final Class<?> type,
-                      final Type genericType,
-                      final Annotation[] annotations,
-                      final MediaType mediaType) {
+      final Class<?> type,
+      final Type genericType,
+      final Annotation[] annotations,
+      final MediaType mediaType) {
     // TODO this means unknown size. is it worth encoding it twice to find out the size?
     return -1;
   }
 
   @Override
   public void writeTo(final PrimitivesGridStructure gridStructure,
-                      final Class<?> type,
-                      final Type genericType,
-                      final Annotation[] annotations,
-                      final MediaType mediaType,
-                      final MultivaluedMap<String, Object> httpHeaders,
-                      final OutputStream entityStream) throws IOException, WebApplicationException {
+      final Class<?> type,
+      final Type genericType,
+      final Annotation[] annotations,
+      final MediaType mediaType,
+      final MultivaluedMap<String, Object> httpHeaders,
+      final OutputStream entityStream) throws IOException, WebApplicationException {
     final String columnsJson = _writer.getJson(gridStructure.getColumnStructure().getGroups());
     entityStream.write(("{\"columnSets\":" + columnsJson + ",\"rowCount\":" + gridStructure.getRowCount() + "}").getBytes());
   }

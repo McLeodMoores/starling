@@ -9,18 +9,22 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *  The payoff of European exchange-one-asset-for-another option is max(Q1 * S1 - Q2 * S2, 0) at expiration,
- *  where Q1 is the quantity of asset S1 and Q2 is the quantity of asset S2.
+ * The payoff of European exchange-one-asset-for-another option is max(Q1 * S1 - Q2 * S2, 0) at expiration, where Q1 is the quantity of asset S1 and Q2 is the
+ * quantity of asset S2.
  */
 public class EuropeanExchangeOptionFunctionProvider extends OptionFunctionProvider2D {
   private final double _quantity1;
   private final double _quantity2;
 
   /**
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param quantity1 Quantity of asset 1
-   * @param quantity2 Quantity of asset 2
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param quantity1
+   *          Quantity of asset 1
+   * @param quantity2
+   *          Quantity of asset 2
    */
   public EuropeanExchangeOptionFunctionProvider(final double timeToExpiry, final int steps, final double quantity1, final double quantity2) {
     super(0., timeToExpiry, steps, true);
@@ -78,7 +82,8 @@ public class EuropeanExchangeOptionFunctionProvider extends OptionFunctionProvid
   }
 
   /**
-   * Access quantity of asset 1
+   * Access quantity of asset 1.
+   * 
    * @return _quantity1
    */
   public double getQuantity1() {
@@ -86,7 +91,8 @@ public class EuropeanExchangeOptionFunctionProvider extends OptionFunctionProvid
   }
 
   /**
-   * Access quantity of asset 2
+   * Access quantity of asset 2.
+   * 
    * @return _quantity2
    */
   public double getQuantity2() {

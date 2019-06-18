@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.mcleodmoores.financial.function.credit.configs.CreditCurveDefinition;
 import com.opengamma.core.change.ChangeEvent;
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
@@ -38,11 +39,12 @@ import com.opengamma.master.config.impl.ConfigSearchIterator;
 /**
  * Function repository configuration source for the functions contained in this package.
  */
+@SuppressWarnings("deprecation")
 public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Default instance of a repository configuration source exposing the functions from this package.
-   * 
+   *
    * @return the configuration source exposing functions from this package
    */
   public static FunctionConfigurationSource instance() {
@@ -72,14 +74,15 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
    */
   public static class Providers extends VersionedFunctionConfigurationBean {
 
-    private static final Class<?>[] CURVE_CLASSES = new Class[] {CurveDefinition.class, InterpolatedCurveDefinition.class, ConstantCurveDefinition.class, SpreadCurveDefinition.class };
+    private static final Class<?>[] CURVE_CLASSES = new Class[] { CurveDefinition.class, InterpolatedCurveDefinition.class, ConstantCurveDefinition.class,
+        SpreadCurveDefinition.class };
     private static final Set<String> MONITORED_TYPES;
 
     static {
-      MONITORED_TYPES = new HashSet<String>();
+      MONITORED_TYPES = new HashSet<>();
       MONITORED_TYPES.add(MultiCurveCalculationConfig.class.getName());
       MONITORED_TYPES.add(YieldCurveDefinition.class.getName());
-      for (Class<?> curveClass : CURVE_CLASSES) {
+      for (final Class<?> curveClass : CURVE_CLASSES) {
         MONITORED_TYPES.add(curveClass.getName());
       }
     }
@@ -106,6 +109,7 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
       functions.add(functionConfiguration(CurveMarketDataFunction.class, curveName));
     }
 
+    @SuppressWarnings({ "unchecked" })
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
 
@@ -150,7 +154,9 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
         searchRequest.setVersionCorrection(getVersionCorrection());
         for (final ConfigDocument configDocument : ConfigSearchIterator.iterable(getConfigMaster(), searchRequest)) {
           final String documentName = configDocument.getName();
-          addCurveFunctions(functions, documentName);
+          if (!(configDocument.getValue().getValue() instanceof CreditCurveDefinition)) {
+            addCurveFunctions(functions, documentName);
+          }
         }
       }
     }

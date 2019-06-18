@@ -48,7 +48,8 @@ public class HistoricalTimeSeriesFunction extends AbstractFunction {
   protected static HistoricalTimeSeries executeImpl(final FunctionExecutionContext executionContext, final HistoricalTimeSeriesSource timeSeriesSource,
       final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue) {
     final LocalDate startDate = DateConstraint.evaluate(executionContext, desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY));
-    final boolean includeStart = HistoricalTimeSeriesFunctionUtils.parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY));
+    final boolean includeStart = HistoricalTimeSeriesFunctionUtils
+        .parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY));
 
     final LocalDate valuationDate = executionContext.getValuationTime().atZone(ZoneId.systemDefault()).toLocalDate();
     if (startDate != null && (includeStart && valuationDate.isBefore(startDate) || !valuationDate.isAfter(startDate))) {
@@ -56,7 +57,8 @@ public class HistoricalTimeSeriesFunction extends AbstractFunction {
     }
 
     final LocalDate endDate = DateConstraint.evaluate(executionContext, desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY));
-    final boolean includeEnd = HistoricalTimeSeriesFunctionUtils.parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY));
+    final boolean includeEnd = HistoricalTimeSeriesFunctionUtils
+        .parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY));
     HistoricalTimeSeries hts = timeSeriesSource.getHistoricalTimeSeries(targetSpec.getUniqueId(), startDate, includeStart, endDate, includeEnd);
     final String adjusterString = desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY);
     hts = HistoricalTimeSeriesAdjustment.parse(adjusterString).adjust(hts);
@@ -65,7 +67,7 @@ public class HistoricalTimeSeriesFunction extends AbstractFunction {
 
   private class Compiled extends AbstractFunction.AbstractInvokingCompiledFunction {
 
-    public Compiled(final Instant firstValidity, final Instant lastValidity) {
+    Compiled(final Instant firstValidity, final Instant lastValidity) {
       super(firstValidity, lastValidity);
     }
 
@@ -82,7 +84,8 @@ public class HistoricalTimeSeriesFunction extends AbstractFunction {
           .withAny(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY)
           .withAny(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY)
           .withAny(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY)
-          .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE)
+          .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE,
+              HistoricalTimeSeriesFunctionUtils.NO_VALUE)
           .withAny(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY)
           .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE)
           .get()));
@@ -95,8 +98,8 @@ public class HistoricalTimeSeriesFunction extends AbstractFunction {
       Set<String> values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY);
       if (values == null || values.isEmpty()) {
         constraints = desiredValue.getConstraints().copy()
-                                  .withoutAny(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY)
-                                  .with(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY, "");
+            .withoutAny(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY)
+            .with(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY, "");
       } else if (values.size() > 1) {
         constraints = desiredValue.getConstraints().copy().withoutAny(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY)
             .with(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY, values.iterator().next());

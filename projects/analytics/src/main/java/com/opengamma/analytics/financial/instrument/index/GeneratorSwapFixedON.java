@@ -50,7 +50,8 @@ public class GeneratorSwapFixedON extends GeneratorInstrument<GeneratorAttribute
    */
   private final int _paymentLag;
   /**
-   * In case the the periods do not fit exactly between start and end date, is the remaining interval shorter (true) or longer (false) than the requested period.
+   * In case the the periods do not fit exactly between start and end date, is the remaining interval shorter (true) or longer (false) than the requested
+   * period.
    */
   private final boolean _stubShort;
   /**
@@ -64,16 +65,26 @@ public class GeneratorSwapFixedON extends GeneratorInstrument<GeneratorAttribute
 
   /**
    * Constructor from all details. The stub is short and date constructed from the end.
-   * @param name The generator name.
-   * @param index The ON index of the floating leg.
-   * @param legsPeriod The legs period of payments (both fixed and ON legs have the same payment frequency).
-   * @param fixedLegDayCount The fixed leg day count.
-   * @param businessDayConvention The business day convention for the payments (used for both legs).
-   * @param endOfMonth The flag indicating if the end-of-month rule is used (used for both legs).
-   * @param spotLag The index spot lag in days between trade and settlement date (usually 2 or 0).
-   * @param calendar The calendar associated with the overnight index.
+   * 
+   * @param name
+   *          The generator name.
+   * @param index
+   *          The ON index of the floating leg.
+   * @param legsPeriod
+   *          The legs period of payments (both fixed and ON legs have the same payment frequency).
+   * @param fixedLegDayCount
+   *          The fixed leg day count.
+   * @param businessDayConvention
+   *          The business day convention for the payments (used for both legs).
+   * @param endOfMonth
+   *          The flag indicating if the end-of-month rule is used (used for both legs).
+   * @param spotLag
+   *          The index spot lag in days between trade and settlement date (usually 2 or 0).
+   * @param calendar
+   *          The calendar associated with the overnight index.
    */
-  public GeneratorSwapFixedON(final String name, final IndexON index, final Period legsPeriod, final DayCount fixedLegDayCount, final BusinessDayConvention businessDayConvention,
+  public GeneratorSwapFixedON(final String name, final IndexON index, final Period legsPeriod, final DayCount fixedLegDayCount,
+      final BusinessDayConvention businessDayConvention,
       final boolean endOfMonth, final int spotLag, final Calendar calendar) {
     super(name);
     ArgumentChecker.notNull(legsPeriod, "Period");
@@ -95,17 +106,28 @@ public class GeneratorSwapFixedON extends GeneratorInstrument<GeneratorAttribute
 
   /**
    * Constructor from all details. The stub is short and date constructed from the end.
-   * @param name The generator name.
-   * @param index The ON index of the floating leg.
-   * @param legsPeriod The legs period of payments (both fixed and ON legs have the same payment frequency).
-   * @param fixedLegDayCount The fixed leg day count.
-   * @param businessDayConvention The business day convention for the payments (used for both legs).
-   * @param endOfMonth The flag indicating if the end-of-month rule is used (used for both legs).
-   * @param spotLag The index spot lag in days between trade and settlement date (usually 2 or 0).
-   * @param paymentLag The lag in days between the last ON fixing date and the coupon payment.
-   * @param calendar The calendar associated with the overnight index.
+   * 
+   * @param name
+   *          The generator name.
+   * @param index
+   *          The ON index of the floating leg.
+   * @param legsPeriod
+   *          The legs period of payments (both fixed and ON legs have the same payment frequency).
+   * @param fixedLegDayCount
+   *          The fixed leg day count.
+   * @param businessDayConvention
+   *          The business day convention for the payments (used for both legs).
+   * @param endOfMonth
+   *          The flag indicating if the end-of-month rule is used (used for both legs).
+   * @param spotLag
+   *          The index spot lag in days between trade and settlement date (usually 2 or 0).
+   * @param paymentLag
+   *          The lag in days between the last ON fixing date and the coupon payment.
+   * @param calendar
+   *          The calendar associated with the overnight index.
    */
-  public GeneratorSwapFixedON(final String name, final IndexON index, final Period legsPeriod, final DayCount fixedLegDayCount, final BusinessDayConvention businessDayConvention,
+  public GeneratorSwapFixedON(final String name, final IndexON index, final Period legsPeriod, final DayCount fixedLegDayCount,
+      final BusinessDayConvention businessDayConvention,
       final boolean endOfMonth, final int spotLag, final int paymentLag, final Calendar calendar) {
     super(name);
     ArgumentChecker.notNull(legsPeriod, "Period");
@@ -127,6 +149,7 @@ public class GeneratorSwapFixedON extends GeneratorInstrument<GeneratorAttribute
 
   /**
    * Gets the legs period of payments (both fixed and ON legs have the same payment frequency).
+   * 
    * @return The period.
    */
   public Period getLegsPeriod() {
@@ -135,6 +158,7 @@ public class GeneratorSwapFixedON extends GeneratorInstrument<GeneratorAttribute
 
   /**
    * Gets the fixed leg day count.
+   * 
    * @return The day count.
    */
   public DayCount getFixedLegDayCount() {
@@ -143,6 +167,7 @@ public class GeneratorSwapFixedON extends GeneratorInstrument<GeneratorAttribute
 
   /**
    * Gets The business day convention for the payments (used for both legs).
+   * 
    * @return The business day convention.
    */
   public BusinessDayConvention getBusinessDayConvention() {
@@ -151,6 +176,7 @@ public class GeneratorSwapFixedON extends GeneratorInstrument<GeneratorAttribute
 
   /**
    * Gets the flag indicating if the end-of-month rule is used (used for both legs).
+   * 
    * @return The flag indicating if the end-of-month rule is used.
    */
   public boolean isEndOfMonth() {
@@ -159,6 +185,7 @@ public class GeneratorSwapFixedON extends GeneratorInstrument<GeneratorAttribute
 
   /**
    * Gets the ON index of the floating leg.
+   * 
    * @return The ON index.
    */
   public IndexON getIndex() {
@@ -167,6 +194,7 @@ public class GeneratorSwapFixedON extends GeneratorInstrument<GeneratorAttribute
 
   /**
    * Gets the flag indicating if the remaining interval is shorter (true) or longer (false) than the requested period.
+   * 
    * @return The flag.
    */
   public boolean isStubShort() {
@@ -175,6 +203,7 @@ public class GeneratorSwapFixedON extends GeneratorInstrument<GeneratorAttribute
 
   /**
    * Gets the flag indicating if dates in the schedule are be computed from the end date (true) or from the start date (false).
+   * 
    * @return The flag.
    */
   public boolean isFromEnd() {
@@ -183,6 +212,7 @@ public class GeneratorSwapFixedON extends GeneratorInstrument<GeneratorAttribute
 
   /**
    * Gets the spot lag in days between trade and settlement date (usually 2 or 0).
+   * 
    * @return The spot lag.
    */
   public int getSpotLag() {
@@ -191,6 +221,7 @@ public class GeneratorSwapFixedON extends GeneratorInstrument<GeneratorAttribute
 
   /**
    * Gets the lag in days between the last ON fixing date and the coupon payment.
+   * 
    * @return The payment lag.
    */
   public int getPaymentLag() {
@@ -199,6 +230,7 @@ public class GeneratorSwapFixedON extends GeneratorInstrument<GeneratorAttribute
 
   /**
    * Gets the calendar associated to the OIS index.
+   * 
    * @return The calendar.
    */
   public Calendar getOvernightCalendar() {
@@ -206,8 +238,7 @@ public class GeneratorSwapFixedON extends GeneratorInstrument<GeneratorAttribute
   }
 
   /**
-   * {@inheritDoc}
-   * The effective date is date+_spotLag. The end of fixing period is effective date+tenor.
+   * {@inheritDoc} The effective date is date+_spotLag. The end of fixing period is effective date+tenor.
    */
   @Override
   public SwapFixedONDefinition generateInstrument(final ZonedDateTime date, final double rate, final double notional, final GeneratorAttributeIR attribute) {
@@ -226,7 +257,7 @@ public class GeneratorSwapFixedON extends GeneratorInstrument<GeneratorAttribute
     result = prime * result + (_endOfMonth ? 1231 : 1237);
     result = prime * result + _fixedLegDayCount.hashCode();
     result = prime * result + (_fromEnd ? 1231 : 1237);
-    result = prime * result + ((_index == null) ? 0 : _index.hashCode());
+    result = prime * result + (_index == null ? 0 : _index.hashCode());
     result = prime * result + _legsPeriod.hashCode();
     result = prime * result + _paymentLag;
     result = prime * result + _spotLag;

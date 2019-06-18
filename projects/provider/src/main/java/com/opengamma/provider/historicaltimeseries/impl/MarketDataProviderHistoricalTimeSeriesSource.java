@@ -54,13 +54,16 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
   /**
    * Constructor for the class taking the provider to be used for all requests.
    *
-   * @param providerName the name of the data provider
-   * @param uniqueIdSupplier the supplier for unique ids
-   * @param provider the provider of HTS data
+   * @param providerName
+   *          the name of the data provider
+   * @param uniqueIdSupplier
+   *          the supplier for unique ids
+   * @param provider
+   *          the provider of HTS data
    */
   public MarketDataProviderHistoricalTimeSeriesSource(final String providerName,
-                                                      final UniqueIdSupplier uniqueIdSupplier,
-                                                      final HistoricalTimeSeriesProvider provider) {
+      final UniqueIdSupplier uniqueIdSupplier,
+      final HistoricalTimeSeriesProvider provider) {
 
     ArgumentChecker.notNull(providerName, "providerName");
     ArgumentChecker.notNull(uniqueIdSupplier, "uniqueIdSupplier");
@@ -95,7 +98,7 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
         "Unable to retrieve historical time-series from " + _providerName + " using identifier validity date");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public ChangeManager changeManager() {
     throw new UnsupportedOperationException("Change events not supported");
@@ -107,8 +110,8 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
 
     LOGGER.info("Getting HistoricalTimeSeries for security {}", externalIdBundle);
 
-    final HistoricalTimeSeriesProviderGetRequest request =
-        HistoricalTimeSeriesProviderGetRequest.createGet(externalIdBundle, dataSource, dataProvider, dataField, dateRange);
+    final HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGet(externalIdBundle, dataSource, dataProvider,
+        dataField, dateRange);
     request.setMaxPoints(maxPoints);
     final HistoricalTimeSeriesProviderGetResult result = _provider.getHistoricalTimeSeries(request);
     final LocalDateDoubleTimeSeries timeSeries = result.getResultMap().get(externalIdBundle);
@@ -119,21 +122,21 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
     return new SimpleHistoricalTimeSeries(_uniqueIdSupplier.get(), timeSeries);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeries getHistoricalTimeSeries(final UniqueId uniqueId) {
     throw createUniqueIdException();
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
-
-
+  public HistoricalTimeSeries getHistoricalTimeSeries(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end,
+      final boolean includeEnd) {
     throw createUniqueIdException();
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end,
+      final boolean includeEnd, final int maxPoints) {
     throw createUniqueIdException();
   }
 
@@ -143,11 +146,12 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end,
+      final boolean includeEnd) {
     throw createUniqueIdException();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeries getHistoricalTimeSeries(
       final ExternalIdBundle identifiers, final String dataSource, final String dataProvider, final String dataField) {
@@ -157,22 +161,24 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
   @Override
   public HistoricalTimeSeries getHistoricalTimeSeries(
       final ExternalIdBundle identifiers, final String dataSource, final String dataProvider, final String dataField,
-      LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
-    if (!includeStart && start != null) {
-      start = start.plusDays(1);
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
+    LocalDate startDate = start;
+    if (!includeStart && startDate != null) {
+      startDate = startDate.plusDays(1);
     }
-    final LocalDateRange dateRange = LocalDateRange.ofNullUnbounded(start, end, includeEnd);
+    final LocalDateRange dateRange = LocalDateRange.ofNullUnbounded(startDate, end, includeEnd);
     return doGetHistoricalTimeSeries(identifiers, dataSource, dataProvider, dataField, dateRange, null);
   }
 
   @Override
   public HistoricalTimeSeries getHistoricalTimeSeries(
       final ExternalIdBundle identifiers, final String dataSource, final String dataProvider, final String dataField,
-      LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
-    if (!includeStart && start != null) {
-      start = start.plusDays(1);
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
+    LocalDate startDate = start;
+    if (!includeStart && startDate != null) {
+      startDate = startDate.plusDays(1);
     }
-    final LocalDateRange dateRange = LocalDateRange.ofNullUnbounded(start, end, includeEnd);
+    final LocalDateRange dateRange = LocalDateRange.ofNullUnbounded(startDate, end, includeEnd);
     final Integer maxPointsVal = maxPoints == 0 ? null : maxPoints;
     return doGetHistoricalTimeSeries(identifiers, dataSource, dataProvider, dataField, dateRange, maxPointsVal);
   }
@@ -191,34 +197,39 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField, final LocalDate start,
+  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
+      final String dataProvider, final String dataField, final LocalDate start,
       final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
     throw createValidityDateException();
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
+      final String dataProvider, final String dataField) {
     throw createValidityDateException();
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField, final LocalDate start,
+  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
+      final String dataProvider, final String dataField, final LocalDate start,
       final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     throw createValidityDateException();
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider, final String dataField) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider,
+      final String dataField) {
     throw createValidityDateException();
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider, final String dataField, final LocalDate start, final boolean includeStart, final LocalDate end,
+  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider,
+      final String dataField, final LocalDate start, final boolean includeStart, final LocalDate end,
       final boolean includeEnd) {
     throw createValidityDateException();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeries getHistoricalTimeSeries(
       final String dataField, final ExternalIdBundle identifiers, final String resolutionKey) {
@@ -246,13 +257,15 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final String resolutionKey, final LocalDate start, final boolean includeStart, final LocalDate end,
+  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final String resolutionKey,
+      final LocalDate start, final boolean includeStart, final LocalDate end,
       final boolean includeEnd, final int maxPoints) {
     throw createConfigException();
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String resolutionKey, final LocalDate start,
+  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String resolutionKey, final LocalDate start,
       final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
     throw createConfigException();
   }
@@ -264,33 +277,38 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
 
   @Override
   public Pair<LocalDate, Double> getLatestDataPoint(
-      final String dataField, final ExternalIdBundle identifierBundle, final String resolutionKey, final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
-    throw createConfigException();
-  }
-
-  @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String resolutionKey) {
-    throw createConfigException();
-  }
-
-  @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String resolutionKey, final LocalDate start, final boolean includeStart,
+      final String dataField, final ExternalIdBundle identifierBundle, final String resolutionKey, final LocalDate start, final boolean includeStart,
       final LocalDate end, final boolean includeEnd) {
     throw createConfigException();
   }
 
-  //-------------------------------------------------------------------------
+  @Override
+  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String resolutionKey) {
+    throw createConfigException();
+  }
+
+  @Override
+  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String resolutionKey, final LocalDate start, final boolean includeStart,
+      final LocalDate end, final boolean includeEnd) {
+    throw createConfigException();
+  }
+
+  // -------------------------------------------------------------------------
   @Override
   public Map<ExternalIdBundle, HistoricalTimeSeries> getHistoricalTimeSeries(
-      final Set<ExternalIdBundle> externalIdBundles, final String dataSource, final String dataProvider, final String dataField, LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
-
-    if (!includeStart && start != null) {
-      start = start.plusDays(1);
+      final Set<ExternalIdBundle> externalIdBundles, final String dataSource, final String dataProvider, final String dataField, final LocalDate start,
+      final boolean includeStart, final LocalDate end, final boolean includeEnd) {
+    LocalDate startDate = start;
+    if (!includeStart && startDate != null) {
+      startDate = startDate.plusDays(1);
     }
-    final LocalDateRange dateRange = LocalDateRange.ofNullUnbounded(start, end, includeEnd);
+    final LocalDateRange dateRange = LocalDateRange.ofNullUnbounded(startDate, end, includeEnd);
     LOGGER.info("Getting HistoricalTimeSeries for securities {}", externalIdBundles);
 
-    final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> map = _provider.getHistoricalTimeSeries(externalIdBundles, dataSource, dataProvider, dataField, dateRange);
+    final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> map = _provider.getHistoricalTimeSeries(externalIdBundles, dataSource, dataProvider, dataField,
+        dateRange);
     final Map<ExternalIdBundle, HistoricalTimeSeries> result = Maps.newHashMap();
     for (final ExternalIdBundle bundle : map.keySet()) {
       final LocalDateDoubleTimeSeries ts = map.get(bundle);

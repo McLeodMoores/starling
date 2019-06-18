@@ -28,12 +28,13 @@ public class EuropeanOptionPrices {
     ArgumentChecker.isTrue(strikes.length == _nExpiries, "number of strike strips ({}) not equal to number of expiries({})", strikes.length, _nExpiries);
     ArgumentChecker.isTrue(otmPrices.length == _nExpiries, "number of price strips ({}) not equal to number of expiries({})", strikes.length, _nExpiries);
     for (int i = 0; i < _nExpiries; i++) {
-      ArgumentChecker.isTrue(strikes[i].length == otmPrices[i].length, "number of prices and strikes in strip #{} (expiry = {}) do not match. {} prices and {} strikes", i, expiries[i],
+      ArgumentChecker.isTrue(strikes[i].length == otmPrices[i].length,
+          "number of prices and strikes in strip #{} (expiry = {}) do not match. {} prices and {} strikes", i, expiries[i],
           otmPrices[i].length,
           strikes[i].length);
     }
 
-    //do deep copy of inputs
+    // do deep copy of inputs
     _expiries = Arrays.copyOf(expiries, _nExpiries);
     _strikes = new double[_nExpiries][];
     _otmPrices = new double[_nExpiries][];
@@ -63,7 +64,7 @@ public class EuropeanOptionPrices {
     ArgumentChecker.isTrue(ArgumentChecker.isInRangeExcludingHigh(0, _nExpiries, expiryIndex), "Invalid index for expiry; {}", expiryIndex);
     ArgumentChecker.isTrue(ArgumentChecker.isInRangeExcludingHigh(0, _strikes[expiryIndex].length, strikeIndex), "Invalid index for strike; {}", strikeIndex);
 
-    //end up making two copies of this array, once here and once in the constructor of the new object
+    // end up making two copies of this array, once here and once in the constructor of the new object
     final double[] p = Arrays.copyOf(_otmPrices[expiryIndex], _otmPrices[expiryIndex].length);
     p[strikeIndex] += amount;
 

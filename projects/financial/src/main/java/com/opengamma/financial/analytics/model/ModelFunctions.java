@@ -8,8 +8,9 @@ package com.opengamma.financial.analytics.model;
 import java.util.Collections;
 import java.util.List;
 
-import com.mcleodmoores.financial.function.bond.config.BondDiscountingMethodFunctions;
-import com.mcleodmoores.financial.function.fx.config.FxDiscountingMethodFunctions;
+import com.mcleodmoores.financial.function.bond.functions.BondDiscountingMethodFunctions;
+import com.mcleodmoores.financial.function.credit.cds.isda.functions.IsdaFunctions;
+import com.mcleodmoores.financial.function.fx.functions.FxDiscountingMethodFunctions;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
@@ -54,6 +55,7 @@ import com.opengamma.financial.analytics.model.volatility.VolatilityFunctions;
 /**
  * Function repository configuration source for the functions contained in this package and sub-packages.
  */
+@SuppressWarnings("deprecation")
 public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**
@@ -70,12 +72,13 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(MarginPriceFunction.class));
     functions.add(functionConfiguration(PVCashBalanceFunction.class));
     functions.add(functionConfiguration(FXCurrencyExposureFunction.class));
-    /*functions.add(functionConfiguration(InflationBondFromCurvesFunction.class));*/
+    /* functions.add(functionConfiguration(InflationBondFromCurvesFunction.class)); */
 
   }
 
   /**
    * Adds deprecated bond functions.
+   *
    * @return A configuration source containing deprecated bond functions
    * @deprecated The new versions of these functions are added in {{@link #bondCleanPriceFunctionConfiguration()}
    */
@@ -86,6 +89,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds deprecated bond functions.
+   *
    * @return A configuration source containing deprecated bond future functions
    * @deprecated The functions that are added are deprecated
    */
@@ -96,6 +100,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds functions that produce bond analytics from the clean price.
+   *
    * @return A configuration source containing bond functions
    */
   protected FunctionConfigurationSource bondCleanPriceFunctionConfiguration() {
@@ -104,6 +109,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds functions that produce bond analytics from yield curves.
+   *
    * @return A configuration source containing bond functions
    */
   protected FunctionConfigurationSource bondCurveFunctionConfiguration() {
@@ -112,6 +118,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds functions that produce bond analytics from yield curves.
+   *
    * @return A configuration source containing bond functions
    */
   protected FunctionConfigurationSource inflationbondCurveFunctionConfiguration() {
@@ -120,6 +127,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds functions that produce bond analytics from the clean price.
+   *
    * @return A configuration source containing bond functions
    */
   protected FunctionConfigurationSource bondYieldFunctionConfiguration() {
@@ -127,8 +135,8 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Adds functions that produce analytics for volatility swaps using the Carr-Lee
-   * model.
+   * Adds functions that produce analytics for volatility swaps using the Carr-Lee model.
+   *
    * @return A configuration source containing pricing and analytics functions
    */
   protected FunctionConfigurationSource carrLeeFunctionConfiguration() {
@@ -137,6 +145,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds CDS functions.
+   *
    * @return A configuration source containing CDS functions
    */
   protected FunctionConfigurationSource cdsFunctionConfiguration() {
@@ -144,7 +153,17 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
+   * Adds functions that produce credit instrument analytics using the ISDA model.
+   *
+   * @return A configuration source containing ISDA model functions
+   */
+  protected FunctionConfigurationSource isdaModelFunctionConfiguration() {
+    return CombiningFunctionConfigurationSource.of(IsdaFunctions.instance());
+  }
+
+  /**
    * Adds credit functions.
+   *
    * @return A configuration source containing credit functions
    */
   protected FunctionConfigurationSource creditFunctionConfiguration() {
@@ -153,15 +172,25 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds functions that produce curves.
+   *
    * @return A configuration source containing curve functions
    */
   protected FunctionConfigurationSource curveFunctionConfiguration() {
-    return CombiningFunctionConfigurationSource.of(CurveFunctions.instance(),
-        com.mcleodmoores.financial.function.curve.config.CurveFunctions.instance());
+    return CombiningFunctionConfigurationSource.of(CurveFunctions.instance(), com.mcleodmoores.financial.function.curve.functions.CurveFunctions.instance());
+  }
+
+  /**
+   * Adds functions that use the ISDA model.
+   *
+   * @return a configuration source containing ISDA model functions
+   */
+  protected FunctionConfigurationSource idsaFunctionConfiguration() {
+    return IsdaFunctions.instance();
   }
 
   /**
    * Adds equity functions.
+   *
    * @return A configuration source containing equity functions
    */
   protected FunctionConfigurationSource equityFunctionConfiguration() {
@@ -170,6 +199,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds deprecated interest rate instrument functions.
+   *
    * @return A configuration source containing the deprecated interest rate instrument functions
    * @deprecated The current versions of these functions are added in {@link #discountingFunctionConfiguration}
    */
@@ -180,6 +210,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds pricing functions that use curves constructed with the discounting method.
+   *
    * @return A configuration source containing these functions.
    */
   protected FunctionConfigurationSource discountingFunctionConfiguration() {
@@ -187,8 +218,8 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Adds pricing functions that use Black surfaces and curve constructed with
-   * the discounting method.
+   * Adds pricing functions that use Black surfaces and curve constructed with the discounting method.
+   *
    * @return A configuration source containing these functions
    */
   protected FunctionConfigurationSource blackDiscountingFunctionConfiguration() {
@@ -196,8 +227,8 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Adds pricing functions that use curves constructed using the Hull-White
-   * one factor discounting method.
+   * Adds pricing functions that use curves constructed using the Hull-White one factor discounting method.
+   *
    * @return A configuration source containing these functions
    */
   protected FunctionConfigurationSource hullWhitePricingFunctionConfiguration() {
@@ -205,8 +236,8 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Adds pricing functions that use curves constructed using the G2++
-   * discounting method
+   * Adds pricing functions that use curves constructed using the G2++ discounting method.
+   *
    * @return A configuration source containing these functions
    */
   protected FunctionConfigurationSource g2ppPricingFunctionConfiguration() {
@@ -239,6 +270,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds horizon functions.
+   *
    * @return A configuration source containing horizon functions.
    */
   protected FunctionConfigurationSource horizonFunctionConfiguration() {
@@ -247,6 +279,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds interest rate future-specific functions.
+   *
    * @return A configuration source containing the deprecated interest rate future functions.
    * @deprecated The current versions of these functions are added in {@link ModelFunctions#blackDiscountingFunctionConfiguration}
    */
@@ -261,6 +294,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds general option functions.
+   *
    * @return A configuration source containing option functions
    * @deprecated The underlying-specific functions should be used
    */
@@ -275,11 +309,12 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   protected FunctionConfigurationSource riskFactorFunctionConfiguration() {
     // TODO
-    return new SimpleFunctionConfigurationSource(new FunctionConfigurationBundle(Collections.<FunctionConfiguration>emptyList()));
+    return new SimpleFunctionConfigurationSource(new FunctionConfigurationBundle(Collections.<FunctionConfiguration> emptyList()));
   }
 
   /**
-   * Adds SABR pricing functions for swaptions, cap/floors, CMS and cap/floor CMS spreads
+   * Adds SABR pricing functions for swaptions, cap/floors, CMS and cap/floor CMS spreads.
+   *
    * @return A configuration source containing the deprecated functions
    * @deprecated The current versions of these functions are added in {@link ModelFunctions#sabrDiscountingFunctionConfiguration()}
    */
@@ -318,6 +353,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds time series functions.
+   *
    * @return A configuration source containing time series functions
    */
   protected FunctionConfigurationSource timeSeriesFunctionConfiguration() {
@@ -326,6 +362,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds total return swap functions.
+   *
    * @return A configuration source containing total return swap functions
    */
   protected FunctionConfigurationSource totalReturnSwapFunctionConfiguration() {
@@ -334,45 +371,15 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   @Override
   protected FunctionConfigurationSource createObject() {
-    return CombiningFunctionConfigurationSource.of(super.createObject(),
-        bondFunctionConfiguration(),
-        bondFutureOptionFunctionConfiguration(),
-        bondCleanPriceFunctionConfiguration(),
-        bondCurveFunctionConfiguration(),
-        inflationbondCurveFunctionConfiguration(),
-        bondYieldFunctionConfiguration(),
-        carrLeeFunctionConfiguration(),
-        cdsFunctionConfiguration(),
-        creditFunctionConfiguration(),
-        curveFunctionConfiguration(),
-        equityFunctionConfiguration(),
-        fixedIncomeFunctionConfiguration(),
-        forexFunctionConfiguration(),
-        futureFunctionConfiguration(),
-        futureOptionFunctionConfiguration(),
-        horizonFunctionConfiguration(),
-        irFutureOptionFunctionConfiguration(),
-        optionFunctionConfiguration(),
-        pnlFunctionConfiguration(),
-        riskFactorFunctionConfiguration(),
-        sabrCubeFunctionConfiguration(),
-        sensitivitiesFunctionConfiguration(),
-        simpleInstrumentFunctionConfiguration(),
-        swaptionFunctionConfiguration(),
-        varFunctionConfiguration(),
-        volatilityFunctionConfiguration(),
-        yieldCurveFunctionConfiguration(),
-        forwardFunctionConfiguration(),
-        futureCurveFunctionConfiguration(),
-        discountingFunctionConfiguration(),
-        hullWhitePricingFunctionConfiguration(),
-        interestRateFutureFunctionConfiguration(),
-        fxPricingFunctionConfiguration(),
-        blackDiscountingFunctionConfiguration(),
-        sabrDiscountingFunctionConfiguration(),
-        g2ppPricingFunctionConfiguration(),
-        timeSeriesFunctionConfiguration(),
-        totalReturnSwapFunctionConfiguration());
+    return CombiningFunctionConfigurationSource.of(super.createObject(), bondCleanPriceFunctionConfiguration(), bondCurveFunctionConfiguration(),
+        inflationbondCurveFunctionConfiguration(), bondYieldFunctionConfiguration(), carrLeeFunctionConfiguration(), curveFunctionConfiguration(),
+        equityFunctionConfiguration(), forexFunctionConfiguration(), futureFunctionConfiguration(), futureOptionFunctionConfiguration(),
+        horizonFunctionConfiguration(), irFutureOptionFunctionConfiguration(), pnlFunctionConfiguration(), riskFactorFunctionConfiguration(),
+        sensitivitiesFunctionConfiguration(), simpleInstrumentFunctionConfiguration(), swaptionFunctionConfiguration(), varFunctionConfiguration(),
+        volatilityFunctionConfiguration(), yieldCurveFunctionConfiguration(), forwardFunctionConfiguration(), futureCurveFunctionConfiguration(),
+        discountingFunctionConfiguration(), hullWhitePricingFunctionConfiguration(), fxPricingFunctionConfiguration(), blackDiscountingFunctionConfiguration(),
+        sabrDiscountingFunctionConfiguration(), g2ppPricingFunctionConfiguration(), timeSeriesFunctionConfiguration(), totalReturnSwapFunctionConfiguration(),
+        isdaModelFunctionConfiguration());
   }
 
 }

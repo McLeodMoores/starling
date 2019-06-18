@@ -13,7 +13,7 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Supplies {@link CurveConstructionConfiguration}s stored in a {@link ConfigSource}
+ * Supplies {@link CurveConstructionConfiguration}s stored in a {@link ConfigSource}.
  */
 public class ConfigDBCurveConstructionConfigurationSource implements CurveConstructionConfigurationSource {
 
@@ -21,9 +21,10 @@ public class ConfigDBCurveConstructionConfigurationSource implements CurveConstr
   private final ConfigSourceQuery<CurveConstructionConfiguration> _query;
 
   /**
-   * @param configSource The config source, not null
-   * @deprecated Use {@link #ConfigDBCurveConstructionConfigurationSource(ConfigSource,VersionCorrection)}, {@link #ConfigDBCurveConstructionConfigurationSource(ConfigSourceQuery)} or {@link #init}
-   *             instead
+   * @param configSource
+   *          The config source, not null
+   * @deprecated Use {@link #ConfigDBCurveConstructionConfigurationSource(ConfigSource,VersionCorrection)},
+   *             {@link #ConfigDBCurveConstructionConfigurationSource(ConfigSourceQuery)} or {@link #init} instead
    */
   @Deprecated
   public ConfigDBCurveConstructionConfigurationSource(final ConfigSource configSource) {
@@ -31,11 +32,13 @@ public class ConfigDBCurveConstructionConfigurationSource implements CurveConstr
   }
 
   /**
-   * @param configSource The config source, not null
-   * @param versionCorrection The version correction to query at, not null
+   * @param configSource
+   *          The config source, not null
+   * @param versionCorrection
+   *          The version correction to query at, not null
    */
   public ConfigDBCurveConstructionConfigurationSource(final ConfigSource configSource, final VersionCorrection versionCorrection) {
-    this(new ConfigSourceQuery<CurveConstructionConfiguration>(configSource, CurveConstructionConfiguration.class, versionCorrection));
+    this(new ConfigSourceQuery<>(configSource, CurveConstructionConfiguration.class, versionCorrection));
   }
 
   public ConfigDBCurveConstructionConfigurationSource(final ConfigSourceQuery<CurveConstructionConfiguration> query) {

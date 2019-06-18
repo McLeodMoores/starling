@@ -55,6 +55,9 @@ public class JsonJodaRoundTripTest {
 
   /**
    * Simple security
+   * 
+   * @throws JSONException
+   *           if there is a problem producing the JSON
    */
   @Test
   public void fxForward() throws JSONException {
@@ -68,7 +71,6 @@ public class JsonJodaRoundTripTest {
     final BeanTraverser traverser = new BeanTraverser(PROPERTY_FILTER);
     final JSONObject json = (JSONObject) traverser.traverse(FXForwardSecurity.meta(), writingVisitor);
     assertNotNull(json);
-//    System.out.println(json);
 
     final JsonBeanDataSource dataSource = new JsonBeanDataSource(new JSONObject(json.toString()));
     final MetaBeanFactory metaBeanFactory = new MapMetaBeanFactory(ImmutableSet.<MetaBean>of(FXForwardSecurity.meta()));
@@ -82,6 +84,9 @@ public class JsonJodaRoundTripTest {
 
   /**
    * Complicated security with nested beans
+   * 
+   * @throws JSONException
+   *           if there is a problem producing the JSON
    */
   @Test
   public void swap() throws JSONException {
@@ -113,7 +118,6 @@ public class JsonJodaRoundTripTest {
     final BeanVisitor<JSONObject> writingVisitor = new BuildingBeanVisitor<>(security, sink);
     final JSONObject json = (JSONObject) traverser.traverse(SwapSecurity.meta(), writingVisitor);
     assertNotNull(json);
-//    System.out.println(json);
 
     final JsonBeanDataSource dataSource = new JsonBeanDataSource(new JSONObject(json.toString()));
     final MetaBeanFactory metaBeanFactory = new MapMetaBeanFactory(ImmutableSet.<MetaBean>of(
@@ -130,7 +134,11 @@ public class JsonJodaRoundTripTest {
   }
 
   /**
-   * BondFutureSecurity contains a collection of bean instances (BondFutureDeliverable)
+   * BondFutureSecurity contains a collection of bean instances
+   * (BondFutureDeliverable)
+   * 
+   * @throws JSONException
+   *           if there is a problem producing the JSON
    */
   @Test
   public void bondFuture() throws JSONException {
@@ -143,7 +151,7 @@ public class JsonJodaRoundTripTest {
         new BondFutureDeliverable(bundle1, 111),
         new BondFutureDeliverable(bundle2, 222));
     final BondFutureSecurity security = new BondFutureSecurity(new Expiry(expiryDate), "exch", "settExch", Currency.GBP, 1234,
-                                                         basket, firstDeliveryDate, lastDeliveryDate, "category");
+        basket, firstDeliveryDate, lastDeliveryDate, "category");
     security.setName("a bond future");
 
     // TODO this isn't converting ExternalIdBundle properly
@@ -152,7 +160,6 @@ public class JsonJodaRoundTripTest {
     final BeanVisitor<JSONObject> writingVisitor = new BuildingBeanVisitor<>(security, sink);
     final JSONObject json = (JSONObject) traverser.traverse(BondFutureSecurity.meta(), writingVisitor);
     assertNotNull(json);
-//    System.out.println(json);
 
     final JsonBeanDataSource dataSource = new JsonBeanDataSource(new JSONObject(json.toString()));
     final MetaBeanFactory metaBeanFactory = new MapMetaBeanFactory(ImmutableSet.<MetaBean>of(

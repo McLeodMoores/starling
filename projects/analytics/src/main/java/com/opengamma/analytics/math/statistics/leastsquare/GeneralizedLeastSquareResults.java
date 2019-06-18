@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.leastsquare;
@@ -15,20 +15,26 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 
 /**
- * 
- * @param <T> The type of the inputs to the basis functions
+ *
+ * @param <T>
+ *          The type of the inputs to the basis functions
  */
 public class GeneralizedLeastSquareResults<T> extends LeastSquareResults {
 
   private final Function1D<T, Double> _function;
 
   /**
-   * @param basisFunctions The basis functions
-   * @param chiSq The chi-squared of the fit
-   * @param parameters The parameters that were fit
-   * @param covariance The covariance matrix of the result
+   * @param basisFunctions
+   *          The basis functions
+   * @param chiSq
+   *          The chi-squared of the fit
+   * @param parameters
+   *          The parameters that were fit
+   * @param covariance
+   *          The covariance matrix of the result
    */
-  public GeneralizedLeastSquareResults(final List<Function1D<T, Double>> basisFunctions, final double chiSq, final DoubleMatrix1D parameters, final DoubleMatrix2D covariance) {
+  public GeneralizedLeastSquareResults(final List<Function1D<T, Double>> basisFunctions, final double chiSq, final DoubleMatrix1D parameters,
+      final DoubleMatrix2D covariance) {
     super(chiSq, parameters, covariance, null);
 
     _function = new BasisFunctionAggregation<>(basisFunctions, parameters.getData());
@@ -36,6 +42,7 @@ public class GeneralizedLeastSquareResults<T> extends LeastSquareResults {
 
   /**
    * Gets the functions field.
+   *
    * @return the functions
    */
   public Function1D<T, Double> getFunction() {

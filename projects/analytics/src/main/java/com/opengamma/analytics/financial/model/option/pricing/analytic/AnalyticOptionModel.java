@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
@@ -22,25 +22,32 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.util.CompareUtils;
 
 /**
- * @param <T> The type of the option definition
- * @param <U> The type of the option data bundle
- * Base class for analytic option models.
+ * @param <T>
+ *          The type of the option definition
+ * @param <U>
+ *          The type of the option data bundle Base class for analytic option models.
  */
 public abstract class AnalyticOptionModel<T extends OptionDefinition, U extends StandardOptionDataBundle> implements OptionModel<T, U> {
 
   /**
    * Returns a pricing function.
-   * @param definition The option definition, not null
+   *
+   * @param definition
+   *          The option definition, not null
    * @return The pricing function
    */
   public abstract Function1D<U, Double> getPricingFunction(T definition);
 
   /**
-   * Returns a visitor that calculates greeks. By default, the calculation method is finite difference. If a different
-   * method is possible (e.g. analytic formulae) then this method should be overridden in the implementing class.
-   * @param pricingFunction The pricing function, not null
-   * @param data The data, not null
-   * @param definition The option definition, not null
+   * Returns a visitor that calculates greeks. By default, the calculation method is finite difference. If a different method is possible (e.g. analytic
+   * formulae) then this method should be overridden in the implementing class.
+   *
+   * @param pricingFunction
+   *          The pricing function, not null
+   * @param data
+   *          The data, not null
+   * @param definition
+   *          The option definition, not null
    * @return A visitor that calculates greeks
    */
   public GreekVisitor<Double> getGreekVisitor(final Function1D<U, Double> pricingFunction, final U data, final T definition) {
@@ -69,7 +76,7 @@ public abstract class AnalyticOptionModel<T extends OptionDefinition, U extends 
   }
 
   protected double getD1(final double s, final double k, final double t, final double sigma, final double b) {
-    final double numerator = (Math.log(s / k) + t * (b + sigma * sigma / 2));
+    final double numerator = Math.log(s / k) + t * (b + sigma * sigma / 2);
     if (CompareUtils.closeEquals(numerator, 0, 1e-16)) {
       return 0;
     }
@@ -85,11 +92,15 @@ public abstract class AnalyticOptionModel<T extends OptionDefinition, U extends 
   }
 
   /**
-   * Extends the finite difference greek visitor to allow calculation of dZetaDVol
-   * @param <S> The type of the option data bundle
-   * @param <R> The type of the option definition
+   * Extends the finite difference greek visitor to allow calculation of dZetaDVol.
+   *
+   * @param <S>
+   *          The type of the option data bundle
+   * @param <R>
+   *          The type of the option definition
    */
-  protected class AnalyticOptionModelFiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, R extends OptionDefinition> extends FiniteDifferenceGreekVisitor<S, R> {
+  protected class AnalyticOptionModelFiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, R extends OptionDefinition>
+      extends FiniteDifferenceGreekVisitor<S, R> {
     private static final double EPS = 1e-3;
     private final S _data;
     private final R _definition;

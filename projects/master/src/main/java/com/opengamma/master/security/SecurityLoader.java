@@ -27,7 +27,7 @@ public interface SecurityLoader {
    * Ensures information about a single security is available.
    * <p>
    * The security is specified by external identifier bundle.
-   * 
+   *
    * @param externalIdBundle  the external identifier bundle, not null
    * @return the security information, null if not found
    * @throws RuntimeException if a problem occurs
@@ -35,15 +35,18 @@ public interface SecurityLoader {
   UniqueId loadSecurity(ExternalIdBundle externalIdBundle);
 
   /**
-   * Gets information about a collection of securities from the underlying data source.
+   * Gets information about a collection of securities from the underlying data
+   * source.
    * <p>
-   * The securities are specified by external identifier bundles.
-   * The result is keyed by the input bundles.
-   * A missing entry in the result occurs if the security information could not be found
-   * 
-   * @param externalIdBundles  the external identifier bundles, not null
+   * The securities are specified by external identifier bundles. The result is
+   * keyed by the input bundles. A missing entry in the result occurs if the
+   * security information could not be found.
+   *
+   * @param externalIdBundles
+   *          the external identifier bundles, not null
    * @return the security information, not null
-   * @throws RuntimeException if a problem occurs
+   * @throws RuntimeException
+   *           if a problem occurs
    */
   Map<ExternalIdBundle, UniqueId> loadSecurities(Iterable<ExternalIdBundle> externalIdBundles);
 
@@ -52,7 +55,7 @@ public interface SecurityLoader {
    * <p>
    * This is the underlying operation.
    * All other methods delegate to this one.
-   * 
+   *
    * @param request  the request, not null
    * @return the security information result, not null
    * @throws RuntimeException if a problem occurs

@@ -124,37 +124,37 @@ public class WebExchangesResource extends AbstractWebExchangeResource {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response postHTML(
-      @FormParam("name") String name,
-      @FormParam("idscheme") String idScheme,
-      @FormParam("idvalue") String idValue,
-      @FormParam("regionscheme") String regionScheme,
-      @FormParam("regionvalue") String regionValue) {
-    name = StringUtils.trimToNull(name);
-    idScheme = StringUtils.trimToNull(idScheme);
-    idValue = StringUtils.trimToNull(idValue);
-    regionScheme = StringUtils.trimToNull(regionScheme);
-    regionValue = StringUtils.trimToNull(regionValue);
-    if (name == null || idScheme == null || idValue == null) {
+      @FormParam("name") final String name,
+      @FormParam("idscheme") final String idScheme,
+      @FormParam("idvalue") final String idValue,
+      @FormParam("regionscheme") final String regionScheme,
+      @FormParam("regionvalue") final String regionValue) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedIdScheme = StringUtils.trimToNull(idScheme);
+    final String trimmedIdValue = StringUtils.trimToNull(idValue);
+    final String trimmedRegionScheme = StringUtils.trimToNull(regionScheme);
+    final String trimmedRegionValue = StringUtils.trimToNull(regionValue);
+    if (trimmedName == null || idScheme == null || idValue == null) {
       final FlexiBean out = createRootData();
-      if (name == null) {
+      if (trimmedName == null) {
         out.put("err_nameMissing", true);
       }
-      if (idScheme == null) {
+      if (trimmedIdScheme == null) {
         out.put("err_idschemeMissing", true);
       }
-      if (idValue == null) {
+      if (trimmedIdValue == null) {
         out.put("err_idvalueMissing", true);
       }
-      if (regionScheme == null) {
+      if (trimmedRegionScheme == null) {
         out.put("err_regionschemeMissing", true);
       }
-      if (regionValue == null) {
+      if (trimmedRegionValue == null) {
         out.put("err_regionvalueMissing", true);
       }
       final String html = getFreemarker().build(HTML_DIR + "exchanges-add.ftl", out);
       return Response.ok(html).build();
     }
-    final URI uri = createExchange(name, idScheme, idValue, regionScheme, regionValue);
+    final URI uri = createExchange(trimmedName, trimmedIdScheme, trimmedIdValue, trimmedRegionScheme, trimmedRegionValue);
     return Response.seeOther(uri).build();
   }
 
@@ -162,20 +162,20 @@ public class WebExchangesResource extends AbstractWebExchangeResource {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
   public Response postJSON(
-      @FormParam("name") String name,
-      @FormParam("idscheme") String idScheme,
-      @FormParam("idvalue") String idValue,
-      @FormParam("regionscheme") String regionScheme,
-      @FormParam("regionvalue") String regionValue) {
-    name = StringUtils.trimToNull(name);
-    idScheme = StringUtils.trimToNull(idScheme);
-    idValue = StringUtils.trimToNull(idValue);
-    regionScheme = StringUtils.trimToNull(regionScheme);
-    regionValue = StringUtils.trimToNull(regionValue);
-    if (name == null || idScheme == null || idValue == null) {
+      @FormParam("name") final String name,
+      @FormParam("idscheme") final String idScheme,
+      @FormParam("idvalue") final String idValue,
+      @FormParam("regionscheme") final String regionScheme,
+      @FormParam("regionvalue") final String regionValue) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedIdScheme = StringUtils.trimToNull(idScheme);
+    final String trimmedIdValue = StringUtils.trimToNull(idValue);
+    final String trimmedRegionScheme = StringUtils.trimToNull(regionScheme);
+    final String trimmedRegionValue = StringUtils.trimToNull(regionValue);
+    if (trimmedName == null || trimmedIdScheme == null || trimmedIdValue == null) {
       return Response.status(Status.BAD_REQUEST).build();
     }
-    final URI uri = createExchange(name, idScheme, idValue, regionScheme, regionValue);
+    final URI uri = createExchange(trimmedName, trimmedIdScheme, trimmedIdValue, trimmedRegionScheme, trimmedRegionValue);
     return Response.created(uri).build();
   }
 

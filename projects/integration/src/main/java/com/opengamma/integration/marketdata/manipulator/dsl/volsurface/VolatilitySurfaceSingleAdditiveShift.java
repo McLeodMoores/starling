@@ -40,8 +40,8 @@ public class VolatilitySurfaceSingleAdditiveShift implements StructureManipulato
 
   @Override
   public VolatilitySurface execute(final VolatilitySurface surface,
-                                   final ValueSpecification valueSpecification,
-                                   final FunctionExecutionContext executionContext) {
+      final ValueSpecification valueSpecification,
+      final FunctionExecutionContext executionContext) {
     return surface.withSingleAdditiveShift(_x, _y, _shift);
   }
 
@@ -79,17 +79,17 @@ public class VolatilitySurfaceSingleAdditiveShift implements StructureManipulato
       return false;
     }
     final VolatilitySurfaceSingleAdditiveShift other = (VolatilitySurfaceSingleAdditiveShift) obj;
-    return Objects.equals(this._x, other._x) &&
-        Objects.equals(this._y, other._y) &&
-        Objects.equals(this._shift, other._shift);
+    return Objects.equals(this._x, other._x)
+        && Objects.equals(this._y, other._y)
+        && Objects.equals(this._shift, other._shift);
   }
 
   @Override
   public String toString() {
-    return "VolatilitySurfaceSingleAdditiveShift [" +
-        "_x=" + _x +
-        ", _y=" + _y +
-        ", _shift=" + _shift +
-        "]";
+    return "VolatilitySurfaceSingleAdditiveShift ["
+        + "_x=" + _x
+        + ", _y=" + _y
+        + ", _shift=" + _shift
+        + "]";
   }
 }

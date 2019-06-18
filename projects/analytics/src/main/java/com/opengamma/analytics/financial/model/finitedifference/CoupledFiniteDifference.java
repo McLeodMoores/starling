@@ -17,7 +17,7 @@ import com.opengamma.analytics.math.surface.Surface;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class CoupledFiniteDifference {
   private static final Decomposition<?> DCOMP = new LUDecompositionCommons();
@@ -26,7 +26,7 @@ public class CoupledFiniteDifference {
   private final boolean _showFullResults;
 
   /**
-   * 
+   *
    */
   public CoupledFiniteDifference() {
     _theta = 0.5;
@@ -88,9 +88,9 @@ public class CoupledFiniteDifference {
     double[][] c1 = new double[2][xNodes - 2];
     final double[][] c2 = new double[2][xNodes - 2];
 
-    //    final double omega = 1.5;
-    //    final int oldCount = 0;
-    //    final boolean omegaIncrease = false;
+    // final double omega = 1.5;
+    // final int oldCount = 0;
+    // final boolean omegaIncrease = false;
 
     double dt, t1, t2, x;
     double[] x1st, x2nd;
@@ -212,24 +212,24 @@ public class CoupledFiniteDifference {
 
       q[2 * xNodes - 1] = sum + upper2.getConstant(pdeData2.getCoefficients(), t2);
 
-      //TODO work out why SOR does not converge here
-      //      final DoubleMatrix2D mM = new DoubleMatrix2D(m);
-      //      final DecompositionResult res = DCOMP.evaluate(mM);
-      //      f = res.solve(q);
+      // TODO work out why SOR does not converge here
+      // final DoubleMatrix2D mM = new DoubleMatrix2D(m);
+      // final DecompositionResult res = DCOMP.evaluate(mM);
+      // f = res.solve(q);
 
-      //      // SOR
+      // // SOR
       //
-      //      int count = sor(omega, grid, freeBoundary, xNodes, f, q, m, t2);
-      //      if (oldCount > 0) {
-      //        if ((omegaIncrease && count > oldCount) || (!omegaIncrease && count < oldCount)) {
-      //          omega = Math.max(1.0, omega * 0.9);
-      //          omegaIncrease = false;
-      //        } else {
-      //          omega = Math.min(1.99, 1.1 * omega);
-      //          omegaIncrease = true;
-      //        }
-      //      }
-      //      oldCount = count;
+      // int count = sor(omega, grid, freeBoundary, xNodes, f, q, m, t2);
+      // if (oldCount > 0) {
+      // if ((omegaIncrease && count > oldCount) || (!omegaIncrease && count < oldCount)) {
+      // omega = Math.max(1.0, omega * 0.9);
+      // omegaIncrease = false;
+      // } else {
+      // omega = Math.min(1.99, 1.1 * omega);
+      // omegaIncrease = true;
+      // }
+      // }
+      // oldCount = count;
 
       if (first) {
         final DoubleMatrix2D mM = new DoubleMatrix2D(m);
@@ -269,7 +269,8 @@ public class CoupledFiniteDifference {
   }
 
   @SuppressWarnings("unused")
-  private int sor(final double omega, final PDEGrid1D grid, final Surface<Double, Double, Double> freeBoundary, final int xNodes, final double[] f, final double[] q, final double[][] m,
+  private int sor(final double omega, final PDEGrid1D grid, final Surface<Double, Double, Double> freeBoundary, final int xNodes, final double[] f,
+      final double[] q, final double[][] m,
       final double t2) {
     double sum;
     int count = 0;

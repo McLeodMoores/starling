@@ -58,8 +58,11 @@ public class ActiveMqJmsConnectorComponentFactory extends AbstractAliasedCompone
   /**
    * Creates the JMS connector without registering it.
    *
-   * @param repo  the component repository, only used to register secondary items like lifecycle, not null
+   * @param repo
+   *          the component repository, only used to register secondary items like lifecycle, not null
    * @return the JMS connector, not null
+   * @throws Exception
+   *           if there is a problem
    */
   protected JmsConnector createJmsConnector(final ComponentRepository repo) throws Exception {
     final ConnectionFactory connectionFactory = createConnectionFactory(repo);

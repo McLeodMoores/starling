@@ -56,7 +56,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction.class);
   /**
@@ -69,7 +71,7 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
 
   @Override
   public void init(final FunctionCompilationContext context) {
-    // REVIEW: jim 24-Oct-2012 -- this is a terrible, terrible hack.  Blame Andrew Griffin - he told me to do it.
+    // REVIEW: jim 24-Oct-2012 -- this is a terrible, terrible hack. Blame Andrew Griffin - he told me to do it.
     _htsResolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
   }
 
@@ -109,12 +111,12 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<String> curves = desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE);
     final Set<String> curveCalcConfigs = desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
-    if ((curves == null) || (curves.size() != 1)) {
+    if (curves == null || curves.size() != 1) {
       LOGGER.warn("no curve specified");
       // Can't support an unbound request; an injection function must be used (or declare all as optional and use [PLAT-1771])
       return null;
     }
-    if ((curveCalcConfigs == null) || (curveCalcConfigs.size() != 1)) {
+    if (curveCalcConfigs == null || curveCalcConfigs.size() != 1) {
       LOGGER.warn("no curve config specified");
       return null;
     }
@@ -128,7 +130,8 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String curveName = null;
     String curveCalculationConfig = null;
     final ComputationTargetSpecification targetSpec = target.toSpecification();
@@ -170,7 +173,7 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
     assert curveName != null;
     assert curveCalculationConfig != null;
     final RawSecurity security = (RawSecurity) target.getSecurity();
-    //final BigDecimal qty = target.getPosition().getQuantity();
+    // final BigDecimal qty = target.getPosition().getQuantity();
     final ValueRequirement curveRequirement = getCurveRequirement(target, curveName, curveCalculationConfig);
     final Object curveObject = inputs.getValue(curveRequirement);
     if (curveObject == null) {
@@ -184,23 +187,23 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
     }
     final YieldAndDiscountCurve curve = (YieldAndDiscountCurve) curveObject;
     final InterpolatedYieldCurveSpecificationWithSecurities curveSpec = (InterpolatedYieldCurveSpecificationWithSecurities) curveSpecObject;
-    final LinkedHashMap<String, YieldAndDiscountCurve> interpolatedCurves = new LinkedHashMap<String, YieldAndDiscountCurve>();
+    final LinkedHashMap<String, YieldAndDiscountCurve> interpolatedCurves = new LinkedHashMap<>();
     interpolatedCurves.put(curveName, curve);
     final YieldCurveBundle bundle = new YieldCurveBundle(interpolatedCurves);
-    final DoubleMatrix1D sensitivitiesForCurves = getSensitivities(executionContext.getSecuritySource(), inputs, security, curveSpec, curve);
+    final DoubleMatrix1D sensitivitiesForCurves = getSensitivities(executionContext.getSecuritySource(), inputs, security, curveSpec);
     final ValueProperties.Builder properties = createValueProperties(target)
         .with(ValuePropertyNames.CURVE, curveName)
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig);
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final ValueSpecification resultSpec = new ValueSpecification(YCNS_REQUIREMENT, targetSpec, properties.get());
-    final Set<ComputedValue> results = YieldCurveNodeSensitivitiesHelper.getInstrumentLabelledSensitivitiesForCurve(curveName, bundle, sensitivitiesForCurves, curveSpec, resultSpec);
-    //LOGGER.debug("execute, returning " + results);
+    final Set<ComputedValue> results = YieldCurveNodeSensitivitiesHelper.getInstrumentLabelledSensitivitiesForCurve(curveName, bundle, sensitivitiesForCurves,
+        curveSpec, resultSpec);
+    // LOGGER.debug("execute, returning " + results);
     return results;
   }
 
   private DoubleMatrix1D getSensitivities(final SecuritySource secSource, final FunctionInputs inputs, final RawSecurity rawSecurity,
-      final InterpolatedYieldCurveSpecificationWithSecurities curveSpec,
-      final YieldAndDiscountCurve curve) {
+      final InterpolatedYieldCurveSpecificationWithSecurities curveSpec) {
     final Collection<FactorExposureData> decodedSensitivities = RawSecurityUtils.decodeFactorExposureData(secSource, rawSecurity);
     final double[] entries = new double[curveSpec.getStrips().size()];
     int i = 0;
@@ -211,7 +214,7 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
         if (computedValue != null) {
           final ManageableHistoricalTimeSeries mhts = (ManageableHistoricalTimeSeries) computedValue.getValue();
           final Double value = mhts.getTimeSeries().getLatestValue();
-          entries[i] = -value; //* (qty.doubleValue() ); // we invert here because OpenGamma uses -1bp shift rather than +1.  DV01 function will invert back.
+          entries[i] = -value; // * (qty.doubleValue() ); // we invert here because OpenGamma uses -1bp shift rather than +1. DV01 function will invert back.
         } else {
           LOGGER.warn("Value was null when getting required input data " + swapExternalSensitivitiesData.getExposureExternalId());
           entries[i] = 0d;
@@ -230,7 +233,7 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
         if (computedValue != null) {
           final ManageableHistoricalTimeSeries mhts = (ManageableHistoricalTimeSeries) computedValue.getValue();
           final Double value = mhts.getTimeSeries().getLatestValue();
-          entries[i] -= value; //* (qty.doubleValue() ); // we invert here because OpenGamma uses -1bp shift rather than +1.  DV01 function will invert back.
+          entries[i] -= value; // * (qty.doubleValue() ); // we invert here because OpenGamma uses -1bp shift rather than +1. DV01 function will invert back.
         } else {
           LOGGER.warn("Value was null when getting required input data " + bondExternalSensitivitiesData.getExposureExternalId());
         }
@@ -284,11 +287,13 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
 
   protected ValueRequirement getSensitivityRequirement(final ExternalId externalId) {
     final HistoricalTimeSeriesResolutionResult resolutionResult = _htsResolver.resolve(ExternalIdBundle.of(externalId), null, null, null, "EXPOSURE", null);
-    final ValueRequirement htsRequirement = HistoricalTimeSeriesFunctionUtils.createHTSRequirement(resolutionResult, "EXPOSURE", DateConstraint.VALUATION_TIME, true, DateConstraint.VALUATION_TIME,
+    final ValueRequirement htsRequirement = HistoricalTimeSeriesFunctionUtils.createHTSRequirement(resolutionResult, "EXPOSURE", DateConstraint.VALUATION_TIME,
+        true, DateConstraint.VALUATION_TIME,
         true);
     return htsRequirement;
-    //return new ValueRequirement();
-    //return new ValueRequirement(/*ExternalDataRequirementNames.SENSITIVITY*/"EXPOSURE", ComputationTargetType.PRIMITIVE, UniqueId.of(externalId.getScheme().getName(), externalId.getValue()));
+    // return new ValueRequirement();
+    // return new ValueRequirement(/*ExternalDataRequirementNames.SENSITIVITY*/"EXPOSURE", ComputationTargetType.PRIMITIVE,
+    // UniqueId.of(externalId.getScheme().getName(), externalId.getValue()));
   }
 
   protected ValueRequirement getCurveRequirement(final ComputationTarget target, final String curveName, final String curveCalculationConfig) {

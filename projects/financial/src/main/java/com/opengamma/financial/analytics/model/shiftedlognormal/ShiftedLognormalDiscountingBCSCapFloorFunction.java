@@ -35,26 +35,22 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the sensitivities of a cap/floor to the bundle of curves used
- * in pricing. The shifted lognormal method is used.
+ * Calculates the sensitivities of a cap/floor to the bundle of curves used in pricing. The shifted lognormal method is used.
  */
 public class ShiftedLognormalDiscountingBCSCapFloorFunction extends ShiftedLognormalDiscountingCapFloorFunction {
   /** The curve sensitivity calculator */
   private static final InstrumentDerivativeVisitor<BlackSmileShiftCapProviderInterface, MultipleCurrencyMulticurveSensitivity> PVCSDC =
       PresentValueCurveSensitivityBlackSmileShiftCapCalculator.getInstance();
   /** The parameter sensitivity calculator */
-  private static final ParameterSensitivityParameterCalculator<BlackSmileShiftCapProviderInterface> PSC =
-      new ParameterSensitivityParameterCalculator<>(PVCSDC);
+  private static final ParameterSensitivityParameterCalculator<BlackSmileShiftCapProviderInterface> PSC = new ParameterSensitivityParameterCalculator<>(PVCSDC);
   /** The market quote sensitivity calculator */
-  private static final MarketQuoteSensitivityBlockCalculator<BlackSmileShiftCapProviderInterface> CALCULATOR =
-      new MarketQuoteSensitivityBlockCalculator<>(PSC);
+  private static final MarketQuoteSensitivityBlockCalculator<BlackSmileShiftCapProviderInterface> CALCULATOR = new MarketQuoteSensitivityBlockCalculator<>(PSC);
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}.
    */
   public ShiftedLognormalDiscountingBCSCapFloorFunction() {
     super(BLOCK_CURVE_SENSITIVITIES);

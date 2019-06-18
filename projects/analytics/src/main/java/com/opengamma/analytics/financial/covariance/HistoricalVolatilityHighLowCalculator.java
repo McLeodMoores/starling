@@ -11,25 +11,21 @@ import org.apache.commons.lang.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.opengamma.analytics.financial.timeseries.returns.ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator;
 import com.opengamma.analytics.financial.timeseries.returns.RelativeTimeSeriesReturnCalculator;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.CalculationMode;
 
 /**
- * The historical volatility of a price time series can be calculated using:
- * $$
- * \begin{eqnarray*}
- * \sigma = \frac{1}{{2 n \sqrt{\ln{2}}}}\sum\limits_{i=1}^n r_i
- * \end{eqnarray*}
- * $$
- * where $r_i$ is the $i^\text{th}$ period *relative* return of the high and
- * low prices of a series, and $n$ is the number of data points in the price
- * series.
+ * The historical volatility of a price time series can be calculated using: $$
+ * \begin{eqnarray*} \sigma = \frac{1}{{2 n \sqrt{\ln{2}}}}\sum\limits_{i=1}^n
+ * r_i \end{eqnarray*} $$ where $r_i$ is the $i^\text{th}$ period *relative*
+ * return of the high and low prices of a series, and $n$ is the number of data
+ * points in the price series.
  * <p>
  * Although any relative return calculator can be used, to get correct results
- * the calculator should be a {@link ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator}.
+ * the calculator should be a
+ * {@link com.opengamma.analytics.financial.timeseries.returns.ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator}.
  */
 public class HistoricalVolatilityHighLowCalculator extends HistoricalVolatilityCalculator {
   /** The logger */

@@ -74,10 +74,9 @@ public class DataPositionSourceResource extends AbstractDataResource {
     if (version != null) {
       final Portfolio result = getPositionSource().getPortfolio(objectId.atVersion(version), vc);
       return responseOkObject(result);
-    } else {
-      final Portfolio result = getPositionSource().getPortfolio(objectId, vc);
-      return responseOkObject(result);
     }
+    final Portfolio result = getPositionSource().getPortfolio(objectId, vc);
+    return responseOkObject(result);
   }
 
   @GET

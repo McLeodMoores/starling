@@ -28,11 +28,12 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
 
   Random _generator = new Random(System.currentTimeMillis());
 
-  public void test_inner_without_context() {
+  /**
+   *
+   */
+  public void testInnerWithoutcontext() {
     final TestOuterClass inner = new TestOuterClass() {
     };
-
-
 
     final TestOuterClass cycled = cycleObjectOverBytes(autoFudge(inner)).object();
     for (int i = 0; i < 100; i++) {
@@ -41,7 +42,10 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     }
   }
 
-  public void test_inner_with_primitive_context() {
+  /**
+   *
+   */
+  public void testInnerWithPrimitiveContext() {
     final double someContext = _generator.nextDouble();
     final TestOuterClass inner = new TestOuterClass() {
       @Override
@@ -50,8 +54,6 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
       }
     };
 
-
-
     final TestOuterClass cycled = cycleObjectOverBytes(autoFudge(inner)).object();
     for (int i = 0; i < 100; i++) {
       final double randomArg = _generator.nextDouble();
@@ -59,7 +61,10 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     }
   }
 
-  public void test_inner_with_two_primitive_contexts() {
+  /**
+   *
+   */
+  public void testInnerWithTwoPrimitiveContexts() {
     final double someContextA = 1.0;
     final double someContextB = 2.0;
     final TestOuterClass inner = new TestOuterClass() {
@@ -76,7 +81,10 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     }
   }
 
-  public void test_inner_with_array_of_primitives_context() {
+  /**
+   *
+   */
+  public void testInnerWithArrayOfPrimitivesContext() {
 
     final int count = _generator.nextInt(100);
     final double[] someContext = new double[count];
@@ -104,7 +112,10 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     }
   }
 
-  public void test_inner_with_pojo_context() {
+  /**
+   *
+   */
+  public void testInnerWithPojoContext() {
     final ContextPOJO someContext = new ContextPOJO();
     someContext.setValue(_generator.nextDouble());
 
@@ -126,7 +137,7 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
    * This fails because fudge can't serialize arrays of something other than primitives.
    */
   @Test(enabled = false)
-  public void test_inner_with_array_of_pojos_context() {
+  public void testInnerWithArrayOfPojosContext() {
     final int count = _generator.nextInt(100);
     final ContextPOJO[] someContext = new ContextPOJO[count];
 
@@ -146,8 +157,6 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
       }
     };
 
-
-
     final TestOuterClass cycled = cycleObjectOverBytes(autoFudge(inner)).object();
 
     for (int i = 0; i < 100; i++) {
@@ -156,7 +165,10 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     }
   }
 
-  public void test_inner_with_list_of_pojos_context() {
+  /**
+   *
+   */
+  public void testInnerWithListOfPojosContext() {
     final int count = _generator.nextInt(100);
     final List<ContextPOJO> someContext = newArrayList();
 
@@ -177,8 +189,6 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
       }
     };
 
-
-
     final TestOuterClass cycled = cycleObjectOverBytes(autoFudge(inner)).object();
 
     for (int i = 0; i < 100; i++) {
@@ -187,7 +197,10 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     }
   }
 
-  public void test_inner_with_context_copied_from_enclosing_class() {
+  /**
+   *
+   */
+  public void testInnerWithContextCopiedFromEnclosingClass() {
     final double someContext = _someOuterContext;
     final TestOuterClass inner = new TestOuterClass() {
       @Override
@@ -195,8 +208,6 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
         return arg * someContext;
       }
     };
-
-
 
     final TestOuterClass cycled = cycleObjectOverBytes(autoFudge(inner)).object();
     for (int i = 0; i < 100; i++) {
@@ -207,7 +218,10 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  public void test_inner_implementing_iface_without_context() {
+  /**
+   *
+   */
+  public void testInnerImplementingIfaceWithoutContext() {
     final TestOuterInterface inner = new TestOuterInterface() {
       @Override
       public double eval(final double arg) {
@@ -222,7 +236,10 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     }
   }
 
-  public void test_inner_implementing_iface_with_primitive_context() {
+  /**
+   *
+   */
+  public void testInnerImplementingIfaceWithPrimitiveContext() {
     final double someContext = _generator.nextDouble();
     final TestOuterInterface inner = new TestOuterInterface() {
       @Override
@@ -238,8 +255,10 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     }
   }
 
-
-  public void test_inner_implementing_iface_with_array_of_primitives_context() {
+  /**
+   *
+   */
+  public void testInnerImplementingIfaceWithArrayOfPrimitivesContext() {
 
     final int count = _generator.nextInt(100);
     final double[] someContext = new double[count];
@@ -267,7 +286,10 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     }
   }
 
-  public void test_inner_implementing_iface_with_pojo_context() {
+  /**
+   *
+   */
+  public void testInnerImplementingIfaceWithPojoContext() {
     final ContextPOJO someContext = new ContextPOJO();
     someContext.setValue(_generator.nextDouble());
 
@@ -289,7 +311,7 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
    * This fails because fudge can't serialize arrays of something other than primitives.
    */
   @Test(enabled = false)
-  public void test_inner_implementing_iface_with_array_of_pojos_context() {
+  public void testInnerImplementingIfaceWithArrayOfPojosContext() {
     final int count = _generator.nextInt(100);
     final ContextPOJO[] someContext = new ContextPOJO[count];
 
@@ -317,7 +339,10 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     }
   }
 
-  public void test_inner_implementing_iface_with_list_of_pojos_context() {
+  /**
+   *
+   */
+  public void testInnerImplementingIfaceWithListOfPojosContext() {
     final int count = _generator.nextInt(100);
     final List<ContextPOJO> someContext = newArrayList();
 
@@ -346,9 +371,13 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     }
   }
 
+  /** */
   double _someOuterContext = _generator.nextDouble();
 
-  public void test_inner_implementing_iface_with_context_copied_from_enclosing_class() {
+  /**
+   *
+   */
+  public void testInnerImplementingIfaceWithContextCopiedFromEnclosingClass() {
     final double someContext = _someOuterContext;
     final TestOuterInterface inner = new TestOuterInterface() {
       @Override
@@ -364,16 +393,18 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     }
   }
 
+  /**
+   *
+   */
   public void testACollectionWhichIsInnerClass() {
     final Map<Byte, Byte> map = Collections.unmodifiableMap(new HashMap<Byte, Byte>() {
       private static final long serialVersionUID = 1L;
       {
-      this.put((byte) 1, (byte) 2);
+        this.put((byte) 1, (byte) 2);
       }
     });
     @SuppressWarnings("rawtypes")
-    final
-    Map cycled = cycleObjectOverBytes(map);
+    final Map cycled = cycleObjectOverBytes(map);
 
     assertEquals(cycled.get((byte) 1), (byte) 2);
   }

@@ -29,9 +29,9 @@ import com.opengamma.util.ArgumentChecker;
  */
 /* package */ abstract class AbstractTradeBuilder {
 
-  /** Scheme for counterparty external IDs */
+  /** Scheme for counterparty external IDs. */
   /* package */ static final ExternalScheme CPTY_SCHEME = ExternalScheme.of("Cpty");
-  /** JSON key for the counterparty name */
+  /** JSON key for the counterparty name. */
   /* package */ static final String COUNTERPARTY = "counterparty";
   /** Counterparty name used if one isn't supplied. */
   /* package */ static final String DEFAULT_COUNTERPARTY = "Default Counterparty";
@@ -49,10 +49,10 @@ import com.opengamma.util.ArgumentChecker;
   private final PortfolioMaster _portfolioMaster;
 
   /* package */ AbstractTradeBuilder(final PositionMaster positionMaster,
-                                     final PortfolioMaster portfolioMaster,
-                                     final SecurityMaster securityMaster,
-                                     final Set<MetaBean> metaBeans,
-                                     final StringConvert stringConvert) {
+      final PortfolioMaster portfolioMaster,
+      final SecurityMaster securityMaster,
+      final Set<MetaBean> metaBeans,
+      final StringConvert stringConvert) {
     ArgumentChecker.notNull(securityMaster, "securityManager");
     ArgumentChecker.notNull(positionMaster, "positionMaster");
     ArgumentChecker.notEmpty(metaBeans, "metaBeans");
@@ -66,14 +66,14 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   protected static Map<String, Object> property(final String name,
-                                                final boolean optional,
-                                                final boolean readOnly,
-                                                final Map<String, Object> typeInfo) {
-    return ImmutableMap.<String, Object>of("name", name,
-                                           "type", "single",
-                                           "optional", optional,
-                                           "readOnly", readOnly,
-                                           "types", ImmutableList.of(typeInfo));
+      final boolean optional,
+      final boolean readOnly,
+      final Map<String, Object> typeInfo) {
+    return ImmutableMap.<String, Object> of("name", name,
+        "type", "single",
+        "optional", optional,
+        "readOnly", readOnly,
+        "types", ImmutableList.of(typeInfo));
   }
 
   protected static Map<String, Object> attributesProperty() {
@@ -88,23 +88,26 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   protected static Map<String, Object> typeInfo(final String expectedType, final String actualType) {
-    return ImmutableMap.<String, Object>of("beanType", false, "expectedType", expectedType, "actualType", actualType);
+    return ImmutableMap.<String, Object> of("beanType", false, "expectedType", expectedType, "actualType", actualType);
   }
 
   /**
    * Performs a depth first search to find a node with a specified ID.
-   * @param portfolio The portfolio to search
-   * @param nodeId The node ID
+   * 
+   * @param portfolio
+   *          The portfolio to search
+   * @param nodeId
+   *          The node ID
    * @return The node with specified ID, not null
-   * @throws DataNotFoundException If the node can't be found
+   * @throws DataNotFoundException
+   *           If the node can't be found
    */
   /* package */ static ManageablePortfolioNode findNode(final ManageablePortfolio portfolio, final UniqueId nodeId) {
     final ManageablePortfolioNode node = findNode(portfolio.getRootNode(), nodeId);
     if (node != null) {
       return node;
-    } else {
-      throw new DataNotFoundException("Node " + nodeId + " not found");
     }
+    throw new DataNotFoundException("Node " + nodeId + " not found");
   }
 
   private static ManageablePortfolioNode findNode(final ManageablePortfolioNode node, final UniqueId nodeId) {
@@ -120,7 +123,7 @@ import com.opengamma.util.ArgumentChecker;
     return null;
   }
 
-  /* package */  SecurityMaster getSecurityMaster() {
+  /* package */ SecurityMaster getSecurityMaster() {
     return _securityMaster;
   }
 

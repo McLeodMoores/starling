@@ -16,20 +16,28 @@ import com.opengamma.master.config.ConfigMetaDataRequest;
 import com.opengamma.master.config.ConfigMetaDataResult;
 import com.opengamma.master.config.ConfigSearchRequest;
 import com.opengamma.master.config.ConfigSearchResult;
-import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 
 /**
- * A {@link ConfigMaster} which delegates its calls to a list of underlying {@link ConfigMaster}s.
+ * A {@link ConfigMaster} which delegates its calls to a list of underlying
+ * {@link ConfigMaster}s.
  *
- * This class extends {@link ChangeProvidingCombinedMaster} to implement methods specific to the {@link HistoricalTimeSeriesMaster}.
+ * This class extends {@link ChangeProvidingCombinedMaster} to implement methods
+ * specific to the {@link ConfigMaster}.
  */
 public class CombinedConfigMaster extends ChangeProvidingCombinedMaster<ConfigDocument, ConfigMaster> implements ConfigMaster {
 
+  /**
+   * Sets up the delegates.
+   *
+   * @param masterList
+   *          a list of delegates, not null or empty
+   */
   public CombinedConfigMaster(final List<ConfigMaster> masterList) {
     super(masterList);
   }
 
-  //interfaces defined for purposes of brevity in search() and history() implementations
+  // interfaces defined for purposes of brevity in search() and history()
+  // implementations
   private interface ConfigMasterSearchStrategy<R> extends SearchStrategy<ConfigDocument, ConfigMaster, ConfigSearchRequest<R>> { }
 
   private interface ConfigMasterHistoryStrategy<R> extends SearchStrategy<ConfigDocument, ConfigMaster, ConfigHistoryRequest<R>> { }

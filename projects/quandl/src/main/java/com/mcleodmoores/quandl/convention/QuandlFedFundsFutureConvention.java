@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.convention;
 
@@ -29,7 +29,7 @@ import com.opengamma.util.time.Tenor;
  * Convention for Fed fund futures that contains the necessary meta-data to construct a
  * {@link com.opengamma.financial.security.future.FederalFundsFutureSecurity} from Quandl data.
  */
-//TODO think about where currency, tenor and expiry information should go
+// TODO think about where currency, tenor and expiry information should go
 @BeanDefinition
 public class QuandlFedFundsFutureConvention extends QuandlFutureConvention {
 
@@ -61,14 +61,20 @@ public class QuandlFedFundsFutureConvention extends QuandlFutureConvention {
   }
 
   /**
-   * Creates an instance with the settlement exchange and trading exchange name created by parsing
-   * the Quandl code.
-   * @param name The name of the convention, not null
-   * @param externalIdBundle The ids associated with this convention, not null
-   * @param lastTradeTime The last trade time on the expiry date, not null
-   * @param zoneOffsetId The time zone id, not null
-   * @param unitAmount The unit amount for the future
-   * @param underlyingConventionId The id of the underlying index convention, not null
+   * Creates an instance with the settlement exchange and trading exchange name created by parsing the Quandl code.
+   * 
+   * @param name
+   *          The name of the convention, not null
+   * @param externalIdBundle
+   *          The ids associated with this convention, not null
+   * @param lastTradeTime
+   *          The last trade time on the expiry date, not null
+   * @param zoneOffsetId
+   *          The time zone id, not null
+   * @param unitAmount
+   *          The unit amount for the future
+   * @param underlyingConventionId
+   *          The id of the underlying index convention, not null
    */
   public QuandlFedFundsFutureConvention(final String name, final ExternalIdBundle externalIdBundle, final String lastTradeTime,
       final String zoneOffsetId, final double unitAmount, final ExternalId underlyingConventionId) {
@@ -77,19 +83,29 @@ public class QuandlFedFundsFutureConvention extends QuandlFutureConvention {
 
   /**
    * Creates an instance.
-   * @param name The name of the convention, not null
-   * @param externalIdBundle The ids associated with this convention, not null
-   * @param lastTradeTime The last trade time on the expiry date, not null
-   * @param zoneOffsetId The time zone id, not null
-   * @param unitAmount The unit amount for the future
-   * @param underlyingConventionId The id of the underlying index convention, not null
-   * @param tradingExchange The name of the trading exchange, can be null
-   * @param settlementExchange The name of the settlement exchange, can be null
+   * 
+   * @param name
+   *          The name of the convention, not null
+   * @param externalIdBundle
+   *          The ids associated with this convention, not null
+   * @param lastTradeTime
+   *          The last trade time on the expiry date, not null
+   * @param zoneOffsetId
+   *          The time zone id, not null
+   * @param unitAmount
+   *          The unit amount for the future
+   * @param underlyingConventionId
+   *          The id of the underlying index convention, not null
+   * @param tradingExchange
+   *          The name of the trading exchange, can be null
+   * @param settlementExchange
+   *          The name of the settlement exchange, can be null
    */
   public QuandlFedFundsFutureConvention(final String name, final ExternalIdBundle externalIdBundle,
       final String lastTradeTime, final String zoneOffsetId, final double unitAmount,
       final ExternalId underlyingConventionId, final String tradingExchange, final String settlementExchange) {
-    super(name, externalIdBundle, lastTradeTime, zoneOffsetId, unitAmount, underlyingConventionId, tradingExchange, settlementExchange, ExternalSchemes.countryRegionId(Country.US));
+    super(name, externalIdBundle, lastTradeTime, zoneOffsetId, unitAmount, underlyingConventionId, tradingExchange, settlementExchange,
+        ExternalSchemes.countryRegionId(Country.US));
     setLastTradeTime(lastTradeTime);
     setZoneOffsetId(zoneOffsetId);
     setUnitAmount(unitAmount);

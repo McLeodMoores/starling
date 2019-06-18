@@ -31,7 +31,7 @@ public class ResultConverterCache {
     registerConverter(new VolatilitySurfaceDataConverter());
   }
 
-  public <T> void registerConverter(final ResultConverter<?> converter) {
+  public void registerConverter(final ResultConverter<?> converter) {
     _converterMap.put(converter.getConvertedClass(), converter);
   }
 

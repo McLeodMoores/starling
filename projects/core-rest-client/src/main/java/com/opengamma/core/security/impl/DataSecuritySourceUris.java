@@ -15,6 +15,7 @@ import com.opengamma.id.IdUtils;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * RESTful URIs for securities.
@@ -24,15 +25,19 @@ public class DataSecuritySourceUris {
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
-   * @param vc  the version-correction, null means latest
-   * @param bundle  the bundle, may be null
+   * @param baseUri
+   *          the base URI, not null
+   * @param vc
+   *          the version-correction, null means latest
+   * @param bundle
+   *          the bundle, not null
    * @return the URI, not null
    */
   public static URI uriSearch(final URI baseUri, final VersionCorrection vc, final ExternalIdBundle bundle) {
+    ArgumentChecker.notNull(bundle, "bundle");
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("securities");
     if (vc != null) {
-      bld.queryParam("versionAsof", vc.getVersionAsOfString());
+      bld.queryParam("versionAsOf", vc.getVersionAsOfString());
       bld.queryParam("correctedTo", vc.getCorrectedToString());
     }
     bld.queryParam("id", bundle.toStringList().toArray());
@@ -42,11 +47,14 @@ public class DataSecuritySourceUris {
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
-   * @param uniqueId  the unique identifier, may be null
+   * @param baseUri
+   *          the base URI, not null
+   * @param uniqueId
+   *          the unique identifier, not null
    * @return the URI, not null
    */
   public static URI uriGet(final URI baseUri, final UniqueId uniqueId) {
+    ArgumentChecker.notNull(uniqueId, "uniqueId");
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("securities/{securityId}");
     if (uniqueId.getVersion() != null) {
       bld.queryParam("version", uniqueId.getVersion());
@@ -94,6 +102,7 @@ public class DataSecuritySourceUris {
    * @return the URI, not null
    */
   public static URI uriSearchList(final URI baseUri, final ExternalIdBundle bundle) {
+    ArgumentChecker.notNull(bundle, "bundle");
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("securitySearches/list");
     bld.queryParam("id", bundle.toStringList().toArray());
     return bld.build();
@@ -102,12 +111,16 @@ public class DataSecuritySourceUris {
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
-   * @param bundle  the bundle, may be null
-   * @param vc  the version-correction, may be null
+   * @param baseUri
+   *          the base URI, not null
+   * @param bundle
+   *          the bundle, not null
+   * @param vc
+   *          the version-correction, may be null
    * @return the URI, not null
    */
   public static URI uriSearchSingle(final URI baseUri, final ExternalIdBundle bundle, final VersionCorrection vc) {
+    ArgumentChecker.notNull(bundle, "bundle");
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("securitySearches/single");
     if (vc != null) {
       bld.queryParam("versionAsOf", vc.getVersionAsOfString());

@@ -34,6 +34,7 @@ public final class ParRateDiscountingCalculator extends InstrumentDerivativeVisi
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static ParRateDiscountingCalculator getInstance() {
@@ -57,41 +58,50 @@ public final class ParRateDiscountingCalculator extends InstrumentDerivativeVisi
   private static final InterestRateFutureSecurityDiscountingMethod METHOD_IR_FUT = InterestRateFutureSecurityDiscountingMethod.getInstance();
   private static final ForexDiscountingMethod METHOD_FOREX = ForexDiscountingMethod.getInstance();
 
-  //     -----     Deposit     ------
+  // ----- Deposit ------
 
   @Override
   public Double visitCash(final Cash deposit, final MulticurveProviderInterface multicurves) {
     return METHOD_DEPO.parRate(deposit, multicurves);
   }
 
-  //     -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public Double visitForwardRateAgreement(final ForwardRateAgreement fra, final MulticurveProviderInterface multicurves) {
     return METHOD_FRA.parRate(fra, multicurves);
   }
 
-  //     -----     Swap     -----
+  // ----- Swap -----
 
   /**
    * Computes the par rate of a swap with one fixed leg.
-   * @param swap The Fixed coupon swap.
-   * @param multicurves The multi-curves provider.
+   * 
+   * @param swap
+   *          The Fixed coupon swap.
+   * @param multicurves
+   *          The multi-curves provider.
    * @return The par swap rate. If the fixed leg has been set up with some fixed payments these are ignored for the purposes of finding the swap rate
    */
   @Override
   public Double visitFixedCouponSwap(final SwapFixedCoupon<?> swap, final MulticurveProviderInterface multicurves) {
-    final double pvSecond = swap.getSecondLeg().accept(PVC, multicurves).getAmount(swap.getSecondLeg().getCurrency()) * Math.signum(swap.getSecondLeg().getNthPayment(0).getNotional());
+    final double pvSecond = swap.getSecondLeg().accept(PVC, multicurves).getAmount(swap.getSecondLeg().getCurrency())
+        * Math.signum(swap.getSecondLeg().getNthPayment(0).getNotional());
     final double pvbp = METHOD_SWAP.presentValueBasisPoint(swap, multicurves);
     return pvSecond / pvbp;
   }
 
   /**
    * Computes the swap convention-modified par rate for a fixed coupon swap.
-   * <P>Reference: Swaption pricing - v 1.3, OpenGamma Quantitative Research, June 2012.
-   * @param swap The swap.
-   * @param dayCount The day count convention to modify the swap rate.
-   * @param multicurves The multi-curves provider.
+   * <P>
+   * Reference: Swaption pricing - v 1.3, OpenGamma Quantitative Research, June 2012.
+   * 
+   * @param swap
+   *          The swap.
+   * @param dayCount
+   *          The day count convention to modify the swap rate.
+   * @param multicurves
+   *          The multi-curves provider.
    * @return The modified rate.
    */
   public Double visitFixedCouponSwap(final SwapFixedCoupon<?> swap, final DayCount dayCount, final MulticurveProviderInterface multicurves) {
@@ -101,33 +111,43 @@ public final class ParRateDiscountingCalculator extends InstrumentDerivativeVisi
 
   /**
    * Computes the swap convention-modified par rate for a fixed coupon swap with a PVBP externally provided.
-   * <P>Reference: Swaption pricing - v 1.3, OpenGamma Quantitative Research, June 2012.
-   * @param swap The swap.
-   * @param pvbp The present value of a basis point.
-   * @param multicurves The multi-curves provider.
+   * <P>
+   * Reference: Swaption pricing - v 1.3, OpenGamma Quantitative Research, June 2012.
+   * 
+   * @param swap
+   *          The swap.
+   * @param pvbp
+   *          The present value of a basis point.
+   * @param multicurves
+   *          The multi-curves provider.
    * @return The modified rate.
    */
   public Double visitFixedCouponSwap(final SwapFixedCoupon<?> swap, final double pvbp, final MulticurveProviderInterface multicurves) {
-    final double pvSecond = swap.getSecondLeg().accept(PVC, multicurves).getAmount(swap.getSecondLeg().getCurrency()) * Math.signum(swap.getSecondLeg().getNthPayment(0).getNotional());
+    final double pvSecond = swap.getSecondLeg().accept(PVC, multicurves).getAmount(swap.getSecondLeg().getCurrency())
+        * Math.signum(swap.getSecondLeg().getNthPayment(0).getNotional());
     return pvSecond / pvbp;
   }
 
   /**
-   * For swaps the ParSpread is the spread to be added on each coupon of the first leg to obtain a present value of zero.
-   * It is computed as the opposite of the present value of the swap in currency of the first leg divided by the present value of a basis point
-   * of the first leg (as computed by the {@link PresentValueMarketQuoteSensitivityDiscountingCalculator}).
-   * @param swap The swap.
-   * @param multicurves The multi-curves provider.
+   * For swaps the ParSpread is the spread to be added on each coupon of the first leg to obtain a present value of zero. It is computed as the opposite of the
+   * present value of the swap in currency of the first leg divided by the present value of a basis point of the first leg (as computed by the
+   * {@link PresentValueMarketQuoteSensitivityDiscountingCalculator}).
+   * 
+   * @param swap
+   *          The swap.
+   * @param multicurves
+   *          The multi-curves provider.
    * @return The par spread.
    */
   @Override
   public Double visitSwap(final Swap<?, ?> swap, final MulticurveProviderInterface multicurves) {
     ArgumentChecker.notNull(multicurves, "Market");
     ArgumentChecker.notNull(swap, "Swap");
-    return -multicurves.getFxRates().convert(swap.accept(PVC, multicurves), swap.getFirstLeg().getCurrency()).getAmount() / swap.getFirstLeg().accept(PVMQSC, multicurves);
+    return -multicurves.getFxRates().convert(swap.accept(PVC, multicurves), swap.getFirstLeg().getCurrency()).getAmount()
+        / swap.getFirstLeg().accept(PVMQSC, multicurves);
   }
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
   public Double visitInterestRateFutureSecurity(final InterestRateFutureSecurity futures, final MulticurveProviderInterface multicurves) {
@@ -139,12 +159,15 @@ public final class ParRateDiscountingCalculator extends InstrumentDerivativeVisi
     return METHOD_IR_FUT.parRate(futures.getUnderlyingSecurity(), multicurves);
   }
 
-  //     -----     Forex     ------
+  // ----- Forex ------
 
   /**
    * Computes the forward forex rate.
-   * @param forex The forex instrument.
-   * @param multicurves The multicurves provider.
+   * 
+   * @param forex
+   *          The forex instrument.
+   * @param multicurves
+   *          The multicurves provider.
    * @return The forward forex rate.
    */
   @Override

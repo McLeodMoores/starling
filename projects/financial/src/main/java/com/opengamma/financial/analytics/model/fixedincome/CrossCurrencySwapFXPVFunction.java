@@ -36,7 +36,8 @@ public class CrossCurrencySwapFXPVFunction extends CrossCurrencySwapFunction {
   }
 
   @Override
-  protected Set<ComputedValue> getComputedValues(final InstrumentDerivative derivative, final YieldCurveBundle bundle, final ComputationTargetSpecification targetSpec,
+  protected Set<ComputedValue> getComputedValues(final InstrumentDerivative derivative, final YieldCurveBundle bundle,
+      final ComputationTargetSpecification targetSpec,
       final ValueProperties properties) {
     final MultipleCurrencyAmount pv = derivative.accept(CALCULATOR, bundle);
     final ValueSpecification spec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, properties);

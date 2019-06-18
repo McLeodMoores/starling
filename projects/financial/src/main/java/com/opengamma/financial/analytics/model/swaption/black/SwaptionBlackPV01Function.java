@@ -24,6 +24,7 @@ import com.opengamma.financial.security.FinancialSecurityUtils;
 
 /**
  * Calculates PV01 for swaptions using the Black method.
+ * 
  * @deprecated Use {@link BlackDiscountingPV01SwaptionFunction}
  */
 @Deprecated
@@ -32,14 +33,15 @@ public class SwaptionBlackPV01Function extends SwaptionBlackCurveSpecificFunctio
   private static final PV01Calculator CALCULATOR = new PV01Calculator(PresentValueCurveSensitivityBlackCalculator.getInstance());
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#PV01}
+   * Sets the value requirement name to {@link ValueRequirementNames#PV01}.
    */
   public SwaptionBlackPV01Function() {
     super(ValueRequirementNames.PV01);
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative swaption, final YieldCurveWithBlackSwaptionBundle data, final String curveName, final ValueSpecification spec,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative swaption, final YieldCurveWithBlackSwaptionBundle data, final String curveName,
+      final ValueSpecification spec,
       final String curveCalculationConfigName, final String curveCalculationMethod, final FunctionInputs inputs, final ComputationTarget target) {
     final Map<String, Double> pv01 = CALCULATOR.visit(swaption, data);
     final String fullCurveName = curveName + "_" + FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();

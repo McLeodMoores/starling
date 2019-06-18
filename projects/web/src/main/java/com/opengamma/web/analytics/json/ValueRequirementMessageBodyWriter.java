@@ -41,22 +41,22 @@ public class ValueRequirementMessageBodyWriter implements MessageBodyWriter<Valu
 
   @Override
   public long getSize(final ValueRequirementTargetForCell stringValueRequirementPair,
-                      final Class<?> aClass,
-                      final Type type,
-                      final Annotation[] annotations,
-                      final MediaType mediaType) {
+      final Class<?> aClass,
+      final Type type,
+      final Annotation[] annotations,
+      final MediaType mediaType) {
     // TODO this means unknown size. is it worth encoding it twice to find out the size?
     return -1;
   }
 
   @Override
   public void writeTo(final ValueRequirementTargetForCell valueReq,
-                      final Class<?> aClass,
-                      final Type type,
-                      final Annotation[] annotations,
-                      final MediaType mediaType,
-                      final MultivaluedMap<String, Object> stringObjectMultivaluedMap,
-                      final OutputStream outputStream) throws IOException, WebApplicationException {
+      final Class<?> aClass,
+      final Type type,
+      final Annotation[] annotations,
+      final MediaType mediaType,
+      final MultivaluedMap<String, Object> stringObjectMultivaluedMap,
+      final OutputStream outputStream) throws IOException, WebApplicationException {
     final ValueRequirementJSONBuilder jsonBuilder = new ValueRequirementJSONBuilder();
     final String valueSpecStr = jsonBuilder.toJSON(valueReq.getValueRequirement());
 
@@ -69,7 +69,7 @@ public class ValueRequirementMessageBodyWriter implements MessageBodyWriter<Valu
       throw new OpenGammaRuntimeException("Failed to convert ValueRequirement to JSON", e);
     }
     final ImmutableMap<String, Object> jsonMap = ImmutableMap.of("columnSet", valueReq.getColumnSet(),
-                                                           "valueRequirement", valueReqJson);
+        "valueRequirement", valueReqJson);
     outputStream.write(new JSONObject(jsonMap).toString().getBytes());
   }
 

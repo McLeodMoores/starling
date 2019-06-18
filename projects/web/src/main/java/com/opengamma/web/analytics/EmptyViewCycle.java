@@ -43,10 +43,10 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * {@link ViewCycle} implementation that acts as a placeholder when a calculation cycle hasn't completed and there isn't a cycle available. This is cleaner than using a null cycle reference and being
- * forced to do a null check everywhere it's used. Only a single instance of this class should ever exist.
+ * {@link ViewCycle} implementation that acts as a placeholder when a calculation cycle hasn't completed and there isn't a cycle available. This is cleaner than
+ * using a null cycle reference and being forced to do a null check everywhere it's used. Only a single instance of this class should ever exist.
  */
-/*package*/final class EmptyViewCycle implements ViewCycle {
+/* package */final class EmptyViewCycle implements ViewCycle {
 
   /** Reference to the empty cycle. */
   /* package */static final EngineResourceReference<ViewCycle> REFERENCE = new EmptyViewCycleReference();
@@ -62,9 +62,9 @@ import com.opengamma.util.tuple.Pair;
 
   static {
     EMPTY_CACHE_RESPONSE = new ComputationCacheResponse();
-    EMPTY_CACHE_RESPONSE.setResults(ImmutableList.<Pair<ValueSpecification, Object>>of());
+    EMPTY_CACHE_RESPONSE.setResults(ImmutableList.<Pair<ValueSpecification, Object>> of());
     EMPTY_RESULTS_RESPONSE = new ComputationResultsResponse();
-    EMPTY_RESULTS_RESPONSE.setResults(ImmutableMap.<ValueSpecification, ComputedValueResult>of());
+    EMPTY_RESULTS_RESPONSE.setResults(ImmutableMap.<ValueSpecification, ComputedValueResult> of());
   }
 
   private final CompiledViewDefinitionWithGraphs _compiledViewDef = new EmptyViewDefinition();

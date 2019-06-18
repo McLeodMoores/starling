@@ -61,8 +61,8 @@ import com.opengamma.util.paging.Paging;
  * <p>
  * This is a full implementation of the security master using an SQL database. Full details of the API are in {@link SecurityMaster}.
  * <p>
- * The SQL is stored externally in {@code DbSecurityMaster.elsql}. Alternate databases or specific SQL requirements can be handled using database specific overrides, such as
- * {@code DbSecurityMaster-MySpecialDB.elsql}.
+ * The SQL is stored externally in {@code DbSecurityMaster.elsql}. Alternate databases or specific SQL requirements can be handled using database specific
+ * overrides, such as {@code DbSecurityMaster-MySpecialDB.elsql}.
  * <p>
  * This class is mutable but must be treated as immutable after configuration.
  */
@@ -114,7 +114,8 @@ public class DbSecurityMaster
   /**
    * Creates an instance.
    *
-   * @param dbConnector the database connector, not null
+   * @param dbConnector
+   *          the database connector, not null
    */
   public DbSecurityMaster(final DbConnector dbConnector) {
     super(dbConnector, IDENTIFIER_SCHEME_DEFAULT);
@@ -128,7 +129,7 @@ public class DbSecurityMaster
     _metaDataTimer = summaryRegistry.timer(namePrefix + ".metaData");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the detail provider.
    *
@@ -141,7 +142,8 @@ public class DbSecurityMaster
   /**
    * Sets the detail provider.
    *
-   * @param detailProvider the detail provider, not null
+   * @param detailProvider
+   *          the detail provider, not null
    */
   public void setDetailProvider(final SecurityMasterDetailProvider detailProvider) {
     ArgumentChecker.notNull(detailProvider, "detailProvider");
@@ -149,7 +151,7 @@ public class DbSecurityMaster
     _detailProvider = detailProvider;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public SecurityMetaDataResult metaData(final SecurityMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
@@ -178,7 +180,7 @@ public class DbSecurityMaster
     return request.getUniqueIdScheme() == null || getUniqueIdScheme().equals(request.getUniqueIdScheme());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public SecuritySearchResult search(final SecuritySearchRequest request) {
     ArgumentChecker.notNull(request, "request");
@@ -200,8 +202,8 @@ public class DbSecurityMaster
     final ExternalIdSearch externalIdSearch = request.getExternalIdSearch();
     final Map<String, String> attributes = request.getAttributes();
     final List<ObjectId> objectIds = request.getObjectIds();
-    if (objectIds != null && objectIds.size() == 0 ||
-        ExternalIdSearch.canMatch(request.getExternalIdSearch()) == false) {
+    if (objectIds != null && objectIds.size() == 0
+        || !ExternalIdSearch.canMatch(request.getExternalIdSearch())) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }
@@ -213,7 +215,7 @@ public class DbSecurityMaster
         .addValueNullIgnored("sec_type", request.getSecurityType())
         .addValueNullIgnored("external_id_scheme", getDialect().sqlWildcardAdjustValue(request.getExternalIdScheme()))
         .addValueNullIgnored("external_id_value", getDialect().sqlWildcardAdjustValue(request.getExternalIdValue()));
-    if (externalIdSearch != null && externalIdSearch.alwaysMatches() == false) {
+    if (externalIdSearch != null && !externalIdSearch.alwaysMatches()) {
       int i = 0;
       for (final ExternalId id : externalIdSearch) {
         args.addValue("key_scheme" + i, id.getScheme().getName());
@@ -251,7 +253,7 @@ public class DbSecurityMaster
       detailProvider.extendSearch(request, args);
     }
 
-    final String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args) };
+    final String[] sql = { getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args) };
     doSearch(request.getPagingRequest(), sql, args, new SecurityDocumentExtractor(), result);
     if (request.isFullDetail()) {
       loadDetail(detailProvider, result.getDocuments());
@@ -269,7 +271,8 @@ public class DbSecurityMaster
    * <p>
    * This is too complex for the elsql mechanism.
    *
-   * @param idSearch the identifier search, not null
+   * @param idSearch
+   *          the identifier search, not null
    * @return the SQL, not null
    */
   protected String sqlSelectIdKeys(final ExternalIdSearch idSearch) {
@@ -280,7 +283,7 @@ public class DbSecurityMaster
     return StringUtils.join(list, "OR ");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public SecurityDocument get(final UniqueId uniqueId) {
     final SecurityDocument doc = doGet(uniqueId, new SecurityDocumentExtractor(), "Security");
@@ -288,7 +291,7 @@ public class DbSecurityMaster
     return doc;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public SecurityDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     final SecurityDocument doc = doGetByOidInstants(objectId, versionCorrection, new SecurityDocumentExtractor(), "Security");
@@ -296,7 +299,7 @@ public class DbSecurityMaster
     return doc;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public SecurityHistoryResult history(final SecurityHistoryRequest request) {
     final SecurityHistoryResult result = doHistory(request, new SecurityHistoryResult(), new SecurityDocumentExtractor());
@@ -306,12 +309,14 @@ public class DbSecurityMaster
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Loads the detail of the security for the document.
    *
-   * @param detailProvider the detail provider, null ignored
-   * @param docs the documents to load detail for, not null
+   * @param detailProvider
+   *          the detail provider, null ignored
+   * @param docs
+   *          the documents to load detail for, not null
    */
   protected void loadDetail(final SecurityMasterDetailProvider detailProvider, final List<SecurityDocument> docs) {
     if (detailProvider != null) {
@@ -323,11 +328,12 @@ public class DbSecurityMaster
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Inserts a new document.
    *
-   * @param document the document, not null
+   * @param document
+   *          the document, not null
    * @return the new document, not null
    */
   @Override
@@ -442,7 +448,7 @@ public class DbSecurityMaster
     getJdbcTemplate().update(sqlRaw, rawArgs);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Mapper from SQL rows to a SecurityDocument.
    */

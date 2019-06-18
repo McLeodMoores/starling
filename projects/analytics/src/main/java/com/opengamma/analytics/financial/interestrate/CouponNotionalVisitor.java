@@ -145,7 +145,8 @@ public class CouponNotionalVisitor extends InstrumentDefinitionVisitorAdapter<Vo
   }
 
   @Override
-  public CurrencyAmount visitCouponIborAverageFlatCompoundingSpreadDefinition(final CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition payment, final Void data) {
+  public CurrencyAmount visitCouponIborAverageFlatCompoundingSpreadDefinition(final CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition payment,
+      final Void data) {
     return CurrencyAmount.of(payment.getCurrency(), payment.getNotional());
   }
 

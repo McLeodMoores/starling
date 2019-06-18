@@ -62,9 +62,8 @@ public class MapComputationTargetResolver extends DefaultComputationTargetResolv
         }
 
       };
-    } else {
-      return super.getResolver(specification);
     }
+    return super.getResolver(specification);
   }
 
   /**

@@ -22,7 +22,8 @@ import com.opengamma.financial.analytics.model.discounting.DiscountingCurrencyEx
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the currency exposure for a FX forward
+ * Calculates the currency exposure for a FX forward.
+ * 
  * @deprecated Use {@link DiscountingCurrencyExposureFunction}
  */
 @Deprecated
@@ -34,7 +35,8 @@ public class FXForwardCurrencyExposureFunction extends FXForwardMultiValuedFunct
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final Forex fxForward, final YieldCurveBundle data, final ComputationTarget target, final Set<ValueRequirement> desiredValues,
+  protected Set<ComputedValue> getResult(final Forex fxForward, final YieldCurveBundle data, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues,
       final FunctionInputs inputs, final ValueSpecification spec, final FunctionExecutionContext executionContext) {
     final MultipleCurrencyAmount result = fxForward.accept(CALCULATOR, data);
     return Collections.singleton(new ComputedValue(spec, result));

@@ -31,7 +31,7 @@ public class AnalyticsTestBase {
     return OpenGammaFudgeContext.getInstance();
   }
 
-  private FudgeMsg cycleMessage(final FudgeMsg message) {
+  private static FudgeMsg cycleMessage(final FudgeMsg message) {
     final byte[] data = OpenGammaFudgeContext.getInstance().toByteArray(message);
     LOGGER.info("{} bytes", data.length);
     return OpenGammaFudgeContext.getInstance().deserialize(data).getMessage();

@@ -31,33 +31,48 @@ public class ImmutableZonedDateTimeDoubleTimeSeriesFudgeEncodingTest extends Abs
   private double[] _values;
   private ImmutableZonedDateTimeDoubleTimeSeries _ts;
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
-    _instants = new ZonedDateTime[] {ZonedDateTime.of(2012, 6, 30, 0, 0, 0, 0, LONDON), ZonedDateTime.of(2012, 7, 1, 0, 0, 0, 0, LONDON)};
-    _values = new double[] {1.1d, 2.2d};
+    _instants = new ZonedDateTime[] { ZonedDateTime.of(2012, 6, 30, 0, 0, 0, 0, LONDON), ZonedDateTime.of(2012, 7, 1, 0, 0, 0, 0, LONDON) };
+    _values = new double[] { 1.1d, 2.2d };
     _ts = ImmutableZonedDateTimeDoubleTimeSeries.of(_instants, _values, LONDON);
   }
 
+  /**
+   *
+   */
   public void testCycle1() {
-    DoubleTimeSeries<?> cycleObject1 = cycleObject(DoubleTimeSeries.class, _ts);
+    final DoubleTimeSeries<?> cycleObject1 = cycleObject(DoubleTimeSeries.class, _ts);
     assertEquals(ImmutableZonedDateTimeDoubleTimeSeries.class, cycleObject1.getClass());
     assertEquals(_ts, cycleObject1);
   }
 
+  /**
+   *
+   */
   public void testCycle2() {
-    PreciseDoubleTimeSeries<?> cycleObject2 = cycleObject(PreciseDoubleTimeSeries.class, _ts);
+    final PreciseDoubleTimeSeries<?> cycleObject2 = cycleObject(PreciseDoubleTimeSeries.class, _ts);
     assertEquals(ImmutableZonedDateTimeDoubleTimeSeries.class, cycleObject2.getClass());
     assertEquals(_ts, cycleObject2);
   }
 
+  /**
+   *
+   */
   public void testCycle3() {
-    ZonedDateTimeDoubleTimeSeries cycleObject3 = cycleObject(ZonedDateTimeDoubleTimeSeries.class, _ts);
+    final ZonedDateTimeDoubleTimeSeries cycleObject3 = cycleObject(ZonedDateTimeDoubleTimeSeries.class, _ts);
     assertEquals(ImmutableZonedDateTimeDoubleTimeSeries.class, cycleObject3.getClass());
     assertEquals(_ts, cycleObject3);
   }
 
+  /**
+   *
+   */
   public void testCycle4() {
-    ImmutableZonedDateTimeDoubleTimeSeries cycleObject4 = cycleObject(ImmutableZonedDateTimeDoubleTimeSeries.class, _ts);
+    final ImmutableZonedDateTimeDoubleTimeSeries cycleObject4 = cycleObject(ImmutableZonedDateTimeDoubleTimeSeries.class, _ts);
     assertEquals(ImmutableZonedDateTimeDoubleTimeSeries.class, cycleObject4.getClass());
     assertEquals(_ts, cycleObject4);
   }

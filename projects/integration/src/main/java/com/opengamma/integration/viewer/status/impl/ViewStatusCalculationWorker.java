@@ -36,7 +36,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.NamedThreadPoolFactory;
 
 /**
- * Executes the View status calculation task with the default Executor service
+ * Executes the View status calculation task with the default Executor service.
  */
 public class ViewStatusCalculationWorker {
 
@@ -60,7 +60,8 @@ public class ViewStatusCalculationWorker {
     this(toolContext, portfolioId, option, DEFAULT_EXECUTOR);
   }
 
-  public ViewStatusCalculationWorker(final ToolContext toolContext, final UniqueId portfolioId, final ViewStatusOption option, final ExecutorService executorService) {
+  public ViewStatusCalculationWorker(final ToolContext toolContext, final UniqueId portfolioId, final ViewStatusOption option,
+      final ExecutorService executorService) {
     ArgumentChecker.notNull(toolContext, "toolContex");
     ArgumentChecker.notNull(portfolioId, "portfolioId");
     ArgumentChecker.notNull(option, "option");
@@ -122,7 +123,7 @@ public class ViewStatusCalculationWorker {
   public ViewStatusResultAggregator run() {
     final ViewStatusResultAggregator aggregator = new ViewStatusResultAggregatorImpl();
     final CompletionService<PerViewStatusResult> completionService = new ExecutorCompletionService<>(_executor);
-    //submit task to executor to run partitioned by security type
+    // submit task to executor to run partitioned by security type
     for (final String securityType : _valueRequirementBySecType.keySet()) {
       final Collection<String> valueRequirements = _valueRequirementBySecType.get(securityType);
       completionService.submit(new ViewStatusCalculationTask(_toolContext, _portfolioId, _user, securityType, valueRequirements, _marketDataSpecification));

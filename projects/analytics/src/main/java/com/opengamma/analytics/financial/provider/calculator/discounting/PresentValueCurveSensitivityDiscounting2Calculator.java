@@ -18,11 +18,11 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculator of the present value curve sensitivity as multiple currency interest rate curve sensitivity.
- * This calculator contains "second best" approaches (hence the 2 in the name).
- * In general the methods used here would not be used in production.
+ * Calculator of the present value curve sensitivity as multiple currency interest rate curve sensitivity. This calculator contains "second best" approaches
+ * (hence the 2 in the name). In general the methods used here would not be used in production.
  */
-public final class PresentValueCurveSensitivityDiscounting2Calculator extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+public final class PresentValueCurveSensitivityDiscounting2Calculator
+extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -31,6 +31,7 @@ public final class PresentValueCurveSensitivityDiscounting2Calculator extends In
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityDiscounting2Calculator getInstance() {
@@ -48,14 +49,15 @@ public final class PresentValueCurveSensitivityDiscounting2Calculator extends In
    */
   private static final CouponONArithmeticAverageDiscountingMethod METHOD_CPN_AAON_EXACT = CouponONArithmeticAverageDiscountingMethod.getInstance();
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitCouponONArithmeticAverage(final CouponONArithmeticAverage payment, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity visitCouponONArithmeticAverage(final CouponONArithmeticAverage payment,
+      final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_AAON_EXACT.presentValueCurveSensitivity(payment, multicurve);
   }
 
-  // -----     Annuity     ------
+  // ----- Annuity ------
 
   @Override
   public MultipleCurrencyMulticurveSensitivity visitGenericAnnuity(final Annuity<? extends Payment> annuity, final MulticurveProviderInterface multicurve) {
@@ -73,7 +75,7 @@ public final class PresentValueCurveSensitivityDiscounting2Calculator extends In
     return visitGenericAnnuity(annuity, multicurve);
   }
 
-  // -----     Swap     ------
+  // ----- Swap ------
 
   @Override
   public MultipleCurrencyMulticurveSensitivity visitSwap(final Swap<?, ?> swap, final MulticurveProviderInterface multicurve) {

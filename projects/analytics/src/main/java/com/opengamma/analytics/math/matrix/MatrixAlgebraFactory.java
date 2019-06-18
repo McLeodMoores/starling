@@ -9,21 +9,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 
+ *
  * Factory class for various types of matrix algebra calculators.
  */
 public final class MatrixAlgebraFactory {
-  /** Label for Colt matrix algebra */
+  /** Label for Colt matrix algebra. */
   public static final String COLT = "Colt";
-  /** Label for Commons matrix algebra */
+  /** Label for Commons matrix algebra. */
   public static final String COMMONS = "Commons";
-  /** Label for OpenGamma matrix algebra */
+  /** Label for OpenGamma matrix algebra. */
   public static final String OG = "OG";
-  /** {@link ColtMatrixAlgebra} */
+  /** {@link ColtMatrixAlgebra}. */
   public static final ColtMatrixAlgebra COLT_ALGEBRA = new ColtMatrixAlgebra();
-  /** {@link CommonsMatrixAlgebra} */
+  /** {@link CommonsMatrixAlgebra}. */
   public static final CommonsMatrixAlgebra COMMONS_ALGEBRA = new CommonsMatrixAlgebra();
-  /** {@link OGMatrixAlgebra} */
+  /** {@link OGMatrixAlgebra}. */
   public static final OGMatrixAlgebra OG_ALGEBRA = new OGMatrixAlgebra();
   private static final Map<String, MatrixAlgebra> INSTANCES;
   private static final Map<Class<?>, String> INSTANCE_NAMES;
@@ -43,10 +43,13 @@ public final class MatrixAlgebraFactory {
   }
 
   /**
-   * Given a name, returns an instance of the matrix algebra calculator
-   * @param algebraName The name of the matrix algebra calculator
+   * Given a name, returns an instance of the matrix algebra calculator.
+   * 
+   * @param algebraName
+   *          The name of the matrix algebra calculator
    * @return The matrix algebra calculator
-   * @throws IllegalArgumentException If the calculator name is null or there is no calculator for that name
+   * @throws IllegalArgumentException
+   *           If the calculator name is null or there is no calculator for that name
    */
   public static MatrixAlgebra getMatrixAlgebra(final String algebraName) {
     if (INSTANCES.containsKey(algebraName)) {
@@ -56,8 +59,10 @@ public final class MatrixAlgebraFactory {
   }
 
   /**
-   * Given a matrix algebra calculator, returns its name
-   * @param algebra The algebra
+   * Given a matrix algebra calculator, returns its name.
+   * 
+   * @param algebra
+   *          The algebra
    * @return The name of that calculator (null if not found)
    */
   public static String getMatrixAlgebraName(final MatrixAlgebra algebra) {

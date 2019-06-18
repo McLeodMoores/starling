@@ -37,8 +37,7 @@ import com.opengamma.financial.security.swap.EquityTotalReturnSwapSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Converts {@link EquityTotalReturnSwapSecurity} classes to {@link EquityTotalReturnSwapDefinition},
- * which are required for use in the analytics library.
+ * Converts {@link EquityTotalReturnSwapSecurity} classes to {@link EquityTotalReturnSwapDefinition}, which are required for use in the analytics library.
  */
 public class EquityTotalReturnSwapSecurityConverter extends FinancialSecurityVisitorAdapter<InstrumentDefinition<?>> {
   /** The convention source */
@@ -49,9 +48,12 @@ public class EquityTotalReturnSwapSecurityConverter extends FinancialSecurityVis
   private final SecuritySource _securitySource;
 
   /**
-   * @param conventionSource The convention source, not null
-   * @param holidaySource The holiday source, not null
-   * @param securitySource The security source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param securitySource
+   *          The security source, not null
    */
   public EquityTotalReturnSwapSecurityConverter(final ConventionSource conventionSource, final HolidaySource holidaySource,
       final SecuritySource securitySource) {
@@ -66,7 +68,7 @@ public class EquityTotalReturnSwapSecurityConverter extends FinancialSecurityVis
   @Override
   public EquityTotalReturnSwapDefinition visitEquityTotalReturnSwapSecurity(final EquityTotalReturnSwapSecurity security) {
     ArgumentChecker.notNull(security, "security");
-    final FinancialSecurity underlying = (FinancialSecurity) _securitySource.getSingle(security.getAssetId().toBundle()); //TODO ignoring version
+    final FinancialSecurity underlying = (FinancialSecurity) _securitySource.getSingle(security.getAssetId().toBundle()); // TODO ignoring version
     if (underlying instanceof BondSecurity) {
       throw new OpenGammaRuntimeException("Underlying for equity TRS was not an equity");
     }
@@ -75,7 +77,8 @@ public class EquityTotalReturnSwapSecurityConverter extends FinancialSecurityVis
     final LocalDate startDate = security.getEffectiveDate();
     final LocalDate endDate = security.getMaturityDate();
     final NotionalExchange notionalExchange = NotionalExchange.NO_EXCHANGE;
-    final AnnuityDefinition<? extends PaymentDefinition> annuityDefinition = AnnuityUtils.buildFloatingAnnuityDefinition(_conventionSource, _holidaySource, _securitySource, isPayer,
+    final AnnuityDefinition<? extends PaymentDefinition> annuityDefinition = AnnuityUtils.buildFloatingAnnuityDefinition(_conventionSource, _holidaySource,
+        _securitySource, isPayer,
         startDate, endDate, notionalExchange, fundingLeg);
     final EquitySecurity equity = (EquitySecurity) underlying;
     final LegalEntity legalEntity = getLegalEntityForEquity(equity);
@@ -87,9 +90,11 @@ public class EquityTotalReturnSwapSecurityConverter extends FinancialSecurityVis
   }
 
   /**
-   * Gets the legal entity of an equity from information in the security. Sets the ticker, short name and the
-   * sector (GICS code only) if the GICS code is available.
-   * @param equity The equity
+   * Gets the legal entity of an equity from information in the security. Sets the ticker, short name and the sector (GICS code only) if the GICS code is
+   * available.
+   *
+   * @param equity
+   *          The equity
    * @return The legal entity
    */
   private static LegalEntity getLegalEntityForEquity(final EquitySecurity equity) {

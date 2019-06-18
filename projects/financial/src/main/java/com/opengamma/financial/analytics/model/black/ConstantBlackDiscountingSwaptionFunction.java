@@ -46,7 +46,6 @@ import com.opengamma.financial.analytics.conversion.SwapSecurityConverter;
 import com.opengamma.financial.analytics.conversion.SwaptionSecurityConverter;
 import com.opengamma.financial.analytics.model.discounting.DiscountingFunction;
 import com.opengamma.financial.analytics.model.swaption.SwaptionUtils;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.FinancialSecurityVisitor;
 import com.opengamma.financial.security.FinancialSecurityVisitorAdapter;
@@ -58,7 +57,8 @@ import com.opengamma.financial.security.option.SwaptionSecurity;
 public abstract class ConstantBlackDiscountingSwaptionFunction extends DiscountingFunction {
 
   /**
-   * @param valueRequirements The value requirements, not null
+   * @param valueRequirements
+   *          The value requirements, not null
    */
   public ConstantBlackDiscountingSwaptionFunction(final String... valueRequirements) {
     super(valueRequirements);
@@ -69,12 +69,12 @@ public abstract class ConstantBlackDiscountingSwaptionFunction extends Discounti
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
-    final ConventionBundleSource conventionBundleSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final SwapSecurityConverter swapConverter = new SwapSecurityConverter(securitySource, holidaySource, conventionSource, regionSource);
     final InterestRateSwapSecurityConverter irsConverter = new InterestRateSwapSecurityConverter(holidaySource, conventionSource, securitySource);
     final SwaptionSecurityConverter swaptionConverter = new SwaptionSecurityConverter(swapConverter, irsConverter);
-    final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder().swaptionVisitor(swaptionConverter)
+    final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>> builder()
+        .swaptionVisitor(swaptionConverter)
         .create();
     final FutureTradeConverter futureTradeConverter = new FutureTradeConverter();
     return new DefaultTradeConverter(futureTradeConverter, securityConverter);
@@ -86,11 +86,15 @@ public abstract class ConstantBlackDiscountingSwaptionFunction extends Discounti
   protected abstract class BlackDiscountingCompiledFunction extends DiscountingCompiledFunction {
 
     /**
-     * @param tradeToDefinitionConverter Converts targets to definitions, not null
-     * @param definitionToDerivativeConverter Converts definitions to derivatives, not null
-     * @param withCurrency True if the result properties set the {@link ValuePropertyNames#CURRENCY} property.
+     * @param tradeToDefinitionConverter
+     *          Converts targets to definitions, not null
+     * @param definitionToDerivativeConverter
+     *          Converts definitions to derivatives, not null
+     * @param withCurrency
+     *          True if the result properties set the {@link ValuePropertyNames#CURRENCY} property.
      */
-    protected BlackDiscountingCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter, final FixedIncomeConverterDataProvider definitionToDerivativeConverter,
+    protected BlackDiscountingCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter,
+        final FixedIncomeConverterDataProvider definitionToDerivativeConverter,
         final boolean withCurrency) {
       super(tradeToDefinitionConverter, definitionToDerivativeConverter, withCurrency);
     }
@@ -103,7 +107,8 @@ public abstract class ConstantBlackDiscountingSwaptionFunction extends Discounti
 
     @Override
     protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
-      final ValueProperties.Builder properties = createValueProperties().with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(PROPERTY_VOLATILITY_MODEL, CONSTANT_BLACK).withAny(SURFACE)
+      final ValueProperties.Builder properties = createValueProperties().with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(PROPERTY_VOLATILITY_MODEL, CONSTANT_BLACK)
+          .withAny(SURFACE)
           .withAny(CURVE_EXPOSURES);
       if (isWithCurrency()) {
         final Security security = target.getTrade().getSecurity();
@@ -128,21 +133,27 @@ public abstract class ConstantBlackDiscountingSwaptionFunction extends Discounti
     /**
      * Gets the Black surface and curve data.
      *
-     * @param executionContext The execution context, not null
-     * @param inputs The function inputs, not null
-     * @param target The computation target, not null
-     * @param fxMatrix The FX matrix, not null
+     * @param executionContext
+     *          The execution context, not null
+     * @param inputs
+     *          The function inputs, not null
+     * @param target
+     *          The computation target, not null
+     * @param fxMatrix
+     *          The FX matrix, not null
      * @return The Black surface and curve data
      */
-    protected BlackSwaptionFlatProvider getSwaptionBlackSurface(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+    protected BlackSwaptionFlatProvider getSwaptionBlackSurface(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
+        final ComputationTarget target,
         final FXMatrix fxMatrix) {
       final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(executionContext);
       final SwaptionSecurity security = (SwaptionSecurity) target.getTrade().getSecurity();
       final InstrumentDefinition<?> definition = getDefinitionFromTarget(target);
       final MulticurveProviderInterface data = getMergedProviders(inputs, fxMatrix);
       final double volatility = (Double) inputs.getValue(MarketDataRequirementNames.IMPLIED_VOLATILITY);
-      final BlackFlatSwaptionParameters parameters = new BlackFlatSwaptionParameters(ConstantDoublesSurface.from(volatility), SwaptionUtils.getSwapGenerator(security, definition,
-          securitySource));
+      final BlackFlatSwaptionParameters parameters = new BlackFlatSwaptionParameters(ConstantDoublesSurface.from(volatility),
+          SwaptionUtils.getSwapGenerator(security, definition,
+              securitySource));
       final BlackSwaptionFlatProvider blackData = new BlackSwaptionFlatProvider(data, parameters);
       return blackData;
     }

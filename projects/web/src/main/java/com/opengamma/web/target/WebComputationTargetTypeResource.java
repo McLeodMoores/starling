@@ -26,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.web.AbstractWebResource;
 
 /**
- * RESTful resource for the Web GUI to work with computation target types and specifications
+ * RESTful resource for the Web GUI to work with computation target types and specifications.
  */
 @Path("/computationTarget")
 public class WebComputationTargetTypeResource extends AbstractWebResource {
@@ -43,48 +43,70 @@ public class WebComputationTargetTypeResource extends AbstractWebResource {
    */
   private final ComputationTargetTypeProvider _types;
 
+  /**
+   * @param types
+   *          the computation target types, not null
+   */
   public WebComputationTargetTypeResource(final ComputationTargetTypeProvider types) {
     ArgumentChecker.notNull(types, "types");
     _types = types;
   }
 
-  private ComputationTargetTypeProvider getTypes() {
-    return _types;
-  }
-
+  /**
+   * Converts the types to a JSON array.
+   *
+   * @param types
+   *          the types
+   * @return the types as a JSON string
+   */
   protected String typesJSONResponse(final Collection<ComputationTargetType> types) {
-    final List<ComputationTargetType> sorted = new ArrayList<ComputationTargetType>(types);
+    final List<ComputationTargetType> sorted = new ArrayList<>(types);
     Collections.sort(sorted, SORT_ORDER);
     try {
       final JSONWriter response = new JSONStringer().object().key("types").array();
-      for (ComputationTargetType type : sorted) {
+      for (final ComputationTargetType type : sorted) {
         response.object().key("label").value(type.getName()).key("value").value(type.toString()).endObject();
       }
       return response.endArray().endObject().toString();
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       return null;
     }
   }
 
+  /**
+   * Gets the simple computation target types as a JSON response.
+   *
+   * @return the computation target types
+   */
   @GET
   @Path("simpleTypes")
   @Produces(MediaType.APPLICATION_JSON)
   public String getSimpleTypes() {
-    return typesJSONResponse(getTypes().getSimpleTypes());
+    return typesJSONResponse(_types.getSimpleTypes());
   }
 
+  /**
+   * Gets additional computation target types as a JSON response.
+   *
+   * @return the computation target types
+   */
   @GET
   @Path("additionalTypes")
   @Produces(MediaType.APPLICATION_JSON)
   public String getAdditionalTypes() {
-    return typesJSONResponse(getTypes().getAdditionalTypes());
+    return typesJSONResponse(_types.getAdditionalTypes());
   }
 
+  /**
+   * Gets all computation target types as a JSON response.
+   *
+   * @return the computation target types
+   */
   @GET
   @Path("allTypes")
   @Produces(MediaType.APPLICATION_JSON)
   public String getAllTypes() {
-    return typesJSONResponse(getTypes().getAllTypes());
+    return typesJSONResponse(_types.getAllTypes());
   }
 
 }

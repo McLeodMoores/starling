@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.financial.view.rest;
 
 import java.net.URI;
@@ -5,7 +10,7 @@ import java.net.URI;
 import javax.ws.rs.core.UriBuilder;
 
 /**
- * Data engine resource manager constants shared between Resource and Remotes
+ * Data engine resource manager constants shared between Resource and Remotes.
  */
 public class DataEngineResourceManagerUris {
   /**

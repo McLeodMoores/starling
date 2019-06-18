@@ -12,7 +12,11 @@ import com.opengamma.financial.convention.ConventionBundleMaster;
 
 /**
  * Component factory for the Example-specific convention bundle source.
+ * 
+ * @deprecated {@link ConventionBundle}s are deprecated. Use
+ *             {@link com.opengamma.core.convention.Convention}s instead.
  */
+@Deprecated
 public class ExampleConventionBundleSourceComponentFactory extends ConventionBundleSourceComponentFactory {
 
   @Override

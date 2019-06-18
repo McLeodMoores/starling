@@ -6,8 +6,8 @@
 package com.opengamma.analytics.financial.model.option.pricing.tree;
 
 /**
- * Asset-or-nothing call option pays 0 if S <= K and S if S > K, whereas asset-or-nothing put option pays S if S < K and 0 if S >= K,
- * where S is asset price at expiry, K is strike price.
+ * Asset-or-nothing call option pays 0 if S &lt;= K and S if S &gt; K, whereas asset-or-nothing put option pays S if S &lt; K and 0 if S &gt;= K, where S is
+ * asset price at expiry, K is strike price.
  */
 public class AssetOrNothingOptionFunctionProvider extends OptionFunctionProvider1D {
 

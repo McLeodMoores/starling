@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * <p/>
+ * <p>
  * Please see distribution for license.
  */
 package com.opengamma.bbg.util;
@@ -36,7 +36,7 @@ import com.bloomberglp.blpapi.Subscription;
 import com.bloomberglp.blpapi.SubscriptionList;
 import com.opengamma.scripts.Scriptable;
 
-/** Diagnostic tool for bloomberg API server */
+/** Diagnostic tool for bloomberg API server. */
 @Scriptable
 public class Diagnose {
 
@@ -211,15 +211,15 @@ public class Diagnose {
               final Element fieldData = securityData.getElement("fieldData");
               // Element ref = fieldData.getElement(REF_FIELD);
               System.out.printf("Successfully received reference value for  Ticker:%s, Field:%s",
-                                TICKER,
-                                fieldData.getElement(REF_FIELD));
+                  TICKER,
+                  fieldData.getElement(REF_FIELD));
 
             }
           }
         } else if (message.messageType().equals("MarketDataEvents") && message.getElement(LIVE_FIELD) != null) {
           MKT_OK.resolve("ok");
           System.out.printf("Successfully received live value for  Ticker:%s, Field:%s",
-                            TICKER, message.getElement(LIVE_FIELD));
+              TICKER, message.getElement(LIVE_FIELD));
         } else {
           handleEvent(event);
         }

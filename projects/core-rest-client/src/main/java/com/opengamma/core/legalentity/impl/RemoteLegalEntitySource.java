@@ -32,8 +32,8 @@ import com.opengamma.util.rest.UniformInterfaceException404NotFound;
  * Provides remote access to an {@link LegalEntitySource}.
  */
 public class RemoteLegalEntitySource
-    extends AbstractRemoteSource<LegalEntity>
-    implements LegalEntitySource {
+extends AbstractRemoteSource<LegalEntity>
+implements LegalEntitySource {
 
   /**
    * The change manager.
@@ -52,8 +52,10 @@ public class RemoteLegalEntitySource
   /**
    * Creates an instance.
    *
-   * @param baseUri       the base target URI for all RESTful web services, not null
-   * @param changeManager the change manager, not null
+   * @param baseUri
+   *          the base target URI for all RESTful web services, not null
+   * @param changeManager
+   *          the change manager, not null
    */
   public RemoteLegalEntitySource(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri);
@@ -81,7 +83,6 @@ public class RemoteLegalEntitySource
   }
 
   //-------------------------------------------------------------------------
-  @SuppressWarnings("unchecked")
   @Override
   public Collection<LegalEntity> get(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
@@ -90,7 +91,6 @@ public class RemoteLegalEntitySource
     return accessRemote(uri).get(FudgeListWrapper.class).getList();
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Collection<LegalEntity> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(bundle, "bundle");
@@ -101,7 +101,6 @@ public class RemoteLegalEntitySource
   }
 
   //-------------------------------------------------------------------------
-  @SuppressWarnings("unchecked")
   @Override
   public Map<UniqueId, LegalEntity> get(final Collection<UniqueId> uniqueIds) {
     ArgumentChecker.notNull(uniqueIds, "uniqueIds");
@@ -117,6 +116,7 @@ public class RemoteLegalEntitySource
 
   @Override
   public Map<ExternalIdBundle, Collection<LegalEntity>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
+    ArgumentChecker.notNull(bundles, "bundles");
     // TODO: Implement this properly as a REST call
     return AbstractSourceWithExternalBundle.getAll(this, bundles, versionCorrection);
   }
@@ -125,13 +125,21 @@ public class RemoteLegalEntitySource
   @Override
   public LegalEntity getSingle(final ExternalId externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
-    return doGetSingle(externalId.toBundle(), null, null);
+    final LegalEntity legalEntity = doGetSingle(externalId.toBundle(), null, null);
+    if (legalEntity == null) {
+      throw new DataNotFoundException("No legal entity: " + externalId);
+    }
+    return legalEntity;
   }
 
   @Override
   public LegalEntity getSingle(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
-    return doGetSingle(bundle, null, null);
+    final LegalEntity legalEntity = doGetSingle(bundle, null, null);
+    if (legalEntity == null) {
+      throw new DataNotFoundException("No legal entity: " + bundle);
+    }
+    return legalEntity;
   }
 
   @Override
@@ -145,6 +153,19 @@ public class RemoteLegalEntitySource
     return legalEntity;
   }
 
+  /**
+   * Gets a single legal entity or return null.
+   *
+   * @param bundle
+   *          the identifiers
+   * @param versionCorrection
+   *          the version
+   * @param type
+   *          the type
+   * @return the legal entity or null
+   * @param <T>
+   *          the type of the legal entity
+   */
   @SuppressWarnings("unchecked")
   protected <T extends LegalEntity> T doGetSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection, final Class<T> type) {
     try {
@@ -152,9 +173,8 @@ public class RemoteLegalEntitySource
       final LegalEntity legalEntity = accessRemote(uri).get(LegalEntity.class);
       if (type != null) {
         return type.cast(legalEntity);
-      } else {
-        return (T) legalEntity;
       }
+      return (T) legalEntity;
     } catch (final DataNotFoundException ex) {
       return null;
     } catch (final UniformInterfaceException404NotFound ex) {
@@ -164,6 +184,7 @@ public class RemoteLegalEntitySource
 
   @Override
   public Map<ExternalIdBundle, LegalEntity> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
+    ArgumentChecker.notNull(bundles, "bundles");
     // TODO: Implement this properly as a REST call
     return AbstractSourceWithExternalBundle.getSingle(this, bundles, versionCorrection);
   }

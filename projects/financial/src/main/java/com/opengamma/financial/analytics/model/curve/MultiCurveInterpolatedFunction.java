@@ -39,8 +39,8 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.core.convention.ConventionSource;
@@ -84,11 +84,13 @@ import com.opengamma.util.tuple.Pairs;
  * Produces yield curves using the {@link InterpolatedDataProperties#CALCULATION_METHOD_NAME} method.
  */
 public class MultiCurveInterpolatedFunction extends
-  MultiCurveFunction<MulticurveProviderInterface, MulticurveDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
+    MultiCurveFunction<MulticurveProviderInterface, MulticurveDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(MultiCurveInterpolatedFunction.class);
+
   /**
-   * @param curveConfigurationName The curve configuration name, not null
+   * @param curveConfigurationName
+   *          The curve configuration name, not null
    */
   public MultiCurveInterpolatedFunction(final String curveConfigurationName) {
     super(curveConfigurationName);
@@ -112,14 +114,16 @@ public class MultiCurveInterpolatedFunction extends
   @Override
   public CompiledFunctionDefinition getCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames,
       final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration) {
-    return new MultiCurveInterpolatedCompiledFunctionDefinition(earliestInvocation, latestInvocation, curveNames, exogenousRequirements, curveConstructionConfiguration);
+    return new MultiCurveInterpolatedCompiledFunctionDefinition(earliestInvocation, latestInvocation, curveNames, exogenousRequirements,
+        curveConstructionConfiguration);
   }
 
   @Override
   public CompiledFunctionDefinition getCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames,
-                                                        final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration,
-                                                        final String[] currencies) {
-    return new MultiCurveInterpolatedCompiledFunctionDefinition(earliestInvocation, latestInvocation, curveNames, exogenousRequirements, curveConstructionConfiguration, currencies);
+      final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration,
+      final String[] currencies) {
+    return new MultiCurveInterpolatedCompiledFunctionDefinition(earliestInvocation, latestInvocation, curveNames, exogenousRequirements,
+        curveConstructionConfiguration, currencies);
   }
 
   /**
@@ -130,17 +134,23 @@ public class MultiCurveInterpolatedFunction extends
     private final CurveConstructionConfiguration _curveConstructionConfiguration;
 
     /**
-     * @param earliestInvocation The earliest time for which this function is valid, null if there is no bound
-     * @param latestInvocation The latest time for which this function is valid, null if there is no bound
-     * @param curveNames The names of the curves produced by this function, not null
-     * @param exogenousRequirements The exogenous requirements, not null
-     * @param curveConstructionConfiguration The curve construction configuration, not null
-     * @param currencies The set of currencies to which the curves produce sensitivities
+     * @param earliestInvocation
+     *          The earliest time for which this function is valid, null if there is no bound
+     * @param latestInvocation
+     *          The latest time for which this function is valid, null if there is no bound
+     * @param curveNames
+     *          The names of the curves produced by this function, not null
+     * @param exogenousRequirements
+     *          The exogenous requirements, not null
+     * @param curveConstructionConfiguration
+     *          The curve construction configuration, not null
+     * @param currencies
+     *          The set of currencies to which the curves produce sensitivities
      */
     protected MultiCurveInterpolatedCompiledFunctionDefinition(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation,
-                                                            final String[] curveNames, final Set<ValueRequirement> exogenousRequirements,
-                                                            final CurveConstructionConfiguration curveConstructionConfiguration,
-                                                            final String[] currencies) {
+        final String[] curveNames, final Set<ValueRequirement> exogenousRequirements,
+        final CurveConstructionConfiguration curveConstructionConfiguration,
+        final String[] currencies) {
       super(earliestInvocation, latestInvocation, curveNames, ValueRequirementNames.YIELD_CURVE, exogenousRequirements, currencies);
       ArgumentChecker.notNull(curveConstructionConfiguration, "curve construction configuration");
       _curveConstructionConfiguration = curveConstructionConfiguration;
@@ -157,11 +167,16 @@ public class MultiCurveInterpolatedFunction extends
     }
 
     /**
-     * @param earliestInvocation The earliest time for which this function is valid, null if there is no bound
-     * @param latestInvocation The latest time for which this function is valid, null if there is no bound
-     * @param curveNames The names of the curves produced by this function, not null
-     * @param exogenousRequirements The exogenous requirements, not null
-     * @param curveConstructionConfiguration The curve construction configuration, not null
+     * @param earliestInvocation
+     *          The earliest time for which this function is valid, null if there is no bound
+     * @param latestInvocation
+     *          The latest time for which this function is valid, null if there is no bound
+     * @param curveNames
+     *          The names of the curves produced by this function, not null
+     * @param exogenousRequirements
+     *          The exogenous requirements, not null
+     * @param curveConstructionConfiguration
+     *          The curve construction configuration, not null
      */
     protected MultiCurveInterpolatedCompiledFunctionDefinition(
         final ZonedDateTime earliestInvocation,
@@ -175,17 +190,18 @@ public class MultiCurveInterpolatedFunction extends
     }
 
     @Override
-    protected Pair<MulticurveProviderInterface, CurveBuildingBlockBundle> getCurves(final FunctionInputs inputs, final ZonedDateTime now, final MulticurveDiscountBuildingRepository builder,
+    protected Pair<MulticurveProviderInterface, CurveBuildingBlockBundle> getCurves(final FunctionInputs inputs, final ZonedDateTime now,
+        final MulticurveDiscountBuildingRepository builder,
         final MulticurveProviderInterface knownData, final FunctionExecutionContext context, final FXMatrix fx) {
       final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(context);
       int n = 0;
       // These loops are here because the market data snapshot might not contain all of the required information
-      for (final CurveGroupConfiguration group: _curveConstructionConfiguration.getCurveGroups()) {
-        for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry: group.getTypesForCurves().entrySet()) {
+      for (final CurveGroupConfiguration group : _curveConstructionConfiguration.getCurveGroups()) {
+        for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : group.getTypesForCurves().entrySet()) {
           final String curveName = entry.getKey();
           final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, curveName).get();
-          final InterpolatedCurveSpecification specification =
-              (InterpolatedCurveSpecification) inputs.getValue(new ValueRequirement(ValueRequirementNames.CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, curveProperties));
+          final InterpolatedCurveSpecification specification = (InterpolatedCurveSpecification) inputs
+              .getValue(new ValueRequirement(ValueRequirementNames.CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, curveProperties));
           n += specification.getNodes().size();
         }
       }
@@ -194,23 +210,24 @@ public class MultiCurveInterpolatedFunction extends
       final LinkedHashMap<String, Pair<Integer, Integer>> unitMap = new LinkedHashMap<>();
       final LinkedHashMap<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> unitBundles = new LinkedHashMap<>();
       int totalNodes = 0;
-      for (final CurveGroupConfiguration group: _curveConstructionConfiguration.getCurveGroups()) {
+      for (final CurveGroupConfiguration group : _curveConstructionConfiguration.getCurveGroups()) {
 
-        for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry: group.getTypesForCurves().entrySet()) {
+        for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : group.getTypesForCurves().entrySet()) {
 
           final String curveName = entry.getKey();
           final List<? extends CurveTypeConfiguration> types = entry.getValue();
 
           final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, curveName).get();
 
-          final Object dataObject = inputs.getValue(new ValueRequirement(ValueRequirementNames.CURVE_MARKET_DATA, ComputationTargetSpecification.NULL, curveProperties));
+          final Object dataObject = inputs
+              .getValue(new ValueRequirement(ValueRequirementNames.CURVE_MARKET_DATA, ComputationTargetSpecification.NULL, curveProperties));
           if (dataObject == null) {
             throw new OpenGammaRuntimeException("Could not get yield curve data");
           }
           final SnapshotDataBundle marketData = (SnapshotDataBundle) dataObject;
 
-          final InterpolatedCurveSpecification specification =
-              (InterpolatedCurveSpecification) inputs.getValue(new ValueRequirement(ValueRequirementNames.CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, curveProperties));
+          final InterpolatedCurveSpecification specification = (InterpolatedCurveSpecification) inputs
+              .getValue(new ValueRequirement(ValueRequirementNames.CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, curveProperties));
 
           n = specification.getNodes().size();
 
@@ -221,7 +238,7 @@ public class MultiCurveInterpolatedFunction extends
           int i = 0;
           int compoundPeriodsPerYear = 0;
           final int nNodesForCurve = specification.getNodes().size();
-          for (final CurveNodeWithIdentifier node: specification.getNodes()) {
+          for (final CurveNodeWithIdentifier node : specification.getNodes()) {
             final CurveNode curveNode = node.getCurveNode();
             if (curveNode instanceof ContinuouslyCompoundedRateNode) {
               if (i == 0) {
@@ -264,7 +281,7 @@ public class MultiCurveInterpolatedFunction extends
           final String interpolatorName = specification.getInterpolatorName();
           final String rightExtrapolatorName = specification.getRightExtrapolatorName();
           final String leftExtrapolatorName = specification.getLeftExtrapolatorName();
-          final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+          final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
           final InterpolatedDoublesCurve rawCurve = InterpolatedDoublesCurve.from(times, yields, interpolator, curveName);
           final YieldAndDiscountCurve discountCurve;
           if (compoundPeriodsPerYear != 0 && isYield) {
@@ -274,12 +291,13 @@ public class MultiCurveInterpolatedFunction extends
           } else {
             discountCurve = new DiscountCurve(curveName, rawCurve);
           }
-          for (final CurveTypeConfiguration type: types) {
+          for (final CurveTypeConfiguration type : types) {
             if (type instanceof DiscountingCurveTypeConfiguration) {
               final Currency currency = Currency.parse(((DiscountingCurveTypeConfiguration) type).getReference());
               curveBundle.setCurve(currency, discountCurve);
             } else if (type instanceof IborCurveTypeConfiguration) {
-              final IborIndexConvention iborIndexConvention = conventionSource.getSingle(((IborCurveTypeConfiguration) type).getConvention(), IborIndexConvention.class);
+              final IborIndexConvention iborIndexConvention = conventionSource.getSingle(((IborCurveTypeConfiguration) type).getConvention(),
+                  IborIndexConvention.class);
               final Tenor iborIndexTenor = ((IborCurveTypeConfiguration) type).getTenor();
 
               final int spotLag = iborIndexConvention.getSettlementDays();
@@ -297,7 +315,8 @@ public class MultiCurveInterpolatedFunction extends
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final Set<ValueRequirement> requirements = super.getRequirements(compilationContext, target, desiredValue);
       if (requirements == null) {
         return null;

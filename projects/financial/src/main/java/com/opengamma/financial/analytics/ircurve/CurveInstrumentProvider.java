@@ -18,52 +18,71 @@ public interface CurveInstrumentProvider {
 
   /**
    * Gets the external id of the market data given a tenor and curve construction date.
-   * @param curveDate The curve construction date
-   * @param tenor The tenor of the node
+   *
+   * @param curveDate
+   *          The curve construction date
+   * @param tenor
+   *          The tenor of the node
    * @return The external id for the market data of the instrument
    */
   ExternalId getInstrument(LocalDate curveDate, Tenor tenor);
 
   /**
-   * Gets the external id of the market data for a future given a curve construction date,
-   * start tenor, future tenor and the number of future tenors from the start tenor.
-   * @param curveDate The curve construction date
-   * @param startTenor The tenor from which to start counting futures
-   * @param futureTenor The tenor of the futures
-   * @param numFutureFromTenor The number of future tenors to use
+   * Gets the external id of the market data for a future given a curve construction date, start tenor, future tenor and the number of future tenors from the
+   * start tenor.
+   *
+   * @param curveDate
+   *          The curve construction date
+   * @param startTenor
+   *          The tenor from which to start counting futures
+   * @param futureTenor
+   *          The tenor of the futures
+   * @param numFutureFromTenor
+   *          The number of future tenors to use
    * @return The external id for the market data of the instrument
    */
   ExternalId getInstrument(LocalDate curveDate, Tenor startTenor, Tenor futureTenor, int numFutureFromTenor);
 
   /**
-   * Gets the external id of the market data for an IMM instrument given a curve construction date,
-   * start tenor, start IMM period number and end IMM period number.
-   * @param curveDate The curve construction date
-   * @param startTenor The tenor from which to start counting IMM periods
-   * @param startIMMPeriods The number of IMM periods to the start of the swap from the start tenor
-   * @param endIMMPeriods The number of IMM periods to the end of the swap from the start tenor
+   * Gets the external id of the market data for an IMM instrument given a curve construction date, start tenor, start IMM period number and end IMM period
+   * number.
+   *
+   * @param curveDate
+   *          The curve construction date
+   * @param startTenor
+   *          The tenor from which to start counting IMM periods
+   * @param startIMMPeriods
+   *          The number of IMM periods to the start of the swap from the start tenor
+   * @param endIMMPeriods
+   *          The number of IMM periods to the end of the swap from the start tenor
    * @return The external id for the market data of the instrument
    */
   ExternalId getInstrument(LocalDate curveDate, Tenor startTenor, int startIMMPeriods, int endIMMPeriods);
 
   /**
    * Gets the market data field to use for this identifier.
+   *
    * @return The market data field
    */
   String getMarketDataField();
 
   /**
-   * Gets the type of the market data field
+   * Gets the type of the market data field.
+   *
    * @return The data field type
    */
   DataFieldType getDataFieldType();
 
   /**
-   * Gets the external id of the market data for a <b>quarterly</b> future given a
-   * curve construction date, start tenor and the number future tenors from the start tenor.
-   * @param curveDate The curve construction date
-   * @param tenor The tenor of the node
-   * @param numQuarterlyFuturesFromTenor The number of the future
+   * Gets the external id of the market data for a <b>quarterly</b> future given a curve construction date, start tenor and the number future tenors from the
+   * start tenor.
+   *
+   * @param curveDate
+   *          The curve construction date
+   * @param tenor
+   *          The tenor of the node
+   * @param numQuarterlyFuturesFromTenor
+   *          The number of the future
    * @return The external id for the market data of the instrument
    * @deprecated Use the version that does not assume that all futures are quarterly.
    */
@@ -71,12 +90,16 @@ public interface CurveInstrumentProvider {
   ExternalId getInstrument(LocalDate curveDate, Tenor tenor, int numQuarterlyFuturesFromTenor);
 
   /**
-   * Gets the external id of the market data for a periodic zero deposit strip given a curve
-   * construction date and tenor.
-   * @param curveDate The curve construction date
-   * @param tenor The tenor of the node
-   * @param periodsPerYear The number of periods in a year
-   * @param isPeriodicZeroDeposit Is this instrument a periodic zero deposit node.
+   * Gets the external id of the market data for a periodic zero deposit strip given a curve construction date and tenor.
+   *
+   * @param curveDate
+   *          The curve construction date
+   * @param tenor
+   *          The tenor of the node
+   * @param periodsPerYear
+   *          The number of periods in a year
+   * @param isPeriodicZeroDeposit
+   *          Is this instrument a periodic zero deposit node.
    * @return The external id for the market data of the instrument
    * @deprecated This method should only be used for strips of type {@link StripInstrumentType#PERIODIC_ZERO_DEPOSIT}
    */
@@ -84,31 +107,43 @@ public interface CurveInstrumentProvider {
   ExternalId getInstrument(LocalDate curveDate, Tenor tenor, int periodsPerYear, boolean isPeriodicZeroDeposit);
 
   /**
-   * Gets the external id of the market data for a basis swap strip given a curve construction date,
-   * tenor and information about the pay and receive floating leg tenors and index type.
-   * @param curveDate The curve construction date
-   * @param tenor The tenor of the node
-   * @param payTenor The pay tenor of the basis swap
-   * @param receiveTenor The receive tenor of the basis swap
-   * @param payIndexType The pay floating index type
-   * @param receiveIndexType The receive floating index type
+   * Gets the external id of the market data for a basis swap strip given a curve construction date, tenor and information about the pay and receive floating
+   * leg tenors and index type.
+   *
+   * @param curveDate
+   *          The curve construction date
+   * @param tenor
+   *          The tenor of the node
+   * @param payTenor
+   *          The pay tenor of the basis swap
+   * @param receiveTenor
+   *          The receive tenor of the basis swap
+   * @param payIndexType
+   *          The pay floating index type
+   * @param receiveIndexType
+   *          The receive floating index type
    * @return The external id for the market data of the instrument
-   * @deprecated This method should only be used for strips of type {@link StripInstrumentType#BASIS_SWAP}
-   * or {@link StripInstrumentType#TENOR_SWAP}
+   * @deprecated This method should only be used for strips of type {@link StripInstrumentType#BASIS_SWAP} or {@link StripInstrumentType#TENOR_SWAP}
    */
   @Deprecated
-  ExternalId getInstrument(LocalDate curveDate, Tenor tenor, final Tenor payTenor, final Tenor receiveTenor, final IndexType payIndexType, final IndexType receiveIndexType);
+  ExternalId getInstrument(LocalDate curveDate, Tenor tenor, Tenor payTenor, Tenor receiveTenor, IndexType payIndexType,
+      IndexType receiveIndexType);
 
   /**
-   * Gets the external id of the market data for a fixed / float swap strip given a curve construction date,
-   * tenor and information about the floating rate reset tenor and index type.
-   * @param curveDate The curve construction date
-   * @param tenor The tenor of the node
-   * @param resetTenor The reset tenor of the floating rate
-   * @param indexType The floating index type
+   * Gets the external id of the market data for a fixed / float swap strip given a curve construction date, tenor and information about the floating rate reset
+   * tenor and index type.
+   *
+   * @param curveDate
+   *          The curve construction date
+   * @param tenor
+   *          The tenor of the node
+   * @param resetTenor
+   *          The reset tenor of the floating rate
+   * @param indexType
+   *          The floating index type
    * @return The external id for the market data of the instrument
    * @deprecated This method should only be used for strips of type {@link StripInstrumentType#SWAP}
    */
   @Deprecated
-  ExternalId getInstrument(LocalDate curveDate, Tenor tenor, final Tenor resetTenor, final IndexType indexType);
+  ExternalId getInstrument(LocalDate curveDate, Tenor tenor, Tenor resetTenor, IndexType indexType);
 }

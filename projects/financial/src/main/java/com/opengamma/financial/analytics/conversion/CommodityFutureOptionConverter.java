@@ -52,7 +52,6 @@ public class CommodityFutureOptionConverter extends FinancialSecurityVisitorAdap
       final RegionSource regionSource) {
     ArgumentChecker.notNull(securitySource, "security source");
     _securitySource = securitySource;
-    final InterestRateFutureSecurityConverterDeprecated irFutureConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource);
     final BondSecurityConverter bondConverter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
     final BondFutureSecurityConverter bondFutureConverter = new BondFutureSecurityConverter(securitySource, bondConverter);
     _futureSecurityConverter = new FutureSecurityConverterDeprecated(bondFutureConverter);
@@ -68,7 +67,7 @@ public class CommodityFutureOptionConverter extends FinancialSecurityVisitorAdap
     }
 
     final ZonedDateTime expiry = underlyingSecurity.getExpiry().getExpiry();
-    final boolean isCall = (commodityOption.getOptionType().equals(OptionType.CALL));
+    final boolean isCall = commodityOption.getOptionType().equals(OptionType.CALL);
     final ExerciseDecisionType exerciseType = commodityOption.getExerciseType().accept(ExerciseTypeAnalyticsVisitorAdapter.getInstance());
     if (underlyingSecurity instanceof AgricultureFutureSecurity) {
       final AgricultureFutureDefinition underlyingDefinition = (AgricultureFutureDefinition) underlyingSecurity.accept(_futureSecurityConverter);

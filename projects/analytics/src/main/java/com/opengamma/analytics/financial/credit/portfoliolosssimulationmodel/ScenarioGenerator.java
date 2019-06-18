@@ -12,8 +12,11 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class to generate a set of simulated default/recovery rate scenarios for a specified universe of obligors
+ * Class to generate a set of simulated default/recovery rate scenarios for a specified universe of obligors.
+ * 
+ * @deprecated Deprecated
  */
+@Deprecated
 public class ScenarioGenerator {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -71,10 +74,12 @@ public class ScenarioGenerator {
     ArgumentChecker.notNull(obligorUniverse, "Obligor universe");
     ArgumentChecker.notNull(recoveryRateModels, "Recovery rate models");
 
-    ArgumentChecker.isTrue(recoveryRateModels.length == obligorUniverse.getNumberOfObligors(), "The number of obligors must equal the number of input recovery rate models");
+    ArgumentChecker.isTrue(recoveryRateModels.length == obligorUniverse.getNumberOfObligors(),
+        "The number of obligors must equal the number of input recovery rate models");
     ArgumentChecker.isTrue(rho.length == obligorUniverse.getNumberOfObligors(), "The number of obligors must equal the number of input correlations");
     ArgumentChecker.isTrue(beta.length == obligorUniverse.getNumberOfObligors(), "The number of obligors must equal the number of input correlations");
-    ArgumentChecker.isTrue(defaultProbability.length == obligorUniverse.getNumberOfObligors(), "The number of obligors must equal the number of input default probabilities");
+    ArgumentChecker.isTrue(defaultProbability.length == obligorUniverse.getNumberOfObligors(),
+        "The number of obligors must equal the number of input default probabilities");
 
     ArgumentChecker.notNegative(numberOfSimulations, "Number of simulations");
     ArgumentChecker.notNegative(simulationTimeHorizon, "Simulation time horizon");

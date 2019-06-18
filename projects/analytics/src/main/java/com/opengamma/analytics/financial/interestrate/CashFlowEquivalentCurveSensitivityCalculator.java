@@ -23,27 +23,31 @@ import com.opengamma.analytics.financial.interestrate.swap.derivative.Swap;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.util.tuple.DoublesPair;
+
 //CSOFF
 /**
- * Calculator of the cash flow equivalent sensitivity to the curve. The result is a map of <Double, PresentValueSensitivity>.
- * The cash flow equivalent sensitivity is represented by the double which is the time of the cash flow and the PresentValueSensitivity which is the sensitivity of the
+ * Calculator of the cash flow equivalent sensitivity to the curve. The result is a map of from Double to {@link InterestRateCurveSensitivity}. The cash flow
+ * equivalent sensitivity is represented by the double which is the time of the cash flow and the InterestRateCurveSensitivity which is the sensitivity of the
  * cash flow at that date.
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
-public class CashFlowEquivalentCurveSensitivityCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Map<Double, InterestRateCurveSensitivity>> {
+public class CashFlowEquivalentCurveSensitivityCalculator
+    extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Map<Double, InterestRateCurveSensitivity>> {
 
   /**
    * The unique instance of the calculator.
    */
-  private static final CashFlowEquivalentCurveSensitivityCalculator s_instance = new CashFlowEquivalentCurveSensitivityCalculator();
+  private static final CashFlowEquivalentCurveSensitivityCalculator INSTANCE = new CashFlowEquivalentCurveSensitivityCalculator();
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static CashFlowEquivalentCurveSensitivityCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**
@@ -75,7 +79,8 @@ public class CashFlowEquivalentCurveSensitivityCalculator extends InstrumentDeri
     final double fixingStartTime = payment.getFixingPeriodStartTime();
     final double fixingEndTime = payment.getFixingPeriodEndTime();
     final double paymentTime = payment.getPaymentTime();
-    final double beta = forwardCurve.getDiscountFactor(fixingStartTime) / forwardCurve.getDiscountFactor(fixingEndTime) * discountingCurve.getDiscountFactor(paymentTime)
+    final double beta = forwardCurve.getDiscountFactor(fixingStartTime) / forwardCurve.getDiscountFactor(fixingEndTime)
+        * discountingCurve.getDiscountFactor(paymentTime)
         / discountingCurve.getDiscountFactor(fixingStartTime);
     final double betaBar = payment.getNotional() * payment.getPaymentYearFraction() / payment.getFixingAccrualFactor();
 
@@ -108,7 +113,8 @@ public class CashFlowEquivalentCurveSensitivityCalculator extends InstrumentDeri
     final double fixingStartTime = payment.getFixingPeriodStartTime();
     final double fixingEndTime = payment.getFixingPeriodEndTime();
     final double paymentTime = payment.getPaymentTime();
-    final double beta = forwardCurve.getDiscountFactor(fixingStartTime) / forwardCurve.getDiscountFactor(fixingEndTime) * discountingCurve.getDiscountFactor(paymentTime)
+    final double beta = forwardCurve.getDiscountFactor(fixingStartTime) / forwardCurve.getDiscountFactor(fixingEndTime)
+        * discountingCurve.getDiscountFactor(paymentTime)
         / discountingCurve.getDiscountFactor(fixingStartTime);
     final double betaBar = payment.getNotional() * payment.getPaymentYearFraction() / payment.getFixingAccrualFactor();
     final Map<Double, InterestRateCurveSensitivity> result = new HashMap<>();

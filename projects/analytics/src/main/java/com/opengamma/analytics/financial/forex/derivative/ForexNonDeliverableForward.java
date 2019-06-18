@@ -7,7 +7,6 @@ package com.opengamma.analytics.financial.forex.derivative;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.util.ArgumentChecker;
@@ -168,8 +167,9 @@ public class ForexNonDeliverableForward implements InstrumentDerivative {
 
   /**
    * Gets the discounting curve name used for currency1.
+   * 
    * @return The name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getDiscountingCurve1Name() {
@@ -181,8 +181,9 @@ public class ForexNonDeliverableForward implements InstrumentDerivative {
 
   /**
    * Gets the discounting curve name used for currency2.
+   * 
    * @return The name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getDiscountingCurve2Name() {

@@ -21,7 +21,9 @@ import com.opengamma.financial.security.option.BondFutureOptionSecurity;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondFutureOptionBlackPresentValueFunction extends BondFutureOptionBlackFunction {
   private static final PresentValueBlackCalculator CALCULATOR = PresentValueBlackCalculator.getInstance();
 
@@ -30,7 +32,8 @@ public class BondFutureOptionBlackPresentValueFunction extends BondFutureOptionB
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative bondFutureOption, final YieldCurveWithBlackCubeBundle data, final MultiCurveCalculationConfig curveCalculationConfig,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative bondFutureOption, final YieldCurveWithBlackCubeBundle data,
+      final MultiCurveCalculationConfig curveCalculationConfig,
       final ValueSpecification spec, final FunctionInputs inputs, final Set<ValueRequirement> desiredValue, final BondFutureOptionSecurity security) {
     final double pv = bondFutureOption.accept(CALCULATOR, data);
     return Collections.singleton(new ComputedValue(spec, pv));

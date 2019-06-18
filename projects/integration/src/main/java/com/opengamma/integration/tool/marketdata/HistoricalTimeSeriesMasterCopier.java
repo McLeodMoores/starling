@@ -104,12 +104,12 @@ public class HistoricalTimeSeriesMasterCopier {
     final HistoricalTimeSeriesMasterUtils destinationMasterUtils = new HistoricalTimeSeriesMasterUtils(_destinationMaster);
     final HistoricalTimeSeries series  = _destinationMaster.getTimeSeries(sourceInfo.getUniqueId());
     destinationMasterUtils.writeTimeSeries(sourceInfo.getName(),
-                                           sourceInfo.getDataSource(),
-                                           sourceInfo.getDataProvider(),
-                                           sourceInfo.getDataField(),
-                                           sourceInfo.getObservationTime(),
-                                           sourceInfo.getExternalIdBundle().toBundle(),
-                                           series.getTimeSeries());
+        sourceInfo.getDataSource(),
+        sourceInfo.getDataProvider(),
+        sourceInfo.getDataField(),
+        sourceInfo.getObservationTime(),
+        sourceInfo.getExternalIdBundle().toBundle(),
+        series.getTimeSeries());
     if (verbose) {
       System.out.println("Added new time series to destination with " + series.getTimeSeries().size() + " data points");
     }
@@ -133,31 +133,28 @@ public class HistoricalTimeSeriesMasterCopier {
             System.out.println("Fast updating " + sourceTimeSeries.getTimeSeries().size() + " data points");
           }
           return true;
-        } else {
-          LOGGER.warn("Destination for " + destinationId + " has more up to date data than source, skipping!");
-          return false;
         }
-      } else {
-        if (verbose) {
-          System.out.println("Fast compare of source and destination show they are the same, skipping");
-        }
+        LOGGER.warn("Destination for " + destinationId + " has more up to date data than source, skipping!");
+        return false;
+      }
+      if (verbose) {
+        System.out.println("Fast compare of source and destination show they are the same, skipping");
       }
       return false;
-    } else {
-      ManageableHistoricalTimeSeries sourceTimeSeries = _sourceMaster.getTimeSeries(sourceId);
-      final ManageableHistoricalTimeSeries destTimeSeries = _destinationMaster.getTimeSeries(destinationId);
-      if (!sourceTimeSeries.getTimeSeries().equals(destTimeSeries.getTimeSeries())) {
-        sourceTimeSeries = _sourceMaster.getTimeSeries(sourceId);
-        final HistoricalTimeSeriesMasterUtils masterUtils = new HistoricalTimeSeriesMasterUtils(_destinationMaster);
-        masterUtils.writeTimeSeries(destinationId, sourceTimeSeries.getTimeSeries());
-        if (verbose) {
-          System.out.println("Full (slow) copy of source data to destination");
-        } else {
-          System.out.println("Full (slow) compare of source and destination show they are the same, skipping");
-        }
-      }
-      return sourceTimeSeries.getTimeSeries().equals(destTimeSeries.getTimeSeries());
     }
+    ManageableHistoricalTimeSeries sourceTimeSeries = _sourceMaster.getTimeSeries(sourceId);
+    final ManageableHistoricalTimeSeries destTimeSeries = _destinationMaster.getTimeSeries(destinationId);
+    if (!sourceTimeSeries.getTimeSeries().equals(destTimeSeries.getTimeSeries())) {
+      sourceTimeSeries = _sourceMaster.getTimeSeries(sourceId);
+      final HistoricalTimeSeriesMasterUtils masterUtils = new HistoricalTimeSeriesMasterUtils(_destinationMaster);
+      masterUtils.writeTimeSeries(destinationId, sourceTimeSeries.getTimeSeries());
+      if (verbose) {
+        System.out.println("Full (slow) copy of source data to destination");
+      } else {
+        System.out.println("Full (slow) compare of source and destination show they are the same, skipping");
+      }
+    }
+    return sourceTimeSeries.getTimeSeries().equals(destTimeSeries.getTimeSeries());
   }
 
 

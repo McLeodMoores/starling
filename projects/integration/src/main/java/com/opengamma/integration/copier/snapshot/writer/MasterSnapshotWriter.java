@@ -23,7 +23,7 @@ import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotDocument;
 import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotMaster;
 
 /**
- * A class that writes securities and snapshot positions and trades to the OG masters
+ * A class that writes securities and snapshot positions and trades to the OG masters.
  */
 public class MasterSnapshotWriter implements SnapshotWriter {
 
@@ -32,10 +32,11 @@ public class MasterSnapshotWriter implements SnapshotWriter {
   private final MarketDataSnapshotMaster _snapshotMaster;
   private final ManageableMarketDataSnapshot _snapshot;
 
-
   /**
-   * Create a master snapshot writer
-   * @param snapshotMaster The snapshot master to which to write the snapshot
+   * Create a master snapshot writer.
+   * 
+   * @param snapshotMaster
+   *          The snapshot master to which to write the snapshot
    */
 
   public MasterSnapshotWriter(final MarketDataSnapshotMaster snapshotMaster) {
@@ -45,7 +46,7 @@ public class MasterSnapshotWriter implements SnapshotWriter {
 
   @Override
   public void flush() {
-    //To change body of implemented methods use File | Settings | File Templates.
+    // To change body of implemented methods use File | Settings | File Templates.
   }
 
   @Override

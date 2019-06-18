@@ -68,7 +68,7 @@ public interface FunctionDefinition {
    * The unique identifier for a {@code FunctionDefinition} is the handle through which its {@link FunctionInvoker} can be identified from the
    * {@link FunctionRepository} which sourced the function. In general, functions will not specify this themselves, but the repository will provide
    * a unique identifier for them.
-   * <p/>
+   * <p>
    * In general, implementations should <b>not</b> override the implementation in {@link AbstractFunction}.
    *
    * @return The unique identifier for this function.

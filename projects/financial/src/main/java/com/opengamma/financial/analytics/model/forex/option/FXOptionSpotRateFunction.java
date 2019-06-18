@@ -32,11 +32,11 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
  *
  */
 public class FXOptionSpotRateFunction extends AbstractFunction.NonCompiledInvoker {
-  /** Property indicating the data type required */
+  /** Property indicating the data type required. */
   public static final String PROPERTY_DATA_TYPE = "DataType";
-  /** Live FX spot rates for a security */
+  /** Live FX spot rates for a security. */
   public static final String LIVE = "Live";
-  /** Last close FX spot rates for a security */
+  /** Last close FX spot rates for a security. */
   public static final String LAST_CLOSE = "LastClose";
 
   @Override

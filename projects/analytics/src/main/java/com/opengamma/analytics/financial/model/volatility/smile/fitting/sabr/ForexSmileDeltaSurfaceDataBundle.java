@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting.sabr;
@@ -13,10 +13,11 @@ import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurve;
 import com.opengamma.analytics.financial.model.option.definition.SmileDeltaParameters;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolator;
+import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class ForexSmileDeltaSurfaceDataBundle extends SmileSurfaceDataBundle {
   private final double[] _forwards;
@@ -28,8 +29,26 @@ public class ForexSmileDeltaSurfaceDataBundle extends SmileSurfaceDataBundle {
 
   private final boolean _isCallData;
 
-  public ForexSmileDeltaSurfaceDataBundle(final double[] forwards, final double[] expiries, final double[] deltas, final double[] atms, final double[][] riskReversals,
-      final double[][] strangle, final boolean isCallData, final CombinedInterpolatorExtrapolator interpolator) {
+  /**
+   * @param interpolator
+   *          the interpolator, not null
+   * @param forwards
+   *          the forwards, not null
+   * @param expiries
+   *          the expiries, not null
+   * @param deltas
+   *          the deltas, not null
+   * @param atms
+   *          the ATM quotes, not null
+   * @param riskReversals
+   *          the risk reversals, not null
+   * @param strangle
+   *          the strangles, not null
+   * @param isCallData
+   *          true if the data is from call options
+   */
+  public ForexSmileDeltaSurfaceDataBundle(final Interpolator1D interpolator, final double[] forwards, final double[] expiries, final double[] deltas,
+      final double[] atms, final double[][] riskReversals, final double[][] strangle, final boolean isCallData) {
     ArgumentChecker.notNull(deltas, "delta");
     ArgumentChecker.notNull(forwards, "forwards");
     ArgumentChecker.notNull(expiries, "expiries");
@@ -67,7 +86,33 @@ public class ForexSmileDeltaSurfaceDataBundle extends SmileSurfaceDataBundle {
     checkVolatilities(expiries, _vols);
   }
 
-  public ForexSmileDeltaSurfaceDataBundle(final ForwardCurve forwardCurve, final double[] expiries, final double[] deltas, final double[] atms, final double[][] riskReversals,
+  /**
+   * @param forwards
+   *          the forwards, not null
+   * @param expiries
+   *          the expiries, not null
+   * @param deltas
+   *          the deltas, not null
+   * @param atms
+   *          the ATM quotes, not null
+   * @param riskReversals
+   *          the risk reversals, not null
+   * @param strangle
+   *          the strangles, not null
+   * @param isCallData
+   *          true if the data is from call options
+   * @param interpolator
+   *          the interpolator, not null
+   * @deprecated Use the constructor that takes {@link Interpolator1D} directly
+   */
+  @Deprecated
+  public ForexSmileDeltaSurfaceDataBundle(final double[] forwards, final double[] expiries, final double[] deltas, final double[] atms,
+      final double[][] riskReversals, final double[][] strangle, final boolean isCallData, final CombinedInterpolatorExtrapolator interpolator) {
+    this(interpolator, forwards, expiries, deltas, atms, riskReversals, strangle, isCallData);
+  }
+
+  public ForexSmileDeltaSurfaceDataBundle(final ForwardCurve forwardCurve, final double[] expiries, final double[] deltas, final double[] atms,
+      final double[][] riskReversals,
       final double[][] strangle, final boolean isCallData) {
     ArgumentChecker.notNull(deltas, "delta");
     ArgumentChecker.notNull(forwardCurve, "forward curve");
@@ -106,7 +151,8 @@ public class ForexSmileDeltaSurfaceDataBundle extends SmileSurfaceDataBundle {
     checkVolatilities(expiries, _vols);
   }
 
-  public ForexSmileDeltaSurfaceDataBundle(final ForwardCurve forwardCurve, final double[] expiries, final double[][] strikes, final double[][] vols, final boolean isCallData) {
+  public ForexSmileDeltaSurfaceDataBundle(final ForwardCurve forwardCurve, final double[] expiries, final double[][] strikes, final double[][] vols,
+      final boolean isCallData) {
     ArgumentChecker.notNull(forwardCurve, "forward curve");
     ArgumentChecker.notNull(expiries, "expiries");
     ArgumentChecker.notNull(strikes, "strikes");

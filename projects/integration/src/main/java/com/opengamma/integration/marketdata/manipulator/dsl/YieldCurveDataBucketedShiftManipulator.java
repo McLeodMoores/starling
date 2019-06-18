@@ -47,11 +47,11 @@ public final class YieldCurveDataBucketedShiftManipulator implements ImmutableBe
 
   private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveDataBucketedShiftManipulator.class);
 
-  /** Shift type */
+  /** Shift type. */
   @PropertyDefinition(validate = "notNull")
   private final ScenarioShiftType _shiftType;
 
-  /** Shifts to apply */
+  /** Shifts to apply. */
   @PropertyDefinition(validate = "notNull")
   private final ImmutableList<YieldCurveBucketedShift> _shifts;
 
@@ -63,8 +63,8 @@ public final class YieldCurveDataBucketedShiftManipulator implements ImmutableBe
 
   @Override
   public YieldCurveData execute(final YieldCurveData curveData,
-                                final ValueSpecification valueSpecification,
-                                final FunctionExecutionContext executionContext) {
+      final ValueSpecification valueSpecification,
+      final FunctionExecutionContext executionContext) {
     final ZonedDateTime valuationTime = ZonedDateTime.now(executionContext.getValuationClock());
     final Map<ExternalIdBundle, Double> data = Maps.newHashMap(curveData.getDataPoints());
     final Map<ExternalId, ExternalIdBundle> index = curveData.getIndex();
@@ -106,7 +106,7 @@ public final class YieldCurveDataBucketedShiftManipulator implements ImmutableBe
           }
           data.put(bundle, shiftedStripData);
           LOGGER.debug("Shifting data {}, tenor {} by {} from {} to {}",
-                         strip.getSecurityIdentifier(), strip.getTenor(), shift.getShift(), originalData, shiftedStripData);
+              strip.getSecurityIdentifier(), strip.getTenor(), shift.getShift(), originalData, shiftedStripData);
         }
       }
     }
@@ -157,7 +157,7 @@ public final class YieldCurveDataBucketedShiftManipulator implements ImmutableBe
 
   //-----------------------------------------------------------------------
   /**
-   * Gets shift type
+   * Gets shift type.
    * @return the value of the property, not null
    */
   public ScenarioShiftType getShiftType() {
@@ -166,7 +166,7 @@ public final class YieldCurveDataBucketedShiftManipulator implements ImmutableBe
 
   //-----------------------------------------------------------------------
   /**
-   * Gets shifts to apply
+   * Gets shifts to apply.
    * @return the value of the property, not null
    */
   public ImmutableList<YieldCurveBucketedShift> getShifts() {
@@ -412,7 +412,7 @@ public final class YieldCurveDataBucketedShiftManipulator implements ImmutableBe
 
     //-----------------------------------------------------------------------
     /**
-     * Sets shift type
+     * Sets shift type.
      * @param shiftType  the new value, not null
      * @return this, for chaining, not null
      */
@@ -423,7 +423,7 @@ public final class YieldCurveDataBucketedShiftManipulator implements ImmutableBe
     }
 
     /**
-     * Sets shifts to apply
+     * Sets shifts to apply.
      * @param shifts  the new value, not null
      * @return this, for chaining, not null
      */

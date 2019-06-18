@@ -81,7 +81,6 @@ public class LoggedResolutionTradeTest {
     Mockito.verifyNoMoreInteractions(logger);
   }
 
-  @SuppressWarnings("unchecked")
   public void getAttributes() {
     final Trade trade = Mockito.mock(Trade.class);
     final ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);
@@ -92,7 +91,6 @@ public class LoggedResolutionTradeTest {
     Mockito.verifyZeroInteractions(logger);
   }
 
-  @SuppressWarnings("unchecked")
   public void setAttributes() {
     final Trade trade = Mockito.mock(Trade.class);
     final ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);

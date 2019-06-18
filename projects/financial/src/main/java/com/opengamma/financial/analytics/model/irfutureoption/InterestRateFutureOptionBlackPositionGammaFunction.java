@@ -26,8 +26,9 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.black.BlackDiscountingPositionGammaIRFutureOptionFunction;
 
 /**
- * Function computes the {@link ValueRequirementNames#POSITION_GAMMA}, second order derivative of position price with respect to the futures rate,
- * for interest rate future options in the Black world.
+ * Function computes the {@link ValueRequirementNames#POSITION_GAMMA}, second order derivative of position price with respect to the futures rate, for interest
+ * rate future options in the Black world.
+ * 
  * @deprecated Use {@link BlackDiscountingPositionGammaIRFutureOptionFunction}
  */
 @Deprecated
@@ -38,7 +39,7 @@ public class InterestRateFutureOptionBlackPositionGammaFunction extends Interest
   private static final PresentValueBlackGammaCalculator CALCULATOR = PresentValueBlackGammaCalculator.getInstance();
 
   /**
-   * Sets the value requirement names to {@link ValueRequirementNames#POSITION_GAMMA}
+   * Sets the value requirement names to {@link ValueRequirementNames#POSITION_GAMMA}.
    */
   public InterestRateFutureOptionBlackPositionGammaFunction() {
     super(ValueRequirementNames.POSITION_GAMMA, true);

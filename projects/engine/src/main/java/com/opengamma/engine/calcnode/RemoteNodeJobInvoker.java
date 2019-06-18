@@ -267,8 +267,14 @@ import com.opengamma.transport.FudgeMessageSender;
   }
 
   /**
-   * Replaces any blacklisted job items with no-op functions. This keeps the shape of the job the same and may allow
-   * continuation of dependent jobs that can operate on missing inputs.
+   * Replaces any blacklisted job items with no-op functions. This keeps the shape of the job the same and may allow continuation of dependent jobs that can
+   * operate on missing inputs.
+   * 
+   * @param query
+   *          the blacklist
+   * @param job
+   *          the original calculation job
+   * @return the calculation job with blacklisted items replaced with no-op functions
    */
   /* package */static CalculationJob blacklist(final FunctionBlacklistQuery query, final CalculationJob job) {
     if (query.isEmpty()) {
@@ -402,9 +408,8 @@ import com.opengamma.transport.FudgeMessageSender;
         callback.registerJobInvoker(this);
       }
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override

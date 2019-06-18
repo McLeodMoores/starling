@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments.provider;
@@ -39,6 +39,7 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static CouponCMSHullWhiteNumericalIntegrationMethod getInstance() {
@@ -60,8 +61,11 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod {
 
   /**
    * Compute the present value of a CMS coupon with the Hull-White (extended Vasicek) model by numerical integration.
-   * @param cms The CMS coupon.
-   * @param hwMulticurves The Hull-White and multi-curves provider.
+   * 
+   * @param cms
+   *          The CMS coupon.
+   * @param hwMulticurves
+   *          The Hull-White and multi-curves provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponCMS cms, final HullWhiteOneFactorProviderInterface hwMulticurves) {
@@ -79,7 +83,8 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod {
     for (int loopcf = 0; loopcf < nbFixed; loopcf++) {
       alphaFixed[loopcf] = MODEL.alpha(parameters, 0.0, expiryTime, expiryTime, swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime());
       dfFixed[loopcf] = multicurves.getDiscountFactor(ccy, swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime());
-      discountedCashFlowFixed[loopcf] = dfFixed[loopcf] * swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction() * swap.getFixedLeg().getNthPayment(loopcf).getNotional();
+      discountedCashFlowFixed[loopcf] = dfFixed[loopcf] * swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction()
+          * swap.getFixedLeg().getNthPayment(loopcf).getNotional();
     }
     final AnnuityPaymentFixed cfeIbor = swap.getSecondLeg().accept(CFEC, multicurves);
     final double[] alphaIbor = new double[cfeIbor.getNumberOfPayments()];
@@ -120,13 +125,20 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod {
 
     /**
      * Constructor to the integrant function.
-     * @param discountedCashFlowFixed The discounted cash flows of the underlying swap fixed leg.
-     * @param alphaFixed The bond volatilities of the underlying swap fixed leg.
-     * @param discountedCashFlowIbor The discounted cash flows of the underlying swap Ibor leg.
-     * @param alphaIbor The bond volatilities of the underlying swap Ibor leg.
-     * @param alphaPayment The bond volatilities of the payment discount factor.
+     * 
+     * @param discountedCashFlowFixed
+     *          The discounted cash flows of the underlying swap fixed leg.
+     * @param alphaFixed
+     *          The bond volatilities of the underlying swap fixed leg.
+     * @param discountedCashFlowIbor
+     *          The discounted cash flows of the underlying swap Ibor leg.
+     * @param alphaIbor
+     *          The bond volatilities of the underlying swap Ibor leg.
+     * @param alphaPayment
+     *          The bond volatilities of the payment discount factor.
      */
-    public CMSIntegrant(final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor, final double alphaPayment) {
+    CMSIntegrant(final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor,
+        final double alphaPayment) {
       _discountedCashFlowFixed = discountedCashFlowFixed;
       _alphaFixed = alphaFixed;
       _discountedCashFlowIbor = discountedCashFlowIbor;

@@ -26,7 +26,7 @@ import com.opengamma.master.portfolio.PortfolioSearchResult;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * Tool to aggregate portfolios
+ * Tool to aggregate portfolios.
  */
 @Scriptable
 public class PortfolioMergeTool extends AbstractTool<ToolContext> {
@@ -35,17 +35,18 @@ public class PortfolioMergeTool extends AbstractTool<ToolContext> {
   private static final String NEW_PORTFOLIO_NAME = "m";
   private static final String FLATTEN_OPTION_NAME = "f";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new PortfolioMergeTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final String[] portfolioNames = getCommandLine().getOptionValues(INPUT_PORTFOLIO_NAMES);

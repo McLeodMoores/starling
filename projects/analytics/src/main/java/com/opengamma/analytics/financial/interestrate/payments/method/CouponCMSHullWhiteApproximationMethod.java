@@ -21,8 +21,10 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Pricing method of a CMS coupon in the Hull-White (extended Vasicek) model by approximation.
- * <P> Reference: M. Henrard. CMS Swaps and Caps in One-Factor Gaussian Models, SSRN working paper 985551, February 2008.
- * Available at http://ssrn.com/abstract=985551
+ * <P>
+ * Reference: M. Henrard. CMS Swaps and Caps in One-Factor Gaussian Models, SSRN working paper 985551, February 2008. Available at
+ * http://ssrn.com/abstract=985551
+ * 
  * @deprecated {@link HullWhiteOneFactorPiecewiseConstantDataBundle} is deprecated
  */
 @Deprecated
@@ -35,6 +37,7 @@ public final class CouponCMSHullWhiteApproximationMethod implements PricingMetho
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static CouponCMSHullWhiteApproximationMethod getInstance() {
@@ -58,8 +61,11 @@ public final class CouponCMSHullWhiteApproximationMethod implements PricingMetho
 
   /**
    * Compute the present value of a CMS coupon with the Hull-White (extended Vasicek) model by approximation.
-   * @param cmsCoupon The CMS coupon.
-   * @param hwData The Hull-White parameters and the curves.
+   * 
+   * @param cmsCoupon
+   *          The CMS coupon.
+   * @param hwData
+   *          The Hull-White parameters and the curves.
    * @return The coupon price.
    */
   public CurrencyAmount presentValue(final CouponCMS cmsCoupon, final HullWhiteOneFactorPiecewiseConstantDataBundle hwData) {
@@ -74,8 +80,10 @@ public final class CouponCMSHullWhiteApproximationMethod implements PricingMetho
     final double[] discountedCashFlowFixed = new double[nbFixed];
     for (int loopcf = 0; loopcf < nbFixed; loopcf++) {
       alphaFixed[loopcf] = MODEL.alpha(hwData.getHullWhiteParameter(), 0.0, expiryTime, expiryTime, swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime());
-      dfFixed[loopcf] = hwData.getCurve(swap.getFixedLeg().getNthPayment(loopcf).getFundingCurveName()).getDiscountFactor(swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime());
-      discountedCashFlowFixed[loopcf] = dfFixed[loopcf] * swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction() * swap.getFixedLeg().getNthPayment(loopcf).getNotional();
+      dfFixed[loopcf] = hwData.getCurve(swap.getFixedLeg().getNthPayment(loopcf).getFundingCurveName())
+          .getDiscountFactor(swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime());
+      discountedCashFlowFixed[loopcf] = dfFixed[loopcf] * swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction()
+          * swap.getFixedLeg().getNthPayment(loopcf).getNotional();
     }
     final AnnuityPaymentFixed cfeIbor = swap.getSecondLeg().accept(CFEC, hwData);
     final double[] alphaIbor = new double[cfeIbor.getNumberOfPayments()];

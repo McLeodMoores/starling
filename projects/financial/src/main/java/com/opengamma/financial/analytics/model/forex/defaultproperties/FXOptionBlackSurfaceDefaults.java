@@ -34,31 +34,31 @@ import com.opengamma.util.tuple.Pairs;
 public class FXOptionBlackSurfaceDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(FXOptionBlackSurfaceDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.FX_PRESENT_VALUE,
-    ValueRequirementNames.FX_CURRENCY_EXPOSURE,
-    ValueRequirementNames.VALUE_DELTA,
-    ValueRequirementNames.VALUE_VEGA,
-    ValueRequirementNames.VALUE_GAMMA,
-    ValueRequirementNames.VALUE_GAMMA_P,
-    ValueRequirementNames.VEGA_MATRIX,
-    ValueRequirementNames.VEGA_QUOTE_MATRIX,
-    ValueRequirementNames.FX_CURVE_SENSITIVITIES,
-    ValueRequirementNames.PV01,
-    ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY,
-    ValueRequirementNames.VALUE_THETA,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-    ValueRequirementNames.VALUE_RHO,
-    ValueRequirementNames.VALUE_PHI,
-    ValueRequirementNames.VALUE_VOMMA,
-    ValueRequirementNames.VALUE_VANNA,
-    ValueRequirementNames.DELTA,
-    ValueRequirementNames.FORWARD_DELTA,
-    ValueRequirementNames.GAMMA,
-    ValueRequirementNames.FORWARD_GAMMA,
-    ValueRequirementNames.FORWARD_VEGA,
-    ValueRequirementNames.FORWARD_DRIFTLESS_THETA,
-    ValueRequirementNames.THETA
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.FX_PRESENT_VALUE,
+                ValueRequirementNames.FX_CURRENCY_EXPOSURE,
+                ValueRequirementNames.VALUE_DELTA,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.VALUE_GAMMA_P,
+                ValueRequirementNames.VEGA_MATRIX,
+                ValueRequirementNames.VEGA_QUOTE_MATRIX,
+                ValueRequirementNames.FX_CURVE_SENSITIVITIES,
+                ValueRequirementNames.PV01,
+                ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY,
+                ValueRequirementNames.VALUE_THETA,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.VALUE_RHO,
+                ValueRequirementNames.VALUE_PHI,
+                ValueRequirementNames.VALUE_VOMMA,
+                ValueRequirementNames.VALUE_VANNA,
+                ValueRequirementNames.DELTA,
+                ValueRequirementNames.FORWARD_DELTA,
+                ValueRequirementNames.GAMMA,
+                ValueRequirementNames.FORWARD_GAMMA,
+                ValueRequirementNames.FORWARD_VEGA,
+                ValueRequirementNames.FORWARD_DRIFTLESS_THETA,
+                ValueRequirementNames.THETA
   };
   private final String _interpolatorName;
   private final String _leftExtrapolatorName;
@@ -121,7 +121,8 @@ public class FXOptionBlackSurfaceDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (InterpolatedDataProperties.X_INTERPOLATOR_NAME.equals(propertyName)) {
       return Collections.singleton(_interpolatorName);
     }

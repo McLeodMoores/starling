@@ -30,7 +30,7 @@ import com.opengamma.util.PublicSPI;
  * History can be stored in two dimensions and this request provides searching.
  * <p>
  * The first historic dimension is the classic series of versions.
- * Each new version is stored in such a manor that previous versions can be accessed.
+ * Each new version is stored in such a manner that previous versions can be accessed.
  * <p>
  * The second historic dimension is corrections.
  * A correction occurs when it is realized that the original data stored was incorrect.

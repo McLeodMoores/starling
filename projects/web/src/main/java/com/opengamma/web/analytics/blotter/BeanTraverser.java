@@ -22,9 +22,11 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * TODO is there a generally useful way to have pluggable handlers to override default behaviour for specific properties?
- * or would that have to be done in the visitors?
- * could also handle it by property name instead of using the metaproperty
+ *
+ */
+/*
+ * TODO is there a generally useful way to have pluggable handlers to override default behaviour for specific properties? or would that have to be done in the
+ * visitors? could also handle it by property name instead of using the metaproperty
  */
 /* package */ class BeanTraverser {
 
@@ -67,9 +69,8 @@ import com.opengamma.util.ArgumentChecker;
     }
     if (failures.isEmpty()) {
       return decoratedVisitor.finish();
-    } else {
-      throw new BeanTraversalException(metaBean, visitor, failures);
     }
+    throw new BeanTraversalException(metaBean, visitor, failures);
   }
 
   private BeanVisitor<?> decorate(final BeanVisitor<?> visitor) {
@@ -110,8 +111,8 @@ import com.opengamma.util.ArgumentChecker;
 }
 
 /**
- * Exception thrown after a bean traversal that threw exceptions. All exceptions thrown during traversal are added
- * to this exception as {@link #addSuppressed suppressed} exceptions.
+ * Exception thrown after a bean traversal that threw exceptions. All exceptions thrown during traversal are added to this exception as {@link #addSuppressed
+ * suppressed} exceptions.
  */
 /* package */ class BeanTraversalException extends OpenGammaRuntimeException {
 
@@ -129,10 +130,10 @@ import com.opengamma.util.ArgumentChecker;
     ArgumentChecker.notNull(metaBean, "metaBean");
     ArgumentChecker.notEmpty(failures, "failures");
     ArgumentChecker.notNull(visitor, "visitor");
-    return "Bean traversal failed. " +
-        "bean: " + metaBean + ", " +
-        "visitor: " + visitor + ", " +
-        "failures: [" + StringUtils.join(failures, ", ") + "]";
+    return "Bean traversal failed. "
+        + "bean: " + metaBean + ", "
+        + "visitor: " + visitor + ", "
+        + "failures: [" + StringUtils.join(failures, ", ") + "]";
   }
 
 }

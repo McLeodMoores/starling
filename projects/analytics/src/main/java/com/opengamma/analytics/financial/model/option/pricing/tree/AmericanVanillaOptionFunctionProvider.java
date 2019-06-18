@@ -20,10 +20,14 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
   private final Calculator _calc;
 
   /**
-   * @param strike Strike price
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
+   * @param strike
+   *          Strike price
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
    */
   public AmericanVanillaOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall) {
     super(strike, timeToExpiry, steps, isCall);
@@ -31,54 +35,85 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
   }
 
   /**
-   * American vanilla option function with acceleration technique in binomial model
-   * @param strike Strike price
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
-   * @param volatility Volatility
-   * @param interestRate Interest rate
-   * @param dividend Dividend
+   * American vanilla option function with acceleration technique in binomial model.
+   *
+   * @param strike
+   *          Strike price
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
+   * @param volatility
+   *          Volatility
+   * @param interestRate
+   *          Interest rate
+   * @param dividend
+   *          Dividend
    */
-  public AmericanVanillaOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double volatility, final double interestRate,
+  public AmericanVanillaOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double volatility,
+      final double interestRate,
       final double dividend) {
     super(strike, timeToExpiry, steps, isCall);
     _calc = new AccelerationCalculator(volatility, interestRate, dividend);
   }
 
   /**
-   * American vanilla option function with truncation technique in binomial model
-   * @param strike Strike price
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
-   * @param volatility Volatility
-   * @param interestRate Interest rate
-   * @param dividend Dividend
-   * @param stdDev Truncation parameter
+   * American vanilla option function with truncation technique in binomial model.
+   *
+   * @param strike
+   *          Strike price
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
+   * @param volatility
+   *          Volatility
+   * @param interestRate
+   *          Interest rate
+   * @param dividend
+   *          Dividend
+   * @param stdDev
+   *          Truncation parameter
    */
-  public AmericanVanillaOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double volatility, final double interestRate,
+  public AmericanVanillaOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double volatility,
+      final double interestRate,
       final double dividend, final double stdDev) {
     super(strike, timeToExpiry, steps, isCall);
     _calc = new TruncationCalculator(volatility, interestRate, dividend, stdDev);
   }
 
   /**
-   * American vanilla option function with truncation and acceleration techniques in binomial model
-   * @param strike Strike price
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
-   * @param volatility Volatility
-   * @param interestRate Interest rate
-   * @param dividend Dividend
-   * @param stdDev Truncation parameter
-   * @param acc True if acceleration is used
+   * American vanilla option function with truncation and acceleration techniques in binomial model.
+   *
+   * @param strike
+   *          Strike price
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
+   * @param volatility
+   *          Volatility
+   * @param interestRate
+   *          Interest rate
+   * @param dividend
+   *          Dividend
+   * @param stdDev
+   *          Truncation parameter
+   * @param acc
+   *          True if acceleration is used
    */
-  public AmericanVanillaOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double volatility, final double interestRate,
+  public AmericanVanillaOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double volatility,
+      final double interestRate,
       final double dividend, final double stdDev, final boolean acc) {
     super(strike, timeToExpiry, steps, isCall);
-    _calc = acc ? new AcceleratedTruncationCalculator(volatility, interestRate, dividend, stdDev) : new TruncationCalculator(volatility, interestRate, dividend, stdDev);
+    _calc = acc ? new AcceleratedTruncationCalculator(volatility, interestRate, dividend, stdDev)
+        : new TruncationCalculator(volatility, interestRate, dividend, stdDev);
   }
 
   @Override
@@ -87,7 +122,8 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
   }
 
   @Override
-  public double[] getNextOptionValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double baseAssetPrice, final double sumCashDiv,
+  public double[] getNextOptionValues(final double discount, final double upProbability, final double downProbability, final double[] values,
+      final double baseAssetPrice, final double sumCashDiv,
       final double downFactor, final double upOverDown, final int steps) {
     return _calc.nextValues(discount, upProbability, downProbability, values, sumCashDiv, baseAssetPrice, downFactor, upOverDown, steps);
   }
@@ -109,7 +145,8 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
   }
 
   @Override
-  public double[] getNextOptionValues(final double discount, final double upProbability, final double middleProbability, final double downProbability, final double[] values,
+  public double[] getNextOptionValues(final double discount, final double upProbability, final double middleProbability, final double downProbability,
+      final double[] values,
       final double baseAssetPrice, final double sumCashDiv, final double downFactor, final double middleOverDown, final int steps) {
     final double strike = getStrike();
     final double sign = getSign();
@@ -118,7 +155,8 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
     final double[] res = new double[nNodes];
     double assetPrice = baseAssetPrice * Math.pow(downFactor, steps);
     for (int j = 0; j < nNodes; ++j) {
-      res[j] = Math.max(discount * (upProbability * values[j + 2] + middleProbability * values[j + 1] + downProbability * values[j]), sign * (assetPrice + sumCashDiv - strike));
+      res[j] = Math.max(discount * (upProbability * values[j + 2] + middleProbability * values[j + 1] + downProbability * values[j]),
+          sign * (assetPrice + sumCashDiv - strike));
       assetPrice *= middleOverDown;
     }
     return res;
@@ -134,9 +172,10 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
    *
    */
   private abstract class Calculator {
-    abstract double[] payoffsAtExpiry(final double assetPrice, final double downFactor, final double upOverDown);
+    abstract double[] payoffsAtExpiry(double assetPrice, double downFactor, double upOverDown);
 
-    public double[] nextValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double sumCashDiv, final double baseAssetPrice,
+    public double[] nextValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double sumCashDiv,
+        final double baseAssetPrice,
         final double downFactor, final double upOverDown, final int steps) {
       final double strike = getStrike();
       final double sign = getSign();
@@ -176,7 +215,7 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
     private final double _interestRate;
     private final double _dividend;
 
-    public AccelerationCalculator(final double volatility, final double interestRate, final double dividend) {
+    AccelerationCalculator(final double volatility, final double interestRate, final double dividend) {
       ArgumentChecker.isTrue(volatility > 0., "volatility should be positive");
       ArgumentChecker.isTrue(Doubles.isFinite(volatility), "volatility should be finite");
       _volatility = volatility;
@@ -192,7 +231,8 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
     }
 
     @Override
-    public double[] nextValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double sumCashDiv, final double baseAssetPrice,
+    public double[] nextValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double sumCashDiv,
+        final double baseAssetPrice,
         final double downFactor, final double upOverDown, final int steps) {
 
       if (getNumberOfSteps() - 1 == steps) {
@@ -225,7 +265,7 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
     private final double _dividend;
     private final double _stdDiv;
 
-    public TruncationCalculator(final double volatility, final double interestRate, final double dividend, final double stdDiv) {
+    TruncationCalculator(final double volatility, final double interestRate, final double dividend, final double stdDiv) {
       ArgumentChecker.isTrue(volatility > 0., "volatility should be positive");
       ArgumentChecker.isTrue(Doubles.isFinite(volatility), "volatility should be finite");
       ArgumentChecker.isTrue(stdDiv > 0., "stdDiv should be positive");
@@ -257,7 +297,8 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
     }
 
     @Override
-    public double[] nextValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double sumCashDiv, final double baseAssetPrice,
+    public double[] nextValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double sumCashDiv,
+        final double baseAssetPrice,
         final double downFactor, final double upOverDown, final int steps) {
 
       final double strike = getStrike();
@@ -313,7 +354,7 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
     private final double _dt;
     private final ProbabilityDistribution<Double> _normal = new NormalDistribution(0, 1);
 
-    public AcceleratedTruncationCalculator(final double volatility, final double interestRate, final double dividend, final double stdDiv) {
+    AcceleratedTruncationCalculator(final double volatility, final double interestRate, final double dividend, final double stdDiv) {
       ArgumentChecker.isTrue(volatility > 0., "volatility should be positive");
       ArgumentChecker.isTrue(Doubles.isFinite(volatility), "volatility should be finite");
       ArgumentChecker.isTrue(stdDiv > 0., "stdDiv should be positive");
@@ -334,7 +375,8 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
     }
 
     @Override
-    public double[] nextValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double sumCashDiv, final double baseAssetPrice,
+    public double[] nextValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double sumCashDiv,
+        final double baseAssetPrice,
         final double downFactor, final double upOverDown, final int steps) {
 
       final double strike = getStrike();
@@ -377,7 +419,8 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
       return res;
     }
 
-    private double blackScholesPrice(final double spot, final double strike, final double time, final double vol, final double interestRate, final double dividend, final double sign) {
+    private double blackScholesPrice(final double spot, final double strike, final double time, final double vol, final double interestRate,
+        final double dividend, final double sign) {
       final double factor1 = Math.exp(-dividend * time);
       final double factor2 = Math.exp(-interestRate * time);
       final double sigRootT = vol * Math.sqrt(time);

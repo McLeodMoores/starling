@@ -86,7 +86,11 @@ docs.sqlite3
 /target/
 /examples/target/
 .project
-
+/projects/*/*.pmd
+/examples/*/.pmd
+/examples/.pmd
+/deployment-template/*.pmd
+*.pmd
 # IntelliJ config files
 *.iws
 #*.iml

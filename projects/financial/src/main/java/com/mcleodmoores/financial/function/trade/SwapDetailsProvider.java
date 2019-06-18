@@ -37,27 +37,27 @@ import com.opengamma.util.ArgumentChecker;
 public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProvider<SwapDefinition, MulticurveProviderInterface> {
 
   /**
-   * The MulticurveProviderInterface bundle
+   * The MulticurveProviderInterface bundle.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final MulticurveProviderInterface _curves;
   /**
-   * The valuation time
+   * The valuation time.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final ZonedDateTime _valuationTime;
   /**
-   * Boolean, whether the leg is fixed or floating
+   * Boolean, whether the leg is fixed or floating.
    */
   @PropertyDefinition(validate = "notNull")
   private final boolean _fixed;
   /**
-   * The swap definition
+   * The swap definition.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final SwapDefinition _definition;
   /**
-   * The PayReceiveType, whether the leg is pay or receive
+   * The PayReceiveType, whether the leg is pay or receive.
    */
   @PropertyDefinition(validate = "notNull")
   private final PayReceiveType _type;
@@ -65,15 +65,20 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
   /**
    * Creates an instance.
    *
-   * @param curves  the curves, not null
-   * @param valuationTime  the valuation time, not null
-   * @param definition  the swap containing the payment definitions, not null
-   * @param security  the security, not null
-   * @param type  whether the pay or receive leg is to be used, not null
+   * @param curves
+   *          the curves, not null
+   * @param valuationTime
+   *          the valuation time, not null
+   * @param definition
+   *          the swap containing the payment definitions, not null
+   * @param security
+   *          the security, not null
+   * @param type
+   *          whether the pay or receive leg is to be used, not null
    */
   @ImmutableConstructor
   public SwapDetailsProvider(final MulticurveProviderInterface curves, final ZonedDateTime valuationTime,
-                             final SwapDefinition definition, final SwapSecurity security, final PayReceiveType type) {
+      final SwapDefinition definition, final SwapSecurity security, final PayReceiveType type) {
     _curves = ArgumentChecker.notNull(curves, "curves");
     _valuationTime = ArgumentChecker.notNull(valuationTime, "valuationTime");
     _definition = ArgumentChecker.notNull(definition, "definition");
@@ -133,25 +138,27 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the MulticurveProviderInterface bundle
+   * Gets the MulticurveProviderInterface bundle.
    * @return the value of the property, not null
    */
+  @Override
   public MulticurveProviderInterface getCurves() {
     return _curves;
   }
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the valuation time
+   * Gets the valuation time.
    * @return the value of the property, not null
    */
+  @Override
   public ZonedDateTime getValuationTime() {
     return _valuationTime;
   }
 
   //-----------------------------------------------------------------------
   /**
-   * Gets boolean, whether the leg is fixed or floating
+   * Gets boolean, whether the leg is fixed or floating.
    * @return the value of the property, not null
    */
   public boolean isFixed() {
@@ -160,16 +167,17 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the swap definition
+   * Gets the swap definition.
    * @return the value of the property, not null
    */
+  @Override
   public SwapDefinition getDefinition() {
     return _definition;
   }
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the PayReceiveType, whether the leg is pay or receive
+   * Gets the PayReceiveType, whether the leg is pay or receive.
    * @return the value of the property, not null
    */
   public PayReceiveType getType() {
@@ -508,7 +516,7 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the MulticurveProviderInterface bundle
+     * Sets the MulticurveProviderInterface bundle.
      * @param curves  the new value, not null
      * @return this, for chaining, not null
      */
@@ -519,7 +527,7 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
     }
 
     /**
-     * Sets the valuation time
+     * Sets the valuation time.
      * @param valuationTime  the new value, not null
      * @return this, for chaining, not null
      */
@@ -530,7 +538,7 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
     }
 
     /**
-     * Sets boolean, whether the leg is fixed or floating
+     * Sets boolean, whether the leg is fixed or floating.
      * @param fixed  the new value, not null
      * @return this, for chaining, not null
      */
@@ -541,7 +549,7 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
     }
 
     /**
-     * Sets the swap definition
+     * Sets the swap definition.
      * @param definition  the new value, not null
      * @return this, for chaining, not null
      */
@@ -552,7 +560,7 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
     }
 
     /**
-     * Sets the PayReceiveType, whether the leg is pay or receive
+     * Sets the PayReceiveType, whether the leg is pay or receive.
      * @param type  the new value, not null
      * @return this, for chaining, not null
      */

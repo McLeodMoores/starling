@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.generator;
 
@@ -71,8 +71,8 @@ public class ExampleOisPortfolioGeneratorTool extends AbstractPortfolioGenerator
     /** The tickers of the OIS rates for each currency */
     private static final List<Pair<Currency, ExternalId>> FIXINGS = new ArrayList<>();
     /** The swap tenors */
-    private static final Tenor[] TENORS = new Tenor[] {Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS,
-      Tenor.ofYears(7), Tenor.TEN_YEARS, Tenor.ofYears(15), Tenor.ofYears(20) };
+    private static final Tenor[] TENORS = new Tenor[] { Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS, Tenor.ofYears(7), Tenor.TEN_YEARS,
+        Tenor.ofYears(15), Tenor.ofYears(20) };
     /** The trade date */
     private static final LocalDate TODAY = LocalDate.now();
     /** The counterparty */
@@ -89,6 +89,7 @@ public class ExampleOisPortfolioGeneratorTool extends AbstractPortfolioGenerator
 
     /**
      * Gets the singleton instance.
+     * 
      * @return The instance
      */
     public static SecurityGenerator<SwapSecurity> getInstance() {
@@ -115,28 +116,18 @@ public class ExampleOisPortfolioGeneratorTool extends AbstractPortfolioGenerator
       final Double notional = (getRandom().nextInt(9999) + 1) * 10000.;
       final ZonedDateTime tradeDateTime = TODAY.atStartOfDay(ZoneOffset.UTC);
       final ZonedDateTime maturityDateTime = maturity.atStartOfDay(ZoneOffset.UTC);
-      final ConventionBundle swapConvention = getConventionBundleSource().getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME,
-          ccy.getCode() + "_OIS_SWAP"));
+      final ConventionBundle swapConvention = getConventionBundleSource()
+          .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_OIS_SWAP"));
       if (swapConvention == null) {
         LOGGER.error("Couldn't get swap convention for {}", ccy.getCode());
         return null;
       }
       final InterestRateNotional interestRateNotional = new InterestRateNotional(ccy, notional);
-      final SwapLeg fixedLeg = new FixedInterestRateLeg(swapConvention.getSwapFixedLegDayCount(),
-          swapConvention.getSwapFixedLegFrequency(),
-          swapConvention.getSwapFixedLegRegion(),
-          swapConvention.getSwapFixedLegBusinessDayConvention(),
-          interestRateNotional,
-          false,
-          fixedRate);
+      final SwapLeg fixedLeg = new FixedInterestRateLeg(swapConvention.getSwapFixedLegDayCount(), swapConvention.getSwapFixedLegFrequency(),
+          swapConvention.getSwapFixedLegRegion(), swapConvention.getSwapFixedLegBusinessDayConvention(), interestRateNotional, false, fixedRate);
       final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(swapConvention.getSwapFloatingLegDayCount(),
-          swapConvention.getSwapFloatingLegFrequency(),
-          swapConvention.getSwapFloatingLegRegion(),
-          swapConvention.getSwapFloatingLegBusinessDayConvention(),
-          interestRateNotional,
-          false,
-          floatingRateId,
-          FloatingRateType.OIS);
+          swapConvention.getSwapFloatingLegFrequency(), swapConvention.getSwapFloatingLegRegion(), swapConvention.getSwapFloatingLegBusinessDayConvention(),
+          interestRateNotional, false, floatingRateId, FloatingRateType.OIS);
       floatingLeg.setInitialFloatingRate(initialRate);
       final boolean isPayFixed = getRandom().nextBoolean();
       final SwapLeg payLeg;

@@ -28,7 +28,6 @@ import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDABaseTest;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantCreditCurve;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantCreditCurveBuilder;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantYieldCurve;
-import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantYieldCurveBuild;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.MarketQuoteConverter;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ParSpread;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.PointsUpFront;

@@ -9,18 +9,15 @@ import java.util.Arrays;
 
 import org.apache.commons.lang.NotImplementedException;
 
-import com.opengamma.analytics.math.interpolation.data.Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ParallelArrayBinarySort;
 
 /**
- * Shape-preserving C2 cubic spline interpolation based on
- * S. Pruess "Shape preserving C2 cubic spline interpolation"
- *  IMA Journal of Numerical Analysis (1993) 13 (4): 493-507.
- * where two extra knots are introduced between adjacent data points
- * As the position of the new knots are data dependent, the matrix form of yValues producing multi-splines is not relevant
+ * Shape-preserving C2 cubic spline interpolation based on S. Pruess "Shape preserving C2 cubic spline interpolation" IMA Journal of Numerical Analysis (1993)
+ * 13 (4): 493-507. where two extra knots are introduced between adjacent data points As the position of the new knots are data dependent, the matrix form of
+ * yValues producing multi-splines is not relevant
  */
 public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialInterpolator {
 
@@ -64,9 +61,9 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
     boolean correctSign = false;
     int it = 0;
 
-    while (correctSign == false) {
+    while (!correctSign) {
       correctSign = signChecker(beta, rValues);
-      if (correctSign == false) {
+      if (!correctSign) {
         first = firstDiffSweep(intervals, slopes, beta, first);
         rValues = rValuesCalculator(slopes, first);
       }
@@ -104,10 +101,14 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
   }
 
   /**
-   * Since this interpolation method introduces new breakpoints in certain cases, {@link PiecewisePolynomialResultsWithSensitivity} is not well-defined
-   * Instead the node sensitivity is computed in {@link MonotoneConvexSplineInterpolator1D} via {@link Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle}
-   * @param xValues The xValues
-   * @param yValues The yValues
+   * Since this interpolation method introduces new breakpoints in certain cases, {@link PiecewisePolynomialResultsWithSensitivity} is not well-defined Instead
+   * the node sensitivity is computed in {@link MonotoneConvexSplineInterpolator1D} via
+   * {@link com.opengamma.analytics.math.interpolation.data.Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle}.
+   *
+   * @param xValues
+   *          The xValues
+   * @param yValues
+   *          The yValues
    * @return NotImplementedException
    */
   @Override
@@ -132,8 +133,10 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
   }
 
   /**
-   * @param yValues Y values of data
-   * @param intervals Intervals of x data
+   * @param yValues
+   *          Y values of data
+   * @param intervals
+   *          Intervals of x data
    * @return Slopes
    */
   private double[] slopesCalculator(final double[] yValues, final double[] intervals) {
@@ -161,7 +164,7 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
     res[nInts] = endpointFirst(intervals[nInts - 1], intervals[nInts - 2], slopes[nInts - 1], slopes[nInts - 2]);
 
     for (int i = 1; i < nInts; ++i) {
-      if (Math.signum(slopes[i]) != Math.signum(slopes[i - 1]) | (slopes[i] == 0 | slopes[i - 1] == 0)) {
+      if (Math.signum(slopes[i]) != Math.signum(slopes[i - 1]) | slopes[i] == 0 | slopes[i - 1] == 0) {
         res[i] = 0.;
       } else {
         final double den1 = 2. * intervals[i] + intervals[i - 1];
@@ -175,10 +178,15 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
 
   /**
    * Estimate first derivatives at endpoints
-   * @param ints1 First (last) interval
-   * @param ints2 Second (second last) Interval
-   * @param grads1 First (last) slope
-   * @param grads2 Second (second last) slope
+   *
+   * @param ints1
+   *          First (last) interval
+   * @param ints2
+   *          Second (second last) Interval
+   * @param grads1
+   *          First (last) slope
+   * @param grads2
+   *          Second (second last) slope
    * @return Slope at the first (last) data point
    */
   private double endpointFirst(final double ints1, final double ints2, final double grads1, final double grads2) {
@@ -211,11 +219,11 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
   }
 
   /**
-   * In the notation i =1,2,...,N-1,
-   * R_{2*i-1} = 6*slopes_i - 4*first_i - 2*first_{i+1}
-   * R_{2*i}   = - 6*slopes_i + 2*first_i + 4*first_{i+1}
+   * In the notation i =1,2,...,N-1, R_{2*i-1} = 6*slopes_i - 4*first_i - 2*first_{i+1} R_{2*i} = - 6*slopes_i + 2*first_i + 4*first_{i+1}
+   *
    * @param slopes
-   * @param first First derivatives
+   * @param first
+   *          First derivatives
    * @return R functions
    */
   private double[] rValuesCalculator(final double[] slopes, final double[] first) {
@@ -240,6 +248,7 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
 
   /**
    * Check beta_i * R_{2*i-1} \geq 0 and beta_{i+1} *R_{2*i} \geq 0
+   *
    * @param beta
    * @param rValues
    * @return True if the two inequalities are satisfied
@@ -256,8 +265,10 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
   }
 
   /**
-   * As the double sweep algorithm determines only intervals [minTmp, maxTmp] which should contain first derivative, choice of the values of first derivatives is not unique.
-   * Infeasibility is returned in some cases, which is resolved by another choice of first derivatives within the allowed intervals, [minTmp, maxTmp].
+   * As the double sweep algorithm determines only intervals [minTmp, maxTmp] which should contain first derivative, choice of the values of first derivatives
+   * is not unique. Infeasibility is returned in some cases, which is resolved by another choice of first derivatives within the allowed intervals, [minTmp,
+   * maxTmp].
+   *
    * @param intervals
    * @param slopes
    * @param beta
@@ -430,7 +441,9 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
     final double[] res = new double[nData];
 
     for (int i = 1; i < nData - 1; ++i) {
-      res[i] = (rValues[2 * i + 1] > 0 && rValues[2 * i] > 0) ? beta[i] * Math.min(beta[i] * rValues[2 * i + 1] / intervals[i], beta[i] * rValues[2 * i] / intervals[i - 1]) : 0.;
+      res[i] = rValues[2 * i + 1] > 0 && rValues[2 * i] > 0
+          ? beta[i] * Math.min(beta[i] * rValues[2 * i + 1] / intervals[i], beta[i] * rValues[2 * i] / intervals[i - 1])
+          : 0.;
     }
     res[0] = rValues[1] > 0 ? beta[0] * rValues[1] / intervals[0] : 0.;
     res[nData - 1] = rValues[2 * (nData - 1)] > 0 ? beta[nData - 1] * rValues[2 * (nData - 1)] / intervals[nData - 2] : 0.;
@@ -440,6 +453,7 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
 
   /**
    * Extra knots are introduced at xValues[i] + tau[i] * intervals[i] and xValues[i + 1] - tau[i] * intervals[i]
+   *
    * @param intervals
    * @param slopes
    * @param beta
@@ -457,9 +471,11 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
       boolean ineq2 = false;
       final double bound1 = 6. * slopes[i] * beta[i];
       final double bound2 = 6. * slopes[i] * beta[i + 1];
-      double ref1 = (4. * first[i] + 2. * first[i + 1] + intervals[i] * second[i] * res[i] * (2. - res[i]) - intervals[i] * second[i + 1] * res[i] * (1. - res[i])) * beta[i];
-      double ref2 = (2. * first[i] + 4. * first[i + 1] + intervals[i] * second[i] * res[i] * (1. - res[i]) - intervals[i] * second[i + 1] * res[i] * (2. - res[i])) * beta[i + 1];
-      while (ineq1 == false) {
+      double ref1 = (4. * first[i] + 2. * first[i + 1] + intervals[i] * second[i] * res[i] * (2. - res[i])
+          - intervals[i] * second[i + 1] * res[i] * (1. - res[i])) * beta[i];
+      double ref2 = (2. * first[i] + 4. * first[i + 1] + intervals[i] * second[i] * res[i] * (1. - res[i])
+          - intervals[i] * second[i + 1] * res[i] * (2. - res[i])) * beta[i + 1];
+      while (!ineq1) {
         if (ref1 - ERROR * Math.abs(ref1) <= bound1 + ERROR * Math.abs(bound1)) {
           ineq1 = true;
         } else {
@@ -468,9 +484,10 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
         if (res[i] < ERROR / 100.) {
           throw new IllegalArgumentException("Spline is not found");
         }
-        ref1 = (4. * first[i] + 2. * first[i + 1] + intervals[i] * second[i] * res[i] * (2. - res[i]) - intervals[i] * second[i + 1] * res[i] * (1. - res[i])) * beta[i];
+        ref1 = (4. * first[i] + 2. * first[i + 1] + intervals[i] * second[i] * res[i] * (2. - res[i]) - intervals[i] * second[i + 1] * res[i] * (1. - res[i]))
+            * beta[i];
       }
-      while (ineq2 == false) {
+      while (!ineq2) {
         if (ref2 + ERROR * Math.abs(ref2) >= bound2 - ERROR * Math.abs(bound2)) {
           ineq2 = true;
         } else {
@@ -479,7 +496,8 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
         if (res[i] < ERROR / 100.) {
           throw new IllegalArgumentException("Spline is not found");
         }
-        ref2 = (2. * first[i] + 4. * first[i + 1] + intervals[i] * second[i] * res[i] * (1. - res[i]) - intervals[i] * second[i + 1] * res[i] * (2. - res[i])) * beta[i + 1];
+        ref2 = (2. * first[i] + 4. * first[i + 1] + intervals[i] * second[i] * res[i] * (1. - res[i]) - intervals[i] * second[i + 1] * res[i] * (2. - res[i]))
+            * beta[i + 1];
       }
 
     }
@@ -509,6 +527,7 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
 
   /**
    * Determine value, first derivative, second derivative and third derivative of interpolant at extra knots
+   *
    * @param yValues
    * @param intervals
    * @param slopes
@@ -517,17 +536,22 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
    * @param tau
    * @return Coefficient matrix whose i-th row vector is {a_n, a_{n-1}, ... } of f(x) = a_n * (x-x_i)^n + a_{n-1} * (x-x_i)^{n-1} +... for the i-th interval
    */
-  private double[][] solve(final double[] yValues, final double[] intervals, final double[] slopes, final double[] first, final double[] second, final double[] tau) {
+  private double[][] solve(final double[] yValues, final double[] intervals, final double[] slopes, final double[] first, final double[] second,
+      final double[] tau) {
     final int nData = yValues.length;
     final double[][] res = new double[3 * (nData - 1)][4];
 
     final double[] secNewKnots1 = new double[nData - 1];
     final double[] secNewKnots2 = new double[nData - 1];
     for (int i = 0; i < nData - 1; ++i) {
-      secNewKnots1[i] = 6. * slopes[i] / intervals[i] / (1. - tau[i]) - 4. * first[i] / intervals[i] / (1. - tau[i]) - 2. * first[i + 1] / intervals[i] / (1. - tau[i]) - tau[i] * (2. - tau[i]) *
-          second[i] / (1. - tau[i]) + tau[i] * second[i + 1];
-      secNewKnots2[i] = -6. * slopes[i] / intervals[i] / (1. - tau[i]) + 4. * first[i + 1] / intervals[i] / (1. - tau[i]) + 2. * first[i] / intervals[i] / (1. - tau[i]) - tau[i] * (2. - tau[i]) *
-          second[i + 1] / (1. - tau[i]) + tau[i] * second[i];
+      secNewKnots1[i] = 6. * slopes[i] / intervals[i] / (1. - tau[i]) - 4. * first[i] / intervals[i] / (1. - tau[i])
+          - 2. * first[i + 1] / intervals[i] / (1. - tau[i]) - tau[i] * (2. - tau[i])
+              * second[i] / (1. - tau[i])
+          + tau[i] * second[i + 1];
+      secNewKnots2[i] = -6. * slopes[i] / intervals[i] / (1. - tau[i]) + 4. * first[i + 1] / intervals[i] / (1. - tau[i])
+          + 2. * first[i] / intervals[i] / (1. - tau[i]) - tau[i] * (2. - tau[i])
+              * second[i + 1] / (1. - tau[i])
+          + tau[i] * second[i];
     }
 
     for (int i = 0; i < nData - 1; ++i) {
@@ -538,11 +562,13 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
       res[3 * i + 1][0] = (secNewKnots2[i] - secNewKnots1[i]) / 6. / (1. - 2. * tau[i]) / intervals[i];
       res[3 * i + 1][1] = 0.5 * secNewKnots1[i];
       res[3 * i + 1][2] = first[i] + (second[i] + secNewKnots1[i]) * tau[i] * intervals[i] * 0.5;
-      res[3 * i + 1][3] = yValues[i] + tau[i] * intervals[i] * first[i] + (2. * second[i] + secNewKnots1[i]) * tau[i] * intervals[i] * tau[i] * intervals[i] / 6.;
+      res[3 * i + 1][3] = yValues[i] + tau[i] * intervals[i] * first[i]
+          + (2. * second[i] + secNewKnots1[i]) * tau[i] * intervals[i] * tau[i] * intervals[i] / 6.;
       res[3 * i + 2][0] = (second[i + 1] - secNewKnots2[i]) / 6. / tau[i] / intervals[i];
       res[3 * i + 2][1] = 0.5 * secNewKnots2[i];
       res[3 * i + 2][2] = first[i + 1] - (second[i + 1] + secNewKnots2[i]) * tau[i] * intervals[i] * 0.5;
-      res[3 * i + 2][3] = yValues[i + 1] - tau[i] * intervals[i] * first[i + 1] + (2. * second[i + 1] + secNewKnots2[i]) * tau[i] * intervals[i] * tau[i] * intervals[i] / 6.;
+      res[3 * i + 2][3] = yValues[i + 1] - tau[i] * intervals[i] * first[i + 1]
+          + (2. * second[i + 1] + secNewKnots2[i]) * tau[i] * intervals[i] * tau[i] * intervals[i] / 6.;
     }
 
     return res;

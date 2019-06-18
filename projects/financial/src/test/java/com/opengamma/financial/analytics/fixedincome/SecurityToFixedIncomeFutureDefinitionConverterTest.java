@@ -7,6 +7,7 @@ package com.opengamma.financial.analytics.fixedincome;
 
 import java.util.Collections;
 
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 import org.testng.annotations.Test;
@@ -41,16 +42,16 @@ public class SecurityToFixedIncomeFutureDefinitionConverterTest {
     //TODO
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   private static ExchangeSource myExchangeSource() {
     final Exchange exchange = Mockito.mock(Exchange.class);
     Mockito.when(exchange.getUniqueId()).thenReturn(UniqueId.of("SOMETHING", "SOMETHING ELSE"));
     final ExchangeSource source = Mockito.mock(ExchangeSource.class);
-    Mockito.when(source.get(Mockito.any(UniqueId.class))).thenReturn(exchange);
-    Mockito.when(source.get(Mockito.any(ObjectId.class), Mockito.any(VersionCorrection.class))).thenReturn(exchange);
-    ((OngoingStubbing) Mockito.when(source.get(Mockito.any(ExternalIdBundle.class), Mockito.any(VersionCorrection.class)))).thenReturn(Collections.singleton(exchange));
-    Mockito.when(source.getSingle(Mockito.any(ExternalId.class))).thenReturn(exchange);
-    Mockito.when(source.getSingle(Mockito.any(ExternalIdBundle.class))).thenReturn(exchange);
+    Mockito.when(source.get(Matchers.any(UniqueId.class))).thenReturn(exchange);
+    Mockito.when(source.get(Matchers.any(ObjectId.class), Matchers.any(VersionCorrection.class))).thenReturn(exchange);
+    ((OngoingStubbing) Mockito.when(source.get(Matchers.any(ExternalIdBundle.class), Matchers.any(VersionCorrection.class)))).thenReturn(Collections.singleton(exchange));
+    Mockito.when(source.getSingle(Matchers.any(ExternalId.class))).thenReturn(exchange);
+    Mockito.when(source.getSingle(Matchers.any(ExternalIdBundle.class))).thenReturn(exchange);
     return source;
   }
 

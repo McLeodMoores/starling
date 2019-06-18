@@ -23,7 +23,8 @@ import com.opengamma.util.rest.RestUtils;
 /**
  * Abstract base class for RESTful resources.
  *
- * @param <D>  the type of the document
+ * @param <D>
+ *          the type of the document
  */
 public abstract class AbstractDocumentDataResource<D extends AbstractDocument> extends AbstractDataResource {
 
@@ -33,18 +34,18 @@ public abstract class AbstractDocumentDataResource<D extends AbstractDocument> e
 
   protected abstract ObjectId getUrlId();
 
-  //===================== ROUTING HELPERS ==============================================================================
+  // ===================== ROUTING HELPERS ==============================================================================
 
   // @GET
-  protected Response get(/*@QueryParam("versionAsOf")*/ final String versionAsOf, /*@QueryParam("correctedTo")*/ final String correctedTo) {
+  protected Response get(/* @QueryParam("versionAsOf") */ final String versionAsOf, /* @QueryParam("correctedTo") */ final String correctedTo) {
     final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
     final D result = getMaster().get(getUrlId(), vc);
     return responseOkObject(result);
   }
 
   // @POST
-  protected Response update(/*@Context*/ final UriInfo uriInfo, final D request) {
-    if (getUrlId().equals(request.getUniqueId().getObjectId()) == false) {
+  protected Response update(/* @Context */ final UriInfo uriInfo, final D request) {
+    if (!getUrlId().equals(request.getUniqueId().getObjectId())) {
       throw new IllegalArgumentException("Document objectIdentifiable does not match URI");
     }
     final D result = getMaster().update(request);
@@ -57,19 +58,17 @@ public abstract class AbstractDocumentDataResource<D extends AbstractDocument> e
     getMaster().remove(getUrlId().atLatestVersion());
   }
 
-
   // @GET
   // @Path("versions/{versionId}")
-  protected Response getVersioned(/*@PathParam("versionId")*/ final String versionId) {
+  protected Response getVersioned(/* @PathParam("versionId") */ final String versionId) {
     final UniqueId uniqueId = getUrlId().atVersion(versionId);
     final D result = getMaster().get(uniqueId);
     return responseOkObject(result);
   }
 
-
   // @PUT
   // @Path("versions/{versionId}")
-  protected Response replaceVersion(/*@PathParam("versionId")*/ final String versionId, final List<D> replacementDocuments) {
+  protected Response replaceVersion(/* @PathParam("versionId") */ final String versionId, final List<D> replacementDocuments) {
     final UniqueId uniqueId = getUrlId().atVersion(versionId);
 
     final List<UniqueId> result = getMaster().replaceVersion(uniqueId, replacementDocuments);
@@ -91,14 +90,17 @@ public abstract class AbstractDocumentDataResource<D extends AbstractDocument> e
     return responseOkObject(result);
   }
 
-  //====================================================================================================================
+  // ====================================================================================================================
 
   /**
    * Builds a URI for the resource.
    *
-   * @param baseUri  the base URI, not null
-   * @param objectIdentifiable  the object identifier, not null
-   * @param vc  the version-correction locator, null for latest
+   * @param baseUri
+   *          the base URI, not null
+   * @param objectIdentifiable
+   *          the object identifier, not null
+   * @param vc
+   *          the version-correction locator, null for latest
    * @return the URI, not null
    */
   public URI uri(final URI baseUri, final ObjectIdentifiable objectIdentifiable, final VersionCorrection vc) {
@@ -113,9 +115,12 @@ public abstract class AbstractDocumentDataResource<D extends AbstractDocument> e
   /**
    * Builds a URI for the resource.
    *
-   * @param baseUri  the base URI, not null
-   * @param objectId  the object identifier, not null
-   * @param vc  the version-correction locator, null for latest
+   * @param baseUri
+   *          the base URI, not null
+   * @param objectId
+   *          the object identifier, not null
+   * @param vc
+   *          the version-correction locator, null for latest
    * @return the URI, not null
    */
   // TODO replace URI with something better
@@ -128,13 +133,15 @@ public abstract class AbstractDocumentDataResource<D extends AbstractDocument> e
     return bld.build(objectId.getObjectId());
   }
 
-
   /**
    * Builds a URI for the versions of the resource.
    *
-   * @param baseUri  the base URI, not null
-   * @param objectId  the object identifier, not null
-   * @param request  the request, may be null
+   * @param baseUri
+   *          the base URI, not null
+   * @param objectId
+   *          the object identifier, not null
+   * @param request
+   *          the request, may be null
    * @return the URI, not null
    */
   public URI uriVersions(final URI baseUri, final ObjectIdentifiable objectId, final Object request) {
@@ -148,8 +155,10 @@ public abstract class AbstractDocumentDataResource<D extends AbstractDocument> e
   /**
    * Builds a URI for a specific version of the resource.
    *
-   * @param baseUri  the base URI, not null
-   * @param uniqueId  the unique identifier, not null
+   * @param baseUri
+   *          the base URI, not null
+   * @param uniqueId
+   *          the unique identifier, not null
    * @return the URI, not null
    */
   public URI uriVersion(final URI baseUri, final UniqueId uniqueId) {
@@ -157,7 +166,7 @@ public abstract class AbstractDocumentDataResource<D extends AbstractDocument> e
       return uri(baseUri, uniqueId, null);
     }
     return UriBuilder.fromUri(baseUri).path("/" + getResourceName() + "/{id}/versions/{versionId}")
-      .build(uniqueId.toLatest(), uniqueId.getVersion());
+        .build(uniqueId.toLatest(), uniqueId.getVersion());
   }
 
 }

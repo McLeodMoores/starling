@@ -346,9 +346,8 @@ import com.opengamma.financial.expression.UserExpression;
         final NavigablePortfolioNode parent = node.getNavigableParentNode();
         if (parent != null) {
           return evaluateNodeIdentifier(identifier.substring(7), parent);
-        } else {
-          return null;
         }
+        return null;
       } else if ("Positions".equals(identifier)) {
         return node.getPositions().size();
       } else if ("Nodes".equals(identifier)) {
@@ -381,9 +380,8 @@ import com.opengamma.financial.expression.UserExpression;
     private static Object nullForNA(final Object v) {
       if (v == NA) {
         return null;
-      } else {
-        return v;
       }
+      return v;
     }
 
     @Override

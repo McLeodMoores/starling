@@ -16,12 +16,11 @@ import javax.management.MXBean;
 public interface SubscriptionReporter {
 
   /**
-   * Get information on subscriptions for a particular ticker or partial
-   * ticker. Information on any ticker which matches the supplied string
-   * will be returned.
+   * Get information on subscriptions for a particular ticker or partial ticker. Information on any ticker which matches the supplied string will be returned.
    *
-   * @param ticker the ticker to search for
-   * @return map (ticker -> subscription data) for each matching ticker
+   * @param ticker
+   *          the ticker to search for
+   * @return map (ticker -&gt; subscription data) for each matching ticker
    */
   Map<String, SubscriptionInfo> queryByTicker(String ticker);
 
@@ -45,5 +44,5 @@ public interface SubscriptionReporter {
    * @return the user
    */
   String getMarketDataUser();
-  
+
 }

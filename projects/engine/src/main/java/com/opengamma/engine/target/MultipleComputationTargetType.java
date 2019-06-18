@@ -76,10 +76,12 @@ import com.opengamma.util.ArgumentChecker;
   /**
    * Creates a new instance.
    *
-   * @param a the first alternative for the construction, not null
-   * @param b the second alternative for the construction, not null
+   * @param a
+   *          the first alternative for the construction, not null
+   * @param b
+   *          the second alternative for the construction, not null
    */
-  public MultipleComputationTargetType(final ComputationTargetType a, final ComputationTargetType b) {
+  MultipleComputationTargetType(final ComputationTargetType a, final ComputationTargetType b) {
     this(copy(a, b));
   }
 
@@ -97,9 +99,10 @@ import com.opengamma.util.ArgumentChecker;
   /**
    * Creates a new instance.
    *
-   * @param types the alternative types for the construction, not null and not containing null
+   * @param types
+   *          the alternative types for the construction, not null and not containing null
    */
-  public MultipleComputationTargetType(final ComputationTargetType[] types) {
+  MultipleComputationTargetType(final ComputationTargetType[] types) {
     this(copy(types));
   }
 
@@ -246,9 +249,8 @@ import com.opengamma.util.ArgumentChecker;
     }
     if (o instanceof ComputationTargetType) {
       return ((ComputationTargetType) o).accept(EQUALS, this).booleanValue();
-    } else {
-      return false;
     }
+    return false;
   }
 
 }

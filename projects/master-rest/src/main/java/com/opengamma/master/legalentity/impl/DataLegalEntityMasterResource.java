@@ -30,7 +30,7 @@ import com.opengamma.util.rest.RestUtils;
 
 /**
  * RESTful resource for legalEntities.
- * <p/>
+ * <p>
  * The legalEntities resource receives and processes RESTful calls to the legalentity master.
  */
 @Path("legalEntityMaster")

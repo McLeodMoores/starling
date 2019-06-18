@@ -30,7 +30,10 @@ import com.opengamma.util.time.Tenor;
 
 /**
  * Fudge builder for a {@link ConventionBundle}.
+ * 
+ * @deprecated Convention bundles should not be use
  */
+@Deprecated
 @GenericFudgeBuilderFor(ConventionBundle.class)
 public class ConventionBundleFudgeBuilder implements FudgeBuilder<ConventionBundle> {
 
@@ -382,7 +385,8 @@ public class ConventionBundleFudgeBuilder implements FudgeBuilder<ConventionBund
     }
     serializer.addToMessage(msg, "futureYearFraction", null, obj.getFutureYearFraction());
     serializer.addToMessageWithClassHeaders(msg, "swapFixedLegDayCount", null, obj.getSwapFixedLegDayCount(), DayCount.class);
-    serializer.addToMessageWithClassHeaders(msg, "swapFixedLegBusinessDayConvention", null, obj.getSwapFixedLegBusinessDayConvention(), BusinessDayConvention.class);
+    serializer.addToMessageWithClassHeaders(msg, "swapFixedLegBusinessDayConvention", null, obj.getSwapFixedLegBusinessDayConvention(),
+        BusinessDayConvention.class);
     serializer.addToMessageWithClassHeaders(msg, "swapFixedLegFrequency", null, obj.getSwapFixedLegFrequency(), Frequency.class);
     serializer.addToMessageWithClassHeaders(msg, "swapFixedLegCompoundingFrequency", null, obj.getSwapFixedLegCompoundingFrequency(), Frequency.class);
     if (obj.getSwapFixedLegCompoundingType() != null) {
@@ -391,7 +395,8 @@ public class ConventionBundleFudgeBuilder implements FudgeBuilder<ConventionBund
     serializer.addToMessage(msg, "swapFixedLegSettlementDays", null, obj.getSwapFixedLegSettlementDays());
     serializer.addToMessage(msg, "swapFixedLegRegion", null, obj.getSwapFixedLegRegion());
     serializer.addToMessageWithClassHeaders(msg, "swapFloatingLegDayCount", null, obj.getSwapFloatingLegDayCount(), DayCount.class);
-    serializer.addToMessageWithClassHeaders(msg, "swapFloatingLegBusinessDayConvention", null, obj.getSwapFloatingLegBusinessDayConvention(), BusinessDayConvention.class);
+    serializer.addToMessageWithClassHeaders(msg, "swapFloatingLegBusinessDayConvention", null, obj.getSwapFloatingLegBusinessDayConvention(),
+        BusinessDayConvention.class);
     serializer.addToMessageWithClassHeaders(msg, "swapFloatingLegFrequency", null, obj.getSwapFloatingLegFrequency(), Frequency.class);
     serializer.addToMessageWithClassHeaders(msg, "swapFloatingLegCompoundingFrequency", null, obj.getSwapFloatingLegCompoundingFrequency(), Frequency.class);
     if (obj.getSwapFloatingLegCompoundingType() != null) {
@@ -403,13 +408,15 @@ public class ConventionBundleFudgeBuilder implements FudgeBuilder<ConventionBund
     serializer.addToMessage(msg, "capmRiskFreeRate", null, obj.getCAPMRiskFreeRate());
     serializer.addToMessage(msg, "capmMarket", null, obj.getCAPMMarket());
     serializer.addToMessageWithClassHeaders(msg, "basisSwapPayFloatingLegDayCount", null, obj.getBasisSwapPayFloatingLegDayCount(), DayCount.class);
-    serializer.addToMessageWithClassHeaders(msg, "basisSwapPayFloatingLegBusinessDayConvention", null, obj.getBasisSwapPayFloatingLegBusinessDayConvention(), BusinessDayConvention.class);
+    serializer.addToMessageWithClassHeaders(msg, "basisSwapPayFloatingLegBusinessDayConvention", null, obj.getBasisSwapPayFloatingLegBusinessDayConvention(),
+        BusinessDayConvention.class);
     serializer.addToMessageWithClassHeaders(msg, "basisSwapPayFloatingLegFrequency", null, obj.getBasisSwapPayFloatingLegFrequency(), Frequency.class);
     serializer.addToMessage(msg, "basisSwapPayFloatingLegSettlementDays", null, obj.getBasisSwapPayFloatingLegSettlementDays());
     serializer.addToMessage(msg, "basisSwapPayFloatingLegInitialRate", null, obj.getBasisSwapPayFloatingLegInitialRate());
     serializer.addToMessage(msg, "basisSwapPayFloatingLegRegion", null, obj.getBasisSwapPayFloatingLegRegion());
     serializer.addToMessageWithClassHeaders(msg, "basisSwapReceiveFloatingLegDayCount", null, obj.getBasisSwapReceiveFloatingLegDayCount(), DayCount.class);
-    serializer.addToMessageWithClassHeaders(msg, "basisSwapReceiveFloatingLegBusinessDayConvention", null, obj.getBasisSwapReceiveFloatingLegBusinessDayConvention(), BusinessDayConvention.class);
+    serializer.addToMessageWithClassHeaders(msg, "basisSwapReceiveFloatingLegBusinessDayConvention", null,
+        obj.getBasisSwapReceiveFloatingLegBusinessDayConvention(), BusinessDayConvention.class);
     serializer.addToMessageWithClassHeaders(msg, "basisSwapReceiveFloatingLegFrequency", null, obj.getBasisSwapReceiveFloatingLegFrequency(), Frequency.class);
     serializer.addToMessage(msg, "basisSwapReceiveFloatingLegSettlementDays", null, obj.getBasisSwapReceiveFloatingLegSettlementDays());
     serializer.addToMessage(msg, "basisSwapReceiveFloatingLegInitialRate", null, obj.getBasisSwapReceiveFloatingLegInitialRate());
@@ -430,7 +437,7 @@ public class ConventionBundleFudgeBuilder implements FudgeBuilder<ConventionBund
   public ConventionBundle buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final SimpleConventionBundle obj = new SimpleConventionBundle();
     FudgeField field;
-    //CSOFF
+    // CSOFF
     if ((field = msg.getByName("uniqueId")) != null) {
       obj._uniqueId = deserializer.fieldValueToObject(UniqueId.class, field);
     }

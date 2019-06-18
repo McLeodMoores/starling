@@ -34,7 +34,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class FXOptionVannaVolgaSingleValuedFunction extends FXOptionVannaVolgaFunction {
 
   public FXOptionVannaVolgaSingleValuedFunction(final String valueRequirementName) {
@@ -42,13 +44,16 @@ public abstract class FXOptionVannaVolgaSingleValuedFunction extends FXOptionVan
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final CurrencyPair baseQuotePair = getBaseQuotePair(context, target, inputs);
-    final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementName(), target.toSpecification(), getResultProperties(target, baseQuotePair));
+    final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementName(), target.toSpecification(),
+        getResultProperties(target, baseQuotePair));
     return Collections.singleton(resultSpec);
   }
 
-  protected CurrencyPair getBaseQuotePair(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  protected CurrencyPair getBaseQuotePair(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String currencyPairConfigName = null;
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       final ValueSpecification key = entry.getKey();

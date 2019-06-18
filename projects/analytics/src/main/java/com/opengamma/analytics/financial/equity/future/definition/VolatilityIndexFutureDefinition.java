@@ -15,24 +15,28 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Volatility index future definition. An IndexFuture is always cash-settled.
- * eg UXH5 Index, http://cfe.cboe.com/products/Products_VIX.aspx
+ * Volatility index future definition. An IndexFuture is always cash-settled. eg UXH5 Index, http://cfe.cboe.com/products/Products_VIX.aspx
  */
 public class VolatilityIndexFutureDefinition extends IndexFutureDefinition {
 
   /**
    * Constructor for Equity Index Futures, always cash-settled.
    *
-   * @param expiryDate  the time and the day that a particular delivery month of a futures contract stops trading,
-   * as well as the final settlement price for that contract
-   * @param settlementDate settlement date
-   * @param strikePrice reference price
-   * @param currency currency
-   * @param unitAmount  size of a unit
-   * @param underlying  identifier of the underlying commodity
+   * @param expiryDate
+   *          the time and the day that a particular delivery month of a futures contract stops trading, as well as the final settlement price for that contract
+   * @param settlementDate
+   *          settlement date
+   * @param strikePrice
+   *          reference price
+   * @param currency
+   *          currency
+   * @param unitAmount
+   *          size of a unit
+   * @param underlying
+   *          identifier of the underlying commodity
    */
-  public VolatilityIndexFutureDefinition(final ZonedDateTime expiryDate, final ZonedDateTime settlementDate, final double strikePrice,
-      final Currency currency, final double unitAmount, final ExternalId underlying) {
+  public VolatilityIndexFutureDefinition(final ZonedDateTime expiryDate, final ZonedDateTime settlementDate, final double strikePrice, final Currency currency,
+      final double unitAmount, final ExternalId underlying) {
     super(expiryDate, settlementDate, strikePrice, currency, unitAmount, underlying);
   }
 
@@ -49,6 +53,7 @@ public class VolatilityIndexFutureDefinition extends IndexFutureDefinition {
   @Override
   public VolatilityIndexFuture toDerivative(final ZonedDateTime date) {
     ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.isTrue(!date.isAfter(getExpiryDate()), "Valuation date is after expiry date");
     final double timeToFixing = TimeCalculator.getTimeBetween(date, getExpiryDate());
     final double timeToDelivery = TimeCalculator.getTimeBetween(date, getSettlementDate());
     final VolatilityIndexFuture newDeriv = new VolatilityIndexFuture(timeToFixing, timeToDelivery, getReferencePrice(), getCurrency(), getUnitAmount());

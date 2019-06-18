@@ -12,7 +12,6 @@ import java.lang.annotation.Target;
 
 import com.opengamma.id.UniqueId;
 
-
 /**
  * Annotation for REST methods that return an entity with a {@link UniqueId}.  When the method is called a
  * subscription is created for the calling client.  When the entity changes the client will be notified.

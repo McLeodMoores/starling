@@ -43,6 +43,10 @@ public class SocketFudgeConnectionConduitTest {
     return message;
   }
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   public void simpleTest() throws Exception {
     final FudgeMsg testMessage1 = createMessage();
     final FudgeMsg testMessage2 = createMessage();
@@ -73,6 +77,10 @@ public class SocketFudgeConnectionConduitTest {
     server.stop();
   }
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   public void messageReceiverTest() throws Exception {
     final FudgeMsg testMessage1 = createMessage();
     final FudgeMsg testMessage2 = createMessage();
@@ -83,6 +91,7 @@ public class SocketFudgeConnectionConduitTest {
     // it shouldn't be called again - messages should be dispatched to the connection's receiver
     final FudgeConnectionReceiver serverReceiver = new FudgeConnectionReceiver() {
       private int _count;
+
       @Override
       public void connectionReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope message, final FudgeConnection connection) {
         assertNotNull(fudgeContext);
@@ -120,6 +129,9 @@ public class SocketFudgeConnectionConduitTest {
     client.stop();
   }
 
+  /**
+   *
+   */
   private class MessageReadWrite extends Thread implements FudgeMessageReceiver {
 
     private static final int NUM_MESSAGES = 1000;
@@ -156,6 +168,10 @@ public class SocketFudgeConnectionConduitTest {
 
   }
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   @Test(invocationCount = 5, successPercentage = 19)
   public void parallelIOTest() throws Exception {
     final MessageReadWrite serverThread = new MessageReadWrite();
@@ -188,8 +204,8 @@ public class SocketFudgeConnectionConduitTest {
     client.stop();
   }
 
-  private static int[] parallelSendTest(final ExecutorService executorClient, final ExecutorService executorServer,
-      final AtomicInteger concurrencyMax) throws Exception {
+  private static int[] parallelSendTest(final ExecutorService executorClient, final ExecutorService executorServer, final AtomicInteger concurrencyMax)
+      throws Exception {
     final FudgeConnectionReceiver serverReceiver = new FudgeConnectionReceiver() {
       @Override
       public void connectionReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope envelope, final FudgeConnection connection) {
@@ -214,12 +230,13 @@ public class SocketFudgeConnectionConduitTest {
         ? new ServerSocketFudgeConnectionReceiver(FudgeContext.GLOBAL_DEFAULT, serverReceiver, executorServer)
         : new ServerSocketFudgeConnectionReceiver(FudgeContext.GLOBAL_DEFAULT, serverReceiver);
     server.start();
-    final SocketFudgeConnection client = executorClient != null
-        ? new SocketFudgeConnection(FudgeContext.GLOBAL_DEFAULT, executorClient) : new SocketFudgeConnection(FudgeContext.GLOBAL_DEFAULT);
+    final SocketFudgeConnection client = executorClient != null ? new SocketFudgeConnection(FudgeContext.GLOBAL_DEFAULT, executorClient)
+        : new SocketFudgeConnection(FudgeContext.GLOBAL_DEFAULT);
     client.setInetAddress(InetAddress.getLocalHost());
     client.setPortNumber(server.getPortNumber());
     final CollectingFudgeMessageReceiver responses = new CollectingFudgeMessageReceiver() {
       private final AtomicInteger _concurrency = new AtomicInteger(0);
+
       @Override
       public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope envelope) {
         final int concurrency = _concurrency.incrementAndGet();
@@ -247,6 +264,10 @@ public class SocketFudgeConnectionConduitTest {
     return result;
   }
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   public void parallelSendTestSingleSingle() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);
     final int[] result = parallelSendTest(null, null, concurrencyMax);
@@ -257,6 +278,10 @@ public class SocketFudgeConnectionConduitTest {
     assertEquals(2, result[3]);
   }
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   public void parallelSendTestMultiSingle() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);
     final int[] result = parallelSendTest(Executors.newCachedThreadPool(), null, concurrencyMax);
@@ -273,6 +298,10 @@ public class SocketFudgeConnectionConduitTest {
     assertEquals(2, result[3]);
   }
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   public void parallelSendTestSingleMulti() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);
     final int[] result = parallelSendTest(null, Executors.newCachedThreadPool(), concurrencyMax);
@@ -283,6 +312,10 @@ public class SocketFudgeConnectionConduitTest {
     assertEquals(2, result[3]);
   }
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   public void parallelSendTestMultiMulti() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);
     final int[] result = parallelSendTest(Executors.newCachedThreadPool(), Executors.newCachedThreadPool(), concurrencyMax);

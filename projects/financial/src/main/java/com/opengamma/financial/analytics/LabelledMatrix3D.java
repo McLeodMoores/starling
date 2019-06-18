@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics;
-
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -16,34 +14,47 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.financial.analytics.QuickSorter.ArrayQuickSorter;
 import com.opengamma.util.ArgumentChecker;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+
 /**
  * Represents a 3D labeled matrix. The dimensions are named X, Y, Z - values[Z][Y][X].
- * 
- * @param <KX> Key type for the X dimension
- * @param <KY> Key type for the Y dimension
- * @param <KZ> Key type for the Z dimension
- * @param <TX> Tolerance type for X key comparisons
- * @param <TY> Tolerance type for Y key comparisons
- * @param <TZ> Tolerance type for Z key comparisons
- * @param <SUBCLASS> Instantiating sub-class
+ *
+ * @param <KX>
+ *          Key type for the X dimension
+ * @param <KY>
+ *          Key type for the Y dimension
+ * @param <KZ>
+ *          Key type for the Z dimension
+ * @param <TX>
+ *          Tolerance type for X key comparisons
+ * @param <TY>
+ *          Tolerance type for Y key comparisons
+ * @param <TZ>
+ *          Tolerance type for Z key comparisons
+ * @param <SUBCLASS>
+ *          Instantiating sub-class
  */
 public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
 
-  private final KX[] _xKeys;
-  private final Object[] _xLabels;
-  private final KY[] _yKeys;
-  private final Object[] _yLabels;
-  private final KZ[] _zKeys;
-  private final Object[] _zLabels;
-  private final double[][][] _values;
+  private KX[] _xKeys;
+  private Object[] _xLabels;
+  private KY[] _yKeys;
+  private Object[] _yLabels;
+  private KZ[] _zKeys;
+  private Object[] _zLabels;
+  private double[][][] _values;
 
   /**
    * Creates a new 3D labeled matrix. The labels are the {@link Object#toString} forms of the keys.
-   * 
-   * @param xKeys keys for the X dimension
-   * @param yKeys keys for the Y dimension
-   * @param zKeys keys for the Z dimension
-   * @param values values of the matrix in the shape [Z][Y][X]
+   *
+   * @param xKeys
+   *          keys for the X dimension
+   * @param yKeys
+   *          keys for the Y dimension
+   * @param zKeys
+   *          keys for the Z dimension
+   * @param values
+   *          values of the matrix in the shape [Z][Y][X]
    */
   public LabelledMatrix3D(final KX[] xKeys, final KY[] yKeys, final KZ[] zKeys, final double[][][] values) {
     this(xKeys, LabelledMatrixUtils.toString(xKeys), yKeys, LabelledMatrixUtils.toString(yKeys), zKeys, LabelledMatrixUtils.toString(zKeys), values);
@@ -51,16 +62,24 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
 
   /**
    * Creates a new 3D labeled matrix.
-   * 
-   * @param xKeys keys for the X dimension
-   * @param xLabels labels for the X dimension
-   * @param yKeys keys for the Y dimension
-   * @param yLabels labels for the Y dimension
-   * @param zKeys keys for the Z dimension
-   * @param zLabels labels for the Z dimension
-   * @param values values of the matrix in the shape [Z][Y][X]
+   *
+   * @param xKeys
+   *          keys for the X dimension
+   * @param xLabels
+   *          labels for the X dimension
+   * @param yKeys
+   *          keys for the Y dimension
+   * @param yLabels
+   *          labels for the Y dimension
+   * @param zKeys
+   *          keys for the Z dimension
+   * @param zLabels
+   *          labels for the Z dimension
+   * @param values
+   *          values of the matrix in the shape [Z][Y][X]
    */
-  public LabelledMatrix3D(final KX[] xKeys, final Object[] xLabels, final KY[] yKeys, final Object[] yLabels, final KZ[] zKeys, final Object[] zLabels, final double[][][] values) {
+  public LabelledMatrix3D(final KX[] xKeys, final Object[] xLabels, final KY[] yKeys, final Object[] yLabels, final KZ[] zKeys, final Object[] zLabels,
+      final double[][][] values) {
     ArgumentChecker.notNull(xKeys, "xKeys");
     ArgumentChecker.notNull(xLabels, "xLabels");
     ArgumentChecker.notNull(yKeys, "yKeys");
@@ -95,23 +114,29 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
   }
 
   /**
-   * Creates a new labeled matrix instance. This is called at the end of operations so that the sub-class can return an object
-   * of its own type.
-   * 
-   * @param xKeys keys for the X dimension of the new matrix
-   * @param xLabels labels for the X dimension of the new matrix
-   * @param yKeys keys for the Y dimension of the new matrix
-   * @param yLabels labels for the Y dimension of the new matrix
-   * @param zKeys keys for the Z dimension of the new matrix
-   * @param zLabels labels for the Z dimension of the new matrix
-   * @param values values of the new matrix in the shape [Z][Y][X]
+   * Creates a new labeled matrix instance. This is called at the end of operations so that the sub-class can return an object of its own type.
+   *
+   * @param xKeys
+   *          keys for the X dimension of the new matrix
+   * @param xLabels
+   *          labels for the X dimension of the new matrix
+   * @param yKeys
+   *          keys for the Y dimension of the new matrix
+   * @param yLabels
+   *          labels for the Y dimension of the new matrix
+   * @param zKeys
+   *          keys for the Z dimension of the new matrix
+   * @param zLabels
+   *          labels for the Z dimension of the new matrix
+   * @param values
+   *          values of the new matrix in the shape [Z][Y][X]
    * @return the new matrix
    */
-  protected abstract SUBCLASS create(final KX[] xKeys, final Object[] xLabels, final KY[] yKeys, final Object[] yLabels, final KZ[] zKeys, final Object[] zLabels,
-      final double[][][] values);
+  protected abstract SUBCLASS create(KX[] xKeys, Object[] xLabels, KY[] yKeys, Object[] yLabels, KZ[] zKeys, Object[] zLabels,
+      double[][][] values);
 
   private void quickSortX() {
-    (new ArrayQuickSorter<KX>(_xKeys) {
+    new ArrayQuickSorter<KX>(_xKeys) {
 
       private final TX _tolerance = getDefaultToleranceX();
 
@@ -131,11 +156,11 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
         }
       }
 
-    }).sort();
+    }.sort();
   }
 
   private void quickSortY() {
-    (new ArrayQuickSorter<KY>(_yKeys) {
+    new ArrayQuickSorter<KY>(_yKeys) {
 
       private final TY _tolerance = getDefaultToleranceY();
 
@@ -153,11 +178,11 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
         }
       }
 
-    }).sort();
+    }.sort();
   }
 
   private void quickSortZ() {
-    (new ArrayQuickSorter<KZ>(_zKeys) {
+    new ArrayQuickSorter<KZ>(_zKeys) {
 
       private final TZ _tolerance = getDefaultToleranceZ();
 
@@ -173,14 +198,13 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
         swap(_values, first, second);
       }
 
-    }).sort();
+    }.sort();
   }
 
   /**
-   * Returns the default tolerance value for comparison of X dimension keys. This will be used for the initial sort
-   * of a matrix, or if a tolerance is not specified for the other operations. It may be null if the
-   * {@link #compareKeysX} method accepts it (i.e. ignores it).
-   * 
+   * Returns the default tolerance value for comparison of X dimension keys. This will be used for the initial sort of a matrix, or if a tolerance is not
+   * specified for the other operations. It may be null if the {@link #compareKeysX} method accepts it (i.e. ignores it).
+   *
    * @return the default tolerance for X key comparisons
    */
   public TX getDefaultToleranceX() {
@@ -188,10 +212,9 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
   }
 
   /**
-   * Returns the default tolerance value for comparison of Y dimension keys. This will be used for the initial sort
-   * of a matrix, or if a tolerance is not specified for the other operations. It may be null if the
-   * {@link #compareKeysY} method accepts it (i.e. ignores it).
-   * 
+   * Returns the default tolerance value for comparison of Y dimension keys. This will be used for the initial sort of a matrix, or if a tolerance is not
+   * specified for the other operations. It may be null if the {@link #compareKeysY} method accepts it (i.e. ignores it).
+   *
    * @return the default tolerance for Y key comparisons
    */
   public TY getDefaultToleranceY() {
@@ -199,10 +222,9 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
   }
 
   /**
-   * Returns the default tolerance value for comparison of Z dimension keys. This will be used for the initial sort
-   * of a matrix, or if a tolerance is not specified for the other operations. It may be null if the
-   * {@link #compareKeysZ} method accepts it (i.e. ignores it).
-   * 
+   * Returns the default tolerance value for comparison of Z dimension keys. This will be used for the initial sort of a matrix, or if a tolerance is not
+   * specified for the other operations. It may be null if the {@link #compareKeysZ} method accepts it (i.e. ignores it).
+   *
    * @return the default tolerance for Z key comparisons
    */
   public TZ getDefaultToleranceZ() {
@@ -211,18 +233,22 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
 
   /**
    * Compares two X dimension keys.
-   * 
-   * @param key1 first key to compare
-   * @param key2 second key to compare
-   * @param tolerance comparison tolerance
-   * @return negative if the first key is before the second, positive if after, zero if equal (given the tolerance)  
+   *
+   * @param key1
+   *          first key to compare
+   * @param key2
+   *          second key to compare
+   * @param tolerance
+   *          comparison tolerance
+   * @return negative if the first key is before the second, positive if after, zero if equal (given the tolerance)
    */
-  protected abstract int compareKeysX(final KX key1, final KX key2, final TX tolerance);
+  protected abstract int compareKeysX(KX key1, KX key2, TX tolerance);
 
   /**
    * Returns a {@link Comparator} wrapping the {@link #compareKeysX} method for a given tolerance.
-   * 
-   * @param tolerance comparison tolerance
+   *
+   * @param tolerance
+   *          comparison tolerance
    * @return a comparator
    */
   protected Comparator<KX> compareKeysX(final TX tolerance) {
@@ -236,18 +262,22 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
 
   /**
    * Compares two Y dimension keys.
-   * 
-   * @param key1 first key to compare
-   * @param key2 second key to compare
-   * @param tolerance comparison tolerance
-   * @return negative if the first key is before the second, positive if after, zero if equal (given the tolerance)  
+   *
+   * @param key1
+   *          first key to compare
+   * @param key2
+   *          second key to compare
+   * @param tolerance
+   *          comparison tolerance
+   * @return negative if the first key is before the second, positive if after, zero if equal (given the tolerance)
    */
-  protected abstract int compareKeysY(final KY key1, final KY key2, final TY tolerance);
+  protected abstract int compareKeysY(KY key1, KY key2, TY tolerance);
 
   /**
    * Returns a {@link Comparator} wrapping the {@link #compareKeysY} method for a given tolerance.
-   * 
-   * @param tolerance comparison tolerance
+   *
+   * @param tolerance
+   *          comparison tolerance
    * @return a comparator
    */
   protected Comparator<KY> compareKeysY(final TY tolerance) {
@@ -261,18 +291,22 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
 
   /**
    * Compares two Z dimension keys.
-   * 
-   * @param key1 first key to compare
-   * @param key2 second key to compare
-   * @param tolerance comparison tolerance
-   * @return negative if the first key is before the second, positive if after, zero if equal (given the tolerance)  
+   *
+   * @param key1
+   *          first key to compare
+   * @param key2
+   *          second key to compare
+   * @param tolerance
+   *          comparison tolerance
+   * @return negative if the first key is before the second, positive if after, zero if equal (given the tolerance)
    */
-  protected abstract int compareKeysZ(final KZ key1, final KZ key2, final TZ tolerance);
+  protected abstract int compareKeysZ(KZ key1, KZ key2, TZ tolerance);
 
   /**
    * Returns a {@link Comparator} wrapping the {@link #compareKeysZ} method for a given tolerance.
-   * 
-   * @param tolerance comparison tolerance
+   *
+   * @param tolerance
+   *          comparison tolerance
    * @return a comparator
    */
   protected Comparator<KZ> compareKeysZ(final TZ tolerance) {
@@ -287,14 +321,18 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
   /**
    * Adds a labeled matrix to this one to create a new matrix.
    * <p>
-   * Each key triple in the other matrix is checked to see if it is in the current; if so, the value for that triple is added. If the key triple is
-   * not present, the new key triple, labels and value are attached to the matrix. This method ignores the label - if there is a key already present
-   * but the labels do not match, then the new label is the original.
-   * 
-   * @param other Another labeled matrix
-   * @param xTolerance tolerance for detecting a match on the X keys
-   * @param yTolerance tolerance for detecting a match on the Y keys
-   * @param zTolerance tolerance for detecting a match on the Z keys
+   * Each key triple in the other matrix is checked to see if it is in the current; if so, the value for that triple is added. If the key triple is not present,
+   * the new key triple, labels and value are attached to the matrix. This method ignores the label - if there is a key already present but the labels do not
+   * match, then the new label is the original.
+   *
+   * @param other
+   *          Another labeled matrix
+   * @param xTolerance
+   *          tolerance for detecting a match on the X keys
+   * @param yTolerance
+   *          tolerance for detecting a match on the Y keys
+   * @param zTolerance
+   *          tolerance for detecting a match on the Z keys
    * @return The sum of the matrices
    */
   public SUBCLASS addIgnoringLabel(final LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, ?> other, final TX xTolerance, final TY yTolerance, final TZ zTolerance) {
@@ -304,11 +342,12 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
   /**
    * Adds a labeled matrix to this one to create a new matrix.
    * <p>
-   * Each key triple in the other matrix is checked to see if it is in the current; if so, the value for that triple is added. If the key triple is
-   * not present, the new key triple, labels and value are attached to the matrix. This method ignores the label - if there is a key already present
-   * but the labels do not match, then the new label is the original.
-   * 
-   * @param other Another labeled matrix
+   * Each key triple in the other matrix is checked to see if it is in the current; if so, the value for that triple is added. If the key triple is not present,
+   * the new key triple, labels and value are attached to the matrix. This method ignores the label - if there is a key already present but the labels do not
+   * match, then the new label is the original.
+   *
+   * @param other
+   *          Another labeled matrix
    * @return The sum of the matrices
    */
   public SUBCLASS addIgnoringLabel(final LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, ?> other) {
@@ -318,13 +357,17 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
   /**
    * Adds a labeled matrix to this one to create a new matrix.
    * <p>
-   * Each key triple in the other matrix is checked to see if it is in the current; if so, the value for that triple is added. If the key triple is
-   * not present, the new key triple, labels and value are attached to the matrix. If the key labels on the two matrices differ, an exception is thrown.
-   * 
-   * @param other Another labeled matrix
-   * @param xTolerance tolerance for detecting a match on the X keys
-   * @param yTolerance tolerance for detecting a match on the Y keys
-   * @param zTolerance tolerance for detecting a match on the Z keys
+   * Each key triple in the other matrix is checked to see if it is in the current; if so, the value for that triple is added. If the key triple is not present,
+   * the new key triple, labels and value are attached to the matrix. If the key labels on the two matrices differ, an exception is thrown.
+   *
+   * @param other
+   *          Another labeled matrix
+   * @param xTolerance
+   *          tolerance for detecting a match on the X keys
+   * @param yTolerance
+   *          tolerance for detecting a match on the Y keys
+   * @param zTolerance
+   *          tolerance for detecting a match on the Z keys
    * @return The sum of the matrices
    */
   public SUBCLASS add(final LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, ?> other, final TX xTolerance, final TY yTolerance, final TZ zTolerance) {
@@ -334,10 +377,11 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
   /**
    * Adds a labeled matrix to this one to create a new matrix.
    * <p>
-   * Each key triple in the other matrix is checked to see if it is in the current; if so, the value for that triple is added. If the key triple is
-   * not present, the new key triple, labels and value are attached to the matrix. If the key labels on the two matrices differ, an exception is thrown.
-   * 
-   * @param other Another labeled matrix
+   * Each key triple in the other matrix is checked to see if it is in the current; if so, the value for that triple is added. If the key triple is not present,
+   * the new key triple, labels and value are attached to the matrix. If the key labels on the two matrices differ, an exception is thrown.
+   *
+   * @param other
+   *          Another labeled matrix
    * @return The sum of the matrices
    */
   public SUBCLASS add(final LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, ?> other) {
@@ -354,7 +398,7 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
     final KX[] otherXKeys = other.getXKeys();
     final Object[] otherXLabels = other.getXLabels();
     final int[] otherXIndex = new int[otherXKeys.length];
-    while ((iThis < _xKeys.length) && (iOther < otherXKeys.length)) {
+    while (iThis < _xKeys.length && iOther < otherXKeys.length) {
       final int cmp = compareKeysX(_xKeys[iThis], otherXKeys[iOther], xTolerance);
       if (cmp < 0) {
         iThis++;
@@ -396,7 +440,7 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
     final KY[] otherYKeys = other.getYKeys();
     final Object[] otherYLabels = other.getYLabels();
     final int[] otherYIndex = new int[otherYKeys.length];
-    while ((iThis < _yKeys.length) && (iOther < otherYKeys.length)) {
+    while (iThis < _yKeys.length && iOther < otherYKeys.length) {
       final int cmp = compareKeysY(_yKeys[iThis], otherYKeys[iOther], yTolerance);
       if (cmp < 0) {
         iThis++;
@@ -438,7 +482,7 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
     final KZ[] otherZKeys = other.getZKeys();
     final Object[] otherZLabels = other.getZLabels();
     final int[] otherZIndex = new int[otherZKeys.length];
-    while ((iThis < _zKeys.length) && (iOther < otherZKeys.length)) {
+    while (iThis < _zKeys.length && iOther < otherZKeys.length) {
       final int cmp = compareKeysZ(_zKeys[iThis], otherZKeys[iOther], zTolerance);
       if (cmp < 0) {
         iThis++;
@@ -473,12 +517,12 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
       } while (iOther < otherZKeys.length);
     }
     // Build the new matrix
-    final KX[] xKeys = (newXKeys != null) ? newXKeys.toArray(_xKeys) : _xKeys;
-    final Object[] xLabels = (newXLabels != null) ? newXLabels.toArray(_xLabels) : _xLabels;
-    final KY[] yKeys = (newYKeys != null) ? newYKeys.toArray(_yKeys) : _yKeys;
-    final Object[] yLabels = (newYLabels != null) ? newYLabels.toArray(_yLabels) : _yLabels;
-    final KZ[] zKeys = (newZKeys != null) ? newZKeys.toArray(_zKeys) : _zKeys;
-    final Object[] zLabels = (newZLabels != null) ? newZLabels.toArray(_zLabels) : _zLabels;
+    final KX[] xKeys = newXKeys != null ? newXKeys.toArray(_xKeys) : _xKeys;
+    final Object[] xLabels = newXLabels != null ? newXLabels.toArray(_xLabels) : _xLabels;
+    final KY[] yKeys = newYKeys != null ? newYKeys.toArray(_yKeys) : _yKeys;
+    final Object[] yLabels = newYLabels != null ? newYLabels.toArray(_yLabels) : _yLabels;
+    final KZ[] zKeys = newZKeys != null ? newZKeys.toArray(_zKeys) : _zKeys;
+    final Object[] zLabels = newZLabels != null ? newZLabels.toArray(_zLabels) : _zLabels;
     final double[][][] values = new double[zKeys.length][yKeys.length][xKeys.length];
     for (int z = 0; z < _values.length; z++) {
       for (int y = 0; y < _values[z].length; y++) {
@@ -501,7 +545,7 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
 
   /**
    * Returns the keys for the X dimension.
-   * 
+   *
    * @return X keys
    */
   public KX[] getXKeys() {
@@ -510,7 +554,7 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
 
   /**
    * Returns the labels for the X dimension.
-   * 
+   *
    * @return X labels
    */
   public Object[] getXLabels() {
@@ -519,7 +563,7 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
 
   /**
    * Returns the keys for the Y dimension.
-   * 
+   *
    * @return Y keys
    */
   public KY[] getYKeys() {
@@ -528,7 +572,7 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
 
   /**
    * Returns the labels for the Y dimension.
-   * 
+   *
    * @return Y labels
    */
   public Object[] getYLabels() {
@@ -537,7 +581,7 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
 
   /**
    * Returns the keys for the Z dimension.
-   * 
+   *
    * @return Z keys
    */
   public KZ[] getZKeys() {
@@ -546,7 +590,7 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
 
   /**
    * Returns the labels for the Z dimension.
-   * 
+   *
    * @return Z labels
    */
   public Object[] getZLabels() {
@@ -555,7 +599,7 @@ public abstract class LabelledMatrix3D<KX, KY, KZ, TX, TY, TZ, SUBCLASS> {
 
   /**
    * Returns the values of the matrix.
-   * 
+   *
    * @return the matrix values
    */
   public double[][][] getValues() {

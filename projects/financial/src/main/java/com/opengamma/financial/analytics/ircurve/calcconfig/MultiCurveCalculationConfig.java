@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.ircurve.calcconfig;
@@ -18,11 +18,13 @@ import com.opengamma.financial.analytics.ircurve.StripInstrumentType;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
+ * @deprecated This configuration type should no longer be used.
  */
+@Deprecated
 @Config(description = "Multi curve calculation config", group = ConfigGroups.CURVES_LEGACY)
 public class MultiCurveCalculationConfig {
-  //TODO check inputs for instrument exposures - need some or all of yield curve names in the array of names
+  // TODO check inputs for instrument exposures - need some or all of yield curve names in the array of names
   private final String _calculationConfigName;
   private final String[] _yieldCurveNames;
   private final ComputationTargetSpecification _target;
@@ -30,12 +32,14 @@ public class MultiCurveCalculationConfig {
   private final LinkedHashMap<String, String[]> _exogenousConfigAndCurveNames;
   private final LinkedHashMap<String, CurveInstrumentConfig> _curveExposuresForInstruments;
 
-  public MultiCurveCalculationConfig(final String calculationConfigName, final String[] yieldCurveNames, final ComputationTargetSpecification target, final String calculationMethod,
+  public MultiCurveCalculationConfig(final String calculationConfigName, final String[] yieldCurveNames, final ComputationTargetSpecification target,
+      final String calculationMethod,
       final LinkedHashMap<String, CurveInstrumentConfig> curveExposuresForInstruments) {
     this(calculationConfigName, yieldCurveNames, target, calculationMethod, curveExposuresForInstruments, null);
   }
 
-  public MultiCurveCalculationConfig(final String calculationConfigName, final String[] yieldCurveNames, final ComputationTargetSpecification target, final String calculationMethod,
+  public MultiCurveCalculationConfig(final String calculationConfigName, final String[] yieldCurveNames, final ComputationTargetSpecification target,
+      final String calculationMethod,
       final LinkedHashMap<String, CurveInstrumentConfig> curveExposuresForInstruments, final LinkedHashMap<String, String[]> exogenousConfigAndCurveNames) {
     ArgumentChecker.notNull(calculationConfigName, "calculation configuration name");
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");

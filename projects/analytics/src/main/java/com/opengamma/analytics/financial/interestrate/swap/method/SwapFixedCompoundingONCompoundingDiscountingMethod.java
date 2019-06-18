@@ -28,6 +28,7 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Class to compute the quantities related to swaps (annuity, PVBP, coupon equivalent).
+ * 
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.swap.provider.SwapFixedCouponDiscountingMethod}
  */
 @Deprecated
@@ -40,6 +41,7 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static SwapFixedCompoundingONCompoundingDiscountingMethod getInstance() {
@@ -59,10 +61,13 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
   private static final CouponONCompoundedDiscountingMethod METHOD_COUPON_ON_CMP = CouponONCompoundedDiscountingMethod.getInstance();
 
   /**
-   * REVIEW: MH 26-Sep-13: Is "cash annuity" used with couponFixedAccruedCompounding swaps?
-   * Computes the conventional cash annuity of a swap. The computation is relevant only for standard swaps with constant notional and regular payments.
-   * @param fixedCouponSwap The underlying swap.
-   * @param forward The swap forward rate.
+   * REVIEW: MH 26-Sep-13: Is "cash annuity" used with couponFixedAccruedCompounding swaps? Computes the conventional cash annuity of a swap. The computation is
+   * relevant only for standard swaps with constant notional and regular payments.
+   * 
+   * @param fixedCouponSwap
+   *          The underlying swap.
+   * @param forward
+   *          The swap forward rate.
    * @return The cash annuity.
    */
   public double getAnnuityCash(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final double forward) {
@@ -75,9 +80,13 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
   }
 
   /**
-   * Computes the derivative of cash annuity with respect to the forward. The computation is relevant only for standard swaps with constant notional and regular payments.
-   * @param fixedCouponSwap The underlying swap.
-   * @param forward The swap forward.
+   * Computes the derivative of cash annuity with respect to the forward. The computation is relevant only for standard swaps with constant notional and regular
+   * payments.
+   * 
+   * @param fixedCouponSwap
+   *          The underlying swap.
+   * @param forward
+   *          The swap forward.
    * @return The cash annuity derivative.
    */
   public double getAnnuityCashDerivative(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final double forward) {
@@ -91,76 +100,91 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
 
   /**
    * Computes the forward rate of the swaps with one fixed payment.
-   * @param fixedCouponSwap The underlying swap. Should have one fixed payment.
-   * @param curves The yield curve bundle.
+   * 
+   * @param fixedCouponSwap
+   *          The underlying swap. Should have one fixed payment.
+   * @param curves
+   *          The yield curve bundle.
    * @return The forward rate.
    */
   public double forward(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final YieldCurveBundle curves) {
     ArgumentChecker.notNull(fixedCouponSwap, "Swap");
     ArgumentChecker.isTrue(fixedCouponSwap.getFirstLeg().getNumberOfPayments() == 1, "Swap should have one fixed payment");
     ArgumentChecker.isTrue(fixedCouponSwap.getSecondLeg().getNumberOfPayments() == 1, "Swap should have one floating payment");
-    CouponFixedAccruedCompounding cpnFixed = fixedCouponSwap.getFirstLeg().getNthPayment(0);
-    CurrencyAmount pvLegFloating = METHOD_COUPON_ON_CMP.presentValue(fixedCouponSwap.getSecondLeg().getNthPayment(0), curves);
-    double dfPay = curves.getCurve(cpnFixed.getFundingCurveName()).getDiscountFactor(cpnFixed.getPaymentTime());
-    double rate = Math.pow(-pvLegFloating.getAmount() / (dfPay * cpnFixed.getNotional()), 1.0d / cpnFixed.getPaymentYearFraction()) - 1.0d;
+    final CouponFixedAccruedCompounding cpnFixed = fixedCouponSwap.getFirstLeg().getNthPayment(0);
+    final CurrencyAmount pvLegFloating = METHOD_COUPON_ON_CMP.presentValue(fixedCouponSwap.getSecondLeg().getNthPayment(0), curves);
+    final double dfPay = curves.getCurve(cpnFixed.getFundingCurveName()).getDiscountFactor(cpnFixed.getPaymentTime());
+    final double rate = Math.pow(-pvLegFloating.getAmount() / (dfPay * cpnFixed.getNotional()), 1.0d / cpnFixed.getPaymentYearFraction()) - 1.0d;
     return rate;
   }
 
   /**
-   * Computes the "modified forward", i.e. the quantity F such that the swap with amount $N(F + 1)$ has a pv of 0.
-   * The modified forward is also equal to $(1+forward)^\delta - 1$.
-   * @param fixedCouponSwap The underlying swap. Should have one fixed payment.
-   * @param curves The yield curve bundle.
+   * Computes the "modified forward", i.e. the quantity F such that the swap with amount $N(F + 1)$ has a pv of 0. The modified forward is also equal to
+   * $(1+forward)^\delta - 1$.
+   * 
+   * @param fixedCouponSwap
+   *          The underlying swap. Should have one fixed payment.
+   * @param curves
+   *          The yield curve bundle.
    * @return The modified forward rate.
    */
   public double forwardModified(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final YieldCurveBundle curves) {
     ArgumentChecker.notNull(fixedCouponSwap, "Swap");
     ArgumentChecker.isTrue(fixedCouponSwap.getFirstLeg().getNumberOfPayments() == 1, "Swap should have one fixed payment");
     ArgumentChecker.isTrue(fixedCouponSwap.getSecondLeg().getNumberOfPayments() == 1, "Swap should have one floating payment");
-    CouponFixedAccruedCompounding cpnFixed = fixedCouponSwap.getFirstLeg().getNthPayment(0);
-    CurrencyAmount pvLegFloating = METHOD_COUPON_ON_CMP.presentValue(fixedCouponSwap.getSecondLeg().getNthPayment(0), curves);
-    double dfPay = curves.getCurve(cpnFixed.getFundingCurveName()).getDiscountFactor(cpnFixed.getPaymentTime());
-    double rate = -pvLegFloating.getAmount() / (dfPay * cpnFixed.getNotional()) - 1.0d;
+    final CouponFixedAccruedCompounding cpnFixed = fixedCouponSwap.getFirstLeg().getNthPayment(0);
+    final CurrencyAmount pvLegFloating = METHOD_COUPON_ON_CMP.presentValue(fixedCouponSwap.getSecondLeg().getNthPayment(0), curves);
+    final double dfPay = curves.getCurve(cpnFixed.getFundingCurveName()).getDiscountFactor(cpnFixed.getPaymentTime());
+    final double rate = -pvLegFloating.getAmount() / (dfPay * cpnFixed.getNotional()) - 1.0d;
     return rate;
   }
 
   /**
-   * Computes the "modified forward", i.e. the quantity F such that the swap with amount $N(F + 1)$ has a pv of 0.
-   * The modified forward is also equal to $(1+forward)^\delta - 1$.
-   * @param fixedCouponSwap The underlying swap. Should have one fixed payment.
-   * @param curves The yield curve bundle.
+   * Computes the "modified forward", i.e. the quantity F such that the swap with amount $N(F + 1)$ has a pv of 0. The modified forward is also equal to
+   * $(1+forward)^\delta - 1$.
+   * 
+   * @param fixedCouponSwap
+   *          The underlying swap. Should have one fixed payment.
+   * @param curves
+   *          The yield curve bundle.
    * @return The modified forward rate.
    */
-  public InterestRateCurveSensitivity forwardModifiedCurveSensitivity(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final YieldCurveBundle curves) {
+  public InterestRateCurveSensitivity forwardModifiedCurveSensitivity(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap,
+      final YieldCurveBundle curves) {
     ArgumentChecker.notNull(fixedCouponSwap, "Swap");
     ArgumentChecker.isTrue(fixedCouponSwap.getFirstLeg().getNumberOfPayments() == 1, "Swap should have one fixed payment");
     ArgumentChecker.isTrue(fixedCouponSwap.getSecondLeg().getNumberOfPayments() == 1, "Swap should have one floating payment");
-    CouponFixedAccruedCompounding cpnFixed = fixedCouponSwap.getFirstLeg().getNthPayment(0);
-    CurrencyAmount pvLegFloating = METHOD_COUPON_ON_CMP.presentValue(fixedCouponSwap.getSecondLeg().getNthPayment(0), curves);
-    double dfPay = curves.getCurve(cpnFixed.getFundingCurveName()).getDiscountFactor(cpnFixed.getPaymentTime());
-    //    double rate = -pvLegFloating.getAmount() / (dfPay * cpnFixed.getNotional()) - 1.0d;
+    final CouponFixedAccruedCompounding cpnFixed = fixedCouponSwap.getFirstLeg().getNthPayment(0);
+    final CurrencyAmount pvLegFloating = METHOD_COUPON_ON_CMP.presentValue(fixedCouponSwap.getSecondLeg().getNthPayment(0), curves);
+    final double dfPay = curves.getCurve(cpnFixed.getFundingCurveName()).getDiscountFactor(cpnFixed.getPaymentTime());
+    // double rate = -pvLegFloating.getAmount() / (dfPay * cpnFixed.getNotional()) - 1.0d;
     // Backward sweep
-    double rateBar = 1.0;
-    double pvFloatingBar = -1.0d / (dfPay * cpnFixed.getNotional()) * rateBar;
-    double dfBar = pvLegFloating.getAmount() / (dfPay * dfPay * cpnFixed.getNotional()) * rateBar;
+    final double rateBar = 1.0;
+    final double pvFloatingBar = -1.0d / (dfPay * cpnFixed.getNotional()) * rateBar;
+    final double dfBar = pvLegFloating.getAmount() / (dfPay * dfPay * cpnFixed.getNotional()) * rateBar;
     final double dfDr = -cpnFixed.getPaymentTime() * dfPay;
     final List<DoublesPair> list = new ArrayList<>();
     list.add(DoublesPair.of(cpnFixed.getPaymentTime(), dfDr * dfBar));
     final Map<String, List<DoublesPair>> dfMap = new HashMap<>();
     dfMap.put(cpnFixed.getFundingCurveName(), list);
     InterestRateCurveSensitivity result = new InterestRateCurveSensitivity(dfMap);
-    InterestRateCurveSensitivity pvLegFloatingDr = METHOD_COUPON_ON_CMP.presentValueCurveSensitivity(fixedCouponSwap.getSecondLeg().getNthPayment(0), curves);
+    final InterestRateCurveSensitivity pvLegFloatingDr = METHOD_COUPON_ON_CMP.presentValueCurveSensitivity(fixedCouponSwap.getSecondLeg().getNthPayment(0),
+        curves);
     result = result.plus(pvLegFloatingDr.multipliedBy(pvFloatingBar));
     return result;
   }
 
   /**
    * Computes the physical annuity (also called PVBP or level) of the fixed leg of a swap.
-   * @param fixedCouponSwap The underlying swap.
-   * @param discountingCurve The discount curve.
+   * 
+   * @param fixedCouponSwap
+   *          The underlying swap.
+   * @param discountingCurve
+   *          The discount curve.
    * @return The physical annuity.
    */
-  public double presentValueBasisPoint(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final YieldAndDiscountCurve discountingCurve) {
+  public double presentValueBasisPoint(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap,
+      final YieldAndDiscountCurve discountingCurve) {
     final Annuity<CouponFixedAccruedCompounding> annuityFixed = fixedCouponSwap.getFirstLeg();
     double pvbp = 0;
     for (int loopcpn = 0; loopcpn < annuityFixed.getPayments().length; loopcpn++) {
@@ -172,8 +196,11 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
 
   /**
    * Computes the physical annuity (also called PVBP or level) of the fixed leg of a swap.
-   * @param fixedCouponSwap The underlying swap.
-   * @param curves The yield curve bundle (containing the appropriate discounting curve).
+   * 
+   * @param fixedCouponSwap
+   *          The underlying swap.
+   * @param curves
+   *          The yield curve bundle (containing the appropriate discounting curve).
    * @return The physical annuity.
    */
   public double presentValueBasisPoint(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final YieldCurveBundle curves) {
@@ -184,13 +211,19 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
 
   /**
    * Computes the physical annuity (also called PVBP or level) of the fixed leg of a swap modified by a day count.
-   * @param fixedCouponSwap The underlying swap.
-   * @param dayCount Day count convention for the PVBP modification.
-   * @param calendar The calendar, not null
-   * @param discountingCurve The discount curve.
+   * 
+   * @param fixedCouponSwap
+   *          The underlying swap.
+   * @param dayCount
+   *          Day count convention for the PVBP modification.
+   * @param calendar
+   *          The calendar, not null
+   * @param discountingCurve
+   *          The discount curve.
    * @return The physical annuity.
    */
-  public double presentValueBasisPoint(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final DayCount dayCount, final Calendar calendar,
+  public double presentValueBasisPoint(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final DayCount dayCount,
+      final Calendar calendar,
       final YieldAndDiscountCurve discountingCurve) {
     ArgumentChecker.notNull(fixedCouponSwap, "swap");
     ArgumentChecker.notNull(dayCount, "day count");
@@ -210,13 +243,19 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
 
   /**
    * Computes the physical annuity (also called PVBP or level) of the fixed leg of a swap modified by a day count.
-   * @param fixedCouponSwap The underlying swap.
-   * @param dayCount Day count convention for the PVBP modification.
-   * @param calendar The calendar, not null
-   * @param curves The yield curve bundle (containing the appropriate discounting curve).
+   * 
+   * @param fixedCouponSwap
+   *          The underlying swap.
+   * @param dayCount
+   *          Day count convention for the PVBP modification.
+   * @param calendar
+   *          The calendar, not null
+   * @param curves
+   *          The yield curve bundle (containing the appropriate discounting curve).
    * @return The physical annuity.
    */
-  public double presentValueBasisPoint(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final DayCount dayCount, final Calendar calendar,
+  public double presentValueBasisPoint(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final DayCount dayCount,
+      final Calendar calendar,
       final YieldCurveBundle curves) {
     final Annuity<CouponFixedAccruedCompounding> annuityFixed = fixedCouponSwap.getFirstLeg();
     final YieldAndDiscountCurve discountingCurve = curves.getCurve(annuityFixed.getNthPayment(0).getFundingCurveName());
@@ -225,11 +264,15 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
 
   /**
    * Compute the sensitivity of the PVBP to the discounting curve.
-   * @param fixedCouponSwap The swap.
-   * @param discountingCurve The discounting curve.
+   * 
+   * @param fixedCouponSwap
+   *          The swap.
+   * @param discountingCurve
+   *          The discounting curve.
    * @return The sensitivity.
    */
-  public List<DoublesPair> presentValueBasisPointCurveSensitivity(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final YieldAndDiscountCurve discountingCurve) {
+  public List<DoublesPair> presentValueBasisPointCurveSensitivity(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap,
+      final YieldAndDiscountCurve discountingCurve) {
     final Annuity<CouponFixedAccruedCompounding> annuityFixed = fixedCouponSwap.getFirstLeg();
     double time;
     final List<DoublesPair> list = new ArrayList<>();
@@ -244,11 +287,15 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
 
   /**
    * Compute the sensitivity of the PVBP to a curve bundle.
-   * @param fixedCouponSwap The swap.
-   * @param curves The yield curve bundle (containing the appropriate discounting curve).
+   * 
+   * @param fixedCouponSwap
+   *          The swap.
+   * @param curves
+   *          The yield curve bundle (containing the appropriate discounting curve).
    * @return The sensitivity.
    */
-  public InterestRateCurveSensitivity presentValueBasisPointCurveSensitivity(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final YieldCurveBundle curves) {
+  public InterestRateCurveSensitivity presentValueBasisPointCurveSensitivity(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap,
+      final YieldCurveBundle curves) {
     final Map<String, List<DoublesPair>> result = new HashMap<>();
     final Annuity<CouponFixedAccruedCompounding> annuityFixed = fixedCouponSwap.getFirstLeg();
     final YieldAndDiscountCurve discountingCurve = curves.getCurve(annuityFixed.getNthPayment(0).getFundingCurveName());
@@ -258,13 +305,19 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
 
   /**
    * Compute the sensitivity of the PVBP to the discounting curve.
-   * @param fixedCouponSwap The swap.
-   * @param dayCount Day count convention for the PVBP modification.
-   * @param calendar The calendar
-   * @param discountingCurve The discounting curve.
+   * 
+   * @param fixedCouponSwap
+   *          The swap.
+   * @param dayCount
+   *          Day count convention for the PVBP modification.
+   * @param calendar
+   *          The calendar
+   * @param discountingCurve
+   *          The discounting curve.
    * @return The sensitivity.
    */
-  public List<DoublesPair> presentValueBasisPointCurveSensitivity(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final DayCount dayCount,
+  public List<DoublesPair> presentValueBasisPointCurveSensitivity(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap,
+      final DayCount dayCount,
       final Calendar calendar, final YieldAndDiscountCurve discountingCurve) {
     final Annuity<CouponFixedAccruedCompounding> annuityFixed = fixedCouponSwap.getFirstLeg();
     double time;
@@ -272,7 +325,8 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
     for (int loopcpn = 0; loopcpn < annuityFixed.getPayments().length; loopcpn++) {
       time = annuityFixed.getNthPayment(loopcpn).getPaymentTime();
       final DoublesPair s = DoublesPair.of(time, -time * discountingCurve.getDiscountFactor(time)
-          * dayCount.getDayCountFraction(annuityFixed.getNthPayment(loopcpn).getAccrualStartDate(), annuityFixed.getNthPayment(loopcpn).getAccrualEndDate(), calendar)
+          * dayCount.getDayCountFraction(annuityFixed.getNthPayment(loopcpn).getAccrualStartDate(), annuityFixed.getNthPayment(loopcpn).getAccrualEndDate(),
+              calendar)
           * Math.abs(annuityFixed.getNthPayment(loopcpn).getNotional()));
       list.add(s);
     }
@@ -281,12 +335,17 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
 
   /**
    * Compute the sensitivity of the PVBP to the discounting curve.
-   * @param fixedCouponSwap The swap.
-   * @param dayCount Day count convention for the PVBP modification.
-   * @param discountingCurve The discounting curve.
+   * 
+   * @param fixedCouponSwap
+   *          The swap.
+   * @param dayCount
+   *          Day count convention for the PVBP modification.
+   * @param discountingCurve
+   *          The discounting curve.
    * @return The sensitivity.
    */
-  public List<DoublesPair> presentValueBasisPointCurveSensitivity(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final DayCount dayCount,
+  public List<DoublesPair> presentValueBasisPointCurveSensitivity(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap,
+      final DayCount dayCount,
       final YieldAndDiscountCurve discountingCurve) {
     final Annuity<CouponFixedAccruedCompounding> annuityFixed = fixedCouponSwap.getFirstLeg();
     double time;
@@ -303,26 +362,37 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
 
   /**
    * Compute the sensitivity of the PVBP to a curve bundle.
-   * @param fixedCouponSwap The swap.
-   * @param dayCount Day count convention for the PVBP modification.
-   * @param calendar The calendar
-   * @param curves The yield curve bundle (containing the appropriate discounting curve).
+   * 
+   * @param fixedCouponSwap
+   *          The swap.
+   * @param dayCount
+   *          Day count convention for the PVBP modification.
+   * @param calendar
+   *          The calendar
+   * @param curves
+   *          The yield curve bundle (containing the appropriate discounting curve).
    * @return The sensitivity.
    */
-  public InterestRateCurveSensitivity presentValueBasisPointCurveSensitivity(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final DayCount dayCount,
+  public InterestRateCurveSensitivity presentValueBasisPointCurveSensitivity(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap,
+      final DayCount dayCount,
       final Calendar calendar, final YieldCurveBundle curves) {
     final Map<String, List<DoublesPair>> result = new HashMap<>();
     final Annuity<CouponFixedAccruedCompounding> annuityFixed = fixedCouponSwap.getFirstLeg();
     final YieldAndDiscountCurve discountingCurve = curves.getCurve(annuityFixed.getNthPayment(0).getFundingCurveName());
-    result.put(annuityFixed.getNthPayment(0).getFundingCurveName(), presentValueBasisPointCurveSensitivity(fixedCouponSwap, dayCount, calendar, discountingCurve));
+    result.put(annuityFixed.getNthPayment(0).getFundingCurveName(),
+        presentValueBasisPointCurveSensitivity(fixedCouponSwap, dayCount, calendar, discountingCurve));
     return new InterestRateCurveSensitivity(result);
   }
 
   /**
    * Compute the sensitivity of the PVBP to a curve bundle.
-   * @param fixedCouponSwap The swap.
-   * @param dayCount Day count convention for the PVBP modification.
-   * @param curves The yield curve bundle (containing the appropriate discounting curve).
+   * 
+   * @param fixedCouponSwap
+   *          The swap.
+   * @param dayCount
+   *          Day count convention for the PVBP modification.
+   * @param curves
+   *          The yield curve bundle (containing the appropriate discounting curve).
    * @return The sensitivity.
    */
   public InterestRateCurveSensitivity presentValueBasisPointCurveSensitivity(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap,
@@ -337,19 +407,27 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
 
   /**
    * Computes the coupon equivalent of a swap (without margins).
-   * @param fixedCouponSwap The underlying swap.
-   * @param pvbp The swap PVBP.
-   * @param curves The curves.
+   * 
+   * @param fixedCouponSwap
+   *          The underlying swap.
+   * @param pvbp
+   *          The swap PVBP.
+   * @param curves
+   *          The curves.
    * @return The coupon equivalent.
    */
-  public double couponEquivalent(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final double pvbp, final YieldCurveBundle curves) {
+  public double couponEquivalent(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final double pvbp,
+      final YieldCurveBundle curves) {
     return METHOD_ANNUITY.presentValuePositiveNotional(fixedCouponSwap.getFirstLeg(), curves).getAmount() / pvbp;
   }
 
   /**
    * Computes the coupon equivalent of a swap (without margins).
-   * @param fixedCouponSwap The underlying swap.
-   * @param curves The curves.
+   * 
+   * @param fixedCouponSwap
+   *          The underlying swap.
+   * @param curves
+   *          The curves.
    * @return The coupon equivalent.
    */
   public double couponEquivalent(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final YieldCurveBundle curves) {
@@ -359,10 +437,15 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
 
   /**
    * Computes the coupon equivalent of a swap (without margins).
-   * @param fixedCouponSwap The underlying swap.
-   * @param dayCount Day count convention for the PVBP modification.
-   * @param calendar The calendar
-   * @param curves The curves.
+   * 
+   * @param fixedCouponSwap
+   *          The underlying swap.
+   * @param dayCount
+   *          Day count convention for the PVBP modification.
+   * @param calendar
+   *          The calendar
+   * @param curves
+   *          The curves.
    * @return The coupon equivalent.
    */
   public double couponEquivalent(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> fixedCouponSwap, final DayCount dayCount,

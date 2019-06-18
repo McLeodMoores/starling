@@ -50,7 +50,7 @@ public class MarketDataCovarianceMatrixFunctionTest {
         UniqueId.of("Test", Integer.toString(index))), PROPERTIES);
   }
 
-  private LocalDateDoubleTimeSeries localDateDoubleTimeSeries(final LocalDate date, final int length, final int skip, final int skipB) {
+  private static LocalDateDoubleTimeSeries localDateDoubleTimeSeries(final LocalDate date, final int length, final int skip, final int skipB) {
     LocalDate current = date;
     int s = skip;
     final LocalDate[] d = new LocalDate[length];
@@ -66,11 +66,11 @@ public class MarketDataCovarianceMatrixFunctionTest {
     return ImmutableLocalDateDoubleTimeSeries.of(d, v);
   }
 
-  private LocalDateDoubleTimeSeries localDateDoubleTimeSeries(final LocalDate date, final int length) {
+  private static LocalDateDoubleTimeSeries localDateDoubleTimeSeries(final LocalDate date, final int length) {
     return localDateDoubleTimeSeries(date, length, 0, 5);
   }
 
-  private LocalDateDoubleTimeSeries localDateDoubleTimeSeries(final int length, final int skip, final int skipB) {
+  private static LocalDateDoubleTimeSeries localDateDoubleTimeSeries(final int length, final int skip, final int skipB) {
     return localDateDoubleTimeSeries(LocalDate.of(2013, 1, 1), length, skip, skipB);
   }
 
@@ -78,7 +78,7 @@ public class MarketDataCovarianceMatrixFunctionTest {
     return localDateDoubleTimeSeries(length, 0, 5);
   }
 
-  private LocalDateObjectTimeSeries<?> localDateObjectTimeSeries(final int length) {
+  private static LocalDateObjectTimeSeries<?> localDateObjectTimeSeries(final int length) {
     final LocalDate[] d = new LocalDate[length];
     final Object[] v = new Object[length];
     final LocalDate start = LocalDate.of(2013, 1, 1);

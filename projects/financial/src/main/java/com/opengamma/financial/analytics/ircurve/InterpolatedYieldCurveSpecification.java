@@ -24,8 +24,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
- *
+ * @deprecated {@link YieldCurveSpecification}s are deprecated.
  */
+@Deprecated
 public class InterpolatedYieldCurveSpecification implements Serializable {
 
   /** Serialization version. */
@@ -36,12 +37,11 @@ public class InterpolatedYieldCurveSpecification implements Serializable {
   private final String _name;
   private final Interpolator1D _interpolator;
   private final boolean _interpolateYield;
-  private final SortedSet<FixedIncomeStripWithIdentifier> _strips = new TreeSet<FixedIncomeStripWithIdentifier>();
+  private final SortedSet<FixedIncomeStripWithIdentifier> _strips = new TreeSet<>();
   private final ExternalId _region;
 
-  public InterpolatedYieldCurveSpecification(final LocalDate curveDate, final String name, final Currency currency,
-      final Interpolator1D interpolator, final Collection<FixedIncomeStripWithIdentifier> resolvedStrips,
-      final ExternalId region) {
+  public InterpolatedYieldCurveSpecification(final LocalDate curveDate, final String name, final Currency currency, final Interpolator1D interpolator,
+      final Collection<FixedIncomeStripWithIdentifier> resolvedStrips, final ExternalId region) {
     ArgumentChecker.notNull(curveDate, "CurveDate");
     ArgumentChecker.notNull(currency, "Currency");
     ArgumentChecker.notNull(interpolator, "Interpolator1D");
@@ -59,9 +59,8 @@ public class InterpolatedYieldCurveSpecification implements Serializable {
     }
   }
 
-  public InterpolatedYieldCurveSpecification(final LocalDate curveDate, final String name, final Currency currency,
-      final Interpolator1D interpolator, final Collection<FixedIncomeStripWithIdentifier> resolvedStrips,
-      final ExternalId region, final Tenor fraBasis, final Tenor swapBasis) {
+  public InterpolatedYieldCurveSpecification(final LocalDate curveDate, final String name, final Currency currency, final Interpolator1D interpolator,
+      final Collection<FixedIncomeStripWithIdentifier> resolvedStrips, final ExternalId region, final Tenor fraBasis, final Tenor swapBasis) {
     ArgumentChecker.notNull(curveDate, "CurveDate");
     ArgumentChecker.notNull(currency, "Currency");
     ArgumentChecker.notNull(interpolator, "Interpolator1D");
@@ -79,9 +78,8 @@ public class InterpolatedYieldCurveSpecification implements Serializable {
     }
   }
 
-  public InterpolatedYieldCurveSpecification(final LocalDate curveDate, final String name, final Currency currency,
-      final Interpolator1D interpolator, final boolean interpolateYield, final Collection<FixedIncomeStripWithIdentifier> resolvedStrips,
-      final ExternalId region) {
+  public InterpolatedYieldCurveSpecification(final LocalDate curveDate, final String name, final Currency currency, final Interpolator1D interpolator,
+      final boolean interpolateYield, final Collection<FixedIncomeStripWithIdentifier> resolvedStrips, final ExternalId region) {
     ArgumentChecker.notNull(curveDate, "CurveDate");
     ArgumentChecker.notNull(currency, "Currency");
     ArgumentChecker.notNull(interpolator, "Interpolator1D");
@@ -99,9 +97,9 @@ public class InterpolatedYieldCurveSpecification implements Serializable {
     }
   }
 
-  public InterpolatedYieldCurveSpecification(final LocalDate curveDate, final String name, final Currency currency,
-      final Interpolator1D interpolator, final boolean interpolateYield, final Collection<FixedIncomeStripWithIdentifier> resolvedStrips,
-      final ExternalId region, final Tenor fraBasis, final Tenor swapBasis) {
+  public InterpolatedYieldCurveSpecification(final LocalDate curveDate, final String name, final Currency currency, final Interpolator1D interpolator,
+      final boolean interpolateYield, final Collection<FixedIncomeStripWithIdentifier> resolvedStrips, final ExternalId region, final Tenor fraBasis,
+      final Tenor swapBasis) {
     ArgumentChecker.notNull(curveDate, "CurveDate");
     ArgumentChecker.notNull(currency, "Currency");
     ArgumentChecker.notNull(interpolator, "Interpolator1D");
@@ -118,6 +116,7 @@ public class InterpolatedYieldCurveSpecification implements Serializable {
       addStrip(strip);
     }
   }
+
   public void addStrip(final FixedIncomeStripWithIdentifier strip) {
     ArgumentChecker.notNull(strip, "Strip");
     _strips.add(strip);
@@ -125,6 +124,7 @@ public class InterpolatedYieldCurveSpecification implements Serializable {
 
   /**
    * Gets the region field.
+   * 
    * @return the region
    */
   public ExternalId getRegion() {
@@ -210,9 +210,9 @@ public class InterpolatedYieldCurveSpecification implements Serializable {
   public int hashCode() {
     final int prime = 37;
     int result = 1;
-    result = (result * prime) + _currency.hashCode();
+    result = result * prime + _currency.hashCode();
     if (_name != null) {
-      result = (result * prime) + _name.hashCode();
+      result = result * prime + _name.hashCode();
     }
     // since currency/name/date are a candidate key we leave it at that.
     return result;

@@ -50,16 +50,23 @@ public class RollDateFRANodeConverter extends CurveNodeVisitorAdapter<Instrument
   private final ZonedDateTime _valuationTime;
 
   /**
-   * @param securitySource The security source, not null
-   * @param conventionSource The convention source, not null
-   * @param holidaySource The holiday source, not null
-   * @param regionSource The region source, not null
-   * @param marketData The market data, not null
-   * @param dataId The id of the market data, not null
-   * @param valuationTime The valuation time, not null
+   * @param securitySource
+   *          The security source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param regionSource
+   *          The region source, not null
+   * @param marketData
+   *          The market data, not null
+   * @param dataId
+   *          The id of the market data, not null
+   * @param valuationTime
+   *          The valuation time, not null
    */
-  public RollDateFRANodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource, final RegionSource regionSource,
-      final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
+  public RollDateFRANodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource,
+      final RegionSource regionSource, final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
     ArgumentChecker.notNull(securitySource, "security source");
     ArgumentChecker.notNull(conventionSource, "convention source");
     ArgumentChecker.notNull(holidaySource, "holiday source");
@@ -83,26 +90,29 @@ public class RollDateFRANodeConverter extends CurveNodeVisitorAdapter<Instrument
       throw new OpenGammaRuntimeException("Could not get market data for " + _dataId);
     }
     final RollDateFRAConvention convention = _conventionSource.getSingle(rollDateFRANode.getRollDateFRAConvention(), RollDateFRAConvention.class);
-    final com.opengamma.financial.security.index.IborIndex indexSecurity = 
-        (com.opengamma.financial.security.index.IborIndex) _securitySource.getSingle(convention.getIndexConvention().toBundle()); 
+    final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) _securitySource
+        .getSingle(convention.getIndexConvention().toBundle());
     final IborIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
     if (indexConvention == null) {
       throw new OpenGammaRuntimeException("Convention with id " + convention.getIndexConvention() + " was null");
     }
     final IborIndex index = ConverterUtils.indexIbor(indexSecurity.getName(), indexConvention, indexSecurity.getTenor());
     final Calendar fixingCalendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, indexConvention.getFixingCalendar());
-    final RollDateAdjuster adjuster = RollDateAdjusterFactory.getAdjuster(convention.getRollDateConvention().getValue());
-    final ZonedDateTime adjustedStartDate = ScheduleCalculator.getAdjustedDate(_valuationTime.plus(rollDateFRANode.getStartTenor().getPeriod()), 0, fixingCalendar);
+    final RollDateAdjuster adjuster = RollDateAdjusterFactory.of(convention.getRollDateConvention().getValue());
+    final ZonedDateTime adjustedStartDate = ScheduleCalculator.getAdjustedDate(_valuationTime.plus(rollDateFRANode.getStartTenor().getPeriod()), 0,
+        fixingCalendar);
     // Implementation note: Date adjustment to following
     ZonedDateTime immStartDate = RollDateAdjusterUtils.nthDate(adjustedStartDate, adjuster, rollDateFRANode.getRollDateStartNumber());
-    ZonedDateTime immEndDate = RollDateAdjusterUtils.nthDate(immStartDate.plusDays(1), adjuster, rollDateFRANode.getRollDateEndNumber() - rollDateFRANode.getRollDateStartNumber());
+    ZonedDateTime immEndDate = RollDateAdjusterUtils.nthDate(immStartDate.plusDays(1), adjuster,
+        rollDateFRANode.getRollDateEndNumber() - rollDateFRANode.getRollDateStartNumber());
     immStartDate = ScheduleCalculator.getAdjustedDate(immStartDate, 0, fixingCalendar);
     immEndDate = ScheduleCalculator.getAdjustedDate(immEndDate, 0, fixingCalendar);
     final Currency currency = indexConvention.getCurrency();
     final DayCount dayCount = indexConvention.getDayCount();
     final double accrualFactor = dayCount.getDayCountFraction(immStartDate, immEndDate);
     final ZonedDateTime fixingDate = ScheduleCalculator.getAdjustedDate(immStartDate, -index.getSpotLag(), fixingCalendar);
-    return new ForwardRateAgreementDefinition(currency, immStartDate, immStartDate, immEndDate, accrualFactor, 1, fixingDate, immStartDate, immEndDate, index, rate, fixingCalendar);
+    return new ForwardRateAgreementDefinition(currency, immStartDate, immStartDate, immEndDate, accrualFactor, 1, fixingDate, immStartDate, immEndDate, index,
+        rate, fixingCalendar);
   }
-  
+
 }

@@ -37,7 +37,7 @@ public class EquityOptionBjerksundStenslandScenarioPnLFunction extends EquityOpt
   /** The Bjerksund-Stensland present value calculator */
   private static final EqyOptBjerksundStenslandPresentValueCalculator PV_CALCULATOR = EqyOptBjerksundStenslandPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public EquityOptionBjerksundStenslandScenarioPnLFunction() {
     super(ValueRequirementNames.PNL);
   }
@@ -54,12 +54,12 @@ public class EquityOptionBjerksundStenslandScenarioPnLFunction extends EquityOpt
   }
 
   @Override
-  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs, final Set<ValueRequirement> desiredValues,
+  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
+      final Set<ValueRequirement> desiredValues,
       final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
 
     // Compute present value under current market
     final double pvBase = derivative.accept(PV_CALCULATOR, market);
-
 
     // Form market scenario
     final ValueProperties constraints = desiredValues.iterator().next().getConstraints();
@@ -100,7 +100,8 @@ public class EquityOptionBjerksundStenslandScenarioPnLFunction extends EquityOpt
       } else if (volShiftTypeConstraint.equalsIgnoreCase("Multiplicative")) {
         additiveShift = false;
       } else {
-        LOGGER.debug("In ScenarioPnLFunctions, VolShiftType's are Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
+        LOGGER.debug(
+            "In ScenarioPnLFunctions, VolShiftType's are Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
         additiveShift = false;
       }
       volSurfScen = market.getVolatilitySurface().withShift(shiftVol, additiveShift);
@@ -159,13 +160,13 @@ public class EquityOptionBjerksundStenslandScenarioPnLFunction extends EquityOpt
     // If defaults have been added, this adds additional copy of the Function into dep graph with the adjusted constraints
     if (scenarioDefaults != null) {
       return Collections.singleton(new ValueRequirement(getValueRequirementName(), target.toSpecification(), scenarioDefaults.get()));
-    } else {  // Scenarios are defined, so we're satisfied
-      return superReqs;
     }
+    return superReqs;
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.size() == 1) {
       final ValueSpecification input = inputs.keySet().iterator().next();
       if (getValueRequirementName().equals(input.getValueName())) {

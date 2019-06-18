@@ -206,6 +206,7 @@ implements SecurityMaster {
     }
     _changeManager.entityChanged(ChangeType.CHANGED, uniqueId.getObjectId(), storedDocument.getVersionFromInstant(), document.getVersionToInstant(), now);
     _externalIdCache.remove(storedDocument.getSecurity());
+    document.setUniqueId(uniqueId);
     _externalIdCache.add(document.getSecurity(), document);
     return document;
   }

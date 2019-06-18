@@ -23,7 +23,7 @@ import com.opengamma.util.PublicSPI;
 
 /**
  * Result providing the history of a legal entity.
- * <p/>
+ * <p>
  * The returned documents may be a mixture of versions and corrections.
  * The document instant fields are used to identify which are which.
  * See {@link LegalEntityHistoryRequest} for more details.
@@ -75,7 +75,7 @@ public class LegalEntityHistoryResult extends AbstractHistoryResult<LegalEntityD
 
   /**
    * Gets the single result expected from a query.
-   * <p/>
+   * <p>
    * This throws an exception if more than 1 result is actually available.
    * Thus, this method implies an assumption about uniqueness of the queried legalentity.
    *

@@ -39,8 +39,7 @@ import com.opengamma.web.json.FudgeMsgJSONReader;
 /**
  * Abstract base class for RESTful resources intended for websites.
  * <p>
- * Websites and web-services are related but different RESTful elements.
- * This is because a website needs to bend the RESTful rules in order to be usable.
+ * Websites and web-services are related but different RESTful elements. This is because a website needs to bend the RESTful rules in order to be usable.
  */
 public abstract class AbstractWebResource {
   /**
@@ -60,15 +59,18 @@ public abstract class AbstractWebResource {
   protected AbstractWebResource() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds the paging request.
    * <p>
    * This method is lenient, applying sensible default values.
    *
-   * @param pgIdx  the paging first-item index, null if not input
-   * @param pgNum  the paging page, null if not input
-   * @param pgSze  the paging size, null if not input
+   * @param pgIdx
+   *          the paging first-item index, null if not input
+   * @param pgNum
+   *          the paging page, null if not input
+   * @param pgSze
+   *          the paging size, null if not input
    * @return the paging request, not null
    */
   protected PagingRequest buildPagingRequest(final Integer pgIdx, final Integer pgNum, final Integer pgSze) {
@@ -87,52 +89,58 @@ public abstract class AbstractWebResource {
    * <p>
    * This method is lenient, returning the default in case of error.
    *
-   * @param <T>  the sort order type
-   * @param order  the sort order, null or empty returns default
-   * @param defaultOrder  the default order, not null
+   * @param <T>
+   *          the sort order type
+   * @param order
+   *          the sort order, null or empty returns default
+   * @param defaultOrder
+   *          the default order, not null
    * @return the sort order, not null
    */
-  protected <T extends Enum<T>> T buildSortOrder(String order, final T defaultOrder) {
+  protected <T extends Enum<T>> T buildSortOrder(final String order, final T defaultOrder) {
     if (StringUtils.isEmpty(order)) {
       return defaultOrder;
     }
-    order = order.toUpperCase(Locale.ENGLISH);
-    if (order.endsWith(" ASC")) {
-      order = StringUtils.replace(order, " ASC", "_ASC");
-    } else if (order.endsWith(" DESC")) {
-      order = StringUtils.replace(order, " DESC", "_DESC");
-    } else if (order.endsWith("_ASC") == false && order.endsWith("_DESC") == false) {
-      order = order + "_ASC";
+    String orderStr = order.toUpperCase(Locale.ENGLISH);
+    if (orderStr.endsWith(" ASC")) {
+      orderStr = StringUtils.replace(orderStr, " ASC", "_ASC");
+    } else if (orderStr.endsWith(" DESC")) {
+      orderStr = StringUtils.replace(orderStr, " DESC", "_DESC");
+    } else if (!orderStr.endsWith("_ASC") && !orderStr.endsWith("_DESC")) {
+      orderStr = orderStr + "_ASC";
     }
     try {
       final Class<T> cls = defaultOrder.getDeclaringClass();
-      return Enum.valueOf(cls, order);
+      return Enum.valueOf(cls, orderStr);
     } catch (final IllegalArgumentException ex) {
       return defaultOrder;
     }
   }
 
-
   /**
    * Utility method to convert XML to configuration object.
    *
-   * @param <T> the type to parse to
-   * @param xml  the configuration xml, not null
-   * @param type  the type to parse to, not null
+   * @param <T>
+   *          the type to parse to
+   * @param xml
+   *          the configuration xml, not null
+   * @param type
+   *          the type to parse to, not null
    * @return the configuration object
    */
   @SuppressWarnings("unchecked")
   protected <T> T parseXML(final String xml, final Class<T> type) {
     if (xml.contains("<fudgeEnvelope")) {
       return (T) parseXML(xml);
-    } else {
-      return JodaBeanSerialization.deserializer().xmlReader().read(xml, type);
     }
+    return JodaBeanSerialization.deserializer().xmlReader().read(xml, type);
   }
 
   /**
-   * Utility method to convert XML to configuration object
-   * @param xml the configuration xml
+   * Utility method to convert XML to configuration object.
+   *
+   * @param xml
+   *          the configuration xml
    * @return the configuration object
    */
   protected Object parseXML(final String xml) {
@@ -146,7 +154,8 @@ public abstract class AbstractWebResource {
   protected String createBeanXML(final Object obj) {
     if (obj instanceof Bean) {
       try {
-        // NOTE jim 8-Jan-2014 -- changed last param from false to true so bean type is set.  Not necessary for UI, but enables easier parsing if cut and pasted elsewhere.
+        // NOTE jim 8-Jan-2014 -- changed last param from false to true so bean type is set. Not necessary for UI, but enables easier parsing if cut and pasted
+        // elsewhere.
         return JodaBeanSerialization.serializer(true).xmlWriter().write((Bean) obj, true);
       } catch (final RuntimeException ex) {
         LOGGER.warn("Error serialising bean to XML with JodaBean serializer", ex);
@@ -162,8 +171,7 @@ public abstract class AbstractWebResource {
     LOGGER.debug("{} converted to fudge {}", obj, msg);
     final StringWriter buf = new StringWriter(1024);
     @SuppressWarnings("resource")
-    final
-    FudgeMsgWriter writer = new FudgeMsgWriter(new FudgeXMLStreamWriter(getFudgeContext(), buf));
+    final FudgeMsgWriter writer = new FudgeMsgWriter(new FudgeXMLStreamWriter(getFudgeContext(), buf));
     writer.writeMessageEnvelope(msg);
     LOGGER.debug("{} converted to xmk {}", obj, buf.toString());
     try {
@@ -180,7 +188,7 @@ public abstract class AbstractWebResource {
     try {
       transformerFactory.setAttribute("indent-number", indent);
     } catch (final IllegalArgumentException e) {
-      //ignore
+      // ignore
     }
     final Transformer transformer = transformerFactory.newTransformer();
     transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -189,9 +197,10 @@ public abstract class AbstractWebResource {
   }
 
   /**
-   * Converts JSON to configuration object
+   * Converts JSON to configuration object.
    *
-   * @param json the config document in JSON
+   * @param json
+   *          the config document in JSON
    * @return the configuration object
    */
   protected Object parseJSON(final String json) {
@@ -207,6 +216,7 @@ public abstract class AbstractWebResource {
 
   /**
    * Gets the fudgeContext.
+   *
    * @return the fudgeContext
    */
   public FudgeContext getFudgeContext() {

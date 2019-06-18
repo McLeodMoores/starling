@@ -21,13 +21,13 @@ import com.opengamma.util.tuple.DoublesPair;
 public class MulticurveSensitivity {
 
   /**
-   * The map containing the sensitivity to the yield (continuously compounded) (for discounting and issuer specific curves).
-   * The map linked the curve (String) to a list of pairs (cash flow time, sensitivity value).
+   * The map containing the sensitivity to the yield (continuously compounded) (for discounting and issuer specific curves). The map linked the curve (String)
+   * to a list of pairs (cash flow time, sensitivity value).
    */
   private final Map<String, List<DoublesPair>> _sensitivityYieldDiscounting;
   /**
-   * The map containing the sensitivity to forward curve. The sensitivity will depend on the way the curve is described (discount factor curve, forward rate, ...)
-   * The map linked the curve (String) to a list of pairs (cash flow time, sensitivity value).
+   * The map containing the sensitivity to forward curve. The sensitivity will depend on the way the curve is described (discount factor curve, forward rate,
+   * ...) The map linked the curve (String) to a list of pairs (cash flow time, sensitivity value).
    */
   private final Map<String, List<ForwardSensitivity>> _sensitivityForward;
 
@@ -43,21 +43,29 @@ public class MulticurveSensitivity {
 
   /**
    * Constructor from a yield discounting map and a forward map. The maps are used directly.
-   * @param sensitivityYieldDiscounting The map.
-   * @param sensitivityForward The map.
+   *
+   * @param sensitivityYieldDiscounting
+   *          The map.
+   * @param sensitivityForward
+   *          The map.
    */
-  private MulticurveSensitivity(final Map<String, List<DoublesPair>> sensitivityYieldDiscounting, final Map<String, List<ForwardSensitivity>> sensitivityForward) {
+  private MulticurveSensitivity(final Map<String, List<DoublesPair>> sensitivityYieldDiscounting,
+      final Map<String, List<ForwardSensitivity>> sensitivityForward) {
     _sensitivityYieldDiscounting = sensitivityYieldDiscounting;
     _sensitivityForward = sensitivityForward;
   }
 
   /**
    * Constructor from a yield discounting map of sensitivity. The maps are used directly.
-   * @param sensitivityYieldDiscounting The map.
-   * @param sensitivityForward The map.
+   *
+   * @param sensitivityYieldDiscounting
+   *          The map.
+   * @param sensitivityForward
+   *          The map.
    * @return The sensitivity.
    */
-  public static MulticurveSensitivity of(final Map<String, List<DoublesPair>> sensitivityYieldDiscounting, final Map<String, List<ForwardSensitivity>> sensitivityForward) {
+  public static MulticurveSensitivity of(final Map<String, List<DoublesPair>> sensitivityYieldDiscounting,
+      final Map<String, List<ForwardSensitivity>> sensitivityForward) {
     ArgumentChecker.notNull(sensitivityYieldDiscounting, "Sensitivity yield curve");
     ArgumentChecker.notNull(sensitivityForward, "Sensitivity forward");
     return new MulticurveSensitivity(sensitivityYieldDiscounting, sensitivityForward);
@@ -65,7 +73,9 @@ public class MulticurveSensitivity {
 
   /**
    * Constructor from a yield discounting map of sensitivity. The map is used directly.
-   * @param sensitivityYieldDiscounting The map.
+   *
+   * @param sensitivityYieldDiscounting
+   *          The map.
    * @return The sensitivity.
    */
   public static MulticurveSensitivity ofYieldDiscounting(final Map<String, List<DoublesPair>> sensitivityYieldDiscounting) {
@@ -75,7 +85,9 @@ public class MulticurveSensitivity {
 
   /**
    * Constructor from a yield discounting map and a forward map. The map is used directly.
-   * @param sensitivityForward The map.
+   *
+   * @param sensitivityForward
+   *          The map.
    * @return The sensitivity.
    */
   public static MulticurveSensitivity ofForward(final Map<String, List<ForwardSensitivity>> sensitivityForward) {
@@ -93,6 +105,7 @@ public class MulticurveSensitivity {
 
   /**
    * Gets the discounting curve sensitivities.
+   *
    * @return The sensitivity map
    */
   public Map<String, List<DoublesPair>> getYieldDiscountingSensitivities() {
@@ -101,6 +114,7 @@ public class MulticurveSensitivity {
 
   /**
    * Gets the forward curve sensitivity map.
+   *
    * @return The sensitivity map
    */
   public Map<String, List<ForwardSensitivity>> getForwardSensitivities() {
@@ -109,7 +123,9 @@ public class MulticurveSensitivity {
 
   /**
    * Create a copy of the sensitivity and add a given sensitivity to it.
-   * @param other The sensitivity to add.
+   *
+   * @param other
+   *          The sensitivity to add.
    * @return The total sensitivity.
    */
   public MulticurveSensitivity plus(final MulticurveSensitivity other) {
@@ -121,7 +137,9 @@ public class MulticurveSensitivity {
 
   /**
    * Create a new sensitivity object containing the original sensitivity multiplied by a common factor.
-   * @param factor The multiplicative factor.
+   *
+   * @param factor
+   *          The multiplicative factor.
    * @return The multiplied sensitivity.
    */
   public MulticurveSensitivity multipliedBy(final double factor) {
@@ -131,8 +149,10 @@ public class MulticurveSensitivity {
   }
 
   /**
-   * Create a new sensitivity object by a product of two sensitivities
-   * @param other The other sensitivity
+   * Create a new sensitivity object by a product of two sensitivities.
+   *
+   * @param other
+   *          The other sensitivity
    * @return The new sensitivity
    */
   public MulticurveSensitivity productOf(final MulticurveSensitivity other) {
@@ -143,6 +163,7 @@ public class MulticurveSensitivity {
 
   /**
    * Return a new sensitivity by sorting the times and adding the values at duplicated times.
+   *
    * @return The cleaned sensitivity.
    */
   public MulticurveSensitivity cleaned() {
@@ -153,7 +174,9 @@ public class MulticurveSensitivity {
 
   /**
    * Return a new sensitivity by sorting the times and adding the values at duplicated times. The total value below the tolerance threshold are removed.
-   * @param tolerance The tolerance.
+   *
+   * @param tolerance
+   *          The tolerance.
    * @return The cleaned sensitivity.
    */
   public MulticurveSensitivity cleaned(final double tolerance) {

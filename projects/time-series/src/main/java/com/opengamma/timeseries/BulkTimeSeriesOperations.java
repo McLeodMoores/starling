@@ -18,8 +18,10 @@ public class BulkTimeSeriesOperations {
    * <p>
    * Earlier time-series takes precedence over later ones.
    *
-   * @param <E>  the series type
-   * @param inputs  the input series, not null
+   * @param <E>
+   *          the series type
+   * @param inputs
+   *          the input series, not null
    * @return the output series, not null
    */
   @SuppressWarnings("unchecked")
@@ -46,13 +48,15 @@ public class BulkTimeSeriesOperations {
    * <p>
    * Earlier time-series takes precedence over later ones.
    *
-   * @param <E>  the series type
-   * @param inputs  the input series, not null
+   * @param <E>
+   *          the series type
+   * @param inputs
+   *          the input series, not null
    * @return the output series, not null
    */
   @SuppressWarnings("unchecked")
   public <E> List<DoubleTimeSeries<E>> intersection(final List<DoubleTimeSeries<E>> inputs) {
-    return Arrays.asList(intersection((DoubleTimeSeries<E>[]) inputs.toArray()));
+    return Arrays.asList(intersection((DoubleTimeSeries<E>[]) inputs.toArray(new DoubleTimeSeries[0])));
   }
 
 }

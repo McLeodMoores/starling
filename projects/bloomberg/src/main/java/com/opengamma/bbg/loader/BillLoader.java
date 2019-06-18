@@ -97,13 +97,15 @@ public class BillLoader extends SecurityLoader {
       FIELD_DAYS_TO_SETTLE);
 
   /**
-   * The valid Bloomberg security types for bills
+   * The valid Bloomberg security types for bills.
    */
   public static final Set<String> VALID_SECURITY_TYPES2 = ImmutableSet.of("Bill");
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   * 
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public BillLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.BILL);
@@ -152,7 +154,7 @@ public class BillLoader extends SecurityLoader {
     return localDate.atTime(expiryTime).atZone(zone);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     try {
@@ -230,9 +232,12 @@ public class BillLoader extends SecurityLoader {
   }
 
   /**
-   * Parse the identifiers from the response.  Note that we populate BLOOMBERG_TICKER with PARSEKYABLE_DES.
-   * @param fieldData  the response, not null
-   * @param security  the security to populate, not null
+   * Parse the identifiers from the response. Note that we populate BLOOMBERG_TICKER with PARSEKYABLE_DES.
+   * 
+   * @param fieldData
+   *          the response, not null
+   * @param security
+   *          the security to populate, not null
    */
   @Override
   protected void parseIdentifiers(final FudgeMsg fieldData, final ManageableSecurity security) {

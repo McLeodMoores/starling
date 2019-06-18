@@ -70,7 +70,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  * Calculates one-day theta for swaps by rolling down the discounting and forward curves without slide.
- * 
+ *
  * @deprecated This functions uses deprecated analytics code
  */
 @Deprecated
@@ -91,13 +91,14 @@ public class SwapConstantSpreadThetaFunction extends AbstractFunction.NonCompile
     final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context); // TODO [PLAT-5966] Remove
     final HistoricalTimeSeriesResolver timeSeriesResolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
     final SwapSecurityConverterDeprecated swapConverter = new SwapSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, false);
-    _visitor = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder().swapSecurityVisitor(swapConverter).create();
+    _visitor = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>> builder().swapSecurityVisitor(swapConverter).create();
     _definitionConverter = new FixedIncomeConverterDataProvider(conventionSource, securitySource, timeSeriesResolver);
     _curveCalculationConfigSource = ConfigDBCurveCalculationConfigSource.init(context, this);
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final SwapSecurity security = (SwapSecurity) target.getSecurity();
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
@@ -123,17 +124,20 @@ public class SwapConstantSpreadThetaFunction extends AbstractFunction.NonCompile
     final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(executionContext);
     final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
     final Calendar calendar = CalendarUtils.getCalendar(regionSource, holidaySource, ExternalSchemes.currencyRegionId(currency));
-    final ZonedDateTimeDoubleTimeSeries[] fixingSeries = new ZonedDateTimeDoubleTimeSeries[] {FixingTimeSeriesVisitor.convertTimeSeries((HistoricalTimeSeries) inputs
-        .getValue(ValueRequirementNames.HISTORICAL_TIME_SERIES)) };
-    final String[] yieldCurveNames = numCurveNames == 1 ? new String[] {fullCurveNames[0], fullCurveNames[0] } : fullCurveNames;
+    final ZonedDateTimeDoubleTimeSeries[] fixingSeries = new ZonedDateTimeDoubleTimeSeries[] {
+                  FixingTimeSeriesVisitor.convertTimeSeries((HistoricalTimeSeries) inputs
+                      .getValue(ValueRequirementNames.HISTORICAL_TIME_SERIES)) };
+    final String[] yieldCurveNames = numCurveNames == 1 ? new String[] { fullCurveNames[0], fullCurveNames[0] } : fullCurveNames;
     final String[] curveNamesForSecurity = FixedIncomeInstrumentCurveExposureHelper.getCurveNamesForSecurity(security, yieldCurveNames[0], yieldCurveNames[1]);
     final ConstantSpreadHorizonThetaCalculator calculator = ConstantSpreadHorizonThetaCalculator.getInstance();
     if (definition instanceof SwapDefinition) {
-      final MultipleCurrencyAmount theta = calculator.getTheta((SwapDefinition) definition, now, curveNamesForSecurity, bundle, fixingSeries, Integer.parseInt(daysForward), calendar);
+      final MultipleCurrencyAmount theta = calculator.getTheta((SwapDefinition) definition, now, curveNamesForSecurity, bundle, fixingSeries,
+          Integer.parseInt(daysForward), calendar);
       if (theta.size() != 1) {
         throw new OpenGammaRuntimeException("Got multi-currency amount for theta " + theta + "; should only use this function for single currency swaps");
       }
-      return Collections.singleton(new ComputedValue(getResultSpec(target, curveCalculationConfigName, currency.getCode(), daysForward), theta.getAmount(currency)));
+      return Collections
+          .singleton(new ComputedValue(getResultSpec(target, curveCalculationConfigName, currency.getCode(), daysForward), theta.getAmount(currency)));
     }
     throw new OpenGammaRuntimeException("Can only handle fixed / float ibor and ois swaps; have " + definition.getClass());
   }
@@ -149,7 +153,8 @@ public class SwapConstantSpreadThetaFunction extends AbstractFunction.NonCompile
       return false;
     }
     final InterestRateInstrumentType type = InterestRateInstrumentType.getInstrumentTypeFromSecurity((FinancialSecurity) target.getSecurity());
-    return type == InterestRateInstrumentType.SWAP_FIXED_IBOR || type == InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD || type == InterestRateInstrumentType.SWAP_FIXED_OIS;
+    return type == InterestRateInstrumentType.SWAP_FIXED_IBOR || type == InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD
+        || type == InterestRateInstrumentType.SWAP_FIXED_OIS;
   }
 
   @Override
@@ -190,7 +195,8 @@ public class SwapConstantSpreadThetaFunction extends AbstractFunction.NonCompile
       }
       final Set<ValueRequirement> timeSeriesRequirements = new HashSet<>();
       for (final ValueRequirement fixingRequirement : fixingRequirements) {
-        final ValueProperties properties = fixingRequirement.getConstraints().copy().with(PROPERTY_DAYS_TO_MOVE_FORWARD, daysForwardNames).withOptional(PROPERTY_DAYS_TO_MOVE_FORWARD)
+        final ValueProperties properties = fixingRequirement.getConstraints().copy().with(PROPERTY_DAYS_TO_MOVE_FORWARD, daysForwardNames)
+            .withOptional(PROPERTY_DAYS_TO_MOVE_FORWARD)
             .with(CURVE_CALCULATION_CONFIG, curveCalculationConfigNames).withOptional(CURVE_CALCULATION_CONFIG).get();
         timeSeriesRequirements.add(new ValueRequirement(fixingRequirement.getValueName(), fixingRequirement.getTargetReference(), properties));
       }
@@ -203,7 +209,8 @@ public class SwapConstantSpreadThetaFunction extends AbstractFunction.NonCompile
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String curveCalculationConfig = null;
     String daysForward = null;
     for (final Map.Entry<ValueSpecification, ValueRequirement> input : inputs.entrySet()) {
@@ -223,49 +230,64 @@ public class SwapConstantSpreadThetaFunction extends AbstractFunction.NonCompile
 
   /**
    * Gets the result properties.
-   * 
-   * @param currency The currency
+   *
+   * @param currency
+   *          The currency
    * @return The result properties
    */
   private ValueProperties.Builder getResultProperties(final String currency) {
-    final ValueProperties.Builder properties = createValueProperties().withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG).with(ValuePropertyNames.CURRENCY, currency)
+    final ValueProperties.Builder properties = createValueProperties().withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG)
+        .with(ValuePropertyNames.CURRENCY, currency)
         .with(PROPERTY_THETA_CALCULATION_METHOD, THETA_CONSTANT_SPREAD).withAny(PROPERTY_DAYS_TO_MOVE_FORWARD);
     return properties;
   }
 
   /**
    * Gets the result properties.
-   * 
-   * @param currency The currency
-   * @param curveCalculationConfig The curve calculation configuration
-   * @param daysForward The days forward
+   *
+   * @param currency
+   *          The currency
+   * @param curveCalculationConfig
+   *          The curve calculation configuration
+   * @param daysForward
+   *          The days forward
    * @return The result properties
    */
   private ValueProperties.Builder getResultProperties(final String currency, final String curveCalculationConfig, final String daysForward) {
-    final ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig).with(ValuePropertyNames.CURRENCY, currency)
+    final ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig)
+        .with(ValuePropertyNames.CURRENCY, currency)
         .with(PROPERTY_THETA_CALCULATION_METHOD, THETA_CONSTANT_SPREAD).with(PROPERTY_DAYS_TO_MOVE_FORWARD, daysForward);
     return properties;
   }
 
   /**
    * Gets the result specification.
-   * 
-   * @param target The target
-   * @param curveCalculationConfig The curve calculation configuration
-   * @param currency The currency
-   * @param daysForward The days forward
+   *
+   * @param target
+   *          The target
+   * @param curveCalculationConfig
+   *          The curve calculation configuration
+   * @param currency
+   *          The currency
+   * @param daysForward
+   *          The days forward
    * @return The result properties
    */
-  private ValueSpecification getResultSpec(final ComputationTarget target, final String curveCalculationConfig, final String currency, final String daysForward) {
-    return new ValueSpecification(ValueRequirementNames.VALUE_THETA, target.toSpecification(), getResultProperties(currency, curveCalculationConfig, daysForward).get());
+  private ValueSpecification getResultSpec(final ComputationTarget target, final String curveCalculationConfig, final String currency,
+      final String daysForward) {
+    return new ValueSpecification(ValueRequirementNames.VALUE_THETA, target.toSpecification(),
+        getResultProperties(currency, curveCalculationConfig, daysForward).get());
   }
 
   /**
    * Gets the fixing time series requirements for a swap
-   * 
-   * @param security The security
-   * @param definition The definition
-   * @param definitionConverter The definition converter
+   *
+   * @param security
+   *          The security
+   * @param definition
+   *          The definition
+   * @param definitionConverter
+   *          The definition converter
    * @return The set of fixing time series requirements
    */
   private static Set<ValueRequirement> getDerivativeTimeSeriesRequirements(final FinancialSecurity security, final InstrumentDefinition<?> definition,

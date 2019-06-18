@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.analytics.financial.interestrate.payments.provider;
 
 import com.opengamma.analytics.financial.instrument.index.IndexON;
@@ -19,6 +24,7 @@ public final class OISForwardRateProvider implements ForwardRateProvider<IndexON
 
   /**
    * Returns a singleton.
+   * 
    * @return a singleton.
    */
   public static OISForwardRateProvider getInstance() {
@@ -32,7 +38,8 @@ public final class OISForwardRateProvider implements ForwardRateProvider<IndexON
       final double fixingPeriodStartTime,
       final double fixingPeriodEndTime,
       final double fixingPeriodYearFraction) {
-    return multicurves.getSimplyCompoundForwardRate(coupon.getIndex(), fixingPeriodStartTime, fixingPeriodEndTime, fixingPeriodYearFraction);
+    return multicurves.getSimplyCompoundForwardRate(coupon.getIndex(), fixingPeriodStartTime, fixingPeriodEndTime,
+        fixingPeriodYearFraction);
   }
 
 }

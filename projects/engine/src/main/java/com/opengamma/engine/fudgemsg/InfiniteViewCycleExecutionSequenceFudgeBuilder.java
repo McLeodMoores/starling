@@ -15,7 +15,7 @@ import org.fudgemsg.mapping.FudgeSerializer;
 import com.opengamma.engine.view.execution.InfiniteViewCycleExecutionSequence;
 
 /**
- * Fudge message builder for {@link InfiniteViewCycleExecutionSequence}
+ * Fudge message builder for {@link InfiniteViewCycleExecutionSequence}.
  */
 @FudgeBuilderFor(InfiniteViewCycleExecutionSequence.class)
 public class InfiniteViewCycleExecutionSequenceFudgeBuilder implements FudgeBuilder<InfiniteViewCycleExecutionSequence> {

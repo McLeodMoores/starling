@@ -7,29 +7,35 @@ package com.opengamma.analytics.financial.model.option.definition;
 
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTermStructureParametersStrikeInterpolation;
-import com.opengamma.analytics.financial.provider.description.forex.BlackForexSmileProviderDiscount;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
  * Class describing the data required to price instruments with the volatility delta and time dependent.
- * @deprecated Use {@link BlackForexSmileProviderDiscount}
+ *
+ * @deprecated Use {@link com.opengamma.analytics.financial.provider.description.forex.BlackForexSmileProviderDiscount}
  */
 @Deprecated
 public class SmileDeltaTermStructureDataBundle extends ForexOptionDataBundle<SmileDeltaTermStructureParametersStrikeInterpolation> {
 
-  public static SmileDeltaTermStructureDataBundle from(final YieldCurveBundle ycBundle, final SmileDeltaTermStructureParametersStrikeInterpolation smile, final Pair<Currency, Currency> currencyPair) {
+  public static SmileDeltaTermStructureDataBundle from(final YieldCurveBundle ycBundle, final SmileDeltaTermStructureParametersStrikeInterpolation smile,
+      final Pair<Currency, Currency> currencyPair) {
     return new SmileDeltaTermStructureDataBundle(ycBundle, smile, currencyPair);
   }
 
   /**
    * Constructor from the smile parameters and the curves.
-   * @param ycBundle The curves bundle.
-   * @param smile The smile parameters.
-   * @param currencyPair The currency pair for which the smile is valid.
+   * 
+   * @param ycBundle
+   *          The curves bundle.
+   * @param smile
+   *          The smile parameters.
+   * @param currencyPair
+   *          The currency pair for which the smile is valid.
    */
-  public SmileDeltaTermStructureDataBundle(final YieldCurveBundle ycBundle, final SmileDeltaTermStructureParametersStrikeInterpolation smile, final Pair<Currency, Currency> currencyPair) {
+  public SmileDeltaTermStructureDataBundle(final YieldCurveBundle ycBundle, final SmileDeltaTermStructureParametersStrikeInterpolation smile,
+      final Pair<Currency, Currency> currencyPair) {
     super(ycBundle, smile, currencyPair);
   }
 

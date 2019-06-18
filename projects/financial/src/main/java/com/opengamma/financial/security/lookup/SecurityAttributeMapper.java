@@ -36,8 +36,8 @@ public class SecurityAttributeMapper {
   }
 
   /* package */  <T extends ManageableSecurity> void mapColumn(final SecurityAttribute column,
-                                                               final Class<T> type,
-                                                               final SecurityValueProvider<T> provider) {
+      final Class<T> type,
+      final SecurityValueProvider<T> provider) {
     ArgumentChecker.notNull(column, "column");
     ArgumentChecker.notNull(type, "type");
     ArgumentChecker.notNull(provider, "provider");
@@ -57,14 +57,13 @@ public class SecurityAttributeMapper {
     final Map<SecurityAttribute, SecurityValueProvider> securityMappings = _mappings.get(type);
     if (securityMappings != null) {
       return securityMappings;
-    } else {
-      final Map<SecurityAttribute, SecurityValueProvider> newMappings = Maps.newHashMap();
-      _mappings.put(type, newMappings);
-      return newMappings;
     }
+    final Map<SecurityAttribute, SecurityValueProvider> newMappings = Maps.newHashMap();
+    _mappings.put(type, newMappings);
+    return newMappings;
   }
 
-  private SecurityValueProvider propertyProvider(final MetaProperty<?> property) {
+  private static SecurityValueProvider propertyProvider(final MetaProperty<?> property) {
     ArgumentChecker.notNull(property, "property");
     return new PropertyValueProvider(property);
   }
@@ -87,33 +86,28 @@ public class SecurityAttributeMapper {
     final Map<SecurityAttribute, SecurityValueProvider> providerMap = getMappingsForType(type);
     if (providerMap == null) {
       return "";
-    } else {
-      final SecurityValueProvider valueProvider = providerMap.get(column);
-      if (valueProvider != null) {
-        return valueProvider.getValue(security);
-      } else {
-        final Class<?> superclass = type.getSuperclass();
-        if (superclass == null) {
-          return "";
-        } else {
-          return getValue(column, security, superclass);
-        }
-      }
     }
+    final SecurityValueProvider valueProvider = providerMap.get(column);
+    if (valueProvider != null) {
+      return valueProvider.getValue(security);
+    }
+    final Class<?> superclass = type.getSuperclass();
+    if (superclass == null) {
+      return "";
+    }
+    return getValue(column, security, superclass);
   }
 
   private Map<SecurityAttribute, SecurityValueProvider> getMappingsForType(final Class<?> type) {
     final Map<SecurityAttribute, SecurityValueProvider> providerMap = _mappings.get(type);
     if (providerMap != null) {
       return providerMap;
-    } else {
-      final Class<?> superclass = type.getSuperclass();
-      if (superclass == null) {
-        return null;
-      } else {
-        return getMappingsForType(superclass);
-      }
     }
+    final Class<?> superclass = type.getSuperclass();
+    if (superclass == null) {
+      return null;
+    }
+    return getMappingsForType(superclass);
   }
 
   /**

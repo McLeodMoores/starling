@@ -31,8 +31,9 @@ import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
 
 /**
- * Function computes {@link ValueRequirementNames#POSITION_WEIGHTED_VEGA}, taking as input {@link ValueRequirementNames#POSITION_VEGA},
- * for interest rate future options in the Black world.
+ * Function computes {@link ValueRequirementNames#POSITION_WEIGHTED_VEGA}, taking as input {@link ValueRequirementNames#POSITION_VEGA}, for interest rate future
+ * options in the Black world.
+ *
  * @deprecated Use {@link BlackDiscountingWeightedVegaIRFutureOptionFunction}
  */
 @Deprecated
@@ -43,7 +44,7 @@ public class InterestRateFutureOptionBlackPositionWeightedVegaFunction extends I
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackPositionWeightedVegaFunction.class);
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#POSITION_WEIGHTED_VEGA}
+   * Sets the value requirement name to {@link ValueRequirementNames#POSITION_WEIGHTED_VEGA}.
    */
   public InterestRateFutureOptionBlackPositionWeightedVegaFunction() {
     super(ValueRequirementNames.POSITION_WEIGHTED_VEGA, true);
@@ -57,14 +58,16 @@ public class InterestRateFutureOptionBlackPositionWeightedVegaFunction extends I
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
-    final ValueRequirement vegaReq = new ValueRequirement(ValueRequirementNames.POSITION_VEGA, target.toSpecification(), desiredValue.getConstraints().withoutAny(
-        ValuePropertyNames.FUNCTION));
+    final ValueRequirement vegaReq = new ValueRequirement(ValueRequirementNames.POSITION_VEGA, target.toSpecification(),
+        desiredValue.getConstraints().withoutAny(
+            ValuePropertyNames.FUNCTION));
     final Set<ValueRequirement> requirements = Sets.newHashSet(vegaReq);
     return requirements;
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
 
     // 1. Get Vega
     Double vega = null;
@@ -95,7 +98,8 @@ public class InterestRateFutureOptionBlackPositionWeightedVegaFunction extends I
 
     // 3. Create specification and return
     final ValueRequirement desiredValue = desiredValues.iterator().next();
-    final ValueSpecification valueSpecification = new ValueSpecification(ValueRequirementNames.POSITION_WEIGHTED_VEGA, target.toSpecification(), desiredValue.getConstraints());
+    final ValueSpecification valueSpecification = new ValueSpecification(ValueRequirementNames.POSITION_WEIGHTED_VEGA, target.toSpecification(),
+        desiredValue.getConstraints());
     final ComputedValue result = new ComputedValue(valueSpecification, weightedVega);
     return Sets.newHashSet(result);
   }

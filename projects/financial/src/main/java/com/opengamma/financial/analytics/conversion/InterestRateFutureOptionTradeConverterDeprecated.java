@@ -20,9 +20,9 @@ import com.opengamma.financial.security.option.IRFutureOptionSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Converts interest rate future option trades into the form used by the analytics library
- * @deprecated Use {@link InterestRateFutureOptionTradeConverter}. {@link ConventionBundleSource} should not be used,
- * as the conventions are not typed.
+ * Converts interest rate future option trades into the form used by the analytics library.
+ *
+ * @deprecated Use {@link InterestRateFutureOptionTradeConverter}. {@link ConventionBundleSource} should not be used, as the conventions are not typed.
  */
 @Deprecated
 public class InterestRateFutureOptionTradeConverterDeprecated {
@@ -30,7 +30,8 @@ public class InterestRateFutureOptionTradeConverterDeprecated {
   private final InterestRateFutureOptionSecurityConverterDeprecated _securityConverter;
 
   /**
-   * @param securityConverter The interest rate future option security, not null
+   * @param securityConverter
+   *          The interest rate future option security, not null
    */
   public InterestRateFutureOptionTradeConverterDeprecated(final InterestRateFutureOptionSecurityConverterDeprecated securityConverter) {
     ArgumentChecker.notNull(securityConverter, "security converter");
@@ -38,7 +39,8 @@ public class InterestRateFutureOptionTradeConverterDeprecated {
   }
 
   /**
-   * @param trade An interest rate future option trade, not null
+   * @param trade
+   *          An interest rate future option trade, not null
    * @return The instrument definition
    */
   public InstrumentDefinition<?> convert(final Trade trade) {
@@ -47,10 +49,11 @@ public class InterestRateFutureOptionTradeConverterDeprecated {
     final InstrumentDefinition<?> securityDefinition = ((IRFutureOptionSecurity) trade.getSecurity()).accept(_securityConverter);
     final int quantity = trade.getQuantity().intValue();
     final LocalTime tradeTime = trade.getTradeTime() == null ? LocalTime.of(0, 0) : trade.getTradeTime().toLocalTime();
-    final ZonedDateTime tradeDate = trade.getTradeDate().atTime(tradeTime).atZone(ZoneOffset.UTC); //TODO get the real time zone
+    final ZonedDateTime tradeDate = trade.getTradeDate().atTime(tradeTime).atZone(ZoneOffset.UTC); // TODO get the real time zone
 
     final Double tradePrice = trade.getPremium();
-    ArgumentChecker.notNull(tradePrice, "IRFutureOption trade must have a premium set. The interpretation of premium is the market price, without unit, i.e. not %");
+    ArgumentChecker.notNull(tradePrice,
+        "IRFutureOption trade must have a premium set. The interpretation of premium is the market price, without unit, i.e. not %");
     // TODO: The premium is not the right place to store the trade price...
 
     if (securityDefinition instanceof InterestRateFutureOptionMarginSecurityDefinition) {

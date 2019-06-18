@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.surface;
-
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,8 +36,10 @@ import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.ObjectsPair;
 import com.opengamma.util.tuple.Pair;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
- * 
+ *
  */
 public class SwaptionATMVolatilitySurfaceDataFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionATMVolatilitySurfaceDataFunction.class);
@@ -52,7 +52,8 @@ public class SwaptionATMVolatilitySurfaceDataFunction extends AbstractFunction.N
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String surfaceName = desiredValue.getConstraint(ValuePropertyNames.SURFACE);
     String surfaceQuoteType = null;
@@ -74,8 +75,10 @@ public class SwaptionATMVolatilitySurfaceDataFunction extends AbstractFunction.N
     }
     final ValueProperties surfaceProperties = ValueProperties.builder().with(ValuePropertyNames.SURFACE, surfaceName)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.SWAPTION_ATM)
-        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, surfaceQuoteType).with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, surfaceQuoteUnits).get();
-    final Object volatilityDataObject = inputs.getValue(new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_DATA, target.toSpecification(), surfaceProperties));
+        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, surfaceQuoteType)
+        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, surfaceQuoteUnits).get();
+    final Object volatilityDataObject = inputs
+        .getValue(new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_DATA, target.toSpecification(), surfaceProperties));
     if (volatilityDataObject == null) {
       throw new OpenGammaRuntimeException("Could not get volatility surface data");
     }
@@ -107,7 +110,8 @@ public class SwaptionATMVolatilitySurfaceDataFunction extends AbstractFunction.N
     }
     final String surfaceName = surfaceNames.iterator().next();
     final String fullSpecificationName = surfaceName + "_" + target.getUniqueId().getValue();
-    final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.SWAPTION_ATM);
+    final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName,
+        InstrumentTypeProperties.SWAPTION_ATM);
     if (specification == null) {
       LOGGER.error("Could not get volatility surface specification named " + fullSpecificationName);
       return null;
@@ -115,11 +119,13 @@ public class SwaptionATMVolatilitySurfaceDataFunction extends AbstractFunction.N
     final String surfaceQuoteType = specification.getSurfaceQuoteType();
     final String surfaceQuoteUnits = specification.getQuoteUnits();
     if (!surfaceQuoteType.equals(SurfaceAndCubeQuoteType.EXPIRY_MATURITY_ATM)) {
-      LOGGER.error("Cannot use this function for surfaces with quote types other than {}, asked for {}", SurfaceAndCubeQuoteType.EXPIRY_MATURITY_ATM, surfaceQuoteType);
+      LOGGER.error("Cannot use this function for surfaces with quote types other than {}, asked for {}", SurfaceAndCubeQuoteType.EXPIRY_MATURITY_ATM,
+          surfaceQuoteType);
       return null;
     }
     if (!surfaceQuoteUnits.equals(SurfaceAndCubePropertyNames.VOLATILITY_QUOTE)) {
-      LOGGER.error("Cannot use this function for surfaces with quote types other than {}, asked for {}", SurfaceAndCubePropertyNames.VOLATILITY_QUOTE, surfaceQuoteUnits);
+      LOGGER.error("Cannot use this function for surfaces with quote types other than {}, asked for {}", SurfaceAndCubePropertyNames.VOLATILITY_QUOTE,
+          surfaceQuoteUnits);
       return null;
     }
     final ValueProperties surfaceProperties = ValueProperties.builder().with(ValuePropertyNames.SURFACE, surfaceName)
@@ -130,7 +136,7 @@ public class SwaptionATMVolatilitySurfaceDataFunction extends AbstractFunction.N
   }
 
   private static VolatilitySurfaceData<Double, Double> getSurface(final VolatilitySurfaceData<Tenor, Tenor> volatilities) {
-    final Map<Pair<Double, Double>, Double> volatilityValues = new HashMap<Pair<Double, Double>, Double>();
+    final Map<Pair<Double, Double>, Double> volatilityValues = new HashMap<>();
     final DoubleArrayList xList = new DoubleArrayList();
     final DoubleArrayList yList = new DoubleArrayList();
     for (final Tenor x : volatilities.getUniqueXValues()) {
@@ -146,11 +152,12 @@ public class SwaptionATMVolatilitySurfaceDataFunction extends AbstractFunction.N
         }
       }
     }
-    return new VolatilitySurfaceData<Double, Double>(volatilities.getDefinitionName(), volatilities.getSpecificationName(), volatilities.getTarget(), xList.toArray(new Double[0]),
+    return new VolatilitySurfaceData<>(volatilities.getDefinitionName(), volatilities.getSpecificationName(), volatilities.getTarget(),
+        xList.toArray(new Double[0]),
         yList.toArray(new Double[0]), volatilityValues);
   }
 
-  //TODO not the best way to do this
+  // TODO not the best way to do this
   private static double getTime(final Tenor tenor) {
     final Period period = tenor.getPeriod();
     if (period.getYears() != 0) {

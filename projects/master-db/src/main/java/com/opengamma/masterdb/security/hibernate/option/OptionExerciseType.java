@@ -18,13 +18,13 @@ import com.opengamma.financial.security.option.ExerciseTypeVisitor;
  */
 public enum OptionExerciseType {
 
-  /** American */
+  /** American. */
   AMERICAN,
-  /** Asian */
+  /** Asian. */
   ASIAN,
-  /** Bermudan */
+  /** Bermudan. */
   BERMUDAN,
-  /** European */
+  /** European. */
   EUROPEAN;
 
   public static OptionExerciseType identify(final ExerciseType exerciseType) {
@@ -55,13 +55,13 @@ public enum OptionExerciseType {
 
   public <T> T accept(final ExerciseTypeVisitor<T> visitor) {
     switch (this) {
-      case AMERICAN :
+      case AMERICAN:
         return visitor.visitAmericanExerciseType(null);
-      case ASIAN :
+      case ASIAN:
         return visitor.visitAsianExerciseType(null);
-      case BERMUDAN :
+      case BERMUDAN:
         return visitor.visitBermudanExerciseType(null);
-      case EUROPEAN :
+      case EUROPEAN:
         return visitor.visitEuropeanExerciseType(null);
       default:
         throw new OpenGammaRuntimeException("unexpected enum value " + this);

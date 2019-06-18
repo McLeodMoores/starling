@@ -27,6 +27,7 @@ public class MockUriBuilder extends UriBuilder {
   private static final Pattern PATH_PATTERN = Pattern.compile("\\{\\w+\\}");
 
   private String _pathFormat = "";
+  private final StringBuilder _query = new StringBuilder();
 
   @Override
   public UriBuilder clone() {
@@ -75,13 +76,10 @@ public class MockUriBuilder extends UriBuilder {
     return this;
   }
 
-  @SuppressWarnings("rawtypes")
   @Override
   public UriBuilder path(final Class resource) throws IllegalArgumentException {
     ArgumentChecker.notNull(resource, "class");
-    @SuppressWarnings("unchecked")
-    final
-    Annotation annotation = resource.getAnnotation(Path.class);
+    final Annotation annotation = resource.getAnnotation(Path.class);
     if (annotation == null) {
       throw new IllegalArgumentException();
     }
@@ -114,7 +112,6 @@ public class MockUriBuilder extends UriBuilder {
     }
   }
 
-  @SuppressWarnings("rawtypes")
   @Override
   public UriBuilder path(final Class resource, final String methodName) throws IllegalArgumentException {
     ArgumentChecker.notNull(resource, "class");
@@ -171,6 +168,17 @@ public class MockUriBuilder extends UriBuilder {
 
   @Override
   public UriBuilder queryParam(final String name, final Object... values) throws IllegalArgumentException {
+    if (values == null || values.length == 0) {
+      return this;
+    }
+    for (final Object value : values) {
+      if (value != null) {
+        _query.append('&');
+        _query.append(name);
+        _query.append('=');
+        _query.append(value.toString());
+      }
+    }
     return this;
   }
 
@@ -197,8 +205,11 @@ public class MockUriBuilder extends UriBuilder {
   @Override
   public URI build(final Object... values) throws IllegalArgumentException, UriBuilderException {
     String url = null;
-    try {
-      url = new Formatter().format(_pathFormat, values).toString();
+    try (Formatter formatter = new Formatter()) {
+      url = formatter.format(_pathFormat, values).toString();
+      if (_query.length() > 0) {
+        url += "?" + _query.toString();
+      }
     } catch (final Exception ex) {
       throw new UriBuilderException("Problem building url from format[" + _pathFormat + "] and values[" + values + "]", ex);
     }

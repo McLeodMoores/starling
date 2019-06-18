@@ -25,24 +25,33 @@ import com.opengamma.util.time.LocalDateRange;
 @Test(groups = TestGroup.UNIT)
 public class NoneFoundHistoricalTimeSeriesProviderTest {
 
+  /**
+   * Tests getting a single time series.
+   */
   @Test
-  public void test_get_single() {
-    NoneFoundHistoricalTimeSeriesProvider test = new NoneFoundHistoricalTimeSeriesProvider();
+  public void testGetSingle() {
+    final NoneFoundHistoricalTimeSeriesProvider test = new NoneFoundHistoricalTimeSeriesProvider();
     assertEquals(null, test.getHistoricalTimeSeries(ExternalIdBundle.of("A", "B"), "FOO", "BAR", "BAZ", LocalDateRange.ALL));
   }
 
+  /**
+   * Tests getting multiple time series.
+   */
   @Test
-  public void test_get_bulk() {
-    NoneFoundHistoricalTimeSeriesProvider test = new NoneFoundHistoricalTimeSeriesProvider();
-    HashMap<ExternalIdBundle, LocalDateDoubleTimeSeries> expected = new HashMap<ExternalIdBundle, LocalDateDoubleTimeSeries>();
+  public void testGetBulk() {
+    final NoneFoundHistoricalTimeSeriesProvider test = new NoneFoundHistoricalTimeSeriesProvider();
+    final HashMap<ExternalIdBundle, LocalDateDoubleTimeSeries> expected = new HashMap<>();
     assertEquals(expected, test.getHistoricalTimeSeries(ImmutableSet.of(ExternalIdBundle.of("A", "B")), "FOO", "BAR", "BAZ", LocalDateRange.ALL));
   }
 
+  /**
+   * Tests getting a single time series.
+   */
   @Test
-  public void test_get_request() {
-    NoneFoundHistoricalTimeSeriesProvider test = new NoneFoundHistoricalTimeSeriesProvider();
-    HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGet(ExternalIdBundle.of("A", "B"), "FOO", "BAR", "BAZ", LocalDateRange.ALL);
-    HistoricalTimeSeriesProviderGetResult expected = new HistoricalTimeSeriesProviderGetResult();
+  public void testGetRequest() {
+    final NoneFoundHistoricalTimeSeriesProvider test = new NoneFoundHistoricalTimeSeriesProvider();
+    final HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGet(ExternalIdBundle.of("A", "B"), "FOO", "BAR", "BAZ", LocalDateRange.ALL);
+    final HistoricalTimeSeriesProviderGetResult expected = new HistoricalTimeSeriesProviderGetResult();
     assertEquals(expected, test.getHistoricalTimeSeries(request));
   }
 

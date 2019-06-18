@@ -12,8 +12,8 @@ import java.util.List;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Shifts an {@link InterpolatedDoublesSurface}. If the <i>(x, y)</i> value(s) of the shift(s) are not in the nodal points of the
- * original surface, they are added (with shift) to the nodal points of the new surface.
+ * Shifts an {@link InterpolatedDoublesSurface}. If the <i>(x, y)</i> value(s) of the shift(s) are not in the nodal points of the original surface, they are
+ * added (with shift) to the nodal points of the new surface.
  */
 public class InterpolatedSurfaceAdditiveShiftFunction implements SurfaceShiftFunction<InterpolatedDoublesSurface> {
 
@@ -55,7 +55,8 @@ public class InterpolatedSurfaceAdditiveShiftFunction implements SurfaceShiftFun
    * {@inheritDoc}
    */
   @Override
-  public InterpolatedDoublesSurface evaluate(final InterpolatedDoublesSurface surface, final double x, final double y, final double shift, final String newName) {
+  public InterpolatedDoublesSurface evaluate(final InterpolatedDoublesSurface surface, final double x, final double y, final double shift,
+      final String newName) {
     ArgumentChecker.notNull(surface, "surface");
     final double[] xData = surface.getXDataAsPrimitive();
     final double[] yData = surface.getYDataAsPrimitive();
@@ -97,16 +98,19 @@ public class InterpolatedSurfaceAdditiveShiftFunction implements SurfaceShiftFun
    * {@inheritDoc}
    */
   @Override
-  public InterpolatedDoublesSurface evaluate(final InterpolatedDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] shift, final String newName) {
+  public InterpolatedDoublesSurface evaluate(final InterpolatedDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] shift,
+      final String newName) {
     ArgumentChecker.notNull(surface, "surface");
     ArgumentChecker.notNull(xShift, "x shift");
     ArgumentChecker.notNull(yShift, "y shift");
     ArgumentChecker.notNull(shift, "shifts");
     final int n = xShift.length;
     if (n == 0) {
-      return InterpolatedDoublesSurface.from(surface.getXDataAsPrimitive(), surface.getYDataAsPrimitive(), surface.getZDataAsPrimitive(), surface.getInterpolator(), newName);
+      return InterpolatedDoublesSurface.from(surface.getXDataAsPrimitive(), surface.getYDataAsPrimitive(), surface.getZDataAsPrimitive(),
+          surface.getInterpolator(), newName);
     }
-    ArgumentChecker.isTrue(n == yShift.length && n == shift.length, "number of shifts {} must be equal to number of x shift positions {} and y shift positions {}", shift.length, n, yShift.length);
+    ArgumentChecker.isTrue(n == yShift.length && n == shift.length,
+        "number of shifts {} must be equal to number of x shift positions {} and y shift positions {}", shift.length, n, yShift.length);
     final Double[] x = surface.getXData();
     final Double[] y = surface.getYData();
     final Double[] z = surface.getZData();

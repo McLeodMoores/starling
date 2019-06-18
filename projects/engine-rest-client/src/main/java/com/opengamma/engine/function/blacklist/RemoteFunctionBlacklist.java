@@ -143,9 +143,8 @@ public class RemoteFunctionBlacklist extends AbstractFunctionBlacklist {
         rules.add(fdc.fieldValueToObject(FunctionBlacklistRule.class, rule));
       }
       return rules;
-    } else {
-      return Collections.emptyList();
     }
+    return Collections.emptyList();
   }
 
   public RemoteFunctionBlacklist(final FudgeDeserializer fdc, final FudgeMsg info, final RemoteFunctionBlacklistProvider provider) {

@@ -71,13 +71,19 @@ public class BloombergRefDataCollector implements Lifecycle {
   /**
    * Create an instance.
    *
-   * @param fudgeContext  the fudgeContext, not null
-   * @param watchListFile  the watch list file, not null
-   * @param refDataProvider  the reference data provider, not null
-   * @param fieldsFile  the file containing the fields
-   * @param outputFile  the output file, not null
+   * @param fudgeContext
+   *          the fudgeContext, not null
+   * @param watchListFile
+   *          the watch list file, not null
+   * @param refDataProvider
+   *          the reference data provider, not null
+   * @param fieldsFile
+   *          the file containing the fields
+   * @param outputFile
+   *          the output file, not null
    */
-  public BloombergRefDataCollector(final FudgeContext fudgeContext, final File watchListFile, final ReferenceDataProvider refDataProvider, final File fieldsFile, final File outputFile) {
+  public BloombergRefDataCollector(final FudgeContext fudgeContext, final File watchListFile, final ReferenceDataProvider refDataProvider,
+      final File fieldsFile, final File outputFile) {
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     ArgumentChecker.notNull(watchListFile, "watch list file");
     ArgumentChecker.notNull(refDataProvider, "reference data provider");
@@ -92,16 +98,20 @@ public class BloombergRefDataCollector implements Lifecycle {
   /**
    * Create an instance.
    *
-   * @param watchListFile  the watch list file, not null
-   * @param refDataProvider  the reference data provider, not null
-   * @param fieldsFile  the file containing the fields
-   * @param outputFile  the output file, not null
+   * @param watchListFile
+   *          the watch list file, not null
+   * @param refDataProvider
+   *          the reference data provider, not null
+   * @param fieldsFile
+   *          the file containing the fields
+   * @param outputFile
+   *          the output file, not null
    */
   public BloombergRefDataCollector(final File watchListFile, final ReferenceDataProvider refDataProvider, final File fieldsFile, final File outputFile) {
     this(FUDGE_CONTEXT, watchListFile, refDataProvider, fieldsFile, outputFile);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public synchronized void start() {
     LOGGER.info("starting bloombergRefDataCollector");
@@ -156,16 +166,17 @@ public class BloombergRefDataCollector implements Lifecycle {
 
   @Override
   public synchronized boolean isRunning() {
-    return _started.get() == true;
+    return _started.get();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Main entry point from command line
+   * Main entry point from command line.
    *
-   * @param args the args
+   * @param args
+   *          the args
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     final BloombergCliOptions bbgOptions = createOptions();
     processCommandLineOptions(args, bbgOptions);
   }
@@ -190,24 +201,26 @@ public class BloombergRefDataCollector implements Lifecycle {
       port = BloombergConstants.DEFAULT_PORT;
     }
 
-    LOGGER.info("loading ref data with host: {} port: {} fields: {} identifies: {} outputfile {}", new Object[]{host, port, dataFieldFile, identifiersFile, outputFile});
+    LOGGER.info("loading ref data with host: {} port: {} fields: {} identifies: {} outputfile {}",
+        new Object[] { host, port, dataFieldFile, identifiersFile, outputFile });
 
     final BloombergConnectorFactoryBean factory = new BloombergConnectorFactoryBean("BloombergRefDataCollector", host, Integer.valueOf(port));
     final BloombergConnector bloombergConnector = factory.getObjectCreating();
     final BloombergReferenceDataProvider refDataProvider = new BloombergReferenceDataProvider(bloombergConnector);
     refDataProvider.start();
 
-    final BloombergRefDataCollector refDataCollector = new BloombergRefDataCollector(new File(identifiersFile), refDataProvider, new File(dataFieldFile), new File(outputFile));
+    final BloombergRefDataCollector refDataCollector = new BloombergRefDataCollector(new File(identifiersFile), refDataProvider, new File(dataFieldFile),
+        new File(outputFile));
     refDataCollector.start();
   }
 
   private static BloombergCliOptions createOptions() {
     final Builder builder = new BloombergCliOptions.Builder()
-      .withDataFieldsFile(true)
-      .withIdentifiers(true)
-      .withOutput(true)
-      .withHost(true)
-      .withPort(false);
+        .withDataFieldsFile(true)
+        .withIdentifiers(true)
+        .withOutput(true)
+        .withHost(true)
+        .withPort(false);
     return builder.build();
   }
 

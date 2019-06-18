@@ -60,10 +60,10 @@ public class PaymentService {
   private static final String CALC_CONFIG_NAME = "Default";
 
   private static final String[] CASH_FLOW_VALUE_NAMES = new String[] {
-    ValueRequirementNames.FIXED_PAY_CASH_FLOWS,
-    ValueRequirementNames.FLOATING_PAY_CASH_FLOWS,
-    ValueRequirementNames.FIXED_RECEIVE_CASH_FLOWS,
-    ValueRequirementNames.FLOATING_RECEIVE_CASH_FLOWS };
+                ValueRequirementNames.FIXED_PAY_CASH_FLOWS,
+                ValueRequirementNames.FLOATING_PAY_CASH_FLOWS,
+                ValueRequirementNames.FIXED_RECEIVE_CASH_FLOWS,
+                ValueRequirementNames.FLOATING_RECEIVE_CASH_FLOWS };
 
   private static final Map<String, PaymentType> PAYMENT_TYPE_MAP = ImmutableMap.of(
       ValueRequirementNames.FIXED_PAY_CASH_FLOWS, PaymentType.FIXED,
@@ -90,7 +90,7 @@ public class PaymentService {
     _securitySource = securitySource;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public ViewProcessor getViewProcessor() {
     return _viewProcessor;
   }
@@ -107,7 +107,7 @@ public class PaymentService {
     return _securitySource;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public PortfolioPaymentDiary getPortfolioPaymentDiary(final UniqueId portfolioId) {
     Portfolio portfolio = getPositionSource().getPortfolio(portfolioId, VersionCorrection.LATEST);
     portfolio = PortfolioCompiler.resolvePortfolio(portfolio, Executors.newSingleThreadExecutor(), getSecuritySource());
@@ -164,7 +164,8 @@ public class PaymentService {
     return paymentDiary;
   }
 
-  private void addFixedPayments(final FixedPaymentMatrix paymentMatrix, final PaymentDirection direction, final Position position, final PortfolioPaymentDiary paymentDiary) {
+  private void addFixedPayments(final FixedPaymentMatrix paymentMatrix, final PaymentDirection direction, final Position position,
+      final PortfolioPaymentDiary paymentDiary) {
     for (final Map.Entry<LocalDate, MultipleCurrencyAmount> paymentEntry : paymentMatrix.getValues().entrySet()) {
       final LocalDate date = paymentEntry.getKey();
       final MultipleCurrencyAmount multipleCurrencyAmount = paymentEntry.getValue();
@@ -174,7 +175,8 @@ public class PaymentService {
     }
   }
 
-  private void addFloatingPayments(final FloatingPaymentMatrix paymentMatrix, final PaymentDirection direction, final Position position, final PortfolioPaymentDiary paymentDiary) {
+  private void addFloatingPayments(final FloatingPaymentMatrix paymentMatrix, final PaymentDirection direction, final Position position,
+      final PortfolioPaymentDiary paymentDiary) {
     for (final Map.Entry<LocalDate, List<Pair<CurrencyAmount, String>>> paymentEntry : paymentMatrix.getValues().entrySet()) {
       final LocalDate date = paymentEntry.getKey();
       for (final Pair<CurrencyAmount, String> payment : paymentEntry.getValue()) {

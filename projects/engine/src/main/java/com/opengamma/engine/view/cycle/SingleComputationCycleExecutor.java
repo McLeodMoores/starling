@@ -66,7 +66,7 @@ import com.opengamma.util.tuple.Pair;
 
     private final String _calculationConfiguration;
 
-    public GraphExecutionComplete(final String calculationConfiguration) {
+    GraphExecutionComplete(final String calculationConfiguration) {
       _calculationConfiguration = calculationConfiguration;
     }
 
@@ -92,7 +92,7 @@ import com.opengamma.util.tuple.Pair;
     private final CalculationJob _job;
     private final CalculationJobResult _jobResult;
 
-    public CalculationJobComplete(final CalculationJob job, final CalculationJobResult jobResult) {
+    CalculationJobComplete(final CalculationJob job, final CalculationJobResult jobResult) {
       _job = job;
       _jobResult = jobResult;
     }
@@ -113,7 +113,7 @@ import com.opengamma.util.tuple.Pair;
     private final ViewComputationCache _computationCache;
     private final Set<ValueSpecification> _terminalOutputs = new HashSet<>();
 
-    public ExecutingCalculationConfiguration(final SingleComputationCycle cycle, final DependencyGraph graph, final Cancelable handle) {
+    ExecutingCalculationConfiguration(final SingleComputationCycle cycle, final DependencyGraph graph, final Cancelable handle) {
       _handle = handle;
       _graph = graph;
       _resultCache = cycle.getJobExecutionResultCache(graph.getCalculationConfigurationName());
@@ -145,8 +145,8 @@ import com.opengamma.util.tuple.Pair;
         final ValueSpecification valueSpec = value.getFirst();
         final Object calculatedValue = value.getSecond();
         if (calculatedValue != null) {
-          final ComputedValueResult computedValueResult =
-              SingleComputationCycle.createComputedValueResult(valueSpec, calculatedValue, _resultCache.get(valueSpec));
+          final ComputedValueResult computedValueResult = SingleComputationCycle.createComputedValueResult(valueSpec, calculatedValue,
+              _resultCache.get(valueSpec));
           fragmentResultModel.addValue(calculationConfiguration, computedValueResult);
           fullResultModel.addValue(calculationConfiguration, computedValueResult);
         }
@@ -160,7 +160,7 @@ import com.opengamma.util.tuple.Pair;
   private final SingleComputationCycle _cycle;
   private boolean _issueFragmentResults;
 
-  public SingleComputationCycleExecutor(final SingleComputationCycle cycle) {
+  SingleComputationCycleExecutor(final SingleComputationCycle cycle) {
     _cycle = cycle;
   }
 
@@ -294,8 +294,8 @@ import com.opengamma.util.tuple.Pair;
         } else {
           functionName = jobItem.getFunctionUniqueIdentifier();
         }
-        aggregatedExecutionLog =
-            DefaultAggregatedExecutionLog.fullLogMode(functionName, jobItem.getComputationTargetSpecification(), logCopy != null ? logCopy : log, inputLogs);
+        aggregatedExecutionLog = DefaultAggregatedExecutionLog.fullLogMode(functionName, jobItem.getComputationTargetSpecification(),
+            logCopy != null ? logCopy : log, inputLogs);
       } else {
         EnumSet<LogLevel> logs = jobResultItem.getExecutionLog().getLogLevels();
         boolean copied = false;
@@ -328,11 +328,13 @@ import com.opengamma.util.tuple.Pair;
   }
 
   /**
-   * Receives a job result fragment. These will be streamed in by the execution framework. Only one notification per job will be received
-   * (for example the execution framework might have repeated/duplicated jobs to handle node failures).
+   * Receives a job result fragment. These will be streamed in by the execution framework. Only one notification per job will be received (for example the
+   * execution framework might have repeated/duplicated jobs to handle node failures).
    *
-   * @param job the job that was executed, not null
-   * @param jobResult the job result, not null
+   * @param job
+   *          the job that was executed, not null
+   * @param jobResult
+   *          the job result, not null
    */
   public void jobCompleted(final CalculationJob job, final CalculationJobResult jobResult) {
     _events.add(new CalculationJobComplete(job, jobResult));

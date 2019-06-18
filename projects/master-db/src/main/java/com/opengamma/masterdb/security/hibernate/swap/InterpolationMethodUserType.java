@@ -10,7 +10,7 @@ import com.opengamma.financial.security.swap.InterpolationMethod;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the InterpolationMethod enum
+ * Custom Hibernate usertype for the InterpolationMethod enum.
  */
 public class InterpolationMethodUserType extends EnumUserType<InterpolationMethod> {
 

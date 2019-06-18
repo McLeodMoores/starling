@@ -25,7 +25,6 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.Instant;
 
-import com.opengamma.component.rest.RemoteComponentServer;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.VersionUtils;
 
@@ -42,7 +41,7 @@ public class ComponentServer implements Bean {
   /**
    * The URI that the server is published at.
    * <p>
-   * This is set by {@link RemoteComponentServer}.
+   * This is set by {@link com.opengamma.component.rest.RemoteComponentServer}.
    */
   @PropertyDefinition(validate = "notNull")
   private URI _uri;
@@ -197,7 +196,7 @@ public class ComponentServer implements Bean {
   /**
    * Gets the URI that the server is published at.
    * <p>
-   * This is set by {@link RemoteComponentServer}.
+   * This is set by {@link com.opengamma.component.rest.RemoteComponentServer}.
    * @return the value of the property, not null
    */
   public URI getUri() {
@@ -207,7 +206,7 @@ public class ComponentServer implements Bean {
   /**
    * Sets the URI that the server is published at.
    * <p>
-   * This is set by {@link RemoteComponentServer}.
+   * This is set by {@link com.opengamma.component.rest.RemoteComponentServer}.
    * @param uri  the new value of the property, not null
    */
   public void setUri(URI uri) {
@@ -218,7 +217,7 @@ public class ComponentServer implements Bean {
   /**
    * Gets the the {@code uri} property.
    * <p>
-   * This is set by {@link RemoteComponentServer}.
+   * This is set by {@link com.opengamma.component.rest.RemoteComponentServer}.
    * @return the property, not null
    */
   public final Property<URI> uri() {

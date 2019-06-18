@@ -42,8 +42,8 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
   /**
    * Sets the minimum number of items that the planner will attempt to put into each job.
    *
-   * @param minimumJobItems the number of items
-   * @see MultipleNodeExecutionPlanner#setMinimumJobItems
+   * @param minimumJobItems
+   *          the number of items. See {@link MultipleNodeExecutionPlanner#setMininumJobItems(int)}
    */
   public void setMinimumJobItems(final int minimumJobItems) {
     _basePlanner.setMininumJobItems(minimumJobItems);
@@ -62,8 +62,8 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
   /**
    * Sets the maximum number of items that the planner will attempt to put into each job.
    *
-   * @param maximumJobItems the number of items
-   * @see MultipleNodeExecutionPlanner#setMaximumJobItems
+   * @param maximumJobItems
+   *          the number of items. See {@link MultipleNodeExecutionPlanner#setMaximimJobItems(int)}
    */
   public void setMaximumJobItems(final int maximumJobItems) {
     _basePlanner.setMaximimJobItems(maximumJobItems);
@@ -72,8 +72,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
   /**
    * Returns the maximum number of items that the planner will attempt to put into each job.
    *
-   * @return the number of items
-   * @see MultipleNodeExecutionPlanner#getMaximumJobItems
+   * @return the number of items. See {@link MultipleNodeExecutionPlanner#getMaximumJobItems()}
    */
   public int getMaximumJobItems() {
     return _basePlanner.getMaximumJobItems();
@@ -82,8 +81,8 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
   /**
    * Sets the minimum estimated cost of jobs that the planner will attempt to produce.
    *
-   * @param minimumJobCost the estimated cost
-   * @see MultipleNodeExecutionPlanner#setMinimumJobCost
+   * @param minimumJobCost
+   *          the estimated cost. See {@link MultipleNodeExecutionPlanner#setMinimumJobCost(long)}.
    */
   public void setMinimumJobCost(final long minimumJobCost) {
     _basePlanner.setMinimumJobCost(minimumJobCost);
@@ -92,8 +91,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
   /**
    * Returns the minimum estimated cost of jobs that the planner will attempt to produce.
    *
-   * @return the estimated cost
-   * @see MultipleNodeExecutionPlanner#getMinimumJobCost
+   * @return the estimated cost. See {@link MultipleNodeExecutionPlanner#getMinimumJobCost()}.
    */
   public long getMinimumJobCost() {
     return _basePlanner.getMinimumJobCost();
@@ -102,8 +100,8 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
   /**
    * Sets the maximum estimated cost of jobs that the planner will attempt to produce.
    *
-   * @param maximumJobCost the estimated cost
-   * @see MultipleNodeExecutionPlanner#setMaximumJobCost
+   * @param maximumJobCost
+   *          the estimated cost. See {@link MultipleNodeExecutionPlanner#setMaximumJobCost(long)}
    */
   public void setMaximumJobCost(final long maximumJobCost) {
     _basePlanner.setMaximumJobCost(maximumJobCost);
@@ -112,8 +110,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
   /**
    * Returns the maximum estimated cost of jobs that the planner will attempt to produce.
    *
-   * @return the estimated cost
-   * @see MultipleNodeExecutionPlanner#getMaximumJobCost
+   * @return the estimated cost See {@link MultipleNodeExecutionPlanner#getMaximumJobCost()}
    */
   public long getMaximumJobCost() {
     return _basePlanner.getMaximumJobCost();

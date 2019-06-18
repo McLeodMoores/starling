@@ -48,9 +48,8 @@ import com.opengamma.util.ArgumentChecker;
       protected Object formatValue(final LocalDateLabelledMatrix1D value, final ValueSpecification valueSpec, final Object inlineKey) {
         if (inlineKey == null) {
           return ResultsFormatter.VALUE_UNAVAILABLE;
-        } else {
-          return formatInline(value, valueSpec, Format.HISTORY, inlineKey);
         }
+        return formatInline(value, valueSpec, Format.HISTORY, inlineKey);
       }
     });
   }
@@ -59,9 +58,8 @@ import com.opengamma.util.ArgumentChecker;
   public Object formatCell(final LocalDateLabelledMatrix1D value, final ValueSpecification valueSpec, final Object inlineKey) {
     if (inlineKey == null) {
       return "Vector (" + value.getKeys().length + ")";
-    } else {
-      return formatInline(value, valueSpec, Format.CELL, inlineKey);
     }
+    return formatInline(value, valueSpec, Format.CELL, inlineKey);
   }
 
   private Map<String, Object> formatExpanded(final LocalDateLabelledMatrix1D value, final ValueSpecification valueSpec) {
@@ -82,9 +80,9 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   private Object formatInline(final LocalDateLabelledMatrix1D matrix,
-                              final ValueSpecification valueSpec,
-                              final Format format,
-                              final Object inlineKey) {
+      final ValueSpecification valueSpec,
+      final Format format,
+      final Object inlineKey) {
     // if there are matrices of different lengths on different rows then the shorter ones will be missing values for
     // the last columns
     final LocalDate dateKey = (LocalDate) inlineKey;

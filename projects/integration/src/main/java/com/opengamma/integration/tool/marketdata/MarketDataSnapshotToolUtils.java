@@ -36,7 +36,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Utility methods for the MarketDataSnapshot Import/Export tools
+ * Utility methods for the MarketDataSnapshot Import/Export tools.
  */
 public class MarketDataSnapshotToolUtils {
   private static final String VERSION_FROM = "Version From";
@@ -101,20 +101,19 @@ public class MarketDataSnapshotToolUtils {
 
   private static void printVersionListQuery(final SnapshotUtils snapshotUtils, final String optionValue) {
     final DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder()
-      .appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
-      .appendLiteral('-')
-      .appendValue(MONTH_OF_YEAR, 2)
-      .appendLiteral('-')
-      .appendValue(DAY_OF_MONTH, 2)
-      .appendValue(HOUR_OF_DAY, 2)
-      .appendLiteral(':')
-      .appendValue(MINUTE_OF_HOUR, 2)
-      .optionalStart()
-      .appendLiteral(':')
-      .appendValue(SECOND_OF_MINUTE, 2)
-      .appendOffsetId()
-      .toFormatter();
-
+        .appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
+        .appendLiteral('-')
+        .appendValue(MONTH_OF_YEAR, 2)
+        .appendLiteral('-')
+        .appendValue(DAY_OF_MONTH, 2)
+        .appendValue(HOUR_OF_DAY, 2)
+        .appendLiteral(':')
+        .appendValue(MINUTE_OF_HOUR, 2)
+        .optionalStart()
+        .appendLiteral(':')
+        .appendValue(SECOND_OF_MINUTE, 2)
+        .appendOffsetId()
+        .toFormatter();
 
     final List<VersionInfo> snapshotVersions = snapshotUtils.snapshotVersionsByName(optionValue);
     System.out.println(OffsetDateTime.now().format(dateTimeFormatter));
@@ -126,7 +125,8 @@ public class MarketDataSnapshotToolUtils {
     for (final VersionInfo versionInfo : snapshotVersions) {
       final OffsetDateTime versionFrom = versionInfo.getVersionFrom() != null ? OffsetDateTime.ofInstant(versionInfo.getVersionFrom(), ZoneId.of(id)) : null;
       final OffsetDateTime versionTo = versionInfo.getVersionTo() != null ? OffsetDateTime.ofInstant(versionInfo.getVersionTo(), ZoneId.of(id)) : null;
-      final OffsetDateTime correctionFrom = versionInfo.getCorrectionFrom() != null ? OffsetDateTime.ofInstant(versionInfo.getCorrectionFrom(), ZoneId.of(id)) : null;
+      final OffsetDateTime correctionFrom = versionInfo.getCorrectionFrom() != null ? OffsetDateTime.ofInstant(versionInfo.getCorrectionFrom(), ZoneId.of(id))
+          : null;
       final OffsetDateTime correctionTo = versionInfo.getCorrectionTo() != null ? OffsetDateTime.ofInstant(versionInfo.getCorrectionTo(), ZoneId.of(id)) : null;
       if (versionFrom != null) {
         System.out.print(versionFrom.format(dateTimeFormatter));
@@ -186,7 +186,6 @@ public class MarketDataSnapshotToolUtils {
     System.out.print(repeat);
   }
 
-
   public static ValueSnapshot createValueSnapshot(final String market, final String override) {
     Object marketValue = null;
     Object overrideValue = null;
@@ -198,20 +197,20 @@ public class MarketDataSnapshotToolUtils {
       } else {
         try {
           marketValue = LocalDate.parse(market);
-        } catch (final IllegalArgumentException e)  {
+        } catch (final IllegalArgumentException e) {
           LOGGER.error("Market value {} should be a Double, LocalDate or empty.", market);
         }
       }
     }
 
-    //overrideValue can only be Double, LocalDate or empty
+    // overrideValue can only be Double, LocalDate or empty
     if (override != null && !override.isEmpty()) {
       if (NumberUtils.isNumber(override)) {
         overrideValue = NumberUtils.createDouble(override);
       } else {
         try {
           overrideValue = LocalDate.parse(override);
-        } catch (final IllegalArgumentException e)  {
+        } catch (final IllegalArgumentException e) {
           LOGGER.error("Override value {} should be a Double, LocalDate or empty.", override);
         }
       }
@@ -224,7 +223,7 @@ public class MarketDataSnapshotToolUtils {
     try {
       Tenor.parse(tenor);
       return true;
-    } catch (final IllegalArgumentException e)  {
+    } catch (final IllegalArgumentException e) {
       return false;
     }
   }
@@ -248,7 +247,7 @@ public class MarketDataSnapshotToolUtils {
       if (yValues.length > 1) {
         try {
           surfaceY = createYOrdinatePair(yValues);
-        } catch (final IllegalArgumentException e)  {
+        } catch (final IllegalArgumentException e) {
           LOGGER.error("Volatility surface Y ordinate {} should be a Double, Pair<Number, FXVolQuoteType> or empty.", xValue);
         }
       } else if (yValues.length == 1) {
@@ -294,7 +293,7 @@ public class MarketDataSnapshotToolUtils {
 
     String surfaceY;
     if (rawOrdinates.getSecond() instanceof Pair) {
-      surfaceY = ((Pair) rawOrdinates.getSecond()).getFirst() + "|" + ((Pair) rawOrdinates.getSecond()).getSecond();
+      surfaceY = ((Pair<?, ?>) rawOrdinates.getSecond()).getFirst() + "|" + ((Pair<?, ?>) rawOrdinates.getSecond()).getSecond();
     } else if (rawOrdinates.getSecond() instanceof Tenor) {
       surfaceY = ((Tenor) rawOrdinates.getSecond()).toFormattedString();
     } else {
@@ -303,6 +302,5 @@ public class MarketDataSnapshotToolUtils {
 
     return ObjectsPair.of(surfaceX, surfaceY);
   }
-
 
 }

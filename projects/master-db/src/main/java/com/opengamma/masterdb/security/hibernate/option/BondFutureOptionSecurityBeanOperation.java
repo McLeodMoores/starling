@@ -19,12 +19,12 @@ import com.opengamma.masterdb.security.hibernate.HibernateSecurityMasterDao;
 import com.opengamma.masterdb.security.hibernate.OperationContext;
 
 /**
- * BondOptionSecurityBeanOperation
+ * BondOptionSecurityBeanOperation.
  */
 public final class BondFutureOptionSecurityBeanOperation extends AbstractSecurityBeanOperation<BondFutureOptionSecurity, BondFutureOptionSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final BondFutureOptionSecurityBeanOperation INSTANCE = new BondFutureOptionSecurityBeanOperation();
 
@@ -33,7 +33,8 @@ public final class BondFutureOptionSecurityBeanOperation extends AbstractSecurit
   }
 
   @Override
-  public BondFutureOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final BondFutureOptionSecurity security) {
+  public BondFutureOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final BondFutureOptionSecurity security) {
     final BondFutureOptionSecurityBean bean = new BondFutureOptionSecurityBean();
     bean.setOptionExerciseType(OptionExerciseType.identify(security.getExerciseType()));
     bean.setOptionType(security.getOptionType());
@@ -53,14 +54,14 @@ public final class BondFutureOptionSecurityBeanOperation extends AbstractSecurit
     final ExerciseType exerciseType = bean.getOptionExerciseType().accept(new ExerciseTypeVisitorImpl());
 
     final BondFutureOptionSecurity sec = new BondFutureOptionSecurity(
-      bean.getTradingExchange().getName(),
-      bean.getSettlementExchange().getName(),
-      expiryBeanToExpiry(bean.getExpiry()),
-      exerciseType,
-      externalIdBeanToExternalId(bean.getUnderlying()),
-      bean.getPointValue(),
-      bean.isMargined(),
-      currencyBeanToCurrency(bean.getCurrency()), bean.getStrike(), bean.getOptionType());
+        bean.getTradingExchange().getName(),
+        bean.getSettlementExchange().getName(),
+        expiryBeanToExpiry(bean.getExpiry()),
+        exerciseType,
+        externalIdBeanToExternalId(bean.getUnderlying()),
+        bean.getPointValue(),
+        bean.isMargined(),
+        currencyBeanToCurrency(bean.getCurrency()), bean.getStrike(), bean.getOptionType());
     return sec;
   }
 

@@ -17,7 +17,7 @@ import org.fudgemsg.mapping.FudgeBuilderFor;
 import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
 
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.financial.analytics.ircurve.FixedIncomeStrip;
 import com.opengamma.financial.analytics.ircurve.YieldCurveDefinition;
 import com.opengamma.id.ExternalId;
@@ -39,8 +39,8 @@ public class YieldCurveDefinitionFudgeBuilder implements FudgeBuilder<YieldCurve
   private static final String STRIP_FIELD = "strip";
   private static final String UNIQUE_ID_FIELD = "uniqueId";
 
-  private static final String DEFAULT_LEFT_EXTRAPOLATOR_NAME = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
-  private static final String DEFAULT_RIGHT_EXTRAPOLATOR_NAME = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
+  private static final String DEFAULT_LEFT_EXTRAPOLATOR_NAME = LinearExtrapolator1dAdapter.NAME;
+  private static final String DEFAULT_RIGHT_EXTRAPOLATOR_NAME = LinearExtrapolator1dAdapter.NAME;
   private static final boolean DEFAULT_INTERPOLATE_YIELD_VALUE = true;
 
   @Override
@@ -72,7 +72,7 @@ public class YieldCurveDefinitionFudgeBuilder implements FudgeBuilder<YieldCurve
     final String name = message.getString(NAME_FIELD);
     final String interpolatorName = message.getString(INTERPOLATOR_NAME_FIELD);
     final List<FudgeField> allByOrdinal = message.getAllByName(STRIP_FIELD);
-    final SortedSet<FixedIncomeStrip> strips = new TreeSet<FixedIncomeStrip>();
+    final SortedSet<FixedIncomeStrip> strips = new TreeSet<>();
     for (final FudgeField field : allByOrdinal) {
       final FixedIncomeStrip strip = deserializer.fieldValueToObject(FixedIncomeStrip.class, field);
       strips.add(strip);

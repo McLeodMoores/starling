@@ -24,6 +24,9 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 
+/**
+ *
+ */
 @BeanDefinition
 public class ListMultimapMockBean implements ImmutableBean {
 

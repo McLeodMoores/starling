@@ -13,8 +13,6 @@ import com.opengamma.livedata.server.FieldHistoryStore;
 
 /**
  * Calculates a best estimate of the implied volatility of an option.
- *
- * @author pietari
  */
 public class ImpliedVolatilityCalculator implements NormalizationRule {
 

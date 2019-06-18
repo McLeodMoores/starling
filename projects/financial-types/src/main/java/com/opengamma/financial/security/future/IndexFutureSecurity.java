@@ -38,15 +38,57 @@ public class IndexFutureSecurity extends FutureSecurity {
   @PropertyDefinition
   private ExternalId _underlyingId;
 
-  IndexFutureSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  IndexFutureSecurity() {
     super();
   }
 
-  public IndexFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount, final String category) {
+  /**
+   * @param expiry
+   *          the future expiry, not null
+   * @param tradingExchange
+   *          the trading exchange name, not null
+   * @param settlementExchange
+   *          the settlement exchange name, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param category
+   *          the future category, not null
+   * @deprecated Use the constructor that takes the underlying identifier
+   */
+  @Deprecated
+  public IndexFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
   }
 
-  //-------------------------------------------------------------------------
+  /**
+   * @param expiry
+   *          the future expiry, not null
+   * @param tradingExchange
+   *          the trading exchange name, not null
+   * @param settlementExchange
+   *          the settlement exchange name, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param category
+   *          the future category, not null
+   * @param underlyingId
+   *          the identifier of the underlying
+   */
+  public IndexFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final String category, final ExternalId underlyingId) {
+    super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
+    setUnderlyingId(underlyingId);
+  }
+
+  // -------------------------------------------------------------------------
   @Override
   public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitIndexFutureSecurity(this);

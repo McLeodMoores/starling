@@ -27,7 +27,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.mongo.MongoConnector;
 
 /**
- * A cache of String -> reference data in Mongo.
+ * A cache of String -&gt; reference data in Mongo.
  */
 public class MongoDBReferenceDataCache {
 

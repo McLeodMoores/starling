@@ -78,6 +78,29 @@ public class WebPositionsResource extends AbstractWebPositionResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Produces an HTML GET request.
+   *
+   * @param pgIdx
+   *          the paging first-item index, can be null
+   * @param pgNum
+   *          the paging page, can be null
+   * @param pgSze
+   *          the page size, can be null
+   * @param identifier
+   *          the security identifier, can be null
+   * @param minQuantityStr
+   *          the minimum quantity, can be null
+   * @param maxQuantityStr
+   *          the maximum quantity, can be null
+   * @param positionIdStrs
+   *          the identifiers of the position, not null
+   * @param tradeIdStrs
+   *          the identifiers of the trades, not null
+   * @param uniqueIdScheme
+   *          the identifier scheme, can be null
+   * @return the Freemarker output
+   */
   @GET
   @Produces(MediaType.TEXT_HTML)
   @SubscribeMaster(MasterType.POSITION)
@@ -96,6 +119,29 @@ public class WebPositionsResource extends AbstractWebPositionResource {
     return getFreemarker().build(HTML_DIR + "positions.ftl", out);
   }
 
+  /**
+   * Produces a JSON GET request.
+   *
+   * @param pgIdx
+   *          the paging first-item index, can be null
+   * @param pgNum
+   *          the paging page, can be null
+   * @param pgSze
+   *          the page size, can be null
+   * @param identifier
+   *          the security identifier, can be null
+   * @param minQuantityStr
+   *          the minimum quantity, can be null
+   * @param maxQuantityStr
+   *          the maximum quantity, can be null
+   * @param positionIdStrs
+   *          the identifiers of the position, not null
+   * @param tradeIdStrs
+   *          the identifiers of the trades, not null
+   * @param uniqueIdScheme
+   *          the identifier scheme, can be null
+   * @return the Freemarker output
+   */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @SubscribeMaster(MasterType.POSITION)
@@ -114,21 +160,21 @@ public class WebPositionsResource extends AbstractWebPositionResource {
     return getFreemarker().build(JSON_DIR + "positions.ftl", out);
   }
 
-  private FlexiBean createSearchResultData(final PagingRequest pr, final String identifier, String minQuantityStr,
-      String maxQuantityStr, final List<String> positionIdStrs, final List<String> tradeIdStrs, final String uniqueIdScheme) {
-    minQuantityStr = StringUtils.defaultString(minQuantityStr).replace(",", "");
-    maxQuantityStr = StringUtils.defaultString(maxQuantityStr).replace(",", "");
+  private FlexiBean createSearchResultData(final PagingRequest pr, final String identifier, final String minQuantityStr,
+      final String maxQuantityStr, final List<String> positionIdStrs, final List<String> tradeIdStrs, final String uniqueIdScheme) {
+    final String trimmedMinQuantityStr = StringUtils.defaultString(minQuantityStr).replace(",", "");
+    final String trimmedMaxQuantityStr = StringUtils.defaultString(maxQuantityStr).replace(",", "");
     final FlexiBean out = createRootData();
 
     final PositionSearchRequest searchRequest = new PositionSearchRequest();
     searchRequest.setPagingRequest(pr);
     searchRequest.setSecurityIdValue(StringUtils.trimToNull(identifier));
     searchRequest.setUniqueIdScheme(StringUtils.trimToNull(uniqueIdScheme));
-    if (NumberUtils.isNumber(minQuantityStr)) {
-      searchRequest.setMinQuantity(NumberUtils.createBigDecimal(minQuantityStr));
+    if (NumberUtils.isNumber(trimmedMinQuantityStr)) {
+      searchRequest.setMinQuantity(NumberUtils.createBigDecimal(trimmedMinQuantityStr));
     }
-    if (NumberUtils.isNumber(maxQuantityStr)) {
-      searchRequest.setMaxQuantity(NumberUtils.createBigDecimal(maxQuantityStr));
+    if (NumberUtils.isNumber(trimmedMaxQuantityStr)) {
+      searchRequest.setMaxQuantity(NumberUtils.createBigDecimal(trimmedMaxQuantityStr));
     }
     for (final String positionIdStr : positionIdStrs) {
       searchRequest.addPositionObjectId(ObjectId.parse(positionIdStr));
@@ -147,55 +193,72 @@ public class WebPositionsResource extends AbstractWebPositionResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Creates an HTML POST response.
+   *
+   * @param quantityStr
+   *          the quantity, can be null
+   * @param idScheme
+   *          the id scheme, can be null
+   * @param idValue
+   *          the id value, can be null
+   * @param type
+   *          the message type, can be empty
+   * @param positionXml
+   *          the XML describing the position
+   * @param uniqueIdScheme
+   *          the unique id scheme, can be null
+   * @return the POST response
+   */
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response postHTML(
-      @FormParam("quantity") String quantityStr,
-      @FormParam("idscheme") String idScheme,
-      @FormParam("idvalue") String idValue,
-      @FormParam("type") String type,
-      @FormParam(POSITION_XML) String positionXml,
-      @FormParam("uniqueIdScheme") String uniqueIdScheme) {
-    uniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
-    type = StringUtils.trimToEmpty(type);
+      @FormParam("quantity") final String quantityStr,
+      @FormParam("idscheme") final String idScheme,
+      @FormParam("idvalue") final String idValue,
+      @FormParam("type") final String type,
+      @FormParam(POSITION_XML) final String positionXml,
+      @FormParam("uniqueIdScheme") final String uniqueIdScheme) {
+    final String trimmedUniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
+    final String trimmedType = StringUtils.trimToEmpty(type);
     URI uri = null;
-    switch (type) {
+    switch (trimmedType) {
       case "xml":
-        positionXml = StringUtils.trimToNull(positionXml);
-        if (positionXml == null) {
+        final String trimmedPositionXml = StringUtils.trimToNull(positionXml);
+        if (trimmedPositionXml == null) {
           final FlexiBean out = createRootData();
           out.put("err_xmlMissing", true);
           final String html = getFreemarker().build(HTML_DIR + "positions-add.ftl", out);
           return Response.ok(html).build();
         }
-        uri = addPosition(positionXml, uniqueIdScheme);
+        uri = addPosition(trimmedPositionXml, trimmedUniqueIdScheme);
         break;
       case StringUtils.EMPTY:
-        quantityStr = StringUtils.replace(StringUtils.trimToNull(quantityStr), ",", "");
-        final BigDecimal quantity = quantityStr != null && NumberUtils.isNumber(quantityStr) ? new BigDecimal(quantityStr) : null;
-        idScheme = StringUtils.trimToNull(idScheme);
-        idValue = StringUtils.trimToNull(idValue);
-        if (quantity == null || idScheme == null || idValue == null) {
+        final String trimmedQuantityStr = StringUtils.replace(StringUtils.trimToNull(quantityStr), ",", "");
+        final BigDecimal quantity = trimmedQuantityStr != null && NumberUtils.isNumber(trimmedQuantityStr) ? new BigDecimal(trimmedQuantityStr) : null;
+        final String trimmedIdScheme = StringUtils.trimToNull(idScheme);
+        final String trimmedIdValue = StringUtils.trimToNull(idValue);
+        if (quantity == null || trimmedIdScheme == null || trimmedIdValue == null) {
           final FlexiBean out = createRootData();
-          if (quantityStr == null) {
+          if (trimmedQuantityStr == null) {
             out.put("err_quantityMissing", true);
           }
           if (quantity == null) {
             out.put("err_quantityNotNumeric", true);
           }
-          if (idScheme == null) {
+          if (trimmedIdScheme == null) {
             out.put("err_idschemeMissing", true);
           }
-          if (idValue == null) {
+          if (trimmedIdValue == null) {
             out.put("err_idvalueMissing", true);
           }
-          out.put("quantity", quantityStr);
-          out.put("idvalue", idValue);
+          out.put("quantity", trimmedQuantityStr);
+          out.put("idvalue", trimmedIdValue);
           final String html = getFreemarker().build(HTML_DIR + "positions-add.ftl", out);
           return Response.ok(html).build();
         }
-        final ExternalIdBundle id = ExternalIdBundle.of(ExternalId.of(idScheme, idValue));
+        final ExternalIdBundle id = ExternalIdBundle.of(ExternalId.of(trimmedIdScheme, trimmedIdValue));
         final UniqueId secUid = getSecurityUniqueId(id);
         if (secUid == null) {
           final FlexiBean out = createRootData();
@@ -203,7 +266,7 @@ public class WebPositionsResource extends AbstractWebPositionResource {
           final String html = getFreemarker().build(HTML_DIR + "positions-add.ftl", out);
           return Response.ok(html).build();
         }
-        uri = addPosition(quantity, secUid, uniqueIdScheme);
+        uri = addPosition(quantity, secUid, trimmedUniqueIdScheme);
         break;
       default:
         throw new IllegalArgumentException("Can only add position by XML or completing provided web form");
@@ -211,48 +274,71 @@ public class WebPositionsResource extends AbstractWebPositionResource {
     return Response.seeOther(uri).build();
   }
 
+  /**
+   * Creates a JSON POST response.
+   *
+   * @param quantityStr
+   *          the quantity, can be null
+   * @param idScheme
+   *          the id scheme, can be null
+   * @param idValue
+   *          the id value, can be null
+   * @param tradesJson
+   *          the trade information, can be null
+   * @param type
+   *          the message type, can be empty
+   * @param positionXml
+   *          the XML describing the position
+   * @param uniqueIdScheme
+   *          the unique id scheme, can be null
+   * @return the POST response
+   */
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
   public Response postJSON(
-      @FormParam("quantity") String quantityStr,
-      @FormParam("idscheme") String idScheme,
-      @FormParam("idvalue") String idValue,
-      @FormParam("tradesJson") String tradesJson,
-      @FormParam("type") String type,
+      @FormParam("quantity") final String quantityStr,
+      @FormParam("idscheme") final String idScheme,
+      @FormParam("idvalue") final String idValue,
+      @FormParam("tradesJson") final String tradesJson,
+      @FormParam("type") final String type,
       @FormParam(POSITION_XML) final String positionXml,
-      @FormParam("uniqueIdScheme") String uniqueIdScheme) {
+      @FormParam("uniqueIdScheme") final String uniqueIdScheme) {
 
-    uniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
-    type = StringUtils.trimToEmpty(type);
+    final String trimmedUniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
+    final String trimmedType = StringUtils.trimToEmpty(type);
+    final String trimmedPositionXml = StringUtils.trimToNull(positionXml);
     URI uri = null;
-    switch (type) {
+    switch (trimmedType) {
       case "xml":
-        uri = addPosition(positionXml, uniqueIdScheme);
+        if (trimmedPositionXml == null) {
+          return Response.status(Status.BAD_REQUEST).build();
+        }
+        uri = addPosition(trimmedPositionXml, trimmedUniqueIdScheme);
         break;
       case StringUtils.EMPTY:
-        quantityStr = StringUtils.replace(StringUtils.trimToNull(quantityStr), ",", "");
-        final BigDecimal quantity = quantityStr != null && NumberUtils.isNumber(quantityStr) ? new BigDecimal(quantityStr) : null;
-        idScheme = StringUtils.trimToNull(idScheme);
-        idValue = StringUtils.trimToNull(idValue);
-        tradesJson = StringUtils.trimToNull(tradesJson);
+        final String trimmedQuantityStr = StringUtils.replace(StringUtils.trimToNull(quantityStr), ",", "");
+        final BigDecimal quantity = trimmedQuantityStr != null && NumberUtils.isNumber(trimmedQuantityStr) ? new BigDecimal(trimmedQuantityStr) : null;
+        final String trimmedIdScheme = StringUtils.trimToNull(idScheme);
+        final String trimmedIdValue = StringUtils.trimToNull(idValue);
+        final String trimmedTradesJson = StringUtils.trimToNull(tradesJson);
 
-        if (quantity == null || idScheme == null || idValue == null) {
+        if (quantity == null || trimmedIdScheme == null || trimmedIdValue == null) {
           return Response.status(Status.BAD_REQUEST).build();
         }
 
-        final ExternalIdBundle id = ExternalIdBundle.of(ExternalId.of(idScheme, idValue));
+        final ExternalIdBundle id = ExternalIdBundle.of(ExternalId.of(trimmedIdScheme, trimmedIdValue));
         final UniqueId secUid = getSecurityUniqueId(id);
         if (secUid == null) {
-          throw new DataNotFoundException("invalid " + idScheme + "~" + idValue);
+          throw new DataNotFoundException("invalid " + trimmedIdScheme + "~" + trimmedIdValue);
         }
         Collection<ManageableTrade> trades = null;
-        if (tradesJson != null) {
-          trades = parseTrades(tradesJson);
+        if (trimmedTradesJson != null) {
+          trades = parseTrades(trimmedTradesJson);
         } else {
           trades = Collections.<ManageableTrade>emptyList();
         }
-        uri = addPosition(quantity, secUid, trades, uniqueIdScheme);
+        uri = addPosition(quantity, secUid, trades, trimmedUniqueIdScheme);
         break;
       default:
         throw new IllegalArgumentException("Can only add position by XML or completing provided web form");
@@ -266,10 +352,11 @@ public class WebPositionsResource extends AbstractWebPositionResource {
     final PositionMaster positionMaster = data().getPositionMaster();
     final ManageablePosition manageablePosition = (ManageablePosition) positionBean;
     if (uniqueIdScheme != null) {
+      // TODO unique id looks wrong
       manageablePosition.setUniqueId(UniqueId.of(uniqueIdScheme, uniqueIdScheme));
     }
     final ManageablePosition position = positionMaster.add(new PositionDocument(manageablePosition)).getPosition();
-    return  new WebPositionsUris(data()).position(position);
+    return new WebPositionsUris(data()).position(position);
   }
 
   private UniqueId getSecurityUniqueId(final ExternalIdBundle id) {
@@ -304,6 +391,15 @@ public class WebPositionsResource extends AbstractWebPositionResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Finds a position by unique id. If there is no position for that UID, the
+   * history is searched if the master supports this functionality. If no value
+   * is found, an exception is thrown.
+   *
+   * @param idStr
+   *          the position identifier
+   * @return the position
+   */
   @Path("{positionId}")
   public WebPositionResource findPosition(@Subscribe @PathParam("positionId") final String idStr) {
     data().setUriPositionId(idStr);

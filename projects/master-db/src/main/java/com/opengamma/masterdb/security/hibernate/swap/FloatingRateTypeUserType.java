@@ -10,7 +10,7 @@ import com.opengamma.financial.security.swap.FloatingRateType;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the FloatingRateType enum
+ * Custom Hibernate usertype for the FloatingRateType enum.
  */
 public class FloatingRateTypeUserType extends EnumUserType<FloatingRateType> {
 

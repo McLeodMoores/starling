@@ -80,7 +80,8 @@ public class SwaptionCashFixedIborG2ppNumericalIntegrationMethod {
     for (int loopcf = 0; loopcf < nbCfFixed; loopcf++) {
       alphaFixed[0][loopcf] = Math.sqrt(gamma[0][0]) * hthetaFixed[0][loopcf];
       alphaFixed[1][loopcf] = Math.sqrt(gamma[1][1]) * hthetaFixed[1][loopcf];
-      tau2Fixed[loopcf] = alphaFixed[0][loopcf] * alphaFixed[0][loopcf] + alphaFixed[1][loopcf] * alphaFixed[1][loopcf] + 2 * rhog2pp * gamma[0][1] * hthetaFixed[0][loopcf] * hthetaFixed[1][loopcf];
+      tau2Fixed[loopcf] = alphaFixed[0][loopcf] * alphaFixed[0][loopcf] + alphaFixed[1][loopcf] * alphaFixed[1][loopcf]
+          + 2 * rhog2pp * gamma[0][1] * hthetaFixed[0][loopcf] * hthetaFixed[1][loopcf];
     }
 
     final double[][] hthetaIbor = MODEL_G2PP.volatilityMaturityPart(g2Data.getG2ppParameters(), theta, tIbor);
@@ -89,10 +90,12 @@ public class SwaptionCashFixedIborG2ppNumericalIntegrationMethod {
     for (int loopcf = 0; loopcf < nbCfIbor; loopcf++) {
       alphaIbor[0][loopcf] = Math.sqrt(gamma[0][0]) * hthetaIbor[0][loopcf];
       alphaIbor[1][loopcf] = Math.sqrt(gamma[1][1]) * hthetaIbor[1][loopcf];
-      tau2Ibor[loopcf] = alphaIbor[0][loopcf] * alphaIbor[0][loopcf] + alphaIbor[1][loopcf] * alphaIbor[1][loopcf] + 2 * rhog2pp * gamma[0][1] * hthetaIbor[0][loopcf] * hthetaIbor[1][loopcf];
+      tau2Ibor[loopcf] = alphaIbor[0][loopcf] * alphaIbor[0][loopcf] + alphaIbor[1][loopcf] * alphaIbor[1][loopcf]
+          + 2 * rhog2pp * gamma[0][1] * hthetaIbor[0][loopcf] * hthetaIbor[1][loopcf];
     }
 
-    final SwaptionIntegrant integrant = new SwaptionIntegrant(discountedCashFlowFixed, alphaFixed, tau2Fixed, discountedCashFlowIbor, alphaIbor, tau2Ibor, rhobar,
+    final SwaptionIntegrant integrant = new SwaptionIntegrant(discountedCashFlowFixed, alphaFixed, tau2Fixed, discountedCashFlowIbor, alphaIbor, tau2Ibor,
+        rhobar,
         swaption.getUnderlyingSwap(), strike);
     final double limit = 10.0;
     final double absoluteTolerance = 1.0E-0;
@@ -101,7 +104,8 @@ public class SwaptionCashFixedIborG2ppNumericalIntegrationMethod {
     final IntegratorRepeated2D integrator2D = new IntegratorRepeated2D(integrator1D);
     double pv = 0.0;
     try {
-      pv = 1.0 / (2.0 * Math.PI * Math.sqrt(1 - rhobar * rhobar)) * integrator2D.integrate(integrant, new Double[] {-limit, -limit}, new Double[] {limit, limit});
+      pv = 1.0 / (2.0 * Math.PI * Math.sqrt(1 - rhobar * rhobar))
+          * integrator2D.integrate(integrant, new Double[] { -limit, -limit }, new Double[] { limit, limit });
     } catch (final Exception e) {
       throw new RuntimeException(e);
     }
@@ -123,10 +127,11 @@ public class SwaptionCashFixedIborG2ppNumericalIntegrationMethod {
     private final double _rhobar;
     private final SwapFixedCoupon<? extends Payment> _swap;
     private final double _strike;
-    //    private final double _notional;
+    // private final double _notional;
     private final double _omega;
 
-    public SwaptionIntegrant(final double[] discountedCashFlowFixed, final double[][] alphaFixed, final double[] tau2Fixed, final double[] discountedCashFlowIbor, final double[][] alphaIbor,
+    SwaptionIntegrant(final double[] discountedCashFlowFixed, final double[][] alphaFixed, final double[] tau2Fixed, final double[] discountedCashFlowIbor,
+        final double[][] alphaIbor,
         final double[] tau2Ibor, final double rhobar, final SwapFixedCoupon<? extends Payment> swap, final double strike) {
       _discountedCashFlowFixed = discountedCashFlowFixed;
       _alphaFixed = alphaFixed;
@@ -137,8 +142,8 @@ public class SwaptionCashFixedIborG2ppNumericalIntegrationMethod {
       _rhobar = rhobar;
       _swap = swap;
       _strike = strike;
-      //      _notional = Math.abs(swap.getFixedLeg().getNthPayment(0).getNotional());
-      _omega = (swap.getFixedLeg().isPayer() ? 1.0 : -1.0);
+      // _notional = Math.abs(swap.getFixedLeg().getNthPayment(0).getNotional());
+      _omega = swap.getFixedLeg().isPayer() ? 1.0 : -1.0;
     }
 
     @Override

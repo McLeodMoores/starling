@@ -25,7 +25,8 @@ public class TenorLabelledLocalDateDoubleTimeSeriesMatrix1D extends LabelledObje
     super(keys, labels, values, TOLERANCE);
   }
 
-  public TenorLabelledLocalDateDoubleTimeSeriesMatrix1D(final Tenor[] keys, final Object[] labels, final String labelsTitle, final LocalDateDoubleTimeSeries[] values, final String valuesTitle) {
+  public TenorLabelledLocalDateDoubleTimeSeriesMatrix1D(final Tenor[] keys, final Object[] labels, final String labelsTitle,
+      final LocalDateDoubleTimeSeries[] values, final String valuesTitle) {
     super(keys, labels, labelsTitle, values, valuesTitle, TOLERANCE);
   }
 

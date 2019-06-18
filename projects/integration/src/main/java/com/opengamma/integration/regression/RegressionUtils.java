@@ -32,7 +32,7 @@ public final class RegressionUtils {
   public static final String ID_MAPPINGS = "Regression test ID mappings";
   /** Name of the ID mappings Fudge XML file. */
   public static final String ID_MAPPINGS_IDENTIFIER = "idMappings";
-  /** Name of the ref data accesses Fudge XML file */
+  /** Name of the ref data accesses Fudge XML file. */
   public static final String REF_DATA_ACCESSES_IDENTIFIER = "refDataAccesses";
 
   /** Name of the ID mappings Fudge XML file. */
@@ -63,8 +63,9 @@ public final class RegressionUtils {
   }
 
   /**
-   * Creates an empty database by running {@link EmptyDatabaseCreator} in an external process. {@code EmptyDatabaseCreator} relies on {@code DbTool} which scans the classpath to locate the schema
-   * files. This means it has to run with the classpath of the server version being tested so it can find the correct schema files.
+   * Creates an empty database by running {@link EmptyDatabaseCreator} in an external process. {@code EmptyDatabaseCreator} relies on {@code DbTool} which scans
+   * the classpath to locate the schema files. This means it has to run with the classpath of the server version being tested so it can find the correct schema
+   * files.
    */
   /* package */static void createEmptyDatabase(final String configFile, final String workingDirName, final String classpath, final String logbackConfig) {
     // TODO load the config and check the DB URL is overridden. ensure we NEVER use the URL from the real server config
@@ -73,9 +74,11 @@ public final class RegressionUtils {
     try {
       final String className = EmptyDatabaseCreator.class.getName();
       final File workingDir = new File(workingDirName);
-      LOGGER.info("Launching EmptyDatabaseCreator process. workingDir={}, logbackConfig={}, className={}, " + "configFile={}, classpath={}", workingDir, logbackConfig, className,
+      LOGGER.info("Launching EmptyDatabaseCreator process. workingDir={}, logbackConfig={}, className={}, " + "configFile={}, classpath={}", workingDir,
+          logbackConfig, className,
           configFile, classpath);
-      process = new ProcessBuilder("java", logbackConfig, "-cp", classpath, className, configFile).directory(workingDir).redirectOutput(ProcessBuilder.Redirect.INHERIT)
+      process = new ProcessBuilder("java", logbackConfig, "-cp", classpath, className, configFile).directory(workingDir)
+          .redirectOutput(ProcessBuilder.Redirect.INHERIT)
           .redirectError(ProcessBuilder.Redirect.INHERIT).start();
       process.waitFor();
       final int exitCode = process.exitValue();
@@ -91,15 +94,19 @@ public final class RegressionUtils {
     }
   }
 
-  /* package */static void restoreDatabase(final String workingDir, final String classpath, final Properties dbProps, final String serverConfigFile, final String logbackConfig, final String databaseDumpDir) {
+  /* package */static void restoreDatabase(final String workingDir, final String classpath, final Properties dbProps, final String serverConfigFile,
+      final String logbackConfig, final String databaseDumpDir) {
     // TODO don't hard-code the port
     final int port = 8080;
     final String serverUrl = "http://localhost:" + port;
     // run the server, populate the database and stop the server.
     // it needs to be restarted before the tests to pick up function repo changes from the database
-    try (ServerProcess ignored = ServerProcess.start(workingDir, classpath, serverConfigFile, dbProps, logbackConfig); RemoteServer server = RemoteServer.create(serverUrl)) {
-      final DatabaseRestore databaseRestore = new DatabaseRestore(databaseDumpDir, server.getSecurityMaster(), server.getPositionMaster(), server.getPortfolioMaster(), server.getConfigMaster(),
-          server.getHistoricalTimeSeriesMaster(), server.getHolidayMaster(), server.getExchangeMaster(), server.getMarketDataSnapshotMaster(), server.getLegalEntityMaster(),
+    try (ServerProcess ignored = ServerProcess.start(workingDir, classpath, serverConfigFile, dbProps, logbackConfig);
+        RemoteServer server = RemoteServer.create(serverUrl)) {
+      final DatabaseRestore databaseRestore = new DatabaseRestore(databaseDumpDir, server.getSecurityMaster(), server.getPositionMaster(),
+          server.getPortfolioMaster(), server.getConfigMaster(),
+          server.getHistoricalTimeSeriesMaster(), server.getHolidayMaster(), server.getExchangeMaster(), server.getMarketDataSnapshotMaster(),
+          server.getLegalEntityMaster(),
           server.getConventionMaster());
       databaseRestore.restoreDatabase();
     }
@@ -121,8 +128,7 @@ public final class RegressionUtils {
     final ConfigSearchResult<IdMappings> result = configMaster.search(request);
     if (result.getValues().size() == 1) {
       return result.getFirstValue();
-    } else {
-      return null;
     }
+    return null;
   }
 }

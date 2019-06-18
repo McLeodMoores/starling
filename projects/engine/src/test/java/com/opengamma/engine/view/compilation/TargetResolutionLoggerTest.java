@@ -48,8 +48,8 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class TargetResolutionLoggerTest {
 
-  @SuppressWarnings("unchecked")
-  public void testResolve_shallow() {
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  public void testResolveShallow() {
     final ComputationTargetResolver.AtVersionCorrection underlying = Mockito.mock(ComputationTargetResolver.AtVersionCorrection.class);
     final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<>();
     final Set<UniqueId> expiredResolutions = new HashSet<>();
@@ -64,7 +64,7 @@ public class TargetResolutionLoggerTest {
   }
 
   @SuppressWarnings("unchecked")
-  public void testResolve_deep() {
+  public void testResolveDeep() {
     final ComputationTargetResolver.AtVersionCorrection underlying = Mockito.mock(ComputationTargetResolver.AtVersionCorrection.class);
     final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<>();
     final Set<UniqueId> expiredResolutions = new HashSet<>();
@@ -73,17 +73,18 @@ public class TargetResolutionLoggerTest {
     final ComputationTarget target =
         new ComputationTarget(spec.replaceIdentifier(UniqueId.of("Foo", "Bar", "Cow")), new Primitive(UniqueId.of("Foo", "Bar", "Cow")));
     Mockito.when(underlying.resolve(spec)).thenReturn(target);
+    @SuppressWarnings("rawtypes")
     final ObjectResolver deepResolver = Mockito.mock(ObjectResolver.class);
     Mockito.when(deepResolver.deepResolver()).thenReturn(new DeepResolver() {
       @SuppressWarnings("serial")
       @Override
-      public UniqueIdentifiable withLogger(final UniqueIdentifiable underlying, final ResolutionLogger logger) {
-        assertSame(underlying, target.getValue());
+      public UniqueIdentifiable withLogger(final UniqueIdentifiable uid, final ResolutionLogger logger) {
+        assertSame(uid, target.getValue());
         return new Primitive(UniqueId.of("Foo", "Bar", "Cow")) {
           @Override
           public int hashCode() {
             // Pretend that this is a deep-resolving operation
-            logger.log(spec, underlying.getUniqueId());
+            logger.log(spec, uid.getUniqueId());
             return super.hashCode();
           }
         };
@@ -97,7 +98,7 @@ public class TargetResolutionLoggerTest {
     assertFalse(resolutions.isEmpty());
   }
 
-  private Map<ComputationTargetReference, ComputationTargetSpecification> targets() {
+  private static Map<ComputationTargetReference, ComputationTargetSpecification> targets() {
     final Map<ComputationTargetReference, ComputationTargetSpecification> map = new HashMap<>();
     map.put(new ComputationTargetRequirement(ComputationTargetType.PRIMITIVE, ExternalId.of("Test", "1")), ComputationTargetSpecification.NULL);
     map.put(new ComputationTargetRequirement(ComputationTargetType.PRIMITIVE, ExternalId.of("Test", "2")), null);
@@ -191,12 +192,12 @@ public class TargetResolutionLoggerTest {
     Mockito.when(underlyingResolver.getTargetSpecification(spec1)).thenReturn(spec1V);
     final ComputationTargetSpecification spec2 =
         new ComputationTargetSpecification(new ComputationTargetSpecification(ComputationTargetType.POSITION_OR_TRADE, UniqueId.of("Test", "4", "V")),
-              ComputationTargetType.POSITION.containing(ComputationTargetType.TRADE).or(ComputationTargetType.TRADE.containing(ComputationTargetType.SECURITY)),
-                  UniqueId.of("Test", "3"));
+            ComputationTargetType.POSITION.containing(ComputationTargetType.TRADE).or(ComputationTargetType.TRADE.containing(ComputationTargetType.SECURITY)),
+            UniqueId.of("Test", "3"));
     final ComputationTargetSpecification spec2V =
         new ComputationTargetSpecification(new ComputationTargetSpecification(ComputationTargetType.POSITION_OR_TRADE, UniqueId.of("Test", "4", "V")),
-              ComputationTargetType.POSITION.containing(ComputationTargetType.TRADE).or(ComputationTargetType.TRADE.containing(ComputationTargetType.SECURITY)),
-                  UniqueId.of("Test", "3", "V"));
+            ComputationTargetType.POSITION.containing(ComputationTargetType.TRADE).or(ComputationTargetType.TRADE.containing(ComputationTargetType.SECURITY)),
+            UniqueId.of("Test", "3", "V"));
     Mockito.when(underlyingResolver.getTargetSpecification(spec2)).thenReturn(spec2V);
     assertSame(targetResolver.getSpecificationResolver().getTargetSpecification(spec1), spec1V);
     assertSame(targetResolver.getSpecificationResolver().getTargetSpecification(spec2), spec2V);

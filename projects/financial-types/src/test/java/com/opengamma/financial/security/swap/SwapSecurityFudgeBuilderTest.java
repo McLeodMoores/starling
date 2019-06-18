@@ -37,6 +37,9 @@ public class SwapSecurityFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
   private static final Notional NOTIONAL = new InterestRateNotional(Currency.USD, 10000);
   private static final boolean EOM = true;
 
+  /**
+   * Tests a cycle of an interest rate swap.
+   */
   @Test
   public void testSwapSecurity() {
     final ExternalId referenceId = ExternalId.of("Test", "ASD");
@@ -46,6 +49,9 @@ public class SwapSecurityFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
     assertEncodeDecodeCycle(SwapSecurity.class, security);
   }
 
+  /**
+   * Tests a cycle of an inflation swap.
+   */
   @Test
   public void testZeroCouponInflationSwapSecurity() {
     final FixedInflationSwapLeg payLeg = new FixedInflationSwapLeg(DC, FREQUENCY, REGION_ID, BDC, NOTIONAL, EOM, 0.002);
@@ -56,6 +62,9 @@ public class SwapSecurityFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
     assertEncodeDecodeCycle(ZeroCouponInflationSwapSecurity.class, security);
   }
 
+  /**
+   * Tests a cycle of an inflation swap.
+   */
   @Test
   public void testYearOnYearInflationSwapSecurity() {
     final FixedInflationSwapLeg payLeg = new FixedInflationSwapLeg(DC, FREQUENCY, REGION_ID, BDC, NOTIONAL, EOM, 0.002);

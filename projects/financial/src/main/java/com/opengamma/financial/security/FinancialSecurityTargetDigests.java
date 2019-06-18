@@ -93,17 +93,18 @@ import com.opengamma.financial.security.swap.YearOnYearInflationSwapSecurity;
 import com.opengamma.financial.security.swap.ZeroCouponInflationSwapSecurity;
 
 /**
- * Extension to the basic target digests from OG-Engine that supplements the digest with the instrument's currency. This is based on the observation that many of the default constraints are configured
- * with per-currency information.
+ * Extension to the basic target digests from OG-Engine that supplements the digest with the instrument's currency. This is based on the observation that many
+ * of the default constraints are configured with per-currency information.
  * <p>
- * Note that this is not currently appropriate for use alongside some of the default value injecting functions, for example the ones that pick identifiers out of the calculation configuration and
- * inject constraints based on those.
+ * Note that this is not currently appropriate for use alongside some of the default value injecting functions, for example the ones that pick identifiers out
+ * of the calculation configuration and inject constraints based on those.
  */
 public class FinancialSecurityTargetDigests extends SecurityTypeTargetDigests implements FinancialSecurityVisitor<Object>, NotionalVisitor<Object> {
 
   // TODO: Should items with an exchange use that in the digest too to capture the per-exchange default constraints?
 
-  // TODO: Fix for the classes of functions that do behave differently (or suppress the logic if items are in the calculation configuration that drive those functions)
+  // TODO: Fix for the classes of functions that do behave differently (or suppress the logic if items are in the calculation configuration that drive those
+  // functions)
 
   private final MapImpl<Object, Digests> _pairs = new MapImpl<Object, Digests>() {
     @Override
@@ -128,9 +129,8 @@ public class FinancialSecurityTargetDigests extends SecurityTypeTargetDigests im
     final Digests digests = _pairs.get(a);
     if (digests != null) {
       return digests.get(b);
-    } else {
-      return null;
     }
+    return null;
   }
 
   // SecurityTypeTargetDigests
@@ -139,9 +139,8 @@ public class FinancialSecurityTargetDigests extends SecurityTypeTargetDigests im
   protected Object getSecurityDigest(final Security security) {
     if (security instanceof FinancialSecurity) {
       return ((FinancialSecurity) security).accept(this);
-    } else {
-      return super.getSecurityDigest(security);
     }
+    return super.getSecurityDigest(security);
   }
 
   // FinancialSecurityVisitor
@@ -612,6 +611,7 @@ public class FinancialSecurityTargetDigests extends SecurityTypeTargetDigests im
   public Object visitStandardCDSSecurity(final StandardCDSSecurity security) {
     return _standardCDSSecurity.get(security.getNotional().accept(this));
   }
+
   private final Digests _legacyCDSSecurity = new Digests("Security");
 
   @Override

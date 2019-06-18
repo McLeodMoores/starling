@@ -39,10 +39,13 @@ public class CapletStrippingAbsoluteStrikePSpline extends CapletStrippingAbsolut
   /**
    * caplet stripping for a set of caps with the <b>same</b> (absolute) strike. The interpolator is double-quadratic with a linear extrapolator and a
    * transformation so it remains everywhere positive. For co-starting caps the knots are the first caplet expiry, then the end time of all the caps expect the
-   * final one (i.e. all but the first unique caplets in the longest cap see volatilities from the extrapolated part of the curve). If the caps are not co-starting
-   * it is not possible to auto-generate the knots and these should be supplied.
-   * @param caps List of caps with identical strikes
-   * @param yieldCurves The yield curves (should include the discount and relevant Ibor projection curve)
+   * final one (i.e. all but the first unique caplets in the longest cap see volatilities from the extrapolated part of the curve). If the caps are not
+   * co-starting it is not possible to auto-generate the knots and these should be supplied.
+   * 
+   * @param caps
+   *          List of caps with identical strikes
+   * @param yieldCurves
+   *          The yield curves (should include the discount and relevant Ibor projection curve)
    */
   public CapletStrippingAbsoluteStrikePSpline(final List<CapFloor> caps, final YieldCurveBundle yieldCurves) {
     super(caps, yieldCurves);
@@ -61,10 +64,10 @@ public class CapletStrippingAbsoluteStrikePSpline extends CapletStrippingAbsolut
     _volModel = new BasisSplineVolatilityTermStructureProvider(_bSplines);
   }
 
-  //  public CapletStrippingAbsoluteStrikePSpline(List<CapFloor> caps, YieldCurveBundle yieldCurves, final int differenceOrder, final double lambda) {
-  //    super(caps, yieldCurves);
+  // public CapletStrippingAbsoluteStrikePSpline(List<CapFloor> caps, YieldCurveBundle yieldCurves, final int differenceOrder, final double lambda) {
+  // super(caps, yieldCurves);
   //
-  //  }
+  // }
 
   @Override
   public CapletStrippingSingleStrikeResult solveForPrices(final double[] capPrices) {
@@ -113,14 +116,14 @@ public class CapletStrippingAbsoluteStrikePSpline extends CapletStrippingAbsolut
       lsRes = solveForPrice(capPrices, capVols, errors, true);
     } else {
       final Function1D<DoubleMatrix1D, DoubleMatrix1D> modelVolFunc = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
-        @SuppressWarnings("synthetic-access")
         @Override
         public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
           final double[] modelVols = pricer.impliedVols(_volModel.evaluate(x));
           return new DoubleMatrix1D(modelVols);
         }
       };
-      lsRes = NLLSWP.solve(new DoubleMatrix1D(capVols), new DoubleMatrix1D(errors), modelVolFunc, new DoubleMatrix1D(_nWeights, capVols[capVols.length - 1]), _penalty);
+      lsRes = NLLSWP.solve(new DoubleMatrix1D(capVols), new DoubleMatrix1D(errors), modelVolFunc, new DoubleMatrix1D(_nWeights, capVols[capVols.length - 1]),
+          _penalty);
     }
 
     final VolatilityTermStructure volCurve = getVolCurve(lsRes.getFitParameters());
@@ -153,7 +156,6 @@ public class CapletStrippingAbsoluteStrikePSpline extends CapletStrippingAbsolut
     };
 
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> modelPriceFunc = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
-      @SuppressWarnings("synthetic-access")
       @Override
       public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
         final double[] modelPrices = pricer.price(_volModel.evaluate(x));

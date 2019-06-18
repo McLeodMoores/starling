@@ -49,7 +49,8 @@ public class VolatilitySurfaceSpecificationFunction extends AbstractFunction {
   @Override
   public CompiledFunctionDefinition compile(final FunctionCompilationContext outerContext, final Instant atInstant) {
     final ZonedDateTime atZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
-    return new AbstractInvokingCompiledFunction(atZDT.with(LocalTime.MIDNIGHT).toInstant(), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000).toInstant()) {
+    return new AbstractInvokingCompiledFunction(atZDT.with(LocalTime.MIDNIGHT).toInstant(),
+        atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000).toInstant()) {
 
       @Override
       public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
@@ -75,13 +76,15 @@ public class VolatilitySurfaceSpecificationFunction extends AbstractFunction {
           final String fullSpecificationName = surfaceName + "_" + EquitySecurityUtils.getTrimmedTarget(UniqueId.parse(target.getValue().toString()));
           specification = _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName, instrumentType);
           if (specification == null) {
-            throw new OpenGammaRuntimeException("Could not get volatility surface specification named " + fullSpecificationName + " for instrument type " + instrumentType);
+            throw new OpenGammaRuntimeException(
+                "Could not get volatility surface specification named " + fullSpecificationName + " for instrument type " + instrumentType);
           }
         } else {
           final String fullSpecificationName = surfaceName + "_" + target.getUniqueId().getValue();
           specification = _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName, instrumentType);
           if (specification == null) {
-            throw new OpenGammaRuntimeException("Could not get volatility surface specification named " + fullSpecificationName + " for instrument type " + instrumentType);
+            throw new OpenGammaRuntimeException(
+                "Could not get volatility surface specification named " + fullSpecificationName + " for instrument type " + instrumentType);
           }
         }
         @SuppressWarnings("synthetic-access")
@@ -101,12 +104,14 @@ public class VolatilitySurfaceSpecificationFunction extends AbstractFunction {
       @Override
       public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
         return Collections.singleton(new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_SPEC, target.toSpecification(), createValueProperties()
-            .withAny(ValuePropertyNames.SURFACE).withAny(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE).withAny(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE)
+            .withAny(ValuePropertyNames.SURFACE).withAny(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE)
+            .withAny(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE)
             .withAny(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS).get()));
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final Set<String> surfaceNames = desiredValue.getConstraints().getValues(ValuePropertyNames.SURFACE);
         if (surfaceNames == null || surfaceNames.size() != 1) {
           return null;

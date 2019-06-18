@@ -43,7 +43,7 @@ import com.opengamma.util.tuple.Triple;
     return new ParameterizedFunction(function, function.getFunctionDefinition().getDefaultParameters());
   }
 
-  public GetFunctionsStep(final ResolveTask task) {
+  GetFunctionsStep(final ResolveTask task) {
     super(task);
   }
 
@@ -63,12 +63,14 @@ import com.opengamma.util.tuple.Triple;
   };
 
   /**
-   * Removes any optional flags on constraints. If the constraint is optional and the provider produced no value, then the constraint is removed.
-   * If the provider produced values for the constraint, and an intersection exists, then the intersection is used. Otherwise the maximal value
-   * set is used to satisfy the original constraint.
+   * Removes any optional flags on constraints. If the constraint is optional and the provider produced no value, then the constraint is removed. If the
+   * provider produced values for the constraint, and an intersection exists, then the intersection is used. Otherwise the maximal value set is used to satisfy
+   * the original constraint.
    *
-   * @param constraints the requested constraints, not null
-   * @param properties the provider's value specification properties, not null
+   * @param constraints
+   *          the requested constraints, not null
+   * @param properties
+   *          the provider's value specification properties, not null
    * @return the builder for constraints
    */
   private static ValueProperties.Builder intersectOptional(final ValueProperties constraints, final ValueProperties properties) {
@@ -137,7 +139,7 @@ import com.opengamma.util.tuple.Triple;
         targetSpec = marketDataSpec.getTargetSpecification();
       }
       ResolvedValue resolvedValue = createResult(marketDataSpec, MARKET_DATA_SOURCING_FUNCTION,
-          Collections.<ValueSpecification>emptySet(), Collections.singleton(marketDataSpec));
+          Collections.<ValueSpecification> emptySet(), Collections.singleton(marketDataSpec));
       final ValueProperties constraints = requirement.getConstraints();
       final boolean constraintsSatisfied = constraints.isSatisfiedBy(marketDataSpec.getProperties());
       if (requirement.getValueName() != marketDataSpec.getValueName() || !targetSpec.equals(marketDataSpec.getTargetSpecification())
@@ -157,8 +159,8 @@ import com.opengamma.util.tuple.Triple;
               properties = ValueProperties.with(ValuePropertyNames.FUNCTION, MarketDataAliasingFunction.UNIQUE_ID).get();
             } else if (!allProperties.isEmpty()) {
               // Requirement made no constraint on function identifier
-              properties =
-                  intersectOptional(constraints, marketDataSpec.getProperties()).with(ValuePropertyNames.FUNCTION, MarketDataAliasingFunction.UNIQUE_ID).get();
+              properties = intersectOptional(constraints, marketDataSpec.getProperties())
+                  .with(ValuePropertyNames.FUNCTION, MarketDataAliasingFunction.UNIQUE_ID).get();
             } else {
               // Requirement used a nearly infinite property bundle that omitted a function identifier
               properties = constraints.copy().withAny(ValuePropertyNames.FUNCTION).get();
@@ -253,14 +255,17 @@ import com.opengamma.util.tuple.Triple;
    * <p>
    * The collection returned from the function resolver must include normalized value specifications.
    *
-   * @param target the target to apply the functions to, not null
-   * @param context the graph building context, not null
-   * @param state the current task execution state, not null
+   * @param target
+   *          the target to apply the functions to, not null
+   * @param context
+   *          the graph building context, not null
+   * @param state
+   *          the current task execution state, not null
    */
   protected static void getFunctions(final ComputationTarget target, final GraphBuildingContext context, final ResolveTask.State state) {
     final ValueRequirement requirement = state.getValueRequirement();
-    final Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> itr =
-        context.getFunctionResolver().resolveFunction(requirement.getValueName(), target, requirement.getConstraints());
+    final Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> itr = context.getFunctionResolver()
+        .resolveFunction(requirement.getValueName(), target, requirement.getConstraints());
     if (itr.hasNext()) {
       LOGGER.debug("Found functions for {}", requirement);
       state.setRunnableTaskState(new ResolvedFunctionStep(state.getTask(), itr), context);

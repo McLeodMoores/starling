@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics;
-
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import java.util.Arrays;
 
@@ -14,9 +12,13 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.financial.analytics.QuickSorter.ArrayQuickSorter;
 import com.opengamma.util.ParallelArrayBinarySort;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+
 /**
  * @param <S>
+ *          The type of the x values
  * @param <T>
+ *          The type of the y values
  */
 public abstract class LabelledMatrix2D<S extends Comparable<S>, T extends Comparable<T>> {
   private final S[] _xKeys;
@@ -31,7 +33,7 @@ public abstract class LabelledMatrix2D<S extends Comparable<S>, T extends Compar
   public LabelledMatrix2D(final S[] xKeys, final T[] yKeys, final double[][] values) {
     this(xKeys, LabelledMatrixUtils.toString(xKeys), yKeys, LabelledMatrixUtils.toString(yKeys), values);
   }
-  
+
   public LabelledMatrix2D(final S[] xKeys, final Object[] xLabels, final T[] yKeys, final Object[] yLabels, final double[][] values) {
     this(xKeys, xLabels, null, yKeys, yLabels, null, values, null);
   }
@@ -77,7 +79,7 @@ public abstract class LabelledMatrix2D<S extends Comparable<S>, T extends Compar
   public Object[] getXLabels() {
     return _xLabels;
   }
-  
+
   public String getXTitle() {
     return _xTitle;
   }
@@ -89,7 +91,7 @@ public abstract class LabelledMatrix2D<S extends Comparable<S>, T extends Compar
   public Object[] getYLabels() {
     return _yLabels;
   }
-  
+
   public String getYTitle() {
     return _yTitle;
   }
@@ -97,7 +99,7 @@ public abstract class LabelledMatrix2D<S extends Comparable<S>, T extends Compar
   public double[][] getValues() {
     return _values;
   }
-  
+
   public String getValuesTitle() {
     return _valuesTitle;
   }
@@ -106,12 +108,13 @@ public abstract class LabelledMatrix2D<S extends Comparable<S>, T extends Compar
 
   public abstract <Y> int compareY(T key1, T key2, Y tolerance);
 
-  public abstract LabelledMatrix2D<S, T> getMatrix(S[] xKeys, Object[] xLabels, String xTitle, T[] yKeys, Object[] yLabels, String yTitle, double[][] values, String valuesTitle);
-  
+  public abstract LabelledMatrix2D<S, T> getMatrix(S[] xKeys, Object[] xLabels, String xTitle, T[] yKeys, Object[] yLabels, String yTitle, double[][] values,
+      String valuesTitle);
+
   public abstract LabelledMatrix2D<S, T> getMatrix(S[] xKeys, Object[] xLabels, T[] yKeys, Object[] yLabels, double[][] values);
 
-  //TODO this needs rewriting
-  //TODO this ignores labels - using the original labels first and only using the labels from other when a new row / column is added
+  // TODO this needs rewriting
+  // TODO this ignores labels - using the original labels first and only using the labels from other when a new row / column is added
   public <X, Y> LabelledMatrix2D<S, T> add(final LabelledMatrix2D<S, T> other, final X xTolerance, final Y yTolerance) {
     Validate.notNull(other, "labelled matrix");
     final S[] otherXKeys = other.getXKeys();
@@ -126,10 +129,10 @@ public abstract class LabelledMatrix2D<S extends Comparable<S>, T extends Compar
     final int m2 = otherXKeys.length;
     final int n1 = originalYKeys.length;
     final int n2 = otherYKeys.length;
-    final ObjectArrayList<S> newXKeysList = new ObjectArrayList<S>(originalXKeys);
-    final ObjectArrayList<Object> newXLabelsList = new ObjectArrayList<Object>(originalXLabels);
-    final ObjectArrayList<T> newYKeysList = new ObjectArrayList<T>(originalYKeys);
-    final ObjectArrayList<Object> newYLabelsList = new ObjectArrayList<Object>(originalYLabels);
+    final ObjectArrayList<S> newXKeysList = new ObjectArrayList<>(originalXKeys);
+    final ObjectArrayList<Object> newXLabelsList = new ObjectArrayList<>(originalXLabels);
+    final ObjectArrayList<T> newYKeysList = new ObjectArrayList<>(originalYKeys);
+    final ObjectArrayList<Object> newYLabelsList = new ObjectArrayList<>(originalYLabels);
     for (int i = 0; i < m2; i++) {
       final int index = binarySearchInXWithTolerance(originalXKeys, otherXKeys[i], xTolerance);
       if (index < 0) {
@@ -174,7 +177,7 @@ public abstract class LabelledMatrix2D<S extends Comparable<S>, T extends Compar
     int low = 0;
     int high = keys.length - 1;
     while (low <= high) {
-      final int mid = (low + high) >>> 1;
+      final int mid = low + high >>> 1;
       final S midVal = keys[mid];
       final int comparison = compareX(key, midVal, tolerance);
       if (comparison == 0) {
@@ -192,7 +195,7 @@ public abstract class LabelledMatrix2D<S extends Comparable<S>, T extends Compar
     int low = 0;
     int high = keys.length - 1;
     while (low <= high) {
-      final int mid = (low + high) >>> 1;
+      final int mid = low + high >>> 1;
       final T midVal = keys[mid];
       final int comparison = compareY(key, midVal, tolerance);
       if (comparison == 0) {
@@ -207,7 +210,7 @@ public abstract class LabelledMatrix2D<S extends Comparable<S>, T extends Compar
   }
 
   private void quickSortX() {
-    (new ArrayQuickSorter<S>(_xKeys) {
+    new ArrayQuickSorter<S>(_xKeys) {
 
       @Override
       protected int compare(final S first, final S second) {
@@ -224,11 +227,11 @@ public abstract class LabelledMatrix2D<S extends Comparable<S>, T extends Compar
         }
       }
 
-    }).sort();
+    }.sort();
   }
 
   private void quickSortY() {
-    (new ArrayQuickSorter<T>(_yKeys) {
+    new ArrayQuickSorter<T>(_yKeys) {
 
       @Override
       protected int compare(final T first, final T second) {
@@ -242,7 +245,7 @@ public abstract class LabelledMatrix2D<S extends Comparable<S>, T extends Compar
         swap(_values, first, second);
       }
 
-    }).sort();
+    }.sort();
   }
 
   @Override
@@ -250,13 +253,13 @@ public abstract class LabelledMatrix2D<S extends Comparable<S>, T extends Compar
     final int prime = 31;
     int result = 1;
     result = prime * result + Arrays.hashCode(_values);
-    result = prime * result + ((_valuesTitle == null) ? 0 : _valuesTitle.hashCode());
+    result = prime * result + (_valuesTitle == null ? 0 : _valuesTitle.hashCode());
     result = prime * result + Arrays.hashCode(_xKeys);
     result = prime * result + Arrays.hashCode(_xLabels);
-    result = prime * result + ((_xTitle == null) ? 0 : _xTitle.hashCode());
+    result = prime * result + (_xTitle == null ? 0 : _xTitle.hashCode());
     result = prime * result + Arrays.hashCode(_yKeys);
     result = prime * result + Arrays.hashCode(_yLabels);
-    result = prime * result + ((_yTitle == null) ? 0 : _yTitle.hashCode());
+    result = prime * result + (_yTitle == null ? 0 : _yTitle.hashCode());
     return result;
   }
 

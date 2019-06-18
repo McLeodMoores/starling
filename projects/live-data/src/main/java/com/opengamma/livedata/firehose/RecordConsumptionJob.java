@@ -20,7 +20,7 @@ import com.opengamma.util.ArgumentChecker;
  * Decodes records read from the input stream and writes them to a queue so that another thread can process them.
  * Once running, the decoding of packets by one thread should be concurrent with the handling of previous data by
  * other thread(s).
- * <p/>
+ * <p>
  * In the case that the queue fills up, the job will drop new messages to avoid blocking the input
  * queue.
  */

@@ -54,7 +54,7 @@ public class FXOptionBlackPnLSurfaceDefaults extends DefaultPropertyFunction {
     _interpolatorName = interpolatorName;
     _leftExtrapolatorName = leftExtrapolatorName;
     _rightExtrapolatorName = rightExtrapolatorName;
-    _surfaceNameByCurrencyPair = new HashMap<Pair<String, String>, String>();
+    _surfaceNameByCurrencyPair = new HashMap<>();
     for (int i = 0; i < surfaceNameByCurrencyPair.length; i += 3) {
       final String firstCurrency = surfaceNameByCurrencyPair[i];
       final String secondCurrency = surfaceNameByCurrencyPair[i + 1];
@@ -70,11 +70,11 @@ public class FXOptionBlackPnLSurfaceDefaults extends DefaultPropertyFunction {
       return false;
     }
     final FinancialSecurity security = (FinancialSecurity) target.getPosition().getSecurity();
-    final boolean isFXOption = (security instanceof FXOptionSecurity
+    final boolean isFXOption = security instanceof FXOptionSecurity
         || security instanceof FXBarrierOptionSecurity
         || security instanceof FXDigitalOptionSecurity
         || security instanceof NonDeliverableFXOptionSecurity
-        || security instanceof NonDeliverableFXDigitalOptionSecurity);
+        || security instanceof NonDeliverableFXDigitalOptionSecurity;
     if (!isFXOption) {
       return false;
     }
@@ -96,7 +96,8 @@ public class FXOptionBlackPnLSurfaceDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (InterpolatedDataProperties.X_INTERPOLATOR_NAME.equals(propertyName)) {
       return Collections.singleton(_interpolatorName);
     }

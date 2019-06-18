@@ -6,7 +6,7 @@
 package com.opengamma.integration.tool.enginedebugger.node;
 
 /**
- * Abstract implementation for all leaf nodes
+ * Abstract implementation for all leaf nodes.
  */
 public abstract class AbstractTreeTableLeafNode implements TreeTableNode {
 

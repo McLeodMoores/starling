@@ -18,16 +18,18 @@ import com.opengamma.web.AbstractPerRequestWebResource;
 public abstract class AbstractWebLegalEntityResource
     extends AbstractPerRequestWebResource<WebLegalEntityData> {
 
-  /** HTML ftl directory */
+  /** HTML ftl directory. */
   protected static final String HTML_DIR = "legalentities/html/";
-  /** JSON ftl directory */
+  /** JSON ftl directory. */
   protected static final String JSON_DIR = "legalentities/json/";
 
   /**
    * Creates the resource.
-   * 
-   * @param legalEntityMaster  the legalEntity master, not null
-   * @param securityMaster  the securityMaster master, not null
+   *
+   * @param legalEntityMaster
+   *          the legalEntity master, not null
+   * @param securityMaster
+   *          the securityMaster master, not null
    */
   protected AbstractWebLegalEntityResource(final LegalEntityMaster legalEntityMaster, final SecurityMaster securityMaster) {
     super(new WebLegalEntityData());
@@ -38,22 +40,23 @@ public abstract class AbstractWebLegalEntityResource
 
   /**
    * Creates the resource.
-   * 
-   * @param parent  the parent resource, not null
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   protected AbstractWebLegalEntityResource(final AbstractWebLegalEntityResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @return the output root data, not null
    */
   @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
+    final FlexiBean out = super.createRootData();
     out.put("uris", new WebLegalEntityUris(data()));
     return out;
   }

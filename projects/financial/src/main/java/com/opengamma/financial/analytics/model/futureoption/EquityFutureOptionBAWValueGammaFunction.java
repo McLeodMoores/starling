@@ -31,7 +31,7 @@ public class EquityFutureOptionBAWValueGammaFunction extends EquityFutureOptionB
   private static final ValueGreekCalculator CALCULATOR = ValueGammaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityFutureOptionBAWValueGammaFunction() {
     super(ValueRequirementNames.VALUE_GAMMA);

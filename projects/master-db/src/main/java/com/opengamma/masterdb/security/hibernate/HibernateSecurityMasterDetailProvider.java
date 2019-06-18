@@ -76,19 +76,15 @@ import com.opengamma.util.db.DbDialect;
 import com.opengamma.util.db.DbMapSqlParameterSource;
 
 /**
- * Provides access to persist the full bean structure of the security.
- * This supports the default {@link DbSecurityMaster} implementations.
+ * Provides access to persist the full bean structure of the security. This supports the default {@link DbSecurityMaster} implementations.
  */
 public class HibernateSecurityMasterDetailProvider implements SecurityMasterDetailProvider {
 
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(HibernateSecurityMasterDetailProvider.class);
-  private static final ConcurrentMap<Class<?>, SecurityBeanOperation<?, ?>> BEAN_OPERATIONS_BY_SECURITY =
-      new ConcurrentHashMap<>();
-  private static final ConcurrentMap<Class<?>, SecurityBeanOperation<?, ?>> BEAN_OPERATIONS_BY_BEAN =
-      new ConcurrentHashMap<>();
-  private static final ConcurrentMap<String, SecurityBeanOperation<?, ?>> BEAN_OPERATIONS_BY_TYPE =
-      new ConcurrentHashMap<>();
+  private static final ConcurrentMap<Class<?>, SecurityBeanOperation<?, ?>> BEAN_OPERATIONS_BY_SECURITY = new ConcurrentHashMap<>();
+  private static final ConcurrentMap<Class<?>, SecurityBeanOperation<?, ?>> BEAN_OPERATIONS_BY_BEAN = new ConcurrentHashMap<>();
+  private static final ConcurrentMap<String, SecurityBeanOperation<?, ?>> BEAN_OPERATIONS_BY_TYPE = new ConcurrentHashMap<>();
 
   /**
    * The database connector.
@@ -99,7 +95,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
    */
   private final OperationContext _operationContext = new OperationContext();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static void loadBeanOperation(final SecurityBeanOperation<?, ?> beanOperation) {
     if (BEAN_OPERATIONS_BY_SECURITY.containsKey(beanOperation.getSecurityClass())) {
       LOGGER.error(beanOperation.getSecurityClass() + " is already registered in BEAN_OPERATIONS_BY_SECURITY");
@@ -118,21 +114,20 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
     BEAN_OPERATIONS_BY_TYPE.put(beanOperation.getSecurityType(), beanOperation);
   }
 
-
   /**
    * Provides a way to add a bean operation to the hibernate configuration.
    *
-   * Ideally this method should not be public but a way is needed of allowing this class to
-   * be extended (or composed with) such that other projecvts can add their own security types.
-   * Exposing this method is the simplest way to achieve this at the moment. Longer term we would
-   * expect hibernate to be removed in which case it will all become simpler.
+   * Ideally this method should not be public but a way is needed of allowing this class to be extended (or composed with) such that other projecvts can add
+   * their own security types. Exposing this method is the simplest way to achieve this at the moment. Longer term we would expect hibernate to be removed in
+   * which case it will all become simpler.
    *
-   * @param beanOperation the bean operation to be stored
+   * @param beanOperation
+   *          the bean operation to be stored
    */
   public void addBeanOperation(final SecurityBeanOperation<?, ?> beanOperation) {
-    if (BEAN_OPERATIONS_BY_SECURITY.containsKey(beanOperation.getSecurityClass()) ||
-        BEAN_OPERATIONS_BY_BEAN.containsKey(beanOperation.getBeanClass()) ||
-        BEAN_OPERATIONS_BY_TYPE.containsKey(beanOperation.getSecurityType())) {
+    if (BEAN_OPERATIONS_BY_SECURITY.containsKey(beanOperation.getSecurityClass())
+        || BEAN_OPERATIONS_BY_BEAN.containsKey(beanOperation.getBeanClass())
+        || BEAN_OPERATIONS_BY_TYPE.containsKey(beanOperation.getSecurityType())) {
 
       LOGGER.warn(beanOperation.getBeanClass() + " is already registered");
 
@@ -165,18 +160,18 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
     return (SecurityBeanOperation<T, SecurityBean>) beanOperation;
   }
 
-  //  @SuppressWarnings("unchecked")
-  //  private static <T extends SecurityBean> SecurityBeanOperation<Security, T> getBeanOperation(final T bean) {
-  //    final SecurityBeanOperation<?, ?> beanOperation = getBeanOperation(BEAN_OPERATIONS_BY_BEAN, bean.getClass());
-  //    if (beanOperation == null) {
-  //      throw new OpenGammaRuntimeException("can't find BeanOperation for " + bean);
-  //    }
-  //    return (SecurityBeanOperation<Security, T>) beanOperation;
-  //  }
+  // @SuppressWarnings("unchecked")
+  // private static <T extends SecurityBean> SecurityBeanOperation<Security, T> getBeanOperation(final T bean) {
+  // final SecurityBeanOperation<?, ?> beanOperation = getBeanOperation(BEAN_OPERATIONS_BY_BEAN, bean.getClass());
+  // if (beanOperation == null) {
+  // throw new OpenGammaRuntimeException("can't find BeanOperation for " + bean);
+  // }
+  // return (SecurityBeanOperation<Security, T>) beanOperation;
+  // }
 
   @SuppressWarnings("unchecked")
   private static <T extends SecurityBean> SecurityBeanOperation<Security, T> getBeanOperation(final String type) {
-    SecurityBeanOperation<?, ?> beanOperation = BEAN_OPERATIONS_BY_TYPE.get(type.toUpperCase(Locale.ENGLISH));  // upper case handles "Cash"
+    SecurityBeanOperation<?, ?> beanOperation = BEAN_OPERATIONS_BY_TYPE.get(type.toUpperCase(Locale.ENGLISH)); // upper case handles "Cash"
     if (beanOperation == null) {
       if (type.contains("_")) {
         beanOperation = BEAN_OPERATIONS_BY_TYPE.get(type.substring(type.indexOf('_') + 1));
@@ -241,15 +236,16 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
     loadBeanOperation(IndexFamilyBeanOperation.INSTANCE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final DbSecurityMaster master) {
     _dbConnector = master.getDbConnector();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the context for additional resources.
+   *
    * @return the context
    */
   protected OperationContext getOperationContext() {
@@ -258,6 +254,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
 
   /**
    * Gets the Hibernate Spring template.
+   *
    * @return the template
    */
   protected HibernateTemplate getHibernateTemplate() {
@@ -266,6 +263,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
 
   /**
    * Gets the database dialect.
+   *
    * @return the dialect
    */
   protected DbDialect getDialect() {
@@ -274,19 +272,21 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
 
   /**
    * Gets the session DAO.
-   * @param session  the session
+   *
+   * @param session
+   *          the session
    * @return the DAO
    */
   protected HibernateSecurityMasterDao getHibernateSecurityMasterSession(final Session session) {
     return new HibernateSecurityMasterSession(session);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public ManageableSecurity loadSecurityDetail(final ManageableSecurity base) {
     LOGGER.debug("loading detail for security {}", base.getUniqueId());
     return getHibernateTemplate().execute(new HibernateCallback<ManageableSecurity>() {
-      @SuppressWarnings({"unchecked", "rawtypes" })
+      @SuppressWarnings({ "unchecked", "rawtypes" })
       @Override
       public ManageableSecurity doInHibernate(final Session session) throws HibernateException {
         final SecurityBeanOperation beanOperation = getBeanOperation(base.getSecurityType());
@@ -301,7 +301,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
         if (result == null) {
           throw new IllegalStateException("Unable to convert security from database: " + base.getUniqueId() + " " + base.getSecurityType());
         }
-        if (Objects.equal(base.getSecurityType(), result.getSecurityType()) == false) {
+        if (!Objects.equal(base.getSecurityType(), result.getSecurityType())) {
           throw new IllegalStateException("Security type returned by Hibernate load does not match");
         }
         result.setUniqueId(base.getUniqueId());
@@ -318,10 +318,10 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
   public void storeSecurityDetail(final ManageableSecurity security) {
     LOGGER.debug("storing detail for security {}", security.getUniqueId());
     if (security.getClass() == ManageableSecurity.class) {
-      return;  // no detail to store
+      return; // no detail to store
     }
     getHibernateTemplate().execute(new HibernateCallback<Object>() {
-      @SuppressWarnings({"unchecked", "rawtypes" })
+      @SuppressWarnings({ "unchecked", "rawtypes" })
       @Override
       public Object doInHibernate(final Session session) throws HibernateException {
         final HibernateSecurityMasterDao secMasterSession = getHibernateSecurityMasterSession(session);

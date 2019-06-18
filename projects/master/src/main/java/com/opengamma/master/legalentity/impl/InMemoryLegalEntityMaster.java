@@ -36,9 +36,9 @@ import com.opengamma.util.paging.Paging;
 
 /**
  * A simple, in-memory implementation of {@code LegalEntityMaster}.
- * <p/>
+ * <p>
  * This master does not support versioning of legalEntities.
- * <p/>
+ * <p>
  * This implementation does not copy stored elements, making it thread-hostile.
  * As such, this implementation is currently most useful for testing scenarios.
  */

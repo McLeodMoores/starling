@@ -18,15 +18,15 @@ import com.opengamma.livedata.resolver.DistributionSpecificationResolver;
 import com.opengamma.livedata.server.DistributionSpecification;
 
 /**
- * Wraps a {@link DistributionSpecificationResolver} from Strong Bloomberg space into Fake bloomberg space
+ * Wraps a {@link DistributionSpecificationResolver} from Strong Bloomberg space into Fake bloomberg space.
  */
 public class FakeDistributionSpecificationResolver implements DistributionSpecificationResolver {
 
   private final DistributionSpecificationResolver _underlying;
 
-
   /**
-   * @param underlying the bloomberg spec resolver
+   * @param underlying
+   *          the bloomberg spec resolver
    */
   public FakeDistributionSpecificationResolver(final DistributionSpecificationResolver underlying) {
     super();
@@ -50,7 +50,6 @@ public class FakeDistributionSpecificationResolver implements DistributionSpecif
     }
     return ret;
   }
-
 
   private DistributionSpecification wrap(final DistributionSpecification underResolved) {
     if (underResolved == null) {

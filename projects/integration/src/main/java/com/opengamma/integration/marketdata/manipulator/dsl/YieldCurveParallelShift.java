@@ -32,19 +32,19 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * {@link StructureManipulator} that shifts all points on a curve up or down by the same amount.
- * Uses {@link YieldCurveUtils#withParallelShift} to perform the transformation.
+ * {@link StructureManipulator} that shifts all points on a curve up or down by the same amount. Uses {@link YieldCurveUtils#withParallelShift} to perform the
+ * transformation.
  */
 @BeanDefinition
 public final class YieldCurveParallelShift implements StructureManipulator<YieldCurve>, ImmutableBean {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveParallelShift.class);
 
-  /** How the shift should be applied */
+  /** How the shift should be applied. */
   @PropertyDefinition(validate = "notNull")
   private final ScenarioShiftType _shiftType;
 
-  /** The shift to apply  */
+  /** The shift to apply. */
   @PropertyDefinition
   private final double _shift;
 
@@ -56,8 +56,8 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
 
   @Override
   public YieldCurve execute(final YieldCurve structure,
-                            final ValueSpecification valueSpecification,
-                            final FunctionExecutionContext executionContext) {
+      final ValueSpecification valueSpecification,
+      final FunctionExecutionContext executionContext) {
     LOGGER.debug("Shifting curve {} by {}, {}", structure.getName(), _shift, _shiftType);
     return YieldCurveUtils.withParallelShift(structure, _shift, _shiftType.toAnalyticsType());
   }
@@ -106,7 +106,7 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
 
   //-----------------------------------------------------------------------
   /**
-   * Gets how the shift should be applied
+   * Gets how the shift should be applied.
    * @return the value of the property, not null
    */
   public ScenarioShiftType getShiftType() {
@@ -115,7 +115,7 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the shift to apply
+   * Gets the shift to apply.
    * @return the value of the property
    */
   public double getShift() {
@@ -359,7 +359,7 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
 
     //-----------------------------------------------------------------------
     /**
-     * Sets how the shift should be applied
+     * Sets how the shift should be applied.
      * @param shiftType  the new value, not null
      * @return this, for chaining, not null
      */
@@ -370,7 +370,7 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
     }
 
     /**
-     * Sets the shift to apply
+     * Sets the shift to apply.
      * @param shift  the new value
      * @return this, for chaining, not null
      */

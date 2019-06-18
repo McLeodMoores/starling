@@ -12,20 +12,22 @@ public interface ExchangeDataProvider {
 
   /**
    * Gets an exchange by ISO MIC code.
-   * 
-   * @param micCode  the MIC code, not null
+   *
+   * @param micCode
+   *          the MIC code, not null
    * @return the exchange, null if not found
    */
-  Exchange getExchange(final String micCode);
+  Exchange getExchange(String micCode);
 
   /**
    * Gets an exchange from a description.
    *
    * Ideally lookups should be via MIC, but we don't always have access to that.
    *
-   * @param description the description (case insensitive)
+   * @param description
+   *          the description (case insensitive)
    * @return the exchange, null if not found
    */
-  Exchange getExchangeFromDescription(final String description);
+  Exchange getExchangeFromDescription(String description);
 
 }

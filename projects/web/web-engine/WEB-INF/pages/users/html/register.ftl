@@ -4,7 +4,7 @@
 <#-- SECTION Main -->
 <@section title="Register">
   <p>
-    Register to use OpenGamma risk analytics.
+    Register to use Starling risk analytics.
   </p>
   <#if err_unexpected??><div class="err">An unexpected error occurred</div></#if>
   <@form method="POST" action="${userSecurity.registerUri}">

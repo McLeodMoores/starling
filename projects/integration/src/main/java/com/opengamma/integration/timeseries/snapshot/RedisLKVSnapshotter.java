@@ -39,7 +39,8 @@ public class RedisLKVSnapshotter {
   private final String _globalPrefix;
   private final RedisConnector _redisConnector;
 
-  public RedisLKVSnapshotter(final BlackList dataFieldBlackList, final BlackList schemeBlackList, final String normalizationRuleSetId, final String globalPrefix, final RedisConnector redisConnector) {
+  public RedisLKVSnapshotter(final BlackList dataFieldBlackList, final BlackList schemeBlackList, final String normalizationRuleSetId,
+      final String globalPrefix, final RedisConnector redisConnector) {
     ArgumentChecker.notNull(normalizationRuleSetId, "normalizationRuleSetId");
     ArgumentChecker.notNull(globalPrefix, "globalPrefix");
     ArgumentChecker.notNull(redisConnector, "redisConnector");
@@ -60,6 +61,7 @@ public class RedisLKVSnapshotter {
 
   /**
    * Gets the normalizationRuleSetId.
+   * 
    * @return the normalizationRuleSetId
    */
   public String getNormalizationRuleSetId() {
@@ -68,6 +70,7 @@ public class RedisLKVSnapshotter {
 
   /**
    * Gets the globalPrefix.
+   * 
    * @return the globalPrefix
    */
   public String getGlobalPrefix() {
@@ -76,6 +79,7 @@ public class RedisLKVSnapshotter {
 
   /**
    * Gets the redisConnector.
+   * 
    * @return the redisConnector
    */
   public RedisConnector getRedisConnector() {
@@ -84,7 +88,7 @@ public class RedisLKVSnapshotter {
 
   public Map<ExternalId, Map<String, String>> getLastKnownValues() {
     LOGGER.debug("Reading Redis LKV values for normalizationRuleSetId:{} globalPrefix:{} dataFieldBlackList:{} schemeBlackList:{}",
-        new Object[] {getNormalizationRuleSetId(), getGlobalPrefix(), _dataFieldBlackList.keySet(), _schemeBlackList.keySet()});
+        new Object[] { getNormalizationRuleSetId(), getGlobalPrefix(), _dataFieldBlackList.keySet(), _schemeBlackList.keySet() });
     final List<ExternalId> allSecurities = getAllSecurities();
     final OperationTimer timer = new OperationTimer(LOGGER, "Reading LKV for {} securities", allSecurities.size());
     final Map<ExternalId, Map<String, String>> result = getLastKnownValues(allSecurities);
@@ -98,7 +102,7 @@ public class RedisLKVSnapshotter {
     final JedisPool jedisPool = _redisConnector.getJedisPool();
     final Jedis jedis = jedisPool.getResource();
     final Pipeline pipeline = jedis.pipelined();
-    //start transaction
+    // start transaction
     pipeline.multi();
     for (final ExternalId identifier : securities) {
       final String redisKey = generateRedisKey(identifier.getScheme().getName(), identifier.getValue(), getNormalizationRuleSetId());

@@ -48,7 +48,7 @@ public class InterestRateFutureOptionBlackYieldCurveNodePnLDefaults extends Defa
     _samplingPeriod = samplingPeriod;
     _scheduleCalculator = scheduleCalculator;
     _samplingFunction = samplingFunction;
-    _currencyCurveConfigAndSurfaceNames = new HashMap<String, Pair<String, String>>();
+    _currencyCurveConfigAndSurfaceNames = new HashMap<>();
     for (int i = 0; i < currencyCurveConfigAndSurfaceNames.length; i += 3) {
       final Pair<String, String> pair = Pairs.of(currencyCurveConfigAndSurfaceNames[i + 1], currencyCurveConfigAndSurfaceNames[i + 2]);
       _currencyCurveConfigAndSurfaceNames.put(currencyCurveConfigAndSurfaceNames[i], pair);

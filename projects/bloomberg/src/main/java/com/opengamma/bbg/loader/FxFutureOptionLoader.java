@@ -53,33 +53,35 @@ public class FxFutureOptionLoader extends SecurityLoader {
    * The fields to load from Bloomberg.
    */
   private static final Set<String> BLOOMBERG_FUTURE_OPTION_FIELDS = ImmutableSet.of(
-    FIELD_TICKER,
-    FIELD_EXCH_CODE,
-    FIELD_PARSEKYABLE_DES,
-    FIELD_OPT_EXERCISE_TYP,
-    FIELD_OPT_STRIKE_PX,
-    FIELD_OPT_PUT_CALL,
-    FIELD_OPT_UNDERLYING_SECURITY_DES,
-    FIELD_OPT_UNDL_CRNCY,
-    FIELD_OPT_EXPIRE_DT,
-    FIELD_ID_BBG_UNIQUE,
-    FIELD_FUT_VAL_PT,
-    FIELD_UNDL_ID_BB_UNIQUE);
+      FIELD_TICKER,
+      FIELD_EXCH_CODE,
+      FIELD_PARSEKYABLE_DES,
+      FIELD_OPT_EXERCISE_TYP,
+      FIELD_OPT_STRIKE_PX,
+      FIELD_OPT_PUT_CALL,
+      FIELD_OPT_UNDERLYING_SECURITY_DES,
+      FIELD_OPT_UNDL_CRNCY,
+      FIELD_OPT_EXPIRE_DT,
+      FIELD_ID_BBG_UNIQUE,
+      FIELD_FUT_VAL_PT,
+      FIELD_UNDL_ID_BB_UNIQUE);
 
   /**
-   * The valid Bloomberg security types for FX Future Option
+   * The valid Bloomberg security types for FX Future Option.
    */
   public static final Set<String> VALID_SECURITY_TYPES = ImmutableSet.of(BLOOMBERG_CURRENCY_TYPE);
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   * 
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public FxFutureOptionLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.FX_FUTURE_OPTION);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     final String rootTicker = fieldData.getString(FIELD_TICKER);
@@ -132,7 +134,7 @@ public class FxFutureOptionLoader extends SecurityLoader {
       return null;
     }
     final OptionType optionType = getOptionType(putOrCall);
-    //get year month day from expiryDate in the yyyy-mm-dd format
+    // get year month day from expiryDate in the yyyy-mm-dd format
     LocalDate expiryLocalDate = null;
     try {
       expiryLocalDate = LocalDate.parse(expiryDate);
@@ -153,18 +155,18 @@ public class FxFutureOptionLoader extends SecurityLoader {
     }
 
     final FxFutureOptionSecurity security = new FxFutureOptionSecurity(
-      exchangeCode,
-      exchangeCode,
-      expiry,
-      getExerciseType(optionExerciseType),
-      buildUnderlyingTicker(underlingTicker),
-      pointValue,
-      ogCurrency,
-      optionStrikePrice / 100, // Strike in percent //TODO: use normalization (like in BloombergRateClassifier)?
-      optionType);
+        exchangeCode,
+        exchangeCode,
+        expiry,
+        getExerciseType(optionExerciseType),
+        buildUnderlyingTicker(underlingTicker),
+        pointValue,
+        ogCurrency,
+        optionStrikePrice / 100, // Strike in percent //TODO: use normalization (like in BloombergRateClassifier)?
+        optionType);
     security.setExternalIdBundle(ExternalIdBundle.of(identifiers));
     security.setUniqueId(BloombergSecurityProvider.createUniqueId(bbgUniqueID));
-    //build option display name
+    // build option display name
     final StringBuilder buf = new StringBuilder(rootTicker);
     buf.append(" ");
     buf.append(expiryDate);

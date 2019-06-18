@@ -11,19 +11,15 @@ import java.util.regex.Pattern;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Immutable representation of the version of a schema file used for
- * the xml portfolio import/export. A version number must be of the
- * form N.m where N represents the major version and n the minor.
- * Changes in minor version number are expected to be backwards compatible
- * whereas changes in major version are not expected to be.
+ * Immutable representation of the version of a schema file used for the xml portfolio import/export. A version number must be of the form N.m where N
+ * represents the major version and n the minor. Changes in minor version number are expected to be backwards compatible whereas changes in major version are
+ * not expected to be.
  */
 public class SchemaVersion implements Comparable<SchemaVersion> {
 
   /**
-   * Regex with groups specifying:
-   * - one or more digits (captured into group 1), followed by
-   * - a period, followed by
-   * - one or more digits (captured into group 2)
+   * Regex with groups specifying: - one or more digits (captured into group 1), followed by - a period, followed by - one or more digits (captured into group
+   * 2)
    */
   private static final Pattern PATTERN = Pattern.compile("(\\d+)\\.(\\d+)");
 
@@ -50,9 +46,9 @@ public class SchemaVersion implements Comparable<SchemaVersion> {
 
   @Override
   public int compareTo(final SchemaVersion other) {
-    return _majorVersion == other._majorVersion ?
-        _minorVersion - other._minorVersion :
-        _majorVersion - other._majorVersion;
+    return _majorVersion == other._majorVersion
+        ? _minorVersion - other._minorVersion
+        : _majorVersion - other._majorVersion;
   }
 
   @Override

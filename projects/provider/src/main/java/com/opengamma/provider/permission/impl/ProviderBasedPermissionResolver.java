@@ -9,15 +9,16 @@ import org.apache.shiro.authz.Permission;
 
 import com.opengamma.provider.permission.PermissionCheckProvider;
 import com.opengamma.util.ArgumentChecker;
-import com.opengamma.util.auth.AuthUtils;
 import com.opengamma.util.auth.PrefixedPermissionResolver;
-import com.opengamma.util.auth.ShiroPermissionResolver;
 
 /**
- * An Apache Shiro permission resolver that uses a {@code PermissionCheckProvider}.
+ * An Apache Shiro permission resolver that uses a
+ * {@code PermissionCheckProvider}.
  * <p>
- * Instances of this class are registered using {@link ShiroPermissionResolver#register(PrefixedPermissionResolver)}
- * accessed via {@link AuthUtils#getPermissionResolver()}.
+ * Instances of this class are registered using
+ * {@link com.opengamma.util.auth.ShiroPermissionResolver#register(PrefixedPermissionResolver)}
+ * accessed via
+ * {@link com.opengamma.util.auth.AuthUtils#getPermissionResolver()}.
  */
 public final class ProviderBasedPermissionResolver implements PrefixedPermissionResolver {
 

@@ -19,6 +19,12 @@ public class FieldNameChange implements NormalizationRule {
   private final String _from;
   private final String _to;
 
+  /**
+   * @param from
+   *          the name to change from, not null
+   * @param to
+   *          the name to change to, not null
+   */
   public FieldNameChange(final String from, final String to) {
     ArgumentChecker.notNull(from, "From");
     ArgumentChecker.notNull(to, "To");

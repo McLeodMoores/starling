@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments.provider;
@@ -21,7 +21,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  */
 public final class CouponIborAverageFixingDatesCompoundingDiscountingMethod {
 
@@ -32,6 +32,7 @@ public final class CouponIborAverageFixingDatesCompoundingDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static CouponIborAverageFixingDatesCompoundingDiscountingMethod getInstance() {
@@ -46,8 +47,11 @@ public final class CouponIborAverageFixingDatesCompoundingDiscountingMethod {
 
   /**
    * Compute the present value of a Ibor average coupon by discounting.
-   * @param coupon The coupon.
-   * @param multicurves The multi-curve provider.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param multicurves
+   *          The multi-curve provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponIborAverageFixingDatesCompounding coupon, final MulticurveProviderInterface multicurves) {
@@ -56,14 +60,15 @@ public final class CouponIborAverageFixingDatesCompoundingDiscountingMethod {
     final int nPeriods = coupon.getFixingTime().length;
     double payOff = coupon.getInvestmentFactor();
     for (int i = 0; i < nPeriods; ++i) {
-      double forward = ((i == 0) ? coupon.getAmountAccrued() : 0.0);
+      double forward = i == 0 ? coupon.getAmountAccrued() : 0.0;
       final int nDates = coupon.getFixingTime()[i].length;
       for (int j = 0; j < nDates; ++j) {
-        final double forward1 = multicurves.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTime()[i][j], coupon.getFixingPeriodEndTime()[i][j],
+        final double forward1 = multicurves.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTime()[i][j],
+            coupon.getFixingPeriodEndTime()[i][j],
             coupon.getFixingPeriodAccrualFactor()[i][j]);
         forward += coupon.getWeight()[i][j] * forward1;
       }
-      payOff *= (1.0 + forward * coupon.getPaymentAccrualFactors()[i]);
+      payOff *= 1.0 + forward * coupon.getPaymentAccrualFactors()[i];
     }
     final double df = multicurves.getDiscountFactor(coupon.getCurrency(), coupon.getPaymentTime());
     final double pv = coupon.getNotional() * (payOff - 1.0) * df;
@@ -72,11 +77,15 @@ public final class CouponIborAverageFixingDatesCompoundingDiscountingMethod {
 
   /**
    * Compute the present value sensitivity to yield for discounting curve and forward rate (in index convention) for forward curve.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The present value curve sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponIborAverageFixingDatesCompounding coupon, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponIborAverageFixingDatesCompounding coupon,
+      final MulticurveProviderInterface multicurve) {
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(multicurve, "Curves");
     final int nPeriods = coupon.getFixingTime().length;
@@ -84,14 +93,15 @@ public final class CouponIborAverageFixingDatesCompoundingDiscountingMethod {
     final double[] fctr = new double[nPeriods];
     double payOff = coupon.getInvestmentFactor();
     for (int i = 0; i < nPeriods; ++i) {
-      double forward = ((i == 0) ? coupon.getAmountAccrued() : 0.0);
+      double forward = i == 0 ? coupon.getAmountAccrued() : 0.0;
       nDates[i] = coupon.getFixingTime()[i].length;
       for (int j = 0; j < nDates[i]; ++j) {
-        final double forward1 = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTime()[i][j], coupon.getFixingPeriodEndTime()[i][j],
+        final double forward1 = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTime()[i][j],
+            coupon.getFixingPeriodEndTime()[i][j],
             coupon.getFixingPeriodAccrualFactor()[i][j]);
         forward += coupon.getWeight()[i][j] * forward1;
       }
-      fctr[i] = (1.0 + forward * coupon.getPaymentAccrualFactors()[i]);
+      fctr[i] = 1.0 + forward * coupon.getPaymentAccrualFactors()[i];
       payOff *= fctr[i];
     }
     final double df = multicurve.getDiscountFactor(coupon.getCurrency(), coupon.getPaymentTime());

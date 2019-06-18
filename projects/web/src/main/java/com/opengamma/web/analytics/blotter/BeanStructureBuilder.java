@@ -69,9 +69,9 @@ import com.opengamma.util.OpenGammaClock;
   private final Map<Class<?>, String> _endpoints;
 
   /* package */ BeanStructureBuilder(final Set<MetaBean> metaBeans,
-                                     final Map<Class<?>, Class<?>> underlyingSecurityTypes,
-                                     final Map<Class<?>, String> endpoints,
-                                     final StringConvert stringConvert) {
+      final Map<Class<?>, Class<?>> underlyingSecurityTypes,
+      final Map<Class<?>, String> endpoints,
+      final StringConvert stringConvert) {
     ArgumentChecker.notNull(underlyingSecurityTypes, "underlyingSecurityTypes");
     ArgumentChecker.notNull(metaBeans, "metaBeans");
     ArgumentChecker.notNull(endpoints, "endpoints");
@@ -160,40 +160,37 @@ import com.opengamma.util.OpenGammaClock;
   private static boolean isNullable(final MetaProperty<?> property) {
     if (property.propertyType().isPrimitive()) {
       return false;
-    } else {
-      final PropertyDefinition definitionAnnotation = property.annotation(PropertyDefinition.class);
-      return !definitionAnnotation.validate().equals("notNull");
     }
+    final PropertyDefinition definitionAnnotation = property.annotation(PropertyDefinition.class);
+    return !definitionAnnotation.validate().equals("notNull");
   }
 
   /* package */ List<Map<String, Object>> typesFor(final Class<?> type) {
     final String typeName = TYPES.get(type);
     if (typeName != null) {
       return ImmutableList.of(typeInfo(typeName, null, null, false));
-    } else {
-      boolean canConvert;
-      canConvert = isConvertible(type);
-      if (canConvert) {
-        return ImmutableList.of(typeInfo(STRING, type.getSimpleName(), _endpoints.get(type), false));
-      } else {
-        // TODO deal with (potentially multiple) bean types
-        final Set<Class<? extends Bean>> subtypes = _beanHierarchy.subtypes(type);
-        if (subtypes.isEmpty()) {
-          throw new OpenGammaRuntimeException("No type mapping found for class " + type.getName());
-        }
-        final List<Map<String, Object>> types = Lists.newArrayListWithCapacity(subtypes.size());
-        for (final Class<? extends Bean> subtype : subtypes) {
-          types.add(typeInfo(subtype.getSimpleName(), null, _endpoints.get(subtype), true));
-        }
-        return types;
-      }
     }
+    boolean canConvert;
+    canConvert = isConvertible(type);
+    if (canConvert) {
+      return ImmutableList.of(typeInfo(STRING, type.getSimpleName(), _endpoints.get(type), false));
+    }
+    // TODO deal with (potentially multiple) bean types
+    final Set<Class<? extends Bean>> subtypes = _beanHierarchy.subtypes(type);
+    if (subtypes.isEmpty()) {
+      throw new OpenGammaRuntimeException("No type mapping found for class " + type.getName());
+    }
+    final List<Map<String, Object>> types = Lists.newArrayListWithCapacity(subtypes.size());
+    for (final Class<? extends Bean> subtype : subtypes) {
+      types.add(typeInfo(subtype.getSimpleName(), null, _endpoints.get(subtype), true));
+    }
+    return types;
   }
 
   /* package */ static Map<String, Object> property(final MetaProperty<?> property,
-                                                    final List<Map<String, Object>> types,
-                                                    final List<Map<String, Object>> valueTypes,
-                                                    final PropertyType propertyType) {
+      final List<Map<String, Object>> types,
+      final List<Map<String, Object>> valueTypes,
+      final PropertyType propertyType) {
     final Map<String, Object> result = Maps.newHashMap();
     // TODO this is *really* dirty and not supposed to be anything else. fix or remove
     final boolean readOnly = property.style() == PropertyStyle.READ_ONLY || property.name().equals("uniqueId");
@@ -216,9 +213,9 @@ import com.opengamma.util.OpenGammaClock;
   }
 
   /* package */ static Map<String, Object> typeInfo(final String expectedType,
-                                                    final String actualType,
-                                                    final String endpoint,
-                                                    final boolean isBeanType) {
+      final String actualType,
+      final String endpoint,
+      final boolean isBeanType) {
     final Map<String, Object> results = Maps.newHashMap();
     results.put("expectedType", expectedType);
     results.put("actualType", actualType);

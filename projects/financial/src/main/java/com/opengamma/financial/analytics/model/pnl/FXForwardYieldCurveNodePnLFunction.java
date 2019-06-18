@@ -59,8 +59,11 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 
 /**
- * Function that calculates the P&L for an FX forward due to movements in the yield curves used for pricing.
+ * Function that calculates the P&amp;L for an FX forward due to movements in the yield curves used for pricing.
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardYieldCurveNodePnLFunction.class);
@@ -80,14 +83,15 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
   }
 
   /**
-   * Compiled function that calculates the P&L for an FX forward due to movements in the yield curves used for pricing.
+   * Compiled function that calculates the P&amp;L for an FX forward due to movements in the yield curves used for pricing.
    */
   protected class Compiled extends AbstractInvokingCompiledFunction {
     /** The currency pairs */
     private final CurrencyPairs _currencyPairs;
 
     /**
-     * @param currencyPairs The currency pairs, not null
+     * @param currencyPairs
+     *          The currency pairs, not null
      */
     public Compiled(final CurrencyPairs currencyPairs) {
       ArgumentChecker.notNull(currencyPairs, "currency pairs");
@@ -163,11 +167,14 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
         curveCalculationMethod = Iterables.getOnlyElement(curveCalculationMethods);
       }
       final Set<String> calculationMethods = constraints.getValues(ValuePropertyNames.CALCULATION_METHOD);
-      final ValueRequirement ycnsRequirement = getYCNSRequirement(payCurveName, payCurveCalculationConfigName, receiveCurveName, receiveCurveCalculationConfigName, curveCurrency.getCode(),
+      final ValueRequirement ycnsRequirement = getYCNSRequirement(payCurveName, payCurveCalculationConfigName, receiveCurveName,
+          receiveCurveCalculationConfigName, curveCurrency.getCode(),
           curveName, curveCalculationMethods, calculationMethods, security);
       final ValueProperties returnSeriesBaseConstraints = desiredValue.getConstraints().copy().withoutAny(ValuePropertyNames.RECEIVE_CURVE)
-          .withoutAny(ValuePropertyNames.RECEIVE_CURVE_CALCULATION_CONFIG).withoutAny(ValuePropertyNames.PAY_CURVE).withoutAny(ValuePropertyNames.PAY_CURVE_CALCULATION_CONFIG)
-          .withoutAny(ValuePropertyNames.CURVE_CURRENCY).withoutAny(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS).withoutAny(ValuePropertyNames.CURVE_CALCULATION_METHOD)
+          .withoutAny(ValuePropertyNames.RECEIVE_CURVE_CALCULATION_CONFIG).withoutAny(ValuePropertyNames.PAY_CURVE)
+          .withoutAny(ValuePropertyNames.PAY_CURVE_CALCULATION_CONFIG)
+          .withoutAny(ValuePropertyNames.CURVE_CURRENCY).withoutAny(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS)
+          .withoutAny(ValuePropertyNames.CURVE_CALCULATION_METHOD)
           .withoutAny(ValuePropertyNames.CALCULATION_METHOD).get();
       final Set<String> resultCurrencies = constraints.getValues(CURRENCY);
       final String resultCurrency;
@@ -198,9 +205,11 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
           final String underlyingCurveConfigName = Iterables.getOnlyElement(exogenousConfigData.entrySet()).getKey();
           final MultiCurveCalculationConfig underlyingCurveConfig = _curveCalculationConfigSource.getConfig(underlyingCurveConfigName);
           final Currency baseCurrency = Currency.of(underlyingCurveConfig.getTarget().getUniqueId().getValue());
-          returnSeriesRequirement = getReturnSeriesRequirement(curveName, baseCurrency, curveCurrency, curveCalculationConfigName, returnSeriesBaseConstraints, resultCurrency);
+          returnSeriesRequirement = getReturnSeriesRequirement(curveName, baseCurrency, curveCurrency, curveCalculationConfigName, returnSeriesBaseConstraints,
+              resultCurrency);
         } else {
-          returnSeriesRequirement = getReturnSeriesRequirement(curveName, curveCurrency, curveCalculationConfigName, returnSeriesBaseConstraints, resultCurrency);
+          returnSeriesRequirement = getReturnSeriesRequirement(curveName, curveCurrency, curveCalculationConfigName, returnSeriesBaseConstraints,
+              resultCurrency);
         }
       } else {
         returnSeriesRequirement = getReturnSeriesRequirement(curveName, curveCurrency, curveCalculationConfigName, returnSeriesBaseConstraints, resultCurrency);
@@ -211,7 +220,8 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+        final Map<ValueSpecification, ValueRequirement> inputs) {
       final Builder builder = createValueProperties();
       final FXForwardSecurity security = (FXForwardSecurity) target.getPosition().getSecurity();
       final CurrencyPair currencyPair = _currencyPairs.getCurrencyPair(security.getPayCurrency(), security.getReceiveCurrency());
@@ -247,27 +257,26 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
       if (resultCurrency == null) {
         return null;
       }
-      builder.with(ValuePropertyNames.CURRENCY, resultCurrency).with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES);
+      builder.with(ValuePropertyNames.CURRENCY, resultCurrency).with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS,
+          ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES);
       final ValueProperties properties = builder.get();
       final ComputationTargetSpecification targetSpec = target.toSpecification();
       return ImmutableSet.of(new ValueSpecification(ValueRequirementNames.YIELD_CURVE_PNL_SERIES, targetSpec, properties));
     }
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues)
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues)
         throws AsynchronousExecution {
       final Position position = target.getPosition();
       final ValueRequirement desiredValue = desiredValues.iterator().next();
       final ValueProperties constraints = desiredValue.getConstraints();
       final Set<String> resultCurrencies = constraints.getValues(CURRENCY);
-      final FXForwardSecurity security = (FXForwardSecurity) position.getSecurity();
-      final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D ycReturnSeries = (TenorLabelledLocalDateDoubleTimeSeriesMatrix1D) inputs.getValue(ValueRequirementNames.YIELD_CURVE_RETURN_SERIES);
+      final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D ycReturnSeries = (TenorLabelledLocalDateDoubleTimeSeriesMatrix1D) inputs
+          .getValue(ValueRequirementNames.YIELD_CURVE_RETURN_SERIES);
       final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D fcReturnSeries = (TenorLabelledLocalDateDoubleTimeSeriesMatrix1D) inputs
           .getValue(ValueRequirementNames.FX_FORWARD_CURVE_RETURN_SERIES);
       final DoubleLabelledMatrix1D sensitivities = (DoubleLabelledMatrix1D) inputs.getValue(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES);
-      final Currency payCurrency = security.getPayCurrency();
-      final Currency receiveCurrency = security.getReceiveCurrency();
-      final CurrencyPair currencyPair = _currencyPairs.getCurrencyPair(payCurrency, receiveCurrency);
       final String curveCurrency = desiredValue.getConstraint(CURVE_CURRENCY);
       final ValueProperties resultProperties = desiredValues.iterator().next().getConstraints();
       TenorLabelledLocalDateDoubleTimeSeriesMatrix1D returnSeries;
@@ -279,7 +288,8 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
         throw new OpenGammaRuntimeException("Could not get return series for either yield curve or FX forward curve");
       }
       if (returnSeries.size() != sensitivities.size()) {
-        throw new OpenGammaRuntimeException("Yield Curve Node Sensitivities vector of size " + sensitivities.size() + " but return series vector of size " + returnSeries.size());
+        throw new OpenGammaRuntimeException(
+            "Yield Curve Node Sensitivities vector of size " + sensitivities.size() + " but return series vector of size " + returnSeries.size());
       }
       TenorLabelledLocalDateDoubleTimeSeriesMatrix1D pnlSeriesVector;
       if (resultCurrencies == null || resultCurrencies.size() != 1) {
@@ -290,25 +300,36 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
         final boolean resultEqualsCurveCurrency = resultCurrency.equals(curveCurrency);
         pnlSeriesVector = getPnLVector(returnSeries, sensitivities, resultEqualsCurveCurrency, resultCurrency, curveCurrency, inputs);
       }
-      return ImmutableSet.of(new ComputedValue(new ValueSpecification(ValueRequirementNames.YIELD_CURVE_PNL_SERIES, target.toSpecification(), resultProperties), pnlSeriesVector));
+      return ImmutableSet.of(
+          new ComputedValue(new ValueSpecification(ValueRequirementNames.YIELD_CURVE_PNL_SERIES, target.toSpecification(), resultProperties), pnlSeriesVector));
     }
 
     /**
      * Gets the yield curve node sensitivities requirement
      *
-     * @param payCurveName The pay curve name
-     * @param payCurveCalculationConfigName The pay curve calculation configuration name
-     * @param receiveCurveName The receive curve name
-     * @param receiveCurveCalculationConfigName The receive curve calculation configuration name
-     * @param currencyName The curve currency (i.e. the currency that the sensitivities were calculated in)
-     * @param curveName The curve name
-     * @param curveCalculationMethods The curve calculation methods
-     * @param calculationMethods The sensitivities calculation methods
-     * @param security The security
+     * @param payCurveName
+     *          The pay curve name
+     * @param payCurveCalculationConfigName
+     *          The pay curve calculation configuration name
+     * @param receiveCurveName
+     *          The receive curve name
+     * @param receiveCurveCalculationConfigName
+     *          The receive curve calculation configuration name
+     * @param currencyName
+     *          The curve currency (i.e. the currency that the sensitivities were calculated in)
+     * @param curveName
+     *          The curve name
+     * @param curveCalculationMethods
+     *          The curve calculation methods
+     * @param calculationMethods
+     *          The sensitivities calculation methods
+     * @param security
+     *          The security
      * @return The requirement
      */
     private ValueRequirement getYCNSRequirement(final String payCurveName, final String payCurveCalculationConfigName, final String receiveCurveName,
-        final String receiveCurveCalculationConfigName, final String currencyName, final String curveName, final Set<String> curveCalculationMethods, final Set<String> calculationMethods,
+        final String receiveCurveCalculationConfigName, final String currencyName, final String curveName, final Set<String> curveCalculationMethods,
+        final Set<String> calculationMethods,
         final Security security) {
       final ValueProperties.Builder properties = ValueProperties.builder().with(ValuePropertyNames.PAY_CURVE, payCurveName)
           .with(ValuePropertyNames.PAY_CURVE_CALCULATION_CONFIG, payCurveCalculationConfigName).with(ValuePropertyNames.RECEIVE_CURVE, receiveCurveName)
@@ -320,23 +341,31 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
       if (calculationMethods != null) {
         properties.with(ValuePropertyNames.CALCULATION_METHOD, calculationMethods);
       }
-      return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES, ComputationTargetType.SECURITY, security.getUniqueId(), properties.get());
+      return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES, ComputationTargetType.SECURITY, security.getUniqueId(),
+          properties.get());
     }
 
     /**
      * Gets the requirement for the return series of a yield curve that is not FX-implied and adds an optional property for the result currency.
      *
-     * @param curveName The curve name
-     * @param curveCurrency The curve currency
-     * @param curveCalculationConfigName The curve calculation configuration name
-     * @param baseConstraints The base constraints of the results
-     * @param resultCurrency The result currency
+     * @param curveName
+     *          The curve name
+     * @param curveCurrency
+     *          The curve currency
+     * @param curveCalculationConfigName
+     *          The curve calculation configuration name
+     * @param baseConstraints
+     *          The base constraints of the results
+     * @param resultCurrency
+     *          The result currency
      * @return The requirement
      */
-    private ValueRequirement getReturnSeriesRequirement(final String curveName, final Currency curveCurrency, final String curveCalculationConfigName, final ValueProperties baseConstraints,
+    private ValueRequirement getReturnSeriesRequirement(final String curveName, final Currency curveCurrency, final String curveCalculationConfigName,
+        final ValueProperties baseConstraints,
         final String resultCurrency) {
       final ComputationTargetSpecification targetSpec = ComputationTargetType.CURRENCY.specification(curveCurrency);
-      final ValueProperties constraints = baseConstraints.copy().with(ValuePropertyNames.CURVE, curveName).with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName)
+      final ValueProperties constraints = baseConstraints.copy().with(ValuePropertyNames.CURVE, curveName)
+          .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName)
           .withoutAny(CURRENCY).with(CURRENCY, curveCurrency.getCode()).with(RESULT_CURRENCY, resultCurrency).withOptional(RESULT_CURRENCY).get();
       return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_RETURN_SERIES, targetSpec, constraints);
     }
@@ -344,18 +373,27 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
     /**
      * Gets the requirement for the return series of a yield curve that is FX-implied and adds an optional property for the result currency.
      *
-     * @param curveName The curve name
-     * @param payCurrency The pay currency
-     * @param receiveCurrency The receive currency
-     * @param curveCalculationConfigName The curve calculation configuration name
-     * @param baseConstraints The base constraints of the results
-     * @param resultCurrency The result currency
+     * @param curveName
+     *          The curve name
+     * @param payCurrency
+     *          The pay currency
+     * @param receiveCurrency
+     *          The receive currency
+     * @param curveCalculationConfigName
+     *          The curve calculation configuration name
+     * @param baseConstraints
+     *          The base constraints of the results
+     * @param resultCurrency
+     *          The result currency
      * @return The requirement
      */
-    private ValueRequirement getReturnSeriesRequirement(final String curveName, final Currency payCurrency, final Currency receiveCurrency, final String curveCalculationConfigName,
+    private ValueRequirement getReturnSeriesRequirement(final String curveName, final Currency payCurrency, final Currency receiveCurrency,
+        final String curveCalculationConfigName,
         final ValueProperties baseConstraints, final String resultCurrency) {
-      final ComputationTargetSpecification targetSpec = ComputationTargetType.UNORDERED_CURRENCY_PAIR.specification(UnorderedCurrencyPair.of(payCurrency, receiveCurrency));
-      final ValueProperties constraints = baseConstraints.copy().with(ValuePropertyNames.CURVE, curveName).with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName)
+      final ComputationTargetSpecification targetSpec = ComputationTargetType.UNORDERED_CURRENCY_PAIR
+          .specification(UnorderedCurrencyPair.of(payCurrency, receiveCurrency));
+      final ValueProperties constraints = baseConstraints.copy().with(ValuePropertyNames.CURVE, curveName)
+          .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName)
           .withoutAny(CURRENCY).with(RESULT_CURRENCY, resultCurrency).withOptional(RESULT_CURRENCY).get();
       return new ValueRequirement(ValueRequirementNames.FX_FORWARD_CURVE_RETURN_SERIES, targetSpec, constraints);
     }
@@ -363,11 +401,14 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
     /**
      * Calculates the P&L vector without currency conversion.
      *
-     * @param returnSeries The return series for the nodes in a curve
-     * @param sensitivities The sensitivities to the curve
+     * @param returnSeries
+     *          The return series for the nodes in a curve
+     * @param sensitivities
+     *          The sensitivities to the curve
      * @return The P&L vector for each curve node tenor
      */
-    private TenorLabelledLocalDateDoubleTimeSeriesMatrix1D getPnLVector(final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D returnSeries, final DoubleLabelledMatrix1D sensitivities) {
+    private TenorLabelledLocalDateDoubleTimeSeriesMatrix1D getPnLVector(final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D returnSeries,
+        final DoubleLabelledMatrix1D sensitivities) {
       final int size = returnSeries.size();
       final LocalDateDoubleTimeSeries[] nodesPnlSeries = new LocalDateDoubleTimeSeries[size];
       for (int i = 0; i < size; i++) {
@@ -380,15 +421,22 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
     /**
      * Calculates the P&L vector with currency conversion.
      *
-     * @param returnSeries The return series for the nodes in a curve
-     * @param sensitivities The sensitivities to the curve
-     * @param resultCurveCurrency True if the result is in the curve currency
-     * @param resultCurrency The result currency
-     * @param curveCurrency The curve currency
-     * @param inputs The function inputs
+     * @param returnSeries
+     *          The return series for the nodes in a curve
+     * @param sensitivities
+     *          The sensitivities to the curve
+     * @param resultCurveCurrency
+     *          True if the result is in the curve currency
+     * @param resultCurrency
+     *          The result currency
+     * @param curveCurrency
+     *          The curve currency
+     * @param inputs
+     *          The function inputs
      * @return The P&L vector for each curve node tenor converted into the desired currency
      */
-    private TenorLabelledLocalDateDoubleTimeSeriesMatrix1D getPnLVector(final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D returnSeries, final DoubleLabelledMatrix1D sensitivities,
+    private TenorLabelledLocalDateDoubleTimeSeriesMatrix1D getPnLVector(final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D returnSeries,
+        final DoubleLabelledMatrix1D sensitivities,
         final boolean resultCurveCurrency, final String resultCurrency, final String curveCurrency, final FunctionInputs inputs) {
       final int size = returnSeries.size();
       final LocalDateDoubleTimeSeries[] nodesPnlSeries = new LocalDateDoubleTimeSeries[size];
@@ -399,7 +447,8 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
         } else {
           final LocalDateDoubleTimeSeries conversionTS = (LocalDateDoubleTimeSeries) inputs.getValue(HISTORICAL_FX_TIME_SERIES);
           if (conversionTS == null) {
-            throw new OpenGammaRuntimeException("Asked for result in " + resultCurrency + " but could not get " + curveCurrency + "/" + resultCurrency + " conversion series");
+            throw new OpenGammaRuntimeException(
+                "Asked for result in " + resultCurrency + " but could not get " + curveCurrency + "/" + resultCurrency + " conversion series");
           }
           final LocalDateDoubleTimeSeries convertedSeries = conversionTS.reciprocal().multiply(sensitivities.getValues()[i]);
           final LocalDateDoubleTimeSeries nodePnlSeries = returnSeries.getValues()[i].multiply(convertedSeries);

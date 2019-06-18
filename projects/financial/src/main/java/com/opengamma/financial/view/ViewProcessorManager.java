@@ -34,11 +34,11 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.NamedThreadPoolFactory;
 
 /**
- * Manages a set of view processors that share a function repository. When function configuration changes (or the objects the functions are based on change) all active view processes are paused so
- * that the reinitialization can occur without giving inconsistent results for a running view cycle.
+ * Manages a set of view processors that share a function repository. When function configuration changes (or the objects the functions are based on change) all
+ * active view processes are paused so that the reinitialization can occur without giving inconsistent results for a running view cycle.
  * <p>
- * Note that previous behavior was capable of "latching" the sources so that the "get-latest" methods could always be used by functions. This has been removed as relying on such methods is problematic
- * for other system traits and a valid version-correction timestamp is available at all times.
+ * Note that previous behavior was capable of "latching" the sources so that the "get-latest" methods could always be used by functions. This has been removed
+ * as relying on such methods is problematic for other system traits and a valid version-correction timestamp is available at all times.
  */
 public class ViewProcessorManager implements Lifecycle {
 
@@ -91,8 +91,10 @@ public class ViewProcessorManager implements Lifecycle {
   }
 
   /**
-   * @param master the master, not null
-   * @param source for Spring compatibility only - ignored
+   * @param master
+   *          the master, not null
+   * @param source
+   *          for Spring compatibility only - ignored
    * @deprecated Use {@link #setMaster} instead
    */
   @Deprecated
@@ -108,7 +110,8 @@ public class ViewProcessorManager implements Lifecycle {
   }
 
   /**
-   * @param masterToSource the masters, the values of the map are ignored
+   * @param masterToSource
+   *          the masters, the values of the map are ignored
    * @deprecated Use {@link #setMasters} instead
    */
   @Deprecated

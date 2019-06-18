@@ -5,15 +5,16 @@
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
 
-
 /**
  *
  */
 public class ProportionalDividendFunctionProvider extends DividendFunctionProvider {
 
   /**
-   * @param dividendTimes The dividend times
-   * @param dividends Decrease ratios of asset price because of proportional dividends
+   * @param dividendTimes
+   *          The dividend times
+   * @param dividends
+   *          Decrease ratios of asset price because of proportional dividends
    */
   public ProportionalDividendFunctionProvider(final double[] dividendTimes, final double[] dividends) {
     super(dividendTimes, dividends);
@@ -38,7 +39,8 @@ public class ProportionalDividendFunctionProvider extends DividendFunctionProvid
   }
 
   @Override
-  public double[] getAssetPricesForDelta(final double spot, final double interestRate, final int[] divSteps, final double upFactor, final double downFactor, final double sumDiscountDiv) {
+  public double[] getAssetPricesForDelta(final double spot, final double interestRate, final int[] divSteps, final double upFactor, final double downFactor,
+      final double sumDiscountDiv) {
     final double[] res = new double[2];
     final double[] dividends = getDividends();
 
@@ -53,7 +55,8 @@ public class ProportionalDividendFunctionProvider extends DividendFunctionProvid
   }
 
   @Override
-  public double[] getAssetPricesForGamma(final double spot, final double interestRate, final int[] divSteps, final double upFactor, final double downFactor, final double sumDiscountDiv) {
+  public double[] getAssetPricesForGamma(final double spot, final double interestRate, final int[] divSteps, final double upFactor, final double downFactor,
+      final double sumDiscountDiv) {
     final double[] res = new double[3];
     final double[] dividends = getDividends();
 
@@ -76,7 +79,8 @@ public class ProportionalDividendFunctionProvider extends DividendFunctionProvid
   }
 
   @Override
-  public double[] getAssetPricesForDelta(final double spot, final double interestRate, final int[] divSteps, final double upFactor, final double middleFactor, final double downFactor,
+  public double[] getAssetPricesForDelta(final double spot, final double interestRate, final int[] divSteps, final double upFactor, final double middleFactor,
+      final double downFactor,
       final double sumDiscountDiv) {
     final double[] res = new double[3];
     final double[] dividends = getDividends();
@@ -94,7 +98,8 @@ public class ProportionalDividendFunctionProvider extends DividendFunctionProvid
   }
 
   @Override
-  public double[] getAssetPricesForGamma(final double spot, final double interestRate, final int[] divSteps, final double upFactor, final double middleFactor, final double downFactor,
+  public double[] getAssetPricesForGamma(final double spot, final double interestRate, final int[] divSteps, final double upFactor, final double middleFactor,
+      final double downFactor,
       final double sumDiscountDiv) {
     final double[] res = new double[5];
     final double[] dividends = getDividends();

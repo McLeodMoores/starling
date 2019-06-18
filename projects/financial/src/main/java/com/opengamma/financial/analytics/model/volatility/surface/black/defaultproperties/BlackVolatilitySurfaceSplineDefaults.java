@@ -17,7 +17,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Adds default properties, as supplied in FunctionConfiguration (eg DemoStandardFunctionConfiguration), to the BlackVolatilitySurfaceInterpolatorFunction
  * BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SPLINE_INTERPOLATOR BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SPLINE_LEFT_EXTRAPOLATOR
- * BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SPLINE_RIGHT_EXTRAPOLATOR BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SPLINE_EXTRAPOLATOR_FAILURE
+ * BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SPLINE_RIGHT_EXTRAPOLATOR
+ * BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SPLINE_EXTRAPOLATOR_FAILURE.
  */
 public class BlackVolatilitySurfaceSplineDefaults extends BlackVolatilitySurfaceDefaults {
   private final String _splineInterpolator;
@@ -53,7 +54,8 @@ public class BlackVolatilitySurfaceSplineDefaults extends BlackVolatilitySurface
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final Set<String> commonProperties = super.getDefaultValue(context, target, desiredValue, propertyName);
     if (commonProperties != null) {
       return commonProperties;

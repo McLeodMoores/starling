@@ -18,6 +18,7 @@ import com.opengamma.financial.analytics.model.black.BlackDiscountingImpliedVola
 
 /**
  * Function to compute the implied volatility for physical delivery swaptions in the Black model.
+ * 
  * @deprecated Use {@link BlackDiscountingImpliedVolatilitySwaptionFunction}
  */
 @Deprecated
@@ -29,7 +30,7 @@ public class SwaptionBlackImpliedVolatilityFunction extends SwaptionBlackFunctio
   private static final ImpliedVolatilityBlackCalculator CALCULATOR = ImpliedVolatilityBlackCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY}
+   * Sets the value requirement name to {@link ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY}.
    */
   public SwaptionBlackImpliedVolatilityFunction() {
     super(ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY);

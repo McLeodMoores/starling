@@ -14,11 +14,15 @@ import com.opengamma.analytics.financial.model.option.definition.SABRInterestRat
 public class SABRSTIRFuturesProviderDiscount extends SABRSTIRFuturesProvider {
 
   /**
-   * @param multicurveProvider The multicurve provider.
-   * @param parameters The SABR parameters.
-   * @param index The underlying index.
+   * @param multicurveProvider
+   *          The multicurve provider.
+   * @param parameters
+   *          The SABR parameters.
+   * @param index
+   *          The underlying index.
    */
-  public SABRSTIRFuturesProviderDiscount(final MulticurveProviderDiscount multicurveProvider, final SABRInterestRateParameters parameters, final IborIndex index) {
+  public SABRSTIRFuturesProviderDiscount(final MulticurveProviderDiscount multicurveProvider, final SABRInterestRateParameters parameters,
+      final IborIndex index) {
     super(multicurveProvider, parameters, index);
   }
 

@@ -46,15 +46,16 @@ public final class BondSecurityBeanOperation extends AbstractSecurityBeanOperati
 
       @Override
       public BondSecurity visitCorporateBondSecurity(final CorporateBondSecurity bond) {
-        final BondSecurity bondSecurity = new CorporateBondSecurity(bean.getIssuerName(), bean.getIssuerType().getName(), bean.getIssuerDomicile(), bean.getMarket().getName(),
-          currencyBeanToCurrency(bean.getCurrency()), yieldConventionBeanToYieldConvention(bean.getYieldConvention()),
-          expiryBeanToExpiry(bean.getLastTradeDate()), bean.getCouponType().getName(), bean.getCouponRate(),
-          frequencyBeanToFrequency(bean.getCouponFrequency()), dayCountBeanToDayCount(bean.getDayCountConvention()),
-          zonedDateTimeBeanToDateTimeWithZone(bean.getInterestAccrualDate()),
-          zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate()),
-          zonedDateTimeBeanToDateTimeWithZone(bean.getFirstCouponDate()),
-          bean.getIssuancePrice(), bean.getTotalAmountIssued(), bean.getMinimumAmount(), bean.getMinimumIncrement(),
-          bean.getParAmount(), bean.getRedemptionValue());
+        final BondSecurity bondSecurity = new CorporateBondSecurity(bean.getIssuerName(), bean.getIssuerType().getName(), bean.getIssuerDomicile(),
+            bean.getMarket().getName(),
+            currencyBeanToCurrency(bean.getCurrency()), yieldConventionBeanToYieldConvention(bean.getYieldConvention()),
+            expiryBeanToExpiry(bean.getLastTradeDate()), bean.getCouponType().getName(), bean.getCouponRate(),
+            frequencyBeanToFrequency(bean.getCouponFrequency()), dayCountBeanToDayCount(bean.getDayCountConvention()),
+            zonedDateTimeBeanToDateTimeWithZone(bean.getInterestAccrualDate()),
+            zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate()),
+            zonedDateTimeBeanToDateTimeWithZone(bean.getFirstCouponDate()),
+            bean.getIssuancePrice(), bean.getTotalAmountIssued(), bean.getMinimumAmount(), bean.getMinimumIncrement(),
+            bean.getParAmount(), bean.getRedemptionValue());
         bondSecurity.setBusinessDayConvention(businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()));
         bondSecurity.setAnnouncementDate(zonedDateTimeBeanToDateTimeWithZone(bean.getAnnouncementDate()));
         bondSecurity.setGuaranteeType(bean.getGuaranteeType() != null ? bean.getGuaranteeType().getName() : null);
@@ -64,13 +65,13 @@ public final class BondSecurityBeanOperation extends AbstractSecurityBeanOperati
       @Override
       public BondSecurity visitGovernmentBondSecurity(final GovernmentBondSecurity bond) {
         final BondSecurity bondSecurity = new GovernmentBondSecurity(bean.getIssuerName(), bean.getIssuerType().getName(), bean.getIssuerDomicile(),
-          bean.getMarket().getName(), currencyBeanToCurrency(bean.getCurrency()),
-          yieldConventionBeanToYieldConvention(bean.getYieldConvention()), expiryBeanToExpiry(bean.getLastTradeDate()),
-          bean.getCouponType().getName(), bean.getCouponRate(), frequencyBeanToFrequency(bean.getCouponFrequency()),
-          dayCountBeanToDayCount(bean.getDayCountConvention()), zonedDateTimeBeanToDateTimeWithZone(bean.getInterestAccrualDate()),
-          zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate()),
-          zonedDateTimeBeanToDateTimeWithZone(bean.getFirstCouponDate()), bean.getIssuancePrice(), bean.getTotalAmountIssued(),
-          bean.getMinimumAmount(), bean.getMinimumIncrement(), bean.getParAmount(), bean.getRedemptionValue());
+            bean.getMarket().getName(), currencyBeanToCurrency(bean.getCurrency()),
+            yieldConventionBeanToYieldConvention(bean.getYieldConvention()), expiryBeanToExpiry(bean.getLastTradeDate()),
+            bean.getCouponType().getName(), bean.getCouponRate(), frequencyBeanToFrequency(bean.getCouponFrequency()),
+            dayCountBeanToDayCount(bean.getDayCountConvention()), zonedDateTimeBeanToDateTimeWithZone(bean.getInterestAccrualDate()),
+            zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate()),
+            zonedDateTimeBeanToDateTimeWithZone(bean.getFirstCouponDate()), bean.getIssuancePrice(), bean.getTotalAmountIssued(),
+            bean.getMinimumAmount(), bean.getMinimumIncrement(), bean.getParAmount(), bean.getRedemptionValue());
         bondSecurity.setBusinessDayConvention(businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()));
         bondSecurity.setAnnouncementDate(zonedDateTimeBeanToDateTimeWithZone(bean.getAnnouncementDate()));
         bondSecurity.setGuaranteeType(bean.getGuaranteeType() != null ? bean.getGuaranteeType().getName() : null);
@@ -80,14 +81,14 @@ public final class BondSecurityBeanOperation extends AbstractSecurityBeanOperati
       @Override
       public BondSecurity visitMunicipalBondSecurity(final MunicipalBondSecurity bond) {
         final BondSecurity bondSecurity = new MunicipalBondSecurity(bean.getIssuerName(), bean.getIssuerType().getName(), bean.getIssuerDomicile(),
-          bean.getMarket().getName(), currencyBeanToCurrency(bean.getCurrency()),
-          yieldConventionBeanToYieldConvention(bean.getYieldConvention()), expiryBeanToExpiry(bean.getLastTradeDate()),
-          bean.getCouponType().getName(), bean.getCouponRate(), frequencyBeanToFrequency(bean.getCouponFrequency()),
-          dayCountBeanToDayCount(bean.getDayCountConvention()), zonedDateTimeBeanToDateTimeWithZone(bean.getInterestAccrualDate()),
-          zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate()),
-          zonedDateTimeBeanToDateTimeWithZone(bean.getFirstCouponDate()),
-          bean.getIssuancePrice(), bean.getTotalAmountIssued(), bean.getMinimumAmount(), bean.getMinimumIncrement(),
-          bean.getParAmount(), bean.getRedemptionValue());
+            bean.getMarket().getName(), currencyBeanToCurrency(bean.getCurrency()),
+            yieldConventionBeanToYieldConvention(bean.getYieldConvention()), expiryBeanToExpiry(bean.getLastTradeDate()),
+            bean.getCouponType().getName(), bean.getCouponRate(), frequencyBeanToFrequency(bean.getCouponFrequency()),
+            dayCountBeanToDayCount(bean.getDayCountConvention()), zonedDateTimeBeanToDateTimeWithZone(bean.getInterestAccrualDate()),
+            zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate()),
+            zonedDateTimeBeanToDateTimeWithZone(bean.getFirstCouponDate()),
+            bean.getIssuancePrice(), bean.getTotalAmountIssued(), bean.getMinimumAmount(), bean.getMinimumIncrement(),
+            bean.getParAmount(), bean.getRedemptionValue());
         bondSecurity.setBusinessDayConvention(businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()));
         bondSecurity.setAnnouncementDate(zonedDateTimeBeanToDateTimeWithZone(bean.getAnnouncementDate()));
         bondSecurity.setGuaranteeType(bean.getGuaranteeType() != null ? bean.getGuaranteeType().getName() : null);
@@ -97,14 +98,14 @@ public final class BondSecurityBeanOperation extends AbstractSecurityBeanOperati
       @Override
       public BondSecurity visitInflationBondSecurity(final InflationBondSecurity bond) {
         final BondSecurity bondSecurity = new InflationBondSecurity(bean.getIssuerName(), bean.getIssuerType().getName(), bean.getIssuerDomicile(),
-          bean.getMarket().getName(), currencyBeanToCurrency(bean.getCurrency()),
-          yieldConventionBeanToYieldConvention(bean.getYieldConvention()), expiryBeanToExpiry(bean.getLastTradeDate()),
-          bean.getCouponType().getName(), bean.getCouponRate(), frequencyBeanToFrequency(bean.getCouponFrequency()),
-          dayCountBeanToDayCount(bean.getDayCountConvention()), zonedDateTimeBeanToDateTimeWithZone(bean.getInterestAccrualDate()),
-          zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate()),
-          zonedDateTimeBeanToDateTimeWithZone(bean.getFirstCouponDate()),
-          bean.getIssuancePrice(), bean.getTotalAmountIssued(), bean.getMinimumAmount(), bean.getMinimumIncrement(),
-          bean.getParAmount(), bean.getRedemptionValue());
+            bean.getMarket().getName(), currencyBeanToCurrency(bean.getCurrency()),
+            yieldConventionBeanToYieldConvention(bean.getYieldConvention()), expiryBeanToExpiry(bean.getLastTradeDate()),
+            bean.getCouponType().getName(), bean.getCouponRate(), frequencyBeanToFrequency(bean.getCouponFrequency()),
+            dayCountBeanToDayCount(bean.getDayCountConvention()), zonedDateTimeBeanToDateTimeWithZone(bean.getInterestAccrualDate()),
+            zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate()),
+            zonedDateTimeBeanToDateTimeWithZone(bean.getFirstCouponDate()),
+            bean.getIssuancePrice(), bean.getTotalAmountIssued(), bean.getMinimumAmount(), bean.getMinimumIncrement(),
+            bean.getParAmount(), bean.getRedemptionValue());
         bondSecurity.setBusinessDayConvention(businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()));
         bondSecurity.setAnnouncementDate(zonedDateTimeBeanToDateTimeWithZone(bean.getAnnouncementDate()));
         bondSecurity.setGuaranteeType(bean.getGuaranteeType() != null ? bean.getGuaranteeType().getName() : null);

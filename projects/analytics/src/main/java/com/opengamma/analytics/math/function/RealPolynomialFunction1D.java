@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.function;
@@ -12,23 +12,18 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.util.CompareUtils;
 
 /**
- * Class representing a polynomial that has real coefficients and takes a real
- * argument. The function is defined as:
- * $$
- * \begin{align*}
- * p(x) = a_0 + a_1 x + a_2 x^2 + \ldots + a_{n-1} x^{n-1}
- * \end{align*}
- * $$
+ * Class representing a polynomial that has real coefficients and takes a real argument. The function is defined as: $$ \begin{align*} p(x) = a_0 + a_1 x + a_2
+ * x^2 + \ldots + a_{n-1} x^{n-1} \end{align*} $$
  */
 public class RealPolynomialFunction1D extends DoubleFunction1D {
   private final double[] _coefficients;
   private final int _n;
 
   /**
-   * The array of coefficients for a polynomial
-   * $p(x) = a_0 + a_1 x + a_2 x^2 + ... + a_{n-1} x^{n-1}$
-   * is $\\{a_0, a_1, a_2, ..., a_{n-1}\\}$.
-   * @param coefficients The array of coefficients, not null or empty
+   * The array of coefficients for a polynomial $p(x) = a_0 + a_1 x + a_2 x^2 + ... + a_{n-1} x^{n-1}$ is $\\{a_0, a_1, a_2, ..., a_{n-1}\\}$.
+   * 
+   * @param coefficients
+   *          The array of coefficients, not null or empty
    */
   public RealPolynomialFunction1D(final double... coefficients) {
     Validate.notNull(coefficients);
@@ -55,11 +50,14 @@ public class RealPolynomialFunction1D extends DoubleFunction1D {
   }
 
   /**
-   * Adds a function to the polynomial. If the function is not a {@link RealPolynomialFunction1D} then the addition takes
-   * place as in {@link DoubleFunction1D}, otherwise the result will also be a polynomial.
-   * @param f The function to add
+   * Adds a function to the polynomial. If the function is not a {@link RealPolynomialFunction1D} then the addition takes place as in {@link DoubleFunction1D},
+   * otherwise the result will also be a polynomial.
+   * 
+   * @param f
+   *          The function to add
    * @return $P+f$
-   * @throws IllegalArgumentException If the function is null
+   * @throws IllegalArgumentException
+   *           If the function is null
    */
   @Override
   public DoubleFunction1D add(final DoubleFunction1D f) {
@@ -80,10 +78,11 @@ public class RealPolynomialFunction1D extends DoubleFunction1D {
   }
 
   /**
-   * Adds a constant to the polynomial (equivalent to adding the value to the constant term of the polynomial). The result is
-   * also a polynomial.
-   * @param a The value to add
-   * @return $P+a$ 
+   * Adds a constant to the polynomial (equivalent to adding the value to the constant term of the polynomial). The result is also a polynomial.
+   * 
+   * @param a
+   *          The value to add
+   * @return $P+a$
    */
   @Override
   public RealPolynomialFunction1D add(final double a) {
@@ -93,12 +92,9 @@ public class RealPolynomialFunction1D extends DoubleFunction1D {
   }
 
   /**
-   * Returns the derivative of this polynomial (also a polynomial), where
-   * $$
-   * \begin{align*}
-   * P'(x) = a_1 + 2 a_2 x + 3 a_3 x^2 + 4 a_4 x^3 + \dots + n a_n x^{n-1}
-   * \end{align*}
-   * $$
+   * Returns the derivative of this polynomial (also a polynomial). $$ \begin{align*} P'(x) = a_1 + 2 a_2 x + 3 a_3 x^2 + 4 a_4 x^3 + \dots + n a_n x^{n-1}
+   * \end{align*} $$
+   * 
    * @return The derivative polynomial
    */
   @Override
@@ -113,8 +109,10 @@ public class RealPolynomialFunction1D extends DoubleFunction1D {
 
   /**
    * Divides the polynomial by a constant value (equivalent to dividing each coefficient by this value). The result is also a polynomial.
-   * @param a The divisor
-   * @return The polynomial 
+   * 
+   * @param a
+   *          The divisor
+   * @return The polynomial
    */
   @Override
   public RealPolynomialFunction1D divide(final double a) {
@@ -126,11 +124,14 @@ public class RealPolynomialFunction1D extends DoubleFunction1D {
   }
 
   /**
-   * Multiplies the polynomial by a function. If the function is not a {@link RealPolynomialFunction1D} then the multiplication takes
-   * place as in {@link DoubleFunction1D}, otherwise the result will also be a polynomial.
-   * @param f The function by which to multiply
+   * Multiplies the polynomial by a function. If the function is not a {@link RealPolynomialFunction1D} then the multiplication takes place as in
+   * {@link DoubleFunction1D}, otherwise the result will also be a polynomial.
+   * 
+   * @param f
+   *          The function by which to multiply
    * @return $P \dot f$
-   * @throws IllegalArgumentException If the function is null
+   * @throws IllegalArgumentException
+   *           If the function is null
    */
   @Override
   public DoubleFunction1D multiply(final DoubleFunction1D f) {
@@ -154,8 +155,10 @@ public class RealPolynomialFunction1D extends DoubleFunction1D {
 
   /**
    * Multiplies the polynomial by a constant value (equivalent to multiplying each coefficient by this value). The result is also a polynomial.
-   * @param a The multiplicator
-   * @return The polynomial 
+   * 
+   * @param a
+   *          The multiplicator
+   * @return The polynomial
    */
   @Override
   public RealPolynomialFunction1D multiply(final double a) {
@@ -167,11 +170,14 @@ public class RealPolynomialFunction1D extends DoubleFunction1D {
   }
 
   /**
-   * Subtracts a function from the polynomial. If the function is not a {@link RealPolynomialFunction1D} then the subtract takes
-   * place as in {@link DoubleFunction1D}, otherwise the result will also be a polynomial.
-   * @param f The function to subtract
+   * Subtracts a function from the polynomial. If the function is not a {@link RealPolynomialFunction1D} then the subtract takes place as in
+   * {@link DoubleFunction1D}, otherwise the result will also be a polynomial.
+   * 
+   * @param f
+   *          The function to subtract
    * @return $P-f$
-   * @throws IllegalArgumentException If the function is null
+   * @throws IllegalArgumentException
+   *           If the function is null
    */
   @Override
   public DoubleFunction1D subtract(final DoubleFunction1D f) {
@@ -201,10 +207,11 @@ public class RealPolynomialFunction1D extends DoubleFunction1D {
   }
 
   /**
-   * Subtracts a constant from the polynomial (equivalent to subtracting the value from the constant term of the polynomial). The result is
-   * also a polynomial.
-   * @param a The value to add
-   * @return $P-a$ 
+   * Subtracts a constant from the polynomial (equivalent to subtracting the value from the constant term of the polynomial). The result is also a polynomial.
+   * 
+   * @param a
+   *          The value to add
+   * @return $P-a$
    */
   @Override
   public RealPolynomialFunction1D subtract(final double a) {
@@ -214,24 +221,10 @@ public class RealPolynomialFunction1D extends DoubleFunction1D {
   }
 
   /**
-   * Converts the polynomial to its monic form. If 
-   * $$
-   * \begin{align*}
-   * P(x) = a_0 + a_1 x + a_2 x^2 + a_3 x^3 \dots + a_n x^n
-   * \end{align*}
-   * $$
-   * then the monic form is
-   * $$
-   * \begin{align*}
-   * P(x) = \lambda_0 + \lambda_1 x + \lambda_2 x^2 + \lambda_3 x^3 \dots + x^n
-   * \end{align*}
-   * $$
-   * where 
-   * $$
-   * \begin{align*}
-   * \lambda_i = \frac{a_i}{a_n}
-   * \end{align*}
-   * $$
+   * Converts the polynomial to its monic form. If $$ \begin{align*} P(x) = a_0 + a_1 x + a_2 x^2 + a_3 x^3 \dots + a_n x^n \end{align*} $$ then the monic form
+   * is $$ \begin{align*} P(x) = \lambda_0 + \lambda_1 x + \lambda_2 x^2 + \lambda_3 x^3 \dots + x^n \end{align*} $$ where $$ \begin{align*} \lambda_i =
+   * \frac{a_i}{a_n} \end{align*} $$
+   * 
    * @return The polynomial in monic form.
    */
   public RealPolynomialFunction1D toMonic() {

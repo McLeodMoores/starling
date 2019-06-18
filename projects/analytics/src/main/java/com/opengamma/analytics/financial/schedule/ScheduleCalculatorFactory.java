@@ -13,66 +13,66 @@ import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.Month;
 
 /**
- * 
+ *
  */
 public class ScheduleCalculatorFactory {
-  /** Daily */
+  /** Daily. */
   public static final String DAILY = "Daily";
-  /** Weekly */
+  /** Weekly. */
   public static final String WEEKLY = "Weekly";
-  /** Weekly on day */
+  /** Weekly on day. */
   public static final String WEEKLY_ON_DAY = "WeeklyOnDay";
-  /** Monthly */
+  /** Monthly. */
   public static final String MONTHLY = "Monthly";
-  /** First of month */
+  /** First of month. */
   public static final String FIRST_OF_MONTH = "FirstOfMonth";
-  /** End of month */
+  /** End of month. */
   public static final String END_OF_MONTH = "EndOfMonth";
-  /** Monthly on day */
+  /** Monthly on day. */
   public static final String MONTHLY_ON_DAY = "MonthlyOnDay";
-  /** Quarterly */
+  /** Quarterly. */
   public static final String QUARTERLY = "Quarterly";
-  /** Quarterly EOM */
+  /** Quarterly EOM. */
   public static final String QUARTERLY_EOM = "QuarterlyEOM";
-  /** Semi-annual */
+  /** Semi-annual. */
   public static final String SEMI_ANNUAL = "SemiAnnual";
-  /** Semi-annual EOM*/
+  /** Semi-annual EOM. */
   public static final String SEMI_ANNUAL_EOM = "SemiAnnualEOM";
-  /** Annual */
+  /** Annual. */
   public static final String ANNUAL = "Annual";
-  /** First of year */
+  /** First of year. */
   public static final String FIRST_OF_YEAR = "FirstOfYear";
-  /** End of year */
+  /** End of year. */
   public static final String END_OF_YEAR = "EndOfYear";
-  /** Annual on day and month */
+  /** Annual on day and month. */
   public static final String ANNUAL_ON_DAY_AND_MONTH = "AnnualOnDayAndMonth";
-  /** Annual EOM */
+  /** Annual EOM. */
   public static final String ANNUAL_EOM = "AnnualEOM";
-  /** Daily calculator */
+  /** Daily calculator. */
   public static final DailyScheduleCalculator DAILY_CALCULATOR = new DailyScheduleCalculator();
-  /** Weekly calculator */
+  /** Weekly calculator. */
   public static final WeeklyScheduleCalculator WEEKLY_CALCULATOR = new WeeklyScheduleCalculator();
-  /** Monthly calculator */
+  /** Monthly calculator. */
   public static final MonthlyScheduleCalculator MONTHLY_CALCULATOR = new MonthlyScheduleCalculator();
-  /** First of month calculator */
+  /** First of month calculator. */
   public static final FirstOfMonthScheduleCalculator FIRST_OF_MONTH_CALCULATOR = new FirstOfMonthScheduleCalculator();
-  /** End of month calculator */
+  /** End of month calculator. */
   public static final EndOfMonthScheduleCalculator END_OF_MONTH_CALCULATOR = new EndOfMonthScheduleCalculator();
-  /** Quarterly calculator */
+  /** Quarterly calculator. */
   public static final QuarterlyScheduleCalculator QUARTERLY_CALCULATOR = new QuarterlyScheduleCalculator();
-  /** Quarterly EOM calculator */
+  /** Quarterly EOM calculator. */
   public static final EndOfMonthQuarterlyScheduleCalculator QUARTERLY_EOM_CALCULATOR = new EndOfMonthQuarterlyScheduleCalculator();
-  /** Semi-annual calculator */
+  /** Semi-annual calculator. */
   public static final SemiAnnualScheduleCalculator SEMI_ANNUAL_CALCULATOR = new SemiAnnualScheduleCalculator();
-  /** Semi-annual EOM calculator */
+  /** Semi-annual EOM calculator. */
   public static final EndOfMonthSemiAnnualScheduleCalculator SEMI_ANNUAL_EOM_CALCULATOR = new EndOfMonthSemiAnnualScheduleCalculator();
-  /** Annual calculator */
+  /** Annual calculator. */
   public static final AnnualScheduleCalculator ANNUAL_CALCULATOR = new AnnualScheduleCalculator();
-  /** First of year calculator */
+  /** First of year calculator. */
   public static final FirstOfYearScheduleCalculator FIRST_OF_YEAR_CALCULATOR = new FirstOfYearScheduleCalculator();
-  /** End of year calculator */
+  /** End of year calculator. */
   public static final EndOfYearScheduleCalculator END_OF_YEAR_CALCULATOR = new EndOfYearScheduleCalculator();
-  /** Annual EOM calculator */
+  /** Annual EOM calculator. */
   public static final EndOfMonthAnnualScheduleCalculator ANNUAL_EOM_CALCULATOR = new EndOfMonthAnnualScheduleCalculator();
 
   private static final Map<String, Schedule> INSTANCES = new HashMap<>();

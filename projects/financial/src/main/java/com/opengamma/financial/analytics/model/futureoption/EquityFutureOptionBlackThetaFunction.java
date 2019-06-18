@@ -25,7 +25,7 @@ import com.opengamma.engine.value.ValueSpecification;
 public class EquityFutureOptionBlackThetaFunction extends EquityFutureOptionBlackFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityFutureOptionBlackThetaFunction() {
     super(ValueRequirementNames.THETA);

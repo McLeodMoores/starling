@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.historicaltimeseries.impl;
@@ -123,7 +123,7 @@ public class RemoteHistoricalTimeSeriesResolverTest {
 
   }
 
-  private HistoricalTimeSeriesResolver mockConnection(final HistoricalTimeSeriesResolver resolver) {
+  private static HistoricalTimeSeriesResolver mockConnection(final HistoricalTimeSeriesResolver resolver) {
     final DataHistoricalTimeSeriesResolverResource server = new DataHistoricalTimeSeriesResolverResource(resolver, OpenGammaFudgeContext.getInstance());
     final HistoricalTimeSeriesResolver client = new RemoteHistoricalTimeSeriesResolver(URI.create("http://localhost/")) {
       @Override
@@ -134,13 +134,13 @@ public class RemoteHistoricalTimeSeriesResolverTest {
           @Override
           public FudgeMsg answer(final InvocationOnMock invocation) throws Throwable {
             try {
-              String[] str = uri.getPath().substring(9).split("/");
+              final String[] str = uri.getPath().substring(9).split("/");
               DataHistoricalTimeSeriesResolverResource.Resolve resolve = server.resolve();
               for (int i = 0; i < str.length; i++) {
                 if ("adjustment".equals(str[i])) {
                   final String[] params = uri.getQuery().split("&");
-                  final List<String> ids = new ArrayList<String>(params.length);
-                  for (String param : params) {
+                  final List<String> ids = new ArrayList<>(params.length);
+                  for (final String param : params) {
                     ids.add(param.substring(3));
                   }
                   return (FudgeMsg) resolve.adjustment(ids).getEntity();
@@ -161,7 +161,7 @@ public class RemoteHistoricalTimeSeriesResolverTest {
                 }
               }
               return (FudgeMsg) resolve.get().getEntity();
-            } catch (WebApplicationException e) {
+            } catch (final WebApplicationException e) {
               assertEquals(e.getResponse().getStatus(), 404);
               throw new UniformInterfaceException404NotFound(new ClientResponse(404, null, null, null), false);
             }

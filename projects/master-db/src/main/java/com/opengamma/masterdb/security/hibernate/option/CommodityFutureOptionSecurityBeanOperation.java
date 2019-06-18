@@ -19,12 +19,13 @@ import com.opengamma.masterdb.security.hibernate.HibernateSecurityMasterDao;
 import com.opengamma.masterdb.security.hibernate.OperationContext;
 
 /**
- * CommodityOptionSecurityBeanOperation
+ * CommodityOptionSecurityBeanOperation.
  */
-public final class CommodityFutureOptionSecurityBeanOperation extends AbstractSecurityBeanOperation<CommodityFutureOptionSecurity, CommodityFutureOptionSecurityBean> {
+public final class CommodityFutureOptionSecurityBeanOperation
+    extends AbstractSecurityBeanOperation<CommodityFutureOptionSecurity, CommodityFutureOptionSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final CommodityFutureOptionSecurityBeanOperation INSTANCE = new CommodityFutureOptionSecurityBeanOperation();
 
@@ -33,7 +34,8 @@ public final class CommodityFutureOptionSecurityBeanOperation extends AbstractSe
   }
 
   @Override
-  public CommodityFutureOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final CommodityFutureOptionSecurity security) {
+  public CommodityFutureOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final CommodityFutureOptionSecurity security) {
     final CommodityFutureOptionSecurityBean bean = new CommodityFutureOptionSecurityBean();
     bean.setOptionExerciseType(OptionExerciseType.identify(security.getExerciseType()));
     bean.setOptionType(security.getOptionType());
@@ -52,14 +54,14 @@ public final class CommodityFutureOptionSecurityBeanOperation extends AbstractSe
     final ExerciseType exerciseType = bean.getOptionExerciseType().accept(new ExerciseTypeVisitorImpl());
 
     final CommodityFutureOptionSecurity sec = new CommodityFutureOptionSecurity(
-      bean.getTradingExchange().getName(),
-      bean.getSettlementExchange().getName(),
-      expiryBeanToExpiry(bean.getExpiry()),
-      exerciseType,
-      externalIdBeanToExternalId(bean.getUnderlying()),
-      bean.getPointValue(),
-      currencyBeanToCurrency(bean.getCurrency()),
-      bean.getStrike(), bean.getOptionType());
+        bean.getTradingExchange().getName(),
+        bean.getSettlementExchange().getName(),
+        expiryBeanToExpiry(bean.getExpiry()),
+        exerciseType,
+        externalIdBeanToExternalId(bean.getUnderlying()),
+        bean.getPointValue(),
+        currencyBeanToCurrency(bean.getCurrency()),
+        bean.getStrike(), bean.getOptionType());
     return sec;
   }
 

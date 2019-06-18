@@ -27,13 +27,12 @@ import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
-import com.opengamma.financial.convention.daycount.DayCount;
-import com.opengamma.financial.convention.daycount.DayCounts;
 
 /**
- * Calculates the (Black Lognormal) {@link ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY} of target Swaption Trade from calibrated SABR model.<p>
+ * Calculates the (Black Lognormal) {@link com.opengamma.engine.value.ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY} of target Swaption Trade from
+ * calibrated SABR model.
+ * <p>
  * Uses curves constructed using the discounting method.
  */
 public class RightExtrapolationSABRDiscountingImpliedVolFunction extends SABRDiscountingFunction {
@@ -41,7 +40,9 @@ public class RightExtrapolationSABRDiscountingImpliedVolFunction extends SABRDis
   /** The Implied Vol calculator */
   private static final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, Double> CALCULATOR = ImpliedVolatilitySABRSwaptionCalculator.getInstance();
 
-  /** Sets the value requirements to {@link ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY} */
+  /**
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY}.
+   */
   public RightExtrapolationSABRDiscountingImpliedVolFunction() {
     super(SECURITY_IMPLIED_VOLATILITY);
   }
@@ -53,10 +54,10 @@ public class RightExtrapolationSABRDiscountingImpliedVolFunction extends SABRDis
       @Override
       protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
           final Set<ValueRequirement> desiredValues, final InstrumentDerivative derivative, final FXMatrix fxMatrix) {
-        final DayCount dayCount = DayCounts.ACT_360; //TODO Remove daycount from getSABRSurfaces(). It is not used
         final SABRSwaptionProvider sabrData = getSABRSurfaces(executionContext, inputs, target, fxMatrix, null);
         final double impliedVol = derivative.accept(CALCULATOR, sabrData);
-        final ValueSpecification spec = new ValueSpecification(SECURITY_IMPLIED_VOLATILITY, target.toSpecification(), Iterables.getOnlyElement(desiredValues).getConstraints());
+        final ValueSpecification spec = new ValueSpecification(SECURITY_IMPLIED_VOLATILITY, target.toSpecification(),
+            Iterables.getOnlyElement(desiredValues).getConstraints());
         return Collections.singleton(new ComputedValue(spec, impliedVol));
       }
 

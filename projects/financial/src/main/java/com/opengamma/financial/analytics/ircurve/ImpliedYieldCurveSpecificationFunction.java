@@ -19,8 +19,8 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.engine.ComputationTarget;
@@ -36,7 +36,6 @@ import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
-import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.config.ConfigSourceQuery;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
@@ -46,9 +45,13 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Function to produce {@link InterpolatedYieldCurveSpecificationWithSecurities} values for a named curve/currency pair. An instance must be created and put into the repository for each curve
- * definition to be made available to downstream functions which can reference the required curves using property constraints.
+ * Function to produce {@link InterpolatedYieldCurveSpecificationWithSecurities} values for a named curve/currency pair. An instance must be created and put
+ * into the repository for each curve definition to be made available to downstream functions which can reference the required curves using property
+ * constraints.
+ * 
+ * @deprecated {@link YieldCurveSpecification}s are deprecated.
  */
+@Deprecated
 public class ImpliedYieldCurveSpecificationFunction extends AbstractFunction {
   private final Currency _currency;
   private final String _curveName;
@@ -71,7 +74,8 @@ public class ImpliedYieldCurveSpecificationFunction extends AbstractFunction {
 
   @Override
   public void init(final FunctionCompilationContext context) {
-    _resultSpec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE_SPEC, _targetSpec, createValueProperties().with(ValuePropertyNames.CURVE, _curveName).get());
+    _resultSpec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE_SPEC, _targetSpec,
+        createValueProperties().with(ValuePropertyNames.CURVE, _curveName).get());
     _yieldCurveDefinition = ConfigSourceQuery.init(context, this, YieldCurveDefinition.class);
   }
 
@@ -116,8 +120,7 @@ public class ImpliedYieldCurveSpecificationFunction extends AbstractFunction {
       for (final FixedIncomeStripWithIdentifier strip : getCurveSpecification().getStrips()) {
         marketData.setDataPoint(strip.getSecurity(), 0);
       }
-      final InterpolatedYieldCurveSpecificationWithSecurities curveSpecificationWithSecurities =
-          resolveToDummySecurity(getCurveSpecification(), marketData, _currency);
+      final InterpolatedYieldCurveSpecificationWithSecurities curveSpecificationWithSecurities = resolveToDummySecurity(getCurveSpecification(), _currency);
       return Collections.singleton(new ComputedValue(_resultSpec, curveSpecificationWithSecurities));
     }
 
@@ -128,10 +131,10 @@ public class ImpliedYieldCurveSpecificationFunction extends AbstractFunction {
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     final ZonedDateTime atInstantZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
     final LocalDate curveDate = atInstantZDT.toLocalDate();
-    final InterpolatedYieldCurveSpecificationBuilder curveSpecificationBuilder = OpenGammaCompilationContext.getInterpolatedYieldCurveSpecificationBuilder(context);
     final YieldCurveDefinition definition = _yieldCurveDefinition.get(_curveName + "_" + _currency.getCode());
     final InterpolatedYieldCurveSpecification curveSpecification = buildDummyCurve(curveDate, definition);
-    return new CompiledImpl(atInstantZDT.with(LocalTime.MIDNIGHT).toInstant(), atInstantZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000).toInstant(), curveSpecification);
+    return new CompiledImpl(atInstantZDT.with(LocalTime.MIDNIGHT).toInstant(),
+        atInstantZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000).toInstant(), curveSpecification);
   }
 
   private static InterpolatedYieldCurveSpecification buildDummyCurve(final LocalDate curveDate, final YieldCurveDefinition definition) {
@@ -147,11 +150,12 @@ public class ImpliedYieldCurveSpecificationFunction extends AbstractFunction {
     final String leftExtrapolatorName = definition.getLeftExtrapolatorName();
     final String rightExtrapolatorName = definition.getRightExtrapolatorName();
     final boolean interpolateYield = definition.isInterpolateYields();
-    final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
-    return new InterpolatedYieldCurveSpecification(curveDate, definition.getName(), definition.getCurrency(), interpolator, interpolateYield, ids, definition.getRegionId());
+    final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+    return new InterpolatedYieldCurveSpecification(curveDate, definition.getName(), definition.getCurrency(), interpolator, interpolateYield, ids,
+        definition.getRegionId());
   }
 
-  private static InterpolatedYieldCurveSpecificationWithSecurities resolveToDummySecurity(final InterpolatedYieldCurveSpecification curveSpecification, final SnapshotDataBundle marketData,
+  private static InterpolatedYieldCurveSpecificationWithSecurities resolveToDummySecurity(final InterpolatedYieldCurveSpecification curveSpecification,
       final Currency currency) {
     final Collection<FixedIncomeStripWithSecurity> securityStrips = new TreeSet<>();
     final LocalDate curveDate = curveSpecification.getCurveDate();
@@ -162,8 +166,8 @@ public class ImpliedYieldCurveSpecificationFunction extends AbstractFunction {
       final CashSecurity security = new CashSecurity(currency, curveSpecification.getRegion(), start, maturity, DAY_COUNT, 0, 0);
       securityStrips.add(new FixedIncomeStripWithSecurity(strip.getStrip(), resolvedTenor, maturity, strip.getSecurity(), security));
     }
-    return new InterpolatedYieldCurveSpecificationWithSecurities(curveDate, curveSpecification.getName(), curveSpecification.getCurrency(), curveSpecification.getInterpolator(),
-        curveSpecification.interpolateYield(), securityStrips);
+    return new InterpolatedYieldCurveSpecificationWithSecurities(curveDate, curveSpecification.getName(), curveSpecification.getCurrency(),
+        curveSpecification.getInterpolator(), curveSpecification.interpolateYield(), securityStrips);
   }
 
 }

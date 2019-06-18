@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.sabrswaption;
@@ -25,9 +25,10 @@ import com.opengamma.analytics.financial.provider.description.interestrate.SABRS
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
-public final class PresentValueSABRSensitivitySABRSwaptionCalculator extends InstrumentDerivativeVisitorSameMethodAdapter<SABRSwaptionProviderInterface, PresentValueSABRSensitivityDataBundle> {
+public final class PresentValueSABRSensitivitySABRSwaptionCalculator
+    extends InstrumentDerivativeVisitorSameMethodAdapter<SABRSwaptionProviderInterface, PresentValueSABRSensitivityDataBundle> {
 
   /**
    * The unique instance of the calculator.
@@ -36,6 +37,7 @@ public final class PresentValueSABRSensitivitySABRSwaptionCalculator extends Ins
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueSABRSensitivitySABRSwaptionCalculator getInstance() {
@@ -61,7 +63,7 @@ public final class PresentValueSABRSensitivitySABRSwaptionCalculator extends Ins
     return derivative.accept(this, sabr);
   }
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public PresentValueSABRSensitivityDataBundle visitCouponCMS(final CouponCMS payment, final SABRSwaptionProviderInterface sabr) {
@@ -78,13 +80,15 @@ public final class PresentValueSABRSensitivitySABRSwaptionCalculator extends Ins
     if (sabr.getSABRParameter() instanceof SABRInterestRateCorrelationParameters) {
       // TODO: improve correlation data handling
       final SABRInterestRateCorrelationParameters sabrCorrelation = (SABRInterestRateCorrelationParameters) sabr.getSABRParameter();
-      final CapFloorCMSSpreadSABRBinormalMethod method = new CapFloorCMSSpreadSABRBinormalMethod(sabrCorrelation.getCorrelation(), METHOD_CMS_CAP, METHOD_CMS_CPN);
+      final CapFloorCMSSpreadSABRBinormalMethod method = new CapFloorCMSSpreadSABRBinormalMethod(sabrCorrelation.getCorrelation(), METHOD_CMS_CAP,
+          METHOD_CMS_CPN);
       return method.presentValueSABRSensitivity(payment, sabr);
     }
-    throw new UnsupportedOperationException("The PresentValueSABRSensitivitySABRSwaptionCalculator visitor visitCapFloorCMSSpread requires a SABRInterestRateCorrelationParameters as data.");
+    throw new UnsupportedOperationException(
+        "The PresentValueSABRSensitivitySABRSwaptionCalculator visitor visitCapFloorCMSSpread requires a SABRInterestRateCorrelationParameters as data.");
   }
 
-  // -----     Annuity     ------
+  // ----- Annuity ------
 
   @Override
   public PresentValueSABRSensitivityDataBundle visitGenericAnnuity(final Annuity<? extends Payment> annuity, final SABRSwaptionProviderInterface sabr) {
@@ -96,10 +100,11 @@ public final class PresentValueSABRSensitivitySABRSwaptionCalculator extends Ins
     return cs;
   }
 
-  // -----     Swaption     ------
+  // ----- Swaption ------
 
   @Override
-  public PresentValueSABRSensitivityDataBundle visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption, final SABRSwaptionProviderInterface sabr) {
+  public PresentValueSABRSensitivityDataBundle visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption,
+      final SABRSwaptionProviderInterface sabr) {
     return METHOD_SWT_PHYS.presentValueSABRSensitivity(swaption, sabr);
   }
 

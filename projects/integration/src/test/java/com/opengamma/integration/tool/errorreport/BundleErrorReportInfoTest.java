@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.tool.errorreport;
@@ -37,7 +37,7 @@ public class BundleErrorReportInfoTest {
   private static void delete(final File file) {
     final File[] subfiles = file.listFiles();
     if (subfiles != null) {
-      for (File subfile : subfiles) {
+      for (final File subfile : subfiles) {
         if (!subfile.getName().startsWith(".")) {
           delete(subfile);
         }
@@ -76,7 +76,7 @@ public class BundleErrorReportInfoTest {
       final String props = file.getAbsolutePath() + File.separator + "Test.properties";
       writeTestProperties(file.getAbsolutePath(), props);
       assertEquals(BundleErrorReportInfo.mainImpl(new String[] {props }), 0);
-      for (String zip : file.list()) {
+      for (final String zip : file.list()) {
         if (zip.endsWith(".zip")) {
           final File zipFile = new File(file, zip);
           assertEquals(zipFile.length(), 158L);
@@ -90,7 +90,7 @@ public class BundleErrorReportInfoTest {
 
   public void testAttachFiles() throws IOException {
     final File file = new File(tmpdir(), name());
-    final AtomicReference<File> zipFile = new AtomicReference<File>();
+    final AtomicReference<File> zipFile = new AtomicReference<>();
     try {
       writeTestFile(file.getAbsolutePath() + File.separator + "Foo1" + File.separator + "test.log", 1);
       writeTestFile(file.getAbsolutePath() + File.separator + "Foo2x" + File.separator + "test.log", 1);
@@ -152,7 +152,7 @@ public class BundleErrorReportInfoTest {
     assertEquals(BundleErrorReportInfo.mainImpl(new String[0]), 1);
     assertEquals(
         BundleErrorReportInfo.mainImpl(new String[] {File.separatorChar + "this" + File.separatorChar + "path" + File.separatorChar + "does" + File.separatorChar + "not" + File.separatorChar +
-            "exist" }), 1);
+        "exist" }), 1);
   }
 
 }

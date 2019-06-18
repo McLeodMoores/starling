@@ -11,23 +11,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Returns the change in present value of an instrument due to a parallel move of the yield curve, scaled so that the move is 1bp.
- * @deprecated Use the calculators that reference {@link ParameterProviderInterface}
+ *
+ * @deprecated Use the calculators that reference {@link com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface}
  */
 @Deprecated
 public final class PV01Calculator extends InstrumentDerivativeVisitorSameMethodAdapter<YieldCurveBundle, Map<String, Double>> {
 
   /**
-  * The unique instance of the sensitivity calculator.
-  */
+   * The unique instance of the sensitivity calculator.
+   */
   private static final PV01Calculator INSTANCE = new PV01Calculator();
 
   /**
    * Returns the instance of the calculator.
+   *
    * @return The instance.
    */
   public static PV01Calculator getInstance() {
@@ -43,7 +44,9 @@ public final class PV01Calculator extends InstrumentDerivativeVisitorSameMethodA
 
   /**
    * Constructor with a specific present value curve sensitivity calculator.
-   * @param presentValueCurveSensitivityCalculator The calculator.
+   *
+   * @param presentValueCurveSensitivityCalculator
+   *          The calculator.
    */
   public PV01Calculator(final InstrumentDerivativeVisitor<YieldCurveBundle, Map<String, List<DoublesPair>>> presentValueCurveSensitivityCalculator) {
     _presentValueCurveSensitivityCalculator = presentValueCurveSensitivityCalculator;
@@ -59,9 +62,13 @@ public final class PV01Calculator extends InstrumentDerivativeVisitorSameMethodA
   private final InstrumentDerivativeVisitor<YieldCurveBundle, Map<String, List<DoublesPair>>> _presentValueCurveSensitivityCalculator;
 
   /**
-   * Calculates the change in present value of an instrument due to a parallel move of each yield curve the instrument is sensitive to, scaled so that the move is 1bp.
-   * @param ird The instrument.
-   * @param curves The bundle of relevant yield curves.
+   * Calculates the change in present value of an instrument due to a parallel move of each yield curve the instrument is sensitive to, scaled so that the move
+   * is 1bp.
+   *
+   * @param ird
+   *          The instrument.
+   * @param curves
+   *          The bundle of relevant yield curves.
    * @return a Map between curve name and PV01 for that curve
    */
   @Override

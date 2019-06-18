@@ -31,22 +31,25 @@ public class HistoricalTimeSeriesRatingFudgeEncodingTest {
 
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
+  /**
+   *
+   */
   public void fudgeEncoding() {
-    List<HistoricalTimeSeriesRatingRule> rules = new ArrayList<HistoricalTimeSeriesRatingRule>();
+    final List<HistoricalTimeSeriesRatingRule> rules = new ArrayList<>();
     rules.add(HistoricalTimeSeriesRatingRule.of(DATA_SOURCE_NAME, "BLOOMBERG", 2));
     rules.add(HistoricalTimeSeriesRatingRule.of(DATA_SOURCE_NAME, "REUTERS", 1));
     rules.add(HistoricalTimeSeriesRatingRule.of(DATA_PROVIDER_NAME, "CMPL", 3));
-    HistoricalTimeSeriesRating inputConfig = HistoricalTimeSeriesRating.of(rules);
-    
-    FudgeSerializer serializationContext = new FudgeSerializer(FUDGE_CONTEXT);
-    MutableFudgeMsg inputMsg = serializationContext.objectToFudgeMsg(inputConfig);
-    FudgeMsg outputMsg = FUDGE_CONTEXT.deserialize(FUDGE_CONTEXT.toByteArray(inputMsg)).getMessage();
+    final HistoricalTimeSeriesRating inputConfig = HistoricalTimeSeriesRating.of(rules);
+
+    final FudgeSerializer serializationContext = new FudgeSerializer(FUDGE_CONTEXT);
+    final MutableFudgeMsg inputMsg = serializationContext.objectToFudgeMsg(inputConfig);
+    final FudgeMsg outputMsg = FUDGE_CONTEXT.deserialize(FUDGE_CONTEXT.toByteArray(inputMsg)).getMessage();
     assertNotNull(outputMsg);
     assertEquals(3, outputMsg.getNumFields());
-    
-    FudgeDeserializer deserializationContext = new FudgeDeserializer(FUDGE_CONTEXT);
-    HistoricalTimeSeriesRating outputConfig = deserializationContext.fudgeMsgToObject(HistoricalTimeSeriesRating.class, outputMsg);
-    
+
+    final FudgeDeserializer deserializationContext = new FudgeDeserializer(FUDGE_CONTEXT);
+    final HistoricalTimeSeriesRating outputConfig = deserializationContext.fudgeMsgToObject(HistoricalTimeSeriesRating.class, outputMsg);
+
     assertEquals(inputConfig, outputConfig);
   }
 

@@ -37,7 +37,9 @@ import com.opengamma.util.tuple.Triple;
 
 /**
  *
+ * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
+@Deprecated
 public class YieldCurveMarketDataFunction extends AbstractFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveMarketDataFunction.class);
   private ValueSpecification _marketDataResult;
@@ -84,8 +86,8 @@ public class YieldCurveMarketDataFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
-        final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       final SnapshotDataBundle map = buildMarketDataMap(executionContext, inputs);
       return Sets.newHashSet(new ComputedValue(_marketDataResult, map));
     }
@@ -127,10 +129,12 @@ public class YieldCurveMarketDataFunction extends AbstractFunction {
     for (final ComputedValue value : inputs.getAllValues()) {
       final ExternalIdBundle identifiers = value.getSpecification().getTargetSpecification().accept(resolver);
       double rate = (Double) value.getValue();
-      //TODO this is here because KWCDC Curncy is not normalized
+      // TODO this is here because KWCDC Curncy is not normalized
       if (rate > 1.1) {
         LOGGER.error("Normalizing {}, value {}", value.getSpecification(), rate);
-        LOGGER.warn("Performing normalization of rate in YieldCurveMarketDataFunction; if this is being used for anything other than KWCDC Curncy check market data normalization");
+        LOGGER.warn(
+            "Performing normalization of rate in YieldCurveMarketDataFunction; if this is being used for anything other than "
+                + "KWCDC Curncy check market data normalization");
         rate /= 100;
       }
       marketData.setDataPoint(identifiers, rate);
@@ -145,8 +149,7 @@ public class YieldCurveMarketDataFunction extends AbstractFunction {
       final Triple<Instant, Instant, InterpolatedYieldCurveSpecification> compile = _helper.compile(context, atInstant, this);
       return new CompiledImpl(compile.getFirst(), compile.getSecond(), buildRequirements(compile.getThird()));
     } catch (final OpenGammaRuntimeException ogre) {
-      LOGGER.error("Function {} calculating {} on {} couldn't compile, rethrowing...",
-                     getShortName(), _helper.getCurveName(), _helper.getCurrency());
+      LOGGER.error("Function {} calculating {} on {} couldn't compile, rethrowing...", getShortName(), _helper.getCurveName(), _helper.getCurrency());
       throw ogre;
     }
 

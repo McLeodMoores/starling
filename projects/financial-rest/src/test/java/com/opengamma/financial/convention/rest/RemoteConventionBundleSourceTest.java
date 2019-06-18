@@ -33,8 +33,12 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterface;
 
 /**
- * Tests the {@link RemoteConventionBundleSource} and {@link DataConventionBundleSourceResource} classes
+ * Tests the {@link RemoteConventionBundleSource} and
+ * {@link DataConventionBundleSourceResource} classes
+ * 
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class RemoteConventionBundleSourceTest {
 

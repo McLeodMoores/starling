@@ -43,18 +43,20 @@ public class WebRegionResource extends AbstractWebRegionResource {
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   public WebRegionResource(final AbstractWebRegionResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
     final RegionSearchRequest search = new RegionSearchRequest();
-    search.setPagingRequest(PagingRequest.ALL);  // may need to add paging
+    search.setPagingRequest(PagingRequest.ALL); // may need to add paging
     search.setChildrenOfId(data().getRegion().getUniqueId());
     final RegionSearchResult children = data().getRegionMaster().search(search);
     data().setRegionChildren(children.getDocuments());
@@ -72,7 +74,7 @@ public class WebRegionResource extends AbstractWebRegionResource {
   @Produces(MediaType.APPLICATION_JSON)
   public String getJSON() {
     final RegionSearchRequest search = new RegionSearchRequest();
-    search.setPagingRequest(PagingRequest.ALL);  // may need to add paging
+    search.setPagingRequest(PagingRequest.ALL); // may need to add paging
     search.setChildrenOfId(data().getRegion().getUniqueId());
     final RegionSearchResult children = data().getRegionMaster().search(search);
     data().setRegionChildren(children.getDocuments());
@@ -86,7 +88,7 @@ public class WebRegionResource extends AbstractWebRegionResource {
     return getFreemarker().build(JSON_DIR + "region.ftl", out);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
@@ -154,7 +156,8 @@ public class WebRegionResource extends AbstractWebRegionResource {
     return Response.created(uri).build();
   }
 
-  private URI addRegion(final String name, final String fullName, final RegionClassification classification, final String countryISO, final String currencyISO, final String timeZoneId) {
+  private URI addRegion(final String name, final String fullName, final RegionClassification classification, final String countryISO, final String currencyISO,
+      final String timeZoneId) {
     final ManageableRegion region = new ManageableRegion();
     region.getParentRegionIds().add(data().getRegion().getUniqueId());
     region.setName(name);
@@ -168,7 +171,7 @@ public class WebRegionResource extends AbstractWebRegionResource {
     return WebRegionResource.uri(data(), added.getUniqueId());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
@@ -179,7 +182,7 @@ public class WebRegionResource extends AbstractWebRegionResource {
       @FormParam("country") final String countryIso,
       @FormParam("currency") final String currencyIso,
       @FormParam("timezone") final String timeZoneId) {
-    if (data().getRegion().isLatest() == false) {
+    if (!data().getRegion().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
@@ -217,7 +220,7 @@ public class WebRegionResource extends AbstractWebRegionResource {
       @FormParam("country") final String countryISO,
       @FormParam("currency") final String currencyISO,
       @FormParam("timezone") final String timeZoneId) {
-    if (!data().getRegion().isLatest()) {  // TODO: idempotent
+    if (!data().getRegion().isLatest()) { // TODO: idempotent
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
@@ -237,7 +240,8 @@ public class WebRegionResource extends AbstractWebRegionResource {
     return Response.ok().build();
   }
 
-  private URI updateRegion(final String name, final String fullName, final RegionClassification classification, final String countryISO, final String currencyISO, final String timeZoneId) {
+  private URI updateRegion(final String name, final String fullName, final RegionClassification classification, final String countryISO,
+      final String currencyISO, final String timeZoneId) {
     final ManageableRegion region = new ManageableRegion();
     region.setUniqueId(data().getRegion().getUniqueId());
     region.setParentRegionIds(data().getRegion().getRegion().getParentRegionIds());
@@ -253,12 +257,12 @@ public class WebRegionResource extends AbstractWebRegionResource {
     return WebRegionResource.uri(data());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
     final RegionDocument doc = data().getRegion();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
@@ -271,15 +275,16 @@ public class WebRegionResource extends AbstractWebRegionResource {
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteJSON() {
     final RegionDocument doc = data().getRegion();
-    if (doc.isLatest()) {  // idempotent
+    if (doc.isLatest()) { // idempotent
       data().getRegionMaster().remove(doc.getUniqueId());
     }
     return Response.ok().build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   *
    * @return the output root data, not null
    */
   @Override
@@ -294,16 +299,18 @@ public class WebRegionResource extends AbstractWebRegionResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("versions")
   public WebRegionVersionsResource findVersions() {
     return new WebRegionVersionsResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   *
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebRegionData data) {
@@ -312,8 +319,11 @@ public class WebRegionResource extends AbstractWebRegionResource {
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideRegionId  the override region id, null uses information from data
+   *
+   * @param data
+   *          the data, not null
+   * @param overrideRegionId
+   *          the override region id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebRegionData data, final UniqueId overrideRegionId) {

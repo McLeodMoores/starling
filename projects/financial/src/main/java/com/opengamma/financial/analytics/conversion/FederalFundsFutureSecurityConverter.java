@@ -42,12 +42,17 @@ public class FederalFundsFutureSecurityConverter extends FinancialSecurityVisito
   private final RegionSource _regionSource;
 
   /**
-   * @param securitySource The security source, not null
-   * @param holidaySource The holiday source, not null
-   * @param conventionSource The convention source, not null
-   * @param regionSource The region source, not null
+   * @param securitySource
+   *          The security source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param regionSource
+   *          The region source, not null
    */
-  public FederalFundsFutureSecurityConverter(final SecuritySource securitySource, final HolidaySource holidaySource, final ConventionSource conventionSource, final RegionSource regionSource) {
+  public FederalFundsFutureSecurityConverter(final SecuritySource securitySource, final HolidaySource holidaySource, final ConventionSource conventionSource,
+      final RegionSource regionSource) {
     ArgumentChecker.notNull(securitySource, "security source");
     ArgumentChecker.notNull(holidaySource, "holiday source");
     ArgumentChecker.notNull(conventionSource, "convention source");
@@ -59,7 +64,8 @@ public class FederalFundsFutureSecurityConverter extends FinancialSecurityVisito
   }
 
   /**
-   * @param security The security.
+   * @param security
+   *          The security.
    * @return Security definition.
    * @deprecated Use InterestRateFutureSecurityConverter.
    */
@@ -69,12 +75,13 @@ public class FederalFundsFutureSecurityConverter extends FinancialSecurityVisito
   public FederalFundsFutureSecurityDefinition visitInterestRateFutureSecurity(final InterestRateFutureSecurity security) {
     ArgumentChecker.notNull(security, "security");
     final ZonedDateTime lastTradeDate = security.getExpiry().getExpiry();
-    final FederalFundsFutureConvention convention = _conventionSource.getSingle(ExternalId.of(SCHEME_NAME, FED_FUNDS_FUTURE), FederalFundsFutureConvention.class);
+    final FederalFundsFutureConvention convention = _conventionSource.getSingle(ExternalId.of(SCHEME_NAME, FED_FUNDS_FUTURE),
+        FederalFundsFutureConvention.class);
     final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, convention.getExchangeCalendar());
     final OvernightIndex index = (OvernightIndex) _securitySource.getSingle(convention.getIndexConvention().toBundle());
     final OvernightIndexConvention indexConvention = _conventionSource.getSingle(index.getConventionId(), OvernightIndexConvention.class);
     final IndexON indexON = ConverterUtils.indexON(index.getName(), indexConvention);
-    final double paymentAccrualFactor = 1 / 12.; //TODO should not be hard-coded
+    final double paymentAccrualFactor = 1 / 12.; // TODO should not be hard-coded
     final double notional = security.getUnitAmount() / paymentAccrualFactor;
     return FederalFundsFutureSecurityDefinition.from(lastTradeDate, indexON, notional, paymentAccrualFactor, security.getName(), calendar);
   }
@@ -83,12 +90,13 @@ public class FederalFundsFutureSecurityConverter extends FinancialSecurityVisito
   public FederalFundsFutureSecurityDefinition visitFederalFundsFutureSecurity(final FederalFundsFutureSecurity security) {
     ArgumentChecker.notNull(security, "security");
     final ZonedDateTime lastTradeDate = security.getExpiry().getExpiry().withHour(0);
-    final FederalFundsFutureConvention convention = _conventionSource.getSingle(ExternalId.of(SCHEME_NAME, FED_FUNDS_FUTURE), FederalFundsFutureConvention.class);
+    final FederalFundsFutureConvention convention = _conventionSource.getSingle(ExternalId.of(SCHEME_NAME, FED_FUNDS_FUTURE),
+        FederalFundsFutureConvention.class);
     final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, convention.getExchangeCalendar());
     final OvernightIndex index = (OvernightIndex) _securitySource.getSingle(convention.getIndexConvention().toBundle());
     final OvernightIndexConvention indexConvention = _conventionSource.getSingle(index.getConventionId(), OvernightIndexConvention.class);
     final IndexON indexON = ConverterUtils.indexON(index.getName(), indexConvention);
-    final double paymentAccrualFactor = 1 / 12.; //TODO should not be hard-coded
+    final double paymentAccrualFactor = 1 / 12.; // TODO should not be hard-coded
     final double notional = security.getUnitAmount() / paymentAccrualFactor;
     return FederalFundsFutureSecurityDefinition.from(lastTradeDate, indexON, notional, paymentAccrualFactor, security.getName(), calendar);
   }

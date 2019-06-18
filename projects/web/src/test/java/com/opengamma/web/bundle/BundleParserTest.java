@@ -26,63 +26,64 @@ import com.opengamma.util.test.TestGroup;
 public class BundleParserTest {
 
   public void testParser() throws Exception {
-    final InputStream xmlStream = getClass().getResourceAsStream("uiResourceConfig.xml");
+    try (final InputStream xmlStream = getClass().getResourceAsStream("uiResourceConfig.xml")) {
 
-    final UriProvider uriProvider = new UriProvider() {
+      final UriProvider uriProvider = new UriProvider() {
 
-      @Override
-      public URI getUri(final String resourceReference) {
-        try {
-          return new URI(resourceReference);
-        } catch (final URISyntaxException ex) {
-          throw new OpenGammaRuntimeException("Invalid URI for resource " + resourceReference);
+        @Override
+        public URI getUri(final String resourceReference) {
+          try {
+            return new URI(resourceReference);
+          } catch (final URISyntaxException ex) {
+            throw new OpenGammaRuntimeException("Invalid URI for resource " + resourceReference);
+          }
         }
+
+      };
+      final BundleParser bundleParser = new BundleParser(uriProvider, "");
+      final BundleManager bundleManager = bundleParser.parse(xmlStream);
+      assertNotNull(bundleManager);
+
+      final List<Fragment> cssBundleCommon = bundleManager.getBundle("cssBundleCommon.css").getAllFragments();
+      assertNotNull(cssBundleCommon);
+      assertEquals(2, cssBundleCommon.size());
+      assertEquals(new Fragment(new URI("styles/common/og.common.buttons.css"), "/styles/common/og.common.buttons.css"), cssBundleCommon.get(0));
+      assertEquals(new Fragment(new URI("styles/common/og.common.core.css"), "/styles/common/og.common.core.css"), cssBundleCommon.get(1));
+
+      final List<Fragment> cssUtil = bundleManager.getBundle("cssUtil.css").getAllFragments();
+      assertNotNull(cssUtil);
+      assertEquals(2, cssUtil.size());
+      assertEquals(new Fragment(new URI("styles/common/util/og.common.reset.css"), "/styles/common/util/og.common.reset.css"), cssUtil.get(0));
+      assertEquals(new Fragment(new URI("styles/common/util/og.common.links.css"), "/styles/common/util/og.common.links.css"), cssUtil.get(1));
+
+      final List<Fragment> jsBundleCommon = bundleManager.getBundle("jsBundleCommon.js").getAllFragments();
+      assertNotNull(jsBundleCommon);
+      assertEquals(3, jsBundleCommon.size());
+      assertEquals(new Fragment(new URI("scripts/og/common/og.common.core.js"), "/scripts/og/common/og.common.core.js"), jsBundleCommon.get(0));
+      assertEquals(new Fragment(new URI("scripts/og/common/og.common.init.js"), "/scripts/og/common/og.common.init.js"), jsBundleCommon.get(1));
+      assertEquals(new Fragment(new URI("scripts/og/common/og.common.jquery.rest.js"), "/scripts/og/common/og.common.jquery.rest.js"), jsBundleCommon.get(2));
+
+      final List<Fragment> cssOgCommon = bundleManager.getBundle("ogCommon.css").getAllFragments();
+      assertNotNull(cssOgCommon);
+      assertEquals(cssBundleCommon.size() + cssUtil.size(), cssOgCommon.size());
+      int i = 0;
+      for (final Fragment fragment : cssBundleCommon) {
+        assertEquals(fragment, cssOgCommon.get(i++));
+      }
+      for (final Fragment fragment : cssUtil) {
+        assertEquals(fragment, cssOgCommon.get(i++));
       }
 
-    };
-    final BundleParser bundleParser = new BundleParser(uriProvider, "");
-    final BundleManager bundleManager = bundleParser.parse(xmlStream);
-    assertNotNull(bundleManager);
+      final List<Fragment> jsOgCommon = bundleManager.getBundle("ogCommon.js").getAllFragments();
+      assertNotNull(jsOgCommon);
+      assertEquals(jsBundleCommon.size(), jsOgCommon.size());
+      int j = 0;
+      for (final Fragment fragment : jsBundleCommon) {
+        assertEquals(fragment, jsOgCommon.get(j++));
+      }
 
-    final List<Fragment> cssBundleCommon = bundleManager.getBundle("cssBundleCommon.css").getAllFragments();
-    assertNotNull(cssBundleCommon);
-    assertEquals(2, cssBundleCommon.size());
-    assertEquals(new Fragment(new URI("styles/common/og.common.buttons.css"), "/styles/common/og.common.buttons.css"), cssBundleCommon.get(0));
-    assertEquals(new Fragment(new URI("styles/common/og.common.core.css"), "/styles/common/og.common.core.css"), cssBundleCommon.get(1));
-
-    final List<Fragment> cssUtil = bundleManager.getBundle("cssUtil.css").getAllFragments();
-    assertNotNull(cssUtil);
-    assertEquals(2, cssUtil.size());
-    assertEquals(new Fragment(new URI("styles/common/util/og.common.reset.css"), "/styles/common/util/og.common.reset.css"), cssUtil.get(0));
-    assertEquals(new Fragment(new URI("styles/common/util/og.common.links.css"), "/styles/common/util/og.common.links.css"), cssUtil.get(1));
-
-    final List<Fragment> jsBundleCommon = bundleManager.getBundle("jsBundleCommon.js").getAllFragments();
-    assertNotNull(jsBundleCommon);
-    assertEquals(3, jsBundleCommon.size());
-    assertEquals(new Fragment(new URI("scripts/og/common/og.common.core.js"), "/scripts/og/common/og.common.core.js"), jsBundleCommon.get(0));
-    assertEquals(new Fragment(new URI("scripts/og/common/og.common.init.js"), "/scripts/og/common/og.common.init.js"), jsBundleCommon.get(1));
-    assertEquals(new Fragment(new URI("scripts/og/common/og.common.jquery.rest.js"), "/scripts/og/common/og.common.jquery.rest.js"), jsBundleCommon.get(2));
-
-    final List<Fragment> cssOgCommon = bundleManager.getBundle("ogCommon.css").getAllFragments();
-    assertNotNull(cssOgCommon);
-    assertEquals(cssBundleCommon.size() + cssUtil.size(), cssOgCommon.size());
-    int i = 0;
-    for (final Fragment fragment : cssBundleCommon) {
-      assertEquals(fragment, cssOgCommon.get(i++));
+      IOUtils.closeQuietly(xmlStream);
     }
-    for (final Fragment fragment : cssUtil) {
-      assertEquals(fragment, cssOgCommon.get(i++));
-    }
-
-    final List<Fragment> jsOgCommon = bundleManager.getBundle("ogCommon.js").getAllFragments();
-    assertNotNull(jsOgCommon);
-    assertEquals(jsBundleCommon.size(), jsOgCommon.size());
-    int j = 0;
-    for (final Fragment fragment : jsBundleCommon) {
-      assertEquals(fragment, jsOgCommon.get(j++));
-    }
-
-    IOUtils.closeQuietly(xmlStream);
   }
 
 }

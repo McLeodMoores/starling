@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.greeks;
@@ -18,7 +18,8 @@ import java.util.Set;
 import org.testng.annotations.Test;
 
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.tuple.Pair;
 
@@ -28,7 +29,7 @@ import com.opengamma.util.tuple.Pair;
 @Test(groups = TestGroup.UNIT)
 public class PDEGreekResultCollectionTest {
   private static final double[] STRIKES = new double[] {1.1, 1.2, 1.3, 1.4};
-  private static final Interpolator1D INTERPOLATOR = Interpolator1DFactory.LINEAR_INSTANCE;
+  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME);
   private static final double[] GRID_DELTA = new double[] {0.7, 0.75, 0.8, 0.85};
   private static final double[] GRID_GAMMA = new double[] {10, 11, 12, 13};
   private static final double[] GRID_VEGA = new double[] {0.1, 0.11, 0.12, 0.13};

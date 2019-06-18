@@ -25,8 +25,11 @@ public class SwapIborIborDefinition extends SwapDefinition {
 
   /**
    * Constructor of the ibor-ibor swap from its two legs.
-   * @param firstLeg The first Ibor leg.
-   * @param secondLeg The second Ibor leg.
+   * 
+   * @param firstLeg
+   *          The first Ibor leg.
+   * @param secondLeg
+   *          The second Ibor leg.
    */
   public SwapIborIborDefinition(final AnnuityCouponIborSpreadDefinition firstLeg, final AnnuityCouponIborSpreadDefinition secondLeg) {
     super(firstLeg, secondLeg);
@@ -51,26 +54,37 @@ public class SwapIborIborDefinition extends SwapDefinition {
 
   /**
    * Builder from the settlement date and a generator. Both legs have the same notional.
-   * @param settlementDate The settlement date.
-   * @param tenor The swap tenor.
-   * @param generator The Ibor/Ibor swap generator.
-   * @param notional The swap notional.
-   * @param spread The spread to be applied to the first leg.
-   * @param isPayer The payer flag for the first leg.
+   * 
+   * @param settlementDate
+   *          The settlement date.
+   * @param tenor
+   *          The swap tenor.
+   * @param generator
+   *          The Ibor/Ibor swap generator.
+   * @param notional
+   *          The swap notional.
+   * @param spread
+   *          The spread to be applied to the first leg.
+   * @param isPayer
+   *          The payer flag for the first leg.
    * @return The swap.
    */
-  public static SwapIborIborDefinition from(final ZonedDateTime settlementDate, final Period tenor, final GeneratorSwapIborIbor generator, final double notional, final double spread,
+  public static SwapIborIborDefinition from(final ZonedDateTime settlementDate, final Period tenor, final GeneratorSwapIborIbor generator,
+      final double notional, final double spread,
       final boolean isPayer) {
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(tenor, "Tenor");
     ArgumentChecker.notNull(generator, "Swap generator");
-    final AnnuityCouponIborSpreadDefinition firstLeg = AnnuityCouponIborSpreadDefinition.from(settlementDate, tenor, notional, generator.getIborIndex1(), spread, isPayer, generator.getCalendar1());
-    final AnnuityCouponIborSpreadDefinition secondLeg = AnnuityCouponIborSpreadDefinition.from(settlementDate, tenor, notional, generator.getIborIndex2(), 0.0, !isPayer, generator.getCalendar2());
+    final AnnuityCouponIborSpreadDefinition firstLeg = AnnuityCouponIborSpreadDefinition.from(settlementDate, tenor, notional, generator.getIborIndex1(),
+        spread, isPayer, generator.getCalendar1());
+    final AnnuityCouponIborSpreadDefinition secondLeg = AnnuityCouponIborSpreadDefinition.from(settlementDate, tenor, notional, generator.getIborIndex2(), 0.0,
+        !isPayer, generator.getCalendar2());
     return new SwapIborIborDefinition(firstLeg, secondLeg);
   }
 
   /**
    * The Ibor-leg with no spread.
+   * 
    * @return The annuity.
    */
   @Override
@@ -80,6 +94,7 @@ public class SwapIborIborDefinition extends SwapDefinition {
 
   /**
    * The Ibor-leg with the spread.
+   * 
    * @return The annuity.
    */
   @Override
@@ -101,13 +116,14 @@ public class SwapIborIborDefinition extends SwapDefinition {
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
   public Swap<Coupon, Coupon> toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
-    final String[] firstLegCurveNames = new String[] {yieldCurveNames[0], yieldCurveNames[1] };
-    final String[] secondLegCurveNames = new String[] {yieldCurveNames[0], yieldCurveNames[2] };
+    final String[] firstLegCurveNames = new String[] { yieldCurveNames[0], yieldCurveNames[1] };
+    final String[] secondLegCurveNames = new String[] { yieldCurveNames[0], yieldCurveNames[2] };
     final Annuity<Coupon> firstLeg = getFirstLeg().toDerivative(date, firstLegCurveNames);
     final Annuity<Coupon> secondLeg = getSecondLeg().toDerivative(date, secondLegCurveNames);
     return new Swap<>(firstLeg, secondLeg);
@@ -115,6 +131,7 @@ public class SwapIborIborDefinition extends SwapDefinition {
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -122,8 +139,8 @@ public class SwapIborIborDefinition extends SwapDefinition {
   public Swap<Coupon, Coupon> toDerivative(final ZonedDateTime date, final ZonedDateTimeDoubleTimeSeries[] indexDataTS, final String... yieldCurveNames) {
     ArgumentChecker.notNull(indexDataTS, "index data time series array");
     ArgumentChecker.isTrue(indexDataTS.length > 1, "index data time series must contain at least two elements");
-    final String[] firstLegCurveNames = new String[] {yieldCurveNames[0], yieldCurveNames[1] };
-    final String[] secondLegCurveNames = new String[] {yieldCurveNames[0], yieldCurveNames[2] };
+    final String[] firstLegCurveNames = new String[] { yieldCurveNames[0], yieldCurveNames[1] };
+    final String[] secondLegCurveNames = new String[] { yieldCurveNames[0], yieldCurveNames[2] };
     final Annuity<Coupon> firstLeg = getFirstLeg().toDerivative(date, indexDataTS[0], firstLegCurveNames);
     final Annuity<Coupon> secondLeg = getSecondLeg().toDerivative(date, indexDataTS[1], secondLegCurveNames);
     return new Swap<>(firstLeg, secondLeg);

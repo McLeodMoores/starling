@@ -25,7 +25,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A time series writer that writes to an OpenGamma time series master
+ * A time series writer that writes to an OpenGamma time series master.
  */
 public class MasterTimeSeriesWriter implements TimeSeriesWriter {
 
@@ -74,7 +74,8 @@ public class MasterTimeSeriesWriter implements TimeSeriesWriter {
     }
 
     // TODO check if update could be used more often instead of correct
-    final ManageableHistoricalTimeSeries orig = _htsMaster.getTimeSeries(oId, VersionCorrection.LATEST, HistoricalTimeSeriesGetFilter.ofRange(series.getEarliestTime(), null, 1));
+    final ManageableHistoricalTimeSeries orig = _htsMaster.getTimeSeries(oId, VersionCorrection.LATEST,
+        HistoricalTimeSeriesGetFilter.ofRange(series.getEarliestTime(), null, 1));
     if (orig.getTimeSeries().isEmpty()) {
       _htsMaster.updateTimeSeriesDataPoints(oId, series);
     } else {

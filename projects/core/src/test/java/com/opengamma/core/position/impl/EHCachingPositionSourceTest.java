@@ -31,22 +31,28 @@ import net.sf.ehcache.CacheManager;
 /**
  * Tests the {@link EHCachingPositionSource} class.
  */
-@Test(groups = {TestGroup.UNIT, "ehcache"})
+@Test(groups = { TestGroup.UNIT, "ehcache" })
 public class EHCachingPositionSourceTest {
 
   private CacheManager _cacheManager;
 
+  /**
+   *
+   */
   @BeforeClass
   public void setUpClass() {
     _cacheManager = EHCacheUtils.createTestCacheManager(EHCachingPositionSourceTest.class);
   }
 
+  /**
+   *
+   */
   @AfterClass
   public void tearDownClass() {
     EHCacheUtils.shutdownQuiet(_cacheManager);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static Position createPosition(final int id) {
     return new SimplePosition(UniqueId.of("Test", Integer.toString(id)), BigDecimal.ONE, ExternalId.of("Foo", Integer.toString(id)));
   }
@@ -118,6 +124,9 @@ public class EHCachingPositionSourceTest {
     return root;
   }
 
+  /**
+   *
+   */
   public void addToFrontCacheMissing() {
     final EHCachingPositionSource cache = new EHCachingPositionSource(Mockito.mock(PositionSource.class), _cacheManager);
     try {
@@ -132,6 +141,9 @@ public class EHCachingPositionSourceTest {
     }
   }
 
+  /**
+   *
+   */
   public void addToFrontCacheAllSame() {
     final EHCachingPositionSource cache = new EHCachingPositionSource(Mockito.mock(PositionSource.class), _cacheManager);
     try {
@@ -147,6 +159,9 @@ public class EHCachingPositionSourceTest {
     }
   }
 
+  /**
+   *
+   */
   public void addToFrontCacheAllNew() {
     final EHCachingPositionSource cache = new EHCachingPositionSource(Mockito.mock(PositionSource.class), _cacheManager);
     try {
@@ -161,6 +176,9 @@ public class EHCachingPositionSourceTest {
     }
   }
 
+  /**
+   *
+   */
   public void addToFrontCacheSomeNew() {
     final EHCachingPositionSource cache = new EHCachingPositionSource(Mockito.mock(PositionSource.class), _cacheManager);
     try {

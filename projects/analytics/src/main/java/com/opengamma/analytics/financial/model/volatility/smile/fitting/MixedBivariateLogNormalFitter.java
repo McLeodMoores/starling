@@ -25,18 +25,17 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Fitting volatility smiles of two mixed log-normal models with mixed normal variables X,Y.
- * As model constraints are eventually violated starting with some initial guess parameters,
- * the LM algorithm is modified such that model parameters satisfy all of the constraints in every step of the fitting iteration.
- * X,Y should have the same number of normal distributions and share all of the weights.
+ * Fitting volatility smiles of two mixed log-normal models with mixed normal variables X,Y. As model constraints are eventually violated starting with some
+ * initial guess parameters, the LM algorithm is modified such that model parameters satisfy all of the constraints in every step of the fitting iteration. X,Y
+ * should have the same number of normal distributions and share all of the weights.
  *
- * For a mixture of N log-normal distributions, a mixed log-normal model contains 3 * N -2 free parameters.
- * Because sets of weights of X,Y are identical, total number of free parameters of X,Y is 5 * N -3.
+ * For a mixture of N log-normal distributions, a mixed log-normal model contains 3 * N -2 free parameters. Because sets of weights of X,Y are identical, total
+ * number of free parameters of X,Y is 5 * N -3.
  */
 public class MixedBivariateLogNormalFitter {
   private static final Logger LOGGER = LoggerFactory.getLogger(MixedBivariateLogNormalFitter.class);
   private static final int ITRMAX = 10000;
-  private static final double EPS_1 = 1.E-14; //EPS_1 and EPS_2 should be chosen by users
+  private static final double EPS_1 = 1.E-14; // EPS_1 and EPS_2 should be chosen by users
   private static final double EPS_2 = 1.E-14; //
   private static final double TAU = 1.E-3;
 
@@ -52,20 +51,30 @@ public class MixedBivariateLogNormalFitter {
   private final MixedLogNormalVolatilityFunction _volfunc = MixedLogNormalVolatilityFunction.getInstance();
 
   /**
-   * Find a set of parameters such that sum ( (_dataStrikes - exactFunctionValue)^2 ) is minimum
+   * Find a set of parameters such that sum ( (_dataStrikes - exactFunctionValue)^2 ) is minimum.
    *
-   * @param paramsGuess  Initial (unconstrained) guess parameters of X,Y to be chosen randomly
-   * @param dataStrikes  Strike (market data). All the data of X should be before those of Y
-   * @param dataVolatilities  Volatility (market data). all the data of X should be before those of Y
-   * @param timeToExpiry  Time to Expiry
-   * @param forwardX  Forward value of mixed log-normal model with X
-   * @param forwardY  Forward value of mixed log-normal model with Y
-   * @param nNormals  The number of normal distributions (X,Y have the same number of log-normal distributions)
-   * @param nDataX  The number of sets of data (strike, vol) of X
-   * @param paramsGuessCorrection  Set to be larger value for long expiry
+   * @param paramsGuess
+   *          Initial (unconstrained) guess parameters of X,Y to be chosen randomly
+   * @param dataStrikes
+   *          Strike (market data). All the data of X should be before those of Y
+   * @param dataVolatilities
+   *          Volatility (market data). all the data of X should be before those of Y
+   * @param timeToExpiry
+   *          Time to Expiry
+   * @param forwardX
+   *          Forward value of mixed log-normal model with X
+   * @param forwardY
+   *          Forward value of mixed log-normal model with Y
+   * @param nNormals
+   *          The number of normal distributions (X,Y have the same number of log-normal distributions)
+   * @param nDataX
+   *          The number of sets of data (strike, vol) of X
+   * @param paramsGuessCorrection
+   *          Set to be larger value for long expiry
    *
    */
-  public void doFit(final double[] paramsGuess, final double[] dataStrikes, final double[] dataVolatilities, final double timeToExpiry, final double forwardX, final double forwardY,
+  public void doFit(final double[] paramsGuess, final double[] dataStrikes, final double[] dataVolatilities, final double timeToExpiry, final double forwardX,
+      final double forwardY,
       final int nNormals,
       final int nDataX, final double paramsGuessCorrection) {
 
@@ -168,13 +177,13 @@ public class MixedBivariateLogNormalFitter {
       _finalSqu = 0.5 * getVecNormSq(tmp);
     }
 
-    while (done == false && k < ITRMAX) {
+    while (!done && k < ITRMAX) {
 
       k = k + 1;
 
-      ///confirming positive parameters and NotNaN
+      /// confirming positive parameters and NotNaN
       boolean confPositiveParams = false;
-      while (confPositiveParams == false) {
+      while (!confPositiveParams) {
 
         paramsJump = theMatrixEqnSolver(dataStrs, dataVols, gradFunctionValueM, hessian, time, fwdX, fwdY, nNorms, nX);
 
@@ -309,18 +318,28 @@ public class MixedBivariateLogNormalFitter {
   }
 
   /**
-   * @param jump Parameter jump
-   * @param dataStrs Strike data
-   * @param dataVols Volatility data
-   * @param gradFunctionValueM Gradient of the exact function value
-   * @param time Time to expiry
-   * @param fwdX Forward of X
-   * @param fwdY Forward of Y
-   * @param nNorms Number of Normals
-   * @param nX Number of data in the X part
+   * @param jump
+   *          Parameter jump
+   * @param dataStrs
+   *          Strike data
+   * @param dataVols
+   *          Volatility data
+   * @param gradFunctionValueM
+   *          Gradient of the exact function value
+   * @param time
+   *          Time to expiry
+   * @param fwdX
+   *          Forward of X
+   * @param fwdY
+   *          Forward of Y
+   * @param nNorms
+   *          Number of Normals
+   * @param nX
+   *          Number of data in the X part
    * @return Gain ratio which controls update of _shift
    */
-  private double getGainRatio(final double[] jump, final double[] dataStrs, final double[] dataVols, final double[] gradFunctionValueM, final double time, final double fwdX, final double fwdY,
+  private double getGainRatio(final double[] jump, final double[] dataStrs, final double[] dataVols, final double[] gradFunctionValueM, final double time,
+      final double fwdX, final double fwdY,
       final int nNorms,
       final int nX) {
 
@@ -344,7 +363,8 @@ public class MixedBivariateLogNormalFitter {
   /**
    * @return Numerator of gain ratio
    */
-  private double exactFunctionDiff(final double[] jump, final double[] dataStrs, final double[] dataVols, final double time, final double fwdX, final double fwdY, final int nNorms,
+  private double exactFunctionDiff(final double[] jump, final double[] dataStrs, final double[] dataVols, final double time, final double fwdX,
+      final double fwdY, final int nNorms,
       final int nX) {
     final int nParams = jump.length;
     final int nData = dataStrs.length;
@@ -362,8 +382,9 @@ public class MixedBivariateLogNormalFitter {
   }
 
   /**
-   * During the iterations of least-square fitting, a set of parameters sometimes breaks the condition 0 < targetPrice < Math.min(forward, strike).
-   * Do not use getImpliedVolatilityZ method in MixedLogNormalModel2DVolatility.
+   * During the iterations of least-square fitting, a set of parameters sometimes breaks the condition 0 < targetPrice < Math.min(forward, strike). Do not use
+   * getImpliedVolatilityZ method in MixedLogNormalModel2DVolatility.
+   *
    * @param option
    * @param forward
    * @param data
@@ -392,17 +413,26 @@ public class MixedBivariateLogNormalFitter {
   }
 
   /**
-   * @param params Present guess parameters
-   * @param dataStrs Strike data
-   * @param dataVols Volatility data
-   * @param time Time to expiry
-   * @param fwdX Forward of X
-   * @param fwdY Forward of Y
-   * @param nNorms Number of Normals
-   * @param nX Number of data in the X part
+   * @param params
+   *          Present guess parameters
+   * @param dataStrs
+   *          Strike data
+   * @param dataVols
+   *          Volatility data
+   * @param time
+   *          Time to expiry
+   * @param fwdX
+   *          Forward of X
+   * @param fwdY
+   *          Forward of Y
+   * @param nNorms
+   *          Number of Normals
+   * @param nX
+   *          Number of data in the X part
    * @return Difference between a market value of volatility and implied volatility with guess parameters
    */
-  private double[] exactFunctionValue(final double[] params, final double[] dataStrs, final double[] dataVols, final double time, final double fwdX, final double fwdY,
+  private double[] exactFunctionValue(final double[] params, final double[] dataStrs, final double[] dataVols, final double time, final double fwdX,
+      final double fwdY,
       final int nNorms, final int nX) {
 
     final int nData = dataStrs.length;
@@ -447,16 +477,24 @@ public class MixedBivariateLogNormalFitter {
   }
 
   /**
-   * @param params Present guess parameters
-   * @param dataStrs Strike data
-   * @param time Time to expiry
-   * @param fwdX Forward of X
-   * @param fwdY Forward of Y
-   * @param nNorms Number of Normals
-   * @param nX Number of data in the X part
+   * @param params
+   *          Present guess parameters
+   * @param dataStrs
+   *          Strike data
+   * @param time
+   *          Time to expiry
+   * @param fwdX
+   *          Forward of X
+   * @param fwdY
+   *          Forward of Y
+   * @param nNorms
+   *          Number of Normals
+   * @param nX
+   *          Number of data in the X part
    * @return First derivatives of exactFunctionValue in terms of unconstrained model parameters
    */
-  private double[][] exactFunctionDerivative(final double[] params, final double[] dataStrs, final double time, final double fwdX, final double fwdY, final int nNorms, final int nX) {
+  private double[][] exactFunctionDerivative(final double[] params, final double[] dataStrs, final double time, final double fwdX, final double fwdY,
+      final int nNorms, final int nX) {
 
     final int nData = dataStrs.length;
     final int nParams = params.length;
@@ -504,23 +542,24 @@ public class MixedBivariateLogNormalFitter {
       final double impVolX = getVolatility(option, fwdX, dataX);
       for (int i = 0; i < nNorms; ++i) {
         for (int l = i; l < nNorms; ++l) {
-          res[j][i] += -fwdX * weightsX[l] * BlackFormulaRepository.vega(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l]) /
-              BlackFormulaRepository.vega(fwdX, dataStrs[j], time, impVolX);
+          res[j][i] += -fwdX * weightsX[l] * BlackFormulaRepository.vega(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l])
+              / BlackFormulaRepository.vega(fwdX, dataStrs[j], time, impVolX);
         }
       }
       for (int i = 2 * nNorms; i < 3 * nNorms - 1; ++i) {
         for (int l = 0; l < nNorms; ++l) {
-          res[j][i] += -fwdX *
-              (BlackFormulaRepository.price(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l], true) - relativeForwardsX[l] *
-                  BlackFormulaRepository.delta(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l], true)) * weightsJacobianX[l][i - 2 * nNorms] /
-                  BlackFormulaRepository.vega(fwdX, dataStrs[j], time, impVolX);
+          res[j][i] += -fwdX
+              * (BlackFormulaRepository.price(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l], true) - relativeForwardsX[l]
+                  * BlackFormulaRepository.delta(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l], true))
+              * weightsJacobianX[l][i - 2 * nNorms]
+              / BlackFormulaRepository.vega(fwdX, dataStrs[j], time, impVolX);
         }
       }
       for (int i = 3 * nNorms - 1; i < 4 * nNorms - 2; ++i) {
         for (int l = 0; l < nNorms; ++l) {
-          res[j][i] += -fwdX * BlackFormulaRepository.delta(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l], true) *
-              relativeForwardsJacobianX[l][i - (3 * nNorms - 1)] /
-              BlackFormulaRepository.vega(fwdX, dataStrs[j], time, impVolX);
+          res[j][i] += -fwdX * BlackFormulaRepository.delta(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l], true)
+              * relativeForwardsJacobianX[l][i - (3 * nNorms - 1)]
+              / BlackFormulaRepository.vega(fwdX, dataStrs[j], time, impVolX);
         }
       }
     }
@@ -537,16 +576,16 @@ public class MixedBivariateLogNormalFitter {
       }
       for (int i = 2 * nNorms; i < 3 * nNorms - 1; ++i) {
         for (int l = 0; l < nNorms; ++l) {
-          res[j][i] += -fwdY * (BlackFormulaRepository.price(relativeForwardsY[l], dataStrs[j] / fwdY, time, sigmasY[l], true) - relativeForwardsY[l] *
-              BlackFormulaRepository.delta(relativeForwardsY[l], dataStrs[j] / fwdY, time, sigmasY[l], true)) * weightsJacobianY[l][i - 2 * nNorms] /
-              BlackFormulaRepository.vega(fwdY, dataStrs[j], time, impVolY);
+          res[j][i] += -fwdY * (BlackFormulaRepository.price(relativeForwardsY[l], dataStrs[j] / fwdY, time, sigmasY[l], true) - relativeForwardsY[l]
+              * BlackFormulaRepository.delta(relativeForwardsY[l], dataStrs[j] / fwdY, time, sigmasY[l], true)) * weightsJacobianY[l][i - 2 * nNorms]
+              / BlackFormulaRepository.vega(fwdY, dataStrs[j], time, impVolY);
         }
       }
       for (int i = 4 * nNorms - 2; i < 5 * nNorms - 3; ++i) {
         for (int l = 0; l < nNorms; ++l) {
-          res[j][i] += -fwdY * BlackFormulaRepository.delta(relativeForwardsY[l], dataStrs[j] / fwdY, time, sigmasY[l], true) *
-              relativeForwardsJacobianY[l][i - (4 * nNorms - 2)] /
-              BlackFormulaRepository.vega(fwdY, dataStrs[j], time, impVolY);
+          res[j][i] += -fwdY * BlackFormulaRepository.delta(relativeForwardsY[l], dataStrs[j] / fwdY, time, sigmasY[l], true)
+              * relativeForwardsJacobianY[l][i - (4 * nNorms - 2)]
+              / BlackFormulaRepository.vega(fwdY, dataStrs[j], time, impVolY);
         }
       }
     }
@@ -555,19 +594,28 @@ public class MixedBivariateLogNormalFitter {
   }
 
   /**
-   *  Solve the matrix equation ( hessian + shift (Id matrix) ) jump = gradFunctionValueM
-   * @param dataStrs Strike data
-   * @param dataVols Volatility data
+   * Solve the matrix equation ( hessian + shift (Id matrix) ) jump = gradFunctionValueM
+   *
+   * @param dataStrs
+   *          Strike data
+   * @param dataVols
+   *          Volatility data
    * @param gradFunctionValueM
    * @param hessian
-   * @param time Time to expiry
-   * @param fwdX Forward of X
-   * @param fwdY Forward of Y
-   * @param nNorms Number of Normals
-   * @param nX Number of data in the X part
+   * @param time
+   *          Time to expiry
+   * @param fwdX
+   *          Forward of X
+   * @param fwdY
+   *          Forward of Y
+   * @param nNorms
+   *          Number of Normals
+   * @param nX
+   *          Number of data in the X part
    * @return jump
    */
-  private double[] theMatrixEqnSolver(final double[] dataStrs, final double[] dataVols, final double[] gradFunctionValueM, final double[][] hessian, final double time, final double fwdX,
+  private double[] theMatrixEqnSolver(final double[] dataStrs, final double[] dataVols, final double[] gradFunctionValueM, final double[][] hessian,
+      final double time, final double fwdX,
       final double fwdY,
       final int nNorms,
       final int nX) {
@@ -594,9 +642,12 @@ public class MixedBivariateLogNormalFitter {
   }
 
   /**
-   * Linear problem Ax=b where A is a square matrix and x,b are vector can be solved by LU decomposition
-   * @param doubMat Matrix A
-   * @param doubVec Vector B
+   * Linear problem Ax=b where A is a square matrix and x,b are vector can be solved by LU decomposition.
+   *
+   * @param doubMat
+   *          Matrix A
+   * @param doubVec
+   *          Vector B
    * @return Solution to the linear equation, x
    */
   protected double[] decompSol(final double[][] doubMat, final double[] doubVec) {
@@ -611,9 +662,12 @@ public class MixedBivariateLogNormalFitter {
   }
 
   /**
-   * Linear problem Ax=b is solved by forward substitution if A is lower triangular
-   * @param lMat Lower triangular matrix
-   * @param doubVec Vector b
+   * Linear problem Ax=b is solved by forward substitution if A is lower triangular.
+   *
+   * @param lMat
+   *          Lower triangular matrix
+   * @param doubVec
+   *          Vector b
    * @return Solution to the linear equation, x
    */
   private double[] forwardSubstitution(final double[][] lMat, final double[] doubVec) {
@@ -634,8 +688,11 @@ public class MixedBivariateLogNormalFitter {
 
   /**
    * Linear problem Ax=b is solved by backward substitution if A is upper triangular
-   * @param uMat Upper triangular matrix
-   * @param doubVec Vector b
+   *
+   * @param uMat
+   *          Upper triangular matrix
+   * @param doubVec
+   *          Vector b
    * @return Solution to the linear equation, x
    */
   private double[] backSubstitution(final double[][] uMat, final double[] doubVec) {
@@ -685,7 +742,7 @@ public class MixedBivariateLogNormalFitter {
   }
 
   /**
-   *  Add vectorA to VectorB
+   * Add vectorA to VectorB
    */
   private double[] addVectors(final double[] vecA, final double[] vecB) {
     final int dim = vecA.length;

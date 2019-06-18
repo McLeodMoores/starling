@@ -31,7 +31,7 @@ import com.opengamma.util.async.AsynchronousExecution;
  */
 public class CurrencyPairsFunction extends AbstractFunction.NonCompiledInvoker {
 
-  /** Name of the currency pairs name property */
+  /** Name of the currency pairs name property. */
   public static final String CURRENCY_PAIRS_NAME = "CurrencyPairsName";
 
   @Override

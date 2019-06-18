@@ -25,12 +25,17 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Standard conventions for EUR.
+ *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class EUConventions {
 
   /**
    * Adds conventions for deposit, Libor and Euribor fixings, swaps, FRAs and IR futures.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static synchronized void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -42,10 +47,10 @@ public class EUConventions {
     final Frequency semiAnnual = SimpleFrequencyFactory.INSTANCE.getFrequency(Frequency.SEMI_ANNUAL_NAME);
     final Frequency quarterly = SimpleFrequencyFactory.INSTANCE.getFrequency(Frequency.QUARTERLY_NAME);
 
-    //TODO holiday associated with EUR swaps is TARGET
+    // TODO holiday associated with EUR swaps is TARGET
     final ExternalId eu = ExternalSchemes.financialRegionId("EU");
     final ConventionBundleMasterUtils utils = new ConventionBundleMasterUtils(conventionMaster);
-    //EURO LIBOR
+    // EURO LIBOR
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("EU00O/N Index"), simpleNameSecurityId("EUR LIBOR O/N"),
         tullettPrebonSecurityId("ASLIBEULONL")),
         "EUR LIBOR O/N", act360, following, Period.ofDays(1), 0, false, eu);
@@ -110,8 +115,8 @@ public class EUConventions {
         tullettPrebonSecurityId("ASLIBEUR02L")),
         "EURIBOR 2m", act360, modified, Period.ofMonths(2), 2, false, eu);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("EUR003M Index"), ExternalSchemes.ricSecurityId("EURIBOR3MD="),
-            simpleNameSecurityId("EURIBOR 3m"), tullettPrebonSecurityId("ASLIBEUR03L")),
-            "EURIBOR 3m", act360, modified, Period.ofMonths(3), 2, false, eu);
+        simpleNameSecurityId("EURIBOR 3m"), tullettPrebonSecurityId("ASLIBEUR03L")),
+        "EURIBOR 3m", act360, modified, Period.ofMonths(3), 2, false, eu);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("EUR004M Index"), simpleNameSecurityId("EURIBOR 4m"),
         tullettPrebonSecurityId("ASLIBEUR04L")),
         "EURIBOR 4m", act360, modified, Period.ofMonths(4), 2, false, eu);
@@ -119,8 +124,8 @@ public class EUConventions {
         tullettPrebonSecurityId("ASLIBEUR05L")),
         "EURIBOR 5m", act360, modified, Period.ofMonths(5), 2, false, eu);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("EUR006M Index"), ExternalSchemes.ricSecurityId("EURIBOR6MD="),
-            simpleNameSecurityId("EURIBOR 6m"), tullettPrebonSecurityId("ASLIBEUR06L")),
-            "EURIBOR 6m", act360, modified, Period.ofMonths(6), 2, false, eu);
+        simpleNameSecurityId("EURIBOR 6m"), tullettPrebonSecurityId("ASLIBEUR06L")),
+        "EURIBOR 6m", act360, modified, Period.ofMonths(6), 2, false, eu);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("EUR007M Index"), simpleNameSecurityId("EURIBOR 7m"),
         tullettPrebonSecurityId("ASLIBEUR07L")),
         "EURIBOR 7m", act360, modified, Period.ofMonths(7), 2, false, eu);
@@ -217,30 +222,34 @@ public class EUConventions {
         annual, 2, simpleNameSecurityId("EUR EONIA"), eu, true, publicationLagON);
 
     // TODO: Add all ISDA fixing
-    final int[] isdaFixTenor = new int[] {2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 30};
+    final int[] isdaFixTenor = new int[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 30 };
     // ISDA fixing Euribor 10.00 Frankfurt
     utils.addConventionBundle(
         ExternalIdBundle.of(simpleNameSecurityId("EUR_ISDAFIX_EURIBOR10_1Y"), ExternalSchemes.ricSecurityId("EURSFIXA1Y="),
-            bloombergTickerSecurityId("EIISDA01 Index")), "EUR_ISDAFIX_EURIBOR10_1Y", swapFixedDayCount, swapFixedBusinessDay, swapFixedPaymentFrequency, 2, eu, act360, modified,
+            bloombergTickerSecurityId("EIISDA01 Index")),
+        "EUR_ISDAFIX_EURIBOR10_1Y", swapFixedDayCount, swapFixedBusinessDay, swapFixedPaymentFrequency, 2, eu, act360, modified,
         quarterly, 2, simpleNameSecurityId("EURIBOR 3m"), eu, true, Period.ofYears(1));
     for (final int element : isdaFixTenor) {
       final String tenorString = element + "Y";
       final String tenorStringBbg = String.format("%02d", element);
       utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("EUR_ISDAFIX_EURIBOR10_" + tenorString),
-          ExternalSchemes.ricSecurityId("EURSFIXA" + tenorString + "="), bloombergTickerSecurityId("EIISDA" + tenorStringBbg + " Index")), "EUR_ISDAFIX_EURIBOR10_" + tenorString,
+          ExternalSchemes.ricSecurityId("EURSFIXA" + tenorString + "="), bloombergTickerSecurityId("EIISDA" + tenorStringBbg + " Index")),
+          "EUR_ISDAFIX_EURIBOR10_" + tenorString,
           swapFixedDayCount, swapFixedBusinessDay, swapFixedPaymentFrequency, 2, eu, act360, modified, semiAnnual, 2, simpleNameSecurityId("EURIBOR 6m"),
           eu, true, Period.ofYears(element));
     }
     // ISDA fixing Euro Libor 10.00 London
     utils.addConventionBundle(
         ExternalIdBundle.of(simpleNameSecurityId("EUR_ISDAFIX_EUROLIBOR10_1Y"), ExternalSchemes.ricSecurityId("EURSFIXB1Y="),
-            bloombergTickerSecurityId("ELISDA01 Index")), "EUR_ISDAFIX_EUROLIBOR10_1Y", swapFixedDayCount, swapFixedBusinessDay, swapFixedPaymentFrequency, 2, eu, act360, modified,
+            bloombergTickerSecurityId("ELISDA01 Index")),
+        "EUR_ISDAFIX_EUROLIBOR10_1Y", swapFixedDayCount, swapFixedBusinessDay, swapFixedPaymentFrequency, 2, eu, act360, modified,
         quarterly, 2, simpleNameSecurityId("EUR LIBOR 3m"), eu, true);
     for (final int element : isdaFixTenor) {
       final String tenorString = element + "Y";
       final String tenorStringBbg = String.format("%02d", element);
       utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("EUR_ISDAFIX_EUROLIBOR10_" + tenorString),
-          ExternalSchemes.ricSecurityId("EURSFIXB" + tenorString + "="), bloombergTickerSecurityId("ELISDA" + tenorStringBbg + " Index")), "EUR_ISDAFIX_EUROLIBOR10_" + tenorString,
+          ExternalSchemes.ricSecurityId("EURSFIXB" + tenorString + "="), bloombergTickerSecurityId("ELISDA" + tenorStringBbg + " Index")),
+          "EUR_ISDAFIX_EUROLIBOR10_" + tenorString,
           swapFixedDayCount, swapFixedBusinessDay, swapFixedPaymentFrequency, 2, eu, act360, modified, semiAnnual, 2, simpleNameSecurityId("EUR LIBOR 6m"),
           eu, true);
     }

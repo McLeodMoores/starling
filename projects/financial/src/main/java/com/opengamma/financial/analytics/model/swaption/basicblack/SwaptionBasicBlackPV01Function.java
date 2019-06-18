@@ -23,12 +23,12 @@ import com.opengamma.financial.analytics.model.black.ConstantBlackDiscountingPV0
 import com.opengamma.financial.security.FinancialSecurityUtils;
 
 /**
- * Calculates the PV01 of a swaption using the Black method with no volatility modelling assumptions.
- * The implied volatility is read directly from the market data system. Note that this function produces
- * the PV01 with respect to a single, named curve.
+ * Calculates the PV01 of a swaption using the Black method with no volatility modelling assumptions. The implied volatility is read directly from the market
+ * data system. Note that this function produces the PV01 with respect to a single, named curve.
  * <p>
- * Produces a result for {@link ValueRequirementNames#PV01} using {@link PV01Calculator} with
- * {@link PresentValueCurveSensitivityBlackCalculator} as the sensitivity calculator.
+ * Produces a result for {@link ValueRequirementNames#PV01} using {@link PV01Calculator} with {@link PresentValueCurveSensitivityBlackCalculator} as the
+ * sensitivity calculator.
+ * 
  * @deprecated Use {@link ConstantBlackDiscountingPV01SwaptionFunction}
  */
 @Deprecated
@@ -44,7 +44,8 @@ public class SwaptionBasicBlackPV01Function extends SwaptionBasicBlackCurveSpeci
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative swaption, final YieldCurveWithBlackSwaptionBundle data, final String curveName, final ValueSpecification spec,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative swaption, final YieldCurveWithBlackSwaptionBundle data, final String curveName,
+      final ValueSpecification spec,
       final String curveCalculationConfigName, final String curveCalculationMethod, final FunctionInputs inputs, final ComputationTarget target) {
     final Map<String, Double> pv01 = CALCULATOR.visit(swaption, data);
     final String fullCurveName = curveName + "_" + FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();

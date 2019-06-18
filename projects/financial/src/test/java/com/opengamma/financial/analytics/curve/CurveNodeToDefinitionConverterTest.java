@@ -161,8 +161,6 @@ public class CurveNodeToDefinitionConverterTest {
   private static final ExternalId LEG_ON_CMP_ID = ExternalId.of(SCHEME, "USD OIS Leg");
   private static final String ON_AA_NAME = "USD ON Arith. Average Leg";
   private static final ExternalId ON_AA_ID = ExternalId.of(SCHEME, ON_AA_NAME);
-  private static final ExternalId FX_FORWARD_ID = ExternalId.of(SCHEME, "FX Forward");
-  private static final ExternalId FX_SPOT_ID = ExternalId.of(SCHEME, "FX Spot");
   private static final ExternalId IMM_3M_FUTURE_EXPIRY_CONVENTION = ExternalId.of(SCHEME, IMMFutureAndFutureOptionQuarterlyExpiryCalculator.NAME);
   private static final ExternalId IMM_1M_FUTURE_EXPIRY_CONVENTION = ExternalId.of(SCHEME, IMMFutureAndFutureOptionMonthlyExpiryCalculator.NAME);
   private static final ExternalId FIXED_IBOR_3M_SWAP_ID = ExternalId.of(SCHEME, "Swap");

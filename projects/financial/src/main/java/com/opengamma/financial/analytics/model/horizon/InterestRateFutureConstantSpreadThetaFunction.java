@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.horizon;
@@ -61,8 +61,10 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.time.DateUtils;
 
 /**
- * 
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class InterestRateFutureConstantSpreadThetaFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureConstantSpreadThetaFunction.class);
   private InterestRateFutureTradeConverterDeprecated _converter;
@@ -73,13 +75,15 @@ public class InterestRateFutureConstantSpreadThetaFunction extends AbstractFunct
     final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
     final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
-    final InterestRateFutureSecurityConverterDeprecated securityConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource);
+    final InterestRateFutureSecurityConverterDeprecated securityConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource,
+        regionSource);
     _converter = new InterestRateFutureTradeConverterDeprecated(securityConverter);
     _curveCalculationConfigSource = ConfigDBCurveCalculationConfigSource.init(context, this);
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Trade trade = target.getTrade();
     final InterestRateFutureSecurity security = (InterestRateFutureSecurity) trade.getSecurity();
     final Clock snapshotClock = executionContext.getValuationClock();
@@ -97,7 +101,7 @@ public class InterestRateFutureConstantSpreadThetaFunction extends AbstractFunct
     if (definition == null) {
       throw new OpenGammaRuntimeException("Definition for security " + security + " was null");
     }
-    final String[] yieldCurveNames = curveNames.length == 1 ? new String[] {curveNames[0], curveNames[0] } : curveNames;
+    final String[] yieldCurveNames = curveNames.length == 1 ? new String[] { curveNames[0], curveNames[0] } : curveNames;
     final String[] curveNamesForSecurity = FixedIncomeInstrumentCurveExposureHelper.getCurveNamesForSecurity(security, yieldCurveNames[0], yieldCurveNames[1]);
     final String currency = FinancialSecurityUtils.getCurrency(security).getCode();
     final LocalDate startDate = DateUtils.previousWeekDay(now.toLocalDate().minusMonths(1));
@@ -107,7 +111,8 @@ public class InterestRateFutureConstantSpreadThetaFunction extends AbstractFunct
     }
     final int length = ts.getTimeSeries().size();
     if (length == 0) {
-      throw new OpenGammaRuntimeException("Price time series for " + security.getExternalIdBundle() + " was empty between " + startDate + " and " + now.toLocalDate());
+      throw new OpenGammaRuntimeException(
+          "Price time series for " + security.getExternalIdBundle() + " was empty between " + startDate + " and " + now.toLocalDate());
     }
     final double lastMarginPrice = ts.getTimeSeries().getLatestValue();
     final ConstantSpreadHorizonThetaCalculator calculator = ConstantSpreadHorizonThetaCalculator.getInstance();
@@ -163,27 +168,34 @@ public class InterestRateFutureConstantSpreadThetaFunction extends AbstractFunct
 
   private ValueRequirement getTimeSeriesRequirement(final FunctionCompilationContext context, final Security security) {
     final HistoricalTimeSeriesResolver resolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
-    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(security.getExternalIdBundle(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, null);
+    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(security.getExternalIdBundle(), null, null, null,
+        MarketDataRequirementNames.MARKET_VALUE, null);
     if (timeSeries == null) {
       return null;
     }
-    return HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries, MarketDataRequirementNames.MARKET_VALUE, DateConstraint.VALUATION_TIME.minus(Period.ofMonths(1))
-        .previousWeekDay(), true, DateConstraint.VALUATION_TIME, true);
+    return HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries, MarketDataRequirementNames.MARKET_VALUE,
+        DateConstraint.VALUATION_TIME.minus(Period.ofMonths(1))
+            .previousWeekDay(),
+        true, DateConstraint.VALUATION_TIME, true);
   }
 
   private ValueProperties.Builder getResultProperties(final String currency) {
-    final ValueProperties.Builder properties = createValueProperties().withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG).with(ValuePropertyNames.CURRENCY, currency)
+    final ValueProperties.Builder properties = createValueProperties().withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG)
+        .with(ValuePropertyNames.CURRENCY, currency)
         .with(PROPERTY_THETA_CALCULATION_METHOD, THETA_CONSTANT_SPREAD).withAny(PROPERTY_DAYS_TO_MOVE_FORWARD);
     return properties;
   }
 
   private ValueProperties.Builder getResultProperties(final String currency, final String curveCalculationConfig, final String daysForward) {
-    final ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig).with(ValuePropertyNames.CURRENCY, currency)
+    final ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig)
+        .with(ValuePropertyNames.CURRENCY, currency)
         .with(PROPERTY_THETA_CALCULATION_METHOD, THETA_CONSTANT_SPREAD).with(PROPERTY_DAYS_TO_MOVE_FORWARD, daysForward);
     return properties;
   }
 
-  private ValueSpecification getResultSpec(final ComputationTarget target, final String curveCalculationConfig, final String currency, final String daysForward) {
-    return new ValueSpecification(ValueRequirementNames.VALUE_THETA, target.toSpecification(), getResultProperties(currency, curveCalculationConfig, daysForward).get());
+  private ValueSpecification getResultSpec(final ComputationTarget target, final String curveCalculationConfig, final String currency,
+      final String daysForward) {
+    return new ValueSpecification(ValueRequirementNames.VALUE_THETA, target.toSpecification(),
+        getResultProperties(currency, curveCalculationConfig, daysForward).get());
   }
 }

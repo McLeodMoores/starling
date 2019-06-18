@@ -43,7 +43,8 @@ public class LiquidityAggregationFunction implements AggregationFunction<String>
   private static final String RESOLUTION_KEY = "DEFAULT_TSS_CONFIG";
   private static final String NO_LIQUIDITY = "N/A";
 
-  private static final List<String> REQUIRED = Arrays.asList(MORE_THAN_10_0, FROM_3_0_TO_10_0, FROM_1_0_TO_3_0, FROM_0_5_TO_1_0, FROM_0_2_TO_0_5, LESS_THAN_0_2, NO_LIQUIDITY);
+  private static final List<String> REQUIRED = Arrays.asList(MORE_THAN_10_0, FROM_3_0_TO_10_0, FROM_1_0_TO_3_0, FROM_0_5_TO_1_0, FROM_0_2_TO_0_5, LESS_THAN_0_2,
+      NO_LIQUIDITY);
 
   private final HistoricalTimeSeriesSource _htsSource;
   private final SecuritySource _secSource;
@@ -67,24 +68,23 @@ public class LiquidityAggregationFunction implements AggregationFunction<String>
       final Map<String, String> attributes = position.getAttributes();
       if (attributes.containsKey(getName())) {
         return attributes.get(getName());
-      } else {
-        return NO_LIQUIDITY;
       }
-    } else {
-      try {
-        Security sec = position.getSecurityLink().getTarget();
-        if (sec == null) {
-          sec = position.getSecurityLink().resolve(_secSource); // side effect is it updates target.
-        }
-        final Double daysToLiquidate = getDaysToLiquidate(position);
-        if (daysToLiquidate != null) {
-          return classifyLiquidity(daysToLiquidate);
-        } else {
-          return NO_LIQUIDITY;
-        }
-      } catch (final UnsupportedOperationException ex) {
-        return NO_LIQUIDITY;
+      return NO_LIQUIDITY;
+    }
+    try {
+      Security sec = position.getSecurityLink().getTarget();
+      if (sec == null) {
+        sec = position.getSecurityLink().resolve(_secSource); // side effect is
+                                                              // it updates
+                                                              // target.
       }
+      final Double daysToLiquidate = getDaysToLiquidate(position);
+      if (daysToLiquidate != null) {
+        return classifyLiquidity(daysToLiquidate);
+      }
+      return NO_LIQUIDITY;
+    } catch (final UnsupportedOperationException ex) {
+      return NO_LIQUIDITY;
     }
   }
 
@@ -106,12 +106,11 @@ public class LiquidityAggregationFunction implements AggregationFunction<String>
         _daysToLiquidateCache.put(cacheKey, daysToLiquidate);
       }
       return daysToLiquidate;
-    } else {
-      if (_caching && cacheKey != null) {
-        _daysToLiquidateCache.put(cacheKey, null);
-      }
-      return null;
     }
+    if (_caching && cacheKey != null) {
+      _daysToLiquidateCache.put(cacheKey, null);
+    }
+    return null;
   }
 
   private String classifyLiquidity(final Double daysToLiquidate) {
@@ -129,9 +128,8 @@ public class LiquidityAggregationFunction implements AggregationFunction<String>
       } else {
         return MORE_THAN_10_0;
       }
-    } else {
-      return NO_LIQUIDITY;
     }
+    return NO_LIQUIDITY;
   }
 
   @Override

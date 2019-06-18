@@ -19,25 +19,28 @@ public abstract class AbstractDayCount implements DayCount {
   /**
    * Gets the day count between the specified dates.
    * <p>
-   * Given two dates, this method returns the fraction of a year between these dates
-   * according to the convention.
+   * Given two dates, this method returns the fraction of a year between these dates according to the convention.
    *
-   * @param firstDate  the earlier date, not null
-   * @param secondDate  the later date, not null
+   * @param firstDate
+   *          the earlier date, not null
+   * @param secondDate
+   *          the later date, not null
    * @return the day count fraction
    */
   @Override
-  public abstract double getDayCountFraction(final LocalDate firstDate, final LocalDate secondDate);
+  public abstract double getDayCountFraction(LocalDate firstDate, LocalDate secondDate);
 
   /**
    * Gets the day count between the specified dates using the supplied calendar to provide business days
    * <p>
-   * Given two dates, this method returns the fraction of a year between these dates
-   * according to the convention.
+   * Given two dates, this method returns the fraction of a year between these dates according to the convention.
    *
-   * @param firstDate  the earlier date, not null
-   * @param secondDate  the later date, not null
-   * @param calendar  a calendar
+   * @param firstDate
+   *          the earlier date, not null
+   * @param secondDate
+   *          the later date, not null
+   * @param calendar
+   *          a calendar
    * @return the day count fraction
    */
   @Override
@@ -48,11 +51,12 @@ public abstract class AbstractDayCount implements DayCount {
   /**
    * Gets the day count between the specified dates.
    * <p>
-   * Given two dates, this method returns the fraction of a year between these dates
-   * according to the convention.
+   * Given two dates, this method returns the fraction of a year between these dates according to the convention.
    *
-   * @param firstDate  the earlier date, not null
-   * @param secondDate  the later date, not null
+   * @param firstDate
+   *          the earlier date, not null
+   * @param secondDate
+   *          the later date, not null
    * @return the day count fraction
    */
   @Override
@@ -65,12 +69,14 @@ public abstract class AbstractDayCount implements DayCount {
   /**
    * Gets the day count between the specified dates using the supplied calendar to provide business days
    * <p>
-   * Given two dates, this method returns the fraction of a year between these dates
-   * according to the convention.
+   * Given two dates, this method returns the fraction of a year between these dates according to the convention.
    *
-   * @param firstDate  the earlier date, not null
-   * @param secondDate  the later date, not null
-   * @param calendar  a calendar
+   * @param firstDate
+   *          the earlier date, not null
+   * @param secondDate
+   *          the later date, not null
+   * @param calendar
+   *          a calendar
    * @return the day count fraction
    */
   @Override
@@ -83,28 +89,39 @@ public abstract class AbstractDayCount implements DayCount {
   /**
    * Calculates the accrued interest for the coupon according to the convention.
    *
-   * @param previousCouponDate  the previous coupon date, not null
-   * @param date  the evaluated coupon date, not null
-   * @param nextCouponDate  the next coupon date, not null
-   * @param coupon  the coupon value
-   * @param paymentsPerYear  the number of payments per year, one, two, three, four, six or twelve
+   * @param previousCouponDate
+   *          the previous coupon date, not null
+   * @param date
+   *          the evaluated coupon date, not null
+   * @param nextCouponDate
+   *          the next coupon date, not null
+   * @param coupon
+   *          the coupon value
+   * @param paymentsPerYear
+   *          the number of payments per year, one, two, three, four, six or twelve
    * @return the accrued interest
    */
   @Override
-  public abstract double getAccruedInterest(final LocalDate previousCouponDate, final LocalDate date, final LocalDate nextCouponDate, final double coupon, final double paymentsPerYear);
+  public abstract double getAccruedInterest(LocalDate previousCouponDate, LocalDate date, LocalDate nextCouponDate, double coupon, double paymentsPerYear);
 
   /**
    * Calculates the accrued interest for the coupon according to the convention.
    *
-   * @param previousCouponDate  the previous coupon date, not null
-   * @param date  the evaluated coupon date, not null
-   * @param nextCouponDate  the next coupon date, not null
-   * @param coupon  the coupon value
-   * @param paymentsPerYear  the number of payments per year, one, two, three, four, six or twelve
+   * @param previousCouponDate
+   *          the previous coupon date, not null
+   * @param date
+   *          the evaluated coupon date, not null
+   * @param nextCouponDate
+   *          the next coupon date, not null
+   * @param coupon
+   *          the coupon value
+   * @param paymentsPerYear
+   *          the number of payments per year, one, two, three, four, six or twelve
    * @return the accrued interest
    */
   @Override
-  public double getAccruedInterest(final ZonedDateTime previousCouponDate, final ZonedDateTime date, final ZonedDateTime nextCouponDate, final double coupon, final double paymentsPerYear) {
+  public double getAccruedInterest(final ZonedDateTime previousCouponDate, final ZonedDateTime date, final ZonedDateTime nextCouponDate, final double coupon,
+      final double paymentsPerYear) {
     ArgumentChecker.notNull(previousCouponDate, "previous coupon date");
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(nextCouponDate, "next coupon date");
@@ -113,7 +130,7 @@ public abstract class AbstractDayCount implements DayCount {
 
   /**
    * Gets the name of the convention.
-   * 
+   *
    * @return the name, not null
    * @deprecated use getName()
    */

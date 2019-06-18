@@ -37,11 +37,11 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
    */
   private final ChangeManager _changeManager;
 
-
   /**
    * Creates an instance.
    *
-   * @param baseUri  the base target URI for all RESTful web services, not null
+   * @param baseUri
+   *          the base target URI for all RESTful web services, not null
    */
   public RemoteHistoricalTimeSeriesSource(final URI baseUri) {
     this(baseUri, new BasicChangeManager());
@@ -50,8 +50,10 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
   /**
    * Creates an instance.
    *
-   * @param baseUri  the base target URI for all RESTful web services, not null
-   * @param changeManager  the change manager, not null
+   * @param baseUri
+   *          the base target URI for all RESTful web services, not null
+   * @param changeManager
+   *          the change manager, not null
    */
   public RemoteHistoricalTimeSeriesSource(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri);
@@ -59,7 +61,7 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
     _changeManager = changeManager;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeries getHistoricalTimeSeries(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
@@ -72,7 +74,8 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end,
+      final boolean includeEnd) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     try {
       final URI uri = DataHistoricalTimeSeriesSourceUris.uriGet(getBaseUri(), uniqueId, start, includeStart, end, includeEnd, null);
@@ -83,7 +86,8 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end,
+      final boolean includeEnd, final int maxPoints) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     try {
       final URI uri = DataHistoricalTimeSeriesSourceUris.uriGet(getBaseUri(), uniqueId, start, includeStart, end, includeEnd, maxPoints);
@@ -93,25 +97,28 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Pair<LocalDate, Double> getLatestDataPoint(final UniqueId uniqueId) {
     return extractPair(getHistoricalTimeSeries(uniqueId, null, true, null, true, -1));
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end,
+      final boolean includeEnd) {
     return extractPair(getHistoricalTimeSeries(uniqueId, start, includeStart, end, includeEnd, -1));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider, final String dataField) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider,
+      final String dataField) {
     return getHistoricalTimeSeries(identifierBundle, dataSource, dataProvider, dataField, null, true, null, true);
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider, final String dataField,
+  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider,
+      final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     try {
@@ -124,7 +131,8 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider, final String dataField,
+  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider,
+      final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
     ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     try {
@@ -137,12 +145,14 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
+      final String dataProvider, final String dataField) {
     return getHistoricalTimeSeries(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField, null, true, null, true);
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField,
+  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
+      final String dataProvider, final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     try {
@@ -155,7 +165,8 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField,
+  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
+      final String dataProvider, final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
     ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     try {
@@ -167,30 +178,35 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
+      final String dataProvider, final String dataField) {
     return getLatestDataPoint(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField, null, true, null, true);
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField,
+  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
+      final String dataProvider, final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
-    return extractPair(getHistoricalTimeSeries(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField, start, includeStart, end, includeEnd, -1));
+    return extractPair(
+        getHistoricalTimeSeries(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField, start, includeStart, end, includeEnd, -1));
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider, final String dataField) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider,
+      final String dataField) {
     return getLatestDataPoint(identifierBundle, dataSource, dataProvider, dataField, null, true, null, true);
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider, final String dataField,
+  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider,
+      final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     return extractPair(getHistoricalTimeSeries(identifierBundle, dataSource, dataProvider, dataField, start, includeStart, end, includeEnd, -1));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final String resolutionKey) {
     return getHistoricalTimeSeries(dataField, identifierBundle, resolutionKey, null, true, null, true);
@@ -223,12 +239,14 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String resolutionKey) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String resolutionKey) {
     return getHistoricalTimeSeries(dataField, identifierBundle, identifierValidityDate, resolutionKey, null, true, null, true);
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String resolutionKey,
+  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String resolutionKey,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     try {
@@ -241,7 +259,8 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String resolutionKey,
+  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String resolutionKey,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
     ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     try {
@@ -253,7 +272,7 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle, final String resolutionKey) {
     return getLatestDataPoint(dataField, identifierBundle, resolutionKey, null, true, null, true);
@@ -266,33 +285,36 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String resolutionKey) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String resolutionKey) {
     return getLatestDataPoint(dataField, identifierBundle, identifierValidityDate, resolutionKey, null, true, null, true);
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String resolutionKey,
+  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String resolutionKey,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     return extractPair(getHistoricalTimeSeries(dataField, identifierBundle, identifierValidityDate, resolutionKey, start, includeStart, end, includeEnd, -1));
   }
 
-  //-------------------------------------------------------------------------
-  @SuppressWarnings("unchecked")
+  // -------------------------------------------------------------------------
   @Override
-  public Map<ExternalIdBundle, HistoricalTimeSeries> getHistoricalTimeSeries(final Set<ExternalIdBundle> identifierSet, final String dataSource, final String dataProvider, final String dataField,
+  public Map<ExternalIdBundle, HistoricalTimeSeries> getHistoricalTimeSeries(final Set<ExternalIdBundle> identifierSet, final String dataSource,
+      final String dataProvider, final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     ArgumentChecker.notNull(identifierSet, "identifierSet");
     try {
       final URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchBulk(getBaseUri());
-      final FudgeMsg msg = DataHistoricalTimeSeriesSourceUris.uriSearchBulkData(identifierSet, dataSource, dataProvider, dataField, start, includeStart, end, includeEnd);
+      final FudgeMsg msg = DataHistoricalTimeSeriesSourceUris.uriSearchBulkData(identifierSet, dataSource, dataProvider, dataField, start, includeStart, end,
+          includeEnd);
       return accessRemote(uri).post(FudgeMapWrapper.class, msg).getMap();
     } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
-  //-------------------------------------------------------------------------
-  private Pair<LocalDate, Double> extractPair(final HistoricalTimeSeries historicalTimeSeries) {
+  // -------------------------------------------------------------------------
+  private static Pair<LocalDate, Double> extractPair(final HistoricalTimeSeries historicalTimeSeries) {
     if (historicalTimeSeries == null) {
       return null;
     }

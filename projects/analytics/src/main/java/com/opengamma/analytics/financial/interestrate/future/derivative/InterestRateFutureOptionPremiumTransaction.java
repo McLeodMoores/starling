@@ -30,25 +30,32 @@ public class InterestRateFutureOptionPremiumTransaction implements InstrumentDer
    */
   private final double _tradePrice;
   /**
-   * The premium payment. If the payment is in the past, the paymentTime is 0 and the amount 0.
-   * If the payment is today or in the future, the premium amount is given by the the transaction price * future notional * future accrual factor.
+   * The premium payment. If the payment is in the past, the paymentTime is 0 and the amount 0. If the payment is today or in the future, the premium amount is
+   * given by the the transaction price * future notional * future accrual factor.
    */
   private PaymentFixed _premium;
 
   /**
-  * Constructor of the future option transaction from details.
-  * @param underlyingOption The underlying option future security.
-  * @param quantity The quantity of the transaction. Can be positive or negative.
-  * @param premiumTime The transaction date.
-  * @param tradePrice The transaction price.
-  */
+   * Constructor of the future option transaction from details.
+   *
+   * @param underlyingOption
+   *          The underlying option future security.
+   * @param quantity
+   *          The quantity of the transaction. Can be positive or negative.
+   * @param premiumTime
+   *          The transaction date.
+   * @param tradePrice
+   *          The transaction price.
+   */
   @SuppressWarnings("deprecation")
-  public InterestRateFutureOptionPremiumTransaction(final InterestRateFutureOptionPremiumSecurity underlyingOption, final int quantity, final double premiumTime, final double tradePrice) {
+  public InterestRateFutureOptionPremiumTransaction(final InterestRateFutureOptionPremiumSecurity underlyingOption, final int quantity,
+      final double premiumTime, final double tradePrice) {
     ArgumentChecker.notNull(underlyingOption, "underlying option");
     _underlyingOption = underlyingOption;
     _quantity = quantity;
     _tradePrice = tradePrice;
-    final double premiumAmount = -_tradePrice * _quantity * _underlyingOption.getUnderlyingFuture().getNotional() * _underlyingOption.getUnderlyingFuture().getPaymentAccrualFactor();
+    final double premiumAmount = -_tradePrice * _quantity * _underlyingOption.getUnderlyingFuture().getNotional()
+        * _underlyingOption.getUnderlyingFuture().getPaymentAccrualFactor();
     try {
       _premium = new PaymentFixed(underlyingOption.getCurrency(), premiumTime, premiumAmount, underlyingOption.getDiscountingCurveName());
     } catch (final IllegalStateException e) {
@@ -58,6 +65,7 @@ public class InterestRateFutureOptionPremiumTransaction implements InstrumentDer
 
   /**
    * Gets the underlying option future security.
+   *
    * @return The underlying option.
    */
   public InterestRateFutureOptionPremiumSecurity getUnderlyingOption() {
@@ -66,6 +74,7 @@ public class InterestRateFutureOptionPremiumTransaction implements InstrumentDer
 
   /**
    * Gets the quantity of the transaction.
+   *
    * @return The quantity.
    */
   public int getQuantity() {
@@ -74,6 +83,7 @@ public class InterestRateFutureOptionPremiumTransaction implements InstrumentDer
 
   /**
    * Gets the transaction price.
+   *
    * @return The transaction price.
    */
   public double getTradePrice() {
@@ -82,6 +92,7 @@ public class InterestRateFutureOptionPremiumTransaction implements InstrumentDer
 
   /**
    * Gets the premium payment.
+   *
    * @return The premium.
    */
   public PaymentFixed getPremium() {
@@ -92,11 +103,11 @@ public class InterestRateFutureOptionPremiumTransaction implements InstrumentDer
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_premium == null) ? 0 : _premium.hashCode());
+    result = prime * result + (_premium == null ? 0 : _premium.hashCode());
     result = prime * result + _quantity;
     long temp;
     temp = Double.doubleToLongBits(_tradePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlyingOption.hashCode();
     return result;
   }

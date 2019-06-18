@@ -31,9 +31,9 @@ import com.opengamma.id.UniqueId;
 @BeanDefinition
 final class MockNamedSnapshot implements NamedSnapshot, ImmutableBean {
 
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private final UniqueId _uniqueId;
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private final String _name;
   @PropertyDefinition
   private final int _answer;
@@ -92,6 +92,7 @@ final class MockNamedSnapshot implements NamedSnapshot, ImmutableBean {
    * Gets the uniqueId.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -101,6 +102,7 @@ final class MockNamedSnapshot implements NamedSnapshot, ImmutableBean {
    * Gets the name.
    * @return the value of the property
    */
+  @Override
   public String getName() {
     return _name;
   }

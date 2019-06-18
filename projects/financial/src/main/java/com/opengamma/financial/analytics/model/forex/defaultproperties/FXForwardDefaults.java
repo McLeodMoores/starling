@@ -31,17 +31,17 @@ import com.opengamma.util.tuple.Pairs;
  *
  */
 public class FXForwardDefaults extends DefaultPropertyFunction {
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.FX_PRESENT_VALUE,
-    ValueRequirementNames.FX_CURRENCY_EXPOSURE,
-    ValueRequirementNames.FX_CURVE_SENSITIVITIES,
-    ValueRequirementNames.PV01,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-    ValueRequirementNames.VALUE_THETA,
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.FX_FORWARD_POINTS_NODE_SENSITIVITIES
+                ValueRequirementNames.FX_PRESENT_VALUE,
+                ValueRequirementNames.FX_CURRENCY_EXPOSURE,
+                ValueRequirementNames.FX_CURVE_SENSITIVITIES,
+                ValueRequirementNames.PV01,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.VALUE_THETA,
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.FX_FORWARD_POINTS_NODE_SENSITIVITIES
   };
   private final Map<String, Pair<String, String>> _currencyCurveConfigAndDiscountingCurveNames;
 
@@ -76,7 +76,8 @@ public class FXForwardDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final String payCurrency = security.accept(ForexVisitors.getPayCurrencyVisitor()).getCode();
     final String receiveCurrency = security.accept(ForexVisitors.getReceiveCurrencyVisitor()).getCode();

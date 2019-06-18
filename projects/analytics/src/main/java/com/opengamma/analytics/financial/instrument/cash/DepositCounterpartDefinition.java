@@ -29,15 +29,24 @@ public class DepositCounterpartDefinition extends CashDefinition {
 
   /**
    * Constructor from all details.
-   * @param currency The deposit currency.
-   * @param startDate The deposit start date.
-   * @param endDate The deposit end date.
-   * @param notional The deposit notional.
-   * @param rate The deposit rate.
-   * @param accrualFactor The deposit accrual factor.
-   * @param name The counterpart name.
+   * 
+   * @param currency
+   *          The deposit currency.
+   * @param startDate
+   *          The deposit start date.
+   * @param endDate
+   *          The deposit end date.
+   * @param notional
+   *          The deposit notional.
+   * @param rate
+   *          The deposit rate.
+   * @param accrualFactor
+   *          The deposit accrual factor.
+   * @param name
+   *          The counterpart name.
    */
-  public DepositCounterpartDefinition(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime endDate, final double notional, final double rate,
+  public DepositCounterpartDefinition(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime endDate, final double notional,
+      final double rate,
       final double accrualFactor, final String name) {
     super(currency, startDate, endDate, notional, rate, accrualFactor);
     ArgumentChecker.notNull(name, "Name");
@@ -46,15 +55,23 @@ public class DepositCounterpartDefinition extends CashDefinition {
 
   /**
    * Build a counterpart deposit from the start date and the tenor.
-   * @param startDate The deposit start date.
-   * @param tenor The deposit tenor.
-   * @param notional The deposit notional.
-   * @param rate The deposit rate.
-   * @param generator The deposit generator.
-   * @param name The counterpart name.
+   * 
+   * @param startDate
+   *          The deposit start date.
+   * @param tenor
+   *          The deposit tenor.
+   * @param notional
+   *          The deposit notional.
+   * @param rate
+   *          The deposit rate.
+   * @param generator
+   *          The deposit generator.
+   * @param name
+   *          The counterpart name.
    * @return The deposit.
    */
-  public static DepositCounterpartDefinition fromStart(final ZonedDateTime startDate, final Period tenor, final double notional, final double rate, final GeneratorDeposit generator,
+  public static DepositCounterpartDefinition fromStart(final ZonedDateTime startDate, final Period tenor, final double notional, final double rate,
+      final GeneratorDeposit generator,
       final String name) {
     ArgumentChecker.notNull(startDate, "Start date");
     ArgumentChecker.notNull(tenor, "Tenor");
@@ -67,14 +84,21 @@ public class DepositCounterpartDefinition extends CashDefinition {
 
   /**
    * Build a overnight counterpart deposit from the financial description and the start (or settlement) date.
-   * @param startDate The deposit start date.
-   * @param notional The deposit notional.
-   * @param rate The deposit rate.
-   * @param generator The deposit generator.
-   * @param name The counterpart name.
+   * 
+   * @param startDate
+   *          The deposit start date.
+   * @param notional
+   *          The deposit notional.
+   * @param rate
+   *          The deposit rate.
+   * @param generator
+   *          The deposit generator.
+   * @param name
+   *          The counterpart name.
    * @return The deposit.
    */
-  public static DepositCounterpartDefinition fromStart(final ZonedDateTime startDate, final double notional, final double rate, final GeneratorDeposit generator, final String name) {
+  public static DepositCounterpartDefinition fromStart(final ZonedDateTime startDate, final double notional, final double rate,
+      final GeneratorDeposit generator, final String name) {
     ArgumentChecker.notNull(startDate, "Start date");
     ArgumentChecker.notNull(generator, "Generator");
     ArgumentChecker.notNull(name, "Name");
@@ -85,15 +109,23 @@ public class DepositCounterpartDefinition extends CashDefinition {
 
   /**
    * Build a counterpart deposit from the trade date and the tenor.
-   * @param tradeDate The deposit trade date. The start date is the trade date plus the generator spot lag.
-   * @param tenor The deposit tenor.
-   * @param notional The deposit notional.
-   * @param rate The deposit rate.
-   * @param generator The deposit generator.
-   * @param name The counterpart name.
+   * 
+   * @param tradeDate
+   *          The deposit trade date. The start date is the trade date plus the generator spot lag.
+   * @param tenor
+   *          The deposit tenor.
+   * @param notional
+   *          The deposit notional.
+   * @param rate
+   *          The deposit rate.
+   * @param generator
+   *          The deposit generator.
+   * @param name
+   *          The counterpart name.
    * @return The deposit.
    */
-  public static DepositCounterpartDefinition fromTrade(final ZonedDateTime tradeDate, final Period tenor, final double notional, final double rate, final GeneratorDeposit generator,
+  public static DepositCounterpartDefinition fromTrade(final ZonedDateTime tradeDate, final Period tenor, final double notional, final double rate,
+      final GeneratorDeposit generator,
       final String name) {
     ArgumentChecker.notNull(tradeDate, "Start date");
     ArgumentChecker.notNull(tenor, "Tenor");
@@ -107,15 +139,23 @@ public class DepositCounterpartDefinition extends CashDefinition {
 
   /**
    * Build an over-night counterpart deposit from the financial description and the trade date.
-   * @param tradeDate The deposit trade date. The start date is the trade date plus the generator spot lag.
-   * @param start The number of business days to start date.
-   * @param notional The deposit notional.
-   * @param rate The deposit rate.
-   * @param generator The deposit generator.
-   * @param name The counterpart name.
+   * 
+   * @param tradeDate
+   *          The deposit trade date. The start date is the trade date plus the generator spot lag.
+   * @param start
+   *          The number of business days to start date.
+   * @param notional
+   *          The deposit notional.
+   * @param rate
+   *          The deposit rate.
+   * @param generator
+   *          The deposit generator.
+   * @param name
+   *          The counterpart name.
    * @return The deposit.
    */
-  public static DepositCounterpartDefinition fromTrade(final ZonedDateTime tradeDate, final int start, final double notional, final double rate, final GeneratorDeposit generator, final String name) {
+  public static DepositCounterpartDefinition fromTrade(final ZonedDateTime tradeDate, final int start, final double notional, final double rate,
+      final GeneratorDeposit generator, final String name) {
     ArgumentChecker.notNull(tradeDate, "Trade date");
     ArgumentChecker.notNull(generator, "Generator");
     ArgumentChecker.notNull(name, "Name");
@@ -127,6 +167,7 @@ public class DepositCounterpartDefinition extends CashDefinition {
 
   /**
    * Gets the counterpart name.
+   * 
    * @return The name.
    */
   public String getCounterpartName() {
@@ -135,6 +176,7 @@ public class DepositCounterpartDefinition extends CashDefinition {
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -143,9 +185,11 @@ public class DepositCounterpartDefinition extends CashDefinition {
     ArgumentChecker.isTrue(!date.isAfter(getEndDate()), "date is after end date");
     final double startTime = TimeCalculator.getTimeBetween(date, getStartDate());
     if (startTime < 0) {
-      return new DepositCounterpart(getCurrency(), 0, TimeCalculator.getTimeBetween(date, getEndDate()), getNotional(), 0, getRate(), getAccrualFactor(), _name, yieldCurveNames[0]);
+      return new DepositCounterpart(getCurrency(), 0, TimeCalculator.getTimeBetween(date, getEndDate()), getNotional(), 0, getRate(), getAccrualFactor(), _name,
+          yieldCurveNames[0]);
     }
-    return new DepositCounterpart(getCurrency(), startTime, TimeCalculator.getTimeBetween(date, getEndDate()), getNotional(), getNotional(), getRate(), getAccrualFactor(), _name, yieldCurveNames[0]);
+    return new DepositCounterpart(getCurrency(), startTime, TimeCalculator.getTimeBetween(date, getEndDate()), getNotional(), getNotional(), getRate(),
+        getAccrualFactor(), _name, yieldCurveNames[0]);
   }
 
   @Override
@@ -153,9 +197,11 @@ public class DepositCounterpartDefinition extends CashDefinition {
     ArgumentChecker.isTrue(!date.isAfter(getEndDate()), "date is after end date");
     final double startTime = TimeCalculator.getTimeBetween(date, getStartDate());
     if (startTime < 0) {
-      return new DepositCounterpart(getCurrency(), 0, TimeCalculator.getTimeBetween(date, getEndDate()), getNotional(), 0, getRate(), getAccrualFactor(), _name);
+      return new DepositCounterpart(getCurrency(), 0, TimeCalculator.getTimeBetween(date, getEndDate()), getNotional(), 0, getRate(), getAccrualFactor(),
+          _name);
     }
-    return new DepositCounterpart(getCurrency(), startTime, TimeCalculator.getTimeBetween(date, getEndDate()), getNotional(), getNotional(), getRate(), getAccrualFactor(), _name);
+    return new DepositCounterpart(getCurrency(), startTime, TimeCalculator.getTimeBetween(date, getEndDate()), getNotional(), getNotional(), getRate(),
+        getAccrualFactor(), _name);
   }
 
   @Override

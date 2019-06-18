@@ -6,12 +6,12 @@
 
 package com.opengamma.masterdb.security.hibernate.swap;
 
-import com.opengamma.financial.security.swap.Notional;
 import com.opengamma.masterdb.security.hibernate.CurrencyBean;
 import com.opengamma.masterdb.security.hibernate.UniqueIdBean;
 
 /**
- * A Hibernate bean representation of {@link Notional}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.swap.Notional}.
  */
 public class NotionalBean {
 

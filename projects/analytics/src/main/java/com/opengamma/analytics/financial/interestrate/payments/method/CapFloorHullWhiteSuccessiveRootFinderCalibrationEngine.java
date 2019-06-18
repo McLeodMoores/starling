@@ -21,6 +21,7 @@ import com.opengamma.analytics.math.rootfinding.RidderSingleRootFinder;
 
 /**
  * Specific calibration engine for the Hull-White one factor model with cap/floor.
+ * 
  * @deprecated {@link PricingMethod} is deprecated.
  */
 @Deprecated
@@ -33,7 +34,9 @@ public class CapFloorHullWhiteSuccessiveRootFinderCalibrationEngine extends Succ
 
   /**
    * Constructor of the calibration engine.
-   * @param calibrationObjective The calibration objective.
+   * 
+   * @param calibrationObjective
+   *          The calibration objective.
    */
   public CapFloorHullWhiteSuccessiveRootFinderCalibrationEngine(final SuccessiveRootFinderCalibrationObjective calibrationObjective) {
     super(calibrationObjective);
@@ -41,8 +44,11 @@ public class CapFloorHullWhiteSuccessiveRootFinderCalibrationEngine extends Succ
 
   /**
    * Add an instrument to the basket and the associated calculator.
-   * @param instrument An interest rate derivative.
-   * @param method A pricing method.
+   * 
+   * @param instrument
+   *          An interest rate derivative.
+   * @param method
+   *          A pricing method.
    */
   @Override
   public void addInstrument(final InstrumentDerivative instrument, final PricingMethod method) {
@@ -55,8 +61,11 @@ public class CapFloorHullWhiteSuccessiveRootFinderCalibrationEngine extends Succ
 
   /**
    * Add an array of instruments to the basket and the associated calculator. The same method is used for all the instruments.
-   * @param instrument An interest rate derivative array.
-   * @param method A pricing method.
+   * 
+   * @param instrument
+   *          An interest rate derivative array.
+   * @param method
+   *          A pricing method.
    */
   @Override
   public void addInstrument(final InstrumentDerivative[] instrument, final PricingMethod method) {
@@ -74,13 +83,15 @@ public class CapFloorHullWhiteSuccessiveRootFinderCalibrationEngine extends Succ
     computeCalibrationPrice(curves);
     getCalibrationObjective().setCurves(curves);
     final int nbInstruments = getBasket().size();
-    final RidderSingleRootFinder rootFinder = new RidderSingleRootFinder(getCalibrationObjective().getFunctionValueAccuracy(), getCalibrationObjective().getVariableAbsoluteAccuracy());
+    final RidderSingleRootFinder rootFinder = new RidderSingleRootFinder(getCalibrationObjective().getFunctionValueAccuracy(),
+        getCalibrationObjective().getVariableAbsoluteAccuracy());
     final BracketRoot bracketer = new BracketRoot();
     for (int loopins = 0; loopins < nbInstruments; loopins++) {
       final InstrumentDerivative instrument = getBasket().get(loopins);
       getCalibrationObjective().setInstrument(instrument);
       getCalibrationObjective().setPrice(getCalibrationPrice().get(loopins));
-      final double[] range = bracketer.getBracketedPoints(getCalibrationObjective(), getCalibrationObjective().getMinimumParameter(), getCalibrationObjective().getMaximumParameter());
+      final double[] range = bracketer.getBracketedPoints(getCalibrationObjective(), getCalibrationObjective().getMinimumParameter(),
+          getCalibrationObjective().getMaximumParameter());
       rootFinder.getRoot(getCalibrationObjective(), range[0], range[1]);
       if (loopins < nbInstruments - 1) {
         ((CapFloorHullWhiteCalibrationObjective) getCalibrationObjective()).setNextCalibrationTime(_calibrationTimes.get(loopins));

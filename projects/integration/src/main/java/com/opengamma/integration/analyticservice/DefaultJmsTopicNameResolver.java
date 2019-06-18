@@ -20,7 +20,7 @@ import com.opengamma.livedata.resolver.AbstractResolver;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Resolves
+ * Resolves.
  */
 public class DefaultJmsTopicNameResolver extends AbstractResolver<JmsTopicNameResolveRequest, String> implements JmsTopicNameResolver {
 
@@ -44,9 +44,9 @@ public class DefaultJmsTopicNameResolver extends AbstractResolver<JmsTopicNameRe
     final Position position = _positionSource.getPosition(valueSpecification.getTargetSpecification().getUniqueId());
     final String providerId = getProviderId(position);
     final String result = PREFIX + SEPARATOR + providerId + SEPARATOR + request.getCalcConfig() + SEPARATOR + request.getValueSpecification().getValueName();
-//    if (request.getValueSpecification().getProperties() != null) {
-//      result += SEPARATOR + request.getValueSpecification().getProperties().toSimpleString();
-//    }
+    // if (request.getValueSpecification().getProperties() != null) {
+    // result += SEPARATOR + request.getValueSpecification().getProperties().toSimpleString();
+    // }
     LOGGER.debug("{} resolved to {}", request, result);
     return result;
 

@@ -31,10 +31,11 @@ import com.opengamma.util.money.CurrencyAmount;
 /**
  * Formatter for the details of the fixed leg of a swap.
  */
+@SuppressWarnings("deprecation")
 /* package */ class FixedSwapLegDetailsFormatter extends AbstractFormatter<FixedSwapLegDetails> {
   /** Column labels */
   private static final String[] COLUMN_LABELS = new String[] {START_ACCRUAL_DATES, END_ACCRUAL_DATES, DISCOUNT_FACTOR,
-    PAYMENT_TIME, PAYMENT_YEAR_FRACTION, PAYMENT_AMOUNT, NOTIONAL, FIXED_RATE, DISCOUNTED_PAYMENT_AMOUNT};
+      PAYMENT_TIME, PAYMENT_YEAR_FRACTION, PAYMENT_AMOUNT, NOTIONAL, FIXED_RATE, DISCOUNTED_PAYMENT_AMOUNT};
   /** Number of columns */
   private static final int COLUMN_COUNT = COLUMN_LABELS.length;
   /** x labels field */

@@ -24,25 +24,28 @@ public abstract class BloombergTickerParserFutureOption extends BloombergTickerP
   private String _strike;
 
   /**
-   * Parse given ticker
+   * Parse given ticker.
    *
-   * @param value ticker as string
+   * @param value
+   *          ticker as string
    */
   public BloombergTickerParserFutureOption(final String value) {
     super(value);
   }
 
   /**
-   * Parse given id (should be a ticker)
+   * Parse given id (should be a ticker).
    *
-   * @param identifier id to parse
+   * @param identifier
+   *          id to parse
    */
   public BloombergTickerParserFutureOption(final ExternalId identifier) {
     super(identifier);
   }
 
   /**
-   * The symbol
+   * The symbol.
+   * 
    * @return the symbol
    */
   public String getSymbol() {
@@ -50,7 +53,8 @@ public abstract class BloombergTickerParserFutureOption extends BloombergTickerP
   }
 
   /**
-   * is call or put
+   * is call or put.
+   * 
    * @return "C" or "P"
    */
   public String getCallOrPut() {
@@ -58,7 +62,8 @@ public abstract class BloombergTickerParserFutureOption extends BloombergTickerP
   }
 
   /**
-   * get the expiry
+   * get the expiry.
+   * 
    * @return the expiry
    */
   public String getExpiry() {
@@ -66,7 +71,8 @@ public abstract class BloombergTickerParserFutureOption extends BloombergTickerP
   }
 
   /**
-   * get the strike
+   * get the strike.
+   * 
    * @return the strike
    */
   public String getStrike() {
@@ -87,7 +93,8 @@ public abstract class BloombergTickerParserFutureOption extends BloombergTickerP
   }
 
   /**
-   * The type
+   * The type.
+   * 
    * @return the type
    */
   public String getTypeName() {

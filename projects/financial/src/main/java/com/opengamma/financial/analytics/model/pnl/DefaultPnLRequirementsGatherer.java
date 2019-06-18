@@ -12,7 +12,8 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValuePropertyNames;
@@ -48,7 +49,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  * PnL requirements gatherer.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class DefaultPnLRequirementsGatherer implements PnLRequirementsGatherer {
 
   private final Map<String, String> _curveCalculationConfigs = new HashMap<>();
@@ -59,9 +62,9 @@ public class DefaultPnLRequirementsGatherer implements PnLRequirementsGatherer {
   private String _swaptionVolSurfaceName = "DEFAULT";
   private String _irFutureOptionVolSurfaceName = "DEFAULT";
   private String _bondFutureOptionVolSurfaceName = "DEFAULT";
-  private String _fxVolInterpolator = Interpolator1DFactory.DOUBLE_QUADRATIC;
-  private String _fxVolLeftExtrapolator = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
-  private String _fxVolRightExtrapolator = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
+  private String _fxVolInterpolator = DoubleQuadraticInterpolator1dAdapter.NAME;
+  private String _fxVolLeftExtrapolator = LinearExtrapolator1dAdapter.NAME;
+  private String _fxVolRightExtrapolator = LinearExtrapolator1dAdapter.NAME;
 
   protected void addCurveCalculationConfig(final String currency, final String configName) {
     _curveCalculationConfigs.put(currency, configName);
@@ -108,13 +111,15 @@ public class DefaultPnLRequirementsGatherer implements PnLRequirementsGatherer {
   }
 
   @Override
-  public Set<ValueRequirement> getFirstOrderRequirements(final FinancialSecurity security, final String samplingPeriod, final String scheduleCalculator, final String samplingFunction,
+  public Set<ValueRequirement> getFirstOrderRequirements(final FinancialSecurity security, final String samplingPeriod, final String scheduleCalculator,
+      final String samplingFunction,
       final ComputationTargetSpecification targetSpec, final String currency) {
     return security.accept(getFirstOrderRequirements(samplingPeriod, scheduleCalculator, samplingFunction, targetSpec, currency));
   }
 
   //TODO another visitor that takes desiredValue and uses those properties instead of the static defaults
-  protected FinancialSecurityVisitor<Set<ValueRequirement>> getFirstOrderRequirements(final String samplingPeriod, final String scheduleCalculator, final String samplingFunction,
+  protected FinancialSecurityVisitor<Set<ValueRequirement>> getFirstOrderRequirements(final String samplingPeriod, final String scheduleCalculator,
+      final String samplingFunction,
       final ComputationTargetSpecification targetSpec, final String currency) {
     final ValueProperties commonProperties = ValueProperties.builder()
         .with(ValuePropertyNames.CURRENCY, currency)
@@ -386,7 +391,7 @@ public class DefaultPnLRequirementsGatherer implements PnLRequirementsGatherer {
       }
 
       private Set<ValueRequirement> createValueRequirementsForCashLikeSecurity(final Currency currency) {
-        final String config = _curveCalculationConfigs.get(currency);
+        final String config = _curveCalculationConfigs.get(currency.getCode());
         if (config == null) {
           throw new OpenGammaRuntimeException("Could not get curve calculation configuration for " + currency);
         }

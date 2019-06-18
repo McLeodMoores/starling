@@ -16,8 +16,11 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Describes an interest inflation indexed bond issue. Only the coupon are indexed on a price index.
- * @param <N> Type of fixed payment.
- * @param <C> Type of inflation coupon.
+ * 
+ * @param <N>
+ *          Type of fixed payment.
+ * @param <C>
+ *          Type of inflation coupon.
  */
 public class BondInterestIndexedSecurity<N extends PaymentFixed, C extends Coupon> extends BondSecurity<N, C> {
 
@@ -38,8 +41,7 @@ public class BondInterestIndexedSecurity<N extends PaymentFixed, C extends Coupo
    */
   private final double _factorToNextCoupon;
   /**
-   * The description of the bond settlement. It is used only for the dates.
-   * The notional is 0 if the settlement is in the past and 1 if not.
+   * The description of the bond settlement. It is used only for the dates. The notional is 0 if the settlement is in the past and 1 if not.
    */
   private final PaymentFixed _settlement;
 
@@ -50,36 +52,61 @@ public class BondInterestIndexedSecurity<N extends PaymentFixed, C extends Coupo
 
   /**
    * Constructor of the Capital inflation indexed bond. The legal entity contains only the issuer name.
-   * @param nominal The nominal annuity.
-   * @param coupon The coupon annuity.
-   * @param settlementTime The time (in years) to settlement date.
-   * @param accruedInterest The real accrued interest at the settlement date.
-   * @param factorToNextCoupon The real accrual factor to the first coupon.
-   * @param yieldConvention The bond yield convention.
-   * @param couponPerYear Number of coupon per year.
-   * @param settlement The description of the bond settlement.
-   * @param priceIndex The price index
-   * @param issuer The bond issuer name.
+   * 
+   * @param nominal
+   *          The nominal annuity.
+   * @param coupon
+   *          The coupon annuity.
+   * @param settlementTime
+   *          The time (in years) to settlement date.
+   * @param accruedInterest
+   *          The real accrued interest at the settlement date.
+   * @param factorToNextCoupon
+   *          The real accrual factor to the first coupon.
+   * @param yieldConvention
+   *          The bond yield convention.
+   * @param couponPerYear
+   *          Number of coupon per year.
+   * @param settlement
+   *          The description of the bond settlement.
+   * @param priceIndex
+   *          The price index
+   * @param issuer
+   *          The bond issuer name.
    */
-  public BondInterestIndexedSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final double accruedInterest, final double factorToNextCoupon,
+  public BondInterestIndexedSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final double accruedInterest,
+      final double factorToNextCoupon,
       final YieldConvention yieldConvention, final int couponPerYear, final PaymentFixed settlement, final String issuer, final IndexPrice priceIndex) {
-    this(nominal, coupon, settlementTime, accruedInterest, factorToNextCoupon, yieldConvention, couponPerYear, settlement, new LegalEntity(null, issuer, null, null, null), priceIndex);
+    this(nominal, coupon, settlementTime, accruedInterest, factorToNextCoupon, yieldConvention, couponPerYear, settlement,
+        new LegalEntity(null, issuer, null, null, null), priceIndex);
   }
 
   /**
    * Constructor of the Capital inflation indexed bond.
-   * @param nominal The nominal annuity.
-   * @param coupon The coupon annuity.
-   * @param settlementTime The time (in years) to settlement date.
-   * @param accruedInterest The real accrued interest at the settlement date.
-   * @param factorToNextCoupon The real accrual factor to the first coupon.
-   * @param yieldConvention The bond yield convention.
-   * @param couponPerYear Number of coupon per year.
-   * @param settlement The description of the bond settlement.
-   * @param priceIndex The price index
-   * @param issuer The bond issuer name.
+   * 
+   * @param nominal
+   *          The nominal annuity.
+   * @param coupon
+   *          The coupon annuity.
+   * @param settlementTime
+   *          The time (in years) to settlement date.
+   * @param accruedInterest
+   *          The real accrued interest at the settlement date.
+   * @param factorToNextCoupon
+   *          The real accrual factor to the first coupon.
+   * @param yieldConvention
+   *          The bond yield convention.
+   * @param couponPerYear
+   *          Number of coupon per year.
+   * @param settlement
+   *          The description of the bond settlement.
+   * @param priceIndex
+   *          The price index
+   * @param issuer
+   *          The bond issuer name.
    */
-  public BondInterestIndexedSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final double accruedInterest, final double factorToNextCoupon,
+  public BondInterestIndexedSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final double accruedInterest,
+      final double factorToNextCoupon,
       final YieldConvention yieldConvention, final int couponPerYear, final PaymentFixed settlement, final LegalEntity issuer, final IndexPrice priceIndex) {
     super(nominal, coupon, settlementTime, issuer);
     ArgumentChecker.notNull(yieldConvention, "Yield convention");
@@ -96,6 +123,7 @@ public class BondInterestIndexedSecurity<N extends PaymentFixed, C extends Coupo
 
   /**
    * Gets the bond yield convention.
+   * 
    * @return The yield convention.
    */
   public YieldConvention getYieldConvention() {
@@ -104,6 +132,7 @@ public class BondInterestIndexedSecurity<N extends PaymentFixed, C extends Coupo
 
   /**
    * Gets the real accrued interest at the settlement date.
+   * 
    * @return The accrued interest.
    */
   public double getAccruedInterest() {
@@ -112,6 +141,7 @@ public class BondInterestIndexedSecurity<N extends PaymentFixed, C extends Coupo
 
   /**
    * Gets the number of coupon per year.
+   * 
    * @return The number of coupon per year.
    */
   public int getCouponPerYear() {
@@ -120,6 +150,7 @@ public class BondInterestIndexedSecurity<N extends PaymentFixed, C extends Coupo
 
   /**
    * Gets the real accrual factor to the first coupon.
+   * 
    * @return The accrual factor to the first coupon.
    */
   public double getAccrualFactorToNextCoupon() {
@@ -128,6 +159,7 @@ public class BondInterestIndexedSecurity<N extends PaymentFixed, C extends Coupo
 
   /**
    * Gets the price index associated to the bond.
+   * 
    * @return The price index.
    */
   public IndexPrice getPriceIndex() {
@@ -136,19 +168,20 @@ public class BondInterestIndexedSecurity<N extends PaymentFixed, C extends Coupo
 
   /**
    * Gets the index value at the start of the bond.
+   * 
    * @return The index value.
    */
   public PaymentFixed getSettlement() {
     return _settlement;
   }
 
-//  /**
-//   * Returns the issuer/currency pair for the bond.
-//   * @return The pair.
-//   */
-//  public Pair<String, Currency> getIssuerCurrency() {
-//    return ObjectsPair.of(getIssuer(), getCurrency());
-//  }
+  // /**
+  // * Returns the issuer/currency pair for the bond.
+  // * @return The pair.
+  // */
+  // public Pair<String, Currency> getIssuerCurrency() {
+  // return ObjectsPair.of(getIssuer(), getCurrency());
+  // }
 
   @Override
   public <S, T> T accept(final InstrumentDerivativeVisitor<S, T> visitor, final S data) {
@@ -168,12 +201,12 @@ public class BondInterestIndexedSecurity<N extends PaymentFixed, C extends Coupo
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_accruedInterest);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _couponPerYear;
     temp = Double.doubleToLongBits(_factorToNextCoupon);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_settlement == null) ? 0 : _settlement.hashCode());
-    result = prime * result + ((_yieldConvention == null) ? 0 : _yieldConvention.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_settlement == null ? 0 : _settlement.hashCode());
+    result = prime * result + (_yieldConvention == null ? 0 : _yieldConvention.hashCode());
     return result;
   }
 

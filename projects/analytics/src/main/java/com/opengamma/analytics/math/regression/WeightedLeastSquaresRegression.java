@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.regression;
@@ -17,7 +17,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.linalg.Algebra;
 
 /**
- * 
+ *
  */
 public class WeightedLeastSquaresRegression extends LeastSquaresRegression {
   private static final Logger LOGGER = LoggerFactory.getLogger(WeightedLeastSquaresRegression.class);
@@ -30,7 +30,9 @@ public class WeightedLeastSquaresRegression extends LeastSquaresRegression {
     }
     checkData(x, weights, y);
     LOGGER
-        .info("Have a two-dimensional array for what should be a one-dimensional array of weights. The weights used in this regression will be the diagonal elements only");
+    .info(
+        "Have a two-dimensional array for what should be a one-dimensional array of weights. The weights used in this "
+            + "regression will be the diagonal elements only");
     final double[] w = new double[weights.length];
     for (int i = 0; i < w.length; i++) {
       w[i] = weights[i][i];
@@ -54,8 +56,8 @@ public class WeightedLeastSquaresRegression extends LeastSquaresRegression {
     final DoubleMatrix1D vector = DoubleFactory1D.dense.make(indep);
     final DoubleMatrix2D wDiag = DoubleFactory2D.sparse.diagonal(DoubleFactory1D.dense.make(w));
     final DoubleMatrix2D transpose = _algebra.transpose(matrix);
-    final DoubleMatrix1D betasVector =
-        _algebra.mult(_algebra.mult(_algebra.mult(_algebra.inverse(_algebra.mult(transpose, _algebra.mult(wDiag, matrix))), transpose), wDiag), vector);
+    final DoubleMatrix1D betasVector = _algebra
+        .mult(_algebra.mult(_algebra.mult(_algebra.inverse(_algebra.mult(transpose, _algebra.mult(wDiag, matrix))), transpose), wDiag), vector);
     final double[] yModel = convertArray(_algebra.mult(matrix, betasVector).toArray());
     final double[] betas = convertArray(betasVector.toArray());
     return getResultWithStatistics(x, convertArray(wDiag.toArray()), y, betas, yModel, transpose, matrix, useIntercept);

@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.examples.simulated.loader.holiday;
 
@@ -25,7 +25,7 @@ import com.opengamma.scripts.Scriptable;
 import com.opengamma.util.money.Currency;
 
 /**
- *
+ * Populates the holiday master with holidays for currencies.
  */
 @Scriptable
 public class ExamplesCurrencyHolidayLoader extends AbstractTool<ToolContext> {
@@ -39,6 +39,10 @@ public class ExamplesCurrencyHolidayLoader extends AbstractTool<ToolContext> {
     }
   }
 
+  /**
+   * @param args
+   *          the arguments
+   */
   public static void main(final String[] args) {
     new ExamplesCurrencyHolidayLoader().invokeAndTerminate(args);
   }
@@ -46,7 +50,8 @@ public class ExamplesCurrencyHolidayLoader extends AbstractTool<ToolContext> {
   @Override
   protected void doRun() {
     final HolidayMaster holidayMaster = getToolContext().getHolidayMaster();
-    final CurrencyPairs ccyConfig = getToolContext().getConfigSource().getSingle(CurrencyPairs.class, CurrencyPairs.DEFAULT_CURRENCY_PAIRS, VersionCorrection.LATEST);
+    final CurrencyPairs ccyConfig = getToolContext().getConfigSource().getSingle(CurrencyPairs.class, CurrencyPairs.DEFAULT_CURRENCY_PAIRS,
+        VersionCorrection.LATEST);
     final Set<Currency> stored = new HashSet<>();
     for (final CurrencyPair pair : ccyConfig.getPairs()) {
       Currency ccy = pair.getBase();

@@ -46,32 +46,39 @@ import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.money.Currency;
 
 /**
- * This function splits a barrier option into a sum of vanilla calls or puts,
- * and then calls down to the EquityIndexOptionFunction as its requirements
+ * This function splits a barrier option into a sum of vanilla calls or puts, and then calls down to the EquityIndexOptionFunction as its requirements.
  */
 public abstract class EquityVanillaBarrierOptionBlackFunction extends EquityOptionBlackFunction {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityVanillaBarrierOptionBlackFunction.class);
 
   /**
-   * @param requirementName The desired output
+   * @param requirementName
+   *          The desired output
    */
   public EquityVanillaBarrierOptionBlackFunction(final String requirementName) {
     super(requirementName);
   }
 
   /**
-   * This method is defined by extending Functions
-   * @param vanillaOptions Set of EquityIndexOptions that European Barrier is composed of. Binaries are modelled as spreads
-   * @param market EquityOptionDataBundle
-   * @param inputs The market data inputs
-   * @param desiredValues The desired values
-   * @param targetSpec The target specification of the result
-   * @param resultProperties The result properties
+   * This method is defined by extending Functions.
+   *
+   * @param vanillaOptions
+   *          Set of EquityIndexOptions that European Barrier is composed of. Binaries are modelled as spreads
+   * @param market
+   *          EquityOptionDataBundle
+   * @param inputs
+   *          The market data inputs
+   * @param desiredValues
+   *          The desired values
+   * @param targetSpec
+   *          The target specification of the result
+   * @param resultProperties
+   *          The result properties
    * @return the result
    */
-  protected abstract Set<ComputedValue> computeValues(Set<EquityIndexOption> vanillaOptions, StaticReplicationDataBundle market, final FunctionInputs inputs,
-      final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties);
+  protected abstract Set<ComputedValue> computeValues(Set<EquityIndexOption> vanillaOptions, StaticReplicationDataBundle market, FunctionInputs inputs,
+      Set<ValueRequirement> desiredValues, ComputationTargetSpecification targetSpec, ValueProperties resultProperties);
 
   @Override
   protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
@@ -80,8 +87,9 @@ public abstract class EquityVanillaBarrierOptionBlackFunction extends EquityOpti
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues)
-    throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues)
+      throws AsynchronousExecution {
 
     final ZonedDateTime now = ZonedDateTime.now(executionContext.getValuationClock());
     final EquityBarrierOptionSecurity barrierSec = (EquityBarrierOptionSecurity) target.getSecurity();
@@ -104,7 +112,8 @@ public abstract class EquityVanillaBarrierOptionBlackFunction extends EquityOpti
     // 2. Break the barrier security into it's vanilla analytic derivatives
     final Set<EquityIndexOption> vanillas = vanillaDecomposition(now, barrierSec, smoothing, overhedge);
     if (vanillas.iterator().next().getTimeToSettlement() < 0.0) {
-      throw new OpenGammaRuntimeException("EquityBarrierOptionSecurity with expiry, " + barrierSec.getExpiry().getExpiry().toString() + ", has already settled.");
+      throw new OpenGammaRuntimeException(
+          "EquityBarrierOptionSecurity with expiry, " + barrierSec.getExpiry().getExpiry().toString() + ", has already settled.");
     }
     // 3. Build up the market data bundle
     final StaticReplicationDataBundle market = buildMarketBundle(underlyingId, executionContext, inputs, target, desiredValues);
@@ -153,7 +162,8 @@ public abstract class EquityVanillaBarrierOptionBlackFunction extends EquityOpti
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> results = super.getResults(context, target, inputs);
     final Set<ValueSpecification> resultsWithExtraProperties = Sets.newHashSetWithExpectedSize(results.size());
     for (final ValueSpecification spec : results) {
@@ -168,14 +178,14 @@ public abstract class EquityVanillaBarrierOptionBlackFunction extends EquityOpti
     return results;
   }
 
-  //TODO does all of this work need to be done in financial?
+  // TODO does all of this work need to be done in financial?
   private Set<EquityIndexOption> vanillaDecomposition(final ZonedDateTime valuation, final EquityBarrierOptionSecurity barrierOption,
       final double smoothingFullWidth, final double overhedge) {
 
     final Set<EquityIndexOption> vanillas = new HashSet<>();
     // Unpack the barrier security
-    final BarrierDirection bInOut = barrierOption.getBarrierDirection(); //   KNOCK_IN, KNOCK_OUT,
-    final BarrierType bUpDown = barrierOption.getBarrierType(); //   UP, DOWN, DOUBLE
+    final BarrierDirection bInOut = barrierOption.getBarrierDirection(); // KNOCK_IN, KNOCK_OUT,
+    final BarrierType bUpDown = barrierOption.getBarrierType(); // UP, DOWN, DOUBLE
     final double strike = barrierOption.getStrike();
     final double barrier = barrierOption.getBarrierLevel();
     final ZonedDateTime expiry = barrierOption.getExpiry().getExpiry();
@@ -186,7 +196,7 @@ public abstract class EquityVanillaBarrierOptionBlackFunction extends EquityOpti
     // parameters to model binary as call/put spread
     final double oh = overhedge;
     final double width = barrier * smoothingFullWidth; // we specify smoothing as relative value
-    final double size; // = (barrier - strike ) / smoothingFullWidth;
+    double size; // = (barrier - strike ) / smoothingFullWidth;
 
     // There are four cases: UP and IN, UP and OUT, DOWN and IN, DOWN and OUT
     // Switch on direction: If UP, use Call Spreads. If DOWN, use Put spreads.
@@ -197,7 +207,9 @@ public abstract class EquityVanillaBarrierOptionBlackFunction extends EquityOpti
       case UP:
         isCall = true;
         if (barrierOption.getOptionType().equals(OptionType.PUT)) {
-          throw new OpenGammaRuntimeException("ONE_LOOK / Vanilla Barriers do not apply to an UP type of Barrier with OptionType.CALL. Confirm that the intended samplingFrequency is ONE_LOOK");
+          throw new OpenGammaRuntimeException(
+              "ONE_LOOK / Vanilla Barriers do not apply to an UP type of Barrier with OptionType.CALL. Confirm that the intended "
+                  + "samplingFrequency is ONE_LOOK");
         }
         if (barrier < strike) {
           throw new OpenGammaRuntimeException("Encountered an UP / CALL type of BarrierOption where barrier, " + barrier + ", is below strike, " + strike);
@@ -209,7 +221,9 @@ public abstract class EquityVanillaBarrierOptionBlackFunction extends EquityOpti
       case DOWN:
         isCall = false;
         if (barrierOption.getOptionType().equals(OptionType.CALL)) {
-          throw new OpenGammaRuntimeException("ONE_LOOK / Vanilla Barriers do not apply to a DOWN type of Barrier with OptionType.PUT. Confirm that the intended samplingFrequency is ONE_LOOK");
+          throw new OpenGammaRuntimeException(
+              "ONE_LOOK / Vanilla Barriers do not apply to a DOWN type of Barrier with OptionType.PUT. Confirm that the intended "
+                  + "samplingFrequency is ONE_LOOK");
         }
         if (barrier > strike) {
           throw new OpenGammaRuntimeException("Encountered a DOWN / PUT type of BarrierOption where barrier, " + barrier + ", is above strike, " + strike);
@@ -224,7 +238,7 @@ public abstract class EquityVanillaBarrierOptionBlackFunction extends EquityOpti
         throw new OpenGammaRuntimeException("Encountered an EquityBarrierOption with unexpected BarrierType of: " + bUpDown);
     }
 
-    // Switch  on type
+    // Switch on type
     final ExerciseDecisionType exerciseType = barrierOption.getExerciseType().accept(ExerciseTypeAnalyticsVisitorAdapter.getInstance());
     switch (bInOut) {
       case KNOCK_OUT:

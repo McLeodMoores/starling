@@ -13,17 +13,17 @@ import java.util.Map;
  */
 public final class RealFunctionIntegrator1DFactory {
   // TODO add more integration types
-  /** Romberg integrator name */
+  /** Romberg integrator name. */
   public static final String ROMBERG = "Romberg";
-  /** {@link RombergIntegrator1D} */
+  /** {@link RombergIntegrator1D}. */
   public static final RombergIntegrator1D ROMBERG_INSTANCE = new RombergIntegrator1D();
-  /** Simpson integrator name */
+  /** Simpson integrator name. */
   public static final String SIMPSON = "Simpson";
-  /** {@link SimpsonIntegrator1D} */
+  /** {@link SimpsonIntegrator1D}. */
   public static final SimpsonIntegrator1D SIMPSON_INSTANCE = new SimpsonIntegrator1D();
-  /** Extended trapezoid integrator name */
+  /** Extended trapezoid integrator name. */
   public static final String EXTENDED_TRAPEZOID = "ExtendedTrapezoid";
-  /** {@link ExtendedTrapezoidIntegrator1D} */
+  /** {@link ExtendedTrapezoidIntegrator1D}. */
   public static final ExtendedTrapezoidIntegrator1D EXTENDED_TRAPEZOID_INSTANCE = new ExtendedTrapezoidIntegrator1D();
 
   private static final Map<String, Integrator1D<Double, Double>> INSTANCE;
@@ -46,10 +46,13 @@ public final class RealFunctionIntegrator1DFactory {
   }
 
   /**
-   * Given a name, returns an instance of that integrator
-   * @param integratorName The name of the integrator
+   * Given a name, returns an instance of that integrator.
+   * 
+   * @param integratorName
+   *          The name of the integrator
    * @return The integrator
-   * @throws IllegalArgumentException If the integrator name is null or there is no integrator for that name
+   * @throws IllegalArgumentException
+   *           If the integrator name is null or there is no integrator for that name
    */
   public static Integrator1D<Double, Double> getIntegrator(final String integratorName) {
     final Integrator1D<Double, Double> integrator = INSTANCE.get(integratorName);
@@ -60,8 +63,10 @@ public final class RealFunctionIntegrator1DFactory {
   }
 
   /**
-   * Given an integrator, returns its name
-   * @param integrator The integrator
+   * Given an integrator, returns its name.
+   * 
+   * @param integrator
+   *          The integrator
    * @return The name of that integrator (null if not found)
    */
   public static String getIntegratorName(final Integrator1D<Double, Double> integrator) {

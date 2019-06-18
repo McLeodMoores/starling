@@ -30,8 +30,7 @@ import com.opengamma.master.position.ManageableTrade;
 import com.opengamma.master.security.ManageableSecurity;
 
 /**
- * Converts a portfolio from the JAXB extracted objects to the standard
- * system objects.
+ * Converts a portfolio from the JAXB extracted objects to the standard system objects.
  */
 public class PortfolioConverter {
 
@@ -51,9 +50,8 @@ public class PortfolioConverter {
   }
 
   /**
-   * Get the set of manageable positions for this portfolio. Note that this may add in positions
-   * which were not in the original xml file e.g. where a set of trades were specified but no
-   * positions, each trade will be added to a new position.
+   * Get the set of manageable positions for this portfolio. Note that this may add in positions which were not in the original xml file e.g. where a set of
+   * trades were specified but no positions, each trade will be added to a new position.
    *
    * @return the positions, not null
    */
@@ -69,15 +67,16 @@ public class PortfolioConverter {
    * <li>positions (which may or may not contain trades)</li>
    * <li>trades</li>
    * </ul>
-   * and this method will produce a List of PortfolioPosition objects by examining the above elements.
-   * If portfolios are nested, this method will be called recursively noting the portfolio path as the
-   * portfolio hieracrhy is decended. Note that this may add in positions which were not in the original
-   * xml file e.g. where a set of trades were specified but no
-   * positions, each trade will be added to a new position.
+   * and this method will produce a List of PortfolioPosition objects by examining the above elements. If portfolios are nested, this method will be called
+   * recursively noting the portfolio path as the portfolio hieracrhy is decended. Note that this may add in positions which were not in the original xml file
+   * e.g. where a set of trades were specified but no positions, each trade will be added to a new position.
    *
-   * @param portfolio the portfolio to be examined
-   * @param isRoot indicates if the portfolio has no parent i.e. a root node
-   * @param parentPath the path to the portfolio (an array of the names of the portfolio's ancestors).
+   * @param portfolio
+   *          the portfolio to be examined
+   * @param isRoot
+   *          indicates if the portfolio has no parent i.e. a root node
+   * @param parentPath
+   *          the path to the portfolio (an array of the names of the portfolio's ancestors).
    * @return the positions held by the portfolio
    */
   private List<PortfolioPosition> processPortfolio(final Portfolio portfolio, final boolean isRoot, final String[] parentPath) {
@@ -117,9 +116,9 @@ public class PortfolioConverter {
 
         } else if (!Arrays.equals(positionSecurity, tradeSecurity)) {
 
-          throw new PortfolioParsingException("Security must be the same for all trades grouped into a position - " +
-                                                  "position has security: [" + positionSecurity[0] +
-                                                  "] but found trade with: [" + tradeSecurity[0] + "]");
+          throw new PortfolioParsingException("Security must be the same for all trades grouped into a position - "
+              + "position has security: [" + positionSecurity[0]
+              + "] but found trade with: [" + tradeSecurity[0] + "]");
         }
 
         tradeTotalQuantity = tradeTotalQuantity.add(trade.getQuantity());
@@ -144,17 +143,18 @@ public class PortfolioConverter {
   }
 
   /**
-   * Create a new array which is a copy of the path array with
-   * the name parameter appended at the end.
+   * Create a new array which is a copy of the path array with the name parameter appended at the end.
    *
-   * @param path the path array to be extended
-   * @param name the element to append to the array
+   * @param path
+   *          the path array to be extended
+   * @param name
+   *          the element to append to the array
    * @return the extended array
    */
   private String[] extendPath(final String[] path, final String name) {
 
     final int oldLength = path.length;
-    final String[] extended = Arrays.copyOf(path, oldLength  + 1);
+    final String[] extended = Arrays.copyOf(path, oldLength + 1);
     extended[oldLength] = name;
     return extended;
   }
@@ -164,17 +164,15 @@ public class PortfolioConverter {
     if (listedSecurityDefinition != null) {
       LOGGER.debug("Extracting securities for position");
       return listedSecurityDefinition.getSecurityExtractor().extract();
-    } else {
-      return null;
     }
+    return null;
   }
 
   private ManageableSecurity[] extractSecurityFromTrade(final Trade trade, final int tradesSize) {
 
-
     if (tradesSize > 1 && !trade.canBePositionAggregated()) {
-      throw new PortfolioParsingException("Trade type [" + trade.getClass() +
-                                              "] cannot be aggregated into positions");
+      throw new PortfolioParsingException("Trade type [" + trade.getClass()
+          + "] cannot be aggregated into positions");
     }
 
     LOGGER.debug("Extracting securities for trade: [{}]", trade.getExternalSystemId().toExternalId());
@@ -183,13 +181,13 @@ public class PortfolioConverter {
   }
 
   private <T> Iterable<T> nullCheckIterable(final Iterable<T> iterable) {
-    return iterable == null ? ImmutableList.<T>of() : iterable;
+    return iterable == null ? ImmutableList.<T> of() : iterable;
   }
 
   private PortfolioPosition createPortfolioPosition(final Position position,
-                                                    final ManageableSecurity[] security,
-                                                    final String[] parentPath,
-                                                    final BigDecimal tradeQuantity) {
+      final ManageableSecurity[] security,
+      final String[] parentPath,
+      final BigDecimal tradeQuantity) {
     return new PortfolioPosition(convertPosition(position, security[0], tradeQuantity), security, parentPath);
   }
 
@@ -229,10 +227,10 @@ public class PortfolioConverter {
   private ManageableTrade convertTrade(final Trade trade, final Security security) {
 
     final ManageableTrade manageableTrade = new ManageableTrade(trade.getQuantity(),
-                                                          security.getExternalIdBundle(),
-                                                          trade.getTradeDate(),
-                                                          null,
-                                                          trade.getCounterparty().toExternalId());
+        security.getExternalIdBundle(),
+        trade.getTradeDate(),
+        null,
+        trade.getCounterparty().toExternalId());
 
     final ExternalId externalId = trade.getExternalSystemId().toExternalId();
 
@@ -254,6 +252,5 @@ public class PortfolioConverter {
 
     return manageableTrade;
   }
-
 
 }

@@ -46,14 +46,12 @@ public class ReferenceData extends DirectBean {
   @PropertyDefinition(validate = "notNull")
   private String _identifier;
   /**
-   * The reference data that was obtained.
-   * The key is the data field, the value is the reference data value.
+   * The reference data that was obtained. The key is the data field, the value is the reference data value.
    */
   @PropertyDefinition(validate = "notNull")
   private FudgeMsg _fieldValues = FudgeContext.EMPTY_MESSAGE;
   /**
-   * The errors.
-   * This includes errors related to the identifier and to a single field.
+   * The errors. This includes errors related to the identifier and to a single field.
    */
   @PropertyDefinition
   private final List<ReferenceDataError> _errors = Lists.newArrayList();
@@ -72,7 +70,8 @@ public class ReferenceData extends DirectBean {
   /**
    * Creates an instance.
    *
-   * @param identifier  the identifier, not null
+   * @param identifier
+   *          the identifier, not null
    */
   public ReferenceData(final String identifier) {
     setIdentifier(identifier);
@@ -81,19 +80,22 @@ public class ReferenceData extends DirectBean {
   /**
    * Creates an instance.
    *
-   * @param identifier  the identifier, not null
-   * @param fieldValues  the field-value map, not null
+   * @param identifier
+   *          the identifier, not null
+   * @param fieldValues
+   *          the field-value map, not null
    */
   public ReferenceData(final String identifier, final FudgeMsg fieldValues) {
     setIdentifier(identifier);
     setFieldValues(fieldValues);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds an error to the list contained.
    *
-   * @param error  the reference data error to add, not null
+   * @param error
+   *          the reference data error to add, not null
    */
   public void addError(final ReferenceDataError error) {
     ArgumentChecker.notNull(error, "error");
@@ -103,7 +105,8 @@ public class ReferenceData extends DirectBean {
   /**
    * Removes all errors for the specified field.
    *
-   * @param field  the field to remove, null means the whole-identifier errors
+   * @param field
+   *          the field to remove, null means the whole-identifier errors
    */
   public void removeErrors(final String field) {
     for (final Iterator<ReferenceDataError> it = getErrors().iterator(); it.hasNext();) {
@@ -115,7 +118,7 @@ public class ReferenceData extends DirectBean {
   }
 
   /**
-   * Checks if the whole identifier was in error
+   * Checks if the whole identifier was in error.
    *
    * @return true if the whole identifier was in error
    */
@@ -126,7 +129,8 @@ public class ReferenceData extends DirectBean {
   /**
    * Checks if a field was in error.
    *
-   * @param field  the field to check, null for the whole identifier
+   * @param field
+   *          the field to check, null for the whole identifier
    * @return true if the whole identifier was in error
    */
   public boolean isError(final String field) {
@@ -185,8 +189,7 @@ public class ReferenceData extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the reference data that was obtained.
-   * The key is the data field, the value is the reference data value.
+   * Gets the reference data that was obtained. The key is the data field, the value is the reference data value.
    * @return the value of the property, not null
    */
   public FudgeMsg getFieldValues() {
@@ -194,8 +197,7 @@ public class ReferenceData extends DirectBean {
   }
 
   /**
-   * Sets the reference data that was obtained.
-   * The key is the data field, the value is the reference data value.
+   * Sets the reference data that was obtained. The key is the data field, the value is the reference data value.
    * @param fieldValues  the new value of the property, not null
    */
   public void setFieldValues(FudgeMsg fieldValues) {
@@ -205,7 +207,6 @@ public class ReferenceData extends DirectBean {
 
   /**
    * Gets the the {@code fieldValues} property.
-   * The key is the data field, the value is the reference data value.
    * @return the property, not null
    */
   public final Property<FudgeMsg> fieldValues() {
@@ -214,8 +215,7 @@ public class ReferenceData extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the errors.
-   * This includes errors related to the identifier and to a single field.
+   * Gets the errors. This includes errors related to the identifier and to a single field.
    * @return the value of the property, not null
    */
   public List<ReferenceDataError> getErrors() {
@@ -223,8 +223,7 @@ public class ReferenceData extends DirectBean {
   }
 
   /**
-   * Sets the errors.
-   * This includes errors related to the identifier and to a single field.
+   * Sets the errors. This includes errors related to the identifier and to a single field.
    * @param errors  the new value of the property, not null
    */
   public void setErrors(List<ReferenceDataError> errors) {
@@ -235,7 +234,6 @@ public class ReferenceData extends DirectBean {
 
   /**
    * Gets the the {@code errors} property.
-   * This includes errors related to the identifier and to a single field.
    * @return the property, not null
    */
   public final Property<List<ReferenceDataError>> errors() {

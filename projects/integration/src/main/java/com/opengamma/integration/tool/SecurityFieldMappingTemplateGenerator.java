@@ -25,7 +25,7 @@ import com.opengamma.util.paging.PagingRequest;
 import au.com.bytecode.opencsv.CSVWriter;
 
 /**
- * Tool to generate a template for doing field mapping tasks
+ * Tool to generate a template for doing field mapping tasks.
  */
 @Scriptable
 public class SecurityFieldMappingTemplateGenerator extends AbstractTool<ToolContext> {
@@ -33,17 +33,18 @@ public class SecurityFieldMappingTemplateGenerator extends AbstractTool<ToolCont
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(SecurityFieldMappingTemplateGenerator.class);
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new SecurityFieldMappingTemplateGenerator().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
     final CSVWriter csvWriter = new CSVWriter(new FileWriter(getCommandLine().getArgs()[0]));
@@ -69,9 +70,9 @@ public class SecurityFieldMappingTemplateGenerator extends AbstractTool<ToolCont
       return;
     }
     LOGGER.info("Processing security " + firstSecurity);
-    csvWriter.writeNext(new String[] {securityType });
-    csvWriter.writeNext(new String[] {firstSecurity.metaBean().beanName() });
-    csvWriter.writeNext(new String[] {"Type", "Name", "Example"});
+    csvWriter.writeNext(new String[] { securityType });
+    csvWriter.writeNext(new String[] { firstSecurity.metaBean().beanName() });
+    csvWriter.writeNext(new String[] { "Type", "Name", "Example" });
     final Iterable<MetaProperty<?>> metaPropertyIterable = firstSecurity.metaBean().metaPropertyIterable();
     for (final MetaProperty<?> metaProperty : metaPropertyIterable) {
       LOGGER.info("Field" + metaProperty.name());
@@ -81,7 +82,7 @@ public class SecurityFieldMappingTemplateGenerator extends AbstractTool<ToolCont
       } catch (final IllegalStateException ise) {
         strValue = metaProperty.get(firstSecurity).toString();
       }
-      csvWriter.writeNext(new String[] {metaProperty.propertyType().getSimpleName(), metaProperty.name(), strValue });
+      csvWriter.writeNext(new String[] { metaProperty.propertyType().getSimpleName(), metaProperty.name(), strValue });
     }
     csvWriter.writeNext(new String[] {});
   }

@@ -12,8 +12,14 @@ import com.opengamma.id.UniqueId;
 /**
  * Source of convention data.
  * <p>
- * An implementation may be backed by a {@link ConventionBundleMaster} or alternative source of reference/convention data.
+ * An implementation may be backed by a {@link ConventionBundleMaster} or
+ * alternative source of reference/convention data.
+ * 
+ * @deprecated ConventionBundles should no longer be used. Use
+ *             {@link com.opengamma.core.convention.Convention} and
+ *             {@link com.opengamma.core.convention.ConventionSource}.
  */
+@Deprecated
 public interface ConventionBundleSource {
 
   /**

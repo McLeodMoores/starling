@@ -28,6 +28,7 @@ public class MarketDataNotSatisfiableException extends RuntimeException {
     return _requirement;
   }
 
+  @Override
   public String getMessage() {
     return getRequirement().toString();
   }

@@ -27,8 +27,8 @@ import com.opengamma.util.PublicAPI;
  * <p>
  * This is a metadata-based requirement, and specifies only the minimal number of parameters that are necessary to specify the user requirements.
  * <p>
- * The actual value which is computed is available as a {@link ValueSpecification} that is capable of satisfying this requirement.
- * A specification satisfies a requirement if its properties satisfy the requirement constraints, plus the value name and target specifications match.
+ * The actual value which is computed is available as a {@link ValueSpecification} that is capable of satisfying this requirement. A specification satisfies a
+ * requirement if its properties satisfy the requirement constraints, plus the value name and target specifications match.
  * <p>
  * This class is immutable and thread-safe.
  */
@@ -46,9 +46,8 @@ public final class ValueRequirement implements Serializable {
   private String _valueName;
 
   /**
-   * The object that the value refers to. This may be either a {@link ComputationTargetRequirement} or {@link ComputationTargetSpecification}.
-   * If the former, then it will be resolved into a stricter form of value requirement during graph construction so that the target can be
-   * fully identified.
+   * The object that the value refers to. This may be either a {@link ComputationTargetRequirement} or {@link ComputationTargetSpecification}. If the former,
+   * then it will be resolved into a stricter form of value requirement during graph construction so that the target can be fully identified.
    */
   private final ComputationTargetReference _targetReference;
 
@@ -67,9 +66,12 @@ public final class ValueRequirement implements Serializable {
    * <p>
    * This builds a {@link ComputationTargetSpecification} from the target type and id.
    *
-   * @param valueName the value to load, not null
-   * @param targetType the target type, not null
-   * @param targetId the target identifier, may be null
+   * @param valueName
+   *          the value to load, not null
+   * @param targetType
+   *          the target type, not null
+   * @param targetId
+   *          the target identifier, may be null
    */
   public ValueRequirement(final String valueName, final ComputationTargetType targetType, final UniqueId targetId) {
     this(valueName, new ComputationTargetSpecification(targetType, targetId));
@@ -80,10 +82,14 @@ public final class ValueRequirement implements Serializable {
    * <p>
    * This builds a {@link ComputationTargetSpecification} from the target type and id.
    *
-   * @param valueName the name of the value to load, not null
-   * @param targetType the target type, not null
-   * @param targetId the unique identifier of the target, not null
-   * @param constraints the value constraints that must be satisfied
+   * @param valueName
+   *          the name of the value to load, not null
+   * @param targetType
+   *          the target type, not null
+   * @param targetId
+   *          the unique identifier of the target, not null
+   * @param constraints
+   *          the value constraints that must be satisfied
    */
   public ValueRequirement(final String valueName, final ComputationTargetType targetType, final UniqueId targetId, final ValueProperties constraints) {
     this(valueName, new ComputationTargetSpecification(targetType, targetId), constraints);
@@ -94,9 +100,12 @@ public final class ValueRequirement implements Serializable {
    * <p>
    * This builds a {@link ComputationTargetRequirement} from the target type and id.
    *
-   * @param valueName the name of the value to load, not null
-   * @param targetType the target type, not null
-   * @param targetId the external identifier of the target, not null
+   * @param valueName
+   *          the name of the value to load, not null
+   * @param targetType
+   *          the target type, not null
+   * @param targetId
+   *          the external identifier of the target, not null
    */
   public ValueRequirement(final String valueName, final ComputationTargetType targetType, final ExternalId targetId) {
     this(valueName, new ComputationTargetRequirement(targetType, targetId));
@@ -107,10 +116,14 @@ public final class ValueRequirement implements Serializable {
    * <p>
    * This builds a {@link ComputationTargetRequirement} from the target type and id.
    *
-   * @param valueName the name of the value to load, not null
-   * @param targetType the target type, not null
-   * @param targetId the external identifier of the target, not null
-   * @param constraints the value constraints that must be satisfied
+   * @param valueName
+   *          the name of the value to load, not null
+   * @param targetType
+   *          the target type, not null
+   * @param targetId
+   *          the external identifier of the target, not null
+   * @param constraints
+   *          the value constraints that must be satisfied
    */
   public ValueRequirement(final String valueName, final ComputationTargetType targetType, final ExternalId targetId, final ValueProperties constraints) {
     this(valueName, new ComputationTargetRequirement(targetType, targetId), constraints);
@@ -121,9 +134,12 @@ public final class ValueRequirement implements Serializable {
    * <p>
    * This builds a {@link ComputationTargetRequirement} from the target type and id bundle.
    *
-   * @param valueName the name of the value to load, not null
-   * @param targetType the target type, not null
-   * @param targetIds the external identifiers of the target, not null
+   * @param valueName
+   *          the name of the value to load, not null
+   * @param targetType
+   *          the target type, not null
+   * @param targetIds
+   *          the external identifiers of the target, not null
    */
   public ValueRequirement(final String valueName, final ComputationTargetType targetType, final ExternalIdBundle targetIds) {
     this(valueName, new ComputationTargetRequirement(targetType, targetIds));
@@ -134,10 +150,14 @@ public final class ValueRequirement implements Serializable {
    * <p>
    * This builds a {@link ComputationTargetRequirement} from the target type and id bundle.
    *
-   * @param valueName the name of the value to load, not null
-   * @param targetType the target type, not null
-   * @param targetIds the external identifiers of the target, not null
-   * @param constraints the value constraints that must be satisfied
+   * @param valueName
+   *          the name of the value to load, not null
+   * @param targetType
+   *          the target type, not null
+   * @param targetIds
+   *          the external identifiers of the target, not null
+   * @param constraints
+   *          the value constraints that must be satisfied
    */
   public ValueRequirement(final String valueName, final ComputationTargetType targetType, final ExternalIdBundle targetIds, final ValueProperties constraints) {
     this(valueName, new ComputationTargetRequirement(targetType, targetIds), constraints);
@@ -146,8 +166,10 @@ public final class ValueRequirement implements Serializable {
   /**
    * Creates a requirement from a target specification with no value constraints.
    *
-   * @param valueName the value to load, not null
-   * @param targetReference the target reference, not null
+   * @param valueName
+   *          the value to load, not null
+   * @param targetReference
+   *          the target reference, not null
    */
   public ValueRequirement(final String valueName, final ComputationTargetReference targetReference) {
     this(valueName, targetReference, ValueProperties.none());
@@ -156,9 +178,12 @@ public final class ValueRequirement implements Serializable {
   /**
    * Creates a requirement from a target specification with value constraints.
    *
-   * @param valueName the name of the value to load, not null
-   * @param targetReference the target specification, not null
-   * @param constraints the value constraints that must be satisfied
+   * @param valueName
+   *          the name of the value to load, not null
+   * @param targetReference
+   *          the target specification, not null
+   * @param constraints
+   *          the value constraints that must be satisfied
    */
   public ValueRequirement(final String valueName, final ComputationTargetReference targetReference, final ValueProperties constraints) {
     ArgumentChecker.notNull(valueName, "Value name");
@@ -172,17 +197,17 @@ public final class ValueRequirement implements Serializable {
   private static final ConcurrentHashMap<String, String> INTERNED = new ConcurrentHashMap<>();
 
   public static String getInterned(final String valueName) {
-    //This has been observed to be faster if a large proportion of valueNames are already interned and we have a large number of cores
+    // This has been observed to be faster if a large proportion of valueNames are already interned and we have a large number of cores
     String interned = INTERNED.get(valueName);
     if (interned != null) {
       return interned;
     }
     interned = valueName.intern();
-    INTERNED.putIfAbsent(interned, interned); //NOTE: use interned for keys too
+    INTERNED.putIfAbsent(interned, interned); // NOTE: use interned for keys too
     return interned;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the name of the value to load.
    *
@@ -210,15 +235,17 @@ public final class ValueRequirement implements Serializable {
     return _constraints;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets a specific constraint that must be specified.
    * <p>
    * If the constraint allows multiple specific values an arbitrary one is returned.
    *
-   * @param constraintName the constraint to query
+   * @param constraintName
+   *          the constraint to query
    * @return the constraint value, null if it is not defined
-   * @throws IllegalArgumentException if the constraint is a wild-card definition
+   * @throws IllegalArgumentException
+   *           if the constraint is a wild-card definition
    */
   public String getConstraint(final String constraintName) {
     final String value = _constraints.getSingleValue(constraintName);
@@ -238,8 +265,8 @@ public final class ValueRequirement implements Serializable {
     if (obj instanceof ValueRequirement) {
       final ValueRequirement other = (ValueRequirement) obj;
       return _valueName == other._valueName && // values are interned
-          _targetReference.equals(other._targetReference) &&
-          _constraints.equals(other._constraints);
+          _targetReference.equals(other._targetReference)
+          && _constraints.equals(other._constraints);
     }
     return false;
   }

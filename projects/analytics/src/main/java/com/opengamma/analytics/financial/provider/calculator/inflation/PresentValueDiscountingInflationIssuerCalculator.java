@@ -14,9 +14,10 @@ import com.opengamma.analytics.financial.provider.description.inflation.Inflatio
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
-public final class PresentValueDiscountingInflationIssuerCalculator extends InstrumentDerivativeVisitorDelegate<InflationIssuerProviderInterface, MultipleCurrencyAmount> {
+public final class PresentValueDiscountingInflationIssuerCalculator
+    extends InstrumentDerivativeVisitorDelegate<InflationIssuerProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -25,6 +26,7 @@ public final class PresentValueDiscountingInflationIssuerCalculator extends Inst
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueDiscountingInflationIssuerCalculator getInstance() {

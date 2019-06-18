@@ -77,7 +77,7 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
     final CurrencyMatrix matrix = (CurrencyMatrix) target.getValue();
     final Collection<Currency> sourceCurrencies = matrix.getSourceCurrencies();
     final Collection<Currency> targetCurrencies = matrix.getTargetCurrencies();
-    final Set<ValueSpecification> results = Sets.<ValueSpecification>newHashSetWithExpectedSize(sourceCurrencies.size() * targetCurrencies.size());
+    final Set<ValueSpecification> results = Sets.<ValueSpecification> newHashSetWithExpectedSize(sourceCurrencies.size() * targetCurrencies.size());
     final ValueProperties.Builder properties = createValueProperties();
     for (final Currency sourceCurrency : sourceCurrencies) {
       properties.withoutAny(SOURCE_CURRENCY_PROPERTY).with(SOURCE_CURRENCY_PROPERTY, sourceCurrency.getCode());
@@ -85,7 +85,8 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
         if (!targetCurrency.equals(sourceCurrency)) {
           final CurrencyMatrixValue conversion = matrix.getConversion(sourceCurrency, targetCurrency);
           if (conversion != null) {
-            results.add(new ValueSpecification(valueRequirementName, targetSpec, properties.withoutAny(TARGET_CURRENCY_PROPERTY).with(TARGET_CURRENCY_PROPERTY, targetCurrency.getCode()).get()));
+            results.add(new ValueSpecification(valueRequirementName, targetSpec,
+                properties.withoutAny(TARGET_CURRENCY_PROPERTY).with(TARGET_CURRENCY_PROPERTY, targetCurrency.getCode()).get()));
           }
         }
       }
@@ -94,11 +95,13 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
   }
 
   protected ValueRequirement tagInput(final ValueRequirement requirement, final Currency source, final Currency target) {
-    return new ValueRequirement(requirement.getValueName(), requirement.getTargetReference(), requirement.getConstraints().copy().with(SOURCE_CURRENCY_TAG, source.getCode())
-        .withOptional(SOURCE_CURRENCY_TAG).with(TARGET_CURRENCY_TAG, target.getCode()).withOptional(TARGET_CURRENCY_TAG).get());
+    return new ValueRequirement(requirement.getValueName(), requirement.getTargetReference(),
+        requirement.getConstraints().copy().with(SOURCE_CURRENCY_TAG, source.getCode())
+            .withOptional(SOURCE_CURRENCY_TAG).with(TARGET_CURRENCY_TAG, target.getCode()).withOptional(TARGET_CURRENCY_TAG).get());
   }
 
-  protected abstract boolean getRequirements(FunctionCompilationContext context, ValueRequirement desiredValue, CurrencyMatrix matrix, Set<ValueRequirement> requirements, Currency source,
+  protected abstract boolean getRequirements(FunctionCompilationContext context, ValueRequirement desiredValue, CurrencyMatrix matrix,
+      Set<ValueRequirement> requirements, Currency source,
       Currency target);
 
   @Override
@@ -109,9 +112,8 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
     final Set<ValueRequirement> requirements = new HashSet<>();
     if (getRequirements(context, desiredValue, matrix, requirements, sourceCurrency, targetCurrency)) {
       return requirements;
-    } else {
-      return null;
     }
+    return null;
   }
 
   private static final class DetermineResults implements CurrencyMatrixValueVisitor<Boolean> {
@@ -124,7 +126,7 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
     private Currency _currentSourceCurrency;
     private Currency _currentTargetCurrency;
 
-    public DetermineResults(final CurrencyMatrix matrix) {
+    DetermineResults(final CurrencyMatrix matrix) {
       _matrix = matrix;
       _sourceCurrencies = _matrix.getSourceCurrencies();
       _targetCurrencies = _matrix.getTargetCurrencies();
@@ -199,7 +201,8 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final String valueRequirementName = getValueRequirementName();
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final CurrencyMatrix matrix = (CurrencyMatrix) target.getValue();
@@ -215,7 +218,8 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
       properties.withoutAny(SOURCE_CURRENCY_PROPERTY).with(SOURCE_CURRENCY_PROPERTY, sourceCurrency.getCode());
       for (final Currency targetCurrency : resultBuilder._targetCurrencies) {
         if (resultBuilder.hasInputFor(sourceCurrency, targetCurrency)) {
-          results.add(new ValueSpecification(valueRequirementName, targetSpec, properties.withoutAny(TARGET_CURRENCY_PROPERTY).with(TARGET_CURRENCY_PROPERTY, targetCurrency.getCode()).get()));
+          results.add(new ValueSpecification(valueRequirementName, targetSpec,
+              properties.withoutAny(TARGET_CURRENCY_PROPERTY).with(TARGET_CURRENCY_PROPERTY, targetCurrency.getCode()).get()));
         }
       }
     }
@@ -227,10 +231,12 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
     return true;
   }
 
-  protected abstract Object getRate(CurrencyMatrix matrix, ValueRequirement desiredValue, FunctionExecutionContext executionContext, FunctionInputs inputs, Currency source, Currency target);
+  protected abstract Object getRate(CurrencyMatrix matrix, ValueRequirement desiredValue, FunctionExecutionContext executionContext, FunctionInputs inputs,
+      Currency source, Currency target);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final CurrencyMatrix matrix = (CurrencyMatrix) target.getValue();
     final Set<ComputedValue> result = Sets.newHashSetWithExpectedSize(desiredValues.size());
     for (final ValueRequirement desiredValue : desiredValues) {

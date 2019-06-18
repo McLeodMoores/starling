@@ -15,7 +15,9 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Paymen
 
 /**
  * Gets the forward rates for an annuity given a bundle of yield curves.
+ * @deprecated Deprecated
  */
+@Deprecated
 public final class AnnuityForwardRatesVisitor extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double[]> {
   /** Gets the fixed rates for coupons */
   private static final InstrumentDerivativeVisitor<YieldCurveBundle, Double> COUPON_VISITOR = new CouponForwardRateVisitor();

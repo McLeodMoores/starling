@@ -9,16 +9,14 @@
  */
 package com.opengamma.financial.analytics.model.volatility.surface;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.Collections;
 import java.util.Set;
 
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurface;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
 import com.opengamma.analytics.math.surface.Surface;
 import com.opengamma.core.id.ExternalSchemes;
@@ -39,6 +37,8 @@ import com.opengamma.financial.analytics.model.InstrumentTypeProperties;
 import com.opengamma.financial.analytics.model.InterpolatedDataProperties;
 import com.opengamma.util.CompareUtils;
 import com.opengamma.util.money.Currency;
+
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
  * A function that creates an interpolated volatility surface using a standardised volatility surface function
@@ -86,15 +86,15 @@ public class InterpolatedVolatilitySurfaceFunction extends AbstractFunction.NonC
       throw new OpenGammaRuntimeException("Could not get any data for " + volatilityDataRequirement);
     }
     final Interpolator1D xInterpolator =
-        CombinedInterpolatorExtrapolatorFactory.getInterpolator(xInterpolatorName, leftXExtrapolatorName, rightXExtrapolatorName);
+        NamedInterpolator1dFactory.of(xInterpolatorName, leftXExtrapolatorName, rightXExtrapolatorName);
     final Interpolator1D yInterpolator =
-        CombinedInterpolatorExtrapolatorFactory.getInterpolator(yInterpolatorName, leftYExtrapolatorName, rightYExtrapolatorName);
+        NamedInterpolator1dFactory.of(yInterpolatorName, leftYExtrapolatorName, rightYExtrapolatorName);
     final GridInterpolator2D interpolator = new GridInterpolator2D(xInterpolator, yInterpolator);
     final Surface<Double, Double, Double> surface = InterpolatedDoublesSurface.from(x.toDoubleArray(), y.toDoubleArray(), sigma.toDoubleArray(), interpolator);
     final VolatilitySurface volatilitySurface = new VolatilitySurface(surface);
     final ValueProperties properties =
         getResultProperties(surfaceName, instrumentType, leftXExtrapolatorName, rightXExtrapolatorName, xInterpolatorName, leftYExtrapolatorName,
-        rightYExtrapolatorName, yInterpolatorName);
+            rightYExtrapolatorName, yInterpolatorName);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.INTERPOLATED_VOLATILITY_SURFACE, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, volatilitySurface));
   }

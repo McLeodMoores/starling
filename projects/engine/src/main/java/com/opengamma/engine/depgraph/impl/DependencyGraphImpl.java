@@ -199,12 +199,12 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
   /**
    * Returns all of the nodes from a graph.
    * <p>
-   * This is provided mainly for tests and compatibility with code prior to major changes made to the {@link DependencyGraph} class.
-   * It is unlikely to be efficient in terms of memory or the time taken to construct the collection as the work may be performed
-   * twice; once building a set to ensure that each node is visited only once (see {@link #executionOrderIterator}) and again for
-   * the returned set.
+   * This is provided mainly for tests and compatibility with code prior to major changes made to the {@link DependencyGraph} class. It is unlikely to be
+   * efficient in terms of memory or the time taken to construct the collection as the work may be performed twice; once building a set to ensure that each node
+   * is visited only once (see {@link #nodeIterator}) and again for the returned set.
    *
-   * @param graph the graph to query, not null
+   * @param graph
+   *          the graph to query, not null
    * @return all of the nodes in the graph, not null and not containing null
    */
   public static Collection<DependencyNode> getDependencyNodes(final DependencyGraph graph) {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference;
@@ -11,11 +11,9 @@ import com.opengamma.analytics.math.curve.Curve;
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * Describes a partial differential for a function $V(t,x)$, with the initial
- * $\frac{\partial V}{\partial t} + a(x) \frac{\partial^2 V}{\partial x^2} + b(x) \frac{\partial V}{\partial x} + c(x)V = 0$
- * Note that $a$, $b$ and $c$ are functions of $x$ only so the matrix system of the PDE
- * solver need only be solved once (provided that the boundary conditions are
- * only time independent) 
+ * Describes a partial differential for a function $V(t,x)$, with the initial $\frac{\partial V}{\partial t} + a(x) \frac{\partial^2 V}{\partial x^2} + b(x)
+ * \frac{\partial V}{\partial x} + c(x)V = 0$ Note that $a$, $b$ and $c$ are functions of $x$ only so the matrix system of the PDE solver need only be solved
+ * once (provided that the boundary conditions are only time independent).
  */
 public class TimeIndependentConvectionDiffusionPDEDataBundle {
 

@@ -34,13 +34,12 @@ public class FunctionalSurfaceMultiplicativeShiftFunction implements SurfaceShif
     return FunctionalDoublesSurface.from(shiftedFunction, newName);
   }
 
-
   private static class ShiftedFunction implements Function<Double, Double> {
 
     private final double _percentage;
     private final Function<Double, Double> _f;
 
-    public ShiftedFunction(final double percentage, final Function<Double, Double> f) {
+    ShiftedFunction(final double percentage, final Function<Double, Double> f) {
       this._percentage = percentage;
       this._f = f;
     }
@@ -54,8 +53,10 @@ public class FunctionalSurfaceMultiplicativeShiftFunction implements SurfaceShif
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public FunctionalDoublesSurface evaluate(final FunctionalDoublesSurface surface, final double x, final double y, final double percentage) {
@@ -64,18 +65,23 @@ public class FunctionalSurfaceMultiplicativeShiftFunction implements SurfaceShif
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
-  public FunctionalDoublesSurface evaluate(final FunctionalDoublesSurface surface, final double x, final double y, final double percentage, final String newName) {
+  public FunctionalDoublesSurface evaluate(final FunctionalDoublesSurface surface, final double x, final double y, final double percentage,
+      final String newName) {
     throw new UnsupportedOperationException();
   }
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public FunctionalDoublesSurface evaluate(final FunctionalDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] percentage) {
@@ -84,11 +90,14 @@ public class FunctionalSurfaceMultiplicativeShiftFunction implements SurfaceShif
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
-  public FunctionalDoublesSurface evaluate(final FunctionalDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] percentage, final String newName) {
+  public FunctionalDoublesSurface evaluate(final FunctionalDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] percentage,
+      final String newName) {
     throw new UnsupportedOperationException();
   }
 

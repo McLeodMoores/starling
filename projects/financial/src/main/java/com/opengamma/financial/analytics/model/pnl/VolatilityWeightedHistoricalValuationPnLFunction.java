@@ -23,8 +23,7 @@ import com.opengamma.timeseries.date.DateDoubleTimeSeries;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
- * Calculates a PnL series by performing a full historical valuation over the required period, and weights the returns
- * by volatility.
+ * Calculates a PnL series by performing a full historical valuation over the required period, and weights the returns by volatility.
  */
 public class VolatilityWeightedHistoricalValuationPnLFunction extends HistoricalValuationPnLFunction {
 
@@ -55,12 +54,14 @@ public class VolatilityWeightedHistoricalValuationPnLFunction extends Historical
   }
 
   @Override
-  protected DateDoubleTimeSeries<?> calculatePnlSeries(final LocalDateDoubleTimeSeries priceSeries, final FunctionExecutionContext executionContext, final ValueRequirement desiredValue) {
+  protected DateDoubleTimeSeries<?> calculatePnlSeries(final LocalDateDoubleTimeSeries priceSeries, final FunctionExecutionContext executionContext,
+      final ValueRequirement desiredValue) {
     final double lambda = Double.parseDouble(desiredValue.getConstraint(VolatilityWeightingFunctionUtils.VOLATILITY_WEIGHTING_LAMBDA_PROPERTY));
     final TimeSeriesWeightedVolatilityOperator weightedVolatilityOperator = TimeSeriesWeightedVolatilityOperator.relative(lambda);
     final DateDoubleTimeSeries<?> weightedVolatilitySeries = weightedVolatilityOperator.evaluate(priceSeries);
     LocalDateDoubleTimeSeries weightedPnlSeries = (LocalDateDoubleTimeSeries) RELATIVE_WEIGHTED_DIFFERENCE.evaluate(priceSeries, weightedVolatilitySeries);
-    final LocalDate pnlSeriesStart = DateConstraint.evaluate(executionContext, desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY));
+    final LocalDate pnlSeriesStart = DateConstraint.evaluate(executionContext,
+        desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY));
     if (pnlSeriesStart.isAfter(weightedPnlSeries.getEarliestTime())) {
       weightedPnlSeries = weightedPnlSeries.subSeries(pnlSeriesStart, true, weightedPnlSeries.getLatestTime(), true);
     }

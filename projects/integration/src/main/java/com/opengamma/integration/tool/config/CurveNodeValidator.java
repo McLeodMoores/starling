@@ -58,12 +58,20 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
 
   /**
    * @param curveDate
+   *          the curve date
    * @param configValidationUtils
+   *          the validation utils
    * @param securitySource
+   *          a security source
    * @param validationNode
+   *          the validation node
    * @param curveNodeIdMapper
+   *          the node to identifier mapper
+   * @param configSource
+   *          a configuration source
    */
-  public CurveNodeValidator(final LocalDate curveDate, final ConfigValidationUtils configValidationUtils, final SecuritySource securitySource, final ValidationNode validationNode, final CurveNodeIdMapper curveNodeIdMapper, final ConfigSource configSource) {
+  public CurveNodeValidator(final LocalDate curveDate, final ConfigValidationUtils configValidationUtils, final SecuritySource securitySource,
+      final ValidationNode validationNode, final CurveNodeIdMapper curveNodeIdMapper, final ConfigSource configSource) {
     _curveDate = curveDate;
     _configValidationUtils = configValidationUtils;
     _securitySource = securitySource;
@@ -72,8 +80,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     _configSource = configSource;
   }
 
-
-  ValidationNode createInvalidCurveNodeValidationNode(final Tenor tenor, final Class<? extends CurveNode> curveNodeType, final ValidationNode parentNode, final String message) {
+  ValidationNode createInvalidCurveNodeValidationNode(final Tenor tenor, final Class<? extends CurveNode> curveNodeType, final ValidationNode parentNode,
+      final String message) {
     final ValidationNode validationNode = new ValidationNode();
     validationNode.setName(tenor.toFormattedString());
     validationNode.setType(curveNodeType);
@@ -98,7 +106,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
       try {
         final Security bond = _securitySource.getSingle(bondNodeId.toBundle());
         if (bond == null) {
-          bondNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BondNode.class, _validationNode, "Bond " + bondNodeId + " not found in security master");
+          bondNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BondNode.class, _validationNode,
+              "Bond " + bondNodeId + " not found in security master");
         } else {
           bondNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BondNode.class, _validationNode, null);
         }
@@ -107,7 +116,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
             "Bond " + bondNodeId + " error thrown by security master when resolving, probably invalid ID format");
       }
     } else {
-      bondNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BondNode.class, _validationNode, "Entry missing for this tenor in CurveNodeIdMapper");
+      bondNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BondNode.class, _validationNode,
+          "Entry missing for this tenor in CurveNodeIdMapper");
     }
     return null;
   }
@@ -122,7 +132,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     }
     ValidationNode calendarSwapValidationNode;
     if (calendarNodeId == null) {
-      calendarSwapValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), CalendarSwapNode.class, _validationNode, "Entry missing for this tenor in CurveNodeIdMapper");
+      calendarSwapValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), CalendarSwapNode.class, _validationNode,
+          "Entry missing for this tenor in CurveNodeIdMapper");
     } else {
       calendarSwapValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), CalendarSwapNode.class, _validationNode, null);
     }
@@ -159,7 +170,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     }
     ValidationNode cashNodeValidationNode;
     if (cashNodeId == null) {
-      cashNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), CashNode.class, _validationNode, "No curve node id mapper entry for " + node.getResolvedMaturity());
+      cashNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), CashNode.class, _validationNode,
+          "No curve node id mapper entry for " + node.getResolvedMaturity());
     } else {
       cashNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), CashNode.class, _validationNode, null);
     }
@@ -187,7 +199,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     }
     if (continuouslyCompoundedRateNodeId == null) {
       // the node get's attached to parent inside this call.
-      createInvalidCurveNodeValidationNode(node.getResolvedMaturity(), CashNode.class, _validationNode, "No curve node id mapper entry for " + node.getResolvedMaturity());
+      createInvalidCurveNodeValidationNode(node.getResolvedMaturity(), CashNode.class, _validationNode,
+          "No curve node id mapper entry for " + node.getResolvedMaturity());
     } else {
       // the node get's attached to parent inside this call.
       createInvalidCurveNodeValidationNode(node.getResolvedMaturity(), CashNode.class, _validationNode, null);
@@ -205,7 +218,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     }
     if (id == null) {
       // the node get's attached to parent inside this call.
-      createInvalidCurveNodeValidationNode(node.getResolvedMaturity(), CashNode.class, _validationNode, "No curve node id mapper entry for " + node.getResolvedMaturity());
+      createInvalidCurveNodeValidationNode(node.getResolvedMaturity(), CashNode.class, _validationNode,
+          "No curve node id mapper entry for " + node.getResolvedMaturity());
     } else {
       // the node get's attached to parent inside this call.
       createInvalidCurveNodeValidationNode(node.getResolvedMaturity(), CashNode.class, _validationNode, null);
@@ -223,7 +237,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     }
     if (creditSpreadNodeId == null) {
       // the node get's attached to parent inside this call.
-      createInvalidCurveNodeValidationNode(node.getResolvedMaturity(), CreditSpreadNode.class, _validationNode, "No curve node id mapper entry for " + node.getResolvedMaturity());
+      createInvalidCurveNodeValidationNode(node.getResolvedMaturity(), CreditSpreadNode.class, _validationNode,
+          "No curve node id mapper entry for " + node.getResolvedMaturity());
     } else {
       // the node get's attached to parent inside this call.
       createInvalidCurveNodeValidationNode(node.getResolvedMaturity(), CreditSpreadNode.class, _validationNode, null);
@@ -241,7 +256,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     }
     ValidationNode dsValidationNode;
     if (nodeId == null) {
-      dsValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), DeliverableSwapFutureNode.class, _validationNode, "No curve node id mapper entry for " + node.getStartTenor());
+      dsValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), DeliverableSwapFutureNode.class, _validationNode,
+          "No curve node id mapper entry for " + node.getStartTenor());
     } else {
       dsValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), DeliverableSwapFutureNode.class, _validationNode, null);
     }
@@ -298,7 +314,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     }
     ValidationNode dsValidationNode;
     if (nodeId == null) {
-      dsValidationNode = createInvalidCurveNodeValidationNode(node.getFixingEnd(), FRANode.class, _validationNode, "No curve node id mapper entry for " + node.getFixingEnd());
+      dsValidationNode = createInvalidCurveNodeValidationNode(node.getFixingEnd(), FRANode.class, _validationNode,
+          "No curve node id mapper entry for " + node.getFixingEnd());
     } else {
       dsValidationNode = createInvalidCurveNodeValidationNode(node.getFixingEnd(), FRANode.class, _validationNode, null);
     }
@@ -328,7 +345,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     }
     ValidationNode fxValidationNode;
     if (nodeId == null) {
-      fxValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), FXForwardNode.class, _validationNode, "No curve node id mapper entry for " + node.getMaturityTenor());
+      fxValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), FXForwardNode.class, _validationNode,
+          "No curve node id mapper entry for " + node.getMaturityTenor());
     } else {
       fxValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), FXForwardNode.class, _validationNode, null);
     }
@@ -356,7 +374,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     }
     ValidationNode dsValidationNode;
     if (nodeId == null) {
-      dsValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), RollDateFRANode.class, _validationNode, "No curve node id mapper entry for " + node.getStartTenor());
+      dsValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), RollDateFRANode.class, _validationNode,
+          "No curve node id mapper entry for " + node.getStartTenor());
     } else {
       dsValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), RollDateFRANode.class, _validationNode, null);
     }
@@ -384,7 +403,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     }
     ValidationNode dsValidationNode;
     if (nodeId == null) {
-      dsValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), RollDateSwapNode.class, _validationNode, "No curve node id mapper entry for " + node.getStartTenor());
+      dsValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), RollDateSwapNode.class, _validationNode,
+          "No curve node id mapper entry for " + node.getStartTenor());
     } else {
       dsValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), RollDateSwapNode.class, _validationNode, null);
     }
@@ -412,7 +432,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     }
     ValidationNode dsValidationNode;
     if (nodeId == null) {
-      dsValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), RateFutureNode.class, _validationNode, "No curve node id mapper entry for " + node.getStartTenor());
+      dsValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), RateFutureNode.class, _validationNode,
+          "No curve node id mapper entry for " + node.getStartTenor());
     } else {
       dsValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), RateFutureNode.class, _validationNode, null);
     }
@@ -440,7 +461,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     }
     ValidationNode sValidationNode;
     if (nodeId == null) {
-      sValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), SwapNode.class, _validationNode, "No curve node id mapper entry for " + node.getMaturityTenor());
+      sValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), SwapNode.class, _validationNode,
+          "No curve node id mapper entry for " + node.getMaturityTenor());
     } else {
       sValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), SwapNode.class, _validationNode, null);
     }
@@ -479,7 +501,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     }
     ValidationNode sValidationNode;
     if (nodeId == null) {
-      sValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), ThreeLegBasisSwapNode.class, _validationNode, "No curve node id mapper entry for " + node.getMaturityTenor());
+      sValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), ThreeLegBasisSwapNode.class, _validationNode,
+          "No curve node id mapper entry for " + node.getMaturityTenor());
     } else {
       sValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), ThreeLegBasisSwapNode.class, _validationNode, null);
     }
@@ -529,7 +552,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     }
     ValidationNode sValidationNode;
     if (nodeId == null) {
-      sValidationNode = createInvalidCurveNodeValidationNode(node.getTenor(), ZeroCouponInflationNode.class, _validationNode, "No curve node id mapper entry for " + node.getTenor());
+      sValidationNode = createInvalidCurveNodeValidationNode(node.getTenor(), ZeroCouponInflationNode.class, _validationNode,
+          "No curve node id mapper entry for " + node.getTenor());
     } else {
       sValidationNode = createInvalidCurveNodeValidationNode(node.getTenor(), ZeroCouponInflationNode.class, _validationNode, null);
     }
@@ -558,7 +582,6 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     return null;
   }
 
-
   @Override
   public Void visitBillNode(final BillNode node) {
     ExternalId billNodeId;
@@ -572,7 +595,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
       try {
         final Security bill = _securitySource.getSingle(billNodeId.toBundle());
         if (bill == null) {
-          billNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BillNode.class, _validationNode, "Bill " + billNodeId + " not found in security master");
+          billNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BillNode.class, _validationNode,
+              "Bill " + billNodeId + " not found in security master");
         } else {
           billNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BillNode.class, _validationNode, null);
         }
@@ -581,7 +605,8 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
             "Bond " + billNodeId + " error thrown by security master when resolving, probably invalid ID format");
       }
     } else {
-      billNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BillNode.class, _validationNode, "Entry missing for this tenor in CurveNodeIdMapper");
+      billNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BillNode.class, _validationNode,
+          "Entry missing for this tenor in CurveNodeIdMapper");
     }
     return null;
   }

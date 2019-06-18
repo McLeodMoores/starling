@@ -37,8 +37,10 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
-public class StandardVanillaParSpreadCDSFunction extends StandardVanillaCDSFunction { //AbstractFunction.NonCompiledInvoker {
+@Deprecated
+public class StandardVanillaParSpreadCDSFunction extends StandardVanillaCDSFunction { // AbstractFunction.NonCompiledInvoker {
 
   public StandardVanillaParSpreadCDSFunction() {
     super(ValueRequirementNames.PAR_SPREAD);
@@ -46,25 +48,25 @@ public class StandardVanillaParSpreadCDSFunction extends StandardVanillaCDSFunct
 
   @Override
   protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition,
-                                                final ISDACompliantYieldCurve yieldCurve,
-                                                final ZonedDateTime[] times,
-                                                final double[] marketSpreads,
-                                                final ZonedDateTime valuationTime,
-                                                final ComputationTarget target,
-                                                final ValueProperties properties,
-                                                final FunctionInputs inputs,
-                                                final ISDACompliantCreditCurve hazardCurve,
-                                                final CDSAnalytic analytic,
-                                                final Tenor[] tenors) {
+      final ISDACompliantYieldCurve yieldCurve,
+      final ZonedDateTime[] times,
+      final double[] marketSpreads,
+      final ZonedDateTime valuationTime,
+      final ComputationTarget target,
+      final ValueProperties properties,
+      final FunctionInputs inputs,
+      final ISDACompliantCreditCurve hazardCurve,
+      final CDSAnalytic analytic,
+      final Tenor[] tenors) {
     final double parSpread = getParSpread(yieldCurve, hazardCurve, analytic);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.PAR_SPREAD, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, parSpread));
   }
 
   public static double getParSpread(final ISDACompliantYieldCurve yieldCurve,
-                                    final ISDACompliantCreditCurve hazardCurve,
-                                    final CDSAnalytic analytic) {
-    final double par = new MarketQuoteConverter().parSpreads(new CDSAnalytic[]{analytic}, yieldCurve, hazardCurve)[0];
+      final ISDACompliantCreditCurve hazardCurve,
+      final CDSAnalytic analytic) {
+    final double par = new MarketQuoteConverter().parSpreads(new CDSAnalytic[] { analytic }, yieldCurve, hazardCurve)[0];
     return par * 10000; // BPS
   }
 
@@ -80,8 +82,8 @@ public class StandardVanillaParSpreadCDSFunction extends StandardVanillaCDSFunct
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context,
-                                               final ComputationTarget target,
-                                               final ValueRequirement desiredValue) {
+      final ComputationTarget target,
+      final ValueRequirement desiredValue) {
     final Set<ValueRequirement> requirements = super.getRequirements(context, target, desiredValue);
     if (requirements == null) {
       return null;
@@ -91,7 +93,7 @@ public class StandardVanillaParSpreadCDSFunction extends StandardVanillaCDSFunct
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final String spreadCurveName = security.accept(new CreditSecurityToIdentifierVisitor(OpenGammaCompilationContext.getSecuritySource(
         context))).getUniqueId().getValue();
-    //TODO shouldn't need all of the yield curve properties
+    // TODO shouldn't need all of the yield curve properties
     final String yieldCurveName = desiredValue.getConstraint(PROPERTY_YIELD_CURVE);
     final String yieldCurveCalculationConfig = desiredValue.getConstraint(PROPERTY_YIELD_CURVE_CALCULATION_CONFIG);
     final String yieldCurveCalculationMethod = desiredValue.getConstraint(PROPERTY_YIELD_CURVE_CALCULATION_METHOD);
@@ -106,7 +108,8 @@ public class StandardVanillaParSpreadCDSFunction extends StandardVanillaCDSFunct
     if (creditSpreadCurveShifts != null) {
       hazardRateCurveProperties.with(PROPERTY_SPREAD_CURVE_SHIFT, creditSpreadCurveShifts).with(PROPERTY_SPREAD_CURVE_SHIFT_TYPE, creditSpreadCurveShiftTypes);
     }
-    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(), hazardRateCurveProperties.get());
+    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(),
+        hazardRateCurveProperties.get());
     requirements.add(hazardRateCurveRequirement);
     return requirements;
   }

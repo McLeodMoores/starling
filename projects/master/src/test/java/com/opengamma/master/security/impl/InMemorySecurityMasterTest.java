@@ -44,139 +44,184 @@ public class InMemorySecurityMasterTest {
   private static final ManageableSecurity SEC1 = new ManageableSecurity(UniqueId.of("Test", "sec1"), "Test 1", "TYPE1", BUNDLE1);
   private static final ManageableSecurity SEC2 = new ManageableSecurity(UniqueId.of("Test", "sec2"), "Test 2", "TYPE2", BUNDLE2);
 
-  private InMemorySecurityMaster testEmpty;
-  private InMemorySecurityMaster testPopulated;
-  private SecurityDocument doc1;
-  private SecurityDocument doc2;
+  private InMemorySecurityMaster _testEmpty;
+  private InMemorySecurityMaster _testPopulated;
+  private SecurityDocument _doc1;
+  private SecurityDocument _doc2;
 
+  /**
+   * Sets up the master before each method.
+   */
   @BeforeMethod
   public void setUp() {
-    testEmpty = new InMemorySecurityMaster(new ObjectIdSupplier("Test"));
-    testPopulated = new InMemorySecurityMaster(new ObjectIdSupplier("Test"));
-    doc1 = new SecurityDocument();
-    doc1.setSecurity(SEC1);
-    doc1 = testPopulated.add(doc1);
-    doc2 = new SecurityDocument();
-    doc2.setSecurity(SEC2);
-    doc2 = testPopulated.add(doc2);
+    _testEmpty = new InMemorySecurityMaster(new ObjectIdSupplier("Test"));
+    _testPopulated = new InMemorySecurityMaster(new ObjectIdSupplier("Test"));
+    _doc1 = new SecurityDocument();
+    _doc1.setSecurity(SEC1);
+    _doc1 = _testPopulated.add(_doc1);
+    _doc2 = new SecurityDocument();
+    _doc2.setSecurity(SEC2);
+    _doc2 = _testPopulated.add(_doc2);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * Tests that the id supplier cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_nullSupplier() {
+  public void testConstructorNullSupplier() {
     new InMemorySecurityMaster((Supplier<ObjectId>) null);
   }
 
-  public void test_defaultSupplier() {
-    InMemorySecurityMaster master = new InMemorySecurityMaster();
-    SecurityDocument doc = new SecurityDocument();
+  /**
+   * Tests the default id supplier.
+   */
+  public void testDefaultSupplier() {
+    final InMemorySecurityMaster master = new InMemorySecurityMaster();
+    final SecurityDocument doc = new SecurityDocument();
     doc.setSecurity(SEC1);
-    SecurityDocument added = master.add(doc);
+    final SecurityDocument added = master.add(doc);
     assertEquals("MemSec", added.getUniqueId().getScheme());
   }
 
-  public void test_alternateSupplier() {
-    InMemorySecurityMaster master = new InMemorySecurityMaster(new ObjectIdSupplier("Hello"));
-    SecurityDocument doc = new SecurityDocument();
+  /**
+   * Tests that an alternate supplier is used if available.
+   */
+  public void testAlternateSupplier() {
+    final InMemorySecurityMaster master = new InMemorySecurityMaster(new ObjectIdSupplier("Hello"));
+    final SecurityDocument doc = new SecurityDocument();
     doc.setSecurity(SEC1);
-    SecurityDocument added = master.add(doc);
+    final SecurityDocument added = master.add(doc);
     assertEquals("Hello", added.getUniqueId().getScheme());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_emptyMaster() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
-    SecuritySearchResult result = testEmpty.search(request);
+  // -------------------------------------------------------------------------
+  /**
+   * Tests the result of a search on an empty master.
+   */
+  public void testSearchEmptyMaster() {
+    final SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchResult result = _testEmpty.search(request);
     assertEquals(0, result.getPaging().getTotalItems());
     assertEquals(0, result.getDocuments().size());
   }
 
-  public void test_search_populatedMaster_all() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
-    SecuritySearchResult result = testPopulated.search(request);
+  /**
+   * Tests the result of a search on a populated master.
+   */
+  public void testSearchPopulatedMasterAll() {
+    final SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchResult result = _testPopulated.search(request);
     assertEquals(2, result.getPaging().getTotalItems());
-    List<SecurityDocument> docs = result.getDocuments();
+    final List<SecurityDocument> docs = result.getDocuments();
     assertEquals(2, docs.size());
-    assertEquals(true, docs.contains(doc1));
-    assertEquals(true, docs.contains(doc2));
+    assertEquals(true, docs.contains(_doc1));
+    assertEquals(true, docs.contains(_doc2));
   }
 
-  public void test_search_populatedMaster_filterByBundle() {
-    SecuritySearchRequest request = new SecuritySearchRequest(BUNDLE1);
-    SecuritySearchResult result = testPopulated.search(request);
+  /**
+   * Tests the result of a search that is filtered by an external id bundle.
+   */
+  public void testSearchPopulatedMasterFilterByBundle() {
+    final SecuritySearchRequest request = new SecuritySearchRequest(BUNDLE1);
+    final SecuritySearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
     assertEquals(1, result.getDocuments().size());
-    assertEquals(true, result.getDocuments().contains(doc1));
+    assertEquals(true, result.getDocuments().contains(_doc1));
   }
 
-  public void test_search_populatedMaster_filterByBundle_both() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+  /**
+   * Tests the result of a search that is filtered by an external id bundle.
+   */
+  public void testSearchPopulatedMasterFilterByBundleBoth() {
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalIds(BUNDLE1);
     request.addExternalIds(BUNDLE2);
-    SecuritySearchResult result = testPopulated.search(request);
+    final SecuritySearchResult result = _testPopulated.search(request);
     assertEquals(2, result.getPaging().getTotalItems());
-    List<SecurityDocument> docs = result.getDocuments();
+    final List<SecurityDocument> docs = result.getDocuments();
     assertEquals(2, docs.size());
-    assertEquals(true, docs.contains(doc1));
-    assertEquals(true, docs.contains(doc2));
+    assertEquals(true, docs.contains(_doc1));
+    assertEquals(true, docs.contains(_doc2));
   }
 
-  public void test_search_populatedMaster_filterByName() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+  /**
+   * Tests the result of a search that is filtered by name.
+   */
+  public void testSearchPopulatedMasterFilterByName() {
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setName("*est 2");
-    SecuritySearchResult result = testPopulated.search(request);
+    final SecuritySearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    List<SecurityDocument> docs = result.getDocuments();
+    final List<SecurityDocument> docs = result.getDocuments();
     assertEquals(1, docs.size());
-    assertEquals(true, docs.contains(doc2));
+    assertEquals(true, docs.contains(_doc2));
   }
 
-  public void test_search_populatedMaster_filterByType() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+  /**
+   * Tests the result of a search that is filtered by type.
+   */
+  public void testSearchPopulatedMasterFilterByType() {
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setSecurityType("TYPE2");
-    SecuritySearchResult result = testPopulated.search(request);
+    final SecuritySearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    List<SecurityDocument> docs = result.getDocuments();
+    final List<SecurityDocument> docs = result.getDocuments();
     assertEquals(1, docs.size());
-    assertEquals(true, docs.contains(doc2));
+    assertEquals(true, docs.contains(_doc2));
   }
-  
-  public void test_search_popluatedMaster_filterByExternalIdValue() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+
+  /**
+   * Tests the result of a search that is filtered by an external id value.
+   */
+  public void testSearchPopluatedMasterFilterByExternalIdValue() {
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdValue("B");
-    SecuritySearchResult result = testPopulated.search(request);
+    final SecuritySearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    List<SecurityDocument> docs = result.getDocuments();
+    final List<SecurityDocument> docs = result.getDocuments();
     assertEquals(1, docs.size());
-    assertEquals(true, docs.contains(doc1));
+    assertEquals(true, docs.contains(_doc1));
   }
-  
-  public void test_search_popluatedMaster_filterByExternalIdValue_case() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+
+  /**
+   * Tests the result of a search that is filtered by an external id bundle.
+   */
+  public void testSearchPopluatedMasterFilterByExternalIdValueCase() {
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdValue("b");
-    SecuritySearchResult result = testPopulated.search(request);
+    final SecuritySearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    List<SecurityDocument> docs = result.getDocuments();
+    final List<SecurityDocument> docs = result.getDocuments();
     assertEquals(1, docs.size());
-    assertEquals(true, docs.contains(doc1));
+    assertEquals(true, docs.contains(_doc1));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * Tests the exception when no securities can be found.
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_get_emptyMaster() {
-    assertNull(testEmpty.get(OTHER_UID));
+  public void testGetEmptyMaster() {
+    assertNull(_testEmpty.get(OTHER_UID));
   }
 
-  public void test_get_populatedMaster() {
-    assertSame(doc1, testPopulated.get(doc1.getUniqueId()));
-    assertSame(doc2, testPopulated.get(doc2.getUniqueId()));
+  /**
+   * Tests getting securities from a populated master.
+   */
+  public void testGetPopulatedMaster() {
+    assertSame(_doc1, _testPopulated.get(_doc1.getUniqueId()));
+    assertSame(_doc2, _testPopulated.get(_doc2.getUniqueId()));
   }
 
-  //-------------------------------------------------------------------------
-  public void test_add_emptyMaster() {
-    SecurityDocument doc = new SecurityDocument();
+  // -------------------------------------------------------------------------
+  /**
+   * Tests adding securities to a populated master.
+   */
+  public void testAddEmptyMaster() {
+    final SecurityDocument doc = new SecurityDocument();
     doc.setSecurity(SEC1);
-    SecurityDocument added = testEmpty.add(doc);
+    final SecurityDocument added = _testEmpty.add(doc);
     assertNotNull(added.getVersionFromInstant());
     assertNotNull(added.getCorrectionFromInstant());
     assertEquals(added.getVersionFromInstant(), added.getCorrectionFromInstant());
@@ -184,39 +229,51 @@ public class InMemorySecurityMasterTest {
     assertSame(SEC1, added.getSecurity());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * Tests the exception when trying to update a security that is not present in the master.
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_update_emptyMaster() {
-    SecurityDocument doc = new SecurityDocument();
+  public void testUpdateEmptyMaster() {
+    final SecurityDocument doc = new SecurityDocument();
     doc.setSecurity(SEC1);
     doc.setUniqueId(OTHER_UID);
-    testEmpty.update(doc);
+    _testEmpty.update(doc);
   }
 
-  public void test_update_populatedMaster() {
-    SecurityDocument doc = new SecurityDocument();
+  /**
+   * Tests updating a security.
+   */
+  public void testUpdatePopulatedMaster() {
+    final SecurityDocument doc = new SecurityDocument();
     doc.setSecurity(SEC1);
-    doc.setUniqueId(doc1.getUniqueId());
-    SecurityDocument updated = testPopulated.update(doc);
-    assertEquals(doc1.getUniqueId(), updated.getUniqueId());
-    assertNotNull(doc1.getVersionFromInstant());
+    doc.setUniqueId(_doc1.getUniqueId());
+    final SecurityDocument updated = _testPopulated.update(doc);
+    assertEquals(_doc1.getUniqueId(), updated.getUniqueId());
+    assertNotNull(_doc1.getVersionFromInstant());
     assertNotNull(updated.getVersionFromInstant());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * Tests the exception when trying to remove using an id that does not have a corresponding security.
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_remove_emptyMaster() {
-    testEmpty.remove(OTHER_UID);
+  public void testRemoveEmptyMaster() {
+    _testEmpty.remove(OTHER_UID);
   }
 
-  public void test_remove_populatedMaster() {
-    testPopulated.remove(doc1.getUniqueId());
-    SecuritySearchRequest request = new SecuritySearchRequest();
-    SecuritySearchResult result = testPopulated.search(request);
+  /**
+   * Tests the removal of a security.
+   */
+  public void testRemovePopulatedMaster() {
+    _testPopulated.remove(_doc1.getUniqueId());
+    final SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    List<SecurityDocument> docs = result.getDocuments();
+    final List<SecurityDocument> docs = result.getDocuments();
     assertEquals(1, docs.size());
-    assertEquals(true, docs.contains(doc2));
+    assertEquals(true, docs.contains(_doc2));
   }
 
 }

@@ -9,10 +9,10 @@ import com.opengamma.financial.analytics.fxforwardcurve.FXForwardCurveSpecificat
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Custon JSON builder to convert FXForwardCurveSpecification to a JSON object and back again
+ * Custon JSON builder to convert FXForwardCurveSpecification to a JSON object and back again.
  */
 public final class FXForwardCurveSpecificationJSONBuilder extends AbstractJSONBuilder<FXForwardCurveSpecification> {
-  /** Singleton */
+  /** Singleton. */
   public static final FXForwardCurveSpecificationJSONBuilder INSTANCE = new FXForwardCurveSpecificationJSONBuilder();
   /** JSON template */
   private static final String TEMPLATE = createTemplate();

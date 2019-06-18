@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -11,7 +11,7 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.surface.Surface;
 
 /**
- * for a model of forward rates that follow the SDE df = a(f,t)dt + b(f,t)dw this describes the drift function (of forward, f, and time, t)
+ * for a model of forward rates that follow the SDE df = a(f,t)dt + b(f,t)dw this describes the drift function (of forward, f, and time, t).
  */
 public class DriftSurface {
   private final Surface<Double, Double, Double> _surface;

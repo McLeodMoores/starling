@@ -47,7 +47,9 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXDigitalCallSpreadBlackPV01Function extends FXDigitalCallSpreadBlackSingleValuedFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(FXDigitalCallSpreadBlackPV01Function.class);
   private static final PV01ForexCalculator CALCULATOR = PV01ForexCalculator.getInstance();
@@ -105,7 +107,7 @@ public class FXDigitalCallSpreadBlackPV01Function extends FXDigitalCallSpreadBla
     final String putCurveName = Iterables.getOnlyElement(constraints.getValues(PUT_CURVE));
     final String curveName = Iterables.getOnlyElement(curveNames);
     if (!(curveName.equals(putCurveName) || curveName.equals(callCurveName))) {
-      LOGGER.info("Curve name {} did not match either put curve name {} or call curve name {}", new Object[] {curveName, putCurveName, callCurveName });
+      LOGGER.info("Curve name {} did not match either put curve name {} or call curve name {}", new Object[] { curveName, putCurveName, callCurveName });
       return null;
     }
     final String callCurveCalculationConfigName = Iterables.getOnlyElement(constraints.getValues(CALL_CURVE_CALC_CONFIG));
@@ -180,8 +182,9 @@ public class FXDigitalCallSpreadBlackPV01Function extends FXDigitalCallSpreadBla
       LOGGER.error("Could not get base/quote pair for currency pair (" + putCurrency + ", " + callCurrency + ")");
       return null;
     }
-    final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementName(), target.toSpecification(), getResultProperties(target, putCurveName, putCurveCalculationConfig,
-        callCurveName, callCurveCalculationConfig, curveCurrency, baseQuotePair, optionalProperties.get()).get());
+    final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementName(), target.toSpecification(),
+        getResultProperties(target, putCurveName, putCurveCalculationConfig,
+            callCurveName, callCurveCalculationConfig, curveCurrency, baseQuotePair, optionalProperties.get()).get());
     return Collections.singleton(resultSpec);
   }
 
@@ -192,16 +195,18 @@ public class FXDigitalCallSpreadBlackPV01Function extends FXDigitalCallSpreadBla
   }
 
   @Override
-  protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final String putCurve, final String putCurveCalculationConfig, final String callCurve,
+  protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final String putCurve, final String putCurveCalculationConfig,
+      final String callCurve,
       final String callCurveCalculationConfig, final CurrencyPair baseQuotePair, final ValueProperties optionalProperties) {
     throw new UnsupportedOperationException();
   }
 
-  protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final String putCurve, final String putCurveCalculationConfig, final String callCurve,
+  protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final String putCurve, final String putCurveCalculationConfig,
+      final String callCurve,
       final String callCurveCalculationConfig, final String currency, final CurrencyPair baseQuotePair, final ValueProperties optionalProperties) {
-    final ValueProperties.Builder properties = super
-        .getResultProperties(target, putCurve, putCurveCalculationConfig, callCurve, callCurveCalculationConfig, baseQuotePair, optionalProperties).withoutAny(ValuePropertyNames.CURRENCY)
-        .with(ValuePropertyNames.CURRENCY, currency).withAny(ValuePropertyNames.CURVE_CURRENCY).withAny(ValuePropertyNames.CURVE);
+    final ValueProperties.Builder properties = super.getResultProperties(target, putCurve, putCurveCalculationConfig, callCurve, callCurveCalculationConfig,
+        baseQuotePair, optionalProperties).withoutAny(ValuePropertyNames.CURRENCY)
+            .with(ValuePropertyNames.CURRENCY, currency).withAny(ValuePropertyNames.CURVE_CURRENCY).withAny(ValuePropertyNames.CURVE);
     return properties;
   }
 

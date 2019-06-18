@@ -26,8 +26,8 @@ import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesFunction
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Produces a value in terms of a {@link ValuePropertyNames#SAMPLING_PERIOD} from a value in terms of {@link HistoricalTimeSeriesFunctionUtils#START_DATE_PROPERTY} and
- * {@link HistoricalTimeSeriesFunctionUtils#END_DATE_PROPERTY}.
+ * Produces a value in terms of a {@link ValuePropertyNames#SAMPLING_PERIOD} from a value in terms of
+ * {@link HistoricalTimeSeriesFunctionUtils#START_DATE_PROPERTY} and {@link HistoricalTimeSeriesFunctionUtils#END_DATE_PROPERTY}.
  */
 public class PnLPeriodTranslationFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -66,7 +66,8 @@ public class PnLPeriodTranslationFunction extends AbstractFunction.NonCompiledIn
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Map.Entry<ValueSpecification, ValueRequirement> input = Iterables.getOnlyElement(inputs.entrySet());
     final String samplingPeriod = input.getValue().getConstraint(ValuePropertyNames.SAMPLING_PERIOD);
     final ValueProperties outputProperties = input.getKey().getProperties().copy()
@@ -78,7 +79,8 @@ public class PnLPeriodTranslationFunction extends AbstractFunction.NonCompiledIn
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final Object result = inputs.getValue(_valueRequirementName);
     return ImmutableSet.of(new ComputedValue(new ValueSpecification(_valueRequirementName, target.toSpecification(), desiredValue.getConstraints()), result));

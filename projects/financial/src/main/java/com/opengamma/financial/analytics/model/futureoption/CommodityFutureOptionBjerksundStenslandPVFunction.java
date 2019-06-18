@@ -29,7 +29,7 @@ import com.opengamma.financial.security.option.CommodityFutureOptionSecurity;
 public class CommodityFutureOptionBjerksundStenslandPVFunction extends CommodityFutureOptionBjerksundStenslandFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public CommodityFutureOptionBjerksundStenslandPVFunction() {
     super(ValueRequirementNames.PRESENT_VALUE);

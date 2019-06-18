@@ -31,9 +31,13 @@ import com.opengamma.analytics.financial.provider.description.MulticurveProvider
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.MonotonicLogNaturalCubicSplineInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.analytics.math.interpolation.factory.QuadraticLeftExtrapolator1dAdapter;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
@@ -50,11 +54,11 @@ public class DayPeriodPreCalculatedDiscountCurveTest {
   // note the time periods passed in must be a whole number divided by 365.25, otherwise the pre calculated factors
   // will not line up
   private static double[] x = new double[] {0 / DateUtils.DAYS_PER_YEAR, 1 / DateUtils.DAYS_PER_YEAR,
-    2 / DateUtils.DAYS_PER_YEAR, 100 / DateUtils.DAYS_PER_YEAR, 293 / DateUtils.DAYS_PER_YEAR,
-    309 / DateUtils.DAYS_PER_YEAR, 428 / DateUtils.DAYS_PER_YEAR, 567 / DateUtils.DAYS_PER_YEAR,
-    5634 / DateUtils.DAYS_PER_YEAR };
+      2 / DateUtils.DAYS_PER_YEAR, 100 / DateUtils.DAYS_PER_YEAR, 293 / DateUtils.DAYS_PER_YEAR,
+      309 / DateUtils.DAYS_PER_YEAR, 428 / DateUtils.DAYS_PER_YEAR, 567 / DateUtils.DAYS_PER_YEAR,
+      5634 / DateUtils.DAYS_PER_YEAR };
   private static double[] y = new double[] {1.0, 0.75, 0.5, 0.25, 0.15, 0.12, 0.10, 0.9, 0.85 };
-  private static InterpolatedDoublesCurve DOUBLES_CURVE = InterpolatedDoublesCurve.from(x, y, Interpolator1DFactory.LINEAR_INSTANCE);
+  private static final InterpolatedDoublesCurve DOUBLES_CURVE = InterpolatedDoublesCurve.from(x, y, new LinearInterpolator1dAdapter());
   private static final DiscountCurve EXISTING_CURVE = DiscountCurve.from(DOUBLES_CURVE);
 
   @Test(groups = TestGroup.UNIT)
@@ -98,8 +102,8 @@ public class DayPeriodPreCalculatedDiscountCurveTest {
   private static final Annuity<? extends Payment> ANNUITY_IBOR = ANNUITY_IBOR_DEFINITION.toDerivative(REFERENCE_DATE);
   private static final Annuity<? extends Payment> ANNUITY_FIXED = ANNUITY_FIXED_DEFINITION.toDerivative(REFERENCE_DATE);
   private static final Swap<? extends Payment, ? extends Payment> SWAP = SWAP_DEFINITION.toDerivative(REFERENCE_DATE);
-  private static final Interpolator1D LINEAR_FLAT = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D LINEAR_FLAT = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
   private static final double[] EUR_DSC_TIME = new double[] {0.0, 182 / 365.25, 365 / 365.25, 731 / 365.25, 1826 / 365.25, 3652 / 365.25 };
 
   private static final double[] EUR_DSC_DISCOUNT_FACTOR = new double[] {1.0, 0.99, .98, .97, 1.0, .99 };
@@ -149,29 +153,30 @@ public class DayPeriodPreCalculatedDiscountCurveTest {
 
   @Test
   /**
-   * 
+   *
    */
   public void testPreCalculatedVsOutput() {
     final String preiInterpolatedCurveName = "preiInterpolated Discount curve";
-    final Interpolator1D logNaturalinterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LOG_NATURAL_CUBIC_MONOTONE,
-        Interpolator1DFactory.QUADRATIC_LEFT_EXTRAPOLATOR,
-        Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+    final Interpolator1D logNaturalinterpolator = NamedInterpolator1dFactory.of(
+        MonotonicLogNaturalCubicSplineInterpolator1dAdapter.NAME,
+        QuadraticLeftExtrapolator1dAdapter.NAME,
+        LinearExtrapolator1dAdapter.NAME);
     final double[] dscCurveTime = new double[] {0.0, 1 / 365.25, 2 / 365.25, 3 / 365.25, 91 / 365.25, 183 / 365.25, 274 / 365.25, 365 / 365.25, 457 / 365.25, 548 / 365.25, 639 / 365.25, 731 / 365.25,
-      1096 / 365.25, 1461 / 365.25, 1826 / 365.25, 2192 / 365.25, 2557 / 365.25, 2922 / 365.25, 3287 / 365.25, 3653 / 365.25, 4383 / 365.25, 5479 / 365.25, 7305 / 365.25, 9131 / 365.25,
-      10958 / 365.25, 14610 / 365.25, 18263 / 365.25 };
+        1096 / 365.25, 1461 / 365.25, 1826 / 365.25, 2192 / 365.25, 2557 / 365.25, 2922 / 365.25, 3287 / 365.25, 3653 / 365.25, 4383 / 365.25, 5479 / 365.25, 7305 / 365.25, 9131 / 365.25,
+        10958 / 365.25, 14610 / 365.25, 18263 / 365.25 };
 
     final double[] dscCurveDiscountFactor = new double[] {1.0, 0.999995414, 0.999990827, 0.999986241, 0.999583194, 0.999167209, 0.998770249, 0.998379852, 0.997966181, 0.997459857, 0.996773166,
-      0.995843348, 0.989078497, 0.976557279, 0.959377269, 0.938363477, 0.91453858, 0.888747447, 0.861693639, 0.83391463, 0.778517911, 0.700537471, 0.596392269, 0.516411342, 0.451196242, 0.3436152,
-      0.259911234 };
+        0.995843348, 0.989078497, 0.976557279, 0.959377269, 0.938363477, 0.91453858, 0.888747447, 0.861693639, 0.83391463, 0.778517911, 0.700537471, 0.596392269, 0.516411342, 0.451196242, 0.3436152,
+        0.259911234 };
 
     final DayPeriodPreCalculatedDiscountCurve periodPreCalculatedCurve = new DayPeriodPreCalculatedDiscountCurve("test", new InterpolatedDoublesCurve(dscCurveTime, dscCurveDiscountFactor,
         logNaturalinterpolator, true, preiInterpolatedCurveName), 365.25);
     periodPreCalculatedCurve.preCalculateDiscountFactors(50);
     final double[] outputTime = new double[] {0.0, 1 / 365.25, 2 / 365.25, 3 / 365.25, 4 / 365.25, 7 / 365.25, 8 / 365.25, 9 / 365.25, 17 / 365.25, 77 / 365.25, 91 / 365.25, 140 / 365.25,
-      183 / 365.25, 219 / 365.25, 274 / 365.25, 301 / 365.25, 365 / 365.25, 672 / 365.25, 1001 / 365.25, 2034 / 365.25, 9879 / 365.25, 13374 / 365.25, 16180 / 365.25 };
+        183 / 365.25, 219 / 365.25, 274 / 365.25, 301 / 365.25, 365 / 365.25, 672 / 365.25, 1001 / 365.25, 2034 / 365.25, 9879 / 365.25, 13374 / 365.25, 16180 / 365.25 };
 
     final double[] outputDiscountFactor = new double[] {1.0, 0.999995414, 0.999990827, 0.999986241, 0.999981654, 0.999967895, 0.999963309, 0.999958723, 0.999922035, 0.999647188, 0.999583194,
-      0.999360197, 0.999167209, 0.999008575, 0.998770249, 0.998654304, 0.998379852, 0.996469188, 0.991376737, 0.947845026, 0.488392208, 0.377151958, 0.304915694 };
+        0.999360197, 0.999167209, 0.999008575, 0.998770249, 0.998654304, 0.998379852, 0.996469188, 0.991376737, 0.947845026, 0.488392208, 0.377151958, 0.304915694 };
     for (int i = 0; i < outputDiscountFactor.length; i++) {
       assertEquals("DayPeriodPreCalculatedDiscountCurve: discount factor value" + outputTime[i] * 365.25, outputDiscountFactor[i], periodPreCalculatedCurve.getDiscountFactor(outputTime[i]),
           1.0E-6);
@@ -181,16 +186,17 @@ public class DayPeriodPreCalculatedDiscountCurveTest {
   public void testPreCalculatedVsOriginalCurve() {
     final String curveName = "Discount curve";
     final String preiInterpolatedCurveName = "preiInterpolated Discount curve";
-    final Interpolator1D logNaturalinterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LOG_NATURAL_CUBIC_MONOTONE,
-        Interpolator1DFactory.QUADRATIC_LEFT_EXTRAPOLATOR,
-        Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+    final Interpolator1D logNaturalinterpolator = NamedInterpolator1dFactory.of(
+        MonotonicLogNaturalCubicSplineInterpolator1dAdapter.NAME,
+        QuadraticLeftExtrapolator1dAdapter.NAME,
+        LinearExtrapolator1dAdapter.NAME);
     final double[] dscCurveTime = new double[] {0.0, 1 / 365.25, 2 / 365.25, 3 / 365.25, 91 / 365.25, 183 / 365.25, 274 / 365.25, 365 / 365.25, 457 / 365.25, 548 / 365.25, 639 / 365.25, 731 / 365.25,
-      1096 / 365.25, 1461 / 365.25, 1826 / 365.25, 2192 / 365.25, 2557 / 365.25, 2922 / 365.25, 3287 / 365.25, 3653 / 365.25, 4383 / 365.25, 5479 / 365.25, 7305 / 365.25, 9131 / 365.25,
-      10958 / 365.25, 14610 / 365.25, 18263 / 365.25 };
+        1096 / 365.25, 1461 / 365.25, 1826 / 365.25, 2192 / 365.25, 2557 / 365.25, 2922 / 365.25, 3287 / 365.25, 3653 / 365.25, 4383 / 365.25, 5479 / 365.25, 7305 / 365.25, 9131 / 365.25,
+        10958 / 365.25, 14610 / 365.25, 18263 / 365.25 };
 
     final double[] dscCurveDiscountFactor = new double[] {1.0, 0.999995414, 0.999990827, 0.999986241, 0.999583194, 0.999167209, 0.998770249, 0.998379852, 0.997966181, 0.997459857, 0.996773166,
-      0.995843348, 0.989078497, 0.976557279, 0.959377269, 0.938363477, 0.91453858, 0.888747447, 0.861693639, 0.83391463, 0.778517911, 0.700537471, 0.596392269, 0.516411342, 0.451196242, 0.3436152,
-      0.259911234 };
+        0.995843348, 0.989078497, 0.976557279, 0.959377269, 0.938363477, 0.91453858, 0.888747447, 0.861693639, 0.83391463, 0.778517911, 0.700537471, 0.596392269, 0.516411342, 0.451196242, 0.3436152,
+        0.259911234 };
 
     final double[] dscCurveYields = new double[dscCurveDiscountFactor.length];
     dscCurveYields[0] = 1.0;
@@ -203,10 +209,10 @@ public class DayPeriodPreCalculatedDiscountCurveTest {
         logNaturalinterpolator, true, preiInterpolatedCurveName), 365.25);
     periodPreCalculatedCurve.preCalculateDiscountFactors(50);
     final double[] outputTime = new double[] {0.0, 1 / 365.25, 2 / 365.25, 3 / 365.25, 4 / 365.25, 7 / 365.25, 8 / 365.25, 9 / 365.25, 17 / 365.25, 77 / 365.25, 91 / 365.25, 140 / 365.25,
-      183 / 365.25, 219 / 365.25, 274 / 365.25, 301 / 365.25, 365 / 365.25, 672 / 365.25, 1001 / 365.25, 2034 / 365.25, 9879 / 365.25, 13374 / 365.25, 16180 / 365.25 };
+        183 / 365.25, 219 / 365.25, 274 / 365.25, 301 / 365.25, 365 / 365.25, 672 / 365.25, 1001 / 365.25, 2034 / 365.25, 9879 / 365.25, 13374 / 365.25, 16180 / 365.25 };
 
     final double[] outputDiscountFactor = new double[] {1.0, 0.999995414, 0.999990827, 0.999986241, 0.999981654, 0.999967895, 0.999963309, 0.999958723, 0.999922035, 0.999647188, 0.999583194,
-      0.999360197, 0.999167209, 0.999008575, 0.998770249, 0.998654304, 0.998379852, 0.996469188, 0.991376737, 0.947845026, 0.488392208, 0.377151958, 0.304915694 };
+        0.999360197, 0.999167209, 0.999008575, 0.998770249, 0.998654304, 0.998379852, 0.996469188, 0.991376737, 0.947845026, 0.488392208, 0.377151958, 0.304915694 };
     for (int i = 0; i < outputDiscountFactor.length; i++) {
       assertEquals("DayPeriodPreCalculatedDiscountCurve: discount factor value" + outputTime[i] * 365.25, discountCurve.getDiscountFactor(outputTime[i]),
           periodPreCalculatedCurve.getDiscountFactor(outputTime[i]), 1.0E-14);

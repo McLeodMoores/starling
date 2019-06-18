@@ -47,14 +47,21 @@ public class GeneratorMulticurveProviderDiscount extends Function1D<DoubleMatrix
   private final MulticurveProviderDiscount _knownData;
 
   /**
-   * Constructor
-   * @param knownData The yield curve bundle with known data (curves).
-   * @param discountingMap The discounting curves names map.
-   * @param forwardIborMap The forward curves names map.
-   * @param forwardONMap The forward curves names map.
-   * @param generatorsMap The generators map.
+   * Constructor.
+   *
+   * @param knownData
+   *          The yield curve bundle with known data (curves).
+   * @param discountingMap
+   *          The discounting curves names map.
+   * @param forwardIborMap
+   *          The forward curves names map.
+   * @param forwardONMap
+   *          The forward curves names map.
+   * @param generatorsMap
+   *          The generators map.
    */
-  public GeneratorMulticurveProviderDiscount(final MulticurveProviderDiscount knownData, final LinkedHashMap<String, Currency> discountingMap, final LinkedHashMap<String, IborIndex[]> forwardIborMap,
+  public GeneratorMulticurveProviderDiscount(final MulticurveProviderDiscount knownData, final LinkedHashMap<String, Currency> discountingMap,
+      final LinkedHashMap<String, IborIndex[]> forwardIborMap,
       final LinkedHashMap<String, IndexON[]> forwardONMap, final LinkedHashMap<String, GeneratorYDCurve> generatorsMap) {
     ArgumentChecker.notNull(discountingMap, "Discounting curves names map");
     ArgumentChecker.notNull(forwardIborMap, "Forward curves names map");
@@ -68,6 +75,7 @@ public class GeneratorMulticurveProviderDiscount extends Function1D<DoubleMatrix
 
   /**
    * Gets the know data.
+   *
    * @return The known data.
    */
   public MulticurveProviderDiscount getKnownData() {
@@ -76,6 +84,7 @@ public class GeneratorMulticurveProviderDiscount extends Function1D<DoubleMatrix
 
   /**
    * Gets the set of curves. The set order is the order in which they are build.
+   *
    * @return The set.
    */
   public Set<String> getCurvesList() {

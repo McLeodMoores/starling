@@ -14,7 +14,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.util.wrapper.CommonsMathWrapper;
 
 /**
- * Wrapper for results of the Commons implementation of singular value decomposition {@link SVDecompositionCommons}
+ * Wrapper for results of the Commons implementation of singular value decomposition {@link SVDecompositionCommons}.
  */
 public class SVDecompositionCommonsResult implements SVDecompositionResult {
   private final double _condition;
@@ -28,10 +28,11 @@ public class SVDecompositionCommonsResult implements SVDecompositionResult {
   private final DoubleMatrix2D _vTranspose;
   private final DecompositionSolver _solver;
 
-  // TODO combine this and the colt result by feeding in the values for condition etc directly. This means that we will need an OG wrapper for the solver 
+  // TODO combine this and the colt result by feeding in the values for condition etc directly. This means that we will need an OG wrapper for the solver
   // in the commons case or our own for the colt stuff
   /**
-   * @param svd The result of the SV decomposition, not null
+   * @param svd
+   *          The result of the SV decomposition, not null
    */
   public SVDecompositionCommonsResult(final SingularValueDecomposition svd) {
     Validate.notNull(svd);

@@ -16,17 +16,20 @@ public class DoubleLabelledMatrix3D extends LabelledMatrix3D<Double, Double, Dou
     super(xKeys, yKeys, zKeys, values);
   }
 
-  public DoubleLabelledMatrix3D(final Double[] xKeys, final Object[] xLabels, final Double[] yKeys, final Object[] yLabels, final Double[] zKeys, final Object[] zLabels, final double[][][] values) {
+  public DoubleLabelledMatrix3D(final Double[] xKeys, final Object[] xLabels, final Double[] yKeys, final Object[] yLabels, final Double[] zKeys,
+      final Object[] zLabels, final double[][][] values) {
     super(xKeys, xLabels, yKeys, yLabels, zKeys, zLabels, values);
   }
 
   @Override
-  protected DoubleLabelledMatrix3D create(final Double[] xKeys, final Object[] xLabels, final Double[] yKeys, final Object[] yLabels, final Double[] zKeys, final Object[] zLabels,
+  protected DoubleLabelledMatrix3D create(final Double[] xKeys, final Object[] xLabels, final Double[] yKeys, final Object[] yLabels, final Double[] zKeys,
+      final Object[] zLabels,
       final double[][][] values) {
     return new DoubleLabelledMatrix3D(xKeys, xLabels, yKeys, yLabels, zKeys, zLabels, values);
   }
 
-  public DoubleLabelledMatrix3D getMatrix(final Double[] xKeys, final Object[] xLabels, final Double[] yKeys, final Object[] yLabels, final Double[] zKeys, final Object[] zLabels, final double[][][] values) {
+  public DoubleLabelledMatrix3D getMatrix(final Double[] xKeys, final Object[] xLabels, final Double[] yKeys, final Object[] yLabels, final Double[] zKeys,
+      final Object[] zLabels, final double[][][] values) {
     return new DoubleLabelledMatrix3D(xKeys, xLabels, yKeys, yLabels, zKeys, zLabels, values);
   }
 

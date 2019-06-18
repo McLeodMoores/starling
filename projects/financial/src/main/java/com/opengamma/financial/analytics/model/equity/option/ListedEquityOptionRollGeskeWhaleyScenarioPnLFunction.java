@@ -36,13 +36,12 @@ import com.opengamma.financial.analytics.model.volatility.surface.black.EquityBl
 public class ListedEquityOptionRollGeskeWhaleyScenarioPnLFunction extends ListedEquityOptionRollGeskeWhaleyFunction {
 
   /**
-   * The Black present value calculator
-   * The model is chosen to be consistent with {@link EquityBlackVolatilitySurfaceFromSinglePriceFunction}
+   * The Black present value calculator The model is chosen to be consistent with {@link EquityBlackVolatilitySurfaceFromSinglePriceFunction}
    */
   private static final EquityOptionBlackPresentValueCalculator PV_CALCULATOR = EquityOptionBlackPresentValueCalculator.getInstance();
-//  private static final EqyOptRollGeskeWhaleyPresentValueCalculator PV_CALCULATOR = EqyOptRollGeskeWhaleyPresentValueCalculator.getInstance();
+  // private static final EqyOptRollGeskeWhaleyPresentValueCalculator PV_CALCULATOR = EqyOptRollGeskeWhaleyPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public ListedEquityOptionRollGeskeWhaleyScenarioPnLFunction() {
     super(ValueRequirementNames.PNL);
   }
@@ -59,12 +58,12 @@ public class ListedEquityOptionRollGeskeWhaleyScenarioPnLFunction extends Listed
   }
 
   @Override
-  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs, final Set<ValueRequirement> desiredValues,
+  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
+      final Set<ValueRequirement> desiredValues,
       final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
 
     // Compute present value under current market
     final double pvBase = derivative.accept(PV_CALCULATOR, market);
-
 
     // Form market scenario
     final ValueProperties constraints = desiredValues.iterator().next().getConstraints();
@@ -105,7 +104,8 @@ public class ListedEquityOptionRollGeskeWhaleyScenarioPnLFunction extends Listed
       } else if (volShiftTypeConstraint.equalsIgnoreCase("Multiplicative")) {
         additiveShift = false;
       } else {
-        LOGGER.debug("In ScenarioPnLFunctions, VolShiftType's are Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
+        LOGGER.debug(
+            "In ScenarioPnLFunctions, VolShiftType's are Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
         additiveShift = false;
       }
       volSurfScen = market.getVolatilitySurface().withShift(shiftVol, additiveShift);
@@ -164,13 +164,13 @@ public class ListedEquityOptionRollGeskeWhaleyScenarioPnLFunction extends Listed
     // If defaults have been added, this adds additional copy of the Function into dep graph with the adjusted constraints
     if (scenarioDefaults != null) {
       return Collections.singleton(new ValueRequirement(getValueRequirementName(), target.toSpecification(), scenarioDefaults.get()));
-    } else {  // Scenarios are defined, so we're satisfied
-      return superReqs;
     }
+    return superReqs;
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.size() == 1) {
       final ValueSpecification input = inputs.keySet().iterator().next();
       if (getValueRequirementName().equals(input.getValueName())) {

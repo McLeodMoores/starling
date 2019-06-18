@@ -18,13 +18,15 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class InterestRateFutureOptionBlackThetaDefaults extends InterestRateFutureOptionBlackDefaults {
   private final String _defaultNumberOfDays;
 
   public InterestRateFutureOptionBlackThetaDefaults(final String... daysCurrencyCurveConfigAndSurfaceNames) {
     super(Arrays.copyOfRange(daysCurrencyCurveConfigAndSurfaceNames, 1, daysCurrencyCurveConfigAndSurfaceNames.length));
-    ArgumentChecker.isTrue((daysCurrencyCurveConfigAndSurfaceNames.length - 1) % 3 == 0, 
+    ArgumentChecker.isTrue((daysCurrencyCurveConfigAndSurfaceNames.length - 1) % 3 == 0,
         "Input array must begin with a number of days then follow with one curve config and surface name per currency");
     _defaultNumberOfDays = daysCurrencyCurveConfigAndSurfaceNames[0];
   }
@@ -37,7 +39,8 @@ public class InterestRateFutureOptionBlackThetaDefaults extends InterestRateFutu
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ThetaPropertyNamesAndValues.PROPERTY_DAYS_TO_MOVE_FORWARD.equals(propertyName)) {
       return Collections.singleton(_defaultNumberOfDays);
     }

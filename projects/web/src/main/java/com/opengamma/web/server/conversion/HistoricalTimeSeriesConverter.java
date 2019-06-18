@@ -14,7 +14,8 @@ import com.opengamma.engine.value.ValueSpecification;
 public class HistoricalTimeSeriesConverter implements ResultConverter<HistoricalTimeSeries> {
 
   @Override
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final HistoricalTimeSeries value, final ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final HistoricalTimeSeries value,
+      final ConversionMode mode) {
     return LocalDateDoubleTimeSeriesConverter.convertForDisplayImpl(context, valueSpec, value.getTimeSeries(), mode);
   }
 

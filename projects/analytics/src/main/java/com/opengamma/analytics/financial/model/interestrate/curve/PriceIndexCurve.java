@@ -18,8 +18,8 @@ import com.opengamma.analytics.math.interpolation.LinearInterpolator1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A curve containing the (estimated) price index at different maturities. The maturities can be (slightly) negative as the price index are known only with a certain lag.
- * The price index for a given month is on the first of the month point.
+ * A curve containing the (estimated) price index at different maturities. The maturities can be (slightly) negative as the price index are known only with a
+ * certain lag. The price index for a given month is on the first of the month point.
  */
 // TODO: Improve the object to have something similar to the YieldAndDiscountCurve.
 public class PriceIndexCurve {
@@ -36,7 +36,9 @@ public class PriceIndexCurve {
 
   /**
    * Constructor from a curve object.
-   * @param curve The curve.
+   * 
+   * @param curve
+   *          The curve.
    */
   public PriceIndexCurve(final DoublesCurve curve) {
     Validate.notNull(curve, "curve");
@@ -46,10 +48,15 @@ public class PriceIndexCurve {
   /**
    * Build a simple price index curve from known index and annual zero-coupon swap rates. The inflation coupon reference are exact month are not interpolated.
    * No seasonality is used. The price index are interpolated linearly.
-   * @param nodeTimeKnown The time to the known price index. Those time will typically be negative (the price index are published after month end).
-   * @param indexKnown The value of the known index. The first one in the list is the one used in the swaps used for curve construction.
-   * @param nodeTimeOther The time to the price index reference for the swaps.
-   * @param rate The zero-coupon swaps rates.
+   * 
+   * @param nodeTimeKnown
+   *          The time to the known price index. Those time will typically be negative (the price index are published after month end).
+   * @param indexKnown
+   *          The value of the known index. The first one in the list is the one used in the swaps used for curve construction.
+   * @param nodeTimeOther
+   *          The time to the price index reference for the swaps.
+   * @param rate
+   *          The zero-coupon swaps rates.
    * @return The price index curve.
    */
   public static PriceIndexCurve fromStartOfMonth(final double[] nodeTimeKnown, final double[] indexKnown, final double[] nodeTimeOther, final double[] rate) {
@@ -70,6 +77,7 @@ public class PriceIndexCurve {
 
   /**
    * Gets the underlying curve object.
+   * 
    * @return The curve.
    */
   public DoublesCurve getCurve() {
@@ -78,6 +86,7 @@ public class PriceIndexCurve {
 
   /**
    * Returns the curve name.
+   * 
    * @return The name.
    */
   public String getName() {
@@ -86,7 +95,9 @@ public class PriceIndexCurve {
 
   /**
    * Returns the estimated price index for a given time to index.
-   * @param timeToIndex The time
+   * 
+   * @param timeToIndex
+   *          The time
    * @return The price index.
    */
   public double getPriceIndex(final Double timeToIndex) {
@@ -95,8 +106,11 @@ public class PriceIndexCurve {
 
   /**
    * Returns the estimated inflation rate between two given time .
-   * @param firstTime The time
-   * @param secondTime The time
+   * 
+   * @param firstTime
+   *          The time
+   * @param secondTime
+   *          The time
    * @return The price index.
    */
   public double getInflationRate(final Double firstTime, final Double secondTime) {
@@ -106,6 +120,7 @@ public class PriceIndexCurve {
 
   /**
    * Gets the number of parameters in a curve.
+   * 
    * @return The number of parameters
    */
   public int getNumberOfParameters() {
@@ -113,9 +128,12 @@ public class PriceIndexCurve {
   }
 
   /**
-   * Return the number of intrinsic parameters for the definition of the curve. Which is the total number of parameters minus the parameters of the curves in curvesNames (If they are in curves).
-   *  @param curvesNames The list of curves names.
-   *  @return The number of parameters.
+   * Return the number of intrinsic parameters for the definition of the curve. Which is the total number of parameters minus the parameters of the curves in
+   * curvesNames (If they are in curves).
+   * 
+   * @param curvesNames
+   *          The list of curves names.
+   * @return The number of parameters.
    */
   public int getNumberOfIntrinsicParameters(final Set<String> curvesNames) {
     return _curve.size();
@@ -123,6 +141,7 @@ public class PriceIndexCurve {
 
   /**
    * The list of underlying curves (up to one level).
+   * 
    * @return The list.
    */
   public List<String> getUnderlyingCurvesNames() {
@@ -131,9 +150,10 @@ public class PriceIndexCurve {
 
   /**
    * Gets the sensitivities of the price index to the curve parameters for a time.
-   * @param time The time
-   * @return The sensitivities. If the time is less than 1e<sup>-6</sup>, the rate is
-   * ill-defined and zero is returned.
+   * 
+   * @param time
+   *          The time
+   * @return The sensitivities. If the time is less than 1e<sup>-6</sup>, the rate is ill-defined and zero is returned.
    */
   public double[] getPriceIndexParameterSensitivity(final double time) {
     final Double[] curveSensitivity = _curve.getYValueParameterSensitivity(time);

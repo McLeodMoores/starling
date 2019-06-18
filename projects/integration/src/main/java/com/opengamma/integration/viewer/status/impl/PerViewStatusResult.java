@@ -41,9 +41,8 @@ public class PerViewStatusResult {
   public ViewStatus get(final ViewStatusKey key) {
     if (key == null) {
       return null;
-    } else {
-      return _viewStatusResult.get(ImmutableViewStatusKey.of(key));
     }
+    return _viewStatusResult.get(ImmutableViewStatusKey.of(key));
   }
 
   public Set<ViewStatusKey> keySet() {

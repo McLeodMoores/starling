@@ -58,7 +58,7 @@ public class FXForwardCurveDefinitionFunction extends AbstractFunction {
 
     private final FXForwardCurveDefinition _curveDefinition;
 
-    public CompiledImpl(final FXForwardCurveDefinition curveDefinition) {
+    CompiledImpl(final FXForwardCurveDefinition curveDefinition) {
       _curveDefinition = curveDefinition;
     }
 

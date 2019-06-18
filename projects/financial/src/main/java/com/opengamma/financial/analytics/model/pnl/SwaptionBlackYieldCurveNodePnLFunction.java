@@ -6,7 +6,6 @@
 package com.opengamma.financial.analytics.model.pnl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +66,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class SwaptionBlackYieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionBlackYieldCurveNodePnLFunction.class);
   private static final HolidayDateRemovalFunction HOLIDAY_REMOVER = HolidayDateRemovalFunction.getInstance();
@@ -81,7 +82,8 @@ public class SwaptionBlackYieldCurveNodePnLFunction extends AbstractFunction.Non
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Position position = target.getPosition();
     final Clock snapshotClock = executionContext.getValuationClock();
     final LocalDate now = ZonedDateTime.now(snapshotClock).toLocalDate();
@@ -96,19 +98,21 @@ public class SwaptionBlackYieldCurveNodePnLFunction extends AbstractFunction.Non
     final LocalDate startDate = now.minus(samplingPeriod);
     final Schedule scheduleCalculator = getScheduleCalculator(constraints.getValues(ValuePropertyNames.SCHEDULE_CALCULATOR));
     final TimeSeriesSamplingFunction samplingFunction = getSamplingFunction(constraints.getValues(ValuePropertyNames.SAMPLING_FUNCTION));
-    final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR); //REVIEW emcleod should "fromEnd" be hard-coded?
+    final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR);
     DoubleTimeSeries<?> result = null;
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     for (final String yieldCurveName : yieldCurveNames) {
       final ValueRequirement ycnsRequirement = getYCNSRequirement(currencyString, curveCalculationConfigName, yieldCurveName, surfaceName, target);
       final DoubleLabelledMatrix1D ycns = (DoubleLabelledMatrix1D) inputs.getValue(ycnsRequirement);
-      final HistoricalTimeSeriesBundle ychts = (HistoricalTimeSeriesBundle) inputs.getValue(getYCHTSRequirement(currency, yieldCurveName, samplingPeriod.toString()));
+      final HistoricalTimeSeriesBundle ychts = (HistoricalTimeSeriesBundle) inputs
+          .getValue(getYCHTSRequirement(currency, yieldCurveName, samplingPeriod.toString()));
       final DoubleTimeSeries<?> pnLSeries;
       if (curveCalculationConfig.getCalculationMethod().equals(FXImpliedYieldCurveFunction.FX_IMPLIED)) {
         pnLSeries = getPnLSeries(ycns, ychts, schedule, samplingFunction);
       } else {
         final ValueRequirement curveSpecRequirement = getCurveSpecRequirement(currency, yieldCurveName);
-        final InterpolatedYieldCurveSpecificationWithSecurities curveSpec = (InterpolatedYieldCurveSpecificationWithSecurities) inputs.getValue(curveSpecRequirement);
+        final InterpolatedYieldCurveSpecificationWithSecurities curveSpec = (InterpolatedYieldCurveSpecificationWithSecurities) inputs
+            .getValue(curveSpecRequirement);
         pnLSeries = getPnLSeries(curveSpec, ycns, ychts, schedule, samplingFunction);
       }
       if (result == null) {
@@ -174,14 +178,17 @@ public class SwaptionBlackYieldCurveNodePnLFunction extends AbstractFunction.Non
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final Position position = target.getPosition();
     final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD)
-        .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(position.getSecurity()).getCode()).withAny(ValuePropertyNames.SURFACE).withAny(ValuePropertyNames.CURVE)
+        .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(position.getSecurity()).getCode()).withAny(ValuePropertyNames.SURFACE)
+        .withAny(ValuePropertyNames.CURVE)
         .withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG).withAny(ValuePropertyNames.SAMPLING_PERIOD).withAny(ValuePropertyNames.SCHEDULE_CALCULATOR)
-        .withAny(ValuePropertyNames.SAMPLING_FUNCTION).with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES).get();
+        .withAny(ValuePropertyNames.SAMPLING_FUNCTION).with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES)
+        .get();
     return Sets.newHashSet(new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), properties));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<String> curveNames = new HashSet<>();
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       if (entry.getKey().getValueName().equals(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES)) {
@@ -190,9 +197,12 @@ public class SwaptionBlackYieldCurveNodePnLFunction extends AbstractFunction.Non
     }
     final Position position = target.getPosition();
     final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD)
-        .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(position.getSecurity()).getCode()).withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG)
-        .with(ValuePropertyNames.CURVE, curveNames).withAny(ValuePropertyNames.SURFACE).withAny(ValuePropertyNames.SAMPLING_PERIOD).withAny(ValuePropertyNames.SCHEDULE_CALCULATOR)
-        .withAny(ValuePropertyNames.SAMPLING_FUNCTION).with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES).get();
+        .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(position.getSecurity()).getCode())
+        .withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG)
+        .with(ValuePropertyNames.CURVE, curveNames).withAny(ValuePropertyNames.SURFACE).withAny(ValuePropertyNames.SAMPLING_PERIOD)
+        .withAny(ValuePropertyNames.SCHEDULE_CALCULATOR)
+        .withAny(ValuePropertyNames.SAMPLING_FUNCTION).with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES)
+        .get();
     return Sets.newHashSet(new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), properties));
   }
 
@@ -202,7 +212,8 @@ public class SwaptionBlackYieldCurveNodePnLFunction extends AbstractFunction.Non
   }
 
   private ValueProperties getResultProperties(final ValueRequirement desiredValue, final String currency) {
-    return createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD).with(ValuePropertyNames.CURRENCY, currency)
+    return createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD)
+        .with(ValuePropertyNames.CURRENCY, currency)
         .with(ValuePropertyNames.CURVE, desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE))
         .with(ValuePropertyNames.SURFACE, desiredValue.getConstraint(ValuePropertyNames.SURFACE))
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, desiredValue.getConstraint(ValuePropertyNames.CURVE_CALCULATION_CONFIG))
@@ -238,15 +249,13 @@ public class SwaptionBlackYieldCurveNodePnLFunction extends AbstractFunction.Non
       final HistoricalTimeSeriesBundle timeSeriesBundle, final LocalDate[] schedule, final TimeSeriesSamplingFunction samplingFunction) {
     DoubleTimeSeries<?> pnlSeries = null;
     final int n = curveSensitivities.size();
-    final Object[] labels = curveSensitivities.getLabels();
-    final List<Object> labelsList = Arrays.asList(labels);
     final double[] values = curveSensitivities.getValues();
     final SortedSet<FixedIncomeStripWithSecurity> strips = (SortedSet<FixedIncomeStripWithSecurity>) spec.getStrips();
     final FixedIncomeStripWithSecurity[] stripsArray = strips.toArray(new FixedIncomeStripWithSecurity[] {});
     final List<StripInstrumentType> stripList = new ArrayList<>(n);
     int stripCount = 0;
     for (final FixedIncomeStripWithSecurity strip : strips) {
-      final int index = stripCount++; //labelsList.indexOf(strip.getSecurityIdentifier());
+      final int index = stripCount++; // labelsList.indexOf(strip.getSecurityIdentifier());
       if (index < 0) {
         throw new OpenGammaRuntimeException("Could not get index for " + strip);
       }
@@ -270,7 +279,8 @@ public class SwaptionBlackYieldCurveNodePnLFunction extends AbstractFunction.Non
     return pnlSeries;
   }
 
-  private DoubleTimeSeries<?> getPnLSeries(final DoubleLabelledMatrix1D curveSensitivities, final HistoricalTimeSeriesBundle timeSeriesBundle, final LocalDate[] schedule,
+  private DoubleTimeSeries<?> getPnLSeries(final DoubleLabelledMatrix1D curveSensitivities, final HistoricalTimeSeriesBundle timeSeriesBundle,
+      final LocalDate[] schedule,
       final TimeSeriesSamplingFunction samplingFunction) {
     DoubleTimeSeries<?> pnlSeries = null;
     final Object[] labels = curveSensitivities.getLabels();

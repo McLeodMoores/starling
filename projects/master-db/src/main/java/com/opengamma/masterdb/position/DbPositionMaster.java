@@ -71,8 +71,8 @@ import com.opengamma.util.tuple.Pairs;
  * <p>
  * This is a full implementation of the position master using an SQL database. Full details of the API are in {@link PositionMaster}.
  * <p>
- * The SQL is stored externally in {@code DbPositionMaster.elsql}. Alternate databases or specific SQL requirements can be handled using database specific overrides, such as
- * {@code DbPositionMaster-MySpecialDB.elsql}.
+ * The SQL is stored externally in {@code DbPositionMaster.elsql}. Alternate databases or specific SQL requirements can be handled using database specific
+ * overrides, such as {@code DbPositionMaster-MySpecialDB.elsql}.
  * <p>
  * This class is mutable but must be treated as immutable after configuration.
  */
@@ -96,7 +96,8 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
   /**
    * Creates an instance.
    *
-   * @param dbConnector the database connector, not null
+   * @param dbConnector
+   *          the database connector, not null
    */
   public DbPositionMaster(final DbConnector dbConnector) {
     super(dbConnector, IDENTIFIER_SCHEME_DEFAULT);
@@ -109,7 +110,7 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
     _insertTimer = summaryRegistry.timer(namePrefix + ".insert");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public PositionSearchResult search(final PositionSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
@@ -126,14 +127,15 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
     final ExternalIdSearch securityIdSearch = request.getSecurityIdSearch();
     final Collection<ObjectId> positionObjectIds = request.getPositionObjectIds();
     final Collection<ObjectId> tradeObjectIds = request.getTradeObjectIds();
-    if (positionObjectIds != null && positionObjectIds.size() == 0 ||
-        tradeObjectIds != null && tradeObjectIds.size() == 0 ||
-        ExternalIdSearch.canMatch(securityIdSearch) == false) {
+    if (positionObjectIds != null && positionObjectIds.size() == 0
+        || tradeObjectIds != null && tradeObjectIds.size() == 0
+        || !ExternalIdSearch.canMatch(securityIdSearch)) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }
 
-    final DbMapSqlParameterSource args = createParameterSource().addTimestamp("version_as_of_instant", vc.getVersionAsOf()).addTimestamp("corrected_to_instant", vc.getCorrectedTo())
+    final DbMapSqlParameterSource args = createParameterSource().addTimestamp("version_as_of_instant", vc.getVersionAsOf())
+        .addTimestamp("corrected_to_instant", vc.getCorrectedTo())
         .addValueNullIgnored("min_quantity", request.getMinQuantity()).addValueNullIgnored("max_quantity", request.getMaxQuantity())
         .addValueNullIgnored("security_id_value", getDialect().sqlWildcardAdjustValue(request.getSecurityIdValue()));
     if (request.getPositionProviderId() != null) {
@@ -144,7 +146,7 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
       args.addValue("trade_provider_scheme", request.getTradeProviderId().getScheme().getName());
       args.addValue("trade_provider_value", request.getTradeProviderId().getValue());
     }
-    if (securityIdSearch != null && securityIdSearch.alwaysMatches() == false) {
+    if (securityIdSearch != null && !securityIdSearch.alwaysMatches()) {
       int i = 0;
       for (final ExternalId id : securityIdSearch) {
         args.addValue("key_scheme" + i, id.getScheme().getName());
@@ -176,7 +178,7 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
     args.addValue("paging_offset", request.getPagingRequest().getFirstItem());
     args.addValue("paging_fetch", request.getPagingRequest().getPagingSize());
 
-    final String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args) };
+    final String[] sql = { getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args) };
     doSearch(request.getPagingRequest(), sql, args, new PositionDocumentExtractor(), result);
     return result;
   }
@@ -186,7 +188,8 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
    * <p>
    * This is too complex for the elsql mechanism.
    *
-   * @param idSearch the identifier search, not null
+   * @param idSearch
+   *          the identifier search, not null
    * @return the SQL, not null
    */
   protected String sqlSelectIdKeys(final ExternalIdSearch idSearch) {
@@ -197,29 +200,30 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
     return StringUtils.join(list, "OR ");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public PositionDocument get(final UniqueId uniqueId) {
     return doGet(uniqueId, new PositionDocumentExtractor(), "Position");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public PositionDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     return doGetByOidInstants(objectId, versionCorrection, new PositionDocumentExtractor(), "Position");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public PositionHistoryResult history(final PositionHistoryRequest request) {
     return doHistory(request, new PositionHistoryResult(), new PositionDocumentExtractor());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Inserts a new document.
    *
-   * @param document the document, not null
+   * @param document
+   *          the document, not null
    * @return the new document, not null
    */
   @Override
@@ -365,7 +369,7 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public ManageableTrade getTrade(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
@@ -373,17 +377,19 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
 
     if (uniqueId.isVersioned()) {
       return getTradeById(uniqueId);
-    } else {
-      return getTradeByInstants(uniqueId, null, null);
     }
+    return getTradeByInstants(uniqueId, null, null);
   }
 
   /**
    * Gets a trade by searching for the latest version of an object identifier.
    *
-   * @param uniqueId the unique identifier, not null
-   * @param versionAsOf the instant to fetch, not null
-   * @param correctedTo the instant to fetch, not null
+   * @param uniqueId
+   *          the unique identifier, not null
+   * @param versionAsOf
+   *          the instant to fetch, not null
+   * @param correctedTo
+   *          the instant to fetch, not null
    * @return the trade, null if not found
    */
   protected ManageableTrade getTradeByInstants(final UniqueId uniqueId, final Instant versionAsOf, final Instant correctedTo) {
@@ -405,7 +411,8 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
   /**
    * Gets a trade by identifier.
    *
-   * @param uniqueId the unique identifier, not null
+   * @param uniqueId
+   *          the unique identifier, not null
    * @return the trade, null if not found
    */
   protected ManageableTrade getTradeById(final UniqueId uniqueId) {
@@ -421,7 +428,7 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
     return docs.get(0).getPosition().getTrades().get(0); // SQL loads desired trade as only trade
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected AbstractHistoryResult<PositionDocument> historyByVersionsCorrections(final AbstractHistoryRequest request) {
     final PositionHistoryRequest historyRequest = new PositionHistoryRequest();
@@ -433,7 +440,7 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
     return history(historyRequest);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Mapper from SQL rows to a PositionDocument.
    */
@@ -544,7 +551,7 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
       if (providerScheme != null && providerValue != null) {
         _trade.setProviderId(ExternalId.of(providerScheme, providerValue));
       }
-      //set premium
+      // set premium
       final Object premiumValue = rs.getObject("PREMIUM_VALUE");
       if (premiumValue != null) {
         _trade.setPremium((Double) premiumValue);

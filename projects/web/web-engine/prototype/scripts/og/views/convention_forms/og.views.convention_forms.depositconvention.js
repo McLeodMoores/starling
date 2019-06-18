@@ -5,14 +5,12 @@ $.register_module({
 	name: 'og.views.convention_forms.depositconvention',
 	dependencies: [
 		'og.api.rest',
-		'og.common.util.ui'
 	],
 	obj: function () {
 		var ui = og.common.util.ui,
 			forms = og.views.forms,
 			api = og.api.rest,
 			Form = ui.Form,
-			common = og.views.common,
 			ATTR = 'attributes',
 			EIDS = 'externalIdBundle',
 			INDX = '<INDEX>', 
@@ -70,7 +68,8 @@ $.register_module({
             			meta = result.meta,
             			as_new = result.extras.as_new;
             		data.isEOM = isEom;
-            		if (as_new && (orig.name === data.name)) { return window.alert('Please select a new name.') };
+            		if (as_new && (orig_name === data.name)) { return window.alert('Please select a new name.') };
+        			if (!data.externalIdBundle.ID.length) { return window.alert('Please add at least one external identifier') }; 
             		api.conventions.put({
             			id: as_new ? void 0 : resource_id,
             			name: data.name,

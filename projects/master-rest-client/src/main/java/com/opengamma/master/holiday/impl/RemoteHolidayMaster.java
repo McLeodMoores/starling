@@ -29,8 +29,8 @@ import com.sun.jersey.api.client.GenericType;
  * Provides access to a remote {@link HolidayMaster}.
  */
 public class RemoteHolidayMaster
-    extends AbstractRemoteDocumentMaster<HolidayDocument>
-    implements HolidayMaster {
+extends AbstractRemoteDocumentMaster<HolidayDocument>
+implements HolidayMaster {
 
   /**
    * Creates an instance.
@@ -77,9 +77,8 @@ public class RemoteHolidayMaster
     if (uniqueId.isVersioned()) {
       final URI uri = new DataHolidayUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(HolidayDocument.class);
-    } else {
-      return get(uniqueId, VersionCorrection.LATEST);
     }
+    return get(uniqueId, VersionCorrection.LATEST);
   }
 
   //-------------------------------------------------------------------------

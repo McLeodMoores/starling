@@ -564,14 +564,13 @@ public class AssetClassAggregationFunction implements AggregationFunction<String
           return CDX;
         }
       });
-    } else {
-      if (security instanceof RawSecurity && security.getSecurityType().equals(SecurityEntryData.EXTERNAL_SENSITIVITIES_SECURITY_TYPE)) {
-        if (security.getAttributes().containsKey("Security Type")) {
-          return security.getAttributes().get("Security Type");
-        }
-      }
-      return UNKNOWN;
     }
+    if (security instanceof RawSecurity && security.getSecurityType().equals(SecurityEntryData.EXTERNAL_SENSITIVITIES_SECURITY_TYPE)) {
+      if (security.getAttributes().containsKey("Security Type")) {
+        return security.getAttributes().get("Security Type");
+      }
+    }
+    return UNKNOWN;
   }
 
   @Override
@@ -583,9 +582,8 @@ public class AssetClassAggregationFunction implements AggregationFunction<String
   public Collection<String> getRequiredEntries() {
     if (_includeEmptyCategories) {
       return ALL_CATEGORIES;
-    } else {
-      return Collections.emptyList();
     }
+    return Collections.emptyList();
   }
 
   @Override
@@ -593,9 +591,8 @@ public class AssetClassAggregationFunction implements AggregationFunction<String
     if (!ALL_CATEGORIES.contains(assetClass1)) {
       if (!ALL_CATEGORIES.contains(assetClass2)) {
         return assetClass1.compareTo(assetClass2);
-      } else {
-        return -1;
       }
+      return -1;
     } else if (!ALL_CATEGORIES.contains(assetClass2)) {
       return 1;
     } else {

@@ -88,7 +88,7 @@ public class RemoteEngine {
 
   private void init(String baseUrl) {
     baseUrl = StringUtils.stripEnd(baseUrl, "/");
-    if (baseUrl.endsWith("/jax") == false) {
+    if (!baseUrl.endsWith("/jax")) {
       baseUrl += "/jax";
     }
 
@@ -124,6 +124,7 @@ public class RemoteEngine {
 
   /**
    * Gets the components.
+   * 
    * @return the components
    */
   public ComponentServer getComponents() {
@@ -215,7 +216,7 @@ public class RemoteEngine {
     return new RemoteInterpolatedYieldCurveSpecificationBuilder(uri);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public RemoteAvailableOutputsProvider getAvailableOutputsProvider(final String name) {
     final URI uri = _components.getComponentInfo(AvailableOutputsProvider.class, name).getUri();
     return new RemoteAvailableOutputsProvider(uri);

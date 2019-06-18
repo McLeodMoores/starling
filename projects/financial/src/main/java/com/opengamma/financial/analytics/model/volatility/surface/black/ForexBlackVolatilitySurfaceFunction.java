@@ -40,15 +40,15 @@ public abstract class ForexBlackVolatilitySurfaceFunction extends BlackVolatilit
   }
 
   /**
-   * Spline interpolator function for Black volatility surfaces
+   * Spline interpolator function for Black volatility surfaces.
    */
   public static class Spline extends ForexBlackVolatilitySurfaceFunction {
 
     @Override
     public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
         final ValueRequirement desiredValue) {
-      final Set<ValueRequirement> specificRequirements =
-          BlackVolatilitySurfacePropertyUtils.ensureSplineVolatilityInterpolatorProperties(desiredValue.getConstraints());
+      final Set<ValueRequirement> specificRequirements = BlackVolatilitySurfacePropertyUtils
+          .ensureSplineVolatilityInterpolatorProperties(desiredValue.getConstraints());
       if (specificRequirements == null) {
         return null;
       }
@@ -72,7 +72,7 @@ public abstract class ForexBlackVolatilitySurfaceFunction extends BlackVolatilit
       final ValueProperties properties = createValueProperties().get();
       return BlackVolatilitySurfacePropertyUtils.addBlackSurfaceProperties(
           BlackVolatilitySurfacePropertyUtils.addSplineVolatilityInterpolatorProperties(properties, desiredValue).get(),
-            getInstrumentType(), desiredValue).get();
+          getInstrumentType(), desiredValue).get();
     }
 
   }
@@ -85,8 +85,8 @@ public abstract class ForexBlackVolatilitySurfaceFunction extends BlackVolatilit
     @Override
     public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
         final ValueRequirement desiredValue) {
-      final Set<ValueRequirement> specificRequirements =
-          BlackVolatilitySurfacePropertyUtils.ensureSABRVolatilityInterpolatorProperties(desiredValue.getConstraints());
+      final Set<ValueRequirement> specificRequirements = BlackVolatilitySurfacePropertyUtils
+          .ensureSABRVolatilityInterpolatorProperties(desiredValue.getConstraints());
       if (specificRequirements == null) {
         return null;
       }
@@ -122,8 +122,8 @@ public abstract class ForexBlackVolatilitySurfaceFunction extends BlackVolatilit
     @Override
     public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
         final ValueRequirement desiredValue) {
-      final Set<ValueRequirement> specificRequirements =
-          BlackVolatilitySurfacePropertyUtils.ensureMixedLogNormalVolatilityInterpolatorProperties(desiredValue.getConstraints());
+      final Set<ValueRequirement> specificRequirements = BlackVolatilitySurfacePropertyUtils
+          .ensureMixedLogNormalVolatilityInterpolatorProperties(desiredValue.getConstraints());
       if (specificRequirements == null) {
         return null;
       }
@@ -165,7 +165,7 @@ public abstract class ForexBlackVolatilitySurfaceFunction extends BlackVolatilit
     final ForwardCurve forwardCurve = (ForwardCurve) forwardCurveObject;
     @SuppressWarnings("unchecked")
     final VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>> fxVolatilitySurface =
-        (VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>>) volatilitySurfaceObject;
+    (VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>>) volatilitySurfaceObject;
     return BlackVolatilitySurfaceUtils.getDataFromStrangleRiskReversalQuote(forwardCurve, fxVolatilitySurface);
   }
 

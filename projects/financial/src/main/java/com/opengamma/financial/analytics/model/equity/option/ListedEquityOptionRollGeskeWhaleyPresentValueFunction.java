@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.equity.option;
@@ -20,14 +20,14 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * 
+ *
  */
 public class ListedEquityOptionRollGeskeWhaleyPresentValueFunction extends ListedEquityOptionRollGeskeWhaleyFunction {
 
   /** The Roll-Geske-Whaley present value calculator */
   private static final EqyOptRollGeskeWhaleyPresentValueCalculator CALCULATOR = EqyOptRollGeskeWhaleyPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public ListedEquityOptionRollGeskeWhaleyPresentValueFunction() {
     super(ValueRequirementNames.PRESENT_VALUE);
   }

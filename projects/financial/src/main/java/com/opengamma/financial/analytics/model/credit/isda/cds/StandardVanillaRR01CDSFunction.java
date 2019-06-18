@@ -40,7 +40,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class StandardVanillaRR01CDSFunction extends StandardVanillaCDSFunction {
   private static final CDSRiskFactors CALCULATOR = new CDSRiskFactors();
 
@@ -50,14 +52,14 @@ public class StandardVanillaRR01CDSFunction extends StandardVanillaCDSFunction {
 
   @Override
   protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition,
-                                                final ISDACompliantYieldCurve yieldCurve,
-                                                final ZonedDateTime[] times,
-                                                final double[] marketSpreads,
-                                                final ZonedDateTime valuationDate,
-                                                final ComputationTarget target,
-                                                final ValueProperties properties,
-                                                final FunctionInputs inputs,
-                                                final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final Tenor[] tenors) {
+      final ISDACompliantYieldCurve yieldCurve,
+      final ZonedDateTime[] times,
+      final double[] marketSpreads,
+      final ZonedDateTime valuationDate,
+      final ComputationTarget target,
+      final ValueProperties properties,
+      final FunctionInputs inputs,
+      final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final Tenor[] tenors) {
 
     final double rr01 = getRR01(definition, yieldCurve, properties, hazardCurve, analytic);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.RR01, target.toSpecification(), properties);
@@ -65,8 +67,8 @@ public class StandardVanillaRR01CDSFunction extends StandardVanillaCDSFunction {
   }
 
   public static double getRR01(final CreditDefaultSwapDefinition definition,
-                         final ISDACompliantYieldCurve yieldCurve,
-                         final ValueProperties properties, final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic) {
+      final ISDACompliantYieldCurve yieldCurve,
+      final ValueProperties properties, final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic) {
     final RecoveryRateBumpType recoveryRateBumpType =
         RecoveryRateBumpType.valueOf(Iterables.getOnlyElement(properties.getValues(
             CreditInstrumentPropertyNamesAndValues.PROPERTY_RECOVERY_RATE_BUMP_TYPE)));
@@ -76,8 +78,8 @@ public class StandardVanillaRR01CDSFunction extends StandardVanillaCDSFunction {
     final Double bump = Double.valueOf(Iterables.getOnlyElement(properties.getValues(
         CreditInstrumentPropertyNamesAndValues.PROPERTY_RECOVERY_RATE_CURVE_BUMP)));
     return bump * 1e-4 * definition.getNotional() * CALCULATOR.recoveryRateSensitivity(analytic,
-                                                                                       yieldCurve,
-                                                                                       hazardCurve);
+        yieldCurve,
+        hazardCurve);
   }
 
   @Override
@@ -113,7 +115,8 @@ public class StandardVanillaRR01CDSFunction extends StandardVanillaCDSFunction {
     if (creditSpreadCurveShifts != null) {
       hazardRateCurveProperties.with(PROPERTY_SPREAD_CURVE_SHIFT, creditSpreadCurveShifts).with(PROPERTY_SPREAD_CURVE_SHIFT_TYPE, creditSpreadCurveShiftTypes);
     }
-    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(), hazardRateCurveProperties.get());
+    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(),
+        hazardRateCurveProperties.get());
     requirements.add(hazardRateCurveRequirement);
     return requirements;
   }

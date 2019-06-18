@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.minimization;
@@ -10,22 +10,7 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.TrigonometricFunctionUtils;
 
 /**
- * If a model parameter $x$ is constrained to be between two values $a \geq x
- * \geq b$, the function to transform it to an unconstrained variable is $y$ is
- * given by
- * $$
- * \begin{align*}
- * y &= \tanh^{-1}\left(\frac{x - m}{s}\right)\\
- * m &= \frac{a + b}{2}\\
- * s &= \frac{b - a}{2}
- * \end{align*}
- * $$
- * with the inverse transform
- * $$
- * \begin{align*}
- * x &= s\tanh(y) + m\\
- * \end{align*}
- * $$
+ * Transform a double range limit.
  */
 public class DoubleRangeLimitTransform implements ParameterLimitsTransform {
   private static final double TANH_MAX = 25.0;
@@ -48,8 +33,7 @@ public class DoubleRangeLimitTransform implements ParameterLimitsTransform {
   }
 
   /**
-   * If $y > 25$, this returns $b$. If $y < -25$ returns $a$.
-   * {@inheritDoc}
+   * If $y &ge; 25$, this returns $b$. If $y &lt; -25$ returns $a$. {@inheritDoc}
    */
   @Override
   public double inverseTransform(final double y) {
@@ -63,7 +47,9 @@ public class DoubleRangeLimitTransform implements ParameterLimitsTransform {
 
   /**
    * {@inheritDoc}
-   * @throws IllegalArgumentException If $x > b$ or $x < a$
+   *
+   * @throws IllegalArgumentException
+   *           If $x &gt; b$ or $x &lt; a$
    */
   @Override
   public double transform(final double x) {
@@ -77,8 +63,7 @@ public class DoubleRangeLimitTransform implements ParameterLimitsTransform {
   }
 
   /**
-   * If $|y| > 25$, this returns 0.
-   * {@inheritDoc}
+   * If $|y| &gt; 25$, this returns 0. {@inheritDoc}
    */
   @Override
   public double inverseTransformGradient(final double y) {
@@ -93,7 +78,9 @@ public class DoubleRangeLimitTransform implements ParameterLimitsTransform {
 
   /**
    * {@inheritDoc}
-   * @throws IllegalArgumentException If $x > b$ or $x < a$
+   *
+   * @throws IllegalArgumentException
+   *           If $x &gt; b$ or $x &lt; a$
    */
   @Override
   public double transformGradient(final double x) {
@@ -108,9 +95,9 @@ public class DoubleRangeLimitTransform implements ParameterLimitsTransform {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_lower);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_upper);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

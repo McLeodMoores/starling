@@ -330,13 +330,11 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
       if (existing != null) {
         existing.increment(count);
         return existing;
-      } else {
-        return pending;
       }
-    } else {
-      pending.increment(count);
       return pending;
     }
+    pending.increment(count);
+    return pending;
   }
 
   private void failAll() {
@@ -362,13 +360,12 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
     Object value = getBuffered(specification);
     if (value != null) {
       return value;
-    } else {
-      value = getUnderlying().getValue(specification);
-      if (value != null) {
-        putBuffered(specification, value);
-      }
-      return value;
     }
+    value = getUnderlying().getValue(specification);
+    if (value != null) {
+      putBuffered(specification, value);
+    }
+    return value;
   }
 
   @Override
@@ -376,13 +373,12 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
     Object value = getBuffered(specification);
     if (value != null) {
       return value;
-    } else {
-      value = getUnderlying().getValue(specification, filter);
-      if (value != null) {
-        putBuffered(specification, value);
-      }
-      return value;
     }
+    value = getUnderlying().getValue(specification, filter);
+    if (value != null) {
+      putBuffered(specification, value);
+    }
+    return value;
   }
 
   @Override

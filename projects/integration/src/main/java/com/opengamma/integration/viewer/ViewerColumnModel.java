@@ -17,7 +17,7 @@ import com.opengamma.util.tuple.Pair;
 /**
  * Maps particular columns to and from the combination of parameters
  * that make up the appropriate lookup components for that model.
- * <p/>
+ * <p>
  * Columns are:
  * <dl>
  *   <dt>0</dt>

@@ -8,7 +8,7 @@ package com.opengamma.integration.tool.enginedebugger.node;
 import com.opengamma.engine.value.ValueRequirement;
 
 /**
- * Node representing no function found during graph building
+ * Node representing no function found during graph building.
  */
 public class NoFunctionNode extends ValueRequirementNode {
 

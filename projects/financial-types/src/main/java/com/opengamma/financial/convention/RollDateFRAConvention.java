@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -26,6 +28,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Convention for IMM FRAs.
  */
+@ConventionMetaData(description = "IMM FRA", group = ConventionGroups.ROLL_DATE_CONVENTION)
 @BeanDefinition
 public class RollDateFRAConvention extends FinancialConvention {
 
@@ -58,20 +61,23 @@ public class RollDateFRAConvention extends FinancialConvention {
   /**
    * Creates an instance.
    *
-   * @param name  the convention name, not null
-   * @param externalIdBundle  the external identifiers for this convention, not null
-   * @param indexConvention  the index convention, not null TODO: Index
-   * @param rollDateConvention  the roll date convention, not null
+   * @param name
+   *          the convention name, not null
+   * @param externalIdBundle
+   *          the external identifiers for this convention, not null
+   * @param indexConvention
+   *          the index convention, not null TODO: Index
+   * @param rollDateConvention
+   *          the roll date convention, not null
    */
-  public RollDateFRAConvention(
-      final String name, final ExternalIdBundle externalIdBundle, final ExternalId indexConvention,
+  public RollDateFRAConvention(final String name, final ExternalIdBundle externalIdBundle, final ExternalId indexConvention,
       final ExternalId rollDateConvention) {
     super(name, externalIdBundle);
     setIndexConvention(indexConvention);
     setRollDateConvention(rollDateConvention);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
    *
@@ -85,8 +91,10 @@ public class RollDateFRAConvention extends FinancialConvention {
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
    *
-   * @param <T>  the result type of the visitor
-   * @param visitor  the visitor, not null
+   * @param <T>
+   *          the result type of the visitor
+   * @param visitor
+   *          the visitor, not null
    * @return the result
    */
   @Override

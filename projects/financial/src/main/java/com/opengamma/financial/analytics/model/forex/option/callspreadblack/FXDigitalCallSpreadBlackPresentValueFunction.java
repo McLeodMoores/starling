@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.forex.option.callspreadblack;
@@ -26,8 +26,10 @@ import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * 
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXDigitalCallSpreadBlackPresentValueFunction extends FXDigitalCallSpreadBlackSingleValuedFunction {
 
   public FXDigitalCallSpreadBlackPresentValueFunction() {

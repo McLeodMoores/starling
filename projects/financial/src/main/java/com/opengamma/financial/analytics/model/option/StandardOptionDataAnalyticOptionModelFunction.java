@@ -30,7 +30,7 @@ import com.opengamma.financial.security.option.EquityOptionSecurity;
 /**
  *
  */
-//TODO urgently needs a rename
+// TODO urgently needs a rename
 @Deprecated
 public abstract class StandardOptionDataAnalyticOptionModelFunction extends AnalyticOptionModelFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(StandardOptionDataAnalyticOptionModelFunction.class);
@@ -54,12 +54,12 @@ public abstract class StandardOptionDataAnalyticOptionModelFunction extends Anal
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<String> curveNames = desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE);
-    if ((curveNames == null) || (curveNames.size() != 1)) {
+    if (curveNames == null || curveNames.size() != 1) {
       return null;
     }
     final String curveName = curveNames.iterator().next();
     final EquityOptionSecurity option = (EquityOptionSecurity) target.getSecurity();
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     requirements.add(getUnderlyingMarketDataRequirement(option.getUnderlyingId()));
     requirements.add(getYieldCurveMarketDataRequirement(option.getCurrency(), curveName));
     requirements.add(getVolatilitySurfaceMarketDataRequirement(option, curveName));
@@ -68,7 +68,8 @@ public abstract class StandardOptionDataAnalyticOptionModelFunction extends Anal
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> originalResults = getResults(context, target);
     String curveName = null;
     for (final ValueSpecification input : inputs.keySet()) {
@@ -82,8 +83,9 @@ public abstract class StandardOptionDataAnalyticOptionModelFunction extends Anal
     }
     final Set<ValueSpecification> newResults = Sets.newHashSetWithExpectedSize(originalResults.size());
     for (final ValueSpecification result : originalResults) {
-      newResults.add(new ValueSpecification(result.getValueName(), result.getTargetSpecification(), result.getProperties().copy().withoutAny(ValuePropertyNames.CURVE)
-          .with(ValuePropertyNames.CURVE, curveName).get()));
+      newResults
+          .add(new ValueSpecification(result.getValueName(), result.getTargetSpecification(), result.getProperties().copy().withoutAny(ValuePropertyNames.CURVE)
+              .with(ValuePropertyNames.CURVE, curveName).get()));
     }
     return newResults;
   }

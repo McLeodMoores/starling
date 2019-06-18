@@ -59,16 +59,17 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
   private final ExchangeSource _exchangeSource;
   private final Comparator<Position> _comparator = new SimplePositionComparator();
 
-
   public RegionAggregationFunction(final SecuritySource secSource, final RegionSource regionSource, final ExchangeSource exchangeSource) {
     this(secSource, regionSource, exchangeSource, false);
   }
 
-  public RegionAggregationFunction(final SecuritySource secSource, final RegionSource regionSource, final ExchangeSource exchangeSource, final boolean useAttributes) {
+  public RegionAggregationFunction(final SecuritySource secSource, final RegionSource regionSource, final ExchangeSource exchangeSource,
+      final boolean useAttributes) {
     this(secSource, regionSource, exchangeSource, useAttributes, true);
   }
 
-  public RegionAggregationFunction(final SecuritySource secSource, final RegionSource regionSource, final ExchangeSource exchangeSource, final boolean useAttributes, final boolean includeEmptyCategories) {
+  public RegionAggregationFunction(final SecuritySource secSource, final RegionSource regionSource, final ExchangeSource exchangeSource,
+      final boolean useAttributes, final boolean includeEmptyCategories) {
     _secSource = secSource;
     _regionSource = regionSource;
     _exchangeSource = exchangeSource;
@@ -91,59 +92,53 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
       LOGGER.warn("attributes on " + position + " = " + attributes.entrySet());
       if (attributes.containsKey(getName())) {
         return attributes.get(getName());
-      } else {
-        return NO_REGION;
       }
-    } else {
-      try {
-        Security security = position.getSecurityLink().getTarget();
-        if (security == null) {
-          security = position.getSecurityLink().resolve(_secSource);
-        }
-        final ExternalId id = FinancialSecurityUtils.getRegion(security);
-        if (_regionSource != null) {
-          if (id != null) {
-            final Region highestLevelRegion = _regionSource.getHighestLevelRegion(id);
-            if (highestLevelRegion != null) {
+      return NO_REGION;
+    }
+    try {
+      Security security = position.getSecurityLink().getTarget();
+      if (security == null) {
+        security = position.getSecurityLink().resolve(_secSource);
+      }
+      final ExternalId id = FinancialSecurityUtils.getRegion(security);
+      if (_regionSource != null) {
+        if (id != null) {
+          final Region highestLevelRegion = _regionSource.getHighestLevelRegion(id);
+          if (highestLevelRegion != null) {
+            return highestLevelRegion.getName();
+          }
+          return id.getValue();
+        } else if (_exchangeSource != null) {
+          final ExternalId exchangeId = FinancialSecurityUtils.getExchange(security);
+          if (exchangeId != null) {
+            final Exchange exchange = _exchangeSource.getSingle(exchangeId);
+            if (exchange == null) {
+              LOGGER.info("No exchange could be found with ID {}", exchangeId);
+              return NO_REGION;
+            }
+            if (exchange.getRegionIdBundle() == null) {
+              LOGGER.info("Exchange " + exchange.getName() + " region bundle was null");
+              return NO_REGION;
+            }
+            final Region highestLevelRegion = _regionSource.getHighestLevelRegion(exchange.getRegionIdBundle());
+            if (SPECIAL_COUNTRIES_REGIONS.contains(highestLevelRegion.getName())) {
               return highestLevelRegion.getName();
-            } else {
-              return id.getValue();
             }
-          } else if (_exchangeSource != null) {
-            final ExternalId exchangeId = FinancialSecurityUtils.getExchange(security);
-            if (exchangeId != null) {
-              final Exchange exchange = _exchangeSource.getSingle(exchangeId);
-              if (exchange == null) {
-                LOGGER.info("No exchange could be found with ID {}", exchangeId);
-                return NO_REGION;
-              }
-              if (exchange.getRegionIdBundle() == null) {
-                LOGGER.info("Exchange " + exchange.getName() + " region bundle was null");
-                return NO_REGION;
-              }
-              final Region highestLevelRegion = _regionSource.getHighestLevelRegion(exchange.getRegionIdBundle());
-              if (SPECIAL_COUNTRIES_REGIONS.contains(highestLevelRegion.getName())) {
-                return highestLevelRegion.getName();
-              } else {
-                final Set<UniqueId> parentRegionIds = highestLevelRegion.getParentRegionIds();
-                LOGGER.info("got " + highestLevelRegion + ", looking for parent");
-                final String parent = findTopLevelRegion(parentRegionIds);
-                LOGGER.info("parent was " + parent);
-                return parent;
-              }
-            }
-          }
-          return NO_REGION;
-        } else {
-          if (id != null) {
-            return id.getValue();
-          } else {
-            return NO_REGION;
+            final Set<UniqueId> parentRegionIds = highestLevelRegion.getParentRegionIds();
+            LOGGER.info("got " + highestLevelRegion + ", looking for parent");
+            final String parent = findTopLevelRegion(parentRegionIds);
+            LOGGER.info("parent was " + parent);
+            return parent;
           }
         }
-      } catch (final UnsupportedOperationException ex) {
         return NO_REGION;
       }
+      if (id != null) {
+        return id.getValue();
+      }
+      return NO_REGION;
+    } catch (final UnsupportedOperationException ex) {
+      return NO_REGION;
     }
   }
 
@@ -169,15 +164,12 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
     return NAME;
   }
 
-
-
   @Override
   public Collection<String> getRequiredEntries() {
     if (_includeEmptyCategories) {
       return REQUIRED_ENTRIES;
-    } else {
-      return Collections.emptyList();
     }
+    return Collections.emptyList();
   }
 
   @Override

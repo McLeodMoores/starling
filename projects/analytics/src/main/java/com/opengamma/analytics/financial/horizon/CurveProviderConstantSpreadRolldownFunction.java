@@ -13,7 +13,6 @@ import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.analytics.financial.legalentity.LegalEntityFilter;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
-import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProvider;
 import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
@@ -22,12 +21,11 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Produces a {@link MulticurveProviderDiscount} or {@link IssuerProvider} where all yield curves have
- * been shifted forward in time without slide i.e. the curves are shifted in such a way that the rate
- * or discount factor requested for the same maturity date will be the same as for the original curves.
+ * Produces a {@link MulticurveProviderDiscount} or {@link com.opengamma.analytics.financial.provider.description.interestrate.IssuerProvider} where all yield
+ * curves have been shifted forward in time without slide i.e. the curves are shifted in such a way that the rate or discount factor requested for the same
+ * maturity date will be the same as for the original curves.
  * <p>
- * This class does not handle all types of {@link ParameterProviderInterface} because the type
- * hierarchy has not been refactored for easier use.
+ * This class does not handle all types of {@link ParameterProviderInterface} because the type hierarchy has not been refactored for easier use.
  */
 public final class CurveProviderConstantSpreadRolldownFunction implements RolldownFunction<ParameterProviderInterface> {
   /** Rolls down a yield curve without slide */

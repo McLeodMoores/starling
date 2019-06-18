@@ -32,7 +32,7 @@ import com.opengamma.util.ArgumentChecker;
 public class EquityVarianceSwapDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityVarianceSwapDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.PRESENT_VALUE
+                ValueRequirementNames.PRESENT_VALUE
   };
   private final PriorityClass _priority;
   private final Map<String, String> _discountingCurveNames;
@@ -47,8 +47,8 @@ public class EquityVarianceSwapDefaults extends DefaultPropertyFunction {
     ArgumentChecker.notNull(priority, "priority");
     ArgumentChecker.notNull(perEquityConfig, "per equity config");
     final int n = perEquityConfig.length;
-    ArgumentChecker.isTrue(n % 7 == 0, "Must have a discounting curve name, forward curve name, forward curve calculation config, " +
-        "forward curve calculation method, currency and surface name per equity");
+    ArgumentChecker.isTrue(n % 7 == 0, "Must have a discounting curve name, forward curve name, forward curve calculation config, "
+        + "forward curve calculation method, currency and surface name per equity");
     _priority = PriorityClass.valueOf(priority);
     _discountingCurveNames = Maps.newLinkedHashMap();
     _forwardCurveNames = Maps.newLinkedHashMap();

@@ -57,7 +57,7 @@ import com.opengamma.engine.value.ValueSpecification;
     return FORMATTING_ERROR;
   }
 
-  private List<Double[]> formatExpanded(final DoublesCurve value) {
+  private static List<Double[]> formatExpanded(final DoublesCurve value) {
     NodalDoublesCurve detailedCurve;
     if (value instanceof NodalDoublesCurve) {
       detailedCurve = (NodalDoublesCurve) value;

@@ -16,6 +16,8 @@ import org.threeten.bp.Period;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.bond.BondFixedSecurityDefinition;
@@ -32,8 +34,8 @@ import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
-import com.opengamma.financial.analytics.conversion.CalendarUtils;
 import com.opengamma.financial.analytics.conversion.ConversionUtils;
+import com.opengamma.financial.analytics.conversion.WorkingDayCalendarUtils;
 import com.opengamma.financial.analytics.ircurve.strips.BondNode;
 import com.opengamma.financial.convention.BondConvention;
 import com.opengamma.financial.convention.ConventionBundle;
@@ -41,7 +43,6 @@ import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.yield.YieldConvention;
 import com.opengamma.financial.security.bond.BondSecurity;
@@ -72,16 +73,23 @@ public class BondNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
   /** The valuation time */
   private final ZonedDateTime _valuationTime;
   /** Rating agency strings */
-  private static final String[] RATING_STRINGS = new String[] {"RatingMoody", "RatingFitch"};
+  private static final String[] RATING_STRINGS = new String[] { "RatingMoody", "RatingFitch" };
 
   /**
-   * @param regionSource The region source, not null
-   * @param holidaySource The holiday source, not null
-   * @param conventionSource The convention source, not null
-   * @param securitySource The security source, not null
-   * @param marketData The market data, not null
-   * @param dataId The market data id, not null
-   * @param valuationTime The valuation time, not null
+   * @param regionSource
+   *          The region source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param securitySource
+   *          The security source, not null
+   * @param marketData
+   *          The market data, not null
+   * @param dataId
+   *          The market data id, not null
+   * @param valuationTime
+   *          The valuation time, not null
    */
   public BondNodeConverter(final ConventionSource conventionSource, final HolidaySource holidaySource, final RegionSource regionSource,
       final SecuritySource securitySource, final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
@@ -103,13 +111,20 @@ public class BondNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
   }
 
   /**
-   * @param regionSource The region source, not null
-   * @param holidaySource The holiday source, not null
-   * @param conventionBundleSource The convention source, not null
-   * @param securitySource The security source, not null
-   * @param marketData The market data, not null
-   * @param dataId The market data id, not null
-   * @param valuationTime The valuation time, not null
+   * @param regionSource
+   *          The region source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param conventionBundleSource
+   *          The convention source, not null
+   * @param securitySource
+   *          The security source, not null
+   * @param marketData
+   *          The market data, not null
+   * @param dataId
+   *          The market data id, not null
+   * @param valuationTime
+   *          The valuation time, not null
    */
   public BondNodeConverter(final ConventionBundleSource conventionBundleSource, final HolidaySource holidaySource, final RegionSource regionSource,
       final SecuritySource securitySource, final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
@@ -130,23 +145,24 @@ public class BondNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     _valuationTime = valuationTime;
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public InstrumentDefinition<?> visitBondNode(final BondNode bondNode) {
     final Double yield = _marketData.getDataPoint(_dataId);
     if (yield == null) {
       throw new OpenGammaRuntimeException("Could not get market data for " + _dataId);
     }
-    final Security security = _securitySource.getSingle(_dataId.toBundle()); //TODO this is in here because
+    final Security security = _securitySource.getSingle(_dataId.toBundle()); // TODO this is in here because
     // we can't ask for data by ISIN directly.
     if (!(security instanceof BondSecurity)) {
-      throw new OpenGammaRuntimeException("Could not get security for " + security);
+      throw new OpenGammaRuntimeException("Could not get security for " + _dataId.toBundle());
     }
     final BondSecurity bondSecurity = (BondSecurity) security;
     final ExternalId regionId = ExternalSchemes.financialRegionId(bondSecurity.getIssuerDomicile());
     if (regionId == null) {
       throw new OpenGammaRuntimeException("Could not find region for " + bondSecurity.getIssuerDomicile());
     }
-    final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, regionId);
+    final WorkingDayCalendar calendar = WorkingDayCalendarUtils.getCalendarForRegion(_regionSource, _holidaySource, regionId);
     final Currency currency = bondSecurity.getCurrency();
     final ZoneId zone = bondSecurity.getInterestAccrualDate().getZone();
     final ZonedDateTime firstAccrualDate = ZonedDateTime.of(bondSecurity.getInterestAccrualDate().toLocalDate().atStartOfDay(), zone);
@@ -166,8 +182,8 @@ public class BondNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
       settlementDays = convention.getSettlementDays();
     } else {
       final String conventionName = domicile + "_TREASURY_BOND_CONVENTION";
-      final ConventionBundle convention =
-          _conventionBundleSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, conventionName));
+      final ConventionBundle convention = _conventionBundleSource
+          .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, conventionName));
       if (convention == null) {
         throw new OpenGammaRuntimeException("Convention called " + conventionName + " was null");
       }
@@ -181,7 +197,7 @@ public class BondNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
       settlementDays = convention.getBondSettlementDays(firstAccrualDate, maturityDate);
     }
     final YieldConvention yieldConvention = bondSecurity.getYieldConvention();
-    if (bondSecurity.getCouponType().equals("NONE") || bondSecurity.getCouponType().equals("ZERO COUPON")) { //TODO find where string is
+    if (bondSecurity.getCouponType().equals("NONE") || bondSecurity.getCouponType().equals("ZERO COUPON")) { // TODO find where string is
       return new PaymentFixedDefinition(currency, maturityDate, 1);
     }
     final Period paymentPeriod = ConversionUtils.getTenor(bondSecurity.getCouponFrequency());
@@ -206,9 +222,8 @@ public class BondNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
       }
     }
     final LegalEntity legalEntity = new LegalEntity(ticker, shortName, creditRatings, sector, region);
-    final BondFixedSecurityDefinition securityDefinition = BondFixedSecurityDefinition.from(currency, firstAccrualDate,
-        firstCouponDate, maturityDate, paymentPeriod, rate, settlementDays, calendar, dayCount, businessDay, yieldConvention, isEOM,
-        legalEntity);
+    final BondFixedSecurityDefinition securityDefinition = BondFixedSecurityDefinition.from(currency, firstAccrualDate, firstCouponDate, maturityDate,
+        paymentPeriod, rate, settlementDays, CalendarAdapter.of(calendar), dayCount, businessDay, yieldConvention, isEOM, legalEntity);
     // TODO: PLAT-5253 Standard days to settlement are missing in bond description.
     return BondFixedTransactionDefinition.fromYield(securityDefinition, 1, _valuationTime, yield);
   }

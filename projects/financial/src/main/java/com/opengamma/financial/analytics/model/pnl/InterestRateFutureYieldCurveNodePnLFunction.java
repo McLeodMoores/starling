@@ -26,7 +26,8 @@ public class InterestRateFutureYieldCurveNodePnLFunction extends YieldCurveNodeP
   }
 
   @Override
-  protected ValueRequirement getYCNSRequirement(final String currencyString, final String curveCalculationConfigName, final String yieldCurveName, final ComputationTarget target,
+  protected ValueRequirement getYCNSRequirement(final String currencyString, final String curveCalculationConfigName, final String yieldCurveName,
+      final ComputationTarget target,
       final ValueProperties desiredValueProperties) {
     final UniqueId uniqueId = target.getPosition().getTrades().iterator().next().getUniqueId();
     final ValueProperties properties = ValueProperties.builder()
@@ -37,14 +38,14 @@ public class InterestRateFutureYieldCurveNodePnLFunction extends YieldCurveNodeP
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES, ComputationTargetType.TRADE, uniqueId, properties);
   }
 
-//  protected ValueRequirement getCurrencyConversionTSRequirement(final Position position, final String currencyString, final Set<String> resultCurrencies) {
-//    final String resultCurrency = Iterables.getOnlyElement(resultCurrencies);
-//    if (!resultCurrency.equals(currencyString)) {
-//      final ValueProperties.Builder properties = ValueProperties.builder();
-//      properties.with(ValuePropertyNames.CURRENCY, resultCurrencies);
-//      final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(position.getTrade().getSecurity());
-//      return new ValueRequirement(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES, targetSpec, properties.get());
-//    }
-//    return null;
-//  }
+  // protected ValueRequirement getCurrencyConversionTSRequirement(final Position position, final String currencyString, final Set<String> resultCurrencies) {
+  // final String resultCurrency = Iterables.getOnlyElement(resultCurrencies);
+  // if (!resultCurrency.equals(currencyString)) {
+  // final ValueProperties.Builder properties = ValueProperties.builder();
+  // properties.with(ValuePropertyNames.CURRENCY, resultCurrencies);
+  // final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(position.getTrade().getSecurity());
+  // return new ValueRequirement(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES, targetSpec, properties.get());
+  // }
+  // return null;
+  // }
 }

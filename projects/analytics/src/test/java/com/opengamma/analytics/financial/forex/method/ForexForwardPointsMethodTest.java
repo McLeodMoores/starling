@@ -18,9 +18,10 @@ import com.opengamma.analytics.financial.instrument.index.IndexIborMaster;
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
@@ -56,7 +57,7 @@ public class ForexForwardPointsMethodTest {
   private static final double[] MARKET_QUOTES_PTS = new double[] {0.000001, 0.000002, 0.0004, 0.0009, 0.0015, 0.0020, 0.0036, 0.0050 };
   private static final int NB_MARKET_QUOTES = MARKET_QUOTES_PTS.length;
   private static final Period[] MARKET_QUOTES_TENOR = new Period[] {Period.ofDays(-2), Period.ofDays(-1), Period.ofMonths(1), Period.ofMonths(2), Period.ofMonths(3),
-    Period.ofMonths(6), Period.ofMonths(9), Period.ofMonths(12) };
+      Period.ofMonths(6), Period.ofMonths(9), Period.ofMonths(12) };
   private static final ZonedDateTime[] MARKET_QUOTES_DATE = new ZonedDateTime[NB_MARKET_QUOTES];
   private static final double[] MARKET_QUOTES_TIME = new double[NB_MARKET_QUOTES];
   static {
@@ -65,8 +66,8 @@ public class ForexForwardPointsMethodTest {
       MARKET_QUOTES_TIME[loopt] = TimeCalculator.getTimeBetween(REFERENCE_DATE, MARKET_QUOTES_DATE[loopt]);
     }
   }
-  private static final Interpolator1D LINEAR_FLAT = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D LINEAR_FLAT = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
   private static final InterpolatedDoublesCurve FWD_PTS = new InterpolatedDoublesCurve(MARKET_QUOTES_TIME, MARKET_QUOTES_PTS, LINEAR_FLAT, true);
 
   private static final ForexForwardPointsMethod METHOD_FX_PTS = ForexForwardPointsMethod.getInstance();

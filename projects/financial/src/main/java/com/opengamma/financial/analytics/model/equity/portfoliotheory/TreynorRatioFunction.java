@@ -44,10 +44,10 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.timeseries.TimeSeriesIntersector;
 
 /**
- * 
+ *
  */
 public abstract class TreynorRatioFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final double DAYS_PER_YEAR = 365.25; //TODO
+  private static final double DAYS_PER_YEAR = 365.25; // TODO
   private final String _resolutionKey;
 
   public TreynorRatioFunction(final String resolutionKey) {
@@ -67,7 +67,8 @@ public abstract class TreynorRatioFunction extends AbstractFunction.NonCompiledI
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final ValueProperties constraints = desiredValue.getConstraints();
     final HistoricalTimeSeries riskFreeRateTSObject = (HistoricalTimeSeries) inputs.getValue(ValueRequirementNames.HISTORICAL_TIME_SERIES);
-    final Object assetPnLObject = inputs.getValue(new ValueRequirement(ValueRequirementNames.PNL_SERIES, targetSpec)); //TODO replace with return series when portfolio weights are in
+    final Object assetPnLObject = inputs.getValue(new ValueRequirement(ValueRequirementNames.PNL_SERIES, targetSpec)); // TODO replace with return series when
+                                                                                                                       // portfolio weights are in
     if (assetPnLObject == null) {
       throw new OpenGammaRuntimeException("Asset P&L was null");
     }
@@ -83,7 +84,7 @@ public abstract class TreynorRatioFunction extends AbstractFunction.NonCompiledI
     final double fairValue = (Double) assetFairValueObject;
     DoubleTimeSeries<?> assetReturnTS = ((DoubleTimeSeries<?>) assetPnLObject).divide(fairValue);
     DoubleTimeSeries<?> riskFreeReturnTS = riskFreeRateTSObject.getTimeSeries().divide(100 * DAYS_PER_YEAR);
-    DoubleTimeSeries<?>[] series = TimeSeriesIntersector.intersect(riskFreeReturnTS, assetReturnTS);
+    final DoubleTimeSeries<?>[] series = TimeSeriesIntersector.intersect(riskFreeReturnTS, assetReturnTS);
     riskFreeReturnTS = series[0];
     assetReturnTS = series[1];
     final TreynorRatioCalculator calculator = getCalculator(constraints.getValues(ValuePropertyNames.EXCESS_RETURN_CALCULATOR));
@@ -94,7 +95,7 @@ public abstract class TreynorRatioFunction extends AbstractFunction.NonCompiledI
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
-    final Set<ValueRequirement> result = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> result = new HashSet<>();
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> samplingPeriodNames = constraints.getValues(ValuePropertyNames.SAMPLING_PERIOD);
     if (samplingPeriodNames == null || samplingPeriodNames.size() != 1) {
@@ -148,7 +149,8 @@ public abstract class TreynorRatioFunction extends AbstractFunction.NonCompiledI
     final HistoricalTimeSeriesResolver resolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
     final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final ConventionBundle bundle = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "USD_CAPM"));
-    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(bundle.getCAPMMarket(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, _resolutionKey);
+    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(bundle.getCAPMMarket(), null, null, null, MarketDataRequirementNames.MARKET_VALUE,
+        _resolutionKey);
     if (timeSeries == null) {
       return null;
     }
@@ -202,6 +204,6 @@ public abstract class TreynorRatioFunction extends AbstractFunction.NonCompiledI
     }
     final Function<double[], Double> expectedExcessReturnCalculator = StatisticsCalculatorFactory.getCalculator(excessReturnCalculatorNames.iterator().next());
     final DoubleTimeSeriesStatisticsCalculator excessReturnCalculator = new DoubleTimeSeriesStatisticsCalculator(expectedExcessReturnCalculator);
-    return new TreynorRatioCalculator(excessReturnCalculator, excessReturnCalculator); //TODO check that they can both be the same
+    return new TreynorRatioCalculator(excessReturnCalculator, excessReturnCalculator); // TODO check that they can both be the same
   }
 }

@@ -76,7 +76,6 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 import com.opengamma.util.time.Tenor;
 
-
 /**
  *
  */
@@ -90,7 +89,7 @@ public class FXForwardPointsYCNSPnLFunction extends AbstractFunction.NonCompiled
       final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final Position position = target.getPosition();
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
-    final DoubleLabelledMatrix1D sensitivities = ((DoubleLabelledMatrix1D) inputs.getValue(YIELD_CURVE_NODE_SENSITIVITIES));
+    final DoubleLabelledMatrix1D sensitivities = (DoubleLabelledMatrix1D) inputs.getValue(YIELD_CURVE_NODE_SENSITIVITIES);
     final String currency = inputs.getComputedValue(YIELD_CURVE_NODE_SENSITIVITIES).getSpecification().getProperty(CURRENCY);
     final double[] ycns = sensitivities.getValues();
     final Object[] labels = sensitivities.getLabels();
@@ -131,27 +130,27 @@ public class FXForwardPointsYCNSPnLFunction extends AbstractFunction.NonCompiled
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Security security = target.getPosition().getSecurity();
-    return security instanceof FXForwardSecurity ||
-        security instanceof NonDeliverableFXForwardSecurity;
+    return security instanceof FXForwardSecurity
+        || security instanceof NonDeliverableFXForwardSecurity;
   }
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final ValueProperties properties = createValueProperties()
-          .withAny(START_DATE_PROPERTY)
-          .withAny(END_DATE_PROPERTY)
-          .withAny(INCLUDE_START_PROPERTY)
-          .withAny(INCLUDE_END_PROPERTY)
-          .with(TRANSFORMATION_METHOD, "None")
-          .withAny(SCHEDULE_CALCULATOR)
-          .withAny(SAMPLING_FUNCTION)
-          .withAny(CURVE_EXPOSURES)
-          .withAny(FORWARD_CURVE_NAME)
-          .with(PROPERTY_CURVE_TYPE, FORWARD_POINTS)
-          .with(PROPERTY_PNL_CONTRIBUTIONS, YIELD_CURVE_NODE_SENSITIVITIES)
-          .withAny(CURRENCY)
-          .withAny(CURVE)
-          .get();
+        .withAny(START_DATE_PROPERTY)
+        .withAny(END_DATE_PROPERTY)
+        .withAny(INCLUDE_START_PROPERTY)
+        .withAny(INCLUDE_END_PROPERTY)
+        .with(TRANSFORMATION_METHOD, "None")
+        .withAny(SCHEDULE_CALCULATOR)
+        .withAny(SAMPLING_FUNCTION)
+        .withAny(CURVE_EXPOSURES)
+        .withAny(FORWARD_CURVE_NAME)
+        .with(PROPERTY_CURVE_TYPE, FORWARD_POINTS)
+        .with(PROPERTY_PNL_CONTRIBUTIONS, YIELD_CURVE_NODE_SENSITIVITIES)
+        .withAny(CURRENCY)
+        .withAny(CURVE)
+        .get();
     return Collections.singleton(new ValueSpecification(CURVE_PNL_SERIES, target.toSpecification(), properties));
   }
 
@@ -228,7 +227,8 @@ public class FXForwardPointsYCNSPnLFunction extends AbstractFunction.NonCompiled
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String startDate = null;
     String endDate = null;
     String includeStart = null;
@@ -282,7 +282,8 @@ public class FXForwardPointsYCNSPnLFunction extends AbstractFunction.NonCompiled
     final String samplingFunctionName = desiredValue.getConstraint(ValuePropertyNames.SAMPLING_FUNCTION);
     final Schedule scheduleCalculator = ScheduleCalculatorFactory.getScheduleCalculator(scheduleCalculatorName);
     final TimeSeriesSamplingFunction samplingFunction = TimeSeriesSamplingFunctionFactory.getFunction(samplingFunctionName);
-    final LocalDate[] dates = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(returnSeriesStart, returnSeriesEnd, true, false), WEEKEND_CALENDAR);
+    final LocalDate[] dates = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(returnSeriesStart, returnSeriesEnd, true, false),
+        WEEKEND_CALENDAR);
     final LocalDateDoubleTimeSeries sampledTimeSeries = samplingFunction.getSampledTimeSeries(ts, dates);
     final LocalDateDoubleTimeSeries returnSeries = (LocalDateDoubleTimeSeries) DIFFERENCE.evaluate(sampledTimeSeries);
     // Clip the time-series to the range originally asked for

@@ -40,11 +40,19 @@ public class AsynchronousOperationTest {
     return operation.getResult();
   }
 
+  /**
+   * @throws AsynchronousExecution
+   *           if there is a problem
+   */
   public void testResultAvailable() throws AsynchronousExecution {
     assertEquals(immediateSignal(true), RESULT);
   }
 
-  @Test(expectedExceptions = {OpenGammaRuntimeException.class })
+  /**
+   * @throws AsynchronousExecution
+   *           if there is a problem
+   */
+  @Test(expectedExceptions = { OpenGammaRuntimeException.class })
   public void testExceptionAvailable() throws AsynchronousExecution {
     immediateSignal(false);
   }
@@ -92,18 +100,30 @@ public class AsynchronousOperationTest {
     }
   }
 
+  /**
+   *
+   */
   public void testResultDeferredListenerFirst() {
     deferredSignal(true, true);
   }
 
+  /**
+   *
+   */
   public void testExceptionDeferredListenerFirst() {
     deferredSignal(true, false);
   }
 
+  /**
+   *
+   */
   public void testResultDeferredListenerSecond() {
     deferredSignal(false, true);
   }
 
+  /**
+   *
+   */
   public void testExceptionDeferredListenerSecond() {
     deferredSignal(false, false);
   }
@@ -130,11 +150,19 @@ public class AsynchronousOperationTest {
     }
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is a problem
+   */
   public void testResultBlocking() throws InterruptedException {
     assertEquals(blockingCall(true), RESULT);
   }
 
-  @Test(expectedExceptions = {OpenGammaRuntimeException.class })
+  /**
+   * @throws InterruptedException
+   *           if there is a problem
+   */
+  @Test(expectedExceptions = { OpenGammaRuntimeException.class })
   public void testExceptionBlocking() throws InterruptedException {
     blockingCall(false);
   }

@@ -23,7 +23,7 @@ import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotMaster;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Tracks userData and clients
+ * Tracks userData and clients.
  */
 public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, FinancialClientTracker {
 
@@ -40,7 +40,7 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
     _services = services;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the services.
@@ -51,7 +51,7 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
     return _services;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void created(final String userName, final String clientName, final FinancialUserDataType type, final ObjectId identifier) {
     switch (type) {
@@ -134,7 +134,7 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
       final Set<ObjectId> snapshotIds = _marketDataSnapShots.remove(ExternalId.of(userName, clientName));
       for (final ObjectId oid : snapshotIds) {
         marketDataSnapshotMaster.remove(oid);
-        LOGGER.debug("market data snapshot {} discarded for {}/{}", new Object[]{oid, userName, clientName});
+        LOGGER.debug("market data snapshot {} discarded for {}/{}", new Object[] { oid, userName, clientName });
       }
     }
   }
@@ -150,7 +150,7 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
           final Set<ObjectId> oids = entry.getValue();
           for (final ObjectId oid : oids) {
             marketDataSnapshotMaster.remove(oid);
-            LOGGER.debug("market data snapshot {} discarded for {}/{}", new Object[]{oid, userName, identifier.getValue()});
+            LOGGER.debug("market data snapshot {} discarded for {}/{}", new Object[] { oid, userName, identifier.getValue() });
           }
           iterator.remove();
         }
@@ -191,7 +191,7 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
           final Set<ObjectId> viewDefinitions = entry.getValue();
           for (final ObjectId viewDefinitionId : viewDefinitions) {
             configMaster.remove(viewDefinitionId);
-            LOGGER.debug("View definition {} discarded for {}/{}", new Object[]{viewDefinitionId, userName, identifier.getValue()});
+            LOGGER.debug("View definition {} discarded for {}/{}", new Object[] { viewDefinitionId, userName, identifier.getValue() });
           }
           iterator.remove();
         }
@@ -205,7 +205,7 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
       final Set<ObjectId> viewDefinitions = _viewDefinitionIds.remove(ExternalId.of(userName, clientName));
       for (final ObjectId viewDefinitionId : viewDefinitions) {
         configMaster.remove(viewDefinitionId);
-        LOGGER.debug("View definition {} discarded for {}/{}", new Object[]{viewDefinitionId, userName, clientName});
+        LOGGER.debug("View definition {} discarded for {}/{}", new Object[] { viewDefinitionId, userName, clientName });
       }
     }
   }

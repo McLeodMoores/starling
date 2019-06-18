@@ -44,30 +44,39 @@ public class MasterExchangeSourceTest {
   private static final Instant NOW = Instant.now();
   private static final VersionCorrection VC = VersionCorrection.of(NOW.minusSeconds(2), NOW.minusSeconds(1));
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_nullMaster() throws Exception {
+  public void testConstructorNullMaster() {
     new MasterExchangeSource(null);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getExchange_UniqueId_noOverride_found() throws Exception {
-    ExchangeMaster mock = mock(ExchangeMaster.class);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetExchangeUniqueIdNoOverrideFound() {
+    final ExchangeMaster mock = mock(ExchangeMaster.class);
 
-    ExchangeDocument doc = new ExchangeDocument(example());
+    final ExchangeDocument doc = new ExchangeDocument(example());
     when(mock.get(UID)).thenReturn(doc);
-    MasterExchangeSource test = new MasterExchangeSource(mock);
-    Exchange testResult = test.get(UID);
+    final MasterExchangeSource test = new MasterExchangeSource(mock);
+    final Exchange testResult = test.get(UID);
     verify(mock, times(1)).get(UID);
 
     assertEquals(example(), testResult);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_getExchange_UniqueId_notFound() throws Exception {
-    ExchangeMaster mock = mock(ExchangeMaster.class);
+  public void testGetExchangeUniqueIdNotFound() {
+    final ExchangeMaster mock = mock(ExchangeMaster.class);
 
     when(mock.get(UID)).thenThrow(new DataNotFoundException(""));
-    MasterExchangeSource test = new MasterExchangeSource(mock);
+    final MasterExchangeSource test = new MasterExchangeSource(mock);
     try {
       test.get(UID);
     } finally {
@@ -75,25 +84,31 @@ public class MasterExchangeSourceTest {
     }
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getExchange_ObjectId_found() throws Exception {
-    ExchangeMaster mock = mock(ExchangeMaster.class);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetExchangeObjectIdFound() {
+    final ExchangeMaster mock = mock(ExchangeMaster.class);
 
-    ExchangeDocument doc = new ExchangeDocument(example());
+    final ExchangeDocument doc = new ExchangeDocument(example());
     when(mock.get(OID, VC)).thenReturn(doc);
-    MasterExchangeSource test = new MasterExchangeSource(mock);
-    Exchange testResult = test.get(OID, VC);
+    final MasterExchangeSource test = new MasterExchangeSource(mock);
+    final Exchange testResult = test.get(OID, VC);
     verify(mock, times(1)).get(OID, VC);
 
     assertEquals(example(), testResult);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_getExchange_ObjectId_notFound() throws Exception {
-    ExchangeMaster mock = mock(ExchangeMaster.class);
+  public void testGetExchangeObjectIdNotFound() {
+    final ExchangeMaster mock = mock(ExchangeMaster.class);
 
     when(mock.get(OID, VC)).thenThrow(new DataNotFoundException(""));
-    MasterExchangeSource test = new MasterExchangeSource(mock);
+    final MasterExchangeSource test = new MasterExchangeSource(mock);
     try {
       test.get(OID, VC);
     } finally {
@@ -101,75 +116,90 @@ public class MasterExchangeSourceTest {
     }
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getSingleExchange_ExternalId_found() throws Exception {
-    ExchangeMaster mock = mock(ExchangeMaster.class);
-    ExchangeSearchRequest request = new ExchangeSearchRequest(ID);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetSingleExchangeExternalIdFound() {
+    final ExchangeMaster mock = mock(ExchangeMaster.class);
+    final ExchangeSearchRequest request = new ExchangeSearchRequest(ID);
     request.setPagingRequest(PagingRequest.ONE);
 
-    ExchangeSearchResult result = new ExchangeSearchResult();
+    final ExchangeSearchResult result = new ExchangeSearchResult();
     result.getDocuments().add(new ExchangeDocument(example()));
 
     when(mock.search(request)).thenReturn(result);
-    MasterExchangeSource test = new MasterExchangeSource(mock);
-    Exchange testResult = test.getSingle(ID);
+    final MasterExchangeSource test = new MasterExchangeSource(mock);
+    final Exchange testResult = test.getSingle(ID);
     verify(mock, times(1)).search(request);
 
     assertEquals(example(), testResult);
   }
 
-  public void test_getSingleExchange_ExternalId_notFound() throws Exception {
-    ExchangeMaster mock = mock(ExchangeMaster.class);
-    ExchangeSearchRequest request = new ExchangeSearchRequest(ID);
+  /**
+   *
+   */
+  public void testGetSingleExchangeExternalIdNotFound() {
+    final ExchangeMaster mock = mock(ExchangeMaster.class);
+    final ExchangeSearchRequest request = new ExchangeSearchRequest(ID);
     request.setPagingRequest(PagingRequest.ONE);
 
-    ExchangeSearchResult result = new ExchangeSearchResult();
+    final ExchangeSearchResult result = new ExchangeSearchResult();
 
     when(mock.search(request)).thenReturn(result);
-    MasterExchangeSource test = new MasterExchangeSource(mock);
-    Exchange testResult = test.getSingle(ID);
+    final MasterExchangeSource test = new MasterExchangeSource(mock);
+    final Exchange testResult = test.getSingle(ID);
     verify(mock, times(1)).search(request);
 
     assertEquals(null, testResult);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getSingleExchange_ExternalIdBundle_found() throws Exception {
-    ExchangeMaster mock = mock(ExchangeMaster.class);
-    ExchangeSearchRequest request = new ExchangeSearchRequest(BUNDLE);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetSingleExchangeExternalIdBundleFound() {
+    final ExchangeMaster mock = mock(ExchangeMaster.class);
+    final ExchangeSearchRequest request = new ExchangeSearchRequest(BUNDLE);
     request.setPagingRequest(PagingRequest.ONE);
 
-    ExchangeSearchResult result = new ExchangeSearchResult();
+    final ExchangeSearchResult result = new ExchangeSearchResult();
     result.getDocuments().add(new ExchangeDocument(example()));
 
     when(mock.search(request)).thenReturn(result);
-    MasterExchangeSource test = new MasterExchangeSource(mock);
-    Exchange testResult = test.getSingle(BUNDLE);
+    final MasterExchangeSource test = new MasterExchangeSource(mock);
+    final Exchange testResult = test.getSingle(BUNDLE);
     verify(mock, times(1)).search(request);
 
     assertEquals(example(), testResult);
   }
 
-  public void test_getSingleExchange_ExternalIdBundle_vc_found() throws Exception {
-    ExchangeMaster mock = mock(ExchangeMaster.class);
-    ExchangeSearchRequest request = new ExchangeSearchRequest(BUNDLE);
+  /**
+   *
+   */
+  public void testGetSingleExchangeExternalIdBundleVcFound() {
+    final ExchangeMaster mock = mock(ExchangeMaster.class);
+    final ExchangeSearchRequest request = new ExchangeSearchRequest(BUNDLE);
     request.setPagingRequest(PagingRequest.ONE);
     request.setVersionCorrection(VC);
 
-    ExchangeSearchResult result = new ExchangeSearchResult();
+    final ExchangeSearchResult result = new ExchangeSearchResult();
     result.getDocuments().add(new ExchangeDocument(example()));
 
     when(mock.search(request)).thenReturn(result);
-    MasterExchangeSource test = new MasterExchangeSource(mock);
-    Exchange testResult = test.getSingle(BUNDLE, VC);
+    final MasterExchangeSource test = new MasterExchangeSource(mock);
+    final Exchange testResult = test.getSingle(BUNDLE, VC);
     verify(mock, times(1)).search(request);
 
     assertEquals(example(), testResult);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @return an example exchange
+   */
   protected ManageableExchange example() {
-    ManageableExchange exchange = new ManageableExchange();
+    final ManageableExchange exchange = new ManageableExchange();
     exchange.setUniqueId(UID);
     exchange.setName("NYSE");
     exchange.setRegionIdBundle(ExternalIdBundle.of(ExternalSchemes.countryRegionId(Country.US)));

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.classification;
 
@@ -11,7 +11,7 @@ import com.google.common.collect.ImmutableSet;
 /**
  * Hard-coded lists of valid Quandl future code patterns.
  */
-//TODO #16 not good to have as hard-coded lists
+// TODO #16 not good to have as hard-coded lists
 public final class QuandlFutureTypes {
 
   /**
@@ -41,5 +41,5 @@ public final class QuandlFutureTypes {
       Pattern.compile("SGX/ED"), // Eurodollar
       Pattern.compile("SGX/EL"), // Euroyen LIBOR
       Pattern.compile("TFX/JBA") // 3M Euroyen
-      );
+  );
 }

@@ -25,12 +25,16 @@ import com.opengamma.util.tuple.Pair;
   private State _state = State.EMPTY;
 
   /**
-   * @param callbackId ID that's passed to listeners when the grid structure changes
-   * @param viewportDefinition The viewport definition
+   * @param callbackId
+   *          ID that's passed to listeners when the grid structure changes
+   * @param structureCallbackId
+   *          the id for the callback
+   * @param viewportDefinition
+   *          The viewport definition
    */
   /* package */ MainGridViewport(final String callbackId,
-                                 final String structureCallbackId,
-                                 final ViewportDefinition viewportDefinition) {
+      final String structureCallbackId,
+      final ViewportDefinition viewportDefinition) {
     ArgumentChecker.notEmpty(callbackId, "callbackId");
     _callbackId = callbackId;
     _viewportDefinition = viewportDefinition;

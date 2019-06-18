@@ -21,7 +21,7 @@ import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Default barrier distance output format
+ * Default barrier distance output format.
  */
 public class BarrierOptionDistanceDefaults extends DefaultPropertyFunction {
   /** The logger */
@@ -33,11 +33,12 @@ public class BarrierOptionDistanceDefaults extends DefaultPropertyFunction {
    * Value requirement names for which these properties apply
    */
   private static final String[] VALUE_NAMES = new String[] {
-    ValueRequirementNames.BARRIER_DISTANCE
+                ValueRequirementNames.BARRIER_DISTANCE
   };
 
   /**
-   * @param barrierOutput the barrier output format, not null
+   * @param barrierOutput
+   *          the barrier output format, not null
    */
   public BarrierOptionDistanceDefaults(final String barrierOutput) {
     super(FinancialSecurityTypes.EQUITY_BARRIER_OPTION_SECURITY
@@ -48,7 +49,6 @@ public class BarrierOptionDistanceDefaults extends DefaultPropertyFunction {
     _barrierOutput = barrierOutput;
   }
 
-
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
     for (final String valueName : VALUE_NAMES) {
@@ -57,7 +57,8 @@ public class BarrierOptionDistanceDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.BARRIER_DISTANCE_OUTPUT_FORMAT.equals(propertyName)) {
       return Collections.singleton(_barrierOutput);
     }

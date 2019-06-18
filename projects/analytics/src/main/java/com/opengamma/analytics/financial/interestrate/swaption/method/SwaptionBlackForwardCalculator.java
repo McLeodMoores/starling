@@ -15,6 +15,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Calculates the theoretical forward delta of swaptions using the Black model.
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated.
  */
 @Deprecated
@@ -27,6 +28,7 @@ public class SwaptionBlackForwardCalculator extends InstrumentDerivativeVisitorA
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static SwaptionBlackForwardCalculator getInstance() {
@@ -44,7 +46,8 @@ public class SwaptionBlackForwardCalculator extends InstrumentDerivativeVisitorA
   /** Cash-settled swaption methods */
   private static final SwaptionCashFixedIborBlackMethod CASH_SWAPTION = SwaptionCashFixedIborBlackMethod.getInstance();
   /** Physical fixed compounded / overnight compounded methods */
-  private static final SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod PHYSICAL_COMPOUNDED_SWAPTION = SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod.getInstance();
+  private static final SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod PHYSICAL_COMPOUNDED_SWAPTION =
+      SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod.getInstance();
 
   @Override
   public Double visitSwaptionCashFixedIbor(final SwaptionCashFixedIbor swaption, final YieldCurveBundle curves) {
@@ -54,7 +57,8 @@ public class SwaptionBlackForwardCalculator extends InstrumentDerivativeVisitorA
       final YieldCurveWithBlackSwaptionBundle curvesBlack = (YieldCurveWithBlackSwaptionBundle) curves;
       return CASH_SWAPTION.forward(swaption, curvesBlack);
     }
-    throw new UnsupportedOperationException("The SwaptionBlackForwardDeltaCalculator visitor visitSwaptionCashFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
+    throw new UnsupportedOperationException(
+        "The SwaptionBlackForwardDeltaCalculator visitor visitSwaptionCashFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
   }
 
   @Override
@@ -65,7 +69,8 @@ public class SwaptionBlackForwardCalculator extends InstrumentDerivativeVisitorA
       final YieldCurveWithBlackSwaptionBundle curvesBlack = (YieldCurveWithBlackSwaptionBundle) curves;
       return PHYSICAL_SWAPTION.forward(swaption, curvesBlack);
     }
-    throw new UnsupportedOperationException("The SwaptionBlackForwardDeltaCalculator visitor visitSwaptionPhysicalFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
+    throw new UnsupportedOperationException(
+        "The SwaptionBlackForwardDeltaCalculator visitor visitSwaptionPhysicalFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
   }
 
   @Override
@@ -76,7 +81,7 @@ public class SwaptionBlackForwardCalculator extends InstrumentDerivativeVisitorA
       final YieldCurveWithBlackSwaptionBundle curvesBlack = (YieldCurveWithBlackSwaptionBundle) curves;
       return PHYSICAL_COMPOUNDED_SWAPTION.forward(swaption, curvesBlack);
     }
-    throw new UnsupportedOperationException("The SwaptionBlackForwardDeltaCalculator visitor visitSwaptionPhysicalFixedCompoundedONCompounded " +
-        "requires a YieldCurveWithBlackSwaptionBundle as data.");
+    throw new UnsupportedOperationException("The SwaptionBlackForwardDeltaCalculator visitor visitSwaptionPhysicalFixedCompoundedONCompounded "
+        + "requires a YieldCurveWithBlackSwaptionBundle as data.");
   }
 }

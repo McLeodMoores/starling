@@ -16,7 +16,9 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Gets the forward rates for an annuity given a bundle of yield curves.
+ * @deprecated Deprecated
  */
+@Deprecated
 public final class AnnuityProjectedPaymentsVisitor extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, CurrencyAmount[]> {
   /** Gets the fixed rates for coupons */
   private static final InstrumentDerivativeVisitor<YieldCurveBundle, CurrencyAmount> COUPON_VISITOR = new CouponProjectedPaymentVisitor();

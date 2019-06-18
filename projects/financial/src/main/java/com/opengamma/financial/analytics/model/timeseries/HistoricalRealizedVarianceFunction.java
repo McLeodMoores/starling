@@ -19,8 +19,6 @@ import org.threeten.bp.LocalDate;
 
 import com.google.common.collect.Iterables;
 import com.opengamma.analytics.financial.volatilityswap.RealizedVolatilityCalculator;
-import com.opengamma.analytics.math.function.Function1D;
-import com.opengamma.analytics.math.statistics.descriptive.SampleVarianceCalculator;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.AbstractFunction;
 import com.opengamma.engine.function.FunctionCompilationContext;

@@ -57,11 +57,16 @@ public class NonLinearLeastSquare {
   }
 
   /**
-   * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity is not available
-   * @param x Set of measurement points
-   * @param y Set of measurement values
-   * @param func The model in ParameterizedFunction form (i.e. takes measurement points and a set of parameters and returns a model value)
-   * @param startPos Initial value of the parameters
+   * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity is not available.
+   *
+   * @param x
+   *          Set of measurement points
+   * @param y
+   *          Set of measurement values
+   * @param func
+   *          The model in ParameterizedFunction form (i.e. takes measurement points and a set of parameters and returns a model value)
+   * @param startPos
+   *          Initial value of the parameters
    * @return A LeastSquareResults object
    */
   public LeastSquareResults solve(final DoubleMatrix1D x, final DoubleMatrix1D y, final ParameterizedFunction<Double, DoubleMatrix1D, Double> func,
@@ -71,20 +76,27 @@ public class NonLinearLeastSquare {
     final int n = x.getNumberOfElements();
     Validate.isTrue(y.getNumberOfElements() == n, "y wrong length");
     final double[] sigmas = new double[n];
-    Arrays.fill(sigmas, 1); //emcleod 31-1-2011 arbitrary value for now
+    Arrays.fill(sigmas, 1); // emcleod 31-1-2011 arbitrary value for now
     return solve(x, y, new DoubleMatrix1D(sigmas), func, startPos);
   }
 
   /**
    * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity is not available but a measurement error is.
-   * @param x Set of measurement points
-   * @param y Set of measurement values
-   * @param sigma y Set of measurement errors
-   * @param func The model in ParameterizedFunction form (i.e. takes measurement points and a set of parameters and returns a model value)
-   * @param startPos Initial value of the parameters
+   *
+   * @param x
+   *          Set of measurement points
+   * @param y
+   *          Set of measurement values
+   * @param sigma
+   *          y Set of measurement errors
+   * @param func
+   *          The model in ParameterizedFunction form (i.e. takes measurement points and a set of parameters and returns a model value)
+   * @param startPos
+   *          Initial value of the parameters
    * @return A LeastSquareResults object
    */
-  public LeastSquareResults solve(final DoubleMatrix1D x, final DoubleMatrix1D y, final double sigma, final ParameterizedFunction<Double, DoubleMatrix1D, Double> func,
+  public LeastSquareResults solve(final DoubleMatrix1D x, final DoubleMatrix1D y, final double sigma,
+      final ParameterizedFunction<Double, DoubleMatrix1D, Double> func,
       final DoubleMatrix1D startPos) {
     Validate.notNull(x, "x");
     Validate.notNull(y, "y");
@@ -99,11 +111,17 @@ public class NonLinearLeastSquare {
 
   /**
    * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity is not available but an array of measurements errors is.
-   * @param x Set of measurement points
-   * @param y Set of measurement values
-   * @param sigma Set of measurement errors
-   * @param func The model in ParameterizedFunction form (i.e. takes measurement points and a set of parameters and returns a model value)
-   * @param startPos Initial value of the parameters
+   *
+   * @param x
+   *          Set of measurement points
+   * @param y
+   *          Set of measurement values
+   * @param sigma
+   *          Set of measurement errors
+   * @param func
+   *          The model in ParameterizedFunction form (i.e. takes measurement points and a set of parameters and returns a model value)
+   * @param startPos
+   *          Initial value of the parameters
    * @return A LeastSquareResults object
    */
   public LeastSquareResults solve(final DoubleMatrix1D x, final DoubleMatrix1D y, final DoubleMatrix1D sigma,
@@ -133,12 +151,19 @@ public class NonLinearLeastSquare {
   }
 
   /**
-   *  Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity
-   * @param x Set of measurement points
-   * @param y Set of measurement values
-   * @param func The model in ParameterizedFunction form (i.e. takes a measurement points and a set of parameters and returns a model value)
-   * @param grad The model parameter sensitivities in  ParameterizedFunction form (i.e. takes a measurement points and a set of parameters and returns a model parameter sensitivities)
-   * @param startPos Initial value of the parameters
+   * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity.
+   *
+   * @param x
+   *          Set of measurement points
+   * @param y
+   *          Set of measurement values
+   * @param func
+   *          The model in ParameterizedFunction form (i.e. takes a measurement points and a set of parameters and returns a model value)
+   * @param grad
+   *          The model parameter sensitivities in ParameterizedFunction form (i.e. takes a measurement points and a set of parameters and returns a model
+   *          parameter sensitivities)
+   * @param startPos
+   *          Initial value of the parameters
    * @return value of the fitted parameters
    */
   public LeastSquareResults solve(final DoubleMatrix1D x, final DoubleMatrix1D y, final ParameterizedFunction<Double, DoubleMatrix1D, Double> func,
@@ -149,21 +174,30 @@ public class NonLinearLeastSquare {
     final int n = x.getNumberOfElements();
     Validate.isTrue(y.getNumberOfElements() == n, "y wrong length");
     final double[] sigmas = new double[n];
-    Arrays.fill(sigmas, 1); //emcleod 31-1-2011 arbitrary value for now
+    Arrays.fill(sigmas, 1); // emcleod 31-1-2011 arbitrary value for now
     return solve(x, y, new DoubleMatrix1D(sigmas), func, grad, startPos);
   }
 
   /**
-   *  Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity and a single measurement error are available
-   * @param x Set of measurement points
-   * @param y Set of measurement values
-   * @param sigma Measurement errors
-   * @param func The model in ParameterizedFunction form (i.e. takes a measurement points and a set of parameters and returns a model value)
-   * @param grad The model parameter sensitivities in  ParameterizedFunction form (i.e. takes a measurement points and a set of parameters and returns a model parameter sensitivities)
-   * @param startPos Initial value of the parameters
+   * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity and a single measurement error are available.
+   *
+   * @param x
+   *          Set of measurement points
+   * @param y
+   *          Set of measurement values
+   * @param sigma
+   *          Measurement errors
+   * @param func
+   *          The model in ParameterizedFunction form (i.e. takes a measurement points and a set of parameters and returns a model value)
+   * @param grad
+   *          The model parameter sensitivities in ParameterizedFunction form (i.e. takes a measurement points and a set of parameters and returns a model
+   *          parameter sensitivities)
+   * @param startPos
+   *          Initial value of the parameters
    * @return value of the fitted parameters
    */
-  public LeastSquareResults solve(final DoubleMatrix1D x, final DoubleMatrix1D y, final double sigma, final ParameterizedFunction<Double, DoubleMatrix1D, Double> func,
+  public LeastSquareResults solve(final DoubleMatrix1D x, final DoubleMatrix1D y, final double sigma,
+      final ParameterizedFunction<Double, DoubleMatrix1D, Double> func,
       final ParameterizedFunction<Double, DoubleMatrix1D, DoubleMatrix1D> grad, final DoubleMatrix1D startPos) {
     Validate.notNull(x, "x");
     Validate.notNull(y, "y");
@@ -175,13 +209,21 @@ public class NonLinearLeastSquare {
   }
 
   /**
-   *  Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity and measurement errors are available
-   * @param x Set of measurement points
-   * @param y Set of measurement values
-   * @param sigma Set of measurement errors
-   * @param func The model in ParameterizedFunction form (i.e. takes a measurement points and a set of parameters and returns a model value)
-   * @param grad The model parameter sensitivities in  ParameterizedFunction form (i.e. takes a measurement points and a set of parameters and returns a model parameter sensitivities)
-   * @param startPos Initial value of the parameters
+   * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity and measurement errors are available.
+   *
+   * @param x
+   *          Set of measurement points
+   * @param y
+   *          Set of measurement values
+   * @param sigma
+   *          Set of measurement errors
+   * @param func
+   *          The model in ParameterizedFunction form (i.e. takes a measurement points and a set of parameters and returns a model value)
+   * @param grad
+   *          The model parameter sensitivities in ParameterizedFunction form (i.e. takes a measurement points and a set of parameters and returns a model
+   *          parameter sensitivities)
+   * @param startPos
+   *          Initial value of the parameters
    * @return value of the fitted parameters
    */
   public LeastSquareResults solve(final DoubleMatrix1D x, final DoubleMatrix1D y, final DoubleMatrix1D sigma,
@@ -226,11 +268,15 @@ public class NonLinearLeastSquare {
   }
 
   /**
-   *  Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values,
-   *  so the measurement points are already known to the function), and  analytic parameter sensitivity is not available
-   * @param observedValues Set of measurement values
-   * @param func The model as a function of its parameters only
-   * @param startPos  Initial value of the parameters
+   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
+   * the measurement points are already known to the function), and analytic parameter sensitivity is not available
+   *
+   * @param observedValues
+   *          Set of measurement values
+   * @param func
+   *          The model as a function of its parameters only
+   * @param startPos
+   *          Initial value of the parameters
    * @return value of the fitted parameters
    */
   public LeastSquareResults solve(final DoubleMatrix1D observedValues, final Function1D<DoubleMatrix1D, DoubleMatrix1D> func, final DoubleMatrix1D startPos) {
@@ -240,12 +286,17 @@ public class NonLinearLeastSquare {
   }
 
   /**
-   *  Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values,
-   *  so the measurement points are already known to the function), and  analytic parameter sensitivity is not available
-   * @param observedValues Set of measurement values
-   * @param sigma Set of measurement errors
-   * @param func The model as a function of its parameters only
-   * @param startPos  Initial value of the parameters
+   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
+   * the measurement points are already known to the function), and analytic parameter sensitivity is not available
+   *
+   * @param observedValues
+   *          Set of measurement values
+   * @param sigma
+   *          Set of measurement errors
+   * @param func
+   *          The model as a function of its parameters only
+   * @param startPos
+   *          Initial value of the parameters
    * @return value of the fitted parameters
    */
   public LeastSquareResults solve(final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma, final Function1D<DoubleMatrix1D, DoubleMatrix1D> func,
@@ -255,14 +306,20 @@ public class NonLinearLeastSquare {
   }
 
   /**
-   *  Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values,
-   *  so the measurement points are already known to the function), and  analytic parameter sensitivity is not available
-   * @param observedValues Set of measurement values
-   * @param sigma Set of measurement errors
-   * @param func The model as a function of its parameters only
-   * @param startPos  Initial value of the parameters
-   * @param maxJumps A vector containing the maximum absolute allowed step in a particular direction in each iteration. Can be null, in which case no constant
-   * on the step size is applied.
+   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
+   * the measurement points are already known to the function), and analytic parameter sensitivity is not available
+   *
+   * @param observedValues
+   *          Set of measurement values
+   * @param sigma
+   *          Set of measurement errors
+   * @param func
+   *          The model as a function of its parameters only
+   * @param startPos
+   *          Initial value of the parameters
+   * @param maxJumps
+   *          A vector containing the maximum absolute allowed step in a particular direction in each iteration. Can be null, in which case no constant on the
+   *          step size is applied.
    * @return value of the fitted parameters
    */
   public LeastSquareResults solve(final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma, final Function1D<DoubleMatrix1D, DoubleMatrix1D> func,
@@ -272,13 +329,19 @@ public class NonLinearLeastSquare {
   }
 
   /**
-   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values,
-   * so the measurement points are already known to the function), and  analytic parameter sensitivity is available
-   * @param observedValues Set of measurement values
-   * @param sigma Set of measurement errors
-   * @param func The model as a function of its parameters only
-   * @param jac The model sensitivity to its parameters (i.e. the Jacobian matrix) as a function of its parameters only
-   * @param startPos  Initial value of the parameters
+   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
+   * the measurement points are already known to the function), and analytic parameter sensitivity is available
+   *
+   * @param observedValues
+   *          Set of measurement values
+   * @param sigma
+   *          Set of measurement errors
+   * @param func
+   *          The model as a function of its parameters only
+   * @param jac
+   *          The model sensitivity to its parameters (i.e. the Jacobian matrix) as a function of its parameters only
+   * @param startPos
+   *          Initial value of the parameters
    * @return value of the fitted parameters
    */
   public LeastSquareResults solve(final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma, final Function1D<DoubleMatrix1D, DoubleMatrix1D> func,
@@ -287,15 +350,22 @@ public class NonLinearLeastSquare {
   }
 
   /**
-   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values,
-   * so the measurement points are already known to the function), and  analytic parameter sensitivity is available
-   * @param observedValues Set of measurement values
-   * @param sigma Set of measurement errors
-   * @param func The model as a function of its parameters only
-   * @param jac The model sensitivity to its parameters (i.e. the Jacobian matrix) as a function of its parameters only
-   * @param startPos  Initial value of the parameters
-   * @param maxJumps A vector containing the maximum absolute allowed step in a particular direction in each iteration. Can be null, in which case on constant
-   * on the step size is applied.
+   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
+   * the measurement points are already known to the function), and analytic parameter sensitivity is available
+   *
+   * @param observedValues
+   *          Set of measurement values
+   * @param sigma
+   *          Set of measurement errors
+   * @param func
+   *          The model as a function of its parameters only
+   * @param jac
+   *          The model sensitivity to its parameters (i.e. the Jacobian matrix) as a function of its parameters only
+   * @param startPos
+   *          Initial value of the parameters
+   * @param maxJumps
+   *          A vector containing the maximum absolute allowed step in a particular direction in each iteration. Can be null, in which case on constant on the
+   *          step size is applied.
    * @return value of the fitted parameters
    */
   public LeastSquareResults solve(final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma, final Function1D<DoubleMatrix1D, DoubleMatrix1D> func,
@@ -304,16 +374,24 @@ public class NonLinearLeastSquare {
   }
 
   /**
-   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values,
-   * so the measurement points are already known to the function), and  analytic parameter sensitivity is available
-   * @param observedValues Set of measurement values
-   * @param sigma Set of measurement errors
-   * @param func The model as a function of its parameters only
-   * @param jac The model sensitivity to its parameters (i.e. the Jacobian matrix) as a function of its parameters only
-   * @param startPos  Initial value of the parameters
-   * @param constraints A function that returns true if the trial point is within the constraints of the model
-   * @param maxJumps A vector containing the maximum absolute allowed step in a particular direction in each iteration. Can be null, in which case on constant
-   * on the step size is applied.
+   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
+   * the measurement points are already known to the function), and analytic parameter sensitivity is available
+   *
+   * @param observedValues
+   *          Set of measurement values
+   * @param sigma
+   *          Set of measurement errors
+   * @param func
+   *          The model as a function of its parameters only
+   * @param jac
+   *          The model sensitivity to its parameters (i.e. the Jacobian matrix) as a function of its parameters only
+   * @param startPos
+   *          Initial value of the parameters
+   * @param constraints
+   *          A function that returns true if the trial point is within the constraints of the model
+   * @param maxJumps
+   *          A vector containing the maximum absolute allowed step in a particular direction in each iteration. Can be null, in which case on constant on the
+   *          step size is applied.
    * @return value of the fitted parameters
    */
   public LeastSquareResults solve(final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma, final Function1D<DoubleMatrix1D, DoubleMatrix1D> func,
@@ -334,7 +412,7 @@ public class NonLinearLeastSquare {
     DecompositionResult decmp;
     DoubleMatrix1D theta = startPos;
 
-    double lambda = 0.0; //TODO debug if the model is linear, it will be solved in 1 step
+    double lambda = 0.0; // TODO debug if the model is linear, it will be solved in 1 step
     double newChiSqr, oldChiSqr;
     DoubleMatrix1D error = getError(func, observedValues, sigma, theta);
 
@@ -342,7 +420,7 @@ public class NonLinearLeastSquare {
     DoubleMatrix2D jacobian = getJacobian(jac, sigma, theta);
     oldChiSqr = getChiSqr(error);
 
-    //If we start at the solution we are done
+    // If we start at the solution we are done
     if (oldChiSqr == 0.0) {
       return finish(oldChiSqr, jacobian, theta, sigma);
     }
@@ -362,7 +440,7 @@ public class NonLinearLeastSquare {
 
       DoubleMatrix1D trialTheta = (DoubleMatrix1D) _algebra.add(theta, deltaTheta);
 
-      //if the new value of theta is not in the model domain or the jump is too large, keep increasing lambda until an acceptable step is found
+      // if the new value of theta is not in the model domain or the jump is too large, keep increasing lambda until an acceptable step is found
       if (!constraints.evaluate(trialTheta) || !allowJump(deltaTheta, maxJumps)) {
         lambda = increaseLambda(lambda);
         continue;
@@ -371,12 +449,12 @@ public class NonLinearLeastSquare {
       newError = getError(func, observedValues, sigma, trialTheta);
       newChiSqr = getChiSqr(newError);
 
-      //Check for convergence when no improvement in chiSqr occurs
+      // Check for convergence when no improvement in chiSqr occurs
       if (Math.abs(newChiSqr - oldChiSqr) / (1 + oldChiSqr) < _eps) {
 
         final DoubleMatrix2D alpha0 = lambda == 0.0 ? alpha : getModifiedCurvatureMatrix(jacobian, 0.0);
 
-        //if the model is an exact fit to the data, then no more improvement is possible
+        // if the model is an exact fit to the data, then no more improvement is possible
         if (newChiSqr < _eps) {
           if (lambda > 0.0) {
             decmp = _decomposition.evaluate(alpha0);
@@ -386,7 +464,7 @@ public class NonLinearLeastSquare {
 
         final SVDecompositionCommons svd = (SVDecompositionCommons) DecompositionFactory.SV_COMMONS;
 
-        //add the second derivative information to the Hessian matrix to check we are not at a local maximum or saddle point
+        // add the second derivative information to the Hessian matrix to check we are not at a local maximum or saddle point
         final VectorFieldSecondOrderDifferentiator diff = new VectorFieldSecondOrderDifferentiator();
         final Function1D<DoubleMatrix1D, DoubleMatrix2D[]> secDivFunc = diff.differentiate(func, constraints);
         final DoubleMatrix2D[] secDiv = secDivFunc.evaluate(trialTheta);
@@ -422,8 +500,8 @@ public class NonLinearLeastSquare {
           }
         }
 
-        //if a local maximum or saddle point is found (as indicated by negative eigenvalues), move in a direction that is a weighted
-        //sum of the eigenvectors corresponding to the negative eigenvalues
+        // if a local maximum or saddle point is found (as indicated by negative eigenvalues), move in a direction that is a weighted
+        // sum of the eigenvectors corresponding to the negative eigenvalues
         if (saddle) {
           lambda = increaseLambda(lambda);
           for (int i = 0; i < nParms; i++) {
@@ -454,9 +532,10 @@ public class NonLinearLeastSquare {
 
           int counter = 0;
           while (newChiSqr > oldChiSqr) {
-            //if even a tiny move along the negative eigenvalue cannot improve chiSqr, then exit
+            // if even a tiny move along the negative eigenvalue cannot improve chiSqr, then exit
             if (counter > 10 || Math.abs(newChiSqr - oldChiSqr) / (1 + oldChiSqr) < _eps) {
-              LOGGER.warn("Saddle point detected, but no improvement to chi^2 possible by moving away. It is recommended that a different starting point is used.");
+              LOGGER.warn(
+                  "Saddle point detected, but no improvement to chi^2 possible by moving away. It is recommended that a different starting point is used.");
               return finish(newAlpha, decmp, oldChiSqr, jacobian, theta, sigma);
             }
             scale /= 2.0;
@@ -467,7 +546,7 @@ public class NonLinearLeastSquare {
             counter++;
           }
         } else {
-          //this should be the normal finish - i.e. no improvement in chiSqr and at a true minimum (although there is no guarantee it is not a local minimum)
+          // this should be the normal finish - i.e. no improvement in chiSqr and at a true minimum (although there is no guarantee it is not a local minimum)
           return finish(newAlpha, decmp, newChiSqr, jacobian, trialTheta, sigma);
         }
       }
@@ -480,9 +559,9 @@ public class NonLinearLeastSquare {
         beta = getChiSqrGrad(error, jacobian);
 
         // check for convergence
-        //        if (_algebra.getNorm2(beta) < _eps * g0) {
-        //          return finish(newChiSqr, jacobian, trialTheta, sigma);
-        //        }
+        // if (_algebra.getNorm2(beta) < _eps * g0) {
+        // return finish(newChiSqr, jacobian, trialTheta, sigma);
+        // }
         oldChiSqr = newChiSqr;
       } else {
         lambda = increaseLambda(lambda);
@@ -518,10 +597,15 @@ public class NonLinearLeastSquare {
   /**
    *
    * the inverse-Jacobian where the i-j entry is the sensitivity of the ith (fitted) parameter (a_i) to the jth data point (y_j).
-   * @param sigma Set of measurement errors
-   * @param func The model as a function of its parameters only
-   * @param jac The model sensitivity to its parameters (i.e. the Jacobian matrix) as a function of its parameters only
-   * @param originalSolution The value of the parameters at a converged solution
+   *
+   * @param sigma
+   *          Set of measurement errors
+   * @param func
+   *          The model as a function of its parameters only
+   * @param jac
+   *          The model sensitivity to its parameters (i.e. the Jacobian matrix) as a function of its parameters only
+   * @param originalSolution
+   *          The value of the parameters at a converged solution
    * @return inverse-Jacobian
    */
   public DoubleMatrix2D calInverseJacobian(final DoubleMatrix1D sigma, final Function1D<DoubleMatrix1D, DoubleMatrix1D> func,
@@ -551,8 +635,9 @@ public class NonLinearLeastSquare {
       final DoubleMatrix1D theta) {
     final int n = observedValues.getNumberOfElements();
     final DoubleMatrix1D modelValues = func.evaluate(theta);
-    Validate.isTrue(n == modelValues.getNumberOfElements(), "Number of data points different between model (" + modelValues.getNumberOfElements() + ") and observed ("
-        + n + ")");
+    Validate.isTrue(n == modelValues.getNumberOfElements(),
+        "Number of data points different between model (" + modelValues.getNumberOfElements() + ") and observed ("
+            + n + ")");
     final double[] res = new double[n];
     for (int i = 0; i < n; i++) {
       res[i] = (observedValues.getEntry(i) - modelValues.getEntry(i)) / sigma.getEntry(i);

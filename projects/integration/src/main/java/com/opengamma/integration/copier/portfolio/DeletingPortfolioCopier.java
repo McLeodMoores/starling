@@ -20,8 +20,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.ObjectsPair;
 
 /**
- * A portfolio copier that copies positions/securities from the reader to the writer while deleting them
- * from the specified masters.
+ * A portfolio copier that copies positions/securities from the reader to the writer while deleting them from the specified masters.
  */
 public class DeletingPortfolioCopier implements PortfolioCopier {
 
@@ -77,8 +76,8 @@ public class DeletingPortfolioCopier implements PortfolioCopier {
               _positionMaster.remove(next.getFirst().getUniqueId());
               LOGGER.warn("Deleted " + next.getFirst().getUniqueId() + " (" + next.getFirst().getName() + ")");
             } catch (final Throwable e) {
-              throw new OpenGammaRuntimeException("Could not remove position " +
-                  next.getFirst().getName() + " (" + next.getFirst().getUniqueId().toString() + ")");
+              throw new OpenGammaRuntimeException("Could not remove position "
+                  + next.getFirst().getName() + " (" + next.getFirst().getUniqueId().toString() + ")");
             }
           } else {
             LOGGER.warn("Matched " + next.getFirst().getUniqueId() + " (" + next.getFirst().getName() + ")");
@@ -93,8 +92,8 @@ public class DeletingPortfolioCopier implements PortfolioCopier {
                 _securityMaster.remove(security.getUniqueId());
                 LOGGER.warn("Deleted " + security.getUniqueId() + " (" + security.getName() + ")");
               } catch (final Throwable e) {
-                throw new OpenGammaRuntimeException("Could not remove security " +
-                    security.getName() + " (" + security.getUniqueId().toString() + ")");
+                throw new OpenGammaRuntimeException("Could not remove security "
+                    + security.getName() + " (" + security.getUniqueId().toString() + ")");
               }
             } else {
               LOGGER.warn("Matched " + security.getUniqueId() + " (" + security.getName() + ")");
@@ -107,8 +106,7 @@ public class DeletingPortfolioCopier implements PortfolioCopier {
         positionWriter.setPath(path);
 
         // Write position and security data
-        final ObjectsPair<ManageablePosition, ManageableSecurity[]> written =
-            positionWriter.writePosition(next.getFirst(), next.getSecond());
+        final ObjectsPair<ManageablePosition, ManageableSecurity[]> written = positionWriter.writePosition(next.getFirst(), next.getSecond());
 
         if (visitor != null) {
           visitor.info(StringUtils.arrayToDelimitedString(path, "/"), written.getFirst(), written.getSecond());

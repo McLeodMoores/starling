@@ -41,11 +41,12 @@ import com.opengamma.util.money.CurrencyAmount;
 /**
  * Formatter for the details of the fixed leg of a swap.
  */
+@SuppressWarnings("deprecation")
 /* package */class FloatingSwapLegDetailsFormatter extends AbstractFormatter<FloatingSwapLegDetails> {
   /** Column labels */
-  private static final String[] COLUMN_LABELS = new String[] {START_ACCRUAL_DATES, END_ACCRUAL_DATES, ACCRUAL_YEAR_FRACTION,
-    START_FIXING_DATES, END_FIXING_DATES, FIXING_FRACTIONS, FORWARD_RATE, FIXED_RATE, PAYMENT_DATE, PAYMENT_TIME, PAYMENT_DISCOUNT_FACTOR,
-    PAYMENT_AMOUNT, PROJECTED_AMOUNT, NOTIONAL, SPREAD, GEARING, INDEX_TERM, DISCOUNTED_PAYMENT_AMOUNT, DISCOUNTED_PROJECTED_PAYMENT };
+  private static final String[] COLUMN_LABELS = new String[] { START_ACCRUAL_DATES, END_ACCRUAL_DATES, ACCRUAL_YEAR_FRACTION,
+                START_FIXING_DATES, END_FIXING_DATES, FIXING_FRACTIONS, FORWARD_RATE, FIXED_RATE, PAYMENT_DATE, PAYMENT_TIME, PAYMENT_DISCOUNT_FACTOR,
+                PAYMENT_AMOUNT, PROJECTED_AMOUNT, NOTIONAL, SPREAD, GEARING, INDEX_TERM, DISCOUNTED_PAYMENT_AMOUNT, DISCOUNTED_PROJECTED_PAYMENT };
   /** Number of columns */
   private static final int COLUMN_COUNT = COLUMN_LABELS.length;
   /** x labels field */
@@ -62,11 +63,14 @@ import com.opengamma.util.money.CurrencyAmount;
   private final AbstractFormatter<Double> _basisPointFormatter;
 
   /**
-   * @param caFormatter The currency amount formatter, not null
-   * @param rateFormatter The rate formatter, not null
-   * @param basisPointFormatter The basis point formatter, not null
+   * @param caFormatter
+   *          The currency amount formatter, not null
+   * @param rateFormatter
+   *          The rate formatter, not null
+   * @param basisPointFormatter
+   *          The basis point formatter, not null
    */
-  /* package */FloatingSwapLegDetailsFormatter(final AbstractFormatter<CurrencyAmount> caFormatter, final AbstractFormatter<Double> rateFormatter,
+  /* package */ FloatingSwapLegDetailsFormatter(final AbstractFormatter<CurrencyAmount> caFormatter, final AbstractFormatter<Double> rateFormatter,
       final AbstractFormatter<Double> basisPointFormatter) {
     super(FloatingSwapLegDetails.class);
     ArgumentChecker.notNull(caFormatter, "currency amount formatter");
@@ -90,8 +94,11 @@ import com.opengamma.util.money.CurrencyAmount;
 
   /**
    * Expands the details into a matrix.
-   * @param value The fixed swap leg details
-   * @param valueSpec The value specification
+   * 
+   * @param value
+   *          The fixed swap leg details
+   * @param valueSpec
+   *          The value specification
    * @return The expanded format.
    */
   /* package */Map<String, Object> formatExpanded(final FloatingSwapLegDetails value, final ValueSpecification valueSpec) {
@@ -121,7 +128,8 @@ import com.opengamma.util.money.CurrencyAmount;
       values[i][15] = value.getGearings()[i];
       values[i][16] = value.getIndexTenors()[i] == null ? "-" : value.getIndexTenors()[i].toFormattedString();
       values[i][17] = value.getDiscountedPaymentAmounts()[i] == null ? "-" : _caFormatter.formatCell(value.getDiscountedPaymentAmounts()[i], valueSpec, null);
-      values[i][18] = value.getDiscountedProjectedAmounts()[i] == null ? "-" : _caFormatter.formatCell(value.getDiscountedProjectedAmounts()[i], valueSpec, null);
+      values[i][18] = value.getDiscountedProjectedAmounts()[i] == null ? "-"
+          : _caFormatter.formatCell(value.getDiscountedProjectedAmounts()[i], valueSpec, null);
     }
     results.put(MATRIX, values);
     return results;

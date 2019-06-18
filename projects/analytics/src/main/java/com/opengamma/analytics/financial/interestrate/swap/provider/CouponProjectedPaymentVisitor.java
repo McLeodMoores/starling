@@ -18,7 +18,6 @@ import com.opengamma.analytics.financial.interestrate.payments.provider.IborForw
 import com.opengamma.analytics.financial.interestrate.payments.provider.OvernightForwardRateProvider;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.util.money.CurrencyAmount;
-import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  *
@@ -27,19 +26,22 @@ public class CouponProjectedPaymentVisitor extends InstrumentDerivativeVisitorAd
 
   @Override
   public CurrencyAmount visitCouponIbor(final CouponIbor payment, final MulticurveProviderInterface curves) {
-    final double forward = curves.getSimplyCompoundForwardRate(payment.getIndex(), payment.getFixingPeriodStartTime(), payment.getFixingPeriodEndTime(), payment.getFixingAccrualFactor());
+    final double forward = curves.getSimplyCompoundForwardRate(payment.getIndex(), payment.getFixingPeriodStartTime(), payment.getFixingPeriodEndTime(),
+        payment.getFixingAccrualFactor());
     return CurrencyAmount.of(payment.getCurrency(), payment.getNotional() * payment.getPaymentYearFraction() * forward);
   }
 
   @Override
   public CurrencyAmount visitCouponIborSpread(final CouponIborSpread payment, final MulticurveProviderInterface curves) {
-    final double forward = curves.getSimplyCompoundForwardRate(payment.getIndex(), payment.getFixingPeriodStartTime(), payment.getFixingPeriodEndTime(), payment.getFixingAccrualFactor());
+    final double forward = curves.getSimplyCompoundForwardRate(payment.getIndex(), payment.getFixingPeriodStartTime(), payment.getFixingPeriodEndTime(),
+        payment.getFixingAccrualFactor());
     return CurrencyAmount.of(payment.getCurrency(), payment.getNotional() * payment.getPaymentYearFraction() * forward);
   }
 
   @Override
   public CurrencyAmount visitCouponIborGearing(final CouponIborGearing payment, final MulticurveProviderInterface curves) {
-    final double forward = curves.getSimplyCompoundForwardRate(payment.getIndex(), payment.getFixingPeriodStartTime(), payment.getFixingPeriodEndTime(), payment.getFixingAccrualFactor());
+    final double forward = curves.getSimplyCompoundForwardRate(payment.getIndex(), payment.getFixingPeriodStartTime(), payment.getFixingPeriodEndTime(),
+        payment.getFixingAccrualFactor());
     return CurrencyAmount.of(payment.getCurrency(), payment.getNotional() * payment.getPaymentYearFraction() * forward);
   }
 
@@ -53,11 +55,11 @@ public class CouponProjectedPaymentVisitor extends InstrumentDerivativeVisitorAd
           coupon.getFixingSubperiodsEndTimes()[loopsub],
           coupon.getFixingSubperiodsAccrualFactors()[loopsub]);
       cpaAccumulated += cpaAccumulated * forward * coupon.getSubperiodsAccrualFactors()[loopsub]; // Additional Compounding Period Amount
-      cpaAccumulated += coupon.getNotional() * (forward + coupon.getSpread()) * coupon.getSubperiodsAccrualFactors()[loopsub]; // Basic Compounding Period Amount
+      cpaAccumulated += coupon.getNotional() * (forward + coupon.getSpread()) * coupon.getSubperiodsAccrualFactors()[loopsub]; // Basic Compounding Period
+                                                                                                                               // Amount
     }
     return CurrencyAmount.of(coupon.getCurrency(), cpaAccumulated);
   }
-
 
   @Override
   public CurrencyAmount visitCouponONArithmeticAverageSpread(final CouponONArithmeticAverageSpread payment, final MulticurveProviderInterface curves) {
@@ -71,14 +73,14 @@ public class CouponProjectedPaymentVisitor extends InstrumentDerivativeVisitorAd
       rateAccrued += forwardON[loopfwd] * delta[loopfwd];
     }
     // Does not use the payment accrual factor.
-    return CurrencyAmount.of(payment.getCurrency(), (rateAccrued * payment.getNotional() + payment.getSpreadAmount()));
+    return CurrencyAmount.of(payment.getCurrency(), rateAccrued * payment.getNotional() + payment.getSpreadAmount());
   }
 
   @Override
   public CurrencyAmount visitCouponOIS(final CouponON payment, final MulticurveProviderInterface curves) {
     final double ratio = 1.0 + payment.getFixingPeriodAccrualFactor()
         * OvernightForwardRateProvider.getInstance().getRate(curves, payment, payment.getFixingPeriodStartTime(),
-        payment.getFixingPeriodEndTime(), payment.getFixingPeriodAccrualFactor());
+            payment.getFixingPeriodEndTime(), payment.getFixingPeriodAccrualFactor());
     return CurrencyAmount.of(payment.getCurrency(), payment.getNotionalAccrued() * ratio - payment.getNotional());
   }
 
@@ -88,14 +90,15 @@ public class CouponProjectedPaymentVisitor extends InstrumentDerivativeVisitorAd
     for (int i = 0; i < payment.getFixingPeriodAccrualFactors().length; i++) {
       ratio *= Math.pow(
           1 + curves.getAnnuallyCompoundForwardRate(payment.getIndex(), payment.getFixingPeriodStartTimes()[i],
-          payment.getFixingPeriodEndTimes()[i], payment.getFixingPeriodAccrualFactors()[i]), payment.getFixingPeriodAccrualFactors()[i]);
+              payment.getFixingPeriodEndTimes()[i], payment.getFixingPeriodAccrualFactors()[i]),
+          payment.getFixingPeriodAccrualFactors()[i]);
     }
     return CurrencyAmount.of(payment.getCurrency(), payment.getNotionalAccrued() * ratio);
   }
 
   @Override
   public CurrencyAmount visitCouponFixedCompounding(final CouponFixedCompounding payment, final MulticurveProviderInterface curves) {
-    return CurrencyAmount.of(payment.getCurrency(), (payment.getNotionalAccrued() - payment.getNotional()));
+    return CurrencyAmount.of(payment.getCurrency(), payment.getNotionalAccrued() - payment.getNotional());
   }
 
 }

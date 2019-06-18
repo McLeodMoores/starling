@@ -26,7 +26,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Fudge message builder for {@link ExecutionOptions}
+ * Fudge message builder for {@link ExecutionOptions}.
  */
 @FudgeBuilderFor(ExecutionOptions.class)
 public class ExecutionOptionsFudgeBuilder implements FudgeBuilder<ExecutionOptions> {
@@ -46,7 +46,7 @@ public class ExecutionOptionsFudgeBuilder implements FudgeBuilder<ExecutionOptio
   private static final String DEFAULT_EXECUTION_OPTIONS_FIELD = "defaultExecutionOptions";
   private static final String BATCH_FIELD = "batch";
 
-  private static final Collection<Pair<String, ViewExecutionFlags>> FLAGS = Arrays.<Pair<String, ViewExecutionFlags>>asList(
+  private static final Collection<Pair<String, ViewExecutionFlags>> FLAGS = Arrays.<Pair<String, ViewExecutionFlags>> asList(
       Pairs.of(AWAIT_MARKET_DATA_FIELD, ViewExecutionFlags.AWAIT_MARKET_DATA),
       Pairs.of(TRIGGER_CYCLE_ON_LIVE_DATA_CHANGED_FIELD, ViewExecutionFlags.TRIGGER_CYCLE_ON_MARKET_DATA_CHANGED),
       Pairs.of(TRIGGER_CYCLE_ON_TIME_ELAPSED_FIELD, ViewExecutionFlags.TRIGGER_CYCLE_ON_TIME_ELAPSED),
@@ -78,8 +78,8 @@ public class ExecutionOptionsFudgeBuilder implements FudgeBuilder<ExecutionOptio
 
   @Override
   public ExecutionOptions buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
-    final ViewCycleExecutionSequence executionSequence =
-        deserializer.fudgeMsgToObject(ViewCycleExecutionSequence.class, message.getMessage(EXECUTION_SEQUENCE_FIELD));
+    final ViewCycleExecutionSequence executionSequence = deserializer.fudgeMsgToObject(ViewCycleExecutionSequence.class,
+        message.getMessage(EXECUTION_SEQUENCE_FIELD));
     final EnumSet<ViewExecutionFlags> flags = EnumSet.noneOf(ViewExecutionFlags.class);
     for (final Pair<String, ViewExecutionFlags> flagField : FLAGS) {
       if (BooleanUtils.isTrue(message.getBoolean(flagField.getFirst()))) {
@@ -95,8 +95,9 @@ public class ExecutionOptionsFudgeBuilder implements FudgeBuilder<ExecutionOptio
       marketDataTimeoutMillis = message.getLong(MARKET_DATA_TIMEOUT_MILLIS_FIELD);
     }
     final FudgeField defaultExecutionOptionsField = message.getByName(DEFAULT_EXECUTION_OPTIONS_FIELD);
-    final ViewCycleExecutionOptions defaultExecutionOptions = defaultExecutionOptionsField != null ?
-        deserializer.fieldValueToObject(ViewCycleExecutionOptions.class, defaultExecutionOptionsField) : null;
+    final ViewCycleExecutionOptions defaultExecutionOptions = defaultExecutionOptionsField != null
+        ? deserializer.fieldValueToObject(ViewCycleExecutionOptions.class, defaultExecutionOptionsField)
+        : null;
 
     return new ExecutionOptions(executionSequence, flags, maxSuccessiveDeltaCycles, marketDataTimeoutMillis, defaultExecutionOptions);
   }

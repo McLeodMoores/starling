@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.financial.function.trade;
 
 import java.util.ArrayList;
@@ -130,20 +133,31 @@ public class FixedCouponBondCashFlows implements ImmutableBean {
   private final List<LocalDate> _nominalPaymentDates;
 
   /**
-    * Constructs the cash-flow object.
-    * @param startAccrualDates  the coupon start accrual dates, not null
-    * @param endAccrualDates  the coupon end accrual dates, not null
-    * @param discountFactors  the discount factors used at payment time, not null
-    * @param paymentTimes  the payment times, not null
-    * @param accrualFractions  the accrual year fractions calculated from the day-count convention, not null
-    * @param paymentAmounts  the payment amounts, not null
-    * @param notionals  the notionals, not null
-    * @param couponRates  the coupon rates, not null
+   * Constructs the cash-flow object.
+   *
+   * @param startAccrualDates
+   *          the coupon start accrual dates, not null
+   * @param endAccrualDates
+   *          the coupon end accrual dates, not null
+   * @param discountFactors
+   *          the discount factors used at payment time, not null
+   * @param paymentTimes
+   *          the payment times, not null
+   * @param accrualFractions
+   *          the accrual year fractions calculated from the day-count convention, not null
+   * @param paymentAmounts
+   *          the payment amounts, not null
+   * @param notionals
+   *          the notionals, not null
+   * @param couponRates
+   *          the coupon rates, not null
+   * @param nominalPaymentDates
+   *          the nominal payment dates, not null
    */
   @ImmutableConstructor
   public FixedCouponBondCashFlows(final List<LocalDate> startAccrualDates, final List<LocalDate> endAccrualDates, final List<Double> discountFactors,
-                                  final List<Double> paymentTimes, final List<Double> accrualFractions, final List<CurrencyAmount> paymentAmounts,
-                                  final List<CurrencyAmount> notionals, final List<Double> couponRates, final List<LocalDate> nominalPaymentDates) {
+      final List<Double> paymentTimes, final List<Double> accrualFractions, final List<CurrencyAmount> paymentAmounts,
+      final List<CurrencyAmount> notionals, final List<Double> couponRates, final List<LocalDate> nominalPaymentDates) {
     _accrualStart = Collections.unmodifiableList(new ArrayList<>(ArgumentChecker.notNull(startAccrualDates, "startAccrualDates")));
     _accrualEnd = Collections.unmodifiableList(new ArrayList<>(ArgumentChecker.notNull(endAccrualDates, "endAccrualDates")));
     _notionals = Collections.unmodifiableList(new ArrayList<>(ArgumentChecker.notNull(notionals, "notionals")));
@@ -166,7 +180,8 @@ public class FixedCouponBondCashFlows implements ImmutableBean {
 
   /**
    * Gets the discounted payment amounts.
-   * @return  the discounted cashflows
+   * 
+   * @return the discounted cashflows
    */
   @DerivedProperty
   public List<CurrencyAmount> getDiscountedPaymentAmounts() {
@@ -185,7 +200,8 @@ public class FixedCouponBondCashFlows implements ImmutableBean {
 
   /**
    * Gets the total number of cash-flows.
-   * @return  the total number of cash-flows
+   * 
+   * @return the total number of cash-flows
    */
   @DerivedProperty
   public int getNumberOfCashFlows() {

@@ -46,7 +46,7 @@ public abstract class AbstractPortfolioGeneratorTool {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPortfolioGeneratorTool.class);
   /**
-   * Default counter party name
+   * Default counter party name.
    */
   public static final String DEFAULT_COUNTER_PARTY = "COUNTERPARTY";
 
@@ -156,6 +156,7 @@ public abstract class AbstractPortfolioGeneratorTool {
       securityGenerator.setExchangeMaster(getToolContext().getExchangeMaster());
       securityGenerator.setRegionSource(getToolContext().getRegionSource());
       securityGenerator.setLegalEntitySource(getToolContext().getLegalEntitySource());
+      securityGenerator.setLegalEntityMaster(getToolContext().getLegalEntityMaster());
       securityGenerator.setSecurityMaster(getToolContext().getSecurityMaster());
       securityGenerator.setHistoricalTimeSeriesMaster(getToolContext().getHistoricalTimeSeriesMaster());
     }
@@ -233,7 +234,8 @@ public abstract class AbstractPortfolioGeneratorTool {
     return getInstance(getClassContext(), security);
   }
 
-  public void run(final ToolContext context, final String portfolioName, final AbstractPortfolioGeneratorTool instance, final boolean write, final Currency[] currencies) {
+  public void run(final ToolContext context, final String portfolioName, final AbstractPortfolioGeneratorTool instance, final boolean write,
+      final Currency[] currencies) {
     instance.setToolContext(context);
     instance.setCounterPartyGenerator(getCounterPartyGenerator());
     instance.setRandom(new SecureRandom());
@@ -279,7 +281,6 @@ public abstract class AbstractPortfolioGeneratorTool {
       }
     }
   }
-
 
   public void run(final ToolContext context, final String portfolioName, final String security, final boolean write, final Currency[] currencies) {
     final AbstractPortfolioGeneratorTool instance = getInstance(security);
@@ -354,7 +355,7 @@ public abstract class AbstractPortfolioGeneratorTool {
     }
     for (final Position position : node.getPositions()) {
       final Security security = position.getSecurityLink().resolve(securitySource);
-      LOGGER.debug("{} {} x {}", new Object[] {indent, position.getQuantity(), security });
+      LOGGER.debug("{} {} x {}", new Object[] { indent, position.getQuantity(), security });
     }
   }
 
@@ -369,11 +370,8 @@ public abstract class AbstractPortfolioGeneratorTool {
     options.addOption(required(new Option("s", SECURITY_OPT, true, "selects the asset class to populate the portfolio with")));
     options.addOption(new Option("w", WRITE_OPT, false, "writes the portfolio and securities to the masters"));
     options.addOption(new Option("cp", COUNTER_PARTY_OPT, true, "sets the name of the counter party"));
-    options.addOption(OptionBuilder.hasArgs()
-        .withArgName("Currency")
-        .withDescription("Specify the currencies of the securities to be generated")
-        .withLongOpt(CURRENCIES_OPT)
-        .create("ccy"));
+    options.addOption(OptionBuilder.hasArgs().withArgName("Currency").withDescription("Specify the currencies of the securities to be generated")
+        .withLongOpt(CURRENCIES_OPT).create("ccy"));
   }
 
   private Currency[] parseCurrencies(final CommandLine commandLine) {
@@ -385,16 +383,14 @@ public abstract class AbstractPortfolioGeneratorTool {
         ccys[i++] = Currency.of(ccyStr.trim());
       }
       return ccys;
-    } else {
-      return null;
     }
+    return null;
   }
 
   public void run(final ToolContext context, final CommandLine commandLine) {
     setCounterPartyGenerator(new StaticNameGenerator(commandLine.getOptionValue(COUNTER_PARTY_OPT, DEFAULT_COUNTER_PARTY)));
-    run(context, commandLine.getOptionValue(PORTFOLIO_OPT), commandLine.getOptionValue(SECURITY_OPT),
-        commandLine.hasOption(WRITE_OPT), parseCurrencies(commandLine));
+    run(context, commandLine.getOptionValue(PORTFOLIO_OPT), commandLine.getOptionValue(SECURITY_OPT), commandLine.hasOption(WRITE_OPT),
+        parseCurrencies(commandLine));
   }
 
 }
-

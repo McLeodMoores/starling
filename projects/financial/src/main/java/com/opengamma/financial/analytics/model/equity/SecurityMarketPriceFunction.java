@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.equity;
@@ -8,7 +8,6 @@ package com.opengamma.financial.analytics.model.equity;
 import java.util.Collections;
 import java.util.Set;
 
-import com.opengamma.core.security.Security;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.AbstractFunction;
@@ -28,7 +27,8 @@ import com.opengamma.financial.security.MarketSecurityVisitor;
 import com.opengamma.util.money.Currency;
 
 /**
- * Provides the market price for the security of a position as a value on the position. <p>
+ * Provides the market price for the security of a position as a value on the position.
+ * <p>
  * See also {@link SecurityMarkCurrentFunction}
  */
 public class SecurityMarketPriceFunction extends AbstractFunction.NonCompiledInvoker {
@@ -40,7 +40,8 @@ public class SecurityMarketPriceFunction extends AbstractFunction.NonCompiledInv
       final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
     final double marketValue = (Double) inputs.getValue(MarketDataRequirementNames.MARKET_VALUE);
     final ValueRequirement desiredValue = desiredValues.iterator().next();
-    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.SECURITY_MARKET_PRICE, target.toSpecification(), desiredValue.getConstraints()), marketValue));
+    return Collections.singleton(new ComputedValue(
+        new ValueSpecification(ValueRequirementNames.SECURITY_MARKET_PRICE, target.toSpecification(), desiredValue.getConstraints()), marketValue));
   }
 
   @Override
@@ -59,7 +60,8 @@ public class SecurityMarketPriceFunction extends AbstractFunction.NonCompiledInv
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
-    return Collections.singleton(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, target.getPositionOrTrade().getSecurity().getUniqueId()));
+    return Collections.singleton(
+        new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, target.getPositionOrTrade().getSecurity().getUniqueId()));
   }
 
   @Override

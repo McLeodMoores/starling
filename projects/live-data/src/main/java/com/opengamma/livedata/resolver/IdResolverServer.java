@@ -28,6 +28,12 @@ public class IdResolverServer implements FudgeRequestReceiver {
   private static final Logger LOGGER = LoggerFactory.getLogger(IdResolverServer.class);
   private final IdResolver _delegate;
 
+  /**
+   * Creates a resolver server.
+   * 
+   * @param delegate
+   *          the delegate id resolver, not null
+   */
   public IdResolverServer(final IdResolver delegate) {
     ArgumentChecker.notNull(delegate, "Delegate specification resolver");
     _delegate = delegate;

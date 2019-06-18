@@ -97,7 +97,7 @@ import com.opengamma.web.valuerequirementname.WebValueRequirementNamesResource;
  * Component factory for the main website.
  */
 @BeanDefinition
-//@SuppressWarnings("deprecation")
+// @SuppressWarnings("deprecation")
 public class WebsiteBasicsComponentFactory extends AbstractComponentFactory {
 
   /**
@@ -213,7 +213,7 @@ public class WebsiteBasicsComponentFactory extends AbstractComponentFactory {
   /**
    * For looking up market data provider specifications by name.
    *
-   * @deprecated  use liveMarketDataProviderFactory
+   * @deprecated use liveMarketDataProviderFactory
    */
   @PropertyDefinition
   @Deprecated
@@ -235,13 +235,12 @@ public class WebsiteBasicsComponentFactory extends AbstractComponentFactory {
   private VolatilityCubeDefinitionSource _volatilityCubeDefinitionSource;
 
   /**
-   * The external Scheme configuration
-   * e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity
+   * The external Scheme configuration e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity.
    */
   @PropertyDefinition
   private String _externalSchemes;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     final Set<Class<?>> publishedTypes = initMasters(repo, getExternalSchemesMap());
@@ -283,7 +282,7 @@ public class WebsiteBasicsComponentFactory extends AbstractComponentFactory {
   }
 
   protected void initBasics(final ComponentRepository repo, final Set<Class<?>> publishedTypes) {
-    if (AuthUtils.isPermissive() == false) {
+    if (!AuthUtils.isPermissive()) {
       ArgumentChecker.notNull(getUserMaster(), "UserMaster");
       ArgumentChecker.notNull(getPasswordService(), "PasswordService");
       repo.getRestComponents().publishResource(new WebLoginResource());
@@ -310,26 +309,28 @@ public class WebsiteBasicsComponentFactory extends AbstractComponentFactory {
     return publishedTypes;
   }
 
-  //builds a map of type -> constructor params
+  // builds a map of type -> constructor params
   private Map<Class<?>, List<Object>> extractResourceParams(final Map<ExternalScheme, String> externalSchemes, final MasterConfigSource configSource) {
     final Map<Class<?>, List<Object>> resourceParameters = Maps.newHashMap();
-    resourceParameters.put(WebConfigsResource.class,   params(getConfigMaster()));
+    resourceParameters.put(WebConfigsResource.class, params(getConfigMaster()));
     resourceParameters.put(WebUsersResource.class, params(getUserMaster(), getPasswordService()));
     resourceParameters.put(WebRolesResource.class, params(getUserMaster()));
     resourceParameters.put(WebExchangesResource.class, params(getExchangeMaster()));
-    resourceParameters.put(WebHolidaysResource.class,  params(getHolidayMaster()));
-    resourceParameters.put(WebRegionsResource.class,   params(getRegionMaster()));
+    resourceParameters.put(WebHolidaysResource.class, params(getHolidayMaster()));
+    resourceParameters.put(WebRegionsResource.class, params(getRegionMaster()));
     resourceParameters.put(WebConventionsResource.class, params(getConventionMaster()));
     resourceParameters.put(WebLegalEntitiesResource.class, params(getLegalEntityMaster(), getSecurityMaster()));
-    resourceParameters.put(WebSecuritiesResource.class, params(getSecurityMaster(), getSecurityLoader(), getHistoricalTimeSeriesMaster(), getLegalEntityMaster()));
+    resourceParameters.put(WebSecuritiesResource.class,
+        params(getSecurityMaster(), getSecurityLoader(), getHistoricalTimeSeriesMaster(), getLegalEntityMaster()));
     resourceParameters.put(WebPositionsResource.class, params(getPositionMaster(), getSecurityLoader(),
         getSecuritySource(), getHistoricalTimeSeriesSource(), externalSchemes));
     resourceParameters.put(WebPortfoliosResource.class, params(getPortfolioMaster(), getPositionMaster(), getSecuritySource(), getScheduler()));
     resourceParameters.put(WebAllHistoricalTimeSeriesResource.class, params(getHistoricalTimeSeriesMaster(), getHistoricalTimeSeriesLoader(), configSource));
     resourceParameters.put(WebComputationTargetTypeResource.class, params(getTargetTypes()));
-    resourceParameters.put(WebMarketDataSnapshotsResource.class, params(getMarketDataSnapshotMaster(), getConfigMaster(), Optional.fromNullable(getLiveMarketDataProviderFactory()),
-        Optional.fromNullable(getMarketDataSpecificationRepository()), configSource, getComputationTargetResolver(),
-        getViewProcessor(), getHistoricalTimeSeriesSource(), getVolatilityCubeDefinitionSource()));
+    resourceParameters.put(WebMarketDataSnapshotsResource.class,
+        params(getMarketDataSnapshotMaster(), getConfigMaster(), Optional.fromNullable(getLiveMarketDataProviderFactory()),
+            Optional.fromNullable(getMarketDataSpecificationRepository()), configSource, getComputationTargetResolver(),
+            getViewProcessor(), getHistoricalTimeSeriesSource(), getVolatilityCubeDefinitionSource()));
     resourceParameters.put(WebFunctionsResource.class, params(getFunctionConfigurationSource()));
     resourceParameters.put(HolidayLoaderResource.class, params(getHolidayMaster()));
     return resourceParameters;
@@ -366,7 +367,7 @@ public class WebsiteBasicsComponentFactory extends AbstractComponentFactory {
       repo.getRestComponents().publishResource(
           new WebValueRequirementNamesResource(valueRequirementNameClasses.split(",")));
     } else {
-      repo.getRestComponents().publishResource(new WebValueRequirementNamesResource(new String[] {valueRequirementNameClasses}));
+      repo.getRestComponents().publishResource(new WebValueRequirementNamesResource(new String[] { valueRequirementNameClasses }));
     }
   }
 
@@ -944,7 +945,7 @@ public class WebsiteBasicsComponentFactory extends AbstractComponentFactory {
   /**
    * Gets for looking up market data provider specifications by name.
    * 
-   * @deprecated  use liveMarketDataProviderFactory
+   * @deprecated use liveMarketDataProviderFactory
    * @return the value of the property
    */
   @Deprecated
@@ -955,7 +956,7 @@ public class WebsiteBasicsComponentFactory extends AbstractComponentFactory {
   /**
    * Sets for looking up market data provider specifications by name.
    * 
-   * @deprecated  use liveMarketDataProviderFactory
+   * @deprecated use liveMarketDataProviderFactory
    * @param marketDataSpecificationRepository  the new value of the property
    */
   @Deprecated
@@ -966,7 +967,7 @@ public class WebsiteBasicsComponentFactory extends AbstractComponentFactory {
   /**
    * Gets the the {@code marketDataSpecificationRepository} property.
    * 
-   * @deprecated  use liveMarketDataProviderFactory
+   * @deprecated use liveMarketDataProviderFactory
    * @return the property, not null
    */
   @Deprecated
@@ -1051,8 +1052,7 @@ public class WebsiteBasicsComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the external Scheme configuration
-   * e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity
+   * Gets the external Scheme configuration e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity.
    * @return the value of the property
    */
   public String getExternalSchemes() {
@@ -1060,8 +1060,7 @@ public class WebsiteBasicsComponentFactory extends AbstractComponentFactory {
   }
 
   /**
-   * Sets the external Scheme configuration
-   * e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity
+   * Sets the external Scheme configuration e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity.
    * @param externalSchemes  the new value of the property
    */
   public void setExternalSchemes(String externalSchemes) {
@@ -1070,7 +1069,6 @@ public class WebsiteBasicsComponentFactory extends AbstractComponentFactory {
 
   /**
    * Gets the the {@code externalSchemes} property.
-   * e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity
    * @return the property, not null
    */
   public final Property<String> externalSchemes() {
@@ -1639,7 +1637,7 @@ public class WebsiteBasicsComponentFactory extends AbstractComponentFactory {
 
     /**
      * The meta-property for the {@code marketDataSpecificationRepository} property.
-     * @deprecated  use liveMarketDataProviderFactory
+     * @deprecated use liveMarketDataProviderFactory
      * @return the meta-property, not null
      */
     @Deprecated

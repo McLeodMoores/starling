@@ -16,20 +16,22 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Paymen
 import com.opengamma.analytics.financial.interestrate.payments.derivative.PaymentFixed;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
+
 //CSOFF
 /**
- * Calculates the change in present value (PV) when an instrument's fixed payments change (for bonds this is the coupon rate, for swaps it is the rate on the fixed leg etc) dPV/dC
- * This can be used to convert between sensitivities of PV to the yield curve and sensitivities of Par rate to the yield curve
+ * Calculates the change in present value (PV) when an instrument's fixed payments change (for bonds this is the coupon rate, for swaps it is the rate on the
+ * fixed leg etc) dPV/dC. This can be used to convert between sensitivities of PV to the yield curve and sensitivities of Par rate to the yield curve
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
 public final class PresentValueCouponSensitivityCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double> {
   private static final RateReplacingInterestRateDerivativeVisitor REPLACE_RATE = RateReplacingInterestRateDerivativeVisitor.getInstance();
   private static final PresentValueCalculator PVC = PresentValueCalculator.getInstance();
-  private static final PresentValueCouponSensitivityCalculator s_instance = new PresentValueCouponSensitivityCalculator();
+  private static final PresentValueCouponSensitivityCalculator INSTANCE = new PresentValueCouponSensitivityCalculator();
 
   public static PresentValueCouponSensitivityCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   private PresentValueCouponSensitivityCalculator() {

@@ -53,19 +53,22 @@ import com.opengamma.util.PoolExecutor;
    */
   private volatile boolean _invalidNodes;
 
-  public InvalidMarketDataDependencyNodeFilter(final ComputationTargetResolver.AtVersionCorrection targetResolver,
+  InvalidMarketDataDependencyNodeFilter(final ComputationTargetResolver.AtVersionCorrection targetResolver,
       final MarketDataAvailabilityProvider marketData) {
     _targetResolver = targetResolver;
     _marketData = marketData;
   }
 
   /**
-   * Updates the "to-check" list with market data from the given graph. This must be called for all graph fragments that this
-   * sub-grapher will be required to act on before {@link #checkMarketData} is called.
+   * Updates the "to-check" list with market data from the given graph. This must be called for all graph fragments that this sub-grapher will be required to
+   * act on before {@link #checkMarketData} is called.
    *
-   * @param node a root node of the graph to consider, not null
-   * @param terminalOutputs the graph's terminal outputs, not null
-   * @param visited the "visited" buffer, not null
+   * @param node
+   *          a root node of the graph to consider, not null
+   * @param terminalOutputs
+   *          the graph's terminal outputs, not null
+   * @param visited
+   *          the "visited" buffer, not null
    */
   public void init(final DependencyNode node, final Map<ValueSpecification, ?> terminalOutputs, final Set<DependencyNode> visited) {
     if (!visited.add(node)) {
@@ -106,8 +109,10 @@ import com.opengamma.util.PoolExecutor;
    * <p>
    * This may be called by multiple threads and will update the {@link #_valid} and {@link #_invalidNodes} properties.
    *
-   * @param alias the alias (might be the same as {@code marketData} if it is used directly), not null
-   * @param marketData the previous market data specification returned by the data provider, not null
+   * @param alias
+   *          the alias (might be the same as {@code marketData} if it is used directly), not null
+   * @param marketData
+   *          the previous market data specification returned by the data provider, not null
    */
   private void check(final ValueSpecification alias, final ValueSpecification marketData) {
     final ComputationTarget target = _targetResolver.resolve(alias.getTargetSpecification());
@@ -120,8 +125,8 @@ import com.opengamma.util.PoolExecutor;
       return;
     }
     final Object targetValue = target.getValue();
-    final ValueRequirement desiredValue =
-        new ValueRequirement(alias.getValueName(), alias.getTargetSpecification(), alias.getProperties().withoutAny(ValuePropertyNames.DATA_PROVIDER));
+    final ValueRequirement desiredValue = new ValueRequirement(alias.getValueName(), alias.getTargetSpecification(),
+        alias.getProperties().withoutAny(ValuePropertyNames.DATA_PROVIDER));
     final ValueSpecification requiredMarketData = _marketData.getAvailability(alias.getTargetSpecification(), targetValue, desiredValue);
     if (marketData.equals(requiredMarketData)) {
       LOGGER.debug("Market data entry {} still available for {}", marketData, desiredValue);
@@ -137,7 +142,7 @@ import com.opengamma.util.PoolExecutor;
 
     private final ValueSpecification[] _data;
 
-    public CheckBatch(final Iterator<Map.Entry<ValueSpecification, ValueSpecification>> itr, final int count) {
+    CheckBatch(final Iterator<Map.Entry<ValueSpecification, ValueSpecification>> itr, final int count) {
       _data = new ValueSpecification[count * 2];
       int j = 0;
       for (int i = 0; i < count; i++) {
@@ -163,8 +168,10 @@ import com.opengamma.util.PoolExecutor;
    * After the "to-check" list is populated by calling {@link #init}, call this to check the market data. Checks are submitted to an executor in batches for
    * parallel operation.
    *
-   * @param executor the executor to use, not null
-   * @param batchSize the number of items to check in each batch
+   * @param executor
+   *          the executor to use, not null
+   * @param batchSize
+   *          the number of items to check in each batch
    * @return true if at least one market data node is now invalid, false if all are okay
    */
   public boolean checkMarketData(final PoolExecutor executor, final int batchSize) {

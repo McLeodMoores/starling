@@ -20,11 +20,14 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Describes a generic single currency bond transaction.
- * @param <N> The notional type (usually FixedPayment or CouponInflationZeroCoupon).
- * @param <C> The coupon type.
+ *
+ * @param <N>
+ *          The notional type (usually FixedPayment or CouponInflationZeroCoupon).
+ * @param <C>
+ *          The coupon type.
  */
 public abstract class BondTransactionDefinition<N extends PaymentDefinition, C extends CouponDefinition> implements
-    InstrumentDefinition<BondTransaction<? extends BondSecurity<? extends Payment, ? extends Coupon>>> {
+InstrumentDefinition<BondTransaction<? extends BondSecurity<? extends Payment, ? extends Coupon>>> {
 
   /**
    * The bond underlying the transaction.
@@ -43,8 +46,8 @@ public abstract class BondTransactionDefinition<N extends PaymentDefinition, C e
    */
   private final ZonedDateTime _settlementExCouponDate;
   /**
-   * The (quoted) price of the transaction in relative term (i.e. 0.90 if the dirty price is 90% of nominal).
-   * The meaning of this number will depend on the type of bond (fixed coupon, FRN, inflation).
+   * The (quoted) price of the transaction in relative term (i.e. 0.90 if the dirty price is 90% of nominal). The meaning of this number will depend on the type
+   * of bond (fixed coupon, FRN, inflation).
    */
   private final double _price;
   /**
@@ -62,12 +65,18 @@ public abstract class BondTransactionDefinition<N extends PaymentDefinition, C e
 
   /**
    * Constructor of the bond transaction from all the transaction details.
-   * @param underlyingBond The bond underlying the transaction.
-   * @param quantity The number of bonds purchased (can be negative or positive).
-   * @param settlementDate Transaction settlement date.
-   * @param price The (dirty) price of the transaction in relative term (i.e. 0.90 if the dirty price is 90% of nominal).
+   *
+   * @param underlyingBond
+   *          The bond underlying the transaction.
+   * @param quantity
+   *          The number of bonds purchased (can be negative or positive).
+   * @param settlementDate
+   *          Transaction settlement date.
+   * @param price
+   *          The (dirty) price of the transaction in relative term (i.e. 0.90 if the dirty price is 90% of nominal).
    */
-  public BondTransactionDefinition(final BondSecurityDefinition<N, C> underlyingBond, final double quantity, final ZonedDateTime settlementDate, final double price) {
+  public BondTransactionDefinition(final BondSecurityDefinition<N, C> underlyingBond, final double quantity, final ZonedDateTime settlementDate,
+      final double price) {
     ArgumentChecker.notNull(underlyingBond, "Underlying bond");
     ArgumentChecker.notNull(settlementDate, "Settlement date");
     _underlyingBond = underlyingBond;
@@ -88,6 +97,7 @@ public abstract class BondTransactionDefinition<N extends PaymentDefinition, C e
 
   /**
    * Gets the bond underlying the transaction.
+   *
    * @return The underlying Bond.
    */
   public BondSecurityDefinition<N, C> getUnderlyingBond() {
@@ -96,6 +106,7 @@ public abstract class BondTransactionDefinition<N extends PaymentDefinition, C e
 
   /**
    * Gets the number (or quantity) of bonds purchased (can be negative or positive).
+   *
    * @return The quantity.
    */
   public double getQuantity() {
@@ -104,6 +115,7 @@ public abstract class BondTransactionDefinition<N extends PaymentDefinition, C e
 
   /**
    * Gets the settlement date.
+   *
    * @return The settlement date.
    */
   public ZonedDateTime getSettlementDate() {
@@ -112,6 +124,7 @@ public abstract class BondTransactionDefinition<N extends PaymentDefinition, C e
 
   /**
    * Gets the ex-coupon date associated to the settlement date, i.e. ex-coupon days before settlement date.
+   *
    * @return The ex-coupon date.
    */
   public ZonedDateTime getSettlementExCouponDate() {
@@ -120,6 +133,7 @@ public abstract class BondTransactionDefinition<N extends PaymentDefinition, C e
 
   /**
    * Returns the (dirty) price of the bond.
+   *
    * @return The price.
    */
   public double getPrice() {
@@ -128,6 +142,7 @@ public abstract class BondTransactionDefinition<N extends PaymentDefinition, C e
 
   /**
    * Gets the coupon index of the transaction settlement date.
+   *
    * @return The coupon index of the settlement date.
    */
   public int getCouponIndex() {
@@ -136,6 +151,7 @@ public abstract class BondTransactionDefinition<N extends PaymentDefinition, C e
 
   /**
    * Gets the previous accrual date with respect to the settlement date.
+   *
    * @return The previous accrual date.
    */
   public ZonedDateTime getPreviousAccrualDate() {
@@ -144,6 +160,7 @@ public abstract class BondTransactionDefinition<N extends PaymentDefinition, C e
 
   /**
    * Gets the next accrual date with respect to the settlement date.
+   *
    * @return The next accrual date.
    */
   public ZonedDateTime getNextAccrualDate() {

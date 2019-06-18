@@ -5,10 +5,6 @@
  */
 package com.opengamma.web.analytics.rest;
 
-import java.io.IOException;
-
-import org.json.JSONException;
-
 import com.opengamma.web.analytics.push.WebPushTestUtils;
 
 /**
@@ -16,7 +12,7 @@ import com.opengamma.web.analytics.push.WebPushTestUtils;
  */
 public class AnalyticsCsvTest {
 
-  public static void main(final String[] args) throws IOException, JSONException, InterruptedException {
+  public static void main(final String[] args) throws Exception {
     final WebPushTestUtils webPushTestUtils = new WebPushTestUtils();
     final String clientId = webPushTestUtils.handshake();
     final String viewDefJson = "{" +

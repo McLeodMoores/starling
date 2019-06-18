@@ -12,21 +12,21 @@ import java.util.Map;
  * Factory class for different types of decompositions.
  */
 public final class DecompositionFactory {
-  /** Commons LU decomposition */
+  /** Commons LU decomposition. */
   public static final String LU_COMMONS_NAME = "LU_COMMONS";
-  /** Commons QR decomposition */
+  /** Commons QR decomposition. */
   public static final String QR_COMMONS_NAME = "QR_COMMONS";
-  /** Colt SV decomposition */
+  /** Colt SV decomposition. */
   public static final String SV_COLT_NAME = "SV_COLT";
-  /** Commons SV decomposition */
+  /** Commons SV decomposition. */
   public static final String SV_COMMONS_NAME = "SV_COMMONS";
-  /** {@link LUDecompositionCommons} */
+  /** {@link LUDecompositionCommons}. */
   public static final Decomposition<?> LU_COMMONS = new LUDecompositionCommons();
-  /** {@link QRDecompositionCommons} */
+  /** {@link QRDecompositionCommons}. */
   public static final Decomposition<?> QR_COMMONS = new QRDecompositionCommons();
-  /** {@link SVDecompositionColt} */
+  /** {@link SVDecompositionColt}. */
   public static final Decomposition<?> SV_COLT = new SVDecompositionColt();
-  /** {@link SVDecompositionCommons} */
+  /** {@link SVDecompositionCommons}. */
   public static final Decomposition<?> SV_COMMONS = new SVDecompositionCommons();
   private static final Map<String, Decomposition<?>> INSTANCES;
   private static final Map<Class<?>, String> INSTANCE_NAMES;
@@ -48,10 +48,13 @@ public final class DecompositionFactory {
   }
 
   /**
-   * Given a name, returns an instance of that decomposition method
-   * @param decompositionName The name of the decomposition method
+   * Given a name, returns an instance of that decomposition method.
+   * 
+   * @param decompositionName
+   *          The name of the decomposition method
    * @return The decomposition method
-   * @throws IllegalArgumentException If the decomposition name is null or there is no decomposition method of that name
+   * @throws IllegalArgumentException
+   *           If the decomposition name is null or there is no decomposition method of that name
    */
   public static Decomposition<?> getDecomposition(final String decompositionName) {
     final Decomposition<?> decomposition = INSTANCES.get(decompositionName);
@@ -62,8 +65,10 @@ public final class DecompositionFactory {
   }
 
   /**
-   * Given a decomposition method, returns its name
-   * @param decomposition The decomposition method
+   * Given a decomposition method, returns its name.
+   * 
+   * @param decomposition
+   *          The decomposition method
    * @return The name of the decomposition method (null if not found)
    */
   public static String getDecompositionName(final Decomposition<?> decomposition) {

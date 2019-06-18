@@ -178,9 +178,8 @@ public class MergingViewProcessListener implements ViewResultListener {
       if (passThrough) {
         // Release anything that's been merged while it hasn't been passing updates straight through
         return takeCallQueue();
-      } else {
-        return null;
       }
+      return null;
     } finally {
       _mergerLock.unlock();
     }

@@ -14,7 +14,7 @@ import com.bloomberglp.blpapi.Name;
 import com.google.common.collect.ImmutableSet;
 
 /**
- * Bloomberg Constants
+ * Bloomberg Constants.
  */
 public final class BloombergConstants {
 
@@ -41,15 +41,15 @@ public final class BloombergConstants {
    */
   public static final String DEFAULT_DATA_PROVIDER = "DEFAULT";
   /**
-   * OPTION CHAIN FIELD
+   * OPTION CHAIN FIELD.
    */
   public static final String FIELD_OPT_CHAIN = "OPT_CHAIN";
   /**
-   * Future chain
+   * Future chain.
    */
   public static final String FIELD_FUT_CHAIN = "FUT_CHAIN";
   /**
-   * Default start date for timeseries and securities
+   * Default start date for timeseries and securities.
    */
   public static final LocalDate DEFAULT_START_DATE = LocalDate.of(1900, Month.JANUARY, 1);
 
@@ -76,7 +76,7 @@ public final class BloombergConstants {
   public static final String FIELD_OPT_UNDERLYING_SECURITY_DES = "UNDERLYING_SECURITY_DES";
   public static final String FIELD_OPTION_ROOT_TICKER = "OPTION_ROOT_TICKER";
   /**
-   * OPTION TICK VALUE FIELD
+   * OPTION TICK VALUE FIELD.
    */
   public static final String FIELD_OPT_TICK_VAL = "OPT_TICK_VAL";
   public static final String FIELD_OPT_VAL_PT = "OPT_VAL_PT";
@@ -113,7 +113,7 @@ public final class BloombergConstants {
   public static final String FIELD_FUT_DLV_DT_LAST = "FUT_DLV_DT_LAST";
   public static final String FIELD_FUT_TRADING_UNITS = "FUT_TRADING_UNITS";
   /**
-   * A future contract changes by this amount for a single point move of the underlier
+   * A future contract changes by this amount for a single point move of the underlier.
    */
   public static final String FIELD_FUT_VAL_PT = "FUT_VAL_PT";
   public static final String FIELD_GICS_SUB_INDUSTRY = "GICS_SUB_INDUSTRY";
@@ -129,7 +129,7 @@ public final class BloombergConstants {
   public static final String FIELD_PARSEKYABLE_DES = "PARSEKYABLE_DES";
   public static final String FIELD_LAST_TRADEABLE_DT = "LAST_TRADEABLE_DT";
 
-  //bonds
+  // bonds
   public static final String FIELD_INDUSTRY_GROUP = "INDUSTRY_GROUP";
   public static final String FIELD_INDUSTRY_SECTOR = "INDUSTRY_SECTOR";
   public static final String FIELD_CNTRY_ISSUE_ISO = "CNTRY_ISSUE_ISO";
@@ -183,11 +183,11 @@ public final class BloombergConstants {
   public static final String BLOOMBERG_HISTORICAL_DATA_REQUEST = "HistoricalDataRequest";
   public static final String BLOOMBERG_INVALID_SECURITY = "INVALID_SECURITY";
 
-  //option volatility
+  // option volatility
   public static final String FIELD_OPT_IMPLIED_VOLATILITY_BST = "OPT_IMPLIED_VOLATILITY_BST";
   public static final String FIELD_HIST_PUT_IMP_VOL = "HIST_PUT_IMP_VOL";
 
-  //Different bloomberg equity type
+  // Different bloomberg equity type
   public static final String BBG_COMMON_STOCK_TYPE = "Common Stock";
   public static final String BBG_PREFERENCE_TYPE = "Preference";
   public static final String BBG_ADR_TYPE = "ADR";
@@ -203,29 +203,29 @@ public final class BloombergConstants {
   public static final String BBG_PUBLIC_TYPE = "PUBLIC";
   public static final String BBG_EQUITY_WRT_TYPE = "Equity WRT";
 
-  //Bloomberg currency types
+  // Bloomberg currency types
   public static final String BBG_CROSS_CURRENCY_TYPE = "Cross Currency";
   public static final String BBG_CURRENCY_TYPE = "Currency";
 
-  //Bloomberg metal future types
+  // Bloomberg metal future types
   public static final String BBG_PRECIOUS_METAL_TYPE = "Precious Metal";
   public static final String BBG_BASE_METAL_TYPE = "Base Metal";
 
-  //Bloomberg energy future types
+  // Bloomberg energy future types
   public static final String BBG_REFINED_PRODUCTS = "Refined Products";
   public static final String BBG_ELECTRICITY = "Electricity";
   public static final String BBG_COAL = "Coal";
   public static final String BBG_CRUDE_OIL = "Crude Oil";
   public static final String BBG_NATURAL_GAS = "Natural Gas";
 
-  //Bloomberg agriculture future types
+  // Bloomberg agriculture future types
   public static final String BBG_WHEAT = "Wheat";
   public static final String BBG_SOY = "Soy";
   public static final String BBG_LIVESTOCK = "Livestock";
   public static final String BBG_FOODSTUFF = "Foodstuff";
   public static final String BBG_CORN = "Corn";
 
-  //Bloomberg index future type
+  // Bloomberg index future type
   public static final String BLOOMBERG_EQUITY_INDEX_TYPE = "Equity Index";
   public static final String BBG_NON_EQUITY_INDEX_TYPE = "Non-Equity Index";
   public static final String BBG_WEEKLY_INDEX_OPTIONS_TYPE = "Weekly Index Options";
@@ -234,12 +234,12 @@ public final class BloombergConstants {
   public static final String BLOOMBERG_FINANCIAL_COMMODITY_OPTION_TYPE = "Financial commodity option.";
   public static final String BLOOMBERG_CURRENCY_TYPE = "Currency";
 
-  //Bloomberg equity dividend future type
+  // Bloomberg equity dividend future type
   public static final String BBG_STOCK_FUTURE_TYPE = "STOCK FUTURE";
   public static final String BLOOMBERG_EQUITY_DIVIDEND_TYPE = "SINGLE STOCK DIVIDEND FUTURE";
 
   /**
-   * Bloomberg bond future security type description
+   * Bloomberg bond future security type description.
    */
   public static final String BLOOMBERG_BOND_FUTURE_TYPE = "Bond";
 
@@ -258,7 +258,7 @@ public final class BloombergConstants {
   public static final String BLOOMBERG_PHYSICAL_INDEX_FUTURE_TYPE = "Physical index future.";
 
   /**
-   * Rates
+   * Rates.
    */
   public static final String BLOOMBERG_NON_DELIVERABLE_IRS_SWAP_TYPE = "NON-DELIVERABLE IRS SWAP";
   public static final String BLOOMBERG_IMM_SWAP_TYPE = "IMM SWAP";
@@ -282,7 +282,7 @@ public final class BloombergConstants {
   public static final Name AUTHORIZATION_SUCCESS = new Name("AuthorizationSuccess");
   public static final Name AUTHORIZATION_FAILURE = new Name("AuthorizationFailure");
 
-  //historical fields
+  // historical fields
   public static final String BBG_FIELD_LAST_PRICE = "PX_LAST";
   public static final String BBG_FIELD_CUR_MKT_CAP = "CUR_MKT_CAP";
   public static final String BBG_FIELD_VOLUME = "VOLUME";
@@ -291,7 +291,7 @@ public final class BloombergConstants {
   public static final String BBG_FIELD_SETTLE_PRICE = "PX_SETTLE";
   public static final String BBG_FIELD_DIVIDEND_YIELD = "EQY_DVD_YLD_EST";
 
-  //quote unit information
+  // quote unit information
   public static final String BBG_FIELD_FWD_SCALE = "FWD_SCALE";
   // CSON
 
@@ -347,7 +347,7 @@ public final class BloombergConstants {
       FIELD_OPT_UNDL_TICKER);
 
   /**
-   * Valid market sector
+   * Valid market sector.
    */
   public static final Set<String> MARKET_SECTORS = ImmutableSet.of(
       MARKET_SECTOR_COMDTY,
@@ -362,11 +362,11 @@ public final class BloombergConstants {
       MARKET_SECTOR_PREFERRED);
 
   /**
-   * Bpipe application authentication  prefix
+   * Bpipe application authentication prefix.
    */
   public static final String AUTH_APP_PREFIX = "AuthenticationMode=APPLICATION_ONLY;ApplicationAuthenticationType=APPNAME_AND_KEY;ApplicationName=";
   /**
-   * The name of live data entitlement field
+   * The name of live data entitlement field.
    */
   public static final String EID_LIVE_DATA_FIELD = "EID";
 

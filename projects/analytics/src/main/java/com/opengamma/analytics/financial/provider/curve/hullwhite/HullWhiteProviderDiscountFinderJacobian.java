@@ -30,10 +30,14 @@ public class HullWhiteProviderDiscountFinderJacobian extends Function1D<DoubleMa
 
   /**
    * Constructor.
-   * @param parameterSensitivityCalculator The instrument parameter sensitivity calculator.
-   * @param data The data required for curve building.
+   * 
+   * @param parameterSensitivityCalculator
+   *          The instrument parameter sensitivity calculator.
+   * @param data
+   *          The data required for curve building.
    */
-  public HullWhiteProviderDiscountFinderJacobian(final ParameterSensitivityHullWhiteMatrixAbstractCalculator parameterSensitivityCalculator, final HullWhiteProviderDiscountBuildingData data) {
+  public HullWhiteProviderDiscountFinderJacobian(final ParameterSensitivityHullWhiteMatrixAbstractCalculator parameterSensitivityCalculator,
+      final HullWhiteProviderDiscountBuildingData data) {
     _parameterSensitivityCalculator = parameterSensitivityCalculator;
     _data = data;
   }

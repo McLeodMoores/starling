@@ -20,7 +20,8 @@ import com.opengamma.id.ExternalId;
 public class LabelledMatrix1DConverter implements ResultConverter<LabelledMatrix1D> {
 
   @Override
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final LabelledMatrix1D value, final ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final LabelledMatrix1D value,
+      final ConversionMode mode) {
     final Map<String, Object> result = new HashMap<>();
     final int length = value.getKeys().length;
     result.put("summary", length);

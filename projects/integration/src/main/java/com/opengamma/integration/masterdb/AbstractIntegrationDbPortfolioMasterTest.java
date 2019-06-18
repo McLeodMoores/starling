@@ -41,13 +41,13 @@ public abstract class AbstractIntegrationDbPortfolioMasterTest extends AbstractL
     return _prtMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test(enabled = false, description = "Queries the entire database")
-  public void test_queryAll() throws Exception {
+  public void testQueryAll() throws Exception {
     final PortfolioSearchRequest request = new PortfolioSearchRequest();
     request.setPagingRequest(PagingRequest.NONE);
     final int total = getPortfolioMaster().search(request).getPaging().getTotalItems();
-    final int pages = (total / PAGE_SIZE) + 1;
+    final int pages = total / PAGE_SIZE + 1;
     for (int page = 1; page <= pages; page++) {
       request.setPagingRequest(PagingRequest.ofPage(page, PAGE_SIZE));
       System.out.println("Checking portfolio master, page " + request.getPagingRequest());

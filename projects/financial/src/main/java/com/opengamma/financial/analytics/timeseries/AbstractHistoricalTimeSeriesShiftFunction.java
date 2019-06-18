@@ -36,7 +36,8 @@ import com.opengamma.timeseries.DoubleTimeSeriesOperators.UnaryOperator;
 /**
  * Base class for functions to shift historical market data values, implemented using properties and constraints.
  *
- * @param <T> the type of data converted
+ * @param <T>
+ *          the type of data converted
  */
 public abstract class AbstractHistoricalTimeSeriesShiftFunction<T> extends AbstractFunction.NonCompiledInvoker {
 
@@ -68,27 +69,31 @@ public abstract class AbstractHistoricalTimeSeriesShiftFunction<T> extends Abstr
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> shift = constraints.getValues(SHIFT_PROPERTY);
-    if ((shift == null) || shift.isEmpty() || constraints.isOptional(SHIFT_PROPERTY)) {
+    if (shift == null || shift.isEmpty() || constraints.isOptional(SHIFT_PROPERTY)) {
       return null;
     }
-    final ValueProperties properties = desiredValue.getConstraints().copy().withoutAny(SHIFT_PROPERTY).with(SHIFT_PROPERTY, "0").withOptional(SHIFT_PROPERTY).get();
+    final ValueProperties properties = desiredValue.getConstraints().copy().withoutAny(SHIFT_PROPERTY).with(SHIFT_PROPERTY, "0").withOptional(SHIFT_PROPERTY)
+        .get();
     return Collections.singleton(new ValueRequirement(desiredValue.getValueName(), target.toSpecification(), properties));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
-    final ValueProperties properties = input.getProperties().copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, getUniqueId()).withAny(SHIFT_PROPERTY).get();
+    final ValueProperties properties = input.getProperties().copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, getUniqueId())
+        .withAny(SHIFT_PROPERTY).get();
     return Collections.singleton(new ValueSpecification(input.getValueName(), input.getTargetSpecification(), properties));
   }
 
-  private ValueRequirement createRequirement(final FunctionExecutionContext context, final String field, final ExternalIdBundle identifiers) {
+  private ValueRequirement createRequirement(final String field, final ExternalIdBundle identifiers) {
     return new ValueRequirement(field, ComputationTargetType.SECURITY, identifiers);
   }
 
-  protected HistoricalTimeSeries applyOverride(final FunctionExecutionContext context, final OverrideOperation operation, final String field, final ExternalIdBundle identifiers,
+  protected HistoricalTimeSeries applyOverride(final FunctionExecutionContext context, final OverrideOperation operation, final String field,
+      final ExternalIdBundle identifiers,
       final HistoricalTimeSeries value) {
-    final ValueRequirement requirement = createRequirement(context, field, identifiers);
+    final ValueRequirement requirement = createRequirement(field, identifiers);
     LOGGER.debug("Synthetic requirement {} on {}", requirement, value);
     return new SimpleHistoricalTimeSeries(value.getUniqueId(), value.getTimeSeries().operate(new UnaryOperator() {
       @Override
@@ -98,13 +103,15 @@ public abstract class AbstractHistoricalTimeSeriesShiftFunction<T> extends Abstr
     }));
   }
 
-  protected Double applyOverride(final FunctionExecutionContext context, final OverrideOperation operation, final String field, final ExternalIdBundle identifiers, final Double value) {
-    final ValueRequirement requirement = createRequirement(context, field, identifiers);
+  protected Double applyOverride(final FunctionExecutionContext context, final OverrideOperation operation, final String field,
+      final ExternalIdBundle identifiers, final Double value) {
+    final ValueRequirement requirement = createRequirement(field, identifiers);
     LOGGER.debug("Synthetic requirement {} on {}", requirement, value);
     return (Double) operation.apply(requirement, value);
   }
 
-  protected HistoricalTimeSeriesBundle applyOverride(final FunctionExecutionContext context, final OverrideOperation operation, final HistoricalTimeSeriesBundle value) {
+  protected HistoricalTimeSeriesBundle applyOverride(final FunctionExecutionContext context, final OverrideOperation operation,
+      final HistoricalTimeSeriesBundle value) {
     return value.apply(new Function3<String, ExternalIdBundle, HistoricalTimeSeries, HistoricalTimeSeries>() {
       @Override
       public HistoricalTimeSeries execute(final String fieldName, final ExternalIdBundle ids, final HistoricalTimeSeries timeSeries) {
@@ -116,7 +123,8 @@ public abstract class AbstractHistoricalTimeSeriesShiftFunction<T> extends Abstr
   protected abstract T apply(FunctionExecutionContext context, OverrideOperation operation, T value, ValueSpecification valueSpec);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ComputedValue input = inputs.getAllValues().iterator().next();
     @SuppressWarnings("unchecked")
     final T inputValue = (T) input.getValue();
@@ -129,7 +137,8 @@ public abstract class AbstractHistoricalTimeSeriesShiftFunction<T> extends Abstr
     LOGGER.debug("Applying {} to yield curve {}", shift, inputValue);
     final T result = apply(executionContext, compiler.compile(shift, executionContext.getComputationTargetResolver()), inputValue, input.getSpecification());
     LOGGER.debug("Got result {}", result);
-    return Collections.singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), result));
+    return Collections
+        .singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), result));
   }
 
 }

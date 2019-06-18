@@ -25,7 +25,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class ISDACDXAsSingleNameParallelIR01Function extends ISDACDXAsSingleNameIR01Function {
 
   public ISDACDXAsSingleNameParallelIR01Function() {

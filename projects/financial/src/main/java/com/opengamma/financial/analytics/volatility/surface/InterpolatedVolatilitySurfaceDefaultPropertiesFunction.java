@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.surface;
@@ -18,7 +18,7 @@ import com.opengamma.financial.property.DefaultPropertyFunction;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class InterpolatedVolatilitySurfaceDefaultPropertiesFunction extends DefaultPropertyFunction {
   private final String _leftXExtrapolatorName;
@@ -28,7 +28,8 @@ public class InterpolatedVolatilitySurfaceDefaultPropertiesFunction extends Defa
   private final String _rightYExtrapolatorName;
   private final String _yInterpolatorName;
 
-  public InterpolatedVolatilitySurfaceDefaultPropertiesFunction(final String leftXExtrapolatorName, final String rightXExtrapolatorName, final String xInterpolatorName,
+  public InterpolatedVolatilitySurfaceDefaultPropertiesFunction(final String leftXExtrapolatorName, final String rightXExtrapolatorName,
+      final String xInterpolatorName,
       final String leftYExtrapolatorName, final String rightYExtrapolatorName, final String yInterpolatorName) {
     super(ComputationTargetType.LEGACY_PRIMITIVE, true); // // [PLAT-2286]: change to correct type
     ArgumentChecker.notNull(leftXExtrapolatorName, "left x extrapolator name");
@@ -56,7 +57,8 @@ public class InterpolatedVolatilitySurfaceDefaultPropertiesFunction extends Defa
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget taget, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget taget, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (InterpolatedDataProperties.LEFT_X_EXTRAPOLATOR_NAME.equals(propertyName)) {
       return Collections.singleton(_leftXExtrapolatorName);
     }

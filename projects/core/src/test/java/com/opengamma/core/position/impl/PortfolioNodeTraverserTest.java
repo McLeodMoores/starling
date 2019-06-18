@@ -27,13 +27,11 @@ import com.opengamma.util.test.TestGroup;
  */
 public class PortfolioNodeTraverserTest {
 
-  /* Test tree =
-
-                                       N0
-                N1              N10               P19 P20
-         N2    N5  P8 P9    N11     N14   P17 P18
-       P3 P4 P6 P7        P12 P13 P15 P16
-
+  /*
+   * Test tree =
+   *
+   * N0 N1 N10 P19 P20 N2 N5 P8 P9 N11 N14 P17 P18 P3 P4 P6 P7 P12 P13 P15 P16
+   *
    */
 
   private static Position createTestPosition(final AtomicInteger nextId) {
@@ -59,6 +57,9 @@ public class PortfolioNodeTraverserTest {
   private static final int POSITION_PRE = 2;
   private static final int POSITION_POST = 3;
 
+  /**
+   *
+   */
   private static class Callback implements PortfolioNodeTraversalCallback {
 
     private final Queue<Integer> _visited = new LinkedList<>();
@@ -123,7 +124,10 @@ public class PortfolioNodeTraverserTest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(groups = TestGroup.UNIT)
   public void testDepthFirst() {
     final Callback cb = new Callback();
@@ -159,6 +163,9 @@ public class PortfolioNodeTraverserTest {
     cb.assertVisit(NODE_POST, 0);
   }
 
+  /**
+   *
+   */
   @Test(groups = TestGroup.UNIT, enabled = false)
   public void testBreadthFirst() {
     final Callback cb = new Callback();
@@ -179,6 +186,9 @@ public class PortfolioNodeTraverserTest {
     cb.assertVisit(NODE_POST, 0);
   }
 
+  /**
+   *
+   */
   @Test(groups = TestGroup.UNIT, expectedExceptions = UnsupportedOperationException.class)
   public void testBreadthFirstBroken() {
     final Callback cb = new Callback();
@@ -212,6 +222,9 @@ public class PortfolioNodeTraverserTest {
     cb.assertVisitAfter(POSITION_POST, 9, POSITION_POST, 4);
   }
 
+  /**
+   *
+   */
   @Test(groups = TestGroup.UNIT)
   public void testParallelNoSlaveThreads() {
     final Callback cb = new Callback();
@@ -220,6 +233,9 @@ public class PortfolioNodeTraverserTest {
     assertParallelOrder(cb);
   }
 
+  /**
+   *
+   */
   @Test(groups = TestGroup.UNIT_SLOW)
   public void testParallelSlaveThreads() {
     final Callback cb = new Callback() {

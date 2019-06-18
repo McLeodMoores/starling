@@ -22,16 +22,21 @@ public class EquityIndexFutureDefinition extends IndexFutureDefinition {
   /**
    * Constructor for Equity Index Futures, always cash-settled.
    *
-   * @param expiryDate  the time and the day that a particular delivery month of a futures contract stops trading,
-   * as well as the final settlement price for that contract
-   * @param settlementDate settlement date
-   * @param strikePrice reference price
-   * @param currency currency
-   * @param unitAmount  size of a unit
-   * @param underlying  identifier of the underlying commodity
+   * @param expiryDate
+   *          the time and the day that a particular delivery month of a futures contract stops trading, as well as the final settlement price for that contract
+   * @param settlementDate
+   *          settlement date
+   * @param strikePrice
+   *          reference price
+   * @param currency
+   *          currency
+   * @param unitAmount
+   *          size of a unit
+   * @param underlying
+   *          identifier of the underlying commodity
    */
-  public EquityIndexFutureDefinition(final ZonedDateTime expiryDate, final ZonedDateTime settlementDate, final double strikePrice,
-      final Currency currency, final double unitAmount, final ExternalId underlying) {
+  public EquityIndexFutureDefinition(final ZonedDateTime expiryDate, final ZonedDateTime settlementDate, final double strikePrice, final Currency currency,
+      final double unitAmount, final ExternalId underlying) {
     super(expiryDate, settlementDate, strikePrice, currency, unitAmount, underlying);
   }
 
@@ -48,6 +53,7 @@ public class EquityIndexFutureDefinition extends IndexFutureDefinition {
   @Override
   public EquityIndexFuture toDerivative(final ZonedDateTime date) {
     ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.isTrue(!date.isAfter(getExpiryDate()), "Valuation date is after expiry date");
     final double timeToFixing = TimeCalculator.getTimeBetween(date, getExpiryDate());
     final double timeToDelivery = TimeCalculator.getTimeBetween(date, getSettlementDate());
     final EquityIndexFuture newDeriv = new EquityIndexFuture(timeToFixing, timeToDelivery, getReferencePrice(), getCurrency(), getUnitAmount());
@@ -57,6 +63,7 @@ public class EquityIndexFutureDefinition extends IndexFutureDefinition {
   @Override
   public EquityIndexFuture toDerivative(final ZonedDateTime date, final Double referencePrice) {
     ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.isTrue(!date.isAfter(getExpiryDate()), "Valuation date is after expiry date");
     if (referencePrice == null) {
       return toDerivative(date, referencePrice);
     }

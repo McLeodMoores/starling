@@ -30,9 +30,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.ObjectsPair;
 
 /**
- * Portfolio reader that reads multiple CSV files within a ZIP archive, identifies the correct parser class for each,
- * using the file name, and persists all loaded trades/entries using the specified portfolio writer. Folder structure
- * in the ZIP archive is replicated in the portfolio node structure.
+ * Portfolio reader that reads multiple CSV files within a ZIP archive, identifies the correct parser class for each, using the file name, and persists all
+ * loaded trades/entries using the specified portfolio writer. Folder structure in the ZIP archive is replicated in the portfolio node structure.
  */
 public class ZippedPositionReader implements PositionReader {
 
@@ -75,17 +74,16 @@ public class ZippedPositionReader implements PositionReader {
 
     while (true) {
       // Try to get the next row from the current csv in the zip archive
-      final ObjectsPair<ManageablePosition, ManageableSecurity[]> next =
-          _currentReader == null ? null : _currentReader.readNext();
+      final ObjectsPair<ManageablePosition, ManageableSecurity[]> next = _currentReader == null ? null : _currentReader.readNext();
 
       if (next != null) {
         return next;
 
-      // If no more rows to get in the current csv, and no more zip entries, then we've reached the end
+        // If no more rows to get in the current csv, and no more zip entries, then we've reached the end
       } else if (!_zipEntries.hasMoreElements()) {
         return null;
 
-      // More zip entries, try get another csv and return a row from it
+        // More zip entries, try get another csv and return a row from it
       } else {
         // Get the portfolio reader for this csv file
         _currentReader = getReader(_zipEntries.nextElement());
@@ -119,10 +117,10 @@ public class ZippedPositionReader implements PositionReader {
             return null;
           }
           if (parser.getSecurityHashCode() != _versionMap.get(secType)) {
-            LOGGER.error("The parser version for the '" + secType + "' security (hash " +
-                Integer.toHexString(parser.getSecurityHashCode()) +
-                ") does not match the data stored in the archive (hash " +
-                Integer.toHexString(_versionMap.get(secType)) + ")");
+            LOGGER.error("The parser version for the '" + secType + "' security (hash "
+                + Integer.toHexString(parser.getSecurityHashCode())
+                + ") does not match the data stored in the archive (hash "
+                + Integer.toHexString(_versionMap.get(secType)) + ")");
             return null;
           }
         }
@@ -136,9 +134,8 @@ public class ZippedPositionReader implements PositionReader {
         LOGGER.warn("Could not import from " + entry.getName() + ", skipping file (exception is " + ex + ")");
         return null;
       }
-    } else {
-      return null;
     }
+    return null;
   }
 
   private void readMetaData(final String filename) {
@@ -152,7 +149,7 @@ public class ZippedPositionReader implements PositionReader {
 
         String input;
         while ((input = cfgReader.readLine()) != null && !input.equals("[securityHashes]")) {
-          ; // CSIGNORE
+          // CSIGNORE
         }
 
         while ((input = cfgReader.readLine()) != null) {

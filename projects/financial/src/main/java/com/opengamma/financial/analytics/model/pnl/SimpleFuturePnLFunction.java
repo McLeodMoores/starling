@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -56,7 +56,7 @@ import com.opengamma.timeseries.date.DateDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public class SimpleFuturePnLFunction extends AbstractFunction.NonCompiledInvoker {
   private static final HolidayDateRemovalFunction HOLIDAY_REMOVER = HolidayDateRemovalFunction.getInstance();
@@ -70,7 +70,8 @@ public class SimpleFuturePnLFunction extends AbstractFunction.NonCompiledInvoker
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Position position = target.getPosition();
     final FutureSecurity security = (FutureSecurity) position.getSecurity();
     final Currency currency = security.getCurrency();
@@ -98,7 +99,7 @@ public class SimpleFuturePnLFunction extends AbstractFunction.NonCompiledInvoker
     final double pv = (Double) pvObject;
     final Schedule scheduleCalculator = getScheduleCalculator(scheduleCalculatorName);
     final TimeSeriesSamplingFunction samplingFunction = getSamplingFunction(samplingFunctionName);
-    final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR); //REVIEW emcleod should "fromEnd" be hard-coded?
+    final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR);
     DateDoubleTimeSeries<?> pnlSeries = samplingFunction.getSampledTimeSeries(dbTimeSeries.getTimeSeries(), schedule);
     pnlSeries = DIFFERENCE.evaluate(pnlSeries);
     pnlSeries = pnlSeries.multiply(pv);
@@ -115,7 +116,7 @@ public class SimpleFuturePnLFunction extends AbstractFunction.NonCompiledInvoker
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Position position = target.getPosition();
-    final Security security = (Security) position.getSecurity();
+    final Security security = position.getSecurity();
     return security instanceof EnergyFutureSecurity || security instanceof MetalFutureSecurity || security instanceof IndexFutureSecurity;
   }
 
@@ -153,7 +154,7 @@ public class SimpleFuturePnLFunction extends AbstractFunction.NonCompiledInvoker
     }
     final Position position = target.getPosition();
     final FutureSecurity future = (FutureSecurity) position.getSecurity();
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     final ValueProperties pvProperties = ValueProperties.builder()
         .with(ValuePropertyNames.CURRENCY, future.getCurrency().getCode())
         .with(ValuePropertyNames.CURVE, curveName).get();
@@ -164,7 +165,8 @@ public class SimpleFuturePnLFunction extends AbstractFunction.NonCompiledInvoker
       return null;
     }
     requirements.add(HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries,
-        MarketDataRequirementNames.MARKET_VALUE, DateConstraint.VALUATION_TIME.minus(samplingPeriodName.iterator().next()), true, DateConstraint.VALUATION_TIME, true));
+        MarketDataRequirementNames.MARKET_VALUE, DateConstraint.VALUATION_TIME.minus(samplingPeriodName.iterator().next()), true, DateConstraint.VALUATION_TIME,
+        true));
     return requirements;
   }
 

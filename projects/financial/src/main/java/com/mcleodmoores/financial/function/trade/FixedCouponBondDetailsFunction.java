@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.financial.function.trade;
 
@@ -52,15 +52,14 @@ public class FixedCouponBondDetailsFunction extends BondAndBondFutureFromCurvesF
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
     final ValueProperties properties = desiredValue.getConstraints();
     final ZonedDateTime now = ZonedDateTime.now(executionContext.getValuationClock());
-    final BondFixedTransactionDefinition definition =
-        (BondFixedTransactionDefinition) BondAndBondFutureFunctionUtils.getDefinition(executionContext, target, now);
-    final BondFixedTransaction derivative =
-        (BondFixedTransaction) BondAndBondFutureFunctionUtils.getBondOrBondFutureDerivative(executionContext, target, now, inputs);
+    final BondFixedTransactionDefinition definition = (BondFixedTransactionDefinition) BondAndBondFutureFunctionUtils.getDefinition(executionContext, target,
+        now);
+    final BondFixedTransaction derivative = (BondFixedTransaction) BondAndBondFutureFunctionUtils.getBondOrBondFutureDerivative(executionContext, target, now,
+        inputs);
     final IssuerProvider curves = (IssuerProvider) inputs.getValue(CURVE_BUNDLE);
     final FixedCouponBondDetailsProvider provider = new FixedCouponBondDetailsProvider(curves, now, definition);
     final ValueSpecification spec = new ValueSpecification(BOND_DETAILS, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, derivative.accept(FixedCouponBondDetailsCalculator.INSTANCE, provider)));
   }
-
 
 }

@@ -157,7 +157,7 @@ public class UserSearchRequest implements Bean {
     if (getEmailAddress() != null && !RegexUtils.wildcardMatch(getEmailAddress(), user.getEmailAddress())) {
       return false;
     }
-    if (!user.getAssociatedPermissions().contains(getAssociatedPermission())) {
+    if (getAssociatedPermission() != null && !user.getAssociatedPermissions().contains(getAssociatedPermission())) {
       return false;
     }
     if (getAlternateIdValue() != null) {

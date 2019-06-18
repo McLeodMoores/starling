@@ -35,9 +35,9 @@ import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 /**
  * Produces a value requirement that will query the fixing time series for a security.
  */
-public class FixingTimeSeriesVisitor extends FinancialSecurityVisitorAdapter<ValueRequirement> { //CSIGNORE
+public class FixingTimeSeriesVisitor extends FinancialSecurityVisitorAdapter<ValueRequirement> { // CSIGNORE
 
-  //TODO a lot of this code is repeated in FixedIncomeConverterDataProvider - that class should use this one
+  // TODO a lot of this code is repeated in FixedIncomeConverterDataProvider - that class should use this one
 
   private final ConventionBundleSource _conventionSource;
   private final HistoricalTimeSeriesResolver _resolver;
@@ -52,12 +52,13 @@ public class FixingTimeSeriesVisitor extends FinancialSecurityVisitorAdapter<Val
   @Override
   public ValueRequirement visitSwapSecurity(final SwapSecurity security) {
     final InterestRateInstrumentType type = InterestRateInstrumentType.getInstrumentTypeFromSecurity(security);
-    if (type != InterestRateInstrumentType.SWAP_FIXED_IBOR &&
-        type != InterestRateInstrumentType.SWAP_FIXED_OIS &&
-        type != InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD) {
+    if (type != InterestRateInstrumentType.SWAP_FIXED_IBOR
+        && type != InterestRateInstrumentType.SWAP_FIXED_OIS
+        && type != InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD) {
       throw new OpenGammaRuntimeException("Can only get series for fixed / float swaps; have " + type);
     }
-    final FloatingInterestRateLeg floatingLeg = (FloatingInterestRateLeg) (security.getPayLeg() instanceof FixedInterestRateLeg ? security.getReceiveLeg() : security.getPayLeg());
+    final FloatingInterestRateLeg floatingLeg = (FloatingInterestRateLeg) (security.getPayLeg() instanceof FixedInterestRateLeg ? security.getReceiveLeg()
+        : security.getPayLeg());
     final ZonedDateTime swapStartDate = security.getEffectiveDate();
     return getIndexTimeSeries(floatingLeg, swapStartDate, _now, true, _resolver);
   }
@@ -71,7 +72,8 @@ public class FixingTimeSeriesVisitor extends FinancialSecurityVisitorAdapter<Val
     if (ts == null) {
       throw new OpenGammaRuntimeException("Could not get time series of underlying index " + id.getExternalIds().toString() + " bundle used was " + id);
     }
-    return HistoricalTimeSeriesFunctionUtils.createHTSRequirement(ts, MarketDataRequirementNames.MARKET_VALUE, DateConstraint.of(startDate), true, now, includeEndDate);
+    return HistoricalTimeSeriesFunctionUtils.createHTSRequirement(ts, MarketDataRequirementNames.MARKET_VALUE, DateConstraint.of(startDate), true, now,
+        includeEndDate);
   }
 
   public static ZonedDateTimeDoubleTimeSeries convertTimeSeries(final HistoricalTimeSeries ts) {
@@ -86,7 +88,8 @@ public class FixingTimeSeriesVisitor extends FinancialSecurityVisitorAdapter<Val
   }
 
   private ExternalIdBundle getIndexIdForSwap(final FloatingInterestRateLeg floatingLeg) {
-    if (floatingLeg.getFloatingRateType().isIbor() || floatingLeg.getFloatingRateType().equals(FloatingRateType.OIS) || floatingLeg.getFloatingRateType().equals(FloatingRateType.CMS)) {
+    if (floatingLeg.getFloatingRateType().isIbor() || floatingLeg.getFloatingRateType().equals(FloatingRateType.OIS)
+        || floatingLeg.getFloatingRateType().equals(FloatingRateType.CMS)) {
       return getIndexIdBundle(floatingLeg.getFloatingReferenceRateId());
     }
     return ExternalIdBundle.of(floatingLeg.getFloatingReferenceRateId());

@@ -8,7 +8,6 @@ import static org.testng.Assert.assertNotEquals;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
@@ -62,7 +61,6 @@ public class OvernightIndexTest {
   /**
    * Tests the object.
    */
-  @SuppressWarnings("deprecation")
   @Test
   public void testObject() {
     final OvernightIndex index = new OvernightIndex(NAME, CURRENCY, DAY_COUNT, PUBLICATION_LAG);

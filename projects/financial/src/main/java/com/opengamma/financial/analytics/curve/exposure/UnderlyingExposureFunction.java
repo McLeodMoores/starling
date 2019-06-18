@@ -41,8 +41,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Exposure function that returns the underlying security of the given trade. If there is no underlying, then null is
- * returned.
+ * Exposure function that returns the underlying security of the given trade. If there is no underlying, then null is returned.
  */
 public class UnderlyingExposureFunction implements ExposureFunction {
 
@@ -75,7 +74,7 @@ public class UnderlyingExposureFunction implements ExposureFunction {
 
     private final SecuritySource _securitySource;
 
-    public UnderlyingVisitor(final SecuritySource securitySource) {
+    UnderlyingVisitor(final SecuritySource securitySource) {
       super(null);
       _securitySource = ArgumentChecker.notNull(securitySource, "securitySource");
     }
@@ -150,7 +149,7 @@ public class UnderlyingExposureFunction implements ExposureFunction {
     @Override
     public List<ExternalId> visitSwaptionSecurity(final SwaptionSecurity security) {
       final List<ExternalId> result = new ArrayList<>();
-      final SwapSecurity underlyingSwap = (SwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId())); //TODO version
+      final SwapSecurity underlyingSwap = (SwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId())); // TODO version
       final SwapLeg payLeg = underlyingSwap.getPayLeg();
       final SwapLeg receiveLeg = underlyingSwap.getReceiveLeg();
       if (payLeg instanceof FloatingInterestRateLeg) {

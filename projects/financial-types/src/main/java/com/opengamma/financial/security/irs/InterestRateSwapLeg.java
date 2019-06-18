@@ -43,7 +43,7 @@ public abstract class InterestRateSwapLeg extends DirectBean {
   private InterestRateSwapNotional _notional;
 
   /**
-   * Whether this is a pay or receive leg
+   * Whether this is a pay or receive leg.
    */
   @PropertyDefinition(validate = "notNull")
   private PayReceiveType _payReceiveType;
@@ -65,7 +65,6 @@ public abstract class InterestRateSwapLeg extends DirectBean {
    */
   @PropertyDefinition(validate = "notNull")
   private RollConvention _rollConvention = RollConvention.NONE;
-
 
   /*
    * Maturity date parameters
@@ -142,8 +141,10 @@ public abstract class InterestRateSwapLeg extends DirectBean {
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
    *
-   * @param <T> the result type of the visitor
-   * @param visitor  the visitor, not null
+   * @param <T>
+   *          the result type of the visitor
+   * @param visitor
+   *          the visitor, not null
    * @return the result
    */
   public abstract <T> T accept(InterestRateSwapLegVisitor<T> visitor);
@@ -194,7 +195,7 @@ public abstract class InterestRateSwapLeg extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets whether this is a pay or receive leg
+   * Gets whether this is a pay or receive leg.
    * @return the value of the property, not null
    */
   public PayReceiveType getPayReceiveType() {
@@ -202,7 +203,7 @@ public abstract class InterestRateSwapLeg extends DirectBean {
   }
 
   /**
-   * Sets whether this is a pay or receive leg
+   * Sets whether this is a pay or receive leg.
    * @param payReceiveType  the new value of the property, not null
    */
   public void setPayReceiveType(PayReceiveType payReceiveType) {

@@ -18,6 +18,7 @@ import com.opengamma.financial.analytics.model.black.BlackDiscountingPVSwaptionF
 
 /**
  * Calculates the present value of swaptions using the Black method.
+ * 
  * @deprecated Use {@link BlackDiscountingPVSwaptionFunction}
  */
 @Deprecated
@@ -26,7 +27,7 @@ public class SwaptionBlackPresentValueFunction extends SwaptionBlackFunction {
   private static final PresentValueBlackCalculator CALCULATOR = PresentValueBlackCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirement name to {@link ValueRequirementNames#PRESENT_VALUE}.
    */
   public SwaptionBlackPresentValueFunction() {
     super(ValueRequirementNames.PRESENT_VALUE);

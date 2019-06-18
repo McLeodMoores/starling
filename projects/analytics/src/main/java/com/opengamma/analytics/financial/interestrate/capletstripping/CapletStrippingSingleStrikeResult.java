@@ -10,7 +10,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Holds the results of performing caplet stripping on a set of caps (on the same Ibor index) <b>with the same strike</b>
+ * Holds the results of performing caplet stripping on a set of caps (on the same Ibor index) <b>with the same strike</b>.
  */
 public class CapletStrippingSingleStrikeResult {
 
@@ -21,14 +21,19 @@ public class CapletStrippingSingleStrikeResult {
 
   /**
    *
-   * @param chiSq The chi-square of the fit. This will be zero (to the stopping tolerance) for root finding based strippers
-   * @param fitParms The fit parameters from running the stripping routine. The model prices and volatility curve are derived from the fitted parameters via the
-   * model used in the stripping routine.
-   * @param volCurve The volatility curve for the caplets that <i>best</i> reproduces the model cap prices
-   * @param modelPrices The cap prices produced by the stripping - these will be identical (to within tolerance) to the market prices for root finding based
-  * routines, but could differ for least-squares
+   * @param chiSq
+   *          The chi-square of the fit. This will be zero (to the stopping tolerance) for root finding based strippers
+   * @param fitParms
+   *          The fit parameters from running the stripping routine. The model prices and volatility curve are derived from the fitted parameters via the model
+   *          used in the stripping routine.
+   * @param volCurve
+   *          The volatility curve for the caplets that <i>best</i> reproduces the model cap prices
+   * @param modelPrices
+   *          The cap prices produced by the stripping - these will be identical (to within tolerance) to the market prices for root finding based routines, but
+   *          could differ for least-squares
    */
-  public CapletStrippingSingleStrikeResult(final double chiSq, final DoubleMatrix1D fitParms, final VolatilityTermStructure volCurve, final DoubleMatrix1D modelPrices) {
+  public CapletStrippingSingleStrikeResult(final double chiSq, final DoubleMatrix1D fitParms, final VolatilityTermStructure volCurve,
+      final DoubleMatrix1D modelPrices) {
     ArgumentChecker.isTrue(chiSq >= 0, "Negative chiSq");
     ArgumentChecker.notNull(fitParms, "null fit parameters");
     ArgumentChecker.notNull(volCurve, "null vol curve");
@@ -41,6 +46,7 @@ public class CapletStrippingSingleStrikeResult {
 
   /**
    * Gets the volatilityCurve.
+   *
    * @return the volatilityCurve
    */
   public VolatilityTermStructure getVolatilityCurve() {
@@ -49,6 +55,7 @@ public class CapletStrippingSingleStrikeResult {
 
   /**
    * Gets the chiSq.
+   *
    * @return the chiSq
    */
   public double getChiSq() {
@@ -57,6 +64,7 @@ public class CapletStrippingSingleStrikeResult {
 
   /**
    * Gets the fitParameters.
+   *
    * @return the fitParameters
    */
   public DoubleMatrix1D getFitParameters() {
@@ -65,6 +73,7 @@ public class CapletStrippingSingleStrikeResult {
 
   /**
    * Gets the modelValues.
+   *
    * @return the modelValues
    */
   public DoubleMatrix1D getModelValues() {

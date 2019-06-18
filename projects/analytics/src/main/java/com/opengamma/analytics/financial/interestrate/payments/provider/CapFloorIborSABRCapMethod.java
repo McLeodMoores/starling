@@ -27,8 +27,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- *  Class used to compute the price and sensitivity of a Ibor cap/floor with SABR model.
- *  No convexity adjustment is done for payment at non-standard dates.
+ * Class used to compute the price and sensitivity of a Ibor cap/floor with SABR model. No convexity adjustment is done for payment at non-standard dates.
  */
 public final class CapFloorIborSABRCapMethod implements CapFloorIborSABRCapMethodInterface {
 
@@ -45,6 +44,7 @@ public final class CapFloorIborSABRCapMethod implements CapFloorIborSABRCapMetho
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static CapFloorIborSABRCapMethod getInstance() {
@@ -58,8 +58,11 @@ public final class CapFloorIborSABRCapMethod implements CapFloorIborSABRCapMetho
 
   /**
    * Computes the present value of a cap/floor in the SABR model.
-   * @param cap The cap/floor.
-   * @param sabr The SABR cap and multi-curves provider.
+   *
+   * @param cap
+   *          The cap/floor.
+   * @param sabr
+   *          The SABR cap and multi-curves provider.
    * @return The present value.
    */
   @Override
@@ -67,7 +70,8 @@ public final class CapFloorIborSABRCapMethod implements CapFloorIborSABRCapMetho
     ArgumentChecker.notNull(cap, "The cap/floor shoud not be null");
     ArgumentChecker.notNull(sabr, "SABR cap provider");
     final EuropeanVanillaOption option = new EuropeanVanillaOption(cap.getStrike(), cap.getFixingTime(), cap.isCap());
-    final double forward = sabr.getMulticurveProvider().getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor());
+    final double forward = sabr.getMulticurveProvider().getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(),
+        cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor());
     final double df = sabr.getMulticurveProvider().getDiscountFactor(cap.getCurrency(), cap.getPaymentTime());
     final double maturity = cap.getFixingPeriodEndTime() - cap.getFixingPeriodStartTime();
     // TODO: Improve maturity, using periods?
@@ -80,8 +84,11 @@ public final class CapFloorIborSABRCapMethod implements CapFloorIborSABRCapMetho
 
   /**
    * Computes the present value rate sensitivity to rates of a cap/floor in the SABR model.
-   * @param cap The cap/floor.
-   * @param sabr The SABR cap and multi-curves provider.
+   *
+   * @param cap
+   *          The cap/floor.
+   * @param sabr
+   *          The SABR cap and multi-curves provider.
    * @return The present value curve sensitivity.
    */
   public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CapFloorIbor cap, final SABRCapProviderInterface sabr) {
@@ -89,7 +96,8 @@ public final class CapFloorIborSABRCapMethod implements CapFloorIborSABRCapMetho
     ArgumentChecker.notNull(sabr, "SABR cap provider");
     final MulticurveProviderInterface multicurve = sabr.getMulticurveProvider();
     final EuropeanVanillaOption option = new EuropeanVanillaOption(cap.getStrike(), cap.getFixingTime(), cap.isCap());
-    final double forward = multicurve.getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor());
+    final double forward = multicurve.getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(),
+        cap.getFixingAccrualFactor());
     final double df = multicurve.getDiscountFactor(cap.getCurrency(), cap.getPaymentTime());
     final MulticurveSensitivity forwardDr = MulticurveSensitivity.ofForward(multicurve.getName(cap.getIndex()),
         new SimplyCompoundedForwardSensitivity(cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor(), 1.0));
@@ -111,15 +119,19 @@ public final class CapFloorIborSABRCapMethod implements CapFloorIborSABRCapMetho
 
   /**
    * Computes the present value SABR sensitivity of a cap/floor in the SABR model.
-   * @param cap The cap/floor.
-   * @param sabr The SABR cap and multi-curves provider.
+   *
+   * @param cap
+   *          The cap/floor.
+   * @param sabr
+   *          The SABR cap and multi-curves provider.
    * @return The present value SABR sensitivity.
    */
   public PresentValueSABRSensitivityDataBundle presentValueSABRSensitivity(final CapFloorIbor cap, final SABRCapProviderInterface sabr) {
     ArgumentChecker.notNull(cap, "The cap/floor shoud not be null");
     ArgumentChecker.notNull(sabr, "SABR cap provider");
     final EuropeanVanillaOption option = new EuropeanVanillaOption(cap.getStrike(), cap.getFixingTime(), cap.isCap());
-    final double forward = sabr.getMulticurveProvider().getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor());
+    final double forward = sabr.getMulticurveProvider().getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(),
+        cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor());
     final double df = sabr.getMulticurveProvider().getDiscountFactor(cap.getCurrency(), cap.getPaymentTime());
     final double maturity = cap.getFixingPeriodEndTime() - cap.getFixingPeriodStartTime();
     final double[] volatilityAdjoint = sabr.getSABRParameter().getVolatilityAdjoint(cap.getFixingTime(), maturity, cap.getStrike(), forward);

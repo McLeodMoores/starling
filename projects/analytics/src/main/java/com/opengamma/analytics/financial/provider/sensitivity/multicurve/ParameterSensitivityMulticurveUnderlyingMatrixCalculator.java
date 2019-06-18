@@ -21,29 +21,36 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve.
- * The meaning of "parameters" will depend of the way the curve is stored (interpolated yield, function parameters, etc.).
- * The return format is ParameterSensitivity object.
+ * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve. The meaning of
+ * "parameters" will depend of the way the curve is stored (interpolated yield, function parameters, etc.). The return format is ParameterSensitivity object.
  */
 public class ParameterSensitivityMulticurveUnderlyingMatrixCalculator extends ParameterSensitivityMulticurveMatrixAbstractCalculator {
 
   /**
-   * Constructor
-   * @param curveSensitivityCalculator The curve sensitivity calculator.
+   * Constructor.
+   *
+   * @param curveSensitivityCalculator
+   *          The curve sensitivity calculator.
    */
-  public ParameterSensitivityMulticurveUnderlyingMatrixCalculator(final InstrumentDerivativeVisitor<MulticurveProviderInterface, MulticurveSensitivity> curveSensitivityCalculator) {
+  public ParameterSensitivityMulticurveUnderlyingMatrixCalculator(
+      final InstrumentDerivativeVisitor<MulticurveProviderInterface, MulticurveSensitivity> curveSensitivityCalculator) {
     super(curveSensitivityCalculator);
   }
 
   /**
    * Computes the sensitivity with respect to the parameters from the point sensitivities to the continuously compounded rate.
-   * @param sensitivity The point sensitivity.
-   * @param data The multi-curve provider. Not null.
-   * @param curveNames The set of curves for which the sensitivity will be computed. Not null.
+   *
+   * @param sensitivity
+   *          The point sensitivity.
+   * @param data
+   *          The multi-curve provider. Not null.
+   * @param curveNames
+   *          The set of curves for which the sensitivity will be computed. Not null.
    * @return The sensitivity (as a ParameterSensitivity). The order of the sensitivity is by curve as provided by the sensicurveNamesSet.
    */
   @Override
-  public DoubleMatrix1D pointToParameterSensitivity(final MulticurveSensitivity sensitivity, final MulticurveProviderInterface data, final Set<String> curveNames) {
+  public DoubleMatrix1D pointToParameterSensitivity(final MulticurveSensitivity sensitivity, final MulticurveProviderInterface data,
+      final Set<String> curveNames) {
     final Set<String> allCurveNames = data.getAllNames();
     ArgumentChecker.isTrue(allCurveNames.containsAll(curveNames), "curve in the names set not in the multi-curve provider");
     final int nCurves = allCurveNames.size();
@@ -78,7 +85,7 @@ public class ParameterSensitivityMulticurveUnderlyingMatrixCalculator extends Pa
       for (final String u : underlyingNames) {
         final Integer index = curveReferenceIndices.get(u);
         if (index != null) {
-          //TODO relies on ordering (underlying curves first) and doesn't allow an underlying curve with underlyings to be used e.g. spread on spread
+          // TODO relies on ordering (underlying curves first) and doesn't allow an underlying curve with underlyings to be used e.g. spread on spread
           nParametersWithoutUnderlyingCurve[i] -= nParametersWithoutUnderlyingCurve[index];
           indexOtherMulticurveList.add(index);
         }
@@ -103,7 +110,7 @@ public class ParameterSensitivityMulticurveUnderlyingMatrixCalculator extends Pa
     final double[][] combinedSensitivities = combineWithUnderlyingSensitivities(sensitivities, allCurveNames, nCurves, curveReferenceIndices,
         nParametersWithoutUnderlyingCurve, underlyingCurveReferenceIndices, startIndices, startUnderlyingIndices);
     return convertToMatrix(curveNames, curveReferenceIndices, combinedSensitivities);
-   }
+  }
 
   private static DoubleMatrix1D convertToMatrix(final Set<String> curvesToFit, final Map<String, Integer> referenceIndices, final double[][] sensitivities) {
     double[] result = new double[0];

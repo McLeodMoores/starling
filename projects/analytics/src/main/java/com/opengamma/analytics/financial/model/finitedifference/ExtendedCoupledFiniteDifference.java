@@ -24,7 +24,8 @@ public class ExtendedCoupledFiniteDifference extends CoupledFiniteDifference {
     super(theta, true);
   }
 
-  public PDEFullResults1D[] solve(final ExtendedCoupledPDEDataBundle pdeData1, final ExtendedCoupledPDEDataBundle pdeData2, final PDEGrid1D grid, final BoundaryCondition lowerBoundary1,
+  public PDEFullResults1D[] solve(final ExtendedCoupledPDEDataBundle pdeData1, final ExtendedCoupledPDEDataBundle pdeData2, final PDEGrid1D grid,
+      final BoundaryCondition lowerBoundary1,
       final BoundaryCondition upperBoundary1, final BoundaryCondition lowerBoundary2, final BoundaryCondition upperBoundary2,
       @SuppressWarnings("unused") final Surface<Double, Double, Double> freeBoundary) {
 
@@ -56,9 +57,9 @@ public class ExtendedCoupledFiniteDifference extends CoupledFiniteDifference {
     final double lambda1 = pdeData1.getCoupling();
     final double lambda2 = pdeData2.getCoupling();
 
-    //    final double omega = 1.5;
-    //    final int oldCount = 0;
-    //    final boolean omegaIncrease = false;
+    // final double omega = 1.5;
+    // final int oldCount = 0;
+    // final boolean omegaIncrease = false;
 
     double dt, t1, t2, x;
     double[] x1st, x2nd;

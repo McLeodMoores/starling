@@ -17,16 +17,21 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Class describing a generic Cross currency swap. The two legs should be in different currencies.
+ *
  * @deprecated Remove the class when the curve names are removed from instruments (provider in production).
  */
-// TODO: This class was created only to deal with curve name of XCcy swaps. It should be deleted as soon as the curve names are removed from instrument description.
+// TODO: This class was created only to deal with curve name of XCcy swaps. It should be deleted as soon as the curve names are removed from instrument
+// description.
 @Deprecated
 public class SwapXCcyDefinition extends SwapDefinition {
 
   /**
    * Constructor of the ibor-ibor swap from its two legs. The currency of hte two curves should be different.
-   * @param firstLeg The first Ibor leg.
-   * @param secondLeg The second Ibor leg.
+   *
+   * @param firstLeg
+   *          The first Ibor leg.
+   * @param secondLeg
+   *          The second Ibor leg.
    */
   public SwapXCcyDefinition(final AnnuityDefinition<? extends PaymentDefinition> firstLeg, final AnnuityDefinition<? extends PaymentDefinition> secondLeg) {
     super(firstLeg, secondLeg);
@@ -34,51 +39,59 @@ public class SwapXCcyDefinition extends SwapDefinition {
   }
 
   /**
-   * {@inheritDoc}
-   * Convert to derivative version.
-   * @param date The system date.
-   * @param yieldCurveNames The yield curve names. The first two curves are used for the first leg. The next two are used for the second leg.
+   * {@inheritDoc} Convert to derivative version.
+   *
+   * @param date
+   *          The system date.
+   * @param yieldCurveNames
+   *          The yield curve names. The first two curves are used for the first leg. The next two are used for the second leg.
    * @return The derivative.
    * @deprecated Use the method that does not take yield curve names
    */
+  @SuppressWarnings("unchecked")
   @Deprecated
   @Override
   public Swap<Payment, Payment> toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
     ArgumentChecker.isTrue(yieldCurveNames.length >= 4, "Should have at least 4 curve names");
-    final String[] firstLegCurveNames = new String[] {yieldCurveNames[0], yieldCurveNames[1] };
-    final String[] secondLegCurveNames = new String[] {yieldCurveNames[2], yieldCurveNames[3] };
+    final String[] firstLegCurveNames = new String[] { yieldCurveNames[0], yieldCurveNames[1] };
+    final String[] secondLegCurveNames = new String[] { yieldCurveNames[2], yieldCurveNames[3] };
     final Annuity<Payment> firstLeg = (Annuity<Payment>) getFirstLeg().toDerivative(date, firstLegCurveNames);
     final Annuity<Payment> secondLeg = (Annuity<Payment>) getSecondLeg().toDerivative(date, secondLegCurveNames);
     return new Swap<>(firstLeg, secondLeg);
   }
 
   /**
-   * {@inheritDoc}
-   * Convert to derivative version.
-   * @param date The system date.
-   * @param yieldCurveNames The yield curve names. The first two curves are used for the first leg. The next two are used for the second leg.
+   * {@inheritDoc} Convert to derivative version.
+   *
+   * @param date
+   *          The system date.
+   * @param yieldCurveNames
+   *          The yield curve names. The first two curves are used for the first leg. The next two are used for the second leg.
    * @return The derivative.
    * @deprecated Use the method that does not take yield curve names
    */
+  @SuppressWarnings("unchecked")
   @Deprecated
   @Override
   public Swap<Payment, Payment> toDerivative(final ZonedDateTime date, final ZonedDateTimeDoubleTimeSeries[] indexDataTS, final String... yieldCurveNames) {
     ArgumentChecker.notNull(indexDataTS, "index data time series array");
     ArgumentChecker.isTrue(indexDataTS.length > 1, "index data time series must contain at least two elements");
     ArgumentChecker.isTrue(yieldCurveNames.length >= 4, "Should have at least 4 curve names");
-    final String[] firstLegCurveNames = new String[] {yieldCurveNames[0], yieldCurveNames[1] };
-    final String[] secondLegCurveNames = new String[] {yieldCurveNames[2], yieldCurveNames[3] };
+    final String[] firstLegCurveNames = new String[] { yieldCurveNames[0], yieldCurveNames[1] };
+    final String[] secondLegCurveNames = new String[] { yieldCurveNames[2], yieldCurveNames[3] };
     final Annuity<Payment> firstLeg = (Annuity<Payment>) getFirstLeg().toDerivative(date, indexDataTS[0], firstLegCurveNames);
     final Annuity<Payment> secondLeg = (Annuity<Payment>) getSecondLeg().toDerivative(date, indexDataTS[1], secondLegCurveNames);
     return new Swap<>(firstLeg, secondLeg);
   }
 
   /**
-   * {@inheritDoc}
-   * Convert to derivative version.
-   * @param date The system date.
+   * {@inheritDoc} Convert to derivative version.
+   *
+   * @param date
+   *          The system date.
    * @return The derivative.
    */
+  @SuppressWarnings("unchecked")
   @Override
   public Swap<Payment, Payment> toDerivative(final ZonedDateTime date) {
     final Annuity<Payment> firstLeg = (Annuity<Payment>) getFirstLeg().toDerivative(date);
@@ -87,11 +100,13 @@ public class SwapXCcyDefinition extends SwapDefinition {
   }
 
   /**
-   * {@inheritDoc}
-   * Convert to derivative version.
-   * @param date The system date.
+   * {@inheritDoc} Convert to derivative version.
+   *
+   * @param date
+   *          The system date.
    * @return The derivative.
    */
+  @SuppressWarnings("unchecked")
   @Override
   public Swap<Payment, Payment> toDerivative(final ZonedDateTime date, final ZonedDateTimeDoubleTimeSeries[] indexDataTS) {
     ArgumentChecker.notNull(indexDataTS, "index data time series array");

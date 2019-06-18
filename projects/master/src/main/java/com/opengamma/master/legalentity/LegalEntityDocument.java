@@ -39,7 +39,7 @@ public class LegalEntityDocument extends AbstractDocument implements Serializabl
   /**
    * The legal entity object held by the document.
    */
-  @PropertyDefinition
+  @PropertyDefinition(validate = "notNull")
   private ManageableLegalEntity _legalEntity;
   /**
    * The legal entity unique identifier.
@@ -60,7 +60,7 @@ public class LegalEntityDocument extends AbstractDocument implements Serializabl
    * @param legalEntity the legal entity, not null
    */
   public LegalEntityDocument(final ManageableLegalEntity legalEntity) {
-    ArgumentChecker.notNull(legalEntity, "legal entity");
+    ArgumentChecker.notNull(legalEntity, "legalEntity");
     setUniqueId(legalEntity.getUniqueId());
     setLegalEntity(legalEntity);
   }
@@ -73,7 +73,7 @@ public class LegalEntityDocument extends AbstractDocument implements Serializabl
 
   /**
    * Gets the name of the legal entity.
-   * <p/>
+   * <p>
    * This is derived from the legal entity itself.
    *
    * @return the name, null if no name
@@ -104,7 +104,7 @@ public class LegalEntityDocument extends AbstractDocument implements Serializabl
   //-----------------------------------------------------------------------
   /**
    * Gets the legal entity object held by the document.
-   * @return the value of the property
+   * @return the value of the property, not null
    */
   public ManageableLegalEntity getLegalEntity() {
     return _legalEntity;
@@ -112,9 +112,10 @@ public class LegalEntityDocument extends AbstractDocument implements Serializabl
 
   /**
    * Sets the legal entity object held by the document.
-   * @param legalEntity  the new value of the property
+   * @param legalEntity  the new value of the property, not null
    */
   public void setLegalEntity(ManageableLegalEntity legalEntity) {
+    JodaBeanUtils.notNull(legalEntity, "legalEntity");
     this._legalEntity = legalEntity;
   }
 
@@ -304,6 +305,12 @@ public class LegalEntityDocument extends AbstractDocument implements Serializabl
           return;
       }
       super.propertySet(bean, propertyName, newValue, quiet);
+    }
+
+    @Override
+    protected void validate(Bean bean) {
+      JodaBeanUtils.notNull(((LegalEntityDocument) bean)._legalEntity, "legalEntity");
+      super.validate(bean);
     }
 
   }

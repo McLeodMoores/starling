@@ -4,12 +4,12 @@ package com.opengamma.bbg.model;
 import java.util.Set;
 import java.util.TreeSet;
 public class ReferenceDataRequestMessage implements java.io.Serializable {
-          public Set<String> getSecurities () {
-            return new TreeSet<> (getSecurity ());
-          }
-          public Set<String> getFields () {
-            return new TreeSet<> (getField ());
-          }
+  public Set<String> getSecurities () {
+    return new TreeSet<> (getSecurity ());
+  }
+  public Set<String> getFields () {
+    return new TreeSet<> (getField ());
+  }
   private static final long serialVersionUID = 27268955680917l;
   private java.util.List<String> _security;
   public static final String SECURITY_KEY = "security";
@@ -132,9 +132,8 @@ public class ReferenceDataRequestMessage implements java.io.Serializable {
   public java.util.List<String> getSecurity () {
     if (_security != null) {
       return java.util.Collections.unmodifiableList (_security);
-    } else {
-      return null;
     }
+    return null;
   }
   public void setSecurity (final String security) {
     if (security == null) {
@@ -170,9 +169,8 @@ public class ReferenceDataRequestMessage implements java.io.Serializable {
   public java.util.List<String> getField () {
     if (_field != null) {
       return java.util.Collections.unmodifiableList (_field);
-    } else {
-      return null;
     }
+    return null;
   }
   public void setField (final String field) {
     if (field == null) {

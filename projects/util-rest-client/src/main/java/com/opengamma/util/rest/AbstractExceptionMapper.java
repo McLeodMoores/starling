@@ -164,7 +164,7 @@ public abstract class AbstractExceptionMapper<T extends Throwable>
       return base;
     }
     final StrBuilder buf = new StrBuilder(512);
-    buf.append(base).append("<br />");
+    buf.append(base).append("<br>");
     int count = 0;
     for (int i = 0; i < exception.getStackTrace().length && count < 4; i++) {
       final StackTraceElement ste = exception.getStackTrace()[i];
@@ -173,9 +173,9 @@ public abstract class AbstractExceptionMapper<T extends Throwable>
         continue;
       }
       if (ste.getLineNumber() >= 0) {
-        buf.append(String.format("&nbsp;&nbsp;at %s.%s() L%d<br />", ste.getClassName(), ste.getMethodName(), ste.getLineNumber()));
+        buf.append(String.format("&nbsp;&nbsp;at %s.%s() L%d<br>", ste.getClassName(), ste.getMethodName(), ste.getLineNumber()));
       } else {
-        buf.append(String.format("&nbsp;&nbsp;at %s.%s()<br />", ste.getClassName(), ste.getMethodName()));
+        buf.append(String.format("&nbsp;&nbsp;at %s.%s()<br>", ste.getClassName(), ste.getMethodName()));
       }
       count++;
     }

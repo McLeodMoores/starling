@@ -23,9 +23,11 @@ import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.option.SwaptionSecurity;
 import com.opengamma.util.ArgumentChecker;
+
 //CSOFF
 /**
  * Default properties function for swaptions that are to be priced using the basic Black method.
+ * 
  * @deprecated The functions for which these default properties apply are deprecated.
  */
 @Deprecated
@@ -33,18 +35,19 @@ public class SwaptionBasicBlackDefaultPropertiesFunction extends DefaultProperty
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionBasicBlackDefaultPropertiesFunction.class);
   /** The requirements for which these defaults apply */
-  private static final String[] s_valueRequirements = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.VALUE_VEGA,
-    ValueRequirementNames.PV01,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-    ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY,
+  private static final String[] VALUE_REQUIREMENTS = new String[] {
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.PV01,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY,
   };
   /** A map of currency to default curve calculation configuration names */
   private final Map<String, String> _currencyAndCurveConfigNames;
 
   /**
-   * @param currencyAndCurveConfigNames A list of alternating currency and curve calculation configuration names, not null
+   * @param currencyAndCurveConfigNames
+   *          A list of alternating currency and curve calculation configuration names, not null
    */
   public SwaptionBasicBlackDefaultPropertiesFunction(final String... currencyAndCurveConfigNames) {
     super(FinancialSecurityTypes.SWAPTION_SECURITY, true);
@@ -66,13 +69,14 @@ public class SwaptionBasicBlackDefaultPropertiesFunction extends DefaultProperty
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String valueRequirement : s_valueRequirements) {
+    for (final String valueRequirement : VALUE_REQUIREMENTS) {
       defaults.addValuePropertyName(valueRequirement, ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     }
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String currencyName = FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();
     if (!_currencyAndCurveConfigNames.containsKey(currencyName)) {
       LOGGER.error("Could not config and surface names for currency " + currencyName + "; should never happen");
@@ -83,10 +87,7 @@ public class SwaptionBasicBlackDefaultPropertiesFunction extends DefaultProperty
     }
     return null;
   }
-/**
-  @Override
-  public String getMutualExclusionGroup() {
-    return OpenGammaFunctionExclusions.SWAPTION_BASIC_BLACK_DEFAULTS;
-  }
-  */
+  /**
+   * @Override public String getMutualExclusionGroup() { return OpenGammaFunctionExclusions.SWAPTION_BASIC_BLACK_DEFAULTS; }
+   */
 }

@@ -46,21 +46,19 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
   @PropertyDefinition
   private Integer _port;
   /**
-   * The bpipe application name, if applicable
+   * The bpipe application name, if applicable.
    */
   @PropertyDefinition
   private String _applicationName;
   /**
-   * The auto restart on disconnection
+   * The auto restart on disconnection.
    */
   @PropertyDefinition
   private boolean _autoRestartOnDisconnection;
 
   /**
-   * The pre-populated session options.
-   * These options can be left null and they will then be created with default options.
-   * If they are non-null, then the server host and port will be added if the
-   * server host within this instance is null.
+   * The pre-populated session options. These options can be left null and they will then be created with default options.
+   * If they are non-null, then the server host and port will be added if the server host within this instance is null.
    */
   @PropertyDefinition
   private SessionOptions _sessionOptions;
@@ -80,7 +78,8 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
   /**
    * Creates an instance, specifying the server.
    *
-   * @param name  the name of the connector, not null
+   * @param name
+   *          the name of the connector, not null
    */
   public BloombergConnectorFactoryBean(final String name) {
     super(BloombergConnector.class);
@@ -90,9 +89,12 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
   /**
    * Creates an instance, specifying the server.
    *
-   * @param name  the name of the connector, not null
-   * @param host  the server host name, may be null
-   * @param port  the server port, may be null
+   * @param name
+   *          the name of the connector, not null
+   * @param host
+   *          the server host name, may be null
+   * @param port
+   *          the server port, may be null
    */
   public BloombergConnectorFactoryBean(final String name, final String host, final Integer port) {
     this(name, host, port, null);
@@ -101,10 +103,14 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
   /**
    * Creates an instance, specifying the server.
    *
-   * @param name  the name of the connector, not null
-   * @param host  the server host name, may be null
-   * @param port  the server port, may be null
-   * @param applicationName the bpipe application name, may be null
+   * @param name
+   *          the name of the connector, not null
+   * @param host
+   *          the server host name, may be null
+   * @param port
+   *          the server port, may be null
+   * @param applicationName
+   *          the bpipe application name, may be null
    */
   public BloombergConnectorFactoryBean(final String name, final String host, final Integer port, final String applicationName) {
     super(BloombergConnector.class);
@@ -114,7 +120,7 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
     setApplicationName(applicationName);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public BloombergConnector createObject() {
     SessionOptions sessionOptions = getSessionOptions();
@@ -231,7 +237,7 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bpipe application name, if applicable
+   * Gets the bpipe application name, if applicable.
    * @return the value of the property
    */
   public String getApplicationName() {
@@ -239,7 +245,7 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
   }
 
   /**
-   * Sets the bpipe application name, if applicable
+   * Sets the bpipe application name, if applicable.
    * @param applicationName  the new value of the property
    */
   public void setApplicationName(String applicationName) {
@@ -256,7 +262,7 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the auto restart on disconnection
+   * Gets the auto restart on disconnection.
    * @return the value of the property
    */
   public boolean isAutoRestartOnDisconnection() {
@@ -264,7 +270,7 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
   }
 
   /**
-   * Sets the auto restart on disconnection
+   * Sets the auto restart on disconnection.
    * @param autoRestartOnDisconnection  the new value of the property
    */
   public void setAutoRestartOnDisconnection(boolean autoRestartOnDisconnection) {
@@ -281,10 +287,8 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the pre-populated session options.
-   * These options can be left null and they will then be created with default options.
-   * If they are non-null, then the server host and port will be added if the
-   * server host within this instance is null.
+   * Gets the pre-populated session options. These options can be left null and they will then be created with default options.
+   * If they are non-null, then the server host and port will be added if the server host within this instance is null.
    * @return the value of the property
    */
   public SessionOptions getSessionOptions() {
@@ -292,10 +296,8 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
   }
 
   /**
-   * Sets the pre-populated session options.
-   * These options can be left null and they will then be created with default options.
-   * If they are non-null, then the server host and port will be added if the
-   * server host within this instance is null.
+   * Sets the pre-populated session options. These options can be left null and they will then be created with default options.
+   * If they are non-null, then the server host and port will be added if the server host within this instance is null.
    * @param sessionOptions  the new value of the property
    */
   public void setSessionOptions(SessionOptions sessionOptions) {
@@ -304,9 +306,7 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
 
   /**
    * Gets the the {@code sessionOptions} property.
-   * These options can be left null and they will then be created with default options.
-   * If they are non-null, then the server host and port will be added if the
-   * server host within this instance is null.
+   * If they are non-null, then the server host and port will be added if the server host within this instance is null.
    * @return the property, not null
    */
   public final Property<SessionOptions> sessionOptions() {

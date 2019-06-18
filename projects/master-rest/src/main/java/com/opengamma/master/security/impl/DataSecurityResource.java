@@ -54,8 +54,10 @@ public class DataSecurityResource
   /**
    * Creates the resource.
    *
-   * @param securitiesResource  the parent resource, not null
-   * @param securityId  the security unique identifier, not null
+   * @param securitiesResource
+   *          the parent resource, not null
+   * @param securityId
+   *          the security unique identifier, not null
    */
   public DataSecurityResource(final DataSecurityMasterResource securitiesResource, final ObjectId securityId) {
     ArgumentChecker.notNull(securitiesResource, "securitiesResource");
@@ -64,7 +66,7 @@ public class DataSecurityResource
     _urlResourceId = securityId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the securities resource.
@@ -85,7 +87,7 @@ public class DataSecurityResource
     return _urlResourceId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the security master.
@@ -97,13 +99,12 @@ public class DataSecurityResource
     return getSecuritiesResource().getSecurityMaster();
   }
 
-
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("versions")
   public Response history(@Context final UriInfo uriInfo) {
     final SecurityHistoryRequest request = RestUtils.decodeQueryParams(uriInfo, SecurityHistoryRequest.class);
-    if (getUrlId().equals(request.getObjectId()) == false) {
+    if (!getUrlId().equals(request.getObjectId())) {
       throw new IllegalArgumentException("Document objectId does not match URI");
     }
     final SecurityHistoryResult result = getMaster().history(request);
@@ -134,7 +135,6 @@ public class DataSecurityResource
   public Response getVersioned(@PathParam("versionId") final String versionId) {
     return super.getVersioned(versionId);
   }
-
 
   @Override
   @PUT

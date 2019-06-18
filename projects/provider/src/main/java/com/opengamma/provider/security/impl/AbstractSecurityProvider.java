@@ -18,8 +18,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Abstract implementation of a provider of security information.
  * <p>
- * This provides default implementations of the interface methods that delegate to a
- * protected method that subclasses must implement.
+ * This provides default implementations of the interface methods that delegate to a protected method that subclasses must implement.
  */
 public abstract class AbstractSecurityProvider implements SecurityProvider {
 
@@ -31,14 +30,15 @@ public abstract class AbstractSecurityProvider implements SecurityProvider {
   /**
    * Creates an instance.
    *
-   * @param dataSourceRegex  the data source regex, not null
+   * @param dataSourceRegex
+   *          the data source regex, not null
    */
   public AbstractSecurityProvider(final String dataSourceRegex) {
     ArgumentChecker.notNull(dataSourceRegex, "dataSourceRegex");
     _dataSourceRegex = dataSourceRegex;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Security getSecurity(final ExternalIdBundle externalIdBundle) {
     final SecurityProviderRequest request = SecurityProviderRequest.createGet(externalIdBundle, null);
@@ -53,12 +53,12 @@ public abstract class AbstractSecurityProvider implements SecurityProvider {
     return result.getResultMap();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public SecurityProviderResult getSecurities(final SecurityProviderRequest request) {
     ArgumentChecker.notNull(request, "request");
-    ArgumentChecker.isTrue(request.getDataSource() == null ||
-        request.getDataSource().matches(_dataSourceRegex), "Unsupported data source: " + request.getDataSource());
+    ArgumentChecker.isTrue(request.getDataSource() == null
+        || request.getDataSource().matches(_dataSourceRegex), "Unsupported data source: " + request.getDataSource());
 
     // short-cut empty case
     if (request.getExternalIdBundles().isEmpty()) {
@@ -74,7 +74,8 @@ public abstract class AbstractSecurityProvider implements SecurityProvider {
    * <p>
    * The data source is checked before this method is invoked.
    *
-   * @param request  the request, with a non-empty set of identifiers, not null
+   * @param request
+   *          the request, with a non-empty set of identifiers, not null
    * @return the result, not null
    */
   protected abstract SecurityProviderResult doBulkGet(SecurityProviderRequest request);

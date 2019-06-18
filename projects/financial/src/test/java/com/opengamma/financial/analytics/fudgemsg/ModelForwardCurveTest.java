@@ -20,9 +20,10 @@ import com.opengamma.analytics.math.curve.Curve;
 import com.opengamma.analytics.math.curve.FunctionalDoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.function.Function1D;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.util.serialization.InvokedSerializedForm;
 import com.opengamma.util.test.TestGroup;
 
@@ -34,7 +35,7 @@ public class ModelForwardCurveTest extends AnalyticsTestBase {
 
   private static final double[] EXPIRIES = new double[] {1, 2, 3, 4, 5};
   private static final double[] FORWARD = new double[] {100, 101, 102, 103, 104};
-  private static final Interpolator1D INTERPOLATOR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
   private static final double EPS = 1e-12;
 
 
@@ -95,21 +96,21 @@ public class ModelForwardCurveTest extends AnalyticsTestBase {
     assertCurveEquals(curve1.getForwardCurve(), curve2.getForwardCurve());
     assertCurveEquals(curve1.getDriftCurve(), curve2.getDriftCurve());
   }
-  
+
   protected static Curve<Double, Double> getForwardCurve() {
     final Function1D<Double, Double> f = new Function1D<Double, Double>() {
       @Override
       public Double evaluate(final Double x) {
         return x * x;
       }
-    }; 
+    };
     return new FunctionalDoublesCurve(f) {
       public Object writeReplace() {
         return new InvokedSerializedForm(ModelForwardCurveTest.class, "getForwardCurve");
       }
     };
   }
-  
+
   @Test
   public void testCurve6() {
     final ForwardCurve curve1 = new ForwardCurve(getForwardCurve());
@@ -138,7 +139,7 @@ public class ModelForwardCurveTest extends AnalyticsTestBase {
     assertTrue(curve1.equals(curve2));
     assertTrue(curve1.getRiskFreeCurve().equals(curve2.getRiskFreeCurve()));
     assertTrue(curve1.getDividends().equals(curve2.getDividends()));
-    
+
   }
 
   private void assertCurveEquals(final Curve<Double, Double> c1, final Curve<Double, Double> c2) {

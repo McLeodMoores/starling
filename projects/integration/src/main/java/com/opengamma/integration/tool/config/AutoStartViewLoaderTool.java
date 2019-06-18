@@ -31,8 +31,7 @@ import com.opengamma.master.config.ConfigDocument;
 import com.opengamma.master.config.ConfigMaster;
 
 /**
- * Simple tool for loading auto start view definitions. If the server is suitably
- * configured then views will be automatically started when the engine starts.
+ * Simple tool for loading auto start view definitions. If the server is suitably configured then views will be automatically started when the engine starts.
  */
 public class AutoStartViewLoaderTool extends AbstractTool<ToolContext> {
 
@@ -51,17 +50,18 @@ public class AutoStartViewLoaderTool extends AbstractTool<ToolContext> {
    */
   private static final String MARKET_DATA_SPECIFICATIONS = "m";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new AutoStartViewLoaderTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
 
@@ -90,8 +90,8 @@ public class AutoStartViewLoaderTool extends AbstractTool<ToolContext> {
     // Format is expected to be Live:Activ,Snapshot:MySpecialSnap etc.
     final String[] parsed = value.split(":");
     if (parsed.length != 2 || parsed[0].isEmpty() || parsed[1].isEmpty()) {
-      throw new OpenGammaRuntimeException("Unable to parse market data spec from [" + value +
-                                              "] - needs to be of the form <Type>:<Name> e.g. Live:Bloomberg");
+      throw new OpenGammaRuntimeException("Unable to parse market data spec from [" + value
+          + "] - needs to be of the form <Type>:<Name> e.g. Live:Bloomberg");
     }
 
     switch (parsed[0].toUpperCase()) {
@@ -135,7 +135,8 @@ public class AutoStartViewLoaderTool extends AbstractTool<ToolContext> {
     flagsOption.setValueSeparator(',');
     options.addOption(flagsOption);
 
-    final Option marketDataOption = new Option(MARKET_DATA_SPECIFICATIONS, "marketDataSpecifications", true, "Comma separated list of market data specifications to be used");
+    final Option marketDataOption = new Option(MARKET_DATA_SPECIFICATIONS, "marketDataSpecifications", true,
+        "Comma separated list of market data specifications to be used");
     marketDataOption.setRequired(true);
     marketDataOption.setArgs(Option.UNLIMITED_VALUES);
     marketDataOption.setValueSeparator(',');

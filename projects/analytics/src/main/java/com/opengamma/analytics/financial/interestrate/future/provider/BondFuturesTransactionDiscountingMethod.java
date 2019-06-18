@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.future.provider;
@@ -21,6 +21,7 @@ public final class BondFuturesTransactionDiscountingMethod extends FuturesTransa
 
   /**
    * Return the method unique instance.
+   * 
    * @return The instance.
    */
   public static BondFuturesTransactionDiscountingMethod getInstance() {
@@ -40,12 +41,17 @@ public final class BondFuturesTransactionDiscountingMethod extends FuturesTransa
 
   /**
    * Computes the present value of future from the curves using the cheapest-to-deliver and computing the value as a forward.
-   * @param futures The future.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param netBasis The net basis associated to the future.
+   * 
+   * @param futures
+   *          The future.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param netBasis
+   *          The net basis associated to the future.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValueFromNetBasis(final BondFuturesTransaction futures, final IssuerProviderInterface issuerMulticurves, final double netBasis) {
+  public MultipleCurrencyAmount presentValueFromNetBasis(final BondFuturesTransaction futures, final IssuerProviderInterface issuerMulticurves,
+      final double netBasis) {
     return presentValueFromPrice(futures, METHOD_FUTURES_SEC.priceFromNetBasis(futures.getUnderlyingSecurity(), issuerMulticurves, netBasis));
   }
 

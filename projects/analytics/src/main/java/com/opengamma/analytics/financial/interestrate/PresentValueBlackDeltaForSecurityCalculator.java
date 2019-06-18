@@ -20,6 +20,7 @@ import com.opengamma.util.ArgumentChecker;
  * InstrumentDerivativeVisitor that calculates delta, the first derivative of the price with respect to the price of the underlying future.
  * <p>
  * See also {@link PresentValueBlackDeltaForTransactionCalculator}
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -27,14 +28,18 @@ public class PresentValueBlackDeltaForSecurityCalculator extends InstrumentDeriv
   /** A static instance */
   private static final PresentValueBlackDeltaForSecurityCalculator INSTANCE = new PresentValueBlackDeltaForSecurityCalculator();
   /** Bond future option with premium calculation methods */
-  private static final BondFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_BOND_FUTURE_OPTION = BondFutureOptionPremiumSecurityBlackSurfaceMethod.getInstance();
+  private static final BondFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_BOND_FUTURE_OPTION = BondFutureOptionPremiumSecurityBlackSurfaceMethod
+      .getInstance();
   /** Interest rate future option with margin calculation methods */
-  private static final InterestRateFutureOptionMarginSecurityBlackSurfaceMethod MARGINED_IR_FUTURE_OPTION = InterestRateFutureOptionMarginSecurityBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionMarginSecurityBlackSurfaceMethod MARGINED_IR_FUTURE_OPTION =
+      InterestRateFutureOptionMarginSecurityBlackSurfaceMethod.getInstance();
   /** Interest rate future option with premium calculation methods */
-  private static final InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_IR_FUTURE_OPTION = InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_IR_FUTURE_OPTION =
+      InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod.getInstance();
 
   /**
-   * Gets a static instance
+   * Gets a static instance.
+   *
    * @return An instance
    */
   public static PresentValueBlackDeltaForSecurityCalculator getInstance() {

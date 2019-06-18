@@ -21,24 +21,38 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.core.position.Trade;
+import com.opengamma.util.ArgumentChecker;
 
 /**
- * Provides helper methods to store a {@link Deal}'s data in a map of strings and reload it into a
- * {@link Deal} instance.  Intended to be used for storing a {@link Deal} in a {@link Trade}'s
- * {@link Trade#getAttributes() attributes}.
+ * Provides helper methods to store a {@link Deal}'s data in a map of strings and reload it into a {@link Deal} instance. Intended to be used for storing a
+ * {@link Deal} in a {@link com.opengamma.core.position.Trade}'s {@link com.opengamma.core.position.Trade#getAttributes() attributes}.
  */
 public final class DealAttributeEncoder {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DealAttributeEncoder.class);
 
   /**
-   * Resticted constructor
+   * Restricted constructor
    */
   private DealAttributeEncoder() {
   }
 
+  /**
+   * Reads attributes represented as key/value pairs into a deal.
+   *
+   * The type of the deal is given by the value for the key
+   * {@link Deal#DEAL_CLASSNAME}. If there is no value for this key, then null
+   * is returned. If an instance of this class cannot be loaded from the class
+   * loader, then an exception is thrown.
+   *
+   * Once a
+   *
+   * @param tradeAttributes
+   *          the attributes map in which Deal information is stored, not null
+   * @return a deal of the type in the attributes, or null
+   */
   public static Deal read(final Map<String, String> tradeAttributes) {
+    ArgumentChecker.notNull(tradeAttributes, "tradeAttributes");
     final String dealClass = tradeAttributes.get(DEAL_CLASSNAME);
     Deal deal = null;
     if (dealClass != null) {

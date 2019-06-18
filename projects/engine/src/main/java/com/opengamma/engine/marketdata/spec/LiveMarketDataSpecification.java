@@ -25,27 +25,27 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * LiveMarketDataSpecification
+ * LiveMarketDataSpecification.
  */
 @BeanDefinition
 public final class LiveMarketDataSpecification implements ImmutableBean, MarketDataSpecification {
   private static final long serialVersionUID = 1L;
   /**
-   * The data source
+   * The data source.
    */
   @PropertyDefinition
   private final String _dataSource;
 
   /**
-   * Avoid creating multiple instances since the live case is so common and most requests should come through this
-   * helper.
+   * Avoid creating multiple instances since the live case is so common and most requests should come through this helper.
    */
   public static final LiveMarketDataSpecification LIVE_SPEC = new LiveMarketDataSpecification(null);
 
   /**
    * Creates a live market data specification.
    *
-   * @param dataSource the data source, not-null
+   * @param dataSource
+   *          the data source, not-null
    * @return the live market data specification, not null
    */
   public static LiveMarketDataSpecification of(final String dataSource) {
@@ -98,7 +98,7 @@ public final class LiveMarketDataSpecification implements ImmutableBean, MarketD
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the data source
+   * Gets the data source.
    * @return the value of the property
    */
   public String getDataSource() {
@@ -313,7 +313,7 @@ public final class LiveMarketDataSpecification implements ImmutableBean, MarketD
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the data source
+     * Sets the data source.
      * @param dataSource  the new value
      * @return this, for chaining, not null
      */

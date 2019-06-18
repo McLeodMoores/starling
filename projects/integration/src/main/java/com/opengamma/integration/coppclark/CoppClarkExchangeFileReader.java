@@ -114,7 +114,8 @@ public class CoppClarkExchangeFileReader {
   /**
    * Creates a populated exchange source around the specified master.
    *
-   * @param exchangeMaster  the exchange master to populate, not null
+   * @param exchangeMaster
+   *          the exchange master to populate, not null
    * @return the exchange source, not null
    */
   public static ExchangeSource createPopulated(final ExchangeMaster exchangeMaster) {
@@ -127,7 +128,8 @@ public class CoppClarkExchangeFileReader {
    * <p>
    * The values can be extracted using the methods.
    *
-   * @param exchangeMaster  the exchange master to populate, not null
+   * @param exchangeMaster
+   *          the exchange master to populate, not null
    * @return the exchange reader, not null
    */
   private static CoppClarkExchangeFileReader createPopulated0(final ExchangeMaster exchangeMaster) {
@@ -159,17 +161,18 @@ public class CoppClarkExchangeFileReader {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates an instance with the exchange master to populate.
    *
-   * @param exchangeMaster  the exchange master, not null
+   * @param exchangeMaster
+   *          the exchange master, not null
    */
   public CoppClarkExchangeFileReader(final ExchangeMaster exchangeMaster) {
     _exchangeMaster = exchangeMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the exchange master.
    *
@@ -188,15 +191,17 @@ public class CoppClarkExchangeFileReader {
     return new MasterExchangeSource(getExchangeMaster());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Reads the specified input stream, parsing the exchange data.
-   * @param inputStream  the input stream, not null
+   *
+   * @param inputStream
+   *          the input stream, not null
    */
   public void readStream(final InputStream inputStream) {
     try {
       final CSVReader reader = new CSVReader(new InputStreamReader(new BufferedInputStream(inputStream)));
-      String[] line = reader.readNext();  // header
+      String[] line = reader.readNext(); // header
       final int[] indices = findIndices(line);
       line = reader.readNext();
       while (line != null) {
@@ -256,7 +261,7 @@ public class CoppClarkExchangeFileReader {
         _data.put(exchangeMIC, doc);
       }
       final String timeZoneId = requiredStringField(rawFields[indices[INDEX_ZONE_ID]]);
-      if (ZoneId.of(timeZoneId).equals(doc.getExchange().getTimeZone()) == false) {
+      if (!ZoneId.of(timeZoneId).equals(doc.getExchange().getTimeZone())) {
         throw new OpenGammaRuntimeException("Multiple time-zone entries for exchange: " + doc.getExchange());
       }
       doc.getExchange().getDetail().add(readDetailLine(rawFields, indices));
@@ -310,10 +315,12 @@ public class CoppClarkExchangeFileReader {
     return StringUtils.defaultIfEmpty(field, null);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Merges the documents into the database.
-   * @param map  the map of documents, not null
+   *
+   * @param map
+   *          the map of documents, not null
    */
   private void mergeDocuments() {
     final ExchangeSearchRequest allSearch = new ExchangeSearchRequest();
@@ -348,7 +355,7 @@ public class CoppClarkExchangeFileReader {
         existing.setCorrectionToInstant(null);
         Collections.sort(existing.getExchange().getDetail(), DETAIL_COMPARATOR);
         Collections.sort(doc.getExchange().getDetail(), DETAIL_COMPARATOR);
-        if (doc.equals(existing) == false) {  // only update if changed
+        if (!doc.equals(existing)) { // only update if changed
           messages.add("Updated " + doc.getExchange().getISOMic() + " " + doc.getUniqueId());
           doc = _exchangeMaster.update(doc);
         }
@@ -358,31 +365,32 @@ public class CoppClarkExchangeFileReader {
     }
 
     // do not remove exchanges, even when they disappear
-//    for (UniqueId uniqueId : mics.values()) {
-//      System.out.println("Removed " + uniqueId);
-//      _exchangeMaster.remove(uniqueId);
-//    }
+    // for (UniqueId uniqueId : mics.values()) {
+    // System.out.println("Removed " + uniqueId);
+    // _exchangeMaster.remove(uniqueId);
+    // }
 
     for (final String msg : messages) {
       System.out.println(msg);
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static final DetailComparator DETAIL_COMPARATOR = new DetailComparator();
+
   static class DetailComparator implements Comparator<ManageableExchangeDetail> {
     @Override
     public int compare(final ManageableExchangeDetail detail1, final ManageableExchangeDetail detail2) {
       return new CompareToBuilder()
-        .append(detail1.getProductGroup(), detail2.getProductGroup())
-        .append(detail1.getProductName(), detail2.getProductName())
-        .append(detail1.getCalendarStart(), detail2.getCalendarStart())
-        .append(detail1.getCalendarEnd(), detail2.getCalendarEnd())
-        .append(detail1.getDayStart(), detail2.getDayStart())
-        .append(detail1.getDayEnd(), detail2.getDayEnd())
-        .append(detail1.getPhaseName(), detail2.getPhaseName())
-        .append(detail1.getPhaseStart(), detail2.getPhaseStart())
-        .toComparison();
+          .append(detail1.getProductGroup(), detail2.getProductGroup())
+          .append(detail1.getProductName(), detail2.getProductName())
+          .append(detail1.getCalendarStart(), detail2.getCalendarStart())
+          .append(detail1.getCalendarEnd(), detail2.getCalendarEnd())
+          .append(detail1.getDayStart(), detail2.getDayStart())
+          .append(detail1.getDayEnd(), detail2.getDayEnd())
+          .append(detail1.getPhaseName(), detail2.getPhaseName())
+          .append(detail1.getPhaseStart(), detail2.getPhaseStart())
+          .toComparison();
     }
   }
 

@@ -55,10 +55,8 @@ import com.opengamma.util.time.Tenor;
 /**
  * Example code to load a very simple FX forward portfolio.
  * <p>
- * This code is kept deliberately as simple as possible.
- * There are no checks for the securities or portfolios already existing, so if you run it
- * more than once you will get multiple copies portfolios and securities with the same names.
- * It is designed to run against the HSQLDB example database.
+ * This code is kept deliberately as simple as possible. There are no checks for the securities or portfolios already existing, so if you run it more than once
+ * you will get multiple copies portfolios and securities with the same names. It is designed to run against the HSQLDB example database.
  */
 public class ExampleFxForwardPortfolioLoader extends AbstractTool<IntegrationToolContext> {
 
@@ -66,14 +64,14 @@ public class ExampleFxForwardPortfolioLoader extends AbstractTool<IntegrationToo
   private static final Logger LOGGER = LoggerFactory.getLogger(ExampleFxForwardPortfolioLoader.class);
   /** The number of securities in this portfolio */
   private static final int SIZE = 200;
-  /** The name of the portfolio */
+  /** The name of the portfolio. */
   public static final String PORTFOLIO_NAME = "FX Forward Portfolio";
-  /** The currency pairs */
-  public static final UnorderedCurrencyPair[] CCYS = new UnorderedCurrencyPair[] {UnorderedCurrencyPair.of(Currency.USD, Currency.JPY)};
+  /** The currency pairs. */
+  public static final UnorderedCurrencyPair[] CCYS = new UnorderedCurrencyPair[] { UnorderedCurrencyPair.of(Currency.USD, Currency.JPY) };
   /** The scheme used for an identifier */
   private static final String ID_SCHEME = "FX_FORWARD_GENERATOR";
   /** The tenors */
-  private static final Tenor[] TENORS = new Tenor[] {Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.FIVE_YEARS, Tenor.TEN_YEARS};
+  private static final Tenor[] TENORS = new Tenor[] { Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.FIVE_YEARS, Tenor.TEN_YEARS };
   /** The region */
   private static final ExternalId REGION = ExternalSchemes.countryRegionId(Country.US);
   /** Formats the rates in the security name */
@@ -81,22 +79,22 @@ public class ExampleFxForwardPortfolioLoader extends AbstractTool<IntegrationToo
 
   /**
    * Main method to run the tool.
-   * 
-   * @param args  the standard tool arguments, not null
+   *
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     try {
-      boolean success =
-          new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class) &&
-          new ExampleFxForwardPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
+      final boolean success = new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class)
+          && new ExampleFxForwardPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
       ShutdownUtils.exit(success ? 0 : -1);
-    } catch (Throwable ex) {
+    } catch (final Throwable ex) {
       ex.printStackTrace();
       ShutdownUtils.exit(-2);
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final Collection<FXForwardSecurity> fxForwards = createRandomFXForwards();
@@ -140,9 +138,9 @@ public class ExampleFxForwardPortfolioLoader extends AbstractTool<IntegrationToo
       externalIds.addAll(tickers);
     }
     final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(
-      getToolContext().getHistoricalTimeSeriesMaster(),
-      getToolContext().getHistoricalTimeSeriesProvider(),
-      new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
+        getToolContext().getHistoricalTimeSeriesMaster(),
+        getToolContext().getHistoricalTimeSeriesProvider(),
+        new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
     loader.loadTimeSeries(externalIds, "UNKNOWN", "PX_LAST", LocalDate.now().minusYears(1), LocalDate.now());
   }
 

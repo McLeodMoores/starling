@@ -27,7 +27,8 @@ import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value for FX options using the Black method
+ * Calculates the present value for FX options using the Black method.
+ * 
  * @deprecated Use {@link BlackDiscountingPVFXOptionFunction}
  */
 @Deprecated

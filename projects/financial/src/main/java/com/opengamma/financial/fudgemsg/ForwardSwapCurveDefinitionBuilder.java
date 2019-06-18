@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.fudgemsg;
@@ -21,7 +21,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 @FudgeBuilderFor(ForwardSwapCurveDefinition.class)
 public class ForwardSwapCurveDefinitionBuilder implements FudgeBuilder<ForwardSwapCurveDefinition> {
@@ -45,7 +45,7 @@ public class ForwardSwapCurveDefinitionBuilder implements FudgeBuilder<ForwardSw
     final Currency target = deserializer.fieldValueToObject(Currency.class, message.getByName(TARGET_FIELD));
     final String name = message.getString(NAME_FIELD);
     final List<FudgeField> tenorFields = message.getAllByName(TENOR_FIELD);
-    final List<Tenor> tenors = new ArrayList<Tenor>();
+    final List<Tenor> tenors = new ArrayList<>();
     for (final FudgeField tenorField : tenorFields) {
       final Tenor tenor = deserializer.fieldValueToObject(Tenor.class, tenorField);
       tenors.add(tenor);

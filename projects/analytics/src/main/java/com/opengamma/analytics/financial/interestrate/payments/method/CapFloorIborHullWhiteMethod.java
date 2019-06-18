@@ -24,19 +24,12 @@ import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Class used to compute the price and sensitivity of a Ibor cap/floor with
- * Hull-White one factor model.  The general pricing formula is given by:
- * $$
- * \begin{equation*}
- * \frac{\delta_p}{\delta_F}P^D(0,t_p)\left( \frac{P^j(0,t_0)}{P^j(0,t_1)} N(-\kappa-\alpha_0) - (1+\delta_F K) N(-\kappa-\alpha_1) \right)
- * \end{equation*}
- * $$
- * where:
- * \begin{equation*}
- * \kappa = \frac{1}{\alpha_1-\alpha_0} \left( \ln\left(\frac{(1+\delta_F K)P^j(0,t_1)}{P^j(0,t_0)}\right) - \frac12 (\alpha_1^2 - \alpha_0^2) \right).
- * \end{equation*}
- * $$
- *  @deprecated {@link HullWhiteOneFactorPiecewiseConstantDataBundle} is deprecated
+ * Class used to compute the price and sensitivity of a Ibor cap/floor with Hull-White one factor model. The general pricing formula is given by: $$
+ * \begin{equation*} \frac{\delta_p}{\delta_F}P^D(0,t_p)\left( \frac{P^j(0,t_0)}{P^j(0,t_1)} N(-\kappa-\alpha_0) - (1+\delta_F K) N(-\kappa-\alpha_1) \right)
+ * \end{equation*} $$ where: \begin{equation*} \kappa = \frac{1}{\alpha_1-\alpha_0} \left( \ln\left(\frac{(1+\delta_F K)P^j(0,t_1)}{P^j(0,t_0)}\right) - \frac12
+ * (\alpha_1^2 - \alpha_0^2) \right). \end{equation*} $$
+ *
+ * @deprecated {@link HullWhiteOneFactorPiecewiseConstantDataBundle} is deprecated
  */
 @Deprecated
 public class CapFloorIborHullWhiteMethod implements PricingMethod {
@@ -59,8 +52,11 @@ public class CapFloorIborHullWhiteMethod implements PricingMethod {
 
   /**
    * Computes the present value of a cap/floor in the Hull-White one factor model.
-   * @param cap The cap/floor.
-   * @param hwData The Hull-White parameters and the curves.
+   *
+   * @param cap
+   *          The cap/floor.
+   * @param hwData
+   *          The Hull-White parameters and the curves.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final CapFloorIbor cap, final HullWhiteOneFactorPiecewiseConstantDataBundle hwData) {
@@ -78,8 +74,9 @@ public class CapFloorIborHullWhiteMethod implements PricingMethod {
     final double alpha0 = _model.alpha(hwData.getHullWhiteParameter(), 0.0, cap.getFixingTime(), tp, t0);
     final double alpha1 = _model.alpha(hwData.getHullWhiteParameter(), 0.0, cap.getFixingTime(), tp, t1);
     final double kappa = (Math.log((1 + deltaF * k) * dfForwardT1 / dfForwardT0) - (alpha1 * alpha1 - alpha0 * alpha0) / 2.0) / (alpha1 - alpha0);
-    final double omega = (cap.isCap() ? 1.0 : -1.0);
-    double pv = deltaP / deltaF * dfPay * omega * (dfForwardT0 / dfForwardT1 * NORMAL.getCDF(omega * (-kappa - alpha0)) - (1.0 + deltaF * k) * NORMAL.getCDF(omega * (-kappa - alpha1)));
+    final double omega = cap.isCap() ? 1.0 : -1.0;
+    double pv = deltaP / deltaF * dfPay * omega
+        * (dfForwardT0 / dfForwardT1 * NORMAL.getCDF(omega * (-kappa - alpha0)) - (1.0 + deltaF * k) * NORMAL.getCDF(omega * (-kappa - alpha1)));
     pv *= cap.getNotional();
     return CurrencyAmount.of(cap.getCurrency(), pv);
   }
@@ -93,8 +90,11 @@ public class CapFloorIborHullWhiteMethod implements PricingMethod {
 
   /**
    * Computes the present value curve sensitivity of a cap/floor in the Hull-White one factor model.
-   * @param cap The cap/floor.
-   * @param hwData The Hull-White parameters and the curves.
+   *
+   * @param cap
+   *          The cap/floor.
+   * @param hwData
+   *          The Hull-White parameters and the curves.
    * @return The present value curve sensitivity.
    */
   public InterestRateCurveSensitivity presentValueCurveSensitivity(final CapFloorIbor cap, final HullWhiteOneFactorPiecewiseConstantDataBundle hwData) {
@@ -106,7 +106,7 @@ public class CapFloorIborHullWhiteMethod implements PricingMethod {
     final double deltaF = cap.getFixingAccrualFactor();
     final double deltaP = cap.getPaymentYearFraction();
     final double k = cap.getStrike();
-    final double omega = (cap.isCap() ? 1.0 : -1.0);
+    final double omega = cap.isCap() ? 1.0 : -1.0;
     // Forward sweep
     final double dfPay = hwData.getCurve(cap.getFundingCurveName()).getDiscountFactor(tp);
     final double dfForwardT0 = hwData.getCurve(cap.getForwardCurveName()).getDiscountFactor(t0);
@@ -116,10 +116,10 @@ public class CapFloorIborHullWhiteMethod implements PricingMethod {
     final double kappa = (Math.log((1 + deltaF * k) * dfForwardT1 / dfForwardT0) - (alpha1 * alpha1 - alpha0 * alpha0) / 2.0) / (alpha1 - alpha0);
     final double n0 = NORMAL.getCDF(omega * (-kappa - alpha0));
     final double n1 = NORMAL.getCDF(omega * (-kappa - alpha1));
-    //    double pv = deltaP / deltaF * dfPay * omega * (dfForwardT0 / dfForwardT1 * n0 - (1.0 + deltaF * k) * n1) * cap.getNotional();
+    // double pv = deltaP / deltaF * dfPay * omega * (dfForwardT0 / dfForwardT1 * n0 - (1.0 + deltaF * k) * n1) * cap.getNotional();
     // Backward sweep
     final double pvBar = 1.0;
-    //    double kappaBar = 0.0; // kappa is the optimal exercise boundary
+    // double kappaBar = 0.0; // kappa is the optimal exercise boundary
     final double dfForwardT1Bar = -deltaP / deltaF * dfPay * omega * dfForwardT0 / (dfForwardT1 * dfForwardT1) * n0 * cap.getNotional() * pvBar;
     final double dfForwardT0Bar = deltaP / deltaF * dfPay * omega / dfForwardT1 * n0 * cap.getNotional() * pvBar;
     final double dfPayBar = deltaP / deltaF * omega * (dfForwardT0 / dfForwardT1 * n0 - (1.0 + deltaF * k) * n1) * cap.getNotional() * pvBar;
@@ -136,8 +136,11 @@ public class CapFloorIborHullWhiteMethod implements PricingMethod {
 
   /**
    * Computes the present value Hull-White parameters sensitivity of a cap/floor in the Hull-White one factor model.
-   * @param cap The cap/floor.
-   * @param hwData The Hull-White parameters and the curves.
+   *
+   * @param cap
+   *          The cap/floor.
+   * @param hwData
+   *          The Hull-White parameters and the curves.
    * @return The present value parameters sensitivity.
    */
   public double[] presentValueHullWhiteSensitivity(final CapFloorIbor cap, final HullWhiteOneFactorPiecewiseConstantDataBundle hwData) {
@@ -150,7 +153,7 @@ public class CapFloorIborHullWhiteMethod implements PricingMethod {
     final double deltaF = cap.getFixingAccrualFactor();
     final double deltaP = cap.getPaymentYearFraction();
     final double k = cap.getStrike();
-    final double omega = (cap.isCap() ? 1.0 : -1.0);
+    final double omega = cap.isCap() ? 1.0 : -1.0;
     // Forward sweep
     final double dfPay = hwData.getCurve(cap.getFundingCurveName()).getDiscountFactor(tp);
     final double dfForwardT0 = hwData.getCurve(cap.getForwardCurveName()).getDiscountFactor(t[0]);
@@ -166,7 +169,7 @@ public class CapFloorIborHullWhiteMethod implements PricingMethod {
     for (int loopcf = 0; loopcf < 2; loopcf++) {
       n[loopcf] = NORMAL.getCDF(omega * (-kappa - alpha[loopcf]));
     }
-    //    double pv = deltaP / deltaF * dfPay * omega * (dfForwardT0 / dfForwardT1 * n0 - (1.0 + deltaF * k) * n1) * cap.getNotional();
+    // double pv = deltaP / deltaF * dfPay * omega * (dfForwardT0 / dfForwardT1 * n0 - (1.0 + deltaF * k) * n1) * cap.getNotional();
     // Backward sweep
     final double pvBar = 1.0;
     final double[] nBar = new double[2];

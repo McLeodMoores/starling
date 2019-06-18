@@ -16,7 +16,6 @@ import com.opengamma.engine.function.config.BeanDynamicFunctionConfigurationSour
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.engine.function.config.VersionedFunctionConfigurationBean;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.financial.analytics.ircurve.YieldCurveDefinition;
 import com.opengamma.financial.analytics.ircurve.calcconfig.MultiCurveCalculationConfig;
 import com.opengamma.financial.analytics.model.curve.interestrate.ImpliedDepositCurveFunction;
@@ -29,6 +28,7 @@ import com.opengamma.master.config.impl.ConfigSearchIterator;
 /**
  * Function repository configuration source for the functions contained in this package.
  */
+@SuppressWarnings("deprecation")
 public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
 
   /**
@@ -41,10 +41,12 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Returns a factory that populates the repository with functions that produce {@link ValueRequirementNames#YIELD_CURVE_HISTORICAL_TIME_SERIES} for all curve types <b>except</b>
-   * {@link ImpliedDepositCurveFunction#IMPLIED_DEPOSIT}
+   * Returns a factory that populates the repository with functions that produce
+   * {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_HISTORICAL_TIME_SERIES} for all curve types <b>except</b>
+   * {@link ImpliedDepositCurveFunction#IMPLIED_DEPOSIT}.
    *
-   * @param configMaster The configuration master
+   * @param configMaster
+   *          The configuration master
    * @return A function configuration source
    */
   public static FunctionConfigurationSource providers(final ConfigMaster configMaster) {
@@ -67,7 +69,10 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Function repository configuration source for yield curve functions based on the items defined in a Config Master.
+   * 
+   * @deprecated This configuration type should no longer be used.
    */
+  @Deprecated
   public static class Providers extends VersionedFunctionConfigurationBean {
     /** The configuration master */
     private ConfigMaster _configMaster;
@@ -75,7 +80,8 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
     /**
      * Sets the configuration master.
      *
-     * @param configMaster The config master
+     * @param configMaster
+     *          The config master
      */
     public void setConfigMaster(final ConfigMaster configMaster) {
       _configMaster = configMaster;
@@ -90,6 +96,7 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
       return _configMaster;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       // search for the names of implied deposit curves and exclude from historical time series function
@@ -98,7 +105,6 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
       searchRequest.setType(MultiCurveCalculationConfig.class);
       searchRequest.setVersionCorrection(getVersionCorrection());
       for (final ConfigDocument configDocument : ConfigSearchIterator.iterable(_configMaster, searchRequest)) {
-        final String documentName = configDocument.getName();
         final MultiCurveCalculationConfig config = ((ConfigItem<MultiCurveCalculationConfig>) configDocument.getConfig()).getValue();
         if (config.getCalculationMethod().equals(ImpliedDepositCurveFunction.IMPLIED_DEPOSIT)) {
           excludedCurves.addAll(Arrays.asList(config.getYieldCurveNames()));

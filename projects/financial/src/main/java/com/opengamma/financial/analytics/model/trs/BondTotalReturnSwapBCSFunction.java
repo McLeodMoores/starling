@@ -17,8 +17,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.Instant;
 
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
@@ -47,7 +45,6 @@ import com.opengamma.financial.security.swap.BondTotalReturnSwapSecurity;
  */
 public class BondTotalReturnSwapBCSFunction extends BondTotalReturnSwapFunction {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(BondTotalReturnSwapBCSFunction.class);
 
   /** The curve sensitivity calculator */
   private static final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, MultipleCurrencyMulticurveSensitivity> PVCSDC =
@@ -69,10 +66,11 @@ public class BondTotalReturnSwapBCSFunction extends BondTotalReturnSwapFunction 
   @Override
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     return new BondTotalReturnSwapCompiledFunction(getTargetToDefinitionConverter(context),
-                                                   getDefinitionToDerivativeConverter(context), true) {
+        getDefinitionToDerivativeConverter(context), true) {
 
       @Override
-      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues,
+      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+          final Set<ValueRequirement> desiredValues,
           final InstrumentDerivative derivative, final FXMatrix fxMatrix) {
         final ParameterIssuerProviderInterface issuerCurves = getMergedWithIssuerProviders(inputs, fxMatrix);
         final CurveBuildingBlockBundle blocks = new CurveBuildingBlockBundle();
@@ -85,7 +83,8 @@ public class BondTotalReturnSwapBCSFunction extends BondTotalReturnSwapFunction 
         final Set<ComputedValue> result = new HashSet<>();
         final MultipleCurrencyParameterSensitivity sensitivities = CALCULATOR.fromInstrument(derivative, issuerCurves, blocks);
         for (final ValueRequirement desiredValue : desiredValues) {
-          final ValueSpecification spec = new ValueSpecification(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), desiredValue.getConstraints().copy().get());
+          final ValueSpecification spec = new ValueSpecification(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(),
+              desiredValue.getConstraints().copy().get());
           result.add(new ComputedValue(spec, sensitivities));
         }
         return result;
@@ -93,22 +92,22 @@ public class BondTotalReturnSwapBCSFunction extends BondTotalReturnSwapFunction 
 
       @Override
       public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext,
-                                                   final ComputationTarget target,
-                                                   final ValueRequirement desiredValue) {
+          final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         return super.getRequirements(compilationContext, target, desiredValue);
       }
 
       @SuppressWarnings("synthetic-access")
       @Override
       public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext,
-                                                final ComputationTarget target,
-                                                final Map<ValueSpecification, ValueRequirement> inputs) {
+          final ComputationTarget target,
+          final Map<ValueSpecification, ValueRequirement> inputs) {
         return super.getResults(compilationContext, target, inputs);
       }
 
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext,
-                                                                        final ComputationTarget target) {
+          final ComputationTarget target) {
         return Collections.singleton(createValueProperties()
             .with(PROPERTY_CURVE_TYPE, DISCOUNTING)
             .withAny(CURVE_EXPOSURES)

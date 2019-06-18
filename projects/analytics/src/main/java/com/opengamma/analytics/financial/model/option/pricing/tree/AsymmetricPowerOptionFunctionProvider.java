@@ -9,18 +9,23 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Payoff of asymmetric power option is max( S^i - K , 0 ) for call and max( K - S^i , 0 ) for put with i > 0
+ * Payoff of asymmetric power option is max( S^i - K , 0 ) for call and max( K - S^i , 0 ) for put with i &gt; 0.
  */
 public class AsymmetricPowerOptionFunctionProvider extends OptionFunctionProvider1D {
 
   private final double _power;
 
   /**
-   * @param strike Strike price, K
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
-   * @param power Power, i
+   * @param strike
+   *          Strike price, K
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
+   * @param power
+   *          Power, i
    */
   public AsymmetricPowerOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double power) {
     super(strike, timeToExpiry, steps, isCall);
@@ -62,7 +67,8 @@ public class AsymmetricPowerOptionFunctionProvider extends OptionFunctionProvide
   }
 
   /**
-   * Access power
+   * Access power.
+   * 
    * @return _power
    */
   public double getPower() {

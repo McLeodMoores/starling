@@ -15,7 +15,10 @@ import com.opengamma.util.money.Currency;
  * A source of yield curve definitions based on configuration.
  * <p>
  * This supplies curve definitions from a {@link ConfigSource}.
+ * 
+ * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
+@Deprecated
 public class ConfigDBInterpolatedYieldCurveDefinitionSource implements InterpolatedYieldCurveDefinitionSource {
 
   /**
@@ -25,7 +28,9 @@ public class ConfigDBInterpolatedYieldCurveDefinitionSource implements Interpola
 
   /**
    * Creates an instance backed by a config source.
-   * @param configSource  the source, not null
+   * 
+   * @param configSource
+   *          the source, not null
    */
   public ConfigDBInterpolatedYieldCurveDefinitionSource(final ConfigSource configSource) {
     ArgumentChecker.notNull(configSource, "configSource");
@@ -34,13 +39,14 @@ public class ConfigDBInterpolatedYieldCurveDefinitionSource implements Interpola
 
   /**
    * Gets the config source.
+   * 
    * @return the config source, not null
    */
   protected ConfigSource getConfigSource() {
     return _configSource;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public YieldCurveDefinition getDefinition(final Currency ccy, final String name) {
     return _configSource.getLatestByName(YieldCurveDefinition.class, name + "_" + ccy.getCode());

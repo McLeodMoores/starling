@@ -40,7 +40,7 @@ import com.opengamma.engine.value.ValueSpecification;
     private final int _objectId = NEXT_OBJECT_ID.getAndIncrement();
     private final ResolveTask _task;
 
-    //private final InstanceCount _instanceCount = new InstanceCount(this);
+    // private final InstanceCount _instanceCount = new InstanceCount(this);
 
     protected State(final ResolveTask task) {
       assert task != null;
@@ -68,9 +68,8 @@ import com.opengamma.engine.value.ValueSpecification;
       if (task.setState(this, nextState)) {
         context.run(task);
         return true;
-      } else {
-        return false;
       }
+      return false;
     }
 
     protected boolean pushResult(final GraphBuildingContext context, final ResolvedValue resolvedValue, final boolean lastResult) {
@@ -82,10 +81,15 @@ import com.opengamma.engine.value.ValueSpecification;
      * <p>
      * The {@code valueSpecification} specification must be a normalized/canonical form.
      *
-     * @param valueSpecification the resolved value specification, as it will appear in the dependency graph, not null
-     * @param parameterizedFunction the function identifier and parameters, not null
-     * @param functionInputs the resolved input specifications, as they will appear in the dependency graph, not null
-     * @param functionOutputs the resolved output specifications, as they will appear in the dependency graph, not null
+     * @param valueSpecification
+     *          the resolved value specification, as it will appear in the dependency graph, not null
+     * @param parameterizedFunction
+     *          the function identifier and parameters, not null
+     * @param functionInputs
+     *          the resolved input specifications, as they will appear in the dependency graph, not null
+     * @param functionOutputs
+     *          the resolved output specifications, as they will appear in the dependency graph, not null
+     * @return the resolved value
      */
     protected ResolvedValue createResult(final ValueSpecification valueSpecification, final ParameterizedFunction parameterizedFunction,
         final Set<ValueSpecification> functionInputs, final Set<ValueSpecification> functionOutputs) {
@@ -123,7 +127,7 @@ import com.opengamma.engine.value.ValueSpecification;
       throw new UnsupportedOperationException("Not runnable state (" + toString() + ")");
     }
 
-    protected abstract void pump(final GraphBuildingContext context);
+    protected abstract void pump(GraphBuildingContext context);
 
     @Override
     public int cancelLoopMembers(final GraphBuildingContext context, final Map<Chain, Chain.LoopState> visited) {
@@ -137,7 +141,8 @@ import com.opengamma.engine.value.ValueSpecification;
     /**
      * Called when the parent task is discarded.
      *
-     * @param context the graph building context, not null
+     * @param context
+     *          the graph building context, not null
      */
     protected void discard(final GraphBuildingContext context) {
       // No-op; only implement if there is data to discard (e.g. cancel things to free resources) for the state
@@ -165,7 +170,7 @@ import com.opengamma.engine.value.ValueSpecification;
    */
   private final Collection<FunctionExclusionGroup> _functionExclusion;
 
-  public ResolveTask(final ValueRequirement valueRequirement, final ResolveTask parent, final Collection<FunctionExclusionGroup> functionExclusion) {
+  ResolveTask(final ValueRequirement valueRequirement, final ResolveTask parent, final Collection<FunctionExclusionGroup> functionExclusion) {
     super(valueRequirement);
     final int hc;
     if (parent != null) {
@@ -200,10 +205,9 @@ import com.opengamma.engine.value.ValueSpecification;
       LOGGER.debug("State transition {} to {}", previousState, nextState);
       _state = nextState;
       return true;
-    } else {
-      System.err.println("Invalid state transition - was " + _state + ", not " + previousState + " - not advancing to " + nextState);
-      return false;
     }
+    System.err.println("Invalid state transition - was " + _state + ", not " + previousState + " - not advancing to " + nextState);
+    return false;
   }
 
   @Override
@@ -226,9 +230,8 @@ import com.opengamma.engine.value.ValueSpecification;
       // Release the lock that the context added before we got queued (or run in-line)
       release(context);
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   private Set<ValueRequirement> getParentValueRequirements() {
@@ -238,9 +241,8 @@ import com.opengamma.engine.value.ValueSpecification;
   public boolean hasParent(final ResolveTask task) {
     if (task == this) {
       return true;
-    } else {
-      return hasParent(task.getValueRequirement());
     }
+    return hasParent(task.getValueRequirement());
   }
 
   public boolean hasParent(final ValueRequirement valueRequirement) {
@@ -258,7 +260,8 @@ import com.opengamma.engine.value.ValueSpecification;
    * <p>
    * This is part of a cheaper test for an existing task than creating a new instance and using the {@link #equals} method.
    *
-   * @param parent the candidate parent to test, not null
+   * @param parent
+   *          the candidate parent to test, not null
    * @return true if the parent value requirements would match
    */
   public boolean hasParentValueRequirements(final ResolveTask parent) {

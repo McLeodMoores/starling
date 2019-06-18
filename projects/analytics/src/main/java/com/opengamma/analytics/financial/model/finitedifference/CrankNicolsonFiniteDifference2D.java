@@ -10,7 +10,7 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.cube.Cube;
 
 /**
- * <b>Note</b> this is for testing purposes and is not recommended for actual use
+ * <b>Note</b> this is for testing purposes and is not recommended for actual use.
  */
 @SuppressWarnings("deprecation")
 public class CrankNicolsonFiniteDifference2D implements ConvectionDiffusionPDESolver2D {
@@ -18,15 +18,17 @@ public class CrankNicolsonFiniteDifference2D implements ConvectionDiffusionPDESo
   private final double _theta;
 
   /**
-   * Sets up a standard Crank-Nicolson scheme for 2-D (two spatial dimensions) PDEs
+   * Sets up a standard Crank-Nicolson scheme for 2-D (two spatial dimensions) PDEs.
    */
   public CrankNicolsonFiniteDifference2D() {
     _theta = 0.5;
   }
 
   /**
-   * Sets up a scheme that is the weighted average of an explicit and an implicit scheme
-   * @param theta The weight. theta = 0 - fully explicit, theta = 0.5 - Crank-Nicolson, theta = 1.0 - fully implicit
+   * Sets up a scheme that is the weighted average of an explicit and an implicit scheme.
+   *
+   * @param theta
+   *          The weight. theta = 0 - fully explicit, theta = 0.5 - Crank-Nicolson, theta = 1.0 - fully implicit
    */
   public CrankNicolsonFiniteDifference2D(final double theta) {
     Validate.isTrue(theta >= 0 && theta <= 1.0, "theta must be in the range 0 to 1");
@@ -34,19 +36,22 @@ public class CrankNicolsonFiniteDifference2D implements ConvectionDiffusionPDESo
   }
 
   @Override
-  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final int tSteps, final int xSteps, final int ySteps, final double tMax, final BoundaryCondition2D xLowerBoundary,
+  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final int tSteps, final int xSteps, final int ySteps, final double tMax,
+      final BoundaryCondition2D xLowerBoundary,
       final BoundaryCondition2D xUpperBoundary,
       final BoundaryCondition2D yLowerBoundary, final BoundaryCondition2D yUpperBoundary) {
     return solve(pdeData, tSteps, xSteps, ySteps, tMax, xLowerBoundary, xUpperBoundary, yLowerBoundary, yUpperBoundary, null);
   }
 
   @Override
-  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final int tSteps, final int xSteps, final int ySteps, final double tMax, final BoundaryCondition2D xLowerBoundary,
-      final BoundaryCondition2D xUpperBoundary, final BoundaryCondition2D yLowerBoundary, final BoundaryCondition2D yUpperBoundary, final Cube<Double, Double, Double, Double> freeBoundary) {
+  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final int tSteps, final int xSteps, final int ySteps, final double tMax,
+      final BoundaryCondition2D xLowerBoundary,
+      final BoundaryCondition2D xUpperBoundary, final BoundaryCondition2D yLowerBoundary, final BoundaryCondition2D yUpperBoundary,
+      final Cube<Double, Double, Double, Double> freeBoundary) {
 
-    final double dt = tMax / (tSteps);
-    final double dx = (xUpperBoundary.getLevel() - xLowerBoundary.getLevel()) / (xSteps);
-    final double dy = (yUpperBoundary.getLevel() - yLowerBoundary.getLevel()) / (ySteps);
+    final double dt = tMax / tSteps;
+    final double dx = (xUpperBoundary.getLevel() - xLowerBoundary.getLevel()) / xSteps;
+    final double dy = (yUpperBoundary.getLevel() - yLowerBoundary.getLevel()) / ySteps;
     final double dtdx2 = dt / dx / dx;
     final double dtdx = dt / dx;
     final double dtdy2 = dt / dy / dy;
@@ -112,7 +117,7 @@ public class CrankNicolsonFiniteDifference2D implements ConvectionDiffusionPDESo
             // sum += -dtdxdy * e / 4.0 * u[index + xSteps];
             // sum += (dtdy2 * d + 0.5 * dtdy * f) * u[index + xSteps + 1];
             // sum += dtdxdy * e / 4.0 * u[index + xSteps + 2];
-            sum *= (1 - _theta);
+            sum *= 1 - _theta;
           }
           sum += u[index];
 
@@ -125,7 +130,7 @@ public class CrankNicolsonFiniteDifference2D implements ConvectionDiffusionPDESo
           w[index][2] = -_theta * dtdxdy * e / 4.0;
 
           w[index][3] = _theta * (dtdx2 * a - 0.5 * dtdx * b);
-          w[index][4] = 1 - _theta * ((2 * dtdx2 * a - dt * c) + (2 * dtdy2 * d));
+          w[index][4] = 1 - _theta * (2 * dtdx2 * a - dt * c + 2 * dtdy2 * d);
           w[index][5] = _theta * (dtdx2 * a + 0.5 * dtdx * b);
 
           w[index][6] = -_theta * dtdxdy * e / 4.0;
@@ -290,7 +295,8 @@ public class CrankNicolsonFiniteDifference2D implements ConvectionDiffusionPDESo
 
   }
 
-  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final double[] timeGrid, final double[] xGrid, final double[] yGrid, final BoundaryCondition2D xLowerBoundary,
+  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final double[] timeGrid, final double[] xGrid, final double[] yGrid,
+      final BoundaryCondition2D xLowerBoundary,
       final BoundaryCondition2D xUpperBoundary, final BoundaryCondition2D yLowerBoundary, final BoundaryCondition2D yUpperBoundary,
       @SuppressWarnings("unused") final Cube<Double, Double, Double, Double> freeBoundary) {
 
@@ -385,9 +391,11 @@ public class CrankNicolsonFiniteDifference2D implements ConvectionDiffusionPDESo
             sum -= b * (x1st[i - 1][0] * u[index - 1] + x1st[i - 1][1] * u[index] + x1st[i - 1][2] * u[index + 1]);
             sum -= c * u[index];
             sum -= d * (y2nd[j - 1][0] * u[index - xNodes] + y2nd[j - 1][1] * u[index] + y2nd[j - 1][2] * u[index + xNodes]);
-            sum -= e * (x1st[i - 1][0] * (y1st[j - 1][0] * u[index - xNodes - 1] + y1st[j - 1][1] * u[index - 1] + y1st[j - 1][2] * u[index + xNodes - 1]) + x1st[i - 1][1] *
-                (y1st[j - 1][0] * u[index - xNodes] + y1st[j - 1][1] * u[index] + y1st[j - 1][2] * u[index + xNodes]) + x1st[i - 1][2] *
-                (y1st[j - 1][0] * u[index - xNodes + 1] + y1st[j - 1][1] * u[index + 1] + y1st[j - 1][2] * u[index + xNodes + 1]));
+            sum -= e * (x1st[i - 1][0] * (y1st[j - 1][0] * u[index - xNodes - 1] + y1st[j - 1][1] * u[index - 1] + y1st[j - 1][2] * u[index + xNodes - 1])
+                + x1st[i - 1][1]
+                    * (y1st[j - 1][0] * u[index - xNodes] + y1st[j - 1][1] * u[index] + y1st[j - 1][2] * u[index + xNodes])
+                + x1st[i - 1][2]
+                    * (y1st[j - 1][0] * u[index - xNodes + 1] + y1st[j - 1][1] * u[index + 1] + y1st[j - 1][2] * u[index + xNodes + 1]));
             sum -= f * (y1st[j - 1][0] * u[index - xNodes] + y1st[j - 1][1] * u[index] + y1st[j - 1][2] * u[index + xNodes]);
             sum *= (1 - _theta) * dt[n - 1];
           }
@@ -400,7 +408,8 @@ public class CrankNicolsonFiniteDifference2D implements ConvectionDiffusionPDESo
           w[index][2] = -_theta * dt[n - 1] * x1st[i - 1][2] * y1st[j - 1][0] * e; // i+1,j-1
 
           w[index][3] = _theta * dt[n - 1] * (x2nd[i - 1][0] * a + x1st[i - 1][0] * b + x1st[i - 1][0] * y1st[j - 1][1] * e); // i-1,j
-          w[index][4] = 1 + _theta * dt[n - 1] * (x2nd[i - 1][1] * a + x1st[i - 1][1] * b + c + y2nd[j - 1][1] * d + x1st[i - 1][1] * y1st[j - 1][1] * e + y1st[j - 1][1] * f); // i,j
+          w[index][4] = 1 + _theta * dt[n - 1]
+              * (x2nd[i - 1][1] * a + x1st[i - 1][1] * b + c + y2nd[j - 1][1] * d + x1st[i - 1][1] * y1st[j - 1][1] * e + y1st[j - 1][1] * f); // i,j
           w[index][5] = _theta * dt[n - 1] * (x2nd[i - 1][2] * a + x1st[i - 1][2] * b + x1st[i - 1][2] * y1st[j - 1][1] * e); // i+1,j
 
           w[index][6] = -_theta * dt[n - 1] * x1st[i - 1][0] * y1st[j - 1][2] * e; // i-1,j+1

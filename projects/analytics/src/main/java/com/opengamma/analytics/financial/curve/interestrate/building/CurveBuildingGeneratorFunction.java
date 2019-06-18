@@ -13,14 +13,13 @@ import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorY
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundleBuildingFunction;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
-import com.opengamma.analytics.financial.provider.curve.multicurve.MulticurveDiscountBuildingRepository;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
  * Yield curve bundle building function based on an map of curve generators.
  * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated. Use classes such as
- * {@link MulticurveDiscountBuildingRepository}.
+ * {@link com.opengamma.analytics.financial.provider.curve.multicurve.MulticurveDiscountBuildingRepository}.
  */
 @Deprecated
 public class CurveBuildingGeneratorFunction extends YieldCurveBundleBuildingFunction {

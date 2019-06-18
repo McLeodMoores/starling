@@ -34,9 +34,8 @@ import com.opengamma.util.ArgumentChecker;
   public Object getValue(final String propertyName) {
     if (_propertyName.equals(propertyName)) {
       return _value;
-    } else {
-      return _delegate.getValue(propertyName);
     }
+    return _delegate.getValue(propertyName);
   }
 
   @Override

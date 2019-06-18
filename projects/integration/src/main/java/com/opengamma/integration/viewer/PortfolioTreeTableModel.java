@@ -44,7 +44,7 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
   private PortfolioNode _treeRoot;
   private ViewComputationResultModel _resultModel;
 
-  public PortfolioTreeTableModel() {
+  PortfolioTreeTableModel() {
     _columnModel = new ViewerColumnModel();
   }
 
@@ -57,9 +57,8 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
   public synchronized String getColumnName(final int column) {
     if (column == 0) {
       return "Trade";
-    } else {
-      return _columnModel.getCalculationConfigurationName(column) + "-" + _columnModel.getRequirementName(column);
     }
+    return _columnModel.getCalculationConfigurationName(column) + "-" + _columnModel.getRequirementName(column);
   }
 
   @Override
@@ -68,24 +67,13 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
   }
 
   /*
-  private void dumpPortfolio(PortfolioNode node, int depth) {
-    StringBuilder indent = new StringBuilder();
-    for (int i=0; i<depth; i++) indent.append(" ");
-    LOGGER.info("{}{}", indent.toString(), node);
-    if (node.getPositions() != null) {
-      for (Position position : node.getPositions()) {
-        LOGGER.info("{}  {}", indent.toString(), position);
-      }
-    }
-    if (node.getSubNodes() != null) {
-      for (PortfolioNode subNode : node.getSubNodes()) {
-        dumpPortfolio(subNode, depth+2);
-      }
-    }
-  }
-  */
+   * private void dumpPortfolio(PortfolioNode node, int depth) { StringBuilder indent = new StringBuilder(); for (int i=0; i<depth; i++) indent.append(" ");
+   * LOGGER.info("{}{}", indent.toString(), node); if (node.getPositions() != null) { for (Position position : node.getPositions()) { LOGGER.info("{}  {}",
+   * indent.toString(), position); } } if (node.getSubNodes() != null) { for (PortfolioNode subNode : node.getSubNodes()) { dumpPortfolio(subNode, depth+2); } }
+   * }
+   */
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public UserPrincipal getUser() {
     return UserPrincipal.getLocalUser();
@@ -104,12 +92,12 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
 
   @Override
   public void cycleStarted(final ViewCycleMetadata cycleMetadata) {
-    //ignore
+    // ignore
   }
 
   @Override
   public void cycleFragmentCompleted(final ViewComputationResultModel fullFragment, final ViewDeltaResultModel deltaFragment) {
-    //ignore
+    // ignore
   }
 
   @Override
@@ -134,7 +122,7 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
   public void clientShutdown(final Exception e) {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void fireTreeNodesChanged() {
     final TreeModelEvent treeModelEvent = new TreeModelEvent(this, new TreePath(getRoot()), null, null);
     for (final TreeModelListener listener : getTreeModelListeners()) {
@@ -187,7 +175,7 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
 
   @Override
   public synchronized Object getValueAt(final Object node, final int column) {
-    //LOGGER.info("getValueAt({}, {})", node, column);
+    // LOGGER.info("getValueAt({}, {})", node, column);
     if (node == null) {
       return null;
     }
@@ -203,7 +191,7 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
 
   @Override
   public synchronized Object getChild(final Object parent, final int index) {
-    //LOGGER.info("getChild({}, {})", parent, index);
+    // LOGGER.info("getChild({}, {})", parent, index);
     if (parent == null) {
       return null;
     }
@@ -213,9 +201,8 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
       final PortfolioNode node = (PortfolioNode) parent;
       if (index < node.getPositions().size()) {
         return node.getPositions().toArray()[index];
-      } else {
-        return node.getChildNodes().toArray()[index - node.getPositions().size()];
       }
+      return node.getChildNodes().toArray()[index - node.getPositions().size()];
     } else {
       throw new OpenGammaRuntimeException("Unexpected call to getChild on a unexpected type " + parent);
     }
@@ -223,7 +210,7 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
 
   @Override
   public synchronized int getChildCount(final Object parent) {
-    //LOGGER.info("getChildCount({})", parent);
+    // LOGGER.info("getChildCount({})", parent);
     if (parent == null) {
       return 0;
     }
@@ -239,7 +226,7 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
 
   @Override
   public synchronized int getIndexOfChild(final Object parent, final Object child) {
-    //LOGGER.info("getIndexOfChild({}, {})", parent, child);
+    // LOGGER.info("getIndexOfChild({}, {})", parent, child);
     if (parent == null) {
       return 0;
     }
@@ -249,9 +236,8 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
       final PortfolioNode node = (PortfolioNode) parent;
       if (child instanceof Position) {
         return new ArrayList<>(node.getPositions()).indexOf(child);
-      } else {
-        return new ArrayList<>(node.getChildNodes()).indexOf(child) + node.getPositions().size();
       }
+      return new ArrayList<>(node.getChildNodes()).indexOf(child) + node.getPositions().size();
     } else {
       throw new OpenGammaRuntimeException("Unexpected call to getChild on a unexpected type " + parent);
     }

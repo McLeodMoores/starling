@@ -20,7 +20,8 @@ import com.opengamma.financial.security.option.FXDigitalOptionSecurity;
 // logic in getBarrierLevel() / getMarketDataRequirement() probably implies this should be refactored
 
 /**
- * Function to compute barrier distance for equity options Defined as absolute difference (optionally expressed as a percentage) between barrier level and market price
+ * Function to compute barrier distance for equity options Defined as absolute difference (optionally expressed as a percentage) between barrier level and
+ * market price.
  */
 public class FXBarrierOptionDistanceFunction extends BarrierOptionDistanceFunction {
 

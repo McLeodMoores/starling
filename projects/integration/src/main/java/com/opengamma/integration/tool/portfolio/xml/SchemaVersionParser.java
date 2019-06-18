@@ -21,10 +21,10 @@ import org.slf4j.LoggerFactory;
 import com.opengamma.OpenGammaRuntimeException;
 
 /**
- * Performs a parse of an XML document (via the provided Reader), in order to extract the
- * schema version. A StAX parser {@see http://docs.oracle.com/javase/tutorial/jaxp/stax/login.html} is
- * used so that the whole document is not read into memory when all the should be required is the
- * first few lines of the document.
+ * Performs a parse of an XML document (via the provided Reader), in order to extract the schema version.
+ * <p>
+ * A (@see <a href=http://docs.oracle.com/javase/tutorial/jaxp/stax/login.html>STAX parser</a>) is used so that the whole document is not read into memory when
+ * all that should be required is the first few lines of the document.
  */
 public class SchemaVersionParser {
 
@@ -37,23 +37,23 @@ public class SchemaVersionParser {
   private final Reader _reader;
 
   /**
-   * Initialise the parser with a reader holding an XML document. The reader is
-   * expected to be managed by the client, and should be initialised to the start
-   * of the document.
+   * Initialise the parser with a reader holding an XML document. The reader is expected to be managed by the client, and should be initialised to the start of
+   * the document.
    *
-   * @param reader reader to read the XML document from
+   * @param reader
+   *          reader to read the XML document from
    */
   public SchemaVersionParser(final Reader reader) {
     _reader = reader;
   }
 
   /**
-   * Attempt to read the schema version from the XML document. The root element
-   * is found, checked and the version number extracted. If any of these operations
+   * Attempt to read the schema version from the XML document. The root element is found, checked and the version number extracted. If any of these operations
    * fail then an {@link OpenGammaRuntimeException} will be thrown.
    *
    * @return the schema version from the xml document
-   * @throws OpenGammaRuntimeException if parsing the schema version fails
+   * @throws OpenGammaRuntimeException
+   *           if parsing the schema version fails
    */
   public SchemaVersion parseSchemaVersion() {
 
@@ -90,9 +90,9 @@ public class SchemaVersionParser {
   private void checkRootElement(final StartElement element, final String expectedName) {
     final String elementName = element.getName().getLocalPart();
     if (!elementName.equals(expectedName)) {
-      throw new OpenGammaRuntimeException("Root element should have name [" + expectedName +
-                                              "] but instead found [" + elementName +
-                                              "] - unable to parse file");
+      throw new OpenGammaRuntimeException("Root element should have name [" + expectedName
+          + "] but instead found [" + elementName
+          + "] - unable to parse file");
     }
   }
 
@@ -101,9 +101,8 @@ public class SchemaVersionParser {
     final Attribute schemaVersion = element.getAttributeByName(SCHEMA_VERSION_QNAME);
     if (schemaVersion != null) {
       return new SchemaVersion(schemaVersion.getValue());
-    } else {
-      throw new OpenGammaRuntimeException("No schema version was found - unable to parse file");
     }
+    throw new OpenGammaRuntimeException("No schema version was found - unable to parse file");
   }
 
   private XMLEventReader createXmlEventReader() throws XMLStreamException {

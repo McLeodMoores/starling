@@ -29,7 +29,9 @@ import com.opengamma.util.tuple.Triple;
 /**
  * Method to computes the present value and sensitivities of physical delivery European swaptions with a Libor Market Model calibrated exactly to SABR prices.
  * The LMM displacements and volatility weights are hard coded.
- * <p> Reference: M. Henrard, Algorithmic differentiation and calibration: optimization, September 2012.
+ * <p>
+ * Reference: M. Henrard, Algorithmic differentiation and calibration: optimization, September 2012.
+ * 
  * @deprecated Use {@link SwaptionPhysicalFixedIborSABRLMMLeastSquareMethod}
  */
 @Deprecated
@@ -56,14 +58,19 @@ public class SwaptionPhysicalFixedIborSABRLMMAtBestMethod implements PricingMeth
    */
   private final double[] _strikeMoneyness;
   /**
-   * The initial value of the LMM parameters for calibration. The initial parameters are not modified by the calibration but a new copy is created for each calibration.
+   * The initial value of the LMM parameters for calibration. The initial parameters are not modified by the calibration but a new copy is created for each
+   * calibration.
    */
   private final LiborMarketModelDisplacedDiffusionParameters _parametersInit;
 
   /**
    * Constructor.
-   * @param strikeMoneyness The moneyness of strikes used in the calibration basket. Difference between the swaption rate and the basket rates.
-   * @param parametersInit The initial value of the LMM parameters for calibration. The initial parameters are not modified by the calibration but a new copy is created for each calibration.
+   * 
+   * @param strikeMoneyness
+   *          The moneyness of strikes used in the calibration basket. Difference between the swaption rate and the basket rates.
+   * @param parametersInit
+   *          The initial value of the LMM parameters for calibration. The initial parameters are not modified by the calibration but a new copy is created for
+   *          each calibration.
    */
   public SwaptionPhysicalFixedIborSABRLMMAtBestMethod(final double[] strikeMoneyness, final LiborMarketModelDisplacedDiffusionParameters parametersInit) {
     ArgumentChecker.notNull(strikeMoneyness, "strike moneyness");
@@ -73,12 +80,14 @@ public class SwaptionPhysicalFixedIborSABRLMMAtBestMethod implements PricingMeth
   }
 
   /**
-   * The method calibrates a LMM on a set of vanilla swaption priced with SABR. The set of vanilla swaptions is given by the CalibrationType.
-   * The original swaption is priced with the calibrated LMM.
-   * This should not be used for vanilla swaptions (the price is equal to the SABR price with a longer computation type and some approximation).
-   * This is useful for non-standard swaptions like amortized swaptions.
-   * @param swaption The swaption.
-   * @param curves The curves and SABR data.
+   * The method calibrates a LMM on a set of vanilla swaption priced with SABR. The set of vanilla swaptions is given by the CalibrationType. The original
+   * swaption is priced with the calibrated LMM. This should not be used for vanilla swaptions (the price is equal to the SABR price with a longer computation
+   * type and some approximation). This is useful for non-standard swaptions like amortized swaptions.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param curves
+   *          The curves and SABR data.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption, final SABRInterestRateDataBundle curves) {
@@ -86,8 +95,10 @@ public class SwaptionPhysicalFixedIborSABRLMMAtBestMethod implements PricingMeth
     ArgumentChecker.notNull(curves, "curves");
     final int nbStrikes = _strikeMoneyness.length;
     final LiborMarketModelDisplacedDiffusionParameters lmmParameters = _parametersInit.copy();
-    final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective objective = new SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective(lmmParameters);
-    final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine calibrationEngine = new SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine(objective, nbStrikes);
+    final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective objective = new SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective(
+        lmmParameters);
+    final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine calibrationEngine = new SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine(
+        objective, nbStrikes);
     final SwaptionPhysicalFixedIbor[] swaptionCalibration = METHOD_BASKET.calibrationBasketFixedLegPeriod(swaption, _strikeMoneyness);
     calibrationEngine.addInstrument(swaptionCalibration, METHOD_SWAPTION_SABR);
     calibrationEngine.calibrate(curves);
@@ -108,8 +119,10 @@ public class SwaptionPhysicalFixedIborSABRLMMAtBestMethod implements PricingMeth
     ArgumentChecker.notNull(curves, "curves");
     final int nbStrikes = _strikeMoneyness.length;
     final LiborMarketModelDisplacedDiffusionParameters lmmParameters = _parametersInit.copy();
-    final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective objective = new SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective(lmmParameters);
-    final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine calibrationEngine = new SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine(objective, nbStrikes);
+    final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective objective = new SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective(
+        lmmParameters);
+    final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine calibrationEngine = new SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine(
+        objective, nbStrikes);
     final SwaptionPhysicalFixedIbor[] swaptionCalibration = METHOD_BASKET.calibrationBasketFixedLegPeriod(swaption, _strikeMoneyness);
     calibrationEngine.addInstrument(swaptionCalibration, METHOD_SWAPTION_SABR);
     calibrationEngine.calibrate(curves);
@@ -159,7 +172,8 @@ public class SwaptionPhysicalFixedIborSABRLMMAtBestMethod implements PricingMeth
     // Implementation note: Theta is vector with first the Alpha, the the Rho and finally the Nu.
     for (int loopperiod = 0; loopperiod < nbPeriods; loopperiod++) {
       for (int loopstrike = 0; loopstrike < nbStrikes; loopstrike++) {
-        final PresentValueSABRSensitivityDataBundle dPvCaldSABR = METHOD_SWAPTION_SABR.presentValueSABRSensitivity(swaptionCalibration[loopperiod * nbStrikes + loopstrike], curves);
+        final PresentValueSABRSensitivityDataBundle dPvCaldSABR = METHOD_SWAPTION_SABR
+            .presentValueSABRSensitivity(swaptionCalibration[loopperiod * nbStrikes + loopstrike], curves);
         final Set<DoublesPair> keySet = dPvCaldSABR.getAlpha().getMap().keySet();
         final DoublesPair[] keys = keySet.toArray(new DoublesPair[keySet.size()]);
         dPvCaldTheta[loopperiod * nbStrikes + loopstrike][loopperiod] += dPvCaldSABR.getAlpha().getMap().get(keys[0]);
@@ -197,7 +211,8 @@ public class SwaptionPhysicalFixedIborSABRLMMAtBestMethod implements PricingMeth
     // Storage in PresentValueSABRSensitivityDataBundle
     final PresentValueSABRSensitivityDataBundle sensi = new PresentValueSABRSensitivityDataBundle();
     for (int loopp = 0; loopp < nbPeriods; loopp++) {
-      final DoublesPair expiryMaturity = DoublesPair.of(swaptionCalibration[loopp * nbStrikes].getTimeToExpiry(), swaptionCalibration[loopp * nbStrikes].getMaturityTime());
+      final DoublesPair expiryMaturity = DoublesPair.of(swaptionCalibration[loopp * nbStrikes].getTimeToExpiry(),
+          swaptionCalibration[loopp * nbStrikes].getMaturityTime());
       sensi.addAlpha(expiryMaturity, dPvdTheta[loopp]);
       sensi.addRho(expiryMaturity, dPvdTheta[nbPeriods + loopp]);
       sensi.addNu(expiryMaturity, dPvdTheta[2 * nbPeriods + loopp]);
@@ -205,14 +220,17 @@ public class SwaptionPhysicalFixedIborSABRLMMAtBestMethod implements PricingMeth
     return sensi;
   }
 
-  public Triple<CurrencyAmount, PresentValueSABRSensitivityDataBundle, InterestRateCurveSensitivity> presentValueAndSensitivity(final SwaptionPhysicalFixedIbor swaption,
+  public Triple<CurrencyAmount, PresentValueSABRSensitivityDataBundle, InterestRateCurveSensitivity> presentValueAndSensitivity(
+      final SwaptionPhysicalFixedIbor swaption,
       final SABRInterestRateDataBundle curves) {
     ArgumentChecker.notNull(swaption, "swaption");
     ArgumentChecker.notNull(curves, "curves");
     final int nbStrikes = _strikeMoneyness.length;
     final LiborMarketModelDisplacedDiffusionParameters lmmParameters = _parametersInit.copy();
-    final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective objective = new SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective(lmmParameters);
-    final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine calibrationEngine = new SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine(objective, nbStrikes);
+    final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective objective = new SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective(
+        lmmParameters);
+    final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine calibrationEngine = new SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine(
+        objective, nbStrikes);
     final SwaptionPhysicalFixedIbor[] swaptionCalibration = METHOD_BASKET.calibrationBasketFixedLegPeriod(swaption, _strikeMoneyness);
     calibrationEngine.addInstrument(swaptionCalibration, METHOD_SWAPTION_SABR);
     calibrationEngine.calibrate(curves);
@@ -267,7 +285,8 @@ public class SwaptionPhysicalFixedIborSABRLMMAtBestMethod implements PricingMeth
     // Implementation note: Derivative of the calibration swaptions wrt the SABR parameters as a unique array.
     for (int loopperiod = 0; loopperiod < nbPeriods; loopperiod++) {
       for (int loopstrike = 0; loopstrike < nbStrikes; loopstrike++) {
-        final PresentValueSABRSensitivityDataBundle dPvCaldSABR = METHOD_SWAPTION_SABR.presentValueSABRSensitivity(swaptionCalibration[loopperiod * nbStrikes + loopstrike], curves);
+        final PresentValueSABRSensitivityDataBundle dPvCaldSABR = METHOD_SWAPTION_SABR
+            .presentValueSABRSensitivity(swaptionCalibration[loopperiod * nbStrikes + loopstrike], curves);
         final Set<DoublesPair> keySet = dPvCaldSABR.getAlpha().getMap().keySet();
         final DoublesPair[] keys = keySet.toArray(new DoublesPair[keySet.size()]);
         dPvCaldTheta[loopperiod * nbStrikes + loopstrike][loopperiod] += dPvCaldSABR.getAlpha().getMap().get(keys[0]);
@@ -306,7 +325,8 @@ public class SwaptionPhysicalFixedIborSABRLMMAtBestMethod implements PricingMeth
     // Storage in PresentValueSABRSensitivityDataBundle
     final PresentValueSABRSensitivityDataBundle sensiSABR = new PresentValueSABRSensitivityDataBundle();
     for (int loopp = 0; loopp < nbPeriods; loopp++) {
-      final DoublesPair expiryMaturity = DoublesPair.of(swaptionCalibration[loopp * nbStrikes].getTimeToExpiry(), swaptionCalibration[loopp * nbStrikes].getMaturityTime());
+      final DoublesPair expiryMaturity = DoublesPair.of(swaptionCalibration[loopp * nbStrikes].getTimeToExpiry(),
+          swaptionCalibration[loopp * nbStrikes].getMaturityTime());
       sensiSABR.addAlpha(expiryMaturity, dPvdTheta[loopp]);
       sensiSABR.addRho(expiryMaturity, dPvdTheta[nbPeriods + loopp]);
       sensiSABR.addNu(expiryMaturity, dPvdTheta[2 * nbPeriods + loopp]);

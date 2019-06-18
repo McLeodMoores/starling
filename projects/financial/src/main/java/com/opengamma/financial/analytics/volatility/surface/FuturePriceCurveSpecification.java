@@ -70,9 +70,9 @@ public class FuturePriceCurveSpecification {
       return false;
     }
     final FuturePriceCurveSpecification other = (FuturePriceCurveSpecification) o;
-    return other.getName().equals(getName()) &&
-           other.getCurveInstrumentProvider().equals(getCurveInstrumentProvider()) &&
-           other.getTarget().equals(getTarget()) &&
-           other.isUseUnderlyingSecurityForExpiry() == isUseUnderlyingSecurityForExpiry();
+    return other.getName().equals(getName())
+        && other.getCurveInstrumentProvider().equals(getCurveInstrumentProvider())
+        && other.getTarget().equals(getTarget())
+        && other.isUseUnderlyingSecurityForExpiry() == isUseUnderlyingSecurityForExpiry();
   }
 }

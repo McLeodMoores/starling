@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicAPI;
 
@@ -49,7 +50,7 @@ public class UserPrincipal implements Serializable {
     try {
       return new UserPrincipal(userName, InetAddress.getLocalHost().toString());
     } catch (final UnknownHostException ex) {
-      throw new com.opengamma.OpenGammaRuntimeException("Could not initialize local user", ex);
+      throw new OpenGammaRuntimeException("Could not initialize local user", ex);
     }
   }
 

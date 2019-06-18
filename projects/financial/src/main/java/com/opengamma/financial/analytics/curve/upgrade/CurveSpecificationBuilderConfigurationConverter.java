@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -74,31 +74,31 @@ public class CurveSpecificationBuilderConfigurationConverter {
   public static Collection<CurveNodeIdMapper> convert(final String currency, final Map<String, CurveSpecificationBuilderConfiguration> configMap,
       final Map<StripInstrumentType, InstrumentProviderPopulator> converters) {
     return null;
-    //    final Map<String, CurveNodeIdMapper.Builder> convertedWithNames = new HashMap<>();
-    //    for (final Map.Entry<String, CurveSpecificationBuilderConfiguration> convertedEntry : configMap.entrySet()) {
-    //      final String originalName = convertedEntry.getKey();
-    //      final CurveSpecificationBuilderConfiguration originalConfig = convertedEntry.getValue();
-    //      for (final Map.Entry<StripInstrumentType, InstrumentProviderPopulator> entry : converters.entrySet()) {
-    //        final InstrumentProviderPopulator converter = entry.getValue();
-    //        final String remappedName = converter.rename(originalName, currency);
-    //        final Builder remappedNameBuilder = convertedWithNames.get(remappedName);
-    //        final Pair<String, CurveNodeIdMapper.Builder> pair;
-    //        if (remappedNameBuilder != null) {
-    //          pair = Pairs.of(remappedName, converter.apply(remappedNameBuilder.name(originalName).build(), originalConfig, currency).getSecond());
-    //        } else {
-    //          pair = converter.apply(CurveNodeIdMapper.builder().name(originalName).build(), originalConfig, currency);
-    //        }
-    //        convertedWithNames.put(remappedName, pair.getSecond());
-    //      }
-    //    }
-    //    final Set<CurveNodeIdMapper> converted = new HashSet<>();
-    //    for (final Map.Entry<String, CurveNodeIdMapper.Builder> entry : convertedWithNames.entrySet()) {
-    //      final CurveNodeIdMapper idMapper = entry.getValue().build();
-    //      if (idMapper.getAllTenors().size() != 0) {
-    //        converted.add(idMapper);
-    //      }
-    //    }
-    //    return converted;
+    // final Map<String, CurveNodeIdMapper.Builder> convertedWithNames = new HashMap<>();
+    // for (final Map.Entry<String, CurveSpecificationBuilderConfiguration> convertedEntry : configMap.entrySet()) {
+    // final String originalName = convertedEntry.getKey();
+    // final CurveSpecificationBuilderConfiguration originalConfig = convertedEntry.getValue();
+    // for (final Map.Entry<StripInstrumentType, InstrumentProviderPopulator> entry : converters.entrySet()) {
+    // final InstrumentProviderPopulator converter = entry.getValue();
+    // final String remappedName = converter.rename(originalName, currency);
+    // final Builder remappedNameBuilder = convertedWithNames.get(remappedName);
+    // final Pair<String, CurveNodeIdMapper.Builder> pair;
+    // if (remappedNameBuilder != null) {
+    // pair = Pairs.of(remappedName, converter.apply(remappedNameBuilder.name(originalName).build(), originalConfig, currency).getSecond());
+    // } else {
+    // pair = converter.apply(CurveNodeIdMapper.builder().name(originalName).build(), originalConfig, currency);
+    // }
+    // convertedWithNames.put(remappedName, pair.getSecond());
+    // }
+    // }
+    // final Set<CurveNodeIdMapper> converted = new HashSet<>();
+    // for (final Map.Entry<String, CurveNodeIdMapper.Builder> entry : convertedWithNames.entrySet()) {
+    // final CurveNodeIdMapper idMapper = entry.getValue().build();
+    // if (idMapper.getAllTenors().size() != 0) {
+    // converted.add(idMapper);
+    // }
+    // }
+    // return converted;
   }
 
 }

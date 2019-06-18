@@ -67,19 +67,21 @@ public final class AgricultureFutureLoader extends SecurityLoader {
       FIELD_FUT_VAL_PT);
 
   /**
-   * The valid Bloomberg future categories for Agriculture Futures
+   * The valid Bloomberg future categories for Agriculture Futures.
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = ImmutableSet.of(BBG_CORN, BBG_WHEAT, BBG_SOY, BBG_LIVESTOCK, BBG_FOODSTUFF);
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   * 
+   * @param referenceDataProvider
+   *          the provider, not null
    */
-  public  AgricultureFutureLoader(final ReferenceDataProvider referenceDataProvider) {
+  public AgricultureFutureLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.AGRICULTURE_FUTURE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     final String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");

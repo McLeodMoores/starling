@@ -28,15 +28,17 @@ public class ExampleFXForwardCurveConfigPopulator {
   private static final String INSTRUMENT_TYPE = "FX_FORWARD";
   /** Tenors for non-JPY instruments */
   private static final ImmutableList<Tenor> TENORS = ImmutableList.of(Tenor.ofDays(7), Tenor.ofDays(14), Tenor.ofDays(21), Tenor.ofMonths(1),
-    Tenor.ofMonths(3), Tenor.ofMonths(6), Tenor.ofMonths(9), Tenor.ofYears(1),
-    Tenor.ofYears(5), Tenor.ofYears(10));
+      Tenor.ofMonths(3), Tenor.ofMonths(6), Tenor.ofMonths(9), Tenor.ofYears(1),
+      Tenor.ofYears(5), Tenor.ofYears(10));
   /** Tenors for JPY */
   private static final ImmutableList<Tenor> JPY_TENORS = ImmutableList.of(Tenor.ofDays(7), Tenor.ofDays(14), Tenor.ofDays(21), Tenor.ofMonths(1),
-    Tenor.ofMonths(3), Tenor.ofMonths(6), Tenor.ofMonths(9), Tenor.ofYears(1), Tenor.ofYears(2));
+      Tenor.ofMonths(3), Tenor.ofMonths(6), Tenor.ofMonths(9), Tenor.ofYears(1), Tenor.ofYears(2));
 
   /**
-   * @param configMaster The configuration master, not null
-   * @param ccyPairs The currency pairs, not null
+   * @param configMaster
+   *          The configuration master, not null
+   * @param ccyPairs
+   *          The currency pairs, not null
    */
   public ExampleFXForwardCurveConfigPopulator(final ConfigMaster configMaster, final UnorderedCurrencyPair[] ccyPairs) {
     ArgumentChecker.notNull(configMaster, "configuration master");
@@ -46,8 +48,11 @@ public class ExampleFXForwardCurveConfigPopulator {
 
   /**
    * Populates the configuration master.
-   * @param configMaster The configuration master, not null
-   * @param ccyPairs The currency pairs, not null
+   *
+   * @param configMaster
+   *          The configuration master, not null
+   * @param ccyPairs
+   *          The currency pairs, not null
    * @return A populated configuration master
    */
   public static ConfigMaster populateCurveConfigMaster(final ConfigMaster configMaster, final UnorderedCurrencyPair[] ccyPairs) {
@@ -61,7 +66,8 @@ public class ExampleFXForwardCurveConfigPopulator {
   }
 
   private static void populateCurveSpecifications(final ConfigMaster configMaster, final UnorderedCurrencyPair target, final String name) {
-    final FXForwardCurveInstrumentProvider curveInstrumentProvider = new ExampleFXForwardCurveInstrumentProvider(target.toString(), "FXFORWARD", target.toString(),
+    final FXForwardCurveInstrumentProvider curveInstrumentProvider = new ExampleFXForwardCurveInstrumentProvider(target.toString(), "FXFORWARD",
+        target.toString(),
         MarketDataRequirementNames.MARKET_VALUE);
     final String fullName = name + SEPARATOR + target.toString() + SEPARATOR + INSTRUMENT_TYPE;
     final FXForwardCurveSpecification specification = new FXForwardCurveSpecification(fullName, target, curveInstrumentProvider);

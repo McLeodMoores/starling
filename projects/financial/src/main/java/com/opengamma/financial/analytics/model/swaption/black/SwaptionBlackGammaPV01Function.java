@@ -17,9 +17,9 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the gamma PV01 of a swaption using the Black method. This functions produces
- * the change in PV01 when all curves to which the swaption is sensitive are parallel-shifted
- * by +1 bp.
+ * Calculates the gamma PV01 of a swaption using the Black method. This functions produces the change in PV01 when all curves to which the swaption is sensitive
+ * are parallel-shifted by +1 bp.
+ * 
  * @deprecated The parent of this function is deprecated
  */
 @Deprecated
@@ -28,7 +28,7 @@ public class SwaptionBlackGammaPV01Function extends SwaptionBlackFunction {
   private static final GammaPV01Calculator CALCULATOR = new GammaPV01Calculator(PresentValueCurveSensitivityBlackCalculator.getInstance());
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#GAMMA_PV01}
+   * Sets the value requirement to {@link ValueRequirementNames#GAMMA_PV01}.
    */
   public SwaptionBlackGammaPV01Function() {
     super(ValueRequirementNames.GAMMA_PV01);

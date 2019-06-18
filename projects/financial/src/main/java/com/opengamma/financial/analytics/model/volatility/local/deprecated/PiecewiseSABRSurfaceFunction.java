@@ -44,7 +44,8 @@ import com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePr
 public abstract class PiecewiseSABRSurfaceFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String surfaceType = desiredValue.getConstraint(PROPERTY_SURFACE_TYPE);
     final boolean moneynessSurface = LocalVolatilityPDEUtils.isMoneynessSurface(surfaceType);
@@ -60,11 +61,12 @@ public abstract class PiecewiseSABRSurfaceFunction extends AbstractFunction.NonC
     final String surfaceName = desiredValue.getConstraint(SURFACE);
     final String curveCalculationMethodName = desiredValue.getConstraint(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
     final String forwardCurveName = desiredValue.getConstraint(CURVE);
-    //TODO R White testing using spline rather than SABR - this should be an option
+    // TODO R White testing using spline rather than SABR - this should be an option
     final GeneralSmileInterpolator smileInterpolator = new SmileInterpolatorSpline();
     final VolatilitySurfaceInterpolator surfaceFitter = new VolatilitySurfaceInterpolator(smileInterpolator, useLogTime, useIntegratedVariance, useLogValue);
-    //  final PiecewiseSABRSurfaceFitter1<?> surfaceFitter = new MoneynessPiecewiseSABRSurfaceFitter(useLogTime, useIntegratedVariance, useLogValue);
-    final SmileSurfaceDataBundle data = getData(inputs, getVolatilityDataRequirement(target, surfaceName), getForwardCurveRequirement(target, curveCalculationMethodName, forwardCurveName));
+    // final PiecewiseSABRSurfaceFitter1<?> surfaceFitter = new MoneynessPiecewiseSABRSurfaceFitter(useLogTime, useIntegratedVariance, useLogValue);
+    final SmileSurfaceDataBundle data = getData(inputs, getVolatilityDataRequirement(target, surfaceName),
+        getForwardCurveRequirement(target, curveCalculationMethodName, forwardCurveName));
     final BlackVolatilitySurface<?> impliedVolatilitySurface = surfaceFitter.getVolatilitySurface(data);
     final ValueProperties properties = getResultProperties(surfaceName, surfaceType, xAxis, yAxis, yAxisType, curveCalculationMethodName,
         forwardCurveName);
@@ -112,7 +114,8 @@ public abstract class PiecewiseSABRSurfaceFunction extends AbstractFunction.NonC
     if (yAxisTypes == null || yAxisTypes.size() != 1) {
       return null;
     }
-    return Sets.newHashSet(getVolatilityDataRequirement(target, surfaceName), getForwardCurveRequirement(target, forwardCurveCalculationMethod, forwardCurveName));
+    return Sets.newHashSet(getVolatilityDataRequirement(target, surfaceName),
+        getForwardCurveRequirement(target, forwardCurveCalculationMethod, forwardCurveName));
   }
 
   @Override
@@ -125,8 +128,8 @@ public abstract class PiecewiseSABRSurfaceFunction extends AbstractFunction.NonC
       final ValueProperties constraints = input.getValue().getConstraints();
       if (input.getValue().getValueName().equals(ValueRequirementNames.FORWARD_CURVE)) {
         if (constraints.getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD) != null) {
-          final Set<String> forwardCurveCalculationMethodNames =
-              constraints.getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
+          final Set<String> forwardCurveCalculationMethodNames = constraints
+              .getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
           if (forwardCurveCalculationMethodNames == null || forwardCurveCalculationMethodNames.size() != 1) {
             throw new OpenGammaRuntimeException("Missing or non-unique forward curve calculation method name");
           }
@@ -160,13 +163,13 @@ public abstract class PiecewiseSABRSurfaceFunction extends AbstractFunction.NonC
 
   protected abstract ValueProperties getResultProperties();
 
-  protected abstract ValueProperties getResultProperties(final String definitionName, final String forwardCurveCalculationMethod,
-      final String forwardCurveName);
+  protected abstract ValueProperties getResultProperties(String definitionName, String forwardCurveCalculationMethod,
+      String forwardCurveName);
 
-  protected abstract ValueProperties getResultProperties(final String definitionName, final String surfaceType, final String xAxis, final String yAxis,
-      final String yAxisType, final String forwardCurveCalculationMethod, final String forwardCurveName);
+  protected abstract ValueProperties getResultProperties(String definitionName, String surfaceType, String xAxis, String yAxis,
+      String yAxisType, String forwardCurveCalculationMethod, String forwardCurveName);
 
-  protected abstract ValueRequirement getVolatilityDataRequirement(final ComputationTarget target, final String surfaceName);
+  protected abstract ValueRequirement getVolatilityDataRequirement(ComputationTarget target, String surfaceName);
 
   private ValueRequirement getForwardCurveRequirement(final ComputationTarget target, final String calculationMethod, final String forwardCurveName) {
     final ValueProperties properties = ValueProperties.builder()

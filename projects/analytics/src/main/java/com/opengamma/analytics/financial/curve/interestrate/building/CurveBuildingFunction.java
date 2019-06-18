@@ -20,7 +20,6 @@ import com.opengamma.analytics.financial.interestrate.InterestRateCurveSensitivi
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.curve.multicurve.MulticurveDiscountBuildingRepository;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.linearalgebra.DecompositionFactory;
 import com.opengamma.analytics.math.matrix.CommonsMatrixAlgebra;
@@ -33,8 +32,10 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  * Functions to build curves.
- * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated. Use classes such as
- * {@link MulticurveDiscountBuildingRepository}.
+ * 
+ * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s
+ *             are deprecated. Use classes such as
+ *             {@link com.opengamma.analytics.financial.provider.curve.multicurve.MulticurveDiscountBuildingRepository}.
  */
 @Deprecated
 public class CurveBuildingFunction {

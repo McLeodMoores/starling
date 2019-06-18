@@ -45,7 +45,7 @@ public class ExampleTimeSeriesRatingLoader extends AbstractTool<ToolContext> {
   @Override
   protected void doRun() {
     final ConfigMaster configMaster = getToolContext().getConfigMaster();
-    final List<HistoricalTimeSeriesRatingRule> rules = new ArrayList<HistoricalTimeSeriesRatingRule>();
+    final List<HistoricalTimeSeriesRatingRule> rules = new ArrayList<>();
     rules.add(HistoricalTimeSeriesRatingRule.of(DATA_SOURCE_NAME, "BLOOMBERG", 1));
     rules.add(HistoricalTimeSeriesRatingRule.of(DATA_SOURCE_NAME, SimulatedHistoricalDataGenerator.OG_DATA_SOURCE, 2));
     rules.add(HistoricalTimeSeriesRatingRule.of(DATA_PROVIDER_NAME, "CMPL", 1));

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.bondfutureoption;
@@ -20,8 +20,9 @@ import com.opengamma.financial.analytics.ircurve.calcconfig.MultiCurveCalculatio
 import com.opengamma.financial.security.option.BondFutureOptionSecurity;
 
 /**
- * 
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondFutureOptionBlackDeltaFunction extends BondFutureOptionBlackFunction {
   private static final PresentValueBlackDeltaForTransactionCalculator CALCULATOR = PresentValueBlackDeltaForTransactionCalculator.getInstance();
 
@@ -30,7 +31,8 @@ public class BondFutureOptionBlackDeltaFunction extends BondFutureOptionBlackFun
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative bondFutureOption, final YieldCurveWithBlackCubeBundle data, final MultiCurveCalculationConfig curveCalculationConfig,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative bondFutureOption, final YieldCurveWithBlackCubeBundle data,
+      final MultiCurveCalculationConfig curveCalculationConfig,
       final ValueSpecification spec, final FunctionInputs inputs, final Set<ValueRequirement> desiredValue, final BondFutureOptionSecurity security) {
     final Double gamma = bondFutureOption.accept(CALCULATOR, data);
     return Collections.singleton(new ComputedValue(spec, gamma));

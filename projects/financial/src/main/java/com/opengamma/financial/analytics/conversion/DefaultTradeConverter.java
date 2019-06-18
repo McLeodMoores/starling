@@ -23,7 +23,7 @@ import com.opengamma.financial.security.future.MetalFutureSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Converts {@link Trade} to the appropriate {@link InstrumentDefinition}
+ * Converts {@link Trade} to the appropriate {@link InstrumentDefinition}.
  */
 public class DefaultTradeConverter implements TradeConverter {
   /** Converter for futures excluding Federal funds futures */
@@ -38,9 +38,10 @@ public class DefaultTradeConverter implements TradeConverter {
   private final FinancialSecurityVisitor<InstrumentDefinition<?>> _securityConverter;
 
   /**
-   * Note that this constructor explicitly sets the future trade converter and Federal funds future
-   * converter to null
-   * @param securityConverter The security converter, not null
+   * Note that this constructor explicitly sets the future trade converter and Federal funds future converter to null.
+   *
+   * @param securityConverter
+   *          The security converter, not null
    */
   public DefaultTradeConverter(final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter) {
     ArgumentChecker.notNull(securityConverter, "securityConverter");
@@ -53,8 +54,11 @@ public class DefaultTradeConverter implements TradeConverter {
 
   /**
    * Note that this constructor explicitly sets the Federal funds future converter to null.
-   * @param futureTradeConverter The futures trade converter, not null
-   * @param securityConverter The future security converter, not null
+   *
+   * @param futureTradeConverter
+   *          The futures trade converter, not null
+   * @param securityConverter
+   *          The future security converter, not null
    */
   public DefaultTradeConverter(final FutureTradeConverter futureTradeConverter, final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter) {
     ArgumentChecker.notNull(futureTradeConverter, "future trade converter");
@@ -67,17 +71,22 @@ public class DefaultTradeConverter implements TradeConverter {
   }
 
   /**
-   * @param futureTradeConverter The futures trade converter, not null
-   * @param federalFundsFutureTradeConverter The Federal funds future trade converter, not null
-   * @param irFutureTradeConverter TODO
-   * @param deliverableSwapFutureTradeConverter TODO
-   * @param securityConverter The security converter, not null
+   * @param futureTradeConverter
+   *          The futures trade converter, not null
+   * @param federalFundsFutureTradeConverter
+   *          The Federal funds future trade converter, not null
+   * @param irFutureTradeConverter
+   *          TODO
+   * @param deliverableSwapFutureTradeConverter
+   *          TODO
+   * @param securityConverter
+   *          The security converter, not null
    */
   public DefaultTradeConverter(final FutureTradeConverter futureTradeConverter,
-                        final FederalFundsFutureTradeConverter federalFundsFutureTradeConverter,
-                        final InterestRateFutureTradeConverter irFutureTradeConverter,
-                        final DeliverableSwapFutureTradeConverter deliverableSwapFutureTradeConverter,
-                        final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter) {
+      final FederalFundsFutureTradeConverter federalFundsFutureTradeConverter,
+      final InterestRateFutureTradeConverter irFutureTradeConverter,
+      final DeliverableSwapFutureTradeConverter deliverableSwapFutureTradeConverter,
+      final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter) {
     ArgumentChecker.notNull(futureTradeConverter, "future trade converter");
     ArgumentChecker.notNull(federalFundsFutureTradeConverter, "Federal funds future trade converter");
     ArgumentChecker.notNull(securityConverter, "security converter");
@@ -89,10 +98,13 @@ public class DefaultTradeConverter implements TradeConverter {
   }
 
   /**
-   * Converts a {@link Trade} to a {@link InstrumentDefinition}
-   * @param trade The trade, not null
+   * Converts a {@link Trade} to a {@link InstrumentDefinition}.
+   *
+   * @param trade
+   *          The trade, not null
    * @return The instrument definition
-   * @throws IllegalArgumentException if the underlying security is not a {@link FinancialSecurity}
+   * @throws IllegalArgumentException
+   *           if the underlying security is not a {@link FinancialSecurity}
    */
   @Override
   public InstrumentDefinition<?> convert(final Trade trade) {
@@ -104,7 +116,7 @@ public class DefaultTradeConverter implements TradeConverter {
 
   private final class TradeVisitor extends FinancialSecurityVisitorSameValueAdapter<TradeConverter> {
 
-    public TradeVisitor() {
+    TradeVisitor() {
       super(new TradeConverter() {
         @Override
         public InstrumentDefinition<?> convert(final Trade trade) {

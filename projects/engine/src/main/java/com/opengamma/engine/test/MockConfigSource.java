@@ -55,9 +55,8 @@ public class MockConfigSource extends AbstractSource<ConfigItem<?>> implements C
     final ConfigItem<?> item = _store.get(uniqueId.getObjectId());
     if (item != null) {
       return item;
-    } else {
-      throw new DataNotFoundException(uniqueId.toString());
     }
+    throw new DataNotFoundException(uniqueId.toString());
   }
 
   @Override

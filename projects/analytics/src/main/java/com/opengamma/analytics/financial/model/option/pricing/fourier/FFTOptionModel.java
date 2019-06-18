@@ -39,12 +39,13 @@ public class FFTOptionModel implements OptionModel<EuropeanVanillaOptionDefiniti
   private final double _alpha;
   private final double _tolerance;
 
-  //TODO add interpolator as input
+  // TODO add interpolator as input
   public FFTOptionModel(final MartingaleCharacteristicExponent characteristicExponent) {
     this(characteristicExponent, DEFAULT_STRIKES, DEFAULT_MAX_DELTA_MONEYNESS, DEFAULT_ALPHA, DEFAULT_TOLERANCE);
   }
 
-  public FFTOptionModel(final MartingaleCharacteristicExponent characteristicExponent, final int nStrikes, final double maxDeltaMoneyness, final double alpha, final double tolerance) {
+  public FFTOptionModel(final MartingaleCharacteristicExponent characteristicExponent, final int nStrikes, final double maxDeltaMoneyness, final double alpha,
+      final double tolerance) {
     Validate.notNull(characteristicExponent, "characteristic exponent");
     Validate.isTrue(nStrikes > 0, "number of strikes must be > 0");
     Validate.isTrue(maxDeltaMoneyness > 0, "max delta moneyness must be > 0");
@@ -77,7 +78,7 @@ public class FFTOptionModel implements OptionModel<EuropeanVanillaOptionDefiniti
     final double df = data.getDiscountFactor();
     final double t = option.getTimeToExpiry();
     final boolean isCall = option.isCall();
-    //TODO This is a tuning parameter of the algorithm and has no business being passed in a BlackOptionDataBundle
+    // TODO This is a tuning parameter of the algorithm and has no business being passed in a BlackOptionDataBundle
     final double limitSigma = data.getBlackVolatility();
 
     final double[][] prices = PRICER.price(fwd, df, t, isCall, _characteristicExponent, _nStrikes, _maxDeltaMoneyness, limitSigma, _alpha, _tolerance);

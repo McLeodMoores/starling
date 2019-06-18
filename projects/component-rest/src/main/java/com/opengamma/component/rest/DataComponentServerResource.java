@@ -58,16 +58,16 @@ public class DataComponentServerResource extends AbstractDataResource {
     @Override
     public int compare(final ComponentInfo info1, final ComponentInfo info2) {
       int cmp = 0;
-      if (info1.getAttributes().containsKey(ComponentInfoAttributes.LEVEL) && info2.getAttributes().containsKey(ComponentInfoAttributes.LEVEL) == false) {
+      if (info1.getAttributes().containsKey(ComponentInfoAttributes.LEVEL) && !info2.getAttributes().containsKey(ComponentInfoAttributes.LEVEL)) {
         return -1;
       }
-      if (info1.getAttributes().containsKey(ComponentInfoAttributes.LEVEL) == false && info2.getAttributes().containsKey(ComponentInfoAttributes.LEVEL)) {
+      if (!info1.getAttributes().containsKey(ComponentInfoAttributes.LEVEL) && info2.getAttributes().containsKey(ComponentInfoAttributes.LEVEL)) {
         return 1;
       }
       if (info1.getAttributes().containsKey(ComponentInfoAttributes.LEVEL) && info2.getAttributes().containsKey(ComponentInfoAttributes.LEVEL)) {
         final String str1 = info1.getAttribute(ComponentInfoAttributes.LEVEL);
         final String str2 = info2.getAttribute(ComponentInfoAttributes.LEVEL);
-        cmp = NumberUtils.toInt(str2) - NumberUtils.toInt(str1);  // reverse order
+        cmp = NumberUtils.toInt(str2) - NumberUtils.toInt(str1); // reverse order
       }
       cmp = cmp == 0 ? info1.getClassifier().compareTo(info2.getClassifier()) : cmp;
       return cmp;
@@ -86,8 +86,10 @@ public class DataComponentServerResource extends AbstractDataResource {
   /**
    * Creates the resource.
    *
-   * @param localComponents  the managed components, not null
-   * @param remoteComponents  the republished remote components, not null
+   * @param localComponents
+   *          the managed components, not null
+   * @param remoteComponents
+   *          the republished remote components, not null
    */
   public DataComponentServerResource(final Iterable<RestComponent> localComponents, final Iterable<ComponentInfo> remoteComponents) {
     ArgumentChecker.notNull(localComponents, "localComponents");
@@ -95,7 +97,7 @@ public class DataComponentServerResource extends AbstractDataResource {
     _remoteComponents = ImmutableList.copyOf(remoteComponents);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the components.
    *
@@ -105,7 +107,7 @@ public class DataComponentServerResource extends AbstractDataResource {
     return _localComponents;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @HEAD
   public Response status() {
     // simple GET to quickly return as a ping

@@ -21,10 +21,14 @@ public class OperationTimerTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(OperationTimerTest.class);
 
+  /**
+   * @throws InterruptedException
+   *           if there is a problem
+   */
   public void simpleTest() throws InterruptedException {
-    OperationTimer timer = new OperationTimer(LOGGER, "Testing");
+    final OperationTimer timer = new OperationTimer(LOGGER, "Testing");
     Thread.sleep(100);
-    long result = timer.finished();
+    final long result = timer.finished();
     // We're not guaranteed that sleeping for 100ms will be exactly 100ms.
     assertTrue(result > 90);
   }

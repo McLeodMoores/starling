@@ -31,7 +31,7 @@ public class EquityFutureOptionBlackValueDeltaFunction extends EquityFutureOptio
   private static final ValueGreekCalculator CALCULATOR = ValueDeltaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityFutureOptionBlackValueDeltaFunction() {
     super(ValueRequirementNames.VALUE_DELTA);

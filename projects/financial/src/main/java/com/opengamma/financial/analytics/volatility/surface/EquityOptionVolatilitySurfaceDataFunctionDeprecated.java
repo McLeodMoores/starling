@@ -57,7 +57,7 @@ import com.opengamma.util.tuple.Pairs;
 /**
  * @deprecated This has been replaced by the pair, RawEquityOptionVolatilitySurfaceDataFunction, EquityFutureOptionVolatilitySurfaceDataFunction
  */
-//TODO this class needs to be re-written, as each instrument type needs a different set of inputs
+// TODO this class needs to be re-written, as each instrument type needs a different set of inputs
 @Deprecated
 public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends AbstractFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityOptionVolatilitySurfaceDataFunctionDeprecated.class);
@@ -104,9 +104,14 @@ public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends Abstrac
     if (_specification == null) {
       throw new OpenGammaRuntimeException("Couldn't find Equity Option Volatility Surface Specification " + _specificationName);
     }
-    _result = new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ComputationTargetSpecification.of(_definition.getTarget().getUniqueId()),
-        createValueProperties().with(ValuePropertyNames.SURFACE, _definitionName).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)
-            .withAny(EquityVarianceSwapStaticReplicationFunction.STRIKE_PARAMETERIZATION_METHOD/*, VarianceSwapStaticReplication.StrikeParameterization.STRIKE.toString()*/).get());
+    _result = new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA,
+        ComputationTargetSpecification.of(_definition.getTarget().getUniqueId()),
+        createValueProperties().with(ValuePropertyNames.SURFACE, _definitionName)
+            .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)
+            .withAny(EquityVarianceSwapStaticReplicationFunction.STRIKE_PARAMETERIZATION_METHOD/*
+                                                                                                * , VarianceSwapStaticReplication.StrikeParameterization.STRIKE.
+                                                                                                * toString()
+                                                                                                */).get());
     _results = Collections.singleton(_result);
   }
 
@@ -117,9 +122,10 @@ public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends Abstrac
   }
 
   /**
-   * // Computes active expiry dates, which fall on the Saturday following the 3rd Friday of an expiry month
+   * Computes active expiry dates, which fall on the Saturday following the 3rd Friday of an expiry month.
    *
-   * @param valDate The evaluation date
+   * @param valDate
+   *          The evaluation date
    * @return The expiry dates
    */
   public static TreeSet<LocalDate> getExpirySet(final LocalDate valDate) {
@@ -154,9 +160,12 @@ public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends Abstrac
   /**
    * Dynamically return an array of strikes given an underlying spot level of the index or price.
    *
-   * @param spot Spot value of the underlying ( e.g. index, stock )
-   * @param relativeWidth Strike bounds are specified simply: [ spot * ( 1 - width), spot * ( 1 + width) ]
-   * @param stepSize Difference between each strike in the resulting set. // TODO Extend beyond integer
+   * @param spot
+   *          Spot value of the underlying ( e.g. index, stock )
+   * @param relativeWidth
+   *          Strike bounds are specified simply: [ spot * ( 1 - width), spot * ( 1 + width) ]
+   * @param stepSize
+   *          Difference between each strike in the resulting set. // TODO Extend beyond integer
    * @return Long array. The format of this is limiting as these values will be used to create identifiers for the data provider
    */
   public static Double[] getStrikes(final Double spot, Double relativeWidth, Integer stepSize) {
@@ -188,10 +197,12 @@ public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends Abstrac
     return strikes;
   }
 
-  public static <X, Y> Set<ValueRequirement> buildRequirements(final VolatilitySurfaceSpecification specification, final VolatilitySurfaceDefinition<X, Y> definition,
+  public static <X, Y> Set<ValueRequirement> buildRequirements(final VolatilitySurfaceSpecification specification,
+      final VolatilitySurfaceDefinition<X, Y> definition,
       final ZonedDateTime atInstant) {
     final Set<ValueRequirement> result = new HashSet<>();
-    final BloombergEquityOptionVolatilitySurfaceInstrumentProvider provider = (BloombergEquityOptionVolatilitySurfaceInstrumentProvider) specification.getSurfaceInstrumentProvider();
+    final BloombergEquityOptionVolatilitySurfaceInstrumentProvider provider = (BloombergEquityOptionVolatilitySurfaceInstrumentProvider) specification
+        .getSurfaceInstrumentProvider();
     final Object[] expiries = getExpirySet(atInstant.toLocalDate()).toArray();
 
     // !!!!!!!!! SUPPOSE We have some value in the definition that provides us with an estimate of the center strike
@@ -217,8 +228,9 @@ public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends Abstrac
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     final ZonedDateTime atZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
     final Set<ValueRequirement> requirements = Collections.unmodifiableSet(buildRequirements(_specification, _definition, atZDT));
-    //TODO ENG-252 see MarketInstrumentImpliedYieldCurveFunction; need to work out the expiry more efficiently
-    return new AbstractInvokingCompiledFunction(atZDT.with(LocalTime.MIDNIGHT).toInstant(), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000).toInstant()) {
+    // TODO ENG-252 see MarketInstrumentImpliedYieldCurveFunction; need to work out the expiry more efficiently
+    return new AbstractInvokingCompiledFunction(atZDT.with(LocalTime.MIDNIGHT).toInstant(),
+        atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000).toInstant()) {
 
       @Override
       public ComputationTargetType getTargetType() {
@@ -235,7 +247,8 @@ public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends Abstrac
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         if (canApplyTo(myContext, target)) {
           return requirements;
         }
@@ -254,7 +267,8 @@ public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends Abstrac
           final Set<ValueRequirement> desiredValues) {
         final Clock snapshotClock = executionContext.getValuationClock();
         final ExternalId temp = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, _definition.getTarget().getUniqueId().getValue());
-        final ValueRequirement underlyingSpotValueRequirement = new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, temp);
+        final ValueRequirement underlyingSpotValueRequirement = new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE,
+            temp);
         final Double underlyingSpot = (Double) inputs.getValue(underlyingSpotValueRequirement);
         if (underlyingSpot == null) {
           LOGGER.error("Could not get underlying spot value for " + _definition.getTarget().getUniqueId());
@@ -283,7 +297,8 @@ public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends Abstrac
             }
           }
         }
-        final VolatilitySurfaceData<?, ?> volSurfaceData = new VolatilitySurfaceData<>(_definition.getName(), _specification.getName(), _definition.getTarget().getUniqueId(),
+        final VolatilitySurfaceData<?, ?> volSurfaceData = new VolatilitySurfaceData<>(_definition.getName(), _specification.getName(),
+            _definition.getTarget().getUniqueId(),
             expiries, _definition.getYs(), volatilityValues);
         final ComputedValue resultValue = new ComputedValue(_result, volSurfaceData);
         return Collections.singleton(resultValue);

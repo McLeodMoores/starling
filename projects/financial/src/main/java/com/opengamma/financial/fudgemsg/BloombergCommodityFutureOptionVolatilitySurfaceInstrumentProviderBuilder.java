@@ -23,7 +23,8 @@ import com.opengamma.financial.analytics.volatility.surface.BloombergCommodityFu
  *
  */
 @FudgeBuilderFor(BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider.class)
-public class BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProviderBuilder implements FudgeBuilder<BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider> {
+public class BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProviderBuilder
+    implements FudgeBuilder<BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider> {
   private static final String CALL_FIELD_NAME = "useCallAboveStrikeValue";
   private static final String EXCHANGE_ID_FIELD_NAME = "exchangeId";
   private static final String SCHEME_NAME = "schemeName";
@@ -43,13 +44,14 @@ public class BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProviderBu
 
   @Override
   public BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
-    String futureOptionPrefix = message.getString(PREFIX_FIELD_NAME);
-    String postfix = message.getString(POSTFIX_FIELD_NAME);
-    String dataFieldName = message.getString(DATA_FIELD_NAME);
-    String schemeName = message.getString(SCHEME_NAME);
+    final String futureOptionPrefix = message.getString(PREFIX_FIELD_NAME);
+    final String postfix = message.getString(POSTFIX_FIELD_NAME);
+    final String dataFieldName = message.getString(DATA_FIELD_NAME);
+    final String schemeName = message.getString(SCHEME_NAME);
     final Double useCallAboveValue = message.getDouble(CALL_FIELD_NAME);
     final String exchangeId = message.getString(EXCHANGE_ID_FIELD_NAME);
-    return new BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider(futureOptionPrefix, postfix, dataFieldName, useCallAboveValue, exchangeId, schemeName);
+    return new BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider(futureOptionPrefix, postfix, dataFieldName, useCallAboveValue, exchangeId,
+        schemeName);
   }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.future;
 
@@ -37,9 +37,8 @@ import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
 
 /**
- * Rate future loader that uses codes and information from Quandl. If any errors occur, this loader
- * will return null, as it is likely to be used by other classes that will try to load multiple
- * rate futures.
+ * Rate future loader that uses codes and information from Quandl. If any errors occur, this loader will return null, as it is likely to be used by other
+ * classes that will try to load multiple rate futures.
  */
 @Scriptable
 public class QuandlRateFutureGenerator extends QuandlSecurityLoader {
@@ -48,7 +47,9 @@ public class QuandlRateFutureGenerator extends QuandlSecurityLoader {
 
   /**
    * Main method to run this tool.
-   * @param args The program arguments
+   * 
+   * @param args
+   *          The program arguments
    */
   public static void main(final String[] args) {
     new QuandlRateFutureGenerator().invokeAndTerminate(args);
@@ -64,22 +65,24 @@ public class QuandlRateFutureGenerator extends QuandlSecurityLoader {
   public static final String FED_FUND_FUTURE_CATEGORY = "FED FUNDS FUTURE";
 
   /**
-   * Creates a security from an array of string inputs. If the future cannot be created,
-   * returns null.
+   * Creates a security from an array of string inputs. If the future cannot be created, returns null.
    * <p>
    * The inputs are assumed to be:
    * <ul>
-   *  <li> Quandl code e.g. CME/EDZ2014
-   *  <li> Category e.g. STIR FUTURE
-   *  <li> Expiry date in the form yyyy-mm-dd
-   *  <li> Unit amount e.g. 2500
-   *  <li> Time zone
-   *  <li> Future trading hours in the form hh:mm - hh:mm
-   *  <li> Trading exchange
-   *  <li> Settlement exchange
-   *  <li> Currency
-   * </ul> Underlying index code
-   * @param inputs The string inputs
+   * <li>Quandl code e.g. CME/EDZ2014
+   * <li>Category e.g. STIR FUTURE
+   * <li>Expiry date in the form yyyy-mm-dd
+   * <li>Unit amount e.g. 2500
+   * <li>Time zone
+   * <li>Future trading hours in the form hh:mm - hh:mm
+   * <li>Trading exchange
+   * <li>Settlement exchange
+   * <li>Currency
+   * </ul>
+   * Underlying index code
+   * 
+   * @param inputs
+   *          The string inputs
    * @return A rate future ({@link InterestRateFutureSecurity} or {@link FederalFundsFutureSecurity}), or null
    */
   @Override
@@ -153,11 +156,14 @@ public class QuandlRateFutureGenerator extends QuandlSecurityLoader {
   }
 
   /**
-   * Creates a security from a Quandl code and a convention. This method looks for a convention with an id
-   * that matches the Quandl code first and then falls back to the Quandl prefix id (e.g. the prefix for CME/EDF2014 is CME/ED)
-   * if there is no appropriate convention. If there is a problem in creating the security, returns null
-   * @param conventionSource The convention source, not null
-   * @param quandlCode The quandl code
+   * Creates a security from a Quandl code and a convention. This method looks for a convention with an id that matches the Quandl code first and then falls
+   * back to the Quandl prefix id (e.g. the prefix for CME/EDF2014 is CME/ED) if there is no appropriate convention. If there is a problem in creating the
+   * security, returns null
+   * 
+   * @param conventionSource
+   *          The convention source, not null
+   * @param quandlCode
+   *          The quandl code
    * @return A rate future ({@link InterestRateFutureSecurity} or {@link FederalFundsFutureSecurity}), or null
    */
   @Override
@@ -182,7 +188,7 @@ public class QuandlRateFutureGenerator extends QuandlSecurityLoader {
       return null;
     }
     FinancialConvention futureConvention;
-    //try the code first, then the prefix
+    // try the code first, then the prefix
     final ExternalId prefixId = QuandlConstants.ofPrefix(quandlPrefix);
     final ExternalId codeId = QuandlConstants.ofCode(quandlCode);
     try {
@@ -246,9 +252,13 @@ public class QuandlRateFutureGenerator extends QuandlSecurityLoader {
 
   /**
    * Parses the expiry date, time zone and trade time strings.
-   * @param dateString The expiry date
-   * @param timeZoneString The time zone string
-   * @param tradingHoursString The trading hours string
+   * 
+   * @param dateString
+   *          The expiry date
+   * @param timeZoneString
+   *          The time zone string
+   * @param tradingHoursString
+   *          The trading hours string
    * @return The expiry
    */
   private static ZonedDateTime parseDate(final String dateString, final String timeZoneString, final String tradingHoursString) {
@@ -268,7 +278,9 @@ public class QuandlRateFutureGenerator extends QuandlSecurityLoader {
 
   /**
    * Splits a string on "-".
-   * @param times The string
+   * 
+   * @param times
+   *          The string
    * @return A list of substrings.
    */
   private static List<String> splitTimes(final String times) {

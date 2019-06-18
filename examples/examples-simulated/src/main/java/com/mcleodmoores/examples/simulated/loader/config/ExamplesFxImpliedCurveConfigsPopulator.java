@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.examples.simulated.loader.config;
 
 import java.util.Arrays;
@@ -35,21 +38,30 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
+/**
+ * Populates the config master with FX implied discounting curves.
+ */
 public class ExamplesFxImpliedCurveConfigsPopulator {
+  /**
+   * The reference USD curve name.
+   */
   public static final String USD_DEPOSIT_CURVE_NAME = "USD Deposit";
-  private static final List<Tenor> USD_DEPOSIT_TENORS = Arrays.asList(Tenor.ONE_WEEK, Tenor.TWO_WEEKS, Tenor.THREE_WEEKS,
-      Tenor.ONE_MONTH, Tenor.TWO_MONTHS, Tenor.THREE_MONTHS, Tenor.FOUR_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS, Tenor.NINE_MONTHS,
-      Tenor.TWELVE_MONTHS, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FOUR_YEARS, Tenor.FIVE_YEARS);
+  private static final List<Tenor> USD_DEPOSIT_TENORS = Arrays.asList(Tenor.ONE_WEEK, Tenor.TWO_WEEKS, Tenor.THREE_WEEKS, Tenor.ONE_MONTH, Tenor.TWO_MONTHS,
+      Tenor.THREE_MONTHS, Tenor.FOUR_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS, Tenor.NINE_MONTHS, Tenor.TWELVE_MONTHS, Tenor.TWO_YEARS, Tenor.THREE_YEARS,
+      Tenor.FOUR_YEARS, Tenor.FIVE_YEARS);
   private static final Tenor ZERO = Tenor.of(Period.ZERO);
   private static final List<Currency> CURRENCIES = Arrays.asList(Currency.JPY, Currency.EUR, Currency.GBP, Currency.CHF, Currency.AUD, Currency.NZD);
   private static final List<Tenor> WEEK_TENORS = Arrays.asList(Tenor.ONE_WEEK, Tenor.TWO_WEEKS, Tenor.THREE_WEEKS);
-  private static final List<Tenor> MONTH_TENORS = Arrays.asList(Tenor.ONE_MONTH, Tenor.THREE_MONTHS,
-      Tenor.SIX_MONTHS, Tenor.NINE_MONTHS, Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FOUR_YEARS, Tenor.FIVE_YEARS,
-      Tenor.SIX_YEARS, Tenor.SEVEN_YEARS, Tenor.EIGHT_YEARS, Tenor.NINE_YEARS, Tenor.TEN_YEARS);
-  private static final String USD_CONFIG_NAME = "USD Deposit Config";
+  private static final List<Tenor> MONTH_TENORS = Arrays.asList(Tenor.ONE_MONTH, Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, Tenor.NINE_MONTHS, Tenor.ONE_YEAR,
+      Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FOUR_YEARS, Tenor.FIVE_YEARS, Tenor.SIX_YEARS, Tenor.SEVEN_YEARS, Tenor.EIGHT_YEARS, Tenor.NINE_YEARS,
+      Tenor.TEN_YEARS);
   private static final ExternalId CONVENTION_ID = ExternalId.of("CONVENTION", "FX Forward");
   private static final List<Currency> DOMINANT_CURRENCY = Arrays.asList(Currency.EUR, Currency.GBP, Currency.AUD, Currency.NZD);
 
+  /**
+   * @param configMaster
+   *          a config master, not null
+   */
   public static void populateConfigMaster(final ConfigMaster configMaster) {
     ArgumentChecker.notNull(configMaster, "configMaster");
     makeUsdConfigs(configMaster);
@@ -60,13 +72,6 @@ public class ExamplesFxImpliedCurveConfigsPopulator {
   }
 
   private static void makeUsdConfigs(final ConfigMaster configMaster) {
-//    final DiscountingCurveTypeConfiguration discountingCurveType = new DiscountingCurveTypeConfiguration(Currency.USD.getCode());
-//    final Map<String, List<? extends CurveTypeConfiguration>> curveTypes = new HashMap<>();
-//    curveTypes.put(USD_DEPOSIT_CURVE_NAME, Arrays.asList(discountingCurveType));
-//    final CurveGroupConfiguration group = new CurveGroupConfiguration(0, curveTypes);
-//    final List<CurveGroupConfiguration> groups = Arrays.asList(group);
-//    ConfigMasterUtils.storeByName(configMaster,
-//        ExampleConfigUtils.makeConfig(new CurveConstructionConfiguration(USD_CONFIG_NAME, groups, Collections.<String>emptyList())));
     final String idMapperName = "USD Deposit Tickers";
     final Map<Tenor, CurveInstrumentProvider> cashIds = new HashMap<>();
     final Set<CurveNode> nodes = new LinkedHashSet<>();
@@ -74,12 +79,9 @@ public class ExamplesFxImpliedCurveConfigsPopulator {
       nodes.add(new CashNode(ZERO, tenor, ExternalId.of("CONVENTION", "USD Deposit"), idMapperName));
       cashIds.put(tenor, new StaticCurveInstrumentProvider(ExternalSchemes.syntheticSecurityId("USDCASH" + tenor.toFormattedString())));
     }
-    final CurveDefinition definition = new InterpolatedCurveDefinition(USD_DEPOSIT_CURVE_NAME, nodes,
-        MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
-    final CurveNodeIdMapper nodeIds = CurveNodeIdMapper.builder()
-        .name(idMapperName)
-        .cashNodeIds(cashIds)
-        .build();
+    final CurveDefinition definition = new InterpolatedCurveDefinition(USD_DEPOSIT_CURVE_NAME, nodes, MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME,
+        LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
+    final CurveNodeIdMapper nodeIds = CurveNodeIdMapper.builder().name(idMapperName).cashNodeIds(cashIds).build();
     ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(definition));
     ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(nodeIds));
   }
@@ -98,7 +100,7 @@ public class ExamplesFxImpliedCurveConfigsPopulator {
     final CurveGroupConfiguration group2 = new CurveGroupConfiguration(1, ccyCurveTypes);
     final List<CurveGroupConfiguration> groups = Arrays.asList(group1, group2);
     ConfigMasterUtils.storeByName(configMaster,
-        ExampleConfigUtils.makeConfig(new CurveConstructionConfiguration(name, groups, Collections.<String>emptyList())));
+        ExampleConfigUtils.makeConfig(new CurveConstructionConfiguration(name, groups, Collections.<String> emptyList())));
   }
 
   private static void makeCurveDefinition(final Currency ccy, final ConfigMaster configMaster) {
@@ -110,21 +112,22 @@ public class ExamplesFxImpliedCurveConfigsPopulator {
     for (final Tenor tenor : WEEK_TENORS) {
       final String tenorString = tenor.getPeriod().getDays() / 7 + "W";
       nodes.add(new FXForwardNode(ZERO, tenor, CONVENTION_ID, ccy, Currency.USD, idMapperName));
-      fxForwardIds.put(tenor, new StaticCurvePointsInstrumentProvider(ExternalSchemes.syntheticSecurityId(ccy.getCode() + "USD" + tenorString + "FXFORWARD"),
-          MarketDataRequirementNames.MARKET_VALUE, DataFieldType.POINTS, ExternalSchemes.syntheticSecurityId(underlying), MarketDataRequirementNames.MARKET_VALUE));
+      fxForwardIds.put(tenor,
+          new StaticCurvePointsInstrumentProvider(ExternalSchemes.syntheticSecurityId(ccy.getCode() + "USD" + tenorString + "FXFORWARD"),
+              MarketDataRequirementNames.MARKET_VALUE, DataFieldType.POINTS, ExternalSchemes.syntheticSecurityId(underlying),
+              MarketDataRequirementNames.MARKET_VALUE));
     }
     for (final Tenor tenor : MONTH_TENORS) {
       final String tenorString = tenor.toFormattedString().substring(1);
       nodes.add(new FXForwardNode(ZERO, tenor, CONVENTION_ID, ccy, Currency.USD, idMapperName));
-      fxForwardIds.put(tenor, new StaticCurvePointsInstrumentProvider(ExternalSchemes.syntheticSecurityId(ccy.getCode() + "USD" + tenorString + "FXFORWARD"),
-          MarketDataRequirementNames.MARKET_VALUE, DataFieldType.POINTS, ExternalSchemes.syntheticSecurityId(underlying), MarketDataRequirementNames.MARKET_VALUE));
+      fxForwardIds.put(tenor,
+          new StaticCurvePointsInstrumentProvider(ExternalSchemes.syntheticSecurityId(ccy.getCode() + "USD" + tenorString + "FXFORWARD"),
+              MarketDataRequirementNames.MARKET_VALUE, DataFieldType.POINTS, ExternalSchemes.syntheticSecurityId(underlying),
+              MarketDataRequirementNames.MARKET_VALUE));
     }
-    final CurveDefinition definition = new InterpolatedCurveDefinition(curveName, nodes,
-        MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
-    final CurveNodeIdMapper nodeIds = CurveNodeIdMapper.builder()
-        .name(idMapperName)
-        .fxForwardNodeIds(fxForwardIds)
-        .build();
+    final CurveDefinition definition = new InterpolatedCurveDefinition(curveName, nodes, MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME,
+        LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
+    final CurveNodeIdMapper nodeIds = CurveNodeIdMapper.builder().name(idMapperName).fxForwardNodeIds(fxForwardIds).build();
     ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(definition));
     ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(nodeIds));
   }

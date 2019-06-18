@@ -29,23 +29,31 @@ import com.opengamma.util.ArgumentChecker;
  * Describes a transaction on a Ibor coupon bond issue.
  */
 public class BondIborTransactionDefinition extends BondTransactionDefinition<PaymentFixedDefinition, CouponIborDefinition>
-  implements InstrumentDefinitionWithData<BondTransaction<? extends BondSecurity<? extends Payment, ? extends Coupon>>, DoubleTimeSeries<ZonedDateTime>> {
+    implements InstrumentDefinitionWithData<BondTransaction<? extends BondSecurity<? extends Payment, ? extends Coupon>>, DoubleTimeSeries<ZonedDateTime>> {
 
   /**
    * Constructor of a Ibor coupon bond transaction from all the transaction details.
-   * @param underlyingBond The Ibor coupon bond underlying the transaction.
-   * @param quantity The number of bonds purchased (can be negative or positive).
-   * @param settlementDate Transaction settlement date.
-   * @param price The (dirty) price of the transaction in relative term (i.e. 0.90 if the dirty price is 90% of nominal).
+   *
+   * @param underlyingBond
+   *          The Ibor coupon bond underlying the transaction.
+   * @param quantity
+   *          The number of bonds purchased (can be negative or positive).
+   * @param settlementDate
+   *          Transaction settlement date.
+   * @param price
+   *          The (dirty) price of the transaction in relative term (i.e. 0.90 if the dirty price is 90% of nominal).
    */
-  public BondIborTransactionDefinition(final BondIborSecurityDefinition underlyingBond, final double quantity, final ZonedDateTime settlementDate, final double price) {
+  public BondIborTransactionDefinition(final BondIborSecurityDefinition underlyingBond, final double quantity, final ZonedDateTime settlementDate,
+      final double price) {
     super(underlyingBond, quantity, settlementDate, price);
   }
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
+  @SuppressWarnings("unchecked")
   @Deprecated
   @Override
   public BondIborTransaction toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
@@ -57,7 +65,7 @@ public class BondIborTransactionDefinition extends BondTransactionDefinition<Pay
     final String creditCurveName = yieldCurveNames[0];
     final String discountingCurveName = yieldCurveNames[1];
     final String iborCurveName = yieldCurveNames[2];
-    final String[] couponCurveName = new String[] {creditCurveName, iborCurveName };
+    final String[] couponCurveName = new String[] { creditCurveName, iborCurveName };
     final DayCount actAct = DayCounts.ACT_ACT_ISDA;
     final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, getUnderlyingBond().getSettlementDays(), getUnderlyingBond().getCalendar());
     final double spotTime = actAct.getDayCountFraction(date, spot, getUnderlyingBond().getCalendar());
@@ -90,8 +98,10 @@ public class BondIborTransactionDefinition extends BondTransactionDefinition<Pay
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
+  @SuppressWarnings("unchecked")
   @Deprecated
   @Override
   public BondIborTransaction toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> indexFixingTS, final String... yieldCurveNames) {
@@ -103,7 +113,7 @@ public class BondIborTransactionDefinition extends BondTransactionDefinition<Pay
     final String creditCurveName = yieldCurveNames[0];
     final String discountingCurveName = yieldCurveNames[1];
     final String iborCurveName = yieldCurveNames[2];
-    final String[] couponCurveName = new String[] {creditCurveName, iborCurveName };
+    final String[] couponCurveName = new String[] { creditCurveName, iborCurveName };
     final DayCount actAct = DayCounts.ACT_ACT_ISDA;
     final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, getUnderlyingBond().getSettlementDays(), getUnderlyingBond().getCalendar());
     final double spotTime = actAct.getDayCountFraction(date, spot, getUnderlyingBond().getCalendar());
@@ -134,6 +144,7 @@ public class BondIborTransactionDefinition extends BondTransactionDefinition<Pay
     return result;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public BondIborTransaction toDerivative(final ZonedDateTime date) {
     // TODO: review this implementation using the Security toDerivative.
@@ -168,6 +179,7 @@ public class BondIborTransactionDefinition extends BondTransactionDefinition<Pay
     return result;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public BondIborTransaction toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> indexFixingTS) {
     ArgumentChecker.notNull(date, "date");

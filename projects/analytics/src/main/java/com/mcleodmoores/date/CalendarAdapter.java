@@ -11,19 +11,32 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * An adapter for {@link WorkingDayCalendar}s that converts them into {@link Calendar}s. This class
- * should be used when backwards compatibility is required.
+ * An adapter for {@link WorkingDayCalendar}s that converts them into {@link Calendar}s. This class should be used when backwards compatibility is required.
  */
 @SuppressWarnings("deprecation")
-public class CalendarAdapter implements Calendar {
+public final class CalendarAdapter implements Calendar {
+
+  /**
+   * Creates an adapter.
+   *
+   * @param calendar
+   *          the working day calendar, not null
+   * @return the calendar adapter
+   */
+  public static Calendar of(final WorkingDayCalendar calendar) {
+    return new CalendarAdapter(calendar);
+  }
+
   /** The underlying working day calendar */
   private final WorkingDayCalendar _calendar;
 
   /**
    * Creates an adapter.
-   * @param calendar  the underlying working day calendar, not null
+   *
+   * @param calendar
+   *          the underlying working day calendar, not null
    */
-  public CalendarAdapter(final WorkingDayCalendar calendar) {
+  private CalendarAdapter(final WorkingDayCalendar calendar) {
     _calendar = ArgumentChecker.notNull(calendar, "calendar");
   }
 

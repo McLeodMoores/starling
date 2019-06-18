@@ -59,21 +59,22 @@ public final class OpenGammaExecutionContext {
   private static final String CONVENTION_SOURCE_NAME = "conventionSource";
 
   /**
-   * The name under which an instance of {@link ConfigMaster} should be bound. The config source must return elements from this master, but may return additional elements other sources/masters too.
+   * The name under which an instance of {@link ConfigMaster} should be bound. The config source must return elements from this master, but may return
+   * additional elements other sources/masters too.
    * <p>
-   * This might only be a temporary addition; most services should be written to back onto this if necessary rather than data be accessed directly from the config master. This allows the flexibility
-   * to have data stored in another system or more efficient storage specific to that type.
+   * This might only be a temporary addition; most services should be written to back onto this if necessary rather than data be accessed directly from the
+   * config master. This allows the flexibility to have data stored in another system or more efficient storage specific to that type.
    * <p>
-   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which exposed both user maintained views from the persistent config master and
-   * temporary/short-lived views created programatically.
+   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which exposed both user maintained views from the
+   * persistent config master and temporary/short-lived views created programatically.
    */
   public static final String CONFIG_MASTER_NAME = "configMaster";
 
   /**
    * The name under which an instance of {@link ConfigSource} should be bound.
    * <p>
-   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an implementation that is backed by a ConfigSource, allows the flexibility
-   * to source that data from an external system, or a more efficient storage mechanism, in the future.
+   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an implementation that is backed by
+   * a ConfigSource, allows the flexibility to source that data from an external system, or a more efficient storage mechanism, in the future.
    */
   public static final String CONFIG_SOURCE_NAME = "configSource";
 
@@ -93,12 +94,11 @@ public final class OpenGammaExecutionContext {
   public static final String CURVE_CALCULATION_CONFIG_NAME = "curveCalculationConfigurationSource";
 
   /**
-   * The name under which an instance of {@link ViewProcessor} should be bound. The view processor might not be the same one that an execution is being performed on behalf of, but one which can be
-   * used for nested/slave computations. The view processor should use the {@link #CONFIG_MASTER_NAME} from this context so that dynamically created view definitions are visible.
+   * The name under which an instance of {@link ViewProcessor} should be bound. The view processor might not be the same one that an execution is being
+   * performed on behalf of, but one which can be used for nested/slave computations. The view processor should use the {@link #CONFIG_MASTER_NAME} from this
+   * context so that dynamically created view definitions are visible.
    */
   public static final String VIEW_PROCESSOR_NAME = "viewProcessor";
-
-  private static final String CURRENCY_PAIRS_SOURCE = "currencyPairsSource";
 
   /**
    * Restricted constructor.
@@ -106,11 +106,12 @@ public final class OpenGammaExecutionContext {
   private OpenGammaExecutionContext() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets a {@code HistoricalTimeSeriesSource} from the context.
    *
-   * @param context the context to examine, not null
+   * @param context
+   *          the context to examine, not null
    * @return the value, null if not found
    */
   public static HistoricalTimeSeriesSource getHistoricalTimeSeriesSource(final FunctionExecutionContext context) {
@@ -120,8 +121,10 @@ public final class OpenGammaExecutionContext {
   /**
    * Stores a {@code HistoricalTimeSeriesSource} in the context.
    *
-   * @param context the context to store in, not null
-   * @param source the value to store, not null
+   * @param context
+   *          the context to store in, not null
+   * @param source
+   *          the value to store, not null
    */
   public static void setHistoricalTimeSeriesSource(final FunctionExecutionContext context, final HistoricalTimeSeriesSource source) {
     context.put(HISTORICAL_TIME_SERIES_SOURCE_NAME, source);
@@ -130,7 +133,8 @@ public final class OpenGammaExecutionContext {
   /**
    * Gets a {@code SecuritySource} from the context.
    *
-   * @param context the context to examine, not null
+   * @param context
+   *          the context to examine, not null
    * @return the value, null if not found
    */
   public static SecuritySource getSecuritySource(final FunctionExecutionContext context) {
@@ -140,8 +144,10 @@ public final class OpenGammaExecutionContext {
   /**
    * Stores a {@code SecuritySource} in the context.
    *
-   * @param context the context to store in, not null
-   * @param securitySource the value to store, not null
+   * @param context
+   *          the context to store in, not null
+   * @param securitySource
+   *          the value to store, not null
    */
   public static void setSecuritySource(final FunctionExecutionContext context, final SecuritySource securitySource) {
     context.setSecuritySource(securitySource);
@@ -150,7 +156,8 @@ public final class OpenGammaExecutionContext {
   /**
    * Gets a {@code ConventionBundleSource} from the context.
    *
-   * @param context the context to examine, not null
+   * @param context
+   *          the context to examine, not null
    * @return the value, null if not found
    */
   public static ConventionBundleSource getConventionBundleSource(final FunctionExecutionContext context) {
@@ -160,8 +167,10 @@ public final class OpenGammaExecutionContext {
   /**
    * Stores a {@code ConventionBundleSource} in the context.
    *
-   * @param context the context to store in, not null
-   * @param conventionBundleSource the value to store, not null
+   * @param context
+   *          the context to store in, not null
+   * @param conventionBundleSource
+   *          the value to store, not null
    */
   public static void setConventionBundleSource(final FunctionExecutionContext context, final ConventionBundleSource conventionBundleSource) {
     context.put(CONVENTION_BUNDLE_SOURCE_NAME, conventionBundleSource);
@@ -170,7 +179,8 @@ public final class OpenGammaExecutionContext {
   /**
    * Gets a {@link ConventionSource} from the context.
    *
-   * @param context the context to examine, not null
+   * @param context
+   *          the context to examine, not null
    * @return the value, null if not found
    */
   public static ConventionSource getConventionSource(final FunctionExecutionContext context) {
@@ -180,18 +190,21 @@ public final class OpenGammaExecutionContext {
   /**
    * Stores a {@code ConventionSource} in the context.
    *
-   * @param context the context to store in, not null
-   * @param conventionSource the value to store, not null
+   * @param context
+   *          the context to store in, not null
+   * @param conventionSource
+   *          the value to store, not null
    */
   public static void setConventionSource(final FunctionExecutionContext context, final ConventionSource conventionSource) {
     context.put(CONVENTION_SOURCE_NAME, conventionSource);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets a {@code RegionSource} from the context.
    *
-   * @param context the context to examine, not null
+   * @param context
+   *          the context to examine, not null
    * @return the value, null if not found
    */
   public static RegionSource getRegionSource(final FunctionExecutionContext context) {
@@ -201,18 +214,21 @@ public final class OpenGammaExecutionContext {
   /**
    * Stores a {@code RegionSource} in the context.
    *
-   * @param context the context to store in, not null
-   * @param regionSource the value to store, not null
+   * @param context
+   *          the context to store in, not null
+   * @param regionSource
+   *          the value to store, not null
    */
   public static void setRegionSource(final FunctionExecutionContext context, final RegionSource regionSource) {
     context.put(REGION_SOURCE_NAME, regionSource);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets a {@code HolidaySource} from the context.
    *
-   * @param context the context to examine, not null
+   * @param context
+   *          the context to examine, not null
    * @return the value, null if not found
    */
   public static HolidaySource getHolidaySource(final FunctionExecutionContext context) {
@@ -222,18 +238,21 @@ public final class OpenGammaExecutionContext {
   /**
    * Stores a {@code HolidaySource} in the context.
    *
-   * @param context the context to store in, not null
-   * @param holidaySource the value to store, not null
+   * @param context
+   *          the context to store in, not null
+   * @param holidaySource
+   *          the value to store, not null
    */
   public static void setHolidaySource(final FunctionExecutionContext context, final HolidaySource holidaySource) {
     context.put(HOLIDAY_SOURCE_NAME, holidaySource);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets a {@code LegalEntitySource} from the context.
    *
-   * @param context the context to examine, not null
+   * @param context
+   *          the context to examine, not null
    * @return the value, null if not found
    */
   public static LegalEntitySource getLegalEntitySource(final FunctionExecutionContext context) {
@@ -243,18 +262,21 @@ public final class OpenGammaExecutionContext {
   /**
    * Stores a {@code LegalEntitySource} in the context.
    *
-   * @param context the context to store in, not null
-   * @param legalEntitySource the value to store, not null
+   * @param context
+   *          the context to store in, not null
+   * @param legalEntitySource
+   *          the value to store, not null
    */
   public static void setLegalEntitySource(final FunctionExecutionContext context, final LegalEntitySource legalEntitySource) {
     context.setLegalEntitySource(legalEntitySource);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets a {@code ExchangeSource} from the context.
    *
-   * @param context the context to examine, not null
+   * @param context
+   *          the context to examine, not null
    * @return the value, null if not found
    */
   public static ExchangeSource getExchangeSource(final FunctionExecutionContext context) {
@@ -264,8 +286,10 @@ public final class OpenGammaExecutionContext {
   /**
    * Stores a {@code ExchangeSource} in the context.
    *
-   * @param context the context to store in, not null
-   * @param exchangeSource the value to store, not null
+   * @param context
+   *          the context to store in, not null
+   * @param exchangeSource
+   *          the value to store, not null
    */
   public static void setExchangeSource(final FunctionExecutionContext context, final ExchangeSource exchangeSource) {
     context.put(EXCHANGE_SOURCE_NAME, exchangeSource);
@@ -274,7 +298,8 @@ public final class OpenGammaExecutionContext {
   /**
    * Gets a {@code CurveCalculationConfigSource} from the context.
    *
-   * @param context the context to examine, not null
+   * @param context
+   *          the context to examine, not null
    * @return the curve config source, null if not found
    */
   public static CurveCalculationConfigSource getCurveCalculationConfigSource(final FunctionExecutionContext context) {
@@ -284,8 +309,10 @@ public final class OpenGammaExecutionContext {
   /**
    * Stores a {@code CurveCalculationConfigSource} in the context.
    *
-   * @param context the context to store in, not null
-   * @param curveConfigSource the curve config source to store, not null
+   * @param context
+   *          the context to store in, not null
+   * @param curveConfigSource
+   *          the curve config source to store, not null
    */
   public static void setCurveCalculationConfigSource(final FunctionExecutionContext context, final CurveCalculationConfigSource curveConfigSource) {
     context.put(CURVE_CALCULATION_CONFIG_NAME, curveConfigSource);
@@ -294,7 +321,8 @@ public final class OpenGammaExecutionContext {
   /**
    * Gets a {@code ConfigMaster} from the context.
    *
-   * @param context the context to examine, not null
+   * @param context
+   *          the context to examine, not null
    * @return the value, null if not found
    */
   public static ConfigMaster getConfigMaster(final FunctionExecutionContext context) {
@@ -304,8 +332,10 @@ public final class OpenGammaExecutionContext {
   /**
    * Stores a {@code ConfigMaster} in the context.
    *
-   * @param context the context to store in, not null
-   * @param configMaster the config master instance to store, not null
+   * @param context
+   *          the context to store in, not null
+   * @param configMaster
+   *          the config master instance to store, not null
    */
   public static void setConfigMaster(final FunctionExecutionContext context, final ConfigMaster configMaster) {
     context.put(CONFIG_MASTER_NAME, configMaster);
@@ -314,7 +344,8 @@ public final class OpenGammaExecutionContext {
   /**
    * Gets a {@code ConfigSource} from the context.
    *
-   * @param context the context to examine, not null
+   * @param context
+   *          the context to examine, not null
    * @return the value, null if not found
    */
   public static ConfigSource getConfigSource(final FunctionExecutionContext context) {
@@ -324,8 +355,10 @@ public final class OpenGammaExecutionContext {
   /**
    * Stores a {@code ConfigSource} in the context.
    *
-   * @param context the context to store in, not null
-   * @param configSource the value to store, not null
+   * @param context
+   *          the context to store in, not null
+   * @param configSource
+   *          the value to store, not null
    */
   public static void setConfigSource(final FunctionExecutionContext context, final ConfigSource configSource) {
     context.put(CONFIG_SOURCE_NAME, configSource);
@@ -348,6 +381,9 @@ public final class OpenGammaExecutionContext {
   }
 
   /**
+   * @param context
+   *          the execution context
+   * @return a currency pairs source
    * @deprecated [PLAT-2782] interim measure to move away from direct use of a config source
    */
   @Deprecated

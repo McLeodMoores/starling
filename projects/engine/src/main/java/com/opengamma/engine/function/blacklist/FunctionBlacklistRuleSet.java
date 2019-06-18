@@ -38,7 +38,7 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
     private final WeakReference<FunctionBlacklistRuleSet> _ref;
     private Future<?> _future;
 
-    public Cleaner(final FunctionBlacklistRuleSet ref, final ScheduledExecutorService executor, final int minimumTTL) {
+    Cleaner(final FunctionBlacklistRuleSet ref, final ScheduledExecutorService executor, final int minimumTTL) {
       LOGGER.debug("Creating cleaner for {} at {}s", ref, minimumTTL);
       _executor = executor;
       _ref = new WeakReference<>(ref);
@@ -229,21 +229,22 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
   }
 
   /**
-   * Called when a rule has been added to the set. This is provided so that a subclass may perform specific actions.
-   * This is called after the rule has been added.
+   * Called when a rule has been added to the set. This is provided so that a subclass may perform specific actions. This is called after the rule has been
+   * added.
    *
-   * @param rule the rule that was added to the set
+   * @param rule
+   *          the rule that was added to the set
    */
   protected void onAdd(final FunctionBlacklistRule rule) {
     LOGGER.debug("Added rule {}", rule);
   }
 
   /**
-   * Called when a rule added to the set is removed, perhaps because it's reached its expiry. This is provided so that a subclass
-   * may perform specific actions. This is called after the rule has been
-   * removed.
+   * Called when a rule added to the set is removed, perhaps because it's reached its expiry. This is provided so that a subclass may perform specific actions.
+   * This is called after the rule has been removed.
    *
-   * @param rule the rule that was removed from the set
+   * @param rule
+   *          the rule that was removed from the set
    */
   protected void onRemove(final FunctionBlacklistRule rule) {
     LOGGER.debug("Removed rule {}", rule);

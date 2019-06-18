@@ -21,7 +21,7 @@ public final class ModifiedDurationFromCurvesCalculator extends InstrumentDeriva
   /**
    * The calculator instance.
    */
-  private static final ModifiedDurationFromCurvesCalculator s_instance = new ModifiedDurationFromCurvesCalculator();
+  private static final ModifiedDurationFromCurvesCalculator INSTANCE = new ModifiedDurationFromCurvesCalculator();
   /**
    * The fixed coupon bond method.
    */
@@ -32,7 +32,7 @@ public final class ModifiedDurationFromCurvesCalculator extends InstrumentDeriva
    * @return The instance.
    */
   public static ModifiedDurationFromCurvesCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

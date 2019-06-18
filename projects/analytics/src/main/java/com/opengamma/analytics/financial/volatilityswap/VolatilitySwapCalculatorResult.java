@@ -8,10 +8,9 @@ package com.opengamma.analytics.financial.volatilityswap;
 import java.util.Arrays;
 
 /**
- * Result of a volatility swap calculator containing:
- * Replicating portfolio consisting of put options with price (_putPrices) and weight (_putWeights), call options with price (_callPrices) and weight (_callWeights),
- * straddle with price (_straddleWeight) and weight (_straddlePrice), and cash amount (_cash).
- * Fair value of the volatility swap (_fairValue) given by the sum of options (_optionTotal) plus the cash amount.
+ * Result of a volatility swap calculator containing: Replicating portfolio consisting of put options with price (_putPrices) and weight (_putWeights), call
+ * options with price (_callPrices) and weight (_callWeights), straddle with price (_straddleWeight) and weight (_straddlePrice), and cash amount (_cash). Fair
+ * value of the volatility swap (_fairValue) given by the sum of options (_optionTotal) plus the cash amount.
  */
 public class VolatilitySwapCalculatorResult {
 
@@ -26,15 +25,23 @@ public class VolatilitySwapCalculatorResult {
   private final double _cash;
 
   /**
-   * @param putWeights The weights of put options
-   * @param straddleWeight The weight of straddle
-   * @param callWeights The weights of call options
-   * @param putPrices The put option prices
-   * @param straddlePrice The straddle price
-   * @param callPrices The call option prices
-   * @param cash The cash amount
+   * @param putWeights
+   *          The weights of put options
+   * @param straddleWeight
+   *          The weight of straddle
+   * @param callWeights
+   *          The weights of call options
+   * @param putPrices
+   *          The put option prices
+   * @param straddlePrice
+   *          The straddle price
+   * @param callPrices
+   *          The call option prices
+   * @param cash
+   *          The cash amount
    */
-  public VolatilitySwapCalculatorResult(final double[] putWeights, final double straddleWeight, final double[] callWeights, final double[] putPrices, final double straddlePrice,
+  public VolatilitySwapCalculatorResult(final double[] putWeights, final double straddleWeight, final double[] callWeights, final double[] putPrices,
+      final double straddlePrice,
       final double[] callPrices, final double cash) {
     final int nPuts = putWeights.length;
     final int nCalls = callWeights.length;
@@ -64,17 +71,27 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * @param putWeights The weights of put options
-   * @param straddleWeight The weight of straddle
-   * @param callWeights The weights of call options
-   * @param putPrices The put option prices
-   * @param straddlePrice The straddle price
-   * @param callPrices The call option prices
-   * @param cash The cash amount
-   * @param optionTotal The total option value
-   * @param fairValue The fair value
+   * @param putWeights
+   *          The weights of put options
+   * @param straddleWeight
+   *          The weight of straddle
+   * @param callWeights
+   *          The weights of call options
+   * @param putPrices
+   *          The put option prices
+   * @param straddlePrice
+   *          The straddle price
+   * @param callPrices
+   *          The call option prices
+   * @param cash
+   *          The cash amount
+   * @param optionTotal
+   *          The total option value
+   * @param fairValue
+   *          The fair value
    */
-  public VolatilitySwapCalculatorResult(final double[] putWeights, final double straddleWeight, final double[] callWeights, final double[] putPrices, final double straddlePrice,
+  public VolatilitySwapCalculatorResult(final double[] putWeights, final double straddleWeight, final double[] callWeights, final double[] putPrices,
+      final double straddlePrice,
       final double[] callPrices, final double cash, final double optionTotal, final double fairValue) {
     final int nPuts = putWeights.length;
     final int nCalls = callWeights.length;
@@ -97,17 +114,22 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Construct subclass with strikes
-   * @param putStrikes The put option strikes
-   * @param callStrikes The call option strike
+   * Construct subclass with strikes.
+   *
+   * @param putStrikes
+   *          The put option strikes
+   * @param callStrikes
+   *          The call option strike
    * @return {@link VolatilitySwapCalculatorResultWithStrikes}
    */
   public VolatilitySwapCalculatorResultWithStrikes withStrikes(final double[] putStrikes, final double[] callStrikes) {
-    return new VolatilitySwapCalculatorResultWithStrikes(putStrikes, callStrikes, _putWeights, _straddleWeight, _callWeights, _putPrices, _straddlePrice, _callPrices, _cash, _optionTotal, _fairValue);
+    return new VolatilitySwapCalculatorResultWithStrikes(putStrikes, callStrikes, _putWeights, _straddleWeight, _callWeights, _putPrices, _straddlePrice,
+        _callPrices, _cash, _optionTotal, _fairValue);
   }
 
   /**
-   * Access _fairValue
+   * Access _fairValue.
+   *
    * @return fair value
    */
   public double getFairValue() {
@@ -115,7 +137,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _putWeights
+   * Access _putWeights.
+   *
    * @return put option weights
    */
   public double[] getPutWeights() {
@@ -123,7 +146,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _straddleWeight
+   * Access _straddleWeight.
+   *
    * @return straddle weight
    */
   public double getStraddleWeight() {
@@ -131,7 +155,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _callWeights
+   * Access _callWeights.
+   *
    * @return call option weights
    */
   public double[] getCallWeights() {
@@ -139,7 +164,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _putPrices
+   * Access _putPrices.
+   *
    * @return put option prices
    */
   public double[] getPutPrices() {
@@ -147,7 +173,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _straddlePrice
+   * Access _straddlePrice.
+   *
    * @return straddle price
    */
   public double getStraddlePrice() {
@@ -155,7 +182,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _callPrices
+   * Access _callPrices.
+   *
    * @return call option prices
    */
   public double[] getCallPrices() {
@@ -163,7 +191,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _cash
+   * Access _cash.
+   *
    * @return cash amount
    */
   public double getCash() {
@@ -171,7 +200,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _optionTotal
+   * Access _optionTotal.
+   *
    * @return total option value
    */
   public double getOptionTotal() {

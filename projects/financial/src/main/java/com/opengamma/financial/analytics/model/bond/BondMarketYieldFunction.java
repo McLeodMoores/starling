@@ -28,7 +28,8 @@ public class BondMarketYieldFunction extends BondMarketDataFunction {
   }
 
   @Override
-  protected Set<ComputedValue> getComputedValues(final FunctionExecutionContext context, final double value, final FinancialSecurity security, final ComputationTargetSpecification target) {
+  protected Set<ComputedValue> getComputedValues(final FunctionExecutionContext context, final double value, final FinancialSecurity security,
+      final ComputationTargetSpecification target) {
     final ValueSpecification specification = new ValueSpecification(ValueRequirementNames.MARKET_YTM, target, createValueProperties().get());
     return Collections.singleton(new ComputedValue(specification, value));
   }

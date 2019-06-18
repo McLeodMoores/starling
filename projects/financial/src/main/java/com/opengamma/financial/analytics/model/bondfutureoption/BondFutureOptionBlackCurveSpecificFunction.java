@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.bondfutureoption;
@@ -21,8 +21,10 @@ import com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues
 import com.opengamma.financial.security.option.BondFutureOptionSecurity;
 
 /**
- * 
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class BondFutureOptionBlackCurveSpecificFunction extends BondFutureOptionBlackFunction {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BondFutureOptionBlackCurveSpecificFunction.class);
@@ -60,8 +62,10 @@ public abstract class BondFutureOptionBlackCurveSpecificFunction extends BondFut
 
   @Override
   protected ValueProperties getResultProperties(final String currency) {
-    return createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD).withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG)
-        .withAny(ValuePropertyNames.SURFACE).withAny(ValuePropertyNames.CURVE).with(ValuePropertyNames.CURVE_CURRENCY, currency).with(ValuePropertyNames.CURRENCY, currency).get();
+    return createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD)
+        .withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG)
+        .withAny(ValuePropertyNames.SURFACE).withAny(ValuePropertyNames.CURVE).with(ValuePropertyNames.CURVE_CURRENCY, currency)
+        .with(ValuePropertyNames.CURRENCY, currency).get();
   }
 
   @Override
@@ -71,7 +75,8 @@ public abstract class BondFutureOptionBlackCurveSpecificFunction extends BondFut
     final String currency = security.getCurrency().getCode();
     final String curve = desiredValue.getConstraint(ValuePropertyNames.CURVE);
     return createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD)
-        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig).with(ValuePropertyNames.SURFACE, surfaceName).with(ValuePropertyNames.CURVE, curve)
+        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig).with(ValuePropertyNames.SURFACE, surfaceName)
+        .with(ValuePropertyNames.CURVE, curve)
         .with(ValuePropertyNames.CURVE_CURRENCY, currency).with(ValuePropertyNames.CURRENCY, currency).get();
   }
 }

@@ -22,7 +22,8 @@ public class PositionPayment {
   private final String _index;
   private final CurrencyAmount _amount;
 
-  public PositionPayment(final Position position, final PaymentType paymentType, final PaymentDirection direction, final String index, final CurrencyAmount amount) {
+  public PositionPayment(final Position position, final PaymentType paymentType, final PaymentDirection direction, final String index,
+      final CurrencyAmount amount) {
     _position = position;
     _paymentType = paymentType;
     _direction = direction;

@@ -58,20 +58,31 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
   private final Calendar _calendar;
 
   /**
-   * Constructor of a Ibor-like floating coupon from the coupon details and the Ibor index.
-   * The fixing dates and accrual factors are inferred from the index.
-   * @param currency The payment currency.
-   * @param paymentDate Coupon payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param accrualFactor Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param fixingDate The coupon fixing date.
-   * @param index The coupon Ibor index. Should of the same currency as the payment.
-   * @param spread The spread paid above the Ibor rate.
-   * @param calendar The holiday calendar for the ibor index.
+   * Constructor of a Ibor-like floating coupon from the coupon details and the Ibor index. The fixing dates and accrual factors are inferred from the index.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentDate
+   *          Coupon payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param accrualFactor
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingDate
+   *          The coupon fixing date.
+   * @param index
+   *          The coupon Ibor index. Should of the same currency as the payment.
+   * @param spread
+   *          The spread paid above the Ibor rate.
+   * @param calendar
+   *          The holiday calendar for the ibor index.
    */
-  public CouponIborSpreadDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double accrualFactor,
+  public CouponIborSpreadDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
+      final ZonedDateTime accrualEndDate, final double accrualFactor,
       final double notional, final ZonedDateTime fixingDate, final IborIndex index, final double spread, final Calendar calendar) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, accrualFactor, notional, fixingDate);
     ArgumentChecker.notNull(index, "index");
@@ -79,7 +90,8 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
     ArgumentChecker.notNull(calendar, "calendar");
     _index = index;
     _fixingPeriodStartDate = ScheduleCalculator.getAdjustedDate(fixingDate, _index.getSpotLag(), calendar);
-    _fixingPeriodEndDate = ScheduleCalculator.getAdjustedDate(_fixingPeriodStartDate, index.getTenor(), index.getBusinessDayConvention(), calendar, index.isEndOfMonth());
+    _fixingPeriodEndDate = ScheduleCalculator.getAdjustedDate(_fixingPeriodStartDate, index.getTenor(), index.getBusinessDayConvention(), calendar,
+        index.isEndOfMonth());
     _fixingPeriodAccrualFactor = index.getDayCount().getDayCountFraction(_fixingPeriodStartDate, _fixingPeriodEndDate, calendar);
     _spread = spread;
     _spreadAmount = spread * getNotional() * getPaymentYearFraction();
@@ -88,22 +100,38 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
 
   /**
    * Constructor of a Ibor-like floating coupon from the coupon details and the Ibor index. The payment currency is the index currency.
-   * @param currency The coupn currency.
-   * @param paymentDate The coupon payment date.
-   * @param accrualStartDate The start date of the accrual period.
-   * @param accrualEndDate The end date of the accrual period.
-   * @param paymentAccrualFactor The accrual factor of the accrual period.
-   * @param notional The coupon notional.
-   * @param fixingDate The coupon fixing date.
-   * @param fixingPeriodStartDate The start date of the fixing period.
-   * @param fixingPeriodEndDate The end date of the fixing period.
-   * @param fixingPeriodAccrualFactor The accrual factor (or year fraction) associated to the fixing period in the Index day count convention.
-   * @param index The coupon Ibor index. Should of the same currency as the payment.
-   * @param spread The spread paid above the Ibor rate.
-   * @param calendar The holiday calendar for the ibor index.
+   * 
+   * @param currency
+   *          The coupn currency.
+   * @param paymentDate
+   *          The coupon payment date.
+   * @param accrualStartDate
+   *          The start date of the accrual period.
+   * @param accrualEndDate
+   *          The end date of the accrual period.
+   * @param paymentAccrualFactor
+   *          The accrual factor of the accrual period.
+   * @param notional
+   *          The coupon notional.
+   * @param fixingDate
+   *          The coupon fixing date.
+   * @param fixingPeriodStartDate
+   *          The start date of the fixing period.
+   * @param fixingPeriodEndDate
+   *          The end date of the fixing period.
+   * @param fixingPeriodAccrualFactor
+   *          The accrual factor (or year fraction) associated to the fixing period in the Index day count convention.
+   * @param index
+   *          The coupon Ibor index. Should of the same currency as the payment.
+   * @param spread
+   *          The spread paid above the Ibor rate.
+   * @param calendar
+   *          The holiday calendar for the ibor index.
    */
-  public CouponIborSpreadDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
-      final double paymentAccrualFactor, final double notional, final ZonedDateTime fixingDate, final ZonedDateTime fixingPeriodStartDate, final ZonedDateTime fixingPeriodEndDate,
+  public CouponIborSpreadDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
+      final ZonedDateTime accrualEndDate,
+      final double paymentAccrualFactor, final double notional, final ZonedDateTime fixingDate, final ZonedDateTime fixingPeriodStartDate,
+      final ZonedDateTime fixingPeriodEndDate,
       final double fixingPeriodAccrualFactor, final IborIndex index, final double spread, final Calendar calendar) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, paymentAccrualFactor, notional, fixingDate);
     ArgumentChecker.notNull(index, "index");
@@ -120,35 +148,50 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
 
   /**
    * Builder of a coupon from the accrual dates and the index. The fixing dates are calculated using the index. The payment date is the end accrual date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param accrualFactor Accrual factor of the accrual period.
-   * @param notional The coupon notional.
-   * @param index The coupon Ibor index. Should of the same currency as the payment.
-   * @param spread The spread paid above the Ibor rate.
-   * @param calendar The holiday calendar for the ibor index.
+   * 
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param accrualFactor
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          The coupon notional.
+   * @param index
+   *          The coupon Ibor index. Should of the same currency as the payment.
+   * @param spread
+   *          The spread paid above the Ibor rate.
+   * @param calendar
+   *          The holiday calendar for the ibor index.
    * @return The coupon.
    */
-  public static CouponIborSpreadDefinition from(final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double accrualFactor, final double notional, final IborIndex index,
+  public static CouponIborSpreadDefinition from(final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double accrualFactor,
+      final double notional, final IborIndex index,
       final double spread, final Calendar calendar) {
     final ZonedDateTime fixingDate = ScheduleCalculator.getAdjustedDate(accrualStartDate, -index.getSpotLag(), calendar);
-    return new CouponIborSpreadDefinition(index.getCurrency(), accrualEndDate, accrualStartDate, accrualEndDate, accrualFactor, notional, fixingDate, index, spread, calendar);
+    return new CouponIborSpreadDefinition(index.getCurrency(), accrualEndDate, accrualStartDate, accrualEndDate, accrualFactor, notional, fixingDate, index,
+        spread, calendar);
   }
 
   /**
    * Builder from an Ibor coupon and the spread.
-   * @param couponIbor An Ibor coupon.
-   * @param spread The spread.
+   * 
+   * @param couponIbor
+   *          An Ibor coupon.
+   * @param spread
+   *          The spread.
    * @return The Ibor coupon with spread.
    */
   public static CouponIborSpreadDefinition from(final CouponIborDefinition couponIbor, final double spread) {
     ArgumentChecker.notNull(couponIbor, "Ibor coupon");
-    return new CouponIborSpreadDefinition(couponIbor.getCurrency(), couponIbor.getPaymentDate(), couponIbor.getAccrualStartDate(), couponIbor.getAccrualEndDate(), couponIbor.getPaymentYearFraction(),
+    return new CouponIborSpreadDefinition(couponIbor.getCurrency(), couponIbor.getPaymentDate(), couponIbor.getAccrualStartDate(),
+        couponIbor.getAccrualEndDate(), couponIbor.getPaymentYearFraction(),
         couponIbor.getNotional(), couponIbor.getFixingDate(), couponIbor.getIndex(), spread, couponIbor.getCalendar());
   }
 
   /**
    * Gets the spread.
+   * 
    * @return The spread.
    */
   public double getSpread() {
@@ -157,6 +200,7 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the fixed amount related to the spread.
+   * 
    * @return The spread amount.
    */
   public double getSpreadAmount() {
@@ -165,6 +209,7 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the Ibor index of the instrument.
+   * 
    * @return The index.
    */
   public IborIndex getIndex() {
@@ -173,6 +218,7 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the start date of the fixing period.
+   * 
    * @return The start date of the fixing period.
    */
   public ZonedDateTime getFixingPeriodStartDate() {
@@ -181,6 +227,7 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the end date of the fixing period.
+   * 
    * @return The end date of the fixing period.
    */
   public ZonedDateTime getFixingPeriodEndDate() {
@@ -189,6 +236,7 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the accrual factor (or year fraction) associated to the fixing period in the Index day count convention.
+   * 
    * @return The accrual factor.
    */
   public double getFixingPeriodAccrualFactor() {
@@ -197,6 +245,7 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the holiday calendar for the ibor index.
+   * 
    * @return The holiday calendar
    */
   public Calendar getCalendar() {
@@ -214,14 +263,14 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_fixingPeriodAccrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _fixingPeriodEndDate.hashCode();
     result = prime * result + _fixingPeriodStartDate.hashCode();
     result = prime * result + _index.hashCode();
     temp = Double.doubleToLongBits(_spread);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_spreadAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _calendar.hashCode();
     return result;
   }
@@ -261,6 +310,7 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -279,16 +329,17 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
     final double fixingTime = TimeCalculator.getTimeBetween(dateTime, getFixingDate());
     final double fixingPeriodStartTime = TimeCalculator.getTimeBetween(dateTime, getFixingPeriodStartDate());
     final double fixingPeriodEndTime = TimeCalculator.getTimeBetween(dateTime, getFixingPeriodEndDate());
-    return new CouponIborSpread(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(), fixingPeriodStartTime, fixingPeriodEndTime,
+    return new CouponIborSpread(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(),
+        fixingPeriodStartTime, fixingPeriodEndTime,
         getFixingPeriodAccrualFactor(), _spread, forwardCurveName);
   }
 
   /**
-   * {@inheritDoc}
-   * If the fixing date is strictly before the conversion date and the fixing rate is not available, an exception is thrown; if the fixing rate is available a fixed coupon is returned.
-   * If the fixing date is equal to the conversion date, if the fixing rate is available a fixed coupon is returned, if not a coupon Ibor with spread is returned.
-   * If the fixing date is strictly after the conversion date, a coupon Ibor with spread is returned.
-   * All the comparisons are between dates without time.
+   * {@inheritDoc} If the fixing date is strictly before the conversion date and the fixing rate is not available, an exception is thrown; if the fixing rate is
+   * available a fixed coupon is returned. If the fixing date is equal to the conversion date, if the fixing rate is available a fixed coupon is returned, if
+   * not a coupon Ibor with spread is returned. If the fixing date is strictly after the conversion date, a coupon Ibor with spread is returned. All the
+   * comparisons are between dates without time.
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -320,7 +371,8 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
     final double fixingTime = TimeCalculator.getTimeBetween(dateTime, getFixingDate());
     final double fixingPeriodStartTime = TimeCalculator.getTimeBetween(dateTime, getFixingPeriodStartDate());
     final double fixingPeriodEndTime = TimeCalculator.getTimeBetween(dateTime, getFixingPeriodEndDate());
-    return new CouponIborSpread(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(), fixingPeriodStartTime, fixingPeriodEndTime,
+    return new CouponIborSpread(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(),
+        fixingPeriodStartTime, fixingPeriodEndTime,
         getFixingPeriodAccrualFactor(), _spread, forwardCurveName);
   }
 
@@ -335,16 +387,16 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
     final double fixingTime = TimeCalculator.getTimeBetween(dateTime, getFixingDate());
     final double fixingPeriodStartTime = TimeCalculator.getTimeBetween(dateTime, getFixingPeriodStartDate());
     final double fixingPeriodEndTime = TimeCalculator.getTimeBetween(dateTime, getFixingPeriodEndDate());
-    return new CouponIborSpread(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(), fixingPeriodStartTime, fixingPeriodEndTime,
+    return new CouponIborSpread(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(), fixingPeriodStartTime,
+        fixingPeriodEndTime,
         getFixingPeriodAccrualFactor(), _spread);
   }
 
   /**
-   * {@inheritDoc}
-   * If the fixing date is strictly before the conversion date and the fixing rate is not available, an exception is thrown; if the fixing rate is available a fixed coupon is returned.
-   * If the fixing date is equal to the conversion date, if the fixing rate is available a fixed coupon is returned, if not a coupon Ibor with spread is returned.
-   * If the fixing date is strictly after the conversion date, a coupon Ibor with spread is returned.
-   * All the comparisons are between dates without time.
+   * {@inheritDoc} If the fixing date is strictly before the conversion date and the fixing rate is not available, an exception is thrown; if the fixing rate is
+   * available a fixed coupon is returned. If the fixing date is equal to the conversion date, if the fixing rate is available a fixed coupon is returned, if
+   * not a coupon Ibor with spread is returned. If the fixing date is strictly after the conversion date, a coupon Ibor with spread is returned. All the
+   * comparisons are between dates without time.
    */
   @Override
   public Coupon toDerivative(final ZonedDateTime dateTime, final DoubleTimeSeries<ZonedDateTime> indexFixingTimeSeries) {
@@ -370,7 +422,8 @@ public class CouponIborSpreadDefinition extends CouponFloatingDefinition {
     final double fixingTime = TimeCalculator.getTimeBetween(dateTime, getFixingDate());
     final double fixingPeriodStartTime = TimeCalculator.getTimeBetween(dateTime, getFixingPeriodStartDate());
     final double fixingPeriodEndTime = TimeCalculator.getTimeBetween(dateTime, getFixingPeriodEndDate());
-    return new CouponIborSpread(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(), fixingPeriodStartTime, fixingPeriodEndTime,
+    return new CouponIborSpread(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(), fixingPeriodStartTime,
+        fixingPeriodEndTime,
         getFixingPeriodAccrualFactor(), _spread);
   }
 

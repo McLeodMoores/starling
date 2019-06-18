@@ -12,26 +12,27 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import cern.jet.random.engine.MersenneTwister;
-import cern.jet.random.engine.MersenneTwister64;
-import cern.jet.random.engine.RandomEngine;
-
 import com.opengamma.analytics.math.curve.Curve;
 import com.opengamma.analytics.math.curve.FunctionalDoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.interpolation.BasisFunctionAggregation;
 import com.opengamma.analytics.math.interpolation.BasisFunctionGenerator;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.PSplineFitter;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.ColtMatrixAlgebra;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.matrix.MatrixAlgebra;
 import com.opengamma.analytics.math.rootfinding.newton.NewtonDefaultVectorRootFinder;
 import com.opengamma.util.test.TestGroup;
+
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
 
 /**
  * Test.
@@ -148,8 +149,8 @@ public class NonLinearLeastSquareWithPenaltyTest {
 
     final LeastSquareResults lsRes = NLLSWP.solve(new DoubleMatrix1D(obs), new DoubleMatrix1D(n, 0.01), func, jac, start, penalty);
     if(print) {
-    System.out.println("chi2: " + lsRes.getChiSq());
-    System.out.println(lsRes.getFitParameters());
+      System.out.println("chi2: " + lsRes.getChiSq());
+      System.out.println(lsRes.getFitParameters());
     }
     for(int i=0;i<n;i++) {
       assertEquals(obs[i],lsRes.getFitParameters().getEntry(onIndex[i]),0.01);
@@ -171,7 +172,7 @@ public class NonLinearLeastSquareWithPenaltyTest {
     weights[2] = -0.0;
     weights[3] = -0.0;
     weights[n-2] = -0.0;
-     final BasisFunctionAggregation<Double> func = new BasisFunctionAggregation<>(bSplines, weights);
+    final BasisFunctionAggregation<Double> func = new BasisFunctionAggregation<>(bSplines, weights);
 
     for (int j = 0; j < 101; j++) {
       final double x = j * 20. / 100;
@@ -221,7 +222,8 @@ public class NonLinearLeastSquareWithPenaltyTest {
 
   @Test(enabled = false)
   public void rootTest() {
-    final Interpolator1D baseInterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.DOUBLE_QUADRATIC, Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+    final Interpolator1D baseInterpolator = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME,
+        LinearExtrapolator1dAdapter.NAME);
 
     final NewtonDefaultVectorRootFinder rootFinder = new NewtonDefaultVectorRootFinder();
 

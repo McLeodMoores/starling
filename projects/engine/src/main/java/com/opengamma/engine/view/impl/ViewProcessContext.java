@@ -131,7 +131,7 @@ public class ViewProcessContext {
   }
 
   /**
-   * Gets the config source
+   * Gets the config source.
    *
    * @return the config source, not null
    */
@@ -140,7 +140,7 @@ public class ViewProcessContext {
   }
 
   /**
-   * Gets the view permission provider
+   * Gets the view permission provider.
    *
    * @return the view permission provider, not null
    */
@@ -149,7 +149,7 @@ public class ViewProcessContext {
   }
 
   /**
-   * Gets the view portfolio permission provider
+   * Gets the view portfolio permission provider.
    *
    * @return the view portfolio permission provider, not null
    */
@@ -260,7 +260,8 @@ public class ViewProcessContext {
   /**
    * Uses this context to form a {@code ViewCompliationServices} instance.
    *
-   * @param marketDataAvailabilityProvider the availability provider corresponding to the desired source of market data, not null
+   * @param marketDataAvailabilityProvider
+   *          the availability provider corresponding to the desired source of market data, not null
    * @return the services, not null
    */
   public ViewCompilationServices asCompilationServices(final MarketDataAvailabilityProvider marketDataAvailabilityProvider) {

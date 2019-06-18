@@ -11,8 +11,8 @@ import com.google.common.base.Function;
 
 /**
  * Factory class for {@link Result} objects.
- * <p>
  * <h3>Typical usage pattern:</h3>
+ * 
  * <pre>
  *
  * import static com.opengamma.util.result.ResultGenerator.failure;
@@ -22,9 +22,9 @@ import com.google.common.base.Function;
  *
  * public class Calculations {
  *
- *   public Result<CalculatedValue> calculate() {
+ *   public Result&lt;CalculatedValue&gt; calculate() {
  *
- *     Result<InterimValue> interimResult = doInitialCalculation();
+ *     Result&lt;InterimValue&gt; interimResult = doInitialCalculation();
  *     if (interimResult.isValueAvailable()) {
  *       InterimValue value = interimResult.getValue();
  *       Calculator calculator = getCalculator()
@@ -42,6 +42,7 @@ import com.google.common.base.Function;
  * }
  *
  * </pre>
+ * 
  * @deprecated use the static methods on {@link Result}
  */
 @Deprecated

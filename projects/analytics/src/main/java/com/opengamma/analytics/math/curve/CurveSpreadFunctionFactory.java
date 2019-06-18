@@ -20,8 +20,10 @@ public final class CurveSpreadFunctionFactory extends AbstractNamedInstanceFacto
   public static final CurveSpreadFunctionFactory INSTANCE = new CurveSpreadFunctionFactory();
 
   /**
-   * Finds a spread function by name, ignoring case
-   * @param name The name of the instance to find, not null
+   * Finds a spread function by name, ignoring case.
+   * 
+   * @param name
+   *          The name of the instance to find, not null
    * @return The instance
    */
   @FromString

@@ -37,7 +37,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.BondAndBondFutureFunctionUtils;
 import com.opengamma.financial.security.FinancialSecurityUtils;
@@ -60,8 +59,7 @@ public class BondAndBondFutureConstantSpreadThetaFunction extends BondAndBondFut
       BondConstantSpreadHorizonCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_THETA} and
-   * the calculator to null
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#VALUE_THETA} and the calculator to null.
    */
   public BondAndBondFutureConstantSpreadThetaFunction() {
     super(VALUE_THETA, null);
@@ -77,7 +75,8 @@ public class BondAndBondFutureConstantSpreadThetaFunction extends BondAndBondFut
     final Security security = target.getTrade().getSecurity();
     final MultipleCurrencyAmount theta;
     if (security instanceof BondFutureSecurity) {
-      final BondFuturesTransactionDefinition definition = (BondFuturesTransactionDefinition) BondAndBondFutureFunctionUtils.getDefinition(executionContext, target, now);
+      final BondFuturesTransactionDefinition definition = (BondFuturesTransactionDefinition) BondAndBondFutureFunctionUtils.getDefinition(executionContext,
+          target, now);
       final HistoricalTimeSeries futurePriceSeries = (HistoricalTimeSeries) inputs.getValue(HISTORICAL_TIME_SERIES);
       final LocalDateDoubleTimeSeries ts = futurePriceSeries.getTimeSeries();
       final int length = ts.size();
@@ -88,7 +87,8 @@ public class BondAndBondFutureConstantSpreadThetaFunction extends BondAndBondFut
       final int daysForward = Integer.parseInt(desiredValue.getConstraint(PROPERTY_DAYS_TO_MOVE_FORWARD));
       theta = BOND_FUTURE_CALCULATOR.getTheta(definition, now, issuerCurves, daysForward, null, lastMarginPrice);
     } else if (security instanceof BondSecurity) {
-      final BondTransactionDefinition<?, ?> definition = (BondTransactionDefinition<?, ?>) BondAndBondFutureFunctionUtils.getDefinition(executionContext, target, now);
+      final BondTransactionDefinition<?, ?> definition = (BondTransactionDefinition<?, ?>) BondAndBondFutureFunctionUtils.getDefinition(executionContext,
+          target, now);
       final int daysForward = Integer.parseInt(desiredValue.getConstraint(PROPERTY_DAYS_TO_MOVE_FORWARD));
       theta = BOND_CALCULATOR.getTheta(definition, now, issuerCurves, daysForward, null);
     } else {

@@ -27,21 +27,22 @@ public class HolidayQueryTool extends AbstractTool<ToolContext> {
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new HolidayQueryTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final ToolContext toolContext = getToolContext();
     final CommandLine commandLine = getCommandLine();
     final boolean verbose = commandLine.hasOption("verbose");
-    if (commandLine.hasOption("today") && commandLine.hasOption("yesterday") ||
-        commandLine.hasOption("date") && commandLine.hasOption("today") ||
-        commandLine.hasOption("date") && commandLine.hasOption("yesterday")) {
+    if (commandLine.hasOption("today") && commandLine.hasOption("yesterday")
+        || commandLine.hasOption("date") && commandLine.hasOption("today")
+        || commandLine.hasOption("date") && commandLine.hasOption("yesterday")) {
       System.err.println("Can only return today OR yesterday OR date!");
       System.exit(2);
     }
@@ -82,7 +83,6 @@ public class HolidayQueryTool extends AbstractTool<ToolContext> {
     }
   }
 
-
   @Override
   protected Options createOptions(final boolean mandatoryConfig) {
     final Options options = super.createOptions(mandatoryConfig);
@@ -97,47 +97,47 @@ public class HolidayQueryTool extends AbstractTool<ToolContext> {
   @SuppressWarnings("static-access")
   private Option createCurrencyOption() {
     return OptionBuilder.isRequired(true)
-                        .hasArg()
-                        .withArgName("currency code")
-                        .withDescription("The currency you want to look up")
-                        .withLongOpt("currency")
-                        .create("ccy");
+        .hasArg()
+        .withArgName("currency code")
+        .withDescription("The currency you want to look up")
+        .withLongOpt("currency")
+        .create("ccy");
   }
 
   @SuppressWarnings("static-access")
   private Option createTodayOption() {
     return OptionBuilder.isRequired(false)
-                        .withDescription("Return if today is a holiday")
-                        .withLongOpt("today")
-                        .create("t");
+        .withDescription("Return if today is a holiday")
+        .withLongOpt("today")
+        .create("t");
   }
 
   @SuppressWarnings("static-access")
   private Option createYesterdayOption() {
     return OptionBuilder.isRequired(false)
-                        .hasArg(false)
-                        .withDescription("Return if yesterday is a holiday")
-                        .withLongOpt("yesterday")
-                        .create("y");
+        .hasArg(false)
+        .withDescription("Return if yesterday is a holiday")
+        .withLongOpt("yesterday")
+        .create("y");
   }
 
   @SuppressWarnings("static-access")
   private Option createDateOption() {
     return OptionBuilder.isRequired(false)
-                        .hasArg(true)
-                        .withArgName("date")
-                        .withDescription("Return if date (YYYYMMDD) is a holiday")
-                        .withLongOpt("yesterday")
-                        .create("y");
+        .hasArg(true)
+        .withArgName("date")
+        .withDescription("Return if date (YYYYMMDD) is a holiday")
+        .withLongOpt("yesterday")
+        .create("y");
   }
 
   @SuppressWarnings("static-access")
   private Option createVerboseOption() {
     return OptionBuilder.isRequired(false)
-                        .hasArg(false)
-                        .withDescription("Verbose output")
-                        .withLongOpt("verbose")
-                        .create("v");
+        .hasArg(false)
+        .withDescription("Verbose output")
+        .withLongOpt("verbose")
+        .create("v");
   }
 
   @Override

@@ -13,7 +13,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * Compute vega of forward volatility by parallel shift to volatility surface
+ * Compute vega of forward volatility by parallel shift to volatility surface.
  */
 public class CarrLeeFXVolatilitySwapVegaCalculator extends InstrumentDerivativeVisitorAdapter<CarrLeeFXData, Double> {
 
@@ -25,16 +25,17 @@ public class CarrLeeFXVolatilitySwapVegaCalculator extends InstrumentDerivativeV
   private final double _bumpVol;
 
   /**
-   * Constructor using default bump amount.
-   * Note that fractional volatility is bumped
+   * Constructor using default bump amount. Note that fractional volatility is bumped
    */
   public CarrLeeFXVolatilitySwapVegaCalculator() {
     this(DEFAULT_BUMP);
   }
 
   /**
-   * Constructor specifying bump amount
-   * @param bump The bump amount
+   * Constructor specifying bump amount.
+   *
+   * @param bump
+   *          The bump amount
    */
   public CarrLeeFXVolatilitySwapVegaCalculator(final double bump) {
     _bumpVol = bump;
@@ -42,9 +43,12 @@ public class CarrLeeFXVolatilitySwapVegaCalculator extends InstrumentDerivativeV
   }
 
   /**
-   * Constructor specifying bump amount
-   * @param bump The bump amount
-   * @param cal Base calculator
+   * Constructor specifying bump amount.
+   *
+   * @param bump
+   *          The bump amount
+   * @param cal
+   *          Base calculator
    */
   public CarrLeeFXVolatilitySwapVegaCalculator(final double bump, final CarrLeeFXVolatilitySwapCalculator cal) {
     ArgumentChecker.notNull(cal, "cal");
@@ -53,11 +57,15 @@ public class CarrLeeFXVolatilitySwapVegaCalculator extends InstrumentDerivativeV
   }
 
   /**
-   * Vega calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes},
-   * i.e., assuming the fair value has been already calculated.
-   * @param result {@link VolatilitySwapCalculatorResultWithStrikes}
-   * @param swap The FX volatility swap
-   * @param data The FX data for Carr-Lee
+   * Vega calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes}, i.e., assuming the fair value
+   * has been already calculated.
+   *
+   * @param result
+   *          {@link VolatilitySwapCalculatorResultWithStrikes}
+   * @param swap
+   *          The FX volatility swap
+   * @param data
+   *          The FX data for Carr-Lee
    * @return vega
    */
   public Double getFXVolatilitySwapVega(final VolatilitySwapCalculatorResultWithStrikes result, final FXVolatilitySwap swap, final CarrLeeFXData data) {
@@ -105,11 +113,13 @@ public class CarrLeeFXVolatilitySwapVegaCalculator extends InstrumentDerivativeV
     if (rv == null) {
       final double stdVol = smile.getVolatility(Triple.of(timeToExpiry, forward, forward));
       final double bumpedStdVol = stdVol + _bumpVol;
-      final VolatilitySwapCalculatorResult volBumpedRes = NEW_CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, domesticRate, foreignRate, bumpedPutVols, bumpedStdVol, bumpedCallVols);
+      final VolatilitySwapCalculatorResult volBumpedRes = NEW_CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, domesticRate, foreignRate,
+          bumpedPutVols, bumpedStdVol, bumpedCallVols);
       volBumpedFV = volBumpedRes.getFairValue();
     } else {
       final double timeFromInception = swap.getTimeToObservationStart() < 0 ? Math.abs(swap.getTimeToObservationStart()) : 0;
-      final VolatilitySwapCalculatorResult volBumpedRes = SEASONED_CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, timeFromInception, domesticRate, foreignRate, bumpedPutVols,
+      final VolatilitySwapCalculatorResult volBumpedRes = SEASONED_CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, timeFromInception,
+          domesticRate, foreignRate, bumpedPutVols,
           bumpedCallVols, rv);
       volBumpedFV = volBumpedRes.getFairValue();
     }

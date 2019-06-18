@@ -24,6 +24,9 @@ public class TestHistoricalTimeSeriesSelector implements HistoricalTimeSeriesSel
     return Iterables.getFirst(candidates, null);
   }
 
+  /**
+   * @return the last candidates
+   */
   public Collection<ManageableHistoricalTimeSeriesInfo> getLastCandidates() {
     return _lastCandidates;
   }

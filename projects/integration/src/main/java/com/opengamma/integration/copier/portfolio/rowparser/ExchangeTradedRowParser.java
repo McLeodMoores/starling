@@ -35,21 +35,20 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * A row parser that reads in a ticker for an exchange-traded security, a quantity for a position, and
- * optionally a trade date, premium and counterparty for a trade.
+ * A row parser that reads in a ticker for an exchange-traded security, a quantity for a position, and optionally a trade date, premium and counterparty for a
+ * trade.
  */
 public class ExchangeTradedRowParser extends RowParser {
 
   public enum DateFormat {
 
-    ISO(DateTimeFormatter.ISO_DATE, DateTimeFormatter.BASIC_ISO_DATE),
-    UK(DateTimeFormatter.ofPattern("dd/MM/yyyy"), DateTimeFormatter.ofPattern("dd-MM-yyyy")),
-    US(DateTimeFormatter.ofPattern("MM/dd/yyyy"), DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+    ISO(DateTimeFormatter.ISO_DATE, DateTimeFormatter.BASIC_ISO_DATE), UK(DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+        DateTimeFormatter.ofPattern("dd-MM-yyyy")), US(DateTimeFormatter.ofPattern("MM/dd/yyyy"), DateTimeFormatter.ofPattern("MM-dd-yyyy"));
 
     private final DateTimeFormatter _primaryFormatter;
     private final DateTimeFormatter _secondaryFormatter;
 
-    private DateFormat(final DateTimeFormatter primaryFormatter, final DateTimeFormatter secondaryFormatter) {
+    DateFormat(final DateTimeFormatter primaryFormatter, final DateTimeFormatter secondaryFormatter) {
       _primaryFormatter = primaryFormatter;
       _secondaryFormatter = secondaryFormatter;
     }
@@ -66,30 +65,29 @@ public class ExchangeTradedRowParser extends RowParser {
   private static final String PREMIUM_DATE = "premiumdate";
   private static final String COUNTERPARTY = "counterparty";
 
-  private final String[] _columns = {TICKER, QUANTITY, TRADE_DATE, PREMIUM, COUNTERPARTY, ATTRIBUTES};
+  private final String[] _columns = { TICKER, QUANTITY, TRADE_DATE, PREMIUM, COUNTERPARTY, ATTRIBUTES };
 
   private final SecurityProvider _securityProvider;
 
   public ExchangeTradedRowParser(final SecurityProvider securityProvider, final DateFormat dateFormat) {
     super(dateFormat._primaryFormatter, dateFormat._secondaryFormatter);
     ArgumentChecker.notNull(securityProvider, "securityProvider");
-   _securityProvider = securityProvider;
+    _securityProvider = securityProvider;
   }
 
   public ExchangeTradedRowParser(final SecurityProvider securityProvider, final DateTimeFormatter dateFormatter) {
     super(dateFormatter);
     ArgumentChecker.notNull(securityProvider, "securityProvider");
-   _securityProvider = securityProvider;
+    _securityProvider = securityProvider;
   }
 
   private static final ExternalScheme[] SCHEME_WATERFALL = {
-    ExternalSchemes.BLOOMBERG_TICKER,
-    ExternalSchemes.BLOOMBERG_TCM,
-    ExternalSchemes.BLOOMBERG_BUID,
-    ExternalSchemes.CUSIP,
-    ExternalSchemes.ISIN
+      ExternalSchemes.BLOOMBERG_TICKER,
+      ExternalSchemes.BLOOMBERG_TCM,
+      ExternalSchemes.BLOOMBERG_BUID,
+      ExternalSchemes.CUSIP,
+      ExternalSchemes.ISIN
   };
-
 
   @Override
   public ManageableSecurity[] constructSecurity(final Map<String, String> row) {
@@ -103,14 +101,14 @@ public class ExchangeTradedRowParser extends RowParser {
       final ExternalIdBundle id = ExternalId.parse(idStr).toBundle();
       final Security security = _securityProvider.getSecurity(id);
       if (security != null && security instanceof ManageableSecurity) {
-        return new ManageableSecurity[] {(ManageableSecurity) security};
+        return new ManageableSecurity[] { (ManageableSecurity) security };
       }
     } catch (final IllegalArgumentException iae) {
       for (final ExternalScheme scheme : SCHEME_WATERFALL) {
         final ExternalIdBundle id = ExternalId.of(scheme, idStr).toBundle();
         final Security security = _securityProvider.getSecurity(id);
         if (security != null && security instanceof ManageableSecurity) {
-          return new ManageableSecurity[] {(ManageableSecurity) security};
+          return new ManageableSecurity[] { (ManageableSecurity) security };
         }
       }
     }
@@ -128,14 +126,9 @@ public class ExchangeTradedRowParser extends RowParser {
     if (row.containsKey(QUANTITY)) {
       return new ManageablePosition(
           BigDecimal.valueOf(Integer.parseInt(getWithException(row, QUANTITY))),
-          security.getExternalIdBundle()
-      );
-    } else {
-      return new ManageablePosition(
-          BigDecimal.ONE,
-          security.getExternalIdBundle()
-      );
+          security.getExternalIdBundle());
     }
+    return new ManageablePosition(BigDecimal.ONE, security.getExternalIdBundle());
   }
 
   @Override
@@ -149,13 +142,12 @@ public class ExchangeTradedRowParser extends RowParser {
     if (row.containsKey(TRADE_DATE) && row.containsKey(PREMIUM) && row.containsKey(COUNTERPARTY)) {
       final LocalDate tradeDate = getDateWithException(row, TRADE_DATE);
       final ExternalId counterpartyId = ExternalId.of(Counterparty.DEFAULT_SCHEME, getWithException(row, COUNTERPARTY));
-      final ManageableTrade result =
-          new ManageableTrade(
-              position.getQuantity(),
-              security.getExternalIdBundle(),
-              tradeDate,
-              LocalTime.of(11, 11).atOffset(ZoneOffset.UTC),
-              counterpartyId);
+      final ManageableTrade result = new ManageableTrade(
+          position.getQuantity(),
+          security.getExternalIdBundle(),
+          tradeDate,
+          LocalTime.of(11, 11).atOffset(ZoneOffset.UTC),
+          counterpartyId);
       result.setPremium(Double.parseDouble(row.get(PREMIUM)));
       if (row.containsKey(PREMIUM_CURRENCY)) {
         result.setPremiumCurrency(Currency.parse(getWithException(row, PREMIUM_CURRENCY)));
@@ -172,9 +164,8 @@ public class ExchangeTradedRowParser extends RowParser {
       }
       return result;
 
-    } else {
-      return null;
     }
+    return null;
 
   }
 
@@ -206,8 +197,7 @@ public class ExchangeTradedRowParser extends RowParser {
       final String attributes = SingleSheetPositionWriter.attributesToString(securities[0].getAttributes());
       return ImmutableMap.of(
           TICKER, ticker,
-          ATTRIBUTES, attributes
-      );
+          ATTRIBUTES, attributes);
     }
     return null;
   }

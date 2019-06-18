@@ -58,13 +58,13 @@ import com.opengamma.util.time.Tenor;
  * <li>notionals</li>
  * <li>spreads</li>
  * <li>gearings</li>
- * <li>indexTenors</li>
+ * <li>indexTenors.</li>
  * </ul>
  */
 @BeanDefinition
 public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
-  //TODO replace these static strings with an annotation and reference linked to the corresponding variable - PLAT-6507
+  // TODO replace these static strings with an annotation and reference linked to the corresponding variable - PLAT-6507
   /**
    * The accrual fraction label.
    */
@@ -118,11 +118,11 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
    */
   public static final String INDEX_TERM = "Index Tenor";
   /**
-   * The discounted payment amount
+   * The discounted payment amount.
    */
   public static final String DISCOUNTED_PAYMENT_AMOUNT = "Discounted Payment Amount";
   /**
-   * The discounted projected amount
+   * The discounted projected amount.
    */
   public static final String DISCOUNTED_PROJECTED_PAYMENT = "Discounted Projected Payment";
   /**
@@ -228,42 +228,59 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
   private final List<Tenor> _indexTenors;
 
   /**
-   * @param startAccrualDates The start accrual dates, not null
-   * @param endAccrualDates The end accrual dates, not null
-   * @param accrualYearFractions The accrual year fractions, not null
-   * @param fixingStart The fixing start dates, not null
-   * @param fixingEnd The fixing end dates, not null
-   * @param fixingYearFractions The fixing year fractions, not null
-   * @param forwardRates The forward rates, not null
-   * @param fixedRates The fixed rates, not null
-   * @param paymentDates The payment dates, not null
-   * @param paymentTimes The payment times, not null
-   * @param paymentDiscountFactors The payment discount factors, not null
-   * @param paymentAmounts The payment amounts, not null
-   * @param projectedAmounts The projected amounts, not null
-   * @param notionals The notionals, not null
-   * @param spreads The spreads, not null
-   * @param gearings The gearings, not null
-   * @param indexTenors The index tenors, not null
+   * @param startAccrualDates
+   *          The start accrual dates, not null
+   * @param endAccrualDates
+   *          The end accrual dates, not null
+   * @param accrualYearFractions
+   *          The accrual year fractions, not null
+   * @param fixingStart
+   *          The fixing start dates, not null
+   * @param fixingEnd
+   *          The fixing end dates, not null
+   * @param fixingYearFractions
+   *          The fixing year fractions, not null
+   * @param forwardRates
+   *          The forward rates, not null
+   * @param fixedRates
+   *          The fixed rates, not null
+   * @param paymentDates
+   *          The payment dates, not null
+   * @param paymentTimes
+   *          The payment times, not null
+   * @param paymentDiscountFactors
+   *          The payment discount factors, not null
+   * @param paymentAmounts
+   *          The payment amounts, not null
+   * @param projectedAmounts
+   *          The projected amounts, not null
+   * @param notionals
+   *          The notionals, not null
+   * @param spreads
+   *          The spreads, not null
+   * @param gearings
+   *          The gearings, not null
+   * @param indexTenors
+   *          The index tenors, not null
    */
   @ImmutableConstructor
   public FloatingLegCashFlows(final List<LocalDate> startAccrualDates,
-                              final List<LocalDate> endAccrualDates,
-                              final List<Double> accrualYearFractions,
-                              final List<LocalDate> fixingStart,
-                              final List<LocalDate> fixingEnd,
-                              final List<Double> fixingYearFractions,
-                              final List<Double> forwardRates,
-                              final List<Double> fixedRates,
-                              final List<LocalDate> paymentDates,
-                              final List<Double> paymentTimes,
-                              final List<Double> paymentDiscountFactors,
-                              final List<CurrencyAmount> paymentAmounts,
-                              final List<CurrencyAmount> projectedAmounts,
-                              final List<CurrencyAmount> notionals,
-                              final List<Double> spreads,
-                              final List<Double> gearings,
-                              final List<Tenor> indexTenors) {
+      final List<LocalDate> endAccrualDates,
+      final List<Double> accrualYearFractions,
+      final List<LocalDate> fixingStart,
+      final List<LocalDate> fixingEnd,
+      final List<Double> fixingYearFractions,
+      final List<Double> forwardRates,
+      final List<Double> fixedRates,
+      final List<LocalDate> paymentDates,
+      final List<Double> paymentTimes,
+      final List<Double> paymentDiscountFactors,
+      final List<CurrencyAmount> paymentAmounts,
+      final List<CurrencyAmount> projectedAmounts,
+      final List<CurrencyAmount> notionals,
+      final List<Double> spreads,
+      final List<Double> gearings,
+      final List<Tenor> indexTenors) {
 
     ArgumentChecker.notNull(startAccrualDates, "startAccrualDates");
     ArgumentChecker.notNull(endAccrualDates, "endAccrualDates");
@@ -321,6 +338,7 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
   /**
    * Gets the number of fixed cash-flows.
+   *
    * @return The number of fixed cash-flows
    */
   @DerivedProperty
@@ -330,6 +348,7 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
   /**
    * Gets the number of floating cash-flows.
+   *
    * @return The number of floating cash-flows
    */
   @DerivedProperty
@@ -339,6 +358,7 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
   /**
    * Gets the number of cash-flows.
+   *
    * @return the number of cash-flows
    */
   @DerivedProperty
@@ -348,6 +368,7 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
   /**
    * Gets the discounted payment amounts.
+   *
    * @return the discounted cashflows
    */
   @DerivedProperty
@@ -367,6 +388,7 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
   /**
    * Gets the discounted projected payment amounts.
+   *
    * @return the discounted cashflows
    */
   @DerivedProperty
@@ -383,6 +405,7 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
     }
     return cashflows;
   }
+
   //------------------------- AUTOGENERATED START -------------------------
   ///CLOVER:OFF
   /**
@@ -1758,4 +1781,3 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
   ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }
-

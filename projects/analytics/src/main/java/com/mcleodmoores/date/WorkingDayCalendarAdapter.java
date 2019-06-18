@@ -12,12 +12,38 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * An adapter for {@link Calendar}s that converts them into {@link WorkingDayCalendar}s that allows the weekends
- * to be defined explicitly.
+ * An adapter for {@link Calendar}s that converts them into {@link WorkingDayCalendar}s that allows the weekends to be defined explicitly.
  * <p>
  * This class should be used when backwards compatibility is required.
  */
-public class WorkingDayCalendarAdapter implements WorkingDayCalendar {
+public final class WorkingDayCalendarAdapter implements WorkingDayCalendar {
+
+  /**
+   * A static factory method that sets the weekend to Saturday and Sunday.
+   *
+   * @param calendar
+   *          the underlying calendar, not null
+   * @return the adapter
+   */
+  public static WorkingDayCalendar of(final Calendar calendar) {
+    return new WorkingDayCalendarAdapter(calendar, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+  }
+
+  /**
+   * A static factory method.
+   *
+   * @param calendar
+   *          the underlying calendar, not null
+   * @param weekendDay1
+   *          the first weekend day, not null
+   * @param weekendDay2
+   *          the second weekend day, not null
+   * @return the adapter
+   */
+  public static WorkingDayCalendar of(final Calendar calendar, final DayOfWeek weekendDay1, final DayOfWeek weekendDay2) {
+    return new WorkingDayCalendarAdapter(calendar, weekendDay1, weekendDay2);
+  }
+
   /** The underlying calendar */
   @SuppressWarnings("deprecation")
   private final Calendar _calendar;
@@ -28,11 +54,15 @@ public class WorkingDayCalendarAdapter implements WorkingDayCalendar {
 
   /**
    * Creates an adapter.
-   * @param calendar  the underlying calendar, not null
-   * @param weekendDay1  the first weekend day, not null
-   * @param weekendDay2  the second weekend day, not null
+   *
+   * @param calendar
+   *          the underlying calendar, not null
+   * @param weekendDay1
+   *          the first weekend day, not null
+   * @param weekendDay2
+   *          the second weekend day, not null
    */
-  public WorkingDayCalendarAdapter(final Calendar calendar, final DayOfWeek weekendDay1, final DayOfWeek weekendDay2) {
+  private WorkingDayCalendarAdapter(final Calendar calendar, final DayOfWeek weekendDay1, final DayOfWeek weekendDay2) {
     _calendar = ArgumentChecker.notNull(calendar, "calendar");
     _weekendDay1 = ArgumentChecker.notNull(weekendDay1, "weekendDay1");
     _weekendDay2 = ArgumentChecker.notNull(weekendDay2, "weekendDay2");

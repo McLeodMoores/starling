@@ -15,8 +15,9 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *
+ * @deprecated {@link YieldCurveSpecification}s are deprecated.
  */
+@Deprecated
 public interface InterpolatedYieldCurveSpecificationBuilder {
 
   /**
@@ -47,7 +48,8 @@ public interface InterpolatedYieldCurveSpecificationBuilder {
       if (context.getFunctionReinitializer() != null) {
         context.getFunctionReinitializer().reinitializeFunction(function, SYNTHETIC_CHANGE_ID);
       }
-      return new AtVersionCorrection(OpenGammaCompilationContext.getInterpolatedYieldCurveSpecificationBuilder(context), context.getFunctionInitializationVersionCorrection());
+      return new AtVersionCorrection(OpenGammaCompilationContext.getInterpolatedYieldCurveSpecificationBuilder(context),
+          context.getFunctionInitializationVersionCorrection());
     }
 
   }

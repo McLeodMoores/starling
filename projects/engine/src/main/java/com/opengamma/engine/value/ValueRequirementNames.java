@@ -5,19 +5,14 @@
  */
 package com.opengamma.engine.value;
 
-import com.opengamma.core.id.ExternalSchemes;
-import com.opengamma.core.position.Position;
-import com.opengamma.core.value.MarketDataRequirementNames;
-import com.opengamma.engine.function.FunctionDefinition;
-import com.opengamma.engine.function.TargetSourcingFunction;
-
 /**
  * Standard names used to refer to particular computed values.
  * <p>
- * These name are used as keys to define specific required values in the engine. They should be used by a {@link FunctionDefinition} to state
- * their required inputs and their potential outputs. These are a typical common set of names, which may be extended.
+ * These name are used as keys to define specific required values in the engine. They should be used by a
+ * {@link com.opengamma.engine.function.FunctionDefinition} to state their required inputs and their potential outputs. These are a typical common set of names,
+ * which may be extended.
  * <p>
- * For names used to refer to market data, see {@link MarketDataRequirementNames}.
+ * For names used to refer to market data, see {@link com.opengamma.core.value.MarketDataRequirementNames}.
  */
 public final class ValueRequirementNames {
 
@@ -58,23 +53,21 @@ public final class ValueRequirementNames {
    * The daily volume as of the previous close.
    */
   public static final String DAILY_VOLUME = "Last Volume";
-  //  public static final String DAILY_VOLUME_AVG_5D = "Last Volume Avg 5D";
-  //  public static final String DAILY_VOLUME_AVG_10D = "Last Volume Avg 10D";
-  //  public static final String DAILY_VOLUME_AVG_20D = "Last Volume Avg 20D";
-  //  public static final String DAILY_CALL_IMP_VOL_30D = "Last Call Implied Vol 30D";
+  // public static final String DAILY_VOLUME_AVG_5D = "Last Volume Avg 5D";
+  // public static final String DAILY_VOLUME_AVG_10D = "Last Volume Avg 10D";
+  // public static final String DAILY_VOLUME_AVG_20D = "Last Volume Avg 20D";
+  // public static final String DAILY_CALL_IMP_VOL_30D = "Last Call Implied Vol 30D";
   /**
-   * The mark as of the previous close (e.g. equity price) <p>
+   * The mark as of the previous close (e.g. equity price).
    */
   public static final String MARK = "Mark";
   /**
-   * Current value of a security.
-   * This is typically the mid of bid/ask prices, but if these are not available, may be formed in another fashion
+   * Current value of a security. This is typically the mid of bid/ask prices, but if these are not available, may be formed in another fashion
    */
   public static final String MARK_CURRENT = "Mark - Current";
 
   /**
-   * Previous value of a security.
-   * This is typically the mid of previous bid/ask prices, but if these are not available, may be formed in another fashion
+   * Previous value of a security. This is typically the mid of previous bid/ask prices, but if these are not available, may be formed in another fashion
    */
   public static final String MARK_PREVIOUS = "Mark - Previous";
   /**
@@ -102,8 +95,7 @@ public final class ValueRequirementNames {
    */
   public static final String UNDERLYING_MARKET_PRICE = "Underlying Market Price";
   /**
-   * For margined securities, the reference or margin price. This will either be the security's close price or,
-   * on the transaction date itself, the traded price
+   * For margined securities, the reference or margin price. This will either be the security's close price or, on the transaction date itself, the traded price
    */
   public static final String MARGIN_PRICE = "Margin Price";
   /**
@@ -237,22 +229,23 @@ public final class ValueRequirementNames {
    */
   public static final String G2PP_PARAMETERS = "G2pp Parameters";
   /**
-   * Curve containing (time, rate) pairs that is constructed by directly interpolating between market data points (i.e. no settlement day corrections,
-   * ignoring the type of instrument etc.).
+   * Curve containing (time, rate) pairs that is constructed by directly interpolating between market data points (i.e. no settlement day corrections, ignoring
+   * the type of instrument etc.).
    */
   public static final String YIELD_CURVE_INTERPOLATED = "YieldCurveInterpolated";
   /**
-   * The Jacobian of a yield curve, that is a matrix where each row is the sensitivity of an instrument used in yield curve construction to the
-   * nodal points of the curve.
+   * The Jacobian of a yield curve, that is a matrix where each row is the sensitivity of an instrument used in yield curve construction to the nodal points of
+   * the curve.
    */
   public static final String YIELD_CURVE_JACOBIAN = "YieldCurveJacobian";
   /**
-   * The transition matrix between the sensitivity with respect to the new currency parameters and the initial currency market data.
-   * Used for FX swaps implied curves calibration.
+   * The transition matrix between the sensitivity with respect to the new currency parameters and the initial currency market data. Used for FX swaps implied
+   * curves calibration.
    */
   public static final String FX_IMPLIED_TRANSITION_MATRIX = "FXImpliedTransitionMatrix";
   /**
    * The raw market data that is used in yield curve construction.
+   *
    * @deprecated Use {@link #YIELD_CURVE_DATA} instead, values using this constant can't be manipulated in scenarios.
    */
   @Deprecated
@@ -282,12 +275,12 @@ public final class ValueRequirementNames {
    */
   public static final String ISIN = "ISIN";
   /**
-   * Ticker symbol used to identify a security in Bloomberg. See {@link ExternalSchemes}
+   * Ticker symbol used to identify a security in Bloomberg. See {@link com.opengamma.core.id.ExternalSchemes}
    */
   public static final String BLOOMBERG_TICKER = "BLOOMBERG_TICKER";
   /**
-   * Bloomberg's older security identifier scheme.
-   * They now wish users to adopt their new Bloomberg Global ID (BBGID). See {@link ExternalSchemes}
+   * Bloomberg's older security identifier scheme. They now wish users to adopt their new Bloomberg Global ID (BBGID). See
+   * {@link com.opengamma.core.id.ExternalSchemes}
    */
   public static final String BLOOMBERG_BUID = "BLOOMBERG_BUID";
   /**
@@ -303,11 +296,11 @@ public final class ValueRequirementNames {
    */
   public static final String CURVE_DEFINITION = "CurveDefinition";
   /**
-   * A vector of P&L series for the nodal points of a yield curve.
+   * A vector of P&amp;L series for the nodal points of a yield curve.
    */
   public static final String YIELD_CURVE_PNL_SERIES = "Yield Curve P&L Series";
   /**
-   * A vector of P&L series for the nodal points of a curve.
+   * A vector of P&amp;L series for the nodal points of a curve.
    */
   public static final String CURVE_PNL_SERIES = "Curve P&L Series";
   /**
@@ -381,7 +374,7 @@ public final class ValueRequirementNames {
    */
   public static final String SURFACE_DEFINITION = "SurfaceDefinition";
   /**
-   * Surface containing arrays of x, y, and  values for (x, y) pairs.
+   * Surface containing arrays of x, y, and values for (x, y) pairs.
    */
   public static final String SURFACE_DATA = "SurfaceData";
   /**
@@ -614,12 +607,14 @@ public final class ValueRequirementNames {
   public static final String RECEIVE_LEG_PRESENT_VALUE = "Swap Receive Leg Present Value";
   /**
    * The details of a swap pay leg.
+   *
    * @deprecated Should use {@link #SWAP_PAY_LEG_CASHFLOWS}
    */
   @Deprecated
   public static final String SWAP_PAY_LEG_DETAILS = "Swap Pay Leg Details";
   /**
    * The details of a swap receive leg.
+   *
    * @deprecated Should use {@link #SWAP_RECEIVE_LEG_CASHFLOWS}
    */
   @Deprecated
@@ -768,7 +763,7 @@ public final class ValueRequirementNames {
    */
   public static final String POSITION_CARRY_RHO = "PositionCarryRho";
   /**
-   * The aggregate delta of an option position (change in the value of the {@link Position} with respect to the underlying).
+   * The aggregate delta of an option position (change in the value of the {@link com.opengamma.core.position.Position} with respect to the underlying).
    */
   public static final String POSITION_DELTA = "PositionDelta";
   /**
@@ -932,11 +927,12 @@ public final class ValueRequirementNames {
    */
   public static final String VALUE_CARRY_RHO = "ValueCarryRho";
   /**
-   * ValueDelta represents the cash value of the position or, the value of money one would make if the underlying increased in price by 100%.<p>
-   * {@link #DELTA} = dV/dS.  ValueDelta is defined as S(t) * dV/dS. <p>
-   * Observe: PNL = dV/dS * (change in S) = S(t) * dV/dS * (S(T) - S(t)) / S(t), thus S(t)* dV/dS (ValueDelta) would be the PNL if
-   * 1.0 = (S(T) - S(t)) / S(t) => S(T) = 2*S(t), i.e. if the underlying doubled (increased by 100%). It thus gives a measure of the
-   * sensitivity as a relative measure.
+   * ValueDelta represents the cash value of the position or, the value of money one would make if the underlying increased in price by 100%.
+   * <p>
+   * {@link #DELTA} = dV/dS. ValueDelta is defined as S(t) * dV/dS.
+   * <p>
+   * Observe: PNL = dV/dS * (change in S) = S(t) * dV/dS * (S(T) - S(t)) / S(t), thus S(t)* dV/dS (ValueDelta) would be the PNL if 1.0 = (S(T) - S(t)) / S(t)
+   * &ge; S(T) = 2*S(t), i.e. if the underlying doubled (increased by 100%). It thus gives a measure of the sensitivity as a relative measure.
    */
   public static final String VALUE_DELTA = "ValueDelta";
   /**
@@ -1176,11 +1172,11 @@ public final class ValueRequirementNames {
    */
   public static final String PEARSON_KURTOSIS = "Pearson Kurtosis";
   /**
-   * The P&L of a position, from reference date.
+   * The P&amp;L of a position, from reference date.
    */
   public static final String PNL = "PnL";
   /**
-   * The P&L series of a position.
+   * The P&amp;L series of a position.
    */
   public static final String PNL_SERIES = "P&L Series";
   /**
@@ -1227,15 +1223,15 @@ public final class ValueRequirementNames {
   ///// Value At Risk
 
   /**
-   * The VaR of a position or portfolio calculated using the historical P&L series.
+   * The VaR of a position or portfolio calculated using the historical P&amp;L series.
    */
   public static final String HISTORICAL_VAR = "HistoricalVaR";
   /**
-   * The standard deviation for VaR calculated using the historical P&L series. Should be combined with {@link #HISTORICAL_VAR}.
+   * The standard deviation for VaR calculated using the historical P&amp;L series. Should be combined with {@link #HISTORICAL_VAR}.
    */
   public static final String HISTORICAL_VAR_STDDEV = "HistoricalVaR Standard Deviation";
   /**
-   * The conditional VaR of a position or portfolio calculated using a historical P&L series.
+   * The conditional VaR of a position or portfolio calculated using a historical P&amp;L series.
    */
   public static final String CONDITIONAL_HISTORICAL_VAR = "HistoricalCVaR";
   /**
@@ -1490,11 +1486,11 @@ public final class ValueRequirementNames {
   /**
    * The value vega of a digital option that is priced using call spread replication.
    */
-  //TODO too specific? Only in here because we can't add the outputs for digital options (which has two in this case) and normal value vega
+  // TODO too specific? Only in here because we can't add the outputs for digital options (which has two in this case) and normal value vega
   public static final String CALL_SPREAD_VALUE_VEGA = "Call Spread Value Vega";
 
   ///// Local Volatility
-  //TODO this set of names might be too specific
+  // TODO this set of names might be too specific
   /**
    * Result containing the Black price of an option at each of the points at the option maturity on a PDE grid.
    */
@@ -1682,8 +1678,8 @@ public final class ValueRequirementNames {
   ///// Miscellaneous
 
   /**
-   * The object referenced by a target specification. Can be used to load an item, referenced by a target specification, directly from a database
-   * and receive it as an input to a function. See the documentation for {@link TargetSourcingFunction} for details on requesting target resolved
+   * The object referenced by a target specification. Can be used to load an item, referenced by a target specification, directly from a database and receive it
+   * as an input to a function. See the documentation for {@link com.opengamma.engine.function.TargetSourcingFunction} for details on requesting target resolved
    * items.
    */
   public static final String TARGET = "Target";

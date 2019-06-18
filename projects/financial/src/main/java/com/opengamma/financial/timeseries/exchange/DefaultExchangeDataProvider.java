@@ -13,10 +13,10 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.opengamma.OpenGammaRuntimeException;
+
 import au.com.bytecode.opencsv.CSVParser;
 import au.com.bytecode.opencsv.CSVReader;
-
-import com.opengamma.OpenGammaRuntimeException;
 
 /**
  * Standard provider of exchange data based on a CSV file.
@@ -36,7 +36,8 @@ public final class DefaultExchangeDataProvider implements ExchangeDataProvider {
   }
 
   /**
-   * Get the exchange data provider
+   * Get the exchange data provider.
+   *
    * @return the exchange data provider
    */
   public static ExchangeDataProvider getInstance() {
@@ -45,27 +46,29 @@ public final class DefaultExchangeDataProvider implements ExchangeDataProvider {
 
   /**
    * Loads the exchange data
-   * 
-   * @param filename  the filename, not null
+   *
+   * @param filename
+   *          the filename, not null
    */
   private void loadExchangeData() {
-    InputStream is = getClass().getResourceAsStream(EXCHANGE_ISO_FILE);
+    final InputStream is = getClass().getResourceAsStream(EXCHANGE_ISO_FILE);
     if (is == null) {
       throw new OpenGammaRuntimeException("Unable to locate " + EXCHANGE_ISO_FILE);
     }
-    CSVReader exchangeIsoReader = new CSVReader(new InputStreamReader(is), CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, CSVParser.DEFAULT_ESCAPE_CHARACTER, 1);
-    String [] nextLine;
+    final CSVReader exchangeIsoReader = new CSVReader(new InputStreamReader(is), CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER,
+        CSVParser.DEFAULT_ESCAPE_CHARACTER, 1);
+    String[] nextLine;
     try {
       while ((nextLine = exchangeIsoReader.readNext()) != null) {
-        String micCode = nextLine[0];
-        String description = nextLine[1];
-        String countryCode = nextLine[2];
-        String country = nextLine[3];
-        String city = nextLine[4];
-        String acr = nextLine[5];
-        String status = nextLine[7];
+        final String micCode = nextLine[0];
+        final String description = nextLine[1];
+        final String countryCode = nextLine[2];
+        final String country = nextLine[3];
+        final String city = nextLine[4];
+        final String acr = nextLine[5];
+        final String status = nextLine[7];
         if (StringUtils.isNotBlank(micCode) && StringUtils.isNotBlank(countryCode)) {
-          Exchange exchange = new Exchange();
+          final Exchange exchange = new Exchange();
           exchange.setMic(micCode);
           exchange.setDescription(description);
           exchange.setCountryCode(countryCode);
@@ -78,7 +81,7 @@ public final class DefaultExchangeDataProvider implements ExchangeDataProvider {
         }
       }
       exchangeIsoReader.close();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Unable to read from " + EXCHANGE_ISO_FILE, e);
     }
   }

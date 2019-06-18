@@ -40,10 +40,12 @@ public class BloombergEquityScaleResolver {
   private static final ImmutableSet<ExternalScheme> TICKER_SCHEMES = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK);
 
   /**
-   * Creates a BloombergSecurityTypeResolver
+   * Creates a BloombergSecurityTypeResolver.
    *
-   * @param referenceDataProvider the reference data provider, not null
-   * @param bbgScheme the scheme to use, not null
+   * @param referenceDataProvider
+   *          the reference data provider, not null
+   * @param bbgScheme
+   *          the scheme to use, not null
    */
   public BloombergEquityScaleResolver(final ReferenceDataProvider referenceDataProvider, final ExternalScheme bbgScheme) {
     ArgumentChecker.notNull(referenceDataProvider, "referenceDataProvider");
@@ -95,9 +97,8 @@ public class BloombergEquityScaleResolver {
         }
       }
       return result;
-    } else {
-      return BloombergDataUtils.convertToBloombergBuidKeys(identifiers, _referenceDataProvider);
     }
+    return BloombergDataUtils.convertToBloombergBuidKeys(identifiers, _referenceDataProvider);
   }
 
 }

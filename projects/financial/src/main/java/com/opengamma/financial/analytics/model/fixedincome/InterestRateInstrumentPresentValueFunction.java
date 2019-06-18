@@ -30,7 +30,8 @@ public class InterestRateInstrumentPresentValueFunction extends InterestRateInst
   }
 
   @Override
-  public Set<ComputedValue> getComputedValues(final InstrumentDerivative derivative, final YieldCurveBundle bundle, final FinancialSecurity security, final ComputationTarget target,
+  public Set<ComputedValue> getComputedValues(final InstrumentDerivative derivative, final YieldCurveBundle bundle, final FinancialSecurity security,
+      final ComputationTarget target,
       final String curveCalculationConfigName, final String currency) {
     final Double presentValue = derivative.accept(CALCULATOR, bundle);
     return Collections.singleton(new ComputedValue(getResultSpec(target, curveCalculationConfigName, currency), presentValue));

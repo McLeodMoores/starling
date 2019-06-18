@@ -59,11 +59,29 @@ public class DataExchangeSourceResource extends AbstractDataResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets a HATEAOS response.
+   *
+   * @param uriInfo
+   *          the URI, not null
+   * @return the response
+   */
   @GET
   public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
+  /**
+   * Searches for an exchange by version, correction and external identifiers.
+   *
+   * @param versionAsOf
+   *          the version, can be null. If null, the latest is used.
+   * @param correctedTo
+   *          the correction, can be null. If null, the latest is used.
+   * @param externalIdStrs
+   *          the external ids, not null
+   * @return the exchange as a Fudge message
+   */
   @GET
   @Path("exchanges")
   public Response search(
@@ -76,6 +94,19 @@ public class DataExchangeSourceResource extends AbstractDataResource {
     return responseOkObject(FudgeListWrapper.of(result));
   }
 
+  /**
+   * Searches for an exchange by identifier, version, version and correction.
+   *
+   * @param idStr
+   *          the object identifier, not null
+   * @param version
+   *          the version, can be null. If null, the latest is used
+   * @param versionAsOf
+   *          the version, can be null. If null, the latest is used.
+   * @param correctedTo
+   *          the correction, can be null. If null, the latest is used.
+   * @return the exchange as a Fudge message
+   */
   @GET
   @Path("exchanges/{exchangeId}")
   public Response get(
@@ -87,16 +118,22 @@ public class DataExchangeSourceResource extends AbstractDataResource {
     if (version != null) {
       final Exchange result = getExchangeSource().get(objectId.atVersion(version));
       return responseOkObject(result);
-    } else {
-      final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
-      final Exchange result = getExchangeSource().get(objectId, vc);
-      return responseOkObject(result);
     }
+    final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
+    final Exchange result = getExchangeSource().get(objectId, vc);
+    return responseOkObject(result);
   }
 
 
   // deprecated
   //-------------------------------------------------------------------------
+  /**
+   * Searches for exchanges by identifiers.
+   *
+   * @param externalIdStrs
+   *          the object identifier, not null
+   * @return the conventions as a Fudge message
+   */
   @GET
   @Path("exchangeSearches/single")
   public Response searchSingle(@QueryParam("id") final List<String> externalIdStrs) {

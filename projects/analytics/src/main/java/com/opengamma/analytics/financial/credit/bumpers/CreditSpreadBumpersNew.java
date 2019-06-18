@@ -7,8 +7,9 @@ package com.opengamma.analytics.financial.credit.bumpers;
 
 // CSOFF
 /**
- * Class containing utilities for bumping credit spread term structures by user defined methods and amounts
- *@deprecated this will be deleted
+ * Class containing utilities for bumping credit spread term structures by user defined methods and amounts.
+ *
+ * @deprecated this will be deleted
  */
 @Deprecated
 public class CreditSpreadBumpersNew {
@@ -51,7 +52,8 @@ public class CreditSpreadBumpersNew {
 
   // Method to bump the credit spread term structure at a single (specified) tenor point by a specified amount
 
-  public double[] getBumpedCreditSpreads(final double[] marketSpreads, final int spreadTenorToBump, final double spreadBump, final SpreadBumpType spreadBumpType) {
+  public double[] getBumpedCreditSpreads(final double[] marketSpreads, final int spreadTenorToBump, final double spreadBump,
+      final SpreadBumpType spreadBumpType) {
     final int n = marketSpreads.length;
     final double[] bumpedCreditSpreads = new double[n];
     System.arraycopy(marketSpreads, 0, bumpedCreditSpreads, 0, n);

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.curve;
@@ -12,7 +12,7 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class FXVannaVolgaVolatilityCurveDataBundle {
   private final double _delta;
@@ -21,7 +21,8 @@ public class FXVannaVolgaVolatilityCurveDataBundle {
   private final double _vegaWeightedButterfly;
   private final ZonedDateTime _maturity;
 
-  public FXVannaVolgaVolatilityCurveDataBundle(final double delta, final double riskReversal, final double atm, final double vegaWeightedButterfly, final ZonedDateTime maturity) {
+  public FXVannaVolgaVolatilityCurveDataBundle(final double delta, final double riskReversal, final double atm, final double vegaWeightedButterfly,
+      final ZonedDateTime maturity) {
     ArgumentChecker.notNegative(atm, "atm");
     Validate.notNull(maturity, "maturity");
     _delta = delta;
@@ -57,14 +58,14 @@ public class FXVannaVolgaVolatilityCurveDataBundle {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_atm);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_delta);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _maturity.hashCode();
     temp = Double.doubleToLongBits(_riskReversal);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_vegaWeightedButterfly);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

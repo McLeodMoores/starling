@@ -44,13 +44,15 @@ public class WebSecurityResource extends AbstractWebSecurityResource {
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   public WebSecurityResource(final AbstractWebSecurityResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
@@ -81,28 +83,28 @@ public class WebSecurityResource extends AbstractWebSecurityResource {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
-  public Response putHTML(@FormParam("type") String type, @FormParam(SECURITY_XML) String securityXml) {
+  public Response putHTML(@FormParam("type") final String type, @FormParam(SECURITY_XML) final String securityXml) {
 
     final SecurityDocument doc = data().getSecurity();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     URI responseURI = null;
-    type = StringUtils.defaultString(StringUtils.trimToNull(type), "");
-    switch (type) {
+    final String trimmedType = StringUtils.defaultString(StringUtils.trimToNull(type), "");
+    switch (trimmedType) {
       case "xml":
-        securityXml = StringUtils.trimToNull(securityXml);
+        final String trimmedSecurityXml = StringUtils.trimToNull(securityXml);
         try {
-          responseURI = updateSecurity(securityXml);
+          responseURI = updateSecurity(trimmedSecurityXml);
         } catch (final Exception ex) {
           final FlexiBean out = createRootData();
           out.put("err_securityXml", true);
           out.put("err_securityXmlMsg", ex.getMessage());
-          out.put(SECURITY_XML, StringEscapeUtils.escapeJavaScript(securityXml));
+          out.put(SECURITY_XML, StringEscapeUtils.escapeJavaScript(trimmedSecurityXml));
           final String html = getFreemarker().build(HTML_DIR + "security-update.ftl", out);
           return Response.ok(html).build();
         }
@@ -119,17 +121,17 @@ public class WebSecurityResource extends AbstractWebSecurityResource {
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response putJSON(@FormParam("type") String type, @FormParam(SECURITY_XML) String securityXml) {
+  public Response putJSON(@FormParam("type") final String type, @FormParam(SECURITY_XML) final String securityXml) {
     final SecurityDocument doc = data().getSecurity();
-    if (doc.isLatest() == false) {  // TODO: idempotent
+    if (!doc.isLatest()) { // TODO: idempotent
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
-    type = StringUtils.defaultString(StringUtils.trimToNull(type), "");
-    switch (type) {
+    final String trimmedType = StringUtils.defaultString(StringUtils.trimToNull(type), "");
+    switch (trimmedType) {
       case "xml":
-        securityXml = StringUtils.trimToNull(securityXml);
-        updateSecurity(securityXml);
+        final String trimmedSecurityXml = StringUtils.trimToNull(securityXml);
+        updateSecurity(trimmedSecurityXml);
         break;
       case "": // update security by ID if type is missing
       case "id":
@@ -155,16 +157,16 @@ public class WebSecurityResource extends AbstractWebSecurityResource {
     final ExternalIdBundle identifierBundle = doc.getSecurity().getExternalIdBundle();
     final SecurityLoaderRequest request = SecurityLoaderRequest.create(identifierBundle);
     request.setForceUpdate(true);
-    data().getSecurityLoader().loadSecurities(request);  // ignore errors
+    data().getSecurityLoader().loadSecurities(request); // ignore errors
     return WebSecurityResource.uri(data());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
     final SecurityDocument doc = data().getSecurity();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     data().getSecurityMaster().remove(doc.getUniqueId());
@@ -176,15 +178,16 @@ public class WebSecurityResource extends AbstractWebSecurityResource {
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteJSON() {
     final SecurityDocument doc = data().getSecurity();
-    if (doc.isLatest()) {  // idempotent DELETE
+    if (doc.isLatest()) { // idempotent DELETE
       data().getSecurityMaster().remove(doc.getUniqueId());
     }
     return Response.ok().build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   *
    * @return the output root data, not null
    */
   @Override
@@ -199,8 +202,7 @@ public class WebSecurityResource extends AbstractWebSecurityResource {
 
     // Get the last price HTS for the security
     ObjectId tsObjectId = null;
-    final HistoricalTimeSeriesInfoSearchRequest searchRequest =
-        new HistoricalTimeSeriesInfoSearchRequest(security.getExternalIdBundle());
+    final HistoricalTimeSeriesInfoSearchRequest searchRequest = new HistoricalTimeSeriesInfoSearchRequest(security.getExternalIdBundle());
     final HistoricalTimeSeriesInfoSearchResult searchResult = data().getHistoricalTimeSeriesMaster().search(searchRequest);
     if (searchResult.getFirstInfo() != null) {
       tsObjectId = searchResult.getFirstInfo().getUniqueId().getObjectId();
@@ -217,16 +219,18 @@ public class WebSecurityResource extends AbstractWebSecurityResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("versions")
   public WebSecurityVersionsResource findVersions() {
     return new WebSecurityVersionsResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   *
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebSecuritiesData data) {
@@ -235,8 +239,11 @@ public class WebSecurityResource extends AbstractWebSecurityResource {
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideSecurityId  the override security id, null uses information from data
+   *
+   * @param data
+   *          the data, not null
+   * @param overrideSecurityId
+   *          the override security id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebSecuritiesData data, final UniqueId overrideSecurityId) {

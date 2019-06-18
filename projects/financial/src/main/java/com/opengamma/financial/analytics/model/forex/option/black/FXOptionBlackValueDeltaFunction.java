@@ -26,6 +26,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * The function to compute the value delta of Forex options in the Black model.
+ * 
  * @deprecated Use {@link BlackDiscountingValueDeltaFXOptionFunction}
  */
 @Deprecated
@@ -37,7 +38,7 @@ public class FXOptionBlackValueDeltaFunction extends FXOptionBlackSingleValuedFu
   private static final DeltaValueBlackForexCalculator CALCULATOR = DeltaValueBlackForexCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_DELTA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_DELTA}.
    */
   public FXOptionBlackValueDeltaFunction() {
     super(ValueRequirementNames.VALUE_DELTA);

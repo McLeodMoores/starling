@@ -5,13 +5,11 @@
  */
 package com.opengamma.analytics.financial.interestrate.payments.method;
 
-import com.opengamma.analytics.financial.model.option.definition.SABRInterestRateDataBundle;
-
 /**
  *  Class used to compute the price of a CMS coupon by swaption replication on a SABR formula.
  *  Reference: Hagan, P. S. (2003). Convexity conundrums: Pricing CMS swaps, caps, and floors. Wilmott Magazine, March, pages 38--44.
  *  OpenGamma implementation note: Replication pricing for linear and TEC format CMS, Version 1.2, March 2011.
- *  @deprecated {@link SABRInterestRateDataBundle} is deprecated
+ *  @deprecated {@link com.opengamma.analytics.financial.model.option.definition.SABRInterestRateDataBundle} is deprecated
  */
 @Deprecated
 public final class CouponCMSSABRReplicationMethod extends CouponCMSSABRReplicationGenericMethod {

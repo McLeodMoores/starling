@@ -34,18 +34,19 @@ import com.opengamma.financial.analytics.greeks.AvailableGreeks;
 import com.opengamma.financial.analytics.greeks.AvailablePositionGreeks;
 
 /**
- * 
+ *
  */
 public class OptionGreekToPositionGreekConverterFunction extends AbstractFunction.NonCompiledInvoker {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(OptionGreekToPositionGreekConverterFunction.class);
   private final Function1D<GreekDataBundle, Map<PositionGreek, Double>> _converter = new GreekToPositionGreekConverter();
-  //TODO pass in required greek rather than using the entire set
+
+  // TODO pass in required greek rather than using the entire set
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) {
     final GreekResultCollection greekResultCollection = new GreekResultCollection();
-    Object greekResult;    
+    Object greekResult;
     Greek greek;
     for (final String valueName : AvailableGreeks.getAllGreekNames()) {
       greekResult = inputs.getValue(valueName);
@@ -58,9 +59,10 @@ public class OptionGreekToPositionGreekConverterFunction extends AbstractFunctio
       greek = AvailableGreeks.getGreekForValueRequirementName(valueName);
       greekResultCollection.put(greek, (Double) greekResult);
     }
-    final GreekDataBundle dataBundle = new GreekDataBundle(greekResultCollection, null, new OptionTradeData(target.getPosition().getQuantity().doubleValue(), 25));
+    final GreekDataBundle dataBundle = new GreekDataBundle(greekResultCollection, null,
+        new OptionTradeData(target.getPosition().getQuantity().doubleValue(), 25));
     final Map<PositionGreek, Double> positionGreeks = _converter.evaluate(dataBundle);
-    final Set<ComputedValue> results = new HashSet<ComputedValue>();
+    final Set<ComputedValue> results = new HashSet<>();
     PositionGreek positionGreek;
     Double positionGreekResult;
     ValueSpecification resultSpecification;
@@ -79,7 +81,7 @@ public class OptionGreekToPositionGreekConverterFunction extends AbstractFunctio
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     for (final String valueName : AvailableGreeks.getAllGreekNames()) {
       requirements.add(new ValueRequirement(valueName, targetSpec));
@@ -89,7 +91,7 @@ public class OptionGreekToPositionGreekConverterFunction extends AbstractFunctio
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    final Set<ValueSpecification> results = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> results = new HashSet<>();
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final ValueProperties properties = createValueProperties().get();
     for (final String valueName : AvailablePositionGreeks.getAllPositionGreekNames()) {

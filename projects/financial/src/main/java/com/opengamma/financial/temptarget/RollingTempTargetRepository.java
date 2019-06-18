@@ -81,7 +81,7 @@ public abstract class RollingTempTargetRepository implements TempTargetRepositor
 
   private static final class HousekeepTask extends AbstractHousekeeper<RollingTempTargetRepository> {
 
-    public HousekeepTask(final RollingTempTargetRepository owner) {
+    HousekeepTask(final RollingTempTargetRepository owner) {
       super(owner);
     }
 
@@ -96,15 +96,14 @@ public abstract class RollingTempTargetRepository implements TempTargetRepositor
       final RollingTempTargetRepository target = getTarget();
       if (target != null) {
         return target.getTTLPeriodSeconds() / 3;
-      } else {
-        return 0;
       }
+      return 0;
     }
 
   }
 
   public void setTTLPeriodSeconds(final int period) {
-    _ttlPeriod = (long) period * 1000000000L;
+    _ttlPeriod = period * 1000000000L;
   }
 
   public int getTTLPeriodSeconds() {
@@ -113,27 +112,30 @@ public abstract class RollingTempTargetRepository implements TempTargetRepositor
 
   /**
    * Searches for a record in the "old" generation store.
-   * 
-   * @param uid the identifier to search for
+   *
+   * @param uid
+   *          the identifier to search for
    * @return the record or null if not found
    */
-  protected abstract TempTarget getOldGeneration(final long uid);
+  protected abstract TempTarget getOldGeneration(long uid);
 
   /**
    * Searches for a record in the "new" generation store.
-   * 
-   * @param uid the identifier to search for
+   *
+   * @param uid
+   *          the identifier to search for
    * @return the record or null if not found
    */
-  protected abstract TempTarget getNewGeneration(final long uid);
+  protected abstract TempTarget getNewGeneration(long uid);
 
   /**
    * Searches for a record in the "old" generation store.
-   * 
-   * @param target the record to search for, not null
+   *
+   * @param target
+   *          the record to search for, not null
    * @return the identifier of the record or null if not found
    */
-  protected abstract Long findOldGeneration(final TempTarget target);
+  protected abstract Long findOldGeneration(TempTarget target);
 
   protected long allocIdentifier() {
     return _nextNewIdentifier.getAndIncrement();
@@ -151,23 +153,28 @@ public abstract class RollingTempTargetRepository implements TempTargetRepositor
    * Searches for a record in the "new" generation store or adds one if none is present.
    * <p>
    * Any new record identifiers must be allocated by calling {@link #allocIdentifier}.
-   * 
-   * @param target the record to search for, not null
+   *
+   * @param target
+   *          the record to search for, not null
    * @return the identifier of the matched record, or the new record identifier
    */
-  protected abstract long findOrAddNewGeneration(final TempTarget target);
+  protected abstract long findOrAddNewGeneration(TempTarget target);
 
   /**
-   * Copies all "live" records from the "old" to the "new" generation. Anything not copied because it hasn't been accessed for a while should be written to the {@code deletes} list.
-   * 
-   * @param deadTime the {@link System#nanoTime} before which the record can be considered dead
-   * @param deletes the delete notification list. This will be used to update anything subscribed to the change manager.
+   * Copies all "live" records from the "old" to the "new" generation. Anything not copied because it hasn't been accessed for a while should be written to the
+   * {@code deletes} list.
+   *
+   * @param deadTime
+   *          the {@link System#nanoTime} before which the record can be considered dead
+   * @param deletes
+   *          the delete notification list. This will be used to update anything subscribed to the change manager.
    * @return true if the copy was done, false if there was no copy and the old generation must be kept (for example nothing would be discarded)
    */
-  protected abstract boolean copyOldToNewGeneration(final long deadTime, final List<Long> deletes);
+  protected abstract boolean copyOldToNewGeneration(long deadTime, List<Long> deletes);
 
   /**
-   * Rolls the storage from "new" to "old" generation. The previous "old" generation may be discarded and what was the "new" generation is now the "old" generation.
+   * Rolls the storage from "new" to "old" generation. The previous "old" generation may be discarded and what was the "new" generation is now the "old"
+   * generation.
    */
   protected abstract void nextGeneration();
 
@@ -177,7 +184,7 @@ public abstract class RollingTempTargetRepository implements TempTargetRepositor
    * This method may be called concurrently to the {@link TempTargetRepository} methods, but may only be called by a single thread.
    */
   protected void housekeep() {
-    final List<Long> deletes = new LinkedList<Long>();
+    final List<Long> deletes = new LinkedList<>();
     _shared.lock();
     try {
       LOGGER.info("Copying live objects to new generation");
@@ -233,9 +240,8 @@ public abstract class RollingTempTargetRepository implements TempTargetRepositor
     try {
       if (uid <= _lastOldIdentifier) {
         return getOldGeneration(uid);
-      } else {
-        return getNewGeneration(uid);
       }
+      return getNewGeneration(uid);
     } finally {
       _shared.unlock();
     }

@@ -36,7 +36,7 @@ import net.sf.ehcache.CacheManager;
 /**
  * Test.
  */
-@Test(groups = {TestGroup.INTEGRATION, "ehcache"})  // this fails randomly
+@Test(groups = { TestGroup.INTEGRATION, "ehcache" }) // this fails randomly
 public class HistoricalTimeSeriesSourceTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalTimeSeriesSourceTest.class);
@@ -90,22 +90,20 @@ public class HistoricalTimeSeriesSourceTest {
   }
 
   private ExternalIdBundle makeBundle() {
-    return ExternalIdBundle.of(ExternalSchemes.bloombergTickerSecurityId(makeUniqueRandomId()),
-                                ExternalSchemes.bloombergBuidSecurityId(makeUniqueRandomId()));
+    return ExternalIdBundle.of(ExternalSchemes.bloombergTickerSecurityId(makeUniqueRandomId()), ExternalSchemes.bloombergBuidSecurityId(makeUniqueRandomId()));
   }
 
   /**
-   * Generates 100 id bundles, and for each one generates a random time series for every combination
-   * of data source, data provider and field. Inserts each time series in a structured map and also
-   * in a mock hts source, and checks that the contents of the map and the mock tally.
-   * @return  the populated mock hts source and the set of generated id bundles.
+   * Generates 100 id bundles, and for each one generates a random time series for every combination of data source, data provider and field. Inserts each time
+   * series in a structured map and also in a mock hts source, and checks that the contents of the map and the mock tally.
+   * 
+   * @return the populated mock hts source and the set of generated id bundles.
    */
   private Pair<HistoricalTimeSeriesSource, Set<ExternalIdBundle>> buildAndTestInMemoryProvider() {
     final MockHistoricalTimeSeriesSource inMemoryHistoricalSource = new MockHistoricalTimeSeriesSource();
 
     // create map: Id bundle -> data source -> data provider -> field -> time series
-    final Map<ExternalIdBundle, Map<String, Map<String, Map<String, LocalDateDoubleTimeSeries>>>> map =
-        new HashMap<>();
+    final Map<ExternalIdBundle, Map<String, Map<String, Map<String, LocalDateDoubleTimeSeries>>>> map = new HashMap<>();
     for (int i = 0; i < 100; i++) {
       final ExternalIdBundle ids = makeBundle();
       Map<String, Map<String, Map<String, LocalDateDoubleTimeSeries>>> dsidsSubMap = map.get(ids);
@@ -113,19 +111,19 @@ public class HistoricalTimeSeriesSourceTest {
         dsidsSubMap = new HashMap<>();
         map.put(ids, dsidsSubMap);
       }
-      for (final String dataSource : new String[] {"BLOOMBERG", "REUTERS", "JPM"}) {
+      for (final String dataSource : new String[] { "BLOOMBERG", "REUTERS", "JPM" }) {
         Map<String, Map<String, LocalDateDoubleTimeSeries>> dataSourceSubMap = dsidsSubMap.get(dataSource);
         if (dataSourceSubMap == null) {
           dataSourceSubMap = new HashMap<>();
           dsidsSubMap.put(dataSource, dataSourceSubMap);
         }
-        for (final String dataProvider : new String[] {"UNKNOWN", "CMPL", "CMPT"}) {
+        for (final String dataProvider : new String[] { "UNKNOWN", "CMPL", "CMPT" }) {
           Map<String, LocalDateDoubleTimeSeries> dataProviderSubMap = dataSourceSubMap.get(dataProvider);
           if (dataProviderSubMap == null) {
             dataProviderSubMap = new HashMap<>();
             dataSourceSubMap.put(dataProvider, dataProviderSubMap);
           }
-          for (final String field : new String[] {"PX_LAST", "VOLUME"}) {
+          for (final String field : new String[] { "PX_LAST", "VOLUME" }) {
             final LocalDateDoubleTimeSeries randomTimeSeries = randomTimeSeries();
 
             // Insert generated time series in map
@@ -140,9 +138,9 @@ public class HistoricalTimeSeriesSourceTest {
 
     // assert consistency between map and mock source (both by unique id and by source/provider/field) for each generated entry
     for (final ExternalIdBundle dsids : map.keySet()) {
-      for (final String dataSource : new String[] {"BLOOMBERG", "REUTERS", "JPM"}) {
-        for (final String dataProvider : new String[] {"UNKNOWN", "CMPL", "CMPT"}) {
-          for (final String field : new String[] {"PX_LAST", "VOLUME"}) {
+      for (final String dataSource : new String[] { "BLOOMBERG", "REUTERS", "JPM" }) {
+        for (final String dataProvider : new String[] { "UNKNOWN", "CMPL", "CMPT" }) {
+          for (final String field : new String[] { "PX_LAST", "VOLUME" }) {
             final LocalDateDoubleTimeSeries expectedTS = map.get(dsids).get(dataSource).get(dataProvider).get(field);
             final HistoricalTimeSeries hts = inMemoryHistoricalSource.getHistoricalTimeSeries(dsids, dataSource, dataProvider, field);
             assertEquals(expectedTS, hts.getTimeSeries());
@@ -154,11 +152,17 @@ public class HistoricalTimeSeriesSourceTest {
     return Pairs.of((HistoricalTimeSeriesSource) inMemoryHistoricalSource, map.keySet());
   }
 
+  /**
+   *
+   */
   public void testInMemoryProvider() {
     buildAndTestInMemoryProvider();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   public void testEHCachingHistoricalTimeSeriesSource() {
     final CacheManager cacheManager = EHCacheUtils.createTestCacheManager(HistoricalTimeSeriesSourceTest.class);
     doTestCaching(cacheManager);
@@ -177,9 +181,9 @@ public class HistoricalTimeSeriesSourceTest {
     final Set<ExternalIdBundle> identifiers = providerAndDsids.getSecond();
     final ExternalIdBundle[] dsids = identifiers.toArray(new ExternalIdBundle[] {});
 
-    final String[] dataSources = new String[] {"BLOOMBERG", "REUTERS", "JPM"};
-    final String[] dataProviders = new String[] {"UNKNOWN", "CMPL", "CMPT"};
-    final String[] fields = new String[] {"PX_LAST", "VOLUME"};
+    final String[] dataSources = new String[] { "BLOOMBERG", "REUTERS", "JPM" };
+    final String[] dataProviders = new String[] { "UNKNOWN", "CMPL", "CMPT" };
+    final String[] fields = new String[] { "PX_LAST", "VOLUME" };
 
     for (int i = 0; i < 10000; i++) {
       // Randomly generate query parameters
@@ -196,80 +200,53 @@ public class HistoricalTimeSeriesSourceTest {
       final Integer maxPoints = Math.random() > 0.5 ? random(356 * 5) : null;
 
       // Fetch series/sub-series directly from in-memory mock source
-      final HistoricalTimeSeries inMemSeries =
-          startDate == null && endDate == null && maxPoints == null
-            ? inMemoryHistoricalSource.getHistoricalTimeSeries(ids, dataSource, dataProvider, field)
-            : maxPoints == null
-              ? inMemoryHistoricalSource.getHistoricalTimeSeries(ids, dataSource, dataProvider, field,
-                                                                 startDate, includeStart, endDate, includeEnd)
-              : inMemoryHistoricalSource.getHistoricalTimeSeries(ids, dataSource, dataProvider, field,
-                                                                 startDate, includeStart, endDate, includeEnd, maxPoints);
+      final HistoricalTimeSeries inMemSeries = startDate == null && endDate == null && maxPoints == null
+          ? inMemoryHistoricalSource.getHistoricalTimeSeries(ids, dataSource, dataProvider, field)
+          : maxPoints == null
+              ? inMemoryHistoricalSource.getHistoricalTimeSeries(ids, dataSource, dataProvider, field, startDate, includeStart, endDate, includeEnd)
+              : inMemoryHistoricalSource.getHistoricalTimeSeries(ids, dataSource, dataProvider, field, startDate, includeStart, endDate, includeEnd, maxPoints);
 
       // Fetch latest data point directly from in-memory mock source
-      final Pair<LocalDate, Double> inMemLatest =
-          startDate == null && endDate == null
-            ? inMemoryHistoricalSource.getLatestDataPoint(ids, dataSource, dataProvider, field)
-            : inMemoryHistoricalSource.getLatestDataPoint(ids, dataSource, dataProvider, field,
-                                                          startDate, includeStart, endDate, includeEnd);
+      final Pair<LocalDate, Double> inMemLatest = startDate == null && endDate == null
+          ? inMemoryHistoricalSource.getLatestDataPoint(ids, dataSource, dataProvider, field)
+          : inMemoryHistoricalSource.getLatestDataPoint(ids, dataSource, dataProvider, field, startDate, includeStart, endDate, includeEnd);
 
       // Compare latest data point with cached by externalid/source/provider/field
-      assertEquals(inMemLatest, startDate == null && endDate == null
-                                  ? cachedProvider.getLatestDataPoint(ids, dataSource, dataProvider, field)
-                                  : cachedProvider.getLatestDataPoint(ids, dataSource, dataProvider, field,
-                                                                      startDate, includeStart, endDate, includeEnd));
+      assertEquals(inMemLatest, startDate == null && endDate == null ? cachedProvider.getLatestDataPoint(ids, dataSource, dataProvider, field)
+          : cachedProvider.getLatestDataPoint(ids, dataSource, dataProvider, field, startDate, includeStart, endDate, includeEnd));
 
       // Compare latest data point with cached by uniqueId
-      assertEquals(inMemLatest, startDate == null && endDate == null
-          ? cachedProvider.getLatestDataPoint(inMemSeries.getUniqueId())
-          : cachedProvider.getLatestDataPoint(inMemSeries.getUniqueId(),
-                                              startDate, includeStart, endDate, includeEnd));
+      assertEquals(inMemLatest, startDate == null && endDate == null ? cachedProvider.getLatestDataPoint(inMemSeries.getUniqueId())
+          : cachedProvider.getLatestDataPoint(inMemSeries.getUniqueId(), startDate, includeStart, endDate, includeEnd));
 
       // Select a testing order randomly (order might affect cache patterns)
       if (Math.random() > 0.5) {
 
         // First compare series/sub-series with cached by externalid/source/provider/field
-        HistoricalTimeSeries cachedSeries =
-            startDate == null && endDate == null && maxPoints == null
+        HistoricalTimeSeries cachedSeries = startDate == null && endDate == null && maxPoints == null
             ? cachedProvider.getHistoricalTimeSeries(ids, dataSource, dataProvider, field)
-            : maxPoints == null
-              ? cachedProvider.getHistoricalTimeSeries(ids, dataSource, dataProvider, field,
-                                                       startDate, includeStart, endDate, includeEnd)
-              : cachedProvider.getHistoricalTimeSeries(ids, dataSource, dataProvider, field,
-                                                       startDate, includeStart, endDate, includeEnd, maxPoints);
+            : maxPoints == null ? cachedProvider.getHistoricalTimeSeries(ids, dataSource, dataProvider, field, startDate, includeStart, endDate, includeEnd)
+                : cachedProvider.getHistoricalTimeSeries(ids, dataSource, dataProvider, field, startDate, includeStart, endDate, includeEnd, maxPoints);
         assertEquals(inMemSeries, cachedSeries);
 
         // Then compare series/sub-series with cached by UniqueId
-        cachedSeries =
-            startDate == null && endDate == null && maxPoints == null
-            ? cachedProvider.getHistoricalTimeSeries(cachedSeries.getUniqueId())
-            : maxPoints == null
-              ? cachedProvider.getHistoricalTimeSeries(inMemSeries.getUniqueId(),
-                                                       startDate, includeStart, endDate, includeEnd)
-              : cachedProvider.getHistoricalTimeSeries(inMemSeries.getUniqueId(),
-                                                       startDate, includeStart, endDate, includeEnd, maxPoints);
+        cachedSeries = startDate == null && endDate == null && maxPoints == null ? cachedProvider.getHistoricalTimeSeries(cachedSeries.getUniqueId())
+            : maxPoints == null ? cachedProvider.getHistoricalTimeSeries(inMemSeries.getUniqueId(), startDate, includeStart, endDate, includeEnd)
+                : cachedProvider.getHistoricalTimeSeries(inMemSeries.getUniqueId(), startDate, includeStart, endDate, includeEnd, maxPoints);
         assertEquals(inMemSeries, cachedSeries);
 
       } else {
         // First compare series/sub-series with cached by UniqueId
-        HistoricalTimeSeries cachedSeries =
-            startDate == null && endDate == null && maxPoints == null
+        HistoricalTimeSeries cachedSeries = startDate == null && endDate == null && maxPoints == null
             ? cachedProvider.getHistoricalTimeSeries(inMemSeries.getUniqueId())
-            : maxPoints == null
-              ? cachedProvider.getHistoricalTimeSeries(inMemSeries.getUniqueId(),
-                                                       startDate, includeStart, endDate, includeEnd)
-              : cachedProvider.getHistoricalTimeSeries(inMemSeries.getUniqueId(),
-                                                       startDate, includeStart, endDate, includeEnd, maxPoints);
+            : maxPoints == null ? cachedProvider.getHistoricalTimeSeries(inMemSeries.getUniqueId(), startDate, includeStart, endDate, includeEnd)
+                : cachedProvider.getHistoricalTimeSeries(inMemSeries.getUniqueId(), startDate, includeStart, endDate, includeEnd, maxPoints);
         assertEquals(inMemSeries, cachedSeries);
 
         // Then compare series/sub-series with cached by externalid/source/provider/field
-        cachedSeries =
-            startDate == null && endDate == null && maxPoints == null
-            ? cachedProvider.getHistoricalTimeSeries(ids, dataSource, dataProvider, field)
-            : maxPoints == null
-              ? cachedProvider.getHistoricalTimeSeries(ids, dataSource, dataProvider, field,
-                                                       startDate, includeStart, endDate, includeEnd)
-              : cachedProvider.getHistoricalTimeSeries(ids, dataSource, dataProvider, field,
-                                                       startDate, includeStart, endDate, includeEnd, maxPoints);
+        cachedSeries = startDate == null && endDate == null && maxPoints == null ? cachedProvider.getHistoricalTimeSeries(ids, dataSource, dataProvider, field)
+            : maxPoints == null ? cachedProvider.getHistoricalTimeSeries(ids, dataSource, dataProvider, field, startDate, includeStart, endDate, includeEnd)
+                : cachedProvider.getHistoricalTimeSeries(ids, dataSource, dataProvider, field, startDate, includeStart, endDate, includeEnd, maxPoints);
         assertEquals(inMemSeries, cachedSeries);
       }
 

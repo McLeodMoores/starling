@@ -43,12 +43,16 @@ import com.opengamma.util.tuple.Triple;
    * <p>
    * The {@code resolvedOutput} parameter must be normalized.
    *
-   * @param task the resolve task this step is part of, not null
-   * @param base the superclass data, not null
-   * @param resolved the resolved function information, not null
-   * @param resolvedOutput the provisional resolved value specification, not null
+   * @param task
+   *          the resolve task this step is part of, not null
+   * @param base
+   *          the superclass data, not null
+   * @param resolved
+   *          the resolved function information, not null
+   * @param resolvedOutput
+   *          the provisional resolved value specification, not null
    */
-  public FunctionApplicationStep(final ResolveTask task, final FunctionIterationStep.IterationBaseStep base,
+  FunctionApplicationStep(final ResolveTask task, final FunctionIterationStep.IterationBaseStep base,
       final Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> resolved, final ValueSpecification resolvedOutput) {
     super(task, base);
     _resolved = resolved;
@@ -84,7 +88,7 @@ import com.opengamma.util.tuple.Triple;
 
     private ResolutionPump _pump;
 
-    public DelegateState(final ResolveTask task, final FunctionIterationStep.IterationBaseStep base) {
+    DelegateState(final ResolveTask task, final FunctionIterationStep.IterationBaseStep base) {
       super(task, base);
     }
 
@@ -227,11 +231,11 @@ import com.opengamma.util.tuple.Triple;
       ValueSpecification resolvedOutput = getValueSpecification();
       Set<ValueSpecification> newOutputValues = null;
       try {
-        //DebugUtils.getResults2_enter();
+        // DebugUtils.getResults2_enter();
         newOutputValues = getFunction().getFunction().getResults(context.getCompilationContext(), getComputationTarget(context), inputs);
-        //DebugUtils.getResults2_leave();
+        // DebugUtils.getResults2_leave();
       } catch (final Throwable t) {
-        //DebugUtils.getResults2_leave();
+        // DebugUtils.getResults2_leave();
         LOGGER.warn("Exception thrown by getResults", t);
         context.exception(t);
       }
@@ -270,9 +274,8 @@ import com.opengamma.util.tuple.Triple;
         }
         if (!pushResult(context, reduced, false)) {
           return produceSubstitute(context, inputs, resolvedOutput, resolvedOutputValues);
-        } else {
-          return true;
         }
+        return true;
       }
       // TODO: only use an aggregate object if there is more than one producer; otherwise use the producer directly
       final AggregateResolvedValueProducer aggregate = new AggregateResolvedValueProducer(getValueRequirement());
@@ -308,10 +311,14 @@ import com.opengamma.util.tuple.Triple;
      * <p>
      * The {@code resolvedOutput} value specification must be a normalized/canonical form.
      *
-     * @param context the graph builder context, not null
-     * @param inputs the resolved inputs and the requirements they satisfy, not null
-     * @param resolvedOutput the new resolved output as it should appear from the substitute, not null
-     * @param resolvedOutputs the full set of resolved outputs, not null
+     * @param context
+     *          the graph builder context, not null
+     * @param inputs
+     *          the resolved inputs and the requirements they satisfy, not null
+     * @param resolvedOutput
+     *          the new resolved output as it should appear from the substitute, not null
+     * @param resolvedOutputs
+     *          the full set of resolved outputs, not null
      */
     private boolean produceSubstitute(final GraphBuildingContext context, final Map<ValueSpecification, ValueRequirement> inputs,
         final ValueSpecification resolvedOutput, final Set<ValueSpecification> resolvedOutputs) {
@@ -327,21 +334,20 @@ import com.opengamma.util.tuple.Triple;
         final boolean result = getAdditionalRequirementsAndPushResults(context, newWorker, inputs, resolvedOutput, resolvedOutputs, false);
         newWorker.release(context);
         return result;
-      } else {
-        newWorker.release(context);
-        // An equivalent task is producing the revised value specification
-        final ResolutionSubstituteDelegate delegate = new ResolutionSubstituteDelegate(getTask()) {
-          @Override
-          protected void failedImpl(final GraphBuildingContext context) {
-            getWorker().pumpImpl(context);
-          }
-        };
-        if (setTaskState(delegate)) {
-          producer.addCallback(context, delegate);
-        }
-        producer.release(context);
-        return true;
       }
+      newWorker.release(context);
+      // An equivalent task is producing the revised value specification
+      final ResolutionSubstituteDelegate delegate = new ResolutionSubstituteDelegate(getTask()) {
+        @Override
+        protected void failedImpl(final GraphBuildingContext context) {
+          getWorker().pumpImpl(context);
+        }
+      };
+      if (setTaskState(delegate)) {
+        producer.addCallback(context, delegate);
+      }
+      producer.release(context);
+      return true;
     }
 
     private abstract class ResolutionSubstituteDelegate extends State implements ResolvedValueCallback {
@@ -362,7 +368,7 @@ import com.opengamma.util.tuple.Triple;
         failedImpl(context);
       }
 
-      protected abstract void failedImpl(final GraphBuildingContext context);
+      protected abstract void failedImpl(GraphBuildingContext context);
 
       @Override
       public final void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue,
@@ -455,12 +461,18 @@ import com.opengamma.util.tuple.Triple;
      * <p>
      * The {@code resolvedOutput} specification must be a normalized/canonical form.
      *
-     * @param context the graph building context, not null
-     * @param substituteWorker the alternative worker, if the late resolution was different to the provisional resolution
-     * @param inputs the function inputs and the requirements they resolved, not null and not containing null
-     * @param resolvedOutput the resolved value specification, as it will appear in the dependency graph, not null
-     * @param resolvedOutputs the function outputs as they will appear in the dependency graph, not null and not containing null
-     * @param lastWorkerResult true if this is known to be the last result, otherwise false
+     * @param context
+     *          the graph building context, not null
+     * @param substituteWorker
+     *          the alternative worker, if the late resolution was different to the provisional resolution
+     * @param inputs
+     *          the function inputs and the requirements they resolved, not null and not containing null
+     * @param resolvedOutput
+     *          the resolved value specification, as it will appear in the dependency graph, not null
+     * @param resolvedOutputs
+     *          the function outputs as they will appear in the dependency graph, not null and not containing null
+     * @param lastWorkerResult
+     *          true if this is known to be the last result, otherwise false
      */
     private boolean getAdditionalRequirementsAndPushResults(final GraphBuildingContext context, final FunctionApplicationWorker substituteWorker,
         final Map<ValueSpecification, ValueRequirement> inputs, final ValueSpecification resolvedOutput,
@@ -469,12 +481,12 @@ import com.opengamma.util.tuple.Triple;
       final ComputationTarget target = getComputationTarget(context);
       Set<ValueRequirement> additionalRequirements = null;
       try {
-        //DebugUtils.getAdditionalRequirements_enter();
+        // DebugUtils.getAdditionalRequirements_enter();
         additionalRequirements = getFunction().getFunction().getAdditionalRequirements(context.getCompilationContext(), target,
             inputs.keySet(), resolvedOutputs);
-        //DebugUtils.getAdditionalRequirements_leave();
+        // DebugUtils.getAdditionalRequirements_leave();
       } catch (final Throwable t) {
-        //DebugUtils.getAdditionalRequirements_leave();
+        // DebugUtils.getAdditionalRequirements_leave();
         LOGGER.warn("Exception thrown by getAdditionalRequirements", t);
         context.exception(t);
       }
@@ -576,9 +588,8 @@ import com.opengamma.util.tuple.Triple;
       if (lock.decrementAndGet() == 0) {
         LOGGER.debug("Additional requirements complete");
         return pushResult(context, substituteWorker, inputs, resolvedOutput, resolvedOutputs, lastWorkerResult);
-      } else {
-        return true;
       }
+      return true;
     }
 
     /**
@@ -586,12 +597,18 @@ import com.opengamma.util.tuple.Triple;
      * <p>
      * The {@code resolvedOutput} specification must be a normalized/canonical form.
      *
-     * @param context the graph building context, not null
-     * @param substituteWorker the alternative worker, if the late resolution was different to the provisional resolution
-     * @param inputs the function inputs and the requirements they resolved, not null and not containing null
-     * @param resolvedOutput the resolved value specification, as it will appear in the dependency graph, not null
-     * @param resolvedOutputs the function outputs as they will appear in the dependency graph, not null and not containing null
-     * @param lastWorkerResult true if this is known to be the last result, otherwise false
+     * @param context
+     *          the graph building context, not null
+     * @param substituteWorker
+     *          the alternative worker, if the late resolution was different to the provisional resolution
+     * @param inputs
+     *          the function inputs and the requirements they resolved, not null and not containing null
+     * @param resolvedOutput
+     *          the resolved value specification, as it will appear in the dependency graph, not null
+     * @param resolvedOutputs
+     *          the function outputs as they will appear in the dependency graph, not null and not containing null
+     * @param lastWorkerResult
+     *          true if this is known to be the last result, otherwise false
      */
     private boolean pushResult(final GraphBuildingContext context, final FunctionApplicationWorker substituteWorker,
         final Map<ValueSpecification, ValueRequirement> inputs,
@@ -667,11 +684,11 @@ import com.opengamma.util.tuple.Triple;
       final ComputationTarget target = getComputationTarget(context);
       Set<ValueRequirement> inputRequirements = null;
       try {
-        //DebugUtils.getRequirements_enter();
+        // DebugUtils.getRequirements_enter();
         inputRequirements = functionDefinition.getRequirements(context.getCompilationContext(), target, getIterationBase().getDesiredValue());
-        //DebugUtils.getRequirements_leave();
+        // DebugUtils.getRequirements_leave();
       } catch (final Throwable t) {
-        //DebugUtils.getRequirements_leave();
+        // DebugUtils.getRequirements_leave();
         LOGGER.warn("Exception thrown by getRequirements", t);
         context.exception(t);
       }
@@ -706,7 +723,7 @@ import com.opengamma.util.tuple.Triple;
         if (inputRequirements.isEmpty()) {
           LOGGER.debug("Function {} requires no inputs", functionDefinition);
           worker.setPumpingState(state, 0);
-          if (!state.inputsAvailable(context, Collections.<ValueSpecification, ValueRequirement>emptyMap(), true)) {
+          if (!state.inputsAvailable(context, Collections.<ValueSpecification, ValueRequirement> emptyMap(), true)) {
             context.discardTaskProducing(getResolvedOutput(), getTask());
             state.setRunnableTaskState(getIterationBase(), context);
             worker.finished(context);

@@ -37,7 +37,8 @@ import com.opengamma.util.money.MoneyCalculationUtils;
 public abstract class AbstractPositionPnLFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Position position = target.getPosition();
     BigDecimal currentSum = BigDecimal.ZERO;
     for (final Trade trade : position.getTrades()) {
@@ -45,7 +46,8 @@ public abstract class AbstractPositionPnLFunction extends AbstractFunction.NonCo
           ComputationTargetType.TRADE, trade.getUniqueId()));
       currentSum = MoneyCalculationUtils.add(currentSum, new BigDecimal(String.valueOf(tradeValue)));
     }
-    return Sets.newHashSet(new ComputedValue(new ValueSpecification(ValueRequirementNames.PNL, target.toSpecification(), createValueProperties(position).get()), currentSum.doubleValue()));
+    return Sets.newHashSet(new ComputedValue(new ValueSpecification(ValueRequirementNames.PNL, target.toSpecification(), createValueProperties(position).get()),
+        currentSum.doubleValue()));
   }
 
   @Override

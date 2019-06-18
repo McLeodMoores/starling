@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.curve;
@@ -44,8 +44,8 @@ public class FunctionalCurveShiftFunction implements CurveShiftFunction<Function
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public FunctionalDoublesCurve evaluate(final FunctionalDoublesCurve curve, final double x, final double shift) {
@@ -54,8 +54,8 @@ public class FunctionalCurveShiftFunction implements CurveShiftFunction<Function
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public FunctionalDoublesCurve evaluate(final FunctionalDoublesCurve curve, final double x, final double shift, final String newName) {
@@ -64,8 +64,8 @@ public class FunctionalCurveShiftFunction implements CurveShiftFunction<Function
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public FunctionalDoublesCurve evaluate(final FunctionalDoublesCurve curve, final double[] xShift, final double[] yShift) {
@@ -74,8 +74,8 @@ public class FunctionalCurveShiftFunction implements CurveShiftFunction<Function
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public FunctionalDoublesCurve evaluate(final FunctionalDoublesCurve curve, final double[] xShift, final double[] yShift, final String newName) {

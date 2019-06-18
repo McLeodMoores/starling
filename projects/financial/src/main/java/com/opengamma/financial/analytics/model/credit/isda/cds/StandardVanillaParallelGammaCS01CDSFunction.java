@@ -40,7 +40,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class StandardVanillaParallelGammaCS01CDSFunction extends StandardVanillaCS01CDSFunction {
   private static final CreditSpreadBumpersNew SPREAD_BUMPER = new CreditSpreadBumpersNew();
 
@@ -50,26 +52,29 @@ public class StandardVanillaParallelGammaCS01CDSFunction extends StandardVanilla
 
   @Override
   protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition,
-                                                final ISDACompliantYieldCurve yieldCurve,
-                                                final ZonedDateTime[] times,
-                                                final double[] marketSpreads,
-                                                final ZonedDateTime valuationDate,
-                                                final ComputationTarget target,
-                                                final ValueProperties properties,
-                                                final FunctionInputs inputs,
-                                                final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final Tenor[] tenors) {
+      final ISDACompliantYieldCurve yieldCurve,
+      final ZonedDateTime[] times,
+      final double[] marketSpreads,
+      final ZonedDateTime valuationDate,
+      final ComputationTarget target,
+      final ValueProperties properties,
+      final FunctionInputs inputs,
+      final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final Tenor[] tenors) {
     final Double spreadCurveBump = Double.valueOf(Iterables.getOnlyElement(properties.getValues(
         CreditInstrumentPropertyNamesAndValues.PROPERTY_SPREAD_CURVE_BUMP)));
-    final SpreadBumpType spreadBumpType = SpreadBumpType.valueOf(Iterables.getOnlyElement(properties.getValues(CreditInstrumentPropertyNamesAndValues.PROPERTY_SPREAD_BUMP_TYPE)));
-    //TODO: Pass this down
-    //final PriceType priceType = PriceType.valueOf(Iterables.getOnlyElement(properties.getValues(CreditInstrumentPropertyNamesAndValues.PROPERTY_CDS_PRICE_TYPE)));
+    final SpreadBumpType spreadBumpType = SpreadBumpType
+        .valueOf(Iterables.getOnlyElement(properties.getValues(CreditInstrumentPropertyNamesAndValues.PROPERTY_SPREAD_BUMP_TYPE)));
+    // TODO: Pass this down
+    // final PriceType priceType =
+    // PriceType.valueOf(Iterables.getOnlyElement(properties.getValues(CreditInstrumentPropertyNamesAndValues.PROPERTY_CDS_PRICE_TYPE)));
     final double gammaCS01 = parallelGammaCS01(definition, yieldCurve, hazardCurve, analytic, spreadCurveBump, spreadBumpType);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.GAMMA_CS01, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, gammaCS01));
   }
 
-  public static double parallelGammaCS01(final CreditDefaultSwapDefinition definition, final ISDACompliantYieldCurve yieldCurve, final ISDACompliantCreditCurve hazardCurve,
-                                   final CDSAnalytic analytic, final double spreadCurveBump, final SpreadBumpType spreadBumpType) {
+  public static double parallelGammaCS01(final CreditDefaultSwapDefinition definition, final ISDACompliantYieldCurve yieldCurve,
+      final ISDACompliantCreditCurve hazardCurve,
+      final CDSAnalytic analytic, final double spreadCurveBump, final SpreadBumpType spreadBumpType) {
     final double[] rates = hazardCurve.getKnotZeroRates();
     final double[] bumpedUpRates = SPREAD_BUMPER.getBumpedCreditSpreads(rates, spreadCurveBump * 1e-4, spreadBumpType);
     final double[] bumpedDownRates = SPREAD_BUMPER.getBumpedCreditSpreads(rates, -spreadCurveBump * 1e-4, spreadBumpType);
@@ -99,8 +104,8 @@ public class StandardVanillaParallelGammaCS01CDSFunction extends StandardVanilla
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final String spreadCurveName = security.accept(new CreditSecurityToIdentifierVisitor(OpenGammaCompilationContext.getSecuritySource(
         context))).getUniqueId().getValue();
-    //TODO shouldn't need all of the yield curve properties
-    final String hazardRateCurveCalculationMethod = "ISDA"; //Iterables.getOnlyElement(hazardRateCurveCalculationMethodNames);
+    // TODO shouldn't need all of the yield curve properties
+    final String hazardRateCurveCalculationMethod = "ISDA"; // Iterables.getOnlyElement(hazardRateCurveCalculationMethodNames);
     final String yieldCurveName = desiredValue.getConstraint(PROPERTY_YIELD_CURVE);
     final String yieldCurveCalculationConfig = desiredValue.getConstraint(PROPERTY_YIELD_CURVE_CALCULATION_CONFIG);
     final String yieldCurveCalculationMethod = desiredValue.getConstraint(PROPERTY_YIELD_CURVE_CALCULATION_METHOD);
@@ -115,7 +120,8 @@ public class StandardVanillaParallelGammaCS01CDSFunction extends StandardVanilla
     if (creditSpreadCurveShifts != null) {
       hazardRateCurveProperties.with(PROPERTY_SPREAD_CURVE_SHIFT, creditSpreadCurveShifts).with(PROPERTY_SPREAD_CURVE_SHIFT_TYPE, creditSpreadCurveShiftTypes);
     }
-    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(), hazardRateCurveProperties.get());
+    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(),
+        hazardRateCurveProperties.get());
     requirements.add(hazardRateCurveRequirement);
     return requirements;
   }

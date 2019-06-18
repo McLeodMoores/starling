@@ -22,8 +22,10 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a
+ *             {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class NOConventions {
 
   public static void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {

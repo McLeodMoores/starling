@@ -29,7 +29,7 @@ import com.opengamma.masterdb.security.hibernate.swap.NotionalBeanOperation;
 public final class StdVanillaCDSSecurityBeanOperation extends AbstractSecurityBeanOperation<StandardVanillaCDSSecurity, StandardVanillaCDSSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final StdVanillaCDSSecurityBeanOperation INSTANCE = new StdVanillaCDSSecurityBeanOperation();
 
@@ -38,7 +38,8 @@ public final class StdVanillaCDSSecurityBeanOperation extends AbstractSecurityBe
   }
 
   @Override
-  public StandardVanillaCDSSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final StandardVanillaCDSSecurity security) {
+  public StandardVanillaCDSSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final StandardVanillaCDSSecurity security) {
     final StandardVanillaCDSSecurityBean bean = new StandardVanillaCDSSecurityBean();
     CreditDefaultSwapBeanOperation.createBean(secMasterSession, bean, security);
     bean.setQuotedSpread(security.getQuotedSpread());

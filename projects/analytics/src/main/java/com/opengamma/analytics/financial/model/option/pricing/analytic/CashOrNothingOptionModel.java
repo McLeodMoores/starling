@@ -14,22 +14,8 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * Class for pricing cash-or-nothing options (see {@link com.opengamma.analytics.financial.model.option.definition.CashOrNothingOptionDefinition}).
- * <p>
- * The price is calculated using the Reiner-Rubenstein formula:
- * $$
- * \begin{align*}
- * c &= K e^{-rT}N(d)\\
- * p &= K e^{-rT}N(-d)
- * \end{align*}
- * $$
- * where
- * $$
- * \begin{align*}
- * d = \frac{\ln{\frac{S}{K}} + (b - \frac{\sigma^2}{2})T}{\sigma\sqrt{T}}
- * \end{align*}
- * $$
- * 
+ * Class for pricing cash-or-nothing options (see {@link com.opengamma.analytics.financial.model.option.definition.CashOrNothingOptionDefinition}). The price is
+ * calculated using the Reiner-Rubenstein formula.
  */
 public class CashOrNothingOptionModel extends AnalyticOptionModel<CashOrNothingOptionDefinition, StandardOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);

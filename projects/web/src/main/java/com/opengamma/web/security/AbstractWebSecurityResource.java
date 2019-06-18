@@ -47,15 +47,15 @@ public abstract class AbstractWebSecurityResource
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractWebSecurityResource.class);
   /**
-   * Security XML parameter name
+   * Security XML parameter name.
    */
   protected static final String SECURITY_XML = "securityXml";
   /**
-   * HTML ftl directory
+   * HTML ftl directory.
    */
   protected static final String HTML_DIR = "securities/html/";
   /**
-   * JSON ftl directory
+   * JSON ftl directory.
    */
   protected static final String JSON_DIR = "securities/json/";
   /**
@@ -66,10 +66,14 @@ public abstract class AbstractWebSecurityResource
   /**
    * Creates the resource.
    *
-   * @param securityMaster  the security master, not null
-   * @param securityLoader  the security loader, not null
-   * @param htsMaster  the historical time series master, not null
-   * @param legalEntityMaster the organization master, not null
+   * @param securityMaster
+   *          the security master, not null
+   * @param securityLoader
+   *          the security loader, not null
+   * @param htsMaster
+   *          the historical time series master, not null
+   * @param legalEntityMaster
+   *          the organization master, not null
    */
   protected AbstractWebSecurityResource(final SecurityMaster securityMaster, final SecurityLoader securityLoader, final HistoricalTimeSeriesMaster htsMaster,
       final LegalEntityMaster legalEntityMaster) {
@@ -88,15 +92,17 @@ public abstract class AbstractWebSecurityResource
   /**
    * Creates the resource.
    *
-   * @param parent  the parent resource, not null
+   * @param parent
+   *          the parent resource, not null
    */
   protected AbstractWebSecurityResource(final AbstractWebSecurityResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   *
    * @return the output root data, not null
    */
   @Override
@@ -106,7 +112,7 @@ public abstract class AbstractWebSecurityResource
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the security template provider.
    *
@@ -130,8 +136,7 @@ public abstract class AbstractWebSecurityResource
         final RawSecurity underlyingRawSecurity = (RawSecurity) getSecurity(securityEntryData.getFactorSetId(), data().getSecurityMaster());
         if (underlyingRawSecurity != null) {
           final FudgeMsgEnvelope factorIdMsg = OpenGammaFudgeContext.getInstance().deserialize(underlyingRawSecurity.getRawData());
-          final
-          List<FactorExposureData> factorExposureDataList = OpenGammaFudgeContext.getInstance().fromFudgeMsg(List.class, factorIdMsg.getMessage());
+          final List<FactorExposureData> factorExposureDataList = OpenGammaFudgeContext.getInstance().fromFudgeMsg(List.class, factorIdMsg.getMessage());
           LOGGER.error(factorExposureDataList.toString());
           final List<FactorExposure> factorExposuresList = convertToFactorExposure(factorExposureDataList);
           out.put("factorExposuresList", factorExposuresList);
@@ -143,9 +148,7 @@ public abstract class AbstractWebSecurityResource
       if (security.getSecurityType().equals(FactorExposureData.EXTERNAL_SENSITIVITIES_RISK_FACTORS_SECURITY_TYPE)) {
         final RawSecurity rawSecurity = (RawSecurity) security;
         final FudgeMsgEnvelope msg = OpenGammaFudgeContext.getInstance().deserialize(rawSecurity.getRawData());
-        @SuppressWarnings("unchecked")
-        final
-        List<FactorExposureData> factorExposureDataList = OpenGammaFudgeContext.getInstance().fromFudgeMsg(List.class, msg.getMessage());
+        final List<FactorExposureData> factorExposureDataList = OpenGammaFudgeContext.getInstance().fromFudgeMsg(List.class, msg.getMessage());
         final List<FactorExposure> factorExposuresList = convertToFactorExposure(factorExposureDataList);
         out.put("factorExposuresList", factorExposuresList);
       }
@@ -171,7 +174,8 @@ public abstract class AbstractWebSecurityResource
       final HistoricalTimeSeriesInfoSearchResult exposureSearchResult = data().getHistoricalTimeSeriesMaster().search(exposureSearchRequest);
       HistoricalTimeSeries exposureHTS = null;
       if (exposureSearchResult.getFirstInfo() != null) {
-        exposureHTS = data().getHistoricalTimeSeriesMaster().getTimeSeries(exposureSearchResult.getFirstInfo().getTimeSeriesObjectId(), VersionCorrection.LATEST);
+        exposureHTS = data().getHistoricalTimeSeriesMaster().getTimeSeries(exposureSearchResult.getFirstInfo().getTimeSeriesObjectId(),
+            VersionCorrection.LATEST);
       }
 
       final HistoricalTimeSeriesInfoSearchRequest convexitySearchRequest = new HistoricalTimeSeriesInfoSearchRequest();
@@ -180,7 +184,8 @@ public abstract class AbstractWebSecurityResource
       final HistoricalTimeSeriesInfoSearchResult convexitySearchResult = data().getHistoricalTimeSeriesMaster().search(convexitySearchRequest);
       HistoricalTimeSeries convexityHTS = null;
       if (convexitySearchResult.getFirstInfo() != null) {
-        convexityHTS = data().getHistoricalTimeSeriesMaster().getTimeSeries(convexitySearchResult.getFirstInfo().getTimeSeriesObjectId(), VersionCorrection.LATEST);
+        convexityHTS = data().getHistoricalTimeSeriesMaster().getTimeSeries(convexitySearchResult.getFirstInfo().getTimeSeriesObjectId(),
+            VersionCorrection.LATEST);
       }
 
       final HistoricalTimeSeriesInfoSearchRequest priceSearchRequest = new HistoricalTimeSeriesInfoSearchRequest();
@@ -193,14 +198,14 @@ public abstract class AbstractWebSecurityResource
       }
 
       results.add(new FactorExposure(exposure.getFactorType().getFactorType(),
-        exposure.getFactorName(),
-        exposure.getNode(),
-        priceHTS != null ? priceHTS.getUniqueId() : null,
-        priceHTS != null ? priceHTS.getTimeSeries().getLatestValue() : null,
-        exposureHTS != null ? exposureHTS.getUniqueId() : null,
-        exposureHTS != null ? exposureHTS.getTimeSeries().getLatestValue() : null,
-        convexityHTS != null ? convexityHTS.getUniqueId() : null,
-        convexityHTS != null ? convexityHTS.getTimeSeries().getLatestValue() : null));
+          exposure.getFactorName(),
+          exposure.getNode(),
+          priceHTS != null ? priceHTS.getUniqueId() : null,
+          priceHTS != null ? priceHTS.getTimeSeries().getLatestValue() : null,
+          exposureHTS != null ? exposureHTS.getUniqueId() : null,
+          exposureHTS != null ? exposureHTS.getTimeSeries().getLatestValue() : null,
+          convexityHTS != null ? convexityHTS.getUniqueId() : null,
+          convexityHTS != null ? convexityHTS.getTimeSeries().getLatestValue() : null));
     }
     return results;
   }
@@ -220,9 +225,9 @@ public abstract class AbstractWebSecurityResource
     private final Double _lastConvexity;
 
     public FactorExposure(final String factorType, final String factorName, final String node,
-                          final UniqueId priceTsId, final Double lastPrice,
-                          final UniqueId exposureTsId, final Double lastExposure,
-                          final UniqueId convexityTsId, final Double lastConvexity) {
+        final UniqueId priceTsId, final Double lastPrice,
+        final UniqueId exposureTsId, final Double lastExposure,
+        final UniqueId convexityTsId, final Double lastConvexity) {
       _factorType = factorType;
       _factorName = factorName;
       _node = node;

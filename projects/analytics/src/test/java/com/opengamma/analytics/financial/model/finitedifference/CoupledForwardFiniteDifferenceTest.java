@@ -54,7 +54,7 @@ public class CoupledForwardFiniteDifferenceTest {
   static {
 
     final Function1D<Double, Double> strikeZeroPrice1 = new Function1D<Double, Double>() {
-      @SuppressWarnings({"synthetic-access", "unused" })
+      @SuppressWarnings({"synthetic-access" })
       @Override
       public Double evaluate(final Double t) {
         if (ISCALL) {
@@ -65,7 +65,7 @@ public class CoupledForwardFiniteDifferenceTest {
     };
 
     final Function1D<Double, Double> strikeZeroPrice2 = new Function1D<Double, Double>() {
-      @SuppressWarnings({"synthetic-access", "unused" })
+      @SuppressWarnings({"synthetic-access" })
       @Override
       public Double evaluate(final Double t) {
         if (ISCALL) {

@@ -155,8 +155,8 @@ public class CouponInflationZeroCouponInterpolationDiscountingMethodTest {
     final double notional = 100000000;
     final ZonedDateTime settleDate = ScheduleCalculator.getAdjustedDate(PRICING_DATE, USDLIBOR3M.getSpotLag(), CALENDAR_USD);
     final ZonedDateTime paymentDate = ScheduleCalculator.getAdjustedDate(settleDate, Period.ofYears(tenorYear), BUSINESS_DAY, CALENDAR_USD, USDLIBOR3M.isEndOfMonth());
-    final double weightSettle = 1.0 - (settleDate.getDayOfMonth() - 1.0) / settleDate.toLocalDate().lengthOfMonth();
-    final double indexStart = weightSettle * 225.964 + (1 - weightSettle) * 225.722;
+//    final double weightSettle = 1.0 - (settleDate.getDayOfMonth() - 1.0) / settleDate.toLocalDate().lengthOfMonth();
+//    final double indexStart = weightSettle * 225.964 + (1 - weightSettle) * 225.722;
     final CouponInflationZeroCouponInterpolationDefinition zeroCouponUsdDefinition = CouponInflationZeroCouponInterpolationDefinition.from(settleDate, paymentDate, notional, PRICE_INDEX_US,
         MONTH_LAG, MONTH_LAG, false);
     final CouponInflationZeroCouponInterpolation zeroCouponUsd = (CouponInflationZeroCouponInterpolation) zeroCouponUsdDefinition.toDerivative(PRICING_DATE, PRICE_INDEX_TS);

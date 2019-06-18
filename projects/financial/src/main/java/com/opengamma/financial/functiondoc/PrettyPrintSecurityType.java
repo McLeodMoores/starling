@@ -46,7 +46,7 @@ public final class PrettyPrintSecurityType {
   private static final Map<String, String> DATA;
 
   static {
-    DATA = new HashMap<String, String>();
+    DATA = new HashMap<>();
     DATA.put(BondSecurity.SECURITY_TYPE, "Bond");
     DATA.put(BondFutureOptionSecurity.SECURITY_TYPE, "Bond Future Option");
     DATA.put(CapFloorSecurity.SECURITY_TYPE, "Cap/Floor");

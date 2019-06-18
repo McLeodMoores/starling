@@ -211,10 +211,9 @@ public class JobDispatcherTest {
               LOGGER.debug("invoker {} busy - storing callback", getInvokerId());
               _callback = callback;
               return false;
-            } else {
-              LOGGER.debug("invoker {} ready - immediate callback", getInvokerId());
-              return true;
             }
+            LOGGER.debug("invoker {} ready - immediate callback", getInvokerId());
+            return true;
           }
         }
 
@@ -337,9 +336,8 @@ public class JobDispatcherTest {
       if (_isAlive != null) {
         _isAlive.incrementAndGet();
         return true;
-      } else {
-        return false;
       }
+      return false;
     }
 
     @Override

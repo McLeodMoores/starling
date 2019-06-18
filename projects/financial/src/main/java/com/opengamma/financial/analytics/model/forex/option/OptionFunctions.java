@@ -38,7 +38,8 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Gets the default values for calculations
+   * Gets the default values for calculations.
+   *
    * @return The repository with equity option defaults set
    */
   public static FunctionConfigurationSource defaults() {
@@ -48,7 +49,8 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * @param barrierFormat the barrier output display format
+   * @param barrierFormat
+   *          the barrier output display format
    * @return The repository with equity barrier option defaults set
    */
   public static FunctionConfigurationSource defaults(final String barrierFormat) {
@@ -90,7 +92,8 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Adds Black functions for FX options to the repository
+   * Adds Black functions for FX options to the repository.
+   *
    * @return A function configuration source populated with FX option Black functions
    * @deprecated The functions that are added are deprecated
    */
@@ -109,12 +112,13 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
   protected FunctionConfigurationSource vannaVolgaFunctionConfiguration() {
     // TODO
-    return new SimpleFunctionConfigurationSource(new FunctionConfigurationBundle(Collections.<FunctionConfiguration>emptyList()));
+    return new SimpleFunctionConfigurationSource(new FunctionConfigurationBundle(Collections.<FunctionConfiguration> emptyList()));
   }
 
   @Override
   protected FunctionConfigurationSource createObject() {
-    return CombiningFunctionConfigurationSource.of(super.createObject(), blackFunctionConfiguration(), callSpreadBlackFunctionConfiguration(), localVolFunctionConfiguration(),
+    return CombiningFunctionConfigurationSource.of(super.createObject(), blackFunctionConfiguration(), callSpreadBlackFunctionConfiguration(),
+        localVolFunctionConfiguration(),
         vannaVolgaFunctionConfiguration());
   }
 

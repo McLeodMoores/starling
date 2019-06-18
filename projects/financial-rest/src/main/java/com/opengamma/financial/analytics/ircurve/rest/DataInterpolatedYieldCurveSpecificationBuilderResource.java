@@ -41,14 +41,15 @@ public class DataInterpolatedYieldCurveSpecificationBuilderResource extends Abst
   /**
    * Creates the resource, exposing the underlying source over REST.
    *
-   * @param builder the underlying source, not null
+   * @param builder
+   *          the underlying source, not null
    */
   public DataInterpolatedYieldCurveSpecificationBuilderResource(final InterpolatedYieldCurveSpecificationBuilder builder) {
     ArgumentChecker.notNull(builder, "builder");
     _builder = builder;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the builder.
    *
@@ -58,7 +59,7 @@ public class DataInterpolatedYieldCurveSpecificationBuilderResource extends Abst
     return _builder;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
@@ -66,7 +67,8 @@ public class DataInterpolatedYieldCurveSpecificationBuilderResource extends Abst
 
   @POST
   @Path("builder/{date}/{version}")
-  public Response buildCurve(@PathParam("date") final String curveDateStr, @PathParam("version") final String versionStr, final YieldCurveDefinition definition) {
+  public Response buildCurve(@PathParam("date") final String curveDateStr, @PathParam("version") final String versionStr,
+      final YieldCurveDefinition definition) {
     final LocalDate curveDate = LocalDate.parse(curveDateStr);
     final VersionCorrection version = VersionCorrection.parse(versionStr);
     final InterpolatedYieldCurveSpecification result = getInterpolatedYieldCurveSpecificationBuilder().buildCurve(curveDate, definition, version);
@@ -76,9 +78,12 @@ public class DataInterpolatedYieldCurveSpecificationBuilderResource extends Abst
   /**
    * Builds a URI.
    *
-   * @param baseUri the base URI, not null
-   * @param curveDate the curve date, not null
-   * @param version the configuration version, not null
+   * @param baseUri
+   *          the base URI, not null
+   * @param curveDate
+   *          the curve date, not null
+   * @param version
+   *          the configuration version, not null
    * @return the URI, not null
    */
   public static URI uriBuildCurve(final URI baseUri, final LocalDate curveDate, final VersionCorrection version) {

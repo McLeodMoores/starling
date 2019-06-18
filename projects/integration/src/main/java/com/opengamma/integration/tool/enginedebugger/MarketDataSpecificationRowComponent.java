@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.integration.tool.enginedebugger;
 
 import java.awt.Color;
@@ -29,17 +34,18 @@ public class MarketDataSpecificationRowComponent extends JPanel {
   private static final String UP_ARROW = "\u2191";
   private static final Dimension BUTTON_SIZE = new Dimension(28, 28);
 
-  /** enum representing button action events */
+  /** enum representing button action events. */
   public enum Action {
-    /** Move row up */
+    /** Move row up. */
     MOVE_UP,
-    /** Move row down */
+    /** Move row down. */
     MOVE_DOWN,
-    /** Add new row below */
+    /** Add new row below. */
     ADD,
-    /** Remove this row */
+    /** Remove this row. */
     REMOVE
   }
+
   private final Set<ActionListener> _listeners = new LinkedHashSet<>();
   private MarketDataSpecificationComponent _marketDataSpecificationComponent;
   private final List<LiveDataMetaDataProvider> _liveDataMetaDataProviders;
@@ -50,7 +56,8 @@ public class MarketDataSpecificationRowComponent extends JPanel {
   private JButton _addButton;
   private JButton _removeButton;
 
-  public MarketDataSpecificationRowComponent(final List<LiveDataMetaDataProvider> liveDataMetaDataProviders, final ConfigMaster configMaster, final MarketDataSnapshotMaster snapshotMaster) {
+  public MarketDataSpecificationRowComponent(final List<LiveDataMetaDataProvider> liveDataMetaDataProviders, final ConfigMaster configMaster,
+      final MarketDataSnapshotMaster snapshotMaster) {
     super(new MigLayout("insets 0"));
     _liveDataMetaDataProviders = liveDataMetaDataProviders;
     _configMaster = configMaster;

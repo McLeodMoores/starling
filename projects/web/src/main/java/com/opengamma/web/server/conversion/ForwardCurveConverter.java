@@ -78,10 +78,8 @@ public class ForwardCurveConverter implements ResultConverter<ForwardCurve> {
         sb.append(xData[i]).append("=").append(yData[i]);
       }
       return sb.length() > 0 ? sb.toString() : null;
-    } else {
-      return value.getClass().getSimpleName();
     }
-
+    return value.getClass().getSimpleName();
   }
 
   @Override
@@ -89,7 +87,7 @@ public class ForwardCurveConverter implements ResultConverter<ForwardCurve> {
     return "CURVE";
   }
 
-  private List<Double[]> getData(final InterpolatedDoublesCurve detailedCurve) {
+  private static List<Double[]> getData(final InterpolatedDoublesCurve detailedCurve) {
     final List<Double[]> detailedData = new ArrayList<>();
 
     final Double[] xs = detailedCurve.getXData();
@@ -102,7 +100,7 @@ public class ForwardCurveConverter implements ResultConverter<ForwardCurve> {
     return detailedData;
   }
 
-  private List<Double[]> getData(final FunctionalDoublesCurve detailedCurve) {
+  private static List<Double[]> getData(final FunctionalDoublesCurve detailedCurve) {
     final List<Double[]> detailedData = new ArrayList<>();
 
     for (int i = 0; i < 100; i++) {

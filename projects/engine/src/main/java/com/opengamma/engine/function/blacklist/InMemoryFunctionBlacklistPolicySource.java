@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -14,9 +14,9 @@ import com.opengamma.id.UniqueId;
  * A source of {@link FunctionBlacklistPolicy} definitions backed by a map.
  */
 public class InMemoryFunctionBlacklistPolicySource implements FunctionBlacklistPolicySource {
-  
-  private final Map<String, FunctionBlacklistPolicy> _policiesByName = new ConcurrentHashMap<String, FunctionBlacklistPolicy>();
-  private final Map<UniqueId, FunctionBlacklistPolicy> _policiesByUniqueId = new ConcurrentHashMap<UniqueId, FunctionBlacklistPolicy>();
+
+  private final Map<String, FunctionBlacklistPolicy> _policiesByName = new ConcurrentHashMap<>();
+  private final Map<UniqueId, FunctionBlacklistPolicy> _policiesByUniqueId = new ConcurrentHashMap<>();
 
   public void addPolicy(final FunctionBlacklistPolicy policy) {
     _policiesByName.put(policy.getName(), policy);

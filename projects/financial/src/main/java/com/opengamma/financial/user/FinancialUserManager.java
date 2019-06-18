@@ -45,9 +45,12 @@ public class FinancialUserManager {
   /**
    * Creates an instance.
    *
-   * @param services  the services, not null
-   * @param clientTracker  the tracker, not null
-   * @param userDataTracker  the tracker, not null
+   * @param services
+   *          the services, not null
+   * @param clientTracker
+   *          the tracker, not null
+   * @param userDataTracker
+   *          the tracker, not null
    */
   public FinancialUserManager(final FinancialUserServices services, final FinancialClientTracker clientTracker,
       final FinancialUserDataTracker userDataTracker) {
@@ -56,7 +59,7 @@ public class FinancialUserManager {
     _userDataTracker = userDataTracker;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the services.
    *
@@ -84,11 +87,12 @@ public class FinancialUserManager {
     return _userDataTracker;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets a user.
    *
-   * @param userName  the user name, not null
+   * @param userName
+   *          the user name, not null
    * @return the user, null if not found
    */
   public FinancialUser getUser(final String userName) {
@@ -98,7 +102,8 @@ public class FinancialUserManager {
   /**
    * Gets a user, creating if it does not exist.
    *
-   * @param userName  the user name, not null
+   * @param userName
+   *          the user name, not null
    * @return the user, not null
    */
   public FinancialUser getOrCreateUser(final String userName) {
@@ -114,11 +119,12 @@ public class FinancialUserManager {
     return user;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Discards any users and clients that haven't been accessed since the given timestamp.
    *
-   * @param timestamp any client resources with a last accessed time before this will be removed
+   * @param timestamp
+   *          any client resources with a last accessed time before this will be removed
    */
   public void deleteClients(final Instant timestamp) {
     final Iterator<Map.Entry<String, FinancialUser>> userIterator = _userMap.entrySet().iterator();
@@ -134,12 +140,14 @@ public class FinancialUserManager {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the scheduled deletion task.
    *
-   * @param scheduler  the scheduler, not null
-   * @param clientTimeOut  the time out for clients, not null
+   * @param scheduler
+   *          the scheduler, not null
+   * @param clientTimeOut
+   *          the time out for clients, not null
    */
   public void createDeleteTask(final ScheduledExecutorService scheduler, final Duration clientTimeOut) {
     final long timeOutMillis = clientTimeOut.toMillis();
@@ -153,7 +161,7 @@ public class FinancialUserManager {
   class DeleteClientsRunnable implements Runnable {
     private final long _timeoutMillis;
 
-    public DeleteClientsRunnable(final long timeoutMillis) {
+    DeleteClientsRunnable(final long timeoutMillis) {
       super();
       _timeoutMillis = timeoutMillis;
     }

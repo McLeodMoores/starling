@@ -41,8 +41,10 @@ import com.opengamma.financial.security.bond.BondSecurity;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class BondZSpreadPresentValueSensitivityFunction extends AbstractFunction.NonCompiledInvoker {
   private static final BondSecurityDiscountingMethod CALCULATOR = BondSecurityDiscountingMethod.getInstance();
   private BondSecurityConverter _visitor;
@@ -56,7 +58,8 @@ public abstract class BondZSpreadPresentValueSensitivityFunction extends Abstrac
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ZonedDateTime date = ZonedDateTime.now(executionContext.getValuationClock());
     final BondSecurity security = (BondSecurity) target.getSecurity();
     if (desiredValues.size() != 1) {
@@ -80,12 +83,13 @@ public abstract class BondZSpreadPresentValueSensitivityFunction extends Abstrac
     final Double cleanPrice = (Double) cleanPriceObject;
     final String creditCurveName = riskFreeCurveName;
     final ValueProperties.Builder properties = getResultProperties(riskFreeCurveName, creditCurveName, curveName);
-    final ValueSpecification resultSpec = new ValueSpecification(ValueRequirementNames.PRESENT_VALUE_Z_SPREAD_SENSITIVITY, target.toSpecification(), properties.get());
+    final ValueSpecification resultSpec = new ValueSpecification(ValueRequirementNames.PRESENT_VALUE_Z_SPREAD_SENSITIVITY, target.toSpecification(),
+        properties.get());
     final BondFixedSecurityDefinition definition = (BondFixedSecurityDefinition) security.accept(_visitor);
     final BondFixedSecurity bond = definition.toDerivative(date, curveName, riskFreeCurveName);
     final YieldAndDiscountCurve curve = (YieldAndDiscountCurve) curveObject;
     final YieldAndDiscountCurve riskFreeCurve = (YieldAndDiscountCurve) riskFreeCurveObject;
-    final YieldCurveBundle data = new YieldCurveBundle(new String[] {curveName, riskFreeCurveName}, new YieldAndDiscountCurve[] {curve, riskFreeCurve});
+    final YieldCurveBundle data = new YieldCurveBundle(new String[] { curveName, riskFreeCurveName }, new YieldAndDiscountCurve[] { curve, riskFreeCurve });
     return Sets.newHashSet(new ComputedValue(resultSpec, CALCULATOR.presentValueZSpreadSensitivityFromCurvesAndClean(bond, data, cleanPrice)));
   }
 
@@ -116,10 +120,11 @@ public abstract class BondZSpreadPresentValueSensitivityFunction extends Abstrac
     }
     final String riskFreeCurveName = riskFreeCurves.iterator().next();
     final String curveName = curves.iterator().next();
-    return Sets.newHashSet(getCurveRequirement(target, riskFreeCurveName), getCurveRequirement(target, curveName), getCleanPriceRequirement(target, desiredValue));
+    return Sets.newHashSet(getCurveRequirement(target, riskFreeCurveName), getCurveRequirement(target, curveName),
+        getCleanPriceRequirement(target, desiredValue));
   }
 
-  protected abstract ValueRequirement getCleanPriceRequirement(final ComputationTarget target, final ValueRequirement desiredValue);
+  protected abstract ValueRequirement getCleanPriceRequirement(ComputationTarget target, ValueRequirement desiredValue);
 
   protected abstract String getCalculationMethodName();
 

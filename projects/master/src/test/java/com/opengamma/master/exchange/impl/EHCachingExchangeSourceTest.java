@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.master.exchange.impl;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -5,6 +10,7 @@ import static org.testng.AssertJUnit.assertTrue;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -28,27 +34,36 @@ import net.sf.ehcache.CacheManager;
 /**
  * Test.
  */
-@Test(groups = {TestGroup.UNIT, "ehcache" })
+@Test(groups = { TestGroup.UNIT, "ehcache" })
 public class EHCachingExchangeSourceTest {
 
   private CacheManager _cacheManager;
 
+  /**
+   *
+   */
   @BeforeClass
   public void setUpClass() {
     _cacheManager = EHCacheUtils.createTestCacheManager(EHCachingExchangeSourceTest.class);
   }
 
+  /**
+   *
+   */
   @AfterClass
   public void tearDownClass() {
     EHCacheUtils.shutdownQuiet(_cacheManager);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test
-  public void getById() throws InterruptedException {
+  public void getById() {
     final AtomicLong getCount = new AtomicLong(0);
     final ExchangeSource underlying = Mockito.mock(ExchangeSource.class);
-    Mockito.when(underlying.getSingle(Mockito.<ExternalId>anyObject())).thenAnswer(new Answer<Exchange>() {
+    Mockito.when(underlying.getSingle(Matchers.<ExternalId> anyObject())).thenAnswer(new Answer<Exchange>() {
       @Override
       public Exchange answer(final InvocationOnMock invocation) throws Throwable {
         getCount.incrementAndGet();

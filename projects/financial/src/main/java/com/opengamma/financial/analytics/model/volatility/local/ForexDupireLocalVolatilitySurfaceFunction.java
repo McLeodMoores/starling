@@ -5,9 +5,6 @@
  */
 package com.opengamma.financial.analytics.model.volatility.local;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.financial.analytics.model.InstrumentTypeProperties;
 import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVolatilitySurfacePropertyNamesAndValues;
@@ -16,7 +13,6 @@ import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVol
  *
  */
 public abstract class ForexDupireLocalVolatilitySurfaceFunction extends DupireLocalVolatilitySurfaceFunction {
-  private static final Logger LOGGER = LoggerFactory.getLogger(ForexDupireLocalVolatilitySurfaceFunction.class);
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -29,7 +25,7 @@ public abstract class ForexDupireLocalVolatilitySurfaceFunction extends DupireLo
   }
 
   /**
-   * Function producing a local volatility surface using a Black volatility surface with spline interpolation
+   * Function producing a local volatility surface using a Black volatility surface with spline interpolation.
    */
   public static class Spline extends ForexDupireLocalVolatilitySurfaceFunction {
 
@@ -41,7 +37,7 @@ public abstract class ForexDupireLocalVolatilitySurfaceFunction extends DupireLo
   }
 
   /**
-   * Function producing a local volatility surface using a Black volatility surface with SABR interpolation
+   * Function producing a local volatility surface using a Black volatility surface with SABR interpolation.
    */
   public static class SABR extends ForexDupireLocalVolatilitySurfaceFunction {
 
@@ -53,7 +49,7 @@ public abstract class ForexDupireLocalVolatilitySurfaceFunction extends DupireLo
   }
 
   /**
-   * Function producing a local volatility surface using a Black volatility surface with mixed log-normal interpolation
+   * Function producing a local volatility surface using a Black volatility surface with mixed log-normal interpolation.
    */
   public static class MixedLogNormal extends ForexDupireLocalVolatilitySurfaceFunction {
 

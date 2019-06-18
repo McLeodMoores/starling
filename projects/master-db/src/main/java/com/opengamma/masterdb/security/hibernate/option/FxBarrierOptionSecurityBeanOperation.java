@@ -20,12 +20,12 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * FXBarrierOptionSecurityBeanOperation
+ * FXBarrierOptionSecurityBeanOperation.
  */
 public final class FxBarrierOptionSecurityBeanOperation extends AbstractSecurityBeanOperation<FXBarrierOptionSecurity, FXBarrierOptionSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final FxBarrierOptionSecurityBeanOperation INSTANCE = new FxBarrierOptionSecurityBeanOperation();
 
@@ -34,7 +34,8 @@ public final class FxBarrierOptionSecurityBeanOperation extends AbstractSecurity
   }
 
   @Override
-  public FXBarrierOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final FXBarrierOptionSecurity security) {
+  public FXBarrierOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final FXBarrierOptionSecurity security) {
     final FXBarrierOptionSecurityBean bean = new FXBarrierOptionSecurityBean();
     bean.setCallAmount(security.getCallAmount());
     bean.setPutAmount(security.getPutAmount());

@@ -94,8 +94,8 @@ public class HistoricalValuationPnLFunction extends AbstractFunction.NonCompiled
       final Map<ValueSpecification, ValueRequirement> inputs) {
     final Entry<ValueSpecification, ValueRequirement> tsInput = Iterables.getOnlyElement(inputs.entrySet());
     final ValueSpecification tsSpec = tsInput.getKey();
-    final String pnlStartDate =
-        tsInput.getValue().getConstraint(ValueRequirementNames.PNL_SERIES + "_" + HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
+    final String pnlStartDate = tsInput.getValue()
+        .getConstraint(ValueRequirementNames.PNL_SERIES + "_" + HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
     final ValueSpecification valueSpec = getResultSpec(target, tsSpec.getProperties(), pnlStartDate, null);
     return ImmutableSet.of(valueSpec);
   }
@@ -115,7 +115,7 @@ public class HistoricalValuationPnLFunction extends AbstractFunction.NonCompiled
     return ImmutableSet.of(new ComputedValue(valueSpec, pnlTs));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   protected String getPriceSeriesStart(final ValueProperties outputConstraints) {
     final Set<String> samplingPeriodValues = outputConstraints.getValues(ValuePropertyNames.SAMPLING_PERIOD);
     if (samplingPeriodValues != null && !samplingPeriodValues.isEmpty()) {
@@ -136,7 +136,8 @@ public class HistoricalValuationPnLFunction extends AbstractFunction.NonCompiled
     builder.with(ValuePropertyNames.TRANSFORMATION_METHOD, "None");
   }
 
-  protected DateDoubleTimeSeries<?> calculatePnlSeries(final LocalDateDoubleTimeSeries priceSeries, final FunctionExecutionContext executionContext, final ValueRequirement desiredValue) {
+  protected DateDoubleTimeSeries<?> calculatePnlSeries(final LocalDateDoubleTimeSeries priceSeries, final FunctionExecutionContext executionContext,
+      final ValueRequirement desiredValue) {
     final int pnlVectorSize = priceSeries.size() - 1;
     final double[] pnlValues = new double[pnlVectorSize];
     for (int i = 0; i < pnlVectorSize; i++) {
@@ -148,8 +149,9 @@ public class HistoricalValuationPnLFunction extends AbstractFunction.NonCompiled
     return pnlTs;
   }
 
-  //-------------------------------------------------------------------------
-  private ValueSpecification getResultSpec(final ComputationTarget target, final ValueProperties priceTsProperties, final String pnlStartDate, final ValueRequirement desiredValue) {
+  // -------------------------------------------------------------------------
+  private ValueSpecification getResultSpec(final ComputationTarget target, final ValueProperties priceTsProperties, final String pnlStartDate,
+      final ValueRequirement desiredValue) {
     final Set<String> currencies = priceTsProperties.getValues(HistoricalValuationFunction.PASSTHROUGH_PREFIX + ValuePropertyNames.CURRENCY);
     if (currencies == null || currencies.size() != 1) {
       throw new OpenGammaRuntimeException("Expected a single currency for historical valuation series but got " + currencies);

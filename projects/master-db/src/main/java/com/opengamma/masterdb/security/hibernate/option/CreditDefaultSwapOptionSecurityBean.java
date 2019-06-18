@@ -18,14 +18,14 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.financial.security.option.CreditDefaultSwapOptionSecurity;
 import com.opengamma.masterdb.security.hibernate.CurrencyBean;
 import com.opengamma.masterdb.security.hibernate.ExternalIdBean;
 import com.opengamma.masterdb.security.hibernate.SecurityBean;
 import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
 
 /**
- * A Hibernate bean representation of {@link CreditDefaultSwapOptionSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.option.CreditDefaultSwapOptionSecurity}.
  */
 @BeanDefinition
 public class CreditDefaultSwapOptionSecurityBean extends SecurityBean {

@@ -28,12 +28,14 @@ import com.opengamma.financial.analytics.model.black.BlackDiscountingVegaQuoteMa
 import com.opengamma.financial.currency.CurrencyPair;
 
 /**
- * Calculates the vega quote matrix for FX options
+ * Calculates the vega quote matrix for FX options.
+ *
  * @deprecated Use {@link BlackDiscountingVegaQuoteMatrixFXOptionFunction}
  */
 @Deprecated
 public class FXOptionBlackVegaQuoteMatrixFunction extends FXOptionBlackSingleValuedFunction {
-  private static final PresentValueBlackVolatilityQuoteSensitivityForexCalculator CALCULATOR = PresentValueBlackVolatilityQuoteSensitivityForexCalculator.getInstance();
+  private static final PresentValueBlackVolatilityQuoteSensitivityForexCalculator CALCULATOR = PresentValueBlackVolatilityQuoteSensitivityForexCalculator
+      .getInstance();
 
   public FXOptionBlackVegaQuoteMatrixFunction() {
     super(ValueRequirementNames.VEGA_QUOTE_MATRIX);
@@ -59,7 +61,8 @@ public class FXOptionBlackVegaQuoteMatrixFunction extends FXOptionBlackSingleVal
   @Override
   protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final String putCurve, final String putCurveCalculationConfig,
       final String callCurve, final String callCurveCalculationConfig, final CurrencyPair baseQuotePair, final ValueProperties optionalProperties) {
-    final ValueProperties.Builder properties = super.getResultProperties(target, putCurve, putCurveCalculationConfig, callCurve, callCurveCalculationConfig, baseQuotePair,
+    final ValueProperties.Builder properties = super.getResultProperties(target, putCurve, putCurveCalculationConfig, callCurve, callCurveCalculationConfig,
+        baseQuotePair,
         optionalProperties);
     properties.with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.FOREX);
     return properties;

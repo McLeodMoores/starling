@@ -56,7 +56,7 @@ public class EquityVanillaBarrierOptionVegaMatrixFunction extends EquityVanillaB
   private static final double SHIFT = 0.0001; // FIXME This really should be configurable by the user!
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityVanillaBarrierOptionVegaMatrixFunction() {
     super(ValueRequirementNames.VEGA_QUOTE_MATRIX);
@@ -121,7 +121,7 @@ public class EquityVanillaBarrierOptionVegaMatrixFunction extends EquityVanillaB
             final Double shiftedPV = vanillas[v].accept(PVC, shiftedMarket);
             Validate.notNull(shiftedPV, "Null PV in shifted scenario, T = " + expiries[t] + ", k = " + strikes[t][k]);
             final Double vega = (shiftedPV - basePrices[v]) / -SHIFT;
-            final Triple<Double, Double, Double> xyz = new Triple<>(expiries[t], strikes[t][k], vega);
+            final Triple<Double, Double, Double> xyz = Triple.of(expiries[t], strikes[t][k], vega);
             triplesExpiryStrikeVega.add(xyz);
           }
         }
@@ -160,19 +160,20 @@ public class EquityVanillaBarrierOptionVegaMatrixFunction extends EquityVanillaB
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> results = super.getResults(context, target, inputs);
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final ExternalId underlyingId = FinancialSecurityUtils.getUnderlyingId(security);
-    //final String bbgTicker = getBloombergTicker(securitySource, underlyingId);
+    // final String bbgTicker = getBloombergTicker(securitySource, underlyingId);
     final Set<ValueSpecification> resultsWithExtraProperties = Sets.newHashSetWithExpectedSize(results.size());
     for (final ValueSpecification spec : results) {
       final String name = spec.getValueName();
       final ComputationTargetSpecification targetSpec = spec.getTargetSpecification();
       final ValueProperties properties = spec.getProperties().copy()
           .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.EQUITY_OPTION)
-//          .with(ValuePropertyNames.UNDERLYING_TICKER, bbgTicker)
+          // .with(ValuePropertyNames.UNDERLYING_TICKER, bbgTicker)
           .get();
       resultsWithExtraProperties.add(new ValueSpecification(name, targetSpec, properties));
     }

@@ -30,7 +30,7 @@ import com.opengamma.util.ArgumentChecker;
 public abstract class PureBlackVolatilitySurfaceDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(PureBlackVolatilitySurfaceDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.PURE_VOLATILITY_SURFACE,
+      ValueRequirementNames.PURE_VOLATILITY_SURFACE,
   };
   private final Map<String, String> _tickerToCurveName;
   private final Map<String, String> _tickerToCurveCurrency;
@@ -56,7 +56,7 @@ public abstract class PureBlackVolatilitySurfaceDefaults extends DefaultProperty
   }
 
   @Override
-  public abstract boolean canApplyTo(FunctionCompilationContext context, final ComputationTarget target);
+  public abstract boolean canApplyTo(FunctionCompilationContext context, ComputationTarget target);
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
@@ -69,7 +69,8 @@ public abstract class PureBlackVolatilitySurfaceDefaults extends DefaultProperty
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String ticker = getTicker(target);
     final String curveName = _tickerToCurveName.get(ticker);
     if (curveName == null) {
@@ -102,6 +103,5 @@ public abstract class PureBlackVolatilitySurfaceDefaults extends DefaultProperty
   public String getMutualExclusionGroup() {
     return OpenGammaFunctionExclusions.EQUITY_PURE_VOLATILITY_SURFACE_DEFAULTS;
   }
-
 
 }

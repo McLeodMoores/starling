@@ -9,7 +9,7 @@ import org.threeten.bp.temporal.Temporal;
 import org.threeten.bp.temporal.TemporalAdjuster;
 
 /**
- *  A general implementation of RollDateAdjuster
+ * A general implementation of RollDateAdjuster.
  */
 public class GeneralRollDateAdjuster implements RollDateAdjuster {
 

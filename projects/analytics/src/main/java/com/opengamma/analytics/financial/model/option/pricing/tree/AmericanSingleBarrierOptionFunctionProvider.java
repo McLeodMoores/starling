@@ -11,14 +11,21 @@ package com.opengamma.analytics.financial.model.option.pricing.tree;
 public class AmericanSingleBarrierOptionFunctionProvider extends BarrierOptionFunctionProvider {
 
   /**
-   * @param strike Strike price
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
-   * @param barrier Barrier price
-   * @param typeName {@link com.opengamma.analytics.financial.model.option.pricing.tree.BarrierOptionFunctionProvider.BarrierTypes}, DownAndOut or UpAndOut
+   * @param strike
+   *          Strike price
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
+   * @param barrier
+   *          Barrier price
+   * @param typeName
+   *          {@link com.opengamma.analytics.financial.model.option.pricing.tree.BarrierOptionFunctionProvider.BarrierTypes}, DownAndOut or UpAndOut
    */
-  public AmericanSingleBarrierOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double barrier, final BarrierTypes typeName) {
+  public AmericanSingleBarrierOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall,
+      final double barrier, final BarrierTypes typeName) {
     super(strike, timeToExpiry, steps, isCall, barrier, typeName);
   }
 
@@ -39,7 +46,8 @@ public class AmericanSingleBarrierOptionFunctionProvider extends BarrierOptionFu
   }
 
   @Override
-  public double[] getNextOptionValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double baseAssetPrice, final double sumCashDiv,
+  public double[] getNextOptionValues(final double discount, final double upProbability, final double downProbability, final double[] values,
+      final double baseAssetPrice, final double sumCashDiv,
       final double downFactor, final double upOverDown, final int steps) {
     final double strike = getStrike();
     final double sign = getSign();
@@ -48,7 +56,8 @@ public class AmericanSingleBarrierOptionFunctionProvider extends BarrierOptionFu
     final double[] res = new double[nStepsP];
     double assetPrice = baseAssetPrice * Math.pow(downFactor, steps);
     for (int j = 0; j < nStepsP; ++j) {
-      res[j] = getChecker().checkOut(assetPrice + sumCashDiv) ? 0. : Math.max(discount * (upProbability * values[j + 1] + downProbability * values[j]), sign * (assetPrice + sumCashDiv - strike));
+      res[j] = getChecker().checkOut(assetPrice + sumCashDiv) ? 0.
+          : Math.max(discount * (upProbability * values[j + 1] + downProbability * values[j]), sign * (assetPrice + sumCashDiv - strike));
       assetPrice *= upOverDown;
     }
     return res;
@@ -71,7 +80,8 @@ public class AmericanSingleBarrierOptionFunctionProvider extends BarrierOptionFu
   }
 
   @Override
-  public double[] getNextOptionValues(final double discount, final double upProbability, final double middleProbability, final double downProbability, final double[] values,
+  public double[] getNextOptionValues(final double discount, final double upProbability, final double middleProbability, final double downProbability,
+      final double[] values,
       final double baseAssetPrice, final double sumCashDiv, final double downFactor, final double middleOverDown, final int steps) {
     final double strike = getStrike();
     final double sign = getSign();
@@ -80,8 +90,9 @@ public class AmericanSingleBarrierOptionFunctionProvider extends BarrierOptionFu
     final double[] res = new double[nNodes];
     double assetPrice = baseAssetPrice * Math.pow(downFactor, steps);
     for (int j = 0; j < nNodes; ++j) {
-      res[j] = getChecker().checkOut(assetPrice + sumCashDiv) ? 0. : Math.max(discount * (upProbability * values[j + 2] + middleProbability * values[j + 1] + downProbability * values[j]), sign *
-          (assetPrice + sumCashDiv - strike));
+      res[j] = getChecker().checkOut(assetPrice + sumCashDiv) ? 0.
+          : Math.max(discount * (upProbability * values[j + 2] + middleProbability * values[j + 1] + downProbability * values[j]), sign
+              * (assetPrice + sumCashDiv - strike));
       assetPrice *= middleOverDown;
     }
     return res;

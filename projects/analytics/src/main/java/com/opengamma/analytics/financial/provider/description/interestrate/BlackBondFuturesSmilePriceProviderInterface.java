@@ -11,7 +11,8 @@ package com.opengamma.analytics.financial.provider.description.interestrate;
 public interface BlackBondFuturesSmilePriceProviderInterface extends ParameterIssuerProviderInterface {
 
   /**
-   * Create a new copy of the provider
+   * Create a new copy of the provider.
+   * 
    * @return The bundle
    */
   @Override
@@ -19,12 +20,14 @@ public interface BlackBondFuturesSmilePriceProviderInterface extends ParameterIs
 
   /**
    * Returns the underlying bond futures price.
+   * 
    * @return The price.
    */
   double getFuturesPrice();
 
   /**
    * Returns the Black bond futures provider.
+   * 
    * @return The provider.
    */
   BlackBondFuturesSmileProviderInterface getBlackProvider();

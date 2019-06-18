@@ -17,14 +17,13 @@ import com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfig
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
-
 /**
- * Custom JSON builder to convert CurveSpecificationBuilderConfiguration to JSON object and back again
+ * Custom JSON builder to convert CurveSpecificationBuilderConfiguration to JSON object and back again.
  */
 public final class CurveSpecificationBuilderConfigurationJSONBuilder extends AbstractJSONBuilder<CurveSpecificationBuilderConfiguration> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final CurveSpecificationBuilderConfigurationJSONBuilder INSTANCE = new CurveSpecificationBuilderConfigurationJSONBuilder();
 
@@ -58,7 +57,7 @@ public final class CurveSpecificationBuilderConfigurationJSONBuilder extends Abs
     return message.toString();
   }
 
-  private String[] getTenors(final CurveSpecificationBuilderConfiguration curveSpec) {
+  private static String[] getTenors(final CurveSpecificationBuilderConfiguration curveSpec) {
     final SortedSet<Tenor> allTenors = curveSpec.getAllTenors();
     final String[] periods = new String[allTenors.size()];
     final Iterator<Tenor> iterator = allTenors.iterator();
@@ -67,7 +66,6 @@ public final class CurveSpecificationBuilderConfigurationJSONBuilder extends Abs
     }
     return periods;
   }
-
 
   private static String createTemplate() {
     return null;

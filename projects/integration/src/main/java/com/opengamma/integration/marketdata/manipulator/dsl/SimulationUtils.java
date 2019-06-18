@@ -50,12 +50,13 @@ public final class SimulationUtils {
   private static List<GroovyAliasable> s_aliases = Lists.newArrayList();
 
   static {
-    //new enums to register with aliases can be added here:
+    // new enums to register with aliases can be added here:
     registerEnumAliases(BucketedShiftType.class);
     registerEnumAliases(ScenarioShiftType.class);
   }
 
-  private static <T extends Enum<T> & GroovyAliasable> void registerEnumAliases(final Class<? extends T> enumClazz) {  // CSIGNORE (CS doesn't support funky syntax here)
+  private static <T extends Enum<T> & GroovyAliasable> void registerEnumAliases(final Class<? extends T> enumClazz) { // CSIGNORE (CS doesn't support funky
+                                                                                                                      // syntax here)
     final T[] aliases = enumClazz.getEnumConstants();
     Collections.addAll(s_aliases, aliases);
   }
@@ -65,14 +66,17 @@ public final class SimulationUtils {
 
   /**
    * Returns the ID of the latest version of a view definition.
-   * @param viewDefName The view definition name
-   * @param configSource A source for looking up the view definition
+   *
+   * @param viewDefName
+   *          The view definition name
+   * @param configSource
+   *          A source for looking up the view definition
    * @return The ID of the latest version of the named view definition, not null
-   * @throws DataNotFoundException If no view definition is found with the specified name
+   * @throws DataNotFoundException
+   *           If no view definition is found with the specified name
    */
   public static UniqueId latestViewDefinitionId(final String viewDefName, final ConfigSource configSource) {
-    final Collection<ConfigItem<ViewDefinition>> viewDefs =
-        configSource.get(ViewDefinition.class, viewDefName, VersionCorrection.LATEST);
+    final Collection<ConfigItem<ViewDefinition>> viewDefs = configSource.get(ViewDefinition.class, viewDefName, VersionCorrection.LATEST);
     if (viewDefs.isEmpty()) {
       throw new DataNotFoundException("No view definition found with name '" + viewDefName + "'");
     }
@@ -81,8 +85,11 @@ public final class SimulationUtils {
 
   /**
    * Runs a Groovy script that defines a {@link Simulation} using the DSL.
-   * @param groovyScript  the script location in the filesystem
-   * @param parameters  the parameters
+   *
+   * @param groovyScript
+   *          the script location in the filesystem
+   * @param parameters
+   *          the parameters
    * @return The simulation defined by the script
    */
   public static Simulation createSimulationFromDsl(final String groovyScript, final Map<String, Object> parameters) {
@@ -95,8 +102,11 @@ public final class SimulationUtils {
 
   /**
    * Runs a Groovy script that defines a {@link Simulation} using the DSL.
-   * @param groovyScript  for reading the DSL script
-   * @param parameters  the parameters
+   *
+   * @param groovyScript
+   *          for reading the DSL script
+   * @param parameters
+   *          the parameters
    * @return The simulation defined by the script
    */
   public static Simulation createSimulationFromDsl(final Reader groovyScript, final Map<String, Object> parameters) {
@@ -105,8 +115,11 @@ public final class SimulationUtils {
 
   /**
    * Runs a Groovy script that defines a {@link Scenario} using the DSL.
-   * @param groovyScript  the script location in the filesystem
-   * @param parameters  the parameters
+   *
+   * @param groovyScript
+   *          the script location in the filesystem
+   * @param parameters
+   *          the parameters
    * @return The scenario defined by the script
    */
   public static Scenario createScenarioFromDsl(final String groovyScript, final Map<String, Object> parameters) {
@@ -119,8 +132,11 @@ public final class SimulationUtils {
 
   /**
    * Runs a Groovy script that defines a {@link Scenario} using the DSL.
-   * @param groovyScript  for reading the DSL script
-   * @param parameters  the parameters
+   *
+   * @param groovyScript
+   *          for reading the DSL script
+   * @param parameters
+   *          the parameters
    * @return The scenario defined by the script
    */
   public static Scenario createScenarioFromDsl(final Reader groovyScript, final Map<String, Object> parameters) {
@@ -129,20 +145,25 @@ public final class SimulationUtils {
 
   /**
    * Runs a Groovy DSL script and returns the value returned by the script.
-   * @param scriptReader For reading the script text
-   * @param expectedType The expected type of the return value
-   * @param parameters Parameters used by the script, null or empty if the script doesn't need any
-   * @param <T> The expected type of the return value
+   *
+   * @param scriptReader
+   *          For reading the script text
+   * @param expectedType
+   *          The expected type of the return value
+   * @param parameters
+   *          Parameters used by the script, null or empty if the script doesn't need any
+   * @param <T>
+   *          The expected type of the return value
    * @return The return value of the script, not null
    */
   private static <T> T runGroovyDslScript(final Reader scriptReader, final Class<T> expectedType, final Map<String, Object> parameters) {
-    final Map<String, Object> timeoutArgs = ImmutableMap.<String, Object>of("value", 2);
+    final Map<String, Object> timeoutArgs = ImmutableMap.<String, Object> of("value", 2);
     final ASTTransformationCustomizer customizer = new ASTTransformationCustomizer(timeoutArgs, TimedInterrupt.class);
     final CompilerConfiguration config = new CompilerConfiguration();
     config.addCompilationCustomizers(customizer);
     config.setScriptBaseClass(SimulationScript.class.getName());
-    final Map<String, Object> bindingMap = parameters == null ? Collections.<String, Object>emptyMap() : parameters;
-    //copy map to ensure that binding is mutable (for use in registerAliases)
+    final Map<String, Object> bindingMap = parameters == null ? Collections.<String, Object> emptyMap() : parameters;
+    // copy map to ensure that binding is mutable (for use in registerAliases)
     final Binding binding = new Binding(Maps.newHashMap(bindingMap));
     registerAliases(binding);
     final GroovyShell shell = new GroovyShell(binding, config);
@@ -153,18 +174,16 @@ public final class SimulationUtils {
     }
     if (expectedType.isInstance(scriptOutput)) {
       return expectedType.cast(scriptOutput);
-    } else {
-      throw new IllegalArgumentException("Script '" + scriptReader + "' didn't create an object of the expected type. " +
-          "expected type: " + expectedType.getName() + ", " +
-          "actual type: " + scriptOutput.getClass().getName() + ", " +
-          "actual value: " + scriptOutput);
     }
+    throw new IllegalArgumentException("Script '" + scriptReader + "' didn't create an object of the expected type. " + "expected type: "
+        + expectedType.getName() + ", " + "actual type: " + scriptOutput.getClass().getName() + ", " + "actual value: " + scriptOutput);
   }
 
   /**
-   * Registers aliases in a script's bindings to allow Java enum values to be referred to without being imported
-   * and qualified with the type name.
-   * @param binding The script binding in which to register the aliases
+   * Registers aliases in a script's bindings to allow Java enum values to be referred to without being imported and qualified with the type name.
+   *
+   * @param binding
+   *          The script binding in which to register the aliases
    */
   /* package */ static void registerAliases(final Binding binding) {
 
@@ -182,12 +201,12 @@ public final class SimulationUtils {
   }
 
   /**
-   * Creates a regular expression pattern from a simple glob string. The special characters recognized in the glob
-   * string are ? (match any character), * (match any number of characters) and % (same as *). The other characters
-   * in the glob string are escaped before the pattern is created so it can safely contain regular expression
-   * characters. Escaping is not supported in the glob string, i.e. there's no way to match any of the special
-   * characters themselves.
-   * @param glob The glob string
+   * Creates a regular expression pattern from a simple glob string. The special characters recognized in the glob string are ? (match any character), * (match
+   * any number of characters) and % (same as *). The other characters in the glob string are escaped before the pattern is created so it can safely contain
+   * regular expression characters. Escaping is not supported in the glob string, i.e. there's no way to match any of the special characters themselves.
+   *
+   * @param glob
+   *          The glob string
    * @return A pattern for matching the glob
    */
   public static Pattern patternForGlob(final String glob) {
@@ -226,10 +245,14 @@ public final class SimulationUtils {
   }
 
   /**
-   * Helper method for creating {@link VolatilitySurfaceShift} instances in the Java API with less code
-   * @param x The x location of the point to shift
-   * @param y The y location of the point to shift
-   * @param shift The shift amount
+   * Helper method for creating {@link VolatilitySurfaceShift} instances in the Java API with less code.
+   *
+   * @param x
+   *          The x location of the point to shift
+   * @param y
+   *          The y location of the point to shift
+   * @param shift
+   *          The shift amount
    * @return A {@link VolatilitySurfaceShift} instance built from the arguments
    */
   public static VolatilitySurfaceShift volShift(final Object x, final Object y, final Number shift) {
@@ -241,11 +264,11 @@ public final class SimulationUtils {
     final String idValue = valueSpec.getTargetSpecification().getUniqueId().getValue();
     if (targetType.equals(CurrencyPair.TYPE)) {
       return CurrencyPair.parse(idValue);
-    /*} else if (targetType.equals(ComputationTargetType.UNORDERED_CURRENCY_PAIR)) {
-      String quotedPair = valueSpec.getProperties().getStrictValue(ConventionBasedFXRateFunction.QUOTING_CONVENTION_PROPERTY);
-      return CurrencyPair.parse(quotedPair);*/
-    } else {
-      throw new IllegalArgumentException("Only currency pair target types supported. type=" + targetType);
+      /*
+       * } else if (targetType.equals(ComputationTargetType.UNORDERED_CURRENCY_PAIR)) { String quotedPair =
+       * valueSpec.getProperties().getStrictValue(ConventionBasedFXRateFunction.QUOTING_CONVENTION_PROPERTY); return CurrencyPair.parse(quotedPair);
+       */
     }
+    throw new IllegalArgumentException("Only currency pair target types supported. type=" + targetType);
   }
 }

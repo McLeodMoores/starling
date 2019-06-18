@@ -27,22 +27,19 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.future.DeliverableSwapFutureSecurity;
 import com.opengamma.financial.security.future.InterestRateFutureSecurity;
 
 /**
- * Calculates the market quotes of future that have been priced using
- * the discounting method.
+ * Calculates the market quotes of future that have been priced using the discounting method.
  */
 public class DiscountingMarketQuoteFunction extends DiscountingFunction {
   /** The market quote calculator */
-  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> CALCULATOR =
-      MarketQuoteDiscountingCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> CALCULATOR = MarketQuoteDiscountingCalculator.getInstance();
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#MARKET_QUOTE}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#MARKET_QUOTE}.
    */
   public DiscountingMarketQuoteFunction() {
     super(MARKET_QUOTE);
@@ -66,8 +63,8 @@ public class DiscountingMarketQuoteFunction extends DiscountingFunction {
       @Override
       public boolean canApplyTo(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Security security = target.getTrade().getSecurity();
-        return security instanceof DeliverableSwapFutureSecurity ||
-            security instanceof InterestRateFutureSecurity;
+        return security instanceof DeliverableSwapFutureSecurity
+            || security instanceof InterestRateFutureSecurity;
       }
 
     };

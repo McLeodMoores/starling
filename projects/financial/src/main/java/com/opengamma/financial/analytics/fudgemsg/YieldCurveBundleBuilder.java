@@ -24,7 +24,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Fudge builder for {@code YieldCurveBundle}.
+ * @deprecated Deprecated
  */
+@Deprecated
 @FudgeBuilderFor(YieldCurveBundle.class)
 public final class YieldCurveBundleBuilder extends AbstractFudgeBuilder<YieldCurveBundle> {
   private static final String CURVES_FIELD_NAME = "curve";
@@ -65,7 +67,7 @@ public final class YieldCurveBundleBuilder extends AbstractFudgeBuilder<YieldCur
       serializer.addToMessageWithClassHeaders(message, CURVES_FIELD_NAME, null, object.getCurve(curve));
       serializer.addToMessageWithClassHeaders(message, CURVES_NAME_FIELD_NAME, null, curve);
     }
-    for (Map.Entry<String, Currency> ccyEntry : object.getCurrencyMap().entrySet()) {
+    for (final Map.Entry<String, Currency> ccyEntry : object.getCurrencyMap().entrySet()) {
       serializer.addToMessage(message, CURRENCY_CURVE_FIELD_NAME, null, ccyEntry.getKey());
       serializer.addToMessageWithClassHeaders(message, CURRENCY_FIELD_NAME, null, ccyEntry.getValue());
     }

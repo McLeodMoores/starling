@@ -65,8 +65,8 @@ public class DelegatingConfigMaster extends UniqueIdSchemeDelegator<ConfigMaster
     super(defaultMaster, schemePrefixToMasterMap);
     final AggregatingChangeManager changeManager = new AggregatingChangeManager();
 
-    // REVIEW jonathan 2012-08-03 -- this assumes that the delegating master lasts for the lifetime of the engine as we
-    // never detach from the underlying change managers.
+    // this assumes that the delegating master lasts for the lifetime of the
+    // engine as we never detach from the underlying change managers.
     changeManager.addChangeManager(defaultMaster.changeManager());
     for (final ConfigMaster master : schemePrefixToMasterMap.values()) {
       changeManager.addChangeManager(master.changeManager());
@@ -91,7 +91,11 @@ public class DelegatingConfigMaster extends UniqueIdSchemeDelegator<ConfigMaster
   @Override
   public ConfigDocument add(final ConfigDocument document) {
     ArgumentChecker.notNull(document, "document");
-    return getDefaultDelegate().add(document);
+    final UniqueId uniqueId = document.getUniqueId();
+    if (uniqueId == null) {
+      return getDefaultDelegate().add(document);
+    }
+    return chooseDelegate(uniqueId.getScheme()).add(document);
   }
 
   @Override
@@ -161,6 +165,7 @@ public class DelegatingConfigMaster extends UniqueIdSchemeDelegator<ConfigMaster
 
   @Override
   public Map<UniqueId, ConfigDocument> get(final Collection<UniqueId> uniqueIds) {
+    ArgumentChecker.notNull(uniqueIds, "uniqueIds");
     final Map<UniqueId, ConfigDocument> resultMap = newHashMap();
     for (final UniqueId uniqueId : uniqueIds) {
       final ConfigDocument doc = get(uniqueId);

@@ -19,10 +19,10 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.option.definition.SABRInterestRateDataBundle;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
 import com.opengamma.core.security.Security;
@@ -61,8 +61,10 @@ import com.opengamma.util.tuple.DoublesPair;
 @Deprecated
 public abstract class SABRVegaFunction extends SABRFunction {
 
+  @SuppressWarnings("unchecked")
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final Currency currency = FinancialSecurityUtils.getCurrency(target.getSecurity());
     final String curveCalculationConfigName = desiredValue.getConstraint(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
@@ -116,10 +118,11 @@ public abstract class SABRVegaFunction extends SABRFunction {
     final String yInterpolatorName = desiredValue.getConstraint(InterpolatedDataProperties.Y_INTERPOLATOR_NAME);
     final String yLeftExtrapolatorName = desiredValue.getConstraint(InterpolatedDataProperties.LEFT_Y_EXTRAPOLATOR_NAME);
     final String yRightExtrapolatorName = desiredValue.getConstraint(InterpolatedDataProperties.RIGHT_Y_EXTRAPOLATOR_NAME);
-    final Interpolator1D xInterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(xInterpolatorName, xLeftExtrapolatorName, xRightExtrapolatorName);
-    final Interpolator1D yInterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(yInterpolatorName, yLeftExtrapolatorName, yRightExtrapolatorName);
+    final Interpolator1D xInterpolator = NamedInterpolator1dFactory.of(xInterpolatorName, xLeftExtrapolatorName, xRightExtrapolatorName);
+    final Interpolator1D yInterpolator = NamedInterpolator1dFactory.of(yInterpolatorName, yLeftExtrapolatorName, yRightExtrapolatorName);
     final GridInterpolator2D nodeSensitivityCalculator = new GridInterpolator2D(xInterpolator, yInterpolator);
-    final Map<Double, DoubleMatrix2D> result = SABRVegaCalculationUtils.getVegaCube(alpha, rho, nu, alphaDataBundle, rhoDataBundle, nuDataBundle, inverseJacobians, expiryMaturity,
+    final Map<Double, DoubleMatrix2D> result = SABRVegaCalculationUtils.getVegaCube(alpha, rho, nu, alphaDataBundle, rhoDataBundle, nuDataBundle,
+        inverseJacobians, expiryMaturity,
         nodeSensitivityCalculator);
     final DoubleLabelledMatrix3D labelledMatrix = VegaMatrixUtils.getVegaSwaptionCubeQuoteMatrix(fittedDataPoints.getFittedPoints(), result);
     final ValueProperties properties = getResultProperties(createValueProperties().get(), currency.getCode(), desiredValue);
@@ -181,20 +184,30 @@ public abstract class SABRVegaFunction extends SABRFunction {
 
   /**
    * Gets the value properties for the SABR parameter sensitivities.
-   * @param target The target
-   * @param currency The currency of the security
-   * @param desiredValue The desired value
+   * 
+   * @param target
+   *          The target
+   * @param currency
+   *          The currency of the security
+   * @param desiredValue
+   *          The desired value
    * @return The value properties
    */
-  protected abstract ValueProperties getSensitivityProperties(final ComputationTarget target, final String currency, final ValueRequirement desiredValue);
+  protected abstract ValueProperties getSensitivityProperties(ComputationTarget target, String currency, ValueRequirement desiredValue);
 
   /**
-   * Gets the value properties for the fitted points of the cube
-   * @param cubeDefinitionName The cube definition name
-   * @param cubeSpecificationName The cube specification name
-   * @param surfaceDefinitionName The surface definition name
-   * @param surfaceSpecificationName The surface specification name
-   * @param fittingMethod The SABR fitting method
+   * Gets the value properties for the fitted points of the cube.
+   * 
+   * @param cubeDefinitionName
+   *          The cube definition name
+   * @param cubeSpecificationName
+   *          The cube specification name
+   * @param surfaceDefinitionName
+   *          The surface definition name
+   * @param surfaceSpecificationName
+   *          The surface specification name
+   * @param fittingMethod
+   *          The SABR fitting method
    * @return The value properties
    */
   protected ValueProperties getFittedPointsProperties(final String cubeDefinitionName, final String cubeSpecificationName,

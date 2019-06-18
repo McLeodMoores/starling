@@ -120,9 +120,9 @@ public class ExamplesAvailablePortfolioOutputsTest {
       }
     }
     System.err.println(portfolioName);
-    for (String securityType : outputs.getSecurityTypes()) {
-      final Set<String> values = new HashSet<String>();
-      for (AvailableOutput output : outputs.getPositionOutputs(securityType)) {
+    for (final String securityType : outputs.getSecurityTypes()) {
+      final Set<String> values = new HashSet<>();
+      for (final AvailableOutput output : outputs.getPositionOutputs(securityType)) {
         if (values.add(output.getValueName())) {
           System.err.println("\tassertPositionOutput(outputs, \"" + securityType + "\", \"" + output.getValueName() + "\");");
         }

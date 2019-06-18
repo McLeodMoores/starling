@@ -9,11 +9,13 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
-import com.opengamma.analytics.financial.provider.description.interestrate.HullWhiteOneFactorProviderDiscount;
 
 /**
- * Class describing the data required to price interest rate derivatives with Hull-White one factor model (curves and model parameters).
- * @deprecated Use {@link HullWhiteOneFactorProviderDiscount}
+ * Class describing the data required to price interest rate derivatives with
+ * Hull-White one factor model (curves and model parameters).
+ *
+ * @deprecated Use
+ *             {@link com.opengamma.analytics.financial.provider.description.interestrate.HullWhiteOneFactorProviderDiscount}
  */
 @Deprecated
 public class HullWhiteOneFactorPiecewiseConstantDataBundle extends YieldCurveBundle {
@@ -34,11 +36,11 @@ public class HullWhiteOneFactorPiecewiseConstantDataBundle extends YieldCurveBun
     _parameters = hullWhiteParameters;
   }
 
-  @Override
   /**
    * Create a new copy of the bundle using a new map and the same curve and curve names. The same HullWhiteOneFactorPiecewiseConstantParameters is used.
    * @return The bundle.
    */
+  @Override
   public HullWhiteOneFactorPiecewiseConstantDataBundle copy() {
     return new HullWhiteOneFactorPiecewiseConstantDataBundle(_parameters, this);
   }

@@ -13,8 +13,13 @@ import com.opengamma.master.security.SecurityMaster;
 import com.opengamma.master.security.impl.InMemorySecurityMaster;
 
 /**
- * The default set of conventions for examples-simulated that have been hard-coded.
+ * The default set of conventions for examples-simulated that have been
+ * hard-coded.
+ * 
+ * @deprecated {@link ConventionBundle} is deprecated. Use a
+ *             {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class SyntheticInMemoryConventionMasterInitializer extends ConventionMasterInitializer {
 
   /** Singleton. */

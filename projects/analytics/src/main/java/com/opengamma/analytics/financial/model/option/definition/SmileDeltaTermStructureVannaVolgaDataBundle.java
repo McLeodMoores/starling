@@ -9,8 +9,6 @@ import org.apache.commons.lang.NotImplementedException;
 
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTermStructureParameters;
-import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTermStructureParametersStrikeInterpolation;
-import com.opengamma.analytics.financial.provider.description.forex.BlackForexVannaVolgaProvider;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
@@ -18,28 +16,37 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  * Class describing the data required to price instruments with the volatility delta and time dependent.
- * @deprecated Use {@link BlackForexVannaVolgaProvider}
+ *
+ * @deprecated Use {@link com.opengamma.analytics.financial.provider.description.forex.BlackForexVannaVolgaProvider}
  */
 @Deprecated
 public class SmileDeltaTermStructureVannaVolgaDataBundle extends ForexOptionDataBundle<SmileDeltaTermStructureParameters> {
 
-  public static SmileDeltaTermStructureVannaVolgaDataBundle from(final YieldCurveBundle ycBundle, final SmileDeltaTermStructureParameters smile, final Pair<Currency, Currency> currencyPair) {
+  public static SmileDeltaTermStructureVannaVolgaDataBundle from(final YieldCurveBundle ycBundle, final SmileDeltaTermStructureParameters smile,
+      final Pair<Currency, Currency> currencyPair) {
     return new SmileDeltaTermStructureVannaVolgaDataBundle(ycBundle, smile, currencyPair);
   }
+
   /**
    * Constructor from the smile parameters and the curves.
-   * @param ycBundle The curves bundle, not null
-   * @param smile The smile parameters, not null
-   * @param currencyPair The currency pair for which the smile is valid, not null
+   * 
+   * @param ycBundle
+   *          The curves bundle, not null
+   * @param smile
+   *          The smile parameters, not null
+   * @param currencyPair
+   *          The currency pair for which the smile is valid, not null
    */
-  public SmileDeltaTermStructureVannaVolgaDataBundle(final YieldCurveBundle ycBundle, final SmileDeltaTermStructureParameters smile, final Pair<Currency, Currency> currencyPair) {
+  public SmileDeltaTermStructureVannaVolgaDataBundle(final YieldCurveBundle ycBundle, final SmileDeltaTermStructureParameters smile,
+      final Pair<Currency, Currency> currencyPair) {
     super(ycBundle, smile, currencyPair);
     ArgumentChecker.isTrue(smile.getNumberStrike() == 3, "Vanna-volga methods work only with three strikes; have {}", smile.getNumberStrike());
   }
 
   @Override
   /**
-   * Create a  copy of the bundle.
+   * Create a copy of the bundle.
+   * 
    * @return The bundle.
    */
   public SmileDeltaTermStructureVannaVolgaDataBundle copy() {
@@ -50,10 +57,16 @@ public class SmileDeltaTermStructureVannaVolgaDataBundle extends ForexOptionData
   }
 
   /**
-   * Get the volatility at a given time/strike/forward taking the currency pair order in account. See {@link SmileDeltaTermStructureParametersStrikeInterpolation} for the interpolation/extrapolation.
-   * @param ccy1 The first currency.
-   * @param ccy2 The second currency.
-   * @param time The time to expiration.
+   * Get the volatility at a given time/strike/forward taking the currency pair order in account. See
+   * {@link com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTermStructureParametersStrikeInterpolation} for the
+   * interpolation/extrapolation.
+   * 
+   * @param ccy1
+   *          The first currency.
+   * @param ccy2
+   *          The second currency.
+   * @param time
+   *          The time to expiration.
    * @return The volatility.
    */
   public SmileDeltaParameters getSmile(final Currency ccy1, final Currency ccy2, final double time) {

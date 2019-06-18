@@ -47,7 +47,7 @@ public abstract class AbstractNonVersionedRedisSourceComponentFactory extends Ab
   @PropertyDefinition
   private boolean _publishRest = true;
   /**
-   * If defined create a resolver for this source with the given name
+   * If defined create a resolver for this source with the given name.
    */
   @PropertyDefinition
   private String _resolverClassifier;
@@ -176,7 +176,7 @@ public abstract class AbstractNonVersionedRedisSourceComponentFactory extends Ab
 
   //-----------------------------------------------------------------------
   /**
-   * Gets if defined create a resolver for this source with the given name
+   * Gets if defined create a resolver for this source with the given name.
    * @return the value of the property
    */
   public String getResolverClassifier() {
@@ -184,7 +184,7 @@ public abstract class AbstractNonVersionedRedisSourceComponentFactory extends Ab
   }
 
   /**
-   * Sets if defined create a resolver for this source with the given name
+   * Sets if defined create a resolver for this source with the given name.
    * @param resolverClassifier  the new value of the property
    */
   public void setResolverClassifier(String resolverClassifier) {

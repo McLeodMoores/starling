@@ -23,7 +23,9 @@ import com.opengamma.financial.security.future.BondFutureDeliverable;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondFutureNetBasisFromCurvesFunction extends BondFutureFromCurvesFunction {
   private static final BondFutureNetBasisFromCurvesCalculator CALCULATOR = BondFutureNetBasisFromCurvesCalculator.getInstance();
 
@@ -32,7 +34,8 @@ public class BondFutureNetBasisFromCurvesFunction extends BondFutureFromCurvesFu
   }
 
   @Override
-  protected Set<ComputedValue> calculate(final com.opengamma.financial.security.future.BondFutureSecurity security, final BondFuture bondFuture, final YieldCurveBundle data,
+  protected Set<ComputedValue> calculate(final com.opengamma.financial.security.future.BondFutureSecurity security, final BondFuture bondFuture,
+      final YieldCurveBundle data,
       final ComputationTarget target) {
     final List<BondFutureDeliverable> deliverables = security.getBasket();
     final int n = deliverables.size();

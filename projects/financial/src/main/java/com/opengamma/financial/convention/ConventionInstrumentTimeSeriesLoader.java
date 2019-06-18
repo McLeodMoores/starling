@@ -23,9 +23,11 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesLoader;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Populates an historical time-series master with missing time-series for each instrument referenced by the
- * {@link InMemoryConventionBundleMaster}.
+ * Populates an historical time-series master with missing time-series for each instrument referenced by the {@link InMemoryConventionBundleMaster}.
+ *
+ * @deprecated This loaders uses {@link ConventionBundle}s, which are deprecated
  */
+@Deprecated
 public class ConventionInstrumentTimeSeriesLoader {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ConventionInstrumentTimeSeriesLoader.class);
@@ -91,7 +93,7 @@ public class ConventionInstrumentTimeSeriesLoader {
     return _updateExisting;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public void run() {
     final Collection<ConventionBundle> conventions = getConventionMaster().getAll();
     final Set<ExternalId> externalIds = new HashSet<>();
@@ -104,10 +106,11 @@ public class ConventionInstrumentTimeSeriesLoader {
     }
   }
 
-  private void addExternalId(ExternalId externalId, final Set<ExternalId> externalIds) {
+  private void addExternalId(final ExternalId externalId, final Set<ExternalId> externalIds) {
     if (externalId == null) {
       return;
     }
+    ExternalId eid = null;
     if (externalId.isNotScheme(getIdentifierScheme())) {
       final ConventionBundleSearchResult result = getConventionMaster().searchConventionBundle(new ConventionBundleSearchRequest(externalId));
       if (result.getResults().size() == 0) {
@@ -119,19 +122,20 @@ public class ConventionInstrumentTimeSeriesLoader {
         return;
       }
       final ConventionBundleDocument searchResult = Iterables.getOnlyElement(result.getResults());
-      externalId = searchResult.getConventionSet().getIdentifiers().getExternalId(getIdentifierScheme());
-      if (externalId == null) {
-        LOGGER.warn("Convention for {} does not include a mapping to an identifier with scheme {}", externalId, getIdentifierScheme());
+      eid = searchResult.getConventionSet().getIdentifiers().getExternalId(getIdentifierScheme());
+      if (eid == null) {
+        LOGGER.warn("Convention for {} does not include a mapping to an identifier with scheme {}", eid, getIdentifierScheme());
         return;
       }
     }
-    externalIds.add(externalId);
+    externalIds.add(eid);
   }
 
   private void ensureTimeseries(final ExternalId externalId) {
     LOGGER.info("Checking time-series for {}", externalId);
     try {
-      final HistoricalTimeSeries hts = getHistoricalTimeSeriesSource().getHistoricalTimeSeries(ExternalIdBundle.of(externalId), getDataSource(), getDataProvider(), getDataField());
+      final HistoricalTimeSeries hts = getHistoricalTimeSeriesSource().getHistoricalTimeSeries(ExternalIdBundle.of(externalId), getDataSource(),
+          getDataProvider(), getDataField());
       if (hts == null) {
         LOGGER.info("Adding time-series for {}", externalId);
         getHistoricalTimeSeriesLoader().loadTimeSeries(ImmutableSet.of(externalId), getDataProvider(), getDataField(), null, null);

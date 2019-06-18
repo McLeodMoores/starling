@@ -32,6 +32,7 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Class with methods related to bond security valued by discounting.
+ *
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.bond.provider.BondSecurityDiscountingMethod}
  */
 @Deprecated
@@ -43,6 +44,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Return the class instance.
+   *
    * @return The instance.
    */
   public static BondSecurityDiscountingMethod getInstance() {
@@ -82,8 +84,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the present value of a bond security (without settlement amount payment).
-   * @param bond The bond security.
-   * @param curves The curve bundle.
+   *
+   * @param bond
+   *          The bond security.
+   * @param curves
+   *          The curve bundle.
    * @return The present value.
    */
   public double presentValue(final BondSecurity<? extends Payment, ? extends Coupon> bond, final YieldCurveBundle curves) {
@@ -94,12 +99,17 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the present value of a bond transaction from its clean price.
-   * @param bond The bond transaction.
-   * @param curves The curve bundle.
-   * @param cleanPrice The bond clean price.
+   *
+   * @param bond
+   *          The bond transaction.
+   * @param curves
+   *          The curve bundle.
+   * @param cleanPrice
+   *          The bond clean price.
    * @return The present value.
    */
-  public double presentValueFromCleanPrice(final BondSecurity<? extends Payment, ? extends Coupon> bond, final YieldCurveBundle curves, final double cleanPrice) {
+  public double presentValueFromCleanPrice(final BondSecurity<? extends Payment, ? extends Coupon> bond, final YieldCurveBundle curves,
+      final double cleanPrice) {
     ArgumentChecker.isTrue(bond instanceof BondFixedSecurity, "Present value from clean price available only for fixed coupon bond");
     final BondFixedSecurity bondFixed = (BondFixedSecurity) bond;
     final double dfSettle = curves.getCurve(bondFixed.getRepoCurveName()).getDiscountFactor(bondFixed.getSettlementTime());
@@ -108,11 +118,15 @@ public final class BondSecurityDiscountingMethod {
   }
 
   /**
-   * Computes the present value of a bond security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bond.
-   * The parallel shift is done in the curve convention.
-   * @param bond The bond security.
-   * @param curves The curve bundle.
-   * @param zSpread The z-spread.
+   * Computes the present value of a bond security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bond. The
+   * parallel shift is done in the curve convention.
+   *
+   * @param bond
+   *          The bond security.
+   * @param curves
+   *          The curve bundle.
+   * @param zSpread
+   *          The z-spread.
    * @return The present value.
    */
   public double presentValueFromZSpread(final BondSecurity<? extends Payment, ? extends Coupon> bond, final YieldCurveBundle curves, final double zSpread) {
@@ -126,13 +140,18 @@ public final class BondSecurityDiscountingMethod {
   }
 
   /**
-   * Calculates the sensitivity of the bond to the z spread
-   * @param bond The bond
-   * @param curves The curves
-   * @param zSpread The z spread
+   * Calculates the sensitivity of the bond to the z spread.
+   *
+   * @param bond
+   *          The bond
+   * @param curves
+   *          The curves
+   * @param zSpread
+   *          The z spread
    * @return The sensitivity
    */
-  public double presentValueZSpreadSensitivity(final BondSecurity<? extends Payment, ? extends Coupon> bond, final YieldCurveBundle curves, final double zSpread) {
+  public double presentValueZSpreadSensitivity(final BondSecurity<? extends Payment, ? extends Coupon> bond, final YieldCurveBundle curves,
+      final double zSpread) {
     final String discountingCurveName = bond.getDiscountingCurveName();
     final YieldCurveBundle curvesWithZ = new YieldCurveBundle();
     curvesWithZ.addAll(curves);
@@ -145,8 +164,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the dirty price of a bond security from curves.
-   * @param bond The bond security.
-   * @param curves The curve bundle.
+   *
+   * @param bond
+   *          The bond security.
+   * @param curves
+   *          The curve bundle.
    * @return The dirty price.
    */
   public double dirtyPriceFromCurves(final BondFixedSecurity bond, final YieldCurveBundle curves) {
@@ -158,8 +180,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the dirty price of a bond security from a clean price.
-   * @param bond The bond security.
-   * @param cleanPrice The clean price.
+   *
+   * @param bond
+   *          The bond security.
+   * @param cleanPrice
+   *          The clean price.
    * @return The dirty price.
    */
   public double dirtyPriceFromCleanPrice(final BondFixedSecurity bond, final double cleanPrice) {
@@ -169,8 +194,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the dirty price from the conventional yield.
-   * @param bond  The bond security, not null
-   * @param yield The bond yield.
+   *
+   * @param bond
+   *          The bond security, not null
+   * @param yield
+   *          The bond yield.
    * @return The dirty price.
    */
   public double dirtyPriceFromYield(final BondFixedSecurity bond, final double yield) {
@@ -178,15 +206,17 @@ public final class BondSecurityDiscountingMethod {
     ArgumentChecker.isTrue(bond.getNominal().getNumberOfPayments() == 1, "Yield: more than one nominal repayment.");
     final int nbCoupon = bond.getCoupon().getNumberOfPayments();
     final double nominal = bond.getNominal().getNthPayment(bond.getNominal().getNumberOfPayments() - 1).getAmount();
-    if (((bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET)) || (bond.getYieldConvention().equals(SimpleYieldConvention.GERMAN_BOND)))
-        && (nbCoupon == 1)) {
+    if ((bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET) || bond.getYieldConvention().equals(SimpleYieldConvention.GERMAN_BOND))
+        && nbCoupon == 1) {
       return (nominal + bond.getCoupon().getNthPayment(0).getAmount()) / (1.0 + bond.getFactorToNextCoupon() * yield / bond.getCouponPerYear()) / nominal;
     }
-    if ((bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD)) && (nbCoupon == 1)) {
-      return (nominal + bond.getCoupon().getNthPayment(0).getAmount()) / nominal * Math.pow(1.0 + yield / bond.getCouponPerYear(), -bond.getFactorToNextCoupon());
+    if (bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD) && nbCoupon == 1) {
+      return (nominal + bond.getCoupon().getNthPayment(0).getAmount()) / nominal
+          * Math.pow(1.0 + yield / bond.getCouponPerYear(), -bond.getFactorToNextCoupon());
     }
-    if ((bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET)) || (bond.getYieldConvention().equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD)) ||
-        (bond.getYieldConvention().equals(SimpleYieldConvention.GERMAN_BOND)) || (bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD))) {
+    if (bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET) || bond.getYieldConvention().equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD)
+        || bond.getYieldConvention().equals(SimpleYieldConvention.GERMAN_BOND)
+        || bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD)) {
       return dirtyPriceFromYieldStandard(bond, yield);
     }
     throw new UnsupportedOperationException("The convention " + bond.getYieldConvention().getName() + " is not supported.");
@@ -194,8 +224,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Calculates the dirty price from a standard yield.
-   * @param bond The bond
-   * @param yield The yield
+   *
+   * @param bond
+   *          The bond
+   * @param yield
+   *          The yield
    * @return The dirty price
    */
   private double dirtyPriceFromYieldStandard(final BondFixedSecurity bond, final double yield) {
@@ -213,8 +246,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the dirty price sensitivity to the curves.
-   * @param bond The bond security.
-   * @param curves The curve bundle.
+   *
+   * @param bond
+   *          The bond security.
+   * @param curves
+   *          The curve bundle.
    * @return The price curve sensitivity.
    */
   public InterestRateCurveSensitivity dirtyPriceCurveSensitivity(final BondFixedSecurity bond, final YieldCurveBundle curves) {
@@ -234,8 +270,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the clean price of a bond security from curves.
-   * @param bond The bond security.
-   * @param curves The curve bundle.
+   *
+   * @param bond
+   *          The bond security.
+   * @param curves
+   *          The curve bundle.
    * @return The clean price.
    */
   public double cleanPriceFromCurves(final BondFixedSecurity bond, final YieldCurveBundle curves) {
@@ -245,8 +284,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the clean price of a bond security from a dirty price.
-   * @param bond The bond security.
-   * @param dirtyPrice The dirty price.
+   *
+   * @param bond
+   *          The bond security.
+   * @param dirtyPrice
+   *          The dirty price.
    * @return The clean price.
    */
   public double cleanPriceFromDirtyPrice(final BondFixedSecurity bond, final double dirtyPrice) {
@@ -256,8 +298,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the clean price from the conventional yield.
-   * @param bond  The bond security.
-   * @param yield The bond yield.
+   *
+   * @param bond
+   *          The bond security.
+   * @param yield
+   *          The bond yield.
    * @return The clean price.
    */
   public double cleanPriceFromYield(final BondFixedSecurity bond, final double yield) {
@@ -268,8 +313,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the conventional yield from the dirty price.
-   * @param bond The bond security.
-   * @param dirtyPrice The bond dirty price.
+   *
+   * @param bond
+   *          The bond security.
+   * @param dirtyPrice
+   *          The bond dirty price.
    * @return The yield.
    */
   public double yieldFromDirtyPrice(final BondFixedSecurity bond, final double dirtyPrice) {
@@ -289,8 +337,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the conventional yield from the dirty price.
-   * @param bond The bond security.
-   * @param curves The curve bundle.
+   *
+   * @param bond
+   *          The bond security.
+   * @param curves
+   *          The curve bundle.
    * @return The yield.
    */
   public double yieldFromCurves(final BondFixedSecurity bond, final YieldCurveBundle curves) {
@@ -303,8 +354,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the conventional yield from the clean price.
-   * @param bond The bond security.
-   * @param cleanPrice The bond clean price.
+   *
+   * @param bond
+   *          The bond security.
+   * @param cleanPrice
+   *          The bond clean price.
    * @return The yield.
    */
   public double yieldFromCleanPrice(final BondFixedSecurity bond, final double cleanPrice) {
@@ -315,26 +369,31 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the modified duration of a bond from the conventional yield.
-   * @param bond  The bond security.
-   * @param yield The bond yield.
+   *
+   * @param bond
+   *          The bond security.
+   * @param yield
+   *          The bond yield.
    * @return The modified duration.
    */
   public double modifiedDurationFromYield(final BondFixedSecurity bond, final double yield) {
     final int nbCoupon = bond.getCoupon().getNumberOfPayments();
     final double nominal = bond.getNominal().getNthPayment(bond.getNominal().getNumberOfPayments() - 1).getAmount();
-    if ((bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET)) && (nbCoupon == 1)) {
+    if (bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET) && nbCoupon == 1) {
       return bond.getFactorToNextCoupon() / bond.getCouponPerYear() / (1.0 + bond.getFactorToNextCoupon() * yield / bond.getCouponPerYear());
     }
-    if ((bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD)) && (nbCoupon == 1)) {
+    if (bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD) && nbCoupon == 1) {
       return bond.getFactorToNextCoupon() / bond.getCouponPerYear() / (1.0 + yield / bond.getCouponPerYear());
     }
-    if ((bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET)) || (bond.getYieldConvention().equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD)) ||
-        (bond.getYieldConvention().equals(SimpleYieldConvention.GERMAN_BOND)) || (bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD))) {
+    if (bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET) || bond.getYieldConvention().equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD)
+        || bond.getYieldConvention().equals(SimpleYieldConvention.GERMAN_BOND)
+        || bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD)) {
       final double factorOnPeriod = 1 + yield / bond.getCouponPerYear();
       double mdAtFirstCoupon = 0;
       double pvAtFirstCoupon = 0;
       for (int loopcpn = 0; loopcpn < nbCoupon; loopcpn++) {
-        mdAtFirstCoupon += bond.getCoupon().getNthPayment(loopcpn).getAmount() / Math.pow(factorOnPeriod, loopcpn + 1) * (loopcpn + bond.getFactorToNextCoupon()) / bond.getCouponPerYear();
+        mdAtFirstCoupon += bond.getCoupon().getNthPayment(loopcpn).getAmount() / Math.pow(factorOnPeriod, loopcpn + 1)
+            * (loopcpn + bond.getFactorToNextCoupon()) / bond.getCouponPerYear();
         pvAtFirstCoupon += bond.getCoupon().getNthPayment(loopcpn).getAmount() / Math.pow(factorOnPeriod, loopcpn);
       }
       mdAtFirstCoupon += nominal / Math.pow(factorOnPeriod, nbCoupon) * (nbCoupon - 1 + bond.getFactorToNextCoupon()) / bond.getCouponPerYear();
@@ -348,8 +407,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the modified duration of a bond from the curves.
-   * @param bond  The bond security.
-   * @param curves The curve bundle.
+   *
+   * @param bond
+   *          The bond security.
+   * @param curves
+   *          The curve bundle.
    * @return The modified duration.
    */
   public double modifiedDurationFromCurves(final BondFixedSecurity bond, final YieldCurveBundle curves) {
@@ -359,8 +421,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the modified duration of a bond from the dirty price.
-   * @param bond  The bond security.
-   * @param dirtyPrice The bond dirty price.
+   *
+   * @param bond
+   *          The bond security.
+   * @param dirtyPrice
+   *          The bond dirty price.
    * @return The modified duration.
    */
   public double modifiedDurationFromDirtyPrice(final BondFixedSecurity bond, final double dirtyPrice) {
@@ -370,8 +435,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the modified duration of a bond from the clean price.
-   * @param bond  The bond security.
-   * @param cleanPrice The bond clean price.
+   *
+   * @param bond
+   *          The bond security.
+   * @param cleanPrice
+   *          The bond clean price.
    * @return The modified duration.
    */
   public double modifiedDurationFromCleanPrice(final BondFixedSecurity bond, final double cleanPrice) {
@@ -381,17 +449,22 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the Macaulay duration of a bond from the conventional yield.
-   * @param bond  The bond security.
-   * @param yield The bond yield.
+   *
+   * @param bond
+   *          The bond security.
+   * @param yield
+   *          The bond yield.
    * @return The Macaulay duration.
    */
   public double macaulayDurationFromYield(final BondFixedSecurity bond, final double yield) {
     final int nbCoupon = bond.getCoupon().getNumberOfPayments();
-    if (((bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET)) || (bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD))) && (nbCoupon == 1)) {
+    if ((bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET) || bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD))
+        && nbCoupon == 1) {
       return bond.getFactorToNextCoupon() / bond.getCouponPerYear();
     }
-    if ((bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET)) || (bond.getYieldConvention().equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD)) ||
-        (bond.getYieldConvention().equals(SimpleYieldConvention.GERMAN_BOND)) || (bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD))) {
+    if (bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET) || bond.getYieldConvention().equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD)
+        || bond.getYieldConvention().equals(SimpleYieldConvention.GERMAN_BOND)
+        || bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD)) {
       return modifiedDurationFromYield(bond, yield) * (1 + yield / bond.getCouponPerYear());
     }
     throw new UnsupportedOperationException("The convention " + bond.getYieldConvention().getName() + " is not supported for Macaulay duration.");
@@ -399,8 +472,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the Macaulay duration of a bond from the curves.
-   * @param bond  The bond security.
-   * @param curves The curve bundle.
+   *
+   * @param bond
+   *          The bond security.
+   * @param curves
+   *          The curve bundle.
    * @return The Macaulay duration.
    */
   public double macaulayDurationFromCurves(final BondFixedSecurity bond, final YieldCurveBundle curves) {
@@ -410,8 +486,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the Macauley duration of a bond from the dirty price.
-   * @param bond  The bond security.
-   * @param dirtyPrice The bond dirty price.
+   *
+   * @param bond
+   *          The bond security.
+   * @param dirtyPrice
+   *          The bond dirty price.
    * @return The Macauley duration.
    */
   public double macaulayDurationFromDirtyPrice(final BondFixedSecurity bond, final double dirtyPrice) {
@@ -421,8 +500,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the convexity of a bond from the conventional yield.
-   * @param bond  The bond security.
-   * @param yield The bond yield.
+   *
+   * @param bond
+   *          The bond security.
+   * @param yield
+   *          The bond yield.
    * @return The convexity.
    */
   public double convexityFromYield(final BondFixedSecurity bond, final double yield) {
@@ -430,26 +512,28 @@ public final class BondSecurityDiscountingMethod {
     final double nominal = bond.getNominal().getNthPayment(bond.getNominal().getNumberOfPayments() - 1).getAmount();
     final YieldConvention yieldConvention = bond.getYieldConvention();
     if (nbCoupon == 1) {
-      if (((yieldConvention.equals(SimpleYieldConvention.US_STREET)) || (yieldConvention.equals(SimpleYieldConvention.GERMAN_BOND)))) {
+      if (yieldConvention.equals(SimpleYieldConvention.US_STREET) || yieldConvention.equals(SimpleYieldConvention.GERMAN_BOND)) {
         final double timeToPay = bond.getFactorToNextCoupon() / bond.getCouponPerYear();
-        final double disc = (1.0 + bond.getFactorToNextCoupon() * yield / bond.getCouponPerYear());
+        final double disc = 1.0 + bond.getFactorToNextCoupon() * yield / bond.getCouponPerYear();
         return 2 * timeToPay * timeToPay / (disc * disc);
       }
       if (yieldConvention.equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD)) {
         throw new UnsupportedOperationException("The convention " + yieldConvention.getName() + "with only one coupon is not supported.");
       }
     }
-    if ((yieldConvention.equals(SimpleYieldConvention.US_STREET)) || (yieldConvention.equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD)) ||
-        (yieldConvention.equals(SimpleYieldConvention.GERMAN_BOND)) || (yieldConvention.equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD))) {
+    if (yieldConvention.equals(SimpleYieldConvention.US_STREET) || yieldConvention.equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD)
+        || yieldConvention.equals(SimpleYieldConvention.GERMAN_BOND) || yieldConvention.equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD)) {
       final double factorOnPeriod = 1 + yield / bond.getCouponPerYear();
       double cvAtFirstCoupon = 0;
       double pvAtFirstCoupon = 0;
       for (int loopcpn = 0; loopcpn < nbCoupon; loopcpn++) {
-        cvAtFirstCoupon += bond.getCoupon().getNthPayment(loopcpn).getAmount() / Math.pow(factorOnPeriod, loopcpn + 2) * (loopcpn + bond.getFactorToNextCoupon())
+        cvAtFirstCoupon += bond.getCoupon().getNthPayment(loopcpn).getAmount() / Math.pow(factorOnPeriod, loopcpn + 2)
+            * (loopcpn + bond.getFactorToNextCoupon())
             * (loopcpn + bond.getFactorToNextCoupon() + 1) / (bond.getCouponPerYear() * bond.getCouponPerYear());
         pvAtFirstCoupon += bond.getCoupon().getNthPayment(loopcpn).getAmount() / Math.pow(factorOnPeriod, loopcpn);
       }
-      cvAtFirstCoupon += nominal / Math.pow(factorOnPeriod, nbCoupon + 1) * (nbCoupon - 1 + bond.getFactorToNextCoupon()) * (nbCoupon + bond.getFactorToNextCoupon())
+      cvAtFirstCoupon += nominal / Math.pow(factorOnPeriod, nbCoupon + 1) * (nbCoupon - 1 + bond.getFactorToNextCoupon())
+          * (nbCoupon + bond.getFactorToNextCoupon())
           / (bond.getCouponPerYear() * bond.getCouponPerYear());
       pvAtFirstCoupon += nominal / Math.pow(factorOnPeriod, nbCoupon - 1);
       final double pv = pvAtFirstCoupon * Math.pow(factorOnPeriod, -bond.getFactorToNextCoupon());
@@ -461,8 +545,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the convexity of a bond from the curves.
-   * @param bond  The bond security.
-   * @param curves The curve bundle.
+   *
+   * @param bond
+   *          The bond security.
+   * @param curves
+   *          The curve bundle.
    * @return The convexity.
    */
   public double convexityFromCurves(final BondFixedSecurity bond, final YieldCurveBundle curves) {
@@ -472,8 +559,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the convexity of a bond from the dirty price.
-   * @param bond  The bond security.
-   * @param dirtyPrice The bond dirty price.
+   *
+   * @param bond
+   *          The bond security.
+   * @param dirtyPrice
+   *          The bond dirty price.
    * @return The convexity.
    */
   public double convexityFromDirtyPrice(final BondFixedSecurity bond, final double dirtyPrice) {
@@ -483,8 +573,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the convexity of a bond from the clean price.
-   * @param bond  The bond security.
-   * @param cleanPrice The bond clean price.
+   *
+   * @param bond
+   *          The bond security.
+   * @param cleanPrice
+   *          The bond clean price.
    * @return The convexity.
    */
   public double convexityFromCleanPrice(final BondFixedSecurity bond, final double cleanPrice) {
@@ -494,9 +587,13 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes a bond z-spread from the curves and a present value.
-   * @param bond The bond.
-   * @param curves The curve bundle.
-   * @param pv The target present value.
+   *
+   * @param bond
+   *          The bond.
+   * @param curves
+   *          The curve bundle.
+   * @param pv
+   *          The target present value.
    * @return The z-spread.
    */
   public double zSpreadFromCurvesAndPV(final BondSecurity<? extends Payment, ? extends Coupon> bond, final YieldCurveBundle curves, final double pv) {
@@ -516,45 +613,64 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes a bond present value z-spread sensitivity from the curves and a present value.
-   * @param bond The bond.
-   * @param curves The curve bundle.
-   * @param pv The target present value.
+   *
+   * @param bond
+   *          The bond.
+   * @param curves
+   *          The curve bundle.
+   * @param pv
+   *          The target present value.
    * @return The z-spread sensitivity.
    */
-  public double presentValueZSpreadSensitivityFromCurvesAndPV(final BondSecurity<? extends Payment, ? extends Coupon> bond, final YieldCurveBundle curves, final double pv) {
+  public double presentValueZSpreadSensitivityFromCurvesAndPV(final BondSecurity<? extends Payment, ? extends Coupon> bond, final YieldCurveBundle curves,
+      final double pv) {
     final double zSpread = zSpreadFromCurvesAndPV(bond, curves, pv);
     return presentValueZSpreadSensitivity(bond, curves, zSpread);
   }
 
   /**
    * Computes a bond z-spread from the curves and a clean price.
-   * @param bond The bond.
-   * @param curves The curve bundle.
-   * @param cleanPrice The target clean price.
+   *
+   * @param bond
+   *          The bond.
+   * @param curves
+   *          The curve bundle.
+   * @param cleanPrice
+   *          The target clean price.
    * @return The z-spread.
    */
-  public double zSpreadFromCurvesAndClean(final BondSecurity<? extends Payment, ? extends Coupon> bond, final YieldCurveBundle curves, final double cleanPrice) {
+  public double zSpreadFromCurvesAndClean(final BondSecurity<? extends Payment, ? extends Coupon> bond, final YieldCurveBundle curves,
+      final double cleanPrice) {
     return zSpreadFromCurvesAndPV(bond, curves, presentValueFromCleanPrice(bond, curves, cleanPrice));
   }
 
   /**
    * Computes the bond present value z-spread sensitivity from the curves and a clean price.
-   * @param bond The bond.
-   * @param curves The curve bundle.
-   * @param cleanPrice The target clean price.
+   *
+   * @param bond
+   *          The bond.
+   * @param curves
+   *          The curve bundle.
+   * @param cleanPrice
+   *          The target clean price.
    * @return The z-spread sensitivity.
    */
-  public double presentValueZSpreadSensitivityFromCurvesAndClean(final BondSecurity<? extends Payment, ? extends Coupon> bond, final YieldCurveBundle curves, final double cleanPrice) {
+  public double presentValueZSpreadSensitivityFromCurvesAndClean(final BondSecurity<? extends Payment, ? extends Coupon> bond, final YieldCurveBundle curves,
+      final double cleanPrice) {
     return presentValueZSpreadSensitivityFromCurvesAndPV(bond, curves, presentValueFromCleanPrice(bond, curves, cleanPrice));
   }
 
   /**
    * Computes the present value curve sensitivity of a bond security (without settlement amount payment).
-   * @param bond The bond security.
-   * @param curves The curve bundle.
+   *
+   * @param bond
+   *          The bond security.
+   * @param curves
+   *          The curve bundle.
    * @return The present value curve sensitivity.
    */
-  public InterestRateCurveSensitivity presentValueCurveSensitivity(final BondSecurity<? extends Payment, ? extends Coupon> bond, final YieldCurveBundle curves) {
+  public InterestRateCurveSensitivity presentValueCurveSensitivity(final BondSecurity<? extends Payment, ? extends Coupon> bond,
+      final YieldCurveBundle curves) {
     final InterestRateCurveSensitivity pvcsNominal = new InterestRateCurveSensitivity(bond.getNominal().accept(PVCSC, curves));
     final InterestRateCurveSensitivity pvcsCoupon = new InterestRateCurveSensitivity(bond.getCoupon().accept(PVCSC, curves));
     return pvcsNominal.plus(pvcsCoupon);
@@ -562,8 +678,11 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the present value curve sensitivity to parallel curve movement of a bond security (without settlement amount payment).
-   * @param bond The bond security.
-   * @param curves The curve bundle.
+   *
+   * @param bond
+   *          The bond security.
+   * @param curves
+   *          The curve bundle.
    * @return The present value curve sensitivity.
    */
   public StringAmount presentValueParallelCurveSensitivity(final BondSecurity<? extends Payment, ? extends Coupon> bond, final YieldCurveBundle curves) {
@@ -573,10 +692,12 @@ public final class BondSecurityDiscountingMethod {
   }
 
   /**
-   * Calculates the accrued interest for a fixed-coupon bond using the curves. The accrued interest is defined
-   * as dirty price - clean price.
-   * @param bond The bond, not null
-   * @param curves The curves, not null
+   * Calculates the accrued interest for a fixed-coupon bond using the curves. The accrued interest is defined as dirty price - clean price.
+   *
+   * @param bond
+   *          The bond, not null
+   * @param curves
+   *          The curves, not null
    * @return The accrued interest
    */
   public double accruedInterestFromCurves(final BondFixedSecurity bond, final YieldCurveBundle curves) {

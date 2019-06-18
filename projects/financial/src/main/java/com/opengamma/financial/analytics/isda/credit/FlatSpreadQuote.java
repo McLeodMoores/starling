@@ -31,6 +31,11 @@ import com.opengamma.analytics.financial.credit.isdastandardmodel.QuotedSpread;
 public class FlatSpreadQuote implements CdsQuote, ImmutableBean {
 
   /**
+   * The quote type.
+   */
+  public static final String TYPE = "FLAT_SPREAD";
+
+  /**
    * The coupon of the spread, denoted as a fractional amount.
    */
   @PropertyDefinition
@@ -44,8 +49,11 @@ public class FlatSpreadQuote implements CdsQuote, ImmutableBean {
 
   /**
    * Creates a flat spread quote using the passed coupon and quoted spread.
-   * @param coupon the coupon to use, a fractional amount.
-   * @param quotedSpread the quoted spread, a fractional amount.
+   * 
+   * @param coupon
+   *          the coupon to use, a fractional amount.
+   * @param quotedSpread
+   *          the quoted spread, a fractional amount.
    * @return a flat spread quote
    */
   public static FlatSpreadQuote from(final double coupon, final double quotedSpread) {

@@ -34,6 +34,10 @@ public class JmsByteArrayTransportTest {
 
   private static final long TIMEOUT = 10L * Timeout.standardTimeoutMillis();
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   @Test(invocationCount = 5, successPercentage = 19)
   public void topicConduit() throws Exception {
     final String topicName = "JmsByteArrayTransportTest-topicConduit-" + System.getProperty("user.name") + "-" + System.currentTimeMillis();
@@ -61,7 +65,7 @@ public class JmsByteArrayTransportTest {
     while (!container.isRunning()) {
       Thread.sleep(10L);
     }
-    //TODO: this is a hack.  The context doesn't seem to have always set up the consumer completely yet
+    // TODO: this is a hack. The context doesn't seem to have always set up the consumer completely yet
     Thread.sleep(500L);
 
     messageSender.send(randomBytes);
@@ -84,6 +88,10 @@ public class JmsByteArrayTransportTest {
     container.destroy();
   }
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   @Test(invocationCount = 5, successPercentage = 19)
   public void requestConduit() throws Exception {
     final String topicName = "JmsByteArrayTransportTest-requestConduit-" + System.getProperty("user.name") + "-" + System.currentTimeMillis();

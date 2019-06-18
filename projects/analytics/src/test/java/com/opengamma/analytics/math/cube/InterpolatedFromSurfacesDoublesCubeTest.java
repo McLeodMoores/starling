@@ -106,35 +106,35 @@ public class InterpolatedFromSurfacesDoublesCubeTest {
     double y = 4;
     double z = A1;
     assertEquals(XY_CUBE.getValue(x, y, z), F2.evaluate(x, y), 0);
-    assertEquals(XY_CUBE.getValue(new Triple<>(x, y, z)), F2.evaluate(x, y), 0);
+    assertEquals(XY_CUBE.getValue(Triple.of(x, y, z)), F2.evaluate(x, y), 0);
     z = A1 * Math.random();
     double lower = F1.evaluate(x, y);
     double higher = F2.evaluate(x, y);
     double value = (higher - lower) * (z / A1) + lower;
     assertEquals(XY_CUBE.getValue(x, y, z), value, 0);
-    assertEquals(XY_CUBE.getValue(new Triple<>(x, y, z)), value, 0);
+    assertEquals(XY_CUBE.getValue(Triple.of(x, y, z)), value, 0);
     x = 2.4;
     y = A2;
     z = 5.6;
     assertEquals(XZ_CUBE.getValue(x, y, z), F2.evaluate(x, z), 0);
-    assertEquals(XZ_CUBE.getValue(new Triple<>(x, y, z)), F2.evaluate(x, z), 0);
+    assertEquals(XZ_CUBE.getValue(Triple.of(x, y, z)), F2.evaluate(x, z), 0);
     y = A1 * Math.random();
     lower = F1.evaluate(x, z);
     higher = F2.evaluate(x, z);
     value = (higher - lower) * (y / A1) + lower;
     assertEquals(XZ_CUBE.getValue(x, y, z), value, 0);
-    assertEquals(XZ_CUBE.getValue(new Triple<>(x, y, z)), value, 0);
+    assertEquals(XZ_CUBE.getValue(Triple.of(x, y, z)), value, 0);
     x = A0;
     y = 1.34;
     z = 5.6;
     assertEquals(YZ_CUBE.getValue(x, y, z), F1.evaluate(y, z), 0);
-    assertEquals(YZ_CUBE.getValue(new Triple<>(x, y, z)), F1.evaluate(y, z), 0);
+    assertEquals(YZ_CUBE.getValue(Triple.of(x, y, z)), F1.evaluate(y, z), 0);
     x = A1 * Math.random();
     lower = F1.evaluate(y, z);
     higher = F2.evaluate(y, z);
     value = (higher - lower) * (x / A1) + lower;
     assertEquals(YZ_CUBE.getValue(x, y, z), value, 0);
-    assertEquals(YZ_CUBE.getValue(new Triple<>(x, y, z)), value, 0);
+    assertEquals(YZ_CUBE.getValue(Triple.of(x, y, z)), value, 0);
   }
 
   @Test

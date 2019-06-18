@@ -13,7 +13,7 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.util.redis.RedisConnector;
 
 /**
- * Quartz job that starts and executes Redis hts snaphotter
+ * Quartz job that starts and executes Redis hts snaphotter.
  */
 public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
@@ -37,6 +37,7 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Gets the htsMaster.
+   * 
    * @return the htsMaster
    */
   public HistoricalTimeSeriesMaster getHtsMaster() {
@@ -45,7 +46,9 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the htsMaster.
-   * @param htsMaster  the htsMaster
+   * 
+   * @param htsMaster
+   *          the htsMaster
    */
   public void setHtsMaster(final HistoricalTimeSeriesMaster htsMaster) {
     _htsMaster = htsMaster;
@@ -53,6 +56,7 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Gets the dataSource.
+   * 
    * @return the dataSource
    */
   public String getDataSource() {
@@ -61,7 +65,9 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the dataSource.
-   * @param dataSource  the dataSource
+   * 
+   * @param dataSource
+   *          the dataSource
    */
   public void setDataSource(final String dataSource) {
     _dataSource = dataSource;
@@ -69,6 +75,7 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Gets the normalizationRuleSetId.
+   * 
    * @return the normalizationRuleSetId
    */
   public String getNormalizationRuleSetId() {
@@ -77,7 +84,9 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the normalizationRuleSetId.
-   * @param normalizationRuleSetId  the normalizationRuleSetId
+   * 
+   * @param normalizationRuleSetId
+   *          the normalizationRuleSetId
    */
   public void setNormalizationRuleSetId(final String normalizationRuleSetId) {
     _normalizationRuleSetId = normalizationRuleSetId;
@@ -85,6 +94,7 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Gets the observationTime.
+   * 
    * @return the observationTime
    */
   public String getObservationTime() {
@@ -93,7 +103,9 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the observationTime.
-   * @param observationTime  the observationTime
+   * 
+   * @param observationTime
+   *          the observationTime
    */
   public void setObservationTime(final String observationTime) {
     _observationTime = observationTime;
@@ -101,6 +113,7 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Gets the redisConnector.
+   * 
    * @return the redisConnector
    */
   public RedisConnector getRedisConnector() {
@@ -109,7 +122,9 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the redisConnector.
-   * @param redisConnector  the redisConnector
+   * 
+   * @param redisConnector
+   *          the redisConnector
    */
   public void setRedisConnector(final RedisConnector redisConnector) {
     _redisConnector = redisConnector;
@@ -117,6 +132,7 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Gets the schemeBlackList.
+   * 
    * @return the schemeBlackList
    */
   public BlackList getSchemeBlackList() {
@@ -125,7 +141,9 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the schemeBlackList.
-   * @param schemeBlackList  the schemeBlackList
+   * 
+   * @param schemeBlackList
+   *          the schemeBlackList
    */
   public void setSchemeBlackList(final BlackList schemeBlackList) {
     _schemeBlackList = schemeBlackList;
@@ -133,6 +151,7 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Gets the dataFieldBlackList.
+   * 
    * @return the dataFieldBlackList
    */
   public BlackList getDataFieldBlackList() {
@@ -141,7 +160,9 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the dataFieldBlackList.
-   * @param dataFieldBlackList  the dataFieldBlackList
+   * 
+   * @param dataFieldBlackList
+   *          the dataFieldBlackList
    */
   public void setDataFieldBlackList(final BlackList dataFieldBlackList) {
     _dataFieldBlackList = dataFieldBlackList;
@@ -149,6 +170,7 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Gets the globalPrefix.
+   * 
    * @return the globalPrefix
    */
   public String getGlobalPrefix() {
@@ -157,7 +179,9 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the globalPrefix.
-   * @param globalPrefix  the globalPrefix
+   * 
+   * @param globalPrefix
+   *          the globalPrefix
    */
   public void setGlobalPrefix(final String globalPrefix) {
     _globalPrefix = globalPrefix;
@@ -165,6 +189,7 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Gets the baseDir.
+   * 
    * @return the baseDir
    */
   public String getBaseDir() {
@@ -173,7 +198,9 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the baseDir.
-   * @param baseDir  the baseDir
+   * 
+   * @param baseDir
+   *          the baseDir
    */
   public void setBaseDir(final String baseDir) {
     _baseDir = baseDir;

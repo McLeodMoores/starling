@@ -33,12 +33,10 @@ import com.opengamma.id.UniqueId;
  * <p>
  * This is the simplest possible implementation of the {@link Exchange} interface.
  * <p>
- * This class is mutable and not thread-safe.
- * It is intended to be used in the engine via the read-only {@code Exchange} interface.
+ * This class is mutable and not thread-safe. It is intended to be used in the engine via the read-only {@code Exchange} interface.
  */
 @BeanDefinition
-public class SimpleExchange extends DirectBean
-    implements Exchange, MutableUniqueIdentifiable, Serializable {
+public class SimpleExchange extends DirectBean implements Exchange, MutableUniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -75,11 +73,12 @@ public class SimpleExchange extends DirectBean
   public SimpleExchange() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle.
    *
-   * @param externalId  the external identifier, not null
+   * @param externalId
+   *          the external identifier, not null
    */
   public void addExternalId(final ExternalId externalId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(externalId));

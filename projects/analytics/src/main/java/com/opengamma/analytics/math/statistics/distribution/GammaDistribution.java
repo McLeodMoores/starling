@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.distribution;
@@ -31,7 +31,7 @@ import cern.jet.random.engine.RandomEngine;
  * <p>
  * This implementation uses the CERN <a href="http://acs.lbl.gov/~hoschek/colt/api/index.html">colt</a> package for the cdf, pdf
  * and $\Gamma$-distributed random numbers.
- * 
+ *
  */
 public class GammaDistribution implements ProbabilityDistribution<Double> {
   private final Gamma _gamma;
@@ -71,8 +71,10 @@ public class GammaDistribution implements ProbabilityDistribution<Double> {
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
    * @throws NotImplementedException
+   *           not implemented
    */
   @Override
   public double getInverseCDF(final Double p) {
@@ -116,9 +118,9 @@ public class GammaDistribution implements ProbabilityDistribution<Double> {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_k);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_theta);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

@@ -31,7 +31,7 @@ import com.opengamma.integration.tool.marketdata.MarketDataSnapshotToolUtils;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Writes a snapshot to exported file
+ * Writes a snapshot to exported file.
  */
 public class CsvSnapshotWriter implements SnapshotWriter {
 
@@ -49,7 +49,7 @@ public class CsvSnapshotWriter implements SnapshotWriter {
 
   /** Ordinated ValueSnapshots, needed for Volatility Surfaces */
   private void writeOrdinatedValueSnapshot(final Map<String, String> prefixes,
-                                           final Map<Pair<Object, Object>, ValueSnapshot> valueSnapshots) {
+      final Map<Pair<Object, Object>, ValueSnapshot> valueSnapshots) {
 
     for (final Map.Entry<Pair<Object, Object>, ValueSnapshot> entry : valueSnapshots.entrySet()) {
       final Map<String, String> tempRow = new HashMap<>();
@@ -57,8 +57,8 @@ public class CsvSnapshotWriter implements SnapshotWriter {
       tempRow.putAll(prefixes);
 
       final Pair<String, String> ordinals = MarketDataSnapshotToolUtils.ordinalsAsString(entry.getKey());
-      final String surfaceX  = ordinals.getFirst();
-      final String surfaceY  = ordinals.getSecond();
+      final String surfaceX = ordinals.getFirst();
+      final String surfaceY = ordinals.getSecond();
 
       tempRow.put(SnapshotColumns.SURFACE_X.get(), surfaceX);
       tempRow.put(SnapshotColumns.SURFACE_Y.get(), surfaceY);
@@ -120,13 +120,13 @@ public class CsvSnapshotWriter implements SnapshotWriter {
   }
 
   private void writeUnstructuredMarketDataSnapshot(final Map<String, String> prefixes,
-                                                   final UnstructuredMarketDataSnapshot snapshot) {
+      final UnstructuredMarketDataSnapshot snapshot) {
 
     for (final ExternalIdBundle eib : snapshot.getTargets()) {
       final Map<String, String> tempRow = new HashMap<>();
       tempRow.putAll(prefixes);
       tempRow.put(SnapshotColumns.ID_BUNDLE.get(), StringUtils.join(eib.getExternalIds(), '|'));
-      //Row written by writeValueSnapshot
+      // Row written by writeValueSnapshot
       writeValueSnapshot(tempRow, snapshot.getTargetValues(eib));
     }
   }
@@ -150,7 +150,7 @@ public class CsvSnapshotWriter implements SnapshotWriter {
       tempRow.put(SnapshotColumns.TYPE.get(), SnapshotType.CURVE.get());
       tempRow.put(SnapshotColumns.NAME.get(), entry.getKey().getName());
       tempRow.put(SnapshotColumns.INSTANT.get(), curve.getValuationTime().toString());
-      //Row written via writeUnstructuredMarketDataSnapshot
+      // Row written via writeUnstructuredMarketDataSnapshot
       writeUnstructuredMarketDataSnapshot(tempRow, curve.getValues());
     }
   }
@@ -165,7 +165,7 @@ public class CsvSnapshotWriter implements SnapshotWriter {
 
     final Map<String, String> tempRow = new HashMap<>();
     tempRow.put(SnapshotColumns.TYPE.get(), SnapshotType.GLOBAL_VALUES.get());
-    //Row written via writeUnstructuredMarketDataSnapshot
+    // Row written via writeUnstructuredMarketDataSnapshot
     writeUnstructuredMarketDataSnapshot(tempRow, globalValues);
   }
 
@@ -186,7 +186,7 @@ public class CsvSnapshotWriter implements SnapshotWriter {
       tempRow.put(SnapshotColumns.SURFACE_INSTRUMENT_TYPE.get(), entry.getKey().getInstrumentType());
       tempRow.put(SnapshotColumns.SURFACE_QUOTE_TYPE.get(), entry.getKey().getQuoteType());
       tempRow.put(SnapshotColumns.SURFACE_QUOTE_UNITS.get(), entry.getKey().getQuoteUnits());
-      //Row written by writeOrdinatedValueSnapshot
+      // Row written by writeOrdinatedValueSnapshot
       writeOrdinatedValueSnapshot(tempRow, surface.getValues());
     }
   }
@@ -206,7 +206,7 @@ public class CsvSnapshotWriter implements SnapshotWriter {
       tempRow.put(SnapshotColumns.NAME.get(), entry.getKey().getName());
       tempRow.put(SnapshotColumns.YIELD_CURVE_CURRENCY.get(), entry.getKey().getCurrency().toString());
       tempRow.put(SnapshotColumns.INSTANT.get(), curve.getValuationTime().toString());
-      //Row written via writeUnstructuredMarketDataSnapshot
+      // Row written via writeUnstructuredMarketDataSnapshot
       writeUnstructuredMarketDataSnapshot(tempRow, curve.getValues());
     }
   }

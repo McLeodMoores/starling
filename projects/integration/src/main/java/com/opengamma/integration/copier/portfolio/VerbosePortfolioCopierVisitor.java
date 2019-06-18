@@ -9,7 +9,7 @@ import com.opengamma.master.position.ManageablePosition;
 import com.opengamma.master.security.ManageableSecurity;
 
 /**
- * Portfolio copier visitor that prints messages to stdout
+ * Portfolio copier visitor that prints messages to stdout.
  */
 public class VerbosePortfolioCopierVisitor extends PortfolioCopierStats {
 
@@ -17,6 +17,7 @@ public class VerbosePortfolioCopierVisitor extends PortfolioCopierStats {
   public void error(final String message) {
     System.out.println("Error: " + message);
   }
+
   @Override
   public void info(final String message, final ManageablePosition position, final ManageableSecurity[] securities) {
     super.info(message, position, securities);
@@ -29,6 +30,7 @@ public class VerbosePortfolioCopierVisitor extends PortfolioCopierStats {
     }
     System.out.println(" ]");
   }
+
   @Override
   public void info(final String message) {
     System.out.println(message);

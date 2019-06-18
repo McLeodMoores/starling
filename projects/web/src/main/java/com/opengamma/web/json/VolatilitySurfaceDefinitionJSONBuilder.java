@@ -8,7 +8,7 @@ package com.opengamma.web.json;
 import com.opengamma.financial.analytics.volatility.surface.VolatilitySurfaceDefinition;
 
 /**
- * Custom JSON builder to convert VolatilitySurfaceDefinition to JSON object and back again
+ * Custom JSON builder to convert VolatilitySurfaceDefinition to JSON object and back again.
  */
 public final class VolatilitySurfaceDefinitionJSONBuilder extends AbstractJSONBuilder<VolatilitySurfaceDefinition<?, ?>> {
 

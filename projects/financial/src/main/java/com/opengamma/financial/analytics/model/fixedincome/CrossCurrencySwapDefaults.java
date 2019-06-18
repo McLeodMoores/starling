@@ -34,11 +34,11 @@ import com.opengamma.util.ArgumentChecker;
 public class CrossCurrencySwapDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(CrossCurrencySwapDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.FX_PRESENT_VALUE,
-    ValueRequirementNames.FX_CURRENCY_EXPOSURE,
-    ValueRequirementNames.PV01,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-    ValueRequirementNames.PRESENT_VALUE
+                ValueRequirementNames.FX_PRESENT_VALUE,
+                ValueRequirementNames.FX_CURRENCY_EXPOSURE,
+                ValueRequirementNames.PV01,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.PRESENT_VALUE
   };
   private final Map<String, String> _currencyAndCurveConfigNames; // Ccy - config
 
@@ -79,7 +79,8 @@ public class CrossCurrencySwapDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final String payCurrency = security.accept(ForexVisitors.getPayCurrencyVisitor()).getCode();
     final String receiveCurrency = security.accept(ForexVisitors.getReceiveCurrencyVisitor()).getCode();

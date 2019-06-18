@@ -14,7 +14,8 @@ import com.opengamma.engine.value.ValueSpecification;
 public class PDEGridGreekCurveConverter implements ResultConverter<PDEResultCollection> {
 
   @Override
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final PDEResultCollection value, final ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final PDEResultCollection value,
+      final ConversionMode mode) {
     return null;
   }
 

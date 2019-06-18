@@ -25,17 +25,24 @@ import com.opengamma.util.tuple.DoublesPair;
 public abstract class FDCurveSensitivityCalculator {
 
   /**
-   * Gives the sensitivity of the some metric of an IRD to a points on a one of the family of curves by finite difference
-     * @param ird The Interest Rate Derivative
-   * @param calculator This calculates the metric
-   * @param curves The family of yield curves
-   * @param curveName The name of the curve of interest
-   * @param times The times along the curve. <b>Note</b> These should be in ascending order and  be known sensitivity points
-   * (or the result will be zero)
-   * @param absTol If the absolute value of a sensitivities is below this value it is ignored
+   * Gives the sensitivity of the some metric of an IRD to a points on a one of the family of curves by finite difference.
+   *
+   * @param ird
+   *          The Interest Rate Derivative
+   * @param calculator
+   *          This calculates the metric
+   * @param curves
+   *          The family of yield curves
+   * @param curveName
+   *          The name of the curve of interest
+   * @param times
+   *          The times along the curve. <b>Note</b> These should be in ascending order and be known sensitivity points (or the result will be zero)
+   * @param absTol
+   *          If the absolute value of a sensitivities is below this value it is ignored
    * @return Sensitivities at a given points
    */
-  public static final List<DoublesPair> curveSensitvityFDCalculator(final InstrumentDerivative ird, final InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double> calculator,
+  public static final List<DoublesPair> curveSensitvityFDCalculator(final InstrumentDerivative ird,
+      final InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double> calculator,
       final YieldCurveBundle curves, final String curveName, final double[] times, final double absTol) {
 
     Validate.notNull(times, "null times");
@@ -63,23 +70,31 @@ public abstract class FDCurveSensitivityCalculator {
     return res;
   }
 
-  //  public static final List<DoublesPair> curveSensitvityFDCalculator(final InstrumentDerivative ird, AbstractInstrumentDerivativeVisitor<YieldCurveBundle, Double> calculator,
-  //      final YieldCurveBundle curves, final String curveName, final Double[] times, final double absTol) {
-  //    return curveSensitvityFDCalculator(ird, calculator, curves, curveName, times, absTol);
-  //  }
+  // public static final List<DoublesPair> curveSensitvityFDCalculator(final InstrumentDerivative ird, AbstractInstrumentDerivativeVisitor<YieldCurveBundle,
+  // Double> calculator,
+  // final YieldCurveBundle curves, final String curveName, final Double[] times, final double absTol) {
+  // return curveSensitvityFDCalculator(ird, calculator, curves, curveName, times, absTol);
+  // }
 
   /**
-   * Gives the sensitivity of the some metric of an IRD to a points on a one of the family of curves by finite difference
-     * @param ird The Interest Rate Derivative
-   * @param method This calculates the metric
-   * @param curves The family of yield curves
-   * @param curveName The name of the curve of interest
-   * @param times The times along the curve. <b>Note</b> These should be in ascending order and  be known sensitivity points
-   * (or the result will be zero)
-   * @param absTol If the absolute value of a sensitivities is below this value it is ignored
+   * Gives the sensitivity of the some metric of an IRD to a points on a one of the family of curves by finite difference.
+   *
+   * @param ird
+   *          The Interest Rate Derivative
+   * @param method
+   *          This calculates the metric
+   * @param curves
+   *          The family of yield curves
+   * @param curveName
+   *          The name of the curve of interest
+   * @param times
+   *          The times along the curve. <b>Note</b> These should be in ascending order and be known sensitivity points (or the result will be zero)
+   * @param absTol
+   *          If the absolute value of a sensitivities is below this value it is ignored
    * @return Sensitivities at a given points
    */
-  public static final List<DoublesPair> curveSensitvityFDCalculator(final InstrumentDerivative ird, final PricingMethod method, final YieldCurveBundle curves, final String curveName,
+  public static final List<DoublesPair> curveSensitvityFDCalculator(final InstrumentDerivative ird, final PricingMethod method, final YieldCurveBundle curves,
+      final String curveName,
       final double[] times,
       final double absTol) {
 
@@ -109,15 +124,22 @@ public abstract class FDCurveSensitivityCalculator {
   }
 
   /**
-   * Gives the sensitivity of the some metric of an IRD to a point on a one of the family of curves by finite difference
-   * @param ird The Interest Rate Derivative
-   * @param calculator This calculates the metric
-   * @param curves The family of yield curves
-   * @param curveName The name of the curve of interest
-   * @param t The time along the curve. <b>Note</b> This should be a known sensitivity point or the result will be zero
+   * Gives the sensitivity of the some metric of an IRD to a point on a one of the family of curves by finite difference.
+   *
+   * @param ird
+   *          The Interest Rate Derivative
+   * @param calculator
+   *          This calculates the metric
+   * @param curves
+   *          The family of yield curves
+   * @param curveName
+   *          The name of the curve of interest
+   * @param t
+   *          The time along the curve. <b>Note</b> This should be a known sensitivity point or the result will be zero
    * @return Sensitivity at a given point
    */
-  public static final double curveSensitvityFDCalculator(final InstrumentDerivative ird, final InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double> calculator, final YieldCurveBundle curves,
+  public static final double curveSensitvityFDCalculator(final InstrumentDerivative ird,
+      final InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double> calculator, final YieldCurveBundle curves,
       final String curveName, final double t) {
     Validate.notNull(ird, "null ird");
     Validate.notNull(calculator, "null calculator");
@@ -128,7 +150,8 @@ public abstract class FDCurveSensitivityCalculator {
     return impFDCalculator(ird, calculator, curves, curveName, t);
   }
 
-  private static double impFDCalculator(final InstrumentDerivative ird, final InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double> calculator, final YieldCurveBundle curves,
+  private static double impFDCalculator(final InstrumentDerivative ird, final InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double> calculator,
+      final YieldCurveBundle curves,
       final String curveName, final double t) {
 
     final double eps = 1e-6;
@@ -136,7 +159,7 @@ public abstract class FDCurveSensitivityCalculator {
     final Function1D<Double, Double> blip = new Function1D<Double, Double>() {
       @Override
       public Double evaluate(final Double x) {
-        return (Math.abs(x - t) < 3.0e-6 ? eps : 0.0); //100 second tolerance
+        return Math.abs(x - t) < 3.0e-6 ? eps : 0.0; // 100 second tolerance
       }
     };
 
@@ -154,14 +177,15 @@ public abstract class FDCurveSensitivityCalculator {
     return (up - down) / 2 / eps;
   }
 
-  private static double impFDCalculator(final InstrumentDerivative ird, final PricingMethod method, final YieldCurveBundle curves, final String curveName, final double t) {
+  private static double impFDCalculator(final InstrumentDerivative ird, final PricingMethod method, final YieldCurveBundle curves, final String curveName,
+      final double t) {
 
     final double eps = 1e-6;
 
     final Function1D<Double, Double> blip = new Function1D<Double, Double>() {
       @Override
       public Double evaluate(final Double x) {
-        return (Math.abs(x - t) < 3.0e-6 ? eps : 0.0); //100 second tolerance
+        return Math.abs(x - t) < 3.0e-6 ? eps : 0.0; // 100 second tolerance
       }
     };
 

@@ -8,10 +8,10 @@ CREATE TABLE rsk_schema_version (
 );
 INSERT INTO rsk_schema_version (version_key, version_value) VALUES ('schema_patch', '52');
 
-CREATE SEQUENCE rsk_hibernate_sequence AS bigint
+CREATE SEQUENCE IF NOT EXISTS rsk_hibernate_sequence AS bigint
     START WITH 1 INCREMENT BY 1;
 
-CREATE SEQUENCE rsk_batch_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS rsk_batch_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
 
 

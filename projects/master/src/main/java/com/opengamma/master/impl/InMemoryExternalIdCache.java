@@ -17,20 +17,27 @@ import com.opengamma.id.ExternalBundleIdentifiable;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ExternalIdSearch;
-import com.opengamma.id.ExternalIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Holds instances of {@link ExternalIdentifiable} for the purpose of improving searching in
- * any of the In Memory Masters.
+ * Holds instances of {@link com.opengamma.id.ExternalIdentifiable} for the
+ * purpose of improving searching in any of the In Memory Masters.
  *
- * @param <T> the type of element stored
- * @param <V> the containing document
+ * @param <T>
+ *          the type of element stored
+ * @param <V>
+ *          the containing document
  */
 public class InMemoryExternalIdCache<T extends ExternalBundleIdentifiable, V> {
   private final Map<T, V> _allItems = new ConcurrentHashMap<>();
   private final ConcurrentMap<ExternalId, Map<T, V>> _store = new ConcurrentHashMap<>();
 
+  /**
+   * Adds an identifiable element to the cache.
+   *
+   * @param element  the identifiable element, not null
+   * @param document  the document, not null
+   */
   public void add(final T element, final V document) {
     ArgumentChecker.notNull(element, "element");
     ArgumentChecker.notNull(document, "document");
@@ -50,6 +57,11 @@ public class InMemoryExternalIdCache<T extends ExternalBundleIdentifiable, V> {
     _allItems.put(element, document);
   }
 
+  /**
+   * Removes an identifiable element from the cache.
+   *
+   * @param element  the identifiable element, not null
+   */
   public void remove(final T element) {
     ArgumentChecker.notNull(element, "element");
     final ExternalIdBundle bundle = element.getExternalIdBundle();
@@ -75,7 +87,7 @@ public class InMemoryExternalIdCache<T extends ExternalBundleIdentifiable, V> {
    * positives.
    * False negatives will not be returned.
    *
-   * @param search the search to evaluate
+   * @param search the search to evaluate, not null
    * @return items that are likely to match the search
    */
   public Set<V> getMatches(final ExternalIdSearch search) {

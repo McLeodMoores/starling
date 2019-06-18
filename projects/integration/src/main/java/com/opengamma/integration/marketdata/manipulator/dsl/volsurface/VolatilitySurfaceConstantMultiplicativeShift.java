@@ -32,8 +32,8 @@ public class VolatilitySurfaceConstantMultiplicativeShift implements StructureMa
 
   @Override
   public VolatilitySurface execute(final VolatilitySurface surface,
-                                   final ValueSpecification valueSpecification,
-                                   final FunctionExecutionContext executionContext) {
+      final ValueSpecification valueSpecification,
+      final FunctionExecutionContext executionContext) {
     return surface.withConstantMultiplicativeShift(_shift);
   }
 
@@ -72,8 +72,8 @@ public class VolatilitySurfaceConstantMultiplicativeShift implements StructureMa
 
   @Override
   public String toString() {
-    return "VolatilitySurfaceConstantMultiplicativeShift [" +
-        "_shift=" + _shift +
-        "]";
+    return "VolatilitySurfaceConstantMultiplicativeShift ["
+        + "_shift=" + _shift
+        + "]";
   }
 }

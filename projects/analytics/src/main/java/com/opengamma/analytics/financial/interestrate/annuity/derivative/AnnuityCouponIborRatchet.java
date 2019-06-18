@@ -20,8 +20,8 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A wrapper class for a AnnuityDefinition containing mainly CouponIborRatchetDefinition. The first coupon should be a CouponFixed or a CouponIborGearing.
- * The other coupons should be CouponFixed or a CouponIborRatchet.
+ * A wrapper class for a AnnuityDefinition containing mainly CouponIborRatchetDefinition. The first coupon should be a CouponFixed or a CouponIborGearing. The
+ * other coupons should be CouponFixed or a CouponIborRatchet.
  */
 @SuppressWarnings("deprecation")
 public class AnnuityCouponIborRatchet extends Annuity<Coupon> {
@@ -42,21 +42,25 @@ public class AnnuityCouponIborRatchet extends Annuity<Coupon> {
   private final boolean[] _isFixed;
 
   /**
-   * @param payments The payments composing the annuity.
+   * @param payments
+   *          The payments composing the annuity.
    */
   public AnnuityCouponIborRatchet(final Coupon[] payments) {
     super(payments);
     _isFixed = new boolean[payments.length];
-    ArgumentChecker.isTrue((payments[0] instanceof CouponFixed) || (payments[0] instanceof CouponIborGearing), "First coupon should be CouponFixed or a CouponIborGearing");
-    _isFixed[0] = (payments[0] instanceof CouponFixed);
+    ArgumentChecker.isTrue(payments[0] instanceof CouponFixed || payments[0] instanceof CouponIborGearing,
+        "First coupon should be CouponFixed or a CouponIborGearing");
+    _isFixed[0] = payments[0] instanceof CouponFixed;
     for (int looppay = 1; looppay < payments.length; looppay++) {
-      ArgumentChecker.isTrue((payments[looppay] instanceof CouponFixed) || (payments[looppay] instanceof CouponIborRatchet), "Next coupons should be CouponFixed or CouponIborRatchet");
-      _isFixed[looppay] = (payments[looppay] instanceof CouponFixed);
+      ArgumentChecker.isTrue(payments[looppay] instanceof CouponFixed || payments[looppay] instanceof CouponIborRatchet,
+          "Next coupons should be CouponFixed or CouponIborRatchet");
+      _isFixed[looppay] = payments[looppay] instanceof CouponFixed;
     }
   }
 
   /**
    * Gets the flag indicating if a coupon is already fixed.
+   * 
    * @return The flag.
    */
   public boolean[] isFixed() {
@@ -64,12 +68,14 @@ public class AnnuityCouponIborRatchet extends Annuity<Coupon> {
   }
 
   /**
-   * @param type The calibration type
-   * @param curves The yield curves
+   * @param type
+   *          The calibration type
+   * @param curves
+   *          The yield curves
    * @return A list of coupons that are used in calibration
    * @deprecated {@link YieldCurveBundle} is deprecated
    */
-  //REVIEW emcleod This method does not belong in this class
+  // REVIEW emcleod This method does not belong in this class
   @Deprecated
   public InstrumentDerivative[] calibrationBasket(final RatchetIborCalibrationType type, final YieldCurveBundle curves) {
     final ArrayList<InstrumentDerivative> calibration = new ArrayList<>();
@@ -86,7 +92,8 @@ public class AnnuityCouponIborRatchet extends Annuity<Coupon> {
             final double cpnFloor = cpn.getFloorCoefficients()[0] * cpnRate[loopcpn - 1] + cpn.getFloorCoefficients()[1] * ibor + cpn.getFloorCoefficients()[2];
             final double cpnCap = cpn.getCapCoefficients()[0] * cpnRate[loopcpn - 1] + cpn.getCapCoefficients()[1] * ibor + cpn.getCapCoefficients()[2];
             cpnRate[loopcpn] = Math.min(Math.max(cpnFloor, cpnMain), cpnCap);
-            calibration.add(new CapFloorIbor(cpn.getCurrency(), cpn.getPaymentTime(), cpn.getFundingCurveName(), cpn.getPaymentYearFraction(), cpn.getNotional(), cpn.getFixingTime(), cpn.getIndex(),
+            calibration.add(new CapFloorIbor(cpn.getCurrency(), cpn.getPaymentTime(), cpn.getFundingCurveName(), cpn.getPaymentYearFraction(),
+                cpn.getNotional(), cpn.getFixingTime(), cpn.getIndex(),
                 cpn.getFixingPeriodStartTime(), cpn.getFixingPeriodEndTime(), cpn.getFixingAccrualFactor(), cpn.getForwardCurveName(), cpnRate[loopcpn], true));
           } else {
             if (getNthPayment(loopcpn) instanceof CouponFixed) {

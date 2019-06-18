@@ -27,7 +27,7 @@ import groovy.lang.GroovyObjectSupport;
 import groovy.lang.Script;
 
 /**
- * TODO enforce ordering ordering: view, shocks, scenarios
+ * TODO enforce ordering ordering: view, shocks, scenarios.
  */
 @SuppressWarnings("unused") // it is used reflectively by Groovy
 public abstract class StandAloneScenarioScript extends Script {
@@ -87,7 +87,11 @@ public abstract class StandAloneScenarioScript extends Script {
     }
   }
 
-  /** visible for testing */
+  /**
+   * Visible for testing.
+   *
+   * @return the view delegate
+   */
   /* package */ ViewDelegate getViewDelegate() {
     return _viewDelegate;
   }
@@ -116,7 +120,7 @@ public abstract class StandAloneScenarioScript extends Script {
 @SuppressWarnings("unused")
 /* package */ class ViewDelegate {
 
-  //private final DateTimeFormatter _dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+  // private final DateTimeFormatter _dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
   private String _name;
   private String _server;
@@ -143,7 +147,11 @@ public abstract class StandAloneScenarioScript extends Script {
     return _server;
   }
 
-  /** Visible for testing */
+  /**
+   * Visible for testing.
+   *
+   * @return the market data delegate
+   */
   /* package */ MarketDataDelegate getMarketDataDelegate() {
     return _marketDataDelegate;
   }
@@ -222,8 +230,8 @@ public abstract class StandAloneScenarioScript extends Script {
   private static final Logger LOGGER = LoggerFactory.getLogger(ShocksDelegate.class);
 
   /**
-   * Shock variables. Keys are the variable names, values must be lists of values. It's a linked map so the declaration
-   * order in the script is reflected in the way the cartesian product is generated.
+   * Shock variables. Keys are the variable names, values must be lists of values. It's a linked map so the declaration order in the script is reflected in the
+   * way the cartesian product is generated.
    */
   private final Map<String, List<?>> _vars = Maps.newLinkedHashMap();
 
@@ -233,7 +241,7 @@ public abstract class StandAloneScenarioScript extends Script {
       LOGGER.warn("Shocks must be a list, type=" + newValue.getClass().getName() + ", value=" + newValue);
       return;
     }
-    if (((List) newValue).size() == 0) {
+    if (((List<?>) newValue).size() == 0) {
       LOGGER.warn("Shocks must have at least one value");
       return;
     }
@@ -321,7 +329,9 @@ public abstract class StandAloneScenarioScript extends Script {
 
   /**
    * Defines a method in the DSL that takes a closure which defines how to select and transform a curve.
-   * @param body The block that defines the selection and transformation
+   *
+   * @param body
+   *          The block that defines the selection and transformation
    */
   public void curve(final Closure<?> body) {
     final DslYieldCurveSelectorBuilder selector = new DslYieldCurveSelectorBuilder(_scenario);
@@ -332,7 +342,9 @@ public abstract class StandAloneScenarioScript extends Script {
 
   /**
    * Defines a method in the DSL that takes a closure which defines how to select and transform a curve.
-   * @param body The block that defines the selection and transformation
+   *
+   * @param body
+   *          The block that defines the selection and transformation
    */
   public void curveData(final Closure<?> body) {
     final DslYieldCurveDataSelectorBuilder selector = new DslYieldCurveDataSelectorBuilder(_scenario);
@@ -343,7 +355,9 @@ public abstract class StandAloneScenarioScript extends Script {
 
   /**
    * Defines a method in the DSL that takes a closure which defines how to select and transform a market data point.
-   * @param body The block that defines the selection and transformation
+   *
+   * @param body
+   *          The block that defines the selection and transformation
    */
   public void marketData(final Closure<?> body) {
     final DslPointSelectorBuilder selector = new DslPointSelectorBuilder(_scenario);
@@ -354,7 +368,9 @@ public abstract class StandAloneScenarioScript extends Script {
 
   /**
    * Defines a method in the DSL that takes a closure which defines how to select and transform a volatility surface.
-   * @param body The block that defines the selection and transformation
+   *
+   * @param body
+   *          The block that defines the selection and transformation
    */
   public void surface(final Closure<?> body) {
     final DslVolatilitySurfaceSelectorBuilder selector = new DslVolatilitySurfaceSelectorBuilder(_scenario);
@@ -365,7 +381,9 @@ public abstract class StandAloneScenarioScript extends Script {
 
   /**
    * Defines a method in the DSL that takes a closure which defines how to select and transform spot rates.
-   * @param body The block that defines the selection and transformation
+   *
+   * @param body
+   *          The block that defines the selection and transformation
    */
   public void spotRate(final Closure<?> body) {
     final DslSpotRateSelectorBuilder builder = new DslSpotRateSelectorBuilder(_scenario);
@@ -374,4 +392,3 @@ public abstract class StandAloneScenarioScript extends Script {
     body.call();
   }
 }
-

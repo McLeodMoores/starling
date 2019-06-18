@@ -29,7 +29,8 @@ import com.opengamma.financial.security.bond.BondSecurity;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Prototype - Multiplies {@link ValueRequirementNames#QUANTITY} by {@link ValueRequirementNames#SECURITY_MARKET_PRICE}.<p>
+ * Prototype - Multiplies {@link ValueRequirementNames#QUANTITY} by {@link ValueRequirementNames#SECURITY_MARKET_PRICE}.
+ * <p>
  * The latter is equivalent to {@link ValueRequirementNames#MARKET_CLEAN_PRICE}.
  */
 public class BondNetMarketValueFromCleanPriceFunction extends AbstractFunction.NonCompiledInvoker {
@@ -45,14 +46,16 @@ public class BondNetMarketValueFromCleanPriceFunction extends AbstractFunction.N
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     // Get Clean Price
     Double cleanPrice = null;
     final ComputedValue inputVal = inputs.getComputedValue(ValueRequirementNames.SECURITY_MARKET_PRICE);
     if (inputVal != null) { // Ensure the value was successfully obtained
       cleanPrice = (Double) inputVal.getValue();
     } else {
-      throw new OpenGammaRuntimeException("Did not satisfy requirement," + ValueRequirementNames.SECURITY_MARKET_PRICE + ", for trade " + target.getPositionOrTrade().getUniqueId());
+      throw new OpenGammaRuntimeException(
+          "Did not satisfy requirement," + ValueRequirementNames.SECURITY_MARKET_PRICE + ", for trade " + target.getPositionOrTrade().getUniqueId());
     }
     // Scale by Quantity
     final double quantity = target.getPositionOrTrade().getQuantity().doubleValue();
@@ -70,11 +73,12 @@ public class BondNetMarketValueFromCleanPriceFunction extends AbstractFunction.N
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    return Collections.singleton(new ValueSpecification(getOutputName() , target.toSpecification(), ValueProperties.all()));
+    return Collections.singleton(new ValueSpecification(getOutputName(), target.toSpecification(), ValueProperties.all()));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     // inputs provide the properties of the required security greek. These we pass through to the position
     final ValueSpecification netMarketValueSpec = inputs.keySet().iterator().next();
     if (netMarketValueSpec.getValueName() != ValueRequirementNames.SECURITY_MARKET_PRICE) {
@@ -86,7 +90,7 @@ public class BondNetMarketValueFromCleanPriceFunction extends AbstractFunction.N
         .withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, getUniqueId())
         .withoutAny(ValuePropertyNames.CURRENCY).with(ValuePropertyNames.CURRENCY, currency)
         .get();
-    return Collections.singleton(new ValueSpecification(getOutputName() , target.toSpecification(), properties));
+    return Collections.singleton(new ValueSpecification(getOutputName(), target.toSpecification(), properties));
   }
 
   @Override
@@ -95,7 +99,7 @@ public class BondNetMarketValueFromCleanPriceFunction extends AbstractFunction.N
       return null;
     }
     return Collections.singleton(new ValueRequirement(ValueRequirementNames.SECURITY_MARKET_PRICE, target.toSpecification(),
-          desiredValue.getConstraints().withoutAny(ValuePropertyNames.FUNCTION)));
+        desiredValue.getConstraints().withoutAny(ValuePropertyNames.FUNCTION)));
   }
 
 }

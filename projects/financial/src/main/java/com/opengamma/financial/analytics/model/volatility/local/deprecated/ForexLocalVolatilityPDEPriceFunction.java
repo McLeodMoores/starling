@@ -65,7 +65,8 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
 public class ForexLocalVolatilityPDEPriceFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final FXOptionSecurity fxOption = (FXOptionSecurity) target.getSecurity();
@@ -100,9 +101,10 @@ public class ForexLocalVolatilityPDEPriceFunction extends AbstractFunction.NonCo
     final PDEFullResults1D pdeGrid = (PDEFullResults1D) pdeGridObject;
     final double[] gridTimes = pdeGrid.getGrid().getTimeNodes();
     final double[] gridMoneyness = pdeGrid.getGrid().getSpaceNodes();
-    final CurrencyPairs currencyPairs = OpenGammaExecutionContext.getCurrencyPairsSource(executionContext).getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
+    final CurrencyPairs currencyPairs = OpenGammaExecutionContext.getCurrencyPairsSource(executionContext)
+        .getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
     final CurrencyPair currencyPair = currencyPairs.getCurrencyPair(fxOption.getPutCurrency(), fxOption.getCallCurrency());
-    //TODO interpolate
+    // TODO interpolate
     ///////////////////////////////
     final double tau = getExpiry(fxOption, now);
     final UnorderedCurrencyPair currencies = UnorderedCurrencyPair.of(fxOption.getCallCurrency(), fxOption.getPutCurrency());
@@ -136,7 +138,7 @@ public class ForexLocalVolatilityPDEPriceFunction extends AbstractFunction.NonCo
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final ValueProperties properties = createValueProperties()
-        .withAny(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE) //TODO
+        .withAny(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE) // TODO
         .with(ValuePropertyNames.CALCULATION_METHOD, LocalVolatilityPDEValuePropertyNames.LOCAL_VOLATILITY_METHOD)
         .withAny(SURFACE)
         .withAny(PROPERTY_SURFACE_TYPE)
@@ -238,15 +240,17 @@ public class ForexLocalVolatilityPDEPriceFunction extends AbstractFunction.NonCo
     final String maxMoneyness = maxMoneynessNames.iterator().next();
     final String pdeDirection = pdeDirectionNames.iterator().next();
     final FXOptionSecurity fxOption = (FXOptionSecurity) target.getSecurity();
-    final UnorderedCurrencyPair currencies = UnorderedCurrencyPair.of(fxOption.getCallCurrency(), fxOption.getPutCurrency()); //TODO down to subclass
-    final ValueRequirement pdeGridRequirement = getPDEGridRequirement(target, surfaceName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod, h, forwardCurveName,
+    final UnorderedCurrencyPair currencies = UnorderedCurrencyPair.of(fxOption.getCallCurrency(), fxOption.getPutCurrency()); // TODO down to subclass
+    final ValueRequirement pdeGridRequirement = getPDEGridRequirement(target, surfaceName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod,
+        h, forwardCurveName,
         theta, timeSteps, spaceSteps, timeGridBunching, spaceGridBunching, maxMoneyness, pdeDirection);
     final ValueRequirement forwardCurveRequirement = getForwardCurveRequirement(forwardCurveCalculationMethod, forwardCurveName, currencies);
     return Sets.newHashSet(pdeGridRequirement, forwardCurveRequirement);
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String surfaceName = null;
     String surfaceType = null;
     String xAxis = null;

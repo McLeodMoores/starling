@@ -43,7 +43,7 @@ public class DbFunctionConfigurationSourceComponentFactory extends FunctionConfi
   @PropertyDefinition(validate = "notNull")
   private String _functionDefinitionName;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected FunctionConfigurationSource initSource() {
     final List<FunctionConfigurationSource> underlying = new ArrayList<>();
@@ -59,7 +59,7 @@ public class DbFunctionConfigurationSourceComponentFactory extends FunctionConfi
     private final ConfigMaster _configMaster;
     private final String _definitionName;
 
-    public DbFunctionConfigurationSource(final ConfigMaster configMaster, final String definitionName) {
+    DbFunctionConfigurationSource(final ConfigMaster configMaster, final String definitionName) {
       super(ConfigMasterChangeProvider.of(configMaster));
       _configMaster = configMaster;
       _definitionName = definitionName;

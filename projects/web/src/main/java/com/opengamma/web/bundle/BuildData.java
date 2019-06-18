@@ -14,8 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Provides a build stamp consisting of a version and time/date
- * to be appended to resource urls
+ * Provides a build stamp consisting of a version and time/date to be appended to resource urls.
  */
 public class BuildData {
 
@@ -25,15 +24,15 @@ public class BuildData {
   private static final Logger LOGGER = LoggerFactory.getLogger(ScriptTag.class);
 
   static {
-    Properties prop = new Properties();
+    final Properties prop = new Properties();
     FileInputStream input = null;
     String result;
     try {
-      String resource = ClassLoader.getSystemResource("com/opengamma/web/bundle/build-data.properties").getPath();
+      final String resource = ClassLoader.getSystemResource("com/opengamma/web/bundle/build-data.properties").getPath();
       input = new FileInputStream(new File(resource));
       prop.load(input);
       result = prop.getProperty("web.build.timestamp");
-    } catch (Exception e) {
+    } catch (final Exception e) {
       result = "default";
       LOGGER.warn("Failed to load build data for resource urls", e);
     } finally {
@@ -43,7 +42,7 @@ public class BuildData {
   }
 
   /** @return the stamp of type String */
-  
+
   public static String getBuildStamp() {
     return STAMP;
   }

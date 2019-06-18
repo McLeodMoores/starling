@@ -16,8 +16,9 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class SwaptionBasicBlackTheoreticalForwardGammaFunction extends SwaptionBasicBlackFunction {
   private static final SwaptionBlackForwardGammaCalculator CALCULATOR = SwaptionBlackForwardGammaCalculator.getInstance();
 

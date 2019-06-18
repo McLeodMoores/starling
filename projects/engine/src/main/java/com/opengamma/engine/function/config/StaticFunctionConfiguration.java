@@ -23,7 +23,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Static function configuration representation
+ * Static function configuration representation.
  */
 @BeanDefinition
 public class StaticFunctionConfiguration extends DirectBean implements FunctionConfiguration {
@@ -34,9 +34,10 @@ public class StaticFunctionConfiguration extends DirectBean implements FunctionC
   private String _definitionClassName;
 
   /**
-   * Creates an instance
+   * Creates an instance.
    *
-   * @param definitionClassName the definition class name, not-null.
+   * @param definitionClassName
+   *          the definition class name, not-null.
    */
   public StaticFunctionConfiguration(final String definitionClassName) {
     ArgumentChecker.notNull(definitionClassName, "definitionClassName");
@@ -44,7 +45,7 @@ public class StaticFunctionConfiguration extends DirectBean implements FunctionC
   }
 
   /**
-   * Constructor for builder
+   * Constructor for builder.
    */
   StaticFunctionConfiguration() {
   }

@@ -15,8 +15,7 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
 
 /**
- * @deprecated This calculator uses {@link InstrumentDerivative}s that refer to curve names.
- * Use {@link RateReplacingVisitor}.
+ * @deprecated This calculator uses {@link InstrumentDerivative}s that refer to curve names. Use {@link RateReplacingVisitor}.
  */
 @Deprecated
 public final class RateReplacingInterestRateDerivativeVisitor extends InstrumentDerivativeVisitorAdapter<Double, InstrumentDerivative> {
@@ -47,13 +46,15 @@ public final class RateReplacingInterestRateDerivativeVisitor extends Instrument
 
   @Override
   public CouponFixed visitCouponFixed(final CouponFixed payment, final Double rate) {
-    return new CouponFixed(payment.getCurrency(), payment.getPaymentTime(), payment.getFundingCurveName(), payment.getPaymentYearFraction(), payment.getNotional(), rate,
+    return new CouponFixed(payment.getCurrency(), payment.getPaymentTime(), payment.getFundingCurveName(), payment.getPaymentYearFraction(),
+        payment.getNotional(), rate,
         payment.getAccrualStartDate(), payment.getAccrualEndDate());
   }
 
   @Override
   public ForwardRateAgreement visitForwardRateAgreement(final ForwardRateAgreement fra, final Double rate) {
-    return new ForwardRateAgreement(fra.getCurrency(), fra.getPaymentTime(), fra.getFundingCurveName(), fra.getPaymentYearFraction(), fra.getNotional(), fra.getIndex(), fra.getFixingTime(),
+    return new ForwardRateAgreement(fra.getCurrency(), fra.getPaymentTime(), fra.getFundingCurveName(), fra.getPaymentYearFraction(), fra.getNotional(),
+        fra.getIndex(), fra.getFixingTime(),
         fra.getFixingPeriodStartTime(), fra.getFixingPeriodEndTime(), fra.getFixingYearFraction(), rate, fra.getForwardCurveName());
   }
 
@@ -73,7 +74,8 @@ public final class RateReplacingInterestRateDerivativeVisitor extends Instrument
     final double accruedInterest = rate * bond.getAccruedInterest() / originalRate;
     final AnnuityCouponFixed originalCoupons = (AnnuityCouponFixed) bond.getCoupon();
     final AnnuityCouponFixed coupons = visitFixedCouponAnnuity(originalCoupons, rate);
-    return new BondFixedSecurity((AnnuityPaymentFixed) bond.getNominal(), coupons, bond.getSettlementTime(), accruedInterest, bond.getFactorToNextCoupon(), bond.getYieldConvention(),
+    return new BondFixedSecurity((AnnuityPaymentFixed) bond.getNominal(), coupons, bond.getSettlementTime(), accruedInterest, bond.getFactorToNextCoupon(),
+        bond.getYieldConvention(),
         bond.getCouponPerYear(), bond.getRepoCurveName(), bond.getIssuerEntity());
   }
 }

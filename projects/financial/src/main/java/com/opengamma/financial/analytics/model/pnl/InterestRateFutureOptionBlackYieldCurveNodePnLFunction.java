@@ -46,7 +46,8 @@ public class InterestRateFutureOptionBlackYieldCurveNodePnLFunction extends Yiel
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<String> curveNames = new HashSet<>();
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       if (entry.getKey().getValueName().equals(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES)) {
@@ -69,7 +70,8 @@ public class InterestRateFutureOptionBlackYieldCurveNodePnLFunction extends Yiel
   }
 
   @Override
-  protected ValueRequirement getYCNSRequirement(final String currencyString, final String curveCalculationConfigName, final String yieldCurveName, final ComputationTarget target,
+  protected ValueRequirement getYCNSRequirement(final String currencyString, final String curveCalculationConfigName, final String yieldCurveName,
+      final ComputationTarget target,
       final ValueProperties desiredValueProperties) {
     final String surfaceName = desiredValueProperties.getValues(ValuePropertyNames.SURFACE).iterator().next();
     final UniqueId uniqueId = target.getPosition().getTrades().iterator().next().getUniqueId();
@@ -83,7 +85,8 @@ public class InterestRateFutureOptionBlackYieldCurveNodePnLFunction extends Yiel
   }
 
   @Override
-  protected ValueProperties getResultProperties(final ValueRequirement desiredValue, final String currency, final String[] curveNames, final String curveCalculationConfig) {
+  protected ValueProperties getResultProperties(final ValueRequirement desiredValue, final String currency, final String[] curveNames,
+      final String curveCalculationConfig) {
     return createValueProperties()
         .with(ValuePropertyNames.CURRENCY, currency)
         .with(ValuePropertyNames.SURFACE, desiredValue.getConstraint(ValuePropertyNames.SURFACE))

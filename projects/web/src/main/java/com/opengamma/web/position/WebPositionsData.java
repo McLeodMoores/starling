@@ -46,7 +46,7 @@ public class WebPositionsData extends WebPerRequestData {
   @PropertyDefinition
   private SecurityLoader _securityLoader;
   /**
-   * The security source
+   * The security source.
    */
   @PropertyDefinition
   private SecuritySource _securitySource;
@@ -89,16 +89,20 @@ public class WebPositionsData extends WebPerRequestData {
 
   /**
    * Creates an instance.
-   * @param uriInfo  the URI information
+   * 
+   * @param uriInfo
+   *          the URI information
    */
   public WebPositionsData(final UriInfo uriInfo) {
     setUriInfo(uriInfo);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the best available position id.
-   * @param overrideId  the override id, null derives the result from the data
+   * 
+   * @param overrideId
+   *          the override id, null derives the result from the data
    * @return the id, may be null
    */
   public String getBestPositionUriId(final UniqueId overrideId) {
@@ -179,7 +183,7 @@ public class WebPositionsData extends WebPerRequestData {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the security source
+   * Gets the security source.
    * @return the value of the property
    */
   public SecuritySource getSecuritySource() {
@@ -187,7 +191,7 @@ public class WebPositionsData extends WebPerRequestData {
   }
 
   /**
-   * Sets the security source
+   * Sets the security source.
    * @param securitySource  the new value of the property
    */
   public void setSecuritySource(SecuritySource securitySource) {

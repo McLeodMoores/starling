@@ -21,14 +21,15 @@ import com.opengamma.util.ArgumentChecker;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
- * A class to facilitate importing portfolio data from comma-separated value files
+ * A class to facilitate importing portfolio data from comma-separated value files.
  */
 public class CsvSheetReader extends SheetReader {
 
   private final CSVReader _csvReader;
 
   /**
-   * @param filename  the portfolio data file, not null or empty
+   * @param filename
+   *          the portfolio data file, not null or empty
    */
   public CsvSheetReader(final String filename) {
     ArgumentChecker.notEmpty(filename, "filename");
@@ -44,7 +45,8 @@ public class CsvSheetReader extends SheetReader {
   }
 
   /**
-   * @param inputStream  a portfolio data file stream, not null
+   * @param inputStream
+   *          a portfolio data file stream, not null
    */
   public CsvSheetReader(final InputStream inputStream) {
     ArgumentChecker.notNull(inputStream, "inputStream");

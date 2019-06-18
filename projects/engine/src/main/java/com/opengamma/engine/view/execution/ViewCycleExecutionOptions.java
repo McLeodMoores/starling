@@ -63,7 +63,8 @@ public class ViewCycleExecutionOptions {
     /**
      * Sets the name of the view cycle.
      *
-     * @param name name of the view cycle
+     * @param name
+     *          name of the view cycle
      * @return this instance
      */
     public Builder setName(final String name) {
@@ -72,10 +73,11 @@ public class ViewCycleExecutionOptions {
     }
 
     /**
-     * Sets the valuation time for the view cycle. If set to null then a time implied by the data source will be used - if no time is implied the view
-     * process' clock will be used.
+     * Sets the valuation time for the view cycle. If set to null then a time implied by the data source will be used - if no time is implied the view process'
+     * clock will be used.
      *
-     * @param valuationTime the valuation time to set
+     * @param valuationTime
+     *          the valuation time to set
      * @return this instance
      */
     public Builder setValuationTime(final Instant valuationTime) {
@@ -84,8 +86,8 @@ public class ViewCycleExecutionOptions {
     }
 
     /**
-     * Returns the valuation time for the view cycle. If set to null then a time implied by the data source will be used - if no time is implied the
-     * view process' clock will be used.
+     * Returns the valuation time for the view cycle. If set to null then a time implied by the data source will be used - if no time is implied the view
+     * process' clock will be used.
      *
      * @return the valuation time
      */
@@ -94,10 +96,11 @@ public class ViewCycleExecutionOptions {
     }
 
     /**
-     * Sets the market data specification for the view cycle. This is equivalent to calling {@link #setMarketDataSpecitications} with a list containing
-     * a single element.
+     * Sets the market data specification for the view cycle. This is equivalent to calling {@link #setMarketDataSpecifications} with a list containing a single
+     * element.
      *
-     * @param marketDataSpecification the market data specification, not null
+     * @param marketDataSpecification
+     *          the market data specification, not null
      * @return this instance
      */
     public Builder setMarketDataSpecification(final MarketDataSpecification marketDataSpecification) {
@@ -109,7 +112,8 @@ public class ViewCycleExecutionOptions {
     /**
      * Sets the market data specifications for the view cycle.
      *
-     * @param marketDataSpecifications the market data specifications, not null and not containing null
+     * @param marketDataSpecifications
+     *          the market data specifications, not null and not containing null
      * @return this instance
      */
     public Builder setMarketDataSpecifications(List<MarketDataSpecification> marketDataSpecifications) {
@@ -121,10 +125,10 @@ public class ViewCycleExecutionOptions {
     }
 
     /**
-     * Sets the market data selectors for the view cycle.
-     * These can be used to flag which market data is to be manipulated as it is passed into functions.
+     * Sets the market data selectors for the view cycle. These can be used to flag which market data is to be manipulated as it is passed into functions.
      *
-     * @param marketDataSelector the market data selector, not null
+     * @param marketDataSelector
+     *          the market data selector, not null
      * @return this instance
      */
     public Builder setMarketDataSelector(final MarketDataSelector marketDataSelector) {
@@ -134,7 +138,8 @@ public class ViewCycleExecutionOptions {
     }
 
     /**
-     * Returns the name of the view cycle
+     * Returns the name of the view cycle.
+     * 
      * @return name of the view cycle
      */
     public String getName() {
@@ -160,11 +165,12 @@ public class ViewCycleExecutionOptions {
     }
 
     /**
-     * Sets the version/correction to use when resolving references (for example the portfolio, positions, securities, time-series and so on).
-     * If set to null, the version correction from the default cycle options will be used. If these are the default cycle options then a value
-     * of null will imply {@link VersionCorrection#LATEST}.
+     * Sets the version/correction to use when resolving references (for example the portfolio, positions, securities, time-series and so on). If set to null,
+     * the version correction from the default cycle options will be used. If these are the default cycle options then a value of null will imply
+     * {@link VersionCorrection#LATEST}.
      *
-     * @param versionCorrection the version
+     * @param versionCorrection
+     *          the version
      * @return this instance
      */
     public Builder setResolverVersionCorrection(final VersionCorrection versionCorrection) {
@@ -173,9 +179,8 @@ public class ViewCycleExecutionOptions {
     }
 
     /**
-     * Returns the version/correction to use when resolving references (for example the portfolio, positions, securities, time-series and so on).
-     * If not set the default cycle options will be used. If these are the default cycle options then a value of null will imply
-     * {@link VersionCorrection#LATEST}.
+     * Returns the version/correction to use when resolving references (for example the portfolio, positions, securities, time-series and so on). If not set the
+     * default cycle options will be used. If these are the default cycle options then a value of null will imply {@link VersionCorrection#LATEST}.
      *
      * @return the version/correction to use for reference resolution
      */
@@ -186,7 +191,8 @@ public class ViewCycleExecutionOptions {
     /**
      * Sets the function parameters to be used for the current view cycle.
      *
-     * @param functionParameters the function parameters, not null
+     * @param functionParameters
+     *          the function parameters, not null
      * @return this instance
      */
     public Builder setFunctionParameters(final Map<DistinctMarketDataSelector, FunctionParameters> functionParameters) {
@@ -237,7 +243,8 @@ public class ViewCycleExecutionOptions {
   /**
    * Creates an instance with the values from the supplied builder.
    *
-   * @param builder the values to populate the instance from
+   * @param builder
+   *          the values to populate the instance from
    */
   protected ViewCycleExecutionOptions(final Builder builder) {
     _name = builder.getName();
@@ -249,8 +256,8 @@ public class ViewCycleExecutionOptions {
   }
 
   /**
-   * Creates a builder initialized with the values from this instance. The builder can be modified before {@link Builder#create} called to create a
-   * new {@link ViewCycleExecutionOptions} instance.
+   * Creates a builder initialized with the values from this instance. The builder can be modified before {@link Builder#create} called to create a new
+   * {@link ViewCycleExecutionOptions} instance.
    *
    * @return a builder instance
    */
@@ -272,8 +279,8 @@ public class ViewCycleExecutionOptions {
   }
 
   /**
-   * Returns the valuation time for the view cycle. If set to null then a time implied by the data source will be used - if no time is implied the view
-   * process' clock will be used.
+   * Returns the valuation time for the view cycle. If set to null then a time implied by the data source will be used - if no time is implied the view process'
+   * clock will be used.
    *
    * @return the valuation time, or null if not specified
    */
@@ -300,8 +307,8 @@ public class ViewCycleExecutionOptions {
   }
 
   /**
-   * Returns the version/correction to use when resolving references (for example the portfolio, positions, securities, time-series and so on).
-   * If not set the default cycle options will be used. If these are the default cycle options then a value of null will imply {@link VersionCorrection#LATEST}.
+   * Returns the version/correction to use when resolving references (for example the portfolio, positions, securities, time-series and so on). If not set the
+   * default cycle options will be used. If these are the default cycle options then a value of null will imply {@link VersionCorrection#LATEST}.
    *
    * @return the version/correction to use for reference resolution
    */

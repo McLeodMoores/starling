@@ -56,9 +56,12 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
   /**
    * Creates a new job for submission to the invokers.
    *
-   * @param dispatcher the parent dispatcher that manages the invokers
-   * @param job the root job to send
-   * @param resultReceiver the callback for when the job and it's tail completes
+   * @param dispatcher
+   *          the parent dispatcher that manages the invokers
+   * @param job
+   *          the root job to send
+   * @param resultReceiver
+   *          the callback for when the job and it's tail completes
    */
   StandardJob(final JobDispatcher dispatcher, final CalculationJob job, final JobResultReceiver resultReceiver) {
     super(dispatcher, job);
@@ -80,12 +83,14 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
   }
 
   /**
-   * Change the cache hints on a job. Tail jobs run on the same node as their parent but if we split them into discreet
-   * jobs any values previously produced by their parents into the private cache must
-   * now go into the shared cache.
+   * Change the cache hints on a job. Tail jobs run on the same node as their parent but if we split them into discreet jobs any values previously produced by
+   * their parents into the private cache must now go into the shared cache.
    *
-   * @param job the job to process, not null
-   * @param outputs the adjusted job, not null
+   * @param job
+   *          the job to process, not null
+   * @param outputs
+   *          the adjusted job, not null
+   * @return the calcuation job with new cache hints
    */
   /* package */static CalculationJob adjustCacheHints(final CalculationJob job,
       final Map<ValueSpecification, Triple<CalculationJob, ? extends Set<ValueSpecification>, ? extends Set<ValueSpecification>>> outputs) {
@@ -151,8 +156,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
   }
 
   /**
-   * A watched job instance that corresponds to one of the original jobs. The job may have a tail. When it completes,
-   * new watched job instances will be submitted for each tail job.
+   * A watched job instance that corresponds to one of the original jobs. The job may have a tail. When it completes, new watched job instances will be
+   * submitted for each tail job.
    */
   /* package */static final class WholeWatchedJob extends WatchedJob implements JobResultReceiver {
 
@@ -203,9 +208,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
             notify._count--;
           }
           return job._notify;
-        } else {
-          return Collections.emptyList();
         }
+        return Collections.emptyList();
       }
 
       public synchronized boolean isRunnable(final CalculationJob job) {
@@ -306,38 +310,36 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
           if (receiver != null) {
             LOGGER.debug("Submitting watched job for {}", this);
             return new WatchedJob.Whole(this, getJob(), receiver);
-          } else {
-            // No result receiver means we've already completed/aborted or are about to do so
-            return null;
           }
+          // No result receiver means we've already completed/aborted or are
+          // about to do so
+          return null;
       }
-    } else {
-      // Rewrite the private/shared caching information and submit a watched job for the root. Any tail jobs will be submitted after their
-      // parent jobs complete
-      final CalculationJob job = adjustCacheHints(getJob(),
-          new HashMap<ValueSpecification, Triple<CalculationJob, ? extends Set<ValueSpecification>, ? extends Set<ValueSpecification>>>());
-      LOGGER.debug("Submitting adjusted watched job for {}", this);
-      return createWholeWatchedJob(job);
     }
+    // Rewrite the private/shared caching information and submit a watched job
+    // for the root. Any tail jobs will be submitted after their
+    // parent jobs complete
+    final CalculationJob job = adjustCacheHints(getJob(),
+        new HashMap<ValueSpecification, Triple<CalculationJob, ? extends Set<ValueSpecification>, ? extends Set<ValueSpecification>>>());
+    LOGGER.debug("Submitting adjusted watched job for {}", this);
+    return createWholeWatchedJob(job);
   }
 
   @Override
   protected DispatchableJob prepareRetryJob(final JobInvoker jobInvoker) {
     if (_usedJobInvoker != null && _usedJobInvoker.contains(jobInvoker.getInvokerId())) {
       return createWatchedJob();
-    } else {
-      _rescheduled++;
-      if (_rescheduled >= getDispatcher().getMaxJobAttempts()) {
-        return createWatchedJob();
-      } else {
-        LOGGER.info("Retrying job {}", this);
-        if (_usedJobInvoker == null) {
-          _usedJobInvoker = new HashSet<>();
-        }
-        _usedJobInvoker.add(jobInvoker.getInvokerId());
-        return this;
-      }
     }
+    _rescheduled++;
+    if (_rescheduled >= getDispatcher().getMaxJobAttempts()) {
+      return createWatchedJob();
+    }
+    LOGGER.info("Retrying job {}", this);
+    if (_usedJobInvoker == null) {
+      _usedJobInvoker = new HashSet<>();
+    }
+    _usedJobInvoker.add(jobInvoker.getInvokerId());
+    return this;
   }
 
   @Override

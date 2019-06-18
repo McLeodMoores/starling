@@ -23,9 +23,11 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  *
  */
 @Deprecated
-public class MarginedIRFutureOptionConstantSpreadHorizonCalculator implements HorizonCalculatorDeprecated<InterestRateFutureOptionMarginTransactionDefinition, YieldCurveWithBlackCubeBundle, Double> {
+public class MarginedIRFutureOptionConstantSpreadHorizonCalculator
+implements HorizonCalculatorDeprecated<InterestRateFutureOptionMarginTransactionDefinition, YieldCurveWithBlackCubeBundle, Double> {
   /** Rolls down interest rate future option data (curves and surface) */
-  private static final ConstantSpreadInterestRateFutureOptionBlackDataRolldown IR_FUTURE_OPTION_ROLLDOWN = ConstantSpreadInterestRateFutureOptionBlackDataRolldown.getInstance();
+  private static final ConstantSpreadInterestRateFutureOptionBlackDataRolldown IR_FUTURE_OPTION_ROLLDOWN =
+      ConstantSpreadInterestRateFutureOptionBlackDataRolldown.getInstance();
 
   @Override
   public MultipleCurrencyAmount getTheta(final InterestRateFutureOptionMarginTransactionDefinition definition, final ZonedDateTime date,

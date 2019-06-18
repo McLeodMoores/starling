@@ -23,8 +23,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 /**
  * Abstract implementation of a provider of reference data.
  * <p>
- * This provides default implementations of the interface methods that delegate to a
- * protected method that subclasses must implement.
+ * This provides default implementations of the interface methods that delegate to a protected method that subclasses must implement.
  */
 public abstract class AbstractReferenceDataProvider implements ReferenceDataProvider {
 
@@ -34,7 +33,7 @@ public abstract class AbstractReferenceDataProvider implements ReferenceDataProv
   public AbstractReferenceDataProvider() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public String getReferenceDataValue(final String identifier, final String dataField) {
     return getReferenceDataValues(ImmutableSet.of(identifier), dataField).get(identifier);
@@ -42,7 +41,7 @@ public abstract class AbstractReferenceDataProvider implements ReferenceDataProv
 
   @Override
   public Map<String, String> getReferenceDataValues(final String identifier, final Iterable<String> dataFields) {
-    final Set<String> fields = ImmutableSet.copyOf(dataFields);  // copy to avoid implementation bugs
+    final Set<String> fields = ImmutableSet.copyOf(dataFields); // copy to avoid implementation bugs
     final Map<String, FudgeMsg> data = getReferenceData(ImmutableSet.of(identifier), dataFields);
 
     // extract field to value
@@ -99,7 +98,7 @@ public abstract class AbstractReferenceDataProvider implements ReferenceDataProv
         if (data.getErrors().size() == 0) {
           map.put(identifier, data.getFieldValues());
         } else {
-          if (data.isIdentifierError() == false) {
+          if (!data.isIdentifierError()) {
             final MutableFudgeMsg values = OpenGammaFudgeContext.getInstance().newMessage(data.getFieldValues());
             for (final String field : fields) {
               if (data.isError(field)) {
@@ -134,16 +133,17 @@ public abstract class AbstractReferenceDataProvider implements ReferenceDataProv
     return doBulkGet(request);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the reference data.
    *
-   * @param request  the request, with a non-empty collections, not null
+   * @param request
+   *          the request, with a non-empty collections, not null
    * @return the result, not null
    */
   protected abstract ReferenceDataProviderGetResult doBulkGet(ReferenceDataProviderGetRequest request);
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public String toString() {
     return getClass().getSimpleName();

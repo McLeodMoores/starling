@@ -19,8 +19,8 @@ import com.opengamma.lang.annotation.ExternalFunction;
 import com.opengamma.util.CompareUtils;
 
 /**
- * Class with the Hagan et al SABR volatility function.
- * Reference: Hagan, P.; Kumar, D.; Lesniewski, A. & Woodward, D. "Managing smile risk", Wilmott Magazine, 2002, September, 84-108
+ * Class with the Hagan et al SABR volatility function. Reference: Hagan, P.; Kumar, D.; Lesniewski, A. &amp; Woodward, D. "Managing smile risk", Wilmott
+ * Magazine, 2002, September, 84-108
  */
 public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABRFormulaData> {
 
@@ -29,7 +29,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
    */
   private static final Logger LOGGER = LoggerFactory.getLogger(SABRHaganVolatilityFunction.class);
 
-  private static final double CUTOFF_MONEYNESS = 1e-12; //changed from 1e-6 on 3/3/2012 R white
+  private static final double CUTOFF_MONEYNESS = 1e-12; // changed from 1e-6 on 3/3/2012 R white
   private static final double SMALL_Z = 1e-6;
   private static final double LARGE_NEG_Z = -1e6;
   private static final double LARGE_POS_Z = 1e8;
@@ -37,7 +37,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
   private static final double RHO_EPS = 1e-8;
   private static final double ATM_EPS = 1e-7;
 
-  //  private static final double EPS = 1e-15;
+  // private static final double EPS = 1e-15;
 
   @Override
   public Function1D<SABRFormulaData, Double> getVolatilityFunction(final EuropeanVanillaOption option, final double forward) {
@@ -46,7 +46,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
 
     return new Function1D<SABRFormulaData, Double>() {
       @Override
-      public final Double evaluate(final SABRFormulaData data) {
+      public Double evaluate(final SABRFormulaData data) {
         Validate.notNull(data, "data");
         return getVolatility(option, forward, data);
       }
@@ -92,10 +92,14 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
   }
 
   /**
-   * Standard Hagan formula for log-normal vol
-   * @param option The option.
-   * @param forward The forward value of the underlying
-   * @param data The SABR data.
+   * Standard Hagan formula for log-normal vol.
+   *
+   * @param option
+   *          The option.
+   * @param forward
+   *          The forward value of the underlying
+   * @param data
+   *          The SABR data.
    * @return The log-normal volatility
    */
   public double getVolatility(final EuropeanVanillaOption option, final double forward, final SABRFormulaData data) {
@@ -114,7 +118,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
     final double cutoff = forward * CUTOFF_MONEYNESS;
     final double k;
     if (strike < cutoff) {
-      LOGGER.info("Given strike of {} is less than cutoff at {}, therefore the strike is taken as {}", new Object[] {strike, cutoff, cutoff});
+      LOGGER.info("Given strike of {} is less than cutoff at {}, therefore the strike is taken as {}", new Object[] { strike, cutoff, cutoff });
       k = cutoff;
     } else {
       k = strike;
@@ -123,7 +127,8 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
     final double beta1 = 1 - beta;
     if (CompareUtils.closeEquals(forward, k, ATM_EPS)) {
       final double f1 = Math.pow(forward, beta1);
-      vol = alpha * (1 + timeToExpiry * (beta1 * beta1 * alpha * alpha / 24 / f1 / f1 + rho * alpha * beta * nu / 4 / f1 + nu * nu * (2 - 3 * rho * rho) / 24)) / f1;
+      vol = alpha * (1 + timeToExpiry * (beta1 * beta1 * alpha * alpha / 24 / f1 / f1 + rho * alpha * beta * nu / 4 / f1 + nu * nu * (2 - 3 * rho * rho) / 24))
+          / f1;
     } else {
       if (CompareUtils.closeEquals(beta, 0, BETA_EPS)) {
         final double ln = Math.log(forward / k);
@@ -144,18 +149,20 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
         zOverChi = getZOverChi(rho, z);
         final double first = alpha / (f1Sqrt * (1 + lnBetaSq / 24 + lnBetaSq * lnBetaSq / 1920));
         final double second = zOverChi;
-        final double third = 1 + timeToExpiry * (beta1 * beta1 * alpha * alpha / 24 / f1 + rho * nu * beta * alpha / 4 / f1Sqrt + nu * nu * (2 - 3 * rho * rho) / 24);
+        final double third = 1
+            + timeToExpiry * (beta1 * beta1 * alpha * alpha / 24 / f1 + rho * nu * beta * alpha / 4 / f1Sqrt + nu * nu * (2 - 3 * rho * rho) / 24);
 
         vol = first * second * third;
       }
     }
-    //There is nothing to prevent the nu * nu * (2 - 3 * rho * rho) / 24 part taking the third term, and hence the volatility negative
+    // There is nothing to prevent the nu * nu * (2 - 3 * rho * rho) / 24 part taking the third term, and hence the volatility negative
     return vol;
     // return Math.max(0.0, vol);
   }
 
   @ExternalFunction
-  public double getVolatility(final double forward, final double strike, final double timeToExpiry, final double alpha, final double beta, final double rho, final double nu) {
+  public double getVolatility(final double forward, final double strike, final double timeToExpiry, final double alpha, final double beta, final double rho,
+      final double nu) {
     Validate.isTrue(forward > 0, "Forward must be > 0");
     final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, timeToExpiry, true);
     final SABRFormulaData data = new SABRFormulaData(alpha, beta, rho, nu);
@@ -163,10 +170,14 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
   }
 
   /**
-   * Gets the volatility sensitivity to the SABr parameters
-   * @param option The option.
-   * @param forward The forward value of the underlying
-   * @param data The SABR data.
+   * Gets the volatility sensitivity to the SABr parameters.
+   *
+   * @param option
+   *          The option.
+   * @param forward
+   *          The forward value of the underlying
+   * @param data
+   *          The SABR data.
    * @return array with alpha, beta, rho and nu sensitivities
    */
   public double[] getVolatilityModelAdjoint(final EuropeanVanillaOption option, final double forward, final SABRFormulaData data) {
@@ -176,7 +187,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
     double strike = option.getStrike();
     final double cutoff = forward * CUTOFF_MONEYNESS;
     if (strike < cutoff) {
-      LOGGER.info("Given strike of {} is less than cutoff at {}, therefore the strike is taken as {}", new Object[] {strike, cutoff, cutoff});
+      LOGGER.info("Given strike of {} is less than cutoff at {}, therefore the strike is taken as {}", new Object[] { strike, cutoff, cutoff });
       strike = cutoff;
     }
 
@@ -189,10 +200,10 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
 
     if (alpha == 0.0) {
       Arrays.fill(volatilityAdjoint, 0.0);
-      if (CompareUtils.closeEquals(forward, strike, ATM_EPS)) { //TODO should this is relative
+      if (CompareUtils.closeEquals(forward, strike, ATM_EPS)) { // TODO should this is relative
         volatilityAdjoint[3] = (1 + (2 - 3 * rho * rho) * nu * nu / 24 * timeToExpiry) / Math.pow(forward, betaStar);
       } else {
-        //for non-atm options the alpha sensitivity at alpha = 0 is infinite. Returning this will most likely break calibrations,
+        // for non-atm options the alpha sensitivity at alpha = 0 is infinite. Returning this will most likely break calibrations,
         // so we return an arbitrary large number
         volatilityAdjoint[3] = 1e7;
       }
@@ -204,7 +215,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
     final double lnrfK = Math.log(forward / strike);
     final double z = nu / alpha * sfK * lnrfK;
     final double sf1 = sfK * (1 + betaStar * betaStar / 24 * (lnrfK * lnrfK) + Math.pow(betaStar, 4) / 1920 * Math.pow(lnrfK, 4));
-    final double sf2 = (1 + (Math.pow(betaStar * alpha / sfK, 2) / 24 + (rho * beta * nu * alpha) / (4 * sfK) + (2 - 3 * rho * rho) * nu * nu / 24) * timeToExpiry);
+    final double sf2 = 1 + (Math.pow(betaStar * alpha / sfK, 2) / 24 + rho * beta * nu * alpha / (4 * sfK) + (2 - 3 * rho * rho) * nu * nu / 24) * timeToExpiry;
 
     // Implementation note: Backward sweep.
     final double[] zOverChi = zOverChiWithDev(rho, z);
@@ -213,17 +224,20 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
     final double sf1Bar = -alpha / (sf1 * sf1) * zOverChi[0] * sf2 * vBar;
     final double rzxzBar = alpha / sf1 * sf2 * vBar;
     final double zBar = zOverChi[2] * rzxzBar;
-    //    double xzBar = 0;
+    // double xzBar = 0;
 
-    final double sfKBar = nu / alpha * lnrfK * zBar + sf1 / sfK * sf1Bar - (Math.pow(betaStar * alpha, 2) / Math.pow(sfK, 3) / 12 + (rho * beta * nu * alpha) / 4 / (sfK * sfK)) * timeToExpiry
-        * sf2Bar;
+    final double sfKBar = nu / alpha * lnrfK * zBar + sf1 / sfK * sf1Bar
+        - (Math.pow(betaStar * alpha, 2) / Math.pow(sfK, 3) / 12 + rho * beta * nu * alpha / 4 / (sfK * sfK)) * timeToExpiry
+            * sf2Bar;
 
-    final double nuBar = 1 / alpha * sfK * lnrfK * zBar + ((rho * beta * alpha) / (4 * sfK) + (2 - 3 * rho * rho) * nu / 12) * timeToExpiry * sf2Bar;
-    final double rhoBar = zOverChi[1] * rzxzBar + ((beta * nu * alpha) / (4 * sfK) - rho * nu * nu / 4) * timeToExpiry * sf2Bar;
+    final double nuBar = 1 / alpha * sfK * lnrfK * zBar + (rho * beta * alpha / (4 * sfK) + (2 - 3 * rho * rho) * nu / 12) * timeToExpiry * sf2Bar;
+    final double rhoBar = zOverChi[1] * rzxzBar + (beta * nu * alpha / (4 * sfK) - rho * nu * nu / 4) * timeToExpiry * sf2Bar;
 
-    final double alphaBar = -nu / (alpha * alpha) * sfK * lnrfK * zBar + ((betaStar * alpha / sfK) * (betaStar / sfK) / 12 + (rho * beta * nu) / (4 * sfK)) * timeToExpiry * sf2Bar + 1 / sf1
-        * zOverChi[0] * sf2 * vBar;
-    final double betaBar = -0.5 * Math.log(forward * strike) * sfK * sfKBar - sfK * (betaStar / 12 * (lnrfK * lnrfK) + Math.pow(betaStar, 3) / 480 * Math.pow(lnrfK, 4)) * sf1Bar
+    final double alphaBar = -nu / (alpha * alpha) * sfK * lnrfK * zBar
+        + (betaStar * alpha / sfK * (betaStar / sfK) / 12 + rho * beta * nu / (4 * sfK)) * timeToExpiry * sf2Bar + 1 / sf1
+            * zOverChi[0] * sf2 * vBar;
+    final double betaBar = -0.5 * Math.log(forward * strike) * sfK * sfKBar
+        - sfK * (betaStar / 12 * (lnrfK * lnrfK) + Math.pow(betaStar, 3) / 480 * Math.pow(lnrfK, 4)) * sf1Bar
         + (-betaStar * alpha * alpha / sfK / sfK / 12 + rho * nu * alpha / 4 / sfK) * timeToExpiry * sf2Bar;
 
     volatilityAdjoint[0] = alphaBar;
@@ -236,11 +250,15 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
 
   /**
    * Return the Black implied volatility in the SABR model and its derivatives.
-   * @param option The option.
-   * @param forward The forward value of the underlying
-   * @param data The SABR data.
-   * @return An array with [0] the volatility, [1] Derivative w.r.t the forward, [2] the derivative w.r.t the strike, [3] the derivative w.r.t. to alpha,
-   *  [4] the derivative w.r.t. to beta, [5] the derivative w.r.t. to rho, [6] the derivative w.r.t. to nu
+   *
+   * @param option
+   *          The option.
+   * @param forward
+   *          The forward value of the underlying
+   * @param data
+   *          The SABR data.
+   * @return An array with [0] the volatility, [1] Derivative w.r.t the forward, [2] the derivative w.r.t the strike, [3] the derivative w.r.t. to alpha, [4]
+   *         the derivative w.r.t. to beta, [5] the derivative w.r.t. to rho, [6] the derivative w.r.t. to nu
    */
   public double[] getVolatilityAdjoint(final EuropeanVanillaOption option, final double forward, final SABRFormulaData data) {
     /**
@@ -252,7 +270,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
     double strike = option.getStrike();
     final double cutoff = forward * CUTOFF_MONEYNESS;
     if (strike < cutoff) {
-      LOGGER.info("Given strike of {} is less than cutoff at {}, therefore the strike is taken as {}", new Object[] {strike, cutoff, cutoff});
+      LOGGER.info("Given strike of {} is less than cutoff at {}, therefore the strike is taken as {}", new Object[] { strike, cutoff, cutoff });
       strike = cutoff;
     }
 
@@ -266,10 +284,10 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
 
     if (alpha == 0.0) {
       Arrays.fill(volatilityAdjoint, 0.0);
-      if (CompareUtils.closeEquals(forward, strike, ATM_EPS)) { //TODO should this is relative
+      if (CompareUtils.closeEquals(forward, strike, ATM_EPS)) { // TODO should this is relative
         volatilityAdjoint[3] = (1 + (2 - 3 * rho * rho) * nu * nu / 24 * timeToExpiry) / Math.pow(forward, betaStar);
       } else {
-        //for non-atm options the alpha sensitivity at alpha = 0 is infinite. Returning this will most likely break calibrations,
+        // for non-atm options the alpha sensitivity at alpha = 0 is infinite. Returning this will most likely break calibrations,
         // so we return an arbitrary large number
         volatilityAdjoint[3] = 1e7;
       }
@@ -283,14 +301,14 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
     double rzxz;
     double xz = 0;
     if (CompareUtils.closeEquals(z, 0.0, SMALL_Z)) {
-      rzxz = 1.0 - 0.5 * z * rho; //small z expansion to z^2 terms
+      rzxz = 1.0 - 0.5 * z * rho; // small z expansion to z^2 terms
     } else {
       if (CompareUtils.closeEquals(rhoStar, 0.0, RHO_EPS)) {
         if (z >= 1.0) {
           if (rhoStar == 0.0) {
             rzxz = 0.0;
           } else {
-            xz = (Math.log(2 * (z - 1)) - Math.log(rhoStar));
+            xz = Math.log(2 * (z - 1)) - Math.log(rhoStar);
             rzxz = z / xz;
           }
         } else {
@@ -300,13 +318,13 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
       } else {
         double arg;
         if (z < LARGE_NEG_Z) {
-          arg = (rho * rho - 1) / 2 / z; //get rounding errors due to fine balanced cancellation for very large negative z
+          arg = (rho * rho - 1) / 2 / z; // get rounding errors due to fine balanced cancellation for very large negative z
         } else if (z > LARGE_POS_Z) {
           arg = 2 * (z - rho);
         } else {
-          arg = (Math.sqrt(1 - 2 * rho * z + z * z) + z - rho);
+          arg = Math.sqrt(1 - 2 * rho * z + z * z) + z - rho;
         }
-        if (arg <= 0.0) { //Mathematically this cannot be less than zero, but you know what computers are like.
+        if (arg <= 0.0) { // Mathematically this cannot be less than zero, but you know what computers are like.
           rzxz = 0.0;
         } else {
           xz = Math.log(arg / (1 - rho));
@@ -315,7 +333,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
       }
     }
     final double sf1 = sfK * (1 + betaStar * betaStar / 24 * (lnrfK * lnrfK) + Math.pow(betaStar, 4) / 1920 * Math.pow(lnrfK, 4));
-    final double sf2 = (1 + (Math.pow(betaStar * alpha / sfK, 2) / 24 + (rho * beta * nu * alpha) / (4 * sfK) + (2 - 3 * rho * rho) * nu * nu / 24) * timeToExpiry);
+    final double sf2 = 1 + (Math.pow(betaStar * alpha / sfK, 2) / 24 + rho * beta * nu * alpha / (4 * sfK) + (2 - 3 * rho * rho) * nu * nu / 24) * timeToExpiry;
     volatilityAdjoint[0] = alpha / sf1 * rzxz * sf2;
 
     // Implementation note: Backward sweep.
@@ -348,17 +366,19 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
           zBar = 1 / xz * rzxzBar - xzBar / (xz * xz) * rzxzBar;
         } else {
           xzBar = -z / (xz * xz) * rzxzBar;
-          zBar = 1 / xz * rzxzBar + 1 / ((Math.sqrt(1 - 2 * rho * z + z * z) + z - rho)) * (0.5 * Math.pow(1 - 2 * rho * z + z * z, -0.5) * (-2 * rho + 2 * z) + 1) * xzBar;
+          zBar = 1 / xz * rzxzBar
+              + 1 / (Math.sqrt(1 - 2 * rho * z + z * z) + z - rho) * (0.5 * Math.pow(1 - 2 * rho * z + z * z, -0.5) * (-2 * rho + 2 * z) + 1) * xzBar;
         }
       }
     }
 
     final double lnrfKBar = sfK * (betaStar * betaStar / 12 * lnrfK + Math.pow(betaStar, 4) / 1920 * 4 * Math.pow(lnrfK, 3)) * sf1Bar + nu / alpha * sfK * zBar;
-    final double sfKBar = nu / alpha * lnrfK * zBar + sf1 / sfK * sf1Bar - (Math.pow(betaStar * alpha, 2) / Math.pow(sfK, 3) / 12 + (rho * beta * nu * alpha) / 4 / (sfK * sfK)) * timeToExpiry
-        * sf2Bar;
+    final double sfKBar = nu / alpha * lnrfK * zBar + sf1 / sfK * sf1Bar
+        - (Math.pow(betaStar * alpha, 2) / Math.pow(sfK, 3) / 12 + rho * beta * nu * alpha / 4 / (sfK * sfK)) * timeToExpiry
+            * sf2Bar;
     final double strikeBar = -1 / strike * lnrfKBar + betaStar * sfK / (2 * strike) * sfKBar;
     final double forwardBar = 1 / forward * lnrfKBar + betaStar * sfK / (2 * forward) * sfKBar;
-    final double nuBar = 1 / alpha * sfK * lnrfK * zBar + ((rho * beta * alpha) / (4 * sfK) + (2 - 3 * rho * rho) * nu / 12) * timeToExpiry * sf2Bar;
+    final double nuBar = 1 / alpha * sfK * lnrfK * zBar + (rho * beta * alpha / (4 * sfK) + (2 - 3 * rho * rho) * nu / 12) * timeToExpiry * sf2Bar;
 
     double rhoBar;
     if (Math.abs(forward - strike) < ATM_EPS) {
@@ -367,7 +387,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
       if (CompareUtils.closeEquals(rhoStar, 0.0, RHO_EPS)) {
         if (z >= 1) {
           if (rhoStar == 0.0) {
-            rhoBar = xzBar / RHO_EPS; //the derivative at rho = 1 is infinite  - this sets it to some arbitrary large number
+            rhoBar = xzBar / RHO_EPS; // the derivative at rho = 1 is infinite - this sets it to some arbitrary large number
           } else {
             rhoBar = xzBar / rhoStar;
           }
@@ -378,11 +398,13 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
         rhoBar = (1 / (Math.sqrt(1 - 2 * rho * z + z * z) + z - rho) * (-Math.pow(1 - 2 * rho * z + z * z, -0.5) * z - 1) + 1 / rhoStar) * xzBar;
       }
     }
-    rhoBar += ((beta * nu * alpha) / (4 * sfK) - rho * nu * nu / 4) * timeToExpiry * sf2Bar;
+    rhoBar += (beta * nu * alpha / (4 * sfK) - rho * nu * nu / 4) * timeToExpiry * sf2Bar;
 
-    final double alphaBar = -nu / (alpha * alpha) * sfK * lnrfK * zBar + ((betaStar * alpha / sfK) * (betaStar / sfK) / 12 + (rho * beta * nu) / (4 * sfK)) * timeToExpiry * sf2Bar + 1 / sf1 * rzxz
-        * sf2 * vBar;
-    final double betaBar = -0.5 * Math.log(forward * strike) * sfK * sfKBar - sfK * (betaStar / 12 * (lnrfK * lnrfK) + Math.pow(betaStar, 3) / 480 * Math.pow(lnrfK, 4)) * sf1Bar
+    final double alphaBar = -nu / (alpha * alpha) * sfK * lnrfK * zBar
+        + (betaStar * alpha / sfK * (betaStar / sfK) / 12 + rho * beta * nu / (4 * sfK)) * timeToExpiry * sf2Bar + 1 / sf1 * rzxz
+            * sf2 * vBar;
+    final double betaBar = -0.5 * Math.log(forward * strike) * sfK * sfKBar
+        - sfK * (betaStar / 12 * (lnrfK * lnrfK) + Math.pow(betaStar, 3) / 480 * Math.pow(lnrfK, 4)) * sf1Bar
         + (-betaStar * alpha * alpha / sfK / sfK / 12 + rho * nu * alpha / 4 / sfK) * timeToExpiry * sf2Bar;
 
     volatilityAdjoint[1] = forwardBar;
@@ -396,18 +418,25 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
   }
 
   /**
-   * Computes the first and second order derivatives of the Black implied volatility in the SABR model. 
-   * Around ATM, a first order expansion is used to due to some 0/0-type indetermination. The second order derivative produced is poor around ATM.
-   * @param option The option.
-   * @param forward the forward value of the underlying
-   * @param data The SABR data.
-   * @param volatilityD The array used to return the first order derivatives. [0] Derivative w.r.t the forward, [1] the derivative w.r.t the strike, [2] the derivative w.r.t. to alpha,
-   * [3] the derivative w.r.t. to beta, [4] the derivative w.r.t. to rho, [5] the derivative w.r.t. to nu
-   * @param volatilityD2 The array of array used to return the second order derivative. Only the second order derivative with respect to the forward and strike are implemented.
-   * [0][0] forward-forward; [0][1] forward-strike; [1][1] strike-strike.
+   * Computes the first and second order derivatives of the Black implied volatility in the SABR model. Around ATM, a first order expansion is used to due to
+   * some 0/0-type indetermination. The second order derivative produced is poor around ATM.
+   *
+   * @param option
+   *          The option.
+   * @param forward
+   *          the forward value of the underlying
+   * @param data
+   *          The SABR data.
+   * @param volatilityD
+   *          The array used to return the first order derivatives. [0] Derivative w.r.t the forward, [1] the derivative w.r.t the strike, [2] the derivative
+   *          w.r.t. to alpha, [3] the derivative w.r.t. to beta, [4] the derivative w.r.t. to rho, [5] the derivative w.r.t. to nu
+   * @param volatilityD2
+   *          The array of array used to return the second order derivative. Only the second order derivative with respect to the forward and strike are
+   *          implemented. [0][0] forward-forward; [0][1] forward-strike; [1][1] strike-strike.
    * @return The Black implied volatility.
    */
-  public double getVolatilityAdjoint2(final EuropeanVanillaOption option, final double forward, final SABRFormulaData data, final double[] volatilityD, final double[][] volatilityD2) {
+  public double getVolatilityAdjoint2(final EuropeanVanillaOption option, final double forward, final SABRFormulaData data, final double[] volatilityD,
+      final double[][] volatilityD2) {
     final double k = Math.max(option.getStrike(), 0.000001);
     final double theta = option.getTimeToExpiry();
     final double alpha = data.getAlpha();
@@ -430,7 +459,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
     double f2x = 0.0;
     double x = 0.0, xp = 0, xpp = 0;
     if (CompareUtils.closeEquals(f2, 0.0, SMALL_Z)) {
-      f2x = 1.0 - 0.5 * f2 * rho; //small f2 expansion to f2^2 terms
+      f2x = 1.0 - 0.5 * f2 * rho; // small f2 expansion to f2^2 terms
     } else {
       x = Math.log((sqrtf2 + f2 - rho) / (1 - rho));
       xp = ((-2 * rho + 2 * f2) / sqrtf2 / 2.0 + 1) / (sqrtf2 + f2 - rho);
@@ -453,7 +482,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
     final double sigmaDf4 = f2x / f1 * (1 + f3 * theta);
     final double sigmaDx = -alpha / f1 * f2 / (x * x) * (1 + f3 * theta);
     final double[][] sigmaD2ff = new double[3][3];
-    sigmaD2ff[0][0] = -sigmaDf1 / f1 + sigma / (f1 * f1); //OK
+    sigmaD2ff[0][0] = -sigmaDf1 / f1 + sigma / (f1 * f1); // OK
     sigmaD2ff[0][1] = -sigmaDf2 / f1;
     sigmaD2ff[0][2] = -sigmaDf3 / f1;
     if (CompareUtils.closeEquals(f2, 0.0, SMALL_Z)) {
@@ -463,7 +492,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
       sigmaD2ff[1][2] = alpha / f1 * theta * (1.0 / x - f2 * xp / (x * x));
     }
     sigmaD2ff[2][2] = 0.0;
-    //     final double sigma = alpha / f1 * f2x * (1 + f3 * theta);
+    // final double sigma = alpha / f1 * f2x * (1 + f3 * theta);
     // Second level
     final double[] f1Dh = new double[3];
     final double[] f2Dh = new double[3];
@@ -514,9 +543,12 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
     final double[][] sigmaD2hh = new double[2][2]; // No h0
     for (int loopx = 0; loopx < 2; loopx++) {
       for (int loopy = loopx; loopy < 2; loopy++) {
-        sigmaD2hh[loopx][loopy] = (sigmaD2ff[0][0] * f1Dh[loopy + 1] + sigmaD2ff[0][1] * f2Dh[loopy + 1] + sigmaD2ff[0][2] * f3Dh[loopy + 1]) * f1Dh[loopx + 1] + sigmaDf1 * f1D2hh[loopx][loopy]
-            + (sigmaD2ff[0][1] * f1Dh[loopy + 1] + sigmaD2ff[1][1] * f2Dh[loopy + 1] + sigmaD2ff[1][2] * f3Dh[loopy + 1]) * f2Dh[loopx + 1] + sigmaDf2 * f2D2hh[loopx][loopy]
-            + (sigmaD2ff[0][2] * f1Dh[loopy + 1] + sigmaD2ff[1][2] * f2Dh[loopy + 1] + sigmaD2ff[2][2] * f3Dh[loopy + 1]) * f3Dh[loopx + 1] + sigmaDf3 * f3D2hh[loopx][loopy];
+        sigmaD2hh[loopx][loopy] = (sigmaD2ff[0][0] * f1Dh[loopy + 1] + sigmaD2ff[0][1] * f2Dh[loopy + 1] + sigmaD2ff[0][2] * f3Dh[loopy + 1]) * f1Dh[loopx + 1]
+            + sigmaDf1 * f1D2hh[loopx][loopy]
+            + (sigmaD2ff[0][1] * f1Dh[loopy + 1] + sigmaD2ff[1][1] * f2Dh[loopy + 1] + sigmaD2ff[1][2] * f3Dh[loopy + 1]) * f2Dh[loopx + 1]
+            + sigmaDf2 * f2D2hh[loopx][loopy]
+            + (sigmaD2ff[0][2] * f1Dh[loopy + 1] + sigmaD2ff[1][2] * f2Dh[loopy + 1] + sigmaD2ff[2][2] * f3Dh[loopy + 1]) * f3Dh[loopx + 1]
+            + sigmaDf3 * f3D2hh[loopx][loopy];
       }
     }
     // Third level
@@ -540,10 +572,13 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
       volatilityD[4] = sigmaDf1 * f1Dp[2] + sigmaDx * xDr + sigmaDf3 * f3Dp[2] + sigmaDf4 * f4Dp[2];
     }
     volatilityD[5] = sigmaDf1 * f1Dp[3] + sigmaDf2 * f2Dp[3] + sigmaDf3 * f3Dp[3] + sigmaDf4 * f4Dp[3];
-    volatilityD2[0][0] = (sigmaD2hh[0][0] * h1Df + sigmaD2hh[0][1] * h2Df) * h1Df + sigmaDh1 * h1D2ff + (sigmaD2hh[0][1] * h1Df + sigmaD2hh[1][1] * h2Df) * h2Df + sigmaDh2 * h2D2ff;
-    volatilityD2[0][1] = (sigmaD2hh[0][0] * h1Dk + sigmaD2hh[0][1] * h2Dk) * h1Df + sigmaDh1 * h1D2kf + (sigmaD2hh[0][1] * h1Dk + sigmaD2hh[1][1] * h2Dk) * h2Df + sigmaDh2 * h2D2fk;
+    volatilityD2[0][0] = (sigmaD2hh[0][0] * h1Df + sigmaD2hh[0][1] * h2Df) * h1Df + sigmaDh1 * h1D2ff + (sigmaD2hh[0][1] * h1Df + sigmaD2hh[1][1] * h2Df) * h2Df
+        + sigmaDh2 * h2D2ff;
+    volatilityD2[0][1] = (sigmaD2hh[0][0] * h1Dk + sigmaD2hh[0][1] * h2Dk) * h1Df + sigmaDh1 * h1D2kf + (sigmaD2hh[0][1] * h1Dk + sigmaD2hh[1][1] * h2Dk) * h2Df
+        + sigmaDh2 * h2D2fk;
     volatilityD2[1][0] = volatilityD2[0][1];
-    volatilityD2[1][1] = (sigmaD2hh[0][0] * h1Dk + sigmaD2hh[0][1] * h2Dk) * h1Dk + sigmaDh1 * h1D2kk + (sigmaD2hh[0][1] * h1Dk + sigmaD2hh[1][1] * h2Dk) * h2Dk + sigmaDh2 * h2D2kk;
+    volatilityD2[1][1] = (sigmaD2hh[0][0] * h1Dk + sigmaD2hh[0][1] * h2Dk) * h1Dk + sigmaDh1 * h1D2kk + (sigmaD2hh[0][1] * h1Dk + sigmaD2hh[1][1] * h2Dk) * h2Dk
+        + sigmaDh2 * h2D2kk;
     return sigma;
   }
 
@@ -585,12 +620,12 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
 
     double arg;
     if (z < LARGE_NEG_Z) {
-      arg = (rho * rho - 1) / 2 / z; //get rounding errors due to fine balanced cancellation for very large negative z
+      arg = (rho * rho - 1) / 2 / z; // get rounding errors due to fine balanced cancellation for very large negative z
     } else if (z > LARGE_POS_Z) {
       arg = 2 * (z - rho);
     } else {
-      arg = (Math.sqrt(1 - 2 * rho * z + z * z) + z - rho);
-      //Mathematically this cannot be less than zero, but you know what computers are like.
+      arg = Math.sqrt(1 - 2 * rho * z + z * z) + z - rho;
+      // Mathematically this cannot be less than zero, but you know what computers are like.
       if (arg <= 0.0) {
         return 0.0;
       }
@@ -601,12 +636,12 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
   }
 
   /**
-   * computes the z/chi(z) term, and its derivatives wrt rho and z for all possible values of rho and z (i.e. the edge cases
-   * rho = +- 1 are handled).
+   * computes the z/chi(z) term, and its derivatives wrt rho and z for all possible values of rho and z (i.e. the edge cases rho = +- 1 are handled).
+   *
    * @param rho
    * @param z
    * @return values, derivative wrt rho, and derivative wrt z
-   * 
+   *
    */
   private double[] zOverChiWithDev(final double rho, final double z) {
     final double[] res = new double[3];
@@ -622,7 +657,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
         if (rhoStar == 0) {
           res[0] = 0.0;
           final double temp = Math.log(2 * (z - 1)) - Math.log(RHO_EPS);
-          res[1] = -z / RHO_EPS / FunctionUtils.square(temp); //This should be -infinity
+          res[1] = -z / RHO_EPS / FunctionUtils.square(temp); // This should be -infinity
           res[2] = 0;
         } else {
           final double temp = Math.log(2 * (z - 1)) - Math.log(rhoStar);
@@ -653,7 +688,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
           res[0] = 0;
           final double chi = Math.log(RHO_EPS) - Math.log(-(1 + z) / rhoStar);
           final double chiRho = 1 / RHO_EPS + 1 / rhoStar - FunctionUtils.square(z / (1 + z));
-          res[1] = -chiRho * z / chi / chi; //should be +infinity
+          res[1] = -chiRho * z / chi / chi; // should be +infinity
           res[2] = 0.0;
         } else {
           final double chi = Math.log(rhoHat) - Math.log(-(1 + z) / rhoStar);
@@ -668,14 +703,14 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
       return res;
     }
 
-    //now the non-edge case
+    // now the non-edge case
     double root = 0;
     double arg;
     double argRho;
     double argZ;
     if (z < LARGE_NEG_Z) {
       root = -z + rho - 1 / 2 / z;
-      arg = (rho * rho - 1) / 2 / z; //get rounding errors due to fine balanced cancellation for very large negative z
+      arg = (rho * rho - 1) / 2 / z; // get rounding errors due to fine balanced cancellation for very large negative z
       argRho = rho / z;
       argZ = -arg / z;
     } else if (z > LARGE_POS_Z) {
@@ -689,7 +724,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
       argRho = -(z / root + 1);
       argZ = (z - rho) / root + 1;
     }
-    if (arg <= 0.0) { //Mathematically this cannot be less than zero, but you know what computers are like.
+    if (arg <= 0.0) { // Mathematically this cannot be less than zero, but you know what computers are like.
       res[0] = 0.0;
       res[1] = 0.0;
       res[2] = 0.0;

@@ -41,7 +41,7 @@ import com.opengamma.util.jms.JmsConnector;
 @Produces(FudgeRest.MEDIA)
 public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
 
-  //CSOFF: just constants
+  // CSOFF: just constants
   public static final String PATH_UNIQUE_ID = "id";
   public static final String PATH_USER = "user";
   public static final String PATH_STATE = "state";
@@ -71,12 +71,13 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
   public static final String UPDATE_PERIOD_FIELD = "updatePeriod";
   public static final String VIEW_CYCLE_ACCESS_SUPPORTED_FIELD = "isViewCycleAccessSupported";
   public static final String PATH_VIEW_PROCESS_CONTEXT_MAP = "viewProcessContextMap";
-  //CSON: just constants
+  // CSON: just constants
 
   private final ViewClient _viewClient;
   private final DataEngineResourceManagerResource<ViewCycle> _viewCycleManagerResource;
 
-  public DataViewClientResource(final ViewClient viewClient, final DataEngineResourceManagerResource<ViewCycle> viewCycleManagerResource, final JmsConnector jmsConnector, final ExecutorService executor) {
+  public DataViewClientResource(final ViewClient viewClient, final DataEngineResourceManagerResource<ViewCycle> viewCycleManagerResource,
+      final JmsConnector jmsConnector, final ExecutorService executor) {
     super(createJmsResultPublisher(viewClient, jmsConnector), executor);
     _viewClient = viewClient;
     _viewCycleManagerResource = viewCycleManagerResource;
@@ -85,16 +86,15 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
   private static ViewClientJmsResultPublisher createJmsResultPublisher(final ViewClient viewClient, final JmsConnector jmsConnector) {
     if (jmsConnector == null) {
       return null;
-    } else {
-      return new ViewClientJmsResultPublisher(viewClient, OpenGammaFudgeContext.getInstance(), jmsConnector);
     }
+    return new ViewClientJmsResultPublisher(viewClient, OpenGammaFudgeContext.getInstance(), jmsConnector);
   }
 
-  /*package*/ ViewClient getViewClient() {
+  /* package */ ViewClient getViewClient() {
     return _viewClient;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected boolean isTerminated() {
     return getViewClient().getState() == ViewClientState.TERMINATED;
@@ -105,7 +105,7 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     shutdown();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path(PATH_UNIQUE_ID)
   public Response getUniqueId() {
@@ -127,7 +127,7 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     return responseOkObject(getViewClient().getState());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path(PATH_IS_ATTACHED)
   public Response isAttached() {
@@ -184,7 +184,7 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     return new DataViewProcessResource(getViewClient().getViewProcess());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @PUT
   @Path(PATH_UPDATE_PERIOD)
   @Consumes(FudgeRest.MEDIA)
@@ -195,7 +195,7 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     return responseOk();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path(PATH_RESULT_MODE)
   public Response getResultMode() {
@@ -211,7 +211,7 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     return responseOk();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @PUT
   @Path(PATH_VIEW_PROCESS_CONTEXT_MAP)
   public Response setViewProcessContextMap(final Map<String, String> viewProcessContextMap) {
@@ -220,7 +220,7 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     return responseOk();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path(PATH_FRAGMENT_RESULT_MODE)
   public Response getFragmentResultMode() {
@@ -236,7 +236,7 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     return responseOk();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Path(PATH_PAUSE)
   public Response pause() {
@@ -331,7 +331,7 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     return responseCreated(referenceUri);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Path(PATH_SET_MINIMUM_LOG_MODE)
   @Consumes(FudgeRest.MEDIA)
@@ -343,7 +343,7 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     return responseOk();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @DELETE
   public void shutdown() {
     getViewClient().shutdown();

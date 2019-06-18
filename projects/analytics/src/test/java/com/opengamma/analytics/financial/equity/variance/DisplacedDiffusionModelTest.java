@@ -1,11 +1,10 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.variance;
 
-import static com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory.getInterpolator;
 import static org.testng.AssertJUnit.assertEquals;
 
 import org.testng.annotations.Test;
@@ -17,11 +16,14 @@ import com.opengamma.analytics.financial.model.volatility.surface.BlackVolatilit
 import com.opengamma.analytics.financial.model.volatility.surface.BlackVolatilitySurfaceDelta;
 import com.opengamma.analytics.financial.model.volatility.surface.BlackVolatilitySurfaceStrike;
 import com.opengamma.analytics.math.function.Function;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolator;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator2D;
 import com.opengamma.analytics.math.interpolation.LinearInterpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1d;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.rootfinding.VectorRootFinder;
 import com.opengamma.analytics.math.rootfinding.newton.BroydenVectorRootFinder;
 import com.opengamma.analytics.math.surface.ConstantDoublesSurface;
@@ -64,22 +66,22 @@ public class DisplacedDiffusionModelTest {
   //private static final YieldAndDiscountCurve curveDiscount = curves.getCurve("Funding");
 
   private static final double[] EXPIRIES = new double[] {0.5, 0.5, 0.5, 0.5,
-    1.0, 1.0, 1.0, 1.0,
-    5.0, 5.0, 5.0, 5.0 };
+      1.0, 1.0, 1.0, 1.0,
+      5.0, 5.0, 5.0, 5.0 };
   private static final double[] DELTAS = new double[] {0.75, 0.5, 0.25, 0.1,
-    0.75, 0.5, 0.25, 0.1,
-    0.75, 0.5, 0.25, 0.1 };
+      0.75, 0.5, 0.25, 0.1,
+      0.75, 0.5, 0.25, 0.1 };
 
   private static final double[] STRIKES = new double[] {10, 50, 105, 150,
-    10, 50, 105, 150,
-    10, 50, 105, 150 };
+      10, 50, 105, 150,
+      10, 50, 105, 150 };
 
   private static final double[] VOLS = new double[] {0.28, 0.28, 0.28, 0.28,
-    0.25, 0.25, 0.25, 0.25,
-    0.26, 0.24, 0.23, 0.25 };
+      0.25, 0.25, 0.25, 0.25,
+      0.26, 0.24, 0.23, 0.25 };
 
-  private static final CombinedInterpolatorExtrapolator INTERPOLATOR_1D = getInterpolator(Interpolator1DFactory.DOUBLE_QUADRATIC,
-      Interpolator1DFactory.LINEAR_EXTRAPOLATOR, Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final NamedInterpolator1d INTERPOLATOR_1D = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME,
+      LinearExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
   private static final Interpolator2D INTERPOLATOR_2D = new GridInterpolator2D(new LinearInterpolator1D(), INTERPOLATOR_1D);
   private static final InterpolatedDoublesSurface DELTA_SURFACE = new InterpolatedDoublesSurface(EXPIRIES, DELTAS, VOLS, INTERPOLATOR_2D);
   private static final BlackVolatilitySurface<?> DELTA_VOLSURFACE = new BlackVolatilitySurfaceDelta(DELTA_SURFACE, FORWARD_CURVE);

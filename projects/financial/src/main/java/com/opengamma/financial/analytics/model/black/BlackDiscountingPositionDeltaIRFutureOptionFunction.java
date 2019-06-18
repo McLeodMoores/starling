@@ -26,20 +26,18 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the position delta of interest rate future options using a Black surface and
- * curves constructed using the discounting method.
+ * Calculates the position delta of interest rate future options using a Black surface and curves constructed using the discounting method.
  */
 public class BlackDiscountingPositionDeltaIRFutureOptionFunction extends BlackDiscountingIRFutureOptionFunction {
   /** The position delta calculator */
-  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, Double> CALCULATOR =
-      PositionDeltaSTIRFutureOptionCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, Double> CALCULATOR = PositionDeltaSTIRFutureOptionCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#POSITION_DELTA}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#POSITION_DELTA}.
    */
   public BlackDiscountingPositionDeltaIRFutureOptionFunction() {
     super(POSITION_DELTA);

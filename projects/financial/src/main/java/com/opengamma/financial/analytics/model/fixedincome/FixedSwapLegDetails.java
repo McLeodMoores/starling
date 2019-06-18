@@ -28,7 +28,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Container for the relevant details for pricing a fixed swap leg, with the entries
- * <p>
+ * <ul>
  * <li>Start accrual date</li>
  * <li>End accrual date</li>
  * <li>Payment time</li>
@@ -38,7 +38,7 @@ import com.opengamma.util.money.CurrencyAmount;
  * <li>Notional</li>
  * <li>Rate</li>
  * <li>Discounted payment amount</li>
- * <p>
+ * </ul>
  * There is an entry for each coupon in a fixed leg.
  */
 @Deprecated
@@ -77,7 +77,7 @@ public class FixedSwapLegDetails extends DirectBean implements Serializable {
    */
   public static final String FIXED_RATE = "Fixed Rate";
   /**
-   * The discounted payment amount
+   * The discounted payment amount.
    */
   public static final String DISCOUNTED_PAYMENT_AMOUNT = "Discounted Payment Amount";
 
@@ -128,20 +128,29 @@ public class FixedSwapLegDetails extends DirectBean implements Serializable {
   /**
    * For the builder.
    */
-  /* package */FixedSwapLegDetails() {
+  /* package */ FixedSwapLegDetails() {
     super();
   }
 
   /**
    * All arrays must be the same length.
-   * @param startAccrualDates The start accrual dates, not null
-   * @param endAccrualDates The end accrual dates, not null
-   * @param paymentTimes The payment times, not null
-   * @param paymentFractions The payment year fractions, not null
-   * @param discountFactors The discount factors, not null
-   * @param paymentAmounts The payment amounts, not null
-   * @param notionals The notionals, not null
-   * @param fixedRates The fixed rates, not null
+   * 
+   * @param startAccrualDates
+   *          The start accrual dates, not null
+   * @param endAccrualDates
+   *          The end accrual dates, not null
+   * @param paymentTimes
+   *          The payment times, not null
+   * @param paymentFractions
+   *          The payment year fractions, not null
+   * @param discountFactors
+   *          The discount factors, not null
+   * @param paymentAmounts
+   *          The payment amounts, not null
+   * @param notionals
+   *          The notionals, not null
+   * @param fixedRates
+   *          The fixed rates, not null
    */
   public FixedSwapLegDetails(final LocalDate[] startAccrualDates, final LocalDate[] endAccrualDates,
       final double[] discountFactors, final double[] paymentTimes, final double[] paymentFractions,
@@ -166,6 +175,7 @@ public class FixedSwapLegDetails extends DirectBean implements Serializable {
 
   /**
    * Gets the number of cash-flows.
+   * 
    * @return the number of cash-flows
    */
   @DerivedProperty
@@ -175,6 +185,7 @@ public class FixedSwapLegDetails extends DirectBean implements Serializable {
 
   /**
    * Gets the discounted payment amounts.
+   * 
    * @return the discounted cashflows
    */
   @DerivedProperty
@@ -421,6 +432,7 @@ public class FixedSwapLegDetails extends DirectBean implements Serializable {
   //-----------------------------------------------------------------------
   /**
    * Gets the the {@code numberOfCashFlows} property.
+   * 
    * @return the property, not null
    */
   public final Property<Integer> numberOfCashFlows() {
@@ -430,6 +442,7 @@ public class FixedSwapLegDetails extends DirectBean implements Serializable {
   //-----------------------------------------------------------------------
   /**
    * Gets the the {@code discountedPaymentAmounts} property.
+   * 
    * @return the property, not null
    */
   public final Property<CurrencyAmount[]> discountedPaymentAmounts() {

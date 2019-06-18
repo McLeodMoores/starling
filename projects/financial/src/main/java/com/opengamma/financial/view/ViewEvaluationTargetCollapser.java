@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.depgraph.ComputationTargetCollapser;
 import com.opengamma.engine.function.CompiledFunctionDefinition;
+import com.opengamma.financial.temptarget.TempTarget;
 import com.opengamma.financial.temptarget.TempTargetRepository;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdentifiable;
@@ -47,11 +48,12 @@ public class ViewEvaluationTargetCollapser implements ComputationTargetCollapser
 
   @Override
   public boolean canApplyTo(final ComputationTargetSpecification target) {
-    return ViewEvaluationTarget.TYPE.equals(target.getType());
+    return TempTarget.TYPE.equals(target.getType());
   }
 
   @Override
-  public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a, final ComputationTargetSpecification b) {
+  public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a,
+      final ComputationTargetSpecification b) {
     LOGGER.debug("Request to collapse {} against {}", a, b);
     final ViewEvaluationTarget targetA = getTarget(a);
     if (targetA == null) {

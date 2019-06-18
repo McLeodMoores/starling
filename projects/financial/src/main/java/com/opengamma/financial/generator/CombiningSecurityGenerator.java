@@ -14,7 +14,7 @@ import com.opengamma.master.security.ManageableSecurity;
 
 /**
  * Source of security instances from a selection of underlying generators.
- * 
+ *
  * @param <T> common security super-type.
  */
 public class CombiningSecurityGenerator<T extends ManageableSecurity> extends SecurityGenerator<T> {
@@ -26,7 +26,7 @@ public class CombiningSecurityGenerator<T extends ManageableSecurity> extends Se
   }
 
   public CombiningSecurityGenerator(final Collection<SecurityGenerator<? extends T>> generators) {
-    _generators = new ArrayList<SecurityGenerator<? extends T>>(generators);
+    _generators = new ArrayList<>(generators);
   }
 
   protected List<SecurityGenerator<? extends T>> getGenerators() {

@@ -49,7 +49,7 @@ public class BloombergHistoricalTimeSeriesFieldAdjustmentMapFactoryBean extends 
     super(HistoricalTimeSeriesFieldAdjustmentMap.class);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected HistoricalTimeSeriesFieldAdjustmentMap createObject() {
     return BloombergDataUtils.createFieldAdjustmentMap(getReferenceDataProvider(), getCacheManager());

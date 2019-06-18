@@ -22,18 +22,25 @@ public class AnalyticBondPricer {
   private final AnalyticCDSPricer _pricer = new AnalyticCDSPricer();
 
   /**
-   * Compute the equivalent CDS spread for a bond. This works by first finding a constant hazard rate that reprices the bond (given the supplied yield curve), the using this hazard
-   * rate to calculate the par spread of a CDS.
-   * @param bond Simple analytic representation of a fixed coupon bond
-   * @param yieldCurve The yield curve
-   * @param bondPrice The bond price (for unit notional). Can be given clean or dirty (see below). The dirty price cannot be low that the bond's recovery rate or greater
-   * than its risk free price.
-   * @param cleanOrDirty Clean or dirty price for the bond
-   * @param cds analytic description of a CDS traded at a certain time. The spread is calculated for this CDS.
+   * Compute the equivalent CDS spread for a bond. This works by first finding a constant hazard rate that reprices the bond (given the supplied yield curve),
+   * the using this hazard rate to calculate the par spread of a CDS.
+   *
+   * @param bond
+   *          Simple analytic representation of a fixed coupon bond
+   * @param yieldCurve
+   *          The yield curve
+   * @param bondPrice
+   *          The bond price (for unit notional). Can be given clean or dirty (see below). The dirty price cannot be low that the bond's recovery rate or
+   *          greater than its risk free price.
+   * @param cleanOrDirty
+   *          Clean or dirty price for the bond
+   * @param cds
+   *          analytic description of a CDS traded at a certain time. The spread is calculated for this CDS.
    * @see #getHazardRate
    * @return equivalent CDS spread
    */
-  public double getEquivalentCDSSpread(final BondAnalytic bond, final ISDACompliantYieldCurve yieldCurve, final double bondPrice, final PriceType cleanOrDirty, final CDSAnalytic cds) {
+  public double getEquivalentCDSSpread(final BondAnalytic bond, final ISDACompliantYieldCurve yieldCurve, final double bondPrice, final PriceType cleanOrDirty,
+      final CDSAnalytic cds) {
 
     final double lambda = getHazardRate(bond, yieldCurve, bondPrice, cleanOrDirty);
     final ISDACompliantCreditCurve cc = new ISDACompliantCreditCurve(cds.getProtectionEnd(), lambda);
@@ -41,12 +48,17 @@ public class AnalyticBondPricer {
   }
 
   /**
-   *Get the constant hazard rate implied from a bond price
-   * @param bond Simple analytic representation of a fixed coupon bond
-   * @param yieldCurve  The yield curve
-   * @param bondPrice The bond price (for unit notional). Can be given clean or dirty (see below). The dirty price cannot be low that the bond's recovery rate or greater
-   * than its risk free price.
-   * @param cleanOrDirty Clean or dirty price for the bond
+   * Get the constant hazard rate implied from a bond price.
+   *
+   * @param bond
+   *          Simple analytic representation of a fixed coupon bond
+   * @param yieldCurve
+   *          The yield curve
+   * @param bondPrice
+   *          The bond price (for unit notional). Can be given clean or dirty (see below). The dirty price cannot be low that the bond's recovery rate or
+   *          greater than its risk free price.
+   * @param cleanOrDirty
+   *          Clean or dirty price for the bond
    * @return The implied hazard rate
    */
   public double getHazardRate(final BondAnalytic bond, final ISDACompliantYieldCurve yieldCurve, final double bondPrice, final PriceType cleanOrDirty) {
@@ -59,12 +71,13 @@ public class AnalyticBondPricer {
       return 0.0;
     }
     if (bondPrice > zeroRiskPrice) {
-      throw new IllegalArgumentException("Bond price of " + bondPrice + ", is greater that zero-risk price of " + zeroRiskPrice +
-          ". It is not possible to imply a hazard rate for this bond. Please check inputs");
+      throw new IllegalArgumentException("Bond price of " + bondPrice + ", is greater that zero-risk price of " + zeroRiskPrice
+          + ". It is not possible to imply a hazard rate for this bond. Please check inputs");
     }
     final double dp = cleanOrDirty == PriceType.DIRTY ? bondPrice : bondPrice + bond.getAccruedInterest();
     if (dp <= bond.getRecoveryRate()) {
-      throw new IllegalArgumentException("The dirty price of " + dp + " give, is less than the bond's recovery rate of " + bond.getRecoveryRate() + ". Please check inputs");
+      throw new IllegalArgumentException(
+          "The dirty price of " + dp + " give, is less than the bond's recovery rate of " + bond.getRecoveryRate() + ". Please check inputs");
     }
 
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
@@ -79,26 +92,37 @@ public class AnalyticBondPricer {
   }
 
   /**
-   * Compute the bond price for a given level of a constant hazard rate
-   * @param bond Simple analytic representation of a fixed coupon bond
-   * @param yieldCurve The yield curve
-   * @param hazardRate The hazard rate. Can be zero.
-   * @param cleanOrDirty  Clean or dirty price for the bond
+   * Compute the bond price for a given level of a constant hazard rate.
+   *
+   * @param bond
+   *          Simple analytic representation of a fixed coupon bond
+   * @param yieldCurve
+   *          The yield curve
+   * @param hazardRate
+   *          The hazard rate. Can be zero.
+   * @param cleanOrDirty
+   *          Clean or dirty price for the bond
    * @see #getBondPriceForHazardRateFunction
    * @return The bond price
    */
-  public double bondPriceForHazardRate(final BondAnalytic bond, final ISDACompliantYieldCurve yieldCurve, final double hazardRate, final PriceType cleanOrDirty) {
+  public double bondPriceForHazardRate(final BondAnalytic bond, final ISDACompliantYieldCurve yieldCurve, final double hazardRate,
+      final PriceType cleanOrDirty) {
     return getBondPriceForHazardRateFunction(bond, yieldCurve, cleanOrDirty).evaluate(hazardRate);
   }
 
   /**
-   * This gives a function (Function1D<Double, Double>) that allows you to price a bond for any level of a constant hazard rate
-   * @param bond Simple analytic representation of a fixed coupon bond
-   * @param yieldCurve The yield curve
-   * @param cleanOrDirty Clean or dirty price for the bond
-   * @return a function of hazard rate -> bond price
+   * This gives a function that allows you to price a bond for any level of a constant hazard rate.
+   *
+   * @param bond
+   *          Simple analytic representation of a fixed coupon bond
+   * @param yieldCurve
+   *          The yield curve
+   * @param cleanOrDirty
+   *          Clean or dirty price for the bond
+   * @return a function of hazard rate -&gt; bond price
    */
-  public Function1D<Double, Double> getBondPriceForHazardRateFunction(final BondAnalytic bond, final ISDACompliantYieldCurve yieldCurve, final PriceType cleanOrDirty) {
+  public Function1D<Double, Double> getBondPriceForHazardRateFunction(final BondAnalytic bond, final ISDACompliantYieldCurve yieldCurve,
+      final PriceType cleanOrDirty) {
     ArgumentChecker.notNull(bond, "bond");
     ArgumentChecker.notNull(yieldCurve, "yieldCurve");
     ArgumentChecker.notNull(cleanOrDirty, "cleanOrDirty");

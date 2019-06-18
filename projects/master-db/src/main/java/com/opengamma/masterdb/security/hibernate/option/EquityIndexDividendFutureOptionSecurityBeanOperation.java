@@ -19,17 +19,19 @@ import com.opengamma.masterdb.security.hibernate.HibernateSecurityMasterDao;
 import com.opengamma.masterdb.security.hibernate.OperationContext;
 
 /**
- * EquityIndexOptionSecurityBeanOperation
+ * EquityIndexOptionSecurityBeanOperation.
  */
-public final class EquityIndexDividendFutureOptionSecurityBeanOperation  extends AbstractSecurityBeanOperation<EquityIndexDividendFutureOptionSecurity, EquityIndexDividendFutureOptionSecurityBean> {
+public final class EquityIndexDividendFutureOptionSecurityBeanOperation
+    extends AbstractSecurityBeanOperation<EquityIndexDividendFutureOptionSecurity, EquityIndexDividendFutureOptionSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final EquityIndexDividendFutureOptionSecurityBeanOperation INSTANCE = new EquityIndexDividendFutureOptionSecurityBeanOperation();
 
   private EquityIndexDividendFutureOptionSecurityBeanOperation() {
-    super(EquityIndexDividendFutureOptionSecurity.SECURITY_TYPE, EquityIndexDividendFutureOptionSecurity.class, EquityIndexDividendFutureOptionSecurityBean.class);
+    super(EquityIndexDividendFutureOptionSecurity.SECURITY_TYPE, EquityIndexDividendFutureOptionSecurity.class,
+        EquityIndexDividendFutureOptionSecurityBean.class);
   }
 
   @Override

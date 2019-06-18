@@ -19,8 +19,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeParseException;
@@ -44,8 +42,7 @@ import com.sun.jersey.multipart.FormDataMultiPart;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
- * REST resource that uploads a CSV file containing a list of dates that define the holidays
- * for a holiday type (currency / bank / settlement / trading).
+ * REST resource that uploads a CSV file containing a list of dates that define the holidays for a holiday type (currency / bank / settlement / trading).
  */
 @Path("holidayupload")
 public class HolidayLoaderResource {
@@ -71,7 +68,7 @@ public class HolidayLoaderResource {
     private final DateTimeFormatter _primaryFormatter;
     private final DateTimeFormatter _secondaryFormatter;
 
-    private DateFormat(final DateTimeFormatter primaryFormatter, final DateTimeFormatter secondaryFormatter) {
+    DateFormat(final DateTimeFormatter primaryFormatter, final DateTimeFormatter secondaryFormatter) {
       _primaryFormatter = primaryFormatter;
       _secondaryFormatter = secondaryFormatter;
     }
@@ -79,8 +76,9 @@ public class HolidayLoaderResource {
     /**
      * Parses a date string by trying the primary formatter, then the secondary.
      *
-     * @param dateString  the date string, not null
-     * @return  the parsed date or throws <code>DateTimeParseException</code>
+     * @param dateString
+     *          the date string, not null
+     * @return the parsed date or throws <code>DateTimeParseException</code>
      */
     public LocalDate parse(final String dateString) {
       try {
@@ -91,13 +89,13 @@ public class HolidayLoaderResource {
     }
   }
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(HolidayLoaderResource.class);
   private final HolidayMaster _holidayMaster;
 
   /**
    * Creates an instance.
    *
-   * @param holidayMaster  the master, not null
+   * @param holidayMaster
+   *          the master, not null
    */
   public HolidayLoaderResource(final HolidayMaster holidayMaster) {
     _holidayMaster = ArgumentChecker.notNull(holidayMaster, "holidayMaster");
@@ -129,12 +127,12 @@ public class HolidayLoaderResource {
             final CSVReader csvReader = new CSVReader(new InputStreamReader(fileStream));
             try {
               String[] row = csvReader.readNext();
-               while (row != null) {
+              while (row != null) {
                 for (int i = 0; i < row.length; i++) {
                   final String element = row[i];
                   // be forgiving about entries
                   if (!element.isEmpty()) {
-                      try {
+                    try {
                       dateList.add(dateFormatter.parse(element));
                     } catch (final DateTimeParseException e) {
                       output.write(("Malformed date entry on line " + (i + 1) + ": " + element + "\n").getBytes());

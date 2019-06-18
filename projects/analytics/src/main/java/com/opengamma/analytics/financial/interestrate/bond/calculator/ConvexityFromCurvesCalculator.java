@@ -22,7 +22,7 @@ public final class ConvexityFromCurvesCalculator extends InstrumentDerivativeVis
   /**
    * The calculator instance.
    */
-  private static final ConvexityFromCurvesCalculator s_instance = new ConvexityFromCurvesCalculator();
+  private static final ConvexityFromCurvesCalculator INSTANCE = new ConvexityFromCurvesCalculator();
   /**
    * The fixed coupon bond method.
    */
@@ -33,7 +33,7 @@ public final class ConvexityFromCurvesCalculator extends InstrumentDerivativeVis
    * @return The instance.
    */
   public static ConvexityFromCurvesCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

@@ -49,8 +49,11 @@ public class LiborMarketModelMonteCarloMethod extends MonteCarloMethod {
 
   /**
    * Constructor.
-   * @param numberGenerator The random number generator. Generate Normally distributed numbers.
-   * @param nbPath The number of paths.
+   * 
+   * @param numberGenerator
+   *          The random number generator. Generate Normally distributed numbers.
+   * @param nbPath
+   *          The number of paths.
    */
   public LiborMarketModelMonteCarloMethod(final RandomNumberGenerator numberGenerator, final int nbPath) {
     super(numberGenerator, nbPath);
@@ -59,16 +62,21 @@ public class LiborMarketModelMonteCarloMethod extends MonteCarloMethod {
 
   /**
    * Constructor.
-   * @param numberGenerator The random number generator. Generate Normally distributed numbers.
-   * @param nbPath The number of paths.
-   * @param maxJump The maximum length of a jump in the path generation.
+   * 
+   * @param numberGenerator
+   *          The random number generator. Generate Normally distributed numbers.
+   * @param nbPath
+   *          The number of paths.
+   * @param maxJump
+   *          The maximum length of a jump in the path generation.
    */
   public LiborMarketModelMonteCarloMethod(final RandomNumberGenerator numberGenerator, final int nbPath, final double maxJump) {
     super(numberGenerator, nbPath);
     _maxJump = maxJump;
   }
 
-  public MultipleCurrencyAmount presentValue(final InstrumentDerivative instrument, final Currency ccy, final LiborMarketModelDisplacedDiffusionProvider lmmData) {
+  public MultipleCurrencyAmount presentValue(final InstrumentDerivative instrument, final Currency ccy,
+      final LiborMarketModelDisplacedDiffusionProvider lmmData) {
     final MulticurveProviderInterface multicurves = lmmData.getMulticurveProvider();
     final LiborMarketModelDisplacedDiffusionParameters parameters = lmmData.getLMMParameters();
     // The numeraire is the last time in the LMM description.
@@ -86,7 +94,7 @@ public class LiborMarketModelMonteCarloMethod extends MonteCarloMethod {
       initL[loopper] = (dfL[loopper] / dfL[loopper + 1] - 1.0) / deltaLMM[loopper];
     }
 
-    final int nbBlock = (int) Math.round(Math.ceil(getNbPath() / ((double) BLOCK_SIZE)));
+    final int nbBlock = (int) Math.round(Math.ceil(getNbPath() / (double) BLOCK_SIZE));
     final int[] nbPath2 = new int[nbBlock];
     for (int i = 0; i < nbBlock - 1; i++) {
       nbPath2[i] = BLOCK_SIZE;
@@ -121,8 +129,11 @@ public class LiborMarketModelMonteCarloMethod extends MonteCarloMethod {
 
   /**
    * Create one step in the LMM diffusion. The step is done through several jump times. The diffusion is approximated with a predictor-corrector approach.
-   * @param jumpTime The jump times.
-   * @param initIbor Rate at the start of the period. Size: nbPeriodLMM x nbPath.
+   * 
+   * @param jumpTime
+   *          The jump times.
+   * @param initIbor
+   *          Rate at the start of the period. Size: nbPeriodLMM x nbPath.
    * @return The Ibor rates at the end of the jump period. Size: nbPeriodLMM x nbPath.
    */
   private double[][] stepPC(final double[] jumpTime, final double[][] initIbor, final LiborMarketModelDisplacedDiffusionParameters lmm) {
@@ -192,7 +203,8 @@ public class LiborMarketModelMonteCarloMethod extends MonteCarloMethod {
       for (int loopdrift = nI - 1; loopdrift >= 0; loopdrift--) {
         if (loopdrift < nI - 1) {
           for (int looppath = 0; looppath < nbPath; looppath++) {
-            coefC[loopdrift + 1][looppath] = (f[index + loopdrift + 1][looppath] + almm[index + loopdrift + 1]) / (f[index + loopdrift + 1][looppath] + dI[loopdrift + 1]);
+            coefC[loopdrift + 1][looppath] = (f[index + loopdrift + 1][looppath] + almm[index + loopdrift + 1])
+                / (f[index + loopdrift + 1][looppath] + dI[loopdrift + 1]);
             for (int loop = loopdrift + 1; loop < nI; loop++) {
               mP[loopdrift][looppath] += salpha2.getEntry(loop, loopdrift) * coefP[looppath][loop - 1];
               mC[loopdrift][looppath] += salpha2.getEntry(loop, loopdrift) * coefC[loop][looppath];
@@ -204,7 +216,8 @@ public class LiborMarketModelMonteCarloMethod extends MonteCarloMethod {
           }
         } else {
           for (int looppath = 0; looppath < nbPath; looppath++) {
-            f[loopdrift + index][looppath] = (f[loopdrift + index][looppath] + almm[index + loopdrift]) * Math.exp(cc[loopdrift][looppath]) - almm[index + loopdrift];
+            f[loopdrift + index][looppath] = (f[loopdrift + index][looppath] + almm[index + loopdrift]) * Math.exp(cc[loopdrift][looppath])
+                - almm[index + loopdrift];
           }
         }
       }
@@ -214,9 +227,12 @@ public class LiborMarketModelMonteCarloMethod extends MonteCarloMethod {
 
   /**
    *
-   * @param jumpTime The time of the mandatory jumps.
-   * @param initIbor The Ibor rates at the start. nbPeriodLMM x nbPath
-   * @param lmm The LMM parameters.
+   * @param jumpTime
+   *          The time of the mandatory jumps.
+   * @param initIbor
+   *          The Ibor rates at the start. nbPeriodLMM x nbPath
+   * @param lmm
+   *          The LMM parameters.
    * @return The paths. Size: nbJump x nbPeriodLMM x nbPath
    */
   private double[][][] pathgeneratorlibor(final double[] jumpTime, final double[][] initIbor, final LiborMarketModelDisplacedDiffusionParameters lmm) {
@@ -236,7 +252,7 @@ public class LiborMarketModelMonteCarloMethod extends MonteCarloMethod {
       // Intermediary jumps
       double[] jumpIn;
       if (jumpTimeA[loopjump + 1] - jumpTimeA[loopjump] < _maxJump) {
-        jumpIn = new double[] {jumpTimeA[loopjump], jumpTimeA[loopjump + 1]};
+        jumpIn = new double[] { jumpTimeA[loopjump], jumpTimeA[loopjump + 1] };
       } else {
         final double jump = jumpTimeA[loopjump + 1] - jumpTimeA[loopjump];
         final int nbJumpIn = (int) Math.ceil(jump / _maxJump);
@@ -256,8 +272,11 @@ public class LiborMarketModelMonteCarloMethod extends MonteCarloMethod {
 
   /**
    * Gets a 2D-array of independent normally distributed variables.
-   * @param nbJump The number of jumps.
-   * @param nbPath The number of paths.
+   * 
+   * @param nbJump
+   *          The number of jumps.
+   * @param nbPath
+   *          The number of paths.
    * @return The array of variables.
    */
   private double[][] getNormalArray(final int nbJump, final int nbPath) {

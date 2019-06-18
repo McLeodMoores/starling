@@ -69,19 +69,21 @@ public class SwaptionBlackYieldCurveNodeSensitivitiesFunction extends SwaptionBl
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionBlackYieldCurveNodeSensitivitiesFunction.class);
   /** The node sensitivities calculator */
-  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator.using(PresentValueCurveSensitivityBlackCalculator.getInstance());
+  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator
+      .using(PresentValueCurveSensitivityBlackCalculator.getInstance());
   /** The instrument sensitivity calculator */
   private static final InstrumentSensitivityCalculator CALCULATOR = InstrumentSensitivityCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * Sets the value requirement name to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}.
    */
   public SwaptionBlackYieldCurveNodeSensitivitiesFunction() {
     super(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES);
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(executionContext);
@@ -106,7 +108,7 @@ public class SwaptionBlackYieldCurveNodeSensitivitiesFunction extends SwaptionBl
     }
     String[] curveNames = curveCalculationConfig.getYieldCurveNames();
     if (curveNames.length == 1) {
-      curveNames = new String[] {curveNames[0], curveNames[0] };
+      curveNames = new String[] { curveNames[0], curveNames[0] };
     }
     final String[] fullCurveNames = new String[curveNames.length];
     for (int i = 0; i < curveNames.length; i++) {
@@ -127,7 +129,8 @@ public class SwaptionBlackYieldCurveNodeSensitivitiesFunction extends SwaptionBl
     final InterpolatedYieldCurveSpecificationWithSecurities curveSpec = (InterpolatedYieldCurveSpecificationWithSecurities) curveSpecObject;
     final ValueProperties properties = getResultProperties(currency.getCode(), curveCalculationConfigName, surfaceName, curveName);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), properties);
-    final BlackFlatSwaptionParameters parameters = new BlackFlatSwaptionParameters(volatilitySurface.getSurface(), SwaptionUtils.getSwapGenerator(security, definition, securitySource));
+    final BlackFlatSwaptionParameters parameters = new BlackFlatSwaptionParameters(volatilitySurface.getSurface(),
+        SwaptionUtils.getSwapGenerator(security, definition, securitySource));
     final YieldCurveBundle curves = YieldCurveFunctionUtils.getYieldCurves(inputs, curveCalculationConfig);
     final YieldCurveBundle knownCurves = YieldCurveFunctionUtils.getFixedCurves(inputs, curveCalculationConfig, getCurveCalculationConfigSource());
     final YieldCurveWithBlackSwaptionBundle data = new YieldCurveWithBlackSwaptionBundle(parameters, curves);
@@ -208,7 +211,8 @@ public class SwaptionBlackYieldCurveNodeSensitivitiesFunction extends SwaptionBl
     requirements.add(getVolatilityRequirement(surfaceName, currency));
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     try {
-      final Set<ValueRequirement> timeSeriesRequirements = getDefinitionConverter().getConversionTimeSeriesRequirements(security, security.accept(getSecurityConverter()));
+      final Set<ValueRequirement> timeSeriesRequirements = getDefinitionConverter().getConversionTimeSeriesRequirements(security,
+          security.accept(getSecurityConverter()));
       if (timeSeriesRequirements == null) {
         return null;
       }
@@ -223,9 +227,12 @@ public class SwaptionBlackYieldCurveNodeSensitivitiesFunction extends SwaptionBl
   /**
    * Gets the Jacobian requirement.
    *
-   * @param currency The currency
-   * @param curveCalculationConfigName The curve calculation configuration name.
-   * @param curveCalculationMethod The curve calculation method.
+   * @param currency
+   *          The currency
+   * @param curveCalculationConfigName
+   *          The curve calculation configuration name.
+   * @param curveCalculationMethod
+   *          The curve calculation method.
    * @return The Jacobian requirement
    */
   private static ValueRequirement getJacobianRequirement(final Currency currency, final String curveCalculationConfigName,
@@ -238,8 +245,10 @@ public class SwaptionBlackYieldCurveNodeSensitivitiesFunction extends SwaptionBl
   /**
    * Gets the coupon sensitivities requirement.
    *
-   * @param currency The currency
-   * @param curveCalculationConfigName The curve calculation configuration name.
+   * @param currency
+   *          The currency
+   * @param curveCalculationConfigName
+   *          The curve calculation configuration name.
    * @return The coupon sensitivities requirement
    */
   private static ValueRequirement getCouponSensitivitiesRequirement(final Currency currency, final String curveCalculationConfigName) {
@@ -251,8 +260,10 @@ public class SwaptionBlackYieldCurveNodeSensitivitiesFunction extends SwaptionBl
   /**
    * Gets the curve specification requirement.
    *
-   * @param currency The currency
-   * @param curveName The curve name
+   * @param currency
+   *          The currency
+   * @param curveName
+   *          The curve name
    * @return The curve specification requirement
    */
   private static ValueRequirement getCurveSpecRequirement(final Currency currency, final String curveName) {
@@ -261,7 +272,8 @@ public class SwaptionBlackYieldCurveNodeSensitivitiesFunction extends SwaptionBl
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative swaption, final YieldCurveWithBlackSwaptionBundle data, final String curveName, final ValueSpecification spec,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative swaption, final YieldCurveWithBlackSwaptionBundle data, final String curveName,
+      final ValueSpecification spec,
       final String curveCalculationConfigName, final String curveCalculationMethod, final FunctionInputs inputs, final ComputationTarget target) {
     throw new UnsupportedOperationException();
   }

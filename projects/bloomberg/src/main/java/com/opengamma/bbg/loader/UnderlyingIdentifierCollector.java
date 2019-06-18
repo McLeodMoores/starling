@@ -37,7 +37,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * Collects Underlying identifiers for loaded securities
+ * Collects Underlying identifiers for loaded securities.
  */
 public final class UnderlyingIdentifierCollector {
 
@@ -45,7 +45,7 @@ public final class UnderlyingIdentifierCollector {
   private final FinancialSecurityVisitor<Void> _financialSecurityVisitor;
 
   /**
-   * Creates an instance
+   * Creates an instance.
    */
   public UnderlyingIdentifierCollector() {
     final FinancialSecurityVisitor<Void> underlyingIdentifierCollector = new FinancialSecurityVisitorAdapter<Void>() {
@@ -227,6 +227,7 @@ public final class UnderlyingIdentifierCollector {
 
   /**
    * Gets the underlyings.
+   * 
    * @return the underlyings
    */
   public Set<ExternalIdBundle> getUnderlyings() {
@@ -235,6 +236,7 @@ public final class UnderlyingIdentifierCollector {
 
   /**
    * Gets the financialSecurityVisitor.
+   * 
    * @return the financialSecurityVisitor
    */
   public FinancialSecurityVisitor<Void> getFinancialSecurityVisitor() {

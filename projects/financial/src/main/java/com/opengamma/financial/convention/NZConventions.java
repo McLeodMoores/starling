@@ -24,12 +24,17 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Contains information used to construct standard versions of NZD instruments.
+ *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class NZConventions {
 
   /**
-   * Adds conventions for deposit, Libor and swaps
-   * @param conventionMaster The convention master, not null
+   * Adds conventions for deposit, Libor and swaps.
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static synchronized void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -93,7 +98,7 @@ public class NZConventions {
         tullettPrebonSecurityId("ASLIBNZD12L")), "NZD LIBOR 12m", act365,
         following, Period.ofMonths(12), 2, false, nz);
 
-    //TODO need to check that these are right for deposit rates
+    // TODO need to check that these are right for deposit rates
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("NDDR1T Curncy"), simpleNameSecurityId("NZD DEPOSIT 1d")), "NZD DEPOSIT 1d", act365,
         following, Period.ofDays(1), 0, false, nz);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("NDDR2T Curncy"), simpleNameSecurityId("NZD DEPOSIT 2d")), "NZD DEPOSIT 2d", act365,

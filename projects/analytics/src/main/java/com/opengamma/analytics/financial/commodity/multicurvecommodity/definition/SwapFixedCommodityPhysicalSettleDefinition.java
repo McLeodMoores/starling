@@ -19,12 +19,12 @@ import com.opengamma.util.ArgumentChecker;
 public class SwapFixedCommodityPhysicalSettleDefinition extends SwapDefinition {
 
   /**
-  * Constructor of the fixed-commodity physical settle swap from its two legs. This constructor is intended to be used when there is an initial floating
-  * rate defined in the swap contract - the stream of payments on the floating leg then consists of a {@link CouponFixedDefinition} and
-  * then a series of {@link CouponCommodityCashSettleDefinition}.
-  * @param fixedLeg The fixed leg.
-  * @param commodityLeg The commodity physical settle leg.
-  */
+   * Constructor of the fixed-commodity physical settle swap from its two legs. This constructor is intended to be used when there is an initial floating
+   * rate defined in the swap contract - the stream of payments on the floating leg then consists of a {@link CouponFixedDefinition} and
+   * then a series of {@link CouponCommodityCashSettleDefinition}.
+   * @param fixedLeg The fixed leg.
+   * @param commodityLeg The commodity physical settle leg.
+   */
   public SwapFixedCommodityPhysicalSettleDefinition(final AnnuityCouponFixedDefinition fixedLeg,
       final AnnuityDefinition<? extends PaymentDefinition> commodityLeg) {
     super(fixedLeg, commodityLeg);

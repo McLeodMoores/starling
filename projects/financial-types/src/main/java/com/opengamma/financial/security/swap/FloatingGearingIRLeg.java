@@ -41,29 +41,39 @@ public class FloatingGearingIRLeg extends FloatingInterestRateLeg {
   /**
    * Creates an instance.
    */
-  FloatingGearingIRLeg() { //For builder
+  FloatingGearingIRLeg() { // For builder
   }
 
   /**
    * Creates an instance.
    *
-   * @param dayCount  the day count, not null
-   * @param frequency  the frequency, not null
-   * @param regionIdentifier  the region, not null
-   * @param businessDayConvention  the business day convention, not null
-   * @param notional  the notional, not null
-   * @param eom  whether this is EOM
-   * @param floatingReferenceRateId  the reference rate, not null
-   * @param floatingRateType  the floating rate type, not null
-   * @param gearing the gearing
+   * @param dayCount
+   *          the day count, not null
+   * @param frequency
+   *          the frequency, not null
+   * @param regionIdentifier
+   *          the region, not null
+   * @param businessDayConvention
+   *          the business day convention, not null
+   * @param notional
+   *          the notional, not null
+   * @param eom
+   *          whether this is EOM
+   * @param floatingReferenceRateId
+   *          the reference rate, not null
+   * @param floatingRateType
+   *          the floating rate type, not null
+   * @param gearing
+   *          the gearing
    */
-  public FloatingGearingIRLeg(final DayCount dayCount, final Frequency frequency, final ExternalId regionIdentifier, final BusinessDayConvention businessDayConvention,
-      final Notional notional, final boolean eom, final ExternalId floatingReferenceRateId, final FloatingRateType floatingRateType, final double gearing) {
+  public FloatingGearingIRLeg(final DayCount dayCount, final Frequency frequency, final ExternalId regionIdentifier,
+      final BusinessDayConvention businessDayConvention, final Notional notional, final boolean eom, final ExternalId floatingReferenceRateId,
+      final FloatingRateType floatingRateType, final double gearing) {
     super(dayCount, frequency, regionIdentifier, businessDayConvention, notional, eom, floatingReferenceRateId, floatingRateType);
     setGearing(gearing);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public <T> T accept(final SwapLegVisitor<T> visitor) {
     return visitor.visitFloatingGearingIRLeg(this);

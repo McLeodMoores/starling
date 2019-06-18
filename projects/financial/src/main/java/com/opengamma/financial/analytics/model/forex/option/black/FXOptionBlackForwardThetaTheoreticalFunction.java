@@ -31,6 +31,7 @@ import com.opengamma.financial.currency.CurrencyPair;
 
 /**
  * The function to compute the theta of Forex options in the Black model.
+ * 
  * @deprecated The parent class is deprecated
  */
 @Deprecated
@@ -39,7 +40,7 @@ public class FXOptionBlackForwardThetaTheoreticalFunction extends FXOptionBlackM
   private static final double DEFAULT_DAYS_PER_YEAR = 365.25;
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#THETA}
+   * Sets the value requirement name to {@link ValueRequirementNames#THETA}.
    */
   public FXOptionBlackForwardThetaTheoreticalFunction() {
     super(ValueRequirementNames.THETA);
@@ -56,14 +57,15 @@ public class FXOptionBlackForwardThetaTheoreticalFunction extends FXOptionBlackM
     if (scaleFactors.isEmpty()) {
       scale = DEFAULT_DAYS_PER_YEAR;
       resultProperties
-        .withoutAny(PROPERTY_DAYS_PER_YEAR)
-        .with(PROPERTY_DAYS_PER_YEAR, Double.toString(DEFAULT_DAYS_PER_YEAR));
+          .withoutAny(PROPERTY_DAYS_PER_YEAR)
+          .with(PROPERTY_DAYS_PER_YEAR, Double.toString(DEFAULT_DAYS_PER_YEAR));
     } else {
       scale = Double.parseDouble(scaleFactors.iterator().next());
     }
     if (data instanceof SmileDeltaTermStructureDataBundle) {
       final double result = forex.accept(ForwardBlackThetaTheoreticalForexCalculator.getInstance(), data) / scale;
-      return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.THETA, target.toSpecification(), resultProperties.get()), result));
+      return Collections
+          .singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.THETA, target.toSpecification(), resultProperties.get()), result));
     }
     throw new OpenGammaRuntimeException("Can only calculate theoretical theta for surfaces with smiles");
   }
@@ -82,7 +84,8 @@ public class FXOptionBlackForwardThetaTheoreticalFunction extends FXOptionBlackM
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.size() == 1) {
       final Map.Entry<ValueSpecification, ValueRequirement> entry = Iterables.getOnlyElement(inputs.entrySet());
       if (ValueRequirementNames.THETA.equals(entry.getKey().getValueName())) {
@@ -103,7 +106,7 @@ public class FXOptionBlackForwardThetaTheoreticalFunction extends FXOptionBlackM
       final String callCurve, final String callCurveCalculationConfig, final CurrencyPair baseQuotePair, final ValueProperties optionalProperties) {
     return super.getResultProperties(target, putCurve, putCurveCalculationConfig, callCurve, callCurveCalculationConfig, baseQuotePair,
         optionalProperties)
-        .withAny(PROPERTY_DAYS_PER_YEAR);
+            .withAny(PROPERTY_DAYS_PER_YEAR);
   }
 
   @Override

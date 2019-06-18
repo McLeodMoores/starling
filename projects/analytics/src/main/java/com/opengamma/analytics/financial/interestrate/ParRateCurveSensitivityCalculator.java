@@ -36,17 +36,18 @@ import com.opengamma.analytics.financial.interestrate.payments.method.CouponONDi
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
 import com.opengamma.analytics.financial.interestrate.swap.method.SwapFixedCouponDiscountingMethod;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
-import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.util.CompareUtils;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * For an instrument, this calculates the sensitivity of the par rate (the exact meaning of par rate depends on the instrument - for swaps it is the par swap rate) to points on the yield
- * curve(s) (i.e. dPar/dR at every point the instrument has sensitivity). The return format is a map with curve names (String) as keys and List of DoublesPair as the values; each list holds
- * set of time (corresponding to point of the yield curve) and sensitivity pairs (i.e. dPar/dR at that time).
- * <b>Note:</b> The length of the list is instrument dependent and may have repeated times (with the understanding the sensitivities should be summed).
- * @deprecated Use the calculators that reference {@link ParameterProviderInterface}
+ * For an instrument, this calculates the sensitivity of the par rate (the exact meaning of par rate depends on the instrument - for swaps it is the par swap
+ * rate) to points on the yield curve(s) (i.e. dPar/dR at every point the instrument has sensitivity). The return format is a map with curve names (String) as
+ * keys and List of DoublesPair as the values; each list holds set of time (corresponding to point of the yield curve) and sensitivity pairs (i.e. dPar/dR at
+ * that time). <b>Note:</b> The length of the list is instrument dependent and may have repeated times (with the understanding the sensitivities should be
+ * summed).
+ *
+ * @deprecated Use the calculators that reference {@link com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface}
  */
 @Deprecated
 public final class ParRateCurveSensitivityCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Map<String, List<DoublesPair>>> {
@@ -58,6 +59,7 @@ public final class ParRateCurveSensitivityCalculator extends InstrumentDerivativ
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static ParRateCurveSensitivityCalculator getInstance() {
@@ -154,18 +156,24 @@ public final class ParRateCurveSensitivityCalculator extends InstrumentDerivativ
 
   /**
    * Computes the sensitivity to the curve of swap convention-modified par rate for a fixed coupon swap with a PVBP externally provided.
-   * <P>Reference: Swaption pricing - v 1.3, OpenGamma Quantitative Research, June 2012.
-   * @param swap The swap.
-   * @param dayCount The day count convention to modify the swap rate.
-   * @param curves The curves.
+   * <P>
+   * Reference: Swaption pricing - v 1.3, OpenGamma Quantitative Research, June 2012.
+   * 
+   * @param swap
+   *          The swap.
+   * @param dayCount
+   *          The day count convention to modify the swap rate.
+   * @param curves
+   *          The curves.
    * @return The modified rate.
    */
   public Map<String, List<DoublesPair>> visitFixedCouponSwap(final SwapFixedCoupon<?> swap, final DayCount dayCount, final YieldCurveBundle curves) {
     final double pvSecond = swap.getSecondLeg().accept(PV_CALCULATOR, curves) * Math.signum(swap.getSecondLeg().getNthPayment(0).getNotional());
     final double pvbp = METHOD_SWAP.presentValueBasisPoint(swap, dayCount, curves);
     final InterestRateCurveSensitivity pvbpDr = METHOD_SWAP.presentValueBasisPointCurveSensitivity(swap, dayCount, curves);
-    final InterestRateCurveSensitivity pvSecondDr = new InterestRateCurveSensitivity(swap.getSecondLeg().accept(PV_SENSITIVITY_CALCULATOR, curves)).multipliedBy(Math
-        .signum(swap.getSecondLeg().getNthPayment(0).getNotional()));
+    final InterestRateCurveSensitivity pvSecondDr = new InterestRateCurveSensitivity(swap.getSecondLeg().accept(PV_SENSITIVITY_CALCULATOR, curves))
+        .multipliedBy(Math
+            .signum(swap.getSecondLeg().getNthPayment(0).getNotional()));
     final InterestRateCurveSensitivity result = pvSecondDr.multipliedBy(1.0 / pvbp).plus(pvbpDr.multipliedBy(-pvSecond / (pvbp * pvbp)));
     return result.getSensitivities();
   }
@@ -196,7 +204,7 @@ public final class ParRateCurveSensitivityCalculator extends InstrumentDerivativ
   public Map<String, List<DoublesPair>> visitCouponIborSpread(final CouponIborSpread payment, final YieldCurveBundle data) {
     final String curveName = payment.getForwardCurveName();
     final YieldAndDiscountCurve curve = data.getCurve(curveName);
-    //    final double ta = payment.getFixingTime();
+    // final double ta = payment.getFixingTime();
     final double ta = payment.getFixingPeriodStartTime();
     final double tb = payment.getFixingPeriodEndTime();
     final double delta = payment.getFixingAccrualFactor();
@@ -241,7 +249,7 @@ public final class ParRateCurveSensitivityCalculator extends InstrumentDerivativ
         final List<DoublesPair> temp = new ArrayList<>();
         final List<DoublesPair> list = senseA.get(name);
         final int m = list.size();
-        for (int i = 0; i < (m - 1); i++) {
+        for (int i = 0; i < m - 1; i++) {
           final DoublesPair pair = list.get(i);
           temp.add(DoublesPair.of(pair.getFirstDouble(), factor * pair.getSecondDouble()));
         }

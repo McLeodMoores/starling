@@ -12,8 +12,8 @@ import java.util.List;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Shifts a {@link NodalDoublesSurface}. If the <i>x-y</i> value(s) of the shift(s) are not in the nodal points of the
- * original surface, then the surface cannot be shifted.
+ * Shifts a {@link NodalDoublesSurface}. If the <i>x-y</i> value(s) of the shift(s) are not in the nodal points of the original surface, then the surface cannot
+ * be shifted.
  */
 public class NodalSurfaceAdditiveShiftFunction implements SurfaceShiftFunction<NodalDoublesSurface> {
 
@@ -45,7 +45,9 @@ public class NodalSurfaceAdditiveShiftFunction implements SurfaceShiftFunction<N
 
   /**
    * {@inheritDoc}
-   * @throws IllegalArgumentException If the point to shift is not a nodal point of the surface
+   * 
+   * @throws IllegalArgumentException
+   *           If the point to shift is not a nodal point of the surface
    */
   @Override
   public NodalDoublesSurface evaluate(final NodalDoublesSurface surface, final double x, final double y, final double shift) {
@@ -55,7 +57,9 @@ public class NodalSurfaceAdditiveShiftFunction implements SurfaceShiftFunction<N
 
   /**
    * {@inheritDoc}
-   * @throws IllegalArgumentException If the point to shift is not a nodal point of the surface
+   * 
+   * @throws IllegalArgumentException
+   *           If the point to shift is not a nodal point of the surface
    */
   @Override
   public NodalDoublesSurface evaluate(final NodalDoublesSurface surface, final double x, final double y, final double shift, final String newName) {
@@ -78,7 +82,9 @@ public class NodalSurfaceAdditiveShiftFunction implements SurfaceShiftFunction<N
 
   /**
    * {@inheritDoc}
-   * @throws IllegalArgumentException If the points to shift are not nodal points of the surface
+   * 
+   * @throws IllegalArgumentException
+   *           If the points to shift are not nodal points of the surface
    */
   @Override
   public NodalDoublesSurface evaluate(final NodalDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] zShift) {
@@ -88,10 +94,13 @@ public class NodalSurfaceAdditiveShiftFunction implements SurfaceShiftFunction<N
 
   /**
    * {@inheritDoc}
-   * @throws IllegalArgumentException If the points to shift are not nodal points of the surface
+   * 
+   * @throws IllegalArgumentException
+   *           If the points to shift are not nodal points of the surface
    */
   @Override
-  public NodalDoublesSurface evaluate(final NodalDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] shift, final String newName) {
+  public NodalDoublesSurface evaluate(final NodalDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] shift,
+      final String newName) {
     ArgumentChecker.notNull(surface, "surface");
     ArgumentChecker.notNull(xShift, "x shift");
     ArgumentChecker.notNull(yShift, "y shift");
@@ -100,7 +109,8 @@ public class NodalSurfaceAdditiveShiftFunction implements SurfaceShiftFunction<N
     if (m == 0) {
       return NodalDoublesSurface.from(surface.getXDataAsPrimitive(), surface.getYDataAsPrimitive(), surface.getZDataAsPrimitive(), newName);
     }
-    ArgumentChecker.isTrue(m == yShift.length && m == shift.length, "number of shifts {} must be equal to number of x shift positions {} and y shift positions {}", shift.length, m, yShift.length);
+    ArgumentChecker.isTrue(m == yShift.length && m == shift.length,
+        "number of shifts {} must be equal to number of x shift positions {} and y shift positions {}", shift.length, m, yShift.length);
     final double[] xData = surface.getXDataAsPrimitive();
     final double[] yData = surface.getYDataAsPrimitive();
     final double[] zData = surface.getZDataAsPrimitive();

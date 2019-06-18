@@ -36,18 +36,17 @@ import com.opengamma.util.PublicAPI;
 /**
  * A flexible link between two parts of the system.
  * <p>
- * A link represents a connection from one entity to another in the object model.
- * The connection can be held by an {@code ObjectId} or an {@code ExternalIdBundle}.
- * The link also stores a resolved reference to the object itself.
+ * A link represents a connection from one entity to another in the object model. The connection can be held by an {@code ObjectId} or an
+ * {@code ExternalIdBundle}. The link also stores a resolved reference to the object itself.
  * <p>
  * This class is mutable and not thread-safe.
  *
- * @param <T> the type being linked to
+ * @param <T>
+ *          the type being linked to
  */
 @PublicAPI
 @BeanDefinition
-public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectBean
-implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
+public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectBean implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -58,8 +57,7 @@ implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
   @PropertyDefinition(overrideGet = true)
   private ObjectId _objectId;
   /**
-   * The external identifier bundle that references the target.
-   * An empty bundle is used if not referencing a target by external bundle.
+   * The external identifier bundle that references the target. An empty bundle is used if not referencing a target by external bundle.
    */
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalId = ExternalIdBundle.EMPTY;
@@ -78,7 +76,8 @@ implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
   /**
    * Creates a link from a strong object identifier.
    *
-   * @param objectId  the object identifier, not null
+   * @param objectId
+   *          the object identifier, not null
    */
   public AbstractLink(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
@@ -86,10 +85,10 @@ implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
   }
 
   /**
-   * Creates a link from a strong unique identifier, only
-   * storing the object identifier.
+   * Creates a link from a strong unique identifier, only storing the object identifier.
    *
-   * @param uniqueId  the unique identifier, not null
+   * @param uniqueId
+   *          the unique identifier, not null
    */
   public AbstractLink(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
@@ -99,7 +98,8 @@ implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
   /**
    * Creates a link from an external identifier bundle.
    *
-   * @param bundle  the identifier bundle, not null
+   * @param bundle
+   *          the identifier bundle, not null
    */
   public AbstractLink(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
@@ -107,23 +107,23 @@ implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
   }
 
   /**
-   * Creates a link from the target object.
-   * The strong reference is set using {@link #setAndLockTarget}.
+   * Creates a link from the target object. The strong reference is set using {@link #setAndLockTarget}.
    *
-   * @param target  the resolved target, not null
+   * @param target
+   *          the resolved target, not null
    */
   public AbstractLink(final T target) {
     ArgumentChecker.notNull(target, "target");
     setAndLockTarget(target);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Sets the resolved target, locking it for future resolution by setting the
-   * object identifier and clearing the external identifier bundle.
-   * If the target has no unique identifier, then no change is made to the references.
+   * Sets the resolved target, locking it for future resolution by setting the object identifier and clearing the external identifier bundle. If the target has
+   * no unique identifier, then no change is made to the references.
    *
-   * @param target  the target, not null
+   * @param target
+   *          the target, not null
    */
   public void setAndLockTarget(final T target) {
     ArgumentChecker.notNull(target, "target");
@@ -132,13 +132,11 @@ implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
   }
 
   /**
-   * Locks the resolved target for future resolution by setting the
-   * object identifier and clearing the external identifier bundle.
-   * If the target has no unique identifier, then no change is made to the references.
+   * Locks the resolved target for future resolution by setting the object identifier and clearing the external identifier bundle. If the target has no unique
+   * identifier, then no change is made to the references.
    * <p>
-   * The target of a link is effectively treated as transient state.
-   * This method updates the object identifier based on the resolved target so
-   * that true state of the link is up to date.
+   * The target of a link is effectively treated as transient state. This method updates the object identifier based on the resolved target so that true state
+   * of the link is up to date.
    */
   public void lockTarget() {
     final T target = getTarget();
@@ -152,7 +150,7 @@ implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the best available representation.
    *
@@ -165,11 +163,12 @@ implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
     return MoreObjects.firstNonNull(target, MoreObjects.firstNonNull(objectId, bundle));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle.
    *
-   * @param externalId  the identifier to add, not null
+   * @param externalId
+   *          the identifier to add, not null
    */
   public void addExternalId(final ExternalId externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
@@ -179,14 +178,15 @@ implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
   /**
    * Adds external identifiers to the bundle.
    *
-   * @param externalIds  the identifiers to add, not null
+   * @param externalIds
+   *          the identifiers to add, not null
    */
   public void addExternalIds(final Iterable<ExternalId> externalIds) {
     ArgumentChecker.notNull(externalIds, "externalIds");
     setExternalId(getExternalId().withExternalIds(externalIds));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Iterates over the external reference identifiers.
    *
@@ -198,8 +198,7 @@ implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
   }
 
   /**
-   * Gets the set of external reference identifiers.
-   * This excludes the strong object identifier.
+   * Gets the set of external reference identifiers. This excludes the strong object identifier.
    *
    * @return all the identifiers, not null
    */
@@ -208,8 +207,7 @@ implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
   }
 
   /**
-   * Gets a set of all identifiers, including the object identifier
-   * expressed as an {@code ExternalId}.
+   * Gets a set of all identifiers, including the object identifier expressed as an {@code ExternalId}.
    *
    * @return all the identifiers, not null
    */
@@ -284,8 +282,7 @@ implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the external identifier bundle that references the target.
-   * An empty bundle is used if not referencing a target by external bundle.
+   * Gets the external identifier bundle that references the target. An empty bundle is used if not referencing a target by external bundle.
    * @return the value of the property, not null
    */
   @Override
@@ -294,8 +291,7 @@ implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
   }
 
   /**
-   * Sets the external identifier bundle that references the target.
-   * An empty bundle is used if not referencing a target by external bundle.
+   * Sets the external identifier bundle that references the target. An empty bundle is used if not referencing a target by external bundle.
    * @param externalId  the new value of the property, not null
    */
   public void setExternalId(ExternalIdBundle externalId) {
@@ -305,7 +301,6 @@ implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
 
   /**
    * Gets the the {@code externalId} property.
-   * An empty bundle is used if not referencing a target by external bundle.
    * @return the property, not null
    */
   public final Property<ExternalIdBundle> externalId() {

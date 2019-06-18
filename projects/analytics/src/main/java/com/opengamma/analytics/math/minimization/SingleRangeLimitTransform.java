@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.minimization;
@@ -8,49 +8,7 @@ package com.opengamma.analytics.math.minimization;
 import org.apache.commons.lang.Validate;
 
 /**
- * If a model parameter $x$ is constrained to be either above or below some
- * level $a$ (i.e. $x > a$ or $x < a$), the function to transform it to an
- * unconstrained variable $y$ is given by
- * $$
- * \begin{align*}
- * y = 
- * \begin{cases}
- * \ln(e^{x-a} - 1)\quad & x > a\\
- * a - \ln(e^{a-x} - 1)\quad & x < a
- * \end{cases}
- * \end{align*}
- * $$
- * with inverse transform
- * $$
- * \begin{align*}
- * x = 
- * \begin{cases}
- * a + \ln(e^y + 1)\quad & x > a\\
- * a - \ln(e^y + 1)\quad & x < a
- * \end{cases}
- * \end{align*}
- * $$
- * For large $y > 50$, this becomes
- * $$
- * \begin{align*}
- * y = 
- * \begin{cases}
- * x - a\quad & x > a\\
- * a - x\quad & x < a
- * \end{cases}
- * \end{align*}
- * $$
- * with inverse transform
- * $$
- * \begin{align*}
- * x = 
- * \begin{cases}
- * a + y\quad & x > a\\
- * a - y\quad & x < a
- * \end{cases}
- * \end{align*}
- * $$
- * so any value of $y$ will give a value of $x$.
+ * Transforms a single range limit.
  */
 public class SingleRangeLimitTransform implements ParameterLimitsTransform {
   private static final double EXP_MAX = 50.;
@@ -58,7 +16,7 @@ public class SingleRangeLimitTransform implements ParameterLimitsTransform {
   private final int _sign;
 
   /**
-   * @param a The limit level 
+   * @param a The limit level
    * @param limitType Type of the limit for the parameter
    */
   public SingleRangeLimitTransform(final double a, final LimitType limitType) {
@@ -81,8 +39,9 @@ public class SingleRangeLimitTransform implements ParameterLimitsTransform {
 
   /**
    * {@inheritDoc}
-   * @throws IllegalArgumentException If the value of $x$ is not consistent with the limit (e.g. the limit is $x > a$ and $x$ is
-   * less than $a$
+   * 
+   * @throws IllegalArgumentException
+   *           If the value of $x$ is not consistent with the limit (e.g. the limit is $x &gt; a$ and $x$ is less than $a$
    */
   @Override
   public double transform(final double x) {
@@ -111,8 +70,9 @@ public class SingleRangeLimitTransform implements ParameterLimitsTransform {
 
   /**
    * {@inheritDoc}
-   * @throws IllegalArgumentException If the value of $x$ is not consistent with the limit (e.g. the limit is $x > a$ and $x$ is
-   * less than $a$
+   * 
+   * @throws IllegalArgumentException
+   *           If the value of $x$ is not consistent with the limit (e.g. the limit is $x &gt; a$ and $x$ is less than $a$
    */
   @Override
   public double transformGradient(final double x) {
@@ -131,7 +91,7 @@ public class SingleRangeLimitTransform implements ParameterLimitsTransform {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_limit);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _sign;
     return result;
   }

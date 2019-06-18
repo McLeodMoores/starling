@@ -19,7 +19,6 @@ import org.threeten.bp.Instant;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.core.change.BasicChangeManager;
 import com.opengamma.core.change.ChangeManager;
-import com.opengamma.core.change.ChangeProvider;
 import com.opengamma.core.change.ChangeType;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.ObjectIdentifiable;
@@ -33,8 +32,11 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  * An in-memory master for yield curve definitions, backed by a hash-map.
+ *
+ * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
-public class InMemoryInterpolatedYieldCurveDefinitionMaster implements InterpolatedYieldCurveDefinitionMaster, InterpolatedYieldCurveDefinitionSource, ChangeProvider {
+@Deprecated
+public class InMemoryInterpolatedYieldCurveDefinitionMaster implements InterpolatedYieldCurveDefinitionMaster, InterpolatedYieldCurveDefinitionSource {
 
   /**
    * Default scheme used for identifiers created.
@@ -48,7 +50,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
   /**
    * The change manager.
    */
-  private final ChangeManager _changeManager = new BasicChangeManager(); // TODO make possible to pass the change manager in constructor
+  private final ChangeManager _changeManager = new BasicChangeManager();
   /**
    * The unique id scheme
    */
@@ -61,7 +63,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
     setUniqueIdScheme(DEFAULT_SCHEME);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the scheme in use for unique identifier.
@@ -75,14 +77,15 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
   /**
    * Sets the scheme in use for unique identifier.
    *
-   * @param scheme the scheme for unique identifier, not null
+   * @param scheme
+   *          the scheme for unique identifier, not null
    */
   public void setUniqueIdScheme(final String scheme) {
     ArgumentChecker.notNull(scheme, "scheme");
     _uniqueIdScheme = scheme;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public synchronized YieldCurveDefinition getDefinition(final Currency currency, final String name) {
     return getDefinition(currency, name, VersionCorrection.LATEST);
@@ -96,15 +99,15 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
     if (definitions == null) {
       return null;
     }
-    final Map.Entry<Instant, YieldCurveDefinition> entry = versionCorrection.getVersionAsOf() == null ? definitions.lastEntry() : definitions
-        .floorEntry(versionCorrection.getVersionAsOf());
+    final Map.Entry<Instant, YieldCurveDefinition> entry = versionCorrection.getVersionAsOf() == null ? definitions.lastEntry()
+        : definitions.floorEntry(versionCorrection.getVersionAsOf());
     if (entry == null) {
       return null;
     }
     return entry.getValue();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public synchronized YieldCurveDefinitionDocument add(final YieldCurveDefinitionDocument document) {
     ArgumentChecker.notNull(document, "document");
@@ -306,7 +309,8 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
 
     final Instant lowestCurrentVersionFrom = value.firstKey();
 
-    final List<YieldCurveDefinitionDocument> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, lowestCurrentVersionFrom, null, replacementDocuments);
+    final List<YieldCurveDefinitionDocument> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, lowestCurrentVersionFrom, null,
+        replacementDocuments);
 
     final Instant lowestVersionFrom = orderedReplacementDocuments.get(0).getVersionFromInstant();
     final Instant highestVersionTo = orderedReplacementDocuments.get(orderedReplacementDocuments.size() - 1).getVersionToInstant();
@@ -373,7 +377,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
 
   @Override
   public void removeVersion(final UniqueId uniqueId) {
-    replaceVersion(uniqueId, Collections.<YieldCurveDefinitionDocument>emptyList());
+    replaceVersion(uniqueId, Collections.<YieldCurveDefinitionDocument> emptyList());
   }
 
   @Override
@@ -381,9 +385,8 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
     final List<UniqueId> result = replaceVersion(replacementDocument.getUniqueId(), Collections.singletonList(replacementDocument));
     if (result.isEmpty()) {
       return null;
-    } else {
-      return result.get(0);
     }
+    return result.get(0);
   }
 
   @Override
@@ -391,9 +394,8 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
     final List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
     if (result.isEmpty()) {
       return null;
-    } else {
-      return result.get(0);
     }
+    return result.get(0);
   }
 
   @Override

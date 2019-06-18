@@ -24,13 +24,11 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Function for producing a sorted list of {@link ComputedValue} outputs for all positions underneath a node. The values are
- * sorted in ascending {@link Comparable#compareTo} order. The values must implement the comparable interface for the result to
- * be calculated.
+ * Function for producing a sorted list of {@link ComputedValue} outputs for all positions underneath a node. The values are sorted in ascending
+ * {@link Comparable#compareTo} order. The values must implement the comparable interface for the result to be calculated.
  * <p>
- * This is intended as a "back-end" to functions which produce a specific ordering and filtering (e.g. top N or bottom N) but
- * require sorted input in the first place so that the sort operation can be shared among a number. Otherwise splitting a portfolio
- * into 100 percentiles might mean sorting the results 100 times.  
+ * This is intended as a "back-end" to functions which produce a specific ordering and filtering (e.g. top N or bottom N) but require sorted input in the first
+ * place so that the sort operation can be shared among a number. Otherwise splitting a portfolio into 100 percentiles might mean sorting the results 100 times.
  */
 public class SortedPositionValues extends AbstractSortedPositionValues {
 
@@ -52,11 +50,12 @@ public class SortedPositionValues extends AbstractSortedPositionValues {
     }
   };
 
-  private static void getPositionRequirements(final PortfolioNode node, final String valueName, final ValueProperties requirementConstraints, final Set<ValueRequirement> requirements) {
-    for (Position position : node.getPositions()) {
+  private static void getPositionRequirements(final PortfolioNode node, final String valueName, final ValueProperties requirementConstraints,
+      final Set<ValueRequirement> requirements) {
+    for (final Position position : node.getPositions()) {
       requirements.add(new ValueRequirement(valueName, ComputationTargetType.POSITION, position.getUniqueId(), requirementConstraints));
     }
-    for (PortfolioNode childNode : node.getChildNodes()) {
+    for (final PortfolioNode childNode : node.getChildNodes()) {
       getPositionRequirements(childNode, valueName, requirementConstraints, requirements);
     }
   }
@@ -72,7 +71,7 @@ public class SortedPositionValues extends AbstractSortedPositionValues {
   protected Set<ValueRequirement> getRequirements(final String valueName, final ComputationTarget target, final ValueProperties constraints) {
     final ValueProperties.Builder requirementConstraints = ValueProperties.builder();
     final String valueNameDot = valueName + ".";
-    for (String constraint : constraints.getProperties()) {
+    for (final String constraint : constraints.getProperties()) {
       if (constraint.startsWith(valueNameDot)) {
         final Set<String> values = constraints.getValues(constraint);
         if (values.isEmpty()) {
@@ -82,7 +81,7 @@ public class SortedPositionValues extends AbstractSortedPositionValues {
         }
       }
     }
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     getPositionRequirements(target.getPortfolioNode(), valueName, requirementConstraints.get(), requirements);
     return requirements;
   }
@@ -90,7 +89,7 @@ public class SortedPositionValues extends AbstractSortedPositionValues {
   @Override
   protected void composeValueProperties(final ValueProperties.Builder builder, final ValueSpecification inputValue) {
     builder.with(VALUE_NAME_PROPERTY, inputValue.getValueName());
-    for (String inputProperty : inputValue.getProperties().getProperties()) {
+    for (final String inputProperty : inputValue.getProperties().getProperties()) {
       final Set<String> inputPropertyValues = inputValue.getProperties().getValues(inputProperty);
       if (inputPropertyValues.isEmpty()) {
         builder.withAny(inputValue.getValueName() + "." + inputProperty);
@@ -113,14 +112,16 @@ public class SortedPositionValues extends AbstractSortedPositionValues {
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
-    final List<ComputedValue> values = new ArrayList<ComputedValue>(inputs.getAllValues());
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
+    final List<ComputedValue> values = new ArrayList<>(inputs.getAllValues());
     final ValueProperties.Builder properties = createValueProperties();
-    for (ComputedValue value : values) {
+    for (final ComputedValue value : values) {
       composeValueProperties(properties, value.getSpecification());
     }
     Collections.sort(values, COMPARATOR);
-    return Collections.singleton(new ComputedValue(ValueSpecification.of(getValueName(), ComputationTargetType.PORTFOLIO_NODE, target.getUniqueId(), properties.get()), values));
+    return Collections.singleton(
+        new ComputedValue(ValueSpecification.of(getValueName(), ComputationTargetType.PORTFOLIO_NODE, target.getUniqueId(), properties.get()), values));
   }
 
 }

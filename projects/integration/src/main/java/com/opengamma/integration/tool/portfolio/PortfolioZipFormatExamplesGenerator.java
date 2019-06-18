@@ -48,7 +48,7 @@ import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.util.tuple.ObjectsPair;
 
 /**
- * Tool to generate a template for doing field mapping tasks
+ * Tool to generate a template for doing field mapping tasks.
  */
 @Scriptable
 public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContext> {
@@ -97,8 +97,8 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
   }
 
   private static final Set<String> UNSUPPORTED_SECURITY_TYPES = Sets.newHashSet("CDS_INDEX", "CDS_INDEX_DEFINITION", "CDS", "RAW", "XXX", "MANAGEABLE",
-                                                                                "EXTERNAL_SENSITIVITIES_SECURITY", "EXTERNAL_SENSITIVITY_RISK_FACTORS");
-                                                                                // not enough string conversion stuff there for these yet
+      "EXTERNAL_SENSITIVITIES_SECURITY", "EXTERNAL_SENSITIVITY_RISK_FACTORS");
+  // not enough string conversion stuff there for these yet
 
   private List<ManageablePosition> loadSomePositions(final boolean includeTrades) {
     final List<ManageablePosition> positions = new ArrayList<>();
@@ -139,7 +139,7 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
     private final List<ManageablePosition> _positions;
     private final Iterator<ManageablePosition> _iterator;
 
-    public MyPositionReader(final List<ManageablePosition> positions) {
+    MyPositionReader(final List<ManageablePosition> positions) {
       _positions = positions;
       _iterator = _positions.iterator();
     }
@@ -167,22 +167,20 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
             underlying = getToolContext().getSecuritySource().getSingle(id.toBundle());
             if (underlying != null) {
               return ObjectsPair.of(position,
-                  new ManageableSecurity[] {(ManageableSecurity) security, (ManageableSecurity) underlying });
-            } else {
-              LOGGER.warn("Could not resolve underlying " + id + " for security " + security.getName());
+                  new ManageableSecurity[] { (ManageableSecurity) security, (ManageableSecurity) underlying });
             }
+            LOGGER.warn("Could not resolve underlying " + id + " for security " + security.getName());
           } catch (final Throwable e) {
             // Underlying not found
             LOGGER.warn("Error trying to resolve underlying " + id + " for security " + security.getName());
           }
         }
         return ObjectsPair.of(position,
-            new ManageableSecurity[] {(ManageableSecurity) security });
+            new ManageableSecurity[] { (ManageableSecurity) security });
 
-      } else {
-        LOGGER.warn("Could not resolve security relating to position " + position.getName());
-        return ObjectsPair.of(null, null);
       }
+      LOGGER.warn("Could not resolve security relating to position " + position.getName());
+      return ObjectsPair.of(null, null);
     }
 
     @Override
@@ -203,7 +201,8 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
   private ManageablePosition createPosition(final ManageableSecurity security, final boolean includeTrade) {
     final ManageablePosition position = new ManageablePosition(BigDecimal.ONE, security.getExternalIdBundle());
     if (includeTrade) {
-      final ManageableTrade trade = new ManageableTrade(BigDecimal.ONE, security.getExternalIdBundle(), LocalDate.now().minusDays(3), OffsetTime.now(), ExternalId.of("Cpty", "GOLDMAN"));
+      final ManageableTrade trade = new ManageableTrade(BigDecimal.ONE, security.getExternalIdBundle(), LocalDate.now().minusDays(3), OffsetTime.now(),
+          ExternalId.of("Cpty", "GOLDMAN"));
       position.addTrade(trade);
     }
     return position;
@@ -219,14 +218,12 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
 
       if (SheetFormat.of(filename) == SheetFormat.ZIP) {
         return new ZippedPositionWriter(filename, includeTrades);
-      } else {
-        throw new OpenGammaRuntimeException("Input filename should end in .ZIP");
       }
+      throw new OpenGammaRuntimeException("Input filename should end in .ZIP");
 
-    } else {
-      // Create a dummy portfolio writer to pretty-print instead of persisting
-      return new PrettyPrintingPositionWriter(true);
     }
+    // Create a dummy portfolio writer to pretty-print instead of persisting
+    return new PrettyPrintingPositionWriter(true);
   }
 
   @Override
@@ -257,13 +254,14 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
     return options;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new PortfolioZipFormatExamplesGenerator().invokeAndTerminate(args);
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.issuer;
@@ -14,7 +14,8 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multicu
 /**
  * Calculate the market quote of instruments dependent of a Hull-White one factor provider.
  */
-public final class MarketQuoteCurveSensitivityHullWhiteIssuerCalculator extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, MulticurveSensitivity> {
+public final class MarketQuoteCurveSensitivityHullWhiteIssuerCalculator
+extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, MulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -29,6 +30,7 @@ public final class MarketQuoteCurveSensitivityHullWhiteIssuerCalculator extends 
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static MarketQuoteCurveSensitivityHullWhiteIssuerCalculator getInstance() {
@@ -40,7 +42,7 @@ public final class MarketQuoteCurveSensitivityHullWhiteIssuerCalculator extends 
    */
   private static final BondFuturesSecurityHullWhiteMethod METHOD_BNDFUT_SEC = BondFuturesSecurityHullWhiteMethod.getInstance();
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
   public MulticurveSensitivity visitBondFuturesSecurity(final BondFuturesSecurity futures, final HullWhiteIssuerProviderInterface hullWhite) {

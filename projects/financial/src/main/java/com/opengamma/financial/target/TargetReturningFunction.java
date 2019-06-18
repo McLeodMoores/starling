@@ -37,7 +37,8 @@ public class TargetReturningFunction extends AbstractFunction.NonCompiledInvoker
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     //final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE, target.toSpecification(), properties);
     final ValueProperties outputProperties = createValueProperties().get();
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.TARGET, target.toSpecification(), outputProperties);
@@ -66,7 +67,8 @@ public class TargetReturningFunction extends AbstractFunction.NonCompiledInvoker
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (!inputs.isEmpty()) { // doesn't take any inputs
       return null;
     }

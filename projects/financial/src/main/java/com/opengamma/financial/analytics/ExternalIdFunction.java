@@ -34,12 +34,13 @@ import com.opengamma.id.ExternalScheme;
  *
  */
 public class ExternalIdFunction extends AbstractFunction.NonCompiledInvoker {
-  /** The attribute property name */
+  /** The attribute property name. */
   public static final String EXTERNAL_SCHEME_NAME = "ExternalScheme";
   private static final Logger LOGGER = LoggerFactory.getLogger(ExternalIdFunction.class);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
     final ValueProperties constraints = desiredValue.getConstraints();
     final String schemeName = constraints.getSingleValue(EXTERNAL_SCHEME_NAME);
@@ -51,9 +52,8 @@ public class ExternalIdFunction extends AbstractFunction.NonCompiledInvoker {
       }
       final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.EXTERNAL_ID, target.toSpecification(), constraints);
       return Collections.singleton(new ComputedValue(spec, result));
-    } else {
-      throw new OpenGammaRuntimeException("Could not get id for scheme " + schemeName);
     }
+    throw new OpenGammaRuntimeException("Could not get id for scheme " + schemeName);
   }
 
   @Override
@@ -68,7 +68,7 @@ public class ExternalIdFunction extends AbstractFunction.NonCompiledInvoker {
       return null;
     }
     final ValueProperties.Builder properties = createValueProperties();
-    for (ExternalId identifier : identifiers) {
+    for (final ExternalId identifier : identifiers) {
       properties.with(EXTERNAL_SCHEME_NAME, identifier.getScheme().getName());
     }
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.EXTERNAL_ID, target.toSpecification(), properties.get()));

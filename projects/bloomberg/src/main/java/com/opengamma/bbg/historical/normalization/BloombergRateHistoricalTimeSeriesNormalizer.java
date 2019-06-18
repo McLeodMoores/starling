@@ -18,8 +18,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
- * Implementation of {@link HistoricalTimeSeriesAdjuster} for normalizing time-series consisting of Bloomberg market
- * data.
+ * Implementation of {@link HistoricalTimeSeriesAdjuster} for normalizing time-series consisting of Bloomberg market data.
  */
 public class BloombergRateHistoricalTimeSeriesNormalizer implements HistoricalTimeSeriesAdjuster {
 
@@ -39,7 +38,8 @@ public class BloombergRateHistoricalTimeSeriesNormalizer implements HistoricalTi
   protected Integer getNormalizationFactor(final ExternalIdBundle securityIdBundle) {
     final String buid = securityIdBundle.getValue(ExternalSchemes.BLOOMBERG_BUID);
     if (buid == null) {
-      LOGGER.warn("Unable to classify security for Bloomberg time-series normalization as no BUID found in bundle: {}. The time-series will be unnormalized.", securityIdBundle);
+      LOGGER.warn("Unable to classify security for Bloomberg time-series normalization as no BUID found in bundle: {}. The time-series will be unnormalized.",
+          securityIdBundle);
       return null;
     }
     final Integer normalizationFactor = getClassifier().getNormalizationFactor(buid);

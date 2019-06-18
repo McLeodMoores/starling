@@ -18,10 +18,10 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.value.ValueRenamingFunction;
 
 /**
- * Displays the Black price of the Security underlying the trade or position
- * @deprecated This produces the same value as {@link InterestRateFutureOptionBlackPresentValueFunction}
- * with a different label. Use {@link ValueRenamingFunction} instead of performing the same
- * calculation twice.
+ * Displays the Black price of the Security underlying the trade or position.
+ * 
+ * @deprecated This produces the same value as {@link InterestRateFutureOptionBlackPresentValueFunction} with a different label. Use
+ *             {@link ValueRenamingFunction} instead of performing the same calculation twice.
  */
 @Deprecated
 public class InterestRateFutureOptionBlackPriceFunction extends InterestRateFutureOptionBlackFunction {
@@ -29,7 +29,7 @@ public class InterestRateFutureOptionBlackPriceFunction extends InterestRateFutu
   private static final BlackPriceCalculator CALCULATOR = BlackPriceCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#SECURITY_MODEL_PRICE}
+   * Sets the value requirement name to {@link ValueRequirementNames#SECURITY_MODEL_PRICE}.
    */
   public InterestRateFutureOptionBlackPriceFunction() {
     super(ValueRequirementNames.SECURITY_MODEL_PRICE, false);

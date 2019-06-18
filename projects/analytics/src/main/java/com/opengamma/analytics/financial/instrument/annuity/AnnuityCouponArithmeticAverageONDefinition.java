@@ -24,15 +24,17 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A wrapper class for an annuity containing overnight arithmetic averaged coupons (i.e. the floating leg for a Fed funds-like
- * rate).
+ * A wrapper class for an annuity containing overnight arithmetic averaged coupons (i.e. the floating leg for a Fed funds-like rate).
  */
 public class AnnuityCouponArithmeticAverageONDefinition extends AnnuityCouponDefinition<CouponONArithmeticAverageDefinition> {
 
   /**
    * Constructor from a list of overnight arithmetic average coupons.
-   * @param payments The coupons.
-   * @param calendar The holiday calendar
+   * 
+   * @param payments
+   *          The coupons.
+   * @param calendar
+   *          The holiday calendar
    */
   public AnnuityCouponArithmeticAverageONDefinition(final CouponONArithmeticAverageDefinition[] payments, final Calendar calendar) {
     super(payments, calendar);
@@ -40,42 +42,70 @@ public class AnnuityCouponArithmeticAverageONDefinition extends AnnuityCouponDef
 
   /**
    * Build a annuity of overnight arithmetic average coupons from financial details. The stub convention is short at the start.
-   * @param settlementDate The annuity settlement or first fixing date, not null.
-   * @param endFixingPeriodDate The end date of the overnight arithmetic average coupons accrual period. Also called the maturity date of the annuity even if the
-   * actual payment can take place one or two days later. Not null.
-   * @param notional The annuity notional, not null
-   * @param isPayer The flag indicating if the annuity is paying (true) or receiving (false).
-   * @param paymentPeriod The payment period, not null
-   * @param indexON The overnight index, not null
-   * @param paymentLag The payment lag, not null
-   * @param businessDayConvention The business day convention, not null
-   * @param isEOM True if the date schedule is EOM.
-   * @param indexCalendar The calendar for the overnight index, not null
+   * 
+   * @param settlementDate
+   *          The annuity settlement or first fixing date, not null.
+   * @param endFixingPeriodDate
+   *          The end date of the overnight arithmetic average coupons accrual period. Also called the maturity date of the annuity even if the actual payment
+   *          can take place one or two days later. Not null.
+   * @param notional
+   *          The annuity notional, not null
+   * @param isPayer
+   *          The flag indicating if the annuity is paying (true) or receiving (false).
+   * @param paymentPeriod
+   *          The payment period, not null
+   * @param indexON
+   *          The overnight index, not null
+   * @param paymentLag
+   *          The payment lag, not null
+   * @param businessDayConvention
+   *          The business day convention, not null
+   * @param isEOM
+   *          True if the date schedule is EOM.
+   * @param indexCalendar
+   *          The calendar for the overnight index, not null
    * @return The annuity.
    */
-  public static AnnuityCouponArithmeticAverageONDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate, final double notional, final boolean isPayer,
-      final Period paymentPeriod, final IndexON indexON, final int paymentLag, final BusinessDayConvention businessDayConvention, final boolean isEOM, final Calendar indexCalendar) {
-    return from(settlementDate, endFixingPeriodDate, notional, isPayer, paymentPeriod, indexON, paymentLag, businessDayConvention, isEOM, indexCalendar, StubType.SHORT_START);
+  public static AnnuityCouponArithmeticAverageONDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate,
+      final double notional, final boolean isPayer,
+      final Period paymentPeriod, final IndexON indexON, final int paymentLag, final BusinessDayConvention businessDayConvention, final boolean isEOM,
+      final Calendar indexCalendar) {
+    return from(settlementDate, endFixingPeriodDate, notional, isPayer, paymentPeriod, indexON, paymentLag, businessDayConvention, isEOM, indexCalendar,
+        StubType.SHORT_START);
   }
 
   /**
    * Build a annuity of overnight arithmetic average coupons from financial details.
-   * @param settlementDate The annuity settlement or first fixing date, not null.
-   * @param endFixingPeriodDate The end date of the overnight arithmetic average coupons accrual period. Also called the maturity date of the annuity even if the
-   * actual payment can take place one or two days later. Not null.
-   * @param notional The annuity notional, not null
-   * @param isPayer The flag indicating if the annuity is paying (true) or receiving (false).
-   * @param paymentPeriod The payment period, not null
-   * @param indexON The overnight index, not null
-   * @param paymentLag The payment lag, not null
-   * @param businessDayConvention The business day convention, not null
-   * @param isEOM True if the date schedule is EOM.
-   * @param indexCalendar The calendar for the overnight index, not null
-   * @param stub The stub type.
+   * 
+   * @param settlementDate
+   *          The annuity settlement or first fixing date, not null.
+   * @param endFixingPeriodDate
+   *          The end date of the overnight arithmetic average coupons accrual period. Also called the maturity date of the annuity even if the actual payment
+   *          can take place one or two days later. Not null.
+   * @param notional
+   *          The annuity notional, not null
+   * @param isPayer
+   *          The flag indicating if the annuity is paying (true) or receiving (false).
+   * @param paymentPeriod
+   *          The payment period, not null
+   * @param indexON
+   *          The overnight index, not null
+   * @param paymentLag
+   *          The payment lag, not null
+   * @param businessDayConvention
+   *          The business day convention, not null
+   * @param isEOM
+   *          True if the date schedule is EOM.
+   * @param indexCalendar
+   *          The calendar for the overnight index, not null
+   * @param stub
+   *          The stub type.
    * @return The annuity.
    */
-  public static AnnuityCouponArithmeticAverageONDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate, final double notional, final boolean isPayer,
-      final Period paymentPeriod, final IndexON indexON, final int paymentLag, final BusinessDayConvention businessDayConvention, final boolean isEOM, final Calendar indexCalendar,
+  public static AnnuityCouponArithmeticAverageONDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate,
+      final double notional, final boolean isPayer,
+      final Period paymentPeriod, final IndexON indexON, final int paymentLag, final BusinessDayConvention businessDayConvention, final boolean isEOM,
+      final Calendar indexCalendar,
       final StubType stub) {
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(endFixingPeriodDate, "End fixing period date");
@@ -92,54 +122,86 @@ public class AnnuityCouponArithmeticAverageONDefinition extends AnnuityCouponDef
     final CouponONArithmeticAverageDefinition[] coupons = new CouponONArithmeticAverageDefinition[endFixingPeriodDates.length];
     coupons[0] = CouponONArithmeticAverageDefinition.from(indexON, settlementDate, endFixingPeriodDates[0], notionalSigned, paymentLag, indexCalendar);
     for (int loopcpn = 1; loopcpn < endFixingPeriodDates.length; loopcpn++) {
-      coupons[loopcpn] = CouponONArithmeticAverageDefinition.from(indexON, endFixingPeriodDates[loopcpn - 1], endFixingPeriodDates[loopcpn], notionalSigned, paymentLag,
+      coupons[loopcpn] = CouponONArithmeticAverageDefinition.from(indexON, endFixingPeriodDates[loopcpn - 1], endFixingPeriodDates[loopcpn], notionalSigned,
+          paymentLag,
           indexCalendar);
     }
     return new AnnuityCouponArithmeticAverageONDefinition(coupons, indexCalendar);
   }
 
   /**
-   * Build a annuity of overnight arithmetic average coupons with rate cut off (the two last fixings in the average are the same : the second last) 
-   * from financial details. The stub convention is short at the start.
-   * @param settlementDate The annuity settlement or first fixing date, not null.
-   * @param endFixingPeriodDate The end date of the overnight arithmetic average coupons accrual period. Also called the maturity date of the annuity even if the
-   * actual payment can take place one or two days later. Not null.
-   * @param notional The annuity notional, not null
-   * @param isPayer The flag indicating if the annuity is paying (true) or receiving (false).
-   * @param paymentPeriod The payment period, not null
-   * @param indexON The overnight index, not null
-   * @param paymentLag The payment lag, not null
-   * @param businessDayConvention The business day convention, not null
-   * @param isEOM True if the date schedule is EOM.
-   * @param indexCalendar The calendar for the overnight index, not null
-   * @param rateCutOff The rate cut off should be bigger than 2,and smaller than the number of period (which the number of open days between the two fixing periods)
+   * Build a annuity of overnight arithmetic average coupons with rate cut off (the two last fixings in the average are the same : the second last) from
+   * financial details. The stub convention is short at the start.
+   * 
+   * @param settlementDate
+   *          The annuity settlement or first fixing date, not null.
+   * @param endFixingPeriodDate
+   *          The end date of the overnight arithmetic average coupons accrual period. Also called the maturity date of the annuity even if the actual payment
+   *          can take place one or two days later. Not null.
+   * @param notional
+   *          The annuity notional, not null
+   * @param isPayer
+   *          The flag indicating if the annuity is paying (true) or receiving (false).
+   * @param paymentPeriod
+   *          The payment period, not null
+   * @param indexON
+   *          The overnight index, not null
+   * @param paymentLag
+   *          The payment lag, not null
+   * @param businessDayConvention
+   *          The business day convention, not null
+   * @param isEOM
+   *          True if the date schedule is EOM.
+   * @param indexCalendar
+   *          The calendar for the overnight index, not null
+   * @param rateCutOff
+   *          The rate cut off should be bigger than 2,and smaller than the number of period (which the number of open days between the two fixing periods)
    * @return The annuity.
    */
-  public static AnnuityCouponArithmeticAverageONDefinition withRateCutOff(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate, final double notional, final boolean isPayer,
-      final Period paymentPeriod, final IndexON indexON, final int paymentLag, final BusinessDayConvention businessDayConvention, final boolean isEOM, final Calendar indexCalendar,
+  public static AnnuityCouponArithmeticAverageONDefinition withRateCutOff(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate,
+      final double notional, final boolean isPayer,
+      final Period paymentPeriod, final IndexON indexON, final int paymentLag, final BusinessDayConvention businessDayConvention, final boolean isEOM,
+      final Calendar indexCalendar,
       final int rateCutOff) {
-    return withRateCutOff(settlementDate, endFixingPeriodDate, notional, isPayer, paymentPeriod, indexON, paymentLag, businessDayConvention, isEOM, indexCalendar, StubType.SHORT_START, rateCutOff);
+    return withRateCutOff(settlementDate, endFixingPeriodDate, notional, isPayer, paymentPeriod, indexON, paymentLag, businessDayConvention, isEOM,
+        indexCalendar, StubType.SHORT_START, rateCutOff);
   }
 
   /**
-   * Build a annuity of overnight arithmetic average coupons with rate cut off (the two last fixings in the average are the same : the second last) from financial details.
-   * @param settlementDate The annuity settlement or first fixing date, not null.
-   * @param endFixingPeriodDate The end date of the overnight arithmetic average coupons accrual period. Also called the maturity date of the annuity even if the
-   * actual payment can take place one or two days later. Not null.
-   * @param notional The annuity notional, not null
-   * @param isPayer The flag indicating if the annuity is paying (true) or receiving (false).
-   * @param paymentPeriod The payment period, not null
-   * @param indexON The overnight index, not null
-   * @param paymentLag The payment lag, not null
-   * @param businessDayConvention The business day convention, not null
-   * @param isEOM True if the date schedule is EOM.
-   * @param indexCalendar The calendar for the overnight index, not null
-   * @param stub The stub type.
-   * @param rateCutOff The rate cut off should be bigger than 2,and smaller than the number of period (which the number of open days between the two fixing periods)
+   * Build a annuity of overnight arithmetic average coupons with rate cut off (the two last fixings in the average are the same : the second last) from
+   * financial details.
+   * 
+   * @param settlementDate
+   *          The annuity settlement or first fixing date, not null.
+   * @param endFixingPeriodDate
+   *          The end date of the overnight arithmetic average coupons accrual period. Also called the maturity date of the annuity even if the actual payment
+   *          can take place one or two days later. Not null.
+   * @param notional
+   *          The annuity notional, not null
+   * @param isPayer
+   *          The flag indicating if the annuity is paying (true) or receiving (false).
+   * @param paymentPeriod
+   *          The payment period, not null
+   * @param indexON
+   *          The overnight index, not null
+   * @param paymentLag
+   *          The payment lag, not null
+   * @param businessDayConvention
+   *          The business day convention, not null
+   * @param isEOM
+   *          True if the date schedule is EOM.
+   * @param indexCalendar
+   *          The calendar for the overnight index, not null
+   * @param stub
+   *          The stub type.
+   * @param rateCutOff
+   *          The rate cut off should be bigger than 2,and smaller than the number of period (which the number of open days between the two fixing periods)
    * @return The annuity.
    */
-  public static AnnuityCouponArithmeticAverageONDefinition withRateCutOff(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate, final double notional, final boolean isPayer,
-      final Period paymentPeriod, final IndexON indexON, final int paymentLag, final BusinessDayConvention businessDayConvention, final boolean isEOM, final Calendar indexCalendar,
+  public static AnnuityCouponArithmeticAverageONDefinition withRateCutOff(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate,
+      final double notional, final boolean isPayer,
+      final Period paymentPeriod, final IndexON indexON, final int paymentLag, final BusinessDayConvention businessDayConvention, final boolean isEOM,
+      final Calendar indexCalendar,
       final StubType stub, final int rateCutOff) {
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(endFixingPeriodDate, "End fixing period date");
@@ -154,9 +216,11 @@ public class AnnuityCouponArithmeticAverageONDefinition extends AnnuityCouponDef
     final double sign = isPayer ? -1.0 : 1.0;
     final double notionalSigned = sign * notional;
     final CouponONArithmeticAverageDefinition[] coupons = new CouponONArithmeticAverageDefinition[endFixingPeriodDates.length];
-    coupons[0] = CouponONArithmeticAverageDefinition.withRateCutOff(indexON, settlementDate, endFixingPeriodDates[0], notionalSigned, paymentLag, indexCalendar, rateCutOff);
+    coupons[0] = CouponONArithmeticAverageDefinition.withRateCutOff(indexON, settlementDate, endFixingPeriodDates[0], notionalSigned, paymentLag, indexCalendar,
+        rateCutOff);
     for (int loopcpn = 1; loopcpn < endFixingPeriodDates.length; loopcpn++) {
-      coupons[loopcpn] = CouponONArithmeticAverageDefinition.withRateCutOff(indexON, endFixingPeriodDates[loopcpn - 1], endFixingPeriodDates[loopcpn], notionalSigned, paymentLag,
+      coupons[loopcpn] = CouponONArithmeticAverageDefinition.withRateCutOff(indexON, endFixingPeriodDates[loopcpn - 1], endFixingPeriodDates[loopcpn],
+          notionalSigned, paymentLag,
           indexCalendar, rateCutOff);
     }
     return new AnnuityCouponArithmeticAverageONDefinition(coupons, indexCalendar);
@@ -164,11 +228,13 @@ public class AnnuityCouponArithmeticAverageONDefinition extends AnnuityCouponDef
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
-  public Annuity<? extends Coupon> toDerivative(final ZonedDateTime valZdt, final DoubleTimeSeries<ZonedDateTime> indexFixingTS, final String... yieldCurveNames) {
+  public Annuity<? extends Coupon> toDerivative(final ZonedDateTime valZdt, final DoubleTimeSeries<ZonedDateTime> indexFixingTS,
+      final String... yieldCurveNames) {
     return toDerivative(valZdt, indexFixingTS);
   }
 
@@ -181,9 +247,9 @@ public class AnnuityCouponArithmeticAverageONDefinition extends AnnuityCouponDef
     final ZonedDateTime valZdtInPaymentZone = valZdt.withZoneSameInstant(payments[0].getPaymentDate().getZone());
     final LocalDate valDate = valZdtInPaymentZone.toLocalDate();
 
-    for (int loopcoupon = 0; loopcoupon < payments.length; loopcoupon++) {
-      if (!valDate.isAfter(payments[loopcoupon].getPaymentDate().toLocalDate())) {
-        resultList.add(payments[loopcoupon].toDerivative(valZdt, indexFixingTS));
+    for (final CouponONArithmeticAverageDefinition payment : payments) {
+      if (!valDate.isAfter(payment.getPaymentDate().toLocalDate())) {
+        resultList.add(payment.toDerivative(valZdt, indexFixingTS));
       }
     }
     return new Annuity<>(resultList.toArray(new Coupon[resultList.size()]));

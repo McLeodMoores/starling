@@ -17,9 +17,10 @@ import com.opengamma.analytics.math.integration.RungeKuttaIntegrator1D;
 import com.opengamma.util.money.CurrencyAmount;
 
 /**
- *  Class used to compute the price and sensitivity of a Ibor cap/floor in arrears.
- *  The cap/floor are supposed to be exactly in arrears. The payment date is ignored and the start fixing period date is used instead.
- *  @deprecated {@link PricingMethod} is deprecated
+ * Class used to compute the price and sensitivity of a Ibor cap/floor in arrears. The cap/floor are supposed to be exactly in arrears. The
+ * payment date is ignored and the start fixing period date is used instead.
+ * 
+ * @deprecated {@link PricingMethod} is deprecated
  */
 @Deprecated
 public class CapFloorIborInArrearsGenericReplicationMethod implements PricingMethod {
@@ -29,8 +30,8 @@ public class CapFloorIborInArrearsGenericReplicationMethod implements PricingMet
    */
   private final PricingMethod _baseMethod;
   /**
-   * Range of the integral. Used only for caps. Represent the approximation of infinity in the strike dimension.
-   * The range is [strike, strike+integrationInterval].
+   * Range of the integral. Used only for caps. Represent the approximation of infinity in the strike dimension. The range is [strike,
+   * strike+integrationInterval].
    */
   private final double _integrationInterval = 2.0;
   /**
@@ -40,7 +41,9 @@ public class CapFloorIborInArrearsGenericReplicationMethod implements PricingMet
 
   /**
    * Constructor of the in-arrears pricing method.
-   * @param baseMethod The base method for the pricing of standard cap/floors.
+   * 
+   * @param baseMethod
+   *          The base method for the pricing of standard cap/floors.
    */
   public CapFloorIborInArrearsGenericReplicationMethod(final PricingMethod baseMethod) {
     _baseMethod = baseMethod;
@@ -48,19 +51,26 @@ public class CapFloorIborInArrearsGenericReplicationMethod implements PricingMet
 
   /**
    * Computes the present value of an Ibor cap/floor in arrears by replication.
-   * @param cap The cap/floor.
-   * @param sabrData The SABR data.
+   * 
+   * @param cap
+   *          The cap/floor.
+   * @param sabrData
+   *          The SABR data.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final CapFloorIbor cap, final SABRInterestRateDataBundle sabrData) {
     Validate.notNull(cap);
     Validate.notNull(sabrData);
-    final CapFloorIbor capStandard = new CapFloorIbor(cap.getCurrency(), cap.getFixingPeriodEndTime(), cap.getFundingCurveName(), cap.getPaymentYearFraction(), cap.getNotional(), cap.getFixingTime(),
-        cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor(), cap.getForwardCurveName(), cap.getStrike(), cap.isCap());
+    final CapFloorIbor capStandard = new CapFloorIbor(cap.getCurrency(), cap.getFixingPeriodEndTime(), cap.getFundingCurveName(),
+        cap.getPaymentYearFraction(), cap.getNotional(), cap.getFixingTime(),
+        cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor(),
+        cap.getForwardCurveName(), cap.getStrike(), cap.isCap());
     final double beta = sabrData.getCurve(cap.getForwardCurveName()).getDiscountFactor(cap.getFixingPeriodStartTime())
-        / sabrData.getCurve(cap.getForwardCurveName()).getDiscountFactor(cap.getFixingPeriodEndTime()) * sabrData.getCurve(cap.getFundingCurveName()).getDiscountFactor(cap.getFixingPeriodEndTime())
+        / sabrData.getCurve(cap.getForwardCurveName()).getDiscountFactor(cap.getFixingPeriodEndTime())
+        * sabrData.getCurve(cap.getFundingCurveName()).getDiscountFactor(cap.getFixingPeriodEndTime())
         / sabrData.getCurve(cap.getFundingCurveName()).getDiscountFactor(cap.getFixingPeriodStartTime());
-    final double strikePart = (1.0 + cap.getFixingAccrualFactor() * cap.getStrike()) * _baseMethod.presentValue(capStandard, sabrData).getAmount();
+    final double strikePart = (1.0 + cap.getFixingAccrualFactor() * cap.getStrike())
+        * _baseMethod.presentValue(capStandard, sabrData).getAmount();
     final double absoluteTolerance = 1.0;
     final double relativeTolerance = 1E-10;
     final RungeKuttaIntegrator1D integrator = new RungeKuttaIntegrator1D(absoluteTolerance, relativeTolerance, _nbIteration);
@@ -107,11 +117,15 @@ public class CapFloorIborInArrearsGenericReplicationMethod implements PricingMet
 
     /**
      * Constructor with the required data.
-     * @param baseMethod The base method for the pricing of standard cap/floors.
-     * @param capStandard The standard cap/floor used for replication.
-     * @param sabrData The SABR data bundle used in the standard cap/floor pricing.
+     * 
+     * @param baseMethod
+     *          The base method for the pricing of standard cap/floors.
+     * @param capStandard
+     *          The standard cap/floor used for replication.
+     * @param sabrData
+     *          The SABR data bundle used in the standard cap/floor pricing.
      */
-    public InArrearsIntegrant(final PricingMethod baseMethod, final CapFloorIbor capStandard, final SABRInterestRateDataBundle sabrData) {
+    InArrearsIntegrant(final PricingMethod baseMethod, final CapFloorIbor capStandard, final SABRInterestRateDataBundle sabrData) {
       this._basePricingMethod = baseMethod;
       this._capStandard = capStandard;
       this._sabrData = sabrData;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments.provider;
@@ -21,7 +21,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  */
 public final class CouponIborAverageFixingDatesDiscountingMethod {
 
@@ -32,6 +32,7 @@ public final class CouponIborAverageFixingDatesDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static CouponIborAverageFixingDatesDiscountingMethod getInstance() {
@@ -46,8 +47,11 @@ public final class CouponIborAverageFixingDatesDiscountingMethod {
 
   /**
    * Compute the present value of a Ibor average coupon by discounting.
-   * @param coupon The coupon.
-   * @param multicurves The multi-curve provider.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param multicurves
+   *          The multi-curve provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponIborAverageFixingDates coupon, final MulticurveProviderInterface multicurves) {
@@ -57,7 +61,8 @@ public final class CouponIborAverageFixingDatesDiscountingMethod {
     final int nDates = coupon.getFixingPeriodEndTime().length;
     double forward = 0.;
     for (int i = 0; i < nDates; ++i) {
-      final double forward1 = multicurves.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTime()[i], coupon.getFixingPeriodEndTime()[i],
+      final double forward1 = multicurves.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTime()[i],
+          coupon.getFixingPeriodEndTime()[i],
           coupon.getFixingPeriodAccrualFactor()[i]);
       forward += coupon.getWeight()[i] * forward1;
     }
@@ -69,17 +74,22 @@ public final class CouponIborAverageFixingDatesDiscountingMethod {
 
   /**
    * Compute the present value sensitivity to yield for discounting curve and forward rate (in index convention) for forward curve.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The present value sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponIborAverageFixingDates coupon, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponIborAverageFixingDates coupon,
+      final MulticurveProviderInterface multicurve) {
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(multicurve, "Curves");
     final int nDates = coupon.getFixingPeriodEndTime().length;
     double forward = 0.;
     for (int i = 0; i < nDates; ++i) {
-      final double forward1 = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTime()[i], coupon.getFixingPeriodEndTime()[i],
+      final double forward1 = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTime()[i],
+          coupon.getFixingPeriodEndTime()[i],
           coupon.getFixingPeriodAccrualFactor()[i]);
       forward += coupon.getWeight()[i] * forward1;
     }
@@ -100,7 +110,8 @@ public final class CouponIborAverageFixingDatesDiscountingMethod {
     final Map<String, List<ForwardSensitivity>> mapFwd = new HashMap<>();
     final List<ForwardSensitivity> listForward = new ArrayList<>();
     for (int i = 0; i < nDates; ++i) {
-      listForward.add(new SimplyCompoundedForwardSensitivity(coupon.getFixingPeriodStartTime()[i], coupon.getFixingPeriodEndTime()[i], coupon.getFixingPeriodAccrualFactor()[i], forwardBars[i]));
+      listForward.add(new SimplyCompoundedForwardSensitivity(coupon.getFixingPeriodStartTime()[i], coupon.getFixingPeriodEndTime()[i],
+          coupon.getFixingPeriodAccrualFactor()[i], forwardBars[i]));
     }
     mapFwd.put(multicurve.getName(coupon.getIndex()), listForward);
     return MultipleCurrencyMulticurveSensitivity.of(coupon.getCurrency(), MulticurveSensitivity.of(mapDsc, mapFwd));

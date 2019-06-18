@@ -43,21 +43,27 @@ public class SimulatedHistoricalDataGenerator extends SimulatedHistoricalData {
   private final int _timeSeriesLengthMonths;
 
   /**
-   * @param timeSeriesMaster master for writing the generated time series data
+   * @param timeSeriesMaster
+   *          master for writing the generated time series data
    */
   public SimulatedHistoricalDataGenerator(final HistoricalTimeSeriesMaster timeSeriesMaster) {
     this(timeSeriesMaster, TS_LENGTH);
   }
 
   /**
-   * @param timeSeriesMaster master for writing the generated time series data
-   * @param timeSeriesLengthMonths length in months of the time series
+   * @param timeSeriesMaster
+   *          master for writing the generated time series data
+   * @param timeSeriesLengthMonths
+   *          length in months of the time series
    */
   public SimulatedHistoricalDataGenerator(final HistoricalTimeSeriesMaster timeSeriesMaster, final int timeSeriesLengthMonths) {
     _htsMaster = ArgumentChecker.notNull(timeSeriesMaster, "timeSeriesMaster");
     _timeSeriesLengthMonths = ArgumentChecker.notNegativeOrZero(timeSeriesLengthMonths, "timeSeriesLengthMonths");
   }
 
+  /**
+   * Runs the data generator.
+   */
   public void run() {
     final Random random = new Random(); // no need for SecureRandom here..
     final StringBuilder buf = new StringBuilder("loading ").append(getFinishValues().size()).append(" timeseries");
@@ -101,4 +107,3 @@ public class SimulatedHistoricalDataGenerator extends SimulatedHistoricalData {
   }
 
 }
-

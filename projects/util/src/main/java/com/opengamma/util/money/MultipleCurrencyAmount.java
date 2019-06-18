@@ -8,7 +8,6 @@ package com.opengamma.util.money;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +48,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 @BeanDefinition(builderScope = "private")
 public final class MultipleCurrencyAmount implements ImmutableBean,
-    Iterable<CurrencyAmount>, Serializable {
+Iterable<CurrencyAmount>, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -70,7 +69,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
   public static MultipleCurrencyAmount of(final Currency currency, final double amount) {
     final NavigableMap<Currency, CurrencyAmount> underlying = new TreeMap<>();
     underlying.put(currency, CurrencyAmount.of(currency, amount));
-    return new MultipleCurrencyAmount(Collections.unmodifiableNavigableMap(underlying));
+    return new MultipleCurrencyAmount(Maps.unmodifiableNavigableMap(underlying));
   }
 
   /**

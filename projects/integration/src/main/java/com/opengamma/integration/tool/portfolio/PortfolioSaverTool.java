@@ -28,14 +28,14 @@ import com.opengamma.integration.copier.sheet.SheetFormat;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * The portfolio saver tool
+ * The portfolio saver tool.
  */
 @Scriptable
 public class PortfolioSaverTool extends AbstractTool<ToolContext> {
 
   /** File name option flag */
   private static final String FILE_NAME_OPT = "f";
-  /** Portfolio name option flag*/
+  /** Portfolio name option flag */
   private static final String PORTFOLIO_NAME_OPT = "n";
   /** Write option flag */
   private static final String WRITE_OPT = "w";
@@ -48,17 +48,18 @@ public class PortfolioSaverTool extends AbstractTool<ToolContext> {
 
   private static ToolContext s_context;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new PortfolioSaverTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Loads the test portfolio into the position master.
    */
@@ -68,16 +69,14 @@ public class PortfolioSaverTool extends AbstractTool<ToolContext> {
 
     // Construct portfolio reader
     final PositionReader positionReader = constructPortfolioReader(
-        getCommandLine().getOptionValue(PORTFOLIO_NAME_OPT)
-    );
+        getCommandLine().getOptionValue(PORTFOLIO_NAME_OPT));
 
     // Create portfolio writer
     final PositionWriter positionWriter = constructPortfolioWriter(
         getCommandLine().getOptionValue(FILE_NAME_OPT),
         getCommandLine().getOptionValue(SECURITY_TYPE_OPT),
         getCommandLine().hasOption(WRITE_OPT),
-        getCommandLine().hasOption(INCLUDE_TRADES_OPT)
-    );
+        getCommandLine().hasOption(INCLUDE_TRADES_OPT));
 
     // Construct portfolio copier
     final PortfolioCopier portfolioCopier = new SimplePortfolioCopier();
@@ -99,7 +98,7 @@ public class PortfolioSaverTool extends AbstractTool<ToolContext> {
   }
 
   private static PositionWriter constructPortfolioWriter(final String filename, final String securityType, final boolean write,
-                                                          final boolean includeTrades) {
+      final boolean includeTrades) {
     if (write) {
       // Check that the file name was specified on the command line
       if (filename == null) {
@@ -107,35 +106,31 @@ public class PortfolioSaverTool extends AbstractTool<ToolContext> {
       }
 
       if (SheetFormat.of(filename) == SheetFormat.CSV || SheetFormat.of(filename) == SheetFormat.XLS) {
-//        if (securityType.equalsIgnoreCase("exchangetraded")) {
-//          return new SingleSheetSimplePositionWriter(filename, new ExchangeTradedRowParser(s_context.getBloombergSecuritySource()));
-//        } else {
+        // if (securityType.equalsIgnoreCase("exchangetraded")) {
+        // return new SingleSheetSimplePositionWriter(filename, new ExchangeTradedRowParser(s_context.getBloombergSecuritySource()));
+        // } else {
 
         final RowParser rowParser = JodaBeanRowParser.newJodaBeanRowParser(securityType);
         if (rowParser != null) {
           return new SingleSheetSimplePositionWriter(filename, rowParser, includeTrades);
-        } else {
-          throw new OpenGammaRuntimeException("Could not create a row parser for security type " + securityType);
         }
-//        }
+        throw new OpenGammaRuntimeException("Could not create a row parser for security type " + securityType);
       } else if (SheetFormat.of(filename) == SheetFormat.ZIP) {
         return new ZippedPositionWriter(filename, includeTrades);
       } else {
         throw new OpenGammaRuntimeException("Input filename should end in .CSV, .XLS or .ZIP");
       }
 
-    } else {
-      // Create a dummy portfolio writer to pretty-print instead of persisting
-      return new PrettyPrintingPositionWriter(true);
     }
+    // Create a dummy portfolio writer to pretty-print instead of persisting
+    return new PrettyPrintingPositionWriter(true);
   }
 
   private static PositionReader constructPortfolioReader(final String portfolioName) {
     return new MasterPositionReader(
         portfolioName, s_context.getPortfolioMaster(),
         s_context.getPositionMaster(),
-        s_context.getSecuritySource()
-    );
+        s_context.getSecuritySource());
   }
 
   @Override

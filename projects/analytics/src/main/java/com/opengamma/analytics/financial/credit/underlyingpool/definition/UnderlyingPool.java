@@ -1,21 +1,23 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.underlyingpool.definition;
 
 import com.opengamma.analytics.financial.credit.DebtSeniority;
 import com.opengamma.analytics.financial.credit.RestructuringClause;
-import com.opengamma.analytics.financial.credit.obligor.definition.Obligor;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class to specify the composition and characteristics of a collection of Obligor objects aggregated into a common pool
- * In the credit index context the underlying pool is the set of obligors that constitute an index (e.g. CDX.NA.IG series 18)
+ * Class to specify the composition and characteristics of a collection of Obligor objects aggregated into a common pool In the credit index context the
+ * underlying pool is the set of obligors that constitute an index (e.g. CDX.NA.IG series 18)
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class UnderlyingPool {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -27,7 +29,8 @@ public class UnderlyingPool {
 
   // NOTE : We input the individual obligor notionals as part of the underlying pool (the total pool notional is then calculated from this).
   // NOTE : e.g. suppose we have 100 names in the pool all equally weighted. If each obligor notional is $1mm then the total pool notional is $100mm
-  // NOTE : Alternatively we can specify the total pool notional to be $100mm and then calculate by hand what the appropriate obligor notionals should be (1/100)
+  // NOTE : Alternatively we can specify the total pool notional to be $100mm and then calculate by hand what the appropriate obligor notionals should be
+  // (1/100)
 
   // NOTE : The market data associated with the obligors in the pool (credit spread term structures and yield curves) are not part of this object
 
@@ -124,7 +127,8 @@ public class UnderlyingPool {
       totalObligorWeightings += obligorWeights[i];
     }
 
-    // TODO : Need to get this check working ArgumentChecker.isTrue(Double.doubleToLongBits(totalObligorWeightings) == 1.0, "Index constituent weights must sum to unity");
+    // TODO : Need to get this check working ArgumentChecker.isTrue(Double.doubleToLongBits(totalObligorWeightings) == 1.0, "Index constituent weights must sum
+    // to unity");
     ArgumentChecker.isTrue(totalObligorWeightings == 1.0, "Index constituent weights must sum to unity");
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -138,7 +142,7 @@ public class UnderlyingPool {
     int numberOfDefaultedObligors = 0;
 
     for (int i = 0; i < _numberOfObligors; i++) {
-      if (obligors[i].isHasDefaulted() == true) {
+      if (obligors[i].isHasDefaulted()) {
         numberOfDefaultedObligors++;
       }
     }

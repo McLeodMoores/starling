@@ -71,9 +71,8 @@ public abstract class AbstractCdsOptionAggregationFunction<T> implements Aggrega
       final T extracted = _extractor.extract(cdsOption);
       if (extracted != null) {
         return handleExtractedData(extracted);
-      } else {
-        return NOT_APPLICABLE;
       }
+      return NOT_APPLICABLE;
     }
 
     return NOT_APPLICABLE;

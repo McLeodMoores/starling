@@ -60,7 +60,6 @@ import com.opengamma.util.tuple.Pair;
  */
 public class BondTotalReturnSwapYCNSFunction extends BondTotalReturnSwapFunction {
 
-
   private static final Logger LOGGER = LoggerFactory.getLogger(BondTotalReturnSwapYCNSFunction.class);
 
   /**
@@ -76,7 +75,8 @@ public class BondTotalReturnSwapYCNSFunction extends BondTotalReturnSwapFunction
         getDefinitionToDerivativeConverter(context), true) {
 
       @Override
-      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues,
+      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+          final Set<ValueRequirement> desiredValues,
           final InstrumentDerivative derivative, final FXMatrix fxMatrix) {
         final MultipleCurrencyParameterSensitivity sensitivities = (MultipleCurrencyParameterSensitivity) inputs.getValue(BLOCK_CURVE_SENSITIVITIES);
         final Set<ComputedValue> results = Sets.newHashSet();
@@ -91,8 +91,9 @@ public class BondTotalReturnSwapYCNSFunction extends BondTotalReturnSwapFunction
                   .withoutAny(CURVE)
                   .with(CURVE, curveName)
                   .get();
-              final CurveSpecification curveSpecification = (CurveSpecification) inputs.getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL,
-                  ValueProperties.builder().with(CURVE, curveName).get()));
+              final CurveSpecification curveSpecification = (CurveSpecification) inputs
+                  .getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL,
+                      ValueProperties.builder().with(CURVE, curveName).get()));
               final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(entry.getValue(), curveSpecification);
               final ValueSpecification spec = new ValueSpecification(YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), curveSpecificProperties);
               results.add(new ComputedValue(spec, ycns));
@@ -115,18 +116,21 @@ public class BondTotalReturnSwapYCNSFunction extends BondTotalReturnSwapFunction
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final String curveExposures = desiredValue.getConstraint(CURVE_EXPOSURES);
         final String curveType = desiredValue.getConstraint(PROPERTY_CURVE_TYPE);
         final Builder builder = ValueProperties.builder();
         builder.with(CURVE_EXPOSURES, curveExposures);
         builder.with(PROPERTY_CURVE_TYPE, curveType);
-        final ImmutableSet<ValueRequirement> bcsReq = ImmutableSet.of(new ValueRequirement(ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), builder.get()));
+        final ImmutableSet<ValueRequirement> bcsReq = ImmutableSet
+            .of(new ValueRequirement(ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), builder.get()));
         return Sets.union(bcsReq, super.getRequirements(context, target, desiredValue));
       }
 
       @Override
-      public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+      public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+          final Map<ValueSpecification, ValueRequirement> inputs) {
         final Set<String> functionNames = new HashSet<>();
         final List<Pair<String, String>> ccyCurvePairs = Lists.newArrayList();
         for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
@@ -173,7 +177,6 @@ public class BondTotalReturnSwapYCNSFunction extends BondTotalReturnSwapFunction
       }
 
     };
-
 
   }
 

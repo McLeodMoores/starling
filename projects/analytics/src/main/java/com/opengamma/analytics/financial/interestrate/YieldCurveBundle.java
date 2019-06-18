@@ -14,13 +14,13 @@ import org.apache.commons.lang.ObjectUtils;
 
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
-import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * A bundle of curves and forex exchange rates used for pricing. The curves are stored as a map <String, YieldAndDiscountCurve>.
- * @deprecated Use {@link MulticurveProviderDiscount}
+ * A bundle of curves and forex exchange rates used for pricing. The curves are stored as a map from String to {@link YieldAndDiscountCurve}.
+ *
+ * @deprecated Use {@link com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount}
  */
 @Deprecated
 public class YieldCurveBundle {

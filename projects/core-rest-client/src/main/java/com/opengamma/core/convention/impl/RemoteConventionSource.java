@@ -32,8 +32,8 @@ import com.opengamma.util.rest.UniformInterfaceException404NotFound;
  * Provides remote access to an {@link ConventionSource}.
  */
 public class RemoteConventionSource
-    extends AbstractRemoteSource<Convention>
-    implements ConventionSource {
+extends AbstractRemoteSource<Convention>
+implements ConventionSource {
 
   /**
    * The change manager.
@@ -98,7 +98,6 @@ public class RemoteConventionSource
   }
 
   //-------------------------------------------------------------------------
-  @SuppressWarnings("unchecked")
   @Override
   public Collection<Convention> get(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
@@ -107,7 +106,6 @@ public class RemoteConventionSource
     return accessRemote(uri).get(FudgeListWrapper.class).getList();
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Collection<Convention> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(bundle, "bundle");
@@ -118,7 +116,6 @@ public class RemoteConventionSource
   }
 
   //-------------------------------------------------------------------------
-  @SuppressWarnings("unchecked")
   @Override
   public Map<UniqueId, Convention> get(final Collection<UniqueId> uniqueIds) {
     ArgumentChecker.notNull(uniqueIds, "uniqueIds");
@@ -178,6 +175,19 @@ public class RemoteConventionSource
     return doGetSingle(bundle, versionCorrection, type);
   }
 
+  /**
+   * Gets a single convention.
+   *
+   * @param bundle
+   *          the external identifiers
+   * @param versionCorrection
+   *          the version, null for LATEST
+   * @param type
+   *          the convention type
+   * @return the convention or null if not found
+   * @param <T>
+   *          the type of the convention
+   */
   @SuppressWarnings("unchecked")
   protected <T extends Convention> T doGetSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection, final Class<T> type) {
     try {
@@ -185,9 +195,8 @@ public class RemoteConventionSource
       final Convention convention = accessRemote(uri).get(Convention.class);
       if (type != null) {
         return type.cast(convention);
-      } else {
-        return (T) convention;
       }
+      return (T) convention;
     } catch (final DataNotFoundException ex) {
       return null;
     } catch (final UniformInterfaceException404NotFound ex) {

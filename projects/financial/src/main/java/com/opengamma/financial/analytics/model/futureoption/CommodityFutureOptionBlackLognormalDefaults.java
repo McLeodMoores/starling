@@ -35,17 +35,17 @@ import com.opengamma.util.ArgumentChecker;
 public class CommodityFutureOptionBlackLognormalDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(CommodityFutureOptionBlackLognormalDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-      ValueRequirementNames.PRESENT_VALUE,
-      ValueRequirementNames.VALUE_DELTA,
-      ValueRequirementNames.VALUE_GAMMA,
-      ValueRequirementNames.VALUE_THETA,
-      ValueRequirementNames.VALUE_VEGA,
-      ValueRequirementNames.FORWARD_DELTA,
-      ValueRequirementNames.FORWARD_GAMMA,
-      ValueRequirementNames.DELTA,
-      ValueRequirementNames.GAMMA,
-      ValueRequirementNames.VEGA,
-      ValueRequirementNames.THETA
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.VALUE_DELTA,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.VALUE_THETA,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.FORWARD_DELTA,
+                ValueRequirementNames.FORWARD_GAMMA,
+                ValueRequirementNames.DELTA,
+                ValueRequirementNames.GAMMA,
+                ValueRequirementNames.VEGA,
+                ValueRequirementNames.THETA
   };
   private final PriorityClass _priority;
   private final Map<String, Set<String>> _currencyToCurveName;
@@ -60,8 +60,8 @@ public class CommodityFutureOptionBlackLognormalDefaults extends DefaultProperty
     ArgumentChecker.notNull(priority, "priority");
     ArgumentChecker.notNull(defaultsPerCurrency, "defaults per currency");
     final int n = defaultsPerCurrency.length;
-    ArgumentChecker.isTrue(n % 7 == 0, "Need one discounting curve name, discounting curve calculation config, surface name, surface interpolation method," +
-        "forward curve name and forward curve calculation method per currency");
+    ArgumentChecker.isTrue(n % 7 == 0, "Need one discounting curve name, discounting curve calculation config, surface name, surface interpolation method,"
+        + "forward curve name and forward curve calculation method per currency");
     _priority = PriorityClass.valueOf(priority);
     _currencyToCurveName = new LinkedHashMap<>();
     _currencyToCurveCalculationConfigName = new LinkedHashMap<>();
@@ -106,14 +106,15 @@ public class CommodityFutureOptionBlackLognormalDefaults extends DefaultProperty
       return null;
     }
     final Set<String> values = constraints.getValues(ValuePropertyNames.SURFACE_CALCULATION_METHOD);
-    if ((values == null) || (!values.isEmpty() && !values.contains(BlackVolatilitySurfacePropertyNamesAndValues.INTERPOLATED_BLACK_LOGNORMAL))) {
+    if (values == null || !values.isEmpty() && !values.contains(BlackVolatilitySurfacePropertyNamesAndValues.INTERPOLATED_BLACK_LOGNORMAL)) {
       return null;
     }
     return super.getRequirements(context, target, desiredValue);
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final Security security = target.getSecurity();
     final String currency = ((CommodityFutureOptionSecurity) security).getCurrency().getCode();
     switch (propertyName) {

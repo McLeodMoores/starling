@@ -31,6 +31,11 @@ import com.opengamma.analytics.financial.credit.isdastandardmodel.ParSpread;
 public class ParSpreadQuote implements CdsQuote, ImmutableBean {
 
   /**
+   * The quote type.
+   */
+  public static final String TYPE = "PAR_SPREAD";
+
+  /**
    * The par spread to use, denoted as a fractional amount.
    */
   @PropertyDefinition
@@ -38,7 +43,9 @@ public class ParSpreadQuote implements CdsQuote, ImmutableBean {
 
   /**
    * Builds a quote instance using the given spread.
-   * @param parSpread the spread to use, a fractional amount
+   * 
+   * @param parSpread
+   *          the spread to use, a fractional amount
    * @return a par spread quote
    */
   public static ParSpreadQuote from(final double parSpread) {

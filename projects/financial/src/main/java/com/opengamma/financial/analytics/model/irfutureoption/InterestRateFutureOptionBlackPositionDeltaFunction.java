@@ -27,8 +27,10 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.black.BlackDiscountingPositionDeltaIRFutureOptionFunction;
 
 /**
- * Function computes the {@link ValueRequirementNames#POSITION_DELTA}, first order derivative of {@link Position} price with respect to the futures price,
- * for interest rate future options in the Black world. <p>
+ * Function computes the {@link ValueRequirementNames#POSITION_DELTA}, first order derivative of {@link Position} price with respect to the futures price, for
+ * interest rate future options in the Black world.
+ * <p>
+ * 
  * @deprecated Use {@link BlackDiscountingPositionDeltaIRFutureOptionFunction}
  */
 @Deprecated
@@ -39,7 +41,7 @@ public class InterestRateFutureOptionBlackPositionDeltaFunction extends Interest
   private static final PresentValueBlackDeltaForTransactionCalculator CALCULATOR = PresentValueBlackDeltaForTransactionCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#POSITION_DELTA}
+   * Sets the value requirement name to {@link ValueRequirementNames#POSITION_DELTA}.
    */
   public InterestRateFutureOptionBlackPositionDeltaFunction() {
     super(ValueRequirementNames.POSITION_DELTA, true);
@@ -60,7 +62,7 @@ public class InterestRateFutureOptionBlackPositionDeltaFunction extends Interest
 
   @Override
   protected Set<ComputedValue> getResult(final InstrumentDerivative irFutureOption, final YieldCurveWithBlackCubeBundle curveBundle,
-                                          final ValueSpecification spec, final Set<ValueRequirement> desiredValues) {
+      final ValueSpecification spec, final Set<ValueRequirement> desiredValues) {
     // Compute delta with unit scaling. Remember that future price will be quoted like 0.9965, not 99.65
     final double delta = irFutureOption.accept(CALCULATOR, curveBundle);
     // Add scaling and adjust properties to reflect

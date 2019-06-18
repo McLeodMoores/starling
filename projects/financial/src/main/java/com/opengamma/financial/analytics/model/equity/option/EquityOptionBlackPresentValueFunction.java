@@ -18,7 +18,6 @@ import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
-;
 
 /**
  * Calculates the present value of an equity index or equity option using the Black formula.
@@ -28,7 +27,7 @@ public class EquityOptionBlackPresentValueFunction extends EquityOptionBlackFunc
   private static final EquityOptionBlackPresentValueCalculator CALCULATOR = EquityOptionBlackPresentValueCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBlackPresentValueFunction() {
     super(ValueRequirementNames.PRESENT_VALUE);

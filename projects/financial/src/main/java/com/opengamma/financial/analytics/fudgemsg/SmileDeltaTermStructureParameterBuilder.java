@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.fudgemsg;
@@ -19,12 +19,13 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 
 /**
- * 
+ *
  */
 /* package */ class ForexOptionDataBundleBuilders {
 
   @FudgeBuilderFor(SmileDeltaTermStructureParametersStrikeInterpolation.class)
-  public static class SmileDeltaTermStructureParameterStrikeInterpolationBuilder extends AbstractFudgeBuilder<SmileDeltaTermStructureParametersStrikeInterpolation> {
+  public static class SmileDeltaTermStructureParameterStrikeInterpolationBuilder
+      extends AbstractFudgeBuilder<SmileDeltaTermStructureParametersStrikeInterpolation> {
     private static final String T_DATA_FIELD_NAME = "Time data";
     private static final String DELTA_DATA_FIELD_NAME = "Delta data";
     private static final String VOLATILITY_DATA_FIELD_NAME = "Volatility data";
@@ -47,7 +48,8 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
     }
 
     @Override
-    protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final SmileDeltaTermStructureParametersStrikeInterpolation object) {
+    protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message,
+        final SmileDeltaTermStructureParametersStrikeInterpolation object) {
       final SmileDeltaParameters[] smiles = object.getVolatilityTerm();
       final int n = smiles.length;
       final double[] t = new double[n];

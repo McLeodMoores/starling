@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.model.curve.future;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -56,6 +54,8 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.money.Currency;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  *
  */
@@ -83,12 +83,14 @@ public abstract class FuturePriceCurveFunction extends AbstractFunction {
   protected abstract String getInstrumentType();
 
   @SuppressWarnings("unchecked")
-  private FuturePriceCurveDefinition<Object> getCurveDefinition(final ComputationTarget target, final String definitionName, final VersionCorrection versionCorrection) {
+  private FuturePriceCurveDefinition<Object> getCurveDefinition(final ComputationTarget target, final String definitionName,
+      final VersionCorrection versionCorrection) {
     final String fullDefinitionName = definitionName + "_" + target.getUniqueId().getValue();
     return (FuturePriceCurveDefinition<Object>) getFuturePriceCurveDefinitionSource().getDefinition(fullDefinitionName, getInstrumentType(), versionCorrection);
   }
 
-  private FuturePriceCurveSpecification getCurveSpecification(final ComputationTarget target, final String specificationName, final VersionCorrection versionCorrection) {
+  private FuturePriceCurveSpecification getCurveSpecification(final ComputationTarget target, final String specificationName,
+      final VersionCorrection versionCorrection) {
     final String fullSpecificationName = specificationName + "_" + target.getUniqueId().getValue();
     return getFuturePriceCurveSpecificationSource().getSpecification(fullSpecificationName, getInstrumentType(), versionCorrection);
   }
@@ -96,8 +98,9 @@ public abstract class FuturePriceCurveFunction extends AbstractFunction {
   @SuppressWarnings("unchecked")
   public static Set<ValueRequirement> buildRequirements(final FuturePriceCurveSpecification futurePriceCurveSpecification,
       final FuturePriceCurveDefinition<Object> futurePriceCurveDefinition, final ZonedDateTime atInstant) {
-    final Set<ValueRequirement> result = new HashSet<ValueRequirement>();
-    final FuturePriceCurveInstrumentProvider<Object> futurePriceCurveProvider = (FuturePriceCurveInstrumentProvider<Object>) futurePriceCurveSpecification.getCurveInstrumentProvider();
+    final Set<ValueRequirement> result = new HashSet<>();
+    final FuturePriceCurveInstrumentProvider<Object> futurePriceCurveProvider = (FuturePriceCurveInstrumentProvider<Object>) futurePriceCurveSpecification
+        .getCurveInstrumentProvider();
     for (final Object x : futurePriceCurveDefinition.getXs()) {
       final ExternalId identifier = futurePriceCurveProvider.getInstrument(x, atInstant.toLocalDate());
       result.add(new ValueRequirement(futurePriceCurveProvider.getDataFieldName(), ComputationTargetType.PRIMITIVE, identifier));
@@ -122,30 +125,34 @@ public abstract class FuturePriceCurveFunction extends AbstractFunction {
       public Set<ValueSpecification> getResults(final FunctionCompilationContext myContext, final ComputationTarget target) {
         final ValueProperties curveProperties = createValueProperties().withAny(ValuePropertyNames.CURVE)
             .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType()).get();
-        final ValueSpecification futurePriceCurveResult = new ValueSpecification(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(), curveProperties);
+        final ValueSpecification futurePriceCurveResult = new ValueSpecification(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(),
+            curveProperties);
         return Collections.singleton(futurePriceCurveResult);
       }
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final String curveName = constraints.getStrictValue(ValuePropertyNames.CURVE);
         if (curveName == null) {
           return null;
         }
-        //TODO use separate definition and specification names?
+        // TODO use separate definition and specification names?
         final String curveDefinitionName = curveName;
         final String curveSpecificationName = curveName;
         final VersionCorrection versionCorrection = myContext.getComputationTargetResolver().getVersionCorrection();
         final FuturePriceCurveDefinition<Object> priceCurveDefinition = getCurveDefinition(target, curveDefinitionName, versionCorrection);
         if (priceCurveDefinition == null) {
-          LOGGER.error("Price curve definition for target {} with curve name {} and instrument type {} was null", new Object[] {target, curveDefinitionName, getInstrumentType() });
+          LOGGER.error("Price curve definition for target {} with curve name {} and instrument type {} was null",
+              new Object[] { target, curveDefinitionName, getInstrumentType() });
           return null;
         }
         final FuturePriceCurveSpecification priceCurveSpecification = getCurveSpecification(target, curveSpecificationName, versionCorrection);
         if (priceCurveSpecification == null) {
-          LOGGER.error("Price curve specification for target {} with curve name {} and instrument type {} was null", new Object[] {target, curveSpecificationName, getInstrumentType() });
+          LOGGER.error("Price curve specification for target {} with curve name {} and instrument type {} was null",
+              new Object[] { target, curveSpecificationName, getInstrumentType() });
           return null;
         }
         final Set<ValueRequirement> requirements = Collections.unmodifiableSet(buildRequirements(priceCurveSpecification, priceCurveDefinition, atZDT));
@@ -162,7 +169,7 @@ public abstract class FuturePriceCurveFunction extends AbstractFunction {
         return true;
       }
 
-      @SuppressWarnings({"synthetic-access", "unchecked" })
+      @SuppressWarnings({ "synthetic-access", "unchecked" })
       @Override
       public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
           final Set<ValueRequirement> desiredValues) {
@@ -170,7 +177,7 @@ public abstract class FuturePriceCurveFunction extends AbstractFunction {
         final String curveName = desiredValue.getConstraint(ValuePropertyNames.CURVE);
         final Currency currency = target.getValue(PrimitiveComputationTargetType.CURRENCY);
         final Calendar calendar = new HolidaySourceCalendarAdapter(OpenGammaExecutionContext.getHolidaySource(executionContext), currency);
-        //TODO use separate definition and specification names?
+        // TODO use separate definition and specification names?
         final String curveDefinitionName = curveName;
         final String curveSpecificationName = curveName;
         final VersionCorrection versionCorrection = executionContext.getComputationTargetResolver().getVersionCorrection();
@@ -180,7 +187,8 @@ public abstract class FuturePriceCurveFunction extends AbstractFunction {
         final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
         final DoubleArrayList xList = new DoubleArrayList();
         final DoubleArrayList prices = new DoubleArrayList();
-        final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider = (FuturePriceCurveInstrumentProvider<Number>) priceCurveSpecification.getCurveInstrumentProvider();
+        final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider = (FuturePriceCurveInstrumentProvider<Number>) priceCurveSpecification
+            .getCurveInstrumentProvider();
         final LocalDate valDate = now.toLocalDate();
         if (inputs.getAllValues().isEmpty()) {
           throw new OpenGammaRuntimeException("Could not get any data for future price curve called " + curveSpecificationName);
@@ -218,8 +226,9 @@ public abstract class FuturePriceCurveFunction extends AbstractFunction {
             }
           }
         }
-        final ValueSpecification futurePriceCurveResult = new ValueSpecification(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(), createValueProperties()
-            .with(ValuePropertyNames.CURVE, curveName).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType()).get());
+        final ValueSpecification futurePriceCurveResult = new ValueSpecification(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(),
+            createValueProperties()
+                .with(ValuePropertyNames.CURVE, curveName).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType()).get());
         final NodalDoublesCurve curve = NodalDoublesCurve.from(xList.toDoubleArray(), prices.toDoubleArray());
         final ComputedValue futurePriceCurveResultValue = new ComputedValue(futurePriceCurveResult, curve);
         return Sets.newHashSet(futurePriceCurveResultValue);

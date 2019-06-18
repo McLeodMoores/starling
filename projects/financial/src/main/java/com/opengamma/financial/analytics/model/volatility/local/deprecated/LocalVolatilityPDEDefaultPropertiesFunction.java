@@ -24,10 +24,10 @@ import com.opengamma.util.ArgumentChecker;
 @Deprecated
 public class LocalVolatilityPDEDefaultPropertiesFunction extends DefaultPropertyFunction {
   private static final String[] REQUIREMENTS = new String[] {
-    ValueRequirementNames.LOCAL_VOLATILITY_FULL_PDE_GRID,
-    ValueRequirementNames.LOCAL_VOLATILITY_PDE_GREEKS,
-    ValueRequirementNames.LOCAL_VOLATILITY_PDE_BUCKETED_VEGA,
-    ValueRequirementNames.LOCAL_VOLATILITY_FOREX_PV_QUOTES};
+                ValueRequirementNames.LOCAL_VOLATILITY_FULL_PDE_GRID,
+                ValueRequirementNames.LOCAL_VOLATILITY_PDE_GREEKS,
+                ValueRequirementNames.LOCAL_VOLATILITY_PDE_BUCKETED_VEGA,
+                ValueRequirementNames.LOCAL_VOLATILITY_FOREX_PV_QUOTES };
   private final String _forwardCurveCalculationMethod;
   private final String _forwardCurveName;
   private final String _surfaceType;
@@ -44,8 +44,10 @@ public class LocalVolatilityPDEDefaultPropertiesFunction extends DefaultProperty
   private final String _spaceGridBunching;
   private final String _maxMoneyness;
 
-  public LocalVolatilityPDEDefaultPropertiesFunction(final String forwardCurveCalculationMethod, final String forwardCurveName, final String surfaceType, final String xAxis,
-      final String yAxis, final String yAxisType, final String surfaceName, final String h, final String pdeDirection, final String theta, final String timeSteps, final String spaceSteps,
+  public LocalVolatilityPDEDefaultPropertiesFunction(final String forwardCurveCalculationMethod, final String forwardCurveName, final String surfaceType,
+      final String xAxis,
+      final String yAxis, final String yAxisType, final String surfaceName, final String h, final String pdeDirection, final String theta,
+      final String timeSteps, final String spaceSteps,
       final String timeGridBunching, final String spaceGridBunching, final String maxMoneyness) {
     super(ComputationTargetType.SECURITY, true);
     ArgumentChecker.notNull(forwardCurveCalculationMethod, "forward curve calculation method");
@@ -102,7 +104,8 @@ public class LocalVolatilityPDEDefaultPropertiesFunction extends DefaultProperty
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.CURVE_CALCULATION_METHOD.equals(propertyName)) {
       return Collections.singleton(_forwardCurveCalculationMethod);
     }

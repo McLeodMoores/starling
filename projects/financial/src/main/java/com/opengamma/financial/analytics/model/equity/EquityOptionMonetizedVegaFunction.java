@@ -63,7 +63,8 @@ public class EquityOptionMonetizedVegaFunction extends AbstractFunction.NonCompi
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification spec = Iterables.getOnlyElement(inputs.entrySet()).getKey();
     final ValueProperties vegaProperties = spec.getProperties();
     final ValueProperties properties = vegaProperties.copy()

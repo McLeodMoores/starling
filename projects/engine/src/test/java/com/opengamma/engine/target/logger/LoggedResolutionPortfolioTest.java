@@ -25,7 +25,6 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class LoggedResolutionPortfolioTest {
 
-  @SuppressWarnings("unchecked")
   public void getAttributes() {
     final Portfolio portfolio = Mockito.mock(Portfolio.class);
     final ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);
@@ -36,7 +35,6 @@ public class LoggedResolutionPortfolioTest {
     Mockito.verifyZeroInteractions(logger);
   }
 
-  @SuppressWarnings("unchecked")
   public void setAttributes() {
     final Portfolio portfolio = Mockito.mock(Portfolio.class);
     final ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);

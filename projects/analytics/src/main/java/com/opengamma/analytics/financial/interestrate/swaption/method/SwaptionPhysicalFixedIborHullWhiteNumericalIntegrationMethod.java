@@ -20,6 +20,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Method to compute the present value of physical delivery European swaptions with the Hull-White one factor model by numerical integration.
+ * 
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod}
  */
 @Deprecated
@@ -40,8 +41,11 @@ public class SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod implem
 
   /**
    * Computes the present value of the Physical delivery swaption.
-   * @param swaption The swaption.
-   * @param hwData The Hull-White parameters and the curves.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param hwData
+   *          The Hull-White parameters and the curves.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption, final HullWhiteOneFactorPiecewiseConstantDataBundle hwData) {
@@ -89,10 +93,13 @@ public class SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod implem
 
     /**
      * Constructor to the integrant function.
-     * @param discountedCashFlow The discounted cash flows.
-     * @param alpha The bond volatilities.
+     * 
+     * @param discountedCashFlow
+     *          The discounted cash flows.
+     * @param alpha
+     *          The bond volatilities.
      */
-    public SwaptionIntegrant(final double[] discountedCashFlow, final double[] alpha) {
+    SwaptionIntegrant(final double[] discountedCashFlow, final double[] alpha) {
       _discountedCashFlow = discountedCashFlow;
       _alpha = alpha;
     }

@@ -11,13 +11,14 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Node representing a late failure in resolution during graph building
+ * Node representing a late failure in resolution during graph building.
  */
 public class LateResolutionFailureNode extends AbstractFailureWithRequirementsNode {
 
   private static final String NAME = "LateResolutionFailure";
 
-  public LateResolutionFailureNode(final Object parent, final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput, final Map<ValueSpecification, ValueRequirement> satisfied) {
+  public LateResolutionFailureNode(final Object parent, final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
+      final Map<ValueSpecification, ValueRequirement> satisfied) {
     super(parent, valueRequirement, function, desiredOutput, satisfied, "Satisfied");
   }
 

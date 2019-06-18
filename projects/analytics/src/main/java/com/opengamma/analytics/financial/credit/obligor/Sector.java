@@ -7,52 +7,53 @@ package com.opengamma.analytics.financial.credit.obligor;
 
 /**
  * Enumerate the industrial sector classification of a reference entity.
+ * 
  * @deprecated Sector has been promoted to an object. See {@link com.opengamma.analytics.financial.legalentity.Sector}
  */
 @Deprecated
 public enum Sector {
   /**
-   * Basic materials
+   * Basic materials.
    */
   BASICMATERIALS,
   /**
-   * Consumer goods
+   * Consumer goods.
    */
   CONSUMERGOODS,
   /**
-   * Consumer services
+   * Consumer services.
    */
   CONSUMERSERVICES,
   /**
-   * Energy
+   * Energy.
    */
   ENERGY,
   /**
-   * Financials
+   * Financials.
    */
   FINANCIALS,
   /**
-   * Government
+   * Government.
    */
   GOVERNMENT,
   /**
-   * Healthcare
+   * Healthcare.
    */
   HEALTHCARE,
   /**
-   * Industrials
+   * Industrials.
    */
   INDUSTRIALS,
   /**
-   * Technology
+   * Technology.
    */
   TECHNOLOGY,
   /**
-   * Telecommunication services
+   * Telecommunication services.
    */
   TELECOMMUNICATIONSERVICES,
   /**
-   * Utilities
+   * Utilities.
    */
   UTILITIES,
   /**
@@ -64,13 +65,13 @@ public enum Sector {
    */
   SOVEREIGN,
   /**
-   * No sector
+   * No sector.
    */
   NONE;
 
   /**
-   * Delegates to {@link com.opengamma.analytics.financial.legalentity.Sector}, with
-   * the name set to the name of the enum value and no classifications set.
+   * Delegates to {@link com.opengamma.analytics.financial.legalentity.Sector}, with the name set to the name of the enum value and no classifications set.
+   * 
    * @return A sector object
    */
   public com.opengamma.analytics.financial.legalentity.Sector toSector() {

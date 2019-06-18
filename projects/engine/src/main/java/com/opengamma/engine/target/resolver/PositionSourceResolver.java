@@ -16,7 +16,6 @@ import com.opengamma.core.position.PortfolioNode;
 import com.opengamma.core.position.Position;
 import com.opengamma.core.position.PositionSource;
 import com.opengamma.core.position.Trade;
-import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.target.logger.LoggedResolutionPortfolio;
 import com.opengamma.engine.target.logger.LoggedResolutionPortfolioNode;
 import com.opengamma.engine.target.logger.ResolutionLogger;
@@ -30,8 +29,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A {@link ObjectResolver} built on a {@link PositionSource}.
  * <p>
- * Note that these resolvers only access the position source for shallow resolution of trades and positions. More specialized forms will
- * combine these instances with {@link SecuritySource} based resolvers to provide the deep-resolution required by a full system.
+ * Note that these resolvers only access the position source for shallow resolution of trades and positions. More specialized forms will combine these instances
+ * with {@link com.opengamma.core.security.SecuritySource} based resolvers to provide the deep-resolution required by a full system.
  */
 public class PositionSourceResolver {
 
@@ -75,7 +74,7 @@ public class PositionSourceResolver {
     public UniqueId resolveObjectId(final ObjectId identifier, final VersionCorrection versionCorrection) {
       try {
         // [PLAT-4491] TODO: PositionSource doesn't have a trade by OID lookup. This is probably wrong,
-        //  but no worse than treating the identifier as v/c resolved
+        // but no worse than treating the identifier as v/c resolved
         return getUnderlying().getTrade(identifier.atLatestVersion()).getUniqueId();
       } catch (final DataNotFoundException e) {
         return null;
@@ -91,7 +90,7 @@ public class PositionSourceResolver {
 
   private static class PositionResolver extends PositionSourceResolver implements Resolver<Position> {
 
-    public PositionResolver(final PositionSource underlying) {
+    PositionResolver(final PositionSource underlying) {
       super(underlying);
     }
 
@@ -141,7 +140,7 @@ public class PositionSourceResolver {
 
   private static class PortfolioResolver extends PositionSourceResolver implements Resolver<Portfolio>, DeepResolver {
 
-    public PortfolioResolver(final PositionSource underlying) {
+    PortfolioResolver(final PositionSource underlying) {
       super(underlying);
     }
 
@@ -193,16 +192,15 @@ public class PositionSourceResolver {
     public UniqueIdentifiable withLogger(final UniqueIdentifiable resolved, final ResolutionLogger logger) {
       if (resolved instanceof Portfolio) {
         return new LoggedResolutionPortfolio((Portfolio) resolved, logger);
-      } else {
-        return null;
       }
+      return null;
     }
 
   }
 
   private static class PortfolioNodeResolver extends PositionSourceResolver implements Resolver<PortfolioNode>, DeepResolver {
 
-    public PortfolioNodeResolver(final PositionSource underlying) {
+    PortfolioNodeResolver(final PositionSource underlying) {
       super(underlying);
     }
 
@@ -228,9 +226,8 @@ public class PositionSourceResolver {
     public UniqueIdentifiable withLogger(final UniqueIdentifiable resolved, final ResolutionLogger logger) {
       if (resolved instanceof PortfolioNode) {
         return new LoggedResolutionPortfolioNode((PortfolioNode) resolved, logger);
-      } else {
-        return null;
       }
+      return null;
     }
 
     // IdentifierResolver

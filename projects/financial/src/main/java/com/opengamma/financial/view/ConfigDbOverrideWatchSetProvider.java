@@ -30,19 +30,19 @@ public class ConfigDbOverrideWatchSetProvider implements WatchSetProvider {
     ArgumentChecker.notNull(schemes, "schemes");
     _configScheme = configScheme;
     _configMaster = configMaster;
-    _schemes = new HashSet<String>(schemes);
+    _schemes = new HashSet<>(schemes);
   }
 
   @Override
   public Set<ObjectId> getAdditionalWatchSet(final Set<ObjectId> watchSet) {
-    final Set<ObjectId> result = new HashSet<ObjectId>();
-    for (String scheme : _schemes) {
-      for (ObjectId watch : watchSet) {
+    final Set<ObjectId> result = new HashSet<>();
+    for (final String scheme : _schemes) {
+      for (final ObjectId watch : watchSet) {
         if (_configScheme.equals(watch.getScheme())) {
           try {
             final ConfigDocument doc = _configMaster.get(watch, VersionCorrection.LATEST);
             result.add(ObjectId.of(scheme, doc.getName()));
-          } catch (DataNotFoundException ex) {
+          } catch (final DataNotFoundException ex) {
             // ignore
           }
         }

@@ -25,8 +25,11 @@ public class CouponInflationZeroCouponInterpolationDiscountingMethod {
 
   /**
    * Computes the estimated index with the weight and the two reference end dates.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   *
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The net amount.
    */
   public double indexEstimation(final CouponInflationZeroCouponInterpolation coupon, final InflationProviderInterface inflation) {
@@ -37,8 +40,11 @@ public class CouponInflationZeroCouponInterpolationDiscountingMethod {
 
   /**
    * Computes the present value of the zero-coupon coupon with reference index at start of the month.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   *
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponInflationZeroCouponInterpolation coupon, final InflationProviderInterface inflation) {
@@ -52,24 +58,33 @@ public class CouponInflationZeroCouponInterpolationDiscountingMethod {
 
   /**
    * Computes the par spread of the zero-coupon swap with the fixed rate of the fixed leg of inflation zero-coupon swap.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
-   * @param tenor the teno as used in the fixed leg
-   * @param fixedRate the fixed rate
+   *
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
+   * @param tenor
+   *          the teno as used in the fixed leg
+   * @param fixedRate
+   *          the fixed rate
    * @return The present value.
    */
-  public double parSpread(final CouponInflationZeroCouponInterpolation coupon, final InflationProviderInterface inflation, final int tenor, final double fixedRate) {
+  public double parSpread(final CouponInflationZeroCouponInterpolation coupon, final InflationProviderInterface inflation, final int tenor,
+      final double fixedRate) {
     ArgumentChecker.notNull(tenor, "Tenor");
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(inflation, "Inflation");
     final double estimatedIndex = indexEstimation(coupon, inflation);
-    return Math.pow((estimatedIndex / coupon.getIndexStartValue() - (coupon.payNotional() ? 0.0 : 1.0)), 1 / tenor) - 1 - fixedRate;
+    return Math.pow(estimatedIndex / coupon.getIndexStartValue() - (coupon.payNotional() ? 0.0 : 1.0), 1 / tenor) - 1 - fixedRate;
   }
 
   /**
    * Computes the net amount of the zero-coupon coupon with reference index at start of the month.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   *
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The net amount.
    */
   public MultipleCurrencyAmount netAmount(final CouponInflationZeroCouponInterpolation coupon, final InflationProviderInterface inflation) {
@@ -82,11 +97,15 @@ public class CouponInflationZeroCouponInterpolationDiscountingMethod {
 
   /**
    * Compute the present value sensitivity to rates of a Inflation coupon.
-   * @param coupon The coupon.
-   * @param inflation The inflation provider.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param inflation
+   *          The inflation provider.
    * @return The present value sensitivity.
    */
-  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CouponInflationZeroCouponInterpolation coupon, final InflationProviderInterface inflation) {
+  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CouponInflationZeroCouponInterpolation coupon,
+      final InflationProviderInterface inflation) {
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(inflation, "Inflation");
     final double estimatedIndexMonth0 = inflation.getPriceIndex(coupon.getPriceIndex(), coupon.getReferenceEndTime()[0]);

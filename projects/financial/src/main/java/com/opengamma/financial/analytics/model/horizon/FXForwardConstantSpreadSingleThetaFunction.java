@@ -8,7 +8,6 @@ package com.opengamma.financial.analytics.model.horizon;
 import static com.opengamma.engine.value.ValuePropertyNames.CURRENCY;
 import static com.opengamma.engine.value.ValuePropertyNames.FUNCTION;
 import static com.opengamma.engine.value.ValueRequirementNames.CURRENCY_PAIRS;
-import static com.opengamma.financial.analytics.model.horizon.ThetaPropertyNamesAndValues.PROPERTY_DAYS_TO_MOVE_FORWARD;
 import static com.opengamma.financial.analytics.model.horizon.ThetaPropertyNamesAndValues.PROPERTY_THETA_CALCULATION_METHOD;
 
 import java.util.Collections;
@@ -36,15 +35,17 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  * Converts a the multi-valued value theta for FX Forward instruments into a single result.
+ *
  * @deprecated Deprecated
  */
 @Deprecated
 public class FXForwardConstantSpreadSingleThetaFunction extends FXForwardConstantSpreadThetaFunction {
-  /** The calculation method property value */
+  /** The calculation method property value. */
   public static final String CONSTANT_SPREAD_COLLAPSED = "ConstantSpreadCollapsed";
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Set<ComputedValue> computedValues = super.execute(executionContext, inputs, target, desiredValues);
     if (computedValues.size() != 1) {
       throw new OpenGammaRuntimeException("Expecting only one computed value");
@@ -63,7 +64,7 @@ public class FXForwardConstantSpreadSingleThetaFunction extends FXForwardConstan
     final Currency payCurrency = security.accept(ForexVisitors.getPayCurrencyVisitor());
     final Currency receiveCurrency = security.accept(ForexVisitors.getReceiveCurrencyVisitor());
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     final CurrencyPairs currencyPairs = (CurrencyPairs) inputs.getValue(CURRENCY_PAIRS);
     final CurrencyPair currencyPair = currencyPairs.getCurrencyPair(payCurrency, receiveCurrency);
     final double scale;
@@ -72,7 +73,7 @@ public class FXForwardConstantSpreadSingleThetaFunction extends FXForwardConstan
     } else {
       scale = -1;
     }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     int payIndex = -1;
     int receiveIndex = -1;
@@ -84,16 +85,17 @@ public class FXForwardConstantSpreadSingleThetaFunction extends FXForwardConstan
       } else if (receiveCurrency.equals(currency)) {
         receiveIndex = i;
       } else {
-        throw new OpenGammaRuntimeException("Value theta contains unexpected currency " + currency + ". Expected " + payCurrency + " or " + receiveCurrency + ".");
+        throw new OpenGammaRuntimeException(
+            "Value theta contains unexpected currency " + currency + ". Expected " + payCurrency + " or " + receiveCurrency + ".");
       }
     }
     final double payValue = currencyAmounts[payIndex].getAmount();
     final double receiveValue = currencyAmounts[receiveIndex].getAmount();
     final double spot = (Double) inputs.getValue(ValueRequirementNames.SPOT_RATE);
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     final double singleTheta = scale * (payValue + spot * receiveValue);
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     final ValueProperties properties = spec.getProperties().copy()
         .withoutAny(FUNCTION)
@@ -132,29 +134,36 @@ public class FXForwardConstantSpreadSingleThetaFunction extends FXForwardConstan
   /**
    * Gets the result properties with property values set.
    *
-   * @param target The target
-   * @param payCurveName The name of the pay curve
-   * @param payCurveCalculationConfig The name of the pay curve calculation configuration
-   * @param receiveCurveName The name of the receive curve
-   * @param receiveCurveCalculationConfig The name of the receive curve calculation configuration
-   * @param baseQuotePair The base / counter information for the currency pair
-   * @param daysForward The number of days forward
+   * @param target
+   *          The target
+   * @param payCurveName
+   *          The name of the pay curve
+   * @param payCurveCalculationConfig
+   *          The name of the pay curve calculation configuration
+   * @param receiveCurveName
+   *          The name of the receive curve
+   * @param receiveCurveCalculationConfig
+   *          The name of the receive curve calculation configuration
+   * @param baseQuotePair
+   *          The base / counter information for the currency pair
+   * @param daysForward
+   *          The number of days forward
    * @return The result properties
    */
   @Override
   protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final String payCurveName, final String receiveCurveName,
       final String payCurveCalculationConfig, final String receiveCurveCalculationConfig, final CurrencyPair baseQuotePair, final String daysForward) {
-    final ValueProperties.Builder properties = super.getResultProperties(target, payCurveName, receiveCurveName, payCurveCalculationConfig, receiveCurveCalculationConfig,
+    final ValueProperties.Builder properties = super.getResultProperties(target, payCurveName, receiveCurveName, payCurveCalculationConfig,
+        receiveCurveCalculationConfig,
         baseQuotePair, daysForward)
-        .withoutAny(PROPERTY_THETA_CALCULATION_METHOD)
-        .with(PROPERTY_THETA_CALCULATION_METHOD, CONSTANT_SPREAD_COLLAPSED)
-        .with(CURRENCY, ((FinancialSecurity) target.getSecurity()).accept(ForexVisitors.getPayCurrencyVisitor()).getCode());
+            .withoutAny(PROPERTY_THETA_CALCULATION_METHOD)
+            .with(PROPERTY_THETA_CALCULATION_METHOD, CONSTANT_SPREAD_COLLAPSED)
+            .with(CURRENCY, ((FinancialSecurity) target.getSecurity()).accept(ForexVisitors.getPayCurrencyVisitor()).getCode());
     return properties;
   }
 
   @Override
   protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final ValueRequirement desiredValue) {
-    final String daysForward = desiredValue.getConstraint(PROPERTY_DAYS_TO_MOVE_FORWARD);
     final ValueProperties.Builder properties = super.getResultProperties(target, desiredValue)
         .withoutAny(PROPERTY_THETA_CALCULATION_METHOD)
         .with(PROPERTY_THETA_CALCULATION_METHOD, CONSTANT_SPREAD_COLLAPSED)

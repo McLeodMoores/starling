@@ -78,12 +78,12 @@ public class CdsSeniorityAggregationFunctionTest {
 
     final SecurityDocument document = new SecurityDocument();
     final CashSecurity security = new CashSecurity(Currency.of("USD"),
-                                             ExternalSchemes.financialRegionId("US"),
-                                             ZonedDateTime.now(),
-                                             ZonedDateTime.now().plusYears(5),
-                                             DayCounts.ACT_360,
-                                             0.05,
-                                             100000);
+        ExternalSchemes.financialRegionId("US"),
+        ZonedDateTime.now(),
+        ZonedDateTime.now().plusYears(5),
+        DayCounts.ACT_360,
+        0.05,
+        100000);
     final ExternalId secId = ExternalId.of("SEC_ID", "12345");
     security.addExternalId(secId);
     document.setSecurity(security);
@@ -98,13 +98,13 @@ public class CdsSeniorityAggregationFunctionTest {
 
     final SecurityDocument document = new SecurityDocument();
     final ManageableSecurity cds = new StandardVanillaCDSSecurity(true, ExternalId.of("EXTERNAL_CODE", "ProtBuyer"),
-                                                                  ExternalId.of("EXTERNAL_CODE", "ProtSeller"), ExternalSchemes.markItRedCode("39FF64"),
-                                                                  DebtSeniority.SNRFOR, RestructuringClause.MM, ExternalSchemes.financialRegionId("US"),
-                                                                  createZdt(2013, 3, 20), createZdt(2013, 3, 21), createZdt(2014, 3, 20), StubType.SHORT_START,
-                                                                  SimpleFrequency.SEMI_ANNUAL, DayCounts.ACT_360,
-                                                                  BusinessDayConventions.FOLLOWING,
-                                                                  true, true, true, new InterestRateNotional(Currency.USD, 10000000), true, true, 500,
-                                                                  new InterestRateNotional(Currency.USD, 500000), 500, createZdt(2013, 3, 21), true);
+        ExternalId.of("EXTERNAL_CODE", "ProtSeller"), ExternalSchemes.markItRedCode("39FF64"),
+        DebtSeniority.SNRFOR, RestructuringClause.MM, ExternalSchemes.financialRegionId("US"),
+        createZdt(2013, 3, 20), createZdt(2013, 3, 21), createZdt(2014, 3, 20), StubType.SHORT_START,
+        SimpleFrequency.SEMI_ANNUAL, DayCounts.ACT_360,
+        BusinessDayConventions.FOLLOWING,
+        true, true, true, new InterestRateNotional(Currency.USD, 10000000), true, true, 500,
+        new InterestRateNotional(Currency.USD, 500000), 500, createZdt(2013, 3, 21), true);
     final ExternalId secId = ExternalId.of("SEC_ID", "12345");
     cds.addExternalId(secId);
     document.setSecurity(cds);
@@ -115,7 +115,7 @@ public class CdsSeniorityAggregationFunctionTest {
     assertEquals(_aggregator.classifyPosition(posn), "SNRFOR");
   }
 
-  private ZonedDateTime createZdt(final int year, final int month, final int day) {
+  private static ZonedDateTime createZdt(final int year, final int month, final int day) {
     return ZonedDateTime.of(LocalDate.of(year, month, day).atStartOfDay(), ZoneOffset.UTC);
   }
 

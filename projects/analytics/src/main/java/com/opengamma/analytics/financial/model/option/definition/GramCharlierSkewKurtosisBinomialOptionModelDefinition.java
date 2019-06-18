@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.model.option.definition;
 import com.opengamma.analytics.financial.model.tree.RecombiningBinomialTree;
 
 /**
- * 
+ *
  */
 public class GramCharlierSkewKurtosisBinomialOptionModelDefinition extends BinomialOptionModelDefinition<OptionDefinition, SkewKurtosisOptionDataBundle> {
   private final BinomialOptionModelDefinition<OptionDefinition, StandardOptionDataBundle> _rb = new RendlemanBartterBinomialOptionModelDefinition();
@@ -19,7 +19,8 @@ public class GramCharlierSkewKurtosisBinomialOptionModelDefinition extends Binom
   }
 
   @Override
-  public RecombiningBinomialTree<Double> getUpProbabilityTree(final OptionDefinition option, final SkewKurtosisOptionDataBundle data, final int n, final int j) {
+  public RecombiningBinomialTree<Double> getUpProbabilityTree(final OptionDefinition option, final SkewKurtosisOptionDataBundle data, final int n,
+      final int j) {
     final Double[][] rbTree = _rb.getUpProbabilityTree(option, data, n, j).getNodes();
     final double[][] tree = new double[n + 1][j];
     final double skew = data.getAnnualizedSkew();

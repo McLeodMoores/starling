@@ -20,7 +20,8 @@ public class FunctionalVolatilitySurfaceDataConverter implements ResultConverter
   private static final DecimalFormat LABEL_FORMAT = new DecimalFormat("##.##");
 
   @Override
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final FunctionalVolatilitySurfaceData value, final ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final FunctionalVolatilitySurfaceData value,
+      final ConversionMode mode) {
     final Map<String, Object> result = new HashMap<>();
     final VolatilitySurface surface = value.getSurface();
     final int nX = value.getNXSamples();

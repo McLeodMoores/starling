@@ -64,9 +64,7 @@ import com.opengamma.util.rest.WebApplicationExceptionMapper;
 public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
 
   /**
-   * The flag indicating if the component is active.
-   * This can be used from configuration to disable the Jetty server.
-   * True by default.
+   * The flag indicating if the component is active. This can be used from configuration to disable the Jetty server. True by default.
    */
   @PropertyDefinition
   private boolean _active = true;
@@ -91,10 +89,10 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
   @PropertyDefinition
   private final List<Resource> _secondaryResourceBases = new ArrayList<>();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
-    if (isActive() == false) {
+    if (!isActive()) {
       return;
     }
 
@@ -118,7 +116,7 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
     connector.setRequestHeaderSize(16384);
 
     final Server jettyServer = new Server();
-    jettyServer.setConnectors(new Connector[] {connector});
+    jettyServer.setConnectors(new Connector[] { connector });
 
     final ContextHandlerCollection contexts = new ContextHandlerCollection();
     final HandlerCollection handlers = new HandlerCollection();
@@ -142,9 +140,12 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
    * <p>
    * This adds the webapp context using {@link #createWebAppContext}.
    *
-   * @param repo  the component repository, not null
-   * @param jettyServer  the Jetty server instance, not null
-   * @param handlers  the set of handlers to add to, not null
+   * @param repo
+   *          the component repository, not null
+   * @param jettyServer
+   *          the Jetty server instance, not null
+   * @param handlers
+   *          the set of handlers to add to, not null
    */
   protected void addHandlers(final ComponentRepository repo, final Server jettyServer, final ContextHandlerCollection handlers) {
     handlers.addHandler(createWebAppContext(repo, "OpenGamma", "/"));
@@ -153,9 +154,12 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
   /**
    * Creates the webapp context, merging base resources if defined.
    *
-   * @param repo  the component repository, not null
-   * @param name  the webapp name, not null
-   * @param contextPath  the context path to use as the base, not null
+   * @param repo
+   *          the component repository, not null
+   * @param name
+   *          the webapp name, not null
+   * @param contextPath
+   *          the context path to use as the base, not null
    * @return the webapp context, not null
    */
   protected WebAppContext createWebAppContext(final ComponentRepository repo, final String name, final String contextPath) {
@@ -164,7 +168,7 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
     ogWebAppContext.setBaseResource(createJettyResource());
     ogWebAppContext.setDisplayName(getResourceBase().getDescription());
     ogWebAppContext.setErrorHandler(new PlainTextErrorHandler());
-    ogWebAppContext.setEventListeners(new EventListener[] {new ComponentRepositoryServletContextListener(repo)});
+    ogWebAppContext.setEventListeners(new EventListener[] { new ComponentRepositoryServletContextListener(repo) });
     return ogWebAppContext;
   }
 
@@ -191,7 +195,8 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
   /**
    * Converts a Spring resource to a Jetty resource, handling exceptions.
    *
-   * @param resource  the resource to convert, not null
+   * @param resource
+   *          the resource to convert, not null
    * @return the Jetty resource, not null
    */
   protected org.eclipse.jetty.util.resource.Resource createJettyResource(final Resource resource) {
@@ -205,7 +210,8 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
   /**
    * Registers the basic RESTful helpers.
    *
-   * @param repo  the component repository, not null
+   * @param repo
+   *          the component repository, not null
    */
   protected void registerJettyRestBasics(final ComponentRepository repo) {
     final RestComponents restComponents = repo.getRestComponents();
@@ -227,14 +233,14 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
     restComponents.publishHelper(new ThrowableExceptionMapper());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Wraps Jetty LifeCycle in Spring's Lifecycle.
    */
   static class ServerLifecycle implements Lifecycle {
     private final Server _server;
 
-    public ServerLifecycle(final Server server) {
+    ServerLifecycle(final Server server) {
       _server = server;
     }
 
@@ -283,9 +289,7 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the flag indicating if the component is active.
-   * This can be used from configuration to disable the Jetty server.
-   * True by default.
+   * Gets the flag indicating if the component is active. This can be used from configuration to disable the Jetty server. True by default.
    * @return the value of the property
    */
   public boolean isActive() {
@@ -293,9 +297,7 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
   }
 
   /**
-   * Sets the flag indicating if the component is active.
-   * This can be used from configuration to disable the Jetty server.
-   * True by default.
+   * Sets the flag indicating if the component is active. This can be used from configuration to disable the Jetty server. True by default.
    * @param active  the new value of the property
    */
   public void setActive(boolean active) {
@@ -304,8 +306,6 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
 
   /**
    * Gets the the {@code active} property.
-   * This can be used from configuration to disable the Jetty server.
-   * True by default.
    * @return the property, not null
    */
   public final Property<Boolean> active() {

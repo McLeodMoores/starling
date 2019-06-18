@@ -57,8 +57,11 @@ public class InterestRateFuturesUtils {
 
   /**
    * Returns the n-th next third Wednesday of a IMM quarterly month.
-   * @param nthFuture The number of the future. Should be >=1.
-   * @param date The reference date.
+   * 
+   * @param nthFuture
+   *          The number of the future. Should be &ge;1.
+   * @param date
+   *          The reference date.
    * @return The next quarterly date.
    */
   public static ZonedDateTime nextQuarterlyDate(final int nthFuture, final ZonedDateTime date) {

@@ -36,15 +36,12 @@ import com.opengamma.util.auth.Permissionable;
 /**
  * A security that it may be possible to hold a position in.
  * <p>
- * A security generically defined as anything that a position can be held in.
- * This includes the security defined in "OTC" trades, permitting back-to-back
- * trades to be linked correctly.
+ * A security generically defined as anything that a position can be held in. This includes the security defined in "OTC" trades, permitting back-to-back trades
+ * to be linked correctly.
  */
 @PublicSPI
 @BeanDefinition
-public class ManageableSecurity
-extends DirectBean
-implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
+public class ManageableSecurity extends DirectBean implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -55,15 +52,13 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
   private static final String SECURITY_TYPE = "MANAGEABLE";
 
   /**
-   * The unique identifier of the security.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * The unique identifier of the security. This must be null when adding to a master and not null when retrieved from a master.
    */
   @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
-   * The bundle of external identifiers that define the security.
-   * Each external system will typically refer to a security using a different identifier.
-   * Thus the bundle consists of a set of identifiers, one for each external system.
+   * The bundle of external identifiers that define the security. Each external system will typically refer to a
+   * security using a different identifier. Thus the bundle consists of a set of identifiers, one for each external system.
    */
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
@@ -83,8 +78,7 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
   @PropertyDefinition(overrideGet = true, overrideSet = true)
   private final Map<String, String> _attributes = new HashMap<>();
   /**
-   * The set of required permissions.
-   * This is a set of permissions that a user needs to be able to view a security.
+   * The set of required permissions. This is a set of permissions that a user needs to be able to view a security.
    */
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final Set<String> _requiredPermissions = new TreeSet<>();
@@ -101,7 +95,8 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
   /**
    * Creates an instance with a security type.
    *
-   * @param securityType  the security type, not null
+   * @param securityType
+   *          the security type, not null
    */
   public ManageableSecurity(final String securityType) {
     ArgumentChecker.notEmpty(securityType, "securityType");
@@ -111,10 +106,14 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
   /**
    * Creates a fully populated instance.
    *
-   * @param uniqueId  the security unique identifier, may be null
-   * @param name  the display name, not null
-   * @param securityType  the security type, not null
-   * @param bundle  the security external identifier bundle, not null
+   * @param uniqueId
+   *          the security unique identifier, may be null
+   * @param name
+   *          the display name, not null
+   * @param securityType
+   *          the security type, not null
+   * @param bundle
+   *          the security external identifier bundle, not null
    */
   public ManageableSecurity(final UniqueId uniqueId, final String name, final String securityType, final ExternalIdBundle bundle) {
     this(securityType);
@@ -123,11 +122,12 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
     setExternalIdBundle(bundle);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle representing this security.
    *
-   * @param externalId  the identifier to add, not null
+   * @param externalId
+   *          the identifier to add, not null
    */
   public void addExternalId(final ExternalId externalId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(externalId));
@@ -141,7 +141,8 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
   }
 
   /**
-   * @deprecated  use {@link #getRequiredPermissions()}
+   * @deprecated use {@link #getRequiredPermissions()}
+   * @return the permissions
    */
   @Deprecated
   public Set<String> getPermissions() {
@@ -149,7 +150,9 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
   }
 
   /**
-   * @deprecated  use {@link #setRequiredPermissions}
+   * @deprecated use {@link #setRequiredPermissions}
+   * @param permissions
+   *          the permissions
    */
   @Deprecated
   public void setPermissions(final Set<String> permissions) {
@@ -177,8 +180,7 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the unique identifier of the security.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * Gets the unique identifier of the security. This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
   @Override
@@ -187,8 +189,7 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
   }
 
   /**
-   * Sets the unique identifier of the security.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * Sets the unique identifier of the security. This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
   @Override
@@ -198,7 +199,6 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
 
   /**
    * Gets the the {@code uniqueId} property.
-   * This must be null when adding to a master and not null when retrieved from a master.
    * @return the property, not null
    */
   public final Property<UniqueId> uniqueId() {
@@ -207,9 +207,8 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bundle of external identifiers that define the security.
-   * Each external system will typically refer to a security using a different identifier.
-   * Thus the bundle consists of a set of identifiers, one for each external system.
+   * Gets the bundle of external identifiers that define the security. Each external system will typically refer to a
+   * security using a different identifier. Thus the bundle consists of a set of identifiers, one for each external system.
    * @return the value of the property, not null
    */
   @Override
@@ -218,9 +217,8 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
   }
 
   /**
-   * Sets the bundle of external identifiers that define the security.
-   * Each external system will typically refer to a security using a different identifier.
-   * Thus the bundle consists of a set of identifiers, one for each external system.
+   * Sets the bundle of external identifiers that define the security. Each external system will typically refer to a
+   * security using a different identifier. Thus the bundle consists of a set of identifiers, one for each external system.
    * @param externalIdBundle  the new value of the property, not null
    */
   public void setExternalIdBundle(ExternalIdBundle externalIdBundle) {
@@ -230,8 +228,7 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
 
   /**
    * Gets the the {@code externalIdBundle} property.
-   * Each external system will typically refer to a security using a different identifier.
-   * Thus the bundle consists of a set of identifiers, one for each external system.
+   * security using a different identifier. Thus the bundle consists of a set of identifiers, one for each external system.
    * @return the property, not null
    */
   public final Property<ExternalIdBundle> externalIdBundle() {
@@ -323,8 +320,7 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of required permissions.
-   * This is a set of permissions that a user needs to be able to view a security.
+   * Gets the set of required permissions. This is a set of permissions that a user needs to be able to view a security.
    * @return the value of the property, not null
    */
   @Override
@@ -333,8 +329,7 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
   }
 
   /**
-   * Sets the set of required permissions.
-   * This is a set of permissions that a user needs to be able to view a security.
+   * Sets the set of required permissions. This is a set of permissions that a user needs to be able to view a security.
    * @param requiredPermissions  the new value of the property, not null
    */
   public void setRequiredPermissions(Set<String> requiredPermissions) {
@@ -345,7 +340,6 @@ implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
 
   /**
    * Gets the the {@code requiredPermissions} property.
-   * This is a set of permissions that a user needs to be able to view a security.
    * @return the property, not null
    */
   public final Property<Set<String>> requiredPermissions() {

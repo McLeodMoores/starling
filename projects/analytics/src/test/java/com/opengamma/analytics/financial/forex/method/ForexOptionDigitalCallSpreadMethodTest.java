@@ -34,9 +34,10 @@ import com.opengamma.analytics.financial.model.volatility.VolatilityAndBucketedS
 import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTermStructureParametersStrikeInterpolation;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.financial.util.AssertSensitivityObjects;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
@@ -135,8 +136,8 @@ public class ForexOptionDigitalCallSpreadMethodTest {
    * Tests the present value with an explicit computation.
    */
   public void presentValueDoubleQuadratic() {
-    final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.DOUBLE_QUADRATIC, Interpolator1DFactory.LINEAR_EXTRAPOLATOR,
-        Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+    final Interpolator1D interpolator = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME,
+        LinearExtrapolator1dAdapter.NAME);
     final SmileDeltaTermStructureParametersStrikeInterpolation smileTerm = TestsDataSetsForex.smile3points(REFERENCE_DATE, interpolator);
     final SmileDeltaTermStructureDataBundle smileBundle = new SmileDeltaTermStructureDataBundle(CURVES, smileTerm, Pairs.of(EUR, USD));
     final double strikeM = STRIKE * (1 - STANDARD_SPREAD);
@@ -620,8 +621,8 @@ public class ForexOptionDigitalCallSpreadMethodTest {
    * Analyzes the profile for digital options.
    */
   public void profile() {
-    final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.DOUBLE_QUADRATIC, Interpolator1DFactory.LINEAR_EXTRAPOLATOR,
-        Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+    final Interpolator1D interpolator = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME,
+        LinearExtrapolator1dAdapter.NAME);
     final SmileDeltaTermStructureParametersStrikeInterpolation smileTerm = TestsDataSetsForex.smile5points(REFERENCE_DATE, interpolator);
     final SmileDeltaTermStructureDataBundle smileBundle = new SmileDeltaTermStructureDataBundle(CURVES, smileTerm, Pairs.of(EUR, USD));
 

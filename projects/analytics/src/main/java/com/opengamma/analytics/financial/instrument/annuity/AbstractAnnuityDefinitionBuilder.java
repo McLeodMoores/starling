@@ -23,7 +23,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Base class for building annuity definitions.
- * @param <T> the implementing class
+ * 
+ * @param <T>
+ *          the implementing class
  */
 public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuityDefinitionBuilder<T>> {
 
@@ -90,8 +92,7 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
     }
 
     public boolean isInterpolated() {
-      return _firstIborIndex != null && _secondIborIndex != null
-          && !_firstIborIndex.equals(_secondIborIndex);
+      return _firstIborIndex != null && _secondIborIndex != null && !_firstIborIndex.equals(_secondIborIndex);
     }
   }
 
@@ -171,8 +172,7 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
   private AdjustedDateParameters _adjustedEndDateParameters;
 
   /**
-   * Flag to indicate the payment date relative to accrual period. This is an optional field, and will default to the
-   * end of the accrual period.
+   * Flag to indicate the payment date relative to accrual period. This is an optional field, and will default to the end of the accrual period.
    */
   private DateRelativeTo _paymentDateRelativeTo = DateRelativeTo.END;
 
@@ -204,6 +204,7 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
 
   /**
    * Returns the unadjusted start date of the annuity.
+   * 
    * @return the unadjusted start date of the annuity.
    */
   protected ZonedDateTime getStartDate() {
@@ -213,6 +214,7 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
 
   /**
    * Returns the unadjusted end date of the annuity.
+   * 
    * @return the unadjusted end date of the annuity.
    */
   protected ZonedDateTime getEndDate() {
@@ -266,7 +268,9 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
 
   /**
    * Sets the flag to describe whether the annuity is paying or receiving. This is a required field.
-   * @param payer whether the annuity is paying or receiving.
+   * 
+   * @param payer
+   *          whether the annuity is paying or receiving.
    * @return itself.
    */
   @SuppressWarnings("unchecked")
@@ -277,7 +281,9 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
 
   /**
    * Sets the daycount of the annuity. This is a required field.
-   * @param dayCount the daycount of the annuity.
+   * 
+   * @param dayCount
+   *          the daycount of the annuity.
    * @return itself
    */
   @SuppressWarnings("unchecked")
@@ -288,7 +294,9 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
 
   /**
    * Sets the notional of the annuity. This is a required field.
-   * @param notional the notional of the annuity.
+   * 
+   * @param notional
+   *          the notional of the annuity.
    * @return itself
    */
   @SuppressWarnings("unchecked")
@@ -323,7 +331,9 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
 
   /**
    * Sets the stub type at the end of the series of coupons. This is optional and will default to StubType.NONE if unset.
-   * @param endStub the stub type at the end of the series of coupons.
+   * 
+   * @param endStub
+   *          the stub type at the end of the series of coupons.
    * @return itself
    */
   @SuppressWarnings("unchecked")
@@ -340,7 +350,9 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
 
   /**
    * Sets the flag indicating whether the notional is exchanged at the start of the annuity.
-   * @param exchangeInitialNotional the flag indicating whether the notional is exchanged at the start of the annuity.
+   * 
+   * @param exchangeInitialNotional
+   *          the flag indicating whether the notional is exchanged at the start of the annuity.
    * @return itself
    */
   @SuppressWarnings("unchecked")
@@ -351,7 +363,9 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
 
   /**
    * Sets the flag indicating whether the notional is exchanged at the end of the annuity.
-   * @param exchangeFinalNotional the flag indicating whether the notional is exchanged at the end of the annuity.
+   * 
+   * @param exchangeFinalNotional
+   *          the flag indicating whether the notional is exchanged at the end of the annuity.
    * @return itself
    */
   @SuppressWarnings("unchecked")
@@ -362,7 +376,9 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
 
   /**
    * Sets the accrual period frequency of the annuity. This is a required field.
-   * @param accrualPeriodFrequency the frequency of the coupons of the annuity.
+   * 
+   * @param accrualPeriodFrequency
+   *          the frequency of the coupons of the annuity.
    * @return itself
    */
   @SuppressWarnings("unchecked")
@@ -373,7 +389,9 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
 
   /**
    * Sets the parameters used to adjust the accrual period dates. This is an optional field.
-   * @param accrualDateAdjustmentParameters the parameters used to adjust the accrual periods.
+   * 
+   * @param accrualDateAdjustmentParameters
+   *          the parameters used to adjust the accrual periods.
    * @return the parameters used to adjust the accrual periods.
    */
   @SuppressWarnings("unchecked")
@@ -390,8 +408,7 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
 
   @SuppressWarnings("unchecked")
   public T endDateAdjustmentParameters(final AdjustedDateParameters endDateAdjustmentParameters) {
-    if (_adjustedAccrualDateParameters != null
-        && _adjustedAccrualDateParameters.getBusinessDayConvention() == null
+    if (_adjustedAccrualDateParameters != null && _adjustedAccrualDateParameters.getBusinessDayConvention() == null
         && _adjustedEndDateParameters.getBusinessDayConvention() != null) {
       throw new OpenGammaRuntimeException("End date adjustment business day convention does not match accrual period business day convention");
     }
@@ -413,6 +430,7 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
 
   /**
    * Returns the accrual end dates, adjusted if the parameters are set.
+   * 
    * @return the accrual end dates, adjusted if the parameters are set.
    */
   protected ZonedDateTime[] getAccrualEndDates() {
@@ -446,18 +464,11 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
 
     ZonedDateTime[] accrualEndDates;
     if (adjusted && _adjustedAccrualDateParameters != null) {
-      accrualEndDates = ScheduleCalculator.getAdjustedDateSchedule(
-          startDate,
-          endDate,
-          _accrualPeriodFrequency,
-          stubType,
-          _adjustedAccrualDateParameters.getBusinessDayConvention(),
-          _adjustedAccrualDateParameters.getCalendar(),
-          getRollDateAdjuster());
-          //_rollDateAdjuster instanceof GeneralRollDateAdjuster ? null : _rollDateAdjuster);
+      accrualEndDates = ScheduleCalculator.getAdjustedDateSchedule(startDate, endDate, _accrualPeriodFrequency, stubType,
+          _adjustedAccrualDateParameters.getBusinessDayConvention(), _adjustedAccrualDateParameters.getCalendar(), getRollDateAdjuster());
+      // _rollDateAdjuster instanceof GeneralRollDateAdjuster ? null : _rollDateAdjuster);
     } else {
-      accrualEndDates = ScheduleCalculator.getUnadjustedDateSchedule(
-          startDate, endDate, _accrualPeriodFrequency, stubType);
+      accrualEndDates = ScheduleCalculator.getUnadjustedDateSchedule(startDate, endDate, _accrualPeriodFrequency, stubType);
     }
 
     if (StubType.BOTH == stubType) {
@@ -472,44 +483,35 @@ public abstract class AbstractAnnuityDefinitionBuilder<T extends AbstractAnnuity
 
   protected ZonedDateTime[] getPaymentDates(final ZonedDateTime[] accrualDates) {
     if (_adjustedPaymentDateParameters != null) {
-      return ScheduleCalculator.getAdjustedDateSchedule(
-          accrualDates,
-          _adjustedPaymentDateParameters.getBusinessDayConvention(),
-          _adjustedPaymentDateParameters.getCalendar(),
-          _adjustedPaymentDateParameters.getOffset());
-    } else {
-      return accrualDates;
+      return ScheduleCalculator.getAdjustedDateSchedule(accrualDates, _adjustedPaymentDateParameters.getBusinessDayConvention(),
+          _adjustedPaymentDateParameters.getCalendar(), _adjustedPaymentDateParameters.getOffset());
     }
+    return accrualDates;
   }
 
   protected CouponFixedDefinition getExchangeInitialNotionalCoupon() {
     if (!_exchangeInitialNotional) {
       return null;
     }
-    final ZonedDateTime startDate =
-        getStartDateAdjustmentParameters().getBusinessDayConvention().adjustDate(getStartDateAdjustmentParameters().getCalendar(), getStartDate());
+    final ZonedDateTime startDate = getStartDateAdjustmentParameters().getBusinessDayConvention().adjustDate(getStartDateAdjustmentParameters().getCalendar(),
+        getStartDate());
 
-    return new CouponFixedDefinition(
-        _currency,
-        startDate, // payment
+    return new CouponFixedDefinition(_currency, startDate, // payment
         startDate, // accrual start
         startDate, // accrual end
         1.0, // year frac
-        (isPayer() ? -1 : 1) * getNotional().getAmount(_startDate),
-        1.0); // rate
+        (isPayer() ? -1 : 1) * getNotional().getAmount(_startDate), 1.0); // rate
   }
 
   protected CouponFixedDefinition getExchangeFinalNotionalCoupon() {
-    final ZonedDateTime endDate =
-        getEndDateAdjustmentParameters().getBusinessDayConvention().adjustDate(getEndDateAdjustmentParameters().getCalendar(), getEndDate());
+    final ZonedDateTime endDate = getEndDateAdjustmentParameters().getBusinessDayConvention().adjustDate(getEndDateAdjustmentParameters().getCalendar(),
+        getEndDate());
 
-    return new CouponFixedDefinition(_currency,
-        endDate, // payment
+    return new CouponFixedDefinition(_currency, endDate, // payment
         endDate, // accrual start
         endDate, // accrual end
         1.0, // year frac
-        (isPayer() ? -1 : 1) * Math.abs(getNotional().getAmount(_endDate)),
-        1.0); // rate
+        (isPayer() ? -1 : 1) * Math.abs(getNotional().getAmount(_endDate)), 1.0); // rate
   }
 
   public CompoundingMethod getCompoundingMethod() {

@@ -32,6 +32,7 @@ import com.opengamma.util.tuple.DoublesPair;
 /**
  * Method to computes the present value and sensitivities of physical delivery European swaptions with the Libor Market Model with displaced diffusion.
  * Reference: Henrard, M. (2010). Swaptions in Libor Market Model with local volatility. Wilmott Journal, 2010, 2, 135-154
+ * 
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionPhysicalFixedIborLMMDDMethod}
  */
 @Deprecated
@@ -44,6 +45,7 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod implements PricingMethod
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static SwaptionPhysicalFixedIborLMMDDMethod getInstance() {
@@ -72,8 +74,11 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod implements PricingMethod
 
   /**
    * Computes the present value of the Physical delivery swaption.
-   * @param swaption The swaption.
-   * @param lmmBundle The LMM parameters and the curves.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param lmmBundle
+   *          The LMM parameters and the curves.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption, final LiborMarketModelDisplacedDiffusionDataBundle lmmBundle) {
@@ -84,7 +89,7 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod implements PricingMethod
     final YieldAndDiscountCurve dsc = lmmBundle.getCurve(cfe.getDiscountCurve());
     final int nbCFInit = cfe.getNumberOfPayments();
     final double multFact = Math.signum(cfe.getNthPayment(0).getAmount());
-    final boolean isCall = (cfe.getNthPayment(0).getAmount() < 0);
+    final boolean isCall = cfe.getNthPayment(0).getAmount() < 0;
     final double[] cftInit = new double[nbCFInit];
     final double[] cfaInit = new double[nbCFInit];
     for (int loopcf = 0; loopcf < nbCFInit; loopcf++) {
@@ -109,7 +114,7 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod implements PricingMethod
           if (cftInit[loopcf] - timeLMM[-indCFDate[loopcf] - 2] < TIME_TOLERANCE) {
             indCFDate[loopcf] = -indCFDate[loopcf] - 2;
           } else {
-            ArgumentChecker.isTrue(true, "Instrument time incompatible with LMM parametrisation"); //TODO really?
+            ArgumentChecker.isTrue(true, "Instrument time incompatible with LMM parametrisation"); // TODO really?
           }
         }
       }
@@ -160,7 +165,8 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod implements PricingMethod
     }
     final double bK = -cfaMod0;
     final double bM = (b0 + bK) / 2.0d;
-    final double meanReversionImpact = Math.abs(amr) < 1.0E-6 ? timeToExpiry : (Math.exp(2.0d * amr * timeToExpiry) - 1.0d) / (2.0d * amr); // To handle 0 mean reversion.
+    final double meanReversionImpact = Math.abs(amr) < 1.0E-6 ? timeToExpiry : (Math.exp(2.0d * amr * timeToExpiry) - 1.0d) / (2.0d * amr); // To handle 0 mean
+                                                                                                                                            // reversion.
     final double[] rate0Ratio = new double[nbCF - 1];
     final double[][] mu0 = new double[nbCF - 1][nbFactor];
     for (int loopcf = 0; loopcf < nbCF - 1; loopcf++) {
@@ -241,8 +247,11 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod implements PricingMethod
 
   /**
    * Computes the present value sensitivity to LMM volatility parameters.
-   * @param swaption The (physical delivery) swaption.
-   * @param lmmBundle The LMM parameters and the curves.
+   * 
+   * @param swaption
+   *          The (physical delivery) swaption.
+   * @param lmmBundle
+   *          The LMM parameters and the curves.
    * @return The sensitivity.
    */
   public double[][] presentValueLMMSensitivity(final SwaptionPhysicalFixedIbor swaption, final LiborMarketModelDisplacedDiffusionDataBundle lmmBundle) {
@@ -251,7 +260,7 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod implements PricingMethod
     final YieldAndDiscountCurve dsc = lmmBundle.getCurve(cfe.getDiscountCurve());
     final int nbCFInit = cfe.getNumberOfPayments();
     final double multFact = Math.signum(cfe.getNthPayment(0).getAmount());
-    final boolean isCall = (cfe.getNthPayment(0).getAmount() < 0);
+    final boolean isCall = cfe.getNthPayment(0).getAmount() < 0;
     final double[] cftInit = new double[nbCFInit];
     final double[] cfaInit = new double[nbCFInit];
     for (int loopcf = 0; loopcf < nbCFInit; loopcf++) {
@@ -432,7 +441,8 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod implements PricingMethod
 
     final double[] liborMBar = new double[nbCF - 1];
     for (int loopcf = 0; loopcf < nbCF - 1; loopcf++) {
-      liborMBar[loopcf] = ((liborM[loopcf] + 1 / deltaLMM[loopcf]) - (liborM[loopcf] + aLMM[loopcf])) / ((liborM[loopcf] + 1 / deltaLMM[loopcf]) * (liborM[loopcf] + 1 / deltaLMM[loopcf]))
+      liborMBar[loopcf] = (liborM[loopcf] + 1 / deltaLMM[loopcf] - (liborM[loopcf] + aLMM[loopcf]))
+          / ((liborM[loopcf] + 1 / deltaLMM[loopcf]) * (liborM[loopcf] + 1 / deltaLMM[loopcf]))
           * rateMRatioBar[loopcf];
     }
 
@@ -506,8 +516,11 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod implements PricingMethod
 
   /**
    * Computes the present value sensitivity to the displaced diffusion (shift) parameters.
-   * @param swaption The (physical delivery) swaption.
-   * @param lmmBundle The LMM parameters and the curves.
+   * 
+   * @param swaption
+   *          The (physical delivery) swaption.
+   * @param lmmBundle
+   *          The LMM parameters and the curves.
    * @return The sensitivity.
    */
   public double[] presentValueDDSensitivity(final SwaptionPhysicalFixedIbor swaption, final LiborMarketModelDisplacedDiffusionDataBundle lmmBundle) {
@@ -516,7 +529,7 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod implements PricingMethod
     final YieldAndDiscountCurve dsc = lmmBundle.getCurve(cfe.getDiscountCurve());
     final int nbCFInit = cfe.getNumberOfPayments();
     final double multFact = Math.signum(cfe.getNthPayment(0).getAmount());
-    final boolean isCall = (cfe.getNthPayment(0).getAmount() < 0);
+    final boolean isCall = cfe.getNthPayment(0).getAmount() < 0;
     final double[] cftInit = new double[nbCFInit];
     final double[] cfaInit = new double[nbCFInit];
     for (int loopcf = 0; loopcf < nbCFInit; loopcf++) {
@@ -697,7 +710,8 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod implements PricingMethod
 
     final double[] liborMBar = new double[nbCF - 1];
     for (int loopcf = 0; loopcf < nbCF - 1; loopcf++) {
-      liborMBar[loopcf] = ((liborM[loopcf] + 1 / deltaLMM[loopcf]) - (liborM[loopcf] + aLMM[loopcf])) / ((liborM[loopcf] + 1 / deltaLMM[loopcf]) * (liborM[loopcf] + 1 / deltaLMM[loopcf]))
+      liborMBar[loopcf] = (liborM[loopcf] + 1 / deltaLMM[loopcf] - (liborM[loopcf] + aLMM[loopcf]))
+          / ((liborM[loopcf] + 1 / deltaLMM[loopcf]) * (liborM[loopcf] + 1 / deltaLMM[loopcf]))
           * rateMRatioBar[loopcf];
     }
 
@@ -765,17 +779,21 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod implements PricingMethod
 
   /**
    * Computes the present value curve sensitivity of the Physical delivery swaption.
-   * @param swaption The swaption.
-   * @param lmmBundle The LMM parameters and the curves.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param lmmBundle
+   *          The LMM parameters and the curves.
    * @return The present value.
    */
-  public InterestRateCurveSensitivity presentValueCurveSensitivity(final SwaptionPhysicalFixedIbor swaption, final LiborMarketModelDisplacedDiffusionDataBundle lmmBundle) {
+  public InterestRateCurveSensitivity presentValueCurveSensitivity(final SwaptionPhysicalFixedIbor swaption,
+      final LiborMarketModelDisplacedDiffusionDataBundle lmmBundle) {
     // 1. Swaption CFE preparation
     final AnnuityPaymentFixed cfe = swaption.getUnderlyingSwap().accept(CFEC, lmmBundle);
     final YieldAndDiscountCurve dsc = lmmBundle.getCurve(cfe.getDiscountCurve());
     final int nbCFInit = cfe.getNumberOfPayments();
     final double multFact = Math.signum(cfe.getNthPayment(0).getAmount());
-    final boolean isCall = (cfe.getNthPayment(0).getAmount() < 0);
+    final boolean isCall = cfe.getNthPayment(0).getAmount() < 0;
     final double[] cftInit = new double[nbCFInit];
     final double[] cfaInit = new double[nbCFInit];
     for (int loopcf = 0; loopcf < nbCFInit; loopcf++) {
@@ -950,7 +968,8 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod implements PricingMethod
     }
     final double[] liborMBar = new double[nbCF - 1];
     for (int loopcf = 0; loopcf < nbCF - 1; loopcf++) {
-      liborMBar[loopcf] = ((liborM[loopcf] + 1 / deltaLMM[loopcf]) - (liborM[loopcf] + aLMM[loopcf])) / ((liborM[loopcf] + 1 / deltaLMM[loopcf]) * (liborM[loopcf] + 1 / deltaLMM[loopcf]))
+      liborMBar[loopcf] = (liborM[loopcf] + 1 / deltaLMM[loopcf] - (liborM[loopcf] + aLMM[loopcf]))
+          / ((liborM[loopcf] + 1 / deltaLMM[loopcf]) * (liborM[loopcf] + 1 / deltaLMM[loopcf]))
           * rateMRatioBar[loopcf];
     }
     final double[] pMBar = new double[nbCF];
@@ -1032,7 +1051,7 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod implements PricingMethod
     }
     final double[] dfLMMBar = new double[nbCF];
     for (int loopcf = 0; loopcf < nbCF - 1; loopcf++) {
-      dfLMMBar[loopcf] += (1.0 / dfLMM[loopcf + 1]) / deltaLMM[loopcf] * liborLMMBar[loopcf];
+      dfLMMBar[loopcf] += 1.0 / dfLMM[loopcf + 1] / deltaLMM[loopcf] * liborLMMBar[loopcf];
       dfLMMBar[loopcf + 1] += -dfLMM[loopcf] / (dfLMM[loopcf + 1] * dfLMM[loopcf + 1]) / deltaLMM[loopcf] * liborLMMBar[loopcf];
     }
     for (int loopcf = 1; loopcf < nbCF; loopcf++) {

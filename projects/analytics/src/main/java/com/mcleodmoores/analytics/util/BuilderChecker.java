@@ -17,7 +17,7 @@ public class BuilderChecker {
     return object;
   }
 
-  public static <T, U> T satisfies(final Predicate<T> test, final T object, final String errorMessage) {
+  public static <T> T satisfies(final Predicate<T> test, final T object, final String errorMessage) {
     if (!test.apply(object)) {
       throw new IllegalStateException(errorMessage);
     }

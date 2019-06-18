@@ -21,7 +21,7 @@ import com.opengamma.financial.convention.frequency.Frequency;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * ISDA definition for CDS securities
+ * ISDA definition for CDS securities.
  *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  *
@@ -62,19 +62,32 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
   private final StubType _stubType;
 
   /**
-   * Create an (immutable) CDS definition
-   * @param startDate Protection start date of the CDS contract (may be in the past, not null)
-   * @param maturity Maturity date of the CDS contract (not null)
-   * @param premium Definition for the premium payments (not null)
-   * @param notional Notional of the CDS contract
-   * @param spread Spread (a.k.a. coupon rate) of the CDS contract
-   * @param recoveryRate Recovery rate against the underlying
-   * @param accrualOnDefault Whether, in the event of default, accrued interest must be paid for the current period up to the default date
-   * @param payOnDefault Whether protection payment is due on default (true) or at maturity (false)
-   * @param protectStart Whether the start date is protected (i.e. one extra day of protection)
-   * @param couponFrequency The premium coupon frequency
-   * @param convention Convention data
-   * @param stubType The premium stub type
+   * Create an (immutable) CDS definition.
+   *
+   * @param startDate
+   *          Protection start date of the CDS contract (may be in the past, not null)
+   * @param maturity
+   *          Maturity date of the CDS contract (not null)
+   * @param premium
+   *          Definition for the premium payments (not null)
+   * @param notional
+   *          Notional of the CDS contract
+   * @param spread
+   *          Spread (a.k.a. coupon rate) of the CDS contract
+   * @param recoveryRate
+   *          Recovery rate against the underlying
+   * @param accrualOnDefault
+   *          Whether, in the event of default, accrued interest must be paid for the current period up to the default date
+   * @param payOnDefault
+   *          Whether protection payment is due on default (true) or at maturity (false)
+   * @param protectStart
+   *          Whether the start date is protected (i.e. one extra day of protection)
+   * @param couponFrequency
+   *          The premium coupon frequency
+   * @param convention
+   *          Convention data
+   * @param stubType
+   *          The premium stub type
    */
   public ISDACDSDefinition(final ZonedDateTime startDate, final ZonedDateTime maturity, final ISDACDSPremiumDefinition premium,
       final double notional, final double spread, final double recoveryRate,
@@ -101,10 +114,12 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
   }
 
   /**
-   * Create a {@link ISDACDSDerivative} object for pricing relative to the given pricing date
+   * Create a {@link ISDACDSDerivative} object for pricing relative to the given pricing date.
    *
-   * @param pricingDate Pricing point for offsetting t values
-   * @param yieldCurveNames Curve names: 0 = discount, 1 = credit spread (optional)
+   * @param pricingDate
+   *          Pricing point for offsetting t values
+   * @param yieldCurveNames
+   *          Curve names: 0 = discount, 1 = credit spread (optional)
    * @return CDS derivative object ready for pricing
    * @deprecated Use the method that does not take yield curve names
    */
@@ -119,21 +134,26 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
   }
 
   /**
-   * @param pricingDate The pricing date
-   * @param stepinDate The step-in date
-   * @param settlementDate The settlement date
-   * @param yieldCurveNames The yield curve names, not null
+   * @param pricingDate
+   *          The pricing date
+   * @param stepinDate
+   *          The step-in date
+   * @param settlementDate
+   *          The settlement date
+   * @param yieldCurveNames
+   *          The yield curve names, not null
    * @return The derivative form of a CDS
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
-  public ISDACDSDerivative toDerivative(final ZonedDateTime pricingDate, final ZonedDateTime stepinDate, final ZonedDateTime settlementDate, final String... yieldCurveNames) {
+  public ISDACDSDerivative toDerivative(final ZonedDateTime pricingDate, final ZonedDateTime stepinDate, final ZonedDateTime settlementDate,
+      final String... yieldCurveNames) {
 
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");
     ArgumentChecker.isTrue(yieldCurveNames.length >= 1, "At least one curve required (discount, credit spread is optional)");
 
     final String discountCurveName = yieldCurveNames[0];
-    final String spreadCurveName =  yieldCurveNames.length > 1 ? yieldCurveNames[1] : null;
+    final String spreadCurveName = yieldCurveNames.length > 1 ? yieldCurveNames[1] : null;
 
     return new ISDACDSDerivative(
         discountCurveName, spreadCurveName,
@@ -148,9 +168,10 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
   }
 
   /**
-   * Create a {@link ISDACDSDerivative} object for pricing relative to the given pricing date
+   * Create a {@link ISDACDSDerivative} object for pricing relative to the given pricing date.
    *
-   * @param pricingDate Pricing point for offsetting t values
+   * @param pricingDate
+   *          Pricing point for offsetting t values
    * @return CDS derivative object ready for pricing
    */
   @Override
@@ -163,9 +184,12 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
   }
 
   /**
-   * @param pricingDate The pricing date
-   * @param stepinDate The step-in date
-   * @param settlementDate The settlement date
+   * @param pricingDate
+   *          The pricing date
+   * @param stepinDate
+   *          The step-in date
+   * @param settlementDate
+   *          The settlement date
    * @return The derivative form of a CDS
    */
   public ISDACDSDerivative toDerivative(final ZonedDateTime pricingDate, final ZonedDateTime stepinDate, final ZonedDateTime settlementDate) {
@@ -200,11 +224,12 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
     return rebasedDate2.isBefore(date1)
         ? -ACT_365F.getDayCountFraction(rebasedDate2, date1)
-            :  ACT_365F.getDayCountFraction(date1, rebasedDate2);
+        : ACT_365F.getDayCountFraction(date1, rebasedDate2);
   }
 
   /**
-   * @param stepinDate The step-in date
+   * @param stepinDate
+   *          The step-in date
    * @return The accrued interest at this date
    */
   public double accruedInterest(final ZonedDateTime stepinDate) {
@@ -248,6 +273,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Gets the start date.
+   *
    * @return The start date
    */
   public ZonedDateTime getStartDate() {
@@ -256,6 +282,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Gets the maturity date.
+   *
    * @return The maturity date
    */
   public ZonedDateTime getMaturity() {
@@ -264,6 +291,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Gets the premium.
+   *
    * @return The premium
    */
   public ISDACDSPremiumDefinition getPremium() {
@@ -272,6 +300,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Gets the notional.
+   *
    * @return The notional
    */
   public double getNotional() {
@@ -280,6 +309,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Gets the spread.
+   *
    * @return The spread
    */
   public double getSpread() {
@@ -288,6 +318,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Gets the recovery rate.
+   *
    * @return The recovery rate
    */
   public double getRecoveryRate() {
@@ -296,6 +327,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Is accrued interest paid on default.
+   *
    * @return true if the accrued interest should be paid on default
    */
   public boolean isAccrualOnDefault() {
@@ -304,6 +336,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Is the payment made on the default or at maturity.
+   *
    * @return true if the payment is made on the default date
    */
   public boolean isPayOnDefault() {
@@ -312,6 +345,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Is the start date protected.
+   *
    * @return true if the start date is protected.
    */
   public boolean isProtectStart() {
@@ -320,6 +354,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Gets the coupon frequency.
+   *
    * @return The coupon frequency
    */
   public Frequency getCouponFrequency() {
@@ -327,7 +362,8 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
   }
 
   /**
-   * Gets the convention
+   * Gets the convention.
+   *
    * @return The convention
    */
   public Convention getConvention() {
@@ -335,7 +371,8 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
   }
 
   /**
-   * Gets the stub type
+   * Gets the stub type.
+   *
    * @return The stub type
    */
   public StubType getStubType() {

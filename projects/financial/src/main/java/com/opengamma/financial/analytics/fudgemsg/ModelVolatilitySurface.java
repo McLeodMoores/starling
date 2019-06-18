@@ -33,7 +33,7 @@ import com.opengamma.analytics.math.surface.Surface;
   private ModelVolatilitySurface() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Fudge builder for {@code VolatilitySurface}.
    */
@@ -99,7 +99,8 @@ import com.opengamma.analytics.math.surface.Surface;
       final Object surface = deserializer.fieldValueToObject(message.getByName(SURFACE_FIELD_NAME));
       final Object forwardCurve = deserializer.fieldValueToObject(message.getByName(FORWARD_CURVE_FIELD_NAME));
       final SmileSurfaceDataBundle grid = deserializer.fieldValueToObject(SmileSurfaceDataBundle.class, message.getByName(GRID_FIELD_NAME));
-      final VolatilitySurfaceInterpolator interpolator = deserializer.fieldValueToObject(VolatilitySurfaceInterpolator.class, message.getByName(INTERPOLATOR_FIELD_NAME));
+      final VolatilitySurfaceInterpolator interpolator = deserializer.fieldValueToObject(VolatilitySurfaceInterpolator.class,
+          message.getByName(INTERPOLATOR_FIELD_NAME));
       if (surface instanceof Surface) {
         return new BlackVolatilitySurfaceMoneynessFcnBackedByGrid((Surface<Double, Double, Double>) surface, (ForwardCurve) forwardCurve, grid, interpolator);
       }
@@ -133,7 +134,7 @@ import com.opengamma.analytics.math.surface.Surface;
   }
 
   /**
-   * Fudge builder for {@code PureImpliedVolatilitySurface}
+   * Fudge builder for {@code PureImpliedVolatilitySurface}.
    */
   @FudgeBuilderFor(PureImpliedVolatilitySurface.class)
   public static final class PureImpliedVolatilitySurfaceBuilder extends AbstractFudgeBuilder<PureImpliedVolatilitySurface> {

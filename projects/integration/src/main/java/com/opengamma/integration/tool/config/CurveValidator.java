@@ -53,7 +53,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Class to validate third generation curve configurations
+ * Class to validate third generation curve configurations.
  */
 public class CurveValidator {
   private static final Logger LOGGER = LoggerFactory.getLogger(CurveValidator.class);
@@ -67,16 +67,23 @@ public class CurveValidator {
   private final SecuritySource _securitySource;
 
   /**
-   * Constructor
-   * @param configMaster the config master
-   * @param configSource the config source
-   * @param conventionSource the convention source
-   * @param regionSource the region source
-   * @param secSource the security source
-   * @param holidayMaster the holiday master
+   * Constructor.
+   *
+   * @param configMaster
+   *          the config master
+   * @param configSource
+   *          the config source
+   * @param conventionSource
+   *          the convention source
+   * @param regionSource
+   *          the region source
+   * @param secSource
+   *          the security source
+   * @param holidayMaster
+   *          the holiday master
    */
   public CurveValidator(final ConfigMaster configMaster, final ConfigSource configSource, final ConventionSource conventionSource,
-                        final RegionSource regionSource, final SecuritySource secSource, final HolidayMaster holidayMaster) {
+      final RegionSource regionSource, final SecuritySource secSource, final HolidayMaster holidayMaster) {
     _configMaster = configMaster;
     _configSource = configSource;
     _configValidationUtils = new ConfigValidationUtils(conventionSource, holidayMaster);
@@ -84,9 +91,9 @@ public class CurveValidator {
     _securitySource = secSource;
     _curveDate = LocalDate.now();
   }
+
   /**
    * Not re-entrant.
-   * @return
    */
   public void validateNewCurveSetup() {
     _curveConstructionConfigNodes = new ArrayList<>();
@@ -185,7 +192,8 @@ public class CurveValidator {
     }
   }
 
-  private void validateCurveTypeConfigrations(final String name, final List<? extends CurveTypeConfiguration> curveTypeConfigurations, final ValidationNode parentNode) {
+  private void validateCurveTypeConfigrations(final String name, final List<? extends CurveTypeConfiguration> curveTypeConfigurations,
+      final ValidationNode parentNode) {
     for (final CurveTypeConfiguration curveTypeConfig : curveTypeConfigurations) {
       final ValidationNode curveTypeConfigNode = new ValidationNode();
       curveTypeConfigNode.setName(name);
@@ -220,7 +228,8 @@ public class CurveValidator {
     }
   }
 
-  private void validateDiscountingCurveTypeConfiguration(final String name, final DiscountingCurveTypeConfiguration curveTypeConfiguration, final ValidationNode curveTypeConfigNode) {
+  private void validateDiscountingCurveTypeConfiguration(final String name, final DiscountingCurveTypeConfiguration curveTypeConfiguration,
+      final ValidationNode curveTypeConfigNode) {
     final boolean regionDryRun = checkRegion(curveTypeConfiguration.getReference(), curveTypeConfigNode, true);
     final boolean currencyDryRun = checkCurrency(curveTypeConfiguration.getReference(), curveTypeConfigNode, true);
     if (regionDryRun || currencyDryRun) {
@@ -265,7 +274,8 @@ public class CurveValidator {
     }
   }
 
-  private void validateIborCurveTypeConfiguration(final String name, final IborCurveTypeConfiguration curveTypeConfiguration, final ValidationNode curveTypeConfigNode) {
+  private void validateIborCurveTypeConfiguration(final String name, final IborCurveTypeConfiguration curveTypeConfiguration,
+      final ValidationNode curveTypeConfigNode) {
     if (!_configValidationUtils.conventionExists(curveTypeConfiguration.getConvention())) {
       final ValidationNode validationNode = new ValidationNode();
       validationNode.setName(curveTypeConfiguration.getConvention().getValue());
@@ -307,7 +317,8 @@ public class CurveValidator {
     }
   }
 
-  private void validateInflationCurveTypeConfiguration(final String name, final InflationCurveTypeConfiguration curveTypeConfiguration, final ValidationNode curveTypeConfigNode) {
+  private void validateInflationCurveTypeConfiguration(final String name, final InflationCurveTypeConfiguration curveTypeConfiguration,
+      final ValidationNode curveTypeConfigNode) {
     final boolean regionDryRun = checkRegion(curveTypeConfiguration.getReference(), curveTypeConfigNode, true);
     final boolean currencyDryRun = checkCurrency(curveTypeConfiguration.getReference(), curveTypeConfigNode, true);
     if (regionDryRun || currencyDryRun) {
@@ -352,7 +363,8 @@ public class CurveValidator {
     }
   }
 
-  private void validateInflationIssuerCurveTypeConfiguration(final String name, final InflationIssuerCurveTypeConfiguration curveTypeConfiguration, final ValidationNode curveTypeConfigNode) {
+  private void validateInflationIssuerCurveTypeConfiguration(final String name, final InflationIssuerCurveTypeConfiguration curveTypeConfiguration,
+      final ValidationNode curveTypeConfigNode) {
     final boolean regionDryRun = checkRegion(curveTypeConfiguration.getReference(), curveTypeConfigNode, true);
     final boolean currencyDryRun = checkCurrency(curveTypeConfiguration.getReference(), curveTypeConfigNode, true);
     if (regionDryRun || currencyDryRun) {
@@ -397,7 +409,8 @@ public class CurveValidator {
     }
   }
 
-  private void validateIssuerCurveTypeConfiguration(final String name, final IssuerCurveTypeConfiguration curveTypeConfiguration, final ValidationNode curveTypeConfigNode) {
+  private void validateIssuerCurveTypeConfiguration(final String name, final IssuerCurveTypeConfiguration curveTypeConfiguration,
+      final ValidationNode curveTypeConfigNode) {
     // currency a no-op
     final AbstractCurveDefinition abstractCurveDefinition = getCurveDefinitionOrSubclass(name);
     if (abstractCurveDefinition instanceof CurveDefinition) {
@@ -427,7 +440,8 @@ public class CurveValidator {
     }
   }
 
-  private void validateOvernightCurveTypeConfiguration(final String name, final OvernightCurveTypeConfiguration curveTypeConfiguration, final ValidationNode curveTypeConfigNode) {
+  private void validateOvernightCurveTypeConfiguration(final String name, final OvernightCurveTypeConfiguration curveTypeConfiguration,
+      final ValidationNode curveTypeConfigNode) {
     final ValidationNode onValidationNode = new ValidationNode();
     onValidationNode.setName(curveTypeConfiguration.getConvention().getValue());
     if (_configValidationUtils.conventionExists(curveTypeConfiguration.getConvention())) {
@@ -480,7 +494,8 @@ public class CurveValidator {
     }
   }
 
-  private ValidationNode createInvalidCurveNodeValidationNode(final Tenor tenor, final Class<? extends CurveNode> curveNodeType, final ValidationNode parentNode, final String message) {
+  private ValidationNode createInvalidCurveNodeValidationNode(final Tenor tenor, final Class<? extends CurveNode> curveNodeType,
+      final ValidationNode parentNode, final String message) {
     final ValidationNode validationNode = new ValidationNode();
     validationNode.setName(tenor.toFormattedString());
     validationNode.setType(curveNodeType);
@@ -507,10 +522,14 @@ public class CurveValidator {
   }
 
   /**
-   * Check the string region ISO code (2-character) for validity against the RegionSource.  Records error in node object if dryRun is not set.
-   * @param regionStr the potential region code.  Will add a warning but return true if region is not a country (e.g. EU).
-   * @param node a node to record errors in
-   * @param dryRun whether to omit writing an error
+   * Check the string region ISO code (2-character) for validity against the RegionSource. Records error in node object if dryRun is not set.
+   *
+   * @param regionStr
+   *          the potential region code. Will add a warning but return true if region is not a country (e.g. EU).
+   * @param node
+   *          a node to record errors in
+   * @param dryRun
+   *          whether to omit writing an error
    * @return true, if this is a valid region code
    */
   private boolean checkRegion(final String regionStr, final ValidationNode node, final boolean dryRun) {
@@ -520,20 +539,23 @@ public class CurveValidator {
         node.getWarnings().add("Warning: Region string " + regionStr + " was region but not country");
       }
       return true;
-    } else {
-      if (!dryRun) {
-        node.getWarnings().add("Region string " + regionStr + " was not found as a region or country");
-      }
-      return false;
     }
+    if (!dryRun) {
+      node.getWarnings().add("Region string " + regionStr + " was not found as a region or country");
+    }
+    return false;
   }
 
   /**
-   * Check the string currency valid and record error if not dryRun.  Also adds warning if valid lexigraphically but not contained
-   * in Currency class as a constant.
-   * @param currencyStr the currency in string format (3-character ISO), not null
-   * @param node the error recording node, not null
-   * @param dryRun doesn't record an error if true
+   * Check the string currency valid and record error if not dryRun. Also adds warning if valid lexigraphically but not contained in Currency class as a
+   * constant.
+   *
+   * @param currencyStr
+   *          the currency in string format (3-character ISO), not null
+   * @param node
+   *          the error recording node, not null
+   * @param dryRun
+   *          doesn't record an error if true
    * @return true if valid currency
    */
   private boolean checkCurrency(final String currencyStr, final ValidationNode node, final boolean dryRun) {
@@ -542,24 +564,24 @@ public class CurveValidator {
       if (!checkCurrencyClass(currency)) {
         if (dryRun) {
           return false;
-        } else {
-          node.getWarnings().add("Warning: String expected to be currency parses, but is not in Currency class as constant");
-          return true;
         }
+        node.getWarnings().add("Warning: String expected to be currency parses, but is not in Currency class as constant");
+        return true;
       }
     } catch (final IllegalArgumentException iae) {
       if (dryRun) {
         return false;
-      } else {
-        node.getWarnings().add("String expected to be currency " + currencyStr + " will not parse");
       }
+      node.getWarnings().add("String expected to be currency " + currencyStr + " will not parse");
     }
     return true;
   }
 
   /**
    * Check the Currency class for a constant matching this currency instance
-   * @param currency a currency instance, not null
+   *
+   * @param currency
+   *          a currency instance, not null
    * @return true if there is a constant matching the supplied currency
    */
   private boolean checkCurrencyClass(final Currency currency) {
@@ -585,7 +607,8 @@ public class CurveValidator {
     if (interpolatedCurveDefinition != null) {
       return interpolatedCurveDefinition;
     }
-    final FixedDateInterpolatedCurveDefinition fixedDateInterpolatedCurveDefinition = _configSource.getLatestByName(FixedDateInterpolatedCurveDefinition.class, nameOfCurveDefinition);
+    final FixedDateInterpolatedCurveDefinition fixedDateInterpolatedCurveDefinition = _configSource.getLatestByName(FixedDateInterpolatedCurveDefinition.class,
+        nameOfCurveDefinition);
     if (fixedDateInterpolatedCurveDefinition != null) {
       return fixedDateInterpolatedCurveDefinition;
     }

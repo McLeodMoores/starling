@@ -29,8 +29,8 @@ import net.sf.ehcache.Element;
  * delegate to an underlying <code>DistributionSpecificationResolver</code>.
  */
 public class EHCachingDistributionSpecificationResolver
-  extends AbstractResolver<LiveDataSpecification, DistributionSpecification>
-  implements DistributionSpecificationResolver {
+extends AbstractResolver<LiveDataSpecification, DistributionSpecification>
+implements DistributionSpecificationResolver {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingDistributionSpecificationResolver.class);
 
@@ -59,10 +59,28 @@ public class EHCachingDistributionSpecificationResolver
    */
   private final Cache _cache;
 
+  /**
+   * Creates a caching resolver.
+   *
+   * @param underlying
+   *          the underlying resolver, not null
+   * @param cacheManager
+   *          the cache manager, not null
+   */
   public EHCachingDistributionSpecificationResolver(final DistributionSpecificationResolver underlying, final CacheManager cacheManager) {
     this(underlying, cacheManager, DISTRIBUTION_SPEC_CACHE_DEFAULT_ARG);
   }
 
+  /**
+   * Creates a caching resolver.
+   *
+   * @param underlying
+   *          the underlying resolver, not null
+   * @param cacheManager
+   *          the cache manager, not null
+   * @param cacheName
+   *          the cache name, not null
+   */
   public EHCachingDistributionSpecificationResolver(final DistributionSpecificationResolver underlying, final CacheManager cacheManager,
       final String cacheName) {
     ArgumentChecker.notNull(underlying, "Underlying DistributionSpecificationResolver");
@@ -75,6 +93,11 @@ public class EHCachingDistributionSpecificationResolver
     _cache = EHCacheUtils.getCacheFromManager(cacheManager, combinedCacheName);
   }
 
+  /**
+   * Gets the cache manager.
+   *
+   * @return the cache manager
+   */
   public CacheManager getCacheManager() {
     return _cacheManager;
   }

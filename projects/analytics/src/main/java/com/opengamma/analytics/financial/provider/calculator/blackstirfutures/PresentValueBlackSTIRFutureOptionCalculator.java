@@ -14,7 +14,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 /**
  * Calculator of the present value as a multiple currency amount.
  */
-public final class PresentValueBlackSTIRFutureOptionCalculator extends InstrumentDerivativeVisitorAdapter<BlackSTIRFuturesProviderInterface, MultipleCurrencyAmount> {
+public final class PresentValueBlackSTIRFutureOptionCalculator
+    extends InstrumentDerivativeVisitorAdapter<BlackSTIRFuturesProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -23,6 +24,7 @@ public final class PresentValueBlackSTIRFutureOptionCalculator extends Instrumen
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static PresentValueBlackSTIRFutureOptionCalculator getInstance() {
@@ -40,10 +42,11 @@ public final class PresentValueBlackSTIRFutureOptionCalculator extends Instrumen
    */
   private static final FuturesTransactionBlackSTIRFuturesMethod METHOD_STIRFUT_MARGIN = new FuturesTransactionBlackSTIRFuturesMethod();
 
-  // -----     Futures     ------
+  // ----- Futures ------
 
   @Override
-  public MultipleCurrencyAmount visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures, final BlackSTIRFuturesProviderInterface black) {
+  public MultipleCurrencyAmount visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures,
+      final BlackSTIRFuturesProviderInterface black) {
     return METHOD_STIRFUT_MARGIN.presentValue(futures, black);
   }
 

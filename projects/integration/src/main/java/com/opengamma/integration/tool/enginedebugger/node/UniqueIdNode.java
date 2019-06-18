@@ -8,7 +8,7 @@ package com.opengamma.integration.tool.enginedebugger.node;
 import com.opengamma.id.UniqueId;
 
 /**
- * Node representing a UniqueId
+ * Node representing a UniqueId.
  */
 public class UniqueIdNode extends AbstractTreeTableLeafNode {
 

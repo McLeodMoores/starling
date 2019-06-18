@@ -34,8 +34,8 @@ import com.opengamma.util.time.Tenor;
 public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapSecurity> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ForwardSwapSecurityGenerator.class);
-  private static final Tenor[] TENORS = new Tenor[] {Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, Tenor.NINE_MONTHS, Tenor.ONE_YEAR, Tenor.TWO_YEARS };
-  private static final Tenor[] FORWARDS = new Tenor[] {Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, Tenor.NINE_MONTHS };
+  private static final Tenor[] TENORS = new Tenor[] { Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, Tenor.NINE_MONTHS, Tenor.ONE_YEAR, Tenor.TWO_YEARS };
+  private static final Tenor[] FORWARDS = new Tenor[] { Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, Tenor.NINE_MONTHS };
 
   private int _daysTrading = 30;
 
@@ -50,7 +50,8 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
   /**
    * Return the time series identifier.
    *
-   * @param liborConvention the convention bundle, not null
+   * @param liborConvention
+   *          the convention bundle, not null
    * @return the time series identifier
    */
   protected ExternalId getTimeSeriesIdentifier(final ConventionBundle liborConvention) {
@@ -92,7 +93,8 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
     final ZonedDateTime tradeDate = previousWorkingDay(now.minusDays(getRandom(getDaysTrading())), ccy);
     final Tenor forward = getRandom(FORWARDS);
     final ZonedDateTime forwardDate = nextWorkingDay(now.plus(forward.getPeriod()), ccy);
-    final ConventionBundle swapConvention = getConventionBundleSource().getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
+    final ConventionBundle swapConvention = getConventionBundleSource()
+        .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
     if (swapConvention == null) {
       LOGGER.error("Couldn't get swap convention for {}", ccy.getCode());
       return null;
@@ -107,7 +109,8 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
     // look up the rate timeseries identifier out of the bundle
     final ExternalId tsIdentifier = getTimeSeriesIdentifier(liborConvention);
     // look up the value on our chosen trade date
-    final HistoricalTimeSeries initialRateSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, tsIdentifier.toBundle(), null, tradeDate.toLocalDate(),
+    final HistoricalTimeSeries initialRateSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE,
+        tsIdentifier.toBundle(), null, tradeDate.toLocalDate(),
         true, tradeDate.toLocalDate(), true);
     if (initialRateSeries == null || initialRateSeries.getTimeSeries().isEmpty()) {
       LOGGER.error("couldn't get series for {} on {}", tsIdentifier, tradeDate);
@@ -117,10 +120,11 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
     // get the identifier for the swap rate for the maturity we're interested in (assuming the fixed rate will be =~ swap rate)
     final ExternalId swapRateForMaturityIdentifier = getSwapRateFor(ccy, tradeDate.toLocalDate(), maturity, forward);
     if (swapRateForMaturityIdentifier == null) {
-      LOGGER.error("Couldn't get swap rate identifier for {} [{}] from {}", new Object[] {ccy, maturity, tradeDate });
+      LOGGER.error("Couldn't get swap rate identifier for {} [{}] from {}", new Object[] { ccy, maturity, tradeDate });
       return null;
     }
-    final HistoricalTimeSeries fixedRateSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, swapRateForMaturityIdentifier.toBundle(),
+    final HistoricalTimeSeries fixedRateSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE,
+        swapRateForMaturityIdentifier.toBundle(),
         null, tradeDate.toLocalDate(), true,
         tradeDate.toLocalDate(), true);
     if (fixedRateSeries == null) {
@@ -164,8 +168,9 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
       receiveLegDescription = fixedLegDescription;
     }
     final ForwardSwapSecurity swap = new ForwardSwapSecurity(tradeDate, tradeDate, maturityDate, counterparty, payLeg, receiveLeg, forwardDate);
-    swap.setName("IR Forward Swap " + ccy + " " + NOTIONAL_FORMATTER.format(notional) + " " + maturity.getPeriod() + " from " + forwardDate.format(DATE_FORMATTER) + " - " + payLegDescription +
-        " / " + receiveLegDescription);
+    swap.setName("IR Forward Swap " + ccy + " " + NOTIONAL_FORMATTER.format(notional) + " " + maturity.getPeriod() + " from "
+        + forwardDate.format(DATE_FORMATTER) + " - " + payLegDescription
+        + " / " + receiveLegDescription);
     return swap;
   }
 
@@ -173,11 +178,11 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
   public ManageableTrade createSecurityTrade(final QuantityGenerator quantity, final SecurityPersister persister, final NameGenerator counterPartyGenerator) {
     final ForwardSwapSecurity swap = createSecurity();
     if (swap != null) {
-      return new ManageableTrade(quantity.createQuantity(), persister.storeSecurity(swap), swap.getTradeDate().toLocalDate(), swap.getTradeDate().toOffsetDateTime().toOffsetTime(),
+      return new ManageableTrade(quantity.createQuantity(), persister.storeSecurity(swap), swap.getTradeDate().toLocalDate(),
+          swap.getTradeDate().toOffsetDateTime().toOffsetTime(),
           ExternalId.of(Counterparty.DEFAULT_SCHEME, counterPartyGenerator.createName()));
-    } else {
-      return null;
     }
+    return null;
   }
 
 }

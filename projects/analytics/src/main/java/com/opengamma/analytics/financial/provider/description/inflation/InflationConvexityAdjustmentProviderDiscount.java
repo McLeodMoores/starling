@@ -9,17 +9,21 @@ import com.opengamma.analytics.financial.model.option.parameters.BlackFlatCapFlo
 import com.opengamma.analytics.financial.model.option.parameters.InflationConvexityAdjustmentParameters;
 
 /**
- * Implementation of a provider of Black smile for zero-coupon inflation options. The volatility is time to expiration/strike/delay dependent.
- * The "delay" is the time between expiration of the option and last trading date of the underlying.
+ * Implementation of a provider of Black smile for zero-coupon inflation options. The volatility is time to expiration/strike/delay dependent. The "delay" is
+ * the time between expiration of the option and last trading date of the underlying.
  */
 public class InflationConvexityAdjustmentProviderDiscount extends InflationConvexityAdjustmentProvider {
 
   /**
-   * @param inflation The inflation provider.
-   * @param inflationConvexityAdjutmentsParameters The inflation convexity adjustment parameters.
-   * @param blackSmileIborCapParameters The Black volatility cap/floor (ibor)  parameters.
+   * @param inflation
+   *          The inflation provider.
+   * @param inflationConvexityAdjutmentsParameters
+   *          The inflation convexity adjustment parameters.
+   * @param blackSmileIborCapParameters
+   *          The Black volatility cap/floor (ibor) parameters.
    */
-  public InflationConvexityAdjustmentProviderDiscount(final InflationProviderDiscount inflation, final InflationConvexityAdjustmentParameters inflationConvexityAdjutmentsParameters,
+  public InflationConvexityAdjustmentProviderDiscount(final InflationProviderDiscount inflation,
+      final InflationConvexityAdjustmentParameters inflationConvexityAdjutmentsParameters,
       final BlackFlatCapFloorParameters blackSmileIborCapParameters) {
     super(inflation, inflationConvexityAdjutmentsParameters, blackSmileIborCapParameters);
   }

@@ -22,14 +22,16 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class INConventions {
   /** Month codes used by Bloomberg */
-  private static final char[] BBG_MONTH_CODES = new char[] {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'};
+  private static final char[] BBG_MONTH_CODES = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K' };
 
   /**
-   * @param conventionMaster The convention master, not null
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static synchronized void addFixedIncomeInstrumentConventions(final InMemoryConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -68,21 +70,30 @@ public class INConventions {
     }
 
     // IR FUTURES
-    utils.addConventionBundle(ExternalIdBundle.of(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "INR_IR_FUTURE")), "INR_IR_FUTURE", act365, modified, Period.ofMonths(3),
+    utils.addConventionBundle(ExternalIdBundle.of(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "INR_IR_FUTURE")), "INR_IR_FUTURE", act365,
+        modified, Period.ofMonths(3),
         0, true, in);
-    utils.addConventionBundle(ExternalIdBundle.of(ExternalSchemes.bloombergTickerSecurityId("IRNI6M Curncy"), ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "INR SWAP INDEX")),
+    utils.addConventionBundle(
+        ExternalIdBundle.of(ExternalSchemes.bloombergTickerSecurityId("IRNI6M Curncy"),
+            ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "INR SWAP INDEX")),
         "INR SWAP INDEX", act365, modified, Period.ofMonths(6), 0, true, in);
 
-    utils.addConventionBundle(ExternalIdBundle.of(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "INR_SWAP")), "INR_SWAP", act365, modified, semiAnnual, 0, in, act365,
+    utils.addConventionBundle(ExternalIdBundle.of(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "INR_SWAP")), "INR_SWAP", act365, modified,
+        semiAnnual, 0, in, act365,
         modified, semiAnnual, 0, ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "INR SWAP INDEX"), in, true);
-    utils.addConventionBundle(ExternalIdBundle.of(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "INR_6M_SWAP")), "INR_6M_SWAP", act365, modified, semiAnnual, 0, in, act365,
+    utils.addConventionBundle(ExternalIdBundle.of(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "INR_6M_SWAP")), "INR_6M_SWAP", act365,
+        modified, semiAnnual, 0, in, act365,
         modified, semiAnnual, 0, ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "INR SWAP INDEX"), in, true);
 
-    utils.addConventionBundle(ExternalIdBundle.of(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "INR_OIS_SWAP")), "INR_OIS_SWAP", act365, modified, annual, 0, in,
-        act365, modified, annual, 0, ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "INR OVERNIGHT CASH RATE"), in, true, overnightPublicationLag);
+    utils.addConventionBundle(ExternalIdBundle.of(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "INR_OIS_SWAP")), "INR_OIS_SWAP", act365,
+        modified, annual, 0, in,
+        act365, modified, annual, 0, ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "INR OVERNIGHT CASH RATE"), in, true,
+        overnightPublicationLag);
 
-    utils.addConventionBundle(ExternalIdBundle.of(ExternalSchemes.bloombergTickerSecurityId("NSERO Index"), ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME,
-        "INR OVERNIGHT CASH RATE")), "INR OVERNIGHT CASH RATE", act365, following, Period.ofDays(1), 0, false, in, 0);
+    utils.addConventionBundle(
+        ExternalIdBundle.of(ExternalSchemes.bloombergTickerSecurityId("NSERO Index"), ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME,
+            "INR OVERNIGHT CASH RATE")),
+        "INR OVERNIGHT CASH RATE", act365, following, Period.ofDays(1), 0, false, in, 0);
 
   }
 

@@ -74,16 +74,14 @@ public class UnderlyingIdVisitor extends FinancialSecurityVisitorAdapter<String>
     if (security.getUnderlyingId().isScheme(_preferredScheme)) {
       final String identifier = security.getUnderlyingId().getValue();
       return identifier != null ? identifier : NOT_APPLICABLE;
-    } else {
-      final Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
-      if (underlying != null) {
-        final String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
-        return identifier != null ? identifier : NOT_APPLICABLE;
-      } else {
-        final String identifier = security.getUnderlyingId() != null ? security.getUnderlyingId().getValue() : null;
-        return identifier != null ? identifier : NOT_APPLICABLE;
-      }
     }
+    final Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
+    if (underlying != null) {
+      final String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
+      return identifier != null ? identifier : NOT_APPLICABLE;
+    }
+    final String identifier = security.getUnderlyingId() != null ? security.getUnderlyingId().getValue() : null;
+    return identifier != null ? identifier : NOT_APPLICABLE;
   }
 
   @Override
@@ -103,16 +101,14 @@ public class UnderlyingIdVisitor extends FinancialSecurityVisitorAdapter<String>
     if (security.getUnderlyingId().isScheme(_preferredScheme)) {
       final String identifier = security.getUnderlyingId().getValue();
       return identifier != null ? identifier : NOT_APPLICABLE;
-    } else {
-      final Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
-      if (underlying != null) {
-        final String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
-        return identifier != null ? identifier : NOT_APPLICABLE;
-      } else {
-        final String identifier = security.getUnderlyingId() != null ? security.getUnderlyingId().getValue() : null;
-        return identifier != null ? identifier : NOT_APPLICABLE;
-      }
     }
+    final Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
+    if (underlying != null) {
+      final String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
+      return identifier != null ? identifier : NOT_APPLICABLE;
+    }
+    final String identifier = security.getUnderlyingId() != null ? security.getUnderlyingId().getValue() : null;
+    return identifier != null ? identifier : NOT_APPLICABLE;
   }
 
   @Override
@@ -120,22 +116,20 @@ public class UnderlyingIdVisitor extends FinancialSecurityVisitorAdapter<String>
     if (security.getUnderlyingId().isScheme(_preferredScheme)) {
       final String identifier = security.getUnderlyingId().getValue();
       return identifier != null ? identifier : NOT_APPLICABLE;
-    } else {
-      final Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
-      if (underlying != null) {
-        final String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
-        return identifier != null ? identifier : NOT_APPLICABLE;
-      } else {
-        final String identifier = security.getUnderlyingId() != null ? security.getUnderlyingId().getValue() : null;
-        return identifier != null ? identifier : NOT_APPLICABLE;
-      }
     }
+    final Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
+    if (underlying != null) {
+      final String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
+      return identifier != null ? identifier : NOT_APPLICABLE;
+    }
+    final String identifier = security.getUnderlyingId() != null ? security.getUnderlyingId().getValue() : null;
+    return identifier != null ? identifier : NOT_APPLICABLE;
   }
 
   @Override
   public String visitFXOptionSecurity(final FXOptionSecurity fxOptionSecurity) {
     final UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxOptionSecurity.getCallCurrency(),
-                                                                   fxOptionSecurity.getPutCurrency());
+        fxOptionSecurity.getPutCurrency());
     return unorderedPair.getFirstCurrency() + "/" + unorderedPair.getSecondCurrency();
   }
 
@@ -214,42 +208,42 @@ public class UnderlyingIdVisitor extends FinancialSecurityVisitorAdapter<String>
   @Override
   public String visitNonDeliverableFXOptionSecurity(final NonDeliverableFXOptionSecurity fxOptionSecurity) {
     final UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxOptionSecurity.getCallCurrency(),
-                                                                   fxOptionSecurity.getPutCurrency());
+        fxOptionSecurity.getPutCurrency());
     return unorderedPair.getFirstCurrency() + "/" + unorderedPair.getSecondCurrency();
   }
 
   @Override
   public String visitFXDigitalOptionSecurity(final FXDigitalOptionSecurity fxOptionSecurity) {
     final UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxOptionSecurity.getCallCurrency(),
-                                                                   fxOptionSecurity.getPutCurrency());
+        fxOptionSecurity.getPutCurrency());
     return unorderedPair.getFirstCurrency() + "/" + unorderedPair.getSecondCurrency();
   }
 
   @Override
   public String visitNonDeliverableFXDigitalOptionSecurity(final NonDeliverableFXDigitalOptionSecurity fxOptionSecurity) {
     final UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxOptionSecurity.getCallCurrency(),
-                                                                   fxOptionSecurity.getPutCurrency());
+        fxOptionSecurity.getPutCurrency());
     return unorderedPair.getFirstCurrency() + "/" + unorderedPair.getSecondCurrency();
   }
 
   @Override
   public String visitFXBarrierOptionSecurity(final FXBarrierOptionSecurity fxBarrierOptionSecurity) {
     final UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxBarrierOptionSecurity.getCallCurrency(),
-                                                                   fxBarrierOptionSecurity.getPutCurrency());
+        fxBarrierOptionSecurity.getPutCurrency());
     return unorderedPair.getFirstCurrency() + "/" + unorderedPair.getSecondCurrency();
   }
 
   @Override
   public String visitFXForwardSecurity(final FXForwardSecurity fxForwardSecurity) {
     final UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxForwardSecurity.getPayCurrency(),
-                                                                   fxForwardSecurity.getReceiveCurrency());
+        fxForwardSecurity.getReceiveCurrency());
     return unorderedPair.getFirstCurrency() + "/" + unorderedPair.getSecondCurrency();
   }
 
   @Override
   public String visitNonDeliverableFXForwardSecurity(final NonDeliverableFXForwardSecurity ndfFxForwardSecurity) {
     final UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(ndfFxForwardSecurity.getPayCurrency(),
-                                                                   ndfFxForwardSecurity.getReceiveCurrency());
+        ndfFxForwardSecurity.getReceiveCurrency());
     return unorderedPair.getFirstCurrency() + "/" + unorderedPair.getSecondCurrency();
   }
 

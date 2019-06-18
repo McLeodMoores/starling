@@ -35,7 +35,8 @@ import com.opengamma.util.rest.FudgeRestClient;
  * <p>
  * Provides heartbeating and control of the JMS stream.
  *
- * @param <L> the type of the listener which will receive the results from the consumer.
+ * @param <L>
+ *          the type of the listener which will receive the results from the consumer.
  */
 public abstract class AbstractRestfulJmsResultConsumer<L> {
 
@@ -77,7 +78,8 @@ public abstract class AbstractRestfulJmsResultConsumer<L> {
    */
   private CountDownLatch _startedSignalLatch;
 
-  protected AbstractRestfulJmsResultConsumer(final URI baseUri, final FudgeContext fudgeContext, final JmsConnector jmsConnector, final ScheduledExecutorService scheduler, final long heartbeatPeriodMillis) {
+  protected AbstractRestfulJmsResultConsumer(final URI baseUri, final FudgeContext fudgeContext, final JmsConnector jmsConnector,
+      final ScheduledExecutorService scheduler, final long heartbeatPeriodMillis) {
     _baseUri = baseUri;
     _jmsConnector = jmsConnector;
     _fudgeContext = fudgeContext;
@@ -91,7 +93,7 @@ public abstract class AbstractRestfulJmsResultConsumer<L> {
     _scheduledHeartbeat = scheduler.scheduleAtFixedRate(runnable, heartbeatPeriodMillis, heartbeatPeriodMillis, TimeUnit.MILLISECONDS);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   protected void onStartResultStream() {
   }
 
@@ -100,7 +102,7 @@ public abstract class AbstractRestfulJmsResultConsumer<L> {
 
   protected abstract void dispatchListenerCall(Function<L, ?> listenerCall);
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   protected URI getBaseUri() {
     return _baseUri;
   }
@@ -109,7 +111,7 @@ public abstract class AbstractRestfulJmsResultConsumer<L> {
     return _client;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Externally visible for testing.
    */
@@ -121,7 +123,8 @@ public abstract class AbstractRestfulJmsResultConsumer<L> {
   /**
    * Externally visible for testing.
    *
-   * @param heartbeatUri the heartbeat URI, not null
+   * @param heartbeatUri
+   *          the heartbeat URI, not null
    */
   public void heartbeat(final URI heartbeatUri) {
     ArgumentChecker.notNull(heartbeatUri, "heartbeatUri");
@@ -143,19 +146,20 @@ public abstract class AbstractRestfulJmsResultConsumer<L> {
   }
 
   /**
-   * Called when heartbeating has failed, indicating that the remote resource has been discarded or the connection to the remote host has been lost. This is intended to be overridden to add custom
-   * error handling.
+   * Called when heartbeating has failed, indicating that the remote resource has been discarded or the connection to the remote host has been lost. This is
+   * intended to be overridden to add custom error handling.
    * <p>
    * Externally visible for testing.
    *
-   * @param ex an exception associated with the failed heartbeat, may be null
+   * @param ex
+   *          an exception associated with the failed heartbeat, may be null
    */
   public void heartbeatFailed(final Exception ex) {
     LOGGER.error("Heartbeating failed for resource " + getBaseUri() + " failed", ex);
   }
 
   /**
-   * Externally visible for testing
+   * Externally visible for testing.
    */
   public void stopHeartbeating() {
     if (!_scheduledHeartbeat.isCancelled()) {
@@ -163,14 +167,16 @@ public abstract class AbstractRestfulJmsResultConsumer<L> {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Increments the listener demand, starting the underlying subscription if this is the first listener.
    * <p>
    * If an exception is thrown then the listener state remains unchanged.
    *
-   * @throws InterruptedException if the thread is interrupted while starting the subscription
-   * @throws JMSException if a JMS error occurs while starting the subscription
+   * @throws InterruptedException
+   *           if the thread is interrupted while starting the subscription
+   * @throws JMSException
+   *           if a JMS error occurs while starting the subscription
    */
   protected void incrementListenerDemand() throws InterruptedException, JMSException {
     _listenerDemand++;
@@ -187,8 +193,10 @@ public abstract class AbstractRestfulJmsResultConsumer<L> {
    * <p>
    * If an exception is thrown then the listener state remains unchanged.
    *
-   * @throws InterruptedException if the thread is interrupted while stopping the subscription
-   * @throws JMSException if a JMS error occurs while stopping the subscription
+   * @throws InterruptedException
+   *           if the thread is interrupted while stopping the subscription
+   * @throws JMSException
+   *           if a JMS error occurs while stopping the subscription
    */
   protected void decrementListenerDemand() throws InterruptedException, JMSException {
     _listenerDemand--;
@@ -205,8 +213,10 @@ public abstract class AbstractRestfulJmsResultConsumer<L> {
    * <p>
    * If an exception is thrown then the listener state remains unchanged.
    *
-   * @throws InterruptedException if the thread is interrupted while configuring the subscription
-   * @throws JMSException if a JMS error occurs while configuring the subscription
+   * @throws InterruptedException
+   *           if the thread is interrupted while configuring the subscription
+   * @throws JMSException
+   *           if a JMS error occurs while configuring the subscription
    */
   private void configureResultListener() throws InterruptedException, JMSException {
     if (_listenerDemand == 0) {
@@ -239,7 +249,6 @@ public abstract class AbstractRestfulJmsResultConsumer<L> {
     try {
       _startedSignalLatch = new CountDownLatch(1);
       final ByteArrayFudgeMessageReceiver bafmr = new ByteArrayFudgeMessageReceiver(new FudgeMessageReceiver() {
-        @SuppressWarnings("unchecked")
         @Override
         public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
           LOGGER.debug("Result listener call received");
@@ -287,7 +296,7 @@ public abstract class AbstractRestfulJmsResultConsumer<L> {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   protected static URI getUri(final URI baseUri, final String path) {
     return UriBuilder.fromUri(baseUri).path(path).build();
   }

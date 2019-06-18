@@ -105,7 +105,7 @@ public class ResultsCacheTest {
     final ResultsCache.Result result2 = cache.getResult(CALC_CONFIG, _spec1, Double.class);
     assertEquals(2d, result2.getValue());
     assertEquals(2, result2.getHistory().size());
-    final List<Object> history = new ArrayList<Object>(result2.getHistory());
+    final List<Object> history = new ArrayList<>(result2.getHistory());
     assertEquals(1d, history.get(0));
     assertEquals(2d, history.get(1));
   }

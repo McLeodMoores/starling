@@ -8,12 +8,12 @@ package com.opengamma.financial.view.rest;
 import com.opengamma.engine.resource.EngineResourceReference;
 
 /**
- * RESTful URIs for a {@link EngineResourceReference}
+ * RESTful URIs for a {@link EngineResourceReference}.
  */
 public class DataEngineResourceReferenceUris {
 
-  //CSOFF: just constants
+  // CSOFF: just constants
   public static final String PATH_RESOURCE = "resource";
-  //CSON: just constants
-   
+  // CSON: just constants
+
 }

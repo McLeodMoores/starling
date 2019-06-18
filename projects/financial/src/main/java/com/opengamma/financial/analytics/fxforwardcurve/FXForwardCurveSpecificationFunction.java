@@ -52,7 +52,7 @@ public class FXForwardCurveSpecificationFunction extends AbstractFunction {
 
     private final FXForwardCurveSpecification _curveSpecification;
 
-    public CompiledImpl(final FXForwardCurveSpecification curveSpecification) {
+    CompiledImpl(final FXForwardCurveSpecification curveSpecification) {
       _curveSpecification = curveSpecification;
     }
 

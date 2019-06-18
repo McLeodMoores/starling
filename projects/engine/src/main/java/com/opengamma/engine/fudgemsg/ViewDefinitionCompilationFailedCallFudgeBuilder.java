@@ -16,7 +16,7 @@ import org.threeten.bp.Instant;
 import com.opengamma.engine.view.listener.ViewDefinitionCompilationFailedCall;
 
 /**
- * Fudge message builder for {@link ViewDefinitionCompilationFailedCall}
+ * Fudge message builder for {@link ViewDefinitionCompilationFailedCall}.
  */
 @FudgeBuilderFor(ViewDefinitionCompilationFailedCall.class)
 public class ViewDefinitionCompilationFailedCallFudgeBuilder implements FudgeBuilder<ViewDefinitionCompilationFailedCall> {

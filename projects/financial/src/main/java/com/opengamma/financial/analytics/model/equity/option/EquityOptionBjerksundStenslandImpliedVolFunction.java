@@ -23,9 +23,6 @@ import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurveAffineDividends;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.BjerksundStenslandModel;
 import com.opengamma.analytics.financial.model.volatility.BlackFormulaRepository;
-import com.opengamma.analytics.financial.model.volatility.BlackImpliedVolatilityFormula;
-import com.opengamma.analytics.math.MathException;
-import com.opengamma.analytics.math.rootfinding.BracketRoot;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
@@ -39,21 +36,23 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurity;
+
 /**
- * Calculates the implied volatility of an equity index or equity option using the {@link BjerksundStenslandModel} */
+ * Calculates the implied volatility of an equity index or equity option using the {@link BjerksundStenslandModel}.
+ */
 public class EquityOptionBjerksundStenslandImpliedVolFunction extends EquityOptionBjerksundStenslandFunction {
 
   /** The BjerksundStensland present value calculator */
   private static final EqyOptBjerksundStenslandPresentValueCalculator PV_CALCULATOR = EqyOptBjerksundStenslandPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public EquityOptionBjerksundStenslandImpliedVolFunction() {
     super(ValueRequirementNames.IMPLIED_VOLATILITY);
   }
 
-
   @Override
-  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs, final Set<ValueRequirement> desiredValues,
+  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
+      final Set<ValueRequirement> desiredValues,
       final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
 
     // Get market price
@@ -107,7 +106,7 @@ public class EquityOptionBjerksundStenslandImpliedVolFunction extends EquityOpti
 
     final double volatility = market.getVolatilitySurface().getVolatility(timeToExpiry, strike);
     Double impliedVol = null;
-    
+
     if (derivative instanceof EquityOption) {
       final double spot = market.getForwardCurve().getSpot();
       final double discountRate = market.getDiscountCurve().getInterestRate(timeToExpiry);
@@ -127,28 +126,28 @@ public class EquityOptionBjerksundStenslandImpliedVolFunction extends EquityOpti
       } else {
         costOfCarry = Math.log(fCurve.getForward(timeToExpiry) / spot) / timeToExpiry;
       }
-      
+
       try {
         if (timeToExpiry < 7. / 365.) {
-          impliedVol = BlackFormulaRepository.impliedVolatility(optionPrice / market.getDiscountCurve().getDiscountFactor(timeToExpiry), fCurve.getForward(timeToExpiry), strike, timeToExpiry, isCall);
+          impliedVol = BlackFormulaRepository.impliedVolatility(optionPrice / market.getDiscountCurve().getDiscountFactor(timeToExpiry),
+              fCurve.getForward(timeToExpiry), strike, timeToExpiry, isCall);
         } else {
           impliedVol = model.impliedVolatility(optionPrice, modSpot, strike, discountRate, costOfCarry, timeToExpiry, isCall, Math.min(volatility * 1.5, 0.15));
         }
       } catch (final IllegalArgumentException e) {
         if (inputs.getComputedValue(MarketDataRequirementNames.MARKET_VALUE) == null) {
-          impliedVol =  null;
+          impliedVol = null;
         } else {
           LOGGER.warn(MarketDataRequirementNames.IMPLIED_VOLATILITY + " undefined " + targetSpec);
           impliedVol = 0.;
         }
       }
     } else {
-      impliedVol = volatility;      
+      impliedVol = volatility;
     }
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
     return Collections.singleton(new ComputedValue(resultSpec, impliedVol));
   }
-  
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {

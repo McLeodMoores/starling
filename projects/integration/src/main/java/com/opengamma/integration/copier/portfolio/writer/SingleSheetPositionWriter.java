@@ -16,11 +16,11 @@ import com.opengamma.integration.copier.sheet.writer.SheetWriter;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Abstract class for a portfolio writer that writes to a single sheet
+ * Abstract class for a portfolio writer that writes to a single sheet.
  */
 public abstract class SingleSheetPositionWriter implements PositionWriter {
 
-  private SheetWriter _sheet;         // The spreadsheet to which to export
+  private SheetWriter _sheet; // The spreadsheet to which to export
 
   public SingleSheetPositionWriter(final SheetWriter sheet) {
     ArgumentChecker.notNull(sheet, "sheet");

@@ -27,12 +27,56 @@ public class AgricultureFutureSecurity extends CommodityFutureSecurity {
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
 
-  AgricultureFutureSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  AgricultureFutureSecurity() {
     super();
   }
 
-  public AgricultureFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount, final String category) {
+  /**
+   * @param expiry
+   *          the future expiry, not null
+   * @param tradingExchange
+   *          the trading exchange name, not null
+   * @param settlementExchange
+   *          the settlement exchange name, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param category
+   *          the future category, not null
+   * @deprecated Use the constructor that takes the unit name and number
+   */
+  @Deprecated
+  public AgricultureFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
+  }
+
+  /**
+   * @param expiry
+   *          the future expiry, not null
+   * @param tradingExchange
+   *          the trading exchange name, not null
+   * @param settlementExchange
+   *          the settlement exchange name, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param category
+   *          the future category, not null
+   * @param unitNumber
+   *          the number of units of the commodity to be delivered (or cash
+   *          equivalent received)
+   * @param unitName
+   *          the name of the underlying commodity
+   */
+  public AgricultureFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final String category, final Double unitNumber, final String unitName) {
+    super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category, unitNumber, unitName);
   }
 
   //-------------------------------------------------------------------------

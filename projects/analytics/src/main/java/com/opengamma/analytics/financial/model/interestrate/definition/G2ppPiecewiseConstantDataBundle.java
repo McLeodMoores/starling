@@ -9,11 +9,13 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
-import com.opengamma.analytics.financial.provider.description.interestrate.G2ppProviderDiscount;
 
 /**
- * Class describing the data required to price interest rate derivatives with G2++ (curves and parameters).
- * @deprecated Use {@link G2ppProviderDiscount}
+ * Class describing the data required to price interest rate derivatives with
+ * G2++ (curves and parameters).
+ * 
+ * @deprecated Use
+ *             {@link com.opengamma.analytics.financial.provider.description.interestrate.G2ppProviderDiscount}
  */
 @Deprecated
 public class G2ppPiecewiseConstantDataBundle extends YieldCurveBundle {

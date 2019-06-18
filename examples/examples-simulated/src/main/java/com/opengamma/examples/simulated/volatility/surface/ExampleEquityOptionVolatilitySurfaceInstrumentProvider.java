@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.volatility.surface;
@@ -23,9 +23,9 @@ import com.opengamma.id.ExternalScheme;
 public class ExampleEquityOptionVolatilitySurfaceInstrumentProvider implements SurfaceInstrumentProvider<LocalDate, Double> {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExampleEquityOptionVolatilitySurfaceInstrumentProvider.class);
   private static final ExternalScheme SCHEME = ExternalSchemes.OG_SYNTHETIC_TICKER;
-  private final String _underlyingPrefix; //expecting something like DJX
-  private final String _postfix; //expecting Index or Equity
-  private final String _dataFieldName; //expecting MarketDataRequirementNames.MARKET_VALUE
+  private final String _underlyingPrefix; // expecting something like DJX
+  private final String _postfix; // expecting Index or Equity
+  private final String _dataFieldName; // expecting MarketDataRequirementNames.MARKET_VALUE
   private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yy");
 
   private Boolean _generatePuts;
@@ -99,8 +99,8 @@ public class ExampleEquityOptionVolatilitySurfaceInstrumentProvider implements S
       return false;
     }
     final ExampleEquityOptionVolatilitySurfaceInstrumentProvider other = (ExampleEquityOptionVolatilitySurfaceInstrumentProvider) obj;
-    return getUnderlyingPrefix().equals(other.getUnderlyingPrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getDataFieldName().equals(other.getDataFieldName());
+    return getUnderlyingPrefix().equals(other.getUnderlyingPrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getDataFieldName().equals(other.getDataFieldName());
   }
 }

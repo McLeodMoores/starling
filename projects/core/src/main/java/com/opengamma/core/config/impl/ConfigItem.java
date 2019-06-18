@@ -537,8 +537,11 @@ public class ConfigItem<T> extends DirectBean implements UniqueIdentifiable, Obj
   }
 
   /**
-   * The fields of a configuration item, specifically the value, are not always serializable but can be Fudge encoded.
-   * We can use Java serialization by writing out the binary Fudge encoding.
+   * The fields of a configuration item, specifically the value, are not always serializable but can be Fudge encoded. We can use Java serialization by writing
+   * out the binary Fudge encoding.
+   * 
+   * @param out
+   *          the output stream
    */
   private void writeObject(final ObjectOutputStream out) {
     final FudgeContext context = OpenGammaFudgeContext.getInstance();
@@ -550,8 +553,11 @@ public class ConfigItem<T> extends DirectBean implements UniqueIdentifiable, Obj
   }
 
   /**
-   * The fields of a configuration item, specifically the value, are not always serializable but can be decoded from a
-   * binary Fudge encoding written by {@link #writeObject}.
+   * The fields of a configuration item, specifically the value, are not always serializable but can be decoded from a binary Fudge encoding written by
+   * {@link #writeObject}.
+   *
+   * @param in
+   *          the input stream
    */
   private void readObject(final ObjectInputStream in) {
     final FudgeContext context = OpenGammaFudgeContext.getInstance();

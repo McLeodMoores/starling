@@ -42,7 +42,7 @@ import com.opengamma.master.security.ManageableSecurity;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
-/** Creates EquityFutureSecurity from fields loaded from Bloomberg */
+/** Creates EquityFutureSecurity from fields loaded from Bloomberg. */
 public class EquityFutureLoader extends SecurityLoader {
 
   /** Logger. */
@@ -65,20 +65,24 @@ public class EquityFutureLoader extends SecurityLoader {
       FIELD_FUT_VAL_PT,
       FIELD_FUTURES_CATEGORY));
 
-  /** The set of valid Bloomberg 'Futures Category Types' that will map to EquityFutureSecurity */
+  /** The set of valid Bloomberg 'Futures Category Types' that will map to EquityFutureSecurity. */
   public static final Set<String> VALID_SECURITY_TYPES = ImmutableSet.of(
       BLOOMBERG_EQUITY_INDEX_TYPE,
-      BBG_WEEKLY_INDEX_OPTIONS_TYPE); // THIS IS IFFY - 2EH3 INDEX, FOR EXAMPLE, HAS A FUTURE CATEGORY OF WEEKLY INDEX OPTIONS, THOUGH IT JUST AN ALIAS FOR ESH3 INDEX WHICH IS EQUITY INDEX);
-                                      //TODO: Answer this: Are Equity Index Futures EquityFutureSecurity or IndexFutureSecurity? - See EquityFutureLoader, too
+      BBG_WEEKLY_INDEX_OPTIONS_TYPE); // THIS IS IFFY - 2EH3 INDEX, FOR EXAMPLE, HAS A FUTURE CATEGORY OF WEEKLY INDEX OPTIONS, THOUGH IT JUST AN ALIAS FOR ESH3
+  // INDEX WHICH IS EQUITY INDEX);
+  // TODO: Answer this: Are Equity Index Futures EquityFutureSecurity or IndexFutureSecurity? - See EquityFutureLoader, too
+
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   *
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public EquityFutureLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.EQUITY_FUTURE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     final String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
@@ -132,7 +136,8 @@ public class EquityFutureLoader extends SecurityLoader {
     LOGGER.warn("Creating EquityFutureSecurity - settlementDate set equal to expiryDate. Missing lag.");
     final ZonedDateTime settlementDate = expiry.getExpiry();
 
-    final EquityFutureSecurity security = new EquityFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, Double.valueOf(unitAmount), settlementDate, underlying, category);
+    final EquityFutureSecurity security = new EquityFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, Double.valueOf(unitAmount),
+        settlementDate, underlying, category);
     security.setName(name);
     // set identifiers
     parseIdentifiers(fieldData, security);

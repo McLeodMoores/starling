@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opengamma.component.factory.RemoteComponentFactory;
-import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.LogUtils;
 import com.opengamma.util.StartupUtils;
@@ -79,10 +78,10 @@ public abstract class AbstractDualComponentTool {
   /**
    * Initializes and runs the tool from standard command-line arguments.
    * <p>
-   * The base class defined three options:<br />
-   * c/component server URI - the component server URI, mandatory<br />
-   * l/logback - the logback configuration, default tool-logback.xml<br />
-   * h/help - prints the help tool<br />
+   * The base class defined three options:<br>
+   * c/component server URI - the component server URI, mandatory<br>
+   * l/logback - the logback configuration, default tool-logback.xml<br>
+   * h/help - prints the help tool<br>
    *
    * @param args the command-line arguments, not null
    * @return true if successful, false otherwise
@@ -94,10 +93,10 @@ public abstract class AbstractDualComponentTool {
   /**
    * Initializes and runs the tool from standard command-line arguments.
    * <p>
-   * The base class defined three options:<br />
-   * c/component server URI - the component server URI, mandatory<br />
-   * l/logback - the logback configuration, default tool-logback.xml<br />
-   * h/help - prints the help tool<br />
+   * The base class defined three options:<br>
+   * c/component server URI - the component server URI, mandatory<br>
+   * l/logback - the logback configuration, default tool-logback.xml<br>
+   * h/help - prints the help tool<br>
    *
    * @param args the command-line arguments, not null
    * @param defaultLogbackResource the default logback resource, null to use tool-logback.xml as the default
@@ -130,10 +129,12 @@ public abstract class AbstractDualComponentTool {
   /**
    * Runs the tool.
    * <p>
-   * This starts the tool context and calls {@link #run(ToolContext)}. This will catch exceptions and print a stack trace.
+   * This starts the tool context and calls {@link #run(RemoteComponentFactory, RemoteComponentFactory)}. This will catch exceptions and print a stack trace.
    *
-   * @param srcComponentServerUri  the config resource location, not null
-   * @param destComponentServerUri  the config resource location, not null
+   * @param srcComponentServerUri
+   *          the config resource location, not null
+   * @param destComponentServerUri
+   *          the config resource location, not null
    * @return true if successful
    */
   public final boolean run(String srcComponentServerUri, String destComponentServerUri) {
@@ -270,10 +271,9 @@ public abstract class AbstractDualComponentTool {
     if (componentServerUri.contains("/")) {
       // Assume it's the full URI
       return componentServerUri;
-    } else {
-      // Assume it's host[:port]
-      return "http://" + componentServerUri + "/jax";
     }
+    // Assume it's host[:port]
+    return "http://" + componentServerUri + "/jax";
   }
 
 }

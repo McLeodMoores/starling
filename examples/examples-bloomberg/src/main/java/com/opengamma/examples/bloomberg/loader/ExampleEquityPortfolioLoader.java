@@ -48,10 +48,8 @@ import com.opengamma.scripts.Scriptable;
 /**
  * Example code to load a very simple equity portfolio.
  * <p>
- * This code is kept deliberately as simple as possible.
- * There are no checks for the securities or portfolios already existing, so if you run it
- * more than once you will get multiple copies portfolios and securities with the same names.
- * It is designed to run against the HSQLDB example database.
+ * This code is kept deliberately as simple as possible. There are no checks for the securities or portfolios already existing, so if you run it more than once
+ * you will get multiple copies portfolios and securities with the same names. It is designed to run against the HSQLDB example database.
  */
 @Scriptable
 public class ExampleEquityPortfolioLoader extends AbstractTool<IntegrationToolContext> {
@@ -81,17 +79,18 @@ public class ExampleEquityPortfolioLoader extends AbstractTool<IntegrationToolCo
    */
   public static final String PORTFOLIO_NAME = "Equity Portfolio";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
-   * @param args  the standard tool arguments, not null
+   *
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new ExampleEquityPortfolioLoader().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   protected void createPortfolio(final Collection<ExternalId> tickers) {
 
     // create shell portfolio
@@ -150,7 +149,7 @@ public class ExampleEquityPortfolioLoader extends AbstractTool<IntegrationToolCo
     addPortfolio(portfolio);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     // load all equity securities
@@ -163,20 +162,20 @@ public class ExampleEquityPortfolioLoader extends AbstractTool<IntegrationToolCo
     final SecurityProvider securityProvider = getToolContext().getSecurityProvider();
     final DefaultSecurityLoader securityLoader = new DefaultSecurityLoader(securityMaster, securityProvider);
 
-    final Map<ExternalIdBundle, UniqueId> loadedSecurities = securityLoader.loadSecurities(functional(identifiers).map(new Function1<ExternalId, ExternalIdBundle>() {
-      @Override
-      public ExternalIdBundle execute(final ExternalId ticker) {
-        return ExternalIdBundle.of(ticker);
-      }
-    }).asList());
+    final Map<ExternalIdBundle, UniqueId> loadedSecurities = securityLoader
+        .loadSecurities(functional(identifiers).map(new Function1<ExternalId, ExternalIdBundle>() {
+          @Override
+          public ExternalIdBundle execute(final ExternalId ticker) {
+            return ExternalIdBundle.of(ticker);
+          }
+        }).asList());
     return loadedSecurities.values();
   }
 
   /**
    * Create a empty portfolio.
    * <p>
-   * This creates the portfolio and the root of the tree structure that holds the positions.
-   * Subsequent methods then populate the tree.
+   * This creates the portfolio and the root of the tree structure that holds the positions. Subsequent methods then populate the tree.
    *
    * @return the emoty portfolio, not null
    */
@@ -192,14 +191,16 @@ public class ExampleEquityPortfolioLoader extends AbstractTool<IntegrationToolCo
    * <p>
    * This creates the position using a random number of units and create one or two trades making up the position.
    *
-   * @param security  the security to add a position for, not null
+   * @param security
+   *          the security to add a position for, not null
    * @return the position, not null
    */
   protected ManageablePosition createPositionAndTrade(final EquitySecurity security) {
     LOGGER.debug("Creating position {}", security);
     final int shares = (RandomUtils.nextInt(490) + 10) * 10;
 
-    final ExternalIdBundle bundle = security.getExternalIdBundle(); // we could add an identifier pointing back to the original source database if we're doing an ETL.
+    final ExternalIdBundle bundle = security.getExternalIdBundle(); // we could add an identifier pointing back to the original source database if we're doing
+    // an ETL.
 
     final ManageablePosition position = new ManageablePosition(BigDecimal.valueOf(shares), bundle);
 
@@ -210,7 +211,8 @@ public class ExampleEquityPortfolioLoader extends AbstractTool<IntegrationToolCo
     } else {
       final ManageableTrade trade1 = new ManageableTrade(BigDecimal.valueOf(2000), bundle, LocalDate.of(2010, 12, 1), null, ExternalId.of("CPARTY", "BACS"));
       position.addTrade(trade1);
-      final ManageableTrade trade2 = new ManageableTrade(BigDecimal.valueOf(shares - 2000), bundle, LocalDate.of(2010, 12, 2), null, ExternalId.of("CPARTY", "BACS"));
+      final ManageableTrade trade2 = new ManageableTrade(BigDecimal.valueOf(shares - 2000), bundle, LocalDate.of(2010, 12, 2), null,
+          ExternalId.of("CPARTY", "BACS"));
       position.addTrade(trade2);
     }
     return position;
@@ -219,7 +221,8 @@ public class ExampleEquityPortfolioLoader extends AbstractTool<IntegrationToolCo
   /**
    * Adds the position to the master.
    *
-   * @param position  the position to add, not null
+   * @param position
+   *          the position to add, not null
    * @return the added document, not null
    */
   protected PositionDocument addPosition(final ManageablePosition position) {
@@ -229,7 +232,8 @@ public class ExampleEquityPortfolioLoader extends AbstractTool<IntegrationToolCo
   /**
    * Adds the portfolio to the master.
    *
-   * @param portfolio  the portfolio to add, not null
+   * @param portfolio
+   *          the portfolio to add, not null
    * @return the added document, not null
    */
   protected PortfolioDocument addPortfolio(final ManageablePortfolio portfolio) {

@@ -27,7 +27,7 @@ public class HMUZAdjusterTest {
   }
 
   @Test
-  public void test_LocalDate() {
+  public void testLocalDate() {
     assertEquals(LocalDate.of(2012, 3, 1), ADJUSTER.adjustInto(LocalDate.of(2012, 1, 1)));
     assertEquals(LocalDate.of(2012, 3, 1), ADJUSTER.adjustInto(LocalDate.of(2012, 2, 1)));
     assertEquals(LocalDate.of(2012, 3, 1), ADJUSTER.adjustInto(LocalDate.of(2012, 3, 1)));
@@ -43,7 +43,7 @@ public class HMUZAdjusterTest {
   }
 
   @Test
-  public void test_LocalDateTime() {
+  public void testLocalDateTime() {
     assertEquals(LocalDateTime.of(2012, 3, 1, 0, 0), ADJUSTER.adjustInto(LocalDateTime.of(2012, 1, 1, 0, 0)));
   }
 

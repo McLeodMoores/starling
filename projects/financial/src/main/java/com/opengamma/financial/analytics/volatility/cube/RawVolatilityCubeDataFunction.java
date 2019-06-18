@@ -43,10 +43,8 @@ import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * Constructs a volatility cube from a definition and specification.
- * The market data is not manipulated (i.e. quotes are produced for each ticker,
- * but it is up to down-stream functions to put it in the form that the analytics
- * are expecting).
+ * Constructs a volatility cube from a definition and specification. The market data is not manipulated (i.e. quotes are produced for each ticker, but it is up
+ * to down-stream functions to put it in the form that the analytics are expecting).
  */
 public class RawVolatilityCubeDataFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
@@ -64,17 +62,26 @@ public class RawVolatilityCubeDataFunction extends AbstractFunction.NonCompiledI
 
   /**
    * Builds the market data requirements for a volatility cube.
-   * @param <X> The type of the x axis data
-   * @param <Y> The type of the y axis data
-   * @param <Z> The type of the z axis data
-   * @param specificationSource The specification source
-   * @param definitionSource The definition source
-   * @param specificationName The specification name
-   * @param definitionName The definition name
+   *
+   * @param <X>
+   *          The type of the x axis data
+   * @param <Y>
+   *          The type of the y axis data
+   * @param <Z>
+   *          The type of the z axis data
+   * @param specificationSource
+   *          The specification source
+   * @param definitionSource
+   *          The definition source
+   * @param specificationName
+   *          The specification name
+   * @param definitionName
+   *          The definition name
    * @return The set of market data ids required to populate to volatility cube data snapshot object
-   * @throws OpenGammaRuntimeException If the cube specification or definition is null or if the cube quote types
-   * are not equal
+   * @throws OpenGammaRuntimeException
+   *           If the cube specification or definition is null or if the cube quote types are not equal
    */
+  @SuppressWarnings("unchecked")
   public static <X, Y, Z> Set<ValueRequirement> buildDataRequirements(final VolatilityCubeSpecificationSource specificationSource,
       final VolatilityCubeDefinitionSource definitionSource, final String specificationName, final String definitionName) {
     final VolatilityCubeSpecification specification = specificationSource.getSpecification(specificationName);
@@ -85,9 +92,9 @@ public class RawVolatilityCubeDataFunction extends AbstractFunction.NonCompiledI
     if (definition == null) {
       throw new OpenGammaRuntimeException("Could not get volatility cube definition named " + definitionName);
     }
-    if (!(definition.getCubeQuoteType().equals(specification.getCubeQuoteType()))) {
-      throw new OpenGammaRuntimeException("Inconsistent cube quote type for definition (" + definition.getCubeQuoteType() +
-          ") and specification (" + specification.getCubeQuoteType() + ")");
+    if (!definition.getCubeQuoteType().equals(specification.getCubeQuoteType())) {
+      throw new OpenGammaRuntimeException("Inconsistent cube quote type for definition (" + definition.getCubeQuoteType()
+          + ") and specification (" + specification.getCubeQuoteType() + ")");
     }
     final CubeInstrumentProvider<X, Y, Z> provider = (CubeInstrumentProvider<X, Y, Z>) specification.getCubeInstrumentProvider();
     final Set<ValueRequirement> result = new HashSet<>();
@@ -96,7 +103,7 @@ public class RawVolatilityCubeDataFunction extends AbstractFunction.NonCompiledI
         for (final Z z : definition.getZs()) {
           if (x instanceof String && y instanceof String) {
             try {
-              //TODO the type is not picked up successfully
+              // TODO the type is not picked up successfully
               final Tenor xTenor = Tenor.parse((String) x);
               final Tenor yTenor = Tenor.parse((String) y);
               final Double zDouble = Double.parseDouble((String) z);
@@ -137,10 +144,10 @@ public class RawVolatilityCubeDataFunction extends AbstractFunction.NonCompiledI
     final Map<Triple<Tenor, Tenor, Double>, Double> data = new HashMap<>();
     for (final Object xObj : definition.getXs()) {
       for (final Object yObj : definition.getYs()) {
-        for (final Object zObj : definition.getZs()) { 
-          final Tenor x = (xObj instanceof Tenor) ? (Tenor) xObj : Tenor.parse((String) xObj);
-          final Tenor y = (yObj instanceof Tenor) ? (Tenor) yObj : Tenor.parse((String) yObj);
-          final Double z = (zObj instanceof Double) ? (Double) zObj : Double.parseDouble((String) zObj);
+        for (final Object zObj : definition.getZs()) {
+          final Tenor x = xObj instanceof Tenor ? (Tenor) xObj : Tenor.parse((String) xObj);
+          final Tenor y = yObj instanceof Tenor ? (Tenor) yObj : Tenor.parse((String) yObj);
+          final Double z = zObj instanceof Double ? (Double) zObj : Double.parseDouble((String) zObj);
           final ExternalId identifier = provider.getInstrument(x, y, z);
           final ValueRequirement requirement = new ValueRequirement(provider.getDataFieldName(), ComputationTargetType.PRIMITIVE, identifier);
           final Object volatilityObject = inputs.getValue(requirement);
@@ -163,7 +170,6 @@ public class RawVolatilityCubeDataFunction extends AbstractFunction.NonCompiledI
     return Collections.singleton(new ComputedValue(new ValueSpecification(VOLATILITY_CUBE_MARKET_DATA, target.toSpecification(), properties),
         volatilityCubeData));
   }
-
 
   @Override
   public boolean canHandleMissingInputs() {
@@ -203,7 +209,8 @@ public class RawVolatilityCubeDataFunction extends AbstractFunction.NonCompiledI
     }
     final String definitionName = Iterables.getOnlyElement(definitionNames);
     final String specificationName = Iterables.getOnlyElement(specificationNames);
-    final Set<ValueRequirement> requirements = buildDataRequirements(_volatilityCubeSpecificationSource, _volatilityCubeDefinitionSource, specificationName, definitionName);
+    final Set<ValueRequirement> requirements = buildDataRequirements(_volatilityCubeSpecificationSource, _volatilityCubeDefinitionSource, specificationName,
+        definitionName);
     final ValueProperties definitionProperties = ValueProperties.builder()
         .with(CUBE, definitionNames)
         .get();
@@ -216,7 +223,8 @@ public class RawVolatilityCubeDataFunction extends AbstractFunction.NonCompiledI
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String definitionName = null;
     String specificationName = null;
     String cubeQuoteType = null;

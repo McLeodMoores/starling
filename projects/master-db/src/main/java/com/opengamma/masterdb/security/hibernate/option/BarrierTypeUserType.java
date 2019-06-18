@@ -10,7 +10,7 @@ import com.opengamma.financial.security.option.BarrierType;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the BarrierType enum
+ * Custom Hibernate usertype for the BarrierType enum.
  */
 public class BarrierTypeUserType extends EnumUserType<BarrierType> {
 

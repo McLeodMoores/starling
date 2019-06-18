@@ -53,8 +53,10 @@ public class DataPositionResource extends AbstractDocumentDataResource<PositionD
   /**
    * Creates the resource.
    *
-   * @param parentResource  the parent resource, not null
-   * @param positionId  the position unique identifier, not null
+   * @param parentResource
+   *          the parent resource, not null
+   * @param positionId
+   *          the position unique identifier, not null
    */
   public DataPositionResource(final DataPositionMasterResource parentResource, final ObjectId positionId) {
     ArgumentChecker.notNull(parentResource, "parentResource");
@@ -63,7 +65,7 @@ public class DataPositionResource extends AbstractDocumentDataResource<PositionD
     _urlResourceId = positionId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the parent resource.
@@ -84,7 +86,7 @@ public class DataPositionResource extends AbstractDocumentDataResource<PositionD
     return _urlResourceId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the position master.
@@ -96,12 +98,12 @@ public class DataPositionResource extends AbstractDocumentDataResource<PositionD
     return getParentResource().getPositionMaster();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("versions")
   public Response history(@Context final UriInfo uriInfo) {
     final PositionHistoryRequest request = RestUtils.decodeQueryParams(uriInfo, PositionHistoryRequest.class);
-    if (getUrlId().equals(request.getObjectId()) == false) {
+    if (!getUrlId().equals(request.getObjectId())) {
       throw new IllegalArgumentException("Document objectId does not match URI");
     }
     final PositionHistoryResult result = getMaster().history(request);

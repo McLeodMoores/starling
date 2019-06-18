@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.matrix;
@@ -13,7 +13,7 @@ import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.linalg.Algebra;
 
 /**
- * Provides matrix algebra by using the <a href = "http://acs.lbl.gov/software/colt/api/cern/colt/matrix/linalg/Algebra.html">Colt matrix algebra library</a>. 
+ * Provides matrix algebra by using the <a href = "http://acs.lbl.gov/software/colt/api/cern/colt/matrix/linalg/Algebra.html">Colt matrix algebra library</a>.
  */
 public class ColtMatrixAlgebra extends MatrixAlgebra {
   private static final Algebra ALGEBRA = new Algebra();
@@ -165,7 +165,9 @@ public class ColtMatrixAlgebra extends MatrixAlgebra {
 
   /**
    * {@inheritDoc}
+   * 
    * @throws NotImplementedException
+   *           in all cases
    */
   @Override
   public DoubleMatrix2D getPower(final Matrix<?> m, final double p) {

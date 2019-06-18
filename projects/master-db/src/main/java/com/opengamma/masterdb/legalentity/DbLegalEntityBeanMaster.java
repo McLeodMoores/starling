@@ -25,13 +25,13 @@ import com.opengamma.util.db.DbConnector;
 
 /**
  * A legal entity master implementation based on Joda-Beans using a database for persistence.
- * <p/>
+ * <p>
  * This is a full implementation of the legal entity master using an SQL database.
  * Data is stored based on the Joda-Beans API.
  * Full details of the API are in {@link com.opengamma.master.legalentity.LegalEntityMaster}.
- * <p/>
+ * <p>
  * Applications can configure this master using the callback class passed in.
- * <p/>
+ * <p>
  * This class is mutable but must be treated as immutable after configuration.
  */
 public class DbLegalEntityBeanMaster

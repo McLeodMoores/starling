@@ -44,18 +44,28 @@ public final class CouponONArithmeticAverageSpreadSimplified extends Coupon {
 
   /**
    * Constructor.
-   * @param currency The coupon currency.
-   * @param paymentTime The coupon payment time.
-   * @param notional The coupon notional.
-   * @param index The index associated to the coupon.
-   * @param fixingPeriodStartTime The fixing period start time (in years).
-   * @param fixingPeriodEndTime The fixing period end time (in years).
-   * @param fixingPeriodAccrualFactor The fixing period accrual factor.
-   * @param spread The spread rate paid above the arithmetic average.
-   * @param paymentAccrualFactor The year fraction of the full coupon.
+   * 
+   * @param currency
+   *          The coupon currency.
+   * @param paymentTime
+   *          The coupon payment time.
+   * @param notional
+   *          The coupon notional.
+   * @param index
+   *          The index associated to the coupon.
+   * @param fixingPeriodStartTime
+   *          The fixing period start time (in years).
+   * @param fixingPeriodEndTime
+   *          The fixing period end time (in years).
+   * @param fixingPeriodAccrualFactor
+   *          The fixing period accrual factor.
+   * @param spread
+   *          The spread rate paid above the arithmetic average.
+   * @param paymentAccrualFactor
+   *          The year fraction of the full coupon.
    */
-  private CouponONArithmeticAverageSpreadSimplified(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final IndexON index, final double fixingPeriodStartTime,
-      final double fixingPeriodEndTime, final double fixingPeriodAccrualFactor, final double spread) {
+  private CouponONArithmeticAverageSpreadSimplified(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional,
+      final IndexON index, final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingPeriodAccrualFactor, final double spread) {
     super(currency, paymentTime, paymentYearFraction, notional);
     _index = index;
     _fixingPeriodStartTime = fixingPeriodStartTime;
@@ -67,25 +77,35 @@ public final class CouponONArithmeticAverageSpreadSimplified extends Coupon {
 
   /**
    * Builder from financial details.
-   * @param paymentTime The coupon payment time.
-   * @param paymentAccrualFactor The year fraction of the full coupon.
-   * @param notional The coupon notional.
-   * @param index The index associated to the coupon.
-   * @param fixingPeriodStartTime The fixing period start time (in years).
-   * @param fixingPeriodEndTime The fixing period end time (in years).
-   * @param fixingPeriodAccrualFactor The fixing period accrual factor.
-   * @param spread The spread rate paid above the arithmetic average.
+   * 
+   * @param paymentTime
+   *          The coupon payment time.
+   * @param paymentAccrualFactor
+   *          The year fraction of the full coupon.
+   * @param notional
+   *          The coupon notional.
+   * @param index
+   *          The index associated to the coupon.
+   * @param fixingPeriodStartTime
+   *          The fixing period start time (in years).
+   * @param fixingPeriodEndTime
+   *          The fixing period end time (in years).
+   * @param fixingPeriodAccrualFactor
+   *          The fixing period accrual factor.
+   * @param spread
+   *          The spread rate paid above the arithmetic average.
    * @return The coupon.
    */
-  public static CouponONArithmeticAverageSpreadSimplified from(final double paymentTime, final double paymentAccrualFactor, final double notional, final IndexON index, final double fixingPeriodStartTime,
-      final double fixingPeriodEndTime, final double fixingPeriodAccrualFactor, final double spread) {
+  public static CouponONArithmeticAverageSpreadSimplified from(final double paymentTime, final double paymentAccrualFactor, final double notional,
+      final IndexON index, final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingPeriodAccrualFactor, final double spread) {
     ArgumentChecker.notNull(index, "Index");
-    return new CouponONArithmeticAverageSpreadSimplified(index.getCurrency(), paymentTime, paymentAccrualFactor, notional, index, fixingPeriodStartTime, fixingPeriodEndTime,
-        fixingPeriodAccrualFactor, spread);
+    return new CouponONArithmeticAverageSpreadSimplified(index.getCurrency(), paymentTime, paymentAccrualFactor, notional, index, fixingPeriodStartTime,
+        fixingPeriodEndTime, fixingPeriodAccrualFactor, spread);
   }
 
   /**
    * Gets the index.
+   * 
    * @return The index.
    */
   public IndexON getIndex() {
@@ -94,6 +114,7 @@ public final class CouponONArithmeticAverageSpreadSimplified extends Coupon {
 
   /**
    * Returns the spread rate paid above the arithmetic average.
+   * 
    * @return The spread.
    */
   public double getSpread() {
@@ -102,6 +123,7 @@ public final class CouponONArithmeticAverageSpreadSimplified extends Coupon {
 
   /**
    * Returns the fixed amount related to the spread.
+   * 
    * @return The amount.
    */
   public double getSpreadAmount() {
@@ -110,6 +132,7 @@ public final class CouponONArithmeticAverageSpreadSimplified extends Coupon {
 
   /**
    * Returns the fixing period start time (in years).
+   * 
    * @return The time.
    */
   public double getFixingPeriodStartTime() {
@@ -118,6 +141,7 @@ public final class CouponONArithmeticAverageSpreadSimplified extends Coupon {
 
   /**
    * Returns the fixing period end time (in years).
+   * 
    * @return The time.
    */
   public double getFixingPeriodEndTime() {
@@ -126,6 +150,7 @@ public final class CouponONArithmeticAverageSpreadSimplified extends Coupon {
 
   /**
    * Returns the fixing period accrual factor.
+   * 
    * @return The factor.
    */
   public double getFixingPeriodAccrualFactor() {

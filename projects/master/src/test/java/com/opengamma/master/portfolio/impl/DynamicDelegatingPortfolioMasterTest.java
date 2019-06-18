@@ -23,33 +23,39 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class DynamicDelegatingPortfolioMasterTest {
 
-  private final String schemeA = "A";
-  private final String schemeB = "B";
-  private final ObjectIdSupplier schemeAProvider = new ObjectIdSupplier(schemeA);
-  private final ObjectIdSupplier schemeBProvider = new ObjectIdSupplier(schemeB);
+  private final String _schemeA = "A";
+  private final String _schemeB = "B";
+  private final ObjectIdSupplier _schemeAProvider = new ObjectIdSupplier(_schemeA);
+  private final ObjectIdSupplier _schemeBProvider = new ObjectIdSupplier(_schemeB);
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  void test_DefaultDelegateShouldNotFindAnyData() {
-    final UniqueId doesNotExist = UniqueId.of(schemeA, "DoesNotExist");
+  void testDefaultDelegateShouldNotFindAnyData() {
+    final UniqueId doesNotExist = UniqueId.of(_schemeA, "DoesNotExist");
     final DynamicDelegatingPortfolioMaster sut = new DynamicDelegatingPortfolioMaster();
     sut.get(doesNotExist);
   }
 
+  /**
+   *
+   */
   @Test
-  void test_AddSomeDelegates() {
-    final PortfolioDocument portA = generatePortfolio("PortA", schemeAProvider);
-    final PortfolioDocument portB = generatePortfolio("PortB", schemeBProvider);
+  void testAddSomeDelegates() {
+    final PortfolioDocument portA = generatePortfolio("PortA", _schemeAProvider);
+    final PortfolioDocument portB = generatePortfolio("PortB", _schemeBProvider);
 
     final DynamicDelegatingPortfolioMaster sut = new DynamicDelegatingPortfolioMaster();
 
-    sut.register(schemeA, new InMemoryPortfolioMaster(schemeAProvider));
-    final PortfolioDocument addedPortA = sut.add(schemeA, portA);
+    sut.register(_schemeA, new InMemoryPortfolioMaster(_schemeAProvider));
+    final PortfolioDocument addedPortA = sut.add(_schemeA, portA);
     assertEquals(addedPortA, portA, "adding the document had unexpected side effect");
     PortfolioDocument fetchedPortA = sut.get(addedPortA.getUniqueId());
     assertEquals(fetchedPortA, portA, "unable to fetch same document right after adding");
 
-    sut.register(schemeB, new InMemoryPortfolioMaster(schemeBProvider));
-    final PortfolioDocument addedPortB = sut.add(schemeB, portB);
+    sut.register(_schemeB, new InMemoryPortfolioMaster(_schemeBProvider));
+    final PortfolioDocument addedPortB = sut.add(_schemeB, portB);
     assertEquals(addedPortB, portB, "adding the document had unexpected side effect");
     PortfolioDocument fetchedPortB = sut.get(addedPortB.getUniqueId());
     assertEquals(fetchedPortB, portB, "unable to fetch same document right after adding");
@@ -61,20 +67,23 @@ public class DynamicDelegatingPortfolioMasterTest {
     assertEquals(fetchedPortB, portB, "unable to fetch document a second time");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  void test_RemovingDelegates() {
-    final PortfolioDocument portA = generatePortfolio("PortA", schemeAProvider);
-    final PortfolioDocument portB = generatePortfolio("PortB", schemeBProvider);
+  void testRemovingDelegates() {
+    final PortfolioDocument portA = generatePortfolio("PortA", _schemeAProvider);
+    final PortfolioDocument portB = generatePortfolio("PortB", _schemeBProvider);
 
     final DynamicDelegatingPortfolioMaster sut = new DynamicDelegatingPortfolioMaster();
 
-    sut.register(schemeA, new InMemoryPortfolioMaster(schemeAProvider));
-    final UniqueId addedPort = sut.add(schemeA, portA).getUniqueId();
+    sut.register(_schemeA, new InMemoryPortfolioMaster(_schemeAProvider));
+    final UniqueId addedPort = sut.add(_schemeA, portA).getUniqueId();
 
-    sut.register(schemeB, new InMemoryPortfolioMaster(schemeBProvider));
-    sut.add(schemeB, portB);
+    sut.register(_schemeB, new InMemoryPortfolioMaster(_schemeBProvider));
+    sut.add(_schemeB, portB);
 
-    sut.deregister(schemeA);
+    sut.deregister(_schemeA);
 
     sut.get(addedPort); // will throw data not found exception because we deregistered scheme A
   }

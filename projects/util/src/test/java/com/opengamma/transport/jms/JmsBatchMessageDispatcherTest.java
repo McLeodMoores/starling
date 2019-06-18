@@ -28,6 +28,10 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class JmsBatchMessageDispatcherTest {
 
+  /**
+   * @throws InterruptedException
+   *           if there is an interruption
+   */
   @Test(invocationCount = 5, successPercentage = 19)
   public void queueOperation() throws InterruptedException {
     final String queueName = "JmsBatchMessageDispatcherTest-queueOperation-" + System.getProperty("user.name") + "-" + System.currentTimeMillis();

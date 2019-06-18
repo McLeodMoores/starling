@@ -5,10 +5,9 @@
  */
 package com.opengamma.masterdb.security.hibernate.future;
 
-import com.opengamma.financial.security.future.IndexFutureSecurity;
-
 /**
- * A Hibernate bean representation of {@link IndexFutureSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.future.IndexFutureSecurity}.
  */
 public class IndexFutureBean extends FutureSecurityBean {
 

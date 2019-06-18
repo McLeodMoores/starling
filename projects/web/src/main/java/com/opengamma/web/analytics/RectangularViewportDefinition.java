@@ -37,16 +37,21 @@ public class RectangularViewportDefinition extends ViewportDefinition {
 
   /**
    * @param version
-   * @param rows Indices of rows in the viewport, not empty
-   * @param columns Indices of columns in the viewport, not empty
+   *          the version
+   * @param rows
+   *          Indices of rows in the viewport, not empty
+   * @param columns
+   *          Indices of columns in the viewport, not empty
    * @param format
+   *          the type format
    * @param enableLogging
+   *          true to enable logging
    */
   /* package */ RectangularViewportDefinition(final int version,
-                                              final List<Integer> rows,
-                                              final List<Integer> columns,
-                                              final TypeFormatter.Format format,
-                                              final Boolean enableLogging) {
+      final List<Integer> rows,
+      final List<Integer> columns,
+      final TypeFormatter.Format format,
+      final Boolean enableLogging) {
     super(version, enableLogging);
     ArgumentChecker.notNull(format, "format");
     _format = format;

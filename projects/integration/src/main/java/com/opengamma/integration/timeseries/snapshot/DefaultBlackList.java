@@ -29,7 +29,7 @@ import com.google.common.collect.Lists;
 @BeanDefinition
 public class DefaultBlackList extends DirectBean implements BlackList {
 
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _name;
 
   @PropertyDefinition(validate = "notNull")
@@ -59,6 +59,7 @@ public class DefaultBlackList extends DirectBean implements BlackList {
    * Gets the name.
    * @return the value of the property, not null
    */
+  @Override
   public String getName() {
     return _name;
   }

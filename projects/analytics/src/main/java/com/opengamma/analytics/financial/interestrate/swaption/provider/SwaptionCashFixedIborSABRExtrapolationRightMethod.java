@@ -31,9 +31,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Class used to compute the price and sensitivity of a cash-settled European swaption with SABR model and extrapolation to the right.
- * Implemented only for the SABRHaganVolatilityFunction.
- * OpenGamma implementation note for the extrapolation: Smile extrapolation, version 1.2, May 2011.
+ * Class used to compute the price and sensitivity of a cash-settled European swaption with SABR model and extrapolation to the right. Implemented only for the
+ * SABRHaganVolatilityFunction. OpenGamma implementation note for the extrapolation: Smile extrapolation, version 1.2, May 2011.
  */
 public class SwaptionCashFixedIborSABRExtrapolationRightMethod {
 
@@ -54,8 +53,11 @@ public class SwaptionCashFixedIborSABRExtrapolationRightMethod {
 
   /**
    * Constructor from cut-off strike and tail parameter.
-   * @param cutOffStrike The cut-off strike.
-   * @param mu The tail thickness parameter.
+   * 
+   * @param cutOffStrike
+   *          The cut-off strike.
+   * @param mu
+   *          The tail thickness parameter.
    */
   public SwaptionCashFixedIborSABRExtrapolationRightMethod(final double cutOffStrike, final double mu) {
     _cutOffStrike = cutOffStrike;
@@ -64,8 +66,11 @@ public class SwaptionCashFixedIborSABRExtrapolationRightMethod {
 
   /**
    * Computes the present value of a cash-settled European swaption in the SABR model with extrapolation to the right.
-   * @param swaption The swaption.
-   * @param sabrData The SABR data.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR data.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final SwaptionCashFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
@@ -93,7 +98,8 @@ public class SwaptionCashFixedIborSABRExtrapolationRightMethod {
       final double rho = sabrData.getSABRParameter().getRho(expiryMaturity);
       final double nu = sabrData.getSABRParameter().getNu(expiryMaturity);
       final SABRFormulaData sabrParam = new SABRFormulaData(alpha, beta, rho, nu);
-      final SABRExtrapolationRightFunction sabrExtrapolation = new SABRExtrapolationRightFunction(forward, sabrParam, _cutOffStrike, swaption.getTimeToExpiry(), _mu);
+      final SABRExtrapolationRightFunction sabrExtrapolation = new SABRExtrapolationRightFunction(forward, sabrParam, _cutOffStrike, swaption.getTimeToExpiry(),
+          _mu);
       pv = discountFactorSettle * pvbp * sabrExtrapolation.price(swaption) * (swaption.isLong() ? 1.0 : -1.0);
     }
     return MultipleCurrencyAmount.of(ccy, pv);
@@ -101,11 +107,15 @@ public class SwaptionCashFixedIborSABRExtrapolationRightMethod {
 
   /**
    * Computes the present value rate sensitivity to rates of a cash-settled European swaption in the SABR model with extrapolation to the right.
-   * @param swaption The swaption.
-   * @param sabrData The SABR data. The SABR function need to be the Hagan function.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR data. The SABR function need to be the Hagan function.
    * @return The present value curve sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final SwaptionCashFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final SwaptionCashFixedIbor swaption,
+      final SABRSwaptionProviderInterface sabrData) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(sabrData, "SABR swaption provider");
     final MulticurveProviderInterface multicurves = sabrData.getMulticurveProvider();
@@ -132,7 +142,8 @@ public class SwaptionCashFixedIborSABRExtrapolationRightMethod {
     final double rho = sabrData.getSABRParameter().getRho(expiryMaturity);
     final double nu = sabrData.getSABRParameter().getNu(expiryMaturity);
     final SABRFormulaData sabrParam = new SABRFormulaData(alpha, beta, rho, nu);
-    final SABRExtrapolationRightFunction sabrExtrapolation = new SABRExtrapolationRightFunction(forward, sabrParam, _cutOffStrike, swaption.getTimeToExpiry(), _mu);
+    final SABRExtrapolationRightFunction sabrExtrapolation = new SABRExtrapolationRightFunction(forward, sabrParam, _cutOffStrike, swaption.getTimeToExpiry(),
+        _mu);
     final double price = sabrExtrapolation.price(swaption);
     result = result.multipliedBy(pvbp * price);
     result = result.plus(forwardDr.multipliedBy(discountFactorSettle * (pvbpDf * price + pvbp * sabrExtrapolation.priceDerivativeForward(swaption))));
@@ -144,8 +155,11 @@ public class SwaptionCashFixedIborSABRExtrapolationRightMethod {
 
   /**
    * Computes the present value SABR sensitivity of a physical delivery European swaption in the SABR model with extrapolation to the right.
-   * @param swaption The swaption.
-   * @param sabrData The SABR data. The SABR function need to be the Hagan function.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR data. The SABR function need to be the Hagan function.
    * @return The present value SABR sensitivity.
    */
   public PresentValueSABRSensitivityDataBundle presentValueSABRSensitivity(final SwaptionCashFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
@@ -165,10 +179,11 @@ public class SwaptionCashFixedIborSABRExtrapolationRightMethod {
     final double rho = sabrData.getSABRParameter().getRho(expiryMaturity);
     final double nu = sabrData.getSABRParameter().getNu(expiryMaturity);
     final SABRFormulaData sabrParam = new SABRFormulaData(alpha, beta, rho, nu);
-    final SABRExtrapolationRightFunction sabrExtrapolation = new SABRExtrapolationRightFunction(forward, sabrParam, _cutOffStrike, swaption.getTimeToExpiry(), _mu);
+    final SABRExtrapolationRightFunction sabrExtrapolation = new SABRExtrapolationRightFunction(forward, sabrParam, _cutOffStrike, swaption.getTimeToExpiry(),
+        _mu);
     final double[] priceDSabr = new double[4];
     sabrExtrapolation.priceAdjointSABR(swaption, priceDSabr);
-    final double omega = (swaption.isLong() ? 1.0 : -1.0);
+    final double omega = swaption.isLong() ? 1.0 : -1.0;
     sensi.addAlpha(expiryMaturity, omega * discountFactorSettle * pvbp * priceDSabr[0]);
     sensi.addBeta(expiryMaturity, omega * discountFactorSettle * pvbp * priceDSabr[1]);
     sensi.addRho(expiryMaturity, omega * discountFactorSettle * pvbp * priceDSabr[2]);

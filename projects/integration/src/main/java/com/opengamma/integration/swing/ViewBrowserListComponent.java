@@ -29,7 +29,7 @@ import com.opengamma.engine.view.ViewDefinition;
 import com.opengamma.master.config.ConfigMaster;
 
 /**
- * Swing component with a text box at the top and a filtered list of views underneath
+ * Swing component with a text box at the top and a filtered list of views underneath.
  */
 public class ViewBrowserListComponent extends JComponent {
 
@@ -56,7 +56,7 @@ public class ViewBrowserListComponent extends JComponent {
     _viewNameTextField.addKeyListener(new KeyListener() {
       private void actionPerformed(final KeyEvent e) {
         final JTextField field = _viewNameTextField;
-        _viewListModel.setFilter(field.getText());;
+        _viewListModel.setFilter(field.getText());
       }
 
       @Override
@@ -81,19 +81,17 @@ public class ViewBrowserListComponent extends JComponent {
       @Override
       public void valueChanged(final ListSelectionEvent e) {
         @SuppressWarnings("unchecked")
-        final
-        JList<ViewEntry> cb = (JList<ViewEntry>) e.getSource();
+        final JList<ViewEntry> cb = (JList<ViewEntry>) e.getSource();
         final ViewEntry viewEntry = cb.getSelectedValue();
         if (viewEntry != null) {
           SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
               @SuppressWarnings("unchecked")
-              final
-              ConfigItem<ViewDefinition> configItem = (ConfigItem<ViewDefinition>) _configSource.get(viewEntry.getUniqueId());
+              final ConfigItem<ViewDefinition> configItem = (ConfigItem<ViewDefinition>) _configSource.get(viewEntry.getUniqueId());
               if (configItem.getValue() != null) {
                 _viewNameTextField.setText(viewEntry.getName());
-                //_portfolioTree.setModel(getPortfolioTreeModel(configItem.getValue().getPortfolioId(), getToolContext()));
+                // _portfolioTree.setModel(getPortfolioTreeModel(configItem.getValue().getPortfolioId(), getToolContext()));
               } else {
                 JOptionPane.showMessageDialog(null, "There is no portfolio set in the selected view", "No portfolio", JOptionPane.ERROR_MESSAGE);
               }
@@ -107,12 +105,14 @@ public class ViewBrowserListComponent extends JComponent {
       @Override
       public void keyTyped(final KeyEvent e) {
       }
+
       @Override
       public void keyPressed(final KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_UP && _viewList.getSelectedIndex() == 0) {
           _viewNameTextField.requestFocusInWindow();
         }
       }
+
       @Override
       public void keyReleased(final KeyEvent e) {
       }
@@ -130,6 +130,5 @@ public class ViewBrowserListComponent extends JComponent {
   public ViewListModel getViewListModel() {
     return _viewListModel;
   }
-
 
 }

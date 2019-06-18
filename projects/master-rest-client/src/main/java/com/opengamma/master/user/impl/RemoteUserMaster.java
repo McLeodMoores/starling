@@ -29,8 +29,8 @@ import com.sun.jersey.api.client.ClientResponse;
  * Provides access to a remote {@link UserMaster}.
  */
 public class RemoteUserMaster
-    extends AbstractRemoteMaster
-    implements UserMaster {
+extends AbstractRemoteMaster
+implements UserMaster {
 
   /**
    * The role master.
@@ -118,9 +118,8 @@ public class RemoteUserMaster
     ArgumentChecker.notNull(user, "user");
     if (user.getUniqueId() != null) {
       return update(user);
-    } else {
-      return add(user);
     }
+    return add(user);
   }
 
   @Override

@@ -14,27 +14,31 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Result of interpolation by piecewise polynomial containing
- * knots: Positions of knots
- * coefMatrix: Coefficient matrix whose i-th row vector is { a_n, a_{n-1}, ...} for the i-th interval, where a_n, a_{n-1},... are coefficients of f(x) = a_n (x-x_i)^n + a_{n-1} (x-x_i)^{n-1} + ....
- * In multidimensional cases, coefficients for the i-th interval of the j-th spline is in (j*(i-1) + i) -th row vector.
- * nIntervals: Number of intervals, which should be (Number of knots) - 1
- * order: Number of coefficients in polynomial, which is equal to (polynomial degree) + 1
- * dim: Number of splines
- * which are in the super class, and
- * _coeffSense Node sensitivity of the coefficients _coeffSense[i].getData()[j][k] is \frac{\partial a^i_{n-j}}{\partial y_k}
+ * Result of interpolation by piecewise polynomial containing information about:
+ * <ul>
+ * <li>the knot positions;</li>
+ * <li>a coefficient matrix whose i-th row vector is { a_n, a_{n-1}, ...} for the i-th interval, where a_n, a_{n-1},... are coefficients of f(x) = a_n (x-x_i)^n
+ * + a_{n-1} (x-x_i)^{n-1} + .... In multidimensional cases, coefficients for the i-th interval of the j-th spline is in (j*(i-1) + i) -th row vector;</li>
+ * <li>the number of coefficients in polynomial, which is equal to (polynomial degree) + 1;</li>
+ * <li>the number of splines</li>
+ * <li>the sensitivity of the coefficients whose (i,j,k)th element is \frac{\partial a^i_{n-j}}{\partial y_k}
+ * </ul>
  */
 public class PiecewisePolynomialResultsWithSensitivity extends PiecewisePolynomialResult {
 
   private final DoubleMatrix2D[] _coeffSense;
 
   /**
-   *
    * @param knots
+   *          the knot positions
    * @param coefMatrix
+   *          the polynomial coefficient matrix
    * @param order
+   *          the order
    * @param dim
-   * @param coeffSense the sensitivity of the coefficients to the nodes (y-values)
+   *          the number of splines
+   * @param coeffSense
+   *          the sensitivity of the coefficients to the nodes (y-values)
    */
   public PiecewisePolynomialResultsWithSensitivity(final DoubleMatrix1D knots, final DoubleMatrix2D coefMatrix, final int order,
       final int dim, final DoubleMatrix2D[] coeffSense) {
@@ -47,17 +51,20 @@ public class PiecewisePolynomialResultsWithSensitivity extends PiecewisePolynomi
   }
 
   /**
-   * Access _coeffSense
-   * @return _coeffSense
+   * Gets the sensitivities of the coefficients to the nodes.
+   * 
+   * @return the sensitivities
    */
   public DoubleMatrix2D[] getCoefficientSensitivityAll() {
     return _coeffSense;
   }
 
   /**
-   * Access _coeffSense for the i-th interval
+   * Gets the sensitivities of the coefficients to the nodes for the i-th interval.
+   * 
    * @param interval
-   * @return _coeffSense for the i-th interval
+   *          the interval
+   * @return the sensitivities for the i-th interval
    */
   public DoubleMatrix2D getCoefficientSensitivity(final int interval) {
     return _coeffSense[interval];

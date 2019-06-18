@@ -16,9 +16,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.CurrencyAmount;
 
 /**
- * Class to compute the quantities related to swaps fixed / Ibor with spread (annuity, PVBP, coupon equivalent).
- * Both legs should be in the same currency.
- * The methods check that the coupons on the non-fixed leg are of the type CouponIborSpread.
+ * Class to compute the quantities related to swaps fixed / Ibor with spread (annuity, PVBP, coupon equivalent). Both legs should be in the same currency. The
+ * methods check that the coupons on the non-fixed leg are of the type CouponIborSpread.
  */
 public final class SwapFixedIborSpreadDiscountingMethod extends SwapFixedCouponDiscountingMethod {
 
@@ -29,6 +28,7 @@ public final class SwapFixedIborSpreadDiscountingMethod extends SwapFixedCouponD
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static SwapFixedIborSpreadDiscountingMethod getInstance() {
@@ -48,13 +48,19 @@ public final class SwapFixedIborSpreadDiscountingMethod extends SwapFixedCouponD
 
   /**
    * Computes the coupon equivalent of a swap with margins (all coupons on the non-fixed leg should be CouponIborSpread).
-   * @param fixedCouponSwap The underlying swap.
-   * @param pvbp The swap PVBP.
-   * @param multicurves The multi-curves provider.
+   * 
+   * @param fixedCouponSwap
+   *          The underlying swap.
+   * @param pvbp
+   *          The swap PVBP.
+   * @param multicurves
+   *          The multi-curves provider.
    * @return The coupon equivalent.
    */
-  public double couponEquivalentSpreadModified(final SwapFixedCoupon<? extends Payment> fixedCouponSwap, final double pvbp, final MulticurveProviderInterface multicurves) {
-    ArgumentChecker.isTrue(fixedCouponSwap.getFirstLeg().getCurrency() == fixedCouponSwap.getSecondLeg().getCurrency(), "Both legs should be in the same currency");
+  public double couponEquivalentSpreadModified(final SwapFixedCoupon<? extends Payment> fixedCouponSwap, final double pvbp,
+      final MulticurveProviderInterface multicurves) {
+    ArgumentChecker.isTrue(fixedCouponSwap.getFirstLeg().getCurrency() == fixedCouponSwap.getSecondLeg().getCurrency(),
+        "Both legs should be in the same currency");
     final double pvFixed = METHOD_ANNUITY.presentValuePositiveNotional(fixedCouponSwap.getFixedLeg(), multicurves).getAmount();
     final double pvSpread = presentValueSpreadPositiveNotional(fixedCouponSwap.getSecondLeg(), multicurves).getAmount();
     return (pvFixed - pvSpread) / pvbp;
@@ -62,25 +68,34 @@ public final class SwapFixedIborSpreadDiscountingMethod extends SwapFixedCouponD
 
   /**
    * Computes the spread-modified swap forward rate, i.e. the pv of the floating leg without spread divided by the convention-modified PVBP.
-   * <p> Reference: Swaption pricing, OG-Notes, version 1.4, August 2012.
-   * @param fixedCouponSwap The underlying swap.
-   * @param pvbp The swap PVBP.
-   * @param multicurves The multi-curves provider.
+   * <p>
+   * Reference: Swaption pricing, OG-Notes, version 1.4, August 2012.
+   * 
+   * @param fixedCouponSwap
+   *          The underlying swap.
+   * @param pvbp
+   *          The swap PVBP.
+   * @param multicurves
+   *          The multi-curves provider.
    * @return The spread-modified forward.
    */
-  public double forwardSwapSpreadModified(final SwapFixedCoupon<? extends Payment> fixedCouponSwap, final double pvbp, final MulticurveProviderInterface multicurves) {
+  public double forwardSwapSpreadModified(final SwapFixedCoupon<? extends Payment> fixedCouponSwap, final double pvbp,
+      final MulticurveProviderInterface multicurves) {
     final double pvFloatNoSpread = presentValueIborNoSpreadPositiveNotional(fixedCouponSwap.getSecondLeg(), multicurves).getAmount();
     return pvFloatNoSpread / pvbp;
   }
 
   /**
-   * Computes the present value of the spreads in a leg made of CouponIborSpread. The absolute value of the notional is used. 
-   * @param leg The leg (or annuity).
-   * @param multicurves The multi-curves provider.
+   * Computes the present value of the spreads in a leg made of CouponIborSpread. The absolute value of the notional is used.
+   * 
+   * @param leg
+   *          The leg (or annuity).
+   * @param multicurves
+   *          The multi-curves provider.
    * @return The present value.
    */
   public CurrencyAmount presentValueSpreadPositiveNotional(final Annuity<? extends Payment> leg, final MulticurveProviderInterface multicurves) {
-    Currency ccy = leg.getCurrency();
+    final Currency ccy = leg.getCurrency();
     double pv = 0.0;
     for (int loopcpn = 0; loopcpn < leg.getNumberOfPayments(); loopcpn++) {
       ArgumentChecker.isTrue(leg.getNthPayment(loopcpn) instanceof CouponIborSpread, "Coupon should be Ibor with spread");
@@ -91,13 +106,17 @@ public final class SwapFixedIborSpreadDiscountingMethod extends SwapFixedCouponD
   }
 
   /**
-   * Computes the present value of the Ibor leg made of CouponIborSpread without the spread (only the Ibor is valued). The absolute value of the notional is used. 
-   * @param leg The leg (or annuity).
-   * @param multicurves The multi-curves provider.
+   * Computes the present value of the Ibor leg made of CouponIborSpread without the spread (only the Ibor is valued). The absolute value of the notional is
+   * used.
+   * 
+   * @param leg
+   *          The leg (or annuity).
+   * @param multicurves
+   *          The multi-curves provider.
    * @return The present value.
    */
   public CurrencyAmount presentValueIborNoSpreadPositiveNotional(final Annuity<? extends Payment> leg, final MulticurveProviderInterface multicurves) {
-    Currency ccy = leg.getCurrency();
+    final Currency ccy = leg.getCurrency();
     double pv = 0.0;
     for (int loopcpn = 0; loopcpn < leg.getNumberOfPayments(); loopcpn++) {
       ArgumentChecker.isTrue(leg.getNthPayment(loopcpn) instanceof CouponIborSpread, "Coupon should be Ibor with spread");

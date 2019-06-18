@@ -17,14 +17,14 @@ import com.opengamma.bbg.referencedata.ReferenceDataProvider;
 import com.opengamma.bbg.referencedata.cache.AbstractValueCachingReferenceDataProvider;
 
 /**
- * In memory caching reference data provider
+ * In memory caching reference data provider.
  */
-public class InMemoryCachingReferenceDataProvider extends AbstractValueCachingReferenceDataProvider implements ReferenceDataProvider {
+public class InMemoryCachingReferenceDataProvider extends AbstractValueCachingReferenceDataProvider {
 
   private final Map<String, ReferenceData> _refDataMap = Maps.newHashMap();
 
   public InMemoryCachingReferenceDataProvider(final ReferenceDataProvider underlying) {
-    this(underlying, Collections.<String, ReferenceData>emptyMap());
+    this(underlying, Collections.<String, ReferenceData> emptyMap());
   }
 
   public InMemoryCachingReferenceDataProvider(final ReferenceDataProvider underlying, final Map<String, ReferenceData> prePopulated) {
@@ -44,7 +44,8 @@ public class InMemoryCachingReferenceDataProvider extends AbstractValueCachingRe
   }
 
   /**
-   * An immutable map containing the records accessed by this instance
+   * An immutable map containing the records accessed by this instance.
+   * 
    * @return a map of reference data objects
    */
   public synchronized ImmutableMap<String, ReferenceData> getDataAccessed() {
@@ -52,12 +53,13 @@ public class InMemoryCachingReferenceDataProvider extends AbstractValueCachingRe
   }
 
   /**
-   * Adds the given data to the map
-   * @param refData the data to add
+   * Adds the given data to the map.
+   * 
+   * @param refData
+   *          the data to add
    */
   public synchronized void addToCache(final Map<String, ReferenceData> refData) {
     _refDataMap.putAll(refData);
   }
-
 
 }

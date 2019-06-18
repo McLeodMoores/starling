@@ -23,16 +23,17 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Dividend payments (per share) at discrete times $\tau_i$ of the form $\alpha_i + \beta_iS_{\tau_{i^-}}$  where $S_{\tau_{i^-}}$ is the stock price immediately before the
- * dividend payment.<p>
- * 
- * This is a toy model. It takes static values..
- * From these, we construct a model which pays fixed amounts for the first year, and amounts proportional to the share price thereafter  
+ * Dividend payments (per share) at discrete times $\tau_i$ of the form $\alpha_i + \beta_iS_{\tau_{i^-}}$ where $S_{\tau_{i^-}}$ is the stock price immediately
+ * before the dividend payment.
+ * <p>
+ *
+ * This is a toy model. It takes static values.. From these, we construct a model which pays fixed amounts for the first year, and amounts proportional to the
+ * share price thereafter
  */
 public class AffineDividendFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final double[] TAU = new double[] {0.25, 0.5, 0.75, 1, 2, 3, 4};
-  private static final double[] ALPHA = new double[] {0.23, 0.24, 0.25, 0.26, 0, 0, 0};
-  private static final double[] BETA = new double[] {0, 0, 0, 0, 0.15, 0.2, 0.3};
+  private static final double[] TAU = new double[] { 0.25, 0.5, 0.75, 1, 2, 3, 4 };
+  private static final double[] ALPHA = new double[] { 0.23, 0.24, 0.25, 0.26, 0, 0, 0 };
+  private static final double[] BETA = new double[] { 0, 0, 0, 0, 0.15, 0.2, 0.3 };
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,

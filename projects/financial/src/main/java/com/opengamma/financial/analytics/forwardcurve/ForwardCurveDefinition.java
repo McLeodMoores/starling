@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.forwardcurve;
@@ -14,7 +14,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 public abstract class ForwardCurveDefinition {
   private final String _name;
@@ -56,9 +56,9 @@ public abstract class ForwardCurveDefinition {
       return false;
     }
     final ForwardCurveDefinition other = (ForwardCurveDefinition) obj;
-    return getTarget().equals(other.getTarget()) &&
-        getName().equals(other.getName()) &&
-        Arrays.equals(getTenors(), other.getTenors());
+    return getTarget().equals(other.getTarget())
+        && getName().equals(other.getName())
+        && Arrays.equals(getTenors(), other.getTenors());
   }
 
   @Override

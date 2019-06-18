@@ -51,14 +51,14 @@ import com.opengamma.analytics.financial.interestrate.payments.method.CouponONDi
 import com.opengamma.analytics.financial.interestrate.payments.method.PaymentFixedDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.Swap;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
-import com.opengamma.analytics.financial.provider.calculator.discounting.PresentValueDiscountingCalculator;
-import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the present value of an instrument for a given YieldCurveBundle (set of yield curve that the instrument is sensitive to)
- * @deprecated Use the present values calculators that reference {@link ParameterProviderInterface}
- * e.g. {@link PresentValueDiscountingCalculator}
+ * Calculates the present value of an instrument for a given YieldCurveBundle (set of yield curve that the instrument is sensitive to).
+ *
+ * @deprecated Use the present values calculators that reference
+ *             {@link com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface} e.g.
+ *             {@link com.opengamma.analytics.financial.provider.calculator.discounting.PresentValueDiscountingCalculator}
  */
 @Deprecated
 public class PresentValueCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double> {
@@ -70,6 +70,7 @@ public class PresentValueCalculator extends InstrumentDerivativeVisitorAdapter<Y
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static PresentValueCalculator getInstance() {
@@ -101,7 +102,7 @@ public class PresentValueCalculator extends InstrumentDerivativeVisitorAdapter<Y
   private static final CouponFixedAccruedCompoundingDiscountingMethod METHOD_CPN_FIXED_ACCRUING = CouponFixedAccruedCompoundingDiscountingMethod.getInstance();
   private static final CouponONCompoundedDiscountingMethod METHOD_CPN_ON_COMPOUNDED = CouponONCompoundedDiscountingMethod.getInstance();
 
-  // -----     Deposit     ------
+  // ----- Deposit ------
 
   @Override
   public Double visitCash(final Cash deposit, final YieldCurveBundle curves) {
@@ -113,7 +114,7 @@ public class PresentValueCalculator extends InstrumentDerivativeVisitorAdapter<Y
     return METHOD_DEPOSIT_ZERO.presentValue(deposit, curves).getAmount();
   }
 
-  // -----     Bill/Bond     ------
+  // ----- Bill/Bond ------
 
   @Override
   public Double visitBillSecurity(final BillSecurity bill, final YieldCurveBundle curves) {
@@ -157,7 +158,7 @@ public class PresentValueCalculator extends InstrumentDerivativeVisitorAdapter<Y
     return method.presentValue(bond, curves);
   }
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public Double visitFixedPayment(final PaymentFixed payment, final YieldCurveBundle curves) {

@@ -10,9 +10,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.LogNaturalCubicMonotonicityPreservingInterpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LogLinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.MonotonicLogNaturalCubicSplineInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.csv.CSVDocumentReader;
 
@@ -20,7 +22,7 @@ import au.com.bytecode.opencsv.CSVParser;
 
 public class IRCurveParser {
 
-private static final Logger LOGGER = LoggerFactory.getLogger(IRSwapTradeParser.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IRSwapTradeParser.class);
 
 
   private static final String CURVE_NAME = "Curve Name";
@@ -48,8 +50,8 @@ private static final Logger LOGGER = LoggerFactory.getLogger(IRSwapTradeParser.c
   private static final String FORTY_YEARS = "40Y";
   private static final String FIFTY_YEARS = "50Y";
   private static final String[] DATES = new String[]{ THREE_MONTHS, SIX_MONTHS, NINE_MONTHS, ONE_YEAR, FIFTEEN_MONTHS, HEIGHTEEN_MONTHS, TWENTY_ONE_MONTHS,
-    TWO_YEARS, THREE_YEARS, FOUR_YEARS, FIVE_YEARS, SIX_YEARS, SEVEN_YEARS, HEIGHT_YEARS, NINE_YEARS, TEN_YEARS,
-    TWELVE_YEARS, FIFTEEN_YEARS, TWENTY_YEARS, TWENTY_FIVE_YEARS, THIRTY_YEARS, FORTY_YEARS, FIFTY_YEARS};
+      TWO_YEARS, THREE_YEARS, FOUR_YEARS, FIVE_YEARS, SIX_YEARS, SEVEN_YEARS, HEIGHT_YEARS, NINE_YEARS, TEN_YEARS,
+      TWELVE_YEARS, FIFTEEN_YEARS, TWENTY_YEARS, TWENTY_FIVE_YEARS, THIRTY_YEARS, FORTY_YEARS, FIFTY_YEARS};
   public static final LogNaturalCubicMonotonicityPreservingInterpolator1D LOG_NATURAL_CUBIC_MONOTONE_INSTANCE =
       new LogNaturalCubicMonotonicityPreservingInterpolator1D();
   private static final double[] TIMES = {0.249144422, 0.501026694, 0.750171116, 0.999315537, 1.25119781, 1.500342231,
@@ -82,13 +84,15 @@ private static final Logger LOGGER = LoggerFactory.getLogger(IRSwapTradeParser.c
   }
 
 
-  private InterpolatedDoublesCurve createCurve(final FudgeMsg row) {
+  private static InterpolatedDoublesCurve createCurve(final FudgeMsg row) {
     final double[] discountFactors = new double [DATES.length];
     for (int i = 0; i < DATES.length; i++) {
       discountFactors[i] = row.getDouble(DATES[i]);
     }
     final InterpolatedDoublesCurve curve = new InterpolatedDoublesCurve(TIMES, discountFactors,
-      CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LOG_NATURAL_CUBIC_MONOTONE, Interpolator1DFactory.LOG_LINEAR, Interpolator1DFactory.LINEAR), true, row.getString(CURVE_NAME));
+        NamedInterpolator1dFactory.of(MonotonicLogNaturalCubicSplineInterpolator1dAdapter.NAME, LogLinearExtrapolator1dAdapter.NAME,
+            LinearExtrapolator1dAdapter.NAME),
+        true, row.getString(CURVE_NAME));
     return curve;
   }
 

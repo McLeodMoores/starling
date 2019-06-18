@@ -20,7 +20,7 @@ import com.opengamma.financial.property.DefaultPropertyFunction;
 import com.opengamma.util.SingletonFactoryBean;
 
 /**
- * Creates a FunctionResolver for the demo, prioritizing the functions
+ * Creates a FunctionResolver for the demo, prioritizing the functions.
  */
 @SuppressWarnings("deprecation")
 public class DemoFunctionResolverFactoryBean extends SingletonFactoryBean<FunctionResolver> {
@@ -49,10 +49,10 @@ public class DemoFunctionResolverFactoryBean extends SingletonFactoryBean<Functi
         if (defaultPropertyFunction.isPermitWithout()) {
           // Place below the filtering summing function priority, or the filter may never be applied.
           return -2 + defaultPropertyFunction.getPriority().getPriorityAdjust() - DefaultPropertyFunction.PriorityClass.MAX_ADJUST;
-        } else {
-          // All other currency injections are important; e.g. the currency constraint can't be omitted for some functions
-          return Integer.MAX_VALUE + defaultPropertyFunction.getPriority().getPriorityAdjust() - DefaultPropertyFunction.PriorityClass.MAX_ADJUST;
         }
+        // All other currency injections are important; e.g. the currency
+        // constraint can't be omitted for some functions
+        return Integer.MAX_VALUE + defaultPropertyFunction.getPriority().getPriorityAdjust() - DefaultPropertyFunction.PriorityClass.MAX_ADJUST;
       }
       if (function instanceof BondPV01CountryCurveFunction) {
         return 6;

@@ -22,7 +22,8 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.discounting.DiscountingFunction;
 
 /**
- * Calculates the sensitivities of an FX forward to a curve
+ * Calculates the sensitivities of an FX forward to a curve.
+ *
  * @deprecated Use {@link DiscountingFunction}
  */
 @Deprecated
@@ -34,7 +35,8 @@ public class FXForwardPresentValueCurveSensitivityFunction extends FXForwardMult
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final Forex fxForward, final YieldCurveBundle data, final ComputationTarget target, final Set<ValueRequirement> desiredValues,
+  protected Set<ComputedValue> getResult(final Forex fxForward, final YieldCurveBundle data, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues,
       final FunctionInputs inputs, final ValueSpecification spec, final FunctionExecutionContext executionContext) {
     final MultipleCurrencyInterestRateCurveSensitivity result = fxForward.accept(CALCULATOR, data);
     return Collections.singleton(new ComputedValue(spec, result));

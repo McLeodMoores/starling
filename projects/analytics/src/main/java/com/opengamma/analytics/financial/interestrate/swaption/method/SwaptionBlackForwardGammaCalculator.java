@@ -26,6 +26,7 @@ public class SwaptionBlackForwardGammaCalculator extends InstrumentDerivativeVis
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static SwaptionBlackForwardGammaCalculator getInstance() {
@@ -43,7 +44,8 @@ public class SwaptionBlackForwardGammaCalculator extends InstrumentDerivativeVis
   /** Cash-settled swaption methods */
   private static final SwaptionCashFixedIborBlackMethod METHOD_SWAPTION_CASH = SwaptionCashFixedIborBlackMethod.getInstance();
   /** Physical fixed compounded / overnight compounded methods */
-  private static final SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod PHYSICAL_COMPOUNDED_SWAPTION = SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod.getInstance();
+  private static final SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod PHYSICAL_COMPOUNDED_SWAPTION =
+      SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod.getInstance();
 
   @Override
   public Double visitSwaptionCashFixedIbor(final SwaptionCashFixedIbor swaption, final YieldCurveBundle curves) {
@@ -53,7 +55,8 @@ public class SwaptionBlackForwardGammaCalculator extends InstrumentDerivativeVis
       final YieldCurveWithBlackSwaptionBundle curvesBlack = (YieldCurveWithBlackSwaptionBundle) curves;
       return METHOD_SWAPTION_CASH.forwardGammaTheoretical(swaption, curvesBlack);
     }
-    throw new UnsupportedOperationException("The SwaptionBlackForwardGammaCalculator visitor visitSwaptionCashFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
+    throw new UnsupportedOperationException(
+        "The SwaptionBlackForwardGammaCalculator visitor visitSwaptionCashFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
   }
 
   @Override
@@ -64,7 +67,8 @@ public class SwaptionBlackForwardGammaCalculator extends InstrumentDerivativeVis
       final YieldCurveWithBlackSwaptionBundle curvesBlack = (YieldCurveWithBlackSwaptionBundle) curves;
       return METHOD_SWAPTION_PHYSICAL.forwardGammaTheoretical(swaption, curvesBlack);
     }
-    throw new UnsupportedOperationException("The SwaptionBlackForwardGammaCalculator visitor visitSwaptionPhysicalFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
+    throw new UnsupportedOperationException(
+        "The SwaptionBlackForwardGammaCalculator visitor visitSwaptionPhysicalFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
   }
 
   @Override
@@ -75,6 +79,8 @@ public class SwaptionBlackForwardGammaCalculator extends InstrumentDerivativeVis
       final YieldCurveWithBlackSwaptionBundle curvesBlack = (YieldCurveWithBlackSwaptionBundle) curves;
       return PHYSICAL_COMPOUNDED_SWAPTION.forwardGammaTheoretical(swaption, curvesBlack);
     }
-    throw new UnsupportedOperationException("The SwaptionBlackForwardGammaCalculator visitor visitSwaptionPhysicalFixedCompoundedONCompounded requires a YieldCurveWithBlackSwaptionBundle as data.");
+    throw new UnsupportedOperationException(
+        "The SwaptionBlackForwardGammaCalculator visitor visitSwaptionPhysicalFixedCompoundedONCompounded requires a "
+            + "YieldCurveWithBlackSwaptionBundle as data.");
   }
 }

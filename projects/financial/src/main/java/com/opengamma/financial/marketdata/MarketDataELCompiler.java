@@ -36,7 +36,7 @@ public class MarketDataELCompiler implements OverrideOperationCompiler {
 
     private final ComputationTargetResolver.AtVersionCorrection _resolver;
 
-    public Evaluator(final UserExpression expr, final ComputationTargetResolver.AtVersionCorrection resolver) {
+    Evaluator(final UserExpression expr, final ComputationTargetResolver.AtVersionCorrection resolver) {
       _expr = expr;
       _resolver = resolver;
     }
@@ -94,10 +94,9 @@ public class MarketDataELCompiler implements OverrideOperationCompiler {
       if (result == UserExpression.NA) {
         LOGGER.debug("Evaluation failed - using original {}", original);
         return original;
-      } else {
-        LOGGER.debug("Evaluation of {} to {}", original, result);
-        return result;
       }
+      LOGGER.debug("Evaluation of {} to {}", original, result);
+      return result;
     }
 
   }

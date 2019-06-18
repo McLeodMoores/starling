@@ -6,7 +6,7 @@
 package com.opengamma.masterdb.security.hibernate;
 
 /**
- * Hibernate bean for storing schedule stub type
+ * Hibernate bean for storing schedule stub type.
  *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  */

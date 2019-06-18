@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.function;
 
@@ -37,6 +37,7 @@ public class QuandlCurveFunctions extends VersionedFunctionConfigurationBean {
 
   /**
    * Gets an instance of this function configuration source.
+   * 
    * @return The function configuration source
    */
   public static FunctionConfigurationSource instance() {
@@ -44,9 +45,10 @@ public class QuandlCurveFunctions extends VersionedFunctionConfigurationBean {
   }
 
   /**
-   * Returns a function configuration source that sets up monitored types to allow functions to detect
-   * changes in the configurations.
-   * @param configMaster The config master
+   * Returns a function configuration source that sets up monitored types to allow functions to detect changes in the configurations.
+   * 
+   * @param configMaster
+   *          The config master
    * @return The function configuration source
    */
   public static FunctionConfigurationSource providers(final ConfigMaster configMaster) {
@@ -71,8 +73,7 @@ public class QuandlCurveFunctions extends VersionedFunctionConfigurationBean {
   }
 
   /**
-   * A class that provides curve function configurations that use information from the config master during
-   * initialization and compilation.
+   * A class that provides curve function configurations that use information from the config master during initialization and compilation.
    */
   public static class Providers extends VersionedFunctionConfigurationBean {
     /** The config master */
@@ -80,7 +81,9 @@ public class QuandlCurveFunctions extends VersionedFunctionConfigurationBean {
 
     /**
      * Sets the config master.
-     * @param configMaster The config master, not null
+     * 
+     * @param configMaster
+     *          The config master, not null
      */
     public void setConfigMaster(final ConfigMaster configMaster) {
       ArgumentChecker.notNull(configMaster, "configMaster");
@@ -89,18 +92,18 @@ public class QuandlCurveFunctions extends VersionedFunctionConfigurationBean {
 
     /**
      * Gets the config master.
+     * 
      * @return The config master
      */
     public ConfigMaster getConfigMaster() {
       return _configMaster;
     }
 
-
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       final ConfigSearchRequest<?> searchRequest = new ConfigSearchRequest<>();
       searchRequest.setVersionCorrection(getVersionCorrection());
-      final Class<?>[] curveConstructionConfigurationClasses = new Class[] {CurveConstructionConfiguration.class};
+      final Class<?>[] curveConstructionConfigurationClasses = new Class[] { CurveConstructionConfiguration.class };
       for (final Class<?> clazz : curveConstructionConfigurationClasses) {
         searchRequest.setType(clazz);
         for (final ConfigDocument configDocument : ConfigSearchIterator.iterable(getConfigMaster(), searchRequest)) {
@@ -121,9 +124,10 @@ public class QuandlCurveFunctions extends VersionedFunctionConfigurationBean {
     }
 
     /**
-     * Returns true if the configuration is a {@link CurveConstructionConfiguration}, {@link CurveDefinition} or
-     * {@link InterpolatedCurveDefinition}.
-     * @param type The type
+     * Returns true if the configuration is a {@link CurveConstructionConfiguration}, {@link CurveDefinition} or {@link InterpolatedCurveDefinition}.
+     * 
+     * @param type
+     *          The type
      * @return True if the type is a monitored type.
      */
     protected static boolean isMonitoredType(final String type) {
@@ -145,6 +149,7 @@ public class QuandlCurveFunctions extends VersionedFunctionConfigurationBean {
 
     /**
      * Gets the absolute tolerance.
+     * 
      * @return The absolute tolerance
      */
     public double getAbsoluteTolerance() {
@@ -153,7 +158,9 @@ public class QuandlCurveFunctions extends VersionedFunctionConfigurationBean {
 
     /**
      * Sets the absolute tolerance.
-     * @param absoluteTolerance The absolute tolerance, greater than zero
+     * 
+     * @param absoluteTolerance
+     *          The absolute tolerance, greater than zero
      */
     public void setAbsoluteTolerance(final double absoluteTolerance) {
       ArgumentChecker.isTrue(absoluteTolerance > 0, "Absolute tolerance must be greater than zero; have {}", absoluteTolerance);
@@ -162,6 +169,7 @@ public class QuandlCurveFunctions extends VersionedFunctionConfigurationBean {
 
     /**
      * Gets the relative tolerance.
+     * 
      * @return The relative tolerance
      */
     public double getRelativeTolerance() {
@@ -170,7 +178,9 @@ public class QuandlCurveFunctions extends VersionedFunctionConfigurationBean {
 
     /**
      * Sets the relative tolerance.
-     * @param relativeTolerance The relative tolerance, greater than zero
+     * 
+     * @param relativeTolerance
+     *          The relative tolerance, greater than zero
      */
     public void setRelativeTolerance(final double relativeTolerance) {
       ArgumentChecker.isTrue(relativeTolerance > 0, "Relative tolerance must be greater than zero; have {}", relativeTolerance);
@@ -179,6 +189,7 @@ public class QuandlCurveFunctions extends VersionedFunctionConfigurationBean {
 
     /**
      * Gets the maximum number of iterations.
+     * 
      * @return The maximum number of iterations
      */
     public double getMaximumIterations() {
@@ -187,7 +198,9 @@ public class QuandlCurveFunctions extends VersionedFunctionConfigurationBean {
 
     /**
      * Sets the maximum number of iterations.
-     * @param maxIterations The maximum number of iterations, greater than zero
+     * 
+     * @param maxIterations
+     *          The maximum number of iterations, greater than zero
      */
     public void setMaximumIterations(final int maxIterations) {
       ArgumentChecker.isTrue(maxIterations > 0, "Maximum iterations must be greater than zero; have {}", maxIterations);
@@ -198,7 +211,7 @@ public class QuandlCurveFunctions extends VersionedFunctionConfigurationBean {
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       functions.add(functionConfiguration(CurveConfigurationHistoricalTimeSeriesFunction.class));
       functions.add(functionConfiguration(QuandlCurveHistoricalTimeSeriesFunction.class));
-      final String[] defaults = new String[] {Double.toString(_absoluteTolerance), Double.toString(_relativeTolerance), Integer.toString(_maxIterations)};
+      final String[] defaults = new String[] { Double.toString(_absoluteTolerance), Double.toString(_relativeTolerance), Integer.toString(_maxIterations) };
       functions.add(functionConfiguration(CurveDefaults.class, defaults));
     }
 

@@ -44,7 +44,7 @@ import com.opengamma.util.tuple.Pairs;
     _fixedColumnGroup = GridColumnGroup.empty();
     _nonFixedColumnGroups = GridColumnGroups.empty();
     _valueMappings = new UnversionedValueMappings();
-    _targetLookup = new TargetLookup(_valueMappings, Collections.<Row>emptyList());
+    _targetLookup = new TargetLookup(_valueMappings, Collections.<Row> emptyList());
     _rootNode = null;
   }
 
@@ -52,10 +52,10 @@ import com.opengamma.util.tuple.Pairs;
   // column would need to return its key (null for static and blotter columns)
   // could pass all columns in a single List<GridColumnGroup> or GridColumnGroups instance
   /* package */ MainGridStructure(final GridColumnGroup fixedColumns,
-                                  final GridColumnGroups nonFixedColumns,
-                                  final TargetLookup targetLookup,
-                                  final AnalyticsNode rootNode,
-                                  final UnversionedValueMappings valueMappings) {
+      final GridColumnGroups nonFixedColumns,
+      final TargetLookup targetLookup,
+      final AnalyticsNode rootNode,
+      final UnversionedValueMappings valueMappings) {
     ArgumentChecker.notNull(targetLookup, "targetLookup");
     ArgumentChecker.notNull(nonFixedColumns, "nonFixedColumns");
     ArgumentChecker.notNull(fixedColumns, "fixedColumns");
@@ -71,9 +71,9 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /* package */ MainGridStructure(final GridColumnGroup fixedColumns,
-                                  final GridColumnGroups nonFixedColumns,
-                                  final TargetLookup targetLookup,
-                                  final UnversionedValueMappings valueMappings) {
+      final GridColumnGroups nonFixedColumns,
+      final TargetLookup targetLookup,
+      final UnversionedValueMappings valueMappings) {
     ArgumentChecker.notNull(targetLookup, "targetLookup");
     ArgumentChecker.notNull(nonFixedColumns, "nonFixedColumns");
     ArgumentChecker.notNull(fixedColumns, "fixedColumns");
@@ -88,33 +88,39 @@ import com.opengamma.util.tuple.Pairs;
     _valueMappings = valueMappings;
   }
 
-    /**
-     * Returns the calculation configuration name and value specification for a cell in the grid.
-     * @param rowIndex The row index
-     * @param colIndex The column index
-     * @return Pair of value spec and calculation config name.
-     * TODO need to specify row using a stable target ID for the row to cope with dynamic aggregation
-     */
+  /**
+   * Returns the calculation configuration name and value specification for a cell in the grid.
+   *
+   * @param rowIndex
+   *          The row index
+   * @param colIndex
+   *          The column index
+   * @return Pair of value spec and calculation config name. TODO need to specify row using a stable target ID for the row to cope with dynamic aggregation
+   */
   @Override
   public Pair<String, ValueSpecification> getValueSpecificationForCell(final int rowIndex, final int colIndex) {
     if (rowIndex < 0 || rowIndex >= getRowCount() || colIndex < 0 || colIndex >= getColumnCount()) {
-      throw new IllegalArgumentException("Cell is outside grid bounds: row=" + rowIndex + ", col=" + colIndex +
-                                             ", rowCount=" + getRowCount() + ", colCount=" + getColumnCount());
+      throw new IllegalArgumentException("Cell is outside grid bounds: row=" + rowIndex + ", col=" + colIndex
+          + ", rowCount=" + getRowCount() + ", colCount=" + getColumnCount());
     }
     return _targetLookup.getTargetForCell(rowIndex, _columnGroups.getColumn(colIndex).getSpecification());
   }
+
   /**
    * Returns the calculation configuration name and value requirement for a cell in the grid.
-   * @param rowIndex The row index
-   * @param colIndex The column index
-   * @return Pair of value requirement and calculation config name.
-   * TODO need to specify row using a stable target ID for the row to cope with dynamic aggregation
+   *
+   * @param rowIndex
+   *          The row index
+   * @param colIndex
+   *          The column index
+   * @return Pair of value requirement and calculation config name. TODO need to specify row using a stable target ID for the row to cope with dynamic
+   *         aggregation
    */
   @Override
   public Pair<String, ValueRequirement> getValueRequirementForCell(final int rowIndex, final int colIndex) {
     if (rowIndex < 0 || rowIndex >= getRowCount() || colIndex < 0 || colIndex >= getColumnCount()) {
-      throw new IllegalArgumentException("Cell is outside grid bounds: row=" + rowIndex + ", col=" + colIndex +
-                                             ", rowCount=" + getRowCount() + ", colCount=" + getColumnCount());
+      throw new IllegalArgumentException("Cell is outside grid bounds: row=" + rowIndex + ", col=" + colIndex
+          + ", rowCount=" + getRowCount() + ", colCount=" + getColumnCount());
     }
     return _targetLookup.getRequirementForCell(rowIndex, _columnGroups.getColumn(colIndex).getSpecification());
   }
@@ -161,7 +167,7 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   public Pair<ViewportResults, Viewport.State> createResults(final ViewportDefinition viewportDefinition,
-                                                                    final ResultsCache cache) {
+      final ResultsCache cache) {
     boolean updated = false;
     boolean hasData = false;
     final List<ResultsCell> results = Lists.newArrayList();
@@ -183,9 +189,9 @@ import com.opengamma.util.tuple.Pairs;
       state = Viewport.State.EMPTY;
     }
     final ViewportResults viewportResults = new ViewportResults(results,
-                                                          viewportDefinition,
-                                                          _columnGroups,
-                                                          cache.getLastCalculationDuration(), cache.getValuationTime());
+        viewportDefinition,
+        _columnGroups,
+        cache.getLastCalculationDuration(), cache.getValuationTime());
     return Pairs.of(viewportResults, state);
   }
 

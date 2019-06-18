@@ -19,8 +19,10 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.black.BlackDiscountingPositionVegaIRFutureOptionFunction;
 
 /**
- * Function computes the {@link ValueRequirementNames#POSITION_VEGA}, first order derivative of {@link Position} price with respect to the Black Lognormal Implied Volatility,
- * for interest rate future options in the Black world. <p>
+ * Function computes the {@link ValueRequirementNames#POSITION_VEGA}, first order derivative of {@link Position} price with respect to the Black Lognormal
+ * Implied Volatility, for interest rate future options in the Black world.
+ * <p>
+ *
  * @deprecated Use {@link BlackDiscountingPositionVegaIRFutureOptionFunction}
  */
 @Deprecated
@@ -30,14 +32,15 @@ public class InterestRateFutureOptionBlackPositionVegaFunction extends InterestR
   private static final PresentValueBlackVegaCalculator CALCULATOR = PresentValueBlackVegaCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#POSITION_VEGA}
+   * Sets the value requirement name to {@link ValueRequirementNames#POSITION_VEGA}.
    */
   public InterestRateFutureOptionBlackPositionVegaFunction() {
     super(ValueRequirementNames.POSITION_VEGA, true);
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative irFutureOption, final YieldCurveWithBlackCubeBundle curveBundle, final ValueSpecification spec,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative irFutureOption, final YieldCurveWithBlackCubeBundle curveBundle,
+      final ValueSpecification spec,
       final Set<ValueRequirement> desiredValues) {
     final double vega = irFutureOption.accept(CALCULATOR, curveBundle);
     return Collections.singleton(new ComputedValue(spec, vega));

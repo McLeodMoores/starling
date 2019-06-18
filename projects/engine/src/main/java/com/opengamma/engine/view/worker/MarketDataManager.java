@@ -167,9 +167,9 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
    * the JMX name. If null, no JMX bean will be registered.
    */
   public MarketDataManager(final MarketDataChangeListener listener,
-                           final MarketDataProviderResolver marketDataProviderResolver,
-                           final String viewProcessorName,
-                           final String viewProcessId) {
+      final MarketDataProviderResolver marketDataProviderResolver,
+      final String viewProcessorName,
+      final String viewProcessId) {
 
     ArgumentChecker.notNull(listener, "listener");
     ArgumentChecker.notNull(marketDataProviderResolver, "marketDataProviderResolver");
@@ -178,10 +178,10 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
 
     _objectName = viewProcessorName != null && viewProcessId != null
         ? createObjectName(viewProcessId)
-        : null;
+            : null;
 
-    _jmxServer = setupJmxServer();
-    registerJmx();
+        _jmxServer = setupJmxServer();
+        registerJmx();
   }
 
   private MBeanServer setupJmxServer() {
@@ -371,7 +371,7 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
   }
 
   private void removePendingSubscriptions(final Collection<ValueSpecification> specifications,
-                                          final boolean subscriptionSucceeded) {
+      final boolean subscriptionSucceeded) {
     _subscriptionsLock.lock();
     try {
       for (final ValueSpecification specification : specifications) {
@@ -509,10 +509,10 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
     try {
       final Set<ValueSpecification> currentSubscriptions =
           ImmutableSet.<ValueSpecification>builder()
-              .addAll(_activeSubscriptions.keySet())
-              .addAll(_pendingSubscriptions.keySet())
-              .addAll(_failedSubscriptions.keySet())
-              .build();
+          .addAll(_activeSubscriptions.keySet())
+          .addAll(_pendingSubscriptions.keySet())
+          .addAll(_failedSubscriptions.keySet())
+          .build();
 
       final Set<ValueSpecification> unusedSubscriptions = Sets.difference(currentSubscriptions, requiredSubscriptions).immutableCopy();
       if (!unusedSubscriptions.isEmpty()) {
@@ -612,9 +612,8 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
       final UserPrincipal testUser = UserPrincipal.getTestUser();
       LOGGER.info("UserName undefined for {}. Will use test user {} instead.", userPrincipal, UserPrincipal.getTestUser());
       return testUser;
-    } else {
-      return userPrincipal;
     }
+    return userPrincipal;
   }
 
   // Lifecycle
@@ -682,7 +681,7 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
   }
 
   private Map<String, SubscriptionStatus> querySubscriptions(final Map<ValueSpecification, ZonedDateTime> subscriptions,
-                                                             final SubscriptionState state) {
+      final SubscriptionState state) {
     // We need the lock as we'll get confused if the collections change underneath our feet
     _subscriptionsLock.lock();
     try {
@@ -693,8 +692,8 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
   }
 
   private Map<String, SubscriptionStatus> createStateMap(final String ticker,
-                                                         final Map<ValueSpecification, ZonedDateTime> subscriptions,
-                                                         final SubscriptionState state) {
+      final Map<ValueSpecification, ZonedDateTime> subscriptions,
+      final SubscriptionState state) {
 
     final Map<String, SubscriptionStatus> results = new HashMap<>();
 

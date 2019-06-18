@@ -11,8 +11,10 @@ import org.joda.beans.MetaProperty;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * TODO do I need this?
+ * @param <T>
+ *          the type of the bean
  */
+// TODO do I need this?
 /* package */ abstract class DelegatingVisitor<T> implements BeanVisitor<T> {
 
   private final BeanVisitor<T> _delegate;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.simpleinstruments.pricing;
@@ -29,7 +29,8 @@ public class SimpleFuturePresentValueCalculatorDeprecated implements SimpleInstr
   @Override
   public CurrencyAmount visitSimpleFuture(final SimpleFuture future, final SimpleFutureDataBundleDeprecated data) {
     final double t = future.getExpiry();
-    return CurrencyAmount.of(future.getCurrency(), future.getUnitAmount() * data.getSpotValue() * Math.exp(t * (data.getFundingCurve().getInterestRate(t) - data.getCostOfCarry())));
+    return CurrencyAmount.of(future.getCurrency(),
+        future.getUnitAmount() * data.getSpotValue() * Math.exp(t * (data.getFundingCurve().getInterestRate(t) - data.getCostOfCarry())));
   }
 
   @Override

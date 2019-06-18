@@ -94,8 +94,7 @@ public class ResolvingPortfolioCopier implements PortfolioCopier {
         }
 
         // Write position and security data
-        final ObjectsPair<ManageablePosition, ManageableSecurity[]> written =
-            positionWriter.writePosition(next.getFirst(), next.getSecond());
+        final ObjectsPair<ManageablePosition, ManageableSecurity[]> written = positionWriter.writePosition(next.getFirst(), next.getSecond());
 
         if (visitor != null) {
           visitor.info(StringUtils.arrayToDelimitedString(path, "/"), written.getFirst(), written.getSecond());
@@ -117,15 +116,16 @@ public class ResolvingPortfolioCopier implements PortfolioCopier {
     positionWriter.flush();
   }
 
-  void resolveTimeSeries(final BloombergHistoricalTimeSeriesLoader bbgLoader, final ManageableSecurity security, final String[] dataFields, final String dataProvider, final PortfolioCopierVisitor visitor) {
+  void resolveTimeSeries(final BloombergHistoricalTimeSeriesLoader bbgLoader, final ManageableSecurity security, final String[] dataFields,
+      final String dataProvider, final PortfolioCopierVisitor visitor) {
     for (final String dataField : dataFields) {
-      Set<ExternalId> ids = new HashSet<ExternalId>();
+      Set<ExternalId> ids = new HashSet<>();
       ids = security.getExternalIdBundle().getExternalIds();
       Map<ExternalId, UniqueId> tsMap = null;
       for (final ExternalId id : ids) {
         tsMap = bbgLoader.loadTimeSeries(Collections.singleton(id), dataProvider, dataField, null, null);
-        final String message = "historical time series " + id.toString() + ", fields " + dataField +
-            " from " + dataProvider;
+        final String message = "historical time series " + id.toString() + ", fields " + dataField
+            + " from " + dataProvider;
         if (tsMap.size() > 0) {
           LOGGER.info("Loaded " + message + ": " + tsMap);
           if (visitor != null) {

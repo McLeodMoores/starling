@@ -9,12 +9,15 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
-import com.opengamma.analytics.financial.provider.description.interestrate.SABRSTIRFuturesProviderDiscount;
-import com.opengamma.analytics.financial.provider.description.interestrate.SABRSwaptionProviderDiscount;
 
 /**
- * Class describing the data required to price interest rate derivatives with SABR (curves and parameters).
- * @deprecated Use {@link SABRSwaptionProviderDiscount} and {@link SABRSTIRFuturesProviderDiscount}
+ * Class describing the data required to price interest rate derivatives with
+ * SABR (curves and parameters).
+ * 
+ * @deprecated Use
+ *             {@link com.opengamma.analytics.financial.provider.description.interestrate.SABRSwaptionProviderDiscount}
+ *             and
+ *             {@link com.opengamma.analytics.financial.provider.description.interestrate.SABRSTIRFuturesProviderDiscount}
  */
 @Deprecated
 public class SABRInterestRateDataBundle extends YieldCurveBundle {

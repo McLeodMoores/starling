@@ -23,7 +23,7 @@ import com.opengamma.util.OpenGammaClock;
 import com.opengamma.util.redis.RedisConnector;
 
 /**
- * Job that snapshot lastest market values in RedisServer and updates the timeseries master
+ * Job that snapshot lastest market values in RedisServer and updates the timeseries master.
  */
 public class RedisHtsSnapshotJob implements Runnable {
 
@@ -41,6 +41,7 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Gets the globalPrefix.
+   * 
    * @return the globalPrefix
    */
   public String getGlobalPrefix() {
@@ -49,7 +50,9 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Sets the globalPrefix.
-   * @param globalPrefix  the globalPrefix
+   * 
+   * @param globalPrefix
+   *          the globalPrefix
    */
   public void setGlobalPrefix(final String globalPrefix) {
     _globalPrefix = globalPrefix;
@@ -57,6 +60,7 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Gets the htsMaster.
+   * 
    * @return the htsMaster
    */
   public HistoricalTimeSeriesMaster getHtsMaster() {
@@ -65,6 +69,7 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Gets the dataSource.
+   * 
    * @return the dataSource
    */
   public String getDataSource() {
@@ -73,6 +78,7 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Gets the dataFieldBlackList.
+   * 
    * @return the dataFieldBlackList
    */
   public BlackList getDataFieldBlackList() {
@@ -81,7 +87,9 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Sets the dataFieldBlackList.
-   * @param dataFieldBlackList  the dataFieldBlackList
+   * 
+   * @param dataFieldBlackList
+   *          the dataFieldBlackList
    */
   public void setDataFieldBlackList(final BlackList dataFieldBlackList) {
     _dataFieldBlackList = dataFieldBlackList;
@@ -89,6 +97,7 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Gets the schemeBlackList.
+   * 
    * @return the schemeBlackList
    */
   public BlackList getSchemeBlackList() {
@@ -97,7 +106,9 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Sets the schemeBlackList.
-   * @param schemeBlackList  the schemeBlackList
+   * 
+   * @param schemeBlackList
+   *          the schemeBlackList
    */
   public void setSchemeBlackList(final BlackList schemeBlackList) {
     _schemeBlackList = schemeBlackList;
@@ -105,6 +116,7 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Gets the redisConnector.
+   * 
    * @return the redisConnector
    */
   public RedisConnector getRedisConnector() {
@@ -113,7 +125,9 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Sets the redisConnector.
-   * @param redisConnector  the redisConnector
+   * 
+   * @param redisConnector
+   *          the redisConnector
    */
   public void setRedisConnector(final RedisConnector redisConnector) {
     _redisConnector = redisConnector;
@@ -121,7 +135,9 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Sets the dataSource.
-   * @param dataSource  the dataSource
+   * 
+   * @param dataSource
+   *          the dataSource
    */
   public void setDataSource(final String dataSource) {
     _dataSource = dataSource;
@@ -129,7 +145,9 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Sets the observationTime.
-   * @param observationTime  the observationTime
+   * 
+   * @param observationTime
+   *          the observationTime
    */
   public void setObservationTime(final String observationTime) {
     _observationTime = observationTime;
@@ -137,7 +155,9 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Sets the normalizationRuleSetId.
-   * @param normalizationRuleSetId  the normalizationRuleSetId
+   * 
+   * @param normalizationRuleSetId
+   *          the normalizationRuleSetId
    */
   public void setNormalizationRuleSetId(final String normalizationRuleSetId) {
     _normalizationRuleSetId = normalizationRuleSetId;
@@ -145,6 +165,7 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Gets the observationTime.
+   * 
    * @return the observationTime
    */
   public String getObservationTime() {
@@ -153,6 +174,7 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Gets the normalizationRuleSetId.
+   * 
    * @return the normalizationRuleSetId
    */
   public String getNormalizationRuleSetId() {
@@ -161,6 +183,7 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Gets the baseDir.
+   * 
    * @return the baseDir
    */
   public String getBaseDir() {
@@ -169,7 +192,9 @@ public class RedisHtsSnapshotJob implements Runnable {
 
   /**
    * Sets the baseDir.
-   * @param baseDir  the baseDir
+   * 
+   * @param baseDir
+   *          the baseDir
    */
   public void setBaseDir(final String baseDir) {
     _baseDir = baseDir;
@@ -179,7 +204,7 @@ public class RedisHtsSnapshotJob implements Runnable {
   public void run() {
     validateState();
 
-    //write a copy of redis lkv to disk
+    // write a copy of redis lkv to disk
     final RedisLKVFileWriter snapshotFileWriter = new RedisLKVFileWriter();
     snapshotFileWriter.setBaseDir(new File(getBaseDir()));
     snapshotFileWriter.setDataFieldBlackList(EmptyBlackList.INSTANCE);
@@ -228,7 +253,7 @@ public class RedisHtsSnapshotJob implements Runnable {
           dataProvider = "TULLETTPREBON";
         }
         LOGGER.debug("updating ts {}:{}/{}/{}/{} with {}:{}",
-            new Object[] {externalId, getDataSource(), dataProvider, dataField, getObservationTime(), today, value});
+            new Object[] { externalId, getDataSource(), dataProvider, dataField, getObservationTime(), today, value });
         htsMaster.writeTimeSeriesPoint(makeDescription(externalId, dataField), getDataSource(), dataProvider,
             dataField, getObservationTime(), ExternalIdBundle.of(externalId), today, value);
         tsCounter.getAndAdd(1);

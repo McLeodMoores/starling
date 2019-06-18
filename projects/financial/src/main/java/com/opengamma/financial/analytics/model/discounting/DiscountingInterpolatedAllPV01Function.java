@@ -27,14 +27,12 @@ import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Calculates all relevant PV01s of instruments using curves constructed using
- * the interpolated method.
+ * Calculates all relevant PV01s of instruments using curves constructed using the interpolated method.
  */
 public class DiscountingInterpolatedAllPV01Function extends DiscountingInterpolatedFunction {
 
@@ -43,7 +41,7 @@ public class DiscountingInterpolatedAllPV01Function extends DiscountingInterpola
       new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityDiscountingCalculator.getInstance());
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#ALL_PV01S}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#ALL_PV01S}.
    */
   public DiscountingInterpolatedAllPV01Function() {
     super(ALL_PV01S);

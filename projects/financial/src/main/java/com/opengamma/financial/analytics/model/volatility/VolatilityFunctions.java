@@ -48,7 +48,8 @@ public class VolatilityFunctions extends AbstractFunctionConfigurationBean {
 
   @Override
   protected FunctionConfigurationSource createObject() {
-    return CombiningFunctionConfigurationSource.of(super.createObject(), cubeFunctionConfiguration(), localFunctionConfiguration(), surfaceFunctionConfiguration());
+    return CombiningFunctionConfigurationSource.of(super.createObject(), cubeFunctionConfiguration(), localFunctionConfiguration(),
+        surfaceFunctionConfiguration());
   }
 
 }

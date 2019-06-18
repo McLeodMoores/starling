@@ -21,10 +21,9 @@ import com.jolbox.bonecp.StatementHandle;
 import com.jolbox.bonecp.hooks.AcquireFailConfig;
 import com.jolbox.bonecp.hooks.ConnectionHook;
 import com.jolbox.bonecp.hooks.ConnectionState;
-import com.opengamma.util.async.BlockingOperation;
 
 /**
- * Hacks a call to {@link BlockingOperation#wouldBlock} into {@link BoneCP} when it would wait for a connection to become available.
+ * Hacks a call to {@link com.opengamma.util.async.BlockingOperation#wouldBlock} into {@link BoneCP} when it would wait for a connection to become available.
  */
 public class BoneCPHack implements ConnectionHook {
 

@@ -15,21 +15,6 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 
 /**
  * Class for pricing supershare options (see {@link com.opengamma.analytics.financial.model.option.definition.SupershareOptionDefinition}).
- * <p>
- * The price is calculated using the formula:
- * $$
- * \begin{align*}
- * w = \frac{S e^{(b-r)T}}{K_L}(N(d_1) - N(d_2))
- * \end{align*}
- * $$
- * where
- * $$
- * \begin{align*}
- * d_1 &= \frac{\ln{\frac{S}{K_L}} + (b + \frac{\sigma^2}{2})T}{\sigma\sqrt{T}}\\
- * d_2 &= \frac{\ln{\frac{S}{K_H}} + (b + \frac{\sigma^2}{2})T}{\sigma\sqrt{T}}
- * \end{align*}
- * $$
- * 
  */
 public class SupershareOptionModel extends AnalyticOptionModel<SupershareOptionDefinition, StandardOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);

@@ -21,7 +21,8 @@ public class DoubleValueSizeBasedDecimalPlaceFormatter extends DoubleValueFormat
   private final int _largeNumberDecimalPlaces;
   private final int _threshold;
 
-  public DoubleValueSizeBasedDecimalPlaceFormatter(final int smallNumberDecimalPlaces, final int largeNumberDecimalPlaces, final int threshold, final boolean isCurrencyAmount) {
+  public DoubleValueSizeBasedDecimalPlaceFormatter(final int smallNumberDecimalPlaces, final int largeNumberDecimalPlaces, final int threshold,
+      final boolean isCurrencyAmount) {
     super(isCurrencyAmount);
     _smallNumberDecimalPlaces = smallNumberDecimalPlaces;
     _largeNumberDecimalPlaces = largeNumberDecimalPlaces;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting.sabr;
@@ -35,7 +35,7 @@ import com.opengamma.analytics.math.statistics.leastsquare.LeastSquareResultsWit
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * TODO use root finding rather than chi^2 for this
+ * TODO use root finding rather than chi^2 for this.
  */
 public class PiecewiseSABRFitterRootFinder {
 
@@ -43,7 +43,7 @@ public class PiecewiseSABRFitterRootFinder {
   private static final ParameterLimitsTransform RHO_TRANSFORM = new DoubleRangeLimitTransform(-1, 1);
   private static final ParameterLimitsTransform NU_TRANSFORM = new SingleRangeLimitTransform(0, LimitType.GREATER_THAN);
   private static final NonLinearParameterTransforms TRANSFORM = new UncoupledParameterTransforms(new DoubleMatrix1D(3, 0.0),
-      new ParameterLimitsTransform[] {ALPHA_TRANSFORM, RHO_TRANSFORM, NU_TRANSFORM }, new BitSet());
+      new ParameterLimitsTransform[] { ALPHA_TRANSFORM, RHO_TRANSFORM, NU_TRANSFORM }, new BitSet());
 
   private static final double DEFAULT_BETA = 0.9;
   private static final WeightingFunction DEFAULT_WEIGHTING_FUNCTION = WeightingFunctionFactory.SINE_WEIGHTING_FUNCTION;
@@ -83,12 +83,12 @@ public class PiecewiseSABRFitterRootFinder {
       averageVol2 += vol * vol;
     }
     final double temp = averageVol2 - averageVol * averageVol / n;
-    averageVol2 = temp <= 0.0 ? 0.0 : Math.sqrt(temp) / (n - 1); //while temp should never be negative, rounding errors can make it so
+    averageVol2 = temp <= 0.0 ? 0.0 : Math.sqrt(temp) / (n - 1); // while temp should never be negative, rounding errors can make it so
     averageVol /= n;
 
     DoubleMatrix1D start;
 
-    //almost flat surface
+    // almost flat surface
     if (averageVol2 / averageVol < 0.01) {
       start = new DoubleMatrix1D(averageVol, 1.0, 0.0, 0.0);
       if (!_globalBetaSearch && _defaultBeta != 1.0) {
@@ -102,14 +102,14 @@ public class PiecewiseSABRFitterRootFinder {
     final SABRFormulaData[] modelParams = new SABRFormulaData[n - 2];
 
     final double[] errors = new double[n];
-    Arrays.fill(errors, 0.0001); //1bps
+    Arrays.fill(errors, 0.0001); // 1bps
     final SmileModelFitter<SABRFormulaData> globalFitter = new SABRModelFitter(forward, strikes, expiry, impliedVols, errors, MODEL);
     final BitSet fixed = new BitSet();
     if (n == 3 || !_globalBetaSearch) {
-      fixed.set(1); //fixed beta
+      fixed.set(1); // fixed beta
     }
 
-    //do a global fit first
+    // do a global fit first
     final LeastSquareResultsWithTransform gRes = globalFitter.solve(start, fixed);
 
     if (n == 3) {
@@ -118,7 +118,7 @@ public class PiecewiseSABRFitterRootFinder {
       }
       modelParams[0] = new SABRFormulaData(gRes.getModelParameters().getData());
     } else {
-      //impose a global beta on the remaining 3 point fits
+      // impose a global beta on the remaining 3 point fits
       final double[] gFitParms = gRes.getModelParameters().getData();
       final double beta = gFitParms[1];
       start = new DoubleMatrix1D(gFitParms[0], gFitParms[2], gFitParms[3]);
@@ -135,14 +135,15 @@ public class PiecewiseSABRFitterRootFinder {
         final NonLinearTransformFunction tf = new NonLinearTransformFunction(func, jac, TRANSFORM);
         final DoubleMatrix1D res = rootFinder.getRoot(tf.getFittingFunction(), tf.getFittingJacobian(), start);
         final double[] root = TRANSFORM.inverseTransform(res).getData();
-        modelParams[i] = new SABRFormulaData(new double[] {root[0], beta, root[1], root[2] });
+        modelParams[i] = new SABRFormulaData(new double[] { root[0], beta, root[1], root[2] });
       }
     }
 
     return modelParams;
   }
 
-  public Function1D<DoubleMatrix1D, DoubleMatrix1D> getVolDiffFunc(final double forward, final double[] strikes, final double expiry, final double[] impliedVols) {
+  public Function1D<DoubleMatrix1D, DoubleMatrix1D> getVolDiffFunc(final double forward, final double[] strikes, final double expiry,
+      final double[] impliedVols) {
 
     final Function1D<SABRFormulaData, double[]> func = MODEL.getVolatilityFunction(forward, strikes, expiry);
     final int n = strikes.length;
@@ -153,7 +154,7 @@ public class PiecewiseSABRFitterRootFinder {
         final double sigma = x.getEntry(0);
         final double theta = x.getEntry(1);
         final double phi = x.getEntry(2);
-        final double[] params = new double[] {sigma, 0.0, theta, phi };
+        final double[] params = new double[] { sigma, 0.0, theta, phi };
         final SABRFormulaData data = new SABRFormulaData(params);
         final double[] vols = func.evaluate(data);
         final double[] res = new double[n];
@@ -176,11 +177,11 @@ public class PiecewiseSABRFitterRootFinder {
         final double alpha = x.getEntry(0);
         final double rho = x.getEntry(1);
         final double nu = x.getEntry(2);
-        final double[] params = new double[] {alpha, beta, rho, nu };
+        final double[] params = new double[] { alpha, beta, rho, nu };
         final SABRFormulaData data = new SABRFormulaData(params);
 
         final double[][] temp = adjointFunc.evaluate(data);
-        //remove the delta sigma sense
+        // remove the delta sigma sense
         final double[][] res = new double[3][3];
         for (int i = 0; i < 3; i++) {
           res[i][0] = temp[i][0];

@@ -23,7 +23,7 @@ import com.opengamma.id.VersionCorrection;
 
   private static final long serialVersionUID = 1L;
 
-  public NullComputationTargetType() {
+  NullComputationTargetType() {
     super(NullComputationTargetType.class.getName().hashCode());
   }
 
@@ -101,9 +101,8 @@ import com.opengamma.id.VersionCorrection;
     }
     if (o instanceof ComputationTargetType) {
       return ((ComputationTargetType) o).accept(EQUALS, this).booleanValue();
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override

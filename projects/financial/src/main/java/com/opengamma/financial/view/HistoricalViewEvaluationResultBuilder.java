@@ -47,13 +47,14 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
   // the identifiers of the time series that were written to the database
 
   /**
-   * Builder for time-series where there is at most one result for a given date. Points may be added in any order, allowing the results to be executed in parallel.
+   * Builder for time-series where there is at most one result for a given date. Points may be added in any order, allowing the results to be executed in
+   * parallel.
    */
   private static class TimeSeriesBuilder {
 
     private final SortedMap<Integer, Object> _datedResultMap = new Int2ObjectRBTreeMap<>();
 
-    public TimeSeriesBuilder() {
+    TimeSeriesBuilder() {
     }
 
     public TimeSeriesBuilder addPoint(final int date, final Object value) {
@@ -67,9 +68,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
     public TimeSeries makeTimeSeries() {
       if (_datedResultMap.isEmpty() || Iterables.get(_datedResultMap.values(), 0) instanceof Number) {
         return makeDoubleTimeSeries();
-      } else {
-        return makeObjectTimeSeries();
       }
+      return makeObjectTimeSeries();
     }
 
     private LocalDateDoubleTimeSeries makeDoubleTimeSeries() {
@@ -102,7 +102,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
     private Map<ValueSpecification, Set<ValueRequirement>> _requirements;
     private final Map<ValueRequirement, TimeSeriesBuilder> _results = new HashMap<>();
 
-    public ConfigurationResults(final Collection<ValueRequirement> requirements) {
+    ConfigurationResults(final Collection<ValueRequirement> requirements) {
       for (final ValueRequirement requirement : requirements) {
         _results.put(requirement, new TimeSeriesBuilder());
       }
@@ -194,7 +194,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
   private final MarketDataResults _marketData;
   private boolean _compiled;
 
-  public HistoricalViewEvaluationResultBuilder(final ViewDefinition viewDefinition, final boolean includeMarketData) {
+  HistoricalViewEvaluationResultBuilder(final ViewDefinition viewDefinition, final boolean includeMarketData) {
     for (final ViewCalculationConfiguration calcConfig : viewDefinition.getAllCalculationConfigurations()) {
       final ConfigurationResults configResults = new ConfigurationResults(calcConfig.getSpecificRequirements());
       _results.put(calcConfig.getName(), configResults);
@@ -206,7 +206,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
     }
   }
 
-  public synchronized void store(final CompiledViewDefinition viewDefinition) {
+  synchronized void store(final CompiledViewDefinition viewDefinition) {
     if (!_compiled) {
       for (final CompiledViewCalculationConfiguration calcConfig : viewDefinition.getCompiledCalculationConfigurations()) {
         final ConfigurationResults configResults = _results.get(calcConfig.getName());
@@ -221,7 +221,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
     }
   }
 
-  public synchronized void store(final LocalDate resultsDate, final ViewComputationResultModel results) {
+  synchronized void store(final LocalDate resultsDate, final ViewComputationResultModel results) {
     assert _compiled;
     final int date = LocalDateToIntConverter.convertToInt(resultsDate);
     for (final ViewResultEntry viewResult : results.getAllResults()) {

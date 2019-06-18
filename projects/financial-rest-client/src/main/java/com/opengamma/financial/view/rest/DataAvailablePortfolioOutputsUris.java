@@ -14,18 +14,23 @@ import org.threeten.bp.Instant;
 import com.opengamma.id.UniqueId;
 
 /**
- * RESTful URIs for accessing available outputs from a portfolio
+ * RESTful URIs for accessing available outputs from a portfolio.
  */
 public class DataAvailablePortfolioOutputsUris {
 
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
-   * @param instant  the instant, may be null
-   * @param maxNodes  the maximum nodes, may be null
-   * @param maxPositions  the maximum positions, may be null
-   * @param portfolioId  the portfolio identifier, may be null
+   * @param baseUri
+   *          the base URI, not null
+   * @param instant
+   *          the instant, may be null
+   * @param maxNodes
+   *          the maximum nodes, may be null
+   * @param maxPositions
+   *          the maximum positions, may be null
+   * @param portfolioId
+   *          the portfolio identifier, may be null
    * @return the URI, not null
    */
   public static URI uri(final URI baseUri, final Instant instant, final Integer maxNodes, final Integer maxPositions, final UniqueId portfolioId) {

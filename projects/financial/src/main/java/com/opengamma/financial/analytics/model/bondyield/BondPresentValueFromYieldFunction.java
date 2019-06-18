@@ -22,7 +22,6 @@ import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.util.money.MultipleCurrencyAmount;
@@ -37,7 +36,8 @@ public class BondPresentValueFromYieldFunction extends BondFromYieldAndCurvesFun
   private static final BillTransactionDiscountingMethod BILL_CALCULATOR = BillTransactionDiscountingMethod.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#PRESENT_VALUE}.
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public BondPresentValueFromYieldFunction() {
     super(PRESENT_VALUE);

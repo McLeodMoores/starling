@@ -60,8 +60,8 @@ public class HistoricalTimeSeriesFieldAdjustment {
   }
 
   /**
-   * @deprecated use getUnderlyingDataFieldList()
-   * Gets the underlying data field name.
+   * @deprecated use {@link #getUnderlyingDataFields()} Gets the underlying data
+   *             field name.
    * @return the underlying data field name, not null
    */
   @Deprecated

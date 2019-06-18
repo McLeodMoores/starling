@@ -54,14 +54,14 @@ import com.opengamma.util.tuple.ObjectsPair;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Yield Curve Node Sensitivity for Equity Total Return Swap
+ * Yield Curve Node Sensitivity for Equity Total Return Swap.
  */
 public class EquityTotalReturnSwapYCNSFunction extends EquityTotalReturnSwapFunction {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityTotalReturnSwapYCNSFunction.class);
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * Sets the value requirement to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}.
    */
   public EquityTotalReturnSwapYCNSFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES);
@@ -79,8 +79,7 @@ public class EquityTotalReturnSwapYCNSFunction extends EquityTotalReturnSwapFunc
           final Set<ValueRequirement> desiredValues,
           final InstrumentDerivative derivative,
           final FXMatrix fxMatrix) {
-        final MultipleCurrencyParameterSensitivity sensitivities =
-            (MultipleCurrencyParameterSensitivity) inputs.getValue(BLOCK_CURVE_SENSITIVITIES);
+        final MultipleCurrencyParameterSensitivity sensitivities = (MultipleCurrencyParameterSensitivity) inputs.getValue(BLOCK_CURVE_SENSITIVITIES);
         final Set<ComputedValue> results = Sets.newHashSet();
         for (final ValueRequirement desiredValue : desiredValues) {
           final ValueProperties properties = desiredValue.getConstraints();
@@ -108,7 +107,6 @@ public class EquityTotalReturnSwapYCNSFunction extends EquityTotalReturnSwapFunc
         return results;
       }
 
-
       @Override
       public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context,
           final ComputationTarget target,
@@ -118,18 +116,16 @@ public class EquityTotalReturnSwapYCNSFunction extends EquityTotalReturnSwapFunc
         final ValueProperties.Builder builder = ValueProperties.builder();
         builder.with(CURVE_EXPOSURES, curveExposures);
         builder.with(PROPERTY_CURVE_TYPE, curveType);
-        final ImmutableSet<ValueRequirement> bcsReq =
-            ImmutableSet.of(new ValueRequirement(ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES,
-                target.toSpecification(),
-                builder.get()));
+        final ImmutableSet<ValueRequirement> bcsReq = ImmutableSet.of(new ValueRequirement(ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES,
+            target.toSpecification(),
+            builder.get()));
         return Sets.union(bcsReq, super.getRequirements(context, target, desiredValue));
       }
 
       @Override
       public Set<ValueSpecification> getResults(final FunctionCompilationContext context,
           final ComputationTarget target,
-          final Map<ValueSpecification,
-          ValueRequirement> inputs) {
+          final Map<ValueSpecification, ValueRequirement> inputs) {
         final Set<String> functionNames = new HashSet<>();
         final List<Pair<String, String>> ccyCurvePairs = Lists.newArrayList();
         for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {

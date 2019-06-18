@@ -36,8 +36,8 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
 /**
- * A <code>HistoricalTimeSeriesResolver</code> that tries to find the distribution spec in a cache. If it doesn't find it,
- * it will delegate to an underlying <code>HistoricalTimeSeriesResolver</code>.
+ * A <code>HistoricalTimeSeriesResolver</code> that tries to find the distribution spec in a cache. If it doesn't find it, it will delegate to an underlying
+ * <code>HistoricalTimeSeriesResolver</code>.
  */
 public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesResolverWithBasicChangeManager {
 
@@ -117,6 +117,9 @@ public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesR
 
     @Override
     public boolean equals(final Object o) {
+      if (!(o instanceof ThreadLocalWorker)) {
+        return false;
+      }
       final ThreadLocalWorker other = (ThreadLocalWorker) o;
       return ObjectUtils.equals(_identifierBundle, other._identifierBundle)
           && ObjectUtils.equals(_identifierValidityDate, other._identifierValidityDate)
@@ -207,12 +210,12 @@ public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesR
   }
 
   /**
-   * Sets whether to assume the time series is likely to exist or not. Optimistic resolution will always go to the underlying immediately.
-   * Pessimistic resolution will cache source/provider/field combinations that are known to exist or not exist and check these first to
-   * avoid hitting the underlying so heavily. If the resolutions will mostly succeed, use an optimistic mode. If the
-   * resolutions will mostly fail, use a pessimistic mode.
+   * Sets whether to assume the time series is likely to exist or not. Optimistic resolution will always go to the underlying immediately. Pessimistic
+   * resolution will cache source/provider/field combinations that are known to exist or not exist and check these first to avoid hitting the underlying so
+   * heavily. If the resolutions will mostly succeed, use an optimistic mode. If the resolutions will mostly fail, use a pessimistic mode.
    *
-   * @param optimisticResolution the mode to set
+   * @param optimisticResolution
+   *          the mode to set
    */
   public void setOptimisticFieldResolution(final boolean optimisticResolution) {
     if (optimisticResolution) {
@@ -229,7 +232,8 @@ public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesR
   /**
    * Turns the automatic setting of the optimistic field resolution flag on/off.
    *
-   * @param auto true to use the automatic setting algorithm, false to disable - call {@link #setOptimisticFieldResolution} to set a mode
+   * @param auto
+   *          true to use the automatic setting algorithm, false to disable - call {@link #setOptimisticFieldResolution} to set a mode
    */
   public void setAutomaticFieldResolutionOptimisation(final boolean auto) {
     if (auto) {

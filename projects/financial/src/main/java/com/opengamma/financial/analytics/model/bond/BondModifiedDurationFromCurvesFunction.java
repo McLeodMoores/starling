@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.bond;
@@ -11,8 +11,10 @@ import com.opengamma.analytics.financial.interestrate.bond.calculator.ModifiedDu
 import com.opengamma.engine.value.ValueRequirementNames;
 
 /**
- * 
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondModifiedDurationFromCurvesFunction extends BondFromCurvesFunction {
 
   @Override

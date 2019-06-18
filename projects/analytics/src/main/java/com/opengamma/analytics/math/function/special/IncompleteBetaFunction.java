@@ -12,17 +12,13 @@ import com.opengamma.analytics.math.MathException;
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * 
- * The incomplete beta function is defined as:
- * $$
- * \begin{equation*}
- * I_x(a, b)=\frac{B_x(a, b)}{B(a, b)}\int_0^x t^{a-1}(1-t)^{b-1}dt
- * \end{equation*}
- * $$
- * where $a,b>0$.
+ *
+ * The incomplete beta function is defined as: $$ \begin{equation*} I_x(a, b)=\frac{B_x(a, b)}{B(a, b)}\int_0^x t^{a-1}(1-t)^{b-1}dt \end{equation*} $$ where
+ * $a,b &gt; 0$.
  * <p>
- * This class uses the <a href="http://commons.apache.org/math/api-2.1/org/apache/commons/math/special/Beta.html">Commons Math library implementation</a> of the Beta function.
- * 
+ * This class uses the <a href="http://commons.apache.org/math/api-2.1/org/apache/commons/math/special/Beta.html">Commons Math library implementation</a> of the
+ * Beta function.
+ *
  */
 public class IncompleteBetaFunction extends Function1D<Double, Double> {
   private final double _a;
@@ -32,19 +28,26 @@ public class IncompleteBetaFunction extends Function1D<Double, Double> {
 
   /**
    * Uses the default values for the accuracy ($10^{-12}$) and number of iterations ($10000$).
-   * @param a a, $a > 0$
-   * @param b b, $b > 0$
+   *
+   * @param a
+   *          a, $a &gt; 0$
+   * @param b
+   *          b, $b &gt; 0$
    */
   public IncompleteBetaFunction(final double a, final double b) {
     this(a, b, 1e-12, 10000);
   }
 
   /**
-   * 
-   * @param a a, $a > 0$
-   * @param b b, $b > 0$
-   * @param eps Approximation accuracy, $\epsilon \geq 0$
-   * @param maxIter Maximum number of iterations, $\iter \geq 1$
+   *
+   * @param a
+   *          a, $a &gt; 0$
+   * @param b
+   *          b, $b &gt; 0$
+   * @param eps
+   *          Approximation accuracy, $\epsilon \geq 0$
+   * @param maxIter
+   *          Maximum number of iterations, $\iter \geq 1$
    */
   public IncompleteBetaFunction(final double a, final double b, final double eps, final int maxIter) {
     Validate.isTrue(a > 0, "a must be > 0");
@@ -58,9 +61,11 @@ public class IncompleteBetaFunction extends Function1D<Double, Double> {
   }
 
   /**
-   * @param x x
+   * @param x
+   *          x
    * @return the value of the function
-   * @throws IllegalArgumentException If $x < 0$ or $x > 1$
+   * @throws IllegalArgumentException
+   *           If $x &lt; 0$ or $x &gt; 1$
    */
   @Override
   public Double evaluate(final Double x) {

@@ -34,9 +34,8 @@ public class ValueSpecificationNode implements TreeTableNode {
   public int getChildCount() {
     if (_valueSpec != null) {
       return 2;
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   @Override

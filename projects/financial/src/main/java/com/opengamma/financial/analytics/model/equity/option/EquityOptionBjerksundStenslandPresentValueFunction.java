@@ -27,7 +27,7 @@ public class EquityOptionBjerksundStenslandPresentValueFunction extends EquityOp
   private static final EqyOptBjerksundStenslandPresentValueCalculator CALCULATOR = EqyOptBjerksundStenslandPresentValueCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBjerksundStenslandPresentValueFunction() {
     super(ValueRequirementNames.PRESENT_VALUE);

@@ -45,6 +45,13 @@ public class ManageableSecurityFudgeBuilder extends AbstractFudgeBuilder impleme
     return msg;
   }
 
+  /**
+   * Serializes a security.
+   *
+   * @param serializer  the serializer, not null
+   * @param security  the security, not null
+   * @param msg  the message to add the security message to
+   */
   public static void toFudgeMsg(final FudgeSerializer serializer, final ManageableSecurity security, final MutableFudgeMsg msg) {
     addToMessage(msg, UNIQUE_ID_FIELD_NAME, UniqueIdFudgeBuilder.toFudgeMsg(serializer, security.getUniqueId()));
     addToMessage(msg, NAME_FIELD_NAME, security.getName());
@@ -63,6 +70,13 @@ public class ManageableSecurityFudgeBuilder extends AbstractFudgeBuilder impleme
     return object;
   }
 
+  /**
+   * Adds fields from a message to a security.
+   *
+   * @param deserializer  the deserializer, not null
+   * @param msg  the message, not null
+   * @param security  the security
+   */
   @SuppressWarnings("unchecked")
   public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final ManageableSecurity security) {
     security.setUniqueId(UniqueIdFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(UNIQUE_ID_FIELD_NAME)));

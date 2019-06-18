@@ -12,16 +12,19 @@ import com.opengamma.timeseries.date.DateDoubleTimeSeries;
 import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSeries;
 
 /**
- * The drawdown is a measure of the decline from the historic peak of a variable (e.g. the NAV of a fund).
- * This calculator returns a time series of the drawdown at each point in time.
+ * The drawdown is a measure of the decline from the historic peak of a variable (e.g. the NAV of a fund). This calculator returns a time series of the drawdown
+ * at each point in time.
  */
 public class DrawdownCalculator extends Function1D<DateDoubleTimeSeries<?>, DateDoubleTimeSeries<?>> {
 
   /**
-   * Calculates the drawdown time series, with the drawdown expressed as a decimal
-   * @param ts A time series
+   * Calculates the drawdown time series, with the drawdown expressed as a decimal.
+   * 
+   * @param ts
+   *          A time series
    * @return The drawdown
-   * @throws IllegalArgumentException If the time series is null or empty 
+   * @throws IllegalArgumentException
+   *           If the time series is null or empty
    */
   @Override
   public DateDoubleTimeSeries<?> evaluate(final DateDoubleTimeSeries<?> ts) {

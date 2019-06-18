@@ -12,9 +12,10 @@ import com.opengamma.analytics.financial.provider.description.interestrate.HullW
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
-public final class PresentValueCurveSensitivityHullWhiteIssuerCalculator extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+public final class PresentValueCurveSensitivityHullWhiteIssuerCalculator
+    extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -29,6 +30,7 @@ public final class PresentValueCurveSensitivityHullWhiteIssuerCalculator extends
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityHullWhiteIssuerCalculator getInstance() {
@@ -40,10 +42,11 @@ public final class PresentValueCurveSensitivityHullWhiteIssuerCalculator extends
    */
   private static final BondFuturesTransactionHullWhiteMethod METHOD_BONDFUT_TRA = BondFuturesTransactionHullWhiteMethod.getInstance();
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitBondFuturesTransaction(final BondFuturesTransaction futures, final HullWhiteIssuerProviderInterface hullWhite) {
+  public MultipleCurrencyMulticurveSensitivity visitBondFuturesTransaction(final BondFuturesTransaction futures,
+      final HullWhiteIssuerProviderInterface hullWhite) {
     return METHOD_BONDFUT_TRA.presentValueCurveSensitivity(futures, hullWhite);
   }
 

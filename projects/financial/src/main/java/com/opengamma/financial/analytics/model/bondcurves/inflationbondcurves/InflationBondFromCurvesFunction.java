@@ -53,8 +53,10 @@ import com.opengamma.util.async.AsynchronousExecution;
 /**
  * Base class for bond and bond future analytic calculations from yield curves.
  *
- * @param <S> The type of the curves required by the calculator
- * @param <T> The type of the result
+ * @param <S>
+ *          The type of the curves required by the calculator
+ * @param <T>
+ *          The type of the result
  */
 public abstract class InflationBondFromCurvesFunction<S extends InflationIssuerProviderInterface, T> extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
@@ -67,8 +69,10 @@ public abstract class InflationBondFromCurvesFunction<S extends InflationIssuerP
   private InstrumentExposuresProvider _instrumentExposuresProvider;
 
   /**
-   * @param valueRequirementName The value requirement name, not null
-   * @param calculator The calculator
+   * @param valueRequirementName
+   *          The value requirement name, not null
+   * @param calculator
+   *          The calculator
    */
   public InflationBondFromCurvesFunction(final String valueRequirementName, final InstrumentDerivativeVisitor<S, T> calculator) {
     ArgumentChecker.notNull(valueRequirementName, "value requirement");
@@ -81,6 +85,7 @@ public abstract class InflationBondFromCurvesFunction<S extends InflationIssuerP
     _instrumentExposuresProvider = ConfigDBInstrumentExposuresProvider.init(context, this);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
@@ -130,7 +135,8 @@ public abstract class InflationBondFromCurvesFunction<S extends InflationIssuerP
     final Set<ValueRequirement> requirements = new HashSet<>();
     try {
       for (final String curveExposureConfig : curveExposureConfigs) {
-        final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
+        final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig,
+            target.getTrade());
         if (curveConstructionConfigurationNames == null) {
           LOGGER.error("Could not get curve construction configuration names for curve exposure configuration called {}", curveExposureConfig);
           return null;
@@ -155,13 +161,15 @@ public abstract class InflationBondFromCurvesFunction<S extends InflationIssuerP
   }
 
   /**
-   * Gets the value properties of the result
+   * Gets the value properties of the result.
    *
-   * @param target The computation target
+   * @param target
+   *          The computation target
    * @return The properties
    */
   protected ValueProperties.Builder getResultProperties(final ComputationTarget target) {
-    return createValueProperties().with(CALCULATION_METHOD, CURVES_METHOD).withAny(CURVE_EXPOSURES).withAny(PROPERTY_CURVE_TYPE).withAny(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE)
+    return createValueProperties().with(CALCULATION_METHOD, CURVES_METHOD).withAny(CURVE_EXPOSURES).withAny(PROPERTY_CURVE_TYPE)
+        .withAny(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE)
         .withAny(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE).withAny(PROPERTY_ROOT_FINDER_MAX_ITERATIONS).withAny(CURVE);
   }
 

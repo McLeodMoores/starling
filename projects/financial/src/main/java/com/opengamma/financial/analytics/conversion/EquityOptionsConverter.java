@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.conversion;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZonedDateTime;
 
@@ -62,7 +60,7 @@ public class EquityOptionsConverter extends FinancialSecurityVisitorAdapter<Inst
     // TODO We need to know how long after expiry settlement occurs?
     // IndexOptions are obviously Cash Settled
     final LocalDate settlementDate = expiryDT.toLocalDate(); // FIXME Needs to come from convention
-    //TODO settlement type needs to come from trade or convention
+    // TODO settlement type needs to come from trade or convention
     return new EquityIndexOptionDefinition(isCall, strike, ccy, exerciseType, expiryDT, settlementDate, unitNotional, SettlementType.CASH);
   }
 
@@ -78,7 +76,7 @@ public class EquityOptionsConverter extends FinancialSecurityVisitorAdapter<Inst
     // TODO We need to know how long after expiry settlement occurs?
     // IndexOptions are obviously Cash Settled
     final LocalDate settlementDate = expiryDT.toLocalDate(); // FIXME Needs to come from convention
-    //TODO settlement type needs to come from trade or convention
+    // TODO settlement type needs to come from trade or convention
     return new EquityOptionDefinition(isCall, strike, ccy, exerciseType, expiryDT, settlementDate, unitNotional, SettlementType.PHYSICAL);
   }
 
@@ -94,32 +92,30 @@ public class EquityOptionsConverter extends FinancialSecurityVisitorAdapter<Inst
     final ZonedDateTime expiryDate = security.getExpiry().getExpiry();
     final ExternalId underlyingIdentifier = security.getUnderlyingId();
     // REVIEW Andrew -- This call to getSingle is not correct as the resolution time of the view cycle will not be considered
-    Security underlyingSecurity = _securitySource.getSingle(ExternalIdBundle.of(underlyingIdentifier));
+    final Security underlyingSecurity = _securitySource.getSingle(ExternalIdBundle.of(underlyingIdentifier));
     if (underlyingSecurity == null) {
-      throw new OpenGammaRuntimeException("Underlying security " + underlyingIdentifier + " of option " + security.getExternalIdBundle().toString() + " was not found in database");
+      throw new OpenGammaRuntimeException(
+          "Underlying security " + underlyingIdentifier + " of option " + security.getExternalIdBundle().toString() + " was not found in database");
     }
-    
+
     IndexFutureDefinition underlying = null;
     if (underlyingSecurity instanceof IndexFutureSecurity) {
-      final IndexFutureSecurity underlyingFuture = ((IndexFutureSecurity) underlyingSecurity);
+      final IndexFutureSecurity underlyingFuture = (IndexFutureSecurity) underlyingSecurity;
       underlying = (IndexFutureDefinition) underlyingFuture.accept(_futureSecurityConverter);
     } else if (underlyingSecurity instanceof EquityFutureSecurity) {
-      final EquityFutureSecurity underlyingFuture = ((EquityFutureSecurity) underlyingSecurity);
-      EquityFutureDefinition eqFut = (EquityFutureDefinition) underlyingFuture.accept(_futureSecurityConverter);
-      underlying = new IndexFutureDefinition(eqFut.getExpiryDate(), eqFut.getSettlementDate(), eqFut.getStrikePrice(), eqFut.getCurrency(), eqFut.getUnitAmount(), underlyingFuture.getUnderlyingId());
+      final EquityFutureSecurity underlyingFuture = (EquityFutureSecurity) underlyingSecurity;
+      final EquityFutureDefinition eqFut = (EquityFutureDefinition) underlyingFuture.accept(_futureSecurityConverter);
+      underlying = new IndexFutureDefinition(eqFut.getExpiryDate(), eqFut.getSettlementDate(), eqFut.getStrikePrice(), eqFut.getCurrency(),
+          eqFut.getUnitAmount(), underlyingFuture.getUnderlyingId());
     }
-   
+
     final double strike = security.getStrike();
     final ExerciseDecisionType exerciseType = security.getExerciseType().accept(ExerciseTypeAnalyticsVisitorAdapter.getInstance());
     final boolean isCall = security.getOptionType() == OptionType.CALL;
     final double pointValue = security.getPointValue();
-    // FIXME Need the true referencePrice. 0.0 is just a stub as this converter acts upon a FinancialSecurity, not a Trade. 
+    // FIXME Need the true referencePrice. 0.0 is just a stub as this converter acts upon a FinancialSecurity, not a Trade.
     return new EquityIndexFutureOptionDefinition(expiryDate, underlying, strike, exerciseType, isCall, pointValue, 0.0);
 
   }
-  
-  private static final Logger LOGGER = LoggerFactory.getLogger(EquityOptionsConverter.class);
 
 }
-
-

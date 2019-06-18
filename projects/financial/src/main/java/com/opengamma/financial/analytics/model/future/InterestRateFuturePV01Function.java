@@ -21,7 +21,8 @@ import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecifica
 import com.opengamma.financial.analytics.model.discounting.DiscountingPV01Function;
 
 /**
- * PV01 function for interest rate futures
+ * PV01 function for interest rate futures.
+ * 
  * @deprecated Use {@link DiscountingPV01Function}
  */
 @Deprecated
@@ -33,7 +34,8 @@ public class InterestRateFuturePV01Function extends InterestRateFutureCurveSpeci
   }
 
   @Override
-  protected Set<ComputedValue> getResults(final InstrumentDerivative irFuture, final String curveName, final InterpolatedYieldCurveSpecificationWithSecurities curveSpec,
+  protected Set<ComputedValue> getResults(final InstrumentDerivative irFuture, final String curveName,
+      final InterpolatedYieldCurveSpecificationWithSecurities curveSpec,
       final YieldCurveBundle curves, final ValueSpecification resultSpec, final Security security) {
     final Map<String, Double> pv01 = CALCULATOR.visit(irFuture, curves);
     if (!pv01.containsKey(curveName)) {

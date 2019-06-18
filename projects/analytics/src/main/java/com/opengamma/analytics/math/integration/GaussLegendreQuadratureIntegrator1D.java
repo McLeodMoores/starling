@@ -37,15 +37,8 @@ public class GaussLegendreQuadratureIntegrator1D extends GaussianQuadratureInteg
   }
 
   /**
-   * {@inheritDoc}
-   * To evaluate an integral over $[a, b]$, a change of interval must be performed:
-   * $$
-   * \begin{align*}
-   * \int_a^b f(x)dx 
-   * &= \frac{b - a}{2}\int_{-1}^1 f(\frac{b - a}{2} x + \frac{a + b}{2})dx\\
-   * &\approx \frac{b - a}{2}\sum_{i=1}^n w_i f(\frac{b - a}{2} x + \frac{a + b}{2})
-   * \end{align*}
-   * $$
+   * {@inheritDoc} To evaluate an integral over $[a, b]$, a change of interval must be performed: $$ \begin{align*} \int_a^b f(x)dx = \frac{b - a}{2}\int_{-1}^1
+   * f(\frac{b - a}{2} x + \frac{a + b}{2})dx\\ \approx \frac{b - a}{2}\sum_{i=1}^n w_i f(\frac{b - a}{2} x + \frac{a + b}{2}) \end{align*} $$
    */
   @Override
   public Function1D<Double, Double> getIntegralFunction(final Function1D<Double, Double> function, final Double lower, final Double upper) {

@@ -18,13 +18,13 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 import com.opengamma.analytics.math.util.wrapper.CommonsMathWrapper;
 
 /**
- *  A one-dimensional interpolator using a vector of 12 values as input(seasonalities). The interpolated value of the function
- * <i>y</i> at <i>x</i> between two data points <i>(x<sub>1</sub>,
- * y<sub>1</sub>)</i> and <i>(x<sub>2</sub>, y<sub>2</sub>)</i> is given by a step interpolation using the following data:
- * <br>x<sub>i</sub>=x<sub>1</sub>+(x<sub>2</sub>-x<sub>1</sub>)/12<br>
- * <br>y<sub>i</sub>=y<sub>1</sub>&#928<sub>j=0</sub><sup>i</sup> (1+growth+seasonalities[j])<br>
- * where growth is the solution of the following equation
- * <br>0=y<sub>1</sub>&#928<sub>j=0</sub><sup>i</sup> (1+growth)-y<sub>2</sub><br>
+ * A one-dimensional interpolator using a vector of 12 values as input(seasonalities). The interpolated value of the function <i>y</i> at <i>x</i> between two
+ * data points <i>(x<sub>1</sub>, y<sub>1</sub>)</i> and <i>(x<sub>2</sub>, y<sub>2</sub>)</i> is given by a step interpolation using the following data: <br>
+ * x<sub>i</sub>=x<sub>1</sub>+(x<sub>2</sub>-x<sub>1</sub>)/12<br>
+ * <br>
+ * y<sub>i</sub>=y<sub>1</sub>&#928;<sub>j=0</sub><sup>i</sup> (1+growth+seasonalities[j])<br>
+ * where growth is the solution of the following equation <br>
+ * 0=y<sub>1</sub>&#928;<sub>j=0</sub><sup>i</sup> (1+growth)-y<sub>2</sub><br>
  *
  */
 public class LogLinearWithSeasonalitiesInterpolator1D extends Interpolator1D {

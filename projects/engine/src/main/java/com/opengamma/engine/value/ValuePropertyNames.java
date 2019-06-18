@@ -5,22 +5,21 @@
  */
 package com.opengamma.engine.value;
 
-import com.opengamma.engine.function.FunctionDefinition;
-import com.opengamma.engine.marketdata.availability.MarketDataAvailabilityProvider;
 import com.opengamma.util.PublicAPI;
 
 /**
  * Standard names used to refer to particular value properties.
  * <p>
- * These name are used as keys to define specific value properties for the engine.
- * They should be used by a {@link FunctionDefinition} to annotate their requirements
- * or provide additional context about their outputs.
+ * These name are used as keys to define specific value properties for the
+ * engine. They should be used by a
+ * {@link com.opengamma.engine.function.FunctionDefinition} to annotate their
+ * requirements or provide additional context about their outputs.
  */
 @PublicAPI
 public final class ValuePropertyNames {
 
   // Please see http://jira.opengamma.com/browse/PLAT-2330 for information about this constant.
-  /** Property name of the contribution to the P&L (e.g. yield curve, FX rate) */
+  /** Property name of the contribution to the P&amp;L (e.g. yield curve, FX rate) */
   public static final String PROPERTY_PNL_CONTRIBUTIONS = "PnLContribution";
 
   /**
@@ -83,9 +82,13 @@ public final class ValuePropertyNames {
   public static final String CURVE_CURRENCY = "CurveCurrency";
 
   /**
-   * The data provider used to source external values into the view cycle. This may be used by {@link MarketDataAvailabilityProvider} instances that work
-   * with multiple underlying providers to indicate which data provider should be queried for the value. In the case of a "route" of nested data providers
-   * existing, the {@code /} character can be used as a separator between elements.
+   * The data provider used to source external values into the view cycle. This
+   * may be used by
+   * {@link com.opengamma.engine.marketdata.availability.MarketDataAvailabilityProvider}
+   * instances that work with multiple underlying providers to indicate which
+   * data provider should be queried for the value. In the case of a "route" of
+   * nested data providers existing, the {@code /} character can be used as a
+   * separator between elements.
    */
   public static final String DATA_PROVIDER = "DataProvider";
 

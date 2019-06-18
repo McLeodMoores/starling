@@ -60,9 +60,8 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
       final Object value = waitFor();
       if (value == NULL) {
         return Pairs.of(_specification, null);
-      } else {
-        return Pairs.of(_specification, value);
       }
+      return Pairs.of(_specification, value);
     }
 
     public synchronized void post(final Object value) {
@@ -93,9 +92,8 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
     final WriteThroughViewComputationCache existing = INSTANCES.putIfAbsent(underlying, cached);
     if (existing == null) {
       return cached;
-    } else {
-      return existing;
     }
+    return existing;
   }
 
   /**
@@ -122,9 +120,8 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
     final Pending existingPending = _pending.putIfAbsent(specification, newPending);
     if (existingPending == null) {
       return newPending;
-    } else {
-      return existingPending;
     }
+    return existingPending;
   }
 
   protected void post(final ValueSpecification specification, final Object value) {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.ircurve;
@@ -26,7 +26,7 @@ import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolator;
 import com.opengamma.analytics.math.interpolation.FlatExtrapolator1D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
@@ -48,13 +48,14 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * 
+ * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
+@Deprecated
 public class InterpolatedYieldAndDiscountCurveFunction extends AbstractFunction {
 
   @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(InterpolatedYieldAndDiscountCurveFunction.class);
-  /** Name of the calculation method */
+  /** Name of the calculation method. */
   public static final String INTERPOLATED_CALCULATION_METHOD = "Interpolated";
 
   private final YieldCurveFunctionHelper _helper;
@@ -108,7 +109,7 @@ public class InterpolatedYieldAndDiscountCurveFunction extends AbstractFunction 
     _definition = _helper.init(context, this);
     final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(_definition.getCurrency());
     final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE, _curveName).get();
-    _interpolator = new CombinedInterpolatorExtrapolator(Interpolator1DFactory.getInterpolator(_definition.getInterpolatorName()), new FlatExtrapolator1D());
+    _interpolator = new CombinedInterpolatorExtrapolator(NamedInterpolator1dFactory.of(_definition.getInterpolatorName()), new FlatExtrapolator1D());
     final String curveReqName = _isYieldCurve ? ValueRequirementNames.YIELD_CURVE : ValueRequirementNames.DISCOUNT_CURVE;
     _result = new ValueSpecification(curveReqName, targetSpec, properties);
     _specResult = new ValueSpecification(ValueRequirementNames.YIELD_CURVE_SPEC, targetSpec, properties);
@@ -149,25 +150,28 @@ public class InterpolatedYieldAndDiscountCurveFunction extends AbstractFunction 
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
-        final Set<ValueRequirement> result = new HashSet<ValueRequirement>();
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
+        final Set<ValueRequirement> result = new HashSet<>();
         result.add(_helper.getMarketDataValueRequirement());
         return result;
       }
 
       @Override
-      public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+      public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+          final Set<ValueRequirement> desiredValues) {
         final SnapshotDataBundle marketData = _helper.getMarketDataMap(inputs);
         // Gather market data rates
         // Note that this assumes that all strips are priced in decimal percent. We need to resolve
         // that ultimately in OG-LiveData normalization and pull out the OGRate key rather than
         // the crazy IndicativeValue name.
-        final FixedIncomeStripIdentifierAndMaturityBuilder builder = new FixedIncomeStripIdentifierAndMaturityBuilder(OpenGammaExecutionContext.getRegionSource(executionContext),
-            OpenGammaExecutionContext.getConventionBundleSource(executionContext), executionContext.getSecuritySource(), OpenGammaExecutionContext.getHolidaySource(executionContext));
+        final FixedIncomeStripIdentifierAndMaturityBuilder builder = new FixedIncomeStripIdentifierAndMaturityBuilder(
+            OpenGammaExecutionContext.getRegionSource(executionContext), OpenGammaExecutionContext.getConventionBundleSource(executionContext),
+            executionContext.getSecuritySource(), OpenGammaExecutionContext.getHolidaySource(executionContext));
         final InterpolatedYieldCurveSpecificationWithSecurities specWithSecurities = builder.resolveToSecurity(specification, marketData);
         final Clock snapshotClock = executionContext.getValuationClock();
         final ZonedDateTime today = ZonedDateTime.now(snapshotClock); // TODO: change to times
-        final Map<Double, Double> timeInYearsToRates = new TreeMap<Double, Double>();
+        final Map<Double, Double> timeInYearsToRates = new TreeMap<>();
         boolean isFirst = true;
         for (final FixedIncomeStripWithSecurity strip : specWithSecurities.getStrips()) {
           Double price = marketData.getDataPoint(strip.getSecurityIdentifier());
@@ -187,8 +191,8 @@ public class InterpolatedYieldAndDiscountCurveFunction extends AbstractFunction 
             timeInYearsToRates.put(years, Math.exp(-price * years));
           }
         }
-        final YieldAndDiscountCurve curve = _isYieldCurve ? YieldCurve.from(InterpolatedDoublesCurve.from(timeInYearsToRates, _interpolator)) : DiscountCurve.from(InterpolatedDoublesCurve.from(
-            timeInYearsToRates, _interpolator));
+        final YieldAndDiscountCurve curve = _isYieldCurve ? YieldCurve.from(InterpolatedDoublesCurve.from(timeInYearsToRates, _interpolator))
+            : DiscountCurve.from(InterpolatedDoublesCurve.from(timeInYearsToRates, _interpolator));
         final ComputedValue resultValue = new ComputedValue(_result, curve);
         final ComputedValue specValue = new ComputedValue(_specResult, specWithSecurities);
         return Sets.newHashSet(resultValue, specValue);

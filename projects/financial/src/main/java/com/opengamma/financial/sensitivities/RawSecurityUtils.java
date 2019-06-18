@@ -16,12 +16,13 @@ import com.opengamma.master.security.RawSecurity;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Utilities for raw securities
+ * Utilities for raw securities.
  */
 public class RawSecurityUtils {
 
   /**
-   * @param security The security
+   * @param security
+   *          The security
    * @return true if security is externally provided sensitivities security
    */
   public static boolean isExternallyProvidedSensitivitiesSecurity(final Security security) {
@@ -44,12 +45,9 @@ public class RawSecurityUtils {
     final RawSecurity underlyingRawSecurity = (RawSecurity) secSource.getSingle(securityEntryData.getFactorSetId().toBundle());
     if (underlyingRawSecurity != null) {
       final FudgeMsgEnvelope factorIdMsg = OpenGammaFudgeContext.getInstance().deserialize(underlyingRawSecurity.getRawData());
-      @SuppressWarnings("unchecked")
-      final
-      List<FactorExposureData> factorExposureDataList = OpenGammaFudgeContext.getInstance().fromFudgeMsg(List.class, factorIdMsg.getMessage());
+      final List<FactorExposureData> factorExposureDataList = OpenGammaFudgeContext.getInstance().fromFudgeMsg(List.class, factorIdMsg.getMessage());
       return factorExposureDataList;
-    } else {
-      throw new OpenGammaRuntimeException("Couldn't find factor list security " + securityEntryData.getFactorSetId());
     }
+    throw new OpenGammaRuntimeException("Couldn't find factor list security " + securityEntryData.getFactorSetId());
   }
 }

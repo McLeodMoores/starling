@@ -59,9 +59,12 @@ public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFu
   private final String _resolutionKey;
 
   /**
-   * @param resolutionKey the resolution key, not-null
-   * @param mark2MarketField the mark to market data field name, not-null
-   * @param costOfCarryField the cost of carry field name, not-null
+   * @param resolutionKey
+   *          the resolution key, not-null
+   * @param mark2MarketField
+   *          the mark to market data field name, not-null
+   * @param costOfCarryField
+   *          the cost of carry field name, not-null
    */
   public AbstractTradeOrDailyPositionPnLFunction(final String resolutionKey, final String mark2MarketField, final String costOfCarryField) {
     super();
@@ -79,12 +82,14 @@ public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFu
 
   protected abstract DateConstraint getTimeSeriesEndDate(PositionOrTrade positionOrTrade);
 
-  protected abstract LocalDate checkAvailableData(LocalDate originalTradeDate, HistoricalTimeSeries markToMarketSeries, Security security, String markDataField, String resolutionKey);
+  protected abstract LocalDate checkAvailableData(LocalDate originalTradeDate, HistoricalTimeSeries markToMarketSeries, Security security, String markDataField,
+      String resolutionKey);
 
   protected abstract String getResultValueRequirementName();
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     BigDecimal tradeValue = null;
     HistoricalTimeSeries htsMarkToMarket = null;
@@ -109,8 +114,9 @@ public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFu
     final Security security = trade.getSecurity();
     LocalDate tradeDate = getPreferredTradeDate(executionContext.getValuationClock(), trade);
     tradeDate = checkAvailableData(tradeDate, htsMarkToMarket, security, _mark2MarketField, _resolutionKey);
-    final ValueSpecification valueSpecification = new ValueSpecification(getResultValueRequirementName(), target.toSpecification(), desiredValue.getConstraints());
-    final double costOfCarry = getCostOfCarry(security, tradeDate, htsCostOfCarry);
+    final ValueSpecification valueSpecification = new ValueSpecification(getResultValueRequirementName(), target.toSpecification(),
+        desiredValue.getConstraints());
+    final double costOfCarry = getCostOfCarry(tradeDate, htsCostOfCarry);
     Double markToMarket = htsMarkToMarket.getTimeSeries().getValue(tradeDate);
     if (security instanceof FutureSecurity) {
       final FutureSecurity futureSecurity = (FutureSecurity) security;
@@ -118,12 +124,12 @@ public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFu
     }
     final BigDecimal dailyPnL = tradeValue.subtract(trade.getQuantity().multiply(BigDecimal.valueOf(markToMarket + costOfCarry)));
     LOGGER.debug("{}  security: {} quantity: {} fairValue: {} markToMarket: {} costOfCarry: {} dailyPnL: {}",
-          new Object[] {trade.getUniqueId(), trade.getSecurity().getExternalIdBundle(), trade.getQuantity(), tradeValue, markToMarket, costOfCarry, dailyPnL });
+        new Object[] { trade.getUniqueId(), trade.getSecurity().getExternalIdBundle(), trade.getQuantity(), tradeValue, markToMarket, costOfCarry, dailyPnL });
     final ComputedValue result = new ComputedValue(valueSpecification, MoneyCalculationUtils.rounded(dailyPnL).doubleValue());
     return Sets.newHashSet(result);
   }
 
-  private double getCostOfCarry(final Security security, final LocalDate tradeDate, final HistoricalTimeSeries costOfCarryTS) {
+  private double getCostOfCarry(final LocalDate tradeDate, final HistoricalTimeSeries costOfCarryTS) {
     double result = 0.0d;
     if (costOfCarryTS != null) {
       final Double histCost = costOfCarryTS.getTimeSeries().getValue(tradeDate);
@@ -141,7 +147,8 @@ public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFu
     final ValueRequirement securityOrTradeValue;
     if (positionOrTrade instanceof Trade) {
       // If a TRADE, request the SECURITY's value and scale up during the execute
-      securityOrTradeValue = new ValueRequirement(ValueRequirementNames.VALUE, ComputationTargetType.SECURITY, security.getUniqueId(), getCurrencyProperty(security));
+      securityOrTradeValue = new ValueRequirement(ValueRequirementNames.VALUE, ComputationTargetType.SECURITY, security.getUniqueId(),
+          getCurrencyProperty(security));
     } else {
       // If a POSITION, request the POSITION's value and DON'T scale during the execute
       securityOrTradeValue = new ValueRequirement(ValueRequirementNames.VALUE, target.toSpecification(), getCurrencyProperty(security));
@@ -171,12 +178,12 @@ public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFu
     final Currency ccy = FinancialSecurityUtils.getCurrency(security);
     if (ccy != null) {
       return ValueProperties.with(ValuePropertyNames.CURRENCY, ccy.getCode()).get();
-    } else {
-      return ValueProperties.none();
     }
+    return ValueProperties.none();
   }
 
-  private ValueRequirement getMarkToMarketSeriesRequirement(final HistoricalTimeSeriesResolver resolver, final ExternalIdBundle bundle, final DateConstraint startDate, final DateConstraint endDate) {
+  private ValueRequirement getMarkToMarketSeriesRequirement(final HistoricalTimeSeriesResolver resolver, final ExternalIdBundle bundle,
+      final DateConstraint startDate, final DateConstraint endDate) {
     final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(bundle, null, null, null, _mark2MarketField, _resolutionKey);
     if (timeSeries == null) {
       return null;
@@ -184,7 +191,8 @@ public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFu
     return HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries, _mark2MarketField, startDate, true, endDate, true);
   }
 
-  private ValueRequirement getCostOfCarrySeriesRequirement(final HistoricalTimeSeriesResolver resolver, final ExternalIdBundle bundle, final DateConstraint endDate) {
+  private ValueRequirement getCostOfCarrySeriesRequirement(final HistoricalTimeSeriesResolver resolver, final ExternalIdBundle bundle,
+      final DateConstraint endDate) {
     final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(bundle, null, null, null, _costOfCarryField, _resolutionKey);
     if (timeSeries == null) {
       return null;
@@ -212,7 +220,8 @@ public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFu
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.isEmpty()) {
       return null;
     }
@@ -233,7 +242,7 @@ public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFu
       propertiesBuilder.with("MarkToMarketTimeSeries", uidMarkToMarket.toString());
     }
     if (uidCostOfCarry != null) {
-      propertiesBuilder.with("CostOfCarryTimeSeries",  uidCostOfCarry.toString());
+      propertiesBuilder.with("CostOfCarryTimeSeries", uidCostOfCarry.toString());
     }
     return Collections.singleton(new ValueSpecification(getResultValueRequirementName(), target.toSpecification(), propertiesBuilder.get()));
   }

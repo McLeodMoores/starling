@@ -82,7 +82,7 @@ public class AuthorizationExceptionMapperTest extends AbstractExceptionMapperTes
     assertEquals(data.get("message"), "");
     assertEquals(data.get("user"), "permissive");
     assertTrue(data.get("locator").startsWith(
-        "<p>IllegalArgumentException<br />&nbsp;&nbsp;at com.opengamma.util.rest.AuthorizationExceptionMapperTest.testNoOutputMessage()"));
+        "<p>IllegalArgumentException<br>&nbsp;&nbsp;at com.opengamma.util.rest.AuthorizationExceptionMapperTest.testNoOutputMessage()"));
     assertTrue(data.get("locator").endsWith("</p>"));
   }
 
@@ -105,7 +105,7 @@ public class AuthorizationExceptionMapperTest extends AbstractExceptionMapperTes
     assertEquals(data.get("message"), message);
     assertEquals(data.get("user"), "permissive");
     assertTrue(data.get("locator").startsWith(
-        "<p>OpenGammaRuntimeException<br />&nbsp;&nbsp;at com.opengamma.util.rest.AuthorizationExceptionMapperTest.testOutputMessage()"));
+        "<p>OpenGammaRuntimeException<br>&nbsp;&nbsp;at com.opengamma.util.rest.AuthorizationExceptionMapperTest.testOutputMessage()"));
     assertTrue(data.get("locator").endsWith("</p>"));
   }
 

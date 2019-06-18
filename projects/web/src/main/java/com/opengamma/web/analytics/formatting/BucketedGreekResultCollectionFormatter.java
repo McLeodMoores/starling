@@ -35,9 +35,8 @@ import com.opengamma.engine.value.ValueSpecification;
         }
       }
       return "Volatility Surface (" + expiries.length + " x " + uniqueStrikes.length + ")";
-    } else {
-      return FORMATTING_ERROR;
     }
+    return FORMATTING_ERROR;
   }
 
   @Override

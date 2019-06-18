@@ -19,7 +19,9 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * The function calculating the total Black volatility sensitivity.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXOneLookBarrierOptionBlackVegaFunction extends FXOneLookBarrierOptionBlackFunction {
 
   public FXOneLookBarrierOptionBlackVegaFunction() {
@@ -29,7 +31,8 @@ public class FXOneLookBarrierOptionBlackVegaFunction extends FXOneLookBarrierOpt
   /**
    * The relevant calculator.
    */
-  private static final PresentValueBlackVolatilitySensitivityBlackForexCalculator CALCULATOR = PresentValueBlackVolatilitySensitivityBlackForexCalculator.getInstance();
+  private static final PresentValueBlackVolatilitySensitivityBlackForexCalculator CALCULATOR =
+      PresentValueBlackVolatilitySensitivityBlackForexCalculator.getInstance();
 
   @Override
   protected Object computeValues(final Set<ForexOptionVanilla> vanillaOptions, final ForexOptionDataBundle<?> market) {

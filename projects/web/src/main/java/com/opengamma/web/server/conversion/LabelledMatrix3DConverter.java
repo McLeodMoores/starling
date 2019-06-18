@@ -19,7 +19,8 @@ import com.opengamma.util.time.Tenor;
 public class LabelledMatrix3DConverter implements ResultConverter<LabelledMatrix3D> {
 
   @Override
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final LabelledMatrix3D value, final ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final LabelledMatrix3D value,
+      final ConversionMode mode) {
     final Map<String, Object> result = new HashMap<>();
     final int tablesCount = value.getZKeys().length;
     final int rowCount = value.getYKeys().length;

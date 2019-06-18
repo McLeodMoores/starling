@@ -23,9 +23,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**
- * A swap curve node that uses calendar dates to set the start and maturity dates.
- * By calendar we mean a list of dates, e.g. ECB dates stored in a {@see com.opengamma.core.DateSet}
- * configuration object this is unrelated to the holiday calendar implementation.
+ * A swap curve node that uses calendar dates to set the start and maturity dates. By calendar we mean a list of dates, e.g. ECB dates stored in a
+ * {@link com.opengamma.core.DateSet} configuration object this is unrelated to the holiday calendar implementation.
  */
 @BeanDefinition
 public class CalendarSwapNode extends CurveNode {
@@ -34,8 +33,8 @@ public class CalendarSwapNode extends CurveNode {
   private static final long serialVersionUID = 1L;
 
   /**
-   * The set of dates (i.e. calendar) name, not null. Used to determine swap start and end dates using the offsets below.
-   * Refers to the name of the {@see com.opengamma.core.DateSet} configuration object holding the dates.
+   * The set of dates (i.e. calendar) name, not null. Used to determine swap start and end dates using the offsets below. Refers to the name of the
+   * {@link com.opengamma.core.DateSet} configuration object holding the dates.
    */
   @PropertyDefinition(validate = "notNull")
   private String _dateSetName;
@@ -91,8 +90,8 @@ public class CalendarSwapNode extends CurveNode {
     super(curveNodeIdMapperName);
     ArgumentChecker.notNegativeOrZero(startDateNumber, "start date number");
     ArgumentChecker.isTrue(endDateNumber > startDateNumber, "Maturity date number {} must be greater than the start date number {}",
-                           endDateNumber,
-                           startDateNumber);
+        endDateNumber,
+        startDateNumber);
     setDateSetName(dateSetName);
     setStartTenor(startTenor);
     setStartDateNumber(startDateNumber);
@@ -115,8 +114,8 @@ public class CalendarSwapNode extends CurveNode {
     super(curveNodeIdMapperName);
     ArgumentChecker.notNegativeOrZero(startDateNumber, "start date number");
     ArgumentChecker.isTrue(endDateNumber > startDateNumber, "Maturity date number {} must be greater than the start date number {}",
-                           endDateNumber,
-                           startDateNumber);
+        endDateNumber,
+        startDateNumber);
     setDateSetName(dateSetName);
     setStartTenor(startTenor);
     setStartDateNumber(startDateNumber);
@@ -140,8 +139,8 @@ public class CalendarSwapNode extends CurveNode {
     super(curveNodeIdMapperName, name);
     ArgumentChecker.notNegativeOrZero(startDateNumber, "start date number");
     ArgumentChecker.isTrue(endDateNumber > startDateNumber, "Maturity date number {} must be greater than the start date number {}",
-                           endDateNumber,
-                           startDateNumber);
+        endDateNumber,
+        startDateNumber);
     setDateSetName(dateSetName);
     setStartTenor(startTenor);
     setStartDateNumber(startDateNumber);
@@ -165,8 +164,8 @@ public class CalendarSwapNode extends CurveNode {
     super(curveNodeIdMapperName, name);
     ArgumentChecker.notNegativeOrZero(startDateNumber, "start date number");
     ArgumentChecker.isTrue(endDateNumber > startDateNumber, "Maturity date number {} must be greater than the start date number {}",
-                           endDateNumber,
-                           startDateNumber);
+        endDateNumber,
+        startDateNumber);
     setDateSetName(dateSetName);
     setStartTenor(startTenor);
     setStartDateNumber(startDateNumber);
@@ -208,8 +207,8 @@ public class CalendarSwapNode extends CurveNode {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of dates (i.e. calendar) name, not null. Used to determine swap start and end dates using the offsets below.
-   * Refers to the name of the {@see com.opengamma.core.DateSet} configuration object holding the dates.
+   * Gets the set of dates (i.e. calendar) name, not null. Used to determine swap start and end dates using the offsets below. Refers to the name of the
+   * {@link com.opengamma.core.DateSet} configuration object holding the dates.
    * @return the value of the property, not null
    */
   public String getDateSetName() {
@@ -217,8 +216,8 @@ public class CalendarSwapNode extends CurveNode {
   }
 
   /**
-   * Sets the set of dates (i.e. calendar) name, not null. Used to determine swap start and end dates using the offsets below.
-   * Refers to the name of the {@see com.opengamma.core.DateSet} configuration object holding the dates.
+   * Sets the set of dates (i.e. calendar) name, not null. Used to determine swap start and end dates using the offsets below. Refers to the name of the
+   * {@link com.opengamma.core.DateSet} configuration object holding the dates.
    * @param dateSetName  the new value of the property, not null
    */
   public void setDateSetName(String dateSetName) {
@@ -228,7 +227,7 @@ public class CalendarSwapNode extends CurveNode {
 
   /**
    * Gets the the {@code dateSetName} property.
-   * Refers to the name of the {@see com.opengamma.core.DateSet} configuration object holding the dates.
+   * {@link com.opengamma.core.DateSet} configuration object holding the dates.
    * @return the property, not null
    */
   public final Property<String> dateSetName() {

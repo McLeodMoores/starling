@@ -26,8 +26,7 @@ import com.opengamma.util.PublicSPI;
 /**
  * A raw security that simply holds an array of bytes.
  * <p>
- * This can be used to integrate a security defined using another system.
- * The byte array might be a serialized object or a Fudge message.
+ * This can be used to integrate a security defined using another system. The byte array might be a serialized object or a Fudge message.
  */
 @PublicSPI
 @BeanDefinition
@@ -36,12 +35,11 @@ public class RawSecurity extends ManageableSecurity {
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
 
-  /** Standard name for an unsupported security type; not all RawSecurities need to be of this type */
+  /** Standard name for an unsupported security type; not all RawSecurities need to be of this type. */
   public static final String UNSUPPORTED_SECURITY_TYPE = "UNSUPPORTED";
 
   /**
-   * The raw data of the security, simply expressed as a byte array.
-   * The array is not cloned on get or set, so treat with care.
+   * The raw data of the security, simply expressed as a byte array. The array is not cloned on get or set, so treat with care.
    */
   @PropertyDefinition(validate = "notNull")
   private byte[] _rawData = ArrayUtils.EMPTY_BYTE_ARRAY;
@@ -58,7 +56,8 @@ public class RawSecurity extends ManageableSecurity {
   /**
    * Creates an instance with a security type.
    *
-   * @param securityType  the security type, not null
+   * @param securityType
+   *          the security type, not null
    */
   public RawSecurity(final String securityType) {
     super(securityType);
@@ -67,8 +66,10 @@ public class RawSecurity extends ManageableSecurity {
   /**
    * Creates an instance with a security type.
    *
-   * @param securityType  the security type, not null
-   * @param rawData  the raw data, assigned, not null
+   * @param securityType
+   *          the security type, not null
+   * @param rawData
+   *          the raw data, assigned, not null
    */
   public RawSecurity(final String securityType, final byte[] rawData) {
     super(securityType);
@@ -78,11 +79,16 @@ public class RawSecurity extends ManageableSecurity {
   /**
    * Creates a fully populated instance.
    *
-   * @param uniqueId  the security unique identifier, may be null
-   * @param name  the display name, not null
-   * @param securityType  the security type, not null
-   * @param bundle  the security external identifier bundle, not null
-   * @param rawData  the raw data, assigned, not null
+   * @param uniqueId
+   *          the security unique identifier, may be null
+   * @param name
+   *          the display name, not null
+   * @param securityType
+   *          the security type, not null
+   * @param bundle
+   *          the security external identifier bundle, not null
+   * @param rawData
+   *          the raw data, assigned, not null
    */
   public RawSecurity(final UniqueId uniqueId, final String name, final String securityType, final ExternalIdBundle bundle, final byte[] rawData) {
     super(uniqueId, name, securityType, bundle);
@@ -110,8 +116,7 @@ public class RawSecurity extends ManageableSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the raw data of the security, simply expressed as a byte array.
-   * The array is not cloned on get or set, so treat with care.
+   * Gets the raw data of the security, simply expressed as a byte array. The array is not cloned on get or set, so treat with care.
    * @return the value of the property, not null
    */
   public byte[] getRawData() {
@@ -119,8 +124,7 @@ public class RawSecurity extends ManageableSecurity {
   }
 
   /**
-   * Sets the raw data of the security, simply expressed as a byte array.
-   * The array is not cloned on get or set, so treat with care.
+   * Sets the raw data of the security, simply expressed as a byte array. The array is not cloned on get or set, so treat with care.
    * @param rawData  the new value of the property, not null
    */
   public void setRawData(byte[] rawData) {
@@ -130,7 +134,6 @@ public class RawSecurity extends ManageableSecurity {
 
   /**
    * Gets the the {@code rawData} property.
-   * The array is not cloned on get or set, so treat with care.
    * @return the property, not null
    */
   public final Property<byte[]> rawData() {

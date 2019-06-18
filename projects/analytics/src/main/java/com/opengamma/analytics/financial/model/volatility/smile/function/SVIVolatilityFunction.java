@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.function;
@@ -12,7 +12,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.lang.annotation.ExternalFunction;
 
 /**
- * Gatheral's Stochastic Volatility Inspired (SVI) model
+ * Gatheral's Stochastic Volatility Inspired (SVI) model.
  */
 public class SVIVolatilityFunction extends VolatilityFunctionProvider<SVIFormulaData> {
 
@@ -102,7 +102,8 @@ public class SVIVolatilityFunction extends VolatilityFunctionProvider<SVIFormula
   }
 
   @ExternalFunction
-  public double[] getVolatilityAjoint(final double forward, final double strike, final double a, final double b, final double rho, final double nu, final double m) {
+  public double[] getVolatilityAjoint(final double forward, final double strike, final double a, final double b, final double rho, final double nu,
+      final double m) {
     final SVIFormulaData data = new SVIFormulaData(a, b, rho, nu, m);
     return getVolatilityAjoint(forward, strike, data);
 
@@ -132,13 +133,13 @@ public class SVIVolatilityFunction extends VolatilityFunctionProvider<SVIFormula
 
     final double[] res = new double[8];
     res[0] = sigma;
-    res[1] = -kappaBar / forward; //fBar
-    res[2] = kappaBar / strike; //strikebar
-    res[3] = 1. / 2. / sigma; //aBar
-    res[4] = s / 2 / sigma; //bBar
-    res[5] = b * d / 2 / sigma; //rhoBar
-    res[6] = nu * b / r / 2 / sigma; //nuBar
-    res[7] = -kappaBar; //mBar
+    res[1] = -kappaBar / forward; // fBar
+    res[2] = kappaBar / strike; // strikebar
+    res[3] = 1. / 2. / sigma; // aBar
+    res[4] = s / 2 / sigma; // bBar
+    res[5] = b * d / 2 / sigma; // rhoBar
+    res[6] = nu * b / r / 2 / sigma; // nuBar
+    res[7] = -kappaBar; // mBar
 
     return res;
   }
@@ -159,11 +160,11 @@ public class SVIVolatilityFunction extends VolatilityFunctionProvider<SVIFormula
 
     final double[] res = new double[5];
 
-    res[0] = 1. / 2. / sigma; //aBar
-    res[1] = s / 2 / sigma; //bBar
-    res[2] = b * d / 2 / sigma; //rhoBar
-    res[3] = nu * b / r / 2 / sigma; //nuBar
-    res[4] = -kappaBar; //mBar
+    res[0] = 1. / 2. / sigma; // aBar
+    res[1] = s / 2 / sigma; // bBar
+    res[2] = b * d / 2 / sigma; // rhoBar
+    res[3] = nu * b / r / 2 / sigma; // nuBar
+    res[4] = -kappaBar; // mBar
 
     return res;
   }

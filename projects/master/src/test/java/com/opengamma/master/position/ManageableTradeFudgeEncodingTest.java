@@ -33,8 +33,11 @@ public class ManageableTradeFudgeEncodingTest {
   private static final Logger LOGGER = LoggerFactory.getLogger(ManageableTradeFudgeEncodingTest.class);
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
+  /**
+   * Tests the Fudge encoder.
+   */
   public void test() {
-    ManageableTrade obj = new ManageableTrade();
+    final ManageableTrade obj = new ManageableTrade();
     obj.setUniqueId(UniqueId.of("U", "1"));
     obj.setQuantity(BigDecimal.ONE);
     obj.setSecurityLink(new ManageableSecurityLink(ExternalId.of("A", "B")));
@@ -44,7 +47,7 @@ public class ManageableTradeFudgeEncodingTest {
     testFudgeMessage(obj);
   }
 
-  private void testFudgeMessage(final ManageableTrade obj) {
+  private static void testFudgeMessage(final ManageableTrade obj) {
     final FudgeSerializer serializer = new FudgeSerializer(FUDGE_CONTEXT);
     FudgeMsg msg = serializer.objectToFudgeMsg(obj);
     LOGGER.debug("ManageableTrade {}", obj);

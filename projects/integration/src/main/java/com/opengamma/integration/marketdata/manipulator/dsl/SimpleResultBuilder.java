@@ -56,12 +56,12 @@ public class SimpleResultBuilder {
     final PortfolioMapperFunction<List<UniqueIdentifiable>> mapperFn = new PortfolioMapperFunction<List<UniqueIdentifiable>>() {
       @Override
       public List<UniqueIdentifiable> apply(final PortfolioNode node) {
-        return Collections.<UniqueIdentifiable>singletonList(node);
+        return Collections.<UniqueIdentifiable> singletonList(node);
       }
 
       @Override
       public List<UniqueIdentifiable> apply(final PortfolioNode parent, final Position position) {
-        final List<UniqueIdentifiable> targets = Lists.<UniqueIdentifiable>newArrayList(position);
+        final List<UniqueIdentifiable> targets = Lists.<UniqueIdentifiable> newArrayList(position);
         for (final Trade trade : position.getTrades()) {
           targets.add(trade);
         }
@@ -75,7 +75,7 @@ public class SimpleResultBuilder {
       _idToIndex.put(target.getUniqueId().getObjectId(), rowIndex++);
     }
 
-    //---------------------------------------------------
+    // ---------------------------------------------------
 
     final Collection<ViewCalculationConfiguration> calcConfigs = compiledViewDef.getViewDefinition().getAllCalculationConfigurations();
     final Set<ColumnSpec> columns = Sets.newLinkedHashSet();
@@ -108,7 +108,9 @@ public class SimpleResultBuilder {
 
   /**
    * Builds a {@link ScenarioResultModel} from the data calculated in a single cycle.
-   * @param resultModel The results calculated by the engine in a single calculation cycle
+   *
+   * @param resultModel
+   *          The results calculated by the engine in a single calculation cycle
    * @return A simple result model built from the results
    */
   public SimpleResultModel build(final ViewResultModel resultModel) {
@@ -117,18 +119,22 @@ public class SimpleResultBuilder {
 
   /**
    * Builds a {@link ScenarioResultModel} from the data calculated in a single cycle.
-   * @param resultModel the results calculated by the engine in a single calculation cycle
-   * @param columnNames column name overrides
+   *
+   * @param resultModel
+   *          the results calculated by the engine in a single calculation cycle
+   * @param columnNames
+   *          column name overrides
    * @return A simple result model built from the results
-   * @throws IllegalArgumentException if the number of column names doesn't match the number of columns
+   * @throws IllegalArgumentException
+   *           if the number of column names doesn't match the number of columns
    */
   public SimpleResultModel build(final ViewResultModel resultModel, final List<String> columnNames) {
     ArgumentChecker.notNull(columnNames, "columnNames");
     ArgumentChecker.notNull(resultModel, "resultModel");
 
     if (columnNames.size() != _columnNames.size()) {
-      throw new IllegalArgumentException("Wrong number of column names. expected: " + _columnNames.size() +
-                                             ", actual: " + columnNames.size());
+      throw new IllegalArgumentException("Wrong number of column names. expected: " + _columnNames.size()
+          + ", actual: " + columnNames.size());
     }
     final int rowCount = _idToIndex.size();
     final int colCount = columnNames.size();
@@ -176,7 +182,7 @@ public class SimpleResultBuilder {
       _header = header;
     }
 
-    public ColumnSpec(final String calcConfigName, final String valueName, final ValueProperties properties) {
+    ColumnSpec(final String calcConfigName, final String valueName, final ValueProperties properties) {
       this(calcConfigName, valueName, properties, null);
     }
 
@@ -196,10 +202,9 @@ public class SimpleResultBuilder {
         return false;
       }
       final ColumnSpec other = (ColumnSpec) obj;
-      return
-          Objects.equals(this._calcConfigName, other._calcConfigName) &&
-          Objects.equals(this._valueName, other._valueName) &&
-          Objects.equals(this._valueProperties, other._valueProperties);
+      return Objects.equals(this._calcConfigName, other._calcConfigName)
+          && Objects.equals(this._valueName, other._valueName)
+          && Objects.equals(this._valueProperties, other._valueProperties);
     }
   }
 }

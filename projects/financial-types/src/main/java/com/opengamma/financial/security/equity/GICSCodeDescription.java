@@ -35,11 +35,10 @@ import com.google.common.base.MoreObjects;
  * <p>
  * This is an effective singleton.
  *
- *  S&P provides an Excel file of GICS code mappings.  To load support for these mappings, the file provided by S&P must be renamed 'gics_map.xls'
- *  and be located in the classpath. If the file does not have this name or the Classloader cannot find it, an error will be logged
- *  and GICS code mapping will not be available.
+ * S&P provides an Excel file of GICS code mappings. To load support for these mappings, the file provided by S&P must be renamed 'gics_map.xls' and be located
+ * in the classpath. If the file does not have this name or the Classloader cannot find it, an error will be logged and GICS code mapping will not be available.
  *
- *  @see <a href="http://www.standardandpoors.com/indices/gics/en/us">Standard and Poors</a>
+ * @see <a href="http://www.standardandpoors.com/indices/gics/en/us">Standard and Poors</a>
  */
 final class GICSCodeDescription {
 
@@ -57,7 +56,7 @@ final class GICSCodeDescription {
    */
   private static final Map<String, String> DESCRIPTIONS = new HashMap<>();
   static {
-    try (final InputStream xlsStream = GICSCodeDescription.class.getClassLoader().getResourceAsStream(GICS_FILE_NAME)) {
+    try (InputStream xlsStream = GICSCodeDescription.class.getClassLoader().getResourceAsStream(GICS_FILE_NAME)) {
       processGICSExcelWorkbook(xlsStream, DESCRIPTIONS);
     } catch (final IOException e) {
       LOGGER.warn("Problem processing S&P GICS mapping file: ", e);
@@ -67,16 +66,19 @@ final class GICSCodeDescription {
   /**
    * Load S&P GICS code mappings from an Excel file stream.
    *
-   * @param inputStream  opened stream based on Excel file
-   * @param gicsMap  map to add mappings to
-   * @throws IOException  if the stream cannot be read
+   * @param inputStream
+   *          opened stream based on Excel file
+   * @param gicsMap
+   *          map to add mappings to
+   * @throws IOException
+   *           if the stream cannot be read
    */
   static void processGICSExcelWorkbook(final InputStream inputStream, final Map<String, String> gicsMap) throws IOException {
     try (Workbook workbook = new HSSFWorkbook(new BufferedInputStream(inputStream))) {
       processGICSExcelWorkbook(workbook, gicsMap);
     } catch (final IOException e) {
-      LOGGER.warn("Unable to find S&P GICS Code Mapping file '" + GICS_FILE_NAME +
-                    "' in classpath; unable to use GICS Codes: " + e);
+      LOGGER.warn("Unable to find S&P GICS Code Mapping file '" + GICS_FILE_NAME
+          + "' in classpath; unable to use GICS Codes: " + e);
       return;
     }
   }
@@ -84,11 +86,13 @@ final class GICSCodeDescription {
   /**
    * Load S&P GICS code mappings from an Apache POI {@link HSSFWorkbook}.
    *
-   * @param workbook  HSSFWorkbook to parse S&P GCIS Excel
-   * @param gicsMap  map to add mappings to
+   * @param workbook
+   *          HSSFWorkbook to parse S&P GCIS Excel
+   * @param gicsMap
+   *          map to add mappings to
    */
   static void processGICSExcelWorkbook(final Workbook workbook, final Map<String, String> gicsMap) {
-    //Assume 1 sheet
+    // Assume 1 sheet
     final Sheet sheet = workbook.getSheetAt(0);
     if (sheet == null) {
       return;
@@ -101,7 +105,7 @@ final class GICSCodeDescription {
       for (int cellNum = 0; cellNum < row.getPhysicalNumberOfCells(); cellNum++) {
         final Cell cell = row.getCell(cellNum, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
         if (isNumeric(cell)) {
-          //worst case if the Excel file is in an  incorrect (or updated) format
+          // worst case if the Excel file is in an incorrect (or updated) format
           // is that number -> random or empty string mappings will be created
           gicsMap.put(getGICSCellValue(cell), getGICSCellValue(row, cellNum + 1));
         }
@@ -109,13 +113,12 @@ final class GICSCodeDescription {
     }
   }
 
-
   /**
-   * Get the value of the Apache POI Cell as a String.  If the Cell type is numeric (always a double with POI),
-   * the value is converted to an integer.  The GCIS file does not contain any floating point values so (at this time)
-   * this is a valid operation.
+   * Get the value of the Apache POI Cell as a String. If the Cell type is numeric (always a double with POI), the value is converted to an integer. The GCIS
+   * file does not contain any floating point values so (at this time) this is a valid operation.
    *
-   * @param cell  Apache POI Cell
+   * @param cell
+   *          Apache POI Cell
    * @return String value
    */
   static String getGICSCellValue(final Cell cell) {
@@ -136,13 +139,14 @@ final class GICSCodeDescription {
     }
   }
 
-
   /**
-   * Get the value of the Apache POI Cell specified by the row and cell num (column) as a String.
-   * If row,cellNum defines a null or blank cell, an empty String is returned.
+   * Get the value of the Apache POI Cell specified by the row and cell num (column) as a String. If row,cellNum defines a null or blank cell, an empty String
+   * is returned.
    *
-   * @param row  Apache POI Row
-   * @param cellNum  cell number in Row
+   * @param row
+   *          Apache POI Row
+   * @param cellNum
+   *          cell number in Row
    * @return String value of specified cell, or empty String if invalid cell
    */
   static String getGICSCellValue(final Row row, final int cellNum) {
@@ -151,10 +155,10 @@ final class GICSCodeDescription {
   }
 
   /**
-   * Determine if specified Cell contains a number or something else based on the cell
-   * type defined in the source Excel file.
+   * Determine if specified Cell contains a number or something else based on the cell type defined in the source Excel file.
    *
-   * @param cell  Apache POI Cell
+   * @param cell
+   *          Apache POI Cell
    * @return true if numeric, false if any other type
    */
   static boolean isNumeric(final Cell cell) {
@@ -167,11 +171,12 @@ final class GICSCodeDescription {
   private GICSCodeDescription() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the description for the code.
    *
-   * @param code  the code to lookup, not null
+   * @param code
+   *          the code to lookup, not null
    * @return the description, "Unknown" if not found
    */
   static String getDescription(final String code) {
@@ -218,7 +223,8 @@ final class GICSCodeDescription {
   /**
    * Get all descriptions with a particular code length.
    *
-   * @param codeLength the number of digits in the code
+   * @param codeLength
+   *          the number of digits in the code
    * @return a collection of all the description strings
    */
   private static Collection<String> getAllDescriptions(final int codeLength) {
@@ -231,7 +237,7 @@ final class GICSCodeDescription {
     return results;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets a simple string description for the class.
    *
@@ -245,7 +251,8 @@ final class GICSCodeDescription {
   /**
    * Output the current contents of the GICS map to the log.
    *
-   * @param gicsMap Map of GICS code -> description
+   * @param gicsMap
+   *          Map of GICS code -> description
    */
   static void dumpGICSMap(final Map<String, String> gicsMap) {
     for (final Map.Entry<String, String> entry : gicsMap.entrySet()) {
@@ -253,10 +260,8 @@ final class GICSCodeDescription {
     }
   }
 
-
   /**
-   * For testing.  Logs the contents of the GICS code->description map that is loaded
-   * statically.
+   * For testing. Logs the contents of the GICS code->description map that is loaded statically.
    *
    * @param args
    * @return
@@ -272,9 +277,10 @@ final class GICSCodeDescription {
   /**
    * For standalone testing.
    *
-   * @param args command line arguments
+   * @param args
+   *          command line arguments
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     final boolean success = new GICSCodeDescription().run(args);
     System.exit(success ? 0 : 1);
   }

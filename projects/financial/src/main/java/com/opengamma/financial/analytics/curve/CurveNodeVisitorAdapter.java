@@ -29,14 +29,16 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Adapter for visiting all concrete curve node types.
  *
- * @param <T> The return type for this visitor.
+ * @param <T>
+ *          The return type for this visitor.
  */
 public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
 
   /**
-   * Creates builder for a {@link CurveNodeVisitor}. The underlying visitor
-   * has no implemented methods.
-   * @param <T> The return type of the visitor
+   * Creates builder for a {@link CurveNodeVisitor}. The underlying visitor has no implemented methods.
+   *
+   * @param <T>
+   *          The return type of the visitor
    * @return A builder
    */
   public static <T> Builder<T> builder() {
@@ -44,10 +46,12 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
   }
 
   /**
-   * Creates builder for a {@link CurveNodeVisitor} that uses the supplied
-   * visitor as the initial underlying
-   * @param <T> The return type of the visitor
-   * @param visitor The underlying visitor, not null
+   * Creates builder for a {@link CurveNodeVisitor} that uses the supplied visitor as the initial underlying.
+   *
+   * @param <T>
+   *          The return type of the visitor
+   * @param visitor
+   *          The underlying visitor, not null
    * @return A builder
    */
   public static <T> Builder<T> builder(final CurveNodeVisitor<T> visitor) {
@@ -140,10 +144,12 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
   }
 
   /**
-   * Generic message for unsupported methods in {@link CurveNodeVisitor} implementations
+   * Generic message for unsupported methods in {@link CurveNodeVisitor} implementations.
    *
-   * @param clazz the implementation class, not null
-   * @param node the curve node, not null
+   * @param clazz
+   *          the implementation class, not null
+   * @param node
+   *          the curve node, not null
    * @return the message, not null;
    */
   public static String getUnsupportedOperationMessage(final Class<?> clazz, final CurveNode node) {
@@ -155,7 +161,8 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
   /**
    * Builder class for this visitor adapter.
    *
-   * @param <T> The return type of the visitor.
+   * @param <T>
+   *          The return type of the visitor.
    */
   public static class Builder<T> {
     /** The visitor */
@@ -170,7 +177,9 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
 
     /**
      * Accepts a visitor.
-     * @param visitor The visitor, not null
+     *
+     * @param visitor
+     *          The visitor, not null
      */
     protected Builder(final CurveNodeVisitor<T> visitor) {
       ArgumentChecker.notNull(visitor, "visitor");
@@ -178,8 +187,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link BillNode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link BillNode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle bill nodes
      */
     public Builder<T> billNodeVisitor(final CurveNodeVisitor<T> visitor) {
@@ -194,8 +205,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link BondNode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link BondNode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle bond nodes
      */
     public Builder<T> bondNodeVisitor(final CurveNodeVisitor<T> visitor) {
@@ -210,8 +223,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link CashNode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link CashNode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle cash nodes
      */
     public Builder<T> cashNodeVisitor(final CurveNodeVisitor<T> visitor) {
@@ -226,8 +241,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link CalendarSwapNode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link CalendarSwapNode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle calendar swap nodes
      */
     public Builder<T> calendarSwapNode(final CurveNodeVisitor<T> visitor) {
@@ -242,8 +259,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link ContinuouslyCompoundedRateNode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link ContinuouslyCompoundedRateNode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle continuously compounded rate nodes
      */
     public Builder<T> continuouslyCompoundedRateNode(final CurveNodeVisitor<T> visitor) {
@@ -258,8 +277,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link PeriodicallyCompoundedRateNode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link PeriodicallyCompoundedRateNode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle periodically compounded rate nodes
      */
     public Builder<T> periodicallyCompoundedRateNode(final CurveNodeVisitor<T> visitor) {
@@ -274,8 +295,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link CreditSpreadNode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link CreditSpreadNode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle credit spread nodes
      */
     public Builder<T> creditSpreadNode(final CurveNodeVisitor<T> visitor) {
@@ -290,8 +313,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link DeliverableSwapFutureNode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link DeliverableSwapFutureNode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle deliverable swap future nodes
      */
     public Builder<T> deliverableSwapFutureNode(final CurveNodeVisitor<T> visitor) {
@@ -306,8 +331,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link DiscountFactorNode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link DiscountFactorNode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle discount factor nodes
      */
     public Builder<T> discountFactorNode(final CurveNodeVisitor<T> visitor) {
@@ -322,8 +349,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link FRANode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link FRANode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle FRA nodes
      */
     public Builder<T> fraNode(final CurveNodeVisitor<T> visitor) {
@@ -338,8 +367,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link FXForwardNode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link FXForwardNode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle FX forward nodes
      */
     public Builder<T> fxForwardNode(final CurveNodeVisitor<T> visitor) {
@@ -354,8 +385,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link RollDateFRANode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link RollDateFRANode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle IMM FRA nodes
      */
     public Builder<T> immFRANode(final CurveNodeVisitor<T> visitor) {
@@ -370,8 +403,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link RollDateSwapNode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link RollDateSwapNode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle IMM swap nodes
      */
     public Builder<T> immSwapNode(final CurveNodeVisitor<T> visitor) {
@@ -386,8 +421,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link RateFutureNode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link RateFutureNode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle rate future nodes
      */
     public Builder<T> rateFutureNode(final CurveNodeVisitor<T> visitor) {
@@ -402,8 +439,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link SwapNode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link SwapNode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle swap nodes
      */
     public Builder<T> swapNode(final CurveNodeVisitor<T> visitor) {
@@ -418,8 +457,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link ThreeLegBasisSwapNode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link ThreeLegBasisSwapNode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle swap nodes
      */
     public Builder<T> threeLegBasisSwapNode(final CurveNodeVisitor<T> visitor) {
@@ -434,8 +475,10 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Adds a visitor for {@link ZeroCouponInflationNode}s
-     * @param visitor The original visitor.
+     * Adds a visitor for {@link ZeroCouponInflationNode}s.
+     *
+     * @param visitor
+     *          The original visitor.
      * @return A visitor that can also handle zero-coupon inflation nodes
      */
     public Builder<T> zeroCouponInflationNode(final CurveNodeVisitor<T> visitor) {
@@ -450,7 +493,8 @@ public class CurveNodeVisitorAdapter<T> implements CurveNodeVisitor<T> {
     }
 
     /**
-     * Creates the visitor
+     * Creates the visitor.
+     *
      * @return The visitor
      */
     public CurveNodeVisitor<T> create() {

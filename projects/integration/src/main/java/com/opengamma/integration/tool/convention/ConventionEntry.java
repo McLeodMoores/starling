@@ -1,5 +1,7 @@
+/**
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.opengamma.integration.tool.convention;
-
 
 import java.util.Map;
 

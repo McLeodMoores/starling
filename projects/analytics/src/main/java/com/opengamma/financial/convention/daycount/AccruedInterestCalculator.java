@@ -29,18 +29,27 @@ public final class AccruedInterestCalculator {
 
   /**
    * Calculates the accrued interest for a {@code ZonedDateTime}.
-   * 
-   * @param dayCount  the day count convention, not null
-   * @param settlementDate  the settlement date, not null
-   * @param nominalDates  the nominalDates, not null, no null elements
-   * @param coupon  the coupon value
-   * @param paymentsPerYear  the number of payments per year, one, two, three, four, six or twelve
-   * @param isEndOfMonthConvention  whether to use end of month rules
-   * @param exDividendDays the number of ex-dividend days
-   * @param calendar The working day calendar to be used in calculating ex-dividend dates, not null
+   *
+   * @param dayCount
+   *          the day count convention, not null
+   * @param settlementDate
+   *          the settlement date, not null
+   * @param nominalDates
+   *          the nominalDates, not null, no null elements
+   * @param coupon
+   *          the coupon value
+   * @param paymentsPerYear
+   *          the number of payments per year, one, two, three, four, six or twelve
+   * @param isEndOfMonthConvention
+   *          whether to use end of month rules
+   * @param exDividendDays
+   *          the number of ex-dividend days
+   * @param calendar
+   *          The working day calendar to be used in calculating ex-dividend dates, not null
    * @return the accrued interest
    */
-  public static double getAccruedInterest(final DayCount dayCount, final ZonedDateTime settlementDate, final ZonedDateTime[] nominalDates, final double coupon, final int paymentsPerYear,
+  public static double getAccruedInterest(final DayCount dayCount, final ZonedDateTime settlementDate, final ZonedDateTime[] nominalDates, final double coupon,
+      final int paymentsPerYear,
       final boolean isEndOfMonthConvention, final int exDividendDays, final Calendar calendar) {
     Validate.notNull(dayCount, "day-count");
     Validate.notNull(settlementDate, "date");
@@ -56,7 +65,8 @@ public final class AccruedInterestCalculator {
     final int length = nominalDates.length;
     Validate.isTrue(index >= 0, "Settlement date is before first accrual date");
     Validate.isTrue(index < length, "Settlement date is after maturity date");
-    final double accruedInterest = getAccruedInterest(dayCount, index, length, nominalDates[index], settlementDate, nominalDates[index + 1], coupon, paymentsPerYear, isEndOfMonthConvention);
+    final double accruedInterest = getAccruedInterest(dayCount, index, length, nominalDates[index], settlementDate, nominalDates[index + 1], coupon,
+        paymentsPerYear, isEndOfMonthConvention);
     ZonedDateTime exDividendDate = nominalDates[index + 1];
     for (int j = 0; j < exDividendDays; j++) {
       while (!calendar.isWorkingDay(exDividendDate.toLocalDate())) {
@@ -72,19 +82,29 @@ public final class AccruedInterestCalculator {
 
   /**
    * Calculates the accrued interest for a {@code ZonedDateTime}.
-   * 
-   * @param dayCount  the day count convention, not null
-   * @param settlementDate  the settlement date, not null
-   * @param nominalDates  the nominalDates, not null, no null elements
-   * @param coupon  the coupon value
-   * @param paymentsPerYear  the number of payments per year, one, two, three, four, six or twelve
-   * @param isEndOfMonthConvention  whether to use end of month rules
-   * @param exDividendDays the number of ex-dividend days
-   * @param index The index of the previous coupon in the nominalDates array
-   * @param calendar The working day calendar to be used in calculating ex-dividend dates, not null
+   *
+   * @param dayCount
+   *          the day count convention, not null
+   * @param settlementDate
+   *          the settlement date, not null
+   * @param nominalDates
+   *          the nominalDates, not null, no null elements
+   * @param coupon
+   *          the coupon value
+   * @param paymentsPerYear
+   *          the number of payments per year, one, two, three, four, six or twelve
+   * @param isEndOfMonthConvention
+   *          whether to use end of month rules
+   * @param exDividendDays
+   *          the number of ex-dividend days
+   * @param index
+   *          The index of the previous coupon in the nominalDates array
+   * @param calendar
+   *          The working day calendar to be used in calculating ex-dividend dates, not null
    * @return the accrued interest
    */
-  public static double getAccruedInterest(final DayCount dayCount, final ZonedDateTime settlementDate, final ZonedDateTime[] nominalDates, final double coupon, final double paymentsPerYear,
+  public static double getAccruedInterest(final DayCount dayCount, final ZonedDateTime settlementDate, final ZonedDateTime[] nominalDates, final double coupon,
+      final double paymentsPerYear,
       final boolean isEndOfMonthConvention, final int exDividendDays, final int index, final Calendar calendar) {
     Validate.notNull(dayCount, "day-count");
     Validate.notNull(settlementDate, "date");
@@ -94,7 +114,8 @@ public final class AccruedInterestCalculator {
     Validate.isTrue(exDividendDays >= 0);
     final int length = nominalDates.length;
     Validate.isTrue(index >= 0 && index < length);
-    final double accruedInterest = getAccruedInterest(dayCount, index, length, nominalDates[index], settlementDate, nominalDates[index + 1], coupon, paymentsPerYear, isEndOfMonthConvention);
+    final double accruedInterest = getAccruedInterest(dayCount, index, length, nominalDates[index], settlementDate, nominalDates[index + 1], coupon,
+        paymentsPerYear, isEndOfMonthConvention);
     ZonedDateTime exDividendDate = nominalDates[index + 1];
     for (int i = 0; i < exDividendDays; i++) {
       while (!calendar.isWorkingDay(exDividendDate.toLocalDate())) {
@@ -110,19 +131,28 @@ public final class AccruedInterestCalculator {
 
   /**
    * Calculates the accrued interest for a {@code LocalDate}.
-   * 
-   * @param dayCount  the day count convention, not null
-   * @param settlementDate  the settlement date, not null
-   * @param nominalDates  the nominalDates, not null, no null elements
-   * @param coupon  the coupon value
-   * @param paymentsPerYear  the number of payments per year, one, two, three, four, six or twelve
-   * @param isEndOfMonthConvention  whether to use end of month rules
-   * @param exDividendDays the number of ex-dividend days
-   * @param calendar The working day calendar to be used in calculating ex-dividend dates, not null
+   *
+   * @param dayCount
+   *          the day count convention, not null
+   * @param settlementDate
+   *          the settlement date, not null
+   * @param nominalDates
+   *          the nominalDates, not null, no null elements
+   * @param coupon
+   *          the coupon value
+   * @param paymentsPerYear
+   *          the number of payments per year, one, two, three, four, six or twelve
+   * @param isEndOfMonthConvention
+   *          whether to use end of month rules
+   * @param exDividendDays
+   *          the number of ex-dividend days
+   * @param calendar
+   *          The working day calendar to be used in calculating ex-dividend dates, not null
    * @return the accrued interest
    */
-  //TODO one where you can pass in array of coupons
-  public static double getAccruedInterest(final DayCount dayCount, final LocalDate settlementDate, final LocalDate[] nominalDates, final double coupon, final double paymentsPerYear,
+  // TODO one where you can pass in array of coupons
+  public static double getAccruedInterest(final DayCount dayCount, final LocalDate settlementDate, final LocalDate[] nominalDates, final double coupon,
+      final double paymentsPerYear,
       final boolean isEndOfMonthConvention, final int exDividendDays, final Calendar calendar) {
     Validate.notNull(dayCount, "day-count");
     Validate.notNull(settlementDate, "date");
@@ -145,7 +175,8 @@ public final class AccruedInterestCalculator {
     final ZonedDateTime previousCouponDate = nominalDates[index].atStartOfDay(ZoneOffset.UTC);
     final ZonedDateTime date = settlementDate.atStartOfDay(ZoneOffset.UTC);
     final ZonedDateTime nextCouponDate = nominalDates[index + 1].atStartOfDay(ZoneOffset.UTC);
-    final double accruedInterest = getAccruedInterest(dayCount, index, length, previousCouponDate, date, nextCouponDate, coupon, paymentsPerYear, isEndOfMonthConvention);
+    final double accruedInterest = getAccruedInterest(dayCount, index, length, previousCouponDate, date, nextCouponDate, coupon, paymentsPerYear,
+        isEndOfMonthConvention);
     LocalDate exDividendDate = nominalDates[index + 1];
     for (int j = 0; j < exDividendDays; j++) {
       while (!calendar.isWorkingDay(exDividendDate)) {
@@ -161,19 +192,29 @@ public final class AccruedInterestCalculator {
 
   /**
    * Calculates the accrued interest for a {@code LocalDate}.
-   * 
-   * @param dayCount  the day count convention, not null
-   * @param settlementDate  the settlement date, not null
-   * @param nominalDates  the nominalDates, not null, no null elements
-   * @param coupon  the coupon value
-   * @param paymentsPerYear  the number of payments per year, one, two, three, four, six or twelve
-   * @param isEndOfMonthConvention  whether to use end of month rules
-   * @param exDividendDays the number of ex-dividend days
-   * @param index The index of the previous coupon in the nominalDates
-   * @param calendar The working day calendar to be used in calculating ex-dividend dates, not null
+   *
+   * @param dayCount
+   *          the day count convention, not null
+   * @param settlementDate
+   *          the settlement date, not null
+   * @param nominalDates
+   *          the nominalDates, not null, no null elements
+   * @param coupon
+   *          the coupon value
+   * @param paymentsPerYear
+   *          the number of payments per year, one, two, three, four, six or twelve
+   * @param isEndOfMonthConvention
+   *          whether to use end of month rules
+   * @param exDividendDays
+   *          the number of ex-dividend days
+   * @param index
+   *          The index of the previous coupon in the nominalDates
+   * @param calendar
+   *          The working day calendar to be used in calculating ex-dividend dates, not null
    * @return the accrued interest
    */
-  public static double getAccruedInterest(final DayCount dayCount, final LocalDate settlementDate, final LocalDate[] nominalDates, final double coupon, final double paymentsPerYear,
+  public static double getAccruedInterest(final DayCount dayCount, final LocalDate settlementDate, final LocalDate[] nominalDates, final double coupon,
+      final double paymentsPerYear,
       final boolean isEndOfMonthConvention, final int exDividendDays, final int index, final Calendar calendar) {
     Validate.notNull(dayCount, "day-count");
     Validate.notNull(settlementDate, "date");
@@ -207,20 +248,31 @@ public final class AccruedInterestCalculator {
 
   /**
    * Calculates the accrued interest for a {@code LocalDate}.
-   * 
-   * @param dayCount  the day count convention, not null
-   * @param settlementDate  the settlement date, not null
-   * @param nominalDates  the nominalDates, not null, no null elements
-   * @param settlementDates  the settlement dates, not null, no null elements
-   * @param coupon  the coupon value
-   * @param paymentsPerYear  the number of payments per year, one, two, three, four, six or twelve
-   * @param isEndOfMonthConvention  whether to use end of month rules
-   * @param exDividendDays the number of ex-dividend days
-   * @param index The index of the previous coupon in the nominalDates
-   * @param calendar The working day calendar used to calculate the ex-dividend date, not null
+   *
+   * @param dayCount
+   *          the day count convention, not null
+   * @param settlementDate
+   *          the settlement date, not null
+   * @param nominalDates
+   *          the nominalDates, not null, no null elements
+   * @param settlementDates
+   *          the settlement dates, not null, no null elements
+   * @param coupon
+   *          the coupon value
+   * @param paymentsPerYear
+   *          the number of payments per year, one, two, three, four, six or twelve
+   * @param isEndOfMonthConvention
+   *          whether to use end of month rules
+   * @param exDividendDays
+   *          the number of ex-dividend days
+   * @param index
+   *          The index of the previous coupon in the nominalDates
+   * @param calendar
+   *          The working day calendar used to calculate the ex-dividend date, not null
    * @return the accrued interest
    */
-  public static double getAccruedInterest(final DayCount dayCount, final LocalDate settlementDate, final LocalDate[] nominalDates, final LocalDate[] settlementDates, final double coupon,
+  public static double getAccruedInterest(final DayCount dayCount, final LocalDate settlementDate, final LocalDate[] nominalDates,
+      final LocalDate[] settlementDates, final double coupon,
       final double paymentsPerYear, final boolean isEndOfMonthConvention, final int exDividendDays, final int index, final Calendar calendar) {
     Validate.notNull(dayCount, "day-count");
     Validate.notNull(settlementDate, "date");
@@ -241,7 +293,8 @@ public final class AccruedInterestCalculator {
         accruedInterest = 0;
       }
     } else {
-      accruedInterest = getAccruedInterest(dayCount, index, length, previousCouponDate, settlementDate, nextCouponDate, coupon, paymentsPerYear, isEndOfMonthConvention);
+      accruedInterest = getAccruedInterest(dayCount, index, length, previousCouponDate, settlementDate, nextCouponDate, coupon, paymentsPerYear,
+          isEndOfMonthConvention);
     }
     LocalDate exDividendDate = nominalDates[index + 1];
     for (int i = 0; i < exDividendDays; i++) {
@@ -256,7 +309,8 @@ public final class AccruedInterestCalculator {
     return accruedInterest;
   }
 
-  public static double getAccruedInterest(final DayCount dayCount, final int index, final int length, final ZonedDateTime previousCouponDate, final ZonedDateTime date,
+  public static double getAccruedInterest(final DayCount dayCount, final int index, final int length, final ZonedDateTime previousCouponDate,
+      final ZonedDateTime date,
       final ZonedDateTime nextCouponDate, final double coupon, final double paymentsPerYear, final boolean isEndOfMonthConvention) {
     if (dayCount instanceof ActualActualICMANormal) {
       if (isEndOfMonthConvention) {
@@ -294,15 +348,16 @@ public final class AccruedInterestCalculator {
     return dayCount.getAccruedInterest(previousCouponDate, date, nextCouponDate, coupon, paymentsPerYear);
   }
 
-  private static StubType getStubType(final int index, final int length, final ZonedDateTime previousCouponDate, final ZonedDateTime nextCouponDate, final double paymentsPerYear,
+  private static StubType getStubType(final int index, final int length, final ZonedDateTime previousCouponDate, final ZonedDateTime nextCouponDate,
+      final double paymentsPerYear,
       final boolean isEndOfMonthConvention) {
     StubType stubType;
     if (index == 0) {
-      LocalDate[] schedule = new LocalDate[] {previousCouponDate.toLocalDate(), nextCouponDate.toLocalDate()};
+      final LocalDate[] schedule = new LocalDate[] { previousCouponDate.toLocalDate(), nextCouponDate.toLocalDate() };
       stubType = StubCalculator.getStartStubType(schedule, paymentsPerYear, isEndOfMonthConvention);
 
     } else if (index == length - 2) {
-      LocalDate[] schedule = new LocalDate[] {previousCouponDate.toLocalDate(), nextCouponDate.toLocalDate()};
+      final LocalDate[] schedule = new LocalDate[] { previousCouponDate.toLocalDate(), nextCouponDate.toLocalDate() };
       stubType = StubCalculator.getEndStubType(schedule, paymentsPerYear, isEndOfMonthConvention);
 
     } else {
@@ -311,15 +366,16 @@ public final class AccruedInterestCalculator {
     return stubType;
   }
 
-  private static StubType getStubType(final int index, final int length, final LocalDate previousCouponDate, final LocalDate nextCouponDate, final double paymentsPerYear,
+  private static StubType getStubType(final int index, final int length, final LocalDate previousCouponDate, final LocalDate nextCouponDate,
+      final double paymentsPerYear,
       final boolean isEndOfMonthConvention) {
     StubType stubType;
     if (index == 0) {
-      LocalDate[] schedule = new LocalDate[] {previousCouponDate, nextCouponDate};
+      final LocalDate[] schedule = new LocalDate[] { previousCouponDate, nextCouponDate };
       stubType = StubCalculator.getStartStubType(schedule, paymentsPerYear, isEndOfMonthConvention);
 
     } else if (index == length - 2) {
-      LocalDate[] schedule = new LocalDate[] {previousCouponDate, nextCouponDate};
+      final LocalDate[] schedule = new LocalDate[] { previousCouponDate, nextCouponDate };
       stubType = StubCalculator.getEndStubType(schedule, paymentsPerYear, isEndOfMonthConvention);
 
     } else {

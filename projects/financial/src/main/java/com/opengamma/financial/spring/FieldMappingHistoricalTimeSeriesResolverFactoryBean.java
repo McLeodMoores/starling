@@ -29,7 +29,7 @@ import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesFieldA
 import com.opengamma.util.spring.SpringFactoryBean;
 
 /**
- * Spring factory bean for {@link FieldMappingHistoricalTimeSeriesResolver}
+ * Spring factory bean for {@link FieldMappingHistoricalTimeSeriesResolver}.
  */
 @BeanDefinition
 public class FieldMappingHistoricalTimeSeriesResolverFactoryBean extends SpringFactoryBean<HistoricalTimeSeriesResolver> {
@@ -57,7 +57,7 @@ public class FieldMappingHistoricalTimeSeriesResolverFactoryBean extends SpringF
     super(HistoricalTimeSeriesResolver.class);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected HistoricalTimeSeriesResolver createObject() {
     final HistoricalTimeSeriesSelector selector = new DefaultHistoricalTimeSeriesSelector(getConfigSource());

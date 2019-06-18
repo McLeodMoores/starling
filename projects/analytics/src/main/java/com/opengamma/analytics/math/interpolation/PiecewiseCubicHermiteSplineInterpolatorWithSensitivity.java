@@ -17,11 +17,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ParallelArrayBinarySort;
 
 /**
- * C1 cubic interpolation preserving monotonicity based on
- * Fritsch, F. N.; Carlson, R. E. (1980)
- * "Monotone Piecewise Cubic Interpolation", SIAM Journal on Numerical Analysis 17 (2): 238–246.
- * Fritsch, F. N. and Butland, J. (1984)
- * "A method for constructing local monotone piecewise cubic interpolants", SIAM Journal on Scientific and Statistical Computing 5 (2): 300-304.
+ * C1 cubic interpolation preserving monotonicity based on Fritsch, F. N.; Carlson, R. E. (1980) "Monotone Piecewise Cubic Interpolation", SIAM Journal on
+ * Numerical Analysis 17 (2): 238–246. Fritsch, F. N. and Butland, J. (1984) "A method for constructing local monotone piecewise cubic interpolants", SIAM
+ * Journal on Scientific and Statistical Computing 5 (2): 300-304.
  *
  * For interpolation without node sensitivity, use {@link PiecewiseCubicHermiteSplineInterpolator}
  */
@@ -79,8 +77,10 @@ public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends Piec
   }
 
   /**
-   * @param xValues X values of data
-   * @param yValues Y values of data
+   * @param xValues
+   *          X values of data
+   * @param yValues
+   *          Y values of data
    * @return Coefficient matrix whose i-th row vector is {a3, a2, a1, a0} of f(x) = a3 * (x-x_i)^3 + a2 * (x-x_i)^2 +... for the i-th interval
    */
   private DoubleMatrix2D[] solve(final double[] xValues, final double[] yValues) {
@@ -163,7 +163,7 @@ public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends Piec
     private final DoubleMatrix1D _d;
     private final DoubleMatrix2D _dDy;
 
-    public SlopeFinderResults(final DoubleMatrix1D d, final DoubleMatrix2D dDy) {
+    SlopeFinderResults(final DoubleMatrix1D d, final DoubleMatrix2D dDy) {
       // this is a private class - don't do the normal checks on inputs
       _d = d;
       _dDy = dDy;
@@ -181,6 +181,7 @@ public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends Piec
 
   /**
    * Finds the the first derivatives at knots and their sensitivity to delta
+   * 
    * @param h
    * @param delta
    * @return slope finder results
@@ -243,6 +244,7 @@ public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends Piec
 
   /**
    * First derivative at end point and its sensitivity to delta
+   * 
    * @param h1
    * @param h2
    * @param y1

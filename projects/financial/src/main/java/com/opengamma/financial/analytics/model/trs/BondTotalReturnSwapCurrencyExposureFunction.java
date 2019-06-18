@@ -32,8 +32,9 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  *
  */
 public class BondTotalReturnSwapCurrencyExposureFunction extends BondTotalReturnSwapFunction {
-  private static final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, MultipleCurrencyAmount> CALCULATOR =
-      CurrencyExposureIssuerCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, MultipleCurrencyAmount> CALCULATOR = CurrencyExposureIssuerCalculator
+      .getInstance();
+
   /**
    *
    */
@@ -52,7 +53,8 @@ public class BondTotalReturnSwapCurrencyExposureFunction extends BondTotalReturn
       }
 
       @Override
-      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues,
+      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+          final Set<ValueRequirement> desiredValues,
           final InstrumentDerivative derivative, final FXMatrix fxMatrix) {
 
         final Set<ComputedValue> results = Sets.newHashSet();
@@ -60,7 +62,8 @@ public class BondTotalReturnSwapCurrencyExposureFunction extends BondTotalReturn
           final ParameterIssuerProviderInterface issuerCurves = getMergedWithIssuerProviders(inputs, fxMatrix);
 
           final MultipleCurrencyAmount exposure = derivative.accept(CALCULATOR, issuerCurves);
-          final ComputedValue result = new ComputedValue(ValueSpecification.of(FX_CURRENCY_EXPOSURE, target.toSpecification(), desiredValue.getConstraints()), exposure);
+          final ComputedValue result = new ComputedValue(ValueSpecification.of(FX_CURRENCY_EXPOSURE, target.toSpecification(), desiredValue.getConstraints()),
+              exposure);
           results.add(result);
         }
 

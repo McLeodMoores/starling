@@ -14,26 +14,34 @@ public final class ConventionGroups {
   public static final String INDEX = "Index";
 
   /**
-   * Group representing conventions for swap legs. These are not complete conventions
-   * but are combined to produce a full convention.
+   * Group representing conventions for instruments with defined roll dates (e.g. IMM dates).
+   */
+  public static final String ROLL_DATE_CONVENTION = "IMM";
+
+  /**
+   * Group representing conventions for swap legs. These are not complete conventions but are combined to produce a full convention.
    */
   public static final String SWAP_LEG_CONVENTION = "Swap Leg";
 
   /**
-   * Group representing fixed income conventions e.g. a swap convention
-   * for a currency.
+   * Group representing exchange-traded futures.
+   */
+  public static final String ETF = "ETF";
+
+  /**
+   * Group representing fixed income conventions e.g. a swap convention for a currency.
    */
   public static final String FIXED_INCOME = "Fixed Income";
 
   /**
-   * Group representing FX conventions e.g. number of settlement days.
+   * Group representing inflation conventions.
    */
-  public static final String FX = "FX";
+  public static final String INFLATION = "Inflation Leg";
 
   /**
-   * Group representing bond conventions e.g. the day-count and yield convention.
+   * Group representing FX conventions.
    */
-  public static final String BOND = "Bond";
+  public static final String FX = "FX";
 
   /**
    * Group representing miscellaneous conventions.

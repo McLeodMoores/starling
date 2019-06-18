@@ -13,7 +13,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.time.DateUtils;
 
 /**
- * 
+ *
  */
 public class HullWhiteOneFactorInterestRateModel implements DiscountBondModel<HullWhiteOneFactorDataBundle> {
   private final double _delta = 0.1;
@@ -40,7 +40,8 @@ public class HullWhiteOneFactorInterestRateModel implements DiscountBondModel<Hu
         final double upT = t + _delta;
         final double downT = t - _delta;
         final double dlnPdt = (-data.getShortRate(upT) * upT + data.getShortRate(downT) * downT) / (2 * _delta);
-        final double lnA = Math.log(ps / pT) - b * dlnPdt - sigma * sigma * Math.pow(Math.exp(-speed * s) - Math.exp(-speed * t), 2) * (Math.exp(2 * speed * t) - 1) / (4 * speed * speed * speed);
+        final double lnA = Math.log(ps / pT) - b * dlnPdt
+            - sigma * sigma * Math.pow(Math.exp(-speed * s) - Math.exp(-speed * t), 2) * (Math.exp(2 * speed * t) - 1) / (4 * speed * speed * speed);
         return Math.exp(lnA - b * rT);
       }
 

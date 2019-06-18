@@ -57,19 +57,32 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
 
   /**
    * Constructor from all the cap/floor details.
-   * @param currency The payment currency.
-   * @param paymentDate Coupon payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param accrualFactor Accrual factor of the accrual period; used for the payment.
-   * @param notional Coupon notional.
-   * @param fixingDate The coupon fixing date.
-   * @param index The coupon Ibor index. The index currency should be the same as the payment currency.
-   * @param strike The strike
-   * @param isCap The cap/floor flag.
-   * @param calendar The holiday calendar for the ibor leg.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentDate
+   *          Coupon payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param accrualFactor
+   *          Accrual factor of the accrual period; used for the payment.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingDate
+   *          The coupon fixing date.
+   * @param index
+   *          The coupon Ibor index. The index currency should be the same as the payment currency.
+   * @param strike
+   *          The strike
+   * @param isCap
+   *          The cap/floor flag.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
    */
-  public CapFloorIborDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
+  public CapFloorIborDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
+      final ZonedDateTime accrualEndDate,
       final double accrualFactor, final double notional, final ZonedDateTime fixingDate, final IborIndex index, final double strike, final boolean isCap,
       final Calendar calendar) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, accrualFactor, notional, fixingDate);
@@ -77,7 +90,8 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
     ArgumentChecker.isTrue(currency.equals(index.getCurrency()), "index currency different from payment currency");
     _index = index;
     _fixingPeriodStartDate = ScheduleCalculator.getAdjustedDate(fixingDate, _index.getSpotLag(), calendar);
-    _fixingPeriodEndDate = ScheduleCalculator.getAdjustedDate(_fixingPeriodStartDate, index.getTenor(), index.getBusinessDayConvention(), calendar, index.isEndOfMonth());
+    _fixingPeriodEndDate = ScheduleCalculator.getAdjustedDate(_fixingPeriodStartDate, index.getTenor(), index.getBusinessDayConvention(), calendar,
+        index.isEndOfMonth());
     _fixingPeriodAccrualFactor = index.getDayCount().getDayCountFraction(_fixingPeriodStartDate, _fixingPeriodEndDate, calendar);
     _strike = strike;
     _isCap = isCap;
@@ -86,53 +100,80 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
 
   /**
    * Builder from all the cap/floor details.
-   * @param paymentDate Coupon payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param accrualFactor Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param fixingDate The coupon fixing date.
-   * @param index The coupon Ibor index.
-   * @param strike The strike
-   * @param isCap The cap/floor flag.
-   * @param calendar The holiday calendar for the ibor leg.
+   * 
+   * @param paymentDate
+   *          Coupon payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param accrualFactor
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingDate
+   *          The coupon fixing date.
+   * @param index
+   *          The coupon Ibor index.
+   * @param strike
+   *          The strike
+   * @param isCap
+   *          The cap/floor flag.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
    * @return The cap/floor.
    */
-  public static CapFloorIborDefinition from(final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double accrualFactor,
+  public static CapFloorIborDefinition from(final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
+      final double accrualFactor,
       final double notional, final ZonedDateTime fixingDate, final IborIndex index, final double strike, final boolean isCap, final Calendar calendar) {
     ArgumentChecker.notNull(index, "index");
-    return new CapFloorIborDefinition(index.getCurrency(), paymentDate, accrualStartDate, accrualEndDate, accrualFactor, notional, fixingDate, index, strike, isCap, calendar);
+    return new CapFloorIborDefinition(index.getCurrency(), paymentDate, accrualStartDate, accrualEndDate, accrualFactor, notional, fixingDate, index, strike,
+        isCap, calendar);
   }
 
   /**
    * Builder from a Ibor coupon the cap/floor strike and isCap flag.
-   * @param couponIbor The underlying Ibor coupon.
-   * @param strike The strike
-   * @param isCap The cap/floor flag.
+   * 
+   * @param couponIbor
+   *          The underlying Ibor coupon.
+   * @param strike
+   *          The strike
+   * @param isCap
+   *          The cap/floor flag.
    * @return The cap/floor
    */
   public static CapFloorIborDefinition from(final CouponIborDefinition couponIbor, final double strike, final boolean isCap) {
     ArgumentChecker.notNull(couponIbor, "coupon Ibor");
-    return new CapFloorIborDefinition(couponIbor.getCurrency(), couponIbor.getPaymentDate(), couponIbor.getAccrualStartDate(), couponIbor.getAccrualEndDate(), couponIbor.getPaymentYearFraction(),
+    return new CapFloorIborDefinition(couponIbor.getCurrency(), couponIbor.getPaymentDate(), couponIbor.getAccrualStartDate(), couponIbor.getAccrualEndDate(),
+        couponIbor.getPaymentYearFraction(),
         couponIbor.getNotional(), couponIbor.getFixingDate(), couponIbor.getIndex(), strike, isCap, couponIbor.getCalendar());
   }
 
   /**
    * Builder from notional, fixing date, index, strike and cap flag.
-   * @param notional Coupon notional.
-   * @param fixingDate The coupon fixing date.
-   * @param index The coupon Ibor index.
-   * @param strike The strike
-   * @param isCap The cap/floor flag.
-   * @param calendar The holiday calendar for the ibor leg.
+   * 
+   * @param notional
+   *          Coupon notional.
+   * @param fixingDate
+   *          The coupon fixing date.
+   * @param index
+   *          The coupon Ibor index.
+   * @param strike
+   *          The strike
+   * @param isCap
+   *          The cap/floor flag.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
    * @return The cap/floor
    */
-  public static CapFloorIborDefinition from(final double notional, final ZonedDateTime fixingDate, final IborIndex index, final double strike, final boolean isCap, final Calendar calendar) {
+  public static CapFloorIborDefinition from(final double notional, final ZonedDateTime fixingDate, final IborIndex index, final double strike,
+      final boolean isCap, final Calendar calendar) {
     return from(CouponIborDefinition.from(notional, fixingDate, index, calendar), strike, isCap);
   }
 
   /**
    * Gets the Ibor index of the instrument.
+   * 
    * @return The index.
    */
   public IborIndex getIndex() {
@@ -141,6 +182,7 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
 
   /**
    * Gets the start date of the fixing period.
+   * 
    * @return The start date of the fixing period.
    */
   public ZonedDateTime getFixingPeriodStartDate() {
@@ -149,6 +191,7 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
 
   /**
    * Gets the end date of the fixing period.
+   * 
    * @return The end date of the fixing period.
    */
   public ZonedDateTime getFixingPeriodEndDate() {
@@ -157,6 +200,7 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
 
   /**
    * Gets the accrual factor (or year fraction) associated to the fixing period in the Index day count convention.
+   * 
    * @return The accrual factor.
    */
   public double getFixingPeriodAccrualFactor() {
@@ -190,13 +234,15 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
   public Coupon toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
     ArgumentChecker.notNull(date, "date");
-    ArgumentChecker.isTrue(!date.isAfter(getFixingDate()), "Do not have any fixing data but are asking for a derivative after the fixing date " + getFixingDate() + " " + date);
+    ArgumentChecker.isTrue(!date.isAfter(getFixingDate()),
+        "Do not have any fixing data but are asking for a derivative after the fixing date " + getFixingDate() + " " + date);
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");
     ArgumentChecker.isTrue(yieldCurveNames.length > 1, "at least one curve required");
     ArgumentChecker.isTrue(!date.isAfter(getPaymentDate()), "date is after payment date " + date + " " + getPaymentDate());
@@ -207,13 +253,15 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
     final double fixingTime = TimeCalculator.getTimeBetween(date, getFixingDate());
     final double fixingPeriodStartTime = TimeCalculator.getTimeBetween(date, getFixingPeriodStartDate());
     final double fixingPeriodEndTime = TimeCalculator.getTimeBetween(date, getFixingPeriodEndDate());
-    //TODO: Definition has no spread and time version has one: to be standardized.
-    return new CapFloorIbor(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(), fixingPeriodStartTime, fixingPeriodEndTime,
+    // TODO: Definition has no spread and time version has one: to be standardized.
+    return new CapFloorIbor(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(),
+        fixingPeriodStartTime, fixingPeriodEndTime,
         getFixingPeriodAccrualFactor(), forwardCurveName, _strike, _isCap);
   }
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -229,7 +277,7 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
     final double paymentTime = TimeCalculator.getTimeBetween(date, getPaymentDate());
     if (date.isAfter(getFixingDate()) || date.equals(getFixingDate())) { // The Ibor cap/floor has already fixed, it is now a fixed coupon.
       Double fixedRate = indexFixingTS.getValue(getFixingDate());
-      //TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
+      // TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
       if (fixedRate == null) {
         final ZonedDateTime fixingDateAtLiborFixingTime = getFixingDate().with(LocalTime.of(11, 0));
         fixedRate = indexFixingTS.getValue(fixingDateAtLiborFixingTime);
@@ -237,14 +285,14 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
       if (fixedRate == null) {
         final ZonedDateTime previousBusinessDay = BusinessDayConventions.PRECEDING.adjustDate(_calendar, getFixingDate().minusDays(1));
         fixedRate = indexFixingTS.getValue(previousBusinessDay);
-        //TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
+        // TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
         if (fixedRate == null) {
           final ZonedDateTime previousBusinessDayAtLiborFixingTime = previousBusinessDay.with(LocalTime.of(11, 0));
           fixedRate = indexFixingTS.getValue(previousBusinessDayAtLiborFixingTime);
         }
         if (fixedRate == null) {
-          fixedRate = indexFixingTS.getLatestValue(); //TODO remove me as soon as possible
-          //throw new OpenGammaRuntimeException("Could not get fixing value for date " + getFixingDate());
+          fixedRate = indexFixingTS.getLatestValue(); // TODO remove me as soon as possible
+          // throw new OpenGammaRuntimeException("Could not get fixing value for date " + getFixingDate());
         }
       }
       return new CouponFixed(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), payOff(fixedRate));
@@ -253,23 +301,26 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
     final double fixingTime = TimeCalculator.getTimeBetween(date, getFixingDate());
     final double fixingPeriodStartTime = TimeCalculator.getTimeBetween(date, getFixingPeriodStartDate());
     final double fixingPeriodEndTime = TimeCalculator.getTimeBetween(date, getFixingPeriodEndDate());
-    //TODO: Definition has no spread and time version has one: to be standardized.
-    return new CapFloorIbor(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(), fixingPeriodStartTime, fixingPeriodEndTime,
+    // TODO: Definition has no spread and time version has one: to be standardized.
+    return new CapFloorIbor(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(),
+        fixingPeriodStartTime, fixingPeriodEndTime,
         getFixingPeriodAccrualFactor(), forwardCurveName, _strike, _isCap);
   }
 
   @Override
   public Coupon toDerivative(final ZonedDateTime date) {
     ArgumentChecker.notNull(date, "date");
-    ArgumentChecker.isTrue(!date.isAfter(getFixingDate()), "Do not have any fixing data but are asking for a derivative after the fixing date " + getFixingDate() + " " + date);
+    ArgumentChecker.isTrue(!date.isAfter(getFixingDate()),
+        "Do not have any fixing data but are asking for a derivative after the fixing date " + getFixingDate() + " " + date);
     ArgumentChecker.isTrue(!date.isAfter(getPaymentDate()), "date is after payment date " + date + " " + getPaymentDate());
     final double paymentTime = TimeCalculator.getTimeBetween(date, getPaymentDate());
     // Ibor is not fixed yet, all the details are required.
     final double fixingTime = TimeCalculator.getTimeBetween(date, getFixingDate());
     final double fixingPeriodStartTime = TimeCalculator.getTimeBetween(date, getFixingPeriodStartDate());
     final double fixingPeriodEndTime = TimeCalculator.getTimeBetween(date, getFixingPeriodEndDate());
-    //TODO: Definition has no spread and time version has one: to be standardized.
-    return new CapFloorIbor(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(), fixingPeriodStartTime, fixingPeriodEndTime,
+    // TODO: Definition has no spread and time version has one: to be standardized.
+    return new CapFloorIbor(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(), fixingPeriodStartTime,
+        fixingPeriodEndTime,
         getFixingPeriodAccrualFactor(), _strike, _isCap);
   }
 
@@ -281,7 +332,7 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
     final double paymentTime = TimeCalculator.getTimeBetween(date, getPaymentDate());
     if (date.isAfter(getFixingDate()) || date.equals(getFixingDate())) { // The Ibor cap/floor has already fixed, it is now a fixed coupon.
       Double fixedRate = indexFixingTS.getValue(getFixingDate());
-      //TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
+      // TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
       if (fixedRate == null) {
         final ZonedDateTime fixingDateAtLiborFixingTime = getFixingDate().with(LocalTime.of(11, 0));
         fixedRate = indexFixingTS.getValue(fixingDateAtLiborFixingTime);
@@ -289,13 +340,13 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
       if (fixedRate == null) {
         final ZonedDateTime previousBusinessDay = BusinessDayConventions.PRECEDING.adjustDate(_calendar, getFixingDate().minusDays(1));
         fixedRate = indexFixingTS.getValue(previousBusinessDay);
-        //TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
+        // TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
         if (fixedRate == null) {
           final ZonedDateTime previousBusinessDayAtLiborFixingTime = previousBusinessDay.with(LocalTime.of(11, 0));
           fixedRate = indexFixingTS.getValue(previousBusinessDayAtLiborFixingTime);
         }
         if (fixedRate == null) {
-          fixedRate = indexFixingTS.getLatestValue(); //TODO remove me as soon as possible
+          fixedRate = indexFixingTS.getLatestValue(); // TODO remove me as soon as possible
         }
       }
       return new CouponFixed(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), payOff(fixedRate));
@@ -304,8 +355,9 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
     final double fixingTime = TimeCalculator.getTimeBetween(date, getFixingDate());
     final double fixingPeriodStartTime = TimeCalculator.getTimeBetween(date, getFixingPeriodStartDate());
     final double fixingPeriodEndTime = TimeCalculator.getTimeBetween(date, getFixingPeriodEndDate());
-    //TODO: Definition has no spread and time version has one: to be standardized.
-    return new CapFloorIbor(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(), fixingPeriodStartTime, fixingPeriodEndTime,
+    // TODO: Definition has no spread and time version has one: to be standardized.
+    return new CapFloorIbor(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), fixingTime, getIndex(), fixingPeriodStartTime,
+        fixingPeriodEndTime,
         getFixingPeriodAccrualFactor(), _strike, _isCap);
   }
 

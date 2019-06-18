@@ -17,10 +17,8 @@ import com.opengamma.engine.value.ValueSpecification;
 import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
- * Converter for {@link VolatilitySurface} objects.
- * The difference between this form and VolatilitySurfaceData is that the latter
- * will often be full of repeated values. Here we compute the distinct set of axes values,
- * then query the surface for the z values.
+ * Converter for {@link VolatilitySurface} objects. The difference between this form and VolatilitySurfaceData is that the latter will often be full of repeated
+ * values. Here we compute the distinct set of axes values, then query the surface for the z values.
  *
  * TODO PLAT-2249 Add field to allow transposing the display surface
  */
@@ -28,12 +26,14 @@ public class VolatilitySurfaceConverter implements ResultConverter<VolatilitySur
 
   @Override
   /**
-   * Put together a map of results such that VolatilitySurfaceDetail.js can render it
-   * Required outputs:
-   * <p>'xs' and 'ys' - String arrays for axes labels.
-   *  <p>'surface' - 2D double array with size matching xs and ys
+   * Put together a map of results such that VolatilitySurfaceDetail.js can render it Required outputs:
+   * <p>
+   * 'xs' and 'ys' - String arrays for axes labels.
+   * <p>
+   * 'surface' - 2D double array with size matching xs and ys
    */
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final VolatilitySurface value, final ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final VolatilitySurface value,
+      final ConversionMode mode) {
     final Map<String, Object> result = new HashMap<>();
 
     final Surface<Double, Double, Double> inputSurface = value.getSurface();
@@ -50,7 +50,6 @@ public class VolatilitySurfaceConverter implements ResultConverter<VolatilitySur
 
       final int xCount = uniqueXs.size();
       result.put("xCount", xCount);
-
 
       // Compute unique Y data
       final Double[] yData = inputSurface.getYData();
@@ -86,7 +85,7 @@ public class VolatilitySurfaceConverter implements ResultConverter<VolatilitySur
             final Double volatility = inputSurface.getZValue(uniqueXs.get(x), uniqueYs.get(y));
             if (volatility == null) {
               missingValues[y][x] = true;
-              //Some 'obviously wrong' value in case client displays it.  Can't use NaN
+              // Some 'obviously wrong' value in case client displays it. Can't use NaN
               outputSurface[y][x] = Double.MAX_VALUE;
             } else {
               outputSurface[y][x] = volatility;
@@ -120,6 +119,5 @@ public class VolatilitySurfaceConverter implements ResultConverter<VolatilitySur
   public String getFormatterName() {
     return "SURFACE_DATA";
   }
-
 
 }

@@ -23,7 +23,7 @@ import com.opengamma.financial.security.fx.NonDeliverableFXForwardSecurity;
 import com.opengamma.id.ExternalId;
 
 /**
- * Get the region for a security, null if not applicable
+ * Get the region for a security, null if not applicable.
  */
 public class RegionVisitor extends FinancialSecurityVisitorSameValueAdapter<ExternalId> {
 

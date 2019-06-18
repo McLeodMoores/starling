@@ -30,10 +30,10 @@ import com.opengamma.util.money.Currency;
   private final Set<String> _calcConfigNames;
 
   /* package */ Selector(final Set<String> calcConfigNames,
-                         final Set<String> names,
-                         final Set<Currency> currencies,
-                         final Pattern nameMatchPattern,
-                         final Pattern nameLikePattern) {
+      final Set<String> names,
+      final Set<Currency> currencies,
+      final Pattern nameMatchPattern,
+      final Pattern nameLikePattern) {
     _calcConfigNames = calcConfigNames;
     _names = names;
     _currencies = currencies;
@@ -87,17 +87,16 @@ import com.opengamma.util.money.Currency;
 
   @Override
   public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification,
-                                                         final String calcConfigName,
-                                                         final SelectorResolver resolver) {
+      final String calcConfigName,
+      final SelectorResolver resolver) {
     ArgumentChecker.notNull(valueSpecification, "valueSpecification");
     if (_calcConfigNames != null && !_calcConfigNames.contains(calcConfigName)) {
       return null;
     }
     if (matches(valueSpecification)) {
       return this;
-    } else {
-      return null;
     }
+    return null;
   }
 
   /* package */ abstract boolean matches(ValueSpecification valueSpecification);
@@ -105,10 +104,10 @@ import com.opengamma.util.money.Currency;
   @Override
   public int hashCode() {
     return Objects.hash(_names,
-                        _currencies,
-                        _nameMatchPattern,
-                        _nameLikePattern,
-                        _calcConfigNames);
+        _currencies,
+        _nameMatchPattern,
+        _nameLikePattern,
+        _calcConfigNames);
   }
 
   @Override
@@ -120,22 +119,22 @@ import com.opengamma.util.money.Currency;
       return false;
     }
     final Selector other = (Selector) obj;
-    return Objects.equals(this._names, other._names) &&
-        Objects.equals(this._currencies, other._currencies) &&
-        Objects.equals(this._nameMatchPattern, other._nameMatchPattern) &&
-        Objects.equals(this._nameLikePattern, other._nameLikePattern) &&
-        Objects.equals(this._calcConfigNames, other._calcConfigNames);
+    return Objects.equals(this._names, other._names)
+        && Objects.equals(this._currencies, other._currencies)
+        && Objects.equals(this._nameMatchPattern, other._nameMatchPattern)
+        && Objects.equals(this._nameLikePattern, other._nameLikePattern)
+        && Objects.equals(this._calcConfigNames, other._calcConfigNames);
   }
 
   @Override
   public String toString() {
-    return "Selector [" +
-        "_names=" + _names +
-        ", _currencies=" + _currencies +
-        ", _nameMatchPattern=" + _nameMatchPattern +
-        ", _nameLikePattern=" + _nameLikePattern +
-        ", _calcConfigNames=" + _calcConfigNames +
-        "]";
+    return "Selector ["
+        + "_names=" + _names
+        + ", _currencies=" + _currencies
+        + ", _nameMatchPattern=" + _nameMatchPattern
+        + ", _nameLikePattern=" + _nameLikePattern
+        + ", _calcConfigNames=" + _calcConfigNames
+        + "]";
   }
 
   /* package */ abstract static class Builder {

@@ -11,7 +11,6 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.core.position.Position;
 import com.opengamma.core.security.Security;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
@@ -24,7 +23,6 @@ import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityUtils;
@@ -32,11 +30,14 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Extends existing Greek functions, reported at {@link Security} levels to sum over {@link Position}s. <p>
- * e.g. If a view asks for {@link ValueRequirementNames#POSITION_DELTA}, this will create a requirement for
- * {@link ValueRequirementNames#DELTA}. <p>
- * NOTE! DELTA in the example, is the mathematical dV/dS, and does not contain any unit contract size.
- * The POSITION_DELTA *does* include any contract multiplier. <p>
+ * Extends existing Greek functions, reported at {@link Security} levels to sum over {@link com.opengamma.core.position.Position}s.
+ * <p>
+ * e.g. If a view asks for {@link com.opengamma.engine.value.ValueRequirementNames#POSITION_DELTA}, this will create a requirement for
+ * {@link com.opengamma.engine.value.ValueRequirementNames#DELTA}.
+ * <p>
+ * NOTE! DELTA in the example, is the mathematical dV/dS, and does not contain any unit contract size. The POSITION_DELTA *does* include any contract
+ * multiplier.
+ * <p>
  * The properties of the position-level requirement will match those of the security level requirement.
  */
 // TODO Review the scope of this Function. e.g. by creating a canApplyTo(). [PLAT-5522]
@@ -49,8 +50,10 @@ public class PositionGreeksFunction extends AbstractFunction.NonCompiledInvoker 
   private static final PositionGreekContractMultiplier CONTRACT_MULTIPLIER = PositionGreekContractMultiplier.getInstance();
 
   /**
-   * @param positionReqName The output requirement name, not null
-   * @param securityReqName The input requirement name, not null
+   * @param positionReqName
+   *          The output requirement name, not null
+   * @param securityReqName
+   *          The input requirement name, not null
    */
   public PositionGreeksFunction(final String positionReqName, final String securityReqName) {
     ArgumentChecker.notNull(positionReqName, "position requirement name");
@@ -100,10 +103,11 @@ public class PositionGreeksFunction extends AbstractFunction.NonCompiledInvoker 
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     // inputs provide the properties of the required security greek. These we pass through to the position
     final ValueSpecification secGreekSpec = inputs.keySet().iterator().next();
-    if (secGreekSpec.getValueName() != getSecurityReqName()) {
+    if (!secGreekSpec.getValueName().equals(getSecurityReqName())) {
       return null;
     }
     final Security security = target.getPositionOrTrade().getSecurity();
@@ -121,15 +125,16 @@ public class PositionGreeksFunction extends AbstractFunction.NonCompiledInvoker 
       return null;
     }
 
-    final ValueRequirement secGreekReq =
-        new ValueRequirement(getSecurityReqName(), ComputationTargetSpecification.of(target.getPositionOrTrade().getSecurity()),
-          desiredValue.getConstraints().withoutAny(ValuePropertyNames.FUNCTION));
+    final ValueRequirement secGreekReq = new ValueRequirement(getSecurityReqName(),
+        ComputationTargetSpecification.of(target.getPositionOrTrade().getSecurity()),
+        desiredValue.getConstraints().withoutAny(ValuePropertyNames.FUNCTION));
     final Set<ValueRequirement> requirements = Sets.newHashSet(secGreekReq);
     return requirements;
   }
 
   /**
    * Gets the output (position) requirement name.
+   * 
    * @return The output requirement name
    */
   public String getPositionReqName() {
@@ -138,6 +143,7 @@ public class PositionGreeksFunction extends AbstractFunction.NonCompiledInvoker 
 
   /**
    * Gets the input (security) requirement name.
+   * 
    * @return The input requirement name
    */
   public String getSecurityReqName() {

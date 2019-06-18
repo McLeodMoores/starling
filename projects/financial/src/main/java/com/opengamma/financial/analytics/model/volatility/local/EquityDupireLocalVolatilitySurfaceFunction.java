@@ -1,12 +1,9 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.volatility.local;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.engine.ComputationTarget;
@@ -21,16 +18,15 @@ import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVol
 import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVolatilitySurfacePropertyUtils;
 
 /**
- * 
+ *
  */
 public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireLocalVolatilitySurfaceFunction {
-  private static final Logger LOGGER = LoggerFactory.getLogger(EquityDupireLocalVolatilitySurfaceFunction.class);
 
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final String targetScheme = target.getUniqueId().getScheme();
-    return (targetScheme.equalsIgnoreCase(ExternalSchemes.BLOOMBERG_TICKER.getName()) ||
-        targetScheme.equalsIgnoreCase(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName()));
+    return targetScheme.equalsIgnoreCase(ExternalSchemes.BLOOMBERG_TICKER.getName())
+        || targetScheme.equalsIgnoreCase(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
   }
 
   @Override
@@ -44,8 +40,8 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
   }
 
   /**
-   * Equity requires an additional three properties.
-   * This is to specify the Funding curve used to build the Equity Forwards.
+   * Equity requires an additional three properties. This is to specify the Funding curve used to build the Equity Forwards.
+   *
    * @return ValueProperties specifying any currency, curve name and curve calculation config
    */
   protected ValueProperties getCurrencyProperties() {
@@ -58,9 +54,10 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
   }
 
   /**
-   * Equity requires an additional three properties.
-   * This is to specify the Funding curve used to build the Equity Forwards.
-   * @param desiredValue ValueRequirement containing "CurveCurrency" and "FundingCurve"
+   * Equity requires an additional three properties. This is to specify the Funding curve used to build the Equity Forwards.
+   *
+   * @param desiredValue
+   *          ValueRequirement containing "CurveCurrency" and "FundingCurve"
    * @return ValueProperties containing specified values
    */
   protected ValueProperties getCurrencyProperties(final ValueRequirement desiredValue) {
@@ -76,9 +73,10 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
   }
 
   /**
-   * Equity requires an additional three properties.
-   * This is to specify the Funding curve used to build the Equity Forwards.
-   * @param desiredValue ValueRequirement containing "CurveCurrency" and "FundingCurve"
+   * Equity requires an additional three properties. This is to specify the Funding curve used to build the Equity Forwards.
+   *
+   * @param desiredValue
+   *          ValueRequirement containing "CurveCurrency" and "FundingCurve"
    * @return ValueProperties containing specified values
    */
   protected ValueProperties getCurrencyPropertiesForVolatilitySurface(final ValueRequirement desiredValue) {
@@ -100,7 +98,6 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
         getInstrumentType(), getBlackSmileInterpolatorName(), parameterizationType).get();
   }
 
-
   @Override
   protected ValueProperties getResultProperties(final ValueRequirement desiredValue, final String parameterizationType) {
     final ValueProperties equityProperties = getCurrencyProperties(desiredValue);
@@ -111,12 +108,13 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
   @Override
   protected ValueRequirement getVolatilitySurfaceRequirement(final ComputationTarget target, final ValueRequirement desiredValue) {
     final ValueProperties equityProperties = getCurrencyPropertiesForVolatilitySurface(desiredValue);
-    final ValueProperties properties = BlackVolatilitySurfacePropertyUtils.addAllBlackSurfaceProperties(equityProperties, getInstrumentType(), desiredValue).get();
+    final ValueProperties properties = BlackVolatilitySurfacePropertyUtils.addAllBlackSurfaceProperties(equityProperties, getInstrumentType(), desiredValue)
+        .get();
     return new ValueRequirement(ValueRequirementNames.BLACK_VOLATILITY_SURFACE, target.toSpecification(), properties);
   }
 
   /**
-   * Function producing a local volatility surface using a Black volatility surface with spline interpolation
+   * Function producing a local volatility surface using a Black volatility surface with spline interpolation.
    */
   public static class Spline extends EquityDupireLocalVolatilitySurfaceFunction {
 
@@ -128,7 +126,7 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
   }
 
   /**
-   * Function producing a local volatility surface using a Black volatility surface with SABR interpolation
+   * Function producing a local volatility surface using a Black volatility surface with SABR interpolation.
    */
   public static class SABR extends EquityDupireLocalVolatilitySurfaceFunction {
 
@@ -140,7 +138,7 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
   }
 
   /**
-   * Function producing a local volatility surface using a Black volatility surface with mixed log-normal interpolation
+   * Function producing a local volatility surface using a Black volatility surface with mixed log-normal interpolation.
    */
   public static class MixedLogNormal extends EquityDupireLocalVolatilitySurfaceFunction {
 

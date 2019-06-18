@@ -27,20 +27,23 @@ public class EquityVarianceSwapStaticReplication {
   private static final Integrator1D<Double, Double> INTEGRATOR = new RungeKuttaIntegrator1D();
 
   /**
-   * Computes the computes the expected variance with and without adjustments for the dividend payments, by computing the price
-   * of a log-contract with expiry coinciding with that
-   *  of the variance swap, and the value of the dividend corrections at all dividend dates, using the method of static
-   *  replication from pure option prices obtained from the
-   *  <b>pure</b> implied volatility surface (The pure< implied volatility is a number that put into Black formula (with unit forward)
-   *  gives the price of puts and calls of the pure
-   *  stock).
-   * @param spot The current level of the stock or index
-   * @param discountCurve The risk free interest rate curve
-   * @param dividends The dividends structure
-   * @param expiry The expiry of the variance swap
-   * @param volSurface A <b>pure</b> implied volatility surface -
-   * @return The expected variance (<b>not</b> annualised) with and without adjustments for the dividend payments
-   * (the former is usually the case for single stock and the latter for indices)
+   * Computes the computes the expected variance with and without adjustments for the dividend payments, by computing the price of a log-contract with expiry
+   * coinciding with that of the variance swap, and the value of the dividend corrections at all dividend dates, using the method of static replication from
+   * pure option prices obtained from the <b>pure</b> implied volatility surface (The pure implied volatility is a number that put into Black formula (with unit
+   * forward) gives the price of puts and calls of the pure stock).
+   * 
+   * @param spot
+   *          The current level of the stock or index
+   * @param discountCurve
+   *          The risk free interest rate curve
+   * @param dividends
+   *          The dividends structure
+   * @param expiry
+   *          The expiry of the variance swap
+   * @param volSurface
+   *          A <b>pure</b> implied volatility surface -
+   * @return The expected variance (<b>not</b> annualised) with and without adjustments for the dividend payments (the former is usually the case for single
+   *         stock and the latter for indices)
    */
   public double[] expectedVariance(final double spot, final YieldAndDiscountCurve discountCurve, final AffineDividends dividends, final double expiry,
       final PureImpliedVolatilitySurface volSurface) {

@@ -17,8 +17,8 @@ import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.util.money.Currency;
 
 /**
- * Base class for functions that calculate values for FX forward where the currency
- * property is set.
+ * Base class for functions that calculate values for FX forward where the currency property is set.
+ * 
  * @deprecated Use {@link DiscountingFunction}
  */
 @Deprecated
@@ -40,7 +40,8 @@ public abstract class FXForwardSingleValuedFunction extends FXForwardFunction {
   }
 
   @Override
-  protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final String payCurveName, final String receiveCurveName, final String payCurveCalculationConfig,
+  protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final String payCurveName, final String receiveCurveName,
+      final String payCurveCalculationConfig,
       final String receiveCurveCalculationConfig, final CurrencyPair baseQuotePair) {
     return createValueProperties()
         .with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.DISCOUNTING)

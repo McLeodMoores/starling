@@ -35,11 +35,15 @@ public class SABRSwaptionProvider implements SABRSwaptionProviderInterface {
   private final GeneratorSwapFixedIbor _generator;
 
   /**
-   * @param multicurveProvider The multicurve provider, not null
-   * @param parameters The SABR parameters, not null
-   * @param generator The underlying swaps generators, not null
+   * @param multicurveProvider
+   *          The multicurve provider, not null
+   * @param parameters
+   *          The SABR parameters, not null
+   * @param generator
+   *          The underlying swaps generators, not null
    */
-  public SABRSwaptionProvider(final MulticurveProviderInterface multicurveProvider, final SABRInterestRateParameters parameters, final GeneratorSwapFixedIbor generator) {
+  public SABRSwaptionProvider(final MulticurveProviderInterface multicurveProvider, final SABRInterestRateParameters parameters,
+      final GeneratorSwapFixedIbor generator) {
     ArgumentChecker.notNull(multicurveProvider, "multicurveProvider");
     ArgumentChecker.notNull(parameters, "parameters");
     ArgumentChecker.notNull(generator, "generator");

@@ -13,11 +13,14 @@ import com.opengamma.master.AbstractMaster;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *
+ * @param <D>
+ *          the type of the documents
+ * @param <M>
+ *          the type of the master
  */
 /* package */ class MasterNotificationListener<D extends AbstractDocument,
-                                               M extends AbstractMaster<D> & ChangeProvider>  // CSIGNORE
-    implements ChangeListener, AutoCloseable {
+    M extends AbstractMaster<D> & ChangeProvider> 
+implements ChangeListener, AutoCloseable {
 
   private final M _master;
   private final AnalyticsView _view;

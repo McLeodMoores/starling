@@ -21,19 +21,19 @@ import com.opengamma.util.tuple.Pair;
 public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
-   * Computes the future convexity factor used in future pricing.  The factor
-   * is called $\gamma$ in the article and is given by
-   * $$
-   * \begin{equation*}
-   * \gamma(t) = \exp\left(\int_t^{t_0} \nu(s,t_2) (\nu(s,t_2)-\nu(s,t_1)) ds \right).
-   * \end{equation*}
-   * $$
+   * Computes the future convexity factor used in future pricing. The factor is called $\gamma$ in the article and is given by $$ \begin{equation*} \gamma(t) =
+   * \exp\left(\int_t^{t_0} \nu(s,t_2) (\nu(s,t_2)-\nu(s,t_1)) ds \right). \end{equation*} $$
    * <p>
    * Reference: Henrard, M. The Irony in the derivatives discounting Part II: the crisis. Wilmott Journal, 2010, 2, 301-316
-   * @param data The Hull-White model parameters.
-   * @param t0 The first expiry time.
-   * @param t1 The first reference time.
-   * @param t2 The second reference time.
+   * 
+   * @param data
+   *          The Hull-White model parameters.
+   * @param t0
+   *          The first expiry time.
+   * @param t1
+   *          The first reference time.
+   * @param t2
+   *          The second reference time.
    * @return The factor.
    */
   public double futuresConvexityFactor(final HullWhiteOneFactorPiecewiseConstantParameters data, final double t0, final double t1, final double t2) {
@@ -48,31 +48,35 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
     s[indexT0] = t0;
     double factor2 = 0.0;
     for (int loopperiod = 0; loopperiod < indexT0; loopperiod++) {
-      factor2 += data.getVolatility()[loopperiod] * data.getVolatility()[loopperiod] * (Math.exp(data.getMeanReversion() * s[loopperiod + 1]) - Math.exp(data.getMeanReversion() * s[loopperiod]))
+      factor2 += data.getVolatility()[loopperiod] * data.getVolatility()[loopperiod]
+          * (Math.exp(data.getMeanReversion() * s[loopperiod + 1]) - Math.exp(data.getMeanReversion() * s[loopperiod]))
           * (2 - Math.exp(-data.getMeanReversion() * (t2 - s[loopperiod + 1])) - Math.exp(-data.getMeanReversion() * (t2 - s[loopperiod])));
     }
     return Math.exp(factor1 / numerator * factor2);
   }
 
   /**
-   * Computes the future convexity factor used in future pricing. Computes also the derivatives of the factor with respect to the model volatilities.
-   * The factor is called $\gamma$ in the article and is given by
-   * $$
-   * \begin{equation*}
-   * \gamma(t) = \exp\left(\int_t^{t_0} \nu(s,t_2) (\nu(s,t_2)-\nu(s,t_1)) ds \right).
-   * \end{equation*}
-   * $$
+   * Computes the future convexity factor used in future pricing. Computes also the derivatives of the factor with respect to the model volatilities. The factor
+   * is called $\gamma$ in the article and is given by $$ \begin{equation*} \gamma(t) = \exp\left(\int_t^{t_0} \nu(s,t_2) (\nu(s,t_2)-\nu(s,t_1)) ds \right).
+   * \end{equation*} $$
    * <p>
    * Reference: Henrard, M. The Irony in the derivatives discounting Part II: the crisis. Wilmott Journal, 2010, 2, 301-316
-   * @param data The Hull-White model parameters.
-   * @param t0 The expiry time.
-   * @param t1 The first reference time.
-   * @param t2 The second reference time.
-   * @param derivatives Array used for return the derivatives with respect to the input. The array is changed by the method. The derivatives of the function alpha
-   * with respect to the piecewise constant volatilities.
+   * 
+   * @param data
+   *          The Hull-White model parameters.
+   * @param t0
+   *          The expiry time.
+   * @param t1
+   *          The first reference time.
+   * @param t2
+   *          The second reference time.
+   * @param derivatives
+   *          Array used for return the derivatives with respect to the input. The array is changed by the method. The derivatives of the function alpha with
+   *          respect to the piecewise constant volatilities.
    * @return The factor.
    */
-  public double futuresConvexityFactor(final HullWhiteOneFactorPiecewiseConstantParameters data, final double t0, final double t1, final double t2, final double[] derivatives) {
+  public double futuresConvexityFactor(final HullWhiteOneFactorPiecewiseConstantParameters data, final double t0, final double t1, final double t2,
+      final double[] derivatives) {
     final int nbSigma = data.getVolatility().length;
     ArgumentChecker.isTrue(derivatives.length == nbSigma, "derivatives vector of incorrect size");
     final double factor1 = Math.exp(-data.getMeanReversion() * t1) - Math.exp(-data.getMeanReversion() * t2);
@@ -102,21 +106,23 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
   }
 
   /**
-   * Computes the payment delay convexity factor used in coupons with mismatched dates pricing.  The factor
-   * is called $\zeta$ in the note and is given by
-   * $$
-   * \begin{equation*}
-   * \zeta = \exp\left(\int_{\theta_0}^{\theta_1} (\nu(s,v)-\nu(s,t_p)) (\nu(s,v)-\nu(s,u)) ds \right).
-   * \end{equation*}
-   * $$
+   * Computes the payment delay convexity factor used in coupons with mismatched dates pricing. The factor is called $\zeta$ in the note and is given by $$
+   * \begin{equation*} \zeta = \exp\left(\int_{\theta_0}^{\theta_1} (\nu(s,v)-\nu(s,t_p)) (\nu(s,v)-\nu(s,u)) ds \right). \end{equation*} $$
    * <p>
    * Reference: Henrard, M. xxx
-   * @param parameters The Hull-White model parameters.
-   * @param startExpiry The start expiry time.
-   * @param endExpiry The end expiry time.
-   * @param u The fixing period start time.
-   * @param v The fixing period end time.
-   * @param tp The payment time.
+   * 
+   * @param parameters
+   *          The Hull-White model parameters.
+   * @param startExpiry
+   *          The start expiry time.
+   * @param endExpiry
+   *          The end expiry time.
+   * @param u
+   *          The fixing period start time.
+   * @param v
+   *          The fixing period end time.
+   * @param tp
+   *          The payment time.
    * @return The factor.
    */
   public double paymentDelayConvexityFactor(final HullWhiteOneFactorPiecewiseConstantParameters parameters, final double startExpiry, final double endExpiry,
@@ -139,21 +145,29 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
       exp2as[loopperiod] = Math.exp(2 * a * s[loopperiod]);
     }
     for (int loopperiod = 0; loopperiod < sLen; loopperiod++) {
-      factor2 += parameters.getVolatility()[loopperiod + indexStart - 1] * parameters.getVolatility()[loopperiod + indexStart - 1] * (exp2as[loopperiod + 1] - exp2as[loopperiod]);
+      factor2 += parameters.getVolatility()[loopperiod + indexStart - 1] * parameters.getVolatility()[loopperiod + indexStart - 1]
+          * (exp2as[loopperiod + 1] - exp2as[loopperiod]);
     }
     return Math.exp(factor1 * factor2 / numerator);
   }
 
   /**
    * Computes the (zero-coupon) bond volatility divided by a bond numeraire for a given period.
-   * @param data Hull-White model data.
-   * @param startExpiry Start time of the expiry period.
-   * @param endExpiry End time of the expiry period.
-   * @param numeraireTime Time to maturity for the bond numeraire.
-   * @param bondMaturity Time to maturity for the bond.
+   * 
+   * @param data
+   *          Hull-White model data.
+   * @param startExpiry
+   *          Start time of the expiry period.
+   * @param endExpiry
+   *          End time of the expiry period.
+   * @param numeraireTime
+   *          Time to maturity for the bond numeraire.
+   * @param bondMaturity
+   *          Time to maturity for the bond.
    * @return The re-based bond volatility.
    */
-  public double alpha(final HullWhiteOneFactorPiecewiseConstantParameters data, final double startExpiry, final double endExpiry, final double numeraireTime, final double bondMaturity) {
+  public double alpha(final HullWhiteOneFactorPiecewiseConstantParameters data, final double startExpiry, final double endExpiry, final double numeraireTime,
+      final double bondMaturity) {
     final double factor1 = Math.exp(-data.getMeanReversion() * numeraireTime) - Math.exp(-data.getMeanReversion() * bondMaturity);
     final double numerator = 2 * data.getMeanReversion() * data.getMeanReversion() * data.getMeanReversion();
     final int indexStart = Math.abs(Arrays.binarySearch(data.getVolatilityTime(), startExpiry) + 1);
@@ -171,23 +185,32 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
       exp2as[loopperiod] = Math.exp(2 * data.getMeanReversion() * s[loopperiod]);
     }
     for (int loopperiod = 0; loopperiod < sLen; loopperiod++) {
-      factor2 += data.getVolatility()[loopperiod + indexStart - 1] * data.getVolatility()[loopperiod + indexStart - 1] * (exp2as[loopperiod + 1] - exp2as[loopperiod]);
+      factor2 += data.getVolatility()[loopperiod + indexStart - 1] * data.getVolatility()[loopperiod + indexStart - 1]
+          * (exp2as[loopperiod + 1] - exp2as[loopperiod]);
     }
     return factor1 * Math.sqrt(factor2 / numerator);
   }
 
   /**
    * The adjoint version of the method. Computes the (zero-coupon) bond volatility divided by a bond numeraire for a given period ant its derivatives.
-   * @param data Hull-White model data.
-   * @param startExpiry Start time of the expiry period.
-   * @param endExpiry End time of the expiry period.
-   * @param numeraireTime Time to maturity for the bond numeraire.
-   * @param bondMaturity Time to maturity for the bond.
-   * @param derivatives Array used for return the derivatives with respect to the input. The array is changed by the method. The derivatives of the function alpha
-   * with respect to the piecewise constant volatilities.
+   * 
+   * @param data
+   *          Hull-White model data.
+   * @param startExpiry
+   *          Start time of the expiry period.
+   * @param endExpiry
+   *          End time of the expiry period.
+   * @param numeraireTime
+   *          Time to maturity for the bond numeraire.
+   * @param bondMaturity
+   *          Time to maturity for the bond.
+   * @param derivatives
+   *          Array used for return the derivatives with respect to the input. The array is changed by the method. The derivatives of the function alpha with
+   *          respect to the piecewise constant volatilities.
    * @return The re-based bond volatility.
    */
-  public double alpha(final HullWhiteOneFactorPiecewiseConstantParameters data, final double startExpiry, final double endExpiry, final double numeraireTime, final double bondMaturity,
+  public double alpha(final HullWhiteOneFactorPiecewiseConstantParameters data, final double startExpiry, final double endExpiry, final double numeraireTime,
+      final double bondMaturity,
       final double[] derivatives) {
     final int nbSigma = data.getVolatility().length;
     for (int loopperiod = 0; loopperiod < nbSigma; loopperiod++) { // To clean derivatives
@@ -211,7 +234,8 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
       exp2as[loopperiod] = Math.exp(2 * data.getMeanReversion() * s[loopperiod]);
     }
     for (int loopperiod = 0; loopperiod < sLen; loopperiod++) {
-      factor2 += data.getVolatility()[loopperiod + indexStart - 1] * data.getVolatility()[loopperiod + indexStart - 1] * (exp2as[loopperiod + 1] - exp2as[loopperiod]);
+      factor2 += data.getVolatility()[loopperiod + indexStart - 1] * data.getVolatility()[loopperiod + indexStart - 1]
+          * (exp2as[loopperiod + 1] - exp2as[loopperiod]);
     }
     final double sqrtFactor2Num = Math.sqrt(factor2 / numerator);
     final double alpha = factor1 * sqrtFactor2Num;
@@ -219,16 +243,20 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
     final double alphaBar = 1.0;
     final double factor2Bar = factor1 / sqrtFactor2Num / 2.0 / numerator * alphaBar;
     for (int loopperiod = 0; loopperiod < sLen; loopperiod++) {
-      derivatives[loopperiod + indexStart - 1] = 2 * data.getVolatility()[loopperiod + indexStart - 1] * (exp2as[loopperiod + 1] - exp2as[loopperiod]) * factor2Bar;
+      derivatives[loopperiod + indexStart - 1] = 2 * data.getVolatility()[loopperiod + indexStart - 1] * (exp2as[loopperiod + 1] - exp2as[loopperiod])
+          * factor2Bar;
     }
     return alpha;
   }
 
   /**
-   * Computes the exercise boundary for swaptions.
-   * Reference: Henrard, M. (2003). Explicit bond option and swaption formula in Heath-Jarrow-Morton one-factor model. International Journal of Theoretical and Applied Finance, 6(1):57--72.
-   * @param discountedCashFlow The cash flow equivalent discounted to today.
-   * @param alpha The zero-coupon bond volatilities.
+   * Computes the exercise boundary for swaptions. Reference: Henrard, M. (2003). Explicit bond option and swaption formula in Heath-Jarrow-Morton one-factor
+   * model. International Journal of Theoretical and Applied Finance, 6(1):57--72.
+   * 
+   * @param discountedCashFlow
+   *          The cash flow equivalent discounted to today.
+   * @param alpha
+   *          The zero-coupon bond volatilities.
    * @return The exercise boundary.
    */
   public double kappa(final double[] discountedCashFlow, final double[] alpha) {
@@ -273,16 +301,17 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
   }
 
   /**
-   * Compute the common part of the exercise boundary of European swaptions
-   * forward. Used in particular for Bermudan swaption first step of the
-   * pricing.
+   * Compute the common part of the exercise boundary of European swaptions forward. Used in particular for Bermudan swaption first step of the pricing.
    * <p>
-   * Reference: Henrard, M. Bermudan Swaptions in Gaussian HJM One-Factor
-   * Model: Analytical and Numerical Approaches. SSRN, October 2008. Available
-   * at SSRN: http://ssrn.com/abstract=1287982
-   * @param discountedCashFlow The swap discounted cash flows.
-   * @param alpha2 The $\alpha^2$ parameters.
-   * @param hwH The H factors.
+   * Reference: Henrard, M. Bermudan Swaptions in Gaussian HJM One-Factor Model: Analytical and Numerical Approaches. SSRN, October 2008. Available at SSRN:
+   * http://ssrn.com/abstract=1287982
+   * 
+   * @param discountedCashFlow
+   *          The swap discounted cash flows.
+   * @param alpha2
+   *          The $\alpha^2$ parameters.
+   * @param hwH
+   *          The H factors.
    * @return The exercise boundary.
    */
   public double lambda(final double[] discountedCashFlow, final double[] alpha2, final double[] hwH) {
@@ -305,9 +334,13 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * The maturity dependent part of the volatility (function called H in the implementation note).
-   * @param hwParameters The model parameters.
-   * @param u The start time.
-   * @param v The end times.
+   * 
+   * @param hwParameters
+   *          The model parameters.
+   * @param u
+   *          The start time.
+   * @param v
+   *          The end times.
    * @return The volatility. Same dimension as v.
    */
   public double[][] volatilityMaturityPart(final HullWhiteOneFactorPiecewiseConstantParameters hwParameters, final double u, final double[][] v) {
@@ -325,9 +358,13 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * The expiry time dependent part of the volatility.
-   * @param hwParameters The model parameters.
-   * @param theta0 The start expiry time.
-   * @param theta1 The end expiry time.
+   * 
+   * @param hwParameters
+   *          The model parameters.
+   * @param theta0
+   *          The start expiry time.
+   * @param theta1
+   *          The end expiry time.
    * @return The volatility.
    */
   public double gamma(final HullWhiteOneFactorPiecewiseConstantParameters hwParameters, final double theta0, final double theta1) {
@@ -360,14 +397,21 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * Compute the swap rate for a given value of the standard normal random variable in the $P(.,\theta)$ numeraire.
-   * @param x The random variable value.
-   * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg.
-   * @param alphaFixed The zero-coupon bond volatilities for the swap fixed leg.
-   * @param discountedCashFlowIbor The discounted cash flows equivalent of the swap Ibor leg.
-   * @param alphaIbor The zero-coupon bond volatilities for the swap Ibor leg.
+   * 
+   * @param x
+   *          The random variable value.
+   * @param discountedCashFlowFixed
+   *          The discounted cash flows equivalent of the swap fixed leg.
+   * @param alphaFixed
+   *          The zero-coupon bond volatilities for the swap fixed leg.
+   * @param discountedCashFlowIbor
+   *          The discounted cash flows equivalent of the swap Ibor leg.
+   * @param alphaIbor
+   *          The zero-coupon bond volatilities for the swap Ibor leg.
    * @return The swap rate.
    */
-  public double swapRate(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor) {
+  public double swapRate(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor,
+      final double[] alphaIbor) {
     ArgumentChecker.isTrue(discountedCashFlowFixed.length == alphaFixed.length, "Length shouyld be equal");
     double numerator = 0.0;
     for (int loopcf = 0; loopcf < discountedCashFlowIbor.length; loopcf++) {
@@ -382,14 +426,21 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * Compute the first order derivative of the swap rate with respect to the value of the standard normal random variable in the $P(.,\theta)$ numeraire.
-   * @param x The random variable value.
-   * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg.
-   * @param alphaFixed The zero-coupon bond volatilities for the swap fixed leg.
-   * @param discountedCashFlowIbor The discounted cash flows equivalent of the swap Ibor leg.
-   * @param alphaIbor The zero-coupon bond volatilities for the swap Ibor leg.
+   * 
+   * @param x
+   *          The random variable value.
+   * @param discountedCashFlowFixed
+   *          The discounted cash flows equivalent of the swap fixed leg.
+   * @param alphaFixed
+   *          The zero-coupon bond volatilities for the swap fixed leg.
+   * @param discountedCashFlowIbor
+   *          The discounted cash flows equivalent of the swap Ibor leg.
+   * @param alphaIbor
+   *          The zero-coupon bond volatilities for the swap Ibor leg.
    * @return The swap rate.
    */
-  public double swapRateDx1(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor) {
+  public double swapRateDx1(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor,
+      final double[] alphaIbor) {
     double f = 0.0;
     double df = 0.0;
     double term;
@@ -410,14 +461,21 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * Computes the second order derivative of the swap rate with respect to the value of the standard normal random variable in the $P(.,\theta)$ numeraire.
-   * @param x The random variable value.
-   * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg.
-   * @param alphaFixed The zero-coupon bond volatilities for the swap fixed leg.
-   * @param discountedCashFlowIbor The discounted cash flows equivalent of the swap Ibor leg.
-   * @param alphaIbor The zero-coupon bond volatilities for the swap Ibor leg.
+   * 
+   * @param x
+   *          The random variable value.
+   * @param discountedCashFlowFixed
+   *          The discounted cash flows equivalent of the swap fixed leg.
+   * @param alphaFixed
+   *          The zero-coupon bond volatilities for the swap fixed leg.
+   * @param discountedCashFlowIbor
+   *          The discounted cash flows equivalent of the swap Ibor leg.
+   * @param alphaIbor
+   *          The zero-coupon bond volatilities for the swap Ibor leg.
    * @return The swap rate.
    */
-  public double swapRateDx2(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor) {
+  public double swapRateDx2(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor,
+      final double[] alphaIbor) {
     double f = 0.0;
     double df = 0.0;
     double df2 = 0.0;
@@ -445,14 +503,21 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * Compute the first order derivative of the swap rate with respect to the discountedCashFlowIbor in the $P(.,\theta)$ numeraire.
-   * @param x The random variable value.
-   * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg.
-   * @param alphaFixed The zero-coupon bond volatilities for the swap fixed leg.
-   * @param discountedCashFlowIbor The discounted cash flows equivalent of the swap Ibor leg.
-   * @param alphaIbor The zero-coupon bond volatilities for the swap Ibor leg.
+   * 
+   * @param x
+   *          The random variable value.
+   * @param discountedCashFlowFixed
+   *          The discounted cash flows equivalent of the swap fixed leg.
+   * @param alphaFixed
+   *          The zero-coupon bond volatilities for the swap fixed leg.
+   * @param discountedCashFlowIbor
+   *          The discounted cash flows equivalent of the swap Ibor leg.
+   * @param alphaIbor
+   *          The zero-coupon bond volatilities for the swap Ibor leg.
    * @return The swap rate derivative.
    */
-  public double[] swapRateDdcfi1(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor) {
+  public double[] swapRateDdcfi1(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor,
+      final double[] alphaIbor) {
     final int nbDcfi = discountedCashFlowIbor.length;
     final int nbDcff = discountedCashFlowFixed.length;
     final double[] swapRateDdcfi1 = new double[nbDcfi];
@@ -468,14 +533,21 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * Compute the first order derivative of the swap rate with respect to the discountedCashFlowFixed in the $P(.,\theta)$ numeraire.
-   * @param x The random variable value.
-   * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg.
-   * @param alphaFixed The zero-coupon bond volatilities for the swap fixed leg.
-   * @param discountedCashFlowIbor The discounted cash flows equivalent of the swap Ibor leg.
-   * @param alphaIbor The zero-coupon bond volatilities for the swap Ibor leg.
+   * 
+   * @param x
+   *          The random variable value.
+   * @param discountedCashFlowFixed
+   *          The discounted cash flows equivalent of the swap fixed leg.
+   * @param alphaFixed
+   *          The zero-coupon bond volatilities for the swap fixed leg.
+   * @param discountedCashFlowIbor
+   *          The discounted cash flows equivalent of the swap Ibor leg.
+   * @param alphaIbor
+   *          The zero-coupon bond volatilities for the swap Ibor leg.
    * @return The swap rate derivative.
    */
-  public double[] swapRateDdcff1(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor) {
+  public double[] swapRateDdcff1(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor,
+      final double[] alphaIbor) {
     final int nbDcff = discountedCashFlowFixed.length;
     final int nbDcfi = discountedCashFlowIbor.length;
     final double[] expD = new double[nbDcfi];
@@ -498,14 +570,21 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * Compute the first order derivative of the swap rate with respect to the alphaIbor in the $P(.,\theta)$ numeraire.
-   * @param x The random variable value.
-   * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg.
-   * @param alphaFixed The zero-coupon bond volatilities for the swap fixed leg.
-   * @param discountedCashFlowIbor The discounted cash flows equivalent of the swap Ibor leg.
-   * @param alphaIbor The zero-coupon bond volatilities for the swap Ibor leg.
+   * 
+   * @param x
+   *          The random variable value.
+   * @param discountedCashFlowFixed
+   *          The discounted cash flows equivalent of the swap fixed leg.
+   * @param alphaFixed
+   *          The zero-coupon bond volatilities for the swap fixed leg.
+   * @param discountedCashFlowIbor
+   *          The discounted cash flows equivalent of the swap Ibor leg.
+   * @param alphaIbor
+   *          The zero-coupon bond volatilities for the swap Ibor leg.
    * @return The swap rate derivatives.
    */
-  public double[] swapRateDai1(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor) {
+  public double[] swapRateDai1(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor,
+      final double[] alphaIbor) {
     final int nbDcfi = discountedCashFlowIbor.length;
     final int nbDcff = discountedCashFlowFixed.length;
     final double[] swapRateDai1 = new double[nbDcfi];
@@ -514,21 +593,29 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
       denominator += discountedCashFlowFixed[loopcf] * Math.exp(-alphaFixed[loopcf] * x - 0.5 * alphaFixed[loopcf] * alphaFixed[loopcf]);
     }
     for (int loopcf = 0; loopcf < nbDcfi; loopcf++) {
-      swapRateDai1[loopcf] = discountedCashFlowIbor[loopcf] * Math.exp(-alphaIbor[loopcf] * x - 0.5 * alphaIbor[loopcf] * alphaIbor[loopcf]) * (x + alphaIbor[loopcf]) / denominator;
+      swapRateDai1[loopcf] = discountedCashFlowIbor[loopcf] * Math.exp(-alphaIbor[loopcf] * x - 0.5 * alphaIbor[loopcf] * alphaIbor[loopcf])
+          * (x + alphaIbor[loopcf]) / denominator;
     }
     return swapRateDai1;
   }
 
   /**
    * Compute the first order derivative of the swap rate with respect to the alphaFixed in the $P(.,\theta)$ numeraire.
-   * @param x The random variable value.
-   * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg.
-   * @param alphaFixed The zero-coupon bond volatilities for the swap fixed leg.
-   * @param discountedCashFlowIbor The discounted cash flows equivalent of the swap Ibor leg.
-   * @param alphaIbor The zero-coupon bond volatilities for the swap Ibor leg.
+   * 
+   * @param x
+   *          The random variable value.
+   * @param discountedCashFlowFixed
+   *          The discounted cash flows equivalent of the swap fixed leg.
+   * @param alphaFixed
+   *          The zero-coupon bond volatilities for the swap fixed leg.
+   * @param discountedCashFlowIbor
+   *          The discounted cash flows equivalent of the swap Ibor leg.
+   * @param alphaIbor
+   *          The zero-coupon bond volatilities for the swap Ibor leg.
    * @return The swap rate derivatives.
    */
-  public double[] swapRateDaf1(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor) {
+  public double[] swapRateDaf1(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor,
+      final double[] alphaIbor) {
     final int nbDcff = discountedCashFlowFixed.length;
     final int nbDcfi = discountedCashFlowIbor.length;
     final double[] expD = new double[nbDcfi];
@@ -550,16 +637,24 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
   }
 
   /**
-   * Compute the first order derivative with respect to the discountedCashFlowFixed and to the discountedCashFlowIbor of the of swap rate second derivative with respect
-   * to the random variable x in the $P(.,\theta)$ numeraire.
-   * @param x The random variable value.
-   * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg.
-   * @param alphaFixed The zero-coupon bond volatilities for the swap fixed leg.
-   * @param discountedCashFlowIbor The discounted cash flows equivalent of the swap Ibor leg.
-   * @param alphaIbor The zero-coupon bond volatilities for the swap Ibor leg.
-   * @return The swap rate derivative. Made of a pair of arrays. The first one is the derivative wrt discountedCashFlowFixed and the second one wrt discountedCashFlowIbor.
+   * Compute the first order derivative with respect to the discountedCashFlowFixed and to the discountedCashFlowIbor of the of swap rate second derivative with
+   * respect to the random variable x in the $P(.,\theta)$ numeraire.
+   * 
+   * @param x
+   *          The random variable value.
+   * @param discountedCashFlowFixed
+   *          The discounted cash flows equivalent of the swap fixed leg.
+   * @param alphaFixed
+   *          The zero-coupon bond volatilities for the swap fixed leg.
+   * @param discountedCashFlowIbor
+   *          The discounted cash flows equivalent of the swap Ibor leg.
+   * @param alphaIbor
+   *          The zero-coupon bond volatilities for the swap Ibor leg.
+   * @return The swap rate derivative. Made of a pair of arrays. The first one is the derivative wrt discountedCashFlowFixed and the second one wrt
+   *         discountedCashFlowIbor.
    */
-  public Pair<double[], double[]> swapRateDx2Ddcf1(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor) {
+  public Pair<double[], double[]> swapRateDx2Ddcf1(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed,
+      final double[] discountedCashFlowIbor, final double[] alphaIbor) {
     final int nbDcff = discountedCashFlowFixed.length;
     final int nbDcfi = discountedCashFlowIbor.length;
     double f = 0.0;
@@ -589,7 +684,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
     final double g2 = g * g;
     final double g3 = g * g2;
     final double g4 = g * g3;
-    //    double dx2 = -((df2 * g - f * dg2) / g2 - (df * g - f * dg) * 2 * dg / g3);
+    // double dx2 = -((df2 * g - f * dg2) / g2 - (df * g - f * dg) * 2 * dg / g3);
     // Backward sweep
     final double dx2Bar = 1.0;
     final double gBar = (df2 / g2 - 2 * f * dg2 / g3 - 4 * df * dg / g3 + 6 * dg * dg * f / g4) * dx2Bar;
@@ -615,16 +710,23 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
   }
 
   /**
-   * Compute the first order derivative with respect to the alphaFixed and to the alphaIbor of the of swap rate second derivative with respect
-   * to the random variable x in the $P(.,\theta)$ numeraire.
-   * @param x The random variable value.
-   * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg.
-   * @param alphaFixed The zero-coupon bond volatilities for the swap fixed leg.
-   * @param discountedCashFlowIbor The discounted cash flows equivalent of the swap Ibor leg.
-   * @param alphaIbor The zero-coupon bond volatilities for the swap Ibor leg.
+   * Compute the first order derivative with respect to the alphaFixed and to the alphaIbor of the of swap rate second derivative with respect to the random
+   * variable x in the $P(.,\theta)$ numeraire.
+   * 
+   * @param x
+   *          The random variable value.
+   * @param discountedCashFlowFixed
+   *          The discounted cash flows equivalent of the swap fixed leg.
+   * @param alphaFixed
+   *          The zero-coupon bond volatilities for the swap fixed leg.
+   * @param discountedCashFlowIbor
+   *          The discounted cash flows equivalent of the swap Ibor leg.
+   * @param alphaIbor
+   *          The zero-coupon bond volatilities for the swap Ibor leg.
    * @return The swap rate derivatives. Made of a pair of arrays. The first one is the derivative wrt alphaFixed and the second one wrt alphaIbor.
    */
-  public Pair<double[], double[]> swapRateDx2Da1(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor) {
+  public Pair<double[], double[]> swapRateDx2Da1(final double x, final double[] discountedCashFlowFixed, final double[] alphaFixed,
+      final double[] discountedCashFlowIbor, final double[] alphaIbor) {
     final int nbDcff = discountedCashFlowFixed.length;
     final int nbDcfi = discountedCashFlowIbor.length;
     double f = 0.0;
@@ -654,7 +756,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
     final double g2 = g * g;
     final double g3 = g * g2;
     final double g4 = g * g3;
-    //    double dx2 = -((df2 * g - f * dg2) / g2 - (df * g - f * dg) * 2 * dg / g3);
+    // double dx2 = -((df2 * g - f * dg2) / g2 - (df * g - f * dg) * 2 * dg / g3);
     // Backward sweep
     final double dx2Bar = 1.0;
     final double gBar = (df2 / g2 - 2 * f * dg2 / g3 - 4 * df * dg / g3 + 6 * dg * dg * f / g4) * dx2Bar;
@@ -668,13 +770,15 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
     final double[] termFixedBar = new double[nbDcff];
     for (int loopcf = 0; loopcf < nbDcff; loopcf++) {
       termFixedBar[loopcf] = gBar - alphaFixed[loopcf] * dgBar + alphaFixed[loopcf] * alphaFixed[loopcf] * dg2Bar;
-      alphaFixedBar[loopcf] = termFixed[loopcf] * (-x - alphaFixed[loopcf]) * termFixedBar[loopcf] - termFixed[loopcf] * dgBar + 2 * alphaFixed[loopcf] * termFixed[loopcf] * dg2Bar;
+      alphaFixedBar[loopcf] = termFixed[loopcf] * (-x - alphaFixed[loopcf]) * termFixedBar[loopcf] - termFixed[loopcf] * dgBar
+          + 2 * alphaFixed[loopcf] * termFixed[loopcf] * dg2Bar;
     }
     final double[] alphaIborBar = new double[nbDcfi];
     final double[] termIborBar = new double[nbDcfi];
     for (int loopcf = 0; loopcf < nbDcfi; loopcf++) {
       termIborBar[loopcf] = fBar - alphaIbor[loopcf] * dfBar + alphaIbor[loopcf] * alphaIbor[loopcf] * df2Bar;
-      alphaIborBar[loopcf] = termIbor[loopcf] * (-x - alphaIbor[loopcf]) * termIborBar[loopcf] - termIbor[loopcf] * dfBar + 2 * alphaIbor[loopcf] * termIbor[loopcf] * df2Bar;
+      alphaIborBar[loopcf] = termIbor[loopcf] * (-x - alphaIbor[loopcf]) * termIborBar[loopcf] - termIbor[loopcf] * dfBar
+          + 2 * alphaIbor[loopcf] * termIbor[loopcf] * df2Bar;
     }
     return ObjectsPair.of(alphaFixedBar, alphaIborBar);
   }

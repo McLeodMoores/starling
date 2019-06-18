@@ -60,9 +60,8 @@ public class MultivaluedMapImpl extends HashMap<String, List<String>> implements
     final List<String> values = get(key);
     if (values != null && values.size() > 0) {
       return values.get(0);
-    } else {
-      return null;
     }
+    return null;
   }
 
   public final void addFirst(final String key, final String value) {

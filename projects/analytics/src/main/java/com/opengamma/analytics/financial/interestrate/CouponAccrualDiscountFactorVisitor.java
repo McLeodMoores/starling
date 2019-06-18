@@ -12,7 +12,9 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class CouponAccrualDiscountFactorVisitor extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, double[]> {
 
   @Override

@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -26,6 +28,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Convention for swaps.
  */
+@ConventionMetaData(description = "Swap", group = ConventionGroups.FIXED_INCOME)
 @BeanDefinition
 public class SwapConvention extends FinancialConvention {
 
@@ -58,20 +61,22 @@ public class SwapConvention extends FinancialConvention {
   /**
    * Creates an instance.
    *
-   * @param name  the convention name, not null
-   * @param externalIdBundle  the external identifiers for this convention, not null
-   * @param payLegConvention  the pay leg convention, not null
-   * @param receiveLegConvention  the receive leg convention, not null
+   * @param name
+   *          the convention name, not null
+   * @param externalIdBundle
+   *          the external identifiers for this convention, not null
+   * @param payLegConvention
+   *          the pay leg convention, not null
+   * @param receiveLegConvention
+   *          the receive leg convention, not null
    */
-  public SwapConvention(
-      final String name, final ExternalIdBundle externalIdBundle, final ExternalId payLegConvention,
-      final ExternalId receiveLegConvention) {
+  public SwapConvention(final String name, final ExternalIdBundle externalIdBundle, final ExternalId payLegConvention, final ExternalId receiveLegConvention) {
     super(name, externalIdBundle);
     setPayLegConvention(payLegConvention);
     setReceiveLegConvention(receiveLegConvention);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
    *
@@ -85,8 +90,10 @@ public class SwapConvention extends FinancialConvention {
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
    *
-   * @param <T>  the result type of the visitor
-   * @param visitor  the visitor, not null
+   * @param <T>
+   *          the result type of the visitor
+   * @param visitor
+   *          the visitor, not null
    * @return the result
    */
   @Override

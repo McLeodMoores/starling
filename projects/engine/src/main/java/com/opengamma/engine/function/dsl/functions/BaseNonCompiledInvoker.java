@@ -95,7 +95,6 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
     final FunctionSignature signature = getFunctionSignature();
     final Pair<Map<String, StreamI<FunctionInput>>, Map<String, StreamI<FunctionOutput>>> ioputsByName = ioputsByName(signature);
 
-    final Map<String, StreamI<FunctionInput>> inputsByName = ioputsByName.getFirst();
     final Map<String, StreamI<FunctionOutput>> outputsByName = ioputsByName.getSecond();
 
     final Set<ValueSpecification> valueSpecifications = new HashSet<>();
@@ -139,7 +138,6 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
     final Pair<Map<String, StreamI<FunctionInput>>, Map<String, StreamI<FunctionOutput>>> ioputsByName = ioputsByName(signature);
 
     final Map<String, StreamI<FunctionInput>> inputsByName = ioputsByName.getFirst();
-    final Map<String, StreamI<FunctionOutput>> outputsByName = ioputsByName.getSecond();
 
     final Set<ValueRequirement> valueRequirements = new HashSet<>();
 
@@ -192,7 +190,6 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
     final FunctionSignature signature = getFunctionSignature();
     final Pair<Map<String, StreamI<FunctionInput>>, Map<String, StreamI<FunctionOutput>>> ioputsByName = ioputsByName(signature);
 
-    final Map<String, StreamI<FunctionInput>> inputsByName = ioputsByName.getFirst();
     final Map<String, StreamI<FunctionOutput>> outputsByName = ioputsByName.getSecond();
 
     final Set<ValueSpecification> valueSpecifications = new HashSet<>();

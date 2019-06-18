@@ -5,7 +5,6 @@
  */
 package com.opengamma.core.position.impl;
 
-
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertNull;
@@ -45,8 +44,8 @@ public class SimpleTradeTest {
    * Tests construction.
    */
   public void testConstructionExternalIdBundleBigDecimalCounterpartyLocalDateOffsetTime() {
-    final SimpleTrade test = new SimpleTrade(new SimpleSecurityLink(BUNDLE), BigDecimal.ONE, COUNTERPARTY,
-        TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
+    final SimpleTrade test = new SimpleTrade(new SimpleSecurityLink(BUNDLE), BigDecimal.ONE, COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(),
+        TRADE_OFFSET_DATETIME.toOffsetTime());
     assertNull(test.getUniqueId());
     assertEquals(BigDecimal.ONE, test.getQuantity());
     assertEquals(1, test.getSecurityLink().getExternalId().size());
@@ -58,7 +57,7 @@ public class SimpleTradeTest {
   }
 
   /**
-   * Tests that the security link cannot be null
+   * Tests that the security link cannot be null.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructionExternalIdBundleBigDecimalCounterpartyLocalDateOffsetTimeNullLink() {
@@ -110,8 +109,8 @@ public class SimpleTradeTest {
    * Tests the copy constructor.
    */
   public void testConstructionCopyFromTrade() {
-    final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE,
-        COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
+    final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE, COUNTERPARTY,
+        TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     trade.addAttribute("A", "B");
     trade.addAttribute("C", "D");
 
@@ -125,20 +124,20 @@ public class SimpleTradeTest {
   public void testCollectionsOfTradesWithDifferentFields() {
     final Set<SimpleTrade> trades = Sets.newHashSet();
 
-    final SimpleTrade trade1 = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE,
-        COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
+    final SimpleTrade trade1 = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE, COUNTERPARTY,
+        TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     trades.add(trade1);
 
-    final SimpleTrade trade2 = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("C", "D")), BigDecimal.ONE,
-        COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
+    final SimpleTrade trade2 = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("C", "D")), BigDecimal.ONE, COUNTERPARTY,
+        TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     trade2.setPremium(100.00);
     trade2.setPremiumCurrency(Currency.USD);
     trade2.setPremiumDate(TRADE_OFFSET_DATETIME.toLocalDate().plusDays(1));
     trade2.setPremiumTime(TRADE_OFFSET_DATETIME.toOffsetTime().plusHours(1));
     trades.add(trade2);
 
-    final SimpleTrade trade3 = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("E", "F")), BigDecimal.ONE,
-        COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
+    final SimpleTrade trade3 = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("E", "F")), BigDecimal.ONE, COUNTERPARTY,
+        TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     trades.add(trade3);
 
     trades.add(new SimpleTrade(trade3));
@@ -170,14 +169,14 @@ public class SimpleTradeTest {
     assertTrue(trades.isEmpty());
   }
 
-  //------------------------------------------------------------------------
+  // ------------------------------------------------------------------------
   /**
    * Tests that attribute keys cannot be null.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testAddAttributeNullKey() {
-    final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE,
-        COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
+    final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE, COUNTERPARTY,
+        TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     assertTrue(trade.getAttributes().isEmpty());
     trade.addAttribute(null, "B");
   }
@@ -187,8 +186,8 @@ public class SimpleTradeTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testAddAttributeNullValue() {
-    final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE,
-        COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
+    final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE, COUNTERPARTY,
+        TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     assertTrue(trade.getAttributes().isEmpty());
     trade.addAttribute("A", null);
   }
@@ -197,8 +196,8 @@ public class SimpleTradeTest {
    * Tests the addition of an attribute.
    */
   public void testAddAttribute() {
-    final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE,
-        COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
+    final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE, COUNTERPARTY,
+        TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     assertTrue(trade.getAttributes().isEmpty());
     trade.addAttribute("A", "B");
     assertEquals(1, trade.getAttributes().size());
@@ -212,8 +211,8 @@ public class SimpleTradeTest {
    * Tests the removal of attribute.
    */
   public void testRemoveAttribute() {
-    final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE,
-        COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
+    final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE, COUNTERPARTY,
+        TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     assertTrue(trade.getAttributes().isEmpty());
     trade.addAttribute("A", "B");
     trade.addAttribute("C", "D");

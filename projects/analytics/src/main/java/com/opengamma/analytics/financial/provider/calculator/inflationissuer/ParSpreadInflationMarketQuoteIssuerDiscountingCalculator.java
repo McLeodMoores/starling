@@ -17,11 +17,11 @@ import com.opengamma.analytics.financial.provider.calculator.inflation.ParSpread
 import com.opengamma.analytics.financial.provider.description.inflation.InflationIssuerProviderInterface;
 
 /**
- * Calculates the par spread (to the market quote) of issuer-specific instruments by discounting.
- * This calculator requires the transaction version of instruments like bonds and bills, as the
- * purchase price information is necessary to calculate a meaningful par spread.
+ * Calculates the par spread (to the market quote) of issuer-specific instruments by discounting. This calculator requires the transaction version of
+ * instruments like bonds and bills, as the purchase price information is necessary to calculate a meaningful par spread.
  */
-public final class ParSpreadInflationMarketQuoteIssuerDiscountingCalculator extends InstrumentDerivativeVisitorDelegate<InflationIssuerProviderInterface, Double> {
+public final class ParSpreadInflationMarketQuoteIssuerDiscountingCalculator
+extends InstrumentDerivativeVisitorDelegate<InflationIssuerProviderInterface, Double> {
 
   /**
    * The unique instance of the calculator.
@@ -30,6 +30,7 @@ public final class ParSpreadInflationMarketQuoteIssuerDiscountingCalculator exte
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static ParSpreadInflationMarketQuoteIssuerDiscountingCalculator getInstance() {
@@ -50,14 +51,14 @@ public final class ParSpreadInflationMarketQuoteIssuerDiscountingCalculator exte
   /** Calculator for bond transactions */
   private static final BondTransactionDiscountingMethod METHOD_BOND_TR = BondTransactionDiscountingMethod.getInstance();
 
-  //     -----     Deposit     -----
+  // ----- Deposit -----
 
   @Override
   public Double visitDepositCounterpart(final DepositCounterpart deposit, final InflationIssuerProviderInterface issuercurves) {
     return METHOD_DEPO_CTPY.parSpread(deposit, issuercurves.getIssuerProvider());
   }
 
-  //     -----     Bond/Bill     -----
+  // ----- Bond/Bill -----
 
   @Override
   public Double visitBillTransaction(final BillTransaction bill, final InflationIssuerProviderInterface issuercurves) {
@@ -69,5 +70,5 @@ public final class ParSpreadInflationMarketQuoteIssuerDiscountingCalculator exte
     return METHOD_BOND_TR.parSpread(bond, issuercurves.getIssuerProvider());
   }
 
-  //TODO : add inflation bonds
+  // TODO : add inflation bonds
 }

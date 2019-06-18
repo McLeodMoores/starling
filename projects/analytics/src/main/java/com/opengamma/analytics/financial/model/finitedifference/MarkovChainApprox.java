@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference;
@@ -15,7 +15,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class MarkovChainApprox {
   /** The first volatility */
@@ -44,12 +44,18 @@ public class MarkovChainApprox {
   private final double[] _vols;
 
   /**
-   * @param vol1 The first volatility, >= 0
-   * @param vol2 The second volatility, >= 0
-   * @param lambda12 The first jump parameter, >= 0
-   * @param lambda21 The second jump parameter, >= 0
-   * @param probState1 The probability of being in the first state, 0 <= probState1 <= 1
-   * @param expiry The time to expiry
+   * @param vol1
+   *          The first volatility, &ge; 0
+   * @param vol2
+   *          The second volatility, &ge; 0
+   * @param lambda12
+   *          The first jump parameter, &ge; 0
+   * @param lambda21
+   *          The second jump parameter, &ge; 0
+   * @param probState1
+   *          The probability of being in the first state, 0 &le; probState1 &le; 1
+   * @param expiry
+   *          The time to expiry
    */
   public MarkovChainApprox(final double vol1, final double vol2, final double lambda12, final double lambda21, final double probState1, final double expiry) {
     ArgumentChecker.isTrue(vol1 >= 0, "The first volatility must be greater than or equal to 0; have {}", vol1);
@@ -68,8 +74,8 @@ public class MarkovChainApprox {
     _theta = lambda21 / _lambda;
     _t = expiry;
 
-    final double wMin = _probState1 * Math.exp(-_lambda12 * expiry); //prob of always being in state 1
-    final double wMax = (1 - _probState1) * Math.exp(-_lambda21 * expiry); //prob of always being in state 1
+    final double wMin = _probState1 * Math.exp(-_lambda12 * expiry); // prob of always being in state 1
+    final double wMax = (1 - _probState1) * Math.exp(-_lambda21 * expiry); // prob of always being in state 1
 
     final double mu = getM1(expiry);
     final double modM1 = getModMoment(1, wMin, wMax, mu, mu);
@@ -88,15 +94,19 @@ public class MarkovChainApprox {
     w = delta2 / (delta1 + delta2);
     ArgumentChecker.isTrue(w >= 0.0 && w <= 1.0, "weight not physical");
 
-    _weights = new double[] {wMin, wMax, w * (1 - wMin - wMax), (1 - w) * (1 - wMin - wMax)};
-    _vols = new double[] {_vol1, _vol2, Math.sqrt(modM1 - delta1), Math.sqrt(modM1 + delta2)};
+    _weights = new double[] { wMin, wMax, w * (1 - wMin - wMax), (1 - w) * (1 - wMin - wMax) };
+    _vols = new double[] { _vol1, _vol2, Math.sqrt(modM1 - delta1), Math.sqrt(modM1 + delta2) };
   }
 
   /**
-   * Calculates the price using the Black formula
-   * @param forward The forward price
-   * @param df The discount factor
-   * @param strike The strike 
+   * Calculates the price using the Black formula.
+   *
+   * @param forward
+   *          The forward price
+   * @param df
+   *          The discount factor
+   * @param strike
+   *          The strike
    * @return The price
    */
   public double price(final double forward, final double df, final double strike) {
@@ -115,11 +125,16 @@ public class MarkovChainApprox {
   }
 
   /**
-   * Calculates the price using the CEV formula
-   * @param forward The forward price
-   * @param df The discount factor
-   * @param strike The strike
-   * @param beta The beta
+   * Calculates the price using the CEV formula.
+   *
+   * @param forward
+   *          The forward price
+   * @param df
+   *          The discount factor
+   * @param strike
+   *          The strike
+   * @param beta
+   *          The beta
    * @return The price
    */
   public double priceCEV(final double forward, final double df, final double strike, final double beta) {
@@ -147,8 +162,10 @@ public class MarkovChainApprox {
   }
 
   /**
-   * Gets the first three moments at expiry
-   * @param expiry The expiry
+   * Gets the first three moments at expiry.
+   *
+   * @param expiry
+   *          The expiry
    * @return An array whose elements are {first moment, second moment, third moment}
    */
   public double[] getMoments(final double expiry) {
@@ -156,11 +173,12 @@ public class MarkovChainApprox {
     final double m2 = getM2(expiry);
     final double m3 = getM3(expiry);
 
-    return new double[] {m1, m2, m3};
+    return new double[] { m1, m2, m3 };
   }
 
   /**
-   * The mean variance (sigma^2*t) of the markov chain
+   * The mean variance (sigma^2*t) of the markov chain.
+   *
    * @param t
    * @return The mean variance
    */
@@ -230,10 +248,12 @@ public class MarkovChainApprox {
     final double b3 = b2 * b;
     final double p = _probState1;
 
-    final double temp1 = a3 * b3 + (3 * a2 * b2 * p - 9 * a3 * b2 + 6 * a2 * b2) / t + (-18 * a2 * b * p + 12 * a * b * p + 36 * a3 * b - 36 * a2 * b + 6 * a * b) / t2
+    final double temp1 = a3 * b3 + (3 * a2 * b2 * p - 9 * a3 * b2 + 6 * a2 * b2) / t
+        + (-18 * a2 * b * p + 12 * a * b * p + 36 * a3 * b - 36 * a2 * b + 6 * a * b) / t2
         + (36 * a2 * p - 36 * a * p + 6 * p - 60 * a3 + 72 * a2 - 18 * a) / t3;
     final double temp2 = (-3 * a2 * b2 * p + 6 * a * b2 * p - 3 * b2 * p + 3 * a3 * b2 - 6 * a2 * b2 + 3 * a * b2) / t
-        + (-18 * a2 * b * p + 24 * a * b * p - 6 * b * p + 24 * a3 * b - 36 * a2 * b + 12 * a * b) / t2 + (-36 * a2 * p + 36 * a * p - 6 * p + 60 * a3 - 72 * a2 + 18 * a) / t3;
+        + (-18 * a2 * b * p + 24 * a * b * p - 6 * b * p + 24 * a3 * b - 36 * a2 * b + 12 * a * b) / t2
+        + (-36 * a2 * p + 36 * a * p - 6 * p + 60 * a3 - 72 * a2 + 18 * a) / t3;
 
     return (temp1 + temp2 * Math.exp(-b * t)) / b3;
   }

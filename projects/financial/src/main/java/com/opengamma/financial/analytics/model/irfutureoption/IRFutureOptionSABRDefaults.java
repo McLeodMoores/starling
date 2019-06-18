@@ -34,12 +34,12 @@ public class IRFutureOptionSABRDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(IRFutureOptionSABRDefaults.class);
   /** The value requirement names for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.PRESENT_VALUE_SABR_ALPHA_SENSITIVITY,
-    ValueRequirementNames.PRESENT_VALUE_SABR_BETA_SENSITIVITY,
-    ValueRequirementNames.PRESENT_VALUE_SABR_RHO_SENSITIVITY,
-    ValueRequirementNames.PRESENT_VALUE_SABR_NU_SENSITIVITY,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.PRESENT_VALUE_SABR_ALPHA_SENSITIVITY,
+                ValueRequirementNames.PRESENT_VALUE_SABR_BETA_SENSITIVITY,
+                ValueRequirementNames.PRESENT_VALUE_SABR_RHO_SENSITIVITY,
+                ValueRequirementNames.PRESENT_VALUE_SABR_NU_SENSITIVITY,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES
   };
   /** The curve calculation configuration names to be used for each currency */
   private final Map<String, String> _curveConfigPerCurrency;
@@ -49,8 +49,9 @@ public class IRFutureOptionSABRDefaults extends DefaultPropertyFunction {
   private final Map<String, String> _fittingMethodPerCurrency;
 
   /**
-   * @param defaultsPerCurrency The default values per currency, not null. Must contain elements in the order: currency, curve calculation configuration name, surface name
-   * and fitting method name.
+   * @param defaultsPerCurrency
+   *          The default values per currency, not null. Must contain elements in the order: currency, curve calculation configuration name, surface name and
+   *          fitting method name.
    */
   public IRFutureOptionSABRDefaults(final String... defaultsPerCurrency) {
     super(ComputationTargetType.TRADE, true);
@@ -91,7 +92,8 @@ public class IRFutureOptionSABRDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final IRFutureOptionSecurity irFutureOption = (IRFutureOptionSecurity) target.getTrade().getSecurity();
     final String currency = FinancialSecurityUtils.getCurrency(irFutureOption).getCode();
     if (ValuePropertyNames.CURVE_CALCULATION_CONFIG.equals(propertyName)) {

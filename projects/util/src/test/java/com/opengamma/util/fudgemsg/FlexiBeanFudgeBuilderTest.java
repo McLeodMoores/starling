@@ -19,12 +19,18 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class FlexiBeanFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
 
-  public void test_empty() {
+  /**
+   *
+   */
+  public void testEmpty() {
     final FlexiBean bean = new FlexiBean();
     assertEquals(cycleObject(FlexiBean.class, bean), bean);
   }
 
-  public void test_simple() {
+  /**
+   *
+   */
+  public void testSimple() {
     final FlexiBean bean = new FlexiBean();
     bean.put("Foo", "Bar");
     bean.put("Bar", 42d);
@@ -32,7 +38,10 @@ public class FlexiBeanFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
     assertEquals(cycleObject(FlexiBean.class, bean), bean);
   }
 
-  public void test_deep() {
+  /**
+   *
+   */
+  public void testDeep() {
     final FlexiBean bean = new FlexiBean();
     bean.put("Foo", "Bar");
     bean.put("Bar", 42d);

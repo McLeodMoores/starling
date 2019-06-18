@@ -5,15 +5,13 @@
  */
 package com.opengamma.financial.generator;
 
-import com.opengamma.financial.security.option.SwaptionSecurity;
-
 /**
  * Utility for constructing a random swaption portfolio.
  */
 public class SwaptionPortfolioGeneratorTool extends AbstractPortfolioGeneratorTool {
 
   protected SwapSecurityGenerator createSwapSecurityGenerator() {
-    SwapSecurityGenerator securities = new SwapSecurityGenerator();
+    final SwapSecurityGenerator securities = new SwapSecurityGenerator();
     configure(securities);
     return securities;
   }
@@ -30,7 +28,7 @@ public class SwaptionPortfolioGeneratorTool extends AbstractPortfolioGeneratorTo
     final SwaptionSecurityGenerator securities = createSwaptionSecurityGenerator();
     configure(securities);
     configure(securities.getUnderlyingGenerator());
-    final PositionGenerator positions = new SimplePositionGenerator<SwaptionSecurity>(securities, getSecurityPersister(), getCounterPartyGenerator());
+    final PositionGenerator positions = new SimplePositionGenerator<>(securities, getSecurityPersister(), getCounterPartyGenerator());
     final PortfolioNodeGenerator rootNode = new LeafPortfolioNodeGenerator(new StaticNameGenerator("Swaptions"), positions, PORTFOLIO_SIZE);
     return new PortfolioGenerator(rootNode, portfolioNameGenerator);
   }
@@ -39,8 +37,8 @@ public class SwaptionPortfolioGeneratorTool extends AbstractPortfolioGeneratorTo
   public PortfolioNodeGenerator createPortfolioNodeGenerator(final int portfolioSize) {
     final SwaptionSecurityGenerator securities = createSwaptionSecurityGenerator();
     configure(securities);
-    final PositionGenerator positions = new SimplePositionGenerator<SwaptionSecurity>(securities, getSecurityPersister(), getCounterPartyGenerator());
+    final PositionGenerator positions = new SimplePositionGenerator<>(securities, getSecurityPersister(), getCounterPartyGenerator());
     return new LeafPortfolioNodeGenerator(new StaticNameGenerator("Swaptions"), positions, portfolioSize);
   }
-  
+
 }

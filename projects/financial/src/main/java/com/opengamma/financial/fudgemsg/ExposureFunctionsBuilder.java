@@ -24,7 +24,7 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdFudgeBuilder;
 
 /**
- * Fudge builder for {@link ExposureFunctions}
+ * Fudge builder for {@link ExposureFunctions}.
  */
 @FudgeBuilderFor(ExposureFunctions.class)
 public class ExposureFunctionsBuilder implements FudgeBuilder<ExposureFunctions> {

@@ -5,7 +5,7 @@
  */
 package com.opengamma.financial.fudgemsg;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import org.fudgemsg.UnmodifiableFudgeField;
 import org.fudgemsg.wire.types.FudgeWireType;
@@ -24,11 +24,17 @@ public class BusinessDayConventionFudgeEncodingTest extends AbstractFudgeBuilder
 
   private static final BusinessDayConvention REF = BusinessDayConventions.MODIFIED_FOLLOWING;
 
+  /**
+   *
+   */
   @Test
   public void testCycle() {
     assertEquals(REF, cycleObject(BusinessDayConvention.class, REF));
   }
 
+  /**
+   *
+   */
   @Test
   public void testFromString() {
     assertEquals(REF, getFudgeContext().getFieldValue(BusinessDayConvention.class, UnmodifiableFudgeField.of(FudgeWireType.STRING, REF.getName())));

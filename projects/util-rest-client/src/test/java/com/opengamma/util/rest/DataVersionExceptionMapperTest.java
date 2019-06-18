@@ -77,7 +77,7 @@ public class DataVersionExceptionMapperTest extends AbstractExceptionMapperTestH
     assertEquals(data.size(), 2);
     assertEquals(data.get("message"), "");
     assertTrue(data.get("locator").startsWith(
-        "<p>IllegalArgumentException<br />&nbsp;&nbsp;at com.opengamma.util.rest.DataVersionExceptionMapperTest.testNoOutputMessage()"));
+        "<p>IllegalArgumentException<br>&nbsp;&nbsp;at com.opengamma.util.rest.DataVersionExceptionMapperTest.testNoOutputMessage()"));
     assertTrue(data.get("locator").endsWith("</p>"));
   }
 
@@ -98,7 +98,7 @@ public class DataVersionExceptionMapperTest extends AbstractExceptionMapperTestH
     assertEquals(data.size(), 2);
     assertEquals(data.get("message"), message);
     assertTrue(data.get("locator").startsWith(
-        "<p>OpenGammaRuntimeException<br />&nbsp;&nbsp;at com.opengamma.util.rest.DataVersionExceptionMapperTest.testOutputMessage()"));
+        "<p>OpenGammaRuntimeException<br>&nbsp;&nbsp;at com.opengamma.util.rest.DataVersionExceptionMapperTest.testOutputMessage()"));
     assertTrue(data.get("locator").endsWith("</p>"));
   }
 

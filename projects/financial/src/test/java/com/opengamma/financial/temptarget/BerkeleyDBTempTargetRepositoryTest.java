@@ -25,7 +25,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class BerkeleyDBTempTargetRepositoryTest {
 
-  private BerkeleyDBTempTargetRepository createTempTargetRepository() {
+  private static BerkeleyDBTempTargetRepository createTempTargetRepository() {
     final File tmp = Files.createTempDir();
     final BerkeleyDBTempTargetRepository targets = new BerkeleyDBTempTargetRepository(tmp);
     targets.start();

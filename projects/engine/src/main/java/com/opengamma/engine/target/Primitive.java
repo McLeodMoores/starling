@@ -20,8 +20,8 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdentifiable;
 
 /**
- * Wrapper for a "primitive" value. This is to allow the {@link ComputationTargetType#PRIMITIVE} to be defined as something more specific
- * than {@link UniqueIdentifiable} which causes function resolution issues.
+ * Wrapper for a "primitive" value. This is to allow the {@link ComputationTargetType#PRIMITIVE} to be defined as something more specific than
+ * {@link UniqueIdentifiable} which causes function resolution issues.
  */
 public class Primitive implements UniqueIdentifiable, Serializable {
 
@@ -71,6 +71,9 @@ public class Primitive implements UniqueIdentifiable, Serializable {
     public boolean equals(final Object o) {
       if (o == this) {
         return true;
+      }
+      if (o == null) {
+        return false;
       }
       if (!o.getClass().equals(ExternalIdentifiablePrimitive.class)) {
         return false;
@@ -131,6 +134,9 @@ public class Primitive implements UniqueIdentifiable, Serializable {
       if (o == this) {
         return true;
       }
+      if (o == null) {
+        return false;
+      }
       if (!o.getClass().equals(ExternalBundleIdentifiablePrimitive.class)) {
         return false;
       }
@@ -179,7 +185,7 @@ public class Primitive implements UniqueIdentifiable, Serializable {
     if (o == this) {
       return true;
     }
-    if (!o.getClass().equals(Primitive.class)) {
+    if (!(o instanceof Primitive)) {
       return false;
     }
     final Primitive other = (Primitive) o;

@@ -41,7 +41,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.swap.BondTotalReturnSwapSecurity;
 import com.opengamma.util.money.Currency;
@@ -58,7 +57,7 @@ public class BondTotalReturnSwapPV01Function extends BondTotalReturnSwapFunction
       new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityIssuerCalculator.getInstance());
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#PV01}.
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#PV01}.
    */
   public BondTotalReturnSwapPV01Function() {
     super(PV01);
@@ -106,7 +105,8 @@ public class BondTotalReturnSwapPV01Function extends BondTotalReturnSwapFunction
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(CURVE);
         if (curveNames == null || curveNames.size() != 1) {
@@ -121,7 +121,8 @@ public class BondTotalReturnSwapPV01Function extends BondTotalReturnSwapFunction
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+      public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final Map<ValueSpecification, ValueRequirement> inputs) {
         final Set<String> currencies = new HashSet<>();
         final Set<String> curveNames = new HashSet<>();
         final Set<String> functionNames = new HashSet<>();

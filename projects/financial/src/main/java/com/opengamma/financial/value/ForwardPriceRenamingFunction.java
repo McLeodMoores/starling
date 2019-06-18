@@ -22,7 +22,8 @@ public class ForwardPriceRenamingFunction extends ValueRenamingFunction {
       ValueRequirementNames.UNDERLYING_MARKET_PRICE);
 
   public ForwardPriceRenamingFunction() {
-    super(VALUE_NAMES_TO_CHANGE, ValueRequirementNames.FORWARD_PRICE, ComputationTargetType.SECURITY.or(ComputationTargetType.POSITION).or(ComputationTargetType.TRADE));
+    super(VALUE_NAMES_TO_CHANGE, ValueRequirementNames.FORWARD_PRICE,
+        ComputationTargetType.SECURITY.or(ComputationTargetType.POSITION).or(ComputationTargetType.TRADE));
   }
 
 }

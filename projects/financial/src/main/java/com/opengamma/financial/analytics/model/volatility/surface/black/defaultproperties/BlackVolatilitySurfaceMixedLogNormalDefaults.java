@@ -20,8 +20,10 @@ public class BlackVolatilitySurfaceMixedLogNormalDefaults extends BlackVolatilit
   private final String _weightingFunction;
 
   public BlackVolatilitySurfaceMixedLogNormalDefaults(final String timeAxis, final String yAxis,
-      final String volatilityTransform, final String timeInterpolator, final String timeLeftExtrapolator, final String timeRightExtrapolator, final String weightingFunction) {
-    super(timeAxis, yAxis, volatilityTransform, timeInterpolator, timeLeftExtrapolator, timeRightExtrapolator, BlackVolatilitySurfacePropertyNamesAndValues.MIXED_LOG_NORMAL);
+      final String volatilityTransform, final String timeInterpolator, final String timeLeftExtrapolator, final String timeRightExtrapolator,
+      final String weightingFunction) {
+    super(timeAxis, yAxis, volatilityTransform, timeInterpolator, timeLeftExtrapolator, timeRightExtrapolator,
+        BlackVolatilitySurfacePropertyNamesAndValues.MIXED_LOG_NORMAL);
     _weightingFunction = weightingFunction;
   }
 
@@ -34,7 +36,8 @@ public class BlackVolatilitySurfaceMixedLogNormalDefaults extends BlackVolatilit
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final Set<String> commonDefaults = super.getDefaultValue(context, target, desiredValue, propertyName);
     if (commonDefaults != null) {
       return commonDefaults;

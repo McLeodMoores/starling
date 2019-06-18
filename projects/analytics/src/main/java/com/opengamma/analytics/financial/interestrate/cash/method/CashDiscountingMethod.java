@@ -22,6 +22,7 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * The methods associated to the pricing of cash deposit by discounting.
+ *
  * @deprecated Use {@link CashDiscountingMethod}
  */
 @Deprecated
@@ -34,6 +35,7 @@ public final class CashDiscountingMethod implements PricingMethod {
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static CashDiscountingMethod getInstance() {
@@ -48,8 +50,11 @@ public final class CashDiscountingMethod implements PricingMethod {
 
   /**
    * Compute the present value by discounting the final cash flow (nominal + interest) and the initial payment (initial amount).
-   * @param deposit The deposit.
-   * @param curves The curves.
+   *
+   * @param deposit
+   *          The deposit.
+   * @param curves
+   *          The curves.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final Cash deposit, final YieldCurveBundle curves) {
@@ -69,8 +74,11 @@ public final class CashDiscountingMethod implements PricingMethod {
 
   /**
    * Compute the present value by discounting the final cash flow (nominal + interest) and the initial payment (initial amount).
-   * @param deposit The deposit.
-   * @param curves The curves.
+   *
+   * @param deposit
+   *          The deposit.
+   * @param curves
+   *          The curves.
    * @return The present value.
    */
   public InterestRateCurveSensitivity presentValueCurveSensitivity(final Cash deposit, final YieldCurveBundle curves) {
@@ -91,10 +99,13 @@ public final class CashDiscountingMethod implements PricingMethod {
   }
 
   /**
-   * Computes the deposit fair rate given the start and end time and the accrual factor.
-   * When deposit has already start the number may not be meaningful as the remaining period is not in line with the accrual factor.
-   * @param deposit The deposit.
-   * @param curves The curves.
+   * Computes the deposit fair rate given the start and end time and the accrual factor. When deposit has already start the number may not be meaningful as the
+   * remaining period is not in line with the accrual factor.
+   *
+   * @param deposit
+   *          The deposit.
+   * @param curves
+   *          The curves.
    * @return The rate.
    */
   public double parRate(final Cash deposit, final YieldCurveBundle curves) {
@@ -106,10 +117,13 @@ public final class CashDiscountingMethod implements PricingMethod {
   }
 
   /**
-   * Computes the spread to be added to the deposit rate to have a zero present value.
-   * When deposit has already start the number may not be meaning full as only the final payment remains (no initial payment).
-   * @param deposit The deposit.
-   * @param curves The curves.
+   * Computes the spread to be added to the deposit rate to have a zero present value. When deposit has already start the number may not be meaning full as only
+   * the final payment remains (no initial payment).
+   *
+   * @param deposit
+   *          The deposit.
+   * @param curves
+   *          The curves.
    * @return The spread.
    */
   public double parSpread(final Cash deposit, final YieldCurveBundle curves) {
@@ -118,14 +132,18 @@ public final class CashDiscountingMethod implements PricingMethod {
     ArgumentChecker.isTrue(deposit.getNotional() != 0.0, "Notional is 0");
     final double dfStart = curves.getCurve(deposit.getYieldCurveName()).getDiscountFactor(deposit.getStartTime());
     final double dfEnd = curves.getCurve(deposit.getYieldCurveName()).getDiscountFactor(deposit.getEndTime());
-    return (deposit.getInitialAmount() * dfStart - (deposit.getNotional() + deposit.getInterestAmount()) * dfEnd) / (deposit.getNotional() * deposit.getAccrualFactor() * dfEnd);
+    return (deposit.getInitialAmount() * dfStart - (deposit.getNotional() + deposit.getInterestAmount()) * dfEnd)
+        / (deposit.getNotional() * deposit.getAccrualFactor() * dfEnd);
   }
 
   /**
-   * Computes the par spread curve sensitivity.
-   * When deposit has already start the number may not be meaning full as only the final payment remains (no initial payment).
-   * @param deposit The deposit.
-   * @param curves The curves.
+   * Computes the par spread curve sensitivity. When deposit has already start the number may not be meaning full as only the final payment remains (no initial
+   * payment).
+   *
+   * @param deposit
+   *          The deposit.
+   * @param curves
+   *          The curves.
    * @return The spread curve sensitivity.
    */
   public InterestRateCurveSensitivity parSpreadCurveSensitivity(final Cash deposit, final YieldCurveBundle curves) {
@@ -137,7 +155,7 @@ public final class CashDiscountingMethod implements PricingMethod {
     // Backward sweep
     final double parSpreadBar = 1.0;
     final double dfEndBar = -(deposit.getInitialAmount() * dfStart / (dfEnd * dfEnd)) / (deposit.getNotional() * deposit.getAccrualFactor()) * parSpreadBar;
-    final double dfStartBar = (deposit.getInitialAmount() / dfEnd) / (deposit.getNotional() * deposit.getAccrualFactor()) * parSpreadBar;
+    final double dfStartBar = deposit.getInitialAmount() / dfEnd / (deposit.getNotional() * deposit.getAccrualFactor()) * parSpreadBar;
     final Map<String, List<DoublesPair>> resultMapDsc = new HashMap<>();
     final List<DoublesPair> listDiscounting = new ArrayList<>();
     listDiscounting.add(DoublesPair.of(deposit.getStartTime(), -deposit.getStartTime() * dfStart * dfStartBar));

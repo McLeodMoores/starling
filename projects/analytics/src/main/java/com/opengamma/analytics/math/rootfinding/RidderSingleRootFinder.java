@@ -16,8 +16,8 @@ import com.opengamma.analytics.math.util.wrapper.CommonsMathWrapper;
 
 /**
  * Finds a single root of a function using Ridder's method. This class is a wrapper for the
- * <a href="http://commons.apache.org/math/api-2.1/org/apache/commons/math/analysis/solvers/RiddersSolver.html">Commons Math library implementation</a>
- * of Ridder's method.
+ * <a href="http://commons.apache.org/math/api-2.1/org/apache/commons/math/analysis/solvers/RiddersSolver.html">Commons Math library implementation</a> of
+ * Ridder's method.
  */
 public class RidderSingleRootFinder extends RealSingleRootFinder {
 
@@ -25,14 +25,15 @@ public class RidderSingleRootFinder extends RealSingleRootFinder {
   private final RiddersSolver _ridder = new RiddersSolver();
 
   /**
-   * Sets the accuracy to 10<sup>-15</sup>
+   * Sets the accuracy to 10<sup>-15</sup>.
    */
   public RidderSingleRootFinder() {
     this(1e-15);
   }
 
   /**
-   * @param functionValueAccuracy The accuracy of the function evaluations.
+   * @param functionValueAccuracy
+   *          The accuracy of the function evaluations.
    */
   public RidderSingleRootFinder(final double functionValueAccuracy) {
     _ridder.setFunctionValueAccuracy(functionValueAccuracy);
@@ -40,8 +41,10 @@ public class RidderSingleRootFinder extends RealSingleRootFinder {
   }
 
   /**
-   * @param functionValueAccuracy The accuracy of the function evaluations.
-   * @param absoluteAccurary The maximum absolute error of the variable.
+   * @param functionValueAccuracy
+   *          The accuracy of the function evaluations.
+   * @param absoluteAccurary
+   *          The maximum absolute error of the variable.
    */
   public RidderSingleRootFinder(final double functionValueAccuracy, final double absoluteAccurary) {
     _ridder.setAbsoluteAccuracy(absoluteAccurary);
@@ -51,7 +54,9 @@ public class RidderSingleRootFinder extends RealSingleRootFinder {
 
   /**
    * {@inheritDoc}
-   * @throws MathException If the Commons method could not evaluate the function; if the Commons method could not converge.
+   * 
+   * @throws MathException
+   *           If the Commons method could not evaluate the function; if the Commons method could not converge.
    */
   @Override
   public Double getRoot(final Function1D<Double, Double> function, final Double xLow, final Double xHigh) {

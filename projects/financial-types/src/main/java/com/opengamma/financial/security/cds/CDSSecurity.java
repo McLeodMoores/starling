@@ -25,47 +25,51 @@ import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.frequency.Frequency;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityVisitor;
+import com.opengamma.financial.security.credit.LegacyCDSSecurity;
+import com.opengamma.financial.security.credit.StandardCDSSecurity;
 import com.opengamma.util.money.Currency;
 
 /**
- * CDS Security object
+ * CDS Security object.
  *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
+ * @deprecated use {@link StandardCDSSecurity} or {@link LegacyCDSSecurity}
  */
+@Deprecated
 @BeanDefinition
 public class CDSSecurity extends FinancialSecurity {
 
   /** Serialization version */
   private static final long serialVersionUID = 1L;
 
-  /** Security type for CDS securities */
+  /** Security type for CDS securities. */
   public static final String SECURITY_TYPE = "CDS";
 
-  /** Notional */
+  /** Notional. */
   @PropertyDefinition
   private double _notional;
 
-  /** CDS spread (premium rate) */
+  /** CDS spread (premium rate). */
   @PropertyDefinition
   private double _spread;
 
-  /** Recovery rate of underlying asset */
+  /** Recovery rate of underlying asset. */
   @PropertyDefinition
   private double _recoveryRate;
 
-  /** Currency of the CDS */
+  /** Currency of the CDS. */
   @PropertyDefinition(validate = "notNull")
   private Currency _currency;
 
-  /** protection start date */
+  /** protection start date. */
   @PropertyDefinition(validate = "notNull")
   private ZonedDateTime _startDate;
 
-  /** Maturity date */
+  /** Maturity date. */
   @PropertyDefinition(validate = "notNull")
   private ZonedDateTime _maturity;
 
-  /** Premium payment frequency */
+  /** Premium payment frequency. */
   @PropertyDefinition(validate = "notNull")
   private Frequency _premiumFrequency;
 
@@ -82,50 +86,49 @@ public class CDSSecurity extends FinancialSecurity {
   private BusinessDayConvention _businessDayConvention;
 
   /**
-   * Stub type for the premium payments
+   * Stub type for the premium payments.
    */
   @PropertyDefinition(validate = "notNull")
   private StubType _stubType;
 
   /**
-   * Number of business days for settlement
+   * Number of business days for settlement.
    */
   @PropertyDefinition
   private int _settlementDays;
 
   /**
-   * The name of the underlying issuer
+   * The name of the underlying issuer.
    */
   @PropertyDefinition(validate = "notNull")
   private String _underlyingIssuer;
 
   /**
-   * The currency of the underlying issue
+   * The currency of the underlying issue.
    */
   @PropertyDefinition(validate = "notNull")
   private Currency _underlyingCurrency;
 
   /**
-   * The seniority of the underlying issue
+   * The seniority of the underlying issue.
    */
   @PropertyDefinition(validate = "notNull")
   private String _underlyingSeniority;
 
   /**
-   * The restructuring clause
+   * The restructuring clause.
    */
   @PropertyDefinition(validate = "notNull")
   private String _restructuringClause;
-
 
   CDSSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public CDSSecurity(final double notional, final double recoveryRate, final double spread, final Currency currency,
-      final ZonedDateTime maturity, final ZonedDateTime startDate, final Frequency premiumFrequency,
-      final DayCount dayCount, final BusinessDayConvention businessDayConvention, final StubType stubType, final int settlementDays,
-      final String underlyingIssuer, final Currency underlyingCurrency, final String underlyingSeniority, final String restructuringClause) {
+  public CDSSecurity(final double notional, final double recoveryRate, final double spread, final Currency currency, final ZonedDateTime maturity,
+      final ZonedDateTime startDate, final Frequency premiumFrequency, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
+      final StubType stubType, final int settlementDays, final String underlyingIssuer, final Currency underlyingCurrency, final String underlyingSeniority,
+      final String restructuringClause) {
 
     super(SECURITY_TYPE);
     setNotional(notional);
@@ -171,7 +174,7 @@ public class CDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets notional
+   * Gets notional.
    * @return the value of the property
    */
   public double getNotional() {
@@ -179,7 +182,7 @@ public class CDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets notional
+   * Sets notional.
    * @param notional  the new value of the property
    */
   public void setNotional(double notional) {
@@ -196,7 +199,7 @@ public class CDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets cDS spread (premium rate)
+   * Gets cDS spread (premium rate).
    * @return the value of the property
    */
   public double getSpread() {
@@ -204,7 +207,7 @@ public class CDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets cDS spread (premium rate)
+   * Sets cDS spread (premium rate).
    * @param spread  the new value of the property
    */
   public void setSpread(double spread) {
@@ -221,7 +224,7 @@ public class CDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets recovery rate of underlying asset
+   * Gets recovery rate of underlying asset.
    * @return the value of the property
    */
   public double getRecoveryRate() {
@@ -229,7 +232,7 @@ public class CDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets recovery rate of underlying asset
+   * Sets recovery rate of underlying asset.
    * @param recoveryRate  the new value of the property
    */
   public void setRecoveryRate(double recoveryRate) {
@@ -246,7 +249,7 @@ public class CDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets currency of the CDS
+   * Gets currency of the CDS.
    * @return the value of the property, not null
    */
   public Currency getCurrency() {
@@ -254,7 +257,7 @@ public class CDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets currency of the CDS
+   * Sets currency of the CDS.
    * @param currency  the new value of the property, not null
    */
   public void setCurrency(Currency currency) {
@@ -272,7 +275,7 @@ public class CDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets protection start date
+   * Gets protection start date.
    * @return the value of the property, not null
    */
   public ZonedDateTime getStartDate() {
@@ -280,7 +283,7 @@ public class CDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets protection start date
+   * Sets protection start date.
    * @param startDate  the new value of the property, not null
    */
   public void setStartDate(ZonedDateTime startDate) {
@@ -298,7 +301,7 @@ public class CDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets maturity date
+   * Gets maturity date.
    * @return the value of the property, not null
    */
   public ZonedDateTime getMaturity() {
@@ -306,7 +309,7 @@ public class CDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets maturity date
+   * Sets maturity date.
    * @param maturity  the new value of the property, not null
    */
   public void setMaturity(ZonedDateTime maturity) {
@@ -324,7 +327,7 @@ public class CDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets premium payment frequency
+   * Gets premium payment frequency.
    * @return the value of the property, not null
    */
   public Frequency getPremiumFrequency() {
@@ -332,7 +335,7 @@ public class CDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets premium payment frequency
+   * Sets premium payment frequency.
    * @param premiumFrequency  the new value of the property, not null
    */
   public void setPremiumFrequency(Frequency premiumFrequency) {
@@ -402,7 +405,7 @@ public class CDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets stub type for the premium payments
+   * Gets stub type for the premium payments.
    * @return the value of the property, not null
    */
   public StubType getStubType() {
@@ -410,7 +413,7 @@ public class CDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets stub type for the premium payments
+   * Sets stub type for the premium payments.
    * @param stubType  the new value of the property, not null
    */
   public void setStubType(StubType stubType) {
@@ -428,7 +431,7 @@ public class CDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets number of business days for settlement
+   * Gets number of business days for settlement.
    * @return the value of the property
    */
   public int getSettlementDays() {
@@ -436,7 +439,7 @@ public class CDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets number of business days for settlement
+   * Sets number of business days for settlement.
    * @param settlementDays  the new value of the property
    */
   public void setSettlementDays(int settlementDays) {
@@ -453,7 +456,7 @@ public class CDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the name of the underlying issuer
+   * Gets the name of the underlying issuer.
    * @return the value of the property, not null
    */
   public String getUnderlyingIssuer() {
@@ -461,7 +464,7 @@ public class CDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the name of the underlying issuer
+   * Sets the name of the underlying issuer.
    * @param underlyingIssuer  the new value of the property, not null
    */
   public void setUnderlyingIssuer(String underlyingIssuer) {
@@ -479,7 +482,7 @@ public class CDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the currency of the underlying issue
+   * Gets the currency of the underlying issue.
    * @return the value of the property, not null
    */
   public Currency getUnderlyingCurrency() {
@@ -487,7 +490,7 @@ public class CDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the currency of the underlying issue
+   * Sets the currency of the underlying issue.
    * @param underlyingCurrency  the new value of the property, not null
    */
   public void setUnderlyingCurrency(Currency underlyingCurrency) {
@@ -505,7 +508,7 @@ public class CDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the seniority of the underlying issue
+   * Gets the seniority of the underlying issue.
    * @return the value of the property, not null
    */
   public String getUnderlyingSeniority() {
@@ -513,7 +516,7 @@ public class CDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the seniority of the underlying issue
+   * Sets the seniority of the underlying issue.
    * @param underlyingSeniority  the new value of the property, not null
    */
   public void setUnderlyingSeniority(String underlyingSeniority) {
@@ -531,7 +534,7 @@ public class CDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the restructuring clause
+   * Gets the restructuring clause.
    * @return the value of the property, not null
    */
   public String getRestructuringClause() {
@@ -539,7 +542,7 @@ public class CDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the restructuring clause
+   * Sets the restructuring clause.
    * @param restructuringClause  the new value of the property, not null
    */
   public void setRestructuringClause(String restructuringClause) {

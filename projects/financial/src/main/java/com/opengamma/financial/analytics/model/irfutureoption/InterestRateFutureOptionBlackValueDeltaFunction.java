@@ -40,7 +40,7 @@ public class InterestRateFutureOptionBlackValueDeltaFunction extends InterestRat
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackValueDeltaFunction.class);
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_DELTA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_DELTA}.
    */
   public InterestRateFutureOptionBlackValueDeltaFunction() {
     super(ValueRequirementNames.VALUE_DELTA, true);
@@ -68,7 +68,8 @@ public class InterestRateFutureOptionBlackValueDeltaFunction extends InterestRat
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     // Build output specification.
     // TODO This is going to be a copy of the spec of the delta!!!
     final IRFutureOptionSecurity security = (IRFutureOptionSecurity) target.getTrade().getSecurity();

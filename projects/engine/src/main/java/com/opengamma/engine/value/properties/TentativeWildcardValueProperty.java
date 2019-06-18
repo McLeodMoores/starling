@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.value.properties;
@@ -16,10 +16,10 @@ import org.fudgemsg.wire.types.FudgeWireType;
 
 import com.google.common.collect.Sets;
 import com.opengamma.engine.fudgemsg.ValuePropertiesFudgeBuilder;
-import com.opengamma.engine.value.ValueProperties;
 
 /**
- * Internal state used to implement a {@link ValueProperties} entry that is a wild-card in order for {@link ValueProperties.Builder#withOptional} to work.
+ * Internal state used to implement a {@link com.opengamma.engine.value.ValueProperties} entry that is a wild-card in order for
+ * {@link com.opengamma.engine.value.ValueProperties.Builder#withOptional} to work.
  */
 public final class TentativeWildcardValueProperty extends AbstractValueProperty {
 
@@ -29,7 +29,7 @@ public final class TentativeWildcardValueProperty extends AbstractValueProperty 
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param key the value key, never null
    * @param next the next property in the bucket, or null if this is the end of the chain
    */
@@ -46,9 +46,8 @@ public final class TentativeWildcardValueProperty extends AbstractValueProperty 
   protected AbstractValueProperty withOptional(final boolean optional) {
     if (isOptional() == optional) {
       return this;
-    } else {
-      return new WildcardValueProperty(getKey(), optional, getNext());
     }
+    return new WildcardValueProperty(getKey(), optional, getNext());
   }
 
   // query
@@ -82,7 +81,7 @@ public final class TentativeWildcardValueProperty extends AbstractValueProperty 
       return new ArrayValueProperty(getKey(), isOptional(), values, getNext());
     } else {
       final Set<String> addValues = Sets.newHashSetWithExpectedSize(values.length);
-      for (String value : values) {
+      for (final String value : values) {
         addValues.add(value);
       }
       return createFromSet(addValues);
@@ -91,7 +90,7 @@ public final class TentativeWildcardValueProperty extends AbstractValueProperty 
 
   @Override
   protected AbstractValueProperty addValuesImpl(final Collection<String> values) {
-    final Set<String> addValues = new HashSet<String>(values);
+    final Set<String> addValues = new HashSet<>(values);
     return createFromSet(addValues);
   }
 

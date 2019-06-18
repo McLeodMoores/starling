@@ -40,8 +40,8 @@ public class VolatilitySurfaceSingleMultiplicativeShift implements StructureMani
 
   @Override
   public VolatilitySurface execute(final VolatilitySurface surface,
-                                   final ValueSpecification valueSpecification,
-                                   final FunctionExecutionContext executionContext) {
+      final ValueSpecification valueSpecification,
+      final FunctionExecutionContext executionContext) {
     return surface.withSingleMultiplicativeShift(_x, _y, _shift);
   }
 
@@ -79,17 +79,17 @@ public class VolatilitySurfaceSingleMultiplicativeShift implements StructureMani
       return false;
     }
     final VolatilitySurfaceSingleMultiplicativeShift other = (VolatilitySurfaceSingleMultiplicativeShift) obj;
-    return Objects.equals(this._x, other._x) &&
-        Objects.equals(this._y, other._y) &&
-        Objects.equals(this._shift, other._shift);
+    return Objects.equals(this._x, other._x)
+        && Objects.equals(this._y, other._y)
+        && Objects.equals(this._shift, other._shift);
   }
 
   @Override
   public String toString() {
-    return "VolatilitySurfaceSingleMultiplicativeShift [" +
-        "_x=" + _x +
-        ", _y=" + _y +
-        ", _shift=" + _shift +
-        "]";
+    return "VolatilitySurfaceSingleMultiplicativeShift ["
+        + "_x=" + _x
+        + ", _y=" + _y
+        + ", _shift=" + _shift
+        + "]";
   }
 }

@@ -18,13 +18,14 @@ import com.opengamma.id.ExternalIdBundleWithDates;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolutionResult;
-import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolverWithBasicChangeManager;
 import com.opengamma.master.historicaltimeseries.ManageableHistoricalTimeSeriesInfo;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Implements {@link HistoricalTimeSeriesResolver} on top of any Redis HTS source.
+ * Implements
+ * {@link com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver}
+ * on top of any Redis HTS source.
  */
 public class RedisSimulationSeriesResolver extends HistoricalTimeSeriesResolverWithBasicChangeManager {
 

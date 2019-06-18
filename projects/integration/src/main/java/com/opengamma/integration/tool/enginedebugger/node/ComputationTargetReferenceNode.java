@@ -10,7 +10,7 @@ import com.opengamma.engine.target.ComputationTargetReference;
 import com.opengamma.engine.target.ComputationTargetRequirement;
 
 /**
- * Node representing a ComputationTargetReference
+ * Node representing a ComputationTargetReference.
  */
 public class ComputationTargetReferenceNode implements TreeTableNode {
 
@@ -39,16 +39,15 @@ public class ComputationTargetReferenceNode implements TreeTableNode {
         default:
           return null;
       }
-    } else {
-      final ComputationTargetSpecification specification = _targetReference.getSpecification();
-      switch (index) {
-        case 0:
-          return new ComputationTargetTypeNode(this, specification.getType());
-        case 1:
-          return new UniqueIdNode(this, specification.getUniqueId());
-        default:
-          return null;
-      }
+    }
+    final ComputationTargetSpecification specification = _targetReference.getSpecification();
+    switch (index) {
+      case 0:
+        return new ComputationTargetTypeNode(this, specification.getType());
+      case 1:
+        return new UniqueIdNode(this, specification.getUniqueId());
+      default:
+        return null;
     }
 
   }

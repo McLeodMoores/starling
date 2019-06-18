@@ -81,10 +81,31 @@ public class EquityIndexOptionSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private String _exchange;
 
-  EquityIndexOptionSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  EquityIndexOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
+  /**
+   * @param optionType
+   *          the option type, not null
+   * @param strike
+   *          the strike
+   * @param currency
+   *          the currency, not null
+   * @param underlyingId
+   *          the identifier of the underlying index, not null
+   * @param exerciseType
+   *          the exercise type, not null
+   * @param expiry
+   *          the expiry, not null
+   * @param pointValue
+   *          the value of a point, not null
+   * @param exchange
+   *          the exchange name, not null
+   */
   public EquityIndexOptionSecurity(final OptionType optionType, final double strike, final Currency currency, final ExternalId underlyingId,
       final ExerciseType exerciseType, final Expiry expiry, final double pointValue, final String exchange) {
     super(SECURITY_TYPE);

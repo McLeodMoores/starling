@@ -49,10 +49,11 @@ public class ConfigDBCurrencyPairsSource extends AbstractSource<CurrencyPairs> i
   // CurrencyPairsSource
 
   /**
-   * Returns a set of currency pairs with the specified name or null if there are none with a matching name. If {@code name} is null then the default set are looked up using
-   * {@link CurrencyPairs#DEFAULT_CURRENCY_PAIRS} as the name.
+   * Returns a set of currency pairs with the specified name or null if there are none with a matching name. If {@code name} is null then the default set are
+   * looked up using {@link CurrencyPairs#DEFAULT_CURRENCY_PAIRS} as the name.
    *
-   * @param name The name of the set of currency pairs, null for the default set.
+   * @param name
+   *          The name of the set of currency pairs, null for the default set.
    * @return The market convention currency pairs with the specified name or null if there are none that match
    */
   @Override

@@ -36,36 +36,67 @@ import com.opengamma.util.PublicAPI;
 import com.opengamma.util.jms.JmsConnector;
 
 /**
- * An ActiveMQ LiveData client. Behaves the same as {@link JmsLiveDataClient} except
- * that subscriptions are made to Composite Destinations in order to reduce
+ * An ActiveMQ LiveData client. Behaves the same as {@link JmsLiveDataClient} except that subscriptions are made to Composite Destinations in order to reduce
  * the time made to make subscriptions.
  *
  * Currently subscriptions are only removed when none of the block is in use any more, this could be improved later.
  */
 @PublicAPI
 public class ActiveMQLiveDataClient extends JmsLiveDataClient {
-  //TODO: Could migrate to individual/smaller subscriptions in background
+  // TODO: Could migrate to individual/smaller subscriptions in background
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ActiveMQLiveDataClient.class);
 
-
-  public ActiveMQLiveDataClient(final FudgeRequestSender subscriptionRequestSender,
-      final FudgeRequestSender entitlementRequestSender, final JmsConnector jmsConnector) {
+  /**
+   * @param subscriptionRequestSender
+   *          the subscription request sender, not null
+   * @param entitlementRequestSender
+   *          the entitlement request sender, not null
+   * @param jmsConnector
+   *          the JMS connector, not null
+   */
+  public ActiveMQLiveDataClient(final FudgeRequestSender subscriptionRequestSender, final FudgeRequestSender entitlementRequestSender,
+      final JmsConnector jmsConnector) {
     super(subscriptionRequestSender, entitlementRequestSender, jmsConnector);
   }
 
-  public ActiveMQLiveDataClient(final FudgeRequestSender subscriptionRequestSender,
-      final FudgeRequestSender entitlementRequestSender, final JmsConnector jmsConnector, final FudgeContext fudgeContext, final int maxSessions) {
+  /**
+   * @param subscriptionRequestSender
+   *          the subscription request sender, not null
+   * @param entitlementRequestSender
+   *          the entitlement request sender, not null
+   * @param jmsConnector
+   *          the JMS connector, not null
+   * @param fudgeContext
+   *          the Fudge context, not null
+   * @param maxSessions
+   *          the maximum number of sessions
+   */
+  public ActiveMQLiveDataClient(final FudgeRequestSender subscriptionRequestSender, final FudgeRequestSender entitlementRequestSender,
+      final JmsConnector jmsConnector, final FudgeContext fudgeContext, final int maxSessions) {
     super(subscriptionRequestSender, entitlementRequestSender, jmsConnector, fudgeContext, maxSessions);
   }
 
-  public ActiveMQLiveDataClient(final FudgeRequestSender subscriptionRequestSender,
-      final FudgeRequestSender entitlementRequestSender, final JmsConnector jmsConnector, final FudgeContext fudgeContext) {
+  /**
+   * @param subscriptionRequestSender
+   *          the subscription request sender, not null
+   * @param entitlementRequestSender
+   *          the entitlement request sender, not null
+   * @param jmsConnector
+   *          the JMS connector, not null
+   * @param fudgeContext
+   *          the Fudge context, not null
+   */
+  public ActiveMQLiveDataClient(final FudgeRequestSender subscriptionRequestSender, final FudgeRequestSender entitlementRequestSender,
+      final JmsConnector jmsConnector, final FudgeContext fudgeContext) {
     super(subscriptionRequestSender, entitlementRequestSender, jmsConnector, fudgeContext);
   }
 
   private final Map<String, ConsumerRecord> _messageConsumersBySpec = new ConcurrentHashMap<>();
 
+  /**
+   * A consumer record.
+   */
   private class ConsumerRecord {
     private final MessageConsumer _consumer;
     private final Set<String> _allReceiving;
@@ -90,9 +121,9 @@ public class ActiveMQLiveDataClient extends JmsLiveDataClient {
       return _allReceiving;
     }
   }
+
   @Override
-  protected Map<String, Runnable> startReceivingTicks(final List<String> specs, final Session session,
-      final JmsByteArrayMessageDispatcher jmsDispatcher) {
+  protected Map<String, Runnable> startReceivingTicks(final List<String> specs, final Session session, final JmsByteArrayMessageDispatcher jmsDispatcher) {
     final Map<String, Runnable> ret = new HashMap<>();
     if (specs.isEmpty()) {
       return ret;
@@ -101,7 +132,7 @@ public class ActiveMQLiveDataClient extends JmsLiveDataClient {
     for (final String spec : specs) {
       final ConsumerRecord record = _messageConsumersBySpec.get(spec);
       if (record != null) {
-        //NOTE: could be on the wrong session, but we don't touch it
+        // NOTE: could be on the wrong session, but we don't touch it
         record.getReceiving().add(spec);
         ret.put(spec, getCloseAction(spec, record));
       }
@@ -140,7 +171,7 @@ public class ActiveMQLiveDataClient extends JmsLiveDataClient {
             _messageConsumersBySpec.remove(receiving);
           }
         } else {
-          //TODO: Should I shrink the subscription?
+          // TODO: Should I shrink the subscription?
           LOGGER.debug("Not closing composite connection remaining subscribtions {}", record.getReceiving());
         }
       }

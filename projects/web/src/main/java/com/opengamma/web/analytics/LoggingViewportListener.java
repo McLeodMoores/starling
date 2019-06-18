@@ -46,7 +46,7 @@ import com.opengamma.util.tuple.Pair;
     final Set<Pair<String, ValueSpecification>> newVals = Sets.newHashSet();
     for (final GridCell cell : viewportDef) {
       final Pair<String, ValueSpecification> valueSpec = gridStructure.getValueSpecificationForCell(cell.getRow(),
-                                                                                              cell.getColumn());
+          cell.getColumn());
       if (valueSpec == null) {
         continue;
       }
@@ -83,7 +83,7 @@ import com.opengamma.util.tuple.Pair;
     }
   }
 
-  private Set<Pair<String, ValueSpecification>> targetsFor(final Iterator<GridCell> cellIterator, final GridStructure gridStructure) {
+  private static Set<Pair<String, ValueSpecification>> targetsFor(final Iterator<GridCell> cellIterator, final GridStructure gridStructure) {
     final Set<Pair<String, ValueSpecification>> targets = Sets.newHashSet();
     while (cellIterator.hasNext()) {
       final GridCell cell = cellIterator.next();

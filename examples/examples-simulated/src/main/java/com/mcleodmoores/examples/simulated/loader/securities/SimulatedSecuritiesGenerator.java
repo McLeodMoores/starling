@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.examples.simulated.loader.securities;
 
 import org.apache.commons.cli.CommandLine;
@@ -9,6 +12,9 @@ import com.opengamma.examples.simulated.tool.SyntheticSecuritiesGeneratorTool;
 import com.opengamma.financial.generator.SecurityGenerator;
 import com.opengamma.financial.tool.ToolContext;
 
+/**
+ * Generates securities.
+ */
 public class SimulatedSecuritiesGenerator extends AbstractSecuritiesGenerator {
 
   @Override
@@ -19,14 +25,17 @@ public class SimulatedSecuritiesGenerator extends AbstractSecuritiesGenerator {
 
   /**
    * Main method.
-   * @param args Uses the command line args<p>
-   * <ul>
-   * <li> h - help
-   * <li> c - config
-   * <li> l - logback
-   * <li> s - sets the name of the security generator (required)
-   * <li> w - writes the portfolio and securities to the database
-   * </ul>
+   * 
+   * @param args
+   *          Uses the command line args
+   *          <p>
+   *          <ul>
+   *          <li>h - help
+   *          <li>c - config
+   *          <li>l - logback
+   *          <li>s - sets the name of the security generator (required)
+   *          <li>w - writes the portfolio and securities to the database
+   *          </ul>
    */
   public static void main(final String[] args) { // CSIGNORE
     final AbstractTool<ToolContext> tool = new AbstractTool<ToolContext>() {

@@ -28,12 +28,31 @@ public class UserPrincipalFudgeBuilder implements FudgeBuilder<UserPrincipal> {
     return UserPrincipalFudgeBuilder.toFudgeMsg(serializer, object);
   }
 
+  /**
+   * Creates a new message and serializes a UserPrincipal.
+   *
+   * @param serializer
+   *          the serializer, not null
+   * @param object
+   *          the UserPrincipal, not null
+   * @return a Fudge message
+   */
   public static MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer, final UserPrincipal object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     UserPrincipalFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
+  /**
+   * Adds UserPrincipal fields to the Fudge message.
+   *
+   * @param serializer
+   *          the serializer, not null
+   * @param object
+   *          the UserPrincipal, not null
+   * @param msg
+   *          the message with fields added
+   */
   public static void toFudgeMsg(final FudgeSerializer serializer, final UserPrincipal object, final MutableFudgeMsg msg) {
     if (object.getUserName() != null) {
       msg.add(USER_NAME_FIELD_NAME, null, object.getUserName());
@@ -48,6 +67,15 @@ public class UserPrincipalFudgeBuilder implements FudgeBuilder<UserPrincipal> {
     return UserPrincipalFudgeBuilder.fromFudgeMsg(deserializer, msg);
   }
 
+  /**
+   * Converts a Fudge message to a UserPrincipal.
+   * 
+   * @param deserializer
+   *          the deserializer, not null
+   * @param msg
+   *          the message, not null
+   * @return a UserPrincipal
+   */
   public static UserPrincipal fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final String userName = msg.getString(USER_NAME_FIELD_NAME);
     final String ipAddress = msg.getString(IP_ADDRESS_FIELD_NAME);

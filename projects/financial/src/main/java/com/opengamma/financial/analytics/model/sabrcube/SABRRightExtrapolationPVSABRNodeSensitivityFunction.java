@@ -24,6 +24,7 @@ import com.opengamma.financial.security.FinancialSecurityUtils;
 
 /**
  * Calculates sensitivities with respect to the SABR parameters.
+ * 
  * @deprecated The parent of this class is deprecated
  */
 @Deprecated
@@ -45,10 +46,10 @@ public abstract class SABRRightExtrapolationPVSABRNodeSensitivityFunction extend
     return getResultAsMatrix(SABRSensitivityNodeCalculator.calculateNodeSensitivities(result, data.getSABRParameter()));
   }
 
-  protected abstract DoubleLabelledMatrix2D getResultAsMatrix(final PresentValueSABRSensitivityDataBundle sensitivities);
+  protected abstract DoubleLabelledMatrix2D getResultAsMatrix(PresentValueSABRSensitivityDataBundle sensitivities);
 
   /**
-   * Function to get the sensitivity to the alpha parameter
+   * Function to get the sensitivity to the alpha parameter.
    */
   public static class Alpha extends SABRRightExtrapolationPVSABRNodeSensitivityFunction {
 
@@ -65,7 +66,7 @@ public abstract class SABRRightExtrapolationPVSABRNodeSensitivityFunction extend
   }
 
   /**
-   * Function to get the sensitivity to the rho parameter
+   * Function to get the sensitivity to the rho parameter.
    */
   public static class Rho extends SABRRightExtrapolationPVSABRNodeSensitivityFunction {
 
@@ -82,7 +83,7 @@ public abstract class SABRRightExtrapolationPVSABRNodeSensitivityFunction extend
   }
 
   /**
-   * Function to get the sensitivity to the nu parameter
+   * Function to get the sensitivity to the nu parameter.
    */
   public static class Nu extends SABRRightExtrapolationPVSABRNodeSensitivityFunction {
 

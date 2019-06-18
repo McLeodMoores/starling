@@ -22,8 +22,8 @@ import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedC
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.analytics.math.function.RealPolynomialFunction1D;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolator;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1d;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.ColtMatrixAlgebra;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
@@ -34,9 +34,11 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Example for curve construction.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class CurveConstructionExample {
-// CSOFF
+  // CSOFF
 
   // @export "matrixDemo"
   public static void matrixDemo(final PrintStream out) {
@@ -145,7 +147,7 @@ public class CurveConstructionExample {
     final double zeroCouponDiscountFactor = yieldCurve.getDiscountFactor(t);
     final double checkCalculation = notional * (zeroCouponDiscountFactor * (1 + r * t) - 1);
     out.format("Manually calculating value of loan gives %f%n", checkCalculation);
-    assert (presentValue - checkCalculation) < 0.0001;
+    assert presentValue - checkCalculation < 0.0001;
 
     final double parRateManual = (Math.exp(y * t) - 1) / t;
     out.format("Calculate par rate manually: %f%n", parRateManual);
@@ -153,12 +155,12 @@ public class CurveConstructionExample {
     final double parRate = parRateCalculator.visitCash(loan, bundle);
     out.format("Calculate par rate using ParRateCalculator: %f%n", parRate);
 
-    assert (parRate - parRateManual) < 0.0001;
+    assert parRate - parRateManual < 0.0001;
   }
 
   // @export "yield-points"
   // factory takes interpolator, left extrapolator, right extrapolator
-  static CombinedInterpolatorExtrapolator interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator("NaturalCubicSpline", "LinearExtrapolator",
+  static NamedInterpolator1d interpolator = NamedInterpolator1dFactory.of("NaturalCubicSpline", "LinearExtrapolator",
       "FlatExtrapolator");
 
   @SuppressWarnings({"unused", "rawtypes" })

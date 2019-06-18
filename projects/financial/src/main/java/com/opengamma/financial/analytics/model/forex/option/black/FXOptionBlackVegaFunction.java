@@ -29,6 +29,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * The function calculating the total Black volatility sensitivity.
+ * 
  * @deprecated The parent of this class is deprecated
  */
 @Deprecated
@@ -37,7 +38,8 @@ public class FXOptionBlackVegaFunction extends FXOptionBlackSingleValuedFunction
   /**
    * The relevant calculator.
    */
-  private static final PresentValueBlackVolatilitySensitivityBlackForexCalculator CALCULATOR = PresentValueBlackVolatilitySensitivityBlackForexCalculator.getInstance();
+  private static final PresentValueBlackVolatilitySensitivityBlackForexCalculator CALCULATOR = PresentValueBlackVolatilitySensitivityBlackForexCalculator
+      .getInstance();
 
   public FXOptionBlackVegaFunction() {
     super(ValueRequirementNames.VALUE_VEGA);
@@ -65,7 +67,8 @@ public class FXOptionBlackVegaFunction extends FXOptionBlackSingleValuedFunction
   protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final String putCurve, final String putCurveCalculationConfig,
       final String callCurve, final String callCurveCalculationConfig, final CurrencyPair baseQuotePair, final ValueProperties optionalProperties) {
     final Set<String> scale = optionalProperties.getValues(ValuePropertyNames.SCALE);
-    final ValueProperties.Builder properties = super.getResultProperties(target, putCurve, putCurveCalculationConfig, callCurve, callCurveCalculationConfig, baseQuotePair,
+    final ValueProperties.Builder properties = super.getResultProperties(target, putCurve, putCurveCalculationConfig, callCurve, callCurveCalculationConfig,
+        baseQuotePair,
         optionalProperties);
     if (scale == null || scale.isEmpty()) {
       // return properties.with(ValuePropertyNames.SCALE, Double.toString(1));

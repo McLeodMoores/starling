@@ -22,10 +22,11 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.analytics.financial.provider.description.forex.BlackForexSmileProviderInterface;
 
 /**
- * Calculates the bucketed vega matrix (first order derivative with respect to the implied volatility) for Forex derivatives in the
- * Black (Garman-Kohlhagen) world. The matrix axes are delta and time to expiry.
+ * Calculates the bucketed vega matrix (first order derivative with respect to the implied volatility) for Forex derivatives in the Black (Garman-Kohlhagen)
+ * world. The matrix axes are delta and time to expiry.
  */
-public class BucketedVegaForexBlackSmileCalculator extends InstrumentDerivativeVisitorAdapter<BlackForexSmileProviderInterface, PresentValueForexBlackVolatilityNodeSensitivityDataBundle> {
+public class BucketedVegaForexBlackSmileCalculator
+    extends InstrumentDerivativeVisitorAdapter<BlackForexSmileProviderInterface, PresentValueForexBlackVolatilityNodeSensitivityDataBundle> {
 
   /**
    * The unique instance of the calculator.
@@ -34,6 +35,7 @@ public class BucketedVegaForexBlackSmileCalculator extends InstrumentDerivativeV
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static BucketedVegaForexBlackSmileCalculator getInstance() {
@@ -47,22 +49,26 @@ public class BucketedVegaForexBlackSmileCalculator extends InstrumentDerivativeV
   }
 
   @Override
-  public PresentValueForexBlackVolatilityNodeSensitivityDataBundle visitForexOptionVanilla(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData) {
+  public PresentValueForexBlackVolatilityNodeSensitivityDataBundle visitForexOptionVanilla(final ForexOptionVanilla option,
+      final BlackForexSmileProviderInterface marketData) {
     return ForexOptionVanillaBlackSmileMethod.getInstance().presentValueBlackVolatilityNodeSensitivity(option, marketData);
   }
 
   @Override
-  public PresentValueForexBlackVolatilityNodeSensitivityDataBundle visitForexOptionDigital(final ForexOptionDigital option, final BlackForexSmileProviderInterface marketData) {
+  public PresentValueForexBlackVolatilityNodeSensitivityDataBundle visitForexOptionDigital(final ForexOptionDigital option,
+      final BlackForexSmileProviderInterface marketData) {
     return ForexOptionDigitalBlackSmileMethod.getInstance().presentValueBlackVolatilityNodeSensitivity(option, marketData);
   }
 
   @Override
-  public PresentValueForexBlackVolatilityNodeSensitivityDataBundle visitForexNonDeliverableOption(final ForexNonDeliverableOption option, final BlackForexSmileProviderInterface marketData) {
+  public PresentValueForexBlackVolatilityNodeSensitivityDataBundle visitForexNonDeliverableOption(final ForexNonDeliverableOption option,
+      final BlackForexSmileProviderInterface marketData) {
     return ForexNonDeliverableOptionBlackSmileMethod.getInstance().presentValueVolatilityNodeSensitivity(option, marketData);
   }
 
   @Override
-  public PresentValueForexBlackVolatilityNodeSensitivityDataBundle visitForexOptionSingleBarrier(final ForexOptionSingleBarrier option, final BlackForexSmileProviderInterface marketData) {
+  public PresentValueForexBlackVolatilityNodeSensitivityDataBundle visitForexOptionSingleBarrier(final ForexOptionSingleBarrier option,
+      final BlackForexSmileProviderInterface marketData) {
     return ForexOptionSingleBarrierBlackMethod.getInstance().presentValueBlackVolatilityNodeSensitivity(option, marketData);
   }
 }

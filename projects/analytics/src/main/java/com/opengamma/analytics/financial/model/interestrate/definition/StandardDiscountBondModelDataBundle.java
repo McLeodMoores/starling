@@ -13,14 +13,15 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.analytics.financial.model.volatility.curve.VolatilityCurve;
 
 /**
- * 
+ *
  */
 public class StandardDiscountBondModelDataBundle {
   private final ZonedDateTime _date;
   private final YieldAndDiscountCurve _shortRateCurve;
   private final VolatilityCurve _shortRateVolatilityCurve;
 
-  public StandardDiscountBondModelDataBundle(final YieldAndDiscountCurve shortRateCurve, final VolatilityCurve shortRateVolatilityCurve, final ZonedDateTime date) {
+  public StandardDiscountBondModelDataBundle(final YieldAndDiscountCurve shortRateCurve, final VolatilityCurve shortRateVolatilityCurve,
+      final ZonedDateTime date) {
     Validate.notNull(shortRateCurve);
     Validate.notNull(shortRateVolatilityCurve);
     Validate.notNull(date);
@@ -53,9 +54,9 @@ public class StandardDiscountBondModelDataBundle {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_date == null) ? 0 : _date.hashCode());
-    result = prime * result + ((_shortRateVolatilityCurve == null) ? 0 : _shortRateVolatilityCurve.hashCode());
-    result = prime * result + ((_shortRateCurve == null) ? 0 : _shortRateCurve.hashCode());
+    result = prime * result + (_date == null ? 0 : _date.hashCode());
+    result = prime * result + (_shortRateVolatilityCurve == null ? 0 : _shortRateVolatilityCurve.hashCode());
+    result = prime * result + (_shortRateCurve == null ? 0 : _shortRateCurve.hashCode());
     return result;
   }
 
@@ -71,7 +72,8 @@ public class StandardDiscountBondModelDataBundle {
       return false;
     }
     final StandardDiscountBondModelDataBundle other = (StandardDiscountBondModelDataBundle) obj;
-    return ObjectUtils.equals(_date, other._date) && ObjectUtils.equals(_shortRateVolatilityCurve, other._shortRateVolatilityCurve) && ObjectUtils.equals(_shortRateCurve, other._shortRateCurve);
+    return ObjectUtils.equals(_date, other._date) && ObjectUtils.equals(_shortRateVolatilityCurve, other._shortRateVolatilityCurve)
+        && ObjectUtils.equals(_shortRateCurve, other._shortRateCurve);
   }
 
 }

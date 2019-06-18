@@ -91,10 +91,14 @@ import com.opengamma.util.tuple.Pair;
 /**
  * Top-level class for multi-curve functions. This is a work in progress
  *
- * @param <T> The type of the provider produced
- * @param <U> The type of the builder
- * @param <V> The type of the curve generator
- * @param <W> The type of the sensitivity results
+ * @param <T>
+ *          The type of the provider produced
+ * @param <U>
+ *          The type of the builder
+ * @param <V>
+ *          The type of the curve generator
+ * @param <W>
+ *          The type of the sensitivity results
  */
 public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U, V, W> extends AbstractFunction {
   /** The maturity calculator */
@@ -107,10 +111,11 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
   private CurveDefinitionSource _curveDefinitionSource;
 
   /**
-   * @param configurationName The configuration name, not null
+   * @param configurationName
+   *          The configuration name, not null
    */
   public MultiCurveFunction(final String configurationName) {
-    ArgumentChecker.notNull(configurationName, "configuration name");
+    ArgumentChecker.notNull(configurationName, "configurationName");
     _configurationName = configurationName;
   }
 
@@ -123,9 +128,9 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
   @Override
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     final ZonedDateTime atZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
-    //TODO work out a way to use dependency graph to get curve information for this config
-    final CurveConstructionConfiguration curveConstructionConfiguration =
-        _curveConstructionConfigurationSource.getCurveConstructionConfiguration(_configurationName);
+    // TODO work out a way to use dependency graph to get curve information for this config
+    final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource
+        .getCurveConstructionConfiguration(_configurationName);
     if (curveConstructionConfiguration == null) {
       throw new OpenGammaRuntimeException("Could not get curve construction configuration called " + _configurationName);
     }
@@ -133,10 +138,8 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
     if (curveConstructionConfiguration.getExogenousConfigurations() != null) {
       final List<String> exogenousConfigurations = curveConstructionConfiguration.getExogenousConfigurations();
       for (final String name : exogenousConfigurations) {
-        //TODO deal with arbitrary depth
-        final ValueProperties properties = ValueProperties.builder()
-            .with(CURVE_CONSTRUCTION_CONFIG, name)
-            .get();
+        // TODO deal with arbitrary depth
+        final ValueProperties properties = ValueProperties.builder().with(CURVE_CONSTRUCTION_CONFIG, name).get();
         exogenousRequirements.add(new ValueRequirement(CURVE_BUNDLE, ComputationTargetSpecification.NULL, properties));
         exogenousRequirements.add(new ValueRequirement(JACOBIAN_BUNDLE, ComputationTargetSpecification.NULL, properties));
       }
@@ -154,8 +157,8 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
       for (final Currency currency : currencies) {
         currencyStrings[i++] = currency.getCode();
       }
-      return getCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000),
-          curveNames, exogenousRequirements, curveConstructionConfiguration, currencyStrings);
+      return getCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000), curveNames,
+          exogenousRequirements, curveConstructionConfiguration, currencyStrings);
     } catch (final Throwable e) {
       throw new OpenGammaRuntimeException(e.getMessage() + ": problem in CurveConstructionConfiguration called " + _configurationName);
     }
@@ -194,11 +197,16 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
   /**
    * Gets the compiled function for this curve construction method.
    *
-   * @param earliestInvocation The earliest time this metadata and invoker are valid, null to indicate no lower validity bound
-   * @param latestInvocation The latest time this metadata and invoker are valid, null to indicate no upper validity bound
-   * @param curveNames The curve names
-   * @param exogenousRequirements The exogenous requirements
-   * @param curveConstructionConfiguration The curve construction configuration
+   * @param earliestInvocation
+   *          The earliest time this metadata and invoker are valid, null to indicate no lower validity bound
+   * @param latestInvocation
+   *          The latest time this metadata and invoker are valid, null to indicate no upper validity bound
+   * @param curveNames
+   *          The curve names
+   * @param exogenousRequirements
+   *          The exogenous requirements
+   * @param curveConstructionConfiguration
+   *          The curve construction configuration
    * @return A compiled function that produces curves.
    * @deprecated Use the method that sets all currencies used in curve construction
    */
@@ -207,15 +215,21 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
       Set<ValueRequirement> exogenousRequirements, CurveConstructionConfiguration curveConstructionConfiguration);
 
   /**
-   * Gets the compiled function for this curve construction method. This method is not abstract to maintain
-   * backwards-compatibility for the version of the curve functions that do not set sensitivity currencies.
+   * Gets the compiled function for this curve construction method. This method is not abstract to maintain backwards-compatibility for the version of the curve
+   * functions that do not set sensitivity currencies.
    *
-   * @param earliestInvocation The earliest time this metadata and invoker are valid, null to indicate no lower validity bound
-   * @param latestInvocation The latest time this metadata and invoker are valid, null to indicate no upper validity bound
-   * @param curveNames The curve names
-   * @param exogenousRequirements The exogenous requirements
-   * @param curveConstructionConfiguration The curve construction configuration
-   * @param currencies The set of currencies to which the curves produce sensitivities
+   * @param earliestInvocation
+   *          The earliest time this metadata and invoker are valid, null to indicate no lower validity bound
+   * @param latestInvocation
+   *          The latest time this metadata and invoker are valid, null to indicate no upper validity bound
+   * @param curveNames
+   *          The curve names
+   * @param exogenousRequirements
+   *          The exogenous requirements
+   * @param curveConstructionConfiguration
+   *          The curve construction configuration
+   * @param currencies
+   *          The set of currencies to which the curves produce sensitivities
    * @return A compiled function that produces curves.
    */
   public CompiledFunctionDefinition getCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames,
@@ -237,11 +251,16 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
     private final Set<ValueSpecification> _results;
 
     /**
-     * @param earliestInvocation The earliest time this metadata and invoker are valid, null to indicate no lower validity bound
-     * @param latestInvocation The latest time this metadata and invoker are valid, null to indicate no upper validity bound
-     * @param curveNames The curve names, not null
-     * @param curveRequirement The curve value requirement produced by this function, not null
-     * @param exogenousRequirements The exogenous requirements, not null
+     * @param earliestInvocation
+     *          The earliest time this metadata and invoker are valid, null to indicate no lower validity bound
+     * @param latestInvocation
+     *          The latest time this metadata and invoker are valid, null to indicate no upper validity bound
+     * @param curveNames
+     *          The curve names, not null
+     * @param curveRequirement
+     *          The curve value requirement produced by this function, not null
+     * @param exogenousRequirements
+     *          The exogenous requirements, not null
      * @deprecated Use the constructor that sets all currencies used in curve construction
      */
     @Deprecated
@@ -251,12 +270,18 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
     }
 
     /**
-     * @param earliestInvocation The earliest time this metadata and invoker are valid, null to indicate no lower validity bound
-     * @param latestInvocation The latest time this metadata and invoker are valid, null to indicate no upper validity bound
-     * @param curveNames The curve names, not null
-     * @param curveRequirement The curve value requirement produced by this function, not null
-     * @param exogenousRequirements The exogenous requirements, not null
-     * @param currencies The set of currencies to which the curves produce sensitivities, can be null
+     * @param earliestInvocation
+     *          The earliest time this metadata and invoker are valid, null to indicate no lower validity bound
+     * @param latestInvocation
+     *          The latest time this metadata and invoker are valid, null to indicate no upper validity bound
+     * @param curveNames
+     *          The curve names, not null
+     * @param curveRequirement
+     *          The curve value requirement produced by this function, not null
+     * @param exogenousRequirements
+     *          The exogenous requirements, not null
+     * @param currencies
+     *          The set of currencies to which the curves produce sensitivities, can be null
      */
     protected CurveCompiledFunctionDefinition(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames,
         final String curveRequirement, final Set<ValueRequirement> exogenousRequirements, final String[] currencies) {
@@ -284,13 +309,12 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
       final T knownData = getKnownData(inputs);
       final Clock snapshotClock = executionContext.getValuationClock();
       final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
-      final ValueProperties.Builder propertiesBuilder = desiredValues.iterator().next().getConstraints().copy()
-          .withoutAny(CURVE)
-          .with(CURVE, Arrays.asList(_curveNames));
-      //TODO remove and use input properties
+      final ValueProperties.Builder propertiesBuilder = desiredValues.iterator().next().getConstraints().copy().withoutAny(CURVE).with(CURVE,
+          Arrays.asList(_curveNames));
+      // TODO remove and use input properties
       final Set<String> currencies;
       if (_currencies == null) {
-        currencies = Collections.<String>emptySet();
+        currencies = Collections.<String> emptySet();
       } else {
         currencies = Sets.newHashSet(_currencies);
       }
@@ -300,7 +324,7 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
       if (_currencies != null && _currencies.length > 0) {
         propertiesBuilder.with(CURVE_SENSITIVITY_CURRENCY, currencies.toArray(new String[currencies.size()]));
       }
-      final ValueProperties properties  = propertiesBuilder.get();
+      final ValueProperties properties = propertiesBuilder.get();
       final double absoluteTolerance = Double.parseDouble(Iterables.getOnlyElement(properties.getValues(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE)));
       final double relativeTolerance = Double.parseDouble(Iterables.getOnlyElement(properties.getValues(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE)));
       final int maxIterations = Integer.parseInt(Iterables.getOnlyElement(properties.getValues(PROPERTY_ROOT_FINDER_MAX_ITERATIONS)));
@@ -364,8 +388,10 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
     /**
      * Adds the exogenous requirements, composed with any input constraints, to a collection.
      *
-     * @param desiredValue the input constraints, not null
-     * @param requirements the collection to add the requirements to, not null
+     * @param desiredValue
+     *          the input constraints, not null
+     * @param requirements
+     *          the collection to add the requirements to, not null
      */
     protected void addExogenousRequirements(final ValueProperties desiredValue, final Collection<ValueRequirement> requirements) {
       if (!_exogenousRequirements.isEmpty()) {
@@ -374,7 +400,7 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
           final ComputationTargetReference targetReq = exogenousRequirement.getTargetReference();
           final ValueProperties exogenousConstraints = exogenousRequirement.getConstraints();
           final ValueProperties.Builder composedConstraints = exogenousConstraints.copy();
-          // add desired contraints as optional constraints on the exogenous requirment
+          // add desired constraints as optional constraints on the exogenous requirement
           for (final String desiredConstraintProperty : desiredValue.getProperties()) {
             if (!exogenousConstraints.isDefined(desiredConstraintProperty)) {
               final Set<String> constrainedValue = desiredValue.getValues(desiredConstraintProperty);
@@ -404,7 +430,8 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
     /**
      * Gets the known data from the FX matrix.
      *
-     * @param inputs The inputs
+     * @param inputs
+     *          The inputs
      * @return The known data
      */
     protected abstract T getKnownData(FunctionInputs inputs);
@@ -412,9 +439,12 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
     /**
      * Gets the curve builder.
      *
-     * @param absoluteTolerance The absolute tolerance for the root-finder
-     * @param relativeTolerance The relative tolerance for the root-finder
-     * @param maxIterations The maximum number of iterations
+     * @param absoluteTolerance
+     *          The absolute tolerance for the root-finder
+     * @param relativeTolerance
+     *          The relative tolerance for the root-finder
+     * @param maxIterations
+     *          The maximum number of iterations
      * @return The builder
      */
     protected abstract U getBuilder(double absoluteTolerance, double relativeTolerance, int maxIterations);
@@ -422,33 +452,49 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
     /**
      * Gets the generator for a curve definition.
      *
-     * @param definition The curve definition
-     * @param valuationDate The valuation date
+     * @param definition
+     *          The curve definition
+     * @param valuationDate
+     *          The valuation date
      * @return The generator
      */
     protected abstract V getGenerator(CurveDefinition definition, LocalDate valuationDate);
 
     /**
      * Gets the converter for the curve nodes in interpolated curves definitions.
-     * @param context The execution context
-     * @param marketData The market data snapshot
-     * @param dataId The market data id for a node
-     * @param historicalData The historical data
-     * @param valuationTime The valuation time
-     * @param fxMatrix The FX matrix
+     *
+     * @param context
+     *          The execution context
+     * @param marketData
+     *          The market data snapshot
+     * @param dataId
+     *          The market data id for a node
+     * @param historicalData
+     *          The historical data
+     * @param valuationTime
+     *          The valuation time
+     * @param fxMatrix
+     *          The FX matrix
      * @return A visitor that converts curve nodes to instrument definitions
      */
-    protected abstract CurveNodeVisitor<InstrumentDefinition<?>> getCurveNodeConverter(FunctionExecutionContext context,
-        SnapshotDataBundle marketData, ExternalId dataId, HistoricalTimeSeriesBundle historicalData, ZonedDateTime valuationTime, FXMatrix fxMatrix);
+    protected abstract CurveNodeVisitor<InstrumentDefinition<?>> getCurveNodeConverter(FunctionExecutionContext context, SnapshotDataBundle marketData,
+        ExternalId dataId, HistoricalTimeSeriesBundle historicalData, ZonedDateTime valuationTime, FXMatrix fxMatrix);
 
     /**
      * Creates the yield curves.
-     * @param inputs The inputs
-     * @param now The valuation time
-     * @param builder The builder
-     * @param knownData The known data
-     * @param context The function execution context
-     * @param fx The FX matrix.
+     *
+     * @param inputs
+     *          The inputs
+     * @param now
+     *          The valuation time
+     * @param builder
+     *          The builder
+     * @param knownData
+     *          The known data
+     * @param context
+     *          The function execution context
+     * @param fx
+     *          The FX matrix.
      * @return The curve provider and associated results
      */
     protected abstract Pair<T, CurveBuildingBlockBundle> getCurves(FunctionInputs inputs, ZonedDateTime now, U builder, T knownData,
@@ -456,10 +502,15 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
 
     /**
      * Gets the results.
-     * @param bundleSpec The value specification for the curve bundle
-     * @param jacobianSpec The value specification for the block of Jacobian matrices
-     * @param bundleProperties The properties for the curve bundle
-     * @param pair The results
+     *
+     * @param bundleSpec
+     *          The value specification for the curve bundle
+     * @param jacobianSpec
+     *          The value specification for the block of Jacobian matrices
+     * @param bundleProperties
+     *          The properties for the curve bundle
+     * @param pair
+     *          The results
      * @return A set of results
      */
     protected abstract Set<ComputedValue> getResults(ValueSpecification bundleSpec, ValueSpecification jacobianSpec, ValueProperties bundleProperties,
@@ -468,7 +519,8 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
     /**
      * Gets the curve node converter used to convert a node into an InstrumentDerivative.
      *
-     * @param conventionSource the convention source, not null
+     * @param conventionSource
+     *          the convention source, not null
      * @return The curve node converter used to convert a node into an InstrumentDerivative.
      */
     protected CurveNodeConverter getCurveNodeConverter(final ConventionSource conventionSource) {
@@ -487,10 +539,10 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
     }
 
     /**
-     * Gets the result properties for a curve bundle. This method does not
-     * set the {@link ValuePropertyNames#CURVE_SENSITIVITY_CURRENCY} property.
+     * Gets the result properties for a curve bundle. This method does not set the {@link ValuePropertyNames#CURVE_SENSITIVITY_CURRENCY} property.
      *
-     * @param curveNames All of the curves produced by this function
+     * @param curveNames
+     *          All of the curves produced by this function
      * @return The result properties
      * @deprecated Use the method that sets the sensitivity currencies
      */
@@ -502,40 +554,34 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
     /**
      * Gets the result properties for a curve.
      *
-     * @param curveName The curve name
+     * @param curveName
+     *          The curve name
      * @return The result properties
      */
     @SuppressWarnings("synthetic-access")
     protected ValueProperties getCurveProperties(final String curveName) {
-      final ValueProperties.Builder builder = createValueProperties()
-          .with(CURVE, curveName)
-          .with(CURVE_CALCULATION_METHOD, ROOT_FINDING)
-          .with(PROPERTY_CURVE_TYPE, getCurveTypeProperty())
-          .with(CURVE_CONSTRUCTION_CONFIG, _configurationName)
-          .withAny(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE)
-          .withAny(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE)
-          .withAny(PROPERTY_ROOT_FINDER_MAX_ITERATIONS);
+      final ValueProperties.Builder builder = createValueProperties().with(CURVE, curveName).with(CURVE_CALCULATION_METHOD, ROOT_FINDING)
+          .with(PROPERTY_CURVE_TYPE, getCurveTypeProperty()).with(CURVE_CONSTRUCTION_CONFIG, _configurationName)
+          .withAny(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE).withAny(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE).withAny(PROPERTY_ROOT_FINDER_MAX_ITERATIONS);
       return builder.get();
     }
 
     /**
      * Gets the result properties for a curve bundle.
      *
-     * @param curveNames All of the curves produced by this function
-     * @param sensitivityCurrencies The set of currencies to which the curves produce sensitivities
+     * @param curveNames
+     *          All of the curves produced by this function
+     * @param sensitivityCurrencies
+     *          The set of currencies to which the curves produce sensitivities
      * @return The result properties
      */
     @SuppressWarnings("synthetic-access")
     protected ValueProperties getBundleProperties(final String[] curveNames, final String[] sensitivityCurrencies) {
-      final ValueProperties.Builder builder = createValueProperties()
-          .with(CURVE_CALCULATION_METHOD, ROOT_FINDING)
-          .with(PROPERTY_CURVE_TYPE, getCurveTypeProperty())
-          .with(CURVE_CONSTRUCTION_CONFIG, _configurationName)
-          .withAny(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE)
-          .withAny(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE)
-          .withAny(PROPERTY_ROOT_FINDER_MAX_ITERATIONS)
+      final ValueProperties.Builder builder = createValueProperties().with(CURVE_CALCULATION_METHOD, ROOT_FINDING)
+          .with(PROPERTY_CURVE_TYPE, getCurveTypeProperty()).with(CURVE_CONSTRUCTION_CONFIG, _configurationName)
+          .withAny(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE).withAny(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE).withAny(PROPERTY_ROOT_FINDER_MAX_ITERATIONS)
           .with(CURVE, curveNames);
-      //TODO
+      // TODO
       if (sensitivityCurrencies != null && sensitivityCurrencies.length > 0) {
         builder.with(CURVE_SENSITIVITY_CURRENCY, sensitivityCurrencies);
       }

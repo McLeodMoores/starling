@@ -73,7 +73,7 @@ public abstract class UserExpression {
       assert var != null;
       assert value != NA;
       if (_variables == null) {
-        _variables = new HashMap<String, Object>();
+        _variables = new HashMap<>();
       }
       _variables.put(var, value);
     }
@@ -91,7 +91,7 @@ public abstract class UserExpression {
         return NA;
       }
       final Object result = _variables.get(var);
-      if ((result == null) && !_variables.containsKey(var)) {
+      if (result == null && !_variables.containsKey(var)) {
         return NA;
       }
       return result;
@@ -158,7 +158,7 @@ public abstract class UserExpression {
       assert clazz != null;
       assert context != null;
       if (_contexts == null) {
-        _contexts = new HashMap<Class<?>, Object>();
+        _contexts = new HashMap<>();
       }
       _contexts.put(clazz, context);
     }

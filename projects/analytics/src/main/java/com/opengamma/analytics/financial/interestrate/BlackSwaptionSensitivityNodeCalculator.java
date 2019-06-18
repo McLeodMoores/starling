@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate;
@@ -23,15 +23,22 @@ public class BlackSwaptionSensitivityNodeCalculator {
 
   /**
    * Computes the sensitivity to the nodes of the Black volatility surface from sensitivities to intermediary points and the parameters.
-   * @param sensitivities The sensitivity to intermediary points.
-   * @param parameters The surface parameters. The underlying volatility surface should be of type InterpolatedDoublesSurface.
+   * 
+   * @param sensitivities
+   *          The sensitivity to intermediary points.
+   * @param parameters
+   *          The surface parameters. The underlying volatility surface should be of type InterpolatedDoublesSurface.
    * @return The sensitivity to the nodes.
    */
-  public PresentValueBlackSwaptionSensitivity calculateNodeSensitivities(final PresentValueBlackSwaptionSensitivity sensitivities, final BlackFlatSwaptionParameters parameters) {
+  @SuppressWarnings("unchecked")
+  public PresentValueBlackSwaptionSensitivity calculateNodeSensitivities(final PresentValueBlackSwaptionSensitivity sensitivities,
+      final BlackFlatSwaptionParameters parameters) {
     ArgumentChecker.notNull(sensitivities, "Black swaption sensitivities");
     ArgumentChecker.notNull(parameters, "Black swaption parameters");
-    ArgumentChecker.isTrue(parameters.getGeneratorSwap().equals(sensitivities.getGeneratorSwap()), "Sensitivities and parameters should refer to the same swap generator");
-    ArgumentChecker.isTrue(parameters.getVolatilitySurface() instanceof InterpolatedDoublesSurface, "Can only calculate node sensitivities for interpolated double surfaces");
+    ArgumentChecker.isTrue(parameters.getGeneratorSwap().equals(sensitivities.getGeneratorSwap()),
+        "Sensitivities and parameters should refer to the same swap generator");
+    ArgumentChecker.isTrue(parameters.getVolatilitySurface() instanceof InterpolatedDoublesSurface,
+        "Can only calculate node sensitivities for interpolated double surfaces");
     final InterpolatedDoublesSurface interpolatedSurface = (InterpolatedDoublesSurface) parameters.getVolatilitySurface();
     final Map<Double, Interpolator1DDataBundle> volatilityData = (Map<Double, Interpolator1DDataBundle>) interpolatedSurface.getInterpolatorData();
     SurfaceValue volatilityNode = new SurfaceValue();

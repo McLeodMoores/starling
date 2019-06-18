@@ -15,12 +15,6 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Calculates the skewness of a lognormal distribution using the standard deviation and time.
- * $$
- * \begin{align*}
- * y &= \sqrt{\exp{\sigma^2 t} - 1}\\
- * \tau &= y^3 + 3y
- * \end{align*}
- * $$
  */
 @LognormalStatistic(aliases = "Lognormal Skewness From Volatility")
 public class LognormalSkewnessFromVolatilityCalculator extends LognormalStatisticsCalculator {

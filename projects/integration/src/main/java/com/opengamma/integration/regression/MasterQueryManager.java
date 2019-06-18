@@ -55,10 +55,14 @@ final class MasterQueryManager {
   private final Function<LegalEntityMaster, ? extends Iterable<LegalEntityDocument>> _legalEntityQuery;
   private final Function<ConventionMaster, ? extends Iterable<ConventionDocument>> _conventionQuery;
 
-  public MasterQueryManager(final Function<SecurityMaster, ? extends Iterable<SecurityDocument>> securityQuery, final Function<PositionMaster, ? extends Iterable<PositionDocument>> positionQuery,
-      final Function<PortfolioMaster, ? extends Iterable<PortfolioDocument>> portfolioQuery, final Function<ConfigMaster, ? extends Iterable<ConfigDocument>> configQuery,
-      final Function<HistoricalTimeSeriesMaster, ? extends Iterable<HistoricalTimeSeriesInfoDocument>> htsQuery, final Function<HolidayMaster, ? extends Iterable<HolidayDocument>> holidayQuery,
-      final Function<ExchangeMaster, ? extends Iterable<ExchangeDocument>> exchangeQuery, final Function<MarketDataSnapshotMaster, ? extends Iterable<MarketDataSnapshotDocument>> marketDataSnapshotQuery,
+  MasterQueryManager(final Function<SecurityMaster, ? extends Iterable<SecurityDocument>> securityQuery,
+      final Function<PositionMaster, ? extends Iterable<PositionDocument>> positionQuery,
+      final Function<PortfolioMaster, ? extends Iterable<PortfolioDocument>> portfolioQuery,
+      final Function<ConfigMaster, ? extends Iterable<ConfigDocument>> configQuery,
+      final Function<HistoricalTimeSeriesMaster, ? extends Iterable<HistoricalTimeSeriesInfoDocument>> htsQuery,
+      final Function<HolidayMaster, ? extends Iterable<HolidayDocument>> holidayQuery,
+      final Function<ExchangeMaster, ? extends Iterable<ExchangeDocument>> exchangeQuery,
+      final Function<MarketDataSnapshotMaster, ? extends Iterable<MarketDataSnapshotDocument>> marketDataSnapshotQuery,
       final Function<LegalEntityMaster, ? extends Iterable<LegalEntityDocument>> legalEntityQuery,
       final Function<ConventionMaster, ? extends Iterable<ConventionDocument>> conventionQuery) {
     super();
@@ -116,18 +120,18 @@ final class MasterQueryManager {
 
   public static MasterQueryManager queryAll() {
     return new MasterQueryManager(new SecurityQueryAll(),
-                                  new PositionQueryAll(),
-                                  new PortfolioQueryAll(),
-                                  new ConfigQueryAll(),
-                                  new HtsQueryAll(),
-                                  new HolidayQueryAll(),
-                                  new ExchangeQueryAll(),
-                                  new MarketDataSnapshotQueryAll(),
-                                  new OrgQueryAll(),
-                                  new ConventionQueryAll());
+        new PositionQueryAll(),
+        new PortfolioQueryAll(),
+        new ConfigQueryAll(),
+        new HtsQueryAll(),
+        new HolidayQueryAll(),
+        new ExchangeQueryAll(),
+        new MarketDataSnapshotQueryAll(),
+        new OrgQueryAll(),
+        new ConventionQueryAll());
   }
 
-  //no getAll() on AbstractMaster so have to write out for each one:
+  // no getAll() on AbstractMaster so have to write out for each one:
 
   private static class SecurityQueryAll implements Function<SecurityMaster, List<SecurityDocument>> {
 
@@ -190,7 +194,6 @@ final class MasterQueryManager {
       return input.search(new ExchangeSearchRequest()).getDocuments();
     }
 
-
   }
 
   private static class MarketDataSnapshotQueryAll implements Function<MarketDataSnapshotMaster, List<MarketDataSnapshotDocument>> {
@@ -199,7 +202,6 @@ final class MasterQueryManager {
     public List<MarketDataSnapshotDocument> apply(final MarketDataSnapshotMaster input) {
       return input.search(new MarketDataSnapshotSearchRequest()).getDocuments();
     }
-
 
   }
 
@@ -210,7 +212,6 @@ final class MasterQueryManager {
       return input.search(new LegalEntitySearchRequest()).getDocuments();
     }
 
-
   }
 
   private static class ConventionQueryAll implements Function<ConventionMaster, List<ConventionDocument>> {
@@ -220,9 +221,6 @@ final class MasterQueryManager {
       return input.search(new ConventionSearchRequest()).getDocuments();
     }
 
-
   }
-
-
 
 }

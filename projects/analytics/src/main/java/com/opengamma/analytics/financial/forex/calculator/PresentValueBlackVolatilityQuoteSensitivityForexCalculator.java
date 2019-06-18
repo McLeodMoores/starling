@@ -8,16 +8,15 @@ package com.opengamma.analytics.financial.forex.calculator;
 import com.opengamma.analytics.financial.forex.method.PresentValueForexBlackVolatilityQuoteSensitivityDataBundle;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorSameMethodAdapter;
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.option.definition.SmileDeltaTermStructureDataBundle;
 
 // CSOFF
 /**
- * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.
+ * @deprecated Curve builders that use and populate {@link com.opengamma.analytics.financial.interestrate.YieldCurveBundle}s are deprecated.
  */
 @Deprecated
 public final class PresentValueBlackVolatilityQuoteSensitivityForexCalculator extends
-    InstrumentDerivativeVisitorSameMethodAdapter<SmileDeltaTermStructureDataBundle, PresentValueForexBlackVolatilityQuoteSensitivityDataBundle> {
+InstrumentDerivativeVisitorSameMethodAdapter<SmileDeltaTermStructureDataBundle, PresentValueForexBlackVolatilityQuoteSensitivityDataBundle> {
 
   /**
    * The unique instance of the calculator.
@@ -26,6 +25,7 @@ public final class PresentValueBlackVolatilityQuoteSensitivityForexCalculator ex
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueBlackVolatilityQuoteSensitivityForexCalculator getInstance() {
@@ -41,7 +41,8 @@ public final class PresentValueBlackVolatilityQuoteSensitivityForexCalculator ex
   /**
    * The calculator used to compute the vega with respect to the volatilities by strikes.
    */
-  private static final PresentValueBlackVolatilityNodeSensitivityBlackForexCalculator VEGA_CALCULATOR = PresentValueBlackVolatilityNodeSensitivityBlackForexCalculator.getInstance();
+  private static final PresentValueBlackVolatilityNodeSensitivityBlackForexCalculator VEGA_CALCULATOR =
+      PresentValueBlackVolatilityNodeSensitivityBlackForexCalculator.getInstance();
 
   @Override
   public PresentValueForexBlackVolatilityQuoteSensitivityDataBundle visit(final InstrumentDerivative derivative, final SmileDeltaTermStructureDataBundle data) {

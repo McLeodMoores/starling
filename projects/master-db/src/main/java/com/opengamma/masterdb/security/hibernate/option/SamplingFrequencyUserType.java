@@ -10,7 +10,7 @@ import com.opengamma.financial.security.option.SamplingFrequency;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the SamplingFrequency enum
+ * Custom Hibernate usertype for the SamplingFrequency enum.
  */
 public class SamplingFrequencyUserType extends EnumUserType<SamplingFrequency> {
 

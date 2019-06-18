@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -73,11 +73,11 @@ public class SimpleCalculationNodeSet extends AbstractCollection<SimpleCalculati
       if (getNodesPerCore() == 0) {
         throw new IllegalStateException("Either nodeCount or nodesPerCore must be set");
       }
-      nodes = (int) Math.ceil(getNodesPerCore() * (double) getCores());
+      nodes = (int) Math.ceil(getNodesPerCore() * getCores());
     } else {
       nodes = getNodeCount();
     }
-    _nodes = new ArrayList<SimpleCalculationNode>(nodes);
+    _nodes = new ArrayList<>(nodes);
     for (int i = 0; i < nodes; i++) {
       _nodes.add(getNodeFactory().createNode());
     }

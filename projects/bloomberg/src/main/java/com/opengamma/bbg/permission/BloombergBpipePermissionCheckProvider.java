@@ -42,7 +42,6 @@ import com.opengamma.bbg.BloombergConstants;
 import com.opengamma.bbg.BloombergPermissions;
 import com.opengamma.bbg.SessionProvider;
 import com.opengamma.core.id.ExternalSchemes;
-import com.opengamma.provider.permission.PermissionCheckProvider;
 import com.opengamma.provider.permission.PermissionCheckProviderRequest;
 import com.opengamma.provider.permission.PermissionCheckProviderResult;
 import com.opengamma.provider.permission.impl.AbstractPermissionCheckProvider;
@@ -51,23 +50,19 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Bloomberg B-PIPE permission/EID check provider.
  * <p>
- * This provider provides the service of checking whether a user has permission
- * to access a piece of Bloomberg reference data.
+ * This provider provides the service of checking whether a user has permission to access a piece of Bloomberg reference data.
  * <p>
- * In order to check permissions, Bloomberg requires an {@code Identity} object.
- * The {@code Identity} is directly connected to Bloomberg and is updated as entitlements change.
- * The provider request must contain the EMRS user id and IP address of a logged on BPS terminal.
- * These are checked by Bloomberg when creating an {@code Identity}.
- * Failure at this stage returns a result with an authentication error.
+ * In order to check permissions, Bloomberg requires an {@code Identity} object. The {@code Identity} is directly connected to Bloomberg and is updated as
+ * entitlements change. The provider request must contain the EMRS user id and IP address of a logged on BPS terminal. These are checked by Bloomberg when
+ * creating an {@code Identity}. Failure at this stage returns a result with an authentication error.
  * <p>
- * Once an {@code Identity} is obtained, the requested permissions are checked against it.
- * Only EID permissions in the request are checked, other permissions are returned as denied.
- * The EID is created and extracted using {@link BloombergPermissions}.
- * Failure at this stage returns a result with an authorization error.
+ * Once an {@code Identity} is obtained, the requested permissions are checked against it. Only EID permissions in the request are checked, other permissions
+ * are returned as denied. The EID is created and extracted using {@link BloombergPermissions}. Failure at this stage returns a result with an authorization
+ * error.
  */
 public final class BloombergBpipePermissionCheckProvider
     extends AbstractPermissionCheckProvider
-    implements PermissionCheckProvider, Lifecycle {
+    implements Lifecycle {
 
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(BloombergBpipePermissionCheckProvider.class);
@@ -89,19 +84,22 @@ public final class BloombergBpipePermissionCheckProvider
   private final SessionProvider _sessionProvider;
 
   /**
-   * Creates a bloomberg permission check provider with default identity expiry
+   * Creates a bloomberg permission check provider with default identity expiry.
    *
-   * @param bloombergConnector the Bloomberg connector, not null
+   * @param bloombergConnector
+   *          the Bloomberg connector, not null
    */
   public BloombergBpipePermissionCheckProvider(final BloombergConnector bloombergConnector) {
     this(bloombergConnector, DEFAULT_IDENTITY_EXPIRY);
   }
 
   /**
-   * Creates a bloomberg permission check provider
+   * Creates a bloomberg permission check provider.
    *
-   * @param bloombergConnector the Bloomberg connector, not null
-   * @param identityExpiry the identity expiry in hours, not null
+   * @param bloombergConnector
+   *          the Bloomberg connector, not null
+   * @param identityExpiry
+   *          the identity expiry in hours, not null
    */
   public BloombergBpipePermissionCheckProvider(final BloombergConnector bloombergConnector, final Duration identityExpiry) {
     ArgumentChecker.notNull(bloombergConnector, "bloombergConnector");
@@ -118,12 +116,12 @@ public final class BloombergBpipePermissionCheckProvider
     _sessionProvider = new SessionProvider(_bloombergConnector, serviceNames, eventHandler);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public PermissionCheckProviderResult isPermitted(final PermissionCheckProviderRequest request) {
     ArgumentChecker.notNull(request, "request");
     // validate
-    if (isRunning() == false) {
+    if (!isRunning()) {
       return PermissionCheckProviderResult.ofAuthenticationError(
           "Bloomberg permission check found connection not running");
     }
@@ -157,7 +155,7 @@ public final class BloombergBpipePermissionCheckProvider
       for (final String permission : request.getRequestedPermissions()) {
         if (BloombergPermissions.isEid(permission)) {
           final int eid = BloombergPermissions.extractEid(permission);
-          final boolean permitted = userIdentity.hasEntitlements(new int[] {eid}, _apiRefDataSvc);
+          final boolean permitted = userIdentity.hasEntitlements(new int[] { eid }, _apiRefDataSvc);
           result.put(permission, permitted);
         } else {
           // permissions other than EID permissions are returned as false without error
@@ -196,26 +194,26 @@ public final class BloombergBpipePermissionCheckProvider
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the loading cache of user identities.
    * <p>
-   * The user identities are loaded by the cache when an entry is found to be missing.
-   * See {@link #loadUserIdentity(IdentityCacheKey)}.
+   * The user identities are loaded by the cache when an entry is found to be missing. See {@link #loadUserIdentity(IdentityCacheKey)}.
    *
-   * @param identityExpiry  the duration before the identity expires
+   * @param identityExpiry
+   *          the duration before the identity expires
    * @return the cache
    */
   private LoadingCache<IdentityCacheKey, Identity> createUserIdentityCache(final Duration identityExpiry) {
     // called from constructor - must not use instance variables in this method
     return CacheBuilder.newBuilder()
-      .expireAfterWrite(identityExpiry.getSeconds(), TimeUnit.SECONDS)
-      .build(new CacheLoader<IdentityCacheKey, Identity>() {
-        @Override
-        public Identity load(final IdentityCacheKey userCredential) throws Exception {
-          return loadUserIdentity(userCredential);
-        }
-      });
+        .expireAfterWrite(identityExpiry.getSeconds(), TimeUnit.SECONDS)
+        .build(new CacheLoader<IdentityCacheKey, Identity>() {
+          @Override
+          public Identity load(final IdentityCacheKey userCredential) throws Exception {
+            return loadUserIdentity(userCredential);
+          }
+        });
   }
 
   // called from the cache to load user identities
@@ -261,7 +259,7 @@ public final class BloombergBpipePermissionCheckProvider
             userInfo.getUserId(), userInfo.getIpAddress()));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Handler for events sent about users.
    */
@@ -281,7 +279,8 @@ public final class BloombergBpipePermissionCheckProvider
   /**
    * Processes events indicating changes in authorization.
    *
-   * @param event  the event, not null
+   * @param event
+   *          the event, not null
    */
   private void processAuthorizationEvent(final Event event) {
     for (final Message msg : event) {
@@ -306,7 +305,7 @@ public final class BloombergBpipePermissionCheckProvider
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public synchronized void start() {
     if (!isRunning()) {

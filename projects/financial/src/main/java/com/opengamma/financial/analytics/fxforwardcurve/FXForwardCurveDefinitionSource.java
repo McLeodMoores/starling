@@ -12,7 +12,7 @@ import com.opengamma.id.VersionCorrection;
  */
 public interface FXForwardCurveDefinitionSource {
 
-  FXForwardCurveDefinition getDefinition(final String name, final String currencyPair);
+  FXForwardCurveDefinition getDefinition(String name, String currencyPair);
 
-  FXForwardCurveDefinition getDefinition(final String name, final String currencyPair, final VersionCorrection versionCorrection);
+  FXForwardCurveDefinition getDefinition(String name, String currencyPair, VersionCorrection versionCorrection);
 }

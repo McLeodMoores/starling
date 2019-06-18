@@ -64,6 +64,7 @@ public class RemoteViewProcessor implements ViewProcessor {
     return new RemoteConfigSource(uri);
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public NamedMarketDataSpecificationRepository getNamedMarketDataSpecificationRepository() {
     final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessorUris.PATH_NAMED_MARKET_DATA_SPEC_REPOSITORY).build();

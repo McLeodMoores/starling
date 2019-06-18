@@ -66,7 +66,6 @@ public final class MarketDataPointSelector implements DistinctMarketDataSelector
     return msg;
   }
 
-  @SuppressWarnings("unchecked")
   public static MarketDataSelector fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     return new MarketDataPointSelector(msg.getValue(ExternalId.class, EXTERNAL_ID));
   }
@@ -91,17 +90,19 @@ public final class MarketDataPointSelector implements DistinctMarketDataSelector
   private static ExternalId createId(final ValueSpecification valueSpecification) {
     if (valueSpecification.getProperty("Id") != null) {
       return ExternalId.parse(valueSpecification.getProperty("Id"));
-    } else {
-      // Id may not always be present - maybe with snapshots? (get External from UniqueId)
-      final UniqueId uniqueId = valueSpecification.getTargetSpecification().getUniqueId();
-      String scheme = uniqueId.getScheme();
-      if (scheme.startsWith(PrimitiveResolver.SCHEME_PREFIX)) {
-        scheme = scheme.substring(11);
-      }
-      // REVIEW 2013-10-11 Andrew -- The above logic is only correct if the requirement was for a single identifier and not a bundle,
-      // for example data might have been asked for with tickers from a number of alternative data providers
-      return ExternalId.of(scheme, uniqueId.getValue());
     }
+    // Id may not always be present - maybe with snapshots? (get External from
+    // UniqueId)
+    final UniqueId uniqueId = valueSpecification.getTargetSpecification().getUniqueId();
+    String scheme = uniqueId.getScheme();
+    if (scheme.startsWith(PrimitiveResolver.SCHEME_PREFIX)) {
+      scheme = scheme.substring(11);
+    }
+    // REVIEW 2013-10-11 Andrew -- The above logic is only correct if the
+    // requirement was for a single identifier and not a bundle,
+    // for example data might have been asked for with tickers from a number of
+    // alternative data providers
+    return ExternalId.of(scheme, uniqueId.getValue());
   }
 
   @Override

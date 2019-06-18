@@ -118,7 +118,7 @@ public class PriorityResolvingCombiningLiveDataServer extends CombiningLiveDataS
   }
 
   /**
-   * @return
+   * @return the specification resolver
    */
   public DistributionSpecificationResolver getDefaultDistributionSpecificationResolver() {
     final DistributionSpecificationResolver distributionSpecResolver = new DelegatingDistributionSpecificationResolver();

@@ -23,6 +23,7 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Method to compute present value and present value sensitivity for Ibor coupon with gearing factor and spread.
+ * 
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.payments.provider.CouponIborGearingDiscountingMethod}
  */
 @Deprecated
@@ -35,6 +36,7 @@ public final class CouponIborGearingDiscountingMethod implements PricingMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static CouponIborGearingDiscountingMethod getInstance() {
@@ -49,8 +51,11 @@ public final class CouponIborGearingDiscountingMethod implements PricingMethod {
 
   /**
    * Compute the present value of a Ibor coupon with gearing factor and spread by discounting.
-   * @param coupon The coupon.
-   * @param curves The yield curves. Should contain the discounting and forward curves associated.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param curves
+   *          The yield curves. Should contain the discounting and forward curves associated.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final CouponIborGearing coupon, final YieldCurveBundle curves) {
@@ -58,7 +63,8 @@ public final class CouponIborGearingDiscountingMethod implements PricingMethod {
     Validate.notNull(curves, "Curves");
     final YieldAndDiscountCurve forwardCurve = curves.getCurve(coupon.getForwardCurveName());
     final YieldAndDiscountCurve discountingCurve = curves.getCurve(coupon.getFundingCurveName());
-    final double forward = (forwardCurve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(coupon.getFixingPeriodEndTime()) - 1) / coupon.getFixingAccrualFactor();
+    final double forward = (forwardCurve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(coupon.getFixingPeriodEndTime())
+        - 1) / coupon.getFixingAccrualFactor();
     final double df = discountingCurve.getDiscountFactor(coupon.getPaymentTime());
     final double value = (coupon.getNotional() * coupon.getPaymentYearFraction() * (coupon.getFactor() * forward) + coupon.getSpreadAmount()) * df;
     return CurrencyAmount.of(coupon.getCurrency(), value);
@@ -72,8 +78,11 @@ public final class CouponIborGearingDiscountingMethod implements PricingMethod {
 
   /**
    * Compute the present value sensitivity to rates of a Ibor coupon with gearing and spread by discounting.
-   * @param coupon The coupon.
-   * @param curves The yield curves. Should contain the discounting and forward curves associated.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param curves
+   *          The yield curves. Should contain the discounting and forward curves associated.
    * @return The present value sensitivity.
    */
   public InterestRateCurveSensitivity presentValueCurveSensitivity(final CouponIborGearing coupon, final YieldCurveBundle curves) {

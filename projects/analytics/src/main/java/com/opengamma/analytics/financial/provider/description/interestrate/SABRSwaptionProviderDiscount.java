@@ -14,11 +14,15 @@ import com.opengamma.analytics.financial.model.option.definition.SABRInterestRat
 public class SABRSwaptionProviderDiscount extends SABRSwaptionProvider {
 
   /**
-   * @param multicurveProvider The multicurve provider.
-   * @param parameters The SABR parameters.
-   * @param generator The underlying swaps generators.
+   * @param multicurveProvider
+   *          The multicurve provider.
+   * @param parameters
+   *          The SABR parameters.
+   * @param generator
+   *          The underlying swaps generators.
    */
-  public SABRSwaptionProviderDiscount(final MulticurveProviderDiscount multicurveProvider, final SABRInterestRateParameters parameters, final GeneratorSwapFixedIbor generator) {
+  public SABRSwaptionProviderDiscount(final MulticurveProviderDiscount multicurveProvider, final SABRInterestRateParameters parameters,
+      final GeneratorSwapFixedIbor generator) {
     super(multicurveProvider, parameters, generator);
   }
 

@@ -20,12 +20,12 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * FXOptionSecurityBeanOperation
+ * FXOptionSecurityBeanOperation.
  */
 public final class FxDigitalOptionSecurityBeanOperation extends AbstractSecurityBeanOperation<FXDigitalOptionSecurity, FXDigitalOptionSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final FxDigitalOptionSecurityBeanOperation INSTANCE = new FxDigitalOptionSecurityBeanOperation();
 
@@ -34,7 +34,8 @@ public final class FxDigitalOptionSecurityBeanOperation extends AbstractSecurity
   }
 
   @Override
-  public FXDigitalOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final FXDigitalOptionSecurity security) {
+  public FXDigitalOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final FXDigitalOptionSecurity security) {
     final FXDigitalOptionSecurityBean bean = new FXDigitalOptionSecurityBean();
     bean.setCallAmount(security.getCallAmount());
     bean.setPutAmount(security.getPutAmount());
@@ -54,8 +55,8 @@ public final class FxDigitalOptionSecurityBeanOperation extends AbstractSecurity
     final Currency paymentCurrency = currencyBeanToCurrency(bean.getPaymentCurrency());
     final Expiry expiry = expiryBeanToExpiry(bean.getExpiry());
     final ZonedDateTime settlementDate = Converters.zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate());
-    final FXDigitalOptionSecurity sec =
-        new FXDigitalOptionSecurity(putCurrency, callCurrency, bean.getPutAmount(), bean.getCallAmount(), paymentCurrency, expiry, settlementDate, bean.getIsLong());
+    final FXDigitalOptionSecurity sec = new FXDigitalOptionSecurity(putCurrency, callCurrency, bean.getPutAmount(), bean.getCallAmount(), paymentCurrency,
+        expiry, settlementDate, bean.getIsLong());
     return sec;
   }
 

@@ -17,7 +17,7 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
 /**
- * A cache decorating a {@link SecurityMasterDetailProvider}
+ * A cache decorating a {@link SecurityMasterDetailProvider}.
  */
 public class EHCachingSecurityMasterDetailProvider implements SecurityMasterDetailProvider {
 
@@ -34,10 +34,11 @@ public class EHCachingSecurityMasterDetailProvider implements SecurityMasterDeta
    */
   private final Cache _detailsCache;
 
-
   /**
-   * @param underlying The provider to wrap
-   * @param manager The cache manager
+   * @param underlying
+   *          The provider to wrap
+   * @param manager
+   *          The cache manager
    */
   public EHCachingSecurityMasterDetailProvider(final SecurityMasterDetailProvider underlying, final CacheManager manager) {
     super();
@@ -47,12 +48,10 @@ public class EHCachingSecurityMasterDetailProvider implements SecurityMasterDeta
     _detailsCache = EHCacheUtils.getCacheFromManager(_manager, SECURITY_CACHE);
   }
 
-
   @Override
   public void init(final DbSecurityMaster master) {
     _underlying.init(master);
   }
-
 
   @Override
   public ManageableSecurity loadSecurityDetail(final ManageableSecurity base) {
@@ -69,11 +68,10 @@ public class EHCachingSecurityMasterDetailProvider implements SecurityMasterDeta
     return JodaBeanUtils.clone(cached);
   }
 
-
   @Override
   public void storeSecurityDetail(final ManageableSecurity security) {
     _underlying.storeSecurityDetail(security);
-    //TODO cache?
+    // TODO cache?
   }
 
   @Override

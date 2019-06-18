@@ -28,7 +28,9 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for AUD deals.
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class AUDTest {
 

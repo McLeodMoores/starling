@@ -22,7 +22,8 @@ public class CurrencyMatrixLatestSourcingFunction extends CurrencyMatrixSeriesSo
   }
 
   @Override
-  protected Object getRate(final CurrencyMatrix matrix, final ValueRequirement desiredValue, final FunctionExecutionContext executionContext, final FunctionInputs inputs, final Currency source, final Currency target) {
+  protected Object getRate(final CurrencyMatrix matrix, final ValueRequirement desiredValue, final FunctionExecutionContext executionContext,
+      final FunctionInputs inputs, final Currency source, final Currency target) {
     final Object fxSeries = super.getRate(matrix, desiredValue, executionContext, inputs, source, target);
     if (fxSeries == null) {
       return null;

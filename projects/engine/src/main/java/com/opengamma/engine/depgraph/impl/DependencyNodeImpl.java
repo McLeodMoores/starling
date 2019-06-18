@@ -68,10 +68,14 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
   /**
    * Creates a new node.
    *
-   * @param function the function, not null
-   * @param target the target specification, not null
-   * @param outputs the outputs of the node, not null and not containing null
-   * @param inputs the input values to the node, not null and not containing null
+   * @param function
+   *          the function, not null
+   * @param target
+   *          the target specification, not null
+   * @param outputs
+   *          the outputs of the node, not null and not containing null
+   * @param inputs
+   *          the input values to the node, not null and not containing null
    */
   public DependencyNodeImpl(final DependencyNodeFunction function, final ComputationTargetSpecification target, final Collection<ValueSpecification> outputs,
       final Map<ValueSpecification, DependencyNode> inputs) {
@@ -484,7 +488,8 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
   /**
    * Obtains a copy of the input value specifications for a node as a set.
    *
-   * @param node the node instance to query
+   * @param node
+   *          the node instance to query
    * @return the set of input value specifications to the node
    */
   public static Set<ValueSpecification> getInputValues(final DependencyNode node) {
@@ -497,9 +502,10 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
   }
 
   /**
-   * Obtains a copy of the input value specifications and nodes as a map of value specifications to the node that produces each one
+   * Obtains a copy of the input value specifications and nodes as a map of value specifications to the node that produces each one.
    *
-   * @param node the node instance to query
+   * @param node
+   *          the node instance to query
    * @return the input values and nodes
    */
   public static Map<ValueSpecification, DependencyNode> getInputs(final DependencyNode node) {
@@ -514,7 +520,8 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
   /**
    * Obtains a copy of the input values to a node as an array.
    *
-   * @param node the node instance to query, not null
+   * @param node
+   *          the node instance to query, not null
    * @return the array of input values to the node, not null and not containing null
    */
   public static ValueSpecification[] getInputValueArray(final DependencyNode node) {
@@ -532,7 +539,8 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
   /**
    * Obtains a copy of the input nodes to a node as an array.
    *
-   * @param node the node instance to query, not null
+   * @param node
+   *          the node instance to query, not null
    * @return the array of input nodes, not null and not containing null
    */
   public static DependencyNode[] getInputNodeArray(final DependencyNode node) {
@@ -572,7 +580,8 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
   /**
    * Obtains a copy of the output value specifications for a node as a set.
    *
-   * @param node the node instance to query, not null
+   * @param node
+   *          the node instance to query, not null
    * @return the set of output value specifications to the node, not null
    */
   public static Set<ValueSpecification> getOutputValues(final DependencyNode node) {
@@ -587,7 +596,8 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
   /**
    * Obtains a copy of the output value specifications for a node as an array.
    *
-   * @param node the node instance to query, not null
+   * @param node
+   *          the node instance to query, not null
    * @return the array of output value specifications to the node, not null
    */
   public static ValueSpecification[] getOutputValueArray(final DependencyNode node) {
@@ -620,7 +630,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
   @Override
   public String toString() {
     return "Node" + Integer.toHexString(System.identityHashCode(this)) + "[" + getFunction() + " on " + getTarget() + ", "
-  + _inputValues.length + " input(s), " + _outputValues.length + " output(s)]";
+        + _inputValues.length + " input(s), " + _outputValues.length + " output(s)]";
   }
 
   private void writeObject(final ObjectOutputStream out) throws IOException {

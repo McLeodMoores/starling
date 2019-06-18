@@ -21,33 +21,34 @@ import com.opengamma.integration.tool.IntegrationToolContext;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * The portfolio loader tool
+ * The portfolio loader tool.
  */
 @Scriptable
 public class PortfolioHtsResolverTool extends AbstractTool<IntegrationToolContext> {
 
-  /** Portfolio name option flag*/
+  /** Portfolio name option flag */
   private static final String PORTFOLIO_NAME_OPT = "n";
   /** Write option flag */
   private static final String WRITE_OPT = "w";
   /** Verbose option flag */
   private static final String VERBOSE_OPT = "v";
-  /** Time series data provider option flag*/
+  /** Time series data provider option flag */
   private static final String TIME_SERIES_DATAPROVIDER_OPT = "p";
-  /** Time series data field option flag*/
+  /** Time series data field option flag */
   private static final String TIME_SERIES_DATAFIELD_OPT = "d";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new PortfolioHtsResolverTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Loads the portfolio into the position master.
    */
@@ -71,9 +72,8 @@ public class PortfolioHtsResolverTool extends AbstractTool<IntegrationToolContex
         context.getHistoricalTimeSeriesProvider(),
         context.getBloombergReferenceDataProvider(),
         getOptionValue(TIME_SERIES_DATAPROVIDER_OPT, "CMPL"),
-        getCommandLine().getOptionValues(TIME_SERIES_DATAFIELD_OPT) == null ?
-            new String[]{"PX_LAST"} : getCommandLine().getOptionValues(TIME_SERIES_DATAFIELD_OPT)
-    );
+        getCommandLine().getOptionValues(TIME_SERIES_DATAFIELD_OPT) == null ? new String[] { "PX_LAST" }
+            : getCommandLine().getOptionValues(TIME_SERIES_DATAFIELD_OPT));
 
     // Create visitor for verbose/quiet mode
     PortfolioCopierVisitor portfolioCopierVisitor;
@@ -94,7 +94,6 @@ public class PortfolioHtsResolverTool extends AbstractTool<IntegrationToolContex
   private String getOptionValue(final String optionName, final String defaultValue) {
     return getCommandLine().getOptionValue(optionName) == null ? defaultValue : getCommandLine().getOptionValue(optionName);
   }
-
 
   @Override
   protected Options createOptions(final boolean contextProvided) {
@@ -126,6 +125,5 @@ public class PortfolioHtsResolverTool extends AbstractTool<IntegrationToolContex
 
     return options;
   }
-
 
 }

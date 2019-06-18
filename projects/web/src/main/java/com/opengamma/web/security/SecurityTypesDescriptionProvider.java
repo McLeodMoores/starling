@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.security;
@@ -26,7 +26,7 @@ import com.opengamma.master.security.ManageableSecurity;
 import com.opengamma.master.security.SecurityDescription;
 
 /**
- * Provides all supported security/index types to their descriptions
+ * Provides all supported security/index types to their descriptions.
  */
 public final class SecurityTypesDescriptionProvider {
 
@@ -42,33 +42,33 @@ public final class SecurityTypesDescriptionProvider {
    */
   private final BiMap<String, String> _type2Description;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the provider, not null
    */
   public static SecurityTypesDescriptionProvider getInstance() {
     return INSTANCE;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Restricted constructor
    */
   private SecurityTypesDescriptionProvider() {
-    Builder<String, String> builder = ImmutableBiMap.builder();
-    AnnotationReflector reflector = AnnotationReflector.getDefaultReflector();
-    Set<Class<?>> securityClasses = reflector.getReflector().getTypesAnnotatedWith(SecurityDescription.class);
-    for (Class<?> securityClass : securityClasses) {
-      SecurityDescription securityDescriptionAnnotation = securityClass.getAnnotation(SecurityDescription.class);
+    final Builder<String, String> builder = ImmutableBiMap.builder();
+    final AnnotationReflector reflector = AnnotationReflector.getDefaultReflector();
+    final Set<Class<?>> securityClasses = reflector.getReflector().getTypesAnnotatedWith(SecurityDescription.class);
+    for (final Class<?> securityClass : securityClasses) {
+      final SecurityDescription securityDescriptionAnnotation = securityClass.getAnnotation(SecurityDescription.class);
       if (securityDescriptionAnnotation != null) {
         // extract type
         String type = StringUtils.trimToNull(securityDescriptionAnnotation.type());
         if (type == null) {
           if (ManageableSecurity.class.isAssignableFrom(securityClass)) {
-            MetaBean metaBean = JodaBeanUtils.metaBean(securityClass);
-            ManageableSecurity bareSecurity = (ManageableSecurity) metaBean.builder().build();
+            final MetaBean metaBean = JodaBeanUtils.metaBean(securityClass);
+            final ManageableSecurity bareSecurity = (ManageableSecurity) metaBean.builder().build();
             type = bareSecurity.getSecurityType();
           } else {
             LOGGER.warn("{} anotated with {}, but not subtype of {}", securityClass, SecurityDescription.class, ManageableSecurity.class);
@@ -85,10 +85,10 @@ public final class SecurityTypesDescriptionProvider {
     _type2Description = builder.build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the set of security/index types.
-   * 
+   *
    * @return the types, not null
    */
   public SortedSet<String> getSecurityTypes() {
@@ -97,30 +97,28 @@ public final class SecurityTypesDescriptionProvider {
 
   /**
    * Gets the map of security type to description.
-   * 
+   *
    * @return the map, not null
    */
   public SortedMap<String, String> getType2Description() {
-    ImmutableSortedMap.Builder<String, String> result = ImmutableSortedMap.naturalOrder();
-    for (Entry<String, String> entry : _type2Description.entrySet()) {
+    final ImmutableSortedMap.Builder<String, String> result = ImmutableSortedMap.naturalOrder();
+    for (final Entry<String, String> entry : _type2Description.entrySet()) {
       result.put(entry.getKey(), entry.getValue());
     }
     return result.build();
   }
-
 
   /**
    * Gets the map of security description to type.
-   * 
+   *
    * @return the map, not null
    */
   public SortedMap<String, String> getDescription2Type() {
-    ImmutableSortedMap.Builder<String, String> result = ImmutableSortedMap.naturalOrder();
-    for (Entry<String, String> entry : _type2Description.inverse().entrySet()) {
+    final ImmutableSortedMap.Builder<String, String> result = ImmutableSortedMap.naturalOrder();
+    for (final Entry<String, String> entry : _type2Description.inverse().entrySet()) {
       result.put(entry.getKey(), entry.getValue());
     }
     return result.build();
   }
-
 
 }

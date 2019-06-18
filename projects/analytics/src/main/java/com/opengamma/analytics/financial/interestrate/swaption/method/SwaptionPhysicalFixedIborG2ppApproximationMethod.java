@@ -24,8 +24,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.CurrencyAmount;
 
 /**
- * Method to computes the present value of physical delivery European swaptions with the G2++ model through efficient approximation.
- * Reference: Henrard, M. Swaptions in Libor Market Model with local volatility. Wilmott Journal, 2010, 2, 135-154. Preprint available at http://ssrn.com/abstract=1098420
+ * Method to computes the present value of physical delivery European swaptions with the G2++ model through efficient approximation. Reference: Henrard, M.
+ * Swaptions in Libor Market Model with local volatility. Wilmott Journal, 2010, 2, 135-154. Preprint available at http://ssrn.com/abstract=1098420
+ * 
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionPhysicalFixedIborG2ppApproximationMethod}
  */
 @Deprecated
@@ -42,8 +43,11 @@ public class SwaptionPhysicalFixedIborG2ppApproximationMethod implements Pricing
 
   /**
    * Computes the present value of the Physical delivery swaption through approximation..
-   * @param swaption The swaption.
-   * @param g2Data The G2++ parameters and the curves.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param g2Data
+   *          The G2++ parameters and the curves.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption, final G2ppPiecewiseConstantDataBundle g2Data) {
@@ -55,9 +59,13 @@ public class SwaptionPhysicalFixedIborG2ppApproximationMethod implements Pricing
 
   /**
    * Computes the present value of the Physical delivery swaption through approximation..
-   * @param swaption The swaption.
-   * @param cfe The swaption cash flow equivalent.
-   * @param g2Data The G2++ parameters and the curves.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param cfe
+   *          The swaption cash flow equivalent.
+   * @param g2Data
+   *          The G2++ parameters and the curves.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption, final AnnuityPaymentFixed cfe, final G2ppPiecewiseConstantDataBundle g2Data) {
@@ -97,7 +105,8 @@ public class SwaptionPhysicalFixedIborG2ppApproximationMethod implements Pricing
     final double[][] gamma = MODEL_G2PP.gamma(g2Data.getG2ppParameter(), 0, swaption.getTimeToExpiry());
     final double[] tau = new double[nbCf];
     for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      tau[loopcf] = gamma[0][0] * ht0[0][loopcf] * ht0[0][loopcf] + gamma[1][1] * ht0[1][loopcf] * ht0[1][loopcf] + 2 * rhog2pp * gamma[0][1] * ht0[0][loopcf] * ht0[1][loopcf];
+      tau[loopcf] = gamma[0][0] * ht0[0][loopcf] * ht0[0][loopcf] + gamma[1][1] * ht0[1][loopcf] * ht0[1][loopcf]
+          + 2 * rhog2pp * gamma[0][1] * ht0[0][loopcf] * ht0[1][loopcf];
     }
     double xbarnum = 0.0;
     double xbarde = 0.0;
@@ -117,8 +126,9 @@ public class SwaptionPhysicalFixedIborG2ppApproximationMethod implements Pricing
       betaK[0] += alphaK[loopcf] * ht0[0][loopcf + 1];
       betaK[1] += alphaK[loopcf] * ht0[1][loopcf + 1];
     }
-    final double[] betaBar = new double[] {(beta0[0] + betaK[0]) / 2.0, (beta0[1] + betaK[1]) / 2.0 };
-    final double sigmaBar2 = gamma[0][0] * betaBar[0] * betaBar[0] + gamma[1][1] * betaBar[1] * betaBar[1] + 2 * rhog2pp * gamma[0][1] * betaBar[0] * betaBar[1];
+    final double[] betaBar = new double[] { (beta0[0] + betaK[0]) / 2.0, (beta0[1] + betaK[1]) / 2.0 };
+    final double sigmaBar2 = gamma[0][0] * betaBar[0] * betaBar[0] + gamma[1][1] * betaBar[1] * betaBar[1]
+        + 2 * rhog2pp * gamma[0][1] * betaBar[0] * betaBar[1];
     final double sigmaBar = Math.sqrt(sigmaBar2);
     final EuropeanVanillaOption option = new EuropeanVanillaOption(k, 1, !swaption.isCall());
     final BlackPriceFunction blackFunction = new BlackPriceFunction();

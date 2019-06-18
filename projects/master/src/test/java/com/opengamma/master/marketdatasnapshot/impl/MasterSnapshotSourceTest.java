@@ -44,13 +44,19 @@ public class MasterSnapshotSourceTest {
   private static final UniqueId UID = UniqueId.of("A", "B");
   private final MasterSnapshotSource _populatedSource = createPopulatedSource();
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_1arg_nullMaster() throws Exception {
+  public void testConstructor1argNullMaster() {
     new MasterSnapshotSource(null);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getSnapshot_noOverride_found() throws Exception {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetSnapshotNoOverrideFound() {
     final MarketDataSnapshotMaster mock = mock(MarketDataSnapshotMaster.class);
 
     final MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument(example());
@@ -62,9 +68,12 @@ public class MasterSnapshotSourceTest {
     assertEquals(example(), testResult);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class, expectedExceptionsMessageRegExp = "Some message")
-  public void test_getSnapshot_noOverride_notFound() throws Exception {
+  public void testGetSnapshotNoOverrideNotFound() {
     final MarketDataSnapshotMaster mock = mock(MarketDataSnapshotMaster.class);
 
     new MarketDataSnapshotDocument(example());
@@ -73,29 +82,41 @@ public class MasterSnapshotSourceTest {
     test.get(UID);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @return an example snapshot
+   */
   protected ManageableMarketDataSnapshot example() {
     final ManageableMarketDataSnapshot snapshotDocument = new ManageableMarketDataSnapshot();
     snapshotDocument.setUniqueId(UID);
     return snapshotDocument;
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testGetSingleWithNoMatchGivesException() {
 
     final MarketDataSnapshotMaster mock = mock(MarketDataSnapshotMaster.class);
-    when(mock.search(Matchers.<MarketDataSnapshotSearchRequest>anyObject()))
-        .thenReturn(new MarketDataSnapshotSearchResult(ImmutableList.<MarketDataSnapshotDocument>of()));
+    when(mock.search(Matchers.<MarketDataSnapshotSearchRequest> anyObject()))
+        .thenReturn(new MarketDataSnapshotSearchResult(ImmutableList.<MarketDataSnapshotDocument> of()));
 
     new MasterSnapshotSource(mock).getSingle(NamedSnapshot.class, "I dont exist", VersionCorrection.LATEST);
   }
 
+  /**
+   *
+   */
   @Test
   public void testMatchByTypeAndNameSucceeds() {
     final NamedSnapshot snapshot = _populatedSource.getSingle(NamedSnapshot.class, "snap1", VersionCorrection.LATEST);
     assertThat(snapshot.getName(), is("snap1"));
   }
 
+  /**
+   *
+   */
   @Test
   public void testTypeUnmatchedAndNameMatchedStillSucceeds() {
     // Snap 2 is referenced as type SpecialSnapshot so type name won't match
@@ -103,6 +124,9 @@ public class MasterSnapshotSourceTest {
     assertThat(snapshot.getName(), is("snap2"));
   }
 
+  /**
+   *
+   */
   @Test
   public void testSnapshotHasCorrectType() {
     // Snap 3 is referenced as type SpecialSnapshot so type name won't match
@@ -110,6 +134,9 @@ public class MasterSnapshotSourceTest {
     assertThat(snapshot.getName(), is("snap3"));
   }
 
+  /**
+   *
+   */
   @Test
   public void testWrongTypeIsAvoided() {
     // Snap 4 is referenced twice with different types
@@ -118,6 +145,9 @@ public class MasterSnapshotSourceTest {
     assertThat(snapshot.getId(), is(42));
   }
 
+  /**
+   *
+   */
   @Test
   public void testWithMultipleMatchesFirstIsReturned() {
     // Snap 4 is referenced twice with different types
@@ -128,8 +158,7 @@ public class MasterSnapshotSourceTest {
   }
 
   /**
-   * Show that even if the master has been told the type is X, if the
-   * actual object is not compatible with X it is not returned.
+   * Show that even if the master has been told the type is X, if the actual object is not compatible with X it is not returned.
    */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testObjectMatchingCriteriaIsNotReturnedIfWrongType() {
@@ -153,25 +182,24 @@ public class MasterSnapshotSourceTest {
     responder.add(SpecialSnapshot.class, createNamedSnapshot("snap5"));
 
     final MarketDataSnapshotMaster mock = mock(MarketDataSnapshotMaster.class);
-    when(mock.search(Matchers.<MarketDataSnapshotSearchRequest>anyObject()))
-        .thenAnswer(new Answer<MarketDataSnapshotSearchResult>() {
-          @Override
-            public MarketDataSnapshotSearchResult answer(final InvocationOnMock invocation) throws Throwable {
-            // Examine the request and use the responder to get matching data
-            final MarketDataSnapshotSearchRequest request = (MarketDataSnapshotSearchRequest) invocation.getArguments()[0];
-            final List<MarketDataSnapshotDocument> docs = new ArrayList<>();
-            final List<NamedSnapshot> matches = responder.getMatches(request.getType(), request.getName());
-            for (final NamedSnapshot match : matches) {
-              docs.add(new MarketDataSnapshotDocument(match));
-            }
-            return new MarketDataSnapshotSearchResult(docs);
-          }
-        });
+    when(mock.search(Matchers.<MarketDataSnapshotSearchRequest> anyObject())).thenAnswer(new Answer<MarketDataSnapshotSearchResult>() {
+      @Override
+      public MarketDataSnapshotSearchResult answer(final InvocationOnMock invocation) throws Throwable {
+        // Examine the request and use the responder to get matching data
+        final MarketDataSnapshotSearchRequest request = (MarketDataSnapshotSearchRequest) invocation.getArguments()[0];
+        final List<MarketDataSnapshotDocument> docs = new ArrayList<>();
+        final List<NamedSnapshot> matches = responder.getMatches(request.getType(), request.getName());
+        for (final NamedSnapshot match : matches) {
+          docs.add(new MarketDataSnapshotDocument(match));
+        }
+        return new MarketDataSnapshotSearchResult(docs);
+      }
+    });
 
     return mock;
   }
 
-  private NamedSnapshot createNamedSnapshot(final String name) {
+  private static NamedSnapshot createNamedSnapshot(final String name) {
     return new NamedSnapshot() {
       @Override
       public String getName() {
@@ -191,30 +219,31 @@ public class MasterSnapshotSourceTest {
   }
 
   /**
-   * Holds a set of snapshots and responds appropriately as a
-   * master would.
+   * Holds a set of snapshots and responds appropriately as a master would.
    */
   private class SearchResponder {
 
     /**
      * The values which are held.
      */
-    private final List<SnapshotRecord> values = new ArrayList<>();
+    private final List<SnapshotRecord> _values = new ArrayList<>();
 
     /**
      * Add a new snapshot, recording a type and name.
      *
-     * @param type the type held for the snapshot, not null
-     * @param snapshot the snapshot, not null
+     * @param type
+     *          the type held for the snapshot, not null
+     * @param snapshot
+     *          the snapshot, not null
      */
     public void add(final Class<? extends NamedSnapshot> type, final NamedSnapshot snapshot) {
-      values.add(new SnapshotRecord(type, snapshot));
+      _values.add(new SnapshotRecord(type, snapshot));
     }
 
     public List<NamedSnapshot> getMatches(final Class<? extends NamedSnapshot> type, final String name) {
 
       final List<NamedSnapshot> matches = new ArrayList<>();
-      for (final SnapshotRecord value : values) {
+      for (final SnapshotRecord value : _values) {
         if (value._name.equals(name) && (type == null || value._type.equals(type))) {
           matches.add(value._snapshot);
         }
@@ -227,11 +256,8 @@ public class MasterSnapshotSourceTest {
    * Simple value class representing a stored snapshot with its name and type.
    */
   private static final class SnapshotRecord {
-
     public final Class<? extends NamedSnapshot> _type;
-
     public final String _name;
-
     public final NamedSnapshot _snapshot;
 
     private SnapshotRecord(final Class<? extends NamedSnapshot> type, final NamedSnapshot snapshot) {
@@ -244,12 +270,18 @@ public class MasterSnapshotSourceTest {
   /**
    * Test implementation of a snapshot.
    */
-  private class SpecialSnapshot implements NamedSnapshot {
+  class SpecialSnapshot implements NamedSnapshot {
 
     private final String _name;
     private final int _id;
 
-    private SpecialSnapshot(final String name, final int id) {
+    /**
+     * @param name
+     *          the name
+     * @param id
+     *          the id
+     */
+    SpecialSnapshot(final String name, final int id) {
       _name = name;
       _id = id;
     }
@@ -259,6 +291,9 @@ public class MasterSnapshotSourceTest {
       return _name;
     }
 
+    /**
+     * @return the id
+     */
     public int getId() {
       return _id;
     }

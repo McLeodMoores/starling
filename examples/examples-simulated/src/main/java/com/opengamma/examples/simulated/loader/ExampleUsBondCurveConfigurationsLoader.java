@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.loader;
 
@@ -16,7 +16,9 @@ public class ExampleUsBondCurveConfigurationsLoader extends AbstractTool<ToolCon
 
   /**
    * Main method to run the tool.
-   * @param args The standard tool arguments, not null
+   * 
+   * @param args
+   *          The standard tool arguments, not null
    */
   public static void main(final String[] args) {
     new ExampleUsBondCurveConfigurationsLoader().invokeAndTerminate(args);

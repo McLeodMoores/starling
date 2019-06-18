@@ -83,14 +83,13 @@ public final class EqualityChecker {
     TypeHandler<Object> handler = (TypeHandler<Object>) HANDLERS.get(value1.getClass());
     if (handler != null) {
       return handler.equals(value1, value2, delta);
-    } else {
-      // ClassMap doesn't handle subtyping and arrays, this uses the Object[] handler for non-primitive arrays
-      if (value1.getClass().isArray() && Object[].class.isAssignableFrom(value1.getClass())) {
-        return OBJECT_ARRAY_HANDLER.equals((Object[]) value1, (Object[]) value2, delta);
-      } else {
-        return Objects.equals(value1, value2);
-      }
     }
+    // ClassMap doesn't handle subtyping and arrays, this uses the Object[]
+    // handler for non-primitive arrays
+    if (value1.getClass().isArray() && Object[].class.isAssignableFrom(value1.getClass())) {
+      return OBJECT_ARRAY_HANDLER.equals((Object[]) value1, (Object[]) value2, delta);
+    }
+    return Objects.equals(value1, value2);
   }
 
   /**

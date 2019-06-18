@@ -62,11 +62,13 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class FXOptionVannaVolgaFunction extends AbstractFunction.NonCompiledInvoker {
-  /** Property name for the delta to use */
+  /** Property name for the delta to use. */
   public static final String PROPERTY_OTM_DELTA = "DeltaOTM";
-  /** The name of the calculation method */
+  /** The name of the calculation method. */
   public static final String VANNA_VOLGA_METHOD = "VannaVolgaMethod";
   private static final Logger LOGGER = LoggerFactory.getLogger(FXOptionVannaVolgaFunction.class);
   private final String _valueRequirementName;
@@ -139,10 +141,12 @@ public abstract class FXOptionVannaVolgaFunction extends AbstractFunction.NonCom
     final Currency callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor());
     final ValueRequirement putFundingCurve = getCurveRequirement(ComputationTargetSpecification.of(putCurrency), putCurveName, putCurveCalculationConfig);
     final ValueRequirement callFundingCurve = getCurveRequirement(ComputationTargetSpecification.of(callCurrency), callCurveName, callCurveCalculationConfig);
-    final ValueRequirement fxVolatilitySurface = getSurfaceRequirement(surfaceName, putCurrency, callCurrency, interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+    final ValueRequirement fxVolatilitySurface = getSurfaceRequirement(surfaceName, putCurrency, callCurrency, interpolatorName, leftExtrapolatorName,
+        rightExtrapolatorName);
     final UnorderedCurrencyPair currencyPair = UnorderedCurrencyPair.of(putCurrency, callCurrency);
     final ValueRequirement spotRequirement = ConventionBasedFXRateFunction.getSpotRateRequirement(currencyPair);
-    final ValueRequirement pairQuoteRequirement = new ValueRequirement(ValueRequirementNames.CURRENCY_PAIRS, ComputationTargetType.PRIMITIVE, currencyPair.getUniqueId());
+    final ValueRequirement pairQuoteRequirement = new ValueRequirement(ValueRequirementNames.CURRENCY_PAIRS, ComputationTargetType.PRIMITIVE,
+        currencyPair.getUniqueId());
     return Sets.newHashSet(putFundingCurve, callFundingCurve, fxVolatilitySurface, spotRequirement, pairQuoteRequirement);
   }
 
@@ -161,12 +165,13 @@ public abstract class FXOptionVannaVolgaFunction extends AbstractFunction.NonCom
     final String fullPutCurveName = putCurveName + "_" + putCurrency.getCode();
     final String fullCallCurveName = callCurveName + "_" + callCurrency.getCode();
     if (baseQuotePair.getBase().equals(putCurrency)) { // To get Base/quote in market standard order.
-      return new String[] {fullPutCurveName, fullCallCurveName };
+      return new String[] { fullPutCurveName, fullCallCurveName };
     }
-    return new String[] {fullCallCurveName, fullPutCurveName };
+    return new String[] { fullCallCurveName, fullPutCurveName };
   }
 
-  protected InstrumentDerivative getDerivative(final FinancialSecurity security, final String[] allCurveNames, final CurrencyPairs baseQuotePairs, final ZonedDateTime now) {
+  protected InstrumentDerivative getDerivative(final FinancialSecurity security, final String[] allCurveNames, final CurrencyPairs baseQuotePairs,
+      final ZonedDateTime now) {
     final InstrumentDefinition<?> definition = security.accept(new ForexSecurityConverter(baseQuotePairs));
     return definition.toDerivative(now, allCurveNames);
   }
@@ -189,7 +194,7 @@ public abstract class FXOptionVannaVolgaFunction extends AbstractFunction.NonCom
     }
     final SmileDeltaParameters[] surface = new SmileDeltaParameters[allSmiles.getNumberExpiration()];
     final int atmIndex = (allSmiles.getNumberStrike() - 1) / 2;
-    final double[] deltas = {delta };
+    final double[] deltas = { delta };
     for (int i = 0; i < allSmiles.getNumberExpiration(); i++) {
       final SmileDeltaParameters parameters = allSmiles.getSmileForTime(i);
       final double timeToExpiration = parameters.getTimeToExpiry();
@@ -216,15 +221,15 @@ public abstract class FXOptionVannaVolgaFunction extends AbstractFunction.NonCom
     YieldAndDiscountCurve[] curves;
     final YieldAndDiscountCurve putFundingCurve = getCurveForCurrency(inputs, putCurrency);
     final YieldAndDiscountCurve callFundingCurve = getCurveForCurrency(inputs, callCurrency);
-    final Map<String, Currency> curveCurrency = new HashMap<String, Currency>();
+    final Map<String, Currency> curveCurrency = new HashMap<>();
     if (baseQuotePair.getBase().equals(putCurrency)) { // To get Base/quote in market standard order.
       ccy1 = putCurrency;
       ccy2 = callCurrency;
-      curves = new YieldAndDiscountCurve[] {putFundingCurve, callFundingCurve };
+      curves = new YieldAndDiscountCurve[] { putFundingCurve, callFundingCurve };
       curveCurrency.put(allCurveNames[0], putCurrency);
       curveCurrency.put(allCurveNames[1], callCurrency);
     } else {
-      curves = new YieldAndDiscountCurve[] {callFundingCurve, putFundingCurve };
+      curves = new YieldAndDiscountCurve[] { callFundingCurve, putFundingCurve };
       ccy1 = callCurrency;
       ccy2 = putCurrency;
       curveCurrency.put(allCurveNames[1], putCurrency);

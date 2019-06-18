@@ -32,7 +32,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
 import com.opengamma.financial.analytics.curve.CurveSpecification;
@@ -42,15 +41,15 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Calculates the yield curve node sensitivities of a linked bond  for all curves to which the instruments are sensitive.
+ * Calculates the yield curve node sensitivities of a linked bond for all curves to which the instruments are sensitive.
  */
-public class InflationBondYCNSFromCurvesFunction extends InflationBondFromCurvesFunction<InflationIssuerProviderInterface, MultipleCurrencyInflationSensitivity> {
+public class InflationBondYCNSFromCurvesFunction
+    extends InflationBondFromCurvesFunction<InflationIssuerProviderInterface, MultipleCurrencyInflationSensitivity> {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(InflationBondYCNSFromCurvesFunction.class);
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES} and
-   * sets the calculator to null.
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES} and sets the calculator to null.
    */
   public InflationBondYCNSFromCurvesFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES, null);
@@ -72,8 +71,9 @@ public class InflationBondYCNSFromCurvesFunction extends InflationBondFromCurves
             .withoutAny(CURVE)
             .with(CURVE, curveName)
             .get();
-        final CurveSpecification curveSpecification = (CurveSpecification) inputs.getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL,
-            ValueProperties.builder().with(CURVE, curveName).get()));
+        final CurveSpecification curveSpecification = (CurveSpecification) inputs
+            .getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL,
+                ValueProperties.builder().with(CURVE, curveName).get()));
         final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(entry.getValue(), curveSpecification);
         final ValueSpecification spec = new ValueSpecification(YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), curveSpecificProperties);
         results.add(new ComputedValue(spec, ycns));

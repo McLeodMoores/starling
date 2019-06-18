@@ -20,8 +20,8 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Holds the state corresponding to a current graph execution. The state is capable of delivering executable jobs by tracking when all
- * dependent jobs have completed.
+ * Holds the state corresponding to a current graph execution. The state is capable of delivering executable jobs by tracking when all dependent jobs have
+ * completed.
  */
 public class ExecutingGraph {
 
@@ -33,7 +33,7 @@ public class ExecutingGraph {
     private final long[] _requiredJobIds;
     private int _requiredJobIndex;
 
-    public TailJobInfo(final int blockCount) {
+    TailJobInfo(final int blockCount) {
       _requiredJobIds = new long[blockCount];
     }
 
@@ -52,15 +52,15 @@ public class ExecutingGraph {
   /**
    * Information about planned jobs that are currently blocked on one or more executing jobs.
    * <p>
-   * Tail jobs are not represented here - the blocking information is held in TailJobInfo - as the calculation node they are dispatched to
-   * is responsible for executing them in the correct sequence.
+   * Tail jobs are not represented here - the blocking information is held in TailJobInfo - as the calculation node they are dispatched to is responsible for
+   * executing them in the correct sequence.
    */
   private static final class BlockedJobInfo {
 
     private final PlannedJob _job;
     private int _waitingFor;
 
-    public BlockedJobInfo(final PlannedJob job) {
+    BlockedJobInfo(final PlannedJob job) {
       _job = job;
       _waitingFor = job.getInputJobCount();
     }
@@ -87,10 +87,14 @@ public class ExecutingGraph {
   /**
    * Creates a new execution state.
    *
-   * @param plan the owning execution plan, not null
-   * @param cycleId the cycle identifier for job specifications, not null
-   * @param valuationTime the valuation time for job specifications, not null
-   * @param resolverVersionCorrection the resolution time stamp, not null
+   * @param plan
+   *          the owning execution plan, not null
+   * @param cycleId
+   *          the cycle identifier for job specifications, not null
+   * @param valuationTime
+   *          the valuation time for job specifications, not null
+   * @param resolverVersionCorrection
+   *          the resolution time stamp, not null
    */
   protected ExecutingGraph(final GraphExecutionPlan plan, final UniqueId cycleId, final Instant valuationTime,
       final VersionCorrection resolverVersionCorrection) {
@@ -147,14 +151,16 @@ public class ExecutingGraph {
    * <p>
    * The caller must already hold the synchronisation lock.
    *
-   * @param planned the planned job, not null
-   * @param jobInfo the map containing information about the tail job set
+   * @param planned
+   *          the planned job, not null
+   * @param jobInfo
+   *          the map containing information about the tail job set
    * @return the actual job
    */
   protected CalculationJob createTailCalculationJob(final PlannedJob planned, final Map<PlannedJob, TailJobInfo> jobInfo) {
     final long[] requiredJobIds = jobInfo.get(planned).getRequiredJobIds();
-    final CalculationJob actual =
-        planned.createCalculationJob(createJobSpecification(), getFunctionInitializationId(), getResolverVersionCorrection(), requiredJobIds);
+    final CalculationJob actual = planned.createCalculationJob(createJobSpecification(), getFunctionInitializationId(), getResolverVersionCorrection(),
+        requiredJobIds);
     addDependentCalculationJobs(actual, planned);
     addTailCalculationJobs(actual, planned, jobInfo);
     return actual;
@@ -163,8 +169,10 @@ public class ExecutingGraph {
   /**
    * Updates the state of any dependent fragments of the execution plan so that they may become executable when the job being created here completes.
    *
-   * @param actual the job being created, not null
-   * @param planned the execution plan information, not null
+   * @param actual
+   *          the job being created, not null
+   * @param planned
+   *          the execution plan information, not null
    */
   protected void addDependentCalculationJobs(final CalculationJob actual, final PlannedJob planned) {
     final PlannedJob[] dependents = planned.getDependents();
@@ -188,9 +196,12 @@ public class ExecutingGraph {
   /**
    * Adds the tail executing jobs to the job being created from the execution plan.
    *
-   * @param actual the job being created, not null
-   * @param planned the execution plan information, not null
-   * @param jobInfo a map to use for temporary storage, not null
+   * @param actual
+   *          the job being created, not null
+   * @param planned
+   *          the execution plan information, not null
+   * @param jobInfo
+   *          a map to use for temporary storage, not null
    */
   protected void addTailCalculationJobs(final CalculationJob actual, final PlannedJob planned, final Map<PlannedJob, TailJobInfo> jobInfo) {
     if (planned.getTails() != null) {
@@ -213,7 +224,8 @@ public class ExecutingGraph {
    * <p>
    * The caller must already hold the synchronisation lock.
    *
-   * @param planned the planned job, not null
+   * @param planned
+   *          the planned job, not null
    * @return the actual calculation job, not null
    */
   protected CalculationJob createCalculationJob(final PlannedJob planned) {
@@ -255,7 +267,8 @@ public class ExecutingGraph {
    * <p>
    * Any jobs that were not yet executable because they require one or more results from this job may now become executable.
    *
-   * @param jobSpec the job that has completed, not null
+   * @param jobSpec
+   *          the job that has completed, not null
    */
   public synchronized void jobCompleted(final CalculationJobSpecification jobSpec) {
     final BlockedJobInfo[] blockedJobs = _executing.remove(jobSpec);

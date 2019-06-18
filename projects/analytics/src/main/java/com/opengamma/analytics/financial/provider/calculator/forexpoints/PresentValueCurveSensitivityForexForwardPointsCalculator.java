@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.forexpoints;
@@ -12,7 +12,7 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public final class PresentValueCurveSensitivityForexForwardPointsCalculator
     extends InstrumentDerivativeVisitorAdapter<MulticurveForwardPointsProviderInterface, MultipleCurrencyMulticurveSensitivity> {
@@ -30,6 +30,7 @@ public final class PresentValueCurveSensitivityForexForwardPointsCalculator
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityForexForwardPointsCalculator getInstance() {
@@ -41,7 +42,7 @@ public final class PresentValueCurveSensitivityForexForwardPointsCalculator
    */
   private static final ForexForwardPointsMethod METHOD_FX_FWD = ForexForwardPointsMethod.getInstance();
 
-  // -----     Forex     ------
+  // ----- Forex ------
 
   @Override
   public MultipleCurrencyMulticurveSensitivity visitForex(final Forex fx, final MulticurveForwardPointsProviderInterface multicurvePoints) {

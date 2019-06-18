@@ -13,7 +13,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.livedata.normalization.NormalizationRuleSet;
 
 /**
- *
+ * A market data resolve request for a JMS topic.
  */
 public class JmsTopicNameResolveRequest {
 
@@ -27,6 +27,12 @@ public class JmsTopicNameResolveRequest {
    */
   private final NormalizationRuleSet _normalizationRule;
 
+  /**
+   * @param marketDataUniqueId
+   *          the id of the market data
+   * @param normalizationRule
+   *          the normalization rule
+   */
   public JmsTopicNameResolveRequest(
       final ExternalId marketDataUniqueId,
       final NormalizationRuleSet normalizationRule) {

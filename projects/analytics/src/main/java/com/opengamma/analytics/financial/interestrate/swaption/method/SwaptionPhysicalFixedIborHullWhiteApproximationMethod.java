@@ -21,9 +21,10 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.CurrencyAmount;
 
 /**
- * Method to computes the present value and sensitivities of physical delivery European swaptions with the Hull-White one factor model through efficient approximation.
- * The method does not require the solution of a non-linear equation.
- * Reference: Henrard, M. Efficient swaptions price in Hull-White one factor model. arXiv, 2009. http://arxiv.org/abs/0901.1776
+ * Method to computes the present value and sensitivities of physical delivery European swaptions with the Hull-White one factor model through efficient
+ * approximation. The method does not require the solution of a non-linear equation. Reference: Henrard, M. Efficient swaptions price in Hull-White one factor
+ * model. arXiv, 2009. http://arxiv.org/abs/0901.1776
+ * 
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionPhysicalFixedIborHullWhiteApproximationMethod}
  */
 @Deprecated
@@ -36,8 +37,11 @@ public class SwaptionPhysicalFixedIborHullWhiteApproximationMethod implements Pr
 
   /**
    * Computes the present value of the Physical delivery swaption through approximation..
-   * @param swaption The swaption.
-   * @param hwData The Hull-White parameters and the curves.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param hwData
+   *          The Hull-White parameters and the curves.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption, final HullWhiteOneFactorPiecewiseConstantDataBundle hwData) {

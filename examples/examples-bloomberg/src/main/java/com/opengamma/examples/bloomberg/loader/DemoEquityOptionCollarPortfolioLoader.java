@@ -84,7 +84,7 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
   private static final Map<String, String> INDEXES_TO_EXCHANGE = getIndexToExchangeMap();
   private static final Set<String> EXCLUDED_SECTORS = Sets.newHashSet("Financials");
 
-  private static final Period[] MEMBER_OPTION_PERIODS = new Period[] {Period.ofMonths(3), Period.ofMonths(6) };
+  private static final Period[] MEMBER_OPTION_PERIODS = new Period[] { Period.ofMonths(3), Period.ofMonths(6) };
 
   private BigDecimal _numContracts;
   private int _numOptions;
@@ -102,33 +102,34 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
 
   private static Map<String, String> getIndexToExchangeMap() {
     final Map<String, String> ret = new HashMap<>();
-    ret.put("SPX", "US"); //S&P 500 -> combined US
+    ret.put("SPX", "US"); // S&P 500 -> combined US
     // ret.put("IBX", "BZ"); //Sao Paulo Stock Exchange IBrX Index -> combined Brazil
-    //ret.put("TW50", "TT"); // FTSE TWSE Taiwan 50 Indx -> Taiwan Stock Exchange
+    // ret.put("TW50", "TT"); // FTSE TWSE Taiwan 50 Indx -> Taiwan Stock Exchange
     return ret;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     new DemoEquityOptionCollarPortfolioLoader().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   protected ManageablePortfolio generatePortfolio(final String portfolioName) {
     final ReferenceDataProvider referenceDataProvider = getToolContext().getBloombergReferenceDataProvider();
 
     final ManageablePortfolio portfolio = new ManageablePortfolio(portfolioName);
 
-    //Is this a hack?
+    // Is this a hack?
     final ManageablePortfolioNode rootNode = portfolio.getRootNode();
     portfolio.setRootNode(rootNode);
 
-    //    String indexTickerSuffix = " Index";
+    // String indexTickerSuffix = " Index";
 
     final Set<String> memberEquities = new HashSet<>();
 
@@ -139,14 +140,14 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
       final String underlying = entry.getKey();
       final String ticker = underlying + indexTickerSuffix;
 
-      //don't add index (delete at some point)
-      //      addNodes(rootNode, ticker, false, INDEX_OPTION_PERIODS);
+      // don't add index (delete at some point)
+      // addNodes(rootNode, ticker, false, INDEX_OPTION_PERIODS);
 
       final Set<String> indexMembers = BloombergDataUtils.getIndexMembers(referenceDataProvider, ticker);
       for (final String member : indexMembers) {
         final String symbol = getBloombergEquitySymbol(entry.getValue(), member);
-        //time series errors for Walmart
-        //Todo: investegate & fix
+        // time series errors for Walmart
+        // Todo: investegate & fix
         if ("WMT US Equity".equals(symbol)) {
           continue;
         }
@@ -212,7 +213,7 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
     final double estimatedCurrentStrike = getOrLoadMostRecentPoint(timeSeriesInfo);
     final Set<ExternalId> optionChain = getOptionChain(ticker);
 
-    //TODO: reuse positions/nodes?
+    // TODO: reuse positions/nodes?
     final String longName = underlyingSecurity == null ? "" : underlyingSecurity.getName();
     final String formattedName = MessageFormatter.format("[{}] {}", underlying, longName).getMessage();
     final ManageablePortfolioNode equityNode = new ManageablePortfolioNode(formattedName);
@@ -248,19 +249,19 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
     for (final Period bucketPeriod : expiries) {
       final ManageablePortfolioNode bucketNode = new ManageablePortfolioNode(bucketPeriod.toString().substring(1));
 
-      final LocalDate nowish = LocalDate.now().withDayOfMonth(20); //This avoids us picking different options every time this script is run
+      final LocalDate nowish = LocalDate.now().withDayOfMonth(20); // This avoids us picking different options every time this script is run
       final LocalDate targetExpiry = nowish.plus(bucketPeriod);
       final LocalDate chosenExpiry = optionsByExpiry.floorKey(targetExpiry);
       if (chosenExpiry == null) {
         LOGGER.info("No options for {} on {}", targetExpiry, underlying);
         continue;
       }
-      LOGGER.info("Using time {} for bucket {} ({})", new Object[] {chosenExpiry, bucketPeriod, targetExpiry });
+      LOGGER.info("Using time {} for bucket {} ({})", new Object[] { chosenExpiry, bucketPeriod, targetExpiry });
 
       final Set<BloombergTickerParserEQOption> optionsAtExpiry = optionsByExpiry.get(chosenExpiry);
       final TreeMap<Double, Pair<BloombergTickerParserEQOption, BloombergTickerParserEQOption>> optionsByStrike = new TreeMap<>();
       for (final BloombergTickerParserEQOption option : optionsAtExpiry) {
-        //        LOGGER.info("option {}", option);
+        // LOGGER.info("option {}", option);
         final double key = option.getStrike();
         Pair<BloombergTickerParserEQOption, BloombergTickerParserEQOption> pair = optionsByStrike.get(key);
         if (pair == null) {
@@ -274,7 +275,7 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
         optionsByStrike.put(key, pair);
       }
 
-      //cascading collar?
+      // cascading collar?
       final BigDecimal amountAtExpiry = spareCount-- > 0 ? spareAmountAtExpiry : defaultAmountAtExpiry;
 
       LOGGER.info(" est strike {}", estimatedCurrentStrike);
@@ -284,7 +285,8 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
       if (strikeIndex < 0) {
         strikeIndex = -(1 + strikeIndex);
       }
-      LOGGER.info("strikes length {} index {} strike of index {}", new Object[] {Integer.valueOf(strikes.length), Integer.valueOf(strikeIndex), Double.valueOf(strikes[strikeIndex]) });
+      LOGGER.info("strikes length {} index {} strike of index {}",
+          new Object[] { Integer.valueOf(strikes.length), Integer.valueOf(strikeIndex), Double.valueOf(strikes[strikeIndex]) });
 
       int minIndex = strikeIndex - _numOptions;
       minIndex = Math.max(0, minIndex);
@@ -300,7 +302,7 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
       sb.append(" ]");
       LOGGER.info(sb.toString());
 
-      //Short Calls
+      // Short Calls
       final ArrayList<Pair<BloombergTickerParserEQOption, BloombergTickerParserEQOption>> calls = new ArrayList<>();
       for (int j = minIndex; j < strikeIndex; j++) {
         final Pair<BloombergTickerParserEQOption, BloombergTickerParserEQOption> pair = optionsByStrike.get(strikes[j]);
@@ -323,7 +325,7 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
       spreadOptions(bucketNode, puts, OptionType.PUT, 1, tickersToLoad, amountAtExpiry, includeUnderlying, puts.size());
 
       if (bucketNode.getChildNodes().size() + bucketNode.getPositionIds().size() > 0) {
-        equityNode.addChildNode(bucketNode); //Avoid generating empty nodes
+        equityNode.addChildNode(bucketNode); // Avoid generating empty nodes
       }
     }
 
@@ -333,7 +335,7 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
         throw new OpenGammaRuntimeException("Unexpected option type " + loaded);
       }
 
-      //TODO [LAPANA-29] Should be able to do this for index options too
+      // TODO [LAPANA-29] Should be able to do this for index options too
       if (includeUnderlying) {
         try {
           final HistoricalTimeSeriesInfoDocument loadedTs = getOrLoadTimeSeries(optionTicker, loaded.getExternalIdBundle());
@@ -351,7 +353,8 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
     }
   }
 
-  private void spreadOptions(final ManageablePortfolioNode bucketNode, final Collection<Pair<BloombergTickerParserEQOption, BloombergTickerParserEQOption>> options, final OptionType type,
+  private void spreadOptions(final ManageablePortfolioNode bucketNode,
+      final Collection<Pair<BloombergTickerParserEQOption, BloombergTickerParserEQOption>> options, final OptionType type,
       final int scale,
       final Set<ExternalId> tickersToLoad, final BigDecimal underlyingAmount, final boolean includeUnderlying, final int targetNumber) {
 
@@ -370,20 +373,21 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
         option = pair.getFirst();
       }
 
-      //TODO [LAPANA-29] Should be able to do this for index options too
+      // TODO [LAPANA-29] Should be able to do this for index options too
       if (includeUnderlying) {
         try {
           final HistoricalTimeSeriesInfoDocument loadedTs = getOrLoadTimeSeries(option.getIdentifier());
-          final HistoricalTimeSeries ts = getToolContext().getHistoricalTimeSeriesSource().getHistoricalTimeSeries(loadedTs.getUniqueId(), LocalDate.now().minusWeeks(1), true, LocalDate.now(), true);
+          final HistoricalTimeSeries ts = getToolContext().getHistoricalTimeSeriesSource().getHistoricalTimeSeries(loadedTs.getUniqueId(),
+              LocalDate.now().minusWeeks(1), true, LocalDate.now(), true);
           if (ts.getTimeSeries().isEmpty()) {
             LOGGER.info("No recent time series points for " + option.getIdentifier());
-            //   leave in for now
-            //          continue; //This option is not liquid enough for us
+            // leave in for now
+            // continue; //This option is not liquid enough for us
           }
         } catch (final Exception ex) {
           LOGGER.info("Failed to get time series for " + option.getIdentifier(), ex);
-          //TODO: stop refetching this series each time
-          continue; //This option is not liquid enough for us
+          // TODO: stop refetching this series each time
+          continue; // This option is not liquid enough for us
         }
       }
       chosen.add(option);
@@ -395,7 +399,7 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
 
     if (chosen.size() == 0) {
       LOGGER.warn("Couldn't find any liquid " + type + " options from " + options);
-      return; //TODO: should we try another expiry?
+      return; // TODO: should we try another expiry?
     }
     for (final BloombergTickerParserEQOption option : chosen) {
       tickersToLoad.add(option.getIdentifier());
@@ -418,7 +422,7 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
   private LocalDate getRandomTradeDate(final ExternalId ticker) {
     final int tradeAge = (int) (3 + Math.random() * 30);
     final LocalDate tradeDate = LocalDate.now().minusDays(tradeAge);
-    //TODO: pick a date for which PX_LAST is known
+    // TODO: pick a date for which PX_LAST is known
     return tradeDate;
   }
 
@@ -428,7 +432,8 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
     }
     final ReferenceDataProvider referenceDataProvider = getToolContext().getBloombergReferenceDataProvider();
 
-    final Set<ExternalId> optionChain = BloombergDataUtils.getOptionChain(referenceDataProvider, ticker.getValue()); //TODO [BBG-88] this query shouldn't get cached permanently
+    final Set<ExternalId> optionChain = BloombergDataUtils.getOptionChain(referenceDataProvider, ticker.getValue()); // TODO [BBG-88] this query shouldn't get
+                                                                                                                     // cached permanently
     if (optionChain == null) {
       throw new OpenGammaRuntimeException("Failed to get option chain for " + ticker);
     }
@@ -458,7 +463,8 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
 
   private HistoricalTimeSeries getAllowedRecentPoints(final HistoricalTimeSeriesInfoDocument timeSeriesInfo) {
     final LocalDate from = oldestTimeSeriesAllowed();
-    final HistoricalTimeSeries timeSeries = getToolContext().getHistoricalTimeSeriesSource().getHistoricalTimeSeries(timeSeriesInfo.getUniqueId().toLatest(), from, true, LocalDate.now(), true);
+    final HistoricalTimeSeries timeSeries = getToolContext().getHistoricalTimeSeriesSource().getHistoricalTimeSeries(timeSeriesInfo.getUniqueId().toLatest(),
+        from, true, LocalDate.now(), true);
     return timeSeries;
   }
 
@@ -468,7 +474,8 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
 
   private HistoricalTimeSeriesInfoDocument getOrLoadTimeSeries(final ExternalId ticker, final ExternalIdBundle idBundle) {
 
-    final ExternalIdBundle searchBundle = idBundle.withoutScheme(ExternalSchemes.ISIN); //For things which move country, e.g. ISIN(VALE5 BZ Equity) == ISIN(RIODF US Equity)
+    final ExternalIdBundle searchBundle = idBundle.withoutScheme(ExternalSchemes.ISIN); // For things which move country, e.g. ISIN(VALE5 BZ Equity) ==
+                                                                                        // ISIN(RIODF US Equity)
     final HistoricalTimeSeriesInfoSearchRequest htsRequest = new HistoricalTimeSeriesInfoSearchRequest(searchBundle);
     htsRequest.setDataField("PX_LAST");
     final HistoricalTimeSeriesInfoSearchResult htsSearch = getToolContext().getHistoricalTimeSeriesMaster().search(htsRequest);
@@ -488,7 +495,7 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
   private HistoricalTimeSeriesInfoDocument loadTimeSeries(ExternalIdBundle idBundle) {
     final ReferenceDataProvider referenceDataProvider = getToolContext().getBloombergReferenceDataProvider();
     if (idBundle.getExternalId(ExternalSchemes.BLOOMBERG_BUID) == null && idBundle.getExternalId(ExternalSchemes.BLOOMBERG_TICKER) != null) {
-      //For some reason loading some series by TICKER fails, but BUID works
+      // For some reason loading some series by TICKER fails, but BUID works
       final BiMap<String, ExternalIdBundle> map = BloombergDataUtils.convertToBloombergBuidKeys(Collections.singleton(idBundle), referenceDataProvider);
       if (map.size() != 1) {
         throw new OpenGammaRuntimeException("Failed to get buid");
@@ -498,7 +505,8 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
         idBundle = idBundle.withExternalId(ExternalSchemes.bloombergBuidSecurityId(buid));
       }
     }
-    final ExternalIdBundle searchBundle = idBundle.withoutScheme(ExternalSchemes.ISIN); // For things which move country, e.g. ISIN(VALE5 BZ Equity) == ISIN(RIODF US Equity)
+    final ExternalIdBundle searchBundle = idBundle.withoutScheme(ExternalSchemes.ISIN); // For things which move country, e.g. ISIN(VALE5 BZ Equity) ==
+                                                                                        // ISIN(RIODF US Equity)
     final Map<ExternalId, UniqueId> timeSeries = getToolContext().getHistoricalTimeSeriesLoader()
         .loadTimeSeries(searchBundle.getExternalIds(), "UNKNOWN", "PX_LAST", LocalDate.now().minusYears(1), null);
     if (timeSeries.size() != 1) {
@@ -514,7 +522,7 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
     if (!getToolContext().getHistoricalTimeSeriesLoader().updateTimeSeries(timeSeries.getUniqueId())) {
       throw new OpenGammaRuntimeException("Failed to update time series " + timeSeries);
     }
-    //Force a cache miss on the source
+    // Force a cache miss on the source
     final HistoricalTimeSeriesInfoDocument newUid = getToolContext().getHistoricalTimeSeriesMaster().get(timeSeries.getUniqueId().toLatest());
     return getToolContext().getHistoricalTimeSeriesSource().getHistoricalTimeSeries(newUid.getUniqueId());
   }
@@ -565,7 +573,8 @@ public class DemoEquityOptionCollarPortfolioLoader extends AbstractTool<Integrat
   /**
    * Stores the portfolio.
    *
-   * @param portfolio the portfolio, not null
+   * @param portfolio
+   *          the portfolio, not null
    */
   private void storePortfolio(final ManageablePortfolio portfolio) {
     final PortfolioMaster portfolioMaster = getToolContext().getPortfolioMaster();

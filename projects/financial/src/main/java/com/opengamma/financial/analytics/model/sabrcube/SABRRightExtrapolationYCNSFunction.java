@@ -36,8 +36,8 @@ import com.opengamma.financial.security.swap.SwapSecurity;
 import com.opengamma.util.money.Currency;
 
 /**
- * Base class for the calculation of yield curve node sensitivities of instruments
- * priced using the SABR model.
+ * Base class for the calculation of yield curve node sensitivities of instruments priced using the SABR model.
+ *
  * @deprecated Use descendants of {@link SABRDiscountingFunction}
  */
 @Deprecated
@@ -56,7 +56,8 @@ public class SABRRightExtrapolationYCNSFunction extends SABRYCNSFunction {
         return false;
       }
       final InterestRateInstrumentType type = SwapSecurityUtils.getSwapType((SwapSecurity) security);
-      if ((type != InterestRateInstrumentType.SWAP_FIXED_CMS) && (type != InterestRateInstrumentType.SWAP_CMS_CMS) && (type != InterestRateInstrumentType.SWAP_IBOR_CMS)) {
+      if (type != InterestRateInstrumentType.SWAP_FIXED_CMS && type != InterestRateInstrumentType.SWAP_CMS_CMS
+          && type != InterestRateInstrumentType.SWAP_IBOR_CMS) {
         return false;
       }
     }

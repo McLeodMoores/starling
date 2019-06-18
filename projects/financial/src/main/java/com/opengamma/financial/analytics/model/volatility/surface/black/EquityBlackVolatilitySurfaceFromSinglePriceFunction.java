@@ -55,25 +55,25 @@ import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
 
 /**
-* Produces a {@link ValueRequirementNames#BLACK_VOLATILITY_SURFACE}
-* from Forward and Discounting Curves, and the Option's {@link MarketDataRequirementNames#MARKET_VALUE} or {@link ValueRequirementNames#MARK_PREVIOUS}.<p>
-*/
+ * Produces a {@link ValueRequirementNames#BLACK_VOLATILITY_SURFACE} from Forward and Discounting Curves, and the Option's
+ * {@link MarketDataRequirementNames#MARKET_VALUE} or {@link ValueRequirementNames#MARK_PREVIOUS}.
+ */
 public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends AbstractFunction.NonCompiledInvoker {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityOptionFunction.class);
 
   /**
-   * Property name for what to do if Implied Vol is undefined <p>
+   * Property name for what to do if Implied Vol is undefined
    * <p>
-   * Property used to select method of dealing with rare case in which option and forward prices are such
-   * that the implied volatility is not defined.<p>
-   * This occurs when the discounted payoff is worth more than the option price.<p>
+   * Property used to select method of dealing with rare case in which option and forward prices are such that the implied volatility is not defined.
+   * <p>
+   * This occurs when the discounted payoff is worth more than the option price.
+   * <p>
    * See child classes of this one.
    */
   public static final String PROPERTY_IMPLIED_VOL_BACKUP = "ImpliedVolBackup";
   /**
-   * Selection of {@link PROPERTY_IMPLIED_VOL_BACKUP} which will throw an error
-   * if implied vol is undefined
+   * Selection of {@link PROPERTY_IMPLIED_VOL_BACKUP} which will throw an error if implied vol is undefined.
    */
   public static final String NO_VOL_BACKUP = "None";
 
@@ -102,7 +102,8 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
     return desiredValues.iterator().next().getConstraints();
   }
 
-  protected Set<ValueRequirement> getAddlRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+  protected Set<ValueRequirement> getAddlRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+      final ValueRequirement desiredValue) {
     return Collections.emptySet();
   }
 
@@ -129,7 +130,8 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
         .with(ValuePropertyNames.CURVE, discountingCurveName)
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig)
         .get();
-    final ValueRequirement discountCurveRequirement = new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(ccy), fundingCurveProperties);
+    final ValueRequirement discountCurveRequirement = new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(ccy),
+        fundingCurveProperties);
     requirements.add(discountCurveRequirement);
 
     // 3. Forward Curve Requirement
@@ -142,9 +144,9 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
       return null;
     }
     final ValueProperties forwardCurveProperties = ValueProperties.builder()
-      .with(ValuePropertyNames.CURVE, forwardCurveName)
-      .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, forwardCurveCalculationMethod)
-      .get();
+        .with(ValuePropertyNames.CURVE, forwardCurveName)
+        .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, forwardCurveCalculationMethod)
+        .get();
     // Next we need to determine the correct target for the ForwardCurve
     final ExternalId underlyingId = FinancialSecurityUtils.getUnderlyingId(security);
     if (underlyingId == null) {
@@ -153,7 +155,8 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
     }
     if (security instanceof EquityIndexFutureOptionSecurity) {
       final SecuritySource securitySource = context.getSecuritySource();
-      final IndexFutureSecurity future = (IndexFutureSecurity) securitySource.getSingle(ExternalIdBundle.of(underlyingId), context.getComputationTargetResolver().getVersionCorrection());
+      final IndexFutureSecurity future = (IndexFutureSecurity) securitySource.getSingle(ExternalIdBundle.of(underlyingId),
+          context.getComputationTargetResolver().getVersionCorrection());
       if (future == null) {
         LOGGER.debug("Did not find anything in SecuritySource for ExternalId: {}", underlyingId);
         return null;
@@ -177,9 +180,11 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final BlackVolatilitySurface<?> blackVolSurf = getVolatilitySurface(executionContext, inputs, target, desiredValues);
-    final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.BLACK_VOLATILITY_SURFACE, target.toSpecification(), getResultProperties(desiredValues));
+    final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.BLACK_VOLATILITY_SURFACE, target.toSpecification(),
+        getResultProperties(desiredValues));
     return Collections.singleton(new ComputedValue(spec, blackVolSurf));
   }
 
@@ -276,6 +281,5 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
     }
     return (ForwardCurve) forwardCurveObject;
   }
-
 
 }

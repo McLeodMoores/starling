@@ -57,7 +57,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Base class for futures option pricing and analytics
+ * Base class for futures option pricing and analytics.
  */
 public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledInvoker {
   /** The values that the function can calculate */
@@ -66,7 +66,8 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
   private FinancialSecurityVisitor<InstrumentDefinition<?>> _converter;
 
   /**
-   * @param valueRequirementNames The value requirement names, not null or empty
+   * @param valueRequirementNames
+   *          The value requirement names, not null or empty
    */
   public FutureOptionFunction(final String[] valueRequirementNames) {
     ArgumentChecker.notEmpty(valueRequirementNames, "value requirement names");
@@ -75,8 +76,7 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
 
   @Override
   /**
-   * {@inheritDoc}
-   * Pass all conventions required to function to convert security to definition
+   * {@inheritDoc} Pass all conventions required to function to convert security to definition
    */
   public void init(final FunctionCompilationContext context) {
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
@@ -84,9 +84,10 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
     final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final FutureSecurityConverterDeprecated futureSecurityConverter = new FutureSecurityConverterDeprecated(null);
-    final FinancialSecurityVisitor<InstrumentDefinition<?>> commodityFutureOption = new CommodityFutureOptionConverter(securitySource, holidaySource, conventionSource, regionSource);
+    final FinancialSecurityVisitor<InstrumentDefinition<?>> commodityFutureOption = new CommodityFutureOptionConverter(securitySource, holidaySource,
+        conventionSource, regionSource);
     final FinancialSecurityVisitor<InstrumentDefinition<?>> equityFutureOption = new EquityOptionsConverter(futureSecurityConverter, securitySource);
-    _converter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder()
+    _converter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>> builder()
         .commodityFutureOptionSecurityVisitor(commodityFutureOption)
         .equityIndexFutureOptionVisitor(equityFutureOption).create();
   }
@@ -113,11 +114,17 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
 
   /**
    * Constructs a market data bundle for use in the analytics library.
-   * @param underlyingId The id of the underlying
-   * @param executionContext The execution context
-   * @param inputs The market data inputs
-   * @param target The computation target
-   * @param desiredValues The desired values
+   *
+   * @param underlyingId
+   *          The id of the underlying
+   * @param executionContext
+   *          The execution context
+   * @param inputs
+   *          The market data inputs
+   * @param target
+   *          The computation target
+   * @param desiredValues
+   *          The desired values
    * @return The market data in a form that the analytics library can use
    */
   protected StaticReplicationDataBundle buildMarketBundle(final ExternalId underlyingId, final FunctionExecutionContext executionContext,
@@ -128,7 +135,7 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
     if (discountingObject == null) {
       throw new OpenGammaRuntimeException("Could not get Discounting Curve");
     }
-    if (!(discountingObject instanceof YieldCurve)) { //TODO: make it more generic
+    if (!(discountingObject instanceof YieldCurve)) { // TODO: make it more generic
       throw new IllegalArgumentException("Can only handle YieldCurve");
     }
     final YieldCurve discountingCurve = (YieldCurve) discountingObject;
@@ -151,17 +158,24 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
   }
 
   /**
-   * Calculates the value
-   * @param derivative The derivative
-   * @param market The market data bundle
-   * @param inputs The function inputs
-   * @param desiredValues The desired values
-   * @param targetSpec The computation target specification
-   * @param resultProperties The result properties
+   * Calculates the value.
+   *
+   * @param derivative
+   *          The derivative
+   * @param market
+   *          The market data bundle
+   * @param inputs
+   *          The function inputs
+   * @param desiredValues
+   *          The desired values
+   * @param targetSpec
+   *          The computation target specification
+   * @param resultProperties
+   *          The result properties
    * @return A set of values
    */
-  protected abstract Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
-      final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties);
+  protected abstract Set<ComputedValue> computeValues(InstrumentDerivative derivative, StaticReplicationDataBundle market, FunctionInputs inputs,
+      Set<ValueRequirement> desiredValues, ComputationTargetSpecification targetSpec, ValueProperties resultProperties);
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
@@ -220,8 +234,10 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
   }
 
   /**
-   * Allows us to set which ValueSpecifications contain ValuePropertyNames.CURRENCY <p>
+   * Allows us to set which ValueSpecifications contain ValuePropertyNames.CURRENCY
+   * <p>
    * PresentValue and ValueGamma will, while Delta and PositionDelta will not.
+   *
    * @return true if Function's specification contains ValuePropertyNames.CURRENCY, else false.
    */
   protected boolean getFunctionIncludesCurrencyProperty() {
@@ -229,7 +245,8 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     boolean discountCurvePropertiesSet = false;
     boolean forwardCurvePropertiesSet = false;
     boolean surfacePropertiesSet = false;
@@ -257,8 +274,8 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
           properties.with(property, curveProperties.getValues(property));
         }
         properties
-          .with(EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_NAME, discountingCurveName)
-          .with(EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_CONFIG, discountingCurveConfig);
+            .with(EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_NAME, discountingCurveName)
+            .with(EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_CONFIG, discountingCurveConfig);
         discountCurvePropertiesSet = true;
       } else if (inputName.equals(ValueRequirementNames.BLACK_VOLATILITY_SURFACE) && !surfacePropertiesSet) {
         final ValueProperties surfaceProperties = value.getProperties().copy()
@@ -297,31 +314,43 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
   }
 
   /**
-   * Constructs the discounting curve requirement
-   * @param discountingCurveName The discounting curve name
-   * @param curveCalculationConfigName The curve calculation configuration name
-   * @param security The security
+   * Constructs the discounting curve requirement.
+   *
+   * @param discountingCurveName
+   *          The discounting curve name
+   * @param curveCalculationConfigName
+   *          The curve calculation configuration name
+   * @param security
+   *          The security
    * @return The discounting curve requirement
    */
   protected ValueRequirement getDiscountCurveRequirement(final String discountingCurveName, final String curveCalculationConfigName, final Security security) {
     final ValueProperties properties = ValueProperties.builder()
-      .with(ValuePropertyNames.CURVE, discountingCurveName)
-      .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName)
-      .get();
-    return new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetType.CURRENCY.specification(FinancialSecurityUtils.getCurrency(security)), properties);
+        .with(ValuePropertyNames.CURVE, discountingCurveName)
+        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName)
+        .get();
+    return new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetType.CURRENCY.specification(FinancialSecurityUtils.getCurrency(security)),
+        properties);
   }
 
   /**
-   * Constructs the volatility surface requirement
-   * @param desiredValue The desired value
-   * @param security The security
-   * @param surfaceName The surface name
-   * @param forwardCurveName The forward curve name
-   * @param surfaceCalculationMethod The surface calculation method
+   * Constructs the volatility surface requirement.
+   *
+   * @param desiredValue
+   *          The desired value
+   * @param security
+   *          The security
+   * @param surfaceName
+   *          The surface name
+   * @param forwardCurveName
+   *          The forward curve name
+   * @param surfaceCalculationMethod
+   *          The surface calculation method
    * @return The volatility surface requirement
    */
-  protected abstract ValueRequirement getVolatilitySurfaceRequirement(final ValueRequirement desiredValue, final FinancialSecurity security, final String surfaceName,
-      final String forwardCurveName, final String surfaceCalculationMethod);
+  protected abstract ValueRequirement getVolatilitySurfaceRequirement(ValueRequirement desiredValue, FinancialSecurity security,
+      String surfaceName,
+      String forwardCurveName, String surfaceCalculationMethod);
 
   protected abstract ValueRequirement getForwardCurveRequirement(FinancialSecurity security, String forwardCurveName, String forwardCurveCalculationMethod);
 
@@ -332,8 +361,10 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
   protected abstract String getSurfaceName(FinancialSecurity security, String surfaceName);
 
   /**
-   * Constructs the underlying future price requirement
-   * @param underlyingId The id of the underlying future
+   * Constructs the underlying future price requirement.
+   *
+   * @param underlyingId
+   *          The id of the underlying future
    * @return The underlying future price requirement
    */
   protected ValueRequirement getUnderlyingFutureRequirement(final ExternalId underlyingId) {
@@ -341,7 +372,8 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
   }
 
   /**
-   * Gets the value requirement names
+   * Gets the value requirement names.
+   *
    * @return The value requirement names
    */
   protected String[] getValueRequirementNames() {
@@ -349,7 +381,8 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
   }
 
   /**
-   * Gets the security converter
+   * Gets the security converter.
+   *
    * @return The security converter
    */
   protected FinancialSecurityVisitor<InstrumentDefinition<?>> getSecurityConverter() {
@@ -357,8 +390,10 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
   }
 
   /**
-   * Copies the constraints, removing the function property and replacing it with the appropriate one for the function
-   * @param constraints The constraints
+   * Copies the constraints, removing the function property and replacing it with the appropriate one for the function.
+   *
+   * @param constraints
+   *          The constraints
    * @return The properties
    */
   protected ValueProperties createResultProperties(final ValueProperties constraints) {

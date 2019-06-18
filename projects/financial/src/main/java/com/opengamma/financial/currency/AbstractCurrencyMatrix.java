@@ -66,10 +66,9 @@ public abstract class AbstractCurrencyMatrix implements CurrencyMatrix, MutableU
     final ConcurrentHashMap<Currency, CurrencyMatrixValue> conversions = _values.get(source);
     if (conversions == null) {
       return null;
-    } else {
-      final CurrencyMatrixValue currMtxVal = conversions.get(target);
-      return currMtxVal;
     }
+    final CurrencyMatrixValue currMtxVal = conversions.get(target);
+    return currMtxVal;
   }
 
   // Helper methods for sub-classes

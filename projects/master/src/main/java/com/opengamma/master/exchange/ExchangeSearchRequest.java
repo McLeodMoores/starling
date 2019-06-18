@@ -36,18 +36,15 @@ import com.opengamma.util.RegexUtils;
 /**
  * Request for searching for exchanges.
  * <p>
- * Documents will be returned that match the search criteria.
- * This class provides the ability to page the results and to search
- * as at a specific version and correction instant.
- * See {@link ExchangeHistoryRequest} for more details on how history works.
+ * Documents will be returned that match the search criteria. This class provides the ability to page the results and to search as at a specific version and
+ * correction instant. See {@link ExchangeHistoryRequest} for more details on how history works.
  */
 @PublicSPI
 @BeanDefinition
 public class ExchangeSearchRequest extends AbstractSearchRequest {
 
   /**
-   * The set of exchange object identifiers, null to not limit by exchange object identifiers.
-   * Note that an empty set will return no exchanges.
+   * The set of exchange object identifiers, null to not limit by exchange object identifiers. Note that an empty set will return no exchanges.
    */
   @PropertyDefinition(set = "manual")
   private List<ObjectId> _objectIds;
@@ -76,7 +73,8 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
   /**
    * Creates an instance using a single search identifier.
    *
-   * @param exchangeId  the exchange external identifier to search for, not null
+   * @param exchangeId
+   *          the exchange external identifier to search for, not null
    */
   public ExchangeSearchRequest(final ExternalId exchangeId) {
     addExternalId(exchangeId);
@@ -85,17 +83,19 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
   /**
    * Creates an instance using a bundle of identifiers.
    *
-   * @param exchangeBundle  the exchange external identifiers to search for, not null
+   * @param exchangeBundle
+   *          the exchange external identifiers to search for, not null
    */
   public ExchangeSearchRequest(final ExternalIdBundle exchangeBundle) {
     addExternalIds(exchangeBundle);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds a single exchange object identifier to the set.
    *
-   * @param exchangeId  the exchange object identifier to add, not null
+   * @param exchangeId
+   *          the exchange object identifier to add, not null
    */
   public void addObjectId(final ObjectIdentifiable exchangeId) {
     ArgumentChecker.notNull(exchangeId, "exchangeId");
@@ -106,10 +106,10 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets the set of exchange object identifiers, null to not limit by exchange object identifiers.
-   * Note that an empty set will return no exchanges.
+   * Sets the set of exchange object identifiers, null to not limit by exchange object identifiers. Note that an empty set will return no exchanges.
    *
-   * @param exchangeIds  the new exchange identifiers, null clears the exchange id search
+   * @param exchangeIds
+   *          the new exchange identifiers, null clears the exchange id search
    */
   public void setObjectIds(final Iterable<? extends ObjectIdentifiable> exchangeIds) {
     if (exchangeIds == null) {
@@ -122,13 +122,13 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Adds a single exchange external identifier to the collection to search for.
-   * Unless customized, the search will match
-   * {@link ExternalIdSearchType#ANY any} of the identifiers.
+   * Adds a single exchange external identifier to the collection to search for. Unless customized, the search will match {@link ExternalIdSearchType#ANY any}
+   * of the identifiers.
    *
-   * @param exchangeId  the exchange key identifier to add, not null
+   * @param exchangeId
+   *          the exchange key identifier to add, not null
    */
   public void addExternalId(final ExternalId exchangeId) {
     ArgumentChecker.notNull(exchangeId, "exchangeId");
@@ -136,11 +136,11 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Adds a collection of exchange external identifiers to the collection to search for.
-   * Unless customized, the search will match
+   * Adds a collection of exchange external identifiers to the collection to search for. Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
    *
-   * @param exchangeIds  the exchange key identifiers to add, not null
+   * @param exchangeIds
+   *          the exchange key identifiers to add, not null
    */
   public void addExternalIds(final ExternalId... exchangeIds) {
     ArgumentChecker.notNull(exchangeIds, "exchangeIds");
@@ -152,11 +152,11 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Adds a collection of exchange external identifiers to the collection to search for.
-   * Unless customized, the search will match
+   * Adds a collection of exchange external identifiers to the collection to search for. Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
    *
-   * @param exchangeIds  the exchange key identifiers to add, not null
+   * @param exchangeIds
+   *          the exchange key identifiers to add, not null
    */
   public void addExternalIds(final Iterable<ExternalId> exchangeIds) {
     ArgumentChecker.notNull(exchangeIds, "exchangeIds");
@@ -170,7 +170,8 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
   /**
    * Sets the search type to use in {@code ExternalIdSearch}.
    *
-   * @param type  the type to set, not null
+   * @param type
+   *          the type to set, not null
    */
   public void setExternalIdSearchType(final ExternalIdSearchType type) {
     if (getExternalIdSearch() == null) {
@@ -180,7 +181,7 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean matches(final AbstractDocument obj) {
     if (!(obj instanceof ExchangeDocument)) {
@@ -221,8 +222,7 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of exchange object identifiers, null to not limit by exchange object identifiers.
-   * Note that an empty set will return no exchanges.
+   * Gets the set of exchange object identifiers, null to not limit by exchange object identifiers. Note that an empty set will return no exchanges.
    * @return the value of the property
    */
   public List<ObjectId> getObjectIds() {
@@ -231,7 +231,6 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code objectIds} property.
-   * Note that an empty set will return no exchanges.
    * @return the property, not null
    */
   public final Property<List<ObjectId>> objectIds() {

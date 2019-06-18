@@ -26,11 +26,12 @@ import com.opengamma.financial.security.option.IRFutureOptionSecurity;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
+
 //CSOFF
 /**
- * Adds {@link ValuePropertyNames#SURFACE} and {@link ValuePropertyNames#CURVE_CALCULATION_CONFIG} to the available
- * {@link ValueRequirement}'s produced by {@link InterestRateFutureOptionBlackFunction}. The properties apply
- * for interest rate future option {@link Trade}s.
+ * Adds {@link ValuePropertyNames#SURFACE} and {@link ValuePropertyNames#CURVE_CALCULATION_CONFIG} to the available {@link ValueRequirement}'s produced by
+ * {@link InterestRateFutureOptionBlackFunction}. The properties apply for interest rate future option {@link Trade}s.
+ * 
  * @deprecated The functions for which these defaults apply are deprecated
  */
 @Deprecated
@@ -38,43 +39,45 @@ public class InterestRateFutureOptionBlackDefaults extends DefaultPropertyFuncti
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackDefaults.class);
   /** The value requirement names for which these defaults apply */
-  private static final String[] s_valueRequirements = new String[] {
-    ValueRequirementNames.PNL,
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.DELTA,
-    ValueRequirementNames.GAMMA,
-    ValueRequirementNames.VEGA,
-    ValueRequirementNames.THETA,
-    ValueRequirementNames.POSITION_DELTA,
-    ValueRequirementNames.POSITION_GAMMA,
-    ValueRequirementNames.POSITION_VEGA,
-    ValueRequirementNames.POSITION_THETA,
-    ValueRequirementNames.POSITION_RHO,
-    ValueRequirementNames.POSITION_WEIGHTED_VEGA,
-    ValueRequirementNames.VALUE_DELTA,
-    ValueRequirementNames.VALUE_GAMMA,
-    ValueRequirementNames.VALUE_VEGA,
-    ValueRequirementNames.VALUE_THETA,
-    ValueRequirementNames.PV01,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-    ValueRequirementNames.IMPLIED_VOLATILITY,
-    ValueRequirementNames.SECURITY_MODEL_PRICE,
-    ValueRequirementNames.UNDERLYING_MODEL_PRICE,
-    ValueRequirementNames.DAILY_PRICE,
-    ValueRequirementNames.FORWARD,
-    ValueRequirementNames.VALUE_GAMMA_P
+  private static final String[] VALUE_REQUIREMENTS = new String[] {
+                ValueRequirementNames.PNL,
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.DELTA,
+                ValueRequirementNames.GAMMA,
+                ValueRequirementNames.VEGA,
+                ValueRequirementNames.THETA,
+                ValueRequirementNames.POSITION_DELTA,
+                ValueRequirementNames.POSITION_GAMMA,
+                ValueRequirementNames.POSITION_VEGA,
+                ValueRequirementNames.POSITION_THETA,
+                ValueRequirementNames.POSITION_RHO,
+                ValueRequirementNames.POSITION_WEIGHTED_VEGA,
+                ValueRequirementNames.VALUE_DELTA,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.VALUE_THETA,
+                ValueRequirementNames.PV01,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.IMPLIED_VOLATILITY,
+                ValueRequirementNames.SECURITY_MODEL_PRICE,
+                ValueRequirementNames.UNDERLYING_MODEL_PRICE,
+                ValueRequirementNames.DAILY_PRICE,
+                ValueRequirementNames.FORWARD,
+                ValueRequirementNames.VALUE_GAMMA_P
   };
 
   /**
-   * This map from currency to curve configuration and surface names
-   * may be accessed and set from child classes.
+   * This map from currency to curve configuration and surface names may be accessed and set from child classes.
    */
   private HashMap<String, Pair<String, String>> _currencyCurveConfigAndSurfaceNames;
 
   /**
    * Requires a list of (currency, curve configuration name, surface name) triples.
-   * @param currencyCurveConfigAndSurfaceNames A list of (currency, curve configuration name, surface name) triples, not null
-   * @throws IllegalArgumentException If each currency does not have a curve configuration name and surface name
+   * 
+   * @param currencyCurveConfigAndSurfaceNames
+   *          A list of (currency, curve configuration name, surface name) triples, not null
+   * @throws IllegalArgumentException
+   *           If each currency does not have a curve configuration name and surface name
    */
   public InterestRateFutureOptionBlackDefaults(final String... currencyCurveConfigAndSurfaceNames) {
     super(ComputationTargetType.TRADE, true);
@@ -100,14 +103,15 @@ public class InterestRateFutureOptionBlackDefaults extends DefaultPropertyFuncti
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String valueRequirement : s_valueRequirements) {
+    for (final String valueRequirement : VALUE_REQUIREMENTS) {
       defaults.addValuePropertyName(valueRequirement, ValuePropertyNames.SURFACE);
       defaults.addValuePropertyName(valueRequirement, ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     }
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String currencyName = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode();
     if (!_currencyCurveConfigAndSurfaceNames.containsKey(currencyName)) {
       LOGGER.error("Could not config and surface names for currency " + currencyName + "; should never happen");
@@ -130,6 +134,7 @@ public class InterestRateFutureOptionBlackDefaults extends DefaultPropertyFuncti
 
   /**
    * Gets the per-currency defaults.
+   * 
    * @return The per-currency defaults
    */
   protected HashMap<String, Pair<String, String>> getCurrencyCurveConfigAndSurfaceNames() {
@@ -138,7 +143,9 @@ public class InterestRateFutureOptionBlackDefaults extends DefaultPropertyFuncti
 
   /**
    * Sets the per-currency defaults.
-   * @param currencyCurveConfigAndSurfaceNames The default values, not null
+   * 
+   * @param currencyCurveConfigAndSurfaceNames
+   *          The default values, not null
    */
   protected void setCurrencyCurveConfigAndSurfaceNames(final HashMap<String, Pair<String, String>> currencyCurveConfigAndSurfaceNames) {
     ArgumentChecker.notNull(currencyCurveConfigAndSurfaceNames, "currency, curve config and surface names");
@@ -147,6 +154,7 @@ public class InterestRateFutureOptionBlackDefaults extends DefaultPropertyFuncti
 
   /**
    * Gets the logger.
+   * 
    * @return The logger
    */
   public static Logger getsLogger() {
@@ -155,10 +163,11 @@ public class InterestRateFutureOptionBlackDefaults extends DefaultPropertyFuncti
 
   /**
    * Gets the value requirements.
+   * 
    * @return The value requirements
    */
   public static String[] getsValuerequirements() {
-    return s_valueRequirements;
+    return VALUE_REQUIREMENTS;
   }
 
 }

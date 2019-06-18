@@ -16,16 +16,18 @@ import com.opengamma.analytics.math.matrix.OGMatrixAlgebra;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Give a class {@link PiecewisePolynomialResultsWithSensitivity}, Compute node sensitivity of function value, first derivative value
- * and second derivative value.
+ * Give a class {@link PiecewisePolynomialResultsWithSensitivity}, Compute node sensitivity of function value, first derivative value and second derivative
+ * value.
  */
 public class PiecewisePolynomialWithSensitivityFunction1D extends PiecewisePolynomialFunction1D {
 
   private static final MatrixAlgebra MA = new OGMatrixAlgebra();
 
   /**
-   * @param pp {@link PiecewisePolynomialResultsWithSensitivity}
+   * @param pp
+   *          {@link PiecewisePolynomialResultsWithSensitivity}
    * @param xKey
+   *          the x value for which to get the sensitivities
    * @return Node sensitivity value at x=xKey
    */
   public DoubleMatrix1D nodeSensitivity(final PiecewisePolynomialResultsWithSensitivity pp, final double xKey) {
@@ -58,8 +60,10 @@ public class PiecewisePolynomialWithSensitivityFunction1D extends PiecewisePolyn
   }
 
   /**
-   * @param pp {@link PiecewisePolynomialResultsWithSensitivity}
+   * @param pp
+   *          {@link PiecewisePolynomialResultsWithSensitivity}
    * @param xKeys
+   *          the x values for which to get the sensitivities
    * @return Node sensitivity value at x=xKeys
    */
   public DoubleMatrix1D[] nodeSensitivity(final PiecewisePolynomialResultsWithSensitivity pp, final double[] xKeys) {
@@ -101,8 +105,10 @@ public class PiecewisePolynomialWithSensitivityFunction1D extends PiecewisePolyn
   }
 
   /**
-   * @param pp {@link PiecewisePolynomialResultsWithSensitivity}
+   * @param pp
+   *          {@link PiecewisePolynomialResultsWithSensitivity}
    * @param xKey
+   *          the x value for which to get the sensitivities
    * @return Node sensitivity of derivative value at x=xKey
    */
   public DoubleMatrix1D differentiateNodeSensitivity(final PiecewisePolynomialResultsWithSensitivity pp, final double xKey) {
@@ -136,8 +142,10 @@ public class PiecewisePolynomialWithSensitivityFunction1D extends PiecewisePolyn
   }
 
   /**
-   * @param pp {@link PiecewisePolynomialResultsWithSensitivity}
+   * @param pp
+   *          {@link PiecewisePolynomialResultsWithSensitivity}
    * @param xKeys
+   *          the x values for which to get the sensitivities
    * @return Node sensitivity of derivative value at x=xKeys
    */
   public DoubleMatrix1D[] differentiateNodeSensitivity(final PiecewisePolynomialResultsWithSensitivity pp, final double[] xKeys) {
@@ -163,13 +171,16 @@ public class PiecewisePolynomialWithSensitivityFunction1D extends PiecewisePolyn
       diffSense[i] = new DoubleMatrix2D(tmp);
     }
 
-    final PiecewisePolynomialResultsWithSensitivity ppDiff = new PiecewisePolynomialResultsWithSensitivity(pp.getKnots(), pp.getCoefMatrix(), nCoefs - 1, pp.getDimensions(), diffSense);
+    final PiecewisePolynomialResultsWithSensitivity ppDiff = new PiecewisePolynomialResultsWithSensitivity(pp.getKnots(), pp.getCoefMatrix(), nCoefs - 1,
+        pp.getDimensions(), diffSense);
     return nodeSensitivity(ppDiff, xKeys);
   }
 
   /**
-   * @param pp {@link PiecewisePolynomialResultsWithSensitivity}
+   * @param pp
+   *          {@link PiecewisePolynomialResultsWithSensitivity}
    * @param xKey
+   *          the x value for which to get the sensitivities
    * @return Node sensitivity of second derivative value at x=xKey
    */
   public DoubleMatrix1D differentiateTwiceNodeSensitivity(final PiecewisePolynomialResultsWithSensitivity pp, final double xKey) {
@@ -203,8 +214,10 @@ public class PiecewisePolynomialWithSensitivityFunction1D extends PiecewisePolyn
   }
 
   /**
-   * @param pp {@link PiecewisePolynomialResultsWithSensitivity}
+   * @param pp
+   *          {@link PiecewisePolynomialResultsWithSensitivity}
    * @param xKeys
+   *          the x values for which to get the sensitivities
    * @return Node sensitivity of second derivative value at x=xKeys
    */
   public DoubleMatrix1D[] differentiateTwiceNodeSensitivity(final PiecewisePolynomialResultsWithSensitivity pp, final double[] xKeys) {
@@ -230,7 +243,8 @@ public class PiecewisePolynomialWithSensitivityFunction1D extends PiecewisePolyn
       diffSense[i] = new DoubleMatrix2D(tmp);
     }
 
-    final PiecewisePolynomialResultsWithSensitivity ppDiff = new PiecewisePolynomialResultsWithSensitivity(pp.getKnots(), pp.getCoefMatrix(), nCoefs - 2, pp.getDimensions(), diffSense);
+    final PiecewisePolynomialResultsWithSensitivity ppDiff = new PiecewisePolynomialResultsWithSensitivity(pp.getKnots(), pp.getCoefMatrix(), nCoefs - 2,
+        pp.getDimensions(), diffSense);
     return nodeSensitivity(ppDiff, xKeys);
   }
 }

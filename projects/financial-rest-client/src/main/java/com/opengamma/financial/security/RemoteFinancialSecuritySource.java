@@ -39,7 +39,6 @@ public class RemoteFinancialSecuritySource extends RemoteSecuritySource implemen
   }
 
   //-------------------------------------------------------------------------
-  @SuppressWarnings("unchecked")
   @Override
   public Collection<Security> getBondsWithIssuerName(final String issuerName) {
     ArgumentChecker.notNull(issuerName, "issuerName");

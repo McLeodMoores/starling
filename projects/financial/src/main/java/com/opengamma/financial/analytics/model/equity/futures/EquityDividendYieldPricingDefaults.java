@@ -42,19 +42,21 @@ public class EquityDividendYieldPricingDefaults extends DefaultPropertyFunction 
 
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_NAMES = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.VALUE_DELTA,
-    ValueRequirementNames.FORWARD,
-    ValueRequirementNames.SPOT,
-    ValueRequirementNames.VALUE_RHO,
-    ValueRequirementNames.PV01,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.VALUE_DELTA,
+                ValueRequirementNames.FORWARD,
+                ValueRequirementNames.SPOT,
+                ValueRequirementNames.VALUE_RHO,
+                ValueRequirementNames.PV01,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES
   };
 
-
   /**
-   * @param priority The priority class of {@link DefaultPropertyFunction} instances, allowing them to be ordered relative to each other. ABOVE_NORMAL, NORMAL, BELOW_NORMAL, LOWEST
-   * @param currencyCurveConfigAndDiscountingCurveNames Choice of MultiCurveCalculationConfig. e.g. DefaultTwoCurveUSDConfig
+   * @param priority
+   *          The priority class of {@link DefaultPropertyFunction} instances, allowing them to be ordered relative to each other. ABOVE_NORMAL, NORMAL,
+   *          BELOW_NORMAL, LOWEST
+   * @param currencyCurveConfigAndDiscountingCurveNames
+   *          Choice of MultiCurveCalculationConfig. e.g. DefaultTwoCurveUSDConfig
    */
   public EquityDividendYieldPricingDefaults(final String priority, final String... currencyCurveConfigAndDiscountingCurveNames) {
     super(ComputationTargetType.TRADE, true);
@@ -64,7 +66,7 @@ public class EquityDividendYieldPricingDefaults extends DefaultPropertyFunction 
 
     final int nPairs = currencyCurveConfigAndDiscountingCurveNames.length;
     ArgumentChecker.isTrue(nPairs % 3 == 0, "Must have one curve config and discounting curve name per currency");
-    _currencyCurveConfigAndDiscountingCurveNames = new HashMap<Currency, Pair<String, String>>();
+    _currencyCurveConfigAndDiscountingCurveNames = new HashMap<>();
     for (int i = 0; i < currencyCurveConfigAndDiscountingCurveNames.length; i += 3) {
       final Pair<String, String> pair = Pairs.of(currencyCurveConfigAndDiscountingCurveNames[i + 1], currencyCurveConfigAndDiscountingCurveNames[i + 2]);
       final Currency ccy = Currency.of(currencyCurveConfigAndDiscountingCurveNames[i]);
@@ -81,7 +83,8 @@ public class EquityDividendYieldPricingDefaults extends DefaultPropertyFunction 
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final Currency ccy = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity());
     if (!_currencyCurveConfigAndDiscountingCurveNames.containsKey(ccy)) {
       LOGGER.error("Could not get config for currency " + ccy + "; should never happen");

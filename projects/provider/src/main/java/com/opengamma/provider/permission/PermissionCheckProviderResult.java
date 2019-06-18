@@ -33,11 +33,8 @@ import com.opengamma.util.PublicSPI;
 /**
  * Result of permission checks for a set of permissions for a user.
  * <p>
- * The result contains a map of the permissions that were checked and the true-false result.
- * It also contains error fields that provide more detail.
- * The map of checked permissions will contain no true values if there are errors
- * and will typically be empty.
- * As such, there is no need for an {@code isErrors()} method.
+ * The result contains a map of the permissions that were checked and the true-false result. It also contains error fields that provide more detail. The map of
+ * checked permissions will contain no true values if there are errors and will typically be empty. As such, there is no need for an {@code isErrors()} method.
  * <p>
  * This class is immutable and thread-safe.
  */
@@ -51,23 +48,22 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
   @PropertyDefinition(validate = "notNull")
   private final ImmutableMap<String, Boolean> _checkedPermissions;
   /**
-   * The authentication error, null if no error in authentication.
-   * The map of checked permissions contains no true values.
+   * The authentication error, null if no error in authentication. The map of checked permissions contains no true values.
    */
   @PropertyDefinition
   private final String _authenticationError;
   /**
-   * The authorization error, null if no error in authorization.
-   * The map of checked permissions contains no true values.
+   * The authorization error, null if no error in authorization. The map of checked permissions contains no true values.
    */
   @PropertyDefinition
   private final String _authorizationError;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates a result containing authorization information.
    *
-   * @param checkedPermissions  the map of checked permissions, not null
+   * @param checkedPermissions
+   *          the map of checked permissions, not null
    * @return the result, not null
    */
   public static PermissionCheckProviderResult of(final Map<String, Boolean> checkedPermissions) {
@@ -77,35 +73,38 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
   /**
    * Creates an authentication error result.
    *
-   * @param errorMessage  the message, not null
+   * @param errorMessage
+   *          the message, not null
    * @return the result, not null
    */
   public static PermissionCheckProviderResult ofAuthenticationError(final String errorMessage) {
-    return new PermissionCheckProviderResult(ImmutableMap.<String, Boolean>of(), errorMessage, null);
+    return new PermissionCheckProviderResult(ImmutableMap.<String, Boolean> of(), errorMessage, null);
   }
 
   /**
    * Creates an authorization error result.
    *
-   * @param errorMessage  the message, not null
+   * @param errorMessage
+   *          the message, not null
    * @return the result, not null
    */
   public static PermissionCheckProviderResult ofAuthorizationError(final String errorMessage) {
-    return new PermissionCheckProviderResult(ImmutableMap.<String, Boolean>of(), null, errorMessage);
+    return new PermissionCheckProviderResult(ImmutableMap.<String, Boolean> of(), null, errorMessage);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if the specified permission is true or false.
    * <p>
    * This method returns false rather than throwing an exception.
    *
-   * @param requestedPermissions  the requested permissions, not null
+   * @param requestedPermissions
+   *          the requested permissions, not null
    * @return true if permitted, false if not
    */
   public boolean isPermittedAll(final Collection<String> requestedPermissions) {
     for (final String requestedPermission : requestedPermissions) {
-      if (isPermitted(requestedPermission) == false) {
+      if (!isPermitted(requestedPermission)) {
         return false;
       }
     }
@@ -117,7 +116,8 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
    * <p>
    * This method returns false rather than throwing an exception.
    *
-   * @param requestedPermission  the requested permission, not null
+   * @param requestedPermission
+   *          the requested permission, not null
    * @return true if permitted, false if not
    */
   public boolean isPermitted(final String requestedPermission) {
@@ -125,35 +125,40 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
   }
 
   /**
-   * Checks the specified permission, throwing an exception if the user does not
-   * have the permission.
+   * Checks the specified permission, throwing an exception if the user does not have the permission.
    * <p>
-   * This method throws an exception unless the user has the specified permission.
-   * Information stored about different kinds of error is used to refine the exception thrown.
+   * This method throws an exception unless the user has the specified permission. Information stored about different kinds of error is used to refine the
+   * exception thrown.
    *
-   * @param requestedPermission  the requested permission, not null
-   * @throws UnauthenticatedException if permission was denied due to invalid user authentication
-   * @throws AuthorizationException if permission was denied due to issues checking authorization
-   * @throws UnauthorizedException if the user does not have the requested permission
+   * @param requestedPermission
+   *          the requested permission, not null
+   * @throws UnauthenticatedException
+   *           if permission was denied due to invalid user authentication
+   * @throws AuthorizationException
+   *           if permission was denied due to issues checking authorization
+   * @throws UnauthorizedException
+   *           if the user does not have the requested permission
    */
   public void checkPermitted(final String requestedPermission) {
     checkErrors();
     final Boolean permitted = getCheckedPermissions().get(requestedPermission);
     if (permitted == null) {
       throw new AuthorizationException("Permission denied: Specified permission was not checked: " + requestedPermission);
-    } else if (permitted.booleanValue() == false) {
+    } else if (!permitted.booleanValue()) {
       throw new UnauthorizedException("Permission denied: " + requestedPermission);
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if any errors occurred, throwing an exception if there were errors.
    * <p>
    * Information stored about different kinds of error is used to refine the exception thrown.
    *
-   * @throws UnauthenticatedException if permission was denied due to invalid user authentication
-   * @throws AuthorizationException if permission was denied due to issues checking authorization
+   * @throws UnauthenticatedException
+   *           if permission was denied due to invalid user authentication
+   * @throws AuthorizationException
+   *           if permission was denied due to issues checking authorization
    */
   public void checkErrors() {
     if (getAuthenticationError() != null) {
@@ -214,8 +219,7 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the authentication error, null if no error in authentication.
-   * The map of checked permissions contains no true values.
+   * Gets the authentication error, null if no error in authentication. The map of checked permissions contains no true values.
    * @return the value of the property
    */
   public String getAuthenticationError() {
@@ -224,8 +228,7 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the authorization error, null if no error in authorization.
-   * The map of checked permissions contains no true values.
+   * Gets the authorization error, null if no error in authorization. The map of checked permissions contains no true values.
    * @return the value of the property
    */
   public String getAuthorizationError() {

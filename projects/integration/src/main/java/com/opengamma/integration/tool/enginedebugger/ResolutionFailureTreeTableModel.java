@@ -15,7 +15,7 @@ import com.opengamma.engine.depgraph.ResolutionFailureImpl;
 import com.opengamma.integration.tool.enginedebugger.node.TreeTableNode;
 
 /**
- * Tree-table model for browsing ResolutionFailure structures
+ * Tree-table model for browsing ResolutionFailure structures.
  */
 public class ResolutionFailureTreeTableModel extends AbstractTreeTableModel {
 
@@ -46,9 +46,8 @@ public class ResolutionFailureTreeTableModel extends AbstractTreeTableModel {
     } else if (node instanceof List) {
       if (column == 0) {
         return LIST_NAME;
-      } else {
-        return null;
       }
+      return null;
     } else if (node instanceof String) {
       switch (column) {
         case 0:

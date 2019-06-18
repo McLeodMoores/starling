@@ -12,10 +12,9 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *  PriceIndexCurve created by adding a curve of double (the inflation rates curve which is represent  market quotes) to a PriceIndexCurve.
- *   One curve is fixed and there is no sensitivity to that curve.
- * In general the fixed curve represent a static adjustment like a seasonality adjustment.
- * The term "fixed" for the second curve means that no parameter is associated to that curve.
+ * PriceIndexCurve created by adding a curve of double (the inflation rates curve which is represent market quotes) to a PriceIndexCurve. One curve is fixed and
+ * there is no sensitivity to that curve. In general the fixed curve represent a static adjustment like a seasonality adjustment. The term "fixed" for the
+ * second curve means that no parameter is associated to that curve.
  */
 public class PriceIndexCurveAddInflationRateFixedCurve extends PriceIndexCurve {
 
@@ -38,15 +37,21 @@ public class PriceIndexCurveAddInflationRateFixedCurve extends PriceIndexCurve {
   private final double _referencePriceIndex;
 
   /**
-   * Constructor from an array of curves.
-   * The new price index curve  will be the sum (or the difference) of the different underlying curves.
-   * @param name The curve name.
-   * @param substract If true, the rate of all curves, except the first one, will be subtracted from the first one. If false, all the rates are added.
-   * @param curve The main curve.
-   * @param curveFixed The fixed curve (as a spread).
-   * @param referencePriceIndex The reference price index value, use to calculate the rate of all the curve.
+   * Constructor from an array of curves. The new price index curve will be the sum (or the difference) of the different underlying curves.
+   *
+   * @param name
+   *          The curve name.
+   * @param substract
+   *          If true, the rate of all curves, except the first one, will be subtracted from the first one. If false, all the rates are added.
+   * @param curve
+   *          The main curve.
+   * @param curveFixed
+   *          The fixed curve (as a spread).
+   * @param referencePriceIndex
+   *          The reference price index value, use to calculate the rate of all the curve.
    */
-  public PriceIndexCurveAddInflationRateFixedCurve(final String name, final PriceIndexCurve curve, final DoublesCurve curveFixed, final boolean substract, final double referencePriceIndex) {
+  public PriceIndexCurveAddInflationRateFixedCurve(final String name, final PriceIndexCurve curve, final DoublesCurve curveFixed, final boolean substract,
+      final double referencePriceIndex) {
     super(curve.getCurve());
     ArgumentChecker.notNull(curve, "Curve");
     ArgumentChecker.notNull(curveFixed, "Curve fixed");

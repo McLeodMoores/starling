@@ -26,7 +26,7 @@ import com.opengamma.master.security.SecurityDescription;
 import com.opengamma.util.money.Currency;
 
 /**
- *
+ * A security representing a cash deposit with a simply-compounded zero rate.
  */
 @BeanDefinition
 @SecurityDescription(type = SimpleZeroDepositSecurity.SECURITY_TYPE, description = "Simple zero deposit")
@@ -34,7 +34,7 @@ public class SimpleZeroDepositSecurity extends FinancialSecurity {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
 
-  /** The security type */
+  /** The security type. */
   public static final String SECURITY_TYPE = "SIMPLE_ZERO_DEPOSIT";
 
   /** The currency. */
@@ -57,11 +57,27 @@ public class SimpleZeroDepositSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private ExternalId _region;
 
+  /**
+   * For the builder.
+   */
   SimpleZeroDepositSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public SimpleZeroDepositSecurity(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime maturityDate, final double rate, final ExternalId region) {
+  /**
+   * @param currency
+   *          the currency, not null
+   * @param startDate
+   *          the start date, not null
+   * @param maturityDate
+   *          the maturity date, not null
+   * @param rate
+   *          the zero rate
+   * @param region
+   *          the region, not null
+   */
+  public SimpleZeroDepositSecurity(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime maturityDate, final double rate,
+      final ExternalId region) {
     super(SECURITY_TYPE);
     setCurrency(currency);
     setStartDate(startDate);

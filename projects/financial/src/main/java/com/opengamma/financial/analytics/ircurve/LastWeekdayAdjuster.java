@@ -10,7 +10,7 @@ import org.threeten.bp.temporal.Temporal;
 import org.threeten.bp.temporal.TemporalAdjuster;
 import org.threeten.bp.temporal.TemporalAdjusters;
 
-/** Returns last weekday in current month */
+/** Returns last weekday in current month. */
 public class LastWeekdayAdjuster implements TemporalAdjuster {
 
   @Override
@@ -19,9 +19,8 @@ public class LastWeekdayAdjuster implements TemporalAdjuster {
     final DayOfWeek lastWeekday = DayOfWeek.from(unadjustedLastDayInMonth);
     if (lastWeekday.equals(DayOfWeek.SATURDAY) || lastWeekday.equals(DayOfWeek.SUNDAY)) {
       return unadjustedLastDayInMonth.with(TemporalAdjusters.previous(DayOfWeek.FRIDAY));
-    } else {
-      return unadjustedLastDayInMonth;
     }
+    return unadjustedLastDayInMonth;
   }
 
 }

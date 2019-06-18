@@ -44,7 +44,8 @@ public class FudgeTestBase {
 
   /**
    * Gets the Fudge context.
-   * @return  the context
+   * 
+   * @return the context
    */
   public FudgeContext getFudgeContext() {
     return _fudgeContext;
@@ -52,8 +53,10 @@ public class FudgeTestBase {
 
   /**
    * Cycles a Fudge message to and from a byte array.
-   * @param message  the message
-   * @return  the cycled message
+   * 
+   * @param message
+   *          the message
+   * @return the cycled message
    */
   private FudgeMsg cycleMessage(final FudgeMsg message) {
     final byte[] data = _fudgeContext.toByteArray(message);
@@ -63,9 +66,14 @@ public class FudgeTestBase {
 
   /**
    * Serializes and deserializes an object using Fudge.
-   * @param clazz  the object class
-   * @param object  the object
-   * @return  the cycled object
+   * 
+   * @param clazz
+   *          the object class
+   * @param object
+   *          the object
+   * @return the cycled object
+   * @param <T>
+   *          the type of the object
    */
   protected <T> T cycleObject(final Class<T> clazz, final T object) {
     final T newObject = cycleGenericObject(clazz, object);
@@ -75,9 +83,14 @@ public class FudgeTestBase {
 
   /**
    * Serializes and deserializes an object using Fudge.
-   * @param clazz  the object class
-   * @param object  the object
-   * @return  the cycled object
+   * 
+   * @param clazz
+   *          the object class
+   * @param object
+   *          the object
+   * @return the cycled object
+   * @param <T>
+   *          the type of the object
    */
   protected <T> T cycleGenericObject(final Class<T> clazz, final T object) {
     LOGGER.info("object {}", object);

@@ -64,14 +64,25 @@ public class EndPointDescriptionTest {
     server.stop();
   }
 
+  /**
+   * @throws IOException
+   *           if there is a problem
+   */
   public void testEndPointsBound() throws IOException {
     testEndPoints(true);
   }
 
+  /**
+   * @throws IOException
+   *           if there is a problem
+   */
   public void testEndPointsUnbound() throws IOException {
     testEndPoints(false);
   }
 
+  /**
+   *
+   */
   public void testConnectToEndPoint() {
     final AbstractServerSocketProcess server = new AbstractServerSocketProcess() {
 
@@ -100,6 +111,9 @@ public class EndPointDescriptionTest {
     server.stop();
   }
 
+  /**
+   *
+   */
   public void testConnectToStaticEndPoint() {
     final AbstractServerSocketProcess server = new AbstractServerSocketProcess() {
 

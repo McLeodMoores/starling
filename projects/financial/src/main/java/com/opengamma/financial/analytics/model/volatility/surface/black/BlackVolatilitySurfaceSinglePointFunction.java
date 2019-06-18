@@ -11,8 +11,6 @@ import static com.opengamma.engine.value.ValuePropertyNames.SURFACE;
 import java.util.Collections;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.Sets;
@@ -48,12 +46,13 @@ import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
 
 /**
- * Computes a flat volatility surface from a single market traded option price, and a forward curve
+ * Computes a flat volatility surface from a single market traded option price, and a forward curve.
  */
 public class BlackVolatilitySurfaceSinglePointFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
 
     // The Security itself is the ComputationTarget. From it, we get strike and expiry information to compute implied volatility
     // The types we're concerned about: EquityOptionSecurity, EquityIndexOptionSecurity, EquityIndexFutureOptionSecurity
@@ -82,7 +81,7 @@ public class BlackVolatilitySurfaceSinglePointFunction extends AbstractFunction.
     final double spot = forwardCurve.getForward(0.0);
 
     // The Volatility Surface is simply a single point, which must be inferred from the market value
-    final Object optionPriceObject = inputs.getComputedValue(MarketDataRequirementNames.MARKET_VALUE);
+    final Object optionPriceObject = inputs.getValue(MarketDataRequirementNames.MARKET_VALUE);
     if (optionPriceObject == null) {
       throw new OpenGammaRuntimeException("Could not get market value of underlying option");
     }
@@ -113,7 +112,7 @@ public class BlackVolatilitySurfaceSinglePointFunction extends AbstractFunction.
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final ValueProperties properties = createValueProperties()
         .with(SURFACE, "SinglePoint")
-        .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType(target))
+        .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType())
         .withAny(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD)
         .withAny(CURVE)
         .get();
@@ -122,7 +121,7 @@ public class BlackVolatilitySurfaceSinglePointFunction extends AbstractFunction.
 
   // TODO: Review: I would prefer not to have to create a version of this for each instrument type...
   // TODO: InstrumentType is hard-coded. Could this be derived from the target Security?
-  private String getInstrumentType(final ComputationTarget target) {
+  private String getInstrumentType() {
     return InstrumentTypeProperties.EQUITY_OPTION;
   }
 
@@ -142,7 +141,8 @@ public class BlackVolatilitySurfaceSinglePointFunction extends AbstractFunction.
       return null;
     }
     final ValueRequirement forwardCurveRequirement = getForwardCurveRequirement(target, desiredValue);
-    final ValueRequirement optionPriceRequirement = new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, target.getSecurity().getUniqueId());
+    final ValueRequirement optionPriceRequirement = new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY,
+        target.getSecurity().getUniqueId());
     return Sets.newHashSet(forwardCurveRequirement, optionPriceRequirement);
   }
 
@@ -164,5 +164,4 @@ public class BlackVolatilitySurfaceSinglePointFunction extends AbstractFunction.
     return new ValueRequirement(ValueRequirementNames.FORWARD_CURVE, underlyingSpec, properties);
   }
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(BlackVolatilitySurfaceSinglePointFunction.class);
 }

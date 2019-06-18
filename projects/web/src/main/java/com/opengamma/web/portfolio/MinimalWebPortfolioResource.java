@@ -36,13 +36,15 @@ public class MinimalWebPortfolioResource extends AbstractMinimalWebPortfolioReso
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   public MinimalWebPortfolioResource(final AbstractMinimalWebPortfolioResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
@@ -70,57 +72,57 @@ public class MinimalWebPortfolioResource extends AbstractMinimalWebPortfolioReso
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
-  public Response putHTML(@FormParam("name") String name, @FormParam("hidden") final Boolean isHidden) {
+  public Response putHTML(@FormParam("name") final String name, @FormParam("hidden") final Boolean isHidden) {
     final PortfolioDocument doc = data().getPortfolio();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
-    name = StringUtils.trimToNull(name);
+    final String trimmedName = StringUtils.trimToNull(name);
     final DocumentVisibility visibility = BooleanUtils.isTrue(isHidden) ? DocumentVisibility.HIDDEN : DocumentVisibility.VISIBLE;
-    if (name == null) {
+    if (trimmedName == null) {
       final FlexiBean out = createRootData();
       out.put("err_nameMissing", true);
       final String html = getFreemarker().build(HTML_DIR + "portfolio-update.ftl", out);
       return Response.ok(html).build();
     }
-    final URI uri = updatePortfolio(name, visibility, doc);
+    final URI uri = updatePortfolio(trimmedName, visibility, doc);
     return Response.seeOther(uri).build();
   }
 
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response putJSON(@FormParam("name") String name, @FormParam("hidden") final Boolean isHidden) {
+  public Response putJSON(@FormParam("name") final String name, @FormParam("hidden") final Boolean isHidden) {
     final PortfolioDocument doc = data().getPortfolio();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
-    name = StringUtils.trimToNull(name);
+    final String trimmedName = StringUtils.trimToNull(name);
     final DocumentVisibility visibility = BooleanUtils.isTrue(isHidden) ? DocumentVisibility.HIDDEN : DocumentVisibility.VISIBLE;
-    updatePortfolio(name, visibility, doc);
+    updatePortfolio(trimmedName, visibility, doc);
     return Response.ok().build();
   }
 
-  private URI updatePortfolio(final String name, final DocumentVisibility visibility, PortfolioDocument doc) {
+  private URI updatePortfolio(final String name, final DocumentVisibility visibility, final PortfolioDocument doc) {
     doc.getPortfolio().setName(name);
     doc.setVisibility(visibility);
-    doc = data().getPortfolioMaster().update(doc);
-    data().setPortfolio(doc);
+    final PortfolioDocument updated = data().getPortfolioMaster().update(doc);
+    data().setPortfolio(updated);
     final URI uri = MinimalWebPortfolioResource.uri(data());
     return uri;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
     final PortfolioDocument doc = data().getPortfolio();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     data().getPortfolioMaster().remove(doc.getUniqueId());
@@ -138,9 +140,10 @@ public class MinimalWebPortfolioResource extends AbstractMinimalWebPortfolioReso
     return Response.ok().build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   *
    * @return the output root data, not null
    */
   @Override
@@ -155,7 +158,7 @@ public class MinimalWebPortfolioResource extends AbstractMinimalWebPortfolioReso
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("nodes")
   public MinimalWebPortfolioNodesResource findNodes() {
     return new MinimalWebPortfolioNodesResource(this);
@@ -166,10 +169,12 @@ public class MinimalWebPortfolioResource extends AbstractMinimalWebPortfolioReso
     return new MinimalWebPortfolioVersionsResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   *
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data) {
@@ -178,8 +183,11 @@ public class MinimalWebPortfolioResource extends AbstractMinimalWebPortfolioReso
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overridePortfolioId  the override portfolio id, null uses information from data
+   *
+   * @param data
+   *          the data, not null
+   * @param overridePortfolioId
+   *          the override portfolio id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data, final UniqueId overridePortfolioId) {

@@ -19,11 +19,12 @@ import com.opengamma.financial.security.future.InterestRateFutureSecurity;
 
 /**
  * Convert the Trade on Interest Rate Future to the Definition version.
+ *
  * @deprecated Use the generic FutureTradeConverter.
  */
 @Deprecated
 public class InterestRateFutureTradeConverterDeprecated {
-  
+
   private final InterestRateFutureSecurityConverterDeprecated _securityConverter;
 
   public InterestRateFutureTradeConverterDeprecated(final InterestRateFutureSecurityConverterDeprecated securityConverter) {
@@ -34,7 +35,8 @@ public class InterestRateFutureTradeConverterDeprecated {
   public InterestRateFutureTransactionDefinition convert(final Trade trade) {
     Validate.notNull(trade, "trade");
     Validate.isTrue(trade.getSecurity() instanceof InterestRateFutureSecurity, "Can only handle trades with security type InterestRateFutureSecurity");
-    final InterestRateFutureSecurityDefinition securityDefinition = _securityConverter.visitInterestRateFutureSecurity((InterestRateFutureSecurity) trade.getSecurity());
+    final InterestRateFutureSecurityDefinition securityDefinition = _securityConverter
+        .visitInterestRateFutureSecurity((InterestRateFutureSecurity) trade.getSecurity());
     final int quantity = trade.getQuantity().intValue();
     final LocalDate tradeDate = trade.getTradeDate();
     if (tradeDate == null) {
@@ -45,7 +47,7 @@ public class InterestRateFutureTradeConverterDeprecated {
       throw new OpenGammaRuntimeException("Trade time should not be null");
     }
     final ZonedDateTime tradeDateTime = tradeDate.atTime(tradeTime).atZoneSameInstant(ZoneOffset.UTC);
-    Double tradePrice = trade.getPremium(); // TODO: [PLAT-1958] The trade price is stored in the trade premium.
+    final Double tradePrice = trade.getPremium(); // TODO: [PLAT-1958] The trade price is stored in the trade premium.
     if (tradePrice == null) {
       throw new OpenGammaRuntimeException("Trade premium should not be null.");
     }

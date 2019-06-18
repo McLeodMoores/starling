@@ -14,7 +14,6 @@ import com.opengamma.analytics.financial.forex.derivative.ForexOptionDigital;
 import com.opengamma.analytics.financial.forex.derivative.ForexOptionSingleBarrier;
 import com.opengamma.analytics.financial.forex.derivative.ForexOptionVanilla;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
@@ -24,7 +23,7 @@ import com.opengamma.util.tuple.DoublesPair;
  * Returns the change in present value of an instrument due to a parallel move of the yield curve, scaled so that the move is 1bp.
  * This calculator is Forex instrument-specific, and assumes that the list of sensitivities are in the currency appropriate for
  * the yield curve.
- * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.
+ * @deprecated Curve builders that use and populate {@link com.opengamma.analytics.financial.interestrate.YieldCurveBundle}s are deprecated.
  */
 @Deprecated
 public final class PV01ForexCalculator extends InstrumentDerivativeVisitorAdapter<Map<String, List<DoublesPair>>, Map<String, Double>> {

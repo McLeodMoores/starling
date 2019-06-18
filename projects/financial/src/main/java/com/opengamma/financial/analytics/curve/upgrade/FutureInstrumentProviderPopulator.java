@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -17,19 +17,20 @@ import com.opengamma.util.result.Function2;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Class that populates a curve node id mapper with the curve instrument providers for a
- * {@link StripInstrumentType#FUTURE} or {@link StripInstrumentType#BANKERS_ACCEPTANCE} strip. If a map for
- * {@link com.opengamma.financial.analytics.ircurve.strips.RateFutureNode}s is already present, this class
- * will overwrite that entry.
+ * Class that populates a curve node id mapper with the curve instrument providers for a {@link StripInstrumentType#FUTURE} or
+ * {@link StripInstrumentType#BANKERS_ACCEPTANCE} strip. If a map for {@link com.opengamma.financial.analytics.ircurve.strips.RateFutureNode}s is already
+ * present, this class will overwrite that entry.
  */
 public class FutureInstrumentProviderPopulator extends InstrumentProviderPopulator {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(FutureInstrumentProviderPopulator.class);
 
   /**
-   * Sets the renaming function to {@link DefaultCsbcRenamingFunction}. The strip instrument type must be
-   * either {@link StripInstrumentType#FUTURE} or {@link StripInstrumentType#BANKERS_ACCEPTANCE}.
-   * @param type  the strip instrument type, not null
+   * Sets the renaming function to {@link DefaultCsbcRenamingFunction}. The strip instrument type must be either {@link StripInstrumentType#FUTURE} or
+   * {@link StripInstrumentType#BANKERS_ACCEPTANCE}.
+   * 
+   * @param type
+   *          the strip instrument type, not null
    */
   public FutureInstrumentProviderPopulator(final StripInstrumentType type) {
     this(type, new DefaultCsbcRenamingFunction());
@@ -37,8 +38,11 @@ public class FutureInstrumentProviderPopulator extends InstrumentProviderPopulat
 
   /**
    * The strip instrument type must be either {@link StripInstrumentType#FUTURE} or {@link StripInstrumentType#BANKERS_ACCEPTANCE}.
-   * @param type  the strip instrument type, not null
-   * @param renamingFunction  the renaming function, not null
+   * 
+   * @param type
+   *          the strip instrument type, not null
+   * @param renamingFunction
+   *          the renaming function, not null
    */
   public FutureInstrumentProviderPopulator(final StripInstrumentType type, final Function2<String, String, String> renamingFunction) {
     super(type, renamingFunction);

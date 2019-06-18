@@ -58,7 +58,8 @@ public class YieldCurveConversionSeriesFunction extends AbstractFunction.NonComp
   }
 
   /**
-   * @param excludedCurves The excluded curve names, not null
+   * @param excludedCurves
+   *          The excluded curve names, not null
    */
   public YieldCurveConversionSeriesFunction(final String[] excludedCurves) {
     ArgumentChecker.notNull(excludedCurves, "excluded curves");
@@ -67,7 +68,9 @@ public class YieldCurveConversionSeriesFunction extends AbstractFunction.NonComp
 
   /**
    * Parses a string and returns null if the string is empty, otherwise returns the original string.
-   * @param str The input string
+   * 
+   * @param str
+   *          The input string
    * @return The parsed string
    */
   private static String parseString(final String str) {
@@ -78,7 +81,8 @@ public class YieldCurveConversionSeriesFunction extends AbstractFunction.NonComp
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final HistoricalTimeSeriesSource timeSeriesSource = OpenGammaExecutionContext.getHistoricalTimeSeriesSource(executionContext);
     final ConventionBundleSource conventionBundleSource = OpenGammaExecutionContext.getConventionBundleSource(executionContext);
     final YieldCurveFixingSeriesProvider provider = new YieldCurveFixingSeriesProvider(conventionBundleSource);
@@ -86,10 +90,13 @@ public class YieldCurveConversionSeriesFunction extends AbstractFunction.NonComp
     final String dataField = desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY);
     final String resolutionKey = parseString(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY));
     final LocalDate startDate = DateConstraint.evaluate(executionContext, desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY));
-    final boolean includeStart = HistoricalTimeSeriesFunctionUtils.parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY));
+    final boolean includeStart = HistoricalTimeSeriesFunctionUtils
+        .parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY));
     final LocalDate endDate = DateConstraint.evaluate(executionContext, desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY));
-    final boolean includeEnd = HistoricalTimeSeriesFunctionUtils.parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY));
-    final InterpolatedYieldCurveSpecificationWithSecurities yieldCurve = (InterpolatedYieldCurveSpecificationWithSecurities) inputs.getAllValues().iterator().next().getValue();
+    final boolean includeEnd = HistoricalTimeSeriesFunctionUtils
+        .parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY));
+    final InterpolatedYieldCurveSpecificationWithSecurities yieldCurve = (InterpolatedYieldCurveSpecificationWithSecurities) inputs.getAllValues().iterator()
+        .next().getValue();
     final HistoricalTimeSeriesBundle bundle = new HistoricalTimeSeriesBundle();
     for (final FixedIncomeStripWithSecurity strip : yieldCurve.getStrips()) {
       final Security security = strip.getSecurity();
@@ -97,7 +104,8 @@ public class YieldCurveConversionSeriesFunction extends AbstractFunction.NonComp
         final FinancialSecurity financialSecurity = (FinancialSecurity) security;
         final Set<ExternalIdBundle> idBundles = financialSecurity.accept(provider);
         for (final ExternalIdBundle id : idBundles) {
-          final HistoricalTimeSeries timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart, endDate, includeEnd);
+          final HistoricalTimeSeries timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart, endDate,
+              includeEnd);
           if (timeSeries != null) {
             if (timeSeries.getTimeSeries().isEmpty()) {
               LOGGER.warn("Time series for {} is empty", id);
@@ -112,8 +120,9 @@ public class YieldCurveConversionSeriesFunction extends AbstractFunction.NonComp
         LOGGER.warn("Security was not a FinancialSecurity");
       }
     }
-    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.YIELD_CURVE_CONVERSION_HISTORICAL_TIME_SERIES, target.toSpecification(),
-        desiredValue.getConstraints()), bundle));
+    return Collections
+        .singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.YIELD_CURVE_CONVERSION_HISTORICAL_TIME_SERIES, target.toSpecification(),
+            desiredValue.getConstraints()), bundle));
   }
 
   @Override
@@ -123,14 +132,18 @@ public class YieldCurveConversionSeriesFunction extends AbstractFunction.NonComp
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    return Collections.singleton(new ValueSpecification(ValueRequirementNames.YIELD_CURVE_CONVERSION_HISTORICAL_TIME_SERIES, target.toSpecification(), createValueProperties()
-        .withAny(ValuePropertyNames.CURVE)
-        .withAny(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY)
-        .withAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY)
-        .withAny(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY)
-        .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE)
-        .withAny(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY)
-        .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE).get()));
+    return Collections.singleton(new ValueSpecification(ValueRequirementNames.YIELD_CURVE_CONVERSION_HISTORICAL_TIME_SERIES, target.toSpecification(),
+        createValueProperties()
+            .withAny(ValuePropertyNames.CURVE)
+            .withAny(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY)
+            .withAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY)
+            .withAny(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY)
+            .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE,
+                HistoricalTimeSeriesFunctionUtils.NO_VALUE)
+            .withAny(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY)
+            .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE,
+                HistoricalTimeSeriesFunctionUtils.NO_VALUE)
+            .get()));
   }
 
   @Override
@@ -147,14 +160,14 @@ public class YieldCurveConversionSeriesFunction extends AbstractFunction.NonComp
       }
     }
     Set<String> values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       constraints = desiredValue.getConstraints().copy().with(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY, MarketDataRequirementNames.MARKET_VALUE);
     } else if (values.size() > 1) {
       constraints = desiredValue.getConstraints().copy().withoutAny(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY)
           .with(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY, values.iterator().next());
     }
     values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
@@ -163,31 +176,32 @@ public class YieldCurveConversionSeriesFunction extends AbstractFunction.NonComp
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
-      constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY).with(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY, values.iterator().next());
+      constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY).with(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY,
+          values.iterator().next());
     }
     values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
       constraints.with(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY, "Null");
     }
     values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY);
-    if ((values == null) || (values.size() != 1)) {
+    if (values == null || values.size() != 1) {
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
       constraints.with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE);
     }
     values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
       constraints.with(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY, "Now");
     }
     values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY);
-    if ((values == null) || (values.size() != 1)) {
+    if (values == null || values.size() != 1) {
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
@@ -209,11 +223,13 @@ public class YieldCurveConversionSeriesFunction extends AbstractFunction.NonComp
       return Collections.singleton(new ValueRequirement(ValueRequirementNames.YIELD_CURVE_SPEC, target.toSpecification(), curveConstraints));
     }
     // We need to substitute ourselves with the adjusted constraints
-    return Collections.singleton(new ValueRequirement(ValueRequirementNames.YIELD_CURVE_CONVERSION_HISTORICAL_TIME_SERIES, target.toSpecification(), constraints.get()));
+    return Collections
+        .singleton(new ValueRequirement(ValueRequirementNames.YIELD_CURVE_CONVERSION_HISTORICAL_TIME_SERIES, target.toSpecification(), constraints.get()));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     if (ValueRequirementNames.YIELD_CURVE_CONVERSION_HISTORICAL_TIME_SERIES.equals(input.getValueName())) {
       // Use the substituted result

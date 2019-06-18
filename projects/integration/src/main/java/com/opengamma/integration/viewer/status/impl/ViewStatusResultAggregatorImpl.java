@@ -37,30 +37,30 @@ import com.opengamma.integration.viewer.status.impl.ViewStatusKeyBean.Meta;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Implementation of {@link ViewStatusResultAggregator}
+ * Implementation of {@link ViewStatusResultAggregator}.
  */
 public class ViewStatusResultAggregatorImpl implements ViewStatusResultAggregator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ViewStatusResultAggregatorImpl.class);
 
   /**
-   * Header for Security Type
+   * Header for Security Type.
    */
   public static final String SECURITY_HEADER = "SecurityType";
   /**
-   * Header for Value Requirement Name
+   * Header for Value Requirement Name.
    */
   public static final String VALUE_REQUIREMENT_NAME_HEADER = "ValueRequirementName";
   /**
-   * Header for Currency
+   * Header for Currency.
    */
   public static final String CURRENCY_HEADER = "Currency";
   /**
-   * Header for Target type
+   * Header for Target type.
    */
   public static final String TARGET_TYPE_HEADER = "Target Type";
   /**
-   * Header for status
+   * Header for status.
    */
   public static final String STATUS = "Status";
 
@@ -75,7 +75,7 @@ public class ViewStatusResultAggregatorImpl implements ViewStatusResultAggregato
     HEADERS.put(statusKeyMeta.targetType(), TARGET_TYPE_HEADER);
   }
 
-  private static final String[] DEFAULT_HEADERS = {TARGET_TYPE_HEADER, SECURITY_HEADER, VALUE_REQUIREMENT_NAME_HEADER, CURRENCY_HEADER, STATUS};
+  private static final String[] DEFAULT_HEADERS = { TARGET_TYPE_HEADER, SECURITY_HEADER, VALUE_REQUIREMENT_NAME_HEADER, CURRENCY_HEADER, STATUS };
 
   private static final String EMPTY_STR = StringUtils.EMPTY;
 
@@ -119,7 +119,8 @@ public class ViewStatusResultAggregatorImpl implements ViewStatusResultAggregato
     return new SimpleViewStatusModel(columnHeaders, rowData, _viewStatusResult);
   }
 
-  private List<List<Object>> createRowData(final Map<List<String>, Set<String>> fixedRow2Columns, final Set<String> extraColumns, final List<ViewColumnType> columnTypes) {
+  private List<List<Object>> createRowData(final Map<List<String>, Set<String>> fixedRow2Columns, final Set<String> extraColumns,
+      final List<ViewColumnType> columnTypes) {
 
     final List<List<String>> rows = Lists.newArrayList(fixedRow2Columns.keySet());
     final Comparator<List<String>> rowComparator = new Comparator<List<String>>() {
@@ -220,8 +221,6 @@ public class ViewStatusResultAggregatorImpl implements ViewStatusResultAggregato
     return ImmutableList.copyOf(result);
   }
 
-
-
   private List<String> subColumnHeaders(final Set<String> extraColumnHeaders, final int colsize) {
     final List<String> subHeader = Lists.newArrayListWithCapacity(colsize);
     final int emptySize = colsize - extraColumnHeaders.size();
@@ -256,9 +255,8 @@ public class ViewStatusResultAggregatorImpl implements ViewStatusResultAggregato
   public ViewStatus getStatus(final ViewStatusKey key) {
     if (key == null) {
       return null;
-    } else {
-      return _viewStatusResult.get(ImmutableViewStatusKey.of(key));
     }
+    return _viewStatusResult.get(ImmutableViewStatusKey.of(key));
   }
 
   @Override
@@ -286,9 +284,9 @@ public class ViewStatusResultAggregatorImpl implements ViewStatusResultAggregato
   }
 
   /**
-   * Immutable key into view status result map
+   * Immutable key into view status result map.
    */
-  static class ImmutableViewStatusKey implements ViewStatusKey  {
+  static class ImmutableViewStatusKey implements ViewStatusKey {
 
     private final String _securityType;
 
@@ -298,7 +296,7 @@ public class ViewStatusResultAggregatorImpl implements ViewStatusResultAggregato
 
     private final String _targetType;
 
-    public ImmutableViewStatusKey(final String securityType, final String valueName, final String currency, final String targetType) {
+    ImmutableViewStatusKey(final String securityType, final String valueName, final String currency, final String targetType) {
       ArgumentChecker.notNull(securityType, "securityType");
       ArgumentChecker.notNull(valueName, "valueName");
       ArgumentChecker.notNull(currency, "currency");

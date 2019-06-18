@@ -23,9 +23,8 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.livedata.UserPrincipal;
 
 /**
- * Common functionality for the thick client demo shared by the LocalEngineViewerLauncher and
- * RemoteEngineViewerLauncher which create a local engine or connect to a shared demo server
- * respectively.
+ * Common functionality for the thick client demo shared by the LocalEngineViewerLauncher and RemoteEngineViewerLauncher which create a local engine or connect
+ * to a shared demo server respectively.
  */
 public abstract class AbstractEngineViewerLauncher extends SingleFrameApplication {
 
@@ -39,7 +38,8 @@ public abstract class AbstractEngineViewerLauncher extends SingleFrameApplicatio
     final ViewClient viewClient = viewProcessor.createViewClient(user);
     final PortfolioTreeTableModel treeTableModel = buildTreeTableModel();
     viewClient.setResultListener(treeTableModel);
-    viewClient.attachToViewProcess(viewProcessor.getConfigSource().getSingle(ViewDefinition.class, "Equity Portfolio View", VersionCorrection.LATEST).getUniqueId(),
+    viewClient.attachToViewProcess(
+        viewProcessor.getConfigSource().getSingle(ViewDefinition.class, "Equity Portfolio View", VersionCorrection.LATEST).getUniqueId(),
         ExecutionOptions.infinite(MarketData.live()));
 
     getMainFrame().setTitle("OpenGamma Viewer");

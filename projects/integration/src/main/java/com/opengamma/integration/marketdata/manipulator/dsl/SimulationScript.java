@@ -22,8 +22,8 @@ import groovy.lang.GroovyObjectSupport;
 import groovy.lang.Script;
 
 /**
- * Base class for scripts that create {@link Simulation}s and {@link Scenario}s. The methods in this class are available
- * in the script and form the basis of a DSL.
+ * Base class for scripts that create {@link Simulation}s and {@link Scenario}s. The methods in this class are available in the script and form the basis of a
+ * DSL.
  */
 @SuppressWarnings("unused") // it is used reflectively by Groovy
 public abstract class SimulationScript extends Script {
@@ -53,15 +53,18 @@ public abstract class SimulationScript extends Script {
   }
 
   /**
-   * Defines a method in the DSL taking a block to define the script parameters and their types. It checks the
-   * parameters are available in the script's binding and that they have the expected type.
+   * Defines a method in the DSL taking a block to define the script parameters and their types. It checks the parameters are available in the script's binding
+   * and that they have the expected type.
+   *
    * <pre>
    * parameters {
    *   foo String
    *   bar Number
    * }
    * </pre>
-   * @param body The block that defines the script's parameters
+   *
+   * @param body
+   *          The block that defines the script's parameters
    */
   public void parameters(final Closure<?> body) {
     final ParametersDelegate parametersDelegate = new ParametersDelegate();
@@ -79,8 +82,8 @@ public abstract class SimulationScript extends Script {
       }
       final Object varValue = binding.getVariable(varName);
       if (!varType.isInstance(varValue)) {
-        throw new IllegalArgumentException("Parameter " + varName + " has type " + varValue.getClass().getName() + ", " +
-                                                "required type is " + varType.getName());
+        throw new IllegalArgumentException("Parameter " + varName + " has type " + varValue.getClass().getName() + ", "
+            + "required type is " + varType.getName());
       }
     }
   }
@@ -117,8 +120,11 @@ public abstract class SimulationScript extends Script {
 
   /**
    * Defines a method in the DSL that takes a closure defining a simulation.
-   * @param name The simulation name
-   * @param body The block that defines the simulation
+   *
+   * @param name
+   *          The simulation name
+   * @param body
+   *          The block that defines the simulation
    * @return The simulation
    */
   public Simulation simulation(final String name, final Closure<?> body) {
@@ -131,8 +137,11 @@ public abstract class SimulationScript extends Script {
 
   /**
    * Defines a method in the DSL that takes a closure defining a scenario.
-   * @param name The scenario name, not empty
-   * @param body The block that defines the scenario
+   *
+   * @param name
+   *          The scenario name, not empty
+   * @param body
+   *          The block that defines the scenario
    * @return The scenario
    */
   public Scenario scenario(final String name, final Closure<?> body) {
@@ -150,7 +159,9 @@ public abstract class SimulationScript extends Script {
 
   /**
    * Defines a method in the DSL that takes a closure which defines how to select and transform a curve.
-   * @param body The block that defines the selection and transformation
+   *
+   * @param body
+   *          The block that defines the selection and transformation
    */
   public void curve(final Closure<?> body) {
     final DslYieldCurveSelectorBuilder selector = new DslYieldCurveSelectorBuilder(_scenario);
@@ -161,7 +172,9 @@ public abstract class SimulationScript extends Script {
 
   /**
    * Defines a method in the DSL that takes a closure which defines how to select and transform a curve.
-   * @param body The block that defines the selection and transformation
+   *
+   * @param body
+   *          The block that defines the selection and transformation
    */
   public void curveData(final Closure<?> body) {
     final DslYieldCurveDataSelectorBuilder selector = new DslYieldCurveDataSelectorBuilder(_scenario);
@@ -172,7 +185,9 @@ public abstract class SimulationScript extends Script {
 
   /**
    * Defines a method in the DSL that takes a closure which defines how to select and transform a market data point.
-   * @param body The block that defines the selection and transformation
+   *
+   * @param body
+   *          The block that defines the selection and transformation
    */
   public void marketData(final Closure<?> body) {
     final DslPointSelectorBuilder selector = new DslPointSelectorBuilder(_scenario);
@@ -183,7 +198,9 @@ public abstract class SimulationScript extends Script {
 
   /**
    * Defines a method in the DSL that takes a closure which defines how to select and transform a volatility surface.
-   * @param body The block that defines the selection and transformation
+   *
+   * @param body
+   *          The block that defines the selection and transformation
    */
   public void surface(final Closure<?> body) {
     final DslVolatilitySurfaceSelectorBuilder selector = new DslVolatilitySurfaceSelectorBuilder(_scenario);
@@ -194,7 +211,9 @@ public abstract class SimulationScript extends Script {
 
   /**
    * Defines a method in the DSL that takes a closure which defines how to select and transform spot rates.
-   * @param body The block that defines the selection and transformation
+   *
+   * @param body
+   *          The block that defines the selection and transformation
    */
   public void spotRate(final Closure<?> body) {
     final DslSpotRateSelectorBuilder builder = new DslSpotRateSelectorBuilder(_scenario);

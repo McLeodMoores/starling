@@ -27,21 +27,23 @@ public class WebPortfolioNodePositionResource extends AbstractWebPortfolioResour
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public WebPortfolioNodePositionResource(final AbstractWebPortfolioResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
-    ObjectId positionId = ObjectId.parse(data().getUriPositionId());
+    final ObjectId positionId = ObjectId.parse(data().getUriPositionId());
     PortfolioDocument doc = data().getPortfolio();
     if (doc.isLatest()) {
-      ManageablePortfolioNode node = data().getNode();
-      if (node.getPositionIds().remove(positionId) == false) {
+      final ManageablePortfolioNode node = data().getNode();
+      if (!node.getPositionIds().remove(positionId)) {
         throw new DataNotFoundException("Position id not found: " + positionId);
       }
       doc = data().getPortfolioMaster().update(doc);
@@ -52,11 +54,11 @@ public class WebPortfolioNodePositionResource extends AbstractWebPortfolioResour
   @DELETE
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteJSON() {
-    ObjectId positionId = ObjectId.parse(data().getUriPositionId());
+    final ObjectId positionId = ObjectId.parse(data().getUriPositionId());
     PortfolioDocument doc = data().getPortfolio();
     if (doc.isLatest()) {
-      ManageablePortfolioNode node = data().getNode();
-      if (node.getPositionIds().remove(positionId) == false) {
+      final ManageablePortfolioNode node = data().getNode();
+      if (!node.getPositionIds().remove(positionId)) {
         throw new DataNotFoundException("Position id not found: " + positionId);
       }
       doc = data().getPortfolioMaster().update(doc);
@@ -64,10 +66,12 @@ public class WebPortfolioNodePositionResource extends AbstractWebPortfolioResour
     return Response.ok().build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data) {
@@ -76,14 +80,17 @@ public class WebPortfolioNodePositionResource extends AbstractWebPortfolioResour
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overridePositionId  the override node id, null uses information from data
+   * 
+   * @param data
+   *          the data, not null
+   * @param overridePositionId
+   *          the override node id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data, final ObjectIdentifiable overridePositionId) {
-    String portfolioId = data.getBestPortfolioUriId(null);
-    String nodeId = data.getBestNodeUriId(null);
-    String positionId = overridePositionId.getObjectId().toString();
+    final String portfolioId = data.getBestPortfolioUriId(null);
+    final String nodeId = data.getBestNodeUriId(null);
+    final String positionId = overridePositionId.getObjectId().toString();
     return data.getUriInfo().getBaseUriBuilder().path(WebPortfolioNodePositionResource.class).build(portfolioId, nodeId, positionId);
   }
 

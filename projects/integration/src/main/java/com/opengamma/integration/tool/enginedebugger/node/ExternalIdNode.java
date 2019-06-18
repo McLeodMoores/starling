@@ -8,7 +8,7 @@ package com.opengamma.integration.tool.enginedebugger.node;
 import com.opengamma.id.ExternalId;
 
 /**
- * Node representing an ExternalId
+ * Node representing an ExternalId.
  */
 public class ExternalIdNode extends AbstractTreeTableLeafNode {
 

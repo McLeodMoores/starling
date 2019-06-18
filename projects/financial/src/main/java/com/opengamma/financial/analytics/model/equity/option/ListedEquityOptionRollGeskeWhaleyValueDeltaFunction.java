@@ -31,12 +31,14 @@ public class ListedEquityOptionRollGeskeWhaleyValueDeltaFunction extends ListedE
   /** Value delta calculator */
   private static final ValueGreekCalculator CALCULATOR = ValueDeltaCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public ListedEquityOptionRollGeskeWhaleyValueDeltaFunction() {
     super(ValueRequirementNames.VALUE_DELTA);
   }
+
   @Override
-  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs, final Set<ValueRequirement> desiredValues,
+  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
+      final Set<ValueRequirement> desiredValues,
       final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
     final Object deltaObject = inputs.getValue(ValueRequirementNames.DELTA);

@@ -65,16 +65,14 @@ import com.opengamma.util.tuple.Triple;
 /**
  * Example code to load a very simple multicurrency swap portfolio.
  * <p>
- * This code is kept deliberately as simple as possible.
- * There are no checks for the securities or portfolios already existing, so if you run it
- * more than once you will get multiple copies portfolios and securities with the same names.
- * It is designed to run against the HSQLDB example database.
+ * This code is kept deliberately as simple as possible. There are no checks for the securities or portfolios already existing, so if you run it more than once
+ * you will get multiple copies portfolios and securities with the same names. It is designed to run against the HSQLDB example database.
  */
 @Scriptable
 public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<IntegrationToolContext> {
 
   /** Logger. */
-  private static Logger LOGGER = LoggerFactory.getLogger(ExampleMultiCurrencySwapPortfolioLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleMultiCurrencySwapPortfolioLoader.class);
 
   /**
    * Size of securities in portfolio
@@ -101,22 +99,22 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
   private static final int DAYS_TRADING = 60;
 
   static {
-    CURRENCIES = new Currency[]{Currency.USD, Currency.GBP, Currency.EUR, Currency.JPY, Currency.CHF};
-    TENORS = new Tenor[]{Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS,
-      Tenor.ofYears(7), Tenor.ofYears(10), Tenor.ofYears(12), Tenor.ofYears(15), Tenor.ofYears(20)};
+    CURRENCIES = new Currency[] { Currency.USD, Currency.GBP, Currency.EUR, Currency.JPY, Currency.CHF };
+    TENORS = new Tenor[] { Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS,
+                  Tenor.ofYears(7), Tenor.ofYears(10), Tenor.ofYears(12), Tenor.ofYears(15), Tenor.ofYears(20) };
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     try {
-      final boolean success =
-          new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class) &&
-          new ExampleMultiCurrencySwapPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
+      final boolean success = new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class)
+          && new ExampleMultiCurrencySwapPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
       ShutdownUtils.exit(success ? 0 : -1);
     } catch (final Throwable ex) {
       ex.printStackTrace();
@@ -124,7 +122,7 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final Collection<SwapSecurity> swaps = createRandomSwaps();
@@ -181,9 +179,9 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
     }
 
     final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(
-      getToolContext().getHistoricalTimeSeriesMaster(),
-      getToolContext().getHistoricalTimeSeriesProvider(),
-      new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
+        getToolContext().getHistoricalTimeSeriesMaster(),
+        getToolContext().getHistoricalTimeSeriesProvider(),
+        new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
     loader.loadTimeSeries(externalIds, "UNKNOWN", "PX_LAST", LocalDate.now().minusYears(1), LocalDate.now());
   }
 
@@ -208,19 +206,19 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
     final String counterparty = "CParty";
 
     final SwapLeg fixedLeg = new FixedInterestRateLeg(swapConvention.getSwapFixedLegDayCount(),
-      swapConvention.getSwapFixedLegFrequency(),
-      swapConvention.getSwapFixedLegRegion(),
-      swapConvention.getSwapFixedLegBusinessDayConvention(),
-      new InterestRateNotional(ccy, notional),
-      false, fixedRate);
+        swapConvention.getSwapFixedLegFrequency(),
+        swapConvention.getSwapFixedLegRegion(),
+        swapConvention.getSwapFixedLegBusinessDayConvention(),
+        new InterestRateNotional(ccy, notional),
+        false, fixedRate);
 
     final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(swapConvention.getSwapFloatingLegDayCount(),
-      swapConvention.getSwapFloatingLegFrequency(),
-      swapConvention.getSwapFloatingLegRegion(),
-      swapConvention.getSwapFloatingLegBusinessDayConvention(),
-      new InterestRateNotional(ccy, notional),
-      false, ExternalId.of(liborIdentifier.getScheme().toString(), liborIdentifier.getValue()),
-      FloatingRateType.IBOR);
+        swapConvention.getSwapFloatingLegFrequency(),
+        swapConvention.getSwapFloatingLegRegion(),
+        swapConvention.getSwapFloatingLegBusinessDayConvention(),
+        new InterestRateNotional(ccy, notional),
+        false, ExternalId.of(liborIdentifier.getScheme().toString(), liborIdentifier.getValue()),
+        FloatingRateType.IBOR);
     // look up the value on our chosen trade date
     final Double initialRate = getInitialRate(tradeDate, liborIdentifier);
     floatingLeg.setInitialFloatingRate(initialRate);
@@ -244,8 +242,8 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
     }
     final SwapSecurity swap = new SwapSecurity(tradeDateTime, tradeDateTime, maturityDateTime, counterparty, payLeg, receiveLeg);
     swap.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
-    swap.setName("IR Swap " + ccy + " " + PortfolioLoaderHelper.NOTIONAL_FORMATTER.format(notional) + " " +
-      maturityDateTime.format(PortfolioLoaderHelper.OUTPUT_DATE_FORMATTER) + " - " + payLegDescription + " / " + receiveLegDescription);
+    swap.setName("IR Swap " + ccy + " " + PortfolioLoaderHelper.NOTIONAL_FORMATTER.format(notional) + " "
+        + maturityDateTime.format(PortfolioLoaderHelper.OUTPUT_DATE_FORMATTER) + " - " + payLegDescription + " / " + receiveLegDescription);
     return swap;
   }
 
@@ -269,8 +267,8 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
   private Double getInitialRate(final LocalDate tradeDate, final ExternalId liborIdentifier) {
     final HistoricalTimeSeriesSource historicalSource = getToolContext().getHistoricalTimeSeriesSource();
     final HistoricalTimeSeries initialRateSeries = historicalSource.getHistoricalTimeSeries(
-      "PX_LAST", liborIdentifier.toBundle(),
-      HistoricalTimeSeriesRatingFieldNames.DEFAULT_CONFIG_NAME, tradeDate.minusDays(30), true, tradeDate, true);
+        "PX_LAST", liborIdentifier.toBundle(),
+        HistoricalTimeSeriesRatingFieldNames.DEFAULT_CONFIG_NAME, tradeDate.minusDays(30), true, tradeDate, true);
     if (initialRateSeries == null || initialRateSeries.getTimeSeries().isEmpty()) {
       throw new OpenGammaRuntimeException("couldn't get series for " + liborIdentifier);
     }
@@ -289,7 +287,8 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
 
   private ConventionBundle getSwapConventionBundle(final Currency ccy) {
     final ConventionBundleSource conventionSource = getToolContext().getConventionBundleSource();
-    final ConventionBundle swapConvention = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
+    final ConventionBundle swapConvention = conventionSource
+        .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
     if (swapConvention == null) {
       throw new OpenGammaRuntimeException("Couldn't get swap convention for " + ccy.getCode());
     }
@@ -312,7 +311,8 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
   }
 
   private static ExternalId getSwapRateFor(final ConfigSource configSource, final Currency ccy, final LocalDate tradeDate, final Tenor tenor) {
-    final CurveSpecificationBuilderConfiguration curveSpecConfig = configSource.getSingle(CurveSpecificationBuilderConfiguration.class, "DEFAULT_" + ccy.getCode(), VersionCorrection.LATEST);
+    final CurveSpecificationBuilderConfiguration curveSpecConfig = configSource.getSingle(CurveSpecificationBuilderConfiguration.class,
+        "DEFAULT_" + ccy.getCode(), VersionCorrection.LATEST);
     if (curveSpecConfig == null) {
       throw new OpenGammaRuntimeException("No curve spec builder configuration for DEFAULT_" + ccy.getCode());
     }

@@ -29,6 +29,7 @@ import org.springframework.web.context.ServletContextAware;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mcleodmoores.web.json.convention.WebConventionsUtils;
 import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractComponentFactory;
 import com.opengamma.core.change.AggregatingChangeManager;
@@ -217,14 +218,14 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
   @Deprecated
   private NamedMarketDataSpecificationRepository _marketDataSpecificationRepository;
   /**
-   * Indicates if currency amounts should be displayed in the UI without the currency code.
-   * Note that this will affect all views and should only be used where all results for all views will always be
-   * in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * Indicates if currency amounts should be displayed in the UI without the currency code. Note that this will
+   * affect all views and should only be used where all results for all views will always be in a single,
+   * well-known currency. Default value is false, indicating that currencies will be displayed by default.
    */
   @PropertyDefinition
   private boolean _suppressCurrencyDisplay;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     final LongPollingConnectionManager longPolling = buildLongPolling();
@@ -234,17 +235,16 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
     final AggregatorNamesResource aggregatorsResource = new AggregatorNamesResource(getPortfolioAggregationFunctions().getMappedFunctions().keySet());
     final MarketDataSnapshotListResource snapshotResource = new MarketDataSnapshotListResource(getMarketDataSnapshotMaster());
     final MasterConfigSource configSource = new MasterConfigSource(getConfigMaster());
-    final AggregatedViewDefinitionManager aggregatedViewDefManager = new AggregatedViewDefinitionManager(getPositionSource(),
-        getSecuritySource(), getCombinedConfigSource(), getUserConfigMaster(), getUserPortfolioMaster(), getUserPositionMaster(),
+    final AggregatedViewDefinitionManager aggregatedViewDefManager = new AggregatedViewDefinitionManager(getPositionSource(), getSecuritySource(),
+        getCombinedConfigSource(), getUserConfigMaster(), getUserPortfolioMaster(), getUserPositionMaster(),
         getPortfolioAggregationFunctions().getMappedFunctions());
     final CurrencyPairsSource currencyPairsSource = new ConfigDBCurrencyPairsSource(configSource);
     // TODO should be able to configure the currency pairs
     final CurrencyPairs currencyPairs = currencyPairsSource.getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
     final SecurityAttributeMapper blotterColumnMapper = DefaultSecurityAttributeMappings.create(currencyPairs);
-    final AnalyticsViewManager analyticsViewManager = new AnalyticsViewManager(getViewProcessor(), getParallelViewRecompilation(),
-        aggregatedViewDefManager, getComputationTargetResolver(), getFunctionRepository(), getMarketDataSpecificationRepository(),
-        blotterColumnMapper, getPositionSource(), getCombinedConfigSource(), getSecuritySource(), getSecurityMaster(),
-        getPositionMaster());
+    final AnalyticsViewManager analyticsViewManager = new AnalyticsViewManager(getViewProcessor(), getParallelViewRecompilation(), aggregatedViewDefManager,
+        getComputationTargetResolver(), getFunctionRepository(), getMarketDataSpecificationRepository(), blotterColumnMapper, getPositionSource(),
+        getCombinedConfigSource(), getSecuritySource(), getSecurityMaster(), getPositionMaster());
     final ResultsFormatter resultsFormatter = new ResultsFormatter(_suppressCurrencyDisplay ? SUPPRESS_CURRENCY : DISPLAY_CURRENCY);
     final GridColumnsJsonWriter columnWriter = new GridColumnsJsonWriter(resultsFormatter);
     final ViewportResultsJsonCsvWriter viewportResultsWriter = new ViewportResultsJsonCsvWriter(resultsFormatter);
@@ -270,6 +270,7 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
     repo.getRestComponents().publishHelper(new ViewportResultsMessageBodyWriter(viewportResultsWriter));
     repo.getRestComponents().publishHelper(new ViewDefinitionEntriesResource(configSource));
     repo.getRestComponents().publishHelper(new ErrorInfoMessageBodyWriter());
+    repo.getRestComponents().publishResource(new WebConventionsUtils());
 
     // these items need to be available to the servlet, but aren't important enough to be published components
     repo.registerServletContextAware(new ServletContextAware() {
@@ -946,9 +947,9 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets indicates if currency amounts should be displayed in the UI without the currency code.
-   * Note that this will affect all views and should only be used where all results for all views will always be
-   * in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * Gets indicates if currency amounts should be displayed in the UI without the currency code. Note that this will
+   * affect all views and should only be used where all results for all views will always be in a single,
+   * well-known currency. Default value is false, indicating that currencies will be displayed by default.
    * @return the value of the property
    */
   public boolean isSuppressCurrencyDisplay() {
@@ -956,9 +957,9 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
   }
 
   /**
-   * Sets indicates if currency amounts should be displayed in the UI without the currency code.
-   * Note that this will affect all views and should only be used where all results for all views will always be
-   * in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * Sets indicates if currency amounts should be displayed in the UI without the currency code. Note that this will
+   * affect all views and should only be used where all results for all views will always be in a single,
+   * well-known currency. Default value is false, indicating that currencies will be displayed by default.
    * @param suppressCurrencyDisplay  the new value of the property
    */
   public void setSuppressCurrencyDisplay(boolean suppressCurrencyDisplay) {
@@ -967,8 +968,8 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
 
   /**
    * Gets the the {@code suppressCurrencyDisplay} property.
-   * Note that this will affect all views and should only be used where all results for all views will always be
-   * in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * affect all views and should only be used where all results for all views will always be in a single,
+   * well-known currency. Default value is false, indicating that currencies will be displayed by default.
    * @return the property, not null
    */
   public final Property<Boolean> suppressCurrencyDisplay() {

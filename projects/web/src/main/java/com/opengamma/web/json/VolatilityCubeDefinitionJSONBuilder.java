@@ -9,13 +9,13 @@ import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitio
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Custom JSON builder to convert VolatilityCubeDefinition to JSON object and back again
+ * Custom JSON builder to convert VolatilityCubeDefinition to JSON object and back again.
  */
 @SuppressWarnings("rawtypes")
 public final class VolatilityCubeDefinitionJSONBuilder extends AbstractJSONBuilder<VolatilityCubeDefinition> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final VolatilityCubeDefinitionJSONBuilder INSTANCE = new VolatilityCubeDefinitionJSONBuilder();
 

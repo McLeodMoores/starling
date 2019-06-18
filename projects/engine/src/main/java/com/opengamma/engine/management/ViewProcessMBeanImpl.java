@@ -17,6 +17,7 @@ import net.sf.ehcache.CacheException;
 
 /**
  * An MBean implementation for attributes and operations on a view process.
+ * 
  * @deprecated use ViewProcessMXBeanImpl
  */
 @Deprecated
@@ -30,10 +31,12 @@ public class ViewProcessMBeanImpl implements ViewProcessMBean {
   private final ObjectName _objectName;
 
   /**
-   * Create a management View
+   * Create a management View.
    *
-   * @param viewProcess the underlying view process
-   * @param viewProcessor the view processor responsible for the view process
+   * @param viewProcess
+   *          the underlying view process
+   * @param viewProcessor
+   *          the view processor responsible for the view process
    */
   public ViewProcessMBeanImpl(final ViewProcessInternal viewProcess, final com.opengamma.engine.view.ViewProcessor viewProcessor) {
     ArgumentChecker.notNull(viewProcess, "viewProcess");
@@ -44,12 +47,18 @@ public class ViewProcessMBeanImpl implements ViewProcessMBean {
 
   /**
    * Creates an object name using the scheme "com.opengamma:type=View,ViewProcessor=<viewProcessorName>,name=<viewProcessId>".
+   * 
+   * @param viewProcessorName
+   *          the view processor name
+   * @param viewProcessId
+   *          the view processor id
+   * @return an object name
    */
   static ObjectName createObjectName(final String viewProcessorName, final UniqueId viewProcessId) {
     ObjectName objectName;
     try {
-      objectName =
-          new ObjectName("com.opengamma:type=ViewProcess,ViewProcessor=ViewProcessor " + viewProcessorName + ",name=ViewProcess " + viewProcessId.getValue());
+      objectName = new ObjectName(
+          "com.opengamma:type=ViewProcess,ViewProcessor=ViewProcessor " + viewProcessorName + ",name=ViewProcess " + viewProcessId.getValue());
     } catch (final MalformedObjectNameException e) {
       throw new CacheException(e);
     }

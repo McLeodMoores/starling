@@ -34,27 +34,27 @@ import com.opengamma.util.tuple.Pairs;
 public class FXPDECurveDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(FXPDECurveDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-      ValueRequirementNames.FORWARD_DELTA,
-      ValueRequirementNames.DUAL_DELTA,
-      ValueRequirementNames.DUAL_GAMMA,
-      ValueRequirementNames.FORWARD_GAMMA,
-      ValueRequirementNames.FOREX_DOMESTIC_PRICE,
-      ValueRequirementNames.FOREX_PV_QUOTES,
-      ValueRequirementNames.FORWARD_VEGA,
-      ValueRequirementNames.FORWARD_VOMMA,
-      ValueRequirementNames.FORWARD_VANNA,
-      ValueRequirementNames.PRESENT_VALUE,
-      ValueRequirementNames.FX_PRESENT_VALUE,
-      ValueRequirementNames.IMPLIED_VOLATILITY,
-      ValueRequirementNames.GRID_DUAL_DELTA,
-      ValueRequirementNames.GRID_DUAL_GAMMA,
-      ValueRequirementNames.GRID_FORWARD_DELTA,
-      ValueRequirementNames.GRID_FORWARD_GAMMA,
-      ValueRequirementNames.GRID_FORWARD_VEGA,
-      ValueRequirementNames.GRID_FORWARD_VANNA,
-      ValueRequirementNames.GRID_FORWARD_VOMMA,
-      ValueRequirementNames.GRID_IMPLIED_VOLATILITY,
-      ValueRequirementNames.GRID_PRESENT_VALUE
+                ValueRequirementNames.FORWARD_DELTA,
+                ValueRequirementNames.DUAL_DELTA,
+                ValueRequirementNames.DUAL_GAMMA,
+                ValueRequirementNames.FORWARD_GAMMA,
+                ValueRequirementNames.FOREX_DOMESTIC_PRICE,
+                ValueRequirementNames.FOREX_PV_QUOTES,
+                ValueRequirementNames.FORWARD_VEGA,
+                ValueRequirementNames.FORWARD_VOMMA,
+                ValueRequirementNames.FORWARD_VANNA,
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.FX_PRESENT_VALUE,
+                ValueRequirementNames.IMPLIED_VOLATILITY,
+                ValueRequirementNames.GRID_DUAL_DELTA,
+                ValueRequirementNames.GRID_DUAL_GAMMA,
+                ValueRequirementNames.GRID_FORWARD_DELTA,
+                ValueRequirementNames.GRID_FORWARD_GAMMA,
+                ValueRequirementNames.GRID_FORWARD_VEGA,
+                ValueRequirementNames.GRID_FORWARD_VANNA,
+                ValueRequirementNames.GRID_FORWARD_VOMMA,
+                ValueRequirementNames.GRID_IMPLIED_VOLATILITY,
+                ValueRequirementNames.GRID_PRESENT_VALUE
   };
   private final Map<String, Pair<String, String>> _currencyCurveConfigAndDiscountingCurveNames;
 
@@ -63,7 +63,7 @@ public class FXPDECurveDefaults extends DefaultPropertyFunction {
     ArgumentChecker.notNull(currencyCurveConfigAndDiscountingCurveNames, "currency and curve config names");
     final int nPairs = currencyCurveConfigAndDiscountingCurveNames.length;
     ArgumentChecker.isTrue(nPairs % 3 == 0, "Must have one curve config and discounting curve name per currency");
-    _currencyCurveConfigAndDiscountingCurveNames = new HashMap<String, Pair<String, String>>();
+    _currencyCurveConfigAndDiscountingCurveNames = new HashMap<>();
     for (int i = 0; i < currencyCurveConfigAndDiscountingCurveNames.length; i += 3) {
       final Pair<String, String> pair = Pairs.of(currencyCurveConfigAndDiscountingCurveNames[i + 1], currencyCurveConfigAndDiscountingCurveNames[i + 2]);
       _currencyCurveConfigAndDiscountingCurveNames.put(currencyCurveConfigAndDiscountingCurveNames[i], pair);
@@ -87,7 +87,8 @@ public class FXPDECurveDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final FXOptionSecurity security = (FXOptionSecurity) target.getSecurity();
     final String callCurrency = security.getCallCurrency().getCode();
     if (!_currencyCurveConfigAndDiscountingCurveNames.containsKey(callCurrency)) {

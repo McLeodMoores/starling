@@ -12,7 +12,7 @@ import com.opengamma.analytics.financial.simpleinstruments.derivative.SimpleFutu
 import com.opengamma.analytics.financial.simpleinstruments.derivative.SimpleInstrument;
 import com.opengamma.analytics.financial.simpleinstruments.derivative.SimpleInstrumentVisitor;
 
-/** Computes PV as the difference between Live and last day's closing prices */
+/** Computes PV as the difference between Live and last day's closing prices. */
 public class SimpleFuturePresentValueCalculator implements SimpleInstrumentVisitor<SimpleFutureDataBundle, Double> {
 
   @Override

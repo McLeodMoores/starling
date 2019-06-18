@@ -20,8 +20,6 @@ import javax.ws.rs.core.Response;
 
 import org.joda.beans.impl.flexi.FlexiBean;
 
-import au.com.bytecode.opencsv.CSVWriter;
-
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesInfoDocument;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesInfoSearchRequest;
@@ -30,6 +28,8 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesLoader;
 import com.opengamma.master.historicaltimeseries.ManageableHistoricalTimeSeriesInfo;
 import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.util.rest.RestUtils;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 /**
  * RESTful resource for a historical time-series.
@@ -49,25 +49,26 @@ public class WebHistoricalTimeSeriesResource extends AbstractWebHistoricalTimeSe
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     return getFreemarker().build(HTML_DIR + "onetimeseries.ftl", out);
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public String getJSON() {
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     return getFreemarker().build(JSON_DIR + "onetimeseries.ftl", out);
   }
 
   @GET
   @Produces(RestUtils.TEXT_CSV)
   public String getCSV() {
-    StringWriter stringWriter  = new StringWriter();
+    final StringWriter stringWriter  = new StringWriter();
     @SuppressWarnings("resource")
+    final
     CSVWriter csvWriter = new CSVWriter(stringWriter);
     csvWriter.writeNext(new String[] {"Time", "Value"});
-    for (Map.Entry<?, Double> entry : data().getTimeSeries().getTimeSeries()) {
+    for (final Map.Entry<?, Double> entry : data().getTimeSeries().getTimeSeries()) {
       csvWriter.writeNext(new String[] {entry.getKey().toString(), entry.getValue().toString()});
     }
     return stringWriter.toString();
@@ -76,16 +77,16 @@ public class WebHistoricalTimeSeriesResource extends AbstractWebHistoricalTimeSe
   @PUT
   @Produces(MediaType.TEXT_HTML)
   public Response put() {
-    HistoricalTimeSeriesInfoDocument tsDoc = data().getInfo();
+    final HistoricalTimeSeriesInfoDocument tsDoc = data().getInfo();
     updateTimeseries(tsDoc.getUniqueId());
-    URI uri = uri(data());
+    final URI uri = uri(data());
     return Response.seeOther(uri).build();
   }
 
   @PUT
   @Produces(MediaType.APPLICATION_JSON)
   public Response putJSON() {
-    HistoricalTimeSeriesInfoDocument tsDoc = data().getInfo();
+    final HistoricalTimeSeriesInfoDocument tsDoc = data().getInfo();
     Response result = null;
     if (updateTimeseries(tsDoc.getUniqueId())) {
       result =  Response.ok().build();
@@ -96,7 +97,7 @@ public class WebHistoricalTimeSeriesResource extends AbstractWebHistoricalTimeSe
   }
 
   private boolean updateTimeseries(final UniqueId uniqueId) {
-    HistoricalTimeSeriesLoader timeSeriesLoader = data().getHistoricalTimeSeriesLoader();
+    final HistoricalTimeSeriesLoader timeSeriesLoader = data().getHistoricalTimeSeriesLoader();
     return timeSeriesLoader.updateTimeSeries(uniqueId);
   }
 
@@ -104,7 +105,7 @@ public class WebHistoricalTimeSeriesResource extends AbstractWebHistoricalTimeSe
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response delete() {
-    URI uri = deleteTimeSeries();
+    final URI uri = deleteTimeSeries();
     return Response.seeOther(uri).build();
   }
 
@@ -116,9 +117,9 @@ public class WebHistoricalTimeSeriesResource extends AbstractWebHistoricalTimeSe
   }
 
   private URI deleteTimeSeries() {
-    HistoricalTimeSeriesInfoDocument doc = data().getInfo();
+    final HistoricalTimeSeriesInfoDocument doc = data().getInfo();
     data().getHistoricalTimeSeriesMaster().remove(doc.getUniqueId());
-    URI uri = WebAllHistoricalTimeSeriesResource.uri(data());
+    final URI uri = WebAllHistoricalTimeSeriesResource.uri(data());
     return uri;
   }
 
@@ -127,9 +128,10 @@ public class WebHistoricalTimeSeriesResource extends AbstractWebHistoricalTimeSe
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    HistoricalTimeSeriesInfoDocument doc = data().getInfo();
+    final FlexiBean out = super.createRootData();
+    final HistoricalTimeSeriesInfoDocument doc = data().getInfo();
     out.put("infoDoc", doc);
     out.put("info", doc.getInfo());
     out.put("related", getRelatedTimeSeries());
@@ -139,19 +141,21 @@ public class WebHistoricalTimeSeriesResource extends AbstractWebHistoricalTimeSe
   }
 
   private Collection<ManageableHistoricalTimeSeriesInfo> getRelatedTimeSeries() {
-    HistoricalTimeSeriesInfoSearchRequest searchRequest = 
+    final HistoricalTimeSeriesInfoSearchRequest searchRequest =
         new HistoricalTimeSeriesInfoSearchRequest(data().getInfo().getInfo().getExternalIdBundle().toBundle());
     searchRequest.setPagingRequest(PagingRequest.FIRST_PAGE);
-    HistoricalTimeSeriesInfoSearchResult searchResult = data().getHistoricalTimeSeriesMaster().search(searchRequest);    
-    Collection<ManageableHistoricalTimeSeriesInfo> result = searchResult.getInfoList();
+    final HistoricalTimeSeriesInfoSearchResult searchResult = data().getHistoricalTimeSeriesMaster().search(searchRequest);
+    final Collection<ManageableHistoricalTimeSeriesInfo> result = searchResult.getInfoList();
     result.remove(data().getInfo().getInfo()); // remove the original time series itself from its related list
     return result;
   }
-  
+
   //-------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebHistoricalTimeSeriesData data) {
@@ -160,12 +164,16 @@ public class WebHistoricalTimeSeriesResource extends AbstractWebHistoricalTimeSe
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideTimeSeriesId  the override historical time-series id, null uses information from data
+   * 
+   * @param data
+   *          the data, not null
+   * @param overrideTimeSeriesId
+   *          the override historical time-series id, null uses information from
+   *          data
    * @return the URI, not null
    */
   public static URI uri(final WebHistoricalTimeSeriesData data, final UniqueId overrideTimeSeriesId) {
-    String portfolioId = data.getBestHistoricalTimeSeriesUriId(overrideTimeSeriesId);
+    final String portfolioId = data.getBestHistoricalTimeSeriesUriId(overrideTimeSeriesId);
     return data.getUriInfo().getBaseUriBuilder().path(WebHistoricalTimeSeriesResource.class).build(portfolioId);
   }
 

@@ -29,6 +29,7 @@ public class SABRSensitivityNodeCalculatorTest {
 
   private static final double TOLERANCE = 1.0E-10;
 
+  @SuppressWarnings("unchecked")
   @Test
   /**
    * Test for a sensitivity with only one sensitivity point.
@@ -57,12 +58,16 @@ public class SABRSensitivityNodeCalculatorTest {
     final Map<Double, Interpolator1DDataBundle> alphaData = (Map<Double, Interpolator1DDataBundle>) SABR_PARAMETERS.getAlphaSurface().getInterpolatorData();
     final Map<DoublesPair, Double> weight = SABR_PARAMETERS.getAlphaSurface().getInterpolator().getNodeSensitivitiesForValue(alphaData, point);
     for (int loopnode = 0; loopnode < 4; loopnode++) {
-      assertEquals("SABR Node calculator " + loopnode, node.getAlpha().getMap().get(nodeExpected[loopnode]), weight.get(nodeExpected[loopnode]) * alphaValue, TOLERANCE);
-      assertEquals("SABR Node calculator " + loopnode, node.getRho().getMap().get(nodeExpected[loopnode]), weight.get(nodeExpected[loopnode]) * rhoValue, TOLERANCE);
-      assertEquals("SABR Node calculator " + loopnode, node.getNu().getMap().get(nodeExpected[loopnode]), weight.get(nodeExpected[loopnode]) * nuValue, TOLERANCE);
+      assertEquals("SABR Node calculator " + loopnode, node.getAlpha().getMap().get(nodeExpected[loopnode]), weight.get(nodeExpected[loopnode]) * alphaValue,
+          TOLERANCE);
+      assertEquals("SABR Node calculator " + loopnode, node.getRho().getMap().get(nodeExpected[loopnode]), weight.get(nodeExpected[loopnode]) * rhoValue,
+          TOLERANCE);
+      assertEquals("SABR Node calculator " + loopnode, node.getNu().getMap().get(nodeExpected[loopnode]), weight.get(nodeExpected[loopnode]) * nuValue,
+          TOLERANCE);
     }
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   /**
    * Test with a sensitivity with only one sensitivity point not in the center.
@@ -90,9 +95,12 @@ public class SABRSensitivityNodeCalculatorTest {
     final Map<Double, Interpolator1DDataBundle> alphaData = (Map<Double, Interpolator1DDataBundle>) SABR_PARAMETERS.getAlphaSurface().getInterpolatorData();
     final Map<DoublesPair, Double> weight = SABR_PARAMETERS.getAlphaSurface().getInterpolator().getNodeSensitivitiesForValue(alphaData, point);
     for (int loopnode = 0; loopnode < 3; loopnode++) {
-      assertEquals("SABR Node calculator " + loopnode, node.getAlpha().getMap().get(nodeExpected[loopnode]), weight.get(nodeExpected[loopnode]) * alphaValue, TOLERANCE);
-      assertEquals("SABR Node calculator " + loopnode, node.getRho().getMap().get(nodeExpected[loopnode]), weight.get(nodeExpected[loopnode]) * rhoValue, TOLERANCE);
-      assertEquals("SABR Node calculator " + loopnode, node.getNu().getMap().get(nodeExpected[loopnode]), weight.get(nodeExpected[loopnode]) * nuValue, TOLERANCE);
+      assertEquals("SABR Node calculator " + loopnode, node.getAlpha().getMap().get(nodeExpected[loopnode]), weight.get(nodeExpected[loopnode]) * alphaValue,
+          TOLERANCE);
+      assertEquals("SABR Node calculator " + loopnode, node.getRho().getMap().get(nodeExpected[loopnode]), weight.get(nodeExpected[loopnode]) * rhoValue,
+          TOLERANCE);
+      assertEquals("SABR Node calculator " + loopnode, node.getNu().getMap().get(nodeExpected[loopnode]), weight.get(nodeExpected[loopnode]) * nuValue,
+          TOLERANCE);
     }
   }
 

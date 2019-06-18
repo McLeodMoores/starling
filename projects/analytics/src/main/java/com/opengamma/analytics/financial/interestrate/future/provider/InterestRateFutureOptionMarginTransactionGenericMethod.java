@@ -14,7 +14,9 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  * Method for the pricing of interest rate future options with daily margining.
- * @param <DATA_TYPE> Data type. Extends ParameterProviderInterface.
+ *
+ * @param <DATA_TYPE>
+ *          Data type. Extends ParameterProviderInterface.
  */
 public abstract class InterestRateFutureOptionMarginTransactionGenericMethod<DATA_TYPE extends ParameterProviderInterface> {
 
@@ -25,7 +27,9 @@ public abstract class InterestRateFutureOptionMarginTransactionGenericMethod<DAT
 
   /**
    * Constructor.
-   * @param methodSecurity The method to compute the underlying security price and price curve sensitivity.
+   *
+   * @param methodSecurity
+   *          The method to compute the underlying security price and price curve sensitivity.
    */
   public InterestRateFutureOptionMarginTransactionGenericMethod(final InterestRateFutureOptionMarginSecurityGenericMethod<DATA_TYPE> methodSecurity) {
     _methodSecurity = methodSecurity;
@@ -33,6 +37,7 @@ public abstract class InterestRateFutureOptionMarginTransactionGenericMethod<DAT
 
   /**
    * Returns the method to compute the underlying security price and price curve sensitivity.
+   *
    * @return The method.
    */
   public InterestRateFutureOptionMarginSecurityGenericMethod<DATA_TYPE> getSecurityMethod() {
@@ -41,21 +46,28 @@ public abstract class InterestRateFutureOptionMarginTransactionGenericMethod<DAT
 
   /**
    * Compute the present value of a future transaction from a quoted price.
-   * @param option The future option.
-   * @param price The quoted price.
+   *
+   * @param option
+   *          The future option.
+   * @param price
+   *          The quoted price.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValueFromPrice(final InterestRateFutureOptionMarginTransaction option, final double price) {
     ArgumentChecker.notNull(option, "Option on STIR futures");
-    final double pv = (price - option.getReferencePrice()) * option.getUnderlyingSecurity().getUnderlyingFuture().getPaymentAccrualFactor() * option.getUnderlyingSecurity().getUnderlyingFuture().getNotional()
+    final double pv = (price - option.getReferencePrice()) * option.getUnderlyingSecurity().getUnderlyingFuture().getPaymentAccrualFactor()
+        * option.getUnderlyingSecurity().getUnderlyingFuture().getNotional()
         * option.getQuantity();
     return MultipleCurrencyAmount.of(option.getUnderlyingSecurity().getCurrency(), pv);
   }
 
   /**
    * Computes the present value of a transaction.
-   * @param transaction The future option transaction.
-   * @param data The data provider.
+   *
+   * @param transaction
+   *          The future option transaction.
+   * @param data
+   *          The data provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final InterestRateFutureOptionMarginTransaction transaction, final DATA_TYPE data) {
@@ -68,8 +80,11 @@ public abstract class InterestRateFutureOptionMarginTransactionGenericMethod<DAT
 
   /**
    * Computes the present value curve sensitivity of a transaction.
-   * @param transaction The future option transaction.
-   * @param data The data provider.
+   *
+   * @param transaction
+   *          The future option transaction.
+   * @param data
+   *          The data provider.
    * @return The present value curve sensitivity.
    */
   public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final InterestRateFutureOptionMarginTransaction transaction, final DATA_TYPE data) {

@@ -15,19 +15,11 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Expiry;
 
 /**
- * Defines a European-style exchange-one-asset-for-another option. The holder
- * can exchange an amount $Q_1$ of the first underlying for an amount $Q_2$ of
- * the second underlying.
+ * Defines a European-style exchange-one-asset-for-another option. The holder can exchange an amount $Q_1$ of the first underlying for an amount $Q_2$ of the
+ * second underlying.
  * <p>
- * The payoff of this option is:
- * $$
- * \begin{eqnarray*}
- * max\left(Q_1S_1 - Q_2S_2, 0\right)
- * \end{eqnarray*}
- * $$
- * where $Q_1$ is the quantity of the first asset, $S_1$ is the spot price of
- * the first underlying, $Q_2$ is the quantity of the second asset and $S_2$ is
- * the spot price of the second underlying.
+ * The payoff of this option is: $$ \begin{eqnarray*} max\left(Q_1S_1 - Q_2S_2, 0\right) \end{eqnarray*} $$ where $Q_1$ is the quantity of the first asset,
+ * $S_1$ is the spot price of the first underlying, $Q_2$ is the quantity of the second asset and $S_2$ is the spot price of the second underlying.
  */
 public class EuropeanExchangeAssetOptionDefinition extends OptionDefinition {
   private final OptionExerciseFunction<StandardTwoAssetOptionDataBundle> _exerciseFunction = new EuropeanExerciseFunction<>();
@@ -47,10 +39,13 @@ public class EuropeanExchangeAssetOptionDefinition extends OptionDefinition {
   private final double _secondQuantity;
 
   /**
-   * 
-   * @param expiry The expiry
-   * @param firstQuantity The quantity of the first asset
-   * @param secondQuantity The quantity of the second asset
+   *
+   * @param expiry
+   *          The expiry
+   * @param firstQuantity
+   *          The quantity of the first asset
+   * @param secondQuantity
+   *          The quantity of the second asset
    */
   public EuropeanExchangeAssetOptionDefinition(final Expiry expiry, final double firstQuantity, final double secondQuantity) {
     super(null, expiry, null);
@@ -61,7 +56,7 @@ public class EuropeanExchangeAssetOptionDefinition extends OptionDefinition {
   }
 
   /**
-   * 
+   *
    * @return The quantity of the first asset
    */
   public double getFirstQuantity() {
@@ -69,7 +64,7 @@ public class EuropeanExchangeAssetOptionDefinition extends OptionDefinition {
   }
 
   /**
-   * 
+   *
    * @return The quantity of the second asset
    */
   public double getSecondQuantity() {
@@ -77,7 +72,8 @@ public class EuropeanExchangeAssetOptionDefinition extends OptionDefinition {
   }
 
   /**
-   * The exercise function of this option is European (see {@link EuropeanExerciseFunction})
+   * The exercise function of this option is European (see {@link EuropeanExerciseFunction}).
+   * 
    * @return The exercise function
    */
   @SuppressWarnings("unchecked")
@@ -101,9 +97,9 @@ public class EuropeanExchangeAssetOptionDefinition extends OptionDefinition {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_firstQuantity);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_secondQuantity);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

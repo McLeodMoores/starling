@@ -34,10 +34,12 @@ import com.opengamma.util.async.AsynchronousExecution;
  */
 public class FXSpotRatePercentageChangeFunction extends AbstractFunction.NonCompiledInvoker {
   private static final DecimalFormat FORMAT = new DecimalFormat("##.###");
+
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
-    final ValueRequirement liveRequirement = new ValueRequirement(ValueRequirementNames.SPOT_RATE_FOR_SECURITY, target.toSpecification(), ValueProperties.with(PROPERTY_DATA_TYPE, LIVE).get());
+    final ValueRequirement liveRequirement = new ValueRequirement(ValueRequirementNames.SPOT_RATE_FOR_SECURITY, target.toSpecification(),
+        ValueProperties.with(PROPERTY_DATA_TYPE, LIVE).get());
     final Object liveObject = inputs.getValue(liveRequirement);
     if (liveObject == null) {
       throw new OpenGammaRuntimeException("Could not get live value");
@@ -51,7 +53,8 @@ public class FXSpotRatePercentageChangeFunction extends AbstractFunction.NonComp
     final double live = (Double) liveObject;
     final double lastClose = (Double) lastCloseObject;
     final String change = FORMAT.format(100 * (live - lastClose) / lastClose) + "%";
-    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.SPOT_FX_PERCENTAGE_CHANGE, target.toSpecification(), createValueProperties().get()), change));
+    return Collections.singleton(new ComputedValue(
+        new ValueSpecification(ValueRequirementNames.SPOT_FX_PERCENTAGE_CHANGE, target.toSpecification(), createValueProperties().get()), change));
   }
 
   @Override
@@ -67,7 +70,8 @@ public class FXSpotRatePercentageChangeFunction extends AbstractFunction.NonComp
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
-    final ValueRequirement liveRequirement = new ValueRequirement(ValueRequirementNames.SPOT_RATE_FOR_SECURITY, target.toSpecification(), ValueProperties.with(PROPERTY_DATA_TYPE, LIVE).get());
+    final ValueRequirement liveRequirement = new ValueRequirement(ValueRequirementNames.SPOT_RATE_FOR_SECURITY, target.toSpecification(),
+        ValueProperties.with(PROPERTY_DATA_TYPE, LIVE).get());
     final ValueRequirement lastCloseRequirement = new ValueRequirement(ValueRequirementNames.SPOT_RATE_FOR_SECURITY, target.toSpecification(),
         ValueProperties.with(PROPERTY_DATA_TYPE, LAST_CLOSE).get());
     return Sets.newHashSet(liveRequirement, lastCloseRequirement);

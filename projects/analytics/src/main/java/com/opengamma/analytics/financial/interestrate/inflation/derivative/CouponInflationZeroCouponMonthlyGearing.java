@@ -12,10 +12,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing an zero-coupon inflation coupon.
- * The start index value is known when the coupon is traded/issued.
- * The index for a given month is given in the yield curve and in the time series on the first of the month.
- * The pay-off is factor*(final index / start index - 1) * notional.
+ * Class describing an zero-coupon inflation coupon. The start index value is known when the coupon is traded/issued. The index for a given month is given in
+ * the yield curve and in the time series on the first of the month. The pay-off is factor*(final index / start index - 1) * notional.
  */
 public class CouponInflationZeroCouponMonthlyGearing extends CouponInflation implements CouponInflationGearing {
 
@@ -30,10 +28,9 @@ public class CouponInflationZeroCouponMonthlyGearing extends CouponInflation imp
   private final double _referenceEndTime;
 
   /**
-   * The time for which the index at the coupon end is paid by the standard corresponding  zero coupon.
-   * There is usually a difference of two or three month between the reference date and the natural payment date.
-   * the natural payment date is equal to the payment date when the lag is the conventional one.
-   * The time can be negative (when the price index for the current and last month is not yet published).
+   * The time for which the index at the coupon end is paid by the standard corresponding zero coupon. There is usually a difference of two or three month
+   * between the reference date and the natural payment date. the natural payment date is equal to the payment date when the lag is the conventional one. The
+   * time can be negative (when the price index for the current and last month is not yet published).
    */
   private final double _naturalPaymentTime;
 
@@ -47,19 +44,31 @@ public class CouponInflationZeroCouponMonthlyGearing extends CouponInflation imp
   private final double _factor;
 
   /**
-  * Inflation zero-coupon constructor.
-  * @param currency The coupon currency.
-  * @param paymentTime The time to payment.
-  * @param paymentYearFraction Accrual factor of the accrual period.
-  * @param notional Coupon notional.
-  * @param priceIndex The price index associated to the coupon.
-  * @param indexStartValue The index value at the start of the coupon.
-  * @param referenceEndTime The reference time for the index at the coupon end.
-  * @param naturalPaymentTime The time for which the index at the coupon end is paid by the standard corresponding  zero coupon.
-  * @param payNotional Flag indicating if the notional is paid (true) or not (false).
-  * @param factor The multiplicative factor.
-  */
-  public CouponInflationZeroCouponMonthlyGearing(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final IndexPrice priceIndex,
+   * Inflation zero-coupon constructor.
+   * 
+   * @param currency
+   *          The coupon currency.
+   * @param paymentTime
+   *          The time to payment.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param indexStartValue
+   *          The index value at the start of the coupon.
+   * @param referenceEndTime
+   *          The reference time for the index at the coupon end.
+   * @param naturalPaymentTime
+   *          The time for which the index at the coupon end is paid by the standard corresponding zero coupon.
+   * @param payNotional
+   *          Flag indicating if the notional is paid (true) or not (false).
+   * @param factor
+   *          The multiplicative factor.
+   */
+  public CouponInflationZeroCouponMonthlyGearing(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional,
+      final IndexPrice priceIndex,
       final double indexStartValue, final double referenceEndTime, final double naturalPaymentTime, final boolean payNotional, final double factor) {
     super(currency, paymentTime, paymentYearFraction, notional, priceIndex);
     _indexStartValue = indexStartValue;
@@ -71,6 +80,7 @@ public class CouponInflationZeroCouponMonthlyGearing extends CouponInflation imp
 
   /**
    * Gets the index value at the start of the coupon.
+   * 
    * @return The index value.
    */
   public double getIndexStartValue() {
@@ -83,6 +93,7 @@ public class CouponInflationZeroCouponMonthlyGearing extends CouponInflation imp
 
   /**
    * Gets the reference time for the index at the coupon end.
+   * 
    * @return The reference time.
    */
   public double getReferenceEndTime() {
@@ -91,6 +102,7 @@ public class CouponInflationZeroCouponMonthlyGearing extends CouponInflation imp
 
   /**
    * Gets the pay notional flag.
+   * 
    * @return The flag.
    */
   public boolean payNotional() {
@@ -99,7 +111,8 @@ public class CouponInflationZeroCouponMonthlyGearing extends CouponInflation imp
 
   @Override
   public CouponInflationZeroCouponMonthlyGearing withNotional(final double notional) {
-    return new CouponInflationZeroCouponMonthlyGearing(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getPriceIndex(), _indexStartValue, _referenceEndTime,
+    return new CouponInflationZeroCouponMonthlyGearing(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getPriceIndex(), _indexStartValue,
+        _referenceEndTime,
         _naturalPaymentTime, _payNotional, _factor);
   }
 

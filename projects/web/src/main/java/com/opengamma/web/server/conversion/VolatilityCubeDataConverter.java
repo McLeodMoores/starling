@@ -15,7 +15,8 @@ import com.opengamma.engine.value.ValueSpecification;
 public class VolatilityCubeDataConverter implements ResultConverter<VolatilityCubeData> {
 
   @Override
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final VolatilityCubeData value, final ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final VolatilityCubeData value,
+      final ConversionMode mode) {
     return convertToText(context, valueSpec, value);
   }
 

@@ -22,10 +22,10 @@ public final class ExecutionFlags {
   }
 
   private ExecutionFlags(final ViewExecutionFlags flag) {
-    _flags = EnumSet.<ViewExecutionFlags>of(flag);
+    _flags = EnumSet.<ViewExecutionFlags> of(flag);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Adds {@link ViewExecutionFlags#AWAIT_MARKET_DATA}.
@@ -78,7 +78,7 @@ public final class ExecutionFlags {
   }
 
   /**
-   * Adds {@link ViewExecutionFlags#COMPILE_ONLY}
+   * Adds {@link ViewExecutionFlags#COMPILE_ONLY}.
    *
    * @return this
    */
@@ -88,7 +88,7 @@ public final class ExecutionFlags {
   }
 
   /**
-   * Adds {@link ViewExecutionFlags#FETCH_MARKET_DATA_ONLY}
+   * Adds {@link ViewExecutionFlags#FETCH_MARKET_DATA_ONLY}.
    *
    * @return this
    */
@@ -98,7 +98,7 @@ public final class ExecutionFlags {
   }
 
   /**
-   * Adds {@link ViewExecutionFlags#SKIP_CYCLE_ON_NO_MARKET_DATA}
+   * Adds {@link ViewExecutionFlags#SKIP_CYCLE_ON_NO_MARKET_DATA}.
    *
    * @return this
    */
@@ -108,7 +108,7 @@ public final class ExecutionFlags {
   }
 
   /**
-   * Adds {@link ViewExecutionFlags#WAIT_FOR_INITIAL_TRIGGER}
+   * Adds {@link ViewExecutionFlags#WAIT_FOR_INITIAL_TRIGGER}.
    *
    * @return this
    */
@@ -118,7 +118,7 @@ public final class ExecutionFlags {
   }
 
   /**
-   * Adds {@link ViewExecutionFlags#IGNORE_COMPILATION_VALIDITY}
+   * Adds {@link ViewExecutionFlags#IGNORE_COMPILATION_VALIDITY}.
    *
    * @return this
    */
@@ -130,7 +130,7 @@ public final class ExecutionFlags {
   /**
    * Modes of operation for the {@link #parallelCompilation} flag.
    */
-  public static enum ParallelRecompilationMode {
+  public enum ParallelRecompilationMode {
 
     /**
      * The {@link ViewExecutionFlags#PARALLEL_RECOMPILATION_AND_EXECUTION} flag.
@@ -149,14 +149,14 @@ public final class ExecutionFlags {
 
     private final ViewExecutionFlags _flag;
 
-    private ParallelRecompilationMode(final ViewExecutionFlags flag) {
+    ParallelRecompilationMode(final ViewExecutionFlags flag) {
       _flag = flag;
     }
 
     private static void remove(final EnumSet<ViewExecutionFlags> flags) {
-      flags.remove(PARALLEL_EXECUTION);
-      flags.remove(DEFERRED_EXECUTION);
-      flags.remove(IMMEDIATE_EXECUTION);
+      flags.remove(PARALLEL_EXECUTION._flag);
+      flags.remove(DEFERRED_EXECUTION._flag);
+      flags.remove(IMMEDIATE_EXECUTION._flag);
     }
 
     private void apply(final EnumSet<ViewExecutionFlags> flags) {
@@ -173,7 +173,7 @@ public final class ExecutionFlags {
     return this;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets an {@link EnumSet} corresponding to the flags that have been added.

@@ -28,16 +28,16 @@ import com.opengamma.master.security.SecurityLoader;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * The exchange-traded security loader tool
+ * The exchange-traded security loader tool.
  */
 @Scriptable
 public class ExchangeTradedSecurityLoaderTool extends AbstractTool<ToolContext> {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExchangeTradedSecurityLoaderTool.class);
   /** File name option flag */
   private static final String FILE_NAME_OPT = "f";
-  /** Time series data provider option flag*/
+  /** Time series data provider option flag */
   private static final String TIME_SERIES_DATAPROVIDER_OPT = "p";
-  /** Time series data field option flag*/
+  /** Time series data field option flag */
   private static final String TIME_SERIES_DATAFIELD_OPT = "d";
   /** Populate time series */
   private static final String POPULATE_TIME_SERIES_OPT = "ts";
@@ -45,17 +45,18 @@ public class ExchangeTradedSecurityLoaderTool extends AbstractTool<ToolContext> 
   private static final String DEFAULT_DATA_PROVIDER = "DEFAULT";
   private static final String DEFAULT_DATA_FIELD = "PX_LAST";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new ExchangeTradedSecurityLoaderTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Loads the portfolio into the position master.
    */
@@ -138,6 +139,5 @@ public class ExchangeTradedSecurityLoaderTool extends AbstractTool<ToolContext> 
 
     return options;
   }
-
 
 }

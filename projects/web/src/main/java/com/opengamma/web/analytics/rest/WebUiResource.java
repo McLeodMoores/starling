@@ -62,8 +62,8 @@ import com.opengamma.web.analytics.push.ClientConnection;
 import com.opengamma.web.analytics.push.ConnectionManager;
 
 /**
- * REST resource for the analytics grid. This resource class specifies the endpoints of every object in the
- * hierarchy of grids, dependency graphs and viewports in the analytics viewer.
+ * REST resource for the analytics grid. This resource class specifies the endpoints of every object in the hierarchy of grids, dependency graphs and viewports
+ * in the analytics viewer.
  */
 @Path("views")
 public class WebUiResource {
@@ -90,28 +90,27 @@ public class WebUiResource {
 
   @POST
   public Response createView(@Context final UriInfo uriInfo,
-                             @Context final HttpServletRequest httpRequest,
-                             @FormParam("requestId") final String requestId,
-                             @FormParam("viewDefinitionId") final String viewDefinitionId,
-                             @FormParam("aggregators") final List<String> aggregators,
-                             @FormParam("marketDataProviders") final String marketDataProviders,
-                             @FormParam("valuationTime") final String valuationTime,
-                             @FormParam("portfolioVersionTime") final String portfolioVersionTime,
-                             @FormParam("portfolioCorrectionTime") final String portfolioCorrectionTime,
-                             @FormParam("clientId") final String clientId,
-                             @FormParam("blotter") final Boolean blotter) {
+      @Context final HttpServletRequest httpRequest,
+      @FormParam("requestId") final String requestId,
+      @FormParam("viewDefinitionId") final String viewDefinitionId,
+      @FormParam("aggregators") final List<String> aggregators,
+      @FormParam("marketDataProviders") final String marketDataProviders,
+      @FormParam("valuationTime") final String valuationTime,
+      @FormParam("portfolioVersionTime") final String portfolioVersionTime,
+      @FormParam("portfolioCorrectionTime") final String portfolioCorrectionTime,
+      @FormParam("clientId") final String clientId,
+      @FormParam("blotter") final Boolean blotter) {
     ArgumentChecker.notEmpty(requestId, "requestId");
     ArgumentChecker.notEmpty(viewDefinitionId, "viewDefinitionId");
     ArgumentChecker.notNull(aggregators, "aggregators");
     ArgumentChecker.notEmpty(marketDataProviders, "marketDataProviders");
     ArgumentChecker.notEmpty(clientId, "clientId");
     final boolean blotterColumns = blotter == null ? false : blotter;
-    final List<MarketDataSpecification> marketDataSpecs =
-        MarketDataSpecificationJsonReader.buildSpecifications(marketDataProviders);
+    final List<MarketDataSpecification> marketDataSpecs = MarketDataSpecificationJsonReader.buildSpecifications(marketDataProviders);
     final VersionCorrection versionCorrection = VersionCorrection.of(parseInstant(portfolioVersionTime),
-                                                               parseInstant(portfolioCorrectionTime));
+        parseInstant(portfolioCorrectionTime));
     final ViewRequest viewRequest = _viewManager.createViewRequest(UniqueId.parse(viewDefinitionId), aggregators, marketDataSpecs,
-                                              parseInstant(valuationTime), versionCorrection, blotterColumns);
+        parseInstant(valuationTime), versionCorrection, blotterColumns);
     final String viewId = Long.toString(NEXT_VIEW_ID.getAndIncrement());
     final URI portfolioGridUri = uriInfo.getAbsolutePathBuilder()
         .path(viewId)
@@ -125,8 +124,7 @@ public class WebUiResource {
     final String userName = AuthUtils.isPermissive() ? null : AuthUtils.getUserName();
     final ClientConnection connection = _connectionManager.getConnectionByClientId(userName, clientId);
     final URI uri = uriInfo.getAbsolutePathBuilder().path(viewId).build();
-    final ImmutableMap<String, Object> callbackMap =
-        ImmutableMap.<String, Object>of("id", requestId, "message", uri.getPath());
+    final ImmutableMap<String, Object> callbackMap = ImmutableMap.<String, Object> of("id", requestId, "message", uri.getPath());
     final URI errorUri = uriInfo.getAbsolutePathBuilder()
         .path(viewId)
         .path("errors")
@@ -136,7 +134,7 @@ public class WebUiResource {
     // Track user principal using session id rather than ip address
     final UserPrincipal ogUserPrincipal = userName != null ? new UserPrincipal(userName, sessionId) : UserPrincipal.getTestUser();
     _viewManager.createView(viewRequest, clientId, ogUserPrincipal, connection, viewId, callbackMap,
-                            portfolioGridUri.getPath(), primitivesGridUri.getPath(), errorUri.getPath());
+        portfolioGridUri.getPath(), primitivesGridUri.getPath(), errorUri.getPath());
     return Response.status(Response.Status.CREATED).build();
   }
 
@@ -149,14 +147,14 @@ public class WebUiResource {
   @Path("{viewId}/pauseOrResume")
   @PUT
   public Response pauseOrResumeView(@PathParam("viewId") final String viewId,
-                                    @FormParam("state") String state) {
+      @FormParam("state") final String state) {
     final ViewClient viewClient = _viewManager.getViewCient(viewId);
-    state = StringUtils.stripToNull(state);
+    String trimmedState = StringUtils.stripToNull(state);
     Response response = Response.status(Response.Status.BAD_REQUEST).build();
-    if (state != null) {
+    if (trimmedState != null) {
       final ViewClientState currentState = viewClient.getState();
-      state = state.toUpperCase();
-      switch (state) {
+      trimmedState = trimmedState.toUpperCase();
+      switch (trimmedState) {
         case "PAUSE":
         case "P":
           if (currentState != ViewClientState.TERMINATED) {
@@ -183,19 +181,19 @@ public class WebUiResource {
   @Path("{viewId}/{gridType}")
   @GET
   public GridStructure getGridStructure(@PathParam("viewId") final String viewId,
-                                        @PathParam("gridType") final String gridType) {
+      @PathParam("gridType") final String gridType) {
     return _viewManager.getView(viewId).getInitialGridStructure(gridType(gridType));
   }
 
   @Path("{viewId}/{gridType}/viewports/{viewportId}/valuereq/{row}/{col}")
   @GET
   public ValueRequirementTargetForCell getValueRequirementForTargetForCell(@PathParam("viewId") final String viewId,
-                                                                           @PathParam("gridType") final String gridType,
-                                                                           @PathParam("row") final int row,
-                                                                           @PathParam("col") final int col,
-                                                                           @PathParam("viewportId") final int viewportId) {
+      @PathParam("gridType") final String gridType,
+      @PathParam("row") final int row,
+      @PathParam("col") final int col,
+      @PathParam("viewportId") final int viewportId) {
 
-    final GridStructure gridStructure =  _viewManager.getView(viewId).getGridStructure(gridType(gridType), viewportId);
+    final GridStructure gridStructure = _viewManager.getView(viewId).getGridStructure(gridType(gridType), viewportId);
 
     final Pair<String, ValueRequirement> pair = gridStructure.getValueRequirementForCell(row, col);
     return new ValueRequirementTargetForCell(pair.getFirst(), pair.getSecond());
@@ -205,15 +203,15 @@ public class WebUiResource {
   @Path("{viewId}/{gridType}/viewports")
   @POST
   public Response createViewport(@Context final UriInfo uriInfo,
-                                 @PathParam("viewId") final String viewId,
-                                 @PathParam("gridType") final String gridType,
-                                 @FormParam("requestId") final int requestId,
-                                 @FormParam("version") final int version,
-                                 @FormParam("rows") final List<Integer> rows,
-                                 @FormParam("columns") final List<Integer> columns,
-                                 @FormParam("cells") final List<GridCell> cells,
-                                 @FormParam("format") final TypeFormatter.Format format,
-                                 @FormParam("enableLogging") final Boolean enableLogging) {
+      @PathParam("viewId") final String viewId,
+      @PathParam("gridType") final String gridType,
+      @FormParam("requestId") final int requestId,
+      @FormParam("version") final int version,
+      @FormParam("rows") final List<Integer> rows,
+      @FormParam("columns") final List<Integer> columns,
+      @FormParam("cells") final List<GridCell> cells,
+      @FormParam("format") final TypeFormatter.Format format,
+      @FormParam("enableLogging") final Boolean enableLogging) {
     final ViewportDefinition viewportDefinition = ViewportDefinition.create(version, rows, columns, cells, format, enableLogging);
     final int viewportId = NEXT_ID.getAndIncrement();
     final String viewportIdStr = Integer.toString(viewportId);
@@ -221,25 +219,25 @@ public class WebUiResource {
     final String callbackId = viewportUriBuilder.build().getPath();
     final String structureCallbackId = viewportUriBuilder.path("structure").build().getPath();
     _viewManager.getView(viewId).createViewport(requestId,
-                                                gridType(gridType),
-                                                viewportId,
-                                                callbackId,
-                                                structureCallbackId,
-                                                viewportDefinition);
+        gridType(gridType),
+        viewportId,
+        callbackId,
+        structureCallbackId,
+        viewportDefinition);
     return Response.status(Response.Status.CREATED).build();
   }
 
   @Path("{viewId}/{gridType}/viewports/{viewportId}")
   @PUT
   public void updateViewport(@PathParam("viewId") final String viewId,
-                             @PathParam("gridType") final String gridType,
-                             @PathParam("viewportId") final int viewportId,
-                             @FormParam("version") final int version,
-                             @FormParam("rows") final List<Integer> rows,
-                             @FormParam("columns") final List<Integer> columns,
-                             @FormParam("cells") final List<GridCell> cells,
-                             @FormParam("format") final TypeFormatter.Format format,
-                             @FormParam("enableLogging") final Boolean enableLogging) {
+      @PathParam("gridType") final String gridType,
+      @PathParam("viewportId") final int viewportId,
+      @FormParam("version") final int version,
+      @FormParam("rows") final List<Integer> rows,
+      @FormParam("columns") final List<Integer> columns,
+      @FormParam("cells") final List<GridCell> cells,
+      @FormParam("format") final TypeFormatter.Format format,
+      @FormParam("enableLogging") final Boolean enableLogging) {
     final ViewportDefinition viewportDef = ViewportDefinition.create(version, rows, columns, cells, format, enableLogging);
     _viewManager.getView(viewId).updateViewport(gridType(gridType), viewportId, viewportDef);
   }
@@ -247,37 +245,37 @@ public class WebUiResource {
   @Path("{viewId}/{gridType}/viewports/{viewportId}/structure")
   @GET
   public GridStructure getViewportGridStructure(@PathParam("viewId") final String viewId,
-                                                @PathParam("gridType") final String gridType,
-                                                @PathParam("viewportId") final int viewportId) {
+      @PathParam("gridType") final String gridType,
+      @PathParam("viewportId") final int viewportId) {
     return _viewManager.getView(viewId).getGridStructure(gridType(gridType), viewportId);
   }
 
   @Path("{viewId}/{gridType}/viewports/{viewportId}")
   @GET
   public ViewportResults getViewportData(@PathParam("viewId") final String viewId,
-                                         @PathParam("gridType") final String gridType,
-                                         @PathParam("viewportId") final int viewportId) {
+      @PathParam("gridType") final String gridType,
+      @PathParam("viewportId") final int viewportId) {
     return _viewManager.getView(viewId).getData(gridType(gridType), viewportId);
   }
 
   @Path("{viewId}/{gridType}/viewports/{viewportId}")
   @DELETE
   public void deleteViewport(@PathParam("viewId") final String viewId,
-                             @PathParam("gridType") final String gridType,
-                             @PathParam("viewportId") final int viewportId) {
+      @PathParam("gridType") final String gridType,
+      @PathParam("viewportId") final int viewportId) {
     _viewManager.getView(viewId).deleteViewport(gridType(gridType), viewportId);
   }
 
   @Path("{viewId}/{gridType}/depgraphs")
   @POST
   public Response openDependencyGraph(@Context final UriInfo uriInfo,
-                                      @PathParam("viewId") final String viewId,
-                                      @PathParam("gridType") final String gridType,
-                                      @FormParam("requestId") final int requestId,
-                                      @FormParam("row") final Integer row,
-                                      @FormParam("col") final Integer col,
-                                      @FormParam("colset") final String calcConfigName,
-                                      @FormParam("req") final ValueRequirementFormParam valueRequirementParam) {
+      @PathParam("viewId") final String viewId,
+      @PathParam("gridType") final String gridType,
+      @FormParam("requestId") final int requestId,
+      @FormParam("row") final Integer row,
+      @FormParam("col") final Integer col,
+      @FormParam("colset") final String calcConfigName,
+      @FormParam("req") final ValueRequirementFormParam valueRequirementParam) {
     final int graphId = NEXT_ID.getAndIncrement();
     final String graphIdStr = Integer.toString(graphId);
     final URI graphUri = uriInfo.getAbsolutePathBuilder().path(graphIdStr).build();
@@ -287,11 +285,11 @@ public class WebUiResource {
     } else if (calcConfigName != null && valueRequirementParam != null) {
       final ValueRequirement valueRequirement = valueRequirementParam.getValueRequirement();
       _viewManager.getView(viewId).openDependencyGraph(requestId,
-                                                       gridType(gridType),
-                                                       graphId,
-                                                       callbackId,
-                                                       calcConfigName,
-                                                       valueRequirement);
+          gridType(gridType),
+          graphId,
+          callbackId,
+          calcConfigName,
+          valueRequirement);
     }
     return Response.status(Response.Status.CREATED).build();
   }
@@ -299,32 +297,32 @@ public class WebUiResource {
   @Path("{viewId}/{gridType}/depgraphs/{depgraphId}")
   @GET
   public GridStructure getDependencyGraphGridStructure(@PathParam("viewId") final String viewId,
-                                                       @PathParam("gridType") final String gridType,
-                                                       @PathParam("depgraphId") final int depgraphId) {
+      @PathParam("gridType") final String gridType,
+      @PathParam("depgraphId") final int depgraphId) {
     return _viewManager.getView(viewId).getInitialGridStructure(gridType(gridType), depgraphId);
   }
 
   @Path("{viewId}/{gridType}/depgraphs/{depgraphId}")
   @DELETE
   public void deleteDependencyGraph(@PathParam("viewId") final String viewId,
-                                    @PathParam("gridType") final String gridType,
-                                    @PathParam("depgraphId") final int depgraphId) {
+      @PathParam("gridType") final String gridType,
+      @PathParam("depgraphId") final int depgraphId) {
     _viewManager.getView(viewId).closeDependencyGraph(gridType(gridType), depgraphId);
   }
 
   @Path("{viewId}/{gridType}/depgraphs/{depgraphId}/viewports")
   @POST
   public Response createDependencyGraphViewport(@Context final UriInfo uriInfo,
-                                                @PathParam("viewId") final String viewId,
-                                                @PathParam("gridType") final String gridType,
-                                                @PathParam("depgraphId") final int depgraphId,
-                                                @FormParam("requestId") final int requestId,
-                                                @FormParam("version") final int version,
-                                                @FormParam("rows") final List<Integer> rows,
-                                                @FormParam("columns") final List<Integer> columns,
-                                                @FormParam("cells") final List<GridCell> cells,
-                                                @FormParam("format") final TypeFormatter.Format format,
-                                                @FormParam("enableLogging") final Boolean enableLogging) {
+      @PathParam("viewId") final String viewId,
+      @PathParam("gridType") final String gridType,
+      @PathParam("depgraphId") final int depgraphId,
+      @FormParam("requestId") final int requestId,
+      @FormParam("version") final int version,
+      @FormParam("rows") final List<Integer> rows,
+      @FormParam("columns") final List<Integer> columns,
+      @FormParam("cells") final List<GridCell> cells,
+      @FormParam("format") final TypeFormatter.Format format,
+      @FormParam("enableLogging") final Boolean enableLogging) {
     final ViewportDefinition viewportDefinition = ViewportDefinition.create(version, rows, columns, cells, format, enableLogging);
     final int viewportId = NEXT_ID.getAndIncrement();
     final String viewportIdStr = Integer.toString(viewportId);
@@ -332,27 +330,27 @@ public class WebUiResource {
     final String callbackId = viewportUriBuilder.build().getPath();
     final String structureCallbackId = viewportUriBuilder.path("structure").build().getPath();
     _viewManager.getView(viewId).createViewport(requestId,
-                                                gridType(gridType),
-                                                depgraphId,
-                                                viewportId,
-                                                callbackId,
-                                                structureCallbackId,
-                                                viewportDefinition);
+        gridType(gridType),
+        depgraphId,
+        viewportId,
+        callbackId,
+        structureCallbackId,
+        viewportDefinition);
     return Response.status(Response.Status.CREATED).build();
   }
 
   @Path("{viewId}/{gridType}/depgraphs/{depgraphId}/viewports/{viewportId}")
   @PUT
   public void updateDependencyGraphViewport(@PathParam("viewId") final String viewId,
-                                            @PathParam("gridType") final String gridType,
-                                            @PathParam("depgraphId") final int depgraphId,
-                                            @PathParam("viewportId") final int viewportId,
-                                            @FormParam("version") final int version,
-                                            @FormParam("rows") final List<Integer> rows,
-                                            @FormParam("columns") final List<Integer> columns,
-                                            @FormParam("cells") final List<GridCell> cells,
-                                            @FormParam("format") final TypeFormatter.Format format,
-                                            @FormParam("enableLogging") final Boolean enableLogging) {
+      @PathParam("gridType") final String gridType,
+      @PathParam("depgraphId") final int depgraphId,
+      @PathParam("viewportId") final int viewportId,
+      @FormParam("version") final int version,
+      @FormParam("rows") final List<Integer> rows,
+      @FormParam("columns") final List<Integer> columns,
+      @FormParam("cells") final List<GridCell> cells,
+      @FormParam("format") final TypeFormatter.Format format,
+      @FormParam("enableLogging") final Boolean enableLogging) {
     final ViewportDefinition viewportDef = ViewportDefinition.create(version, rows, columns, cells, format, enableLogging);
     _viewManager.getView(viewId).updateViewport(gridType(gridType), depgraphId, viewportId, viewportDef);
   }
@@ -360,9 +358,9 @@ public class WebUiResource {
   @Path("{viewId}/{gridType}/depgraphs/{depgraphId}/viewports/{viewportId}/structure")
   @GET
   public GridStructure getDependencyGraphViewportGridStructure(@PathParam("viewId") final String viewId,
-                                                               @PathParam("gridType") final String gridType,
-                                                               @PathParam("depgraphId") final int depgraphId,
-                                                               @PathParam("viewportId") final int viewportId) {
+      @PathParam("gridType") final String gridType,
+      @PathParam("depgraphId") final int depgraphId,
+      @PathParam("viewportId") final int viewportId) {
     final GridStructure g = _viewManager.getView(viewId).getGridStructure(gridType(gridType), depgraphId, viewportId);
     return g;
   }
@@ -370,18 +368,18 @@ public class WebUiResource {
   @Path("{viewId}/{gridType}/depgraphs/{depgraphId}/viewports/{viewportId}")
   @GET
   public ViewportResults getDependencyGraphViewportData(@PathParam("viewId") final String viewId,
-                                                        @PathParam("gridType") final String gridType,
-                                                        @PathParam("depgraphId") final int depgraphId,
-                                                        @PathParam("viewportId") final int viewportId) {
+      @PathParam("gridType") final String gridType,
+      @PathParam("depgraphId") final int depgraphId,
+      @PathParam("viewportId") final int viewportId) {
     return _viewManager.getView(viewId).getData(gridType(gridType), depgraphId, viewportId);
   }
 
   @Path("{viewId}/{gridType}/depgraphs/{depgraphId}/viewports/{viewportId}")
   @DELETE
   public void deleteDependencyGraphViewport(@PathParam("viewId") final String viewId,
-                                            @PathParam("gridType") final String gridType,
-                                            @PathParam("depgraphId") final int depgraphId,
-                                            @PathParam("viewportId") final int viewportId) {
+      @PathParam("gridType") final String gridType,
+      @PathParam("depgraphId") final int depgraphId,
+      @PathParam("viewportId") final int viewportId) {
     _viewManager.getView(viewId).deleteViewport(gridType(gridType), depgraphId, viewportId);
   }
 
@@ -391,7 +389,6 @@ public class WebUiResource {
     return _viewManager.getView(viewId).getErrors();
   }
 
-
   @Path("{viewId}/errors/{errorId}")
   @DELETE
   public void deleteError(@PathParam("viewId") final String viewId, @PathParam("errorId") final long errorId) {
@@ -399,19 +396,22 @@ public class WebUiResource {
   }
 
   /**
-   * Produces view port results as CSV
+   * Produces view port results as CSV.
    *
-   * @param response the injected servlet response, not null.
-   * @param viewId ID of the view
-   * @param gridTypeStr the grid type, 'portfolio' or 'primitives'
+   * @param response
+   *          the injected servlet response, not null.
+   * @param viewId
+   *          ID of the view
+   * @param gridTypeStr
+   *          the grid type, 'portfolio' or 'primitives'
    * @return The view port result as csv
    */
   @GET
   @Path("{viewId}/{gridType}/data")
   @Produces(RestUtils.TEXT_CSV)
   public ViewportResults getViewportResultAsCsv(@PathParam("viewId") final String viewId,
-                                                @PathParam("gridType") final String gridTypeStr,
-                                                @Context final HttpServletResponse response) {
+      @PathParam("gridType") final String gridTypeStr,
+      @Context final HttpServletResponse response) {
     final AnalyticsView view = _viewManager.getView(viewId);
     final AnalyticsView.GridType gridType = gridType(gridTypeStr);
     final ViewportResults result = view.getAllGridData(gridType, TypeFormatter.Format.CELL);
@@ -424,15 +424,16 @@ public class WebUiResource {
     final LocalDateTime time = LocalDateTime.ofInstant(valuationTime, OpenGammaClock.getZone());
 
     final String filename = String.format("%s-%s-%s.csv",
-                                    view.getViewDefinitionId(),
-                                    gridType.name().toLowerCase(),
-                                    time.format(CSV_TIME_FORMAT));
+        view.getViewDefinitionId(),
+        gridType.name().toLowerCase(),
+        time.format(CSV_TIME_FORMAT));
     response.addHeader("content-disposition", "attachment; filename=\"" + filename + "\"");
     return view.getAllGridData(gridType, TypeFormatter.Format.CELL);
   }
 
   /**
-   * @param instantString An ISO-8601 string representing an instant or null
+   * @param instantString
+   *          An ISO-8601 string representing an instant or null
    * @return The parsed string or null if the input is null
    */
   private static Instant parseInstant(final String instantString) {

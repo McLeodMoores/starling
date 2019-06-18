@@ -60,10 +60,11 @@ import com.opengamma.financial.security.option.SwaptionSecurity;
 import com.opengamma.util.money.Currency;
 
 /**
- * Calculates the yield curve node sensitivities of a swaption using the Black method with no volatility modelling assumptions. The implied volatility is read directly from the market data system.
- * Note that this function produces the sensitivities with respect to a single, named curve.
+ * Calculates the yield curve node sensitivities of a swaption using the Black method with no volatility modelling assumptions. The implied volatility is read
+ * directly from the market data system. Note that this function produces the sensitivities with respect to a single, named curve.
  * <p>
- * Produces a result for {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES} using {@link InstrumentSensitivityCalculator} with {@link PresentValueCurveSensitivityBlackCalculator}
+ * Produces a result for {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES} using {@link InstrumentSensitivityCalculator} with
+ * {@link PresentValueCurveSensitivityBlackCalculator}
  *
  * @deprecated Use {@link ConstantBlackDiscountingYCNSSwaptionFunction}
  */
@@ -72,7 +73,8 @@ public class SwaptionBasicBlackYieldCurveNodeSensitivitiesFunction extends Swapt
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionBasicBlackYieldCurveNodeSensitivitiesFunction.class);
   /** The node sensitivity calculator */
-  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator.using(PresentValueCurveSensitivityBlackCalculator.getInstance());
+  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator
+      .using(PresentValueCurveSensitivityBlackCalculator.getInstance());
   /** The instrument sensitivity calculator */
   private static final InstrumentSensitivityCalculator CALCULATOR = InstrumentSensitivityCalculator.getInstance();
 
@@ -84,7 +86,8 @@ public class SwaptionBasicBlackYieldCurveNodeSensitivitiesFunction extends Swapt
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(executionContext);
@@ -109,7 +112,7 @@ public class SwaptionBasicBlackYieldCurveNodeSensitivitiesFunction extends Swapt
     }
     String[] curveNames = curveCalculationConfig.getYieldCurveNames();
     if (curveNames.length == 1) {
-      curveNames = new String[] {curveNames[0], curveNames[0] };
+      curveNames = new String[] { curveNames[0], curveNames[0] };
     }
     final String[] fullCurveNames = new String[curveNames.length];
     for (int i = 0; i < curveNames.length; i++) {
@@ -120,7 +123,7 @@ public class SwaptionBasicBlackYieldCurveNodeSensitivitiesFunction extends Swapt
       throw new UnsupportedOperationException("Cannot handle FX implied curves");
     }
     final InstrumentDefinition<?> definition = security.accept(getVisitor());
-    final InstrumentDerivative swaption = definition.toDerivative(now, fullCurveNames); //TODO
+    final InstrumentDerivative swaption = definition.toDerivative(now, fullCurveNames); // TODO
     final ValueRequirement curveSpecRequirement = getCurveSpecRequirement(currency, curveName);
     final Object curveSpecObject = inputs.getValue(curveSpecRequirement);
     if (curveSpecObject == null) {
@@ -129,7 +132,8 @@ public class SwaptionBasicBlackYieldCurveNodeSensitivitiesFunction extends Swapt
     final InterpolatedYieldCurveSpecificationWithSecurities curveSpec = (InterpolatedYieldCurveSpecificationWithSecurities) curveSpecObject;
     final ValueProperties properties = getResultProperties(currency.getCode(), curveCalculationConfigName, curveName);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), properties);
-    final BlackFlatSwaptionParameters parameters = new BlackFlatSwaptionParameters(volatilitySurface.getSurface(), SwaptionUtils.getSwapGenerator(security, definition, securitySource));
+    final BlackFlatSwaptionParameters parameters = new BlackFlatSwaptionParameters(volatilitySurface.getSurface(),
+        SwaptionUtils.getSwapGenerator(security, definition, securitySource));
     final YieldCurveBundle curves = YieldCurveFunctionUtils.getYieldCurves(inputs, curveCalculationConfig);
     final YieldCurveBundle knownCurves = YieldCurveFunctionUtils.getFixedCurves(inputs, curveCalculationConfig, getCurveCalculationConfigSource());
     final YieldCurveWithBlackSwaptionBundle data = new YieldCurveWithBlackSwaptionBundle(parameters, curves);
@@ -229,7 +233,8 @@ public class SwaptionBasicBlackYieldCurveNodeSensitivitiesFunction extends Swapt
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative swaption, final YieldCurveWithBlackSwaptionBundle data, final String curveName, final ValueSpecification spec,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative swaption, final YieldCurveWithBlackSwaptionBundle data, final String curveName,
+      final ValueSpecification spec,
       final String curveCalculationConfigName, final String curveCalculationMethod, final FunctionInputs inputs, final ComputationTarget target) {
     throw new UnsupportedOperationException();
   }

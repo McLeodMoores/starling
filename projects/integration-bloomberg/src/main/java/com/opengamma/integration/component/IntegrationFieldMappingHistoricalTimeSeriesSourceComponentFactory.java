@@ -42,7 +42,7 @@ public class IntegrationFieldMappingHistoricalTimeSeriesSourceComponentFactory e
   @PropertyDefinition(validate = "notNull")
   private ReferenceDataProvider _bbgReferenceData;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected HistoricalTimeSeriesResolver createResolver(final ComponentRepository repo) {
     final HistoricalTimeSeriesFieldAdjustmentMap bbgFieldAdjustmentMap = BloombergDataUtils.createFieldAdjustmentMap(getBbgReferenceData(), getCacheManager());

@@ -25,8 +25,10 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Method to compute the price for an interest rate future with convexity adjustment from a Hull-White one factor model.
- * <p> Reference: Henrard M., Eurodollar Futures and Options: Convexity Adjustment in HJM One-Factor Model. March 2005.
- * Available at <a href="http://ssrn.com/abstract=682343">http://ssrn.com/abstract=682343</a>
+ * <p>
+ * Reference: Henrard M., Eurodollar Futures and Options: Convexity Adjustment in HJM One-Factor Model. March 2005. Available at
+ * <a href="http://ssrn.com/abstract=682343">http://ssrn.com/abstract=682343</a>
+ * 
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.future.provider.InterestRateFutureSecurityHullWhiteMethod}
  */
 @Deprecated
@@ -39,6 +41,7 @@ public final class InterestRateFutureSecurityHullWhiteMethod extends InterestRat
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static InterestRateFutureSecurityHullWhiteMethod getInstance() {
@@ -58,8 +61,11 @@ public final class InterestRateFutureSecurityHullWhiteMethod extends InterestRat
 
   /**
    * Computes the price of a future from the curves using an estimation of the future rate without convexity adjustment.
-   * @param future The future.
-   * @param curves The Hull-White parameters and the curves.
+   * 
+   * @param future
+   *          The future.
+   * @param curves
+   *          The Hull-White parameters and the curves.
    * @return The price.
    */
   public double price(final InterestRateFutureSecurity future, final HullWhiteOneFactorPiecewiseConstantDataBundle curves) {
@@ -69,24 +75,30 @@ public final class InterestRateFutureSecurityHullWhiteMethod extends InterestRat
     final double dfForwardStart = forwardCurve.getDiscountFactor(future.getFixingPeriodStartTime());
     final double dfForwardEnd = forwardCurve.getDiscountFactor(future.getFixingPeriodEndTime());
     final double forward = (dfForwardStart / dfForwardEnd - 1) / future.getFixingPeriodAccrualFactor();
-    final double futureConvexityFactor = MODEL.futuresConvexityFactor(curves.getHullWhiteParameter(), future.getTradingLastTime(), future.getFixingPeriodStartTime(), future.getFixingPeriodEndTime());
+    final double futureConvexityFactor = MODEL.futuresConvexityFactor(curves.getHullWhiteParameter(), future.getTradingLastTime(),
+        future.getFixingPeriodStartTime(), future.getFixingPeriodEndTime());
     final double price = 1.0 - futureConvexityFactor * forward + (1 - futureConvexityFactor) / future.getFixingPeriodAccrualFactor();
     return price;
   }
 
   /**
    * Compute the price sensitivity to rates of a interest rate future by discounting.
-   * @param future The future.
-   * @param curves The Hull-White parameters and the curves.
+   * 
+   * @param future
+   *          The future.
+   * @param curves
+   *          The Hull-White parameters and the curves.
    * @return The price rate sensitivity.
    */
-  public InterestRateCurveSensitivity priceCurveSensitivity(final InterestRateFutureSecurity future, final HullWhiteOneFactorPiecewiseConstantDataBundle curves) {
+  public InterestRateCurveSensitivity priceCurveSensitivity(final InterestRateFutureSecurity future,
+      final HullWhiteOneFactorPiecewiseConstantDataBundle curves) {
     ArgumentChecker.notNull(future, "Future");
     ArgumentChecker.notNull(curves, "Curves");
     final YieldAndDiscountCurve forwardCurve = curves.getCurve(future.getForwardCurveName());
     final double dfForwardStart = forwardCurve.getDiscountFactor(future.getFixingPeriodStartTime());
     final double dfForwardEnd = forwardCurve.getDiscountFactor(future.getFixingPeriodEndTime());
-    final double futureConvexityFactor = MODEL.futuresConvexityFactor(curves.getHullWhiteParameter(), future.getTradingLastTime(), future.getFixingPeriodStartTime(), future.getFixingPeriodEndTime());
+    final double futureConvexityFactor = MODEL.futuresConvexityFactor(curves.getHullWhiteParameter(), future.getTradingLastTime(),
+        future.getFixingPeriodStartTime(), future.getFixingPeriodEndTime());
     // Backward sweep
     final double priceBar = 1.0;
     final double forwardBar = -futureConvexityFactor * priceBar;

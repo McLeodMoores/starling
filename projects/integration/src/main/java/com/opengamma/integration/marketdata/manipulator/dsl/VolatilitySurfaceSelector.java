@@ -29,9 +29,8 @@ import com.opengamma.util.ArgumentChecker;
 public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
 
   private static final ImmutableSet<String> COMPATIBLE_VR_NAMES = ImmutableSet.of(INTERPOLATED_VOLATILITY_SURFACE,
-                                                                                  VOLATILITY_SURFACE,
-                                                                                  BLACK_VOLATILITY_SURFACE);
-
+      VOLATILITY_SURFACE,
+      BLACK_VOLATILITY_SURFACE);
 
   private final Set<String> _calcConfigNames;
   private final Set<String> _names;
@@ -42,12 +41,12 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
   private final Set<String> _quoteUnits;
 
   /* package */ VolatilitySurfaceSelector(final Set<String> calcConfigNames,
-                                          final Set<String> names,
-                                          final Pattern nameMatchPattern,
-                                          final Pattern nameLikePattern,
-                                          final Set<String> instrumentTypes,
-                                          final Set<String> quoteTypes,
-                                          final Set<String> quoteUnits) {
+      final Set<String> names,
+      final Pattern nameMatchPattern,
+      final Pattern nameLikePattern,
+      final Set<String> instrumentTypes,
+      final Set<String> quoteTypes,
+      final Set<String> quoteUnits) {
     _calcConfigNames = calcConfigNames;
     _names = names;
     _nameMatchPattern = PatternWrapper.wrap(nameMatchPattern);
@@ -64,8 +63,8 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
 
   @Override
   public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification,
-                                                         final String calculationConfigurationName,
-                                                         final SelectorResolver resolver) {
+      final String calculationConfigurationName,
+      final SelectorResolver resolver) {
     if (_calcConfigNames != null && !_calcConfigNames.contains(calculationConfigurationName)) {
       return null;
     }
@@ -106,9 +105,8 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
   private static boolean contains(final Set<String> set, final String str) {
     if (set == null) {
       return true;
-    } else {
-      return set.contains(str);
     }
+    return set.contains(str);
   }
 
   /* package */ Set<String> getCalcConfigNames() {
@@ -164,15 +162,15 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
 
   @Override
   public String toString() {
-    return "VolatilitySurfaceSelector [" +
-        "_calcConfigNames=" + _calcConfigNames +
-        ", _names=" + _names +
-        ", _nameMatchPattern=" + _nameMatchPattern +
-        ", _nameLikePattern=" + _nameLikePattern +
-        ", _instrumentTypes=" + _instrumentTypes +
-        ", _quoteTypes=" + _quoteTypes +
-        ", _quoteUnits=" + _quoteUnits +
-        "]";
+    return "VolatilitySurfaceSelector ["
+        + "_calcConfigNames=" + _calcConfigNames
+        + ", _names=" + _names
+        + ", _nameMatchPattern=" + _nameMatchPattern
+        + ", _nameLikePattern=" + _nameLikePattern
+        + ", _instrumentTypes=" + _instrumentTypes
+        + ", _quoteTypes=" + _quoteTypes
+        + ", _quoteUnits=" + _quoteUnits
+        + "]";
   }
 
   public static class Builder {
@@ -199,12 +197,12 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
 
     /* package */ VolatilitySurfaceSelector getSelector() {
       return new VolatilitySurfaceSelector(_scenario.getCalcConfigNames(),
-                                           _names,
-                                           _nameMatchPattern,
-                                           _nameLikePattern,
-                                           _instrumentTypes,
-                                           _quoteTypes,
-                                           _quoteUnits);
+          _names,
+          _nameMatchPattern,
+          _nameLikePattern,
+          _instrumentTypes,
+          _quoteTypes,
+          _quoteUnits);
     }
 
     public Builder named(final String... names) {

@@ -14,7 +14,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.util.wrapper.CommonsMathWrapper;
 
 /**
- * Wrapper for results of the Commons implementation of LU decomposition ({@link LUDecompositionCommons})
+ * Wrapper for results of the Commons implementation of LU decomposition ({@link LUDecompositionCommons}).
  */
 public class LUDecompositionCommonsResult implements LUDecompositionResult {
   private final double _determinant;
@@ -25,7 +25,8 @@ public class LUDecompositionCommonsResult implements LUDecompositionResult {
   private final DoubleMatrix2D _u;
 
   /**
-   * @param lu The result of the LU decomposition, not null. $\mathbf{L}$ cannot be singular.
+   * @param lu
+   *          The result of the LU decomposition, not null. $\mathbf{L}$ cannot be singular.
    */
   public LUDecompositionCommonsResult(final LUDecomposition lu) {
     Validate.notNull(lu, "LU decomposition");

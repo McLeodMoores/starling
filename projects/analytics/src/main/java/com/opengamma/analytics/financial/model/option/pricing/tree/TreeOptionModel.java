@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -13,9 +13,11 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  * @param <T>
+ *          The type of the option
  * @param <U>
+ *          The the of the market data
  */
 public abstract class TreeOptionModel<T extends OptionDefinition, U extends StandardOptionDataBundle> implements OptionModel<T, U> {
 

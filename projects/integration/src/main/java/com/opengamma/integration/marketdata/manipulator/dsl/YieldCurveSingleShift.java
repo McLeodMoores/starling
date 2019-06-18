@@ -18,8 +18,7 @@ import com.opengamma.engine.marketdata.manipulator.function.StructureManipulator
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Uses {@link YieldAndDiscountCurve#withSingleShift} to perform the transformation.
- * TODO can this be deleted in favour of pointShift with a single point?
+ * Uses {@link YieldAndDiscountCurve#withSingleShift} to perform the transformation. TODO can this be deleted in favour of pointShift with a single point?
  */
 public class YieldCurveSingleShift implements StructureManipulator<YieldAndDiscountCurve> {
 
@@ -40,8 +39,8 @@ public class YieldCurveSingleShift implements StructureManipulator<YieldAndDisco
 
   @Override
   public YieldAndDiscountCurve execute(final YieldAndDiscountCurve structure,
-                                       final ValueSpecification valueSpecification,
-                                       final FunctionExecutionContext executionContext) {
+      final ValueSpecification valueSpecification,
+      final FunctionExecutionContext executionContext) {
     return structure.withSingleShift(_t, _shift);
   }
 
@@ -82,9 +81,9 @@ public class YieldCurveSingleShift implements StructureManipulator<YieldAndDisco
 
   @Override
   public String toString() {
-    return "YieldCurveSingleShift [" +
-        "_shift=" + _shift +
-        ", _t=" + _t +
-        "]";
+    return "YieldCurveSingleShift ["
+        + "_shift=" + _shift
+        + ", _t=" + _t
+        + "]";
   }
 }

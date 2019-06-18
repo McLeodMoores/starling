@@ -61,10 +61,8 @@ import com.opengamma.util.time.Tenor;
 /**
  * Example code to load a simple portfolio of cap/floors and constant-maturity swaps.
  * <p>
- * This code is kept deliberately as simple as possible.
- * There are no checks for the securities or portfolios already existing, so if you run it
- * more than once you will get multiple copies portfolios and securities with the same names.
- * It is designed to run against the HSQLDB example database.
+ * This code is kept deliberately as simple as possible. There are no checks for the securities or portfolios already existing, so if you run it more than once
+ * you will get multiple copies portfolios and securities with the same names. It is designed to run against the HSQLDB example database.
  */
 public class ExampleMixedCMCapFloorPortfolioLoader extends AbstractTool<IntegrationToolContext> {
 
@@ -85,16 +83,16 @@ public class ExampleMixedCMCapFloorPortfolioLoader extends AbstractTool<Integrat
   /** 3m Libor ticker */
   private static final ExternalId LIBOR_3M = ExternalSchemes.bloombergTickerSecurityId("US0003M Index");
   /** The tenors */
-  private static final Tenor[] TENORS = new Tenor[] {Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS, Tenor.TEN_YEARS};
+  private static final Tenor[] TENORS = new Tenor[] { Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS, Tenor.TEN_YEARS };
   /** The pay tenors */
-  private static final Tenor[] PAY_TENORS = new Tenor[] {Tenor.ONE_YEAR, Tenor.FIVE_YEARS};
+  private static final Tenor[] PAY_TENORS = new Tenor[] { Tenor.ONE_YEAR, Tenor.FIVE_YEARS };
   /** The receive tenors */
-  private static final Tenor[] RECEIVE_TENORS = new Tenor[] {Tenor.TWO_YEARS, Tenor.TEN_YEARS};
+  private static final Tenor[] RECEIVE_TENORS = new Tenor[] { Tenor.TWO_YEARS, Tenor.TEN_YEARS };
   /** The strike formatter */
   private static final DecimalFormat FORMAT = new DecimalFormat("##.##");
   /** The id scheme for these securities */
   private static final String ID_SCHEME = "CAP_FLOOR_SWAP_GENERATOR";
-  /** The portfolio name */
+  /** The portfolio name. */
   public static final String PORTFOLIO_NAME = "CMS and Cap/Floor Portfolio";
   /** A map of tenors to swap rate tickers */
   private static final Map<Tenor, ExternalId> TICKERS = new HashMap<>();
@@ -107,25 +105,25 @@ public class ExampleMixedCMCapFloorPortfolioLoader extends AbstractTool<Integrat
     TICKERS.put(Tenor.TEN_YEARS, ExternalSchemes.bloombergTickerSecurityId("USSW10 Curncy"));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
-   * @param args  the standard tool arguments, not null
+   *
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     try {
-      boolean success =
-          new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class) &&
-          new ExampleMixedCMCapFloorPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
+      final boolean success = new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class)
+          && new ExampleMixedCMCapFloorPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
       ShutdownUtils.exit(success ? 0 : -1);
-    } catch (Throwable ex) {
+    } catch (final Throwable ex) {
       ex.printStackTrace();
       ShutdownUtils.exit(-2);
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final Random random = new Random(45689);
@@ -213,17 +211,18 @@ public class ExampleMixedCMCapFloorPortfolioLoader extends AbstractTool<Integrat
     final ZonedDateTime maturityDate = TRADE_DATE.plus(tenor.getPeriod()).atStartOfDay(ZoneOffset.UTC);
     final boolean payer = random.nextBoolean();
     final boolean cap = random.nextBoolean();
-    final double strike = getSwapRate(CURRENCY, TRADE_DATE, tenor) * (1 + ((0.5 - random.nextDouble()) / 30));
+    final double strike = getSwapRate(CURRENCY, TRADE_DATE, tenor) * (1 + (0.5 - random.nextDouble()) / 30);
     final double notional = 1000000 * (1 + random.nextInt(50));
     final ExternalId underlyingId = TICKERS.get(tenor);
     if (underlyingId == null) {
       throw new OpenGammaRuntimeException("Could not get swap rate ticker for " + tenor);
     }
-    final CapFloorSecurity security = new CapFloorSecurity(TRADE_DATE.atStartOfDay(ZoneOffset.UTC), maturityDate, notional, underlyingId, strike, PeriodFrequency.SEMI_ANNUAL,
+    final CapFloorSecurity security = new CapFloorSecurity(TRADE_DATE.atStartOfDay(ZoneOffset.UTC), maturityDate, notional, underlyingId, strike,
+        PeriodFrequency.SEMI_ANNUAL,
         Currency.USD, ACT_360, payer, cap, false);
-    security.setName("USD " + FORMAT.format(notional / 1000000) + (cap ? "MM cap " : "MM floor ") + "@ " + FORMAT.format(strike) +
-        (payer ? "%, pay " : "%, receive ") + tenor.getPeriod().normalized().getYears() + "Y ISDA fixing" +
-        " (" + TRADE_DATE.toString() + " - " + maturityDate.toLocalDate().toString() + ")");
+    security.setName("USD " + FORMAT.format(notional / 1000000) + (cap ? "MM cap " : "MM floor ") + "@ " + FORMAT.format(strike)
+        + (payer ? "%, pay " : "%, receive ") + tenor.getPeriod().normalized().getYears() + "Y ISDA fixing"
+        + " (" + TRADE_DATE.toString() + " - " + maturityDate.toLocalDate().toString() + ")");
     security.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
     return security;
   }
@@ -251,15 +250,16 @@ public class ExampleMixedCMCapFloorPortfolioLoader extends AbstractTool<Integrat
       security = new SwapSecurity(tradeDate, tradeDate, maturityDate, COUNTERPARTY, cmsLeg, iborLeg);
       payIbor = false;
     }
-    security.setName(CURRENCY.getCode() + " " + FORMAT.format(notional.getAmount() / 1000000) + "MM Swap, pay " +
-        (payIbor ? frequency.getPeriod().getMonths() + "M Libor, receive " + tenor.getPeriod().getYears() + "Y ISDA fixing (" :
-          tenor.getPeriod().getYears() + "Y ISDA fixing, receive " + frequency.getPeriod().getMonths() + "M Libor (") +
-          tradeDate.toLocalDate().toString() + " - " + maturityDate.toLocalDate().toString() + ")");
+    security.setName(CURRENCY.getCode() + " " + FORMAT.format(notional.getAmount() / 1000000) + "MM Swap, pay "
+        + (payIbor ? frequency.getPeriod().getMonths() + "M Libor, receive " + tenor.getPeriod().getYears() + "Y ISDA fixing ("
+            : tenor.getPeriod().getYears() + "Y ISDA fixing, receive " + frequency.getPeriod().getMonths() + "M Libor (")
+        + tradeDate.toLocalDate().toString() + " - " + maturityDate.toLocalDate().toString() + ")");
     security.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
     return security;
   }
 
-  private CapFloorCMSSpreadSecurity makeCMSCapFloorSpread(final Random random, final Tenor payTenor, final Tenor receiveTenor, final Tenor maturity, final double strike) {
+  private CapFloorCMSSpreadSecurity makeCMSCapFloorSpread(final Random random, final Tenor payTenor, final Tenor receiveTenor, final Tenor maturity,
+      final double strike) {
     final ZonedDateTime tradeDate = TRADE_DATE.atStartOfDay(ZoneOffset.UTC);
     final ZonedDateTime maturityDate = tradeDate.plus(maturity.getPeriod());
     final boolean payer = random.nextBoolean();
@@ -275,10 +275,11 @@ public class ExampleMixedCMCapFloorPortfolioLoader extends AbstractTool<Integrat
     final double notional = 1000000 * (1 + random.nextInt(50));
     final CapFloorCMSSpreadSecurity security = new CapFloorCMSSpreadSecurity(tradeDate, maturityDate, notional, payIdentifier, receiveIdentifier, strike,
         PeriodFrequency.ANNUAL, CURRENCY, ACT_360, payer, cap);
-    security.setName(CURRENCY.getCode() + " " + FORMAT.format(notional / 1000000) + (cap ? "MM cap spread " : "MM floor spread ") + "@ " + FORMAT.format(strike) +
-        "%, pay " + payTenor.getPeriod().normalized().getYears() + "Y ISDA fixing" + ", receive " +
-        receiveTenor.getPeriod().normalized().getYears() + "Y ISDA fixing" +
-        " (" + tradeDate.toLocalDate().toString() + " - " + maturityDate.toLocalDate().toString() + ")");
+    security
+        .setName(CURRENCY.getCode() + " " + FORMAT.format(notional / 1000000) + (cap ? "MM cap spread " : "MM floor spread ") + "@ " + FORMAT.format(strike)
+            + "%, pay " + payTenor.getPeriod().normalized().getYears() + "Y ISDA fixing" + ", receive "
+            + receiveTenor.getPeriod().normalized().getYears() + "Y ISDA fixing"
+            + " (" + tradeDate.toLocalDate().toString() + " - " + maturityDate.toLocalDate().toString() + ")");
     security.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
     return security;
   }
@@ -303,7 +304,8 @@ public class ExampleMixedCMCapFloorPortfolioLoader extends AbstractTool<Integrat
   }
 
   private static ExternalId getSwapRateFor(final ConfigSource configSource, final Currency ccy, final LocalDate tradeDate, final Tenor tenor) {
-    final CurveSpecificationBuilderConfiguration curveSpecConfig = configSource.getSingle(CurveSpecificationBuilderConfiguration.class, "DEFAULT_" + ccy.getCode(), VersionCorrection.LATEST);
+    final CurveSpecificationBuilderConfiguration curveSpecConfig = configSource.getSingle(CurveSpecificationBuilderConfiguration.class,
+        "DEFAULT_" + ccy.getCode(), VersionCorrection.LATEST);
     if (curveSpecConfig == null) {
       throw new OpenGammaRuntimeException("No curve spec builder configuration for DEFAULT_" + ccy.getCode());
     }

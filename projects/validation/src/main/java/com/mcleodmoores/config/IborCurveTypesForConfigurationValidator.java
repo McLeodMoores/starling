@@ -105,7 +105,7 @@ public final class IborCurveTypesForConfigurationValidator extends Configuration
    */
   public static class IborCurveInformation {
     /** The convention or security id */
-    private final ExternalId _externalId;
+    private final ExternalId ExternalId;
     /** The index tenor */
     private final Tenor _tenor;
 
@@ -115,7 +115,7 @@ public final class IborCurveTypesForConfigurationValidator extends Configuration
      * @param tenor  the index tenor, not null
      */
     public IborCurveInformation(final ExternalId externalId, final Tenor tenor) {
-      _externalId = ArgumentChecker.notNull(externalId, "externalId");
+      ExternalId = ArgumentChecker.notNull(externalId, "externalId");
       _tenor = ArgumentChecker.notNull(tenor, "tenor");
     }
 
@@ -124,7 +124,7 @@ public final class IborCurveTypesForConfigurationValidator extends Configuration
      * @return  the id
      */
     public ExternalId getId() {
-      return _externalId;
+      return ExternalId;
     }
 
     /**
@@ -139,7 +139,7 @@ public final class IborCurveTypesForConfigurationValidator extends Configuration
     public int hashCode() {
       final int prime = 31;
       int result = 1;
-      result = prime * result + Objects.hashCode(_externalId);
+      result = prime * result + Objects.hashCode(ExternalId);
       result = prime * result + Objects.hashCode(_tenor);
       return result;
     }
@@ -153,7 +153,7 @@ public final class IborCurveTypesForConfigurationValidator extends Configuration
         return false;
       }
       final IborCurveInformation other = (IborCurveInformation) obj;
-      return Objects.equals(_externalId, other._externalId) && Objects.equals(_tenor, other._tenor);
+      return Objects.equals(ExternalId, other.ExternalId) && Objects.equals(_tenor, other._tenor);
     }
 
   }

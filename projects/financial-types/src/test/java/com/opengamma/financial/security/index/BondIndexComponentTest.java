@@ -1,17 +1,20 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.index;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 
+import org.joda.beans.Bean;
 import org.testng.annotations.Test;
 
 import com.opengamma.core.id.ExternalSchemes;
+import com.opengamma.financial.AbstractBeanTestCase;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.test.TestGroup;
 
@@ -20,7 +23,7 @@ import com.opengamma.util.test.TestGroup;
  * before databases are affected.
  */
 @Test(groups = TestGroup.UNIT)
-public class BondIndexComponentTest {
+public class BondIndexComponentTest extends AbstractBeanTestCase {
   /** The bond ids */
   private static final ExternalIdBundle IDS = ExternalIdBundle.of(ExternalSchemes.bloombergTickerSecurityId("AAA"),
       ExternalSchemes.bloombergBuidSecurityId("AAAA"));
@@ -60,5 +63,11 @@ public class BondIndexComponentTest {
   public void testFields() {
     assertEquals(IDS, COMPONENT.getBondIdentifier());
     assertEquals(WEIGHT, COMPONENT.getWeight());
+  }
+
+  @Override
+  public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
+    return new JodaBeanProperties<>(BondIndexComponent.class, Arrays.asList("bondIdentifier", "weight"), Arrays.asList(IDS, WEIGHT),
+        Arrays.asList(ExternalIdBundle.of("eids", "1"), BigDecimal.valueOf(2000)));
   }
 }

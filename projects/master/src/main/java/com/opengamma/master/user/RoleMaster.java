@@ -1,13 +1,10 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user;
 
-import com.opengamma.DataDuplicationException;
-import com.opengamma.DataNotFoundException;
-import com.opengamma.DataVersionException;
 import com.opengamma.core.change.ChangeProvider;
 import com.opengamma.core.user.UserAccount;
 import com.opengamma.id.ObjectId;
@@ -43,13 +40,16 @@ public interface RoleMaster extends ChangeProvider {
   /**
    * Gets a role by name.
    * <p>
-   * This will return the role matching the role name.
-   * A role name is a unique key for the role master.
+   * This will return the role matching the role name. A role name is a unique
+   * key for the role master.
    *
-   * @param roleName  the role name to retrieve, not null
+   * @param roleName
+   *          the role name to retrieve, not null
    * @return the role, not null
-   * @throws IllegalArgumentException if the identifier is invalid
-   * @throws DataNotFoundException if there is no role with the specified name
+   * @throws IllegalArgumentException
+   *           if the identifier is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no role with the specified name
    */
   ManageableRole getByName(String roleName);
 
@@ -58,10 +58,13 @@ public interface RoleMaster extends ChangeProvider {
    * <p>
    * This will return the role matching the object identifier.
    *
-   * @param objectId  the object identifier to retrieve, not null
+   * @param objectId
+   *          the object identifier to retrieve, not null
    * @return the role, not null
-   * @throws IllegalArgumentException if the identifier is invalid
-   * @throws DataNotFoundException if there is no role with the specified identifier
+   * @throws IllegalArgumentException
+   *           if the identifier is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no role with the specified identifier
    */
   ManageableRole getById(ObjectId objectId);
 
@@ -71,25 +74,33 @@ public interface RoleMaster extends ChangeProvider {
    * <p>
    * This adds a role, ensuring that the role does not already exist.
    *
-   * @param role  the role to add, not null
+   * @param role
+   *          the role to add, not null
    * @return the unique identifier of the added role, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataDuplicationException if the role name is already used
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataDuplicationException
+   *           if the role name is already used
    */
   UniqueId add(ManageableRole role);
 
   /**
    * Updates a role in the data store.
    * <p>
-   * This updates a role, ensuring that the role already exists.
-   * The unique identifier must be set in the role and it must have a version.
+   * This updates a role, ensuring that the role already exists. The unique
+   * identifier must be set in the role and it must have a version.
    *
-   * @param role  the role to add, not null
+   * @param role
+   *          the role to add, not null
    * @return the unique identifier of the updated role, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataNotFoundException if the role to update cannot be found
-   * @throws DataVersionException if the unique identifier version is not the latest one
-   * @throws DataDuplicationException if the role is being renamed and the name is already used
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if the role to update cannot be found
+   * @throws com.opengamma.DataVersionException
+   *           if the unique identifier version is not the latest one
+   * @throws com.opengamma.DataDuplicationException
+   *           if the role is being renamed and the name is already used
    */
   UniqueId update(ManageableRole role);
 
@@ -109,25 +120,31 @@ public interface RoleMaster extends ChangeProvider {
   /**
    * Removes a role from the data store.
    *
-   * @param roleName  the role name to remove, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataNotFoundException if there is no role with the specified name
+   * @param roleName
+   *          the role name to remove, not null
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no role with the specified name
    */
   void removeByName(String roleName);
 
   /**
    * Removes a role from the data store.
    *
-   * @param objectId  the object identifier to remove, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataNotFoundException if there is no role with the specified identifier
+   * @param objectId
+   *          the object identifier to remove, not null
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no role with the specified identifier
    */
   void removeById(ObjectId objectId);
 
   //-------------------------------------------------------------------------
   /**
    * Searches for roles matching the specified search criteria.
-   * 
+   *
    * @param request  the search request, not null
    * @return the search result, not null
    * @throws IllegalArgumentException if the request is invalid
@@ -137,19 +154,23 @@ public interface RoleMaster extends ChangeProvider {
   /**
    * Queries the event history of a single role.
    * <p>
-   * If an implementation does not store history, and empty object must be returned.
-   * 
-   * @param request  the history request, not null
+   * If an implementation does not store history, and empty object must be
+   * returned.
+   *
+   * @param request
+   *          the history request, not null
    * @return the role history, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataNotFoundException if there is no role with the specified identifier
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no role with the specified identifier
    */
   RoleEventHistoryResult eventHistory(RoleEventHistoryRequest request);
 
   //-------------------------------------------------------------------------
   /**
    * Resolves the user account populating the combined set of role and permissions.
-   * 
+   *
    * @param account  the account to resolve, not null
    * @return the resolved account, not null
    * @throws RuntimeException if an error occurs

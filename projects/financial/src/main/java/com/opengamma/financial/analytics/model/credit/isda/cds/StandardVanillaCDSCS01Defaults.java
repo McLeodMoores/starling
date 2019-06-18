@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.credit.isda.cds;
@@ -22,12 +22,12 @@ import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class StandardVanillaCDSCS01Defaults extends DefaultPropertyFunction {
   private static final String[] VALUE_REQUIREMENT = new String[] {
-    ValueRequirementNames.CS01,
-    ValueRequirementNames.GAMMA_CS01,
+                ValueRequirementNames.CS01,
+                ValueRequirementNames.GAMMA_CS01,
   };
   private final PriorityClass _priority;
   private final Map<String, String> _currencyToSpreadCurveBump;
@@ -65,7 +65,8 @@ public class StandardVanillaCDSCS01Defaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String currency = FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();
     if (CreditInstrumentPropertyNamesAndValues.PROPERTY_SPREAD_CURVE_BUMP.equals(propertyName)) {
       return Collections.singleton(_currencyToSpreadCurveBump.get(currency));

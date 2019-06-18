@@ -118,7 +118,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
     underlying.changeManager().addChangeListener(_changeListener);
   }
 
-  private CacheConfiguration tweakCacheConfiguration(final CacheConfiguration cacheConfiguration) {
+  private static CacheConfiguration tweakCacheConfiguration(final CacheConfiguration cacheConfiguration) {
 
     // Set searchable index
     final Searchable uidToDocumentCacheSearchable = new Searchable();

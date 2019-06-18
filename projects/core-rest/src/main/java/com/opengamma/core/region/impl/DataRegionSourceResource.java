@@ -87,11 +87,10 @@ public class DataRegionSourceResource extends AbstractDataResource {
     if (version != null) {
       final Region result = getRegionSource().get(objectId.atVersion(version));
       return responseOkObject(result);
-    } else {
-      final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
-      final Region result = getRegionSource().get(objectId, vc);
-      return responseOkObject(result);
     }
+    final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
+    final Region result = getRegionSource().get(objectId, vc);
+    return responseOkObject(result);
   }
 
   // deprecated

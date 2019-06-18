@@ -32,6 +32,9 @@ public class IRFutureOptionFunctions extends AbstractFunctionConfigurationBean {
     return new IRFutureOptionFunctions().getObjectCreating();
   }
 
+  /**
+   * @return  the functions
+   */
   public static FunctionConfigurationSource deprecated() {
     return new Deprecated().getObjectCreating();
   }
@@ -103,7 +106,7 @@ public class IRFutureOptionFunctions extends AbstractFunctionConfigurationBean {
       }
     }
 
-    private final Map<String, CurrencyInfo> _perCurrencyInfo = new HashMap<String, CurrencyInfo>();
+    private final Map<String, CurrencyInfo> _perCurrencyInfo = new HashMap<>();
 
     public void setPerCurrencyInfo(final Map<String, CurrencyInfo> perCurrencyInfo) {
       _perCurrencyInfo.clear();
@@ -214,6 +217,7 @@ public class IRFutureOptionFunctions extends AbstractFunctionConfigurationBean {
 
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
     functions.add(functionConfiguration(InterestRateFutureOptionMarketUnderlyingPriceFunction.class));

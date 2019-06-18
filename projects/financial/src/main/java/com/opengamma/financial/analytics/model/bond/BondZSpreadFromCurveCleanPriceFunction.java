@@ -35,7 +35,9 @@ import com.opengamma.financial.security.bond.BondSecurity;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondZSpreadFromCurveCleanPriceFunction extends BondFromPriceFunction {
   private static final BondSecurityDiscountingMethod CALCULATOR = BondSecurityDiscountingMethod.getInstance();
 
@@ -46,7 +48,8 @@ public class BondZSpreadFromCurveCleanPriceFunction extends BondFromPriceFunctio
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String curveName = null;
     String riskFreeCurveName = null;
     for (final Map.Entry<ValueSpecification, ValueRequirement> input : inputs.entrySet()) {

@@ -42,7 +42,8 @@ public class YieldCurveNodePnLDefaults extends DefaultPropertyFunction {
   private final String _samplingFunction;
   private final Map<String, String> _currencyAndCurveConfigNames;
 
-  public YieldCurveNodePnLDefaults(final String samplingPeriod, final String scheduleCalculator, final String samplingFunction, final String... currencyAndCurveConfigNames) {
+  public YieldCurveNodePnLDefaults(final String samplingPeriod, final String scheduleCalculator, final String samplingFunction,
+      final String... currencyAndCurveConfigNames) {
     super(ComputationTargetType.POSITION, true);
     ArgumentChecker.notNull(samplingPeriod, "sampling period");
     ArgumentChecker.notNull(scheduleCalculator, "schedule calculator");
@@ -83,7 +84,8 @@ public class YieldCurveNodePnLDefaults extends DefaultPropertyFunction {
     if (security instanceof SwapSecurity) {
       try {
         final InterestRateInstrumentType type = InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security);
-        if (type != InterestRateInstrumentType.SWAP_FIXED_IBOR && type != InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD && type != InterestRateInstrumentType.SWAP_IBOR_IBOR
+        if (type != InterestRateInstrumentType.SWAP_FIXED_IBOR && type != InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD
+            && type != InterestRateInstrumentType.SWAP_IBOR_IBOR
             && type != InterestRateInstrumentType.SWAP_FIXED_OIS) {
           return false;
         }

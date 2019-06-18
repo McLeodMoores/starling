@@ -51,9 +51,8 @@ public abstract class CurrencyMatrixValue {
     public CurrencyMatrixFixed getReciprocal() {
       if (getFixedValue() == 1.0) {
         return this;
-      } else {
-        return new CurrencyMatrixFixed(1 / getFixedValue());
       }
+      return new CurrencyMatrixFixed(1 / getFixedValue());
     }
 
     @Override
@@ -80,8 +79,8 @@ public abstract class CurrencyMatrixValue {
   }
 
   /**
-   * A conversion rate from one currency to another supplied by another node in the dependency graph. This might be a live data sourcing function to use current market data, or a calculated value
-   * based on something else.
+   * A conversion rate from one currency to another supplied by another node in the dependency graph. This might be a live data sourcing function to use current
+   * market data, or a calculated value based on something else.
    */
   public static final class CurrencyMatrixValueRequirement extends CurrencyMatrixValue {
 
@@ -135,9 +134,11 @@ public abstract class CurrencyMatrixValue {
     }
 
     /**
-     * Support translation from pre-3044 type specifications, such as CTSpec[PRIMITIVE, BLOOMBERG_TICKER~USD Curncy], to the correct CTReq[PRIMITIVE, BLOOMBERGTICKER~USD Curncy].
+     * Support translation from pre-3044 type specifications, such as CTSpec[PRIMITIVE, BLOOMBERG_TICKER~USD Curncy], to the correct CTReq[PRIMITIVE,
+     * BLOOMBERGTICKER~USD Curncy].
      *
-     * @param valueRequirement the possibly legacy specification, not null
+     * @param valueRequirement
+     *          the possibly legacy specification, not null
      * @return the updated specification, not null
      * @deprecated shouldn't be relying on this, a configuration database upgrade script to apply the transformation would be better
      */
@@ -148,7 +149,8 @@ public abstract class CurrencyMatrixValue {
         if (spec.getType().equals(ComputationTargetType.PRIMITIVE)) {
           final UniqueId uid = spec.getUniqueId();
           if (ExternalSchemes.BLOOMBERG_TICKER.getName().equals(uid.getScheme())) {
-            return new ValueRequirement(valueRequirement.getValueName(), new ComputationTargetRequirement(spec.getType(), ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, uid.getValue())),
+            return new ValueRequirement(valueRequirement.getValueName(),
+                new ComputationTargetRequirement(spec.getType(), ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, uid.getValue())),
                 valueRequirement.getConstraints());
           }
         }
@@ -224,7 +226,8 @@ public abstract class CurrencyMatrixValue {
   /**
    * Creates a matrix value that is a given constant value.
    *
-   * @param fixedValue the value
+   * @param fixedValue
+   *          the value
    * @return the matrix value
    */
   public static CurrencyMatrixFixed of(final double fixedValue) {
@@ -233,10 +236,11 @@ public abstract class CurrencyMatrixValue {
   }
 
   /**
-   * Creates a matrix value that is obtained from an arbitrary value produced by the dependency graph. This may be a requirement satisfied by a live data provider or a value calculated by other
-   * functions.
+   * Creates a matrix value that is obtained from an arbitrary value produced by the dependency graph. This may be a requirement satisfied by a live data
+   * provider or a value calculated by other functions.
    *
-   * @param valueRequirement identifies the value to use
+   * @param valueRequirement
+   *          identifies the value to use
    * @return the matrix value
    */
   public static CurrencyMatrixValueRequirement of(final ValueRequirement valueRequirement) {
@@ -246,19 +250,20 @@ public abstract class CurrencyMatrixValue {
   /**
    * Creates a matrix value that indicates a conversion between currencies should be performed using the rates of each to/from an intermediate currency.
    *
-   * @param currency the intermediate currency
+   * @param currency
+   *          the intermediate currency
    * @return the matrix value
    */
   public static CurrencyMatrixCross of(final Currency currency) {
     return new CurrencyMatrixCross(currency);
   }
 
-  public abstract <T> T accept(final CurrencyMatrixValueVisitor<T> visitor);
+  public abstract <T> T accept(CurrencyMatrixValueVisitor<T> visitor);
 
   public abstract CurrencyMatrixValue getReciprocal();
 
   @Override
-  public abstract boolean equals(final Object o);
+  public abstract boolean equals(Object o);
 
   @Override
   public abstract int hashCode();

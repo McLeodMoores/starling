@@ -22,9 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.opengamma.util.auth.AuthUtils;
 
 /**
- * Manages long-polling http requests using Jetty continuations.  Requests to this servlet block until there
- * is new data available for the client or until the connection times out.  The URL is assumed to be
- * {@code <servlet path>/{clientId}}.
+ * Manages long-polling http requests using Jetty continuations. Requests to this servlet block until there is new data available for the client or until the
+ * connection times out. The URL is assumed to be {@code <servlet path>/{clientId}}.
  */
 public class LongPollingServlet extends HttpServlet {
 
@@ -32,7 +31,7 @@ public class LongPollingServlet extends HttpServlet {
 
   /** Key for storing the results as an attribute of the continuation. */
   /* package */ static final String RESULTS = "RESULTS";
-  /** Name of the HTTP query parameter for the client ID */
+  /** Name of the HTTP query parameter for the client ID. */
   public static final String CLIENT_ID = "clientId";
 
   /** Serialization version. */
@@ -54,7 +53,7 @@ public class LongPollingServlet extends HttpServlet {
     _connectionManager = WebPushServletContextUtils.getLongPollingConnectionManager(config.getServletContext());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // this is a hack to get round a problem with browsers caching GET requests even when they're told not to
   @Override
   protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
@@ -107,8 +106,10 @@ public class LongPollingServlet extends HttpServlet {
   }
 
   /**
-   * Extracts the client ID from the URL.  If the URL is {@code http://<host>/<servlet path>/12345} the client ID is 12345.
-   * @param request The request
+   * Extracts the client ID from the URL. If the URL is {@code http://<host>/<servlet path>/12345} the client ID is 12345.
+   * 
+   * @param request
+   *          The request
    * @return The client ID from {@code request}'s URL or null if it's missing
    */
   /* package */ static String getClientId(final HttpServletRequest request) {

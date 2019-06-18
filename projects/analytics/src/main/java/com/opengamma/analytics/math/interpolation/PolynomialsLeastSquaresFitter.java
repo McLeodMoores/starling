@@ -23,7 +23,7 @@ import com.opengamma.analytics.math.statistics.descriptive.SampleStandardDeviati
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Derive coefficients of n-degree polynomial that minimizes least squares error of fit by using QR decomposition and back substitution
+ * Derive coefficients of n-degree polynomial that minimizes least squares error of fit by using QR decomposition and back substitution.
  */
 public class PolynomialsLeastSquaresFitter {
 
@@ -31,12 +31,16 @@ public class PolynomialsLeastSquaresFitter {
   private final double[] _renorm = new double[2];
 
   /**
-   * Given a set of data (X_i, Y_i) and degrees of a polynomial, determines optimal coefficients of the polynomial
-   * @param xData X values of data
-   * @param yData Y values of data
-   * @param degree Degree of polynomial which fits the given data
-   * @return LeastSquaresRegressionResult Containing optimal coefficients of the polynomial and difference between yData[i] and f(xData[i]),
-   * where f() is the polynomial with the derived coefficients
+   * Given a set of data (X_i, Y_i) and degrees of a polynomial, determines optimal coefficients of the polynomial.
+   *
+   * @param xData
+   *          X values of data
+   * @param yData
+   *          Y values of data
+   * @param degree
+   *          Degree of polynomial which fits the given data
+   * @return LeastSquaresRegressionResult Containing optimal coefficients of the polynomial and difference between yData[i] and f(xData[i]), where f() is the
+   *         polynomial with the derived coefficients
    */
   public LeastSquaresRegressionResult regress(final double[] xData, final double[] yData, final int degree) {
 
@@ -44,11 +48,16 @@ public class PolynomialsLeastSquaresFitter {
   }
 
   /**
-   * Alternative regression method with different output
-   * @param xData X values of data
-   * @param yData Y values of data
-   * @param degree Degree of polynomial which fits the given data
-   * @param normalize Normalize xData by mean and standard deviation if normalize == true
+   * Alternative regression method with different output.
+   *
+   * @param xData
+   *          X values of data
+   * @param yData
+   *          Y values of data
+   * @param degree
+   *          Degree of polynomial which fits the given data
+   * @param normalize
+   *          Normalize xData by mean and standard deviation if normalize == true
    * @return PolynomialsLeastSquaresRegressionResult containing coefficients, rMatrix, degrees of freedom, norm of residuals, and mean, standard deviation
    */
   public PolynomialsLeastSquaresFitterResult regressVerbose(final double[] xData, final double[] yData, final int degree, final boolean normalize) {
@@ -61,7 +70,7 @@ public class PolynomialsLeastSquaresFitter {
     final DoubleMatrix1D resResult = new DoubleMatrix1D(result.getResiduals());
     final double resNorm = OG_ALGEBRA.getNorm2(resResult);
 
-    if (normalize == true) {
+    if (normalize) {
       return new PolynomialsLeastSquaresFitterResult(result.getBetas(), rMatriX, nData - degree - 1, resNorm, _renorm);
     }
     return new PolynomialsLeastSquaresFitterResult(result.getBetas(), rMatriX, nData - degree - 1, resNorm);
@@ -69,10 +78,15 @@ public class PolynomialsLeastSquaresFitter {
 
   /**
    * This regression method is private and called in other regression methods
-   * @param xData X values of data
-   * @param yData Y values of data
-   * @param degree Degree of polynomial which fits the given data
-   * @param normalize Normalize xData by mean and standard deviation if normalize == true
+   *
+   * @param xData
+   *          X values of data
+   * @param yData
+   *          Y values of data
+   * @param degree
+   *          Degree of polynomial which fits the given data
+   * @param normalize
+   *          Normalize xData by mean and standard deviation if normalize == true
    * @return LeastSquaresRegressionResult Containing optimal coefficients of the polynomial and difference between yData[i] and f(xData[i])
    */
   private LeastSquaresRegressionResult regress(final double[] xData, final double[] yData, final int degree, final boolean normalize) {
@@ -111,7 +125,7 @@ public class PolynomialsLeastSquaresFitter {
 
     final double[][] tmpMatrix = new double[nData][degree + 1];
 
-    if (normalize == true) {
+    if (normalize) {
       final double[] normData = normaliseData(xData);
       for (int i = 0; i < nData; ++i) {
         for (int j = 0; j < degree + 1; ++j) {
@@ -138,9 +152,13 @@ public class PolynomialsLeastSquaresFitter {
 
   /**
    * This regression method is private and called in other regression methods
-   * @param xDataMatrix _nData x (_degree + 1) matrix whose low vector is (xData[i]^0, xData[i]^1, ..., xData[i]^{_degree})
-   * @param yDataVector yData of DoubleMatrix1D
-   * @param nData Number of data points
+   *
+   * @param xDataMatrix
+   *          _nData x (_degree + 1) matrix whose low vector is (xData[i]^0, xData[i]^1, ..., xData[i]^{_degree})
+   * @param yDataVector
+   *          yData of DoubleMatrix1D
+   * @param nData
+   *          Number of data points
    * @param degree
    */
   private LeastSquaresRegressionResult regress(final DoubleMatrix2D xDataMatrix, final DoubleMatrix1D yDataVector, final int nData, final int degree) {
@@ -169,6 +187,7 @@ public class PolynomialsLeastSquaresFitter {
 
   /**
    * Under the QR decomposition, xDataMatrix = qMatrix * rMatrix, optimal coefficients of the polynomial are computed by back substitution
+   *
    * @param qMatrix
    * @param rMatrix
    * @param yDataVector
@@ -200,7 +219,8 @@ public class PolynomialsLeastSquaresFitter {
   /**
    *
    * @param xDataMatrix
-   * @param betas Optimal coefficients of the polynomial
+   * @param betas
+   *          Optimal coefficients of the polynomial
    * @param yDataVector
    * @return Difference between yData[i] and f(xData[i]), where f() is the polynomial with derived coefficients
    */
@@ -217,7 +237,9 @@ public class PolynomialsLeastSquaresFitter {
 
   /**
    * Normalize x_i as x_i -> (x_i - mean)/(standard deviation)
-   * @param xData X values of data
+   *
+   * @param xData
+   *          X values of data
    * @return Normalized X values
    */
   private double[] normaliseData(final double[] xData) {

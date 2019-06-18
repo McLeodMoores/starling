@@ -30,8 +30,11 @@ public class ManageableRegionFudgeEncodingTest {
   private static final Logger LOGGER = LoggerFactory.getLogger(ManageableRegionFudgeEncodingTest.class);
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
+  /**
+   *
+   */
   public void test() {
-    ManageableRegion obj = new ManageableRegion();
+    final ManageableRegion obj = new ManageableRegion();
     obj.setUniqueId(UniqueId.of("U", "1"));
     obj.setExternalIdBundle(ExternalIdBundle.of("A", "B"));
     obj.setClassification(RegionClassification.INDEPENDENT_STATE);
@@ -43,7 +46,7 @@ public class ManageableRegionFudgeEncodingTest {
     testFudgeMessage(obj);
   }
 
-  private void testFudgeMessage(final ManageableRegion obj) {
+  private static void testFudgeMessage(final ManageableRegion obj) {
     final FudgeSerializer serializer = new FudgeSerializer(FUDGE_CONTEXT);
     FudgeMsg msg = serializer.objectToFudgeMsg(obj);
     LOGGER.debug("ManageableRegion {}", obj);

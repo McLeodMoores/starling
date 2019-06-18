@@ -41,10 +41,11 @@ public final class SnapshotDataBundle {
   }
 
   /**
-   * Queries the data using an identifier bundle. Any data point matching one of the identifiers in the supplied bundle
-   * will be returned. If the identifier bundle is such that multiple points match then an arbitrary one will be returned.
+   * Queries the data using an identifier bundle. Any data point matching one of the identifiers in the supplied bundle will be returned. If the identifier
+   * bundle is such that multiple points match then an arbitrary one will be returned.
    *
-   * @param identifiers the identifier(s) to search for
+   * @param identifiers
+   *          the identifier(s) to search for
    * @return the data point found, or null if none
    */
   public Double getDataPoint(final ExternalIdBundle identifiers) {
@@ -64,7 +65,8 @@ public final class SnapshotDataBundle {
   /**
    * Queries the data using a single identifier.
    *
-   * @param identifier the identifier to search for
+   * @param identifier
+   *          the identifier to search for
    * @return the data point found, or null if none
    */
   public Double getDataPoint(final ExternalId identifier) {
@@ -78,8 +80,10 @@ public final class SnapshotDataBundle {
   /**
    * Sets a data point in the snapshot. Any previous points with matching identifiers will be replaced.
    *
-   * @param identifiers the identifiers to set, not null
-   * @param value the value to set, not null
+   * @param identifiers
+   *          the identifiers to set, not null
+   * @param value
+   *          the value to set, not null
    */
   public void setDataPoint(final ExternalIdBundle identifiers, final Double value) {
     if (_dataPoints.put(identifiers, value) == null) {
@@ -94,8 +98,10 @@ public final class SnapshotDataBundle {
   /**
    * Sets a data point in the snapshot. Any previous point with a matching identifier will be replaced.
    *
-   * @param identifier the identifier to set, not null
-   * @param value the value to set
+   * @param identifier
+   *          the identifier to set, not null
+   * @param value
+   *          the value to set
    */
   public void setDataPoint(final ExternalId identifier, final double value) {
     ExternalIdBundle key = _index.get(identifier);
@@ -110,7 +116,8 @@ public final class SnapshotDataBundle {
   /**
    * Removes data points from the snapshot. All points with matching identifiers will be removed.
    *
-   * @param identifiers the identifiers to remove, not null
+   * @param identifiers
+   *          the identifiers to remove, not null
    */
   public void removeDataPoints(final ExternalIdBundle identifiers) {
     for (final ExternalId identifier : identifiers) {
@@ -121,7 +128,8 @@ public final class SnapshotDataBundle {
   /**
    * Removes a data point from the snapshot.
    *
-   * @param identifier the identifier to remove, not null
+   * @param identifier
+   *          the identifier to remove, not null
    */
   public void removeDataPoint(final ExternalId identifier) {
     final ExternalIdBundle key = _index.remove(identifier);
@@ -183,6 +191,9 @@ public final class SnapshotDataBundle {
 
   @Override
   public String toString() {
+    if (_dataPoints.isEmpty()) {
+      return "SnapshotDataBundle[]";
+    }
     final StringBuilder sb = new StringBuilder("SnapshotDataBundle[");
     for (final Map.Entry<ExternalIdBundle, Double> entry : _dataPoints.entrySet()) {
       sb.append(entry.getKey());

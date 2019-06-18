@@ -22,8 +22,7 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
- * Class containing fields that define a legal entity. The only that field
- * that must be set is the name.
+ * Class containing fields that define a legal entity. The only that field that must be set is the name.
  */
 @BeanDefinition
 public class LegalEntity implements Bean, Serializable {
@@ -32,13 +31,13 @@ public class LegalEntity implements Bean, Serializable {
   private static final long serialVersionUID = 1L;
 
   /**
-   * The ticker
+   * The ticker.
    */
   @PropertyDefinition
   private String _ticker;
 
   /**
-   * The short name
+   * The short name.
    */
   @PropertyDefinition(validate = "notNull")
   private String _shortName;
@@ -73,12 +72,18 @@ public class LegalEntity implements Bean, Serializable {
   }
 
   /**
-   * @param ticker The ticker, not null
-   * @param shortName The short name, not null
-   * @param creditRatings The set of credit ratings, not null
-   * @param sector The sector, not null
-   * @param region The region, not null
-   * @param hasDefaulted The has defaulted flag, not null
+   * @param ticker
+   *          The ticker, not null
+   * @param shortName
+   *          The short name, not null
+   * @param creditRatings
+   *          The set of credit ratings, not null
+   * @param sector
+   *          The sector, not null
+   * @param region
+   *          The region, not null
+   * @param hasDefaulted
+   *          The has defaulted flag, not null
    */
   public LegalEntity(final String ticker, final String shortName, final Set<CreditRating> creditRatings, final Sector sector,
       final Region region, final boolean hasDefaulted) {
@@ -91,14 +96,19 @@ public class LegalEntity implements Bean, Serializable {
   }
 
   /**
-   * @param ticker The ticker, not null
-   * @param shortName The short name, not null
-   * @param creditRatings The set of credit ratings, not null
-   * @param sector The sector, not null
-   * @param region The region, not null
+   * @param ticker
+   *          The ticker, not null
+   * @param shortName
+   *          The short name, not null
+   * @param creditRatings
+   *          The set of credit ratings, not null
+   * @param sector
+   *          The sector, not null
+   * @param region
+   *          The region, not null
    */
   public LegalEntity(final String ticker, final String shortName, final Set<CreditRating> creditRatings, final Sector sector,
-                     final Region region) {
+      final Region region) {
     setTicker(ticker);
     setShortName(shortName);
     setCreditRatings(creditRatings);
@@ -138,7 +148,7 @@ public class LegalEntity implements Bean, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the ticker
+   * Gets the ticker.
    * @return the value of the property
    */
   public String getTicker() {
@@ -146,7 +156,7 @@ public class LegalEntity implements Bean, Serializable {
   }
 
   /**
-   * Sets the ticker
+   * Sets the ticker.
    * @param ticker  the new value of the property
    */
   public void setTicker(String ticker) {
@@ -163,7 +173,7 @@ public class LegalEntity implements Bean, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the short name
+   * Gets the short name.
    * @return the value of the property, not null
    */
   public String getShortName() {
@@ -171,7 +181,7 @@ public class LegalEntity implements Bean, Serializable {
   }
 
   /**
-   * Sets the short name
+   * Sets the short name.
    * @param shortName  the new value of the property, not null
    */
   public void setShortName(String shortName) {

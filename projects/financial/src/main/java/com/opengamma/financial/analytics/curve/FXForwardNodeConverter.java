@@ -148,7 +148,7 @@ public class FXForwardNodeConverter extends CurveNodeVisitorAdapter<InstrumentDe
         throw new OpenGammaRuntimeException("Could not get settlement region from " + spotConvention.getSettlementRegion());
       }
       final Calendar settlementCalendar =
-          new CalendarAdapter(WorkingDayCalendarUtils.getCalendarForRegion(_regionSource, _holidaySource, forwardConvention.getSettlementRegion()));
+          CalendarAdapter.of(WorkingDayCalendarUtils.getCalendarForRegion(_regionSource, _holidaySource, forwardConvention.getSettlementRegion()));
       final ZonedDateTime spotDate = ScheduleCalculator.getAdjustedDate(_valuationTime, settlementDays, settlementCalendar);
       exchangeDate = ScheduleCalculator.getAdjustedDate(spotDate, fxForward.getMaturityTenor(), forwardConvention.getBusinessDayConvention(),
           settlementCalendar, forwardConvention.isIsEOM());

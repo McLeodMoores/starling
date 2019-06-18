@@ -15,7 +15,10 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Function repository configuration source for the functions contained in this package.
+ * 
+ * @deprecated Deprecated
  */
+@Deprecated
 public class HorizonFunctions extends AbstractFunctionConfigurationBean {
 
   /**
@@ -35,7 +38,8 @@ public class HorizonFunctions extends AbstractFunctionConfigurationBean {
     private int _daysForward;
 
     /**
-     * Gets the number of days forward
+     * Gets the number of days forward.
+     * 
      * @return The number of days to move forward
      */
     public int getDaysForward() {
@@ -44,7 +48,9 @@ public class HorizonFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the number of days to move forward.
-     * @param daysForward The number of days to move forward
+     * 
+     * @param daysForward
+     *          The number of days to move forward
      */
     public void setDaysForward(final int daysForward) {
       _daysForward = daysForward;
@@ -58,7 +64,7 @@ public class HorizonFunctions extends AbstractFunctionConfigurationBean {
 
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-      final String[] args = new String[] {PriorityClass.ABOVE_NORMAL.name(), Integer.toString(getDaysForward())};
+      final String[] args = new String[] { PriorityClass.ABOVE_NORMAL.name(), Integer.toString(getDaysForward()) };
       functions.add(functionConfiguration(FXForwardThetaDefaults.class, args));
       functions.add(functionConfiguration(FXOptionBlackThetaDefaults.class, args));
     }

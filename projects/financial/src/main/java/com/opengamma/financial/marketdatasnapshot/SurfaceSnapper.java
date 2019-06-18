@@ -16,7 +16,6 @@ import com.opengamma.core.marketdatasnapshot.SurfaceKey;
 import com.opengamma.core.marketdatasnapshot.SurfaceSnapshot;
 import com.opengamma.core.marketdatasnapshot.ValueSnapshot;
 import com.opengamma.core.marketdatasnapshot.impl.ManageableSurfaceSnapshot;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.engine.view.ViewComputationResultModel;
 import com.opengamma.util.tuple.Pair;
@@ -28,7 +27,7 @@ import com.opengamma.util.tuple.Pairs;
 public class SurfaceSnapper extends StructuredSnapper<SurfaceKey, SurfaceData<Object, Object>, SurfaceSnapshot> {
 
   /**
-   * Sets the requirement name to {@link ValueRequirementNames#SURFACE_MARKET_DATA}
+   * Sets the requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#SURFACE_MARKET_DATA}.
    */
   public SurfaceSnapper() {
     super(SURFACE_MARKET_DATA);

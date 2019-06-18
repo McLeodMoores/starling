@@ -1,13 +1,11 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation;
 
 import java.util.BitSet;
-
-import cern.jet.random.engine.RandomEngine;
 
 import com.opengamma.analytics.financial.model.volatility.smile.fitting.MixedLogNormalModelFitter;
 import com.opengamma.analytics.financial.model.volatility.smile.fitting.SmileModelFitter;
@@ -17,8 +15,10 @@ import com.opengamma.analytics.financial.model.volatility.smile.function.Volatil
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.ArgumentChecker;
 
+import cern.jet.random.engine.RandomEngine;
+
 /**
- * 
+ *
  */
 public class SmileInterpolatorMixedLogNormal extends SmileInterpolator<MixedLogNormalModelData> {
   private static final VolatilityFunctionProvider<MixedLogNormalModelData> MODEL = MixedLogNormalVolatilityFunction.getInstance();
@@ -48,7 +48,7 @@ public class SmileInterpolatorMixedLogNormal extends SmileInterpolator<MixedLogN
     final double b = fitP.getEntry(1);
     final double c = fitP.getEntry(2);
 
-    if (Math.abs(b) < 1e-3 && Math.abs(c) < 1e-3) { //almost flat smile
+    if (Math.abs(b) < 1e-3 && Math.abs(c) < 1e-3) { // almost flat smile
       final double theta = Math.PI / 2 - 0.01;
       return new DoubleMatrix1D(a, 0.01, theta, theta);
     }
@@ -59,7 +59,7 @@ public class SmileInterpolatorMixedLogNormal extends SmileInterpolator<MixedLogN
   @Override
   protected BitSet getLocalFixedValues() {
     final BitSet res = new BitSet();
-    res.set(2); //fit vol 0 for local (3-point) fit
+    res.set(2); // fit vol 0 for local (3-point) fit
     return res;
   }
 
@@ -70,7 +70,8 @@ public class SmileInterpolatorMixedLogNormal extends SmileInterpolator<MixedLogN
   }
 
   @Override
-  protected SmileModelFitter<MixedLogNormalModelData> getFitter(final double forward, final double[] strikes, final double expiry, final double[] impliedVols, final double[] errors) {
+  protected SmileModelFitter<MixedLogNormalModelData> getFitter(final double forward, final double[] strikes, final double expiry, final double[] impliedVols,
+      final double[] errors) {
     return new MixedLogNormalModelFitter(forward, strikes, expiry, impliedVols, errors, MODEL, 2, true);
   }
 

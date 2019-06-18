@@ -29,13 +29,21 @@ public class DepositIborDefinition extends CashDefinition {
 
   /**
    * Constructor from all details.
-   * @param currency The deposit currency.
-   * @param startDate The deposit start date.
-   * @param endDate The deposit end date.
-   * @param notional The deposit notional.
-   * @param rate The deposit rate.
-   * @param accrualFactor The deposit accrual factor.
-   * @param index The associated index.
+   * 
+   * @param currency
+   *          The deposit currency.
+   * @param startDate
+   *          The deposit start date.
+   * @param endDate
+   *          The deposit end date.
+   * @param notional
+   *          The deposit notional.
+   * @param rate
+   *          The deposit rate.
+   * @param accrualFactor
+   *          The deposit accrual factor.
+   * @param index
+   *          The associated index.
    */
   public DepositIborDefinition(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime endDate, final double notional, final double rate,
       final double accrualFactor, final IborIndex index) {
@@ -47,29 +55,44 @@ public class DepositIborDefinition extends CashDefinition {
 
   /**
    * Build a deposit from the start date and an Ibor index. The index tenor is used as tenor of the deposit.
-   * @param startDate The deposit start date.
-   * @param notional The deposit notional.
-   * @param rate The deposit rate.
-   * @param index The associated index.
-   * @param calendar The holiday calendar for the ibor leg.
+   * 
+   * @param startDate
+   *          The deposit start date.
+   * @param notional
+   *          The deposit notional.
+   * @param rate
+   *          The deposit rate.
+   * @param index
+   *          The associated index.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
    * @return The deposit.
    */
-  public static DepositIborDefinition fromStart(final ZonedDateTime startDate, final double notional, final double rate, final IborIndex index, final Calendar calendar) {
+  public static DepositIborDefinition fromStart(final ZonedDateTime startDate, final double notional, final double rate, final IborIndex index,
+      final Calendar calendar) {
     final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, index, calendar);
     final double accrualFactor = index.getDayCount().getDayCountFraction(startDate, endDate, calendar);
     return new DepositIborDefinition(index.getCurrency(), startDate, endDate, notional, rate, accrualFactor, index);
   }
 
   /**
-   * Build a deposit from the trade date and an Ibor index. The index tenor is used as tenor of the deposit. The deposit start date is the trade date plus the index spot lag.
-   * @param tradeDate The deposit trade date.
-   * @param notional The deposit notional.
-   * @param rate The deposit rate.
-   * @param index The associated index.
-   * @param calendar The holiday calendar for the ibor leg.
+   * Build a deposit from the trade date and an Ibor index. The index tenor is used as tenor of the deposit. The deposit start date is the trade date plus the
+   * index spot lag.
+   * 
+   * @param tradeDate
+   *          The deposit trade date.
+   * @param notional
+   *          The deposit notional.
+   * @param rate
+   *          The deposit rate.
+   * @param index
+   *          The associated index.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
    * @return The deposit.
    */
-  public static DepositIborDefinition fromTrade(final ZonedDateTime tradeDate, final double notional, final double rate, final IborIndex index, final Calendar calendar) {
+  public static DepositIborDefinition fromTrade(final ZonedDateTime tradeDate, final double notional, final double rate, final IborIndex index,
+      final Calendar calendar) {
     final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(tradeDate, index.getSpotLag(), calendar);
     final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, index, calendar);
     final double accrualFactor = index.getDayCount().getDayCountFraction(startDate, endDate, calendar);
@@ -78,6 +101,7 @@ public class DepositIborDefinition extends CashDefinition {
 
   /**
    * Gets the Ibor-like index associated to the deposit.
+   * 
    * @return The index.
    */
   public IborIndex getIndex() {
@@ -86,6 +110,7 @@ public class DepositIborDefinition extends CashDefinition {
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -97,7 +122,8 @@ public class DepositIborDefinition extends CashDefinition {
       return new DepositIbor(getCurrency(), 0, TimeCalculator.getTimeBetween(date, getEndDate()), getNotional(), 0, getRate(), getAccrualFactor(), _index,
           yieldCurveNames[0]);
     }
-    return new DepositIbor(getCurrency(), startTime, TimeCalculator.getTimeBetween(date, getEndDate()), getNotional(), getNotional(), getRate(), getAccrualFactor(),
+    return new DepositIbor(getCurrency(), startTime, TimeCalculator.getTimeBetween(date, getEndDate()), getNotional(), getNotional(), getRate(),
+        getAccrualFactor(),
         _index, yieldCurveNames[0]);
   }
 
@@ -108,7 +134,8 @@ public class DepositIborDefinition extends CashDefinition {
     if (startTime < 0) {
       return new DepositIbor(getCurrency(), 0, TimeCalculator.getTimeBetween(date, getEndDate()), getNotional(), 0, getRate(), getAccrualFactor(), _index);
     }
-    return new DepositIbor(getCurrency(), startTime, TimeCalculator.getTimeBetween(date, getEndDate()), getNotional(), getNotional(), getRate(), getAccrualFactor(),
+    return new DepositIbor(getCurrency(), startTime, TimeCalculator.getTimeBetween(date, getEndDate()), getNotional(), getNotional(), getRate(),
+        getAccrualFactor(),
         _index);
   }
 

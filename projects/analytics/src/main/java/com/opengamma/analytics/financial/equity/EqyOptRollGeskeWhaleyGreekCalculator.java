@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity;
@@ -14,12 +14,11 @@ import com.opengamma.analytics.financial.greeks.GreekResultCollection;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
 import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurveAffineDividends;
-import com.opengamma.analytics.financial.model.option.pricing.analytic.BaroneAdesiWhaleyModel;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.RollGeskeWhaleyModel;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the greeks using the Roll-Geske-Whaley model {@link BaroneAdesiWhaleyModel}.
+ * Calculates the greeks using the Roll-Geske-Whaley model {@link com.opengamma.analytics.financial.model.option.pricing.analytic.BaroneAdesiWhaleyModel}.
  * <p>
  * The greeks returned are delta, dual-delta, rho, theta and vega.
  */

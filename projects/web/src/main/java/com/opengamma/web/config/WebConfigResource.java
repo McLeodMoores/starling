@@ -42,13 +42,15 @@ public class WebConfigResource extends AbstractWebConfigResource {
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public WebConfigResource(final AbstractWebConfigResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
@@ -90,7 +92,7 @@ public class WebConfigResource extends AbstractWebConfigResource {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
@@ -163,12 +165,12 @@ public class WebConfigResource extends AbstractWebConfigResource {
     return uri;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
     final ConfigDocument doc = data().getConfig();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     data().getConfigMaster().remove(doc.getUniqueId());
@@ -186,9 +188,10 @@ public class WebConfigResource extends AbstractWebConfigResource {
     return Response.ok().build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -202,16 +205,18 @@ public class WebConfigResource extends AbstractWebConfigResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("versions")
   public WebConfigVersionsResource findVersions() {
     return new WebConfigVersionsResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebConfigData data) {
@@ -220,8 +225,11 @@ public class WebConfigResource extends AbstractWebConfigResource {
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideConfigId  the override config id, null uses information from data
+   * 
+   * @param data
+   *          the data, not null
+   * @param overrideConfigId
+   *          the override config id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebConfigData data, final UniqueId overrideConfigId) {

@@ -19,6 +19,7 @@ import com.opengamma.financial.analytics.model.black.BlackDiscountingImpliedVola
 
 /**
  * Interpolates, for InterestRateFutureOptions using Black model, and returns the implied volatility required.
+ * 
  * @deprecated Use {@link BlackDiscountingImpliedVolatilityIRFutureOptionFunction}
  */
 @Deprecated
@@ -27,7 +28,7 @@ public class InterestRateFutureOptionBlackImpliedVolatilityFunction extends Inte
   private static final ImpliedVolatilityBlackCalculator CALCULATOR = ImpliedVolatilityBlackCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#IMPLIED_VOLATILITY}
+   * Sets the value requirement name to {@link ValueRequirementNames#IMPLIED_VOLATILITY}.
    */
   public InterestRateFutureOptionBlackImpliedVolatilityFunction() {
     super(ValueRequirementNames.IMPLIED_VOLATILITY, false);

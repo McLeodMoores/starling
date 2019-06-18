@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.bond;
@@ -30,11 +30,15 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Bond function for results computed from the market clean price.
+ * 
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class BondFromPriceFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ZonedDateTime date = ZonedDateTime.now(executionContext.getValuationClock());
     if (desiredValues.size() != 1) {
       throw new OpenGammaRuntimeException("This function " + getShortName() + " only provides a single output");
@@ -60,7 +64,7 @@ public abstract class BondFromPriceFunction extends AbstractFunction.NonCompiled
     final ValueSpecification resultSpec = new ValueSpecification(ValueRequirementNames.Z_SPREAD, target.toSpecification(), properties.get());
     final YieldAndDiscountCurve curve = (YieldAndDiscountCurve) curveObject;
     final YieldAndDiscountCurve riskFreeCurve = (YieldAndDiscountCurve) riskFreeCurveObject;
-    final YieldCurveBundle data = new YieldCurveBundle(new String[] {curveName, riskFreeCurveName }, new YieldAndDiscountCurve[] {curve, riskFreeCurve });
+    final YieldCurveBundle data = new YieldCurveBundle(new String[] { curveName, riskFreeCurveName }, new YieldAndDiscountCurve[] { curve, riskFreeCurve });
     return Sets.newHashSet(new ComputedValue(resultSpec, getValue(executionContext, date, riskFreeCurveName, creditCurveName, target, data, cleanPrice)));
   }
 
@@ -80,10 +84,11 @@ public abstract class BondFromPriceFunction extends AbstractFunction.NonCompiled
     }
     final String riskFreeCurveName = riskFreeCurves.iterator().next();
     final String curveName = curves.iterator().next();
-    return Sets.newHashSet(getCurveRequirement(target, riskFreeCurveName), getCurveRequirement(target, curveName), getCleanPriceRequirement(target, desiredValue));
+    return Sets.newHashSet(getCurveRequirement(target, riskFreeCurveName), getCurveRequirement(target, curveName),
+        getCleanPriceRequirement(target, desiredValue));
   }
 
-  protected abstract ValueRequirement getCleanPriceRequirement(final ComputationTarget target, final ValueRequirement desiredValue);
+  protected abstract ValueRequirement getCleanPriceRequirement(ComputationTarget target, ValueRequirement desiredValue);
 
   protected abstract String getCalculationMethodName();
 
@@ -95,8 +100,9 @@ public abstract class BondFromPriceFunction extends AbstractFunction.NonCompiled
 
   protected abstract ValueProperties.Builder getResultProperties();
 
-  protected abstract ValueProperties.Builder getResultProperties(final String riskFreeCurveName, final String creditCurveName, final String curveName);
+  protected abstract ValueProperties.Builder getResultProperties(String riskFreeCurveName, String creditCurveName, String curveName);
 
-  protected abstract double getValue(FunctionExecutionContext context, ZonedDateTime date, String riskFreeCurveName, String creditCurveName, ComputationTarget bond,
+  protected abstract double getValue(FunctionExecutionContext context, ZonedDateTime date, String riskFreeCurveName, String creditCurveName,
+      ComputationTarget bond,
       YieldCurveBundle data, double price);
 }

@@ -20,7 +20,9 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  * Specific calibration engine for the Hull-White one factor model with cap/floor.
- * @param <DATA_TYPE>  The type of the data for the base calculator.
+ *
+ * @param <DATA_TYPE>
+ *          The type of the data for the base calculator.
  */
 public class SuccessiveRootFinderLMMDDCalibrationEngine<DATA_TYPE extends ParameterProviderInterface> extends CalibrationEngineWithCalculators<DATA_TYPE> {
 
@@ -36,7 +38,9 @@ public class SuccessiveRootFinderLMMDDCalibrationEngine<DATA_TYPE extends Parame
 
   /**
    * Constructor of the calibration engine.
-   * @param calibrationObjective The calibration objective.
+   *
+   * @param calibrationObjective
+   *          The calibration objective.
    */
   public SuccessiveRootFinderLMMDDCalibrationEngine(final SuccessiveRootFinderCalibrationObjectiveWithMultiCurves calibrationObjective) {
     super(calibrationObjective.getFXMatrix(), calibrationObjective.getCcy());
@@ -46,24 +50,29 @@ public class SuccessiveRootFinderLMMDDCalibrationEngine<DATA_TYPE extends Parame
 
   /**
    * Add an instrument to the basket and the associated calculator.
-   * @param instrument An interest rate derivative.
-   * @param calculator The calculator.
+   *
+   * @param instrument
+   *          An interest rate derivative.
+   * @param calculator
+   *          The calculator.
    */
   @Override
   public void addInstrument(final InstrumentDerivative instrument, final InstrumentDerivativeVisitor<DATA_TYPE, MultipleCurrencyAmount> calculator) {
-    ArgumentChecker.isTrue((instrument instanceof SwaptionPhysicalFixedIbor), "Instrument should be cap or swaption.");
+    ArgumentChecker.isTrue(instrument instanceof SwaptionPhysicalFixedIbor, "Instrument should be cap or swaption.");
     getBasket().add(instrument);
     getMethod().add(calculator);
     getCalibrationPrices().add(0.0);
     if (instrument instanceof SwaptionPhysicalFixedIbor) {
       final SwaptionPhysicalFixedIbor swaption = (SwaptionPhysicalFixedIbor) instrument;
-      _instrumentIndex.add(Arrays.binarySearch(((SuccessiveRootFinderLMMDDCalibrationObjective) _calibrationObjective).getLMMParameters().getIborTime(), swaption.getUnderlyingSwap()
+      _instrumentIndex.add(Arrays.binarySearch(((SuccessiveRootFinderLMMDDCalibrationObjective) _calibrationObjective).getLMMParameters().getIborTime(),
+          swaption.getUnderlyingSwap()
           .getSecondLeg().getNthPayment(swaption.getUnderlyingSwap().getSecondLeg().getNumberOfPayments() - 1).getPaymentTime()));
     }
   }
 
   /**
    * Gets the instrument index.
+   *
    * @return The instrument index.
    */
   public List<Integer> getInstrumentIndex() {
@@ -72,8 +81,11 @@ public class SuccessiveRootFinderLMMDDCalibrationEngine<DATA_TYPE extends Parame
 
   /**
    * Add an array of instruments to the basket and the associated calculator. The same method is used for all the instruments.
-   * @param instrument An interest rate derivative array.
-   * @param calculator The calculator.
+   *
+   * @param instrument
+   *          An interest rate derivative array.
+   * @param calculator
+   *          The calculator.
    */
   @Override
   public void addInstrument(final InstrumentDerivative[] instrument, final InstrumentDerivativeVisitor<DATA_TYPE, MultipleCurrencyAmount> calculator) {
@@ -88,7 +100,8 @@ public class SuccessiveRootFinderLMMDDCalibrationEngine<DATA_TYPE extends Parame
     _calibrationObjective.setMulticurves(data.getMulticurveProvider());
     final int nbInstruments = getBasket().size();
     final SuccessiveRootFinderLMMDDCalibrationObjective objective = (SuccessiveRootFinderLMMDDCalibrationObjective) _calibrationObjective;
-    final RidderSingleRootFinder rootFinder = new RidderSingleRootFinder(_calibrationObjective.getFunctionValueAccuracy(), _calibrationObjective.getVariableAbsoluteAccuracy());
+    final RidderSingleRootFinder rootFinder = new RidderSingleRootFinder(_calibrationObjective.getFunctionValueAccuracy(),
+        _calibrationObjective.getVariableAbsoluteAccuracy());
     final BracketRoot bracketer = new BracketRoot();
     for (int loopins = 0; loopins < nbInstruments; loopins++) {
       final InstrumentDerivative instrument = getBasket().get(loopins);

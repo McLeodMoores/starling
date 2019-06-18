@@ -31,11 +31,27 @@ import com.opengamma.util.time.DateUtils;
 @Test(groups = TestGroup.UNIT)
 public class HistoricalTimeSeriesMasterPopulator {
 
-  public static List<ExternalIdBundleWithDates> populateAndTestMaster(final HistoricalTimeSeriesMaster htsMaster,
-      final int datasetSize, final String[] dataSources, final String[] dataProviders, final String[] dataFields, final String observationTime) {
+  /**
+   * @param htsMaster
+   *          the time series master to be populated
+   * @param datasetSize
+   *          the size of the data set
+   * @param dataSources
+   *          the data sources
+   * @param dataProviders
+   *          the data providers
+   * @param dataFields
+   *          the data fields
+   * @param observationTime
+   *          the observation times
+   * @return the ids to be searched for
+   */
+  public static List<ExternalIdBundleWithDates> populateAndTestMaster(final HistoricalTimeSeriesMaster htsMaster, final int datasetSize,
+      final String[] dataSources, final String[] dataProviders, final String[] dataFields, final String observationTime) {
     final List<ExternalIdBundleWithDates> result = new ArrayList<>();
     for (int i = 0; i < datasetSize; i++) {
-      final ExternalIdBundle identifiers = ExternalIdBundle.of(ExternalSchemes.bloombergTickerSecurityId("ticker" + i), ExternalSchemes.bloombergBuidSecurityId("buid" + i));
+      final ExternalIdBundle identifiers = ExternalIdBundle.of(ExternalSchemes.bloombergTickerSecurityId("ticker" + i),
+          ExternalSchemes.bloombergBuidSecurityId("buid" + i));
       result.add(ExternalIdBundleWithDates.of(identifiers));
 
       final LocalDate start = DateUtils.previousWeekDay().minusDays(7);

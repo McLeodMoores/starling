@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.surface;
@@ -35,13 +35,14 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Expiry;
 
 /**
- * 
- * 
+ *
+ *
  */
 public class PractitionerBlackScholesVolatilitySurfaceFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ZonedDateTime now = ZonedDateTime.now(Clock.systemUTC());
     final EquityOptionSecurity option = (EquityOptionSecurity) target.getSecurity();
     final ValueRequirement underlyingPriceRequirement = getPriceRequirement(option.getUnderlyingId());
@@ -68,7 +69,7 @@ public class PractitionerBlackScholesVolatilitySurfaceFunction extends AbstractF
     // TODO: need to make sure that these options surround the time to expiry and strike of this option
     // TODO: the surface need only be calculated once per _underlying_, not individual option (as long as point 2
     // above holds)
-    final Set<ValueRequirement> optionRequirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> optionRequirements = new HashSet<>();
     optionRequirements.add(getPriceRequirement(option.getUnderlyingId()));
     optionRequirements.add(getDiscountCurveMarketDataRequirement(option.getCurrency()));
     // TODO: add the other stuff

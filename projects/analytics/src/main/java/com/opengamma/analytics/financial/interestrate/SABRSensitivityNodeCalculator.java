@@ -20,10 +20,14 @@ public class SABRSensitivityNodeCalculator {
 
   /**
    * Calculate the node sensitivities from existing sensitivities and a set of parameters with node points.
-   * @param sensitivities The sensitivities.
-   * @param parameters The SABR parameters.
+   * 
+   * @param sensitivities
+   *          The sensitivities.
+   * @param parameters
+   *          The SABR parameters.
    * @return The node sensitivities.
    */
+  @SuppressWarnings("unchecked")
   public static PresentValueSABRSensitivityDataBundle calculateNodeSensitivities(final PresentValueSABRSensitivityDataBundle sensitivities,
       final SABRInterestRateParameters parameters) {
     final Map<Double, Interpolator1DDataBundle> alphaData = (Map<Double, Interpolator1DDataBundle>) parameters.getAlphaSurface().getInterpolatorData();

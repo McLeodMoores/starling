@@ -61,11 +61,11 @@ public class SimpleYieldConvention implements YieldConvention, Serializable {
    */
   public static final YieldConvention TRUE = new SimpleYieldConvention("True");
   /**
-   * US bond (T-bill and treasuries) yield convention - US treasury for all periods but the last, in which case use money-market
+   * US bond (T-bill and treasuries) yield convention - US treasury for all periods but the last, in which case use money-market.
    */
-  public static final YieldConvention US_BOND = new SimpleYieldConvention("US Treasury"); //TODO better name
+  public static final YieldConvention US_BOND = new SimpleYieldConvention("US Treasury"); // TODO better name
   /**
-   * Bund (German government-issued bond) yield convention
+   * Bund (German government-issued bond) yield convention.
    */
   public static final YieldConvention GERMAN_BOND = new SimpleYieldConvention("GERMAN BONDS");
   /**
@@ -73,7 +73,7 @@ public class SimpleYieldConvention implements YieldConvention, Serializable {
    */
   public static final YieldConvention DISCOUNT = new SimpleYieldConvention("DISCOUNT");
   /**
-   * Bill convention (in particular for Germany, United Kingdom, Belgium)
+   * Bill convention (in particular for Germany, United Kingdom, Belgium).
    */
   public static final YieldConvention INTERESTATMTY = new SimpleYieldConvention("INTEREST@MTY");
   /**
@@ -81,67 +81,67 @@ public class SimpleYieldConvention implements YieldConvention, Serializable {
    */
   public static final YieldConvention STEP_FLOATER = new SimpleYieldConvention("STEP FLOATER"); // TODO: check if real yield convention
   /**
-   * Japanese bonds
+   * Japanese bonds.
    */
   public static final YieldConvention JAPAN_SIMPLE = new SimpleYieldConvention("JAPAN:SIMPLE YIELD");
   /**
-   * Bank of Canada
+   * Bank of Canada.
    */
   public static final YieldConvention BANK_OF_CANADA = new SimpleYieldConvention("BANK OF CANADA YLD");
   /**
-   * Canada Compound Method
+   * Canada Compound Method.
    */
   public static final YieldConvention CANADA_COMPND_METHOD = new SimpleYieldConvention("CANADA:COMPND METH");
   /**
-   * Pay-in-kind
+   * Pay-in-kind.
    */
   public static final YieldConvention PAY_IN_KIND = new SimpleYieldConvention("PAY-IN-KIND");
   /**
-   * Floating rate note
+   * Floating rate note.
    */
   public static final YieldConvention FLOAT_RATE_NOTE = new SimpleYieldConvention("FLOAT RATE NOTE");
   /**
-   * Toggle PIK Notes
+   * Toggle PIK Notes.
    */
   public static final YieldConvention TOGGLE_PIK_NOTES = new SimpleYieldConvention("TOGGLE PIK NOTES");
   /**
-   * Interest at Maturity
+   * Interest at Maturity.
    */
   public static final YieldConvention INTEREST_AT_MATURITY = new SimpleYieldConvention("INTEREST AT MTY");
   /**
-   * France Compound Method
+   * France Compound Method.
    */
   public static final YieldConvention FRANCE_COMPOUND_METHOD = new SimpleYieldConvention("FRANCE:COMPND METH");
   /**
-   * Spain Government Bonds
+   * Spain Government Bonds.
    */
   public static final YieldConvention SPAIN_GOVERNMENT_BONDS = new SimpleYieldConvention("SPAIN:GOVT BONDS");
   /**
-   * Greek Government Bonds
+   * Greek Government Bonds.
    */
   public static final YieldConvention GREEK_GOVERNMENT_BONDS = new SimpleYieldConvention("GREEK GOVT BNDS");
   /**
-   * Finland Government Bonds
+   * Finland Government Bonds.
    */
   public static final YieldConvention FINLAND_GOVERNMENT_BONDS = new SimpleYieldConvention("FINLAND GOVT BONDS");
   /**
-   * Austria ISMA Method
+   * Austria ISMA Method.
    */
   public static final YieldConvention AUSTRIA_ISMA_METHOD = new SimpleYieldConvention("AUSTRIA:ISMA METHD");
   /**
-   * Italy Treasury Bonds
+   * Italy Treasury Bonds.
    */
   public static final YieldConvention ITALY_TREASURY_BONDS = new SimpleYieldConvention("ITALY:TRSY BONDS");
   /**
-   * Spainish T-bills
+   * Spainish T-bills.
    */
   public static final YieldConvention SPANISH_T_BILLS = new SimpleYieldConvention("SPANISH T-BILLS");
   /**
-   * Portugal Domestic Settlement
+   * Portugal Domestic Settlement.
    */
   public static final YieldConvention PORTUGAL_DOMESTIC_SETTLE = new SimpleYieldConvention("PORTUGAL-DOM. SETL");
   /**
-   * Italy Treasury Bill
+   * Italy Treasury Bill.
    */
   public static final YieldConvention ITALY_TREASURY_BILL = new SimpleYieldConvention("ITALY:TRSY BILL");
   /**
@@ -160,7 +160,9 @@ public class SimpleYieldConvention implements YieldConvention, Serializable {
 
   /**
    * Creates an instance.
-   * @param name  the convention name, not null
+   *
+   * @param name
+   *          the convention name, not null
    */
   protected SimpleYieldConvention(final String name) {
     Validate.notNull(name, "name");

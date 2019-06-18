@@ -78,7 +78,7 @@ public class RedisLastKnownValueStorePerformanceTest {
           for (int ii = 0; ii < NUM_CYCLES; ii++) {
             oneCycle();
             //if ((i % 5) == 0) {
-              System.out.println("" + ii + " cycles done.");
+            System.out.println("" + ii + " cycles done.");
             //}
           }
         }
@@ -110,6 +110,9 @@ public class RedisLastKnownValueStorePerformanceTest {
 
   /**
    * @param args
+   *          the arguments
+   * @throws Exception
+   *           if there is a problem
    */
   public static void main(final String[] args) throws Exception {
     final RedisLastKnownValueStorePerformanceTest test = new RedisLastKnownValueStorePerformanceTest();

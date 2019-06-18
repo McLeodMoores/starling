@@ -22,6 +22,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Method to compute the present value of physical delivery European swaptions with the G2++ model by numerical integration.
+ * 
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionPhysicalFixedIborG2ppNumericalIntegrationMethod}
  */
 @Deprecated
@@ -42,8 +43,11 @@ public class SwaptionPhysicalFixedIborG2ppNumericalIntegrationMethod implements 
 
   /**
    * Computes the present value of the Physical delivery swaption through approximation..
-   * @param swaption The swaption.
-   * @param g2Data The G2++ parameters and the curves.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param g2Data
+   *          The G2++ parameters and the curves.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption, final G2ppPiecewiseConstantDataBundle g2Data) {
@@ -70,7 +74,8 @@ public class SwaptionPhysicalFixedIborG2ppNumericalIntegrationMethod implements 
     for (int loopcf = 0; loopcf < nbCf; loopcf++) {
       alpha[0][loopcf] = Math.sqrt(gamma[0][0]) * htheta[0][loopcf];
       alpha[1][loopcf] = Math.sqrt(gamma[1][1]) * htheta[1][loopcf];
-      tau2[loopcf] = alpha[0][loopcf] * alpha[0][loopcf] + alpha[1][loopcf] * alpha[1][loopcf] + 2 * rhog2pp * gamma[0][1] * htheta[0][loopcf] * htheta[1][loopcf];
+      tau2[loopcf] = alpha[0][loopcf] * alpha[0][loopcf] + alpha[1][loopcf] * alpha[1][loopcf]
+          + 2 * rhog2pp * gamma[0][1] * htheta[0][loopcf] * htheta[1][loopcf];
     }
     final double rhobar = rhog2pp * gamma[0][1] / Math.sqrt(gamma[0][0] * gamma[1][1]);
 
@@ -82,7 +87,8 @@ public class SwaptionPhysicalFixedIborG2ppNumericalIntegrationMethod implements 
     final IntegratorRepeated2D integrator2D = new IntegratorRepeated2D(integrator1D);
     double pv = 0.0;
     try {
-      pv = 1.0 / (2.0 * Math.PI * Math.sqrt(1 - rhobar * rhobar)) * integrator2D.integrate(integrant, new Double[] {-limit, -limit }, new Double[] {limit, limit });
+      pv = 1.0 / (2.0 * Math.PI * Math.sqrt(1 - rhobar * rhobar))
+          * integrator2D.integrate(integrant, new Double[] { -limit, -limit }, new Double[] { limit, limit });
     } catch (final Exception e) {
       throw new RuntimeException(e);
     }
@@ -108,10 +114,13 @@ public class SwaptionPhysicalFixedIborG2ppNumericalIntegrationMethod implements 
 
     /**
      * Constructor to the integrant function.
-     * @param discountedCashFlow The discounted cash flows.
-     * @param alpha The bond volatilities.
+     * 
+     * @param discountedCashFlow
+     *          The discounted cash flows.
+     * @param alpha
+     *          The bond volatilities.
      */
-    public SwaptionIntegrant(final double[] discountedCashFlow, final double[][] alpha, final double[] tau2, final double rhobar) {
+    SwaptionIntegrant(final double[] discountedCashFlow, final double[][] alpha, final double[] tau2, final double rhobar) {
       _discountedCashFlow = discountedCashFlow;
       _alpha = alpha;
       _tau2 = tau2;

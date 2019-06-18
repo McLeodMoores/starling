@@ -48,7 +48,7 @@ public abstract class AbstractSearchRequest extends DirectBean implements PagedR
    * The request for paging.
    * By default all matching items will be returned.
    */
-  @PropertyDefinition(overrideGet = true)
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private PagingRequest _pagingRequest = PagingRequest.ALL;
   /**
    * The version-correction locator to search at, not null.
@@ -156,6 +156,7 @@ public abstract class AbstractSearchRequest extends DirectBean implements PagedR
    * By default all matching items will be returned.
    * @param pagingRequest  the new value of the property
    */
+  @Override
   public void setPagingRequest(PagingRequest pagingRequest) {
     this._pagingRequest = pagingRequest;
   }

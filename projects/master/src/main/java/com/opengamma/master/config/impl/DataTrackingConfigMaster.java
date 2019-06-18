@@ -16,10 +16,16 @@ import com.opengamma.master.config.ConfigSearchRequest;
 import com.opengamma.master.config.ConfigSearchResult;
 
 /**
- * Config master which tracks accesses using UniqueIds.
+ * Config master which tracks accesses using {@link com.opengamma.id.UniqueId}s.
  */
 public class DataTrackingConfigMaster extends AbstractDataTrackingMaster<ConfigDocument, ConfigMaster> implements ConfigMaster {
 
+  /**
+   * Sets up the delegate config master.
+   *
+   * @param delegate
+   *          the delegate, not null
+   */
   public DataTrackingConfigMaster(final ConfigMaster delegate) {
     super(delegate);
   }

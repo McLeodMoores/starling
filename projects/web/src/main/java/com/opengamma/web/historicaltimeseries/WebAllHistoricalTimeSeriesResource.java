@@ -78,15 +78,19 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
 
   /**
    * Creates the resource.
-   * @param master  the historical time-series master, not null
-   * @param loader  the historical time-series loader, not null
-   * @param configSource  the configuration source, not null
+   * 
+   * @param master
+   *          the historical time-series master, not null
+   * @param loader
+   *          the historical time-series loader, not null
+   * @param configSource
+   *          the configuration source, not null
    */
   public WebAllHistoricalTimeSeriesResource(final HistoricalTimeSeriesMaster master, final HistoricalTimeSeriesLoader loader, final ConfigSource configSource) {
     super(master, loader, configSource);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   @SubscribeMaster(MasterType.TIME_SERIES)
@@ -125,7 +129,8 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
     return getFreemarker().build(JSON_DIR + "alltimeseries.ftl", out);
   }
 
-  private FlexiBean createSearchResultData(final PagingRequest pr, final String identifier, final String dataSource, final String dataProvider, final String dataField, final String observationTime, final String name, final UriInfo uriInfo) {
+  private FlexiBean createSearchResultData(final PagingRequest pr, final String identifier, final String dataSource, final String dataProvider,
+      final String dataField, final String observationTime, final String name, final UriInfo uriInfo) {
     final FlexiBean out = createRootData();
 
     final HistoricalTimeSeriesInfoSearchRequest searchRequest = new HistoricalTimeSeriesInfoSearchRequest();
@@ -144,7 +149,8 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
     out.put("searchRequest", searchRequest);
 
     if (data().getUriInfo().getQueryParameters().size() > 0) {
-      final ExternalIdWithDatesDisplayComparator comparator = ExternalIdWithDatesDisplayComparatorUtils.getComparator(data().getConfigSource(), ExternalIdDisplayComparatorUtils.DEFAULT_CONFIG_NAME);
+      final ExternalIdWithDatesDisplayComparator comparator = ExternalIdWithDatesDisplayComparatorUtils.getComparator(data().getConfigSource(),
+          ExternalIdDisplayComparatorUtils.DEFAULT_CONFIG_NAME);
       final HistoricalTimeSeriesInfoSearchResult searchResult = data().getHistoricalTimeSeriesMaster().search(searchRequest);
       final Map<String, List<ExternalIdWithDates>> sorted = new HashMap<>();
       for (final HistoricalTimeSeriesInfoDocument doc : searchResult.getDocuments()) {
@@ -159,7 +165,7 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
@@ -200,7 +206,7 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
     }
 
     if (trimmedDataField == null || trimmedIdValue == null || !validStartDate || !validEndDate) {
-      //data for repopulating the form
+      // data for repopulating the form
       out.put("scheme", trimmedIdScheme);
       out.put("dataField", trimmedDataField);
       out.put("idValue", trimmedIdValue);
@@ -317,7 +323,8 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
     return out;
   }
 
-  private Map<ExternalId, UniqueId> addTimeSeries(final String dataProvider, final String dataField, final Set<ExternalId> identifiers, final LocalDate startDate, final LocalDate endDate) {
+  private Map<ExternalId, UniqueId> addTimeSeries(final String dataProvider, final String dataField, final Set<ExternalId> identifiers,
+      final LocalDate startDate, final LocalDate endDate) {
     final HistoricalTimeSeriesLoader loader = data().getHistoricalTimeSeriesLoader();
     Map<ExternalId, UniqueId> added = Maps.newHashMap();
     if (!identifiers.isEmpty()) {
@@ -326,7 +333,7 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
     return added;
   }
 
-  private Set<ExternalId> buildSecurityRequest(final ExternalScheme identificationScheme, final String idValue) {
+  private static Set<ExternalId> buildSecurityRequest(final ExternalScheme identificationScheme, final String idValue) {
     if (idValue == null) {
       return Collections.emptySet();
     }
@@ -341,7 +348,7 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{timeseriesId}")
   public WebHistoricalTimeSeriesResource findSeries(@Subscribe @PathParam("timeseriesId") final String idStr) {
 
@@ -379,9 +386,10 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
     return new WebHistoricalTimeSeriesResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -392,10 +400,12 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for historical time-series.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebHistoricalTimeSeriesData data) {
@@ -404,8 +414,11 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
 
   /**
    * Builds a URI for collection of historical time-series.
-   * @param data  the data, not null
-   * @param identifiers  the identifiers to search for, may be null
+   * 
+   * @param data
+   *          the data, not null
+   * @param identifiers
+   *          the identifiers to search for, may be null
    * @return the URI, not null
    */
   public static URI uri(final WebHistoricalTimeSeriesData data, final Collection<ExternalId> identifiers) {

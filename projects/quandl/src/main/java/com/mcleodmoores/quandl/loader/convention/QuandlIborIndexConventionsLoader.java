@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.convention;
 
@@ -14,8 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalTime;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.mcleodmoores.quandl.QuandlConstants;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.convention.IborIndexConvention;
@@ -28,10 +26,11 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 /**
- * Creates {@link IborIndexConvention}s from a csv file called "ibor-index-conventions.csv". These conventions
- * are used to construct reference indices and as underlying conventions for instruments that have an ibor fixing
- * (e.g. a vanilla ibor swap leg).
+ * Creates {@link IborIndexConvention}s from a csv file called "ibor-index-conventions.csv". These conventions are used to construct reference indices and as
+ * underlying conventions for instruments that have an ibor fixing (e.g. a vanilla ibor swap leg).
  */
 public final class QuandlIborIndexConventionsLoader implements ConventionsLoader<IborIndexConvention> {
   /** An instance of this loader. */
@@ -49,8 +48,10 @@ public final class QuandlIborIndexConventionsLoader implements ConventionsLoader
 
   /**
    * Generates {@link IborIndexConvention}s from a csv file.
-   * @return  a set of conventions, or an empty set if the file was not available or no conventions could be created
-   * @throws Exception  if there is a problem reading the file
+   * 
+   * @return a set of conventions, or an empty set if the file was not available or no conventions could be created
+   * @throws Exception
+   *           if there is a problem reading the file
    */
   @Override
   public Set<IborIndexConvention> loadConventionsFromFile() throws Exception {
@@ -73,9 +74,11 @@ public final class QuandlIborIndexConventionsLoader implements ConventionsLoader
             final LocalTime fixingTime = LocalTime.parse(line[6]);
             final String fixingTimeZone = line[7];
             final ExternalId fixingCalendar = line[8].equalsIgnoreCase("TARGET")
-                ? ExternalSchemes.financialRegionId("EU") : ExternalSchemes.countryRegionId(Country.of(line[8]));
+                ? ExternalSchemes.financialRegionId("EU")
+                : ExternalSchemes.countryRegionId(Country.of(line[8]));
             final ExternalId regionCalendar = line[9].equalsIgnoreCase("TARGET")
-                ? ExternalSchemes.financialRegionId("EU") : ExternalSchemes.countryRegionId(Country.of(line[9]));
+                ? ExternalSchemes.financialRegionId("EU")
+                : ExternalSchemes.countryRegionId(Country.of(line[9]));
             final String fixingPage = line[10];
             ExternalIdBundle idBundle = ExternalIdBundle.of(ExternalId.of("CONVENTION", name));
             for (int i = 11; i < line.length; i++) {

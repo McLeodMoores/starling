@@ -64,24 +64,34 @@ import com.opengamma.util.ArgumentChecker;
   private EngineResourceReference<? extends ViewCycle> _cycleReference = EmptyViewCycle.REFERENCE;
 
   /**
-   * @param viewRequest Defines the view that should be created
-   * @param aggregatedViewDef The view definition including any aggregation
-   * @param viewClient Connects this class to the calculation engine
-   * @param view The object that encapsulates the state of the view user interface
-   * @param parallelViewRecompilation Whether to recompile the view whilst running the current version
-   * @param marketDataSpecificationRepository For looking up market data specs
+   * @param viewRequest
+   *          Defines the view that should be created
+   * @param aggregatedViewDef
+   *          The view definition including any aggregation
+   * @param viewClient
+   *          Connects this class to the calculation engine
+   * @param view
+   *          The object that encapsulates the state of the view user interface
+   * @param listeners
+   *          the listeners
+   * @param parallelViewRecompilation
+   *          Whether to recompile the view whilst running the current version
+   * @param marketDataSpecificationRepository
+   *          For looking up market data specs
    * @param executor
+   *          the executor service
    * @param securitySource
+   *          the security source
    */
   /* package */ AnalyticsViewClientConnection(final ViewRequest viewRequest,
-                                              final AggregatedViewDefinition aggregatedViewDef,
-                                              final ViewClient viewClient,
-                                              final AnalyticsView view,
-                                              final List<AutoCloseable> listeners,
-                                              final ExecutionFlags.ParallelRecompilationMode parallelViewRecompilation,
-                                              final NamedMarketDataSpecificationRepository marketDataSpecificationRepository,
-                                              final ExecutorService executor,
-                                              final SecuritySource securitySource) {
+      final AggregatedViewDefinition aggregatedViewDef,
+      final ViewClient viewClient,
+      final AnalyticsView view,
+      final List<AutoCloseable> listeners,
+      final ExecutionFlags.ParallelRecompilationMode parallelViewRecompilation,
+      final NamedMarketDataSpecificationRepository marketDataSpecificationRepository,
+      final ExecutorService executor,
+      final SecuritySource securitySource) {
     ArgumentChecker.notNull(viewRequest, "viewRequest");
     ArgumentChecker.notNull(viewClient, "viewClient");
     ArgumentChecker.notNull(view, "view");
@@ -150,12 +160,12 @@ import com.opengamma.util.ArgumentChecker;
 
         final ViewCycleExecutionOptions defaultOptions =
             ViewCycleExecutionOptions
-                .builder()
-                .setValuationTime(_viewRequest.getValuationTime())
-                .setMarketDataSpecifications(actualMarketDataSpecs)
-                .setMarketDataSelector(marketDataSelector)
-                .setResolverVersionCorrection(_viewRequest.getPortfolioVersionCorrection())
-                .create();
+            .builder()
+            .setValuationTime(_viewRequest.getValuationTime())
+            .setMarketDataSpecifications(actualMarketDataSpecs)
+            .setMarketDataSelector(marketDataSelector)
+            .setResolverVersionCorrection(_viewRequest.getPortfolioVersionCorrection())
+            .create();
         final EnumSet<ViewExecutionFlags> flags =
             ExecutionFlags.triggersEnabled().parallelCompilation(_parallelViewRecompilation).get();
         final ViewExecutionOptions executionOptions = ExecutionOptions.of(new InfiniteViewCycleExecutionSequence(), defaultOptions, flags);

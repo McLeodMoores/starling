@@ -58,7 +58,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Produces an ISDA compatible yield curve
+ * Produces an ISDA compatible yield curve.
  */
 // non compiled for now to allow dynamic config db lookup
 public class ISDACompliantCurveFunction extends AbstractFunction.NonCompiledInvoker {
@@ -71,7 +71,9 @@ public class ISDACompliantCurveFunction extends AbstractFunction.NonCompiledInvo
 
   /**
    * The name of the curve produced by this function.
-   * @param curveName The curve name, not null
+   *
+   * @param curveName
+   *          The curve name, not null
    */
   public ISDACompliantCurveFunction(final String curveName) {
     ArgumentChecker.notNull(curveName, "curve name");
@@ -80,7 +82,7 @@ public class ISDACompliantCurveFunction extends AbstractFunction.NonCompiledInvo
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
-                                    final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
@@ -88,7 +90,7 @@ public class ISDACompliantCurveFunction extends AbstractFunction.NonCompiledInvo
 
     final CurveSpecification specification = (CurveSpecification) inputs.getValue(ValueRequirementNames.CURVE_SPECIFICATION);
     final SnapshotDataBundle snapshot = (SnapshotDataBundle) inputs.getValue(ValueRequirementNames.CURVE_MARKET_DATA);
-    final LocalDate spotDate = (!desiredValue.getConstraints().getValues(ISDAFunctionConstants.ISDA_CURVE_DATE).isEmpty())
+    final LocalDate spotDate = !desiredValue.getConstraints().getValues(ISDAFunctionConstants.ISDA_CURVE_DATE).isEmpty()
         ? LocalDate.parse(desiredValue.getConstraint(ISDAFunctionConstants.ISDA_CURVE_DATE))
         : now.toLocalDate();
 
@@ -115,7 +117,7 @@ public class ISDACompliantCurveFunction extends AbstractFunction.NonCompiledInvo
         if (cashConvention == null) {
           try {
             cashConvention = conventionSource.getSingle(cashConventionId, DepositConvention.class);
-          } catch (DataNotFoundException ex) {
+          } catch (final DataNotFoundException ex) {
             // ignore, continue around loop
           }
         } else if (!cashConvention.getExternalIdBundle().contains(cashConventionId)) {
@@ -127,7 +129,7 @@ public class ISDACompliantCurveFunction extends AbstractFunction.NonCompiledInvo
         final Convention payConvention = conventionSource.getSingle(payConventionId);
         final ExternalId receiveConventionId = ((SwapNode) node.getCurveNode()).getReceiveLegConvention();
         final Convention receiveConvention = conventionSource.getSingle(receiveConventionId);
-        if (payConvention instanceof VanillaIborLegConvention) {  // float leg
+        if (payConvention instanceof VanillaIborLegConvention) { // float leg
           if (floatLegConvention == null) {
             floatLegConvention = (VanillaIborLegConvention) payConvention;
           } else if (!floatLegConvention.getExternalIdBundle().contains(payConventionId)) {
@@ -142,7 +144,7 @@ public class ISDACompliantCurveFunction extends AbstractFunction.NonCompiledInvo
         } else {
           throw new OpenGammaRuntimeException("Unexpected swap convention type: " + payConvention);
         }
-        if (receiveConvention instanceof VanillaIborLegConvention) {  // float leg
+        if (receiveConvention instanceof VanillaIborLegConvention) { // float leg
           if (floatLegConvention == null) {
             floatLegConvention = (VanillaIborLegConvention) receiveConvention;
           } else if (!floatLegConvention.getExternalIdBundle().contains(receiveConventionId)) {
@@ -162,14 +164,20 @@ public class ISDACompliantCurveFunction extends AbstractFunction.NonCompiledInvo
       }
       k++;
     }
-
-    ArgumentChecker.notNull(cashConvention, "Cash convention");
-    ArgumentChecker.notNull(floatLegConvention, "Floating leg convention");
-    ArgumentChecker.notNull(fixLegConvention, "Fixed leg convention");
+    if (cashConvention == null) {
+      throw new OpenGammaRuntimeException("A cash convention could not be found");
+    }
+    if (floatLegConvention == null) {
+      throw new OpenGammaRuntimeException("A floating swap leg convention could not be found");
+    }
+    if (fixLegConvention == null) {
+      throw new OpenGammaRuntimeException("A fixed swap leg convention could not be found");
+    }
     liborConvention = conventionSource.getSingle(floatLegConvention.getIborIndexConvention(), IborIndexConvention.class);
     ArgumentChecker.notNull(liborConvention, floatLegConvention.getIborIndexConvention().toString());
 
-    final ISDACompliantYieldCurve yieldCurve = ISDACompliantYieldCurveBuild.build(spotDate, spotDate, instruments, tenors, marketDataForCurve, cashConvention.getDayCount(),
+    final ISDACompliantYieldCurve yieldCurve = ISDACompliantYieldCurveBuild.build(spotDate, spotDate, instruments, tenors, marketDataForCurve,
+        cashConvention.getDayCount(),
         fixLegConvention.getDayCount(), fixLegConvention.getPaymentTenor().getPeriod(), ACT_365, liborConvention.getBusinessDayConvention());
 
     final ValueProperties properties = desiredValue.getConstraints().copy()
@@ -194,12 +202,13 @@ public class ISDACompliantCurveFunction extends AbstractFunction.NonCompiledInvo
         .withAny(ISDAFunctionConstants.ISDA_CURVE_DATE)
         .get();
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.YIELD_CURVE,
-                                                        target.toSpecification(),
-                                                        properties));
+        target.toSpecification(),
+        properties));
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+      final ValueRequirement desiredValue) {
     final Set<ValueRequirement> requirements = new HashSet<>();
     final ValueProperties properties = ValueProperties.builder()
         .with(CURVE, _curveName)

@@ -34,13 +34,14 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.money.Currency;
 
 /**
- * Implementation of the custom security type used in the tutorial. This shows how to extend the asset class support available from the OpenGamma instance without having to alter the database backed
- * {@link SecurityMaster} by transforming the security to/from a {@link RawSecurity} for storage and transport.
+ * Implementation of the custom security type used in the tutorial. This shows how to extend the asset class support available from the OpenGamma instance
+ * without having to alter the database backed {@link SecurityMaster} by transforming the security to/from a {@link RawSecurity} for storage and transport.
  * <p>
  * Our tutorial asset class has the common fields from {@link Security} plus a currency and a reference to another underlying or component security.
  * <p>
- * The additional fields specific to this new asset type are held in attributes defined on this class. The default OpenGamma security master database will not be able to support our custom class so
- * these fields are stored in a Fudge message and this is converted to a {@code byte[]} which can be held in a {@code RawSecurity} instance which is fully supported.
+ * The additional fields specific to this new asset type are held in attributes defined on this class. The default OpenGamma security master database will not
+ * be able to support our custom class so these fields are stored in a Fudge message and this is converted to a {@code byte[]} which can be held in a
+ * {@code RawSecurity} instance which is fully supported.
  */
 @BeanDefinition
 public class Tutorial1Security extends ManageableSecurity {
@@ -71,10 +72,14 @@ public class Tutorial1Security extends ManageableSecurity {
   /**
    * Creates a new security instance.
    *
-   * @param name the display name or label for the security, not null
-   * @param identifiers the identifiers that reference this security in other systems, not null
-   * @param currency the currency, not null
-   * @param underlying an identifier of the underlying of component security, not null
+   * @param name
+   *          the display name or label for the security, not null
+   * @param identifiers
+   *          the identifiers that reference this security in other systems, not null
+   * @param currency
+   *          the currency, not null
+   * @param underlying
+   *          an identifier of the underlying of component security, not null
    */
   public Tutorial1Security(final String name, final ExternalIdBundle identifiers, final Currency currency, final ExternalId underlying) {
     super(null, name, TYPE, identifiers);
@@ -85,28 +90,35 @@ public class Tutorial1Security extends ManageableSecurity {
   }
 
   /**
-   * Creates a security instance copying common properties from the {@code RawSecurity}, and filling other attributes from the supplied Fudge message. This will be called by {@link #fromRawSecurity}
-   * or by a sub-class being converted from a {@code RawSecurity}.
+   * Creates a security instance copying common properties from the {@code RawSecurity}, and filling other attributes from the supplied Fudge message. This will
+   * be called by {@link #fromRawSecurity} or by a sub-class being converted from a {@code RawSecurity}.
    *
-   * @param copyFrom the {@code RawSecurity} containing the common properties, not null
-   * @param deserializer the Fudge deserializer instance to decode the message with, not null
-   * @param msg the Fudge message containing this asset's properties
+   * @param copyFrom
+   *          the {@code RawSecurity} containing the common properties, not null
+   * @param deserializer
+   *          the Fudge deserializer instance to decode the message with, not null
+   * @param msg
+   *          the Fudge message containing this asset's properties
    */
   protected Tutorial1Security(final Security copyFrom, final FudgeDeserializer deserializer, final FudgeMsg msg) {
-    this(copyFrom.getName(), copyFrom.getExternalIdBundle(), deserializer.fieldValueToObject(Currency.class, msg.getByName(Meta.INSTANCE.currency().name())), deserializer.fieldValueToObject(
-        ExternalId.class, msg.getByName(Meta.INSTANCE.underlying().name())));
+    this(copyFrom.getName(), copyFrom.getExternalIdBundle(), deserializer.fieldValueToObject(Currency.class, msg.getByName(Meta.INSTANCE.currency().name())),
+        deserializer.fieldValueToObject(
+            ExternalId.class, msg.getByName(Meta.INSTANCE.underlying().name())));
     setAttributes(copyFrom.getAttributes());
   }
 
   /**
-   * Creates a {@code Tutorial1Security} instance from a {@code RawSecurity} instance. Note that the instance returned is not coupled to the original security in any way - changes made to the returned
-   * instance will not affect the original raw security instance, and changes to the raw security will not affect the returned instance.
+   * Creates a {@code Tutorial1Security} instance from a {@code RawSecurity} instance. Note that the instance returned is not coupled to the original security
+   * in any way - changes made to the returned instance will not affect the original raw security instance, and changes to the raw security will not affect the
+   * returned instance.
    * <p>
    * A sub-class will implement it's own form of this, performing a suitable {@link #isInstance} check and then calling the constructor.
    *
-   * @param raw the raw security instance, not null
+   * @param raw
+   *          the raw security instance, not null
    * @return the equivalent tutorial security, not null
-   * @throws IllegalArgumentException if the raw security is not an encoding of a {@code Tutorial1Security}
+   * @throws IllegalArgumentException
+   *           if the raw security is not an encoding of a {@code Tutorial1Security}
    */
   public static Tutorial1Security fromRawSecurity(final RawSecurity raw) {
     ArgumentChecker.isTrue(isInstance(raw), "raw");
@@ -117,10 +129,11 @@ public class Tutorial1Security extends ManageableSecurity {
   }
 
   /**
-   * Tests whether a {@code RawSecurity} instance contains a {@code Tutorial1Security1}. A valid raw security can be used to obtain a {@code Tutorial1Security} instance by calling
-   * {@link #fromRawSecurity}.
+   * Tests whether a {@code RawSecurity} instance contains a {@code Tutorial1Security1}. A valid raw security can be used to obtain a {@code Tutorial1Security}
+   * instance by calling {@link #fromRawSecurity}.
    *
-   * @param raw the raw security instance, not null
+   * @param raw
+   *          the raw security instance, not null
    * @return true if the instance can be converted to a {@code Tutorial1Security}, false otherwise
    */
   public static boolean isInstance(final RawSecurity raw) {
@@ -133,8 +146,10 @@ public class Tutorial1Security extends ManageableSecurity {
    * <p>
    * A sub-class should overload this to add its own fields to the message, calling this version to populate the fields from this class.
    *
-   * @param serializer the Fudge serializer to use for encoding complex values, not null
-   * @param msg the message to populate, not null
+   * @param serializer
+   *          the Fudge serializer to use for encoding complex values, not null
+   * @param msg
+   *          the message to populate, not null
    */
   protected void populateFudgeMsg(final FudgeSerializer serializer, final MutableFudgeMsg msg) {
     serializer.addToMessage(msg, currency().name(), null, getCurrency());
@@ -142,7 +157,8 @@ public class Tutorial1Security extends ManageableSecurity {
   }
 
   /**
-   * Converts this instance to a {@code RawSecurity} containing the equivalent data so that it can be transported or persisted to the OpenGamma {@link SecurityMaster}.
+   * Converts this instance to a {@code RawSecurity} containing the equivalent data so that it can be transported or persisted to the OpenGamma
+   * {@link SecurityMaster}.
    * <p>
    * A sub-class should not need to overload this method, overloading {@link #populateFudgeMsg} will correctly populate the {@code RawSecurity}.
    *

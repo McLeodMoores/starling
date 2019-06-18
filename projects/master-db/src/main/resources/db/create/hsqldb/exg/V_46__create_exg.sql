@@ -13,7 +13,7 @@ CREATE TABLE hol_schema_version (
 );
 INSERT INTO hol_schema_version (version_key, version_value) VALUES ('schema_patch', '46');
   
-CREATE SEQUENCE hol_holiday_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS hol_holiday_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
 -- "as bigint" required by Derby/HSQL, not accepted by Postgresql
 
@@ -77,9 +77,9 @@ CREATE TABLE exg_schema_version (
 );
 INSERT INTO exg_schema_version (version_key, version_value) VALUES ('schema_patch', '46');
 
-CREATE SEQUENCE exg_exchange_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS exg_exchange_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE exg_idkey_seq as bigint
+CREATE SEQUENCE IF NOT EXISTS exg_idkey_seq as bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
 -- "as bigint" required by Derby/HSQL, not accepted by Postgresql
 

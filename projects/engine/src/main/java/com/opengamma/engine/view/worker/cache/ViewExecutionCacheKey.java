@@ -27,7 +27,7 @@ public final class ViewExecutionCacheKey implements Serializable {
   private final Serializable _marketDataProvider;
   private final Serializable _scenarioManipulations;
 
-  /* package */ViewExecutionCacheKey(final UniqueId viewDefinitionId, final Serializable marketDataProvider, final Serializable scenarioManipulations) {
+  /* package */ ViewExecutionCacheKey(final UniqueId viewDefinitionId, final Serializable marketDataProvider, final Serializable scenarioManipulations) {
     _viewDefinitionId = viewDefinitionId;
     _marketDataProvider = marketDataProvider;
     _scenarioManipulations = scenarioManipulations;
@@ -36,17 +36,19 @@ public final class ViewExecutionCacheKey implements Serializable {
   private static Serializable getMarketDataSelectorCacheHintKey(final MarketDataSelectionGraphManipulator graphManipulations) {
     if (graphManipulations == null) {
       return "No-op";
-    } else {
-      return graphManipulations.getCacheHintKey();
     }
+    return graphManipulations.getCacheHintKey();
   }
 
   /**
    * Creates a new key based on the view definition and a single market data availability provider (this may be a composite data provider).
    *
-   * @param viewDefinition the view definition, not null
-   * @param marketDataProvider the market data availability provider, not null
-   * @param graphManipulations any selectors that have been applied to the graph which will cause deviation from the normally produced graph, null for none
+   * @param viewDefinition
+   *          the view definition, not null
+   * @param marketDataProvider
+   *          the market data availability provider, not null
+   * @param graphManipulations
+   *          any selectors that have been applied to the graph which will cause deviation from the normally produced graph, null for none
    * @return the cache key, not null
    */
   public static ViewExecutionCacheKey of(final ViewDefinition viewDefinition, final MarketDataAvailabilityProvider marketDataProvider,
@@ -64,8 +66,8 @@ public final class ViewExecutionCacheKey implements Serializable {
       return false;
     }
     final ViewExecutionCacheKey other = (ViewExecutionCacheKey) o;
-    return _viewDefinitionId.equals(other._viewDefinitionId) && ObjectUtils.equals(_marketDataProvider, other._marketDataProvider) &&
-        ObjectUtils.equals(_scenarioManipulations, other._scenarioManipulations);
+    return _viewDefinitionId.equals(other._viewDefinitionId) && ObjectUtils.equals(_marketDataProvider, other._marketDataProvider)
+        && ObjectUtils.equals(_scenarioManipulations, other._scenarioManipulations);
   }
 
   @Override

@@ -27,9 +27,8 @@ import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class representing a credit rating, with information about the rating,
- * rating description (e.g. prime, investment grade, etc.), the rating
- * agency name and whether the rating is long- or short-term.
+ * Class representing a credit rating, with information about the rating, rating description (e.g. prime, investment grade, etc.), the rating agency name and
+ * whether the rating is long- or short-term.
  * <p>
  * This class is immutable and thread-safe.
  */
@@ -58,16 +57,20 @@ public final class CreditRating implements ImmutableBean, Serializable {
   private final String _agencyName;
 
   /**
-   * True if the rating is long-term, false if short-term
+   * True if the rating is long-term, false if short-term.
    */
   @PropertyDefinition
   private final boolean _longTerm;
 
   /**
-   * Constructs a credit rating
-   * @param rating The rating value, not null
-   * @param agencyName The agency name
-   * @param isLongTerm True if the rating is long-term
+   * Constructs a credit rating.
+   *
+   * @param rating
+   *          The rating value, not null
+   * @param agencyName
+   *          The agency name
+   * @param isLongTerm
+   *          True if the rating is long-term
    * @return The rating
    */
   public static CreditRating of(final String rating, final String agencyName, final boolean isLongTerm) {
@@ -75,11 +78,16 @@ public final class CreditRating implements ImmutableBean, Serializable {
   }
 
   /**
-   * Constructs a credit rating
-   * @param rating The rating value, not null
-   * @param ratingDescription The rating value, not null
-   * @param agencyName The agency name, not null
-   * @param isLongTerm True if the rating is long-term
+   * Constructs a credit rating.
+   *
+   * @param rating
+   *          The rating value, not null
+   * @param ratingDescription
+   *          The rating value, not null
+   * @param agencyName
+   *          The agency name, not null
+   * @param isLongTerm
+   *          True if the rating is long-term
    * @return The rating
    */
   public static CreditRating of(final String rating, final String ratingDescription, final String agencyName,
@@ -89,10 +97,14 @@ public final class CreditRating implements ImmutableBean, Serializable {
   }
 
   /**
-   * @param rating The rating value
-   * @param ratingDescription The description
-   * @param agencyName The agency name
-   * @param isLongTerm True if the rating is long-term
+   * @param rating
+   *          The rating value
+   * @param ratingDescription
+   *          The description
+   * @param agencyName
+   *          The agency name
+   * @param isLongTerm
+   *          True if the rating is long-term
    */
   @ImmutableConstructor
   private CreditRating(final String rating, final String ratingDescription, final String agencyName,
@@ -106,6 +118,7 @@ public final class CreditRating implements ImmutableBean, Serializable {
 
   /**
    * Gets the rating value.
+   *
    * @return The rating value
    */
   public String getRating() {
@@ -114,6 +127,7 @@ public final class CreditRating implements ImmutableBean, Serializable {
 
   /**
    * Gets the rating description.
+   *
    * @return The rating description
    */
   public String getRatingDescription() {
@@ -160,7 +174,7 @@ public final class CreditRating implements ImmutableBean, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets true if the rating is long-term, false if short-term
+   * Gets true if the rating is long-term, false if short-term.
    * @return the value of the property
    */
   public boolean isLongTerm() {

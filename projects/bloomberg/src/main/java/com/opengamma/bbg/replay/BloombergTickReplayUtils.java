@@ -13,27 +13,28 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Utility methods used by bloomberg replay components
+ * Utility methods used by bloomberg replay components.
  */
 final class BloombergTickReplayUtils {
 
   private static FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
 
   /**
-   * Fudge message terminate field
+   * Fudge message terminate field.
    */
   public static final String OG_TERMINATE_FIELD = "OG-TERMINATE";
 
   /**
-   * Restricted constructor
+   * Restricted constructor.
    */
   private BloombergTickReplayUtils() {
   }
 
   /**
-   * checks if a fudge message has terminate field and true
+   * checks if a fudge message has terminate field and true.
    *
-   * @param msg the fudge message, not-null
+   * @param msg
+   *          the fudge message, not-null
    * @return true if terminate message or false otherwise
    */
   public static boolean isTerminateMsg(final FudgeMsg msg) {
@@ -42,7 +43,7 @@ final class BloombergTickReplayUtils {
   }
 
   /**
-   * Creates a terminate fudge message
+   * Creates a terminate fudge message.
    *
    * @return the fudge message
    */
@@ -51,6 +52,5 @@ final class BloombergTickReplayUtils {
     msg.add(OG_TERMINATE_FIELD, true);
     return msg;
   }
-
 
 }

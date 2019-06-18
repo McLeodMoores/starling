@@ -29,11 +29,12 @@ public class FXForwardCurveConfigPopulator {
   private static final String INSTRUMENT_TYPE = "FX_FORWARD";
   /** Tenors for non-JPY instruments */
   private static final ImmutableList<Tenor> TENORS = ImmutableList.of(Tenor.ofDays(7), Tenor.ofDays(14), Tenor.ofDays(21), Tenor.ofMonths(1),
-    Tenor.ofMonths(3), Tenor.ofMonths(6), Tenor.ofMonths(9), Tenor.ofMonths(12),
-    Tenor.ofYears(5), Tenor.ofYears(10));
+      Tenor.ofMonths(3), Tenor.ofMonths(6), Tenor.ofMonths(9), Tenor.ofMonths(12),
+      Tenor.ofYears(5), Tenor.ofYears(10));
 
   /**
-   * @param configMaster The configuration master, not null
+   * @param configMaster
+   *          The configuration master, not null
    */
   public FXForwardCurveConfigPopulator(final ConfigMaster configMaster) {
     ArgumentChecker.notNull(configMaster, "configuration master");
@@ -42,21 +43,27 @@ public class FXForwardCurveConfigPopulator {
 
   /**
    * Populates the configuration master with a single EUR/USD FX forward curve definition and specification called DEFAULT.
-   * @param configMaster The configuration master, not null
+   * 
+   * @param configMaster
+   *          The configuration master, not null
    * @return The populated configuration master
    */
   public static ConfigMaster populateFXForwardCurveConfigMaster(final ConfigMaster configMaster) {
     return populateFXForwardCurveConfigMaster(configMaster, Collections.singletonMap(UnorderedCurrencyPair.of(Currency.EUR, Currency.USD),
-        new Triple<>("DEFAULT", "EUR", "EUR")));
+        Triple.of("DEFAULT", "EUR", "EUR")));
   }
 
   /**
    * Populates the configuration master curves.
-   * @param configMaster The configuration master, not null
-   * @param pairs The currency pairs and (surface name, forward prefix and spot prefix) information, not null
+   * 
+   * @param configMaster
+   *          The configuration master, not null
+   * @param pairs
+   *          The currency pairs and (surface name, forward prefix and spot prefix) information, not null
    * @return The populated configuration master
    */
-  public static ConfigMaster populateFXForwardCurveConfigMaster(final ConfigMaster configMaster, final Map<UnorderedCurrencyPair, Triple<String, String, String>> pairs) {
+  public static ConfigMaster populateFXForwardCurveConfigMaster(final ConfigMaster configMaster,
+      final Map<UnorderedCurrencyPair, Triple<String, String, String>> pairs) {
     ArgumentChecker.notNull(configMaster, "configuration master");
     ArgumentChecker.notNull(pairs, "pairs, names and tickers");
     for (final Map.Entry<UnorderedCurrencyPair, Triple<String, String, String>> pair : pairs.entrySet()) {
@@ -72,8 +79,10 @@ public class FXForwardCurveConfigPopulator {
     ConfigMasterUtils.storeByName(configMaster, makeConfig(definition));
   }
 
-  private static void populateCurveSpecifications(final ConfigMaster configMaster, final UnorderedCurrencyPair target, final Triple<String, String, String> triple) {
-    final FXForwardCurveInstrumentProvider curveInstrumentProvider = new BloombergFXForwardCurveInstrumentProvider(triple.getSecond(), "Curncy", triple.getThird(),
+  private static void populateCurveSpecifications(final ConfigMaster configMaster, final UnorderedCurrencyPair target,
+      final Triple<String, String, String> triple) {
+    final FXForwardCurveInstrumentProvider curveInstrumentProvider = new BloombergFXForwardCurveInstrumentProvider(triple.getSecond(), "Curncy",
+        triple.getThird(),
         MarketDataRequirementNames.MARKET_VALUE);
     final String fullName = triple.getFirst() + SEPARATOR + target.toString() + SEPARATOR + INSTRUMENT_TYPE;
     final FXForwardCurveSpecification spec = new FXForwardCurveSpecification(fullName, target, curveInstrumentProvider);

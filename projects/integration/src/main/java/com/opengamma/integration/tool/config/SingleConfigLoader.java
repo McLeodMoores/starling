@@ -42,8 +42,8 @@ import com.opengamma.util.JodaBeanSerialization;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Loads in a file containing either a single JodaXML or FudgeXML encoded config and updates the config master.
- * Can be provided with a hint type if the JodaXML messages don't contain a type attribute on the bean element.
+ * Loads in a file containing either a single JodaXML or FudgeXML encoded config and updates the config master. Can be provided with a hint type if the JodaXML
+ * messages don't contain a type attribute on the bean element.
  */
 public class SingleConfigLoader {
   private static final Logger LOGGER = LoggerFactory.getLogger(SingleConfigLoader.class);
@@ -58,7 +58,8 @@ public class SingleConfigLoader {
   private static final String DEFAULT_HTS_RATING_NAME = "DEFAULT_TSS_CONFIG";
   private static final String DEFAULT_CURRENCY_MATRIX_NAME = "BloombergLiveData";
 
-  public SingleConfigLoader(final SecurityMaster securityMaster, final ConfigMaster configMaster, final ConfigSource configSource, final ConventionMaster conventionMaster, final MarketDataSnapshotMaster marketDataSnapshotMaster, final boolean doNotUpdateExisting) {
+  public SingleConfigLoader(final SecurityMaster securityMaster, final ConfigMaster configMaster, final ConfigSource configSource,
+      final ConventionMaster conventionMaster, final MarketDataSnapshotMaster marketDataSnapshotMaster, final boolean doNotUpdateExisting) {
     _securityMaster = securityMaster;
     _configMaster = configMaster;
     _configSource = configSource;
@@ -84,16 +85,14 @@ public class SingleConfigLoader {
       if (_doNotUpdateExisting) {
         LOGGER.info("Found existing convention, skipping update");
         return match.getConvention();
-      } else {
-        LOGGER.info("Found existing convention, updating it");
-        match.setConvention(convention);
-        return _conventionMaster.update(match).getConvention();
       }
-    } else {
-      LOGGER.info("No existing convention, creating a new one");
-      final ConventionDocument doc = new ConventionDocument(convention);
-      return _conventionMaster.add(doc).getConvention();
+      LOGGER.info("Found existing convention, updating it");
+      match.setConvention(convention);
+      return _conventionMaster.update(match).getConvention();
     }
+    LOGGER.info("No existing convention, creating a new one");
+    final ConventionDocument doc = new ConventionDocument(convention);
+    return _conventionMaster.add(doc).getConvention();
   }
 
   private ManageableSecurity addOrUpdateSecurity(final ManageableSecurity security) {
@@ -106,6 +105,7 @@ public class SingleConfigLoader {
     return SecurityMasterUtils.addOrUpdateSecurity(_securityMaster, security);
   }
 
+  @SuppressWarnings("deprecation")
   private ManageableMarketDataSnapshot addOrUpdateSnapshot(final ManageableMarketDataSnapshot snapshot) {
     final MarketDataSnapshotSearchRequest searchReq = new MarketDataSnapshotSearchRequest();
     searchReq.setName(snapshot.getName());
@@ -116,7 +116,8 @@ public class SingleConfigLoader {
         if (match == null) {
           match = doc;
         } else {
-          LOGGER.warn("Found more than one matching market data snapshot for {} with type {}, changing first one", snapshot.getName(), snapshot.getBasisViewName());
+          LOGGER.warn("Found more than one matching market data snapshot for {} with type {}, changing first one", snapshot.getName(),
+              snapshot.getBasisViewName());
         }
       }
     }
@@ -124,16 +125,14 @@ public class SingleConfigLoader {
       if (_doNotUpdateExisting) {
         LOGGER.info("Found existing market data snapshot, skipping update");
         return match.getSnapshot();
-      } else {
-        LOGGER.info("Found existing market data snapshot, updating it");
-        match.setSnapshot(snapshot);
-        return _marketDataSnapshotMaster.update(match).getSnapshot();
       }
-    } else {
-      LOGGER.info("No existing market data snapshot, creating a new one");
-      final MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument(snapshot);
-      return _marketDataSnapshotMaster.add(doc).getSnapshot();
+      LOGGER.info("Found existing market data snapshot, updating it");
+      match.setSnapshot(snapshot);
+      return _marketDataSnapshotMaster.update(match).getSnapshot();
     }
+    LOGGER.info("No existing market data snapshot, creating a new one");
+    final MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument(snapshot);
+    return _marketDataSnapshotMaster.add(doc).getSnapshot();
   }
 
   public <T> void loadConfig(final InputStream is, final Class<T> hintType) {
@@ -146,28 +145,28 @@ public class SingleConfigLoader {
       addOrUpdateSecurity((ManageableSecurity) config);
     } else if (config instanceof CurrencyPairs) {
       final ConfigItem<?> item = ConfigItem.of(config, CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof HistoricalTimeSeriesRating) {
       final ConfigItem<?> item = ConfigItem.of(config, DEFAULT_HTS_RATING_NAME);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof CurrencyMatrix) {
       final ConfigItem<?> item = ConfigItem.of(config, DEFAULT_CURRENCY_MATRIX_NAME);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof Bean) {
       final ConfigItem<T> item = ConfigItem.of(config);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
@@ -187,28 +186,28 @@ public class SingleConfigLoader {
       addOrUpdateSecurity((ManageableSecurity) config);
     } else if (config instanceof CurrencyPairs) {
       final ConfigItem<?> item = ConfigItem.of(config, CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof HistoricalTimeSeriesRating) {
       final ConfigItem<?> item = ConfigItem.of(config, DEFAULT_HTS_RATING_NAME);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof CurrencyMatrix) {
       final ConfigItem<?> item = ConfigItem.of(config, DEFAULT_CURRENCY_MATRIX_NAME, CurrencyMatrix.class);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof Bean) {
       final ConfigItem<?> item = ConfigItem.of(config);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
@@ -218,7 +217,7 @@ public class SingleConfigLoader {
     }
   }
 
-  public <T> void loadFudgeConfig(final InputStream is) {
+  public void loadFudgeConfig(final InputStream is) {
     @SuppressWarnings("resource")
     final FudgeMsgReader fmr = new FudgeMsgReader(new FudgeXMLStreamReader(FUDGE_CONTEXT, new InputStreamReader(is)));
     final FudgeMsg message = fmr.nextMessage();
@@ -234,7 +233,7 @@ public class SingleConfigLoader {
     } else {
       item = ConfigItem.of(config);
     }
-    if (_doNotUpdateExisting  && configExists(item)) {
+    if (_doNotUpdateExisting && configExists(item)) {
       LOGGER.info("Existing config present, skipping");
     } else {
       ConfigMasterUtils.storeByName(_configMaster, item);

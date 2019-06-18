@@ -40,7 +40,6 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 import net.sf.ehcache.CacheManager;
 
-
 /**
  * Allows common functionality to be shared between the live and recorded Bloomberg data servers.
  */
@@ -55,13 +54,14 @@ public abstract class AbstractBloombergLiveDataServer extends StandardLiveDataSe
   /**
    * Creates an instance.
    *
-   * @param cacheManager  the cache manager, not null
+   * @param cacheManager
+   *          the cache manager, not null
    */
   public AbstractBloombergLiveDataServer(final CacheManager cacheManager) {
     super(cacheManager);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the reference data provider.
    *
@@ -83,13 +83,11 @@ public abstract class AbstractBloombergLiveDataServer extends StandardLiveDataSe
 
   /**
    *
-   * @return the prefix to use when making the subscription, including slashes.
-   * e.g. "/buid/"
+   * @return the prefix to use when making the subscription, including slashes. e.g. "/buid/"
    */
   protected String getBloombergSubscriptionPathPrefix() {
     return DEFAULT_BBG_SUB_PREFIX;
   }
-
 
   @Override
   public Map<String, FudgeMsg> doSnapshot(final Collection<String> uniqueIds) {
@@ -180,7 +178,8 @@ public abstract class AbstractBloombergLiveDataServer extends StandardLiveDataSe
 
   public synchronized NormalizationRuleResolver getNormalizationRules() {
     if (_normalizationRules == null) {
-      _normalizationRules = new StandardRuleResolver(BloombergDataUtils.getDefaultNormalizationRules(getReferenceDataProvider(), getCacheManager(), getUniqueIdDomain()));
+      _normalizationRules = new StandardRuleResolver(
+          BloombergDataUtils.getDefaultNormalizationRules(getReferenceDataProvider(), getCacheManager(), getUniqueIdDomain()));
     }
     return _normalizationRules;
   }
@@ -195,7 +194,8 @@ public abstract class AbstractBloombergLiveDataServer extends StandardLiveDataSe
   public synchronized DistributionSpecificationResolver getDefaultDistributionSpecificationResolver() {
     if (_defaultDistributionSpecificationResolver == null) {
       final BloombergJmsTopicNameResolver topicResolver = new BloombergJmsTopicNameResolver(getReferenceDataProvider());
-      final DefaultDistributionSpecificationResolver distributionSpecResolver = new DefaultDistributionSpecificationResolver(getIdResolver(), getNormalizationRules(), topicResolver);
+      final DefaultDistributionSpecificationResolver distributionSpecResolver = new DefaultDistributionSpecificationResolver(getIdResolver(),
+          getNormalizationRules(), topicResolver);
       return new EHCachingDistributionSpecificationResolver(distributionSpecResolver, getCacheManager(), "BBG");
     }
     return _defaultDistributionSpecificationResolver;

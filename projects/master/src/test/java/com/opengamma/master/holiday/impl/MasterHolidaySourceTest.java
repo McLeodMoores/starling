@@ -62,6 +62,9 @@ public class MasterHolidaySourceTest {
   private static final Instant NOW = Instant.now();
   private static final VersionCorrection VC = VersionCorrection.of(NOW.minusSeconds(2), NOW.minusSeconds(1));
 
+  /**
+   *
+   */
   @BeforeMethod
   public static void setUp() {
     ThreadLocalServiceContext.init(ServiceContext.of(VersionCorrectionProvider.class, new VersionCorrectionProvider() {
@@ -77,18 +80,27 @@ public class MasterHolidaySourceTest {
     }));
   }
 
+  /**
+   *
+   */
   @AfterMethod
   public static void tearDown() {
-    ThreadLocalServiceContext.init(ServiceContext.of(ImmutableMap.<Class<?>, Object>of()));
+    ThreadLocalServiceContext.init(ServiceContext.of(ImmutableMap.<Class<?>, Object> of()));
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_nullMaster() throws Exception {
+  public void testConstructorNullMaster() {
     new MasterHolidaySource(null);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getHoliday_UniqueId_noOverride_found() throws Exception {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetHolidayUniqueIdnoOverridefound() {
     final HolidayMaster mock = mock(HolidayMaster.class);
 
     final HolidayDocument doc = new HolidayDocument(example());
@@ -100,8 +112,11 @@ public class MasterHolidaySourceTest {
     assertEquals(testResult, example());
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_getHoliday_UniqueId_notFound() throws Exception {
+  public void testGetHolidayUniqueIdNotFound() {
     final HolidayMaster mock = mock(HolidayMaster.class);
 
     when(mock.get(UID)).thenThrow(new DataNotFoundException(""));
@@ -113,8 +128,11 @@ public class MasterHolidaySourceTest {
     }
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getHoliday_ObjectId_found() throws Exception {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetHolidayObjectIdFound() {
     final HolidayMaster mock = mock(HolidayMaster.class);
 
     final HolidayDocument doc = new HolidayDocument(example());
@@ -126,8 +144,11 @@ public class MasterHolidaySourceTest {
     assertEquals(testResult, example());
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_getHoliday_ObjectId_notFound() throws Exception {
+  public void testGetHolidayObjectIdNotFound() {
     final HolidayMaster mock = mock(HolidayMaster.class);
 
     when(mock.get(OID, VC)).thenThrow(new DataNotFoundException(""));
@@ -139,13 +160,11 @@ public class MasterHolidaySourceTest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Tests the behaviour for holidays and holidays with explicit weekend information when the
-   * date is a non-weekend holiday.
-   * @throws Exception  if there is a problem
+   * Tests the behaviour for holidays and holidays with explicit weekend information when the date is a non-weekend holiday.
    */
-  public void testIsHolidayLocalDateCurrencyHoliday() throws Exception {
+  public void testIsHolidayLocalDateCurrencyHoliday() {
     HolidayMaster mock = mock(HolidayMaster.class);
     final HolidaySearchRequest request = new HolidaySearchRequest(GBP);
     request.setDateToCheck(DATE_FRIDAY);
@@ -170,15 +189,14 @@ public class MasterHolidaySourceTest {
   }
 
   /**
-   * Tests the behaviour for holidays and holidays with explicit weekends when the
-   * date is a Friday.
-   * @throws Exception  if there is a problem
+   * Tests the behaviour for holidays and holidays with explicit weekends when the date is a Friday.
+   *
    */
-  public void testIsHolidayLocalDateCurrencyWorkday() throws Exception {
+  public void testIsHolidayLocalDateCurrencyWorkday() {
     HolidayMaster mock = mock(HolidayMaster.class);
     final HolidaySearchRequest request = new HolidaySearchRequest(GBP);
     request.setDateToCheck(DATE_FRIDAY);
-    ManageableHoliday holiday = new ManageableHoliday(GBP, Collections.<LocalDate>emptyList());
+    ManageableHoliday holiday = new ManageableHoliday(GBP, Collections.<LocalDate> emptyList());
     HolidaySearchResult result = new HolidaySearchResult();
     result.getDocuments().add(new HolidayDocument(holiday));
     when(mock.search(request)).thenReturn(result);
@@ -210,16 +228,14 @@ public class MasterHolidaySourceTest {
   }
 
   /**
-   * Tests the behaviour for holidays and holidays with explicit weekends when the date
-   * is a Sunday.
-   * @throws Exception  if there is a problem
+   * Tests the behaviour for holidays and holidays with explicit weekends when the date is a Sunday.
    */
-  public void testIsHolidayLocalDateCurrencySunday() throws Exception {
+  public void testIsHolidayLocalDateCurrencySunday() {
     HolidayMaster mock = mock(HolidayMaster.class);
     HolidaySearchRequest request = new HolidaySearchRequest(GBP);
     request.setDateToCheck(DATE_SUNDAY);
     request.setVersionCorrection(VC);
-    ManageableHoliday holiday = new ManageableHoliday(GBP, Collections.<LocalDate>emptyList());
+    ManageableHoliday holiday = new ManageableHoliday(GBP, Collections.<LocalDate> emptyList());
     HolidaySearchResult result = new HolidaySearchResult();
     result.getDocuments().add(new HolidayDocument(holiday));
     when(mock.search(request)).thenReturn(result);
@@ -302,10 +318,13 @@ public class MasterHolidaySourceTest {
     testResult = test.isHoliday(DATE_SUNDAY, GBP);
     verify(mock, times(1)).search(request);
     assertFalse(testResult);
-}
+  }
 
-  //-------------------------------------------------------------------------
-  public void test_isHoliday_LocalDateTypeExternalId_holiday() throws Exception {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testIsHolidayLocalDateTypeExternalIdHoliday() {
     final HolidayMaster mock = mock(HolidayMaster.class);
     final HolidaySearchRequest request = new HolidaySearchRequest(HolidayType.BANK, ExternalIdBundle.of(ID));
     request.setDateToCheck(DATE_FRIDAY);
@@ -321,8 +340,11 @@ public class MasterHolidaySourceTest {
     assertTrue(testResult);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_isHoliday_LocalDateTypeExternalIdBundle_holiday() throws Exception {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testIsHolidayLocalDateTypeExternalIdBundleHoliday() {
     final HolidayMaster mock = mock(HolidayMaster.class);
     final HolidaySearchRequest request = new HolidaySearchRequest(HolidayType.BANK, BUNDLE);
     request.setDateToCheck(DATE_FRIDAY);
@@ -338,17 +360,18 @@ public class MasterHolidaySourceTest {
     assertTrue(testResult);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @return an example holiday
+   */
   protected Holiday example() {
     return new ManageableHoliday(GBP, Collections.singletonList(DATE_FRIDAY));
   }
 
   /**
-   * Tests that an empty list of dates is cached if no holiday is found and that Saturday and
-   * Sunday are counted as holidays in all cases.
-   * @throws Exception  if there is a problem
+   * Tests that an empty list of dates is cached if no holiday is found and that Saturday and Sunday are counted as holidays in all cases.
    */
-  public void testCachingNoHolidaysFound() throws Exception {
+  public void testCachingNoHolidaysFound() {
     final HolidayMaster mock = mock(HolidayMaster.class);
     final HolidaySearchRequest request = new HolidaySearchRequest(GBP);
     final MasterHolidaySource cachingSource = new MasterHolidaySource(mock, true);
@@ -362,9 +385,8 @@ public class MasterHolidaySourceTest {
 
   /**
    * Tests holiday date caching.
-   * @throws Exception  if there is a problem
    */
-  public void testCachedHolidays() throws Exception {
+  public void testCachedHolidays() {
     HolidayMaster mock = mock(HolidayMaster.class);
     HolidaySearchRequest request = new HolidaySearchRequest(GBP);
     request.setDateToCheck(DATE_FRIDAY);
@@ -407,13 +429,11 @@ public class MasterHolidaySourceTest {
 
   /**
    * Tests that the caching considers explicit weekends if that is the holiday type.
-   * @throws Exception  if there is a problem
    */
-  public void testCachingHolidaysWithWeekend() throws Exception {
+  public void testCachingHolidaysWithWeekend() {
     HolidayMaster mock = mock(HolidayMaster.class);
     HolidaySearchRequest request = new HolidaySearchRequest(GBP);
-    ManageableHoliday holiday =
-        new ManageableHolidayWithWeekend(new ManageableHoliday(GBP, Collections.<LocalDate>emptyList()), WeekendType.SATURDAY_SUNDAY);
+    ManageableHoliday holiday = new ManageableHolidayWithWeekend(new ManageableHoliday(GBP, Collections.<LocalDate> emptyList()), WeekendType.SATURDAY_SUNDAY);
     HolidaySearchResult result = new HolidaySearchResult();
     result.getDocuments().add(new HolidayDocument(holiday));
     when(mock.search(request)).thenReturn(result);
@@ -427,7 +447,7 @@ public class MasterHolidaySourceTest {
     // reset invocation count
     mock = mock(HolidayMaster.class);
     request = new HolidaySearchRequest(GBP);
-    holiday = new ManageableHolidayWithWeekend(new ManageableHoliday(GBP, Collections.<LocalDate>emptyList()), WeekendType.FRIDAY_SATURDAY);
+    holiday = new ManageableHolidayWithWeekend(new ManageableHoliday(GBP, Collections.<LocalDate> emptyList()), WeekendType.FRIDAY_SATURDAY);
     result = new HolidaySearchResult();
     result.getDocuments().add(new HolidayDocument(holiday));
     when(mock.search(request)).thenReturn(result);

@@ -6,7 +6,6 @@
 package com.opengamma.financial.aggregation;
 
 import com.opengamma.analytics.financial.credit.DebtSeniority;
-import com.opengamma.core.position.Position;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.financial.security.cds.AbstractCreditDefaultSwapSecurity;
 import com.opengamma.financial.security.cds.CreditDefaultSwapSecurity;
@@ -34,11 +33,10 @@ public class CdsSeniorityAggregationFunction extends AbstractCdsAggregationFunct
       public DebtSeniority extract(final AbstractCreditDefaultSwapSecurity cds) {
         if (cds instanceof CreditDefaultSwapSecurity) {
           return ((CreditDefaultSwapSecurity) cds).getDebtSeniority();
-        } else {
-          // CreditDefaultSwapOptionSecurity
-          // null communicates N/A
-          return null;
         }
+        // CreditDefaultSwapOptionSecurity
+        // null communicates N/A
+        return null;
 
       }
     });

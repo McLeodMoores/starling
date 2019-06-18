@@ -26,14 +26,17 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Contains information used to construct standard versions of AUD instruments.
- * @deprecated  use {@FinancialConvention}
+ *
+ * @deprecated use {@link com.opengamma.financial.convention.FinancialConvention}
  */
 @Deprecated
 public class AUConventions {
 
   /**
    * Adds conventions for deposit, Libor fixings, swaps, IR futures and FRAs.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static synchronized void addFixedIncomeInstrumentConventions(final InMemoryConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -44,7 +47,7 @@ public class AUConventions {
     final Frequency quarterly = SimpleFrequencyFactory.INSTANCE.getFrequency(Frequency.QUARTERLY_NAME);
     final Frequency annual = SimpleFrequencyFactory.INSTANCE.getFrequency(Frequency.ANNUAL_NAME);
 
-    //TODO holiday associated with AUD swaps is Sydney
+    // TODO holiday associated with AUD swaps is Sydney
     final ExternalId au = ExternalSchemes.financialRegionId("AU");
 
     final Integer overnightPublicationLag = 0;
@@ -88,7 +91,7 @@ public class AUConventions {
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("AU0012M Index"), simpleNameSecurityId("AUD LIBOR 12m"),
         tullettPrebonSecurityId("ASLIBAUD12L")), "AUD LIBOR 12m", act365, following, Period.ofMonths(12), 2, false, au);
 
-    //TODO need to check that these are right for deposit rates
+    // TODO need to check that these are right for deposit rates
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("ADDR1T Curncy"), simpleNameSecurityId("AUD DEPOSIT 1d")), "AUD DEPOSIT 1d", act365,
         following, Period.ofDays(1), 0, false, au);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("ADDR2T Curncy"), simpleNameSecurityId("AUD DEPOSIT 2d")), "AUD DEPOSIT 2d", act365,
@@ -134,13 +137,17 @@ public class AUConventions {
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("ADDR5 Curncy"), simpleNameSecurityId("AUD DEPOSIT 5y")), "AUD DEPOSIT 5y", act365,
         following, Period.ofYears(5), 2, false, au);
 
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("ADBB1M Curncy"), simpleNameSecurityId("AUD Bank Bill 1m")), "AUD Bank Bill 1m", act365,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("ADBB1M Curncy"), simpleNameSecurityId("AUD Bank Bill 1m")), "AUD Bank Bill 1m",
+        act365,
         following, Period.ofMonths(1), 2, false, au);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("ADBB2M Curncy"), simpleNameSecurityId("AUD Bank Bill 2m")), "AUD Bank Bill 2m", act365,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("ADBB2M Curncy"), simpleNameSecurityId("AUD Bank Bill 2m")), "AUD Bank Bill 2m",
+        act365,
         following, Period.ofMonths(2), 2, false, au);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("ADBB3M Curncy"), simpleNameSecurityId("AUD Bank Bill 3m")), "AUD Bank Bill 3m", act365,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("ADBB3M Curncy"), simpleNameSecurityId("AUD Bank Bill 3m")), "AUD Bank Bill 3m",
+        act365,
         following, Period.ofMonths(3), 2, false, au);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("ADBB6M Curncy"), simpleNameSecurityId("AUD Bank Bill 6m")), "AUD Bank Bill 6m", act365,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("ADBB6M Curncy"), simpleNameSecurityId("AUD Bank Bill 6m")), "AUD Bank Bill 6m",
+        act365,
         following, Period.ofMonths(6), 2, false, au);
 
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("RBACOR Index"), simpleNameSecurityId("RBA OVERNIGHT CASH RATE")),
@@ -152,10 +159,10 @@ public class AUConventions {
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("AUD_SWAP")), "AUD_SWAP", act365, modified, semiAnnual, 0, au, act365,
         modified, semiAnnual, 0, simpleNameSecurityId(IndexType.BBSW + "_AUD_P6M"), au, true);
 
-    //    utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("AUD_3M_SWAP")), "AUD_3M_SWAP", swapFixedDayCount, swapFixedBusinessDay,
-    //        quarterly, 0, au, act365, modified, quarterly, 0, simpleNameSecurityId(IndexType.BBSW + "_AUD_P3M"), au, true);
-    //    utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("AUD_6M_SWAP")), "AUD_6M_SWAP", swapFixedDayCount, swapFixedBusinessDay,
-    //        semiAnnual, 0, au, act365, modified, semiAnnual, 0, simpleNameSecurityId(IndexType.BBSW + "_AUD_P6M"), au, true);
+    // utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("AUD_3M_SWAP")), "AUD_3M_SWAP", swapFixedDayCount, swapFixedBusinessDay,
+    // quarterly, 0, au, act365, modified, quarterly, 0, simpleNameSecurityId(IndexType.BBSW + "_AUD_P3M"), au, true);
+    // utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("AUD_6M_SWAP")), "AUD_6M_SWAP", swapFixedDayCount, swapFixedBusinessDay,
+    // semiAnnual, 0, au, act365, modified, semiAnnual, 0, simpleNameSecurityId(IndexType.BBSW + "_AUD_P6M"), au, true);
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("AUD_3M_SWAP")), "AUD_3M_SWAP", swapFixedDayCount, swapFixedBusinessDay,
         quarterly, 0, au, act365, modified, quarterly, 0, simpleNameSecurityId("AUD LIBOR 3m"), au, true); // used for testing as we can't get bank bill data
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("AUD_6M_SWAP")), "AUD_6M_SWAP", swapFixedDayCount, swapFixedBusinessDay,
@@ -171,9 +178,11 @@ public class AUConventions {
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("ADSWC Curncy"), simpleNameSecurityId(IndexType.Swap + "_AUD_P3M")),
         "AUD SWAP 3m", act365, modified, Period.ofMonths(3), 0, true, au); // "AUD Bank Bill 3m"
 
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("BBSW3M Index"), ricSecurityId("AUBABSL3M=AFMA"), simpleNameSecurityId(IndexType.BBSW + "_AUD_P3M")),
+    utils.addConventionBundle(
+        ExternalIdBundle.of(bloombergTickerSecurityId("BBSW3M Index"), ricSecurityId("AUBABSL3M=AFMA"), simpleNameSecurityId(IndexType.BBSW + "_AUD_P3M")),
         "AUD Bank Bill 3m", act365, modified, Period.ofMonths(3), 0, true, au); // "AUD Bank Bill 3m"
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("BBSW6M Index"), ricSecurityId("AUBABSL6M=AFMA"), simpleNameSecurityId(IndexType.BBSW + "_AUD_P6M")),
+    utils.addConventionBundle(
+        ExternalIdBundle.of(bloombergTickerSecurityId("BBSW6M Index"), ricSecurityId("AUBABSL6M=AFMA"), simpleNameSecurityId(IndexType.BBSW + "_AUD_P6M")),
         "AUD Bank Bill 6m", act365, modified, Period.ofMonths(6), 0, true, au); // "AUD Bank Bill 6m"
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("AUD_SWAPTION")), "AUD_SWAPTION", false);
   }

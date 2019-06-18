@@ -5,10 +5,9 @@
  */
 package com.opengamma.masterdb.security.hibernate.future;
 
-import com.opengamma.financial.security.future.StockFutureSecurity;
-
 /**
- * A Hibernate bean representation of {@link StockFutureSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.future.StockFutureSecurity}.
  */
 public class StockFutureBean extends FutureSecurityBean {
 

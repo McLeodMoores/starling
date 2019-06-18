@@ -97,7 +97,7 @@ import com.opengamma.util.tuple.ObjectsPair;
 public class FuturePriceCurveCreator extends AbstractTool<IntegrationToolContext> {
 
   /** Logger */
-  private static Logger LOGGER = LoggerFactory.getLogger(FuturePriceCurveCreator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FuturePriceCurveCreator.class);
 
   /** bbg surface prefix */
   private static final String BBG_PREFIX = "BBG_";
@@ -108,7 +108,7 @@ public class FuturePriceCurveCreator extends AbstractTool<IntegrationToolContext
   /** wildcard search symbol */
   private static final String WILDCARD_SEARCH = "*";
 
-  //Track surfaces we create so we dont recreate them when multiple securities need them
+  // Track surfaces we create so we dont recreate them when multiple securities need them
   /** vol definitions we have created */
   private final Set<String> _curveDefinitionNames = new HashSet<>();
   /** vol specifications we have created */
@@ -116,17 +116,18 @@ public class FuturePriceCurveCreator extends AbstractTool<IntegrationToolContext
   /** regexp to get strike from option ticker */
   private static final String STRIKE_REGEXP = "[CP][ ]*((\\d)+(.\\d+)*)\\b";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new FuturePriceCurveCreator().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final ToolContext toolContext = getToolContext();
@@ -162,8 +163,10 @@ public class FuturePriceCurveCreator extends AbstractTool<IntegrationToolContext
   /**
    * Create surfaces for all (non-expired) securities
    *
-   * @param name the pattern to match securities
-   * @param dryRun set to true to not write to the database
+   * @param name
+   *          the pattern to match securities
+   * @param dryRun
+   *          set to true to not write to the database
    */
   private void createSurfaces(final String name, final boolean dryRun) {
     final ConfigMaster configMaster = getToolContext().getConfigMaster();
@@ -202,13 +205,19 @@ public class FuturePriceCurveCreator extends AbstractTool<IntegrationToolContext
     private final boolean _dryRun;
 
     /**
-     * @param configMaster the config master
-     * @param referenceDataProvider the reference data provider
-     * @param knownVolSpecNames curve specifications to skip
-     * @param knownVolDefNames curve definitions to skip
-     * @param dryRun if true skip write to the database
+     * @param configMaster
+     *          the config master
+     * @param referenceDataProvider
+     *          the reference data provider
+     * @param knownVolSpecNames
+     *          curve specifications to skip
+     * @param knownVolDefNames
+     *          curve definitions to skip
+     * @param dryRun
+     *          if true skip write to the database
      */
-    FuturePriceCurveCreatorVisitor(final ConfigMaster configMaster, final ReferenceDataProvider referenceDataProvider, final Set<String> knownVolSpecNames, final Set<String> knownVolDefNames,
+    FuturePriceCurveCreatorVisitor(final ConfigMaster configMaster, final ReferenceDataProvider referenceDataProvider, final Set<String> knownVolSpecNames,
+        final Set<String> knownVolDefNames,
         final boolean dryRun) {
       _configMaster = configMaster;
       _referenceDataProvider = referenceDataProvider;
@@ -224,13 +233,13 @@ public class FuturePriceCurveCreator extends AbstractTool<IntegrationToolContext
       }
       final String ticker = security.getExternalIdBundle().getValue(ExternalSchemes.BLOOMBERG_TICKER);
       final BloombergTickerParserFutureOption tickerParser = new BloombergTickerParserBondFutureOption(ticker);
-      //final String postfix = BloombergDataUtils.splitTickerAtMarketSector(ticker).getSecond();
+      // final String postfix = BloombergDataUtils.splitTickerAtMarketSector(ticker).getSecond();
       final String underlyingOptChainTicker = getUnderlyingTicker(ticker, security.getUnderlyingId(), tickerParser.getTypeName());
       final String name = BBG_PREFIX + tickerParser.getSymbol() + "_" + security.getCurrency().getCode() + "_" + InstrumentTypeProperties.BOND_FUTURE_PRICE;
       if (!_knownCurveSpecNames.contains(name)) {
         LOGGER.info("Creating FuturePriceCurveSpecification \"{}\"", name);
-        final BloombergBondFuturePriceCurveInstrumentProvider curveInstrumentProvider =
-            new BloombergBondFuturePriceCurveInstrumentProvider(tickerParser.getSymbol(), tickerParser.getTypeName(), FIELD_NAME_PRICE);
+        final BloombergBondFuturePriceCurveInstrumentProvider curveInstrumentProvider = new BloombergBondFuturePriceCurveInstrumentProvider(
+            tickerParser.getSymbol(), tickerParser.getTypeName(), FIELD_NAME_PRICE);
         createFuturePriceCurveSpecification(security.getCurrency(), name, curveInstrumentProvider);
       }
       createFuturePriceCurveDefinition(underlyingOptChainTicker, name, security.getCurrency());
@@ -244,15 +253,15 @@ public class FuturePriceCurveCreator extends AbstractTool<IntegrationToolContext
       }
       final String ticker = security.getExternalIdBundle().getValue(ExternalSchemes.BLOOMBERG_TICKER);
       final BloombergTickerParserFutureOption tickerParser = new BloombergTickerParserCommodityFutureOption(ticker);
-      //      final String postfix = BloombergDataUtils.splitTickerAtMarketSector(ticker).getSecond();
+      // final String postfix = BloombergDataUtils.splitTickerAtMarketSector(ticker).getSecond();
       final String underlyingOptChainTicker = getUnderlyingTicker(ticker, security.getUnderlyingId(), tickerParser.getTypeName());
       final String name = BBG_PREFIX + tickerParser.getSymbol() + "_" + security.getCurrency().getCode()
           + "_" + InstrumentTypeProperties.COMMODITY_FUTURE_PRICE;
       if (!_knownCurveSpecNames.contains(name)) {
         LOGGER.info("Creating FuturePriceCurveSpecification \"{}\"", name);
-        final BloombergCommodityFuturePriceCurveInstrumentProvider curveInstrumentProvider =
-            new BloombergCommodityFuturePriceCurveInstrumentProvider(tickerParser.getSymbol(), tickerParser.getTypeName(),
-                FIELD_NAME_PRICE, ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
+        final BloombergCommodityFuturePriceCurveInstrumentProvider curveInstrumentProvider = new BloombergCommodityFuturePriceCurveInstrumentProvider(
+            tickerParser.getSymbol(), tickerParser.getTypeName(),
+            FIELD_NAME_PRICE, ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
         createFuturePriceCurveSpecification(security.getCurrency(), name, curveInstrumentProvider);
       }
       createFuturePriceCurveDefinition(underlyingOptChainTicker, name, security.getCurrency());
@@ -266,12 +275,14 @@ public class FuturePriceCurveCreator extends AbstractTool<IntegrationToolContext
       }
       final String ticker = security.getExternalIdBundle().getValue(ExternalSchemes.BLOOMBERG_TICKER);
       final BloombergTickerParserFutureOption tickerParser = new BloombergTickerParserIRFutureOption(ticker);
-      //      final String postfix = BloombergDataUtils.splitTickerAtMarketSector(ticker).getSecond();
+      // final String postfix = BloombergDataUtils.splitTickerAtMarketSector(ticker).getSecond();
       final String underlyingTicker = getUnderlyingTicker(ticker, security.getUnderlyingId(), tickerParser.getTypeName());
-      final String name = BBG_PREFIX + PRICE + tickerParser.getSymbol() + "_" + security.getCurrency().getCode() + "_" + InstrumentTypeProperties.IR_FUTURE_PRICE;
+      final String name = BBG_PREFIX + PRICE + tickerParser.getSymbol() + "_" + security.getCurrency().getCode() + "_"
+          + InstrumentTypeProperties.IR_FUTURE_PRICE;
       if (!_knownCurveSpecNames.contains(name)) {
         LOGGER.info("Creating FuturePriceCurveSpecification \"{}\"", name);
-        final BloombergIRFuturePriceCurveInstrumentProvider curveInstrumentProvider = new BloombergIRFuturePriceCurveInstrumentProvider(tickerParser.getSymbol(), tickerParser.getTypeName(),
+        final BloombergIRFuturePriceCurveInstrumentProvider curveInstrumentProvider = new BloombergIRFuturePriceCurveInstrumentProvider(
+            tickerParser.getSymbol(), tickerParser.getTypeName(),
             FIELD_NAME_PRICE);
         createFuturePriceCurveSpecification(security.getCurrency(), name, curveInstrumentProvider);
       }
@@ -307,9 +318,10 @@ public class FuturePriceCurveCreator extends AbstractTool<IntegrationToolContext
         final String prefix = tickerParts[0].substring(0, tickerParts[0].length() - 2); // AAPL=G3 -> AAPL=
         final String exchange = tickerParts[1];
         final String postfix = tickerParts[2];
-        final BloombergEquityFuturePriceCurveInstrumentProvider curveInstrumentProvider =
-            new BloombergEquityFuturePriceCurveInstrumentProvider(prefix, postfix, FIELD_NAME_PRICE, exchange);
-        createFuturePriceCurveSpecification(UniqueId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), underlyingOptChainTicker), name, curveInstrumentProvider);
+        final BloombergEquityFuturePriceCurveInstrumentProvider curveInstrumentProvider = new BloombergEquityFuturePriceCurveInstrumentProvider(prefix, postfix,
+            FIELD_NAME_PRICE, exchange);
+        createFuturePriceCurveSpecification(UniqueId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), underlyingOptChainTicker), name,
+            curveInstrumentProvider);
       }
       createFuturePriceCurveDefinition(Lists.newArrayList(1., 2., 3., 4.), name, security.getCurrency()); // hardcoded to 4 currently
       return null;
@@ -407,7 +419,8 @@ public class FuturePriceCurveCreator extends AbstractTool<IntegrationToolContext
       if (!_knownCurveDefNames.contains(name)) {
         LOGGER.info("Creating FuturePriceCurveDefinition \"{}\"", name);
         final FuturePriceCurveDefinition<Double> futureCurveDefinition = FuturePriceCurveDefinition.of(name, target, xAxis);
-        final ConfigItem<FuturePriceCurveDefinition<Double>> futureCurveDefinitionConfig = ConfigItem.of(futureCurveDefinition, futureCurveDefinition.getName(), FuturePriceCurveDefinition.class);
+        final ConfigItem<FuturePriceCurveDefinition<Double>> futureCurveDefinitionConfig = ConfigItem.of(futureCurveDefinition, futureCurveDefinition.getName(),
+            FuturePriceCurveDefinition.class);
         if (!_dryRun) {
           ConfigMasterUtils.storeByName(_configMaster, futureCurveDefinitionConfig);
         }
@@ -415,9 +428,11 @@ public class FuturePriceCurveCreator extends AbstractTool<IntegrationToolContext
       }
     }
 
-    private void createFuturePriceCurveSpecification(final UniqueIdentifiable target, final String name, final FuturePriceCurveInstrumentProvider<?> curveInstrumentProvider) {
+    private void createFuturePriceCurveSpecification(final UniqueIdentifiable target, final String name,
+        final FuturePriceCurveInstrumentProvider<?> curveInstrumentProvider) {
       final FuturePriceCurveSpecification priceCurveSpec = new FuturePriceCurveSpecification(name, target, curveInstrumentProvider);
-      final ConfigItem<FuturePriceCurveSpecification> volSpecConfig = ConfigItem.of(priceCurveSpec, priceCurveSpec.getName(), FuturePriceCurveSpecification.class);
+      final ConfigItem<FuturePriceCurveSpecification> volSpecConfig = ConfigItem.of(priceCurveSpec, priceCurveSpec.getName(),
+          FuturePriceCurveSpecification.class);
       if (!_dryRun) {
         ConfigMasterUtils.storeByName(_configMaster, volSpecConfig);
       }
@@ -426,7 +441,9 @@ public class FuturePriceCurveCreator extends AbstractTool<IntegrationToolContext
 
     /**
      * From the available options determine axes for a volatility surface.
-     * @param options the available options as given by OPT_CHAIN (must be tickers)
+     * 
+     * @param options
+     *          the available options as given by OPT_CHAIN (must be tickers)
      * @return x and y axes
      */
     private ObjectsPair<ImmutableList<Double>, ImmutableList<Double>> determineAxes(final Collection<ExternalId> options) {
@@ -447,7 +464,7 @@ public class FuturePriceCurveCreator extends AbstractTool<IntegrationToolContext
       // assume all strikes exist for all exercise dates
       int numX = options.size() / strikes.size();
       // Can get quite low numbers (OPT_CHAIN truncated?) so ensure a minimum
-      //TODO: Check why numbers can be so low.
+      // TODO: Check why numbers can be so low.
       if (numX < 12) {
         numX = 12;
       }
@@ -463,8 +480,9 @@ public class FuturePriceCurveCreator extends AbstractTool<IntegrationToolContext
         return underlyingId.getValue();
       }
       // underlying id is not a ticker - have to lookup
-      //TODO: check if there is a better buid -> ticker lookup function
-      String underlyingTicker = _referenceDataProvider.getReferenceData(Collections.singleton(ticker), Collections.singleton(BloombergConstants.FIELD_OPT_UNDL_TICKER))
+      // TODO: check if there is a better buid -> ticker lookup function
+      String underlyingTicker = _referenceDataProvider
+          .getReferenceData(Collections.singleton(ticker), Collections.singleton(BloombergConstants.FIELD_OPT_UNDL_TICKER))
           .get(ticker)
           .getString(BloombergConstants.FIELD_OPT_UNDL_TICKER) + " " + BloombergDataUtils.splitTickerAtMarketSector(ticker).getSecond();
       if (!underlyingTicker.endsWith(postfix)) {

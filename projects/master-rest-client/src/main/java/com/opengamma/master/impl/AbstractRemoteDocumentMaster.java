@@ -29,8 +29,8 @@ import com.opengamma.master.AbstractMaster;
  * @param <D>  the type of the document
  */
 public abstract class AbstractRemoteDocumentMaster<D extends AbstractDocument>
-    extends AbstractRemoteMaster
-    implements AbstractMaster<D> {
+extends AbstractRemoteMaster
+implements AbstractMaster<D> {
 
   /**
    * Creates an instance.
@@ -57,9 +57,8 @@ public abstract class AbstractRemoteDocumentMaster<D extends AbstractDocument>
     final List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
     if (result.isEmpty()) {
       return null;
-    } else {
-      return result.get(0);
     }
+    return result.get(0);
   }
 
   @Override
@@ -72,9 +71,8 @@ public abstract class AbstractRemoteDocumentMaster<D extends AbstractDocument>
     final List<UniqueId> result = replaceVersion(replacementDocument.getUniqueId(), Collections.singletonList(replacementDocument));
     if (result.isEmpty()) {
       return null;
-    } else {
-      return result.get(0);
     }
+    return result.get(0);
   }
 
   @Override

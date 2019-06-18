@@ -27,26 +27,46 @@ import com.opengamma.livedata.msg.LiveDataSubscriptionResponse;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * An implementation of {@link LiveDataClient} that delegates all calls to other
- * clients, keyed by the external ID scheme of the items to be loaded.
- * Where requests are made that may be satisfied by any of the underlying clients,
- * the actual underlying client that will be chosen is non-deterministic.
+ * An implementation of {@link LiveDataClient} that delegates all calls to other clients, keyed by the external ID scheme of the items to be loaded. Where
+ * requests are made that may be satisfied by any of the underlying clients, the actual underlying client that will be chosen is non-deterministic.
  */
 public class DelegatingLiveDataClient implements LiveDataClient {
   private static final Logger LOGGER = LoggerFactory.getLogger(DelegatingLiveDataClient.class);
   private final Map<String, LiveDataClient> _underlyingClients = new ConcurrentSkipListMap<>();
   private LiveDataClient _defaultClient;
 
+  /**
+   * Add a live data client to the underlying client.
+   *
+   * @param idScheme
+   *          the identifier scheme, not null
+   * @param liveDataClient
+   *          the client to add, not null
+   */
   public void addUnderlyingClient(final String idScheme, final LiveDataClient liveDataClient) {
     ArgumentChecker.notNull(idScheme, "idScheme");
     ArgumentChecker.notNull(liveDataClient, "liveDataClient");
     _underlyingClients.put(idScheme, liveDataClient);
   }
 
+  /**
+   * Sets the default client.
+   *
+   * @param defaultClient
+   *          the default client, not null
+   */
   public void setDefaultClient(final LiveDataClient defaultClient) {
     _defaultClient = defaultClient;
   }
 
+  /**
+   * Gets the delegate client that uses the identifier scheme in the specification, or uses the default client. If the default client has not be set, an
+   * exception is thrown.
+   *
+   * @param specification
+   *          the live data specification, not null
+   * @return the live data client
+   */
   protected LiveDataClient identifyUnderlying(final LiveDataSpecification specification) {
     final ExternalIdBundle idBundle = specification.getIdentifiers();
 
@@ -65,6 +85,13 @@ public class DelegatingLiveDataClient implements LiveDataClient {
     throw new OpenGammaRuntimeException("No underlying client configured to handle " + specification);
   }
 
+  /**
+   * Splits the specifications into a map from client to list of specifications that that client can provide data for.
+   * 
+   * @param specifications
+   *          the specifications, not null
+   * @return a map from client to specifications
+   */
   protected Map<LiveDataClient, List<LiveDataSpecification>> splitCollection(final Collection<LiveDataSpecification> specifications) {
     final Map<LiveDataClient, List<LiveDataSpecification>> result = new HashMap<>();
     for (final LiveDataSpecification specification : specifications) {

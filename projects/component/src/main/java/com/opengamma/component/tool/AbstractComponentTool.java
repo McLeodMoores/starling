@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opengamma.component.factory.RemoteComponentFactory;
-import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.LogUtils;
 import com.opengamma.util.StartupUtils;
@@ -59,7 +58,8 @@ public abstract class AbstractComponentTool {
   /**
    * Initializes the tool statically.
    *
-   * @param logbackResource the logback resource location, not null
+   * @param logbackResource
+   *          the logback resource location, not null
    * @return true if successful
    */
   public static final boolean init(final String logbackResource) {
@@ -75,15 +75,15 @@ public abstract class AbstractComponentTool {
   protected AbstractComponentTool() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   protected static String getSystemDefaultLogbackConfiguration() {
     return System.getProperty("logback.configurationFile");
   }
 
   /**
-   * Returns the name of the default logback configuration file if none is explicitly specified. This will be {@link #TOOL_LOGBACK_XML} unless the global {@code logback.configurationFile property} has
-   * been set.
+   * Returns the name of the default logback configuration file if none is explicitly specified. This will be {@link #TOOL_LOGBACK_XML} unless the global
+   * {@code logback.configurationFile property} has been set.
    *
    * @return the logback configuration file resource address, not null
    */
@@ -91,20 +91,20 @@ public abstract class AbstractComponentTool {
     final String globalConfiguration = getSystemDefaultLogbackConfiguration();
     if (globalConfiguration != null) {
       return globalConfiguration;
-    } else {
-      return TOOL_LOGBACK_XML;
     }
+    return TOOL_LOGBACK_XML;
   }
 
   /**
    * Initializes and runs the tool from standard command-line arguments.
    * <p>
-   * The base class defined three options:<br />
-   * c/component server URI - the component server URI, mandatory<br />
-   * l/logback - the logback configuration, default tool-logback.xml<br />
-   * h/help - prints the help tool<br />
+   * The base class defined three options:<br>
+   * c/component server URI - the component server URI, mandatory<br>
+   * l/logback - the logback configuration, default tool-logback.xml<br>
+   * h/help - prints the help tool<br>
    *
-   * @param args the command-line arguments, not null
+   * @param args
+   *          the command-line arguments, not null
    * @return true if successful, false otherwise
    */
   public boolean initAndRun(final String[] args) {
@@ -114,13 +114,15 @@ public abstract class AbstractComponentTool {
   /**
    * Initializes and runs the tool from standard command-line arguments.
    * <p>
-   * The base class defined three options:<br />
-   * c/component server URI - the component server URI, mandatory<br />
-   * l/logback - the logback configuration, default tool-logback.xml<br />
-   * h/help - prints the help tool<br />
+   * The base class defined three options:<br>
+   * c/component server URI - the component server URI, mandatory<br>
+   * l/logback - the logback configuration, default tool-logback.xml<br>
+   * h/help - prints the help tool<br>
    *
-   * @param args the command-line arguments, not null
-   * @param defaultLogbackResource the default logback resource, null to use tool-logback.xml as the default
+   * @param args
+   *          the command-line arguments, not null
+   * @param defaultLogbackResource
+   *          the default logback resource, null to use tool-logback.xml as the default
    * @return true if successful, false otherwise
    */
   public boolean initAndRun(final String[] args, final String defaultLogbackResource) {
@@ -149,9 +151,10 @@ public abstract class AbstractComponentTool {
   /**
    * Runs the tool.
    * <p>
-   * This starts the tool context and calls {@link #run(ToolContext)}. This will catch exceptions and print a stack trace.
+   * This starts the tool context and calls {@link #run(RemoteComponentFactory)}. This will catch exceptions and print a stack trace.
    *
-   * @param componentServerUri the config resource location, not null
+   * @param componentServerUri
+   *          the config resource location, not null
    * @return true if successful
    */
   public final boolean run(String componentServerUri) {
@@ -175,8 +178,10 @@ public abstract class AbstractComponentTool {
    * <p>
    * This will catch unhandled exceptions, and will convert checked exceptions to unchecked.
    *
-   * @param remoteComponentFactory  the remote component factory, not null
-   * @throws RuntimeException if an error occurs
+   * @param remoteComponentFactory
+   *          the remote component factory, not null
+   * @throws RuntimeException
+   *           if an error occurs
    */
   public final void run(final RemoteComponentFactory remoteComponentFactory) {
     _remoteComponentFactory = remoteComponentFactory;
@@ -189,15 +194,16 @@ public abstract class AbstractComponentTool {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Override in subclasses to implement the tool.
    *
-   * @throws Exception if an error occurs
+   * @throws Exception
+   *           if an error occurs
    */
   protected abstract void doRun() throws Exception;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the remote component factory.
    *
@@ -216,7 +222,7 @@ public abstract class AbstractComponentTool {
     return _commandLine;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the command line options.
    * <p>
@@ -260,16 +266,15 @@ public abstract class AbstractComponentTool {
     formatter.printHelp("java " + getEntryPointClass().getName(), options, true);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private String resolveComponentServerUri(String componentServerUri) {
     componentServerUri = componentServerUri.trim();
     if (componentServerUri.contains("/")) {
       // Assume it's the full URI
       return componentServerUri;
-    } else {
-      // Assume it's host[:port]
-      return "http://" + componentServerUri + "/jax";
     }
+    // Assume it's host[:port]
+    return "http://" + componentServerUri + "/jax";
   }
 
 }

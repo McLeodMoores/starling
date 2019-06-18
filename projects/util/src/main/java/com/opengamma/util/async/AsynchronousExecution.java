@@ -25,6 +25,11 @@ public final class AsynchronousExecution extends Exception {
 
   /**
    * This class is not serializable.
+   *
+   * @param output
+   *          the output stream
+   * @throws NotSerializableException
+   *           if this method is called
    */
   private void writeObject(final ObjectOutputStream output) throws IOException {
     throw new NotSerializableException();

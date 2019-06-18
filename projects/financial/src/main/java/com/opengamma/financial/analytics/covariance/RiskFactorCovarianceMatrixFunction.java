@@ -33,8 +33,9 @@ public class RiskFactorCovarianceMatrixFunction extends SampledCovarianceMatrixF
 
   /**
    * Initializes the function.
-   * 
-   * @param context the compilation context
+   *
+   * @param context
+   *          the compilation context
    * @deprecated [PLAT-2240] This just checks whether the context is suitably configured
    */
   @Deprecated
@@ -67,8 +68,10 @@ public class RiskFactorCovarianceMatrixFunction extends SampledCovarianceMatrixF
 
   // FunctionInvoker
 
+  @SuppressWarnings("unchecked")
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final HistoricalViewEvaluationResult riskFactors = (HistoricalViewEvaluationResult) inputs.getValue(ValueRequirementNames.HISTORICAL_TIME_SERIES);
     // Grab the value specifications as a list so that we iterate over them in a consistent order to construct the matrix
     final ValueRequirement[] riskFactorReqs = riskFactors.getValueRequirements().toArray(new ValueRequirement[riskFactors.getValueRequirements().size()]);
@@ -78,7 +81,8 @@ public class RiskFactorCovarianceMatrixFunction extends SampledCovarianceMatrixF
       timeSeries[i] = riskFactors.getDoubleTimeSeries(riskFactorReqs[i]);
     }
     final ValueRequirement desiredValueReq = desiredValues.iterator().next();
-    final ValueSpecification desiredValueSpec = new ValueSpecification(ValueRequirementNames.COVARIANCE_MATRIX, target.toSpecification(), desiredValueReq.getConstraints());
+    final ValueSpecification desiredValueSpec = new ValueSpecification(ValueRequirementNames.COVARIANCE_MATRIX, target.toSpecification(),
+        desiredValueReq.getConstraints());
     return Collections.singleton(new ComputedValue(desiredValueSpec, createCovarianceMatrix(timeSeries, riskFactorReqs)));
   }
 

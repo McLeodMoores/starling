@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-import com.opengamma.util.rest.HttpMethodFilter;
 import com.opengamma.web.analytics.push.LongPollingServlet;
 import com.sun.jersey.api.core.ExtendedUriInfo;
 import com.sun.jersey.api.core.HttpContext;
@@ -45,9 +44,8 @@ import com.sun.jersey.spi.container.ContainerRequest;
     }
     if (clientIds == null || clientIds.size() != 1) {
       return null;
-    } else {
-      return clientIds.get(0);
     }
+    return clientIds.get(0);
   }
 
   /**
@@ -63,8 +61,7 @@ import com.sun.jersey.spi.container.ContainerRequest;
       /*LOGGER.debug("No user principal, not subscribing, url: {}", url);
      return response;*/
       return null;
-    } else {
-      return userPrincipal.getName();
     }
+    return userPrincipal.getName();
   }
 }

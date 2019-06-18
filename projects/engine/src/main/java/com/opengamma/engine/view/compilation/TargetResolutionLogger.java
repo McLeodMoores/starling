@@ -74,9 +74,8 @@ import com.opengamma.id.VersionCorrection;
         }
         if (different) {
           return ComputationTargetType.multiple(result);
-        } else {
-          return null;
         }
+            return null;
       }
 
       @Override
@@ -85,9 +84,8 @@ import com.opengamma.id.VersionCorrection;
         final ComputationTargetType newLeafType = leafType.accept(this, null);
         if (newLeafType != null) {
           return newLeafType;
-        } else {
-          return leafType;
         }
+            return leafType;
       }
 
       @Override
@@ -149,9 +147,8 @@ import com.opengamma.id.VersionCorrection;
       final ComputationTargetType leafType = getLeafType(requirement.getType());
       if (leafType != null) {
         return MemoryUtils.instance(new ComputationTargetRequirement(leafType, requirement.getIdentifiers()));
-      } else {
-        return requirement;
       }
+      return requirement;
     }
 
     @Override
@@ -160,12 +157,10 @@ import com.opengamma.id.VersionCorrection;
         final ComputationTargetType leafType = getLeafType(specification.getType());
         if (leafType != null) {
           return MemoryUtils.instance(new ComputationTargetSpecification(leafType, specification.getUniqueId()));
-        } else {
-          return specification;
         }
-      } else {
-        return null;
+        return specification;
       }
+      return null;
     }
 
     // ResolutionLogger

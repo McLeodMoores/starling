@@ -43,10 +43,29 @@ public class ForwardSwapSecurity extends SwapSecurity {
   @PropertyDefinition(validate = "notNull")
   private ZonedDateTime _forwardStartDate;
 
-  ForwardSwapSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  ForwardSwapSecurity() { // For builder
     super();
   }
 
+  /**
+   * @param tradeDate
+   *          the trade date, not null
+   * @param effectiveDate
+   *          the effective date, not null
+   * @param maturityDate
+   *          the maturity date, not null
+   * @param counterparty
+   *          the counterparty, not null
+   * @param payLeg
+   *          the pay leg, not null
+   * @param receiveLeg
+   *          the receive leg, not null
+   * @param forwardStartDate
+   *          the forward start date, not null
+   */
   public ForwardSwapSecurity(final ZonedDateTime tradeDate, final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate, final String counterparty,
       final SwapLeg payLeg, final SwapLeg receiveLeg, final ZonedDateTime forwardStartDate) {
     super(tradeDate, effectiveDate, maturityDate, counterparty, payLeg, receiveLeg);

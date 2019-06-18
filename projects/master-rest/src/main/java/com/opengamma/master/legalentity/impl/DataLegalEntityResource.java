@@ -52,8 +52,10 @@ public class DataLegalEntityResource extends AbstractDocumentDataResource<LegalE
   /**
    * Creates the resource.
    *
-   * @param legalEntitiesResource the parent resource, not null
-   * @param legalEntityId         the legalentity unique identifier, not null
+   * @param legalEntitiesResource
+   *          the parent resource, not null
+   * @param legalEntityId
+   *          the legalentity unique identifier, not null
    */
   public DataLegalEntityResource(final DataLegalEntityMasterResource legalEntitiesResource, final ObjectId legalEntityId) {
     ArgumentChecker.notNull(legalEntitiesResource, "legalEntitiesResource");
@@ -62,7 +64,7 @@ public class DataLegalEntityResource extends AbstractDocumentDataResource<LegalE
     _urlResourceId = legalEntityId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the legalEntities resource.
@@ -83,7 +85,7 @@ public class DataLegalEntityResource extends AbstractDocumentDataResource<LegalE
     return _urlResourceId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the legalentity master.
@@ -99,7 +101,7 @@ public class DataLegalEntityResource extends AbstractDocumentDataResource<LegalE
   @Path("versions")
   public Response history(@Context final UriInfo uriInfo) {
     final LegalEntityHistoryRequest request = RestUtils.decodeQueryParams(uriInfo, LegalEntityHistoryRequest.class);
-    if (getUrlId().equals(request.getObjectId()) == false) {
+    if (!getUrlId().equals(request.getObjectId())) {
       throw new IllegalArgumentException("Document objectId does not match URI");
     }
     final LegalEntityHistoryResult result = getMaster().history(request);

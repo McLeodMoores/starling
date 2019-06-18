@@ -43,9 +43,12 @@ public class YieldCurveDataManipulatorBuilder {
 
   /**
    * Adds an action to perform a parallel shift to the scenario.
-   * @param shiftType Specifies how to apply the shift. A relative shift is expressed as an amount
-   * to add or subtract, e.g. 10% shift = rate * 1.1, -20% shift = rate * 0.8
-   * @param shift The size of the shift
+   *
+   * @param shiftType
+   *          Specifies how to apply the shift. A relative shift is expressed as an amount to add or subtract, e.g. 10% shift = rate * 1.1, -20% shift = rate *
+   *          0.8
+   * @param shift
+   *          The size of the shift
    * @return This builder
    */
   public YieldCurveDataManipulatorBuilder parallelShift(final ScenarioShiftType shiftType, final Number shift) {
@@ -55,7 +58,9 @@ public class YieldCurveDataManipulatorBuilder {
 
   /**
    * Adds an action to perform a parallel shift to the scenario.
-   * @param shift The size of the shift
+   *
+   * @param shift
+   *          The size of the shift
    * @return This builder
    * @deprecated Use {@link #parallelShift(ScenarioShiftType, Number)}
    */
@@ -66,32 +71,35 @@ public class YieldCurveDataManipulatorBuilder {
   }
 
   /**
-   * Creates a bucketed shift builder with the given type
-   * @param shiftType the type of the shift
-   * @param shifts The shifts to apply to the curve data
+   * Creates a bucketed shift builder with the given type.
+   *
+   * @param shiftType
+   *          the type of the shift
+   * @param shifts
+   *          The shifts to apply to the curve data
    * @return the bucketed shift builder
    */
   public final YieldCurveDataManipulatorBuilder bucketedShifts(final ScenarioShiftType shiftType, final YieldCurveBucketedShift... shifts) {
     ArgumentChecker.notNull(shiftType, "shiftType");
     ArgumentChecker.notEmpty(shifts, "shifts");
-    final YieldCurveDataBucketedShiftManipulator manipulator =
-        new YieldCurveDataBucketedShiftManipulator(shiftType, Arrays.asList(shifts));
+    final YieldCurveDataBucketedShiftManipulator manipulator = new YieldCurveDataBucketedShiftManipulator(shiftType, Arrays.asList(shifts));
     _scenario.add(_selector, manipulator);
     return this;
   }
 
-
   /**
-   * Creates a point shift builder
-   * @param shiftType the type of the shift
-   * @param shifts The shifts to apply to the curve data
+   * Creates a point shift builder.
+   *
+   * @param shiftType
+   *          the type of the shift
+   * @param shifts
+   *          The shifts to apply to the curve data
    * @return the point shifts builder
    */
   public final YieldCurveDataManipulatorBuilder pointShifts(final ScenarioShiftType shiftType, final YieldCurveDataPointShift... shifts) {
     ArgumentChecker.notNull(shiftType, "shiftType");
     ArgumentChecker.notEmpty(shifts, "shifts");
-    final YieldCurveDataPointShiftsManipulator manipulator =
-        new YieldCurveDataPointShiftsManipulator(shiftType, Arrays.asList(shifts));
+    final YieldCurveDataPointShiftsManipulator manipulator = new YieldCurveDataPointShiftsManipulator(shiftType, Arrays.asList(shifts));
     _scenario.add(_selector, manipulator);
     return this;
   }

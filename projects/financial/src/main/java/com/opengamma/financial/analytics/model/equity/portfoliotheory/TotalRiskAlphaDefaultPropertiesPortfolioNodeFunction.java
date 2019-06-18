@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.equity.portfoliotheory;
@@ -8,13 +8,15 @@ package com.opengamma.financial.analytics.model.equity.portfoliotheory;
 import com.opengamma.engine.target.ComputationTargetType;
 
 /**
- * 
+ *
  */
 public class TotalRiskAlphaDefaultPropertiesPortfolioNodeFunction extends TotalRiskAlphaDefaultPropertiesFunction {
 
-  public TotalRiskAlphaDefaultPropertiesPortfolioNodeFunction(final String samplingPeriodName, final String scheduleCalculatorName, final String samplingFunctionName, 
+  public TotalRiskAlphaDefaultPropertiesPortfolioNodeFunction(final String samplingPeriodName, final String scheduleCalculatorName,
+      final String samplingFunctionName,
       final String returnCalculatorName, final String stdDevCalculatorName, final String expectedReturnCalculatorName) {
-    super(samplingPeriodName, scheduleCalculatorName, samplingFunctionName, returnCalculatorName, stdDevCalculatorName, expectedReturnCalculatorName, ComputationTargetType.PORTFOLIO_NODE);
+    super(samplingPeriodName, scheduleCalculatorName, samplingFunctionName, returnCalculatorName, stdDevCalculatorName, expectedReturnCalculatorName,
+        ComputationTargetType.PORTFOLIO_NODE);
   }
 
 }

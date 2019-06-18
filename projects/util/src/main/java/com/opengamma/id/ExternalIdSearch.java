@@ -232,12 +232,13 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
   /**
    * Checks if this search matches the identifier.
    * <p>
-   * An EXACT match returns true if there is one stored identifier and it is equal to the passed in identifier.<br />
-   * An ALL match returns true if this is empty or has a single identifier equal to the input.<br />
-   * An ANY match returns true if the passed in identifier matches any of the stored identifiers.<br />
-   * A NONE match returns true if the passed in identifier does not match any stored identifier.<br />
+   * An EXACT match returns true if there is one stored identifier and it is equal to the passed in identifier.<br >
+   * An ALL match returns true if this is empty or has a single identifier equal to the input.<br >
+   * An ANY match returns true if the passed in identifier matches any of the stored identifiers.<br >
+   * A NONE match returns true if the passed in identifier does not match any stored identifier.<br >
    *
-   * @param otherId  the identifier to search for, not null
+   * @param otherId
+   *          the identifier to search for, not null
    * @return true if this search contains all of the keys specified
    */
   public boolean matches(final ExternalId otherId) {
@@ -259,12 +260,13 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
   /**
    * Checks if this search matches the identifiers.
    * <p>
-   * An EXACT match returns true if the passed in identifiers are the same set as the stored identifiers.<br />
-   * An ALL match returns true if the passed in identifiers match are a superset or equal the stored identifiers.<br />
-   * An ANY match returns true if the passed in identifiers match any of the stored identifiers.<br />
-   * A NONE match returns true if none of the passed in identifiers match a stored identifier.<br />
+   * An EXACT match returns true if the passed in identifiers are the same set as the stored identifiers.<br >
+   * An ALL match returns true if the passed in identifiers match are a superset or equal the stored identifiers.<br >
+   * An ANY match returns true if the passed in identifiers match any of the stored identifiers.<br >
+   * A NONE match returns true if none of the passed in identifiers match a stored identifier.<br >
    *
-   * @param otherId  the identifiers to search for, empty returns true, not null
+   * @param otherId
+   *          the identifiers to search for, empty returns true, not null
    * @return true if this search contains all of the keys specified
    */
   public boolean matches(final Iterable<ExternalId> otherId) {

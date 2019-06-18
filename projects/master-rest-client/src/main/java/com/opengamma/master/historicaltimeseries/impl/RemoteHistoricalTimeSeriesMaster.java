@@ -40,7 +40,8 @@ public class RemoteHistoricalTimeSeriesMaster
   /**
    * Creates an instance.
    *
-   * @param baseUri  the base target URI for all RESTful web services, not null
+   * @param baseUri
+   *          the base target URI for all RESTful web services, not null
    */
   public RemoteHistoricalTimeSeriesMaster(final URI baseUri) {
     super(baseUri);
@@ -49,14 +50,16 @@ public class RemoteHistoricalTimeSeriesMaster
   /**
    * Creates an instance.
    *
-   * @param baseUri  the base target URI for all RESTful web services, not null
-   * @param changeManager  the change manager, not null
+   * @param baseUri
+   *          the base target URI for all RESTful web services, not null
+   * @param changeManager
+   *          the change manager, not null
    */
   public RemoteHistoricalTimeSeriesMaster(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri, changeManager);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoMetaDataResult metaData(final HistoricalTimeSeriesInfoMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
@@ -65,7 +68,7 @@ public class RemoteHistoricalTimeSeriesMaster
     return accessRemote(uri).get(HistoricalTimeSeriesInfoMetaDataResult.class);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoSearchResult search(final HistoricalTimeSeriesInfoSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
@@ -74,7 +77,7 @@ public class RemoteHistoricalTimeSeriesMaster
     return accessRemote(uri).post(HistoricalTimeSeriesInfoSearchResult.class, request);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoDocument get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
@@ -82,12 +85,11 @@ public class RemoteHistoricalTimeSeriesMaster
     if (uniqueId.isVersioned()) {
       final URI uri = new DataHistoricalTimeSeriesUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(HistoricalTimeSeriesInfoDocument.class);
-    } else {
-      return get(uniqueId, VersionCorrection.LATEST);
     }
+    return get(uniqueId, VersionCorrection.LATEST);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
@@ -96,7 +98,7 @@ public class RemoteHistoricalTimeSeriesMaster
     return accessRemote(uri).get(HistoricalTimeSeriesInfoDocument.class);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoDocument add(final HistoricalTimeSeriesInfoDocument document) {
     ArgumentChecker.notNull(document, "document");
@@ -106,7 +108,7 @@ public class RemoteHistoricalTimeSeriesMaster
     return accessRemote(uri).post(HistoricalTimeSeriesInfoDocument.class, document);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoDocument update(final HistoricalTimeSeriesInfoDocument document) {
     ArgumentChecker.notNull(document, "document");
@@ -117,7 +119,7 @@ public class RemoteHistoricalTimeSeriesMaster
     return accessRemote(uri).post(HistoricalTimeSeriesInfoDocument.class, document);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
@@ -126,7 +128,7 @@ public class RemoteHistoricalTimeSeriesMaster
     accessRemote(uri).delete();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoHistoryResult history(final HistoricalTimeSeriesInfoHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
@@ -136,7 +138,7 @@ public class RemoteHistoricalTimeSeriesMaster
     return accessRemote(uri).get(HistoricalTimeSeriesInfoHistoryResult.class);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoDocument correct(final HistoricalTimeSeriesInfoDocument document) {
     ArgumentChecker.notNull(document, "document");
@@ -147,7 +149,7 @@ public class RemoteHistoricalTimeSeriesMaster
     return accessRemote(uri).post(HistoricalTimeSeriesInfoDocument.class, document);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public ManageableHistoricalTimeSeries getTimeSeries(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
@@ -155,9 +157,8 @@ public class RemoteHistoricalTimeSeriesMaster
     if (uniqueId.isVersioned()) {
       final URI uri = DataHistoricalDataPointsUris.uriVersion(getBaseUri(), uniqueId, null);
       return accessRemote(uri).get(ManageableHistoricalTimeSeries.class);
-    } else {
-      return getTimeSeries(uniqueId, VersionCorrection.LATEST);
     }
+    return getTimeSeries(uniqueId, VersionCorrection.LATEST);
   }
 
   @Override
@@ -167,9 +168,8 @@ public class RemoteHistoricalTimeSeriesMaster
     if (uniqueId.isVersioned()) {
       final URI uri = DataHistoricalDataPointsUris.uriVersion(getBaseUri(), uniqueId, filter);
       return accessRemote(uri).get(ManageableHistoricalTimeSeries.class);
-    } else {
-      return getTimeSeries(uniqueId, VersionCorrection.LATEST);
     }
+    return getTimeSeries(uniqueId, VersionCorrection.LATEST);
   }
 
   @Override
@@ -181,7 +181,8 @@ public class RemoteHistoricalTimeSeriesMaster
   }
 
   @Override
-  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection, final HistoricalTimeSeriesGetFilter filter) {
+  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection,
+      final HistoricalTimeSeriesGetFilter filter) {
     ArgumentChecker.notNull(objectId, "objectId");
 
     final URI uri = DataHistoricalDataPointsUris.uri(getBaseUri(), objectId, versionCorrection, filter);

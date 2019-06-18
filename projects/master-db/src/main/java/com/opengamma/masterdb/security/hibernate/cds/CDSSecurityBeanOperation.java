@@ -19,13 +19,13 @@ import com.opengamma.masterdb.security.hibernate.HibernateSecurityMasterDao;
 import com.opengamma.masterdb.security.hibernate.OperationContext;
 
 /**
- * Operation for converting between {@link CDSSecurity} and {@link CDSSecurityBean}
+ * Operation for converting between {@link CDSSecurity} and {@link CDSSecurityBean}.
  *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  */
 public final class CDSSecurityBeanOperation extends AbstractSecurityBeanOperation<CDSSecurity, CDSSecurityBean> {
 
-  /** Singleton instance */
+  /** Singleton instance. */
   public static final CDSSecurityBeanOperation INSTANCE = new CDSSecurityBeanOperation();
 
   private CDSSecurityBeanOperation() {
@@ -56,20 +56,20 @@ public final class CDSSecurityBeanOperation extends AbstractSecurityBeanOperatio
   @Override
   public CDSSecurity createSecurity(final OperationContext context, final CDSSecurityBean bean) {
     return new CDSSecurity(
-      bean.getNotional(),
-      bean.getRecoveryRate(),
-      bean.getSpread(),
-      currencyBeanToCurrency(bean.getCurrency()),
-      zonedDateTimeBeanToDateTimeWithZone(bean.getMaturity()),
-      zonedDateTimeBeanToDateTimeWithZone(bean.getStartDate()),
-      frequencyBeanToFrequency(bean.getPremiumFrequency()),
-      dayCountBeanToDayCount(bean.getDayCount()),
-      businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()),
-      stubTypeBeanToStubType(bean.getStubType()),
-      bean.getSettlementDays(),
-      bean.getUnderlyingIssuer(),
-      currencyBeanToCurrency(bean.getUnderlyingCurrency()),
-      bean.getUnderlyingSeniority(),
-      bean.getRestructuringClause());
+        bean.getNotional(),
+        bean.getRecoveryRate(),
+        bean.getSpread(),
+        currencyBeanToCurrency(bean.getCurrency()),
+        zonedDateTimeBeanToDateTimeWithZone(bean.getMaturity()),
+        zonedDateTimeBeanToDateTimeWithZone(bean.getStartDate()),
+        frequencyBeanToFrequency(bean.getPremiumFrequency()),
+        dayCountBeanToDayCount(bean.getDayCount()),
+        businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()),
+        stubTypeBeanToStubType(bean.getStubType()),
+        bean.getSettlementDays(),
+        bean.getUnderlyingIssuer(),
+        currencyBeanToCurrency(bean.getUnderlyingCurrency()),
+        bean.getUnderlyingSeniority(),
+        bean.getRestructuringClause());
   }
 }

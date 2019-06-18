@@ -24,19 +24,20 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
-/** Calculates the implied volatility of an equity index or equity option using the {@link BaroneAdesiWhaleyModel} */
+/** Calculates the implied volatility of an equity index or equity option using the {@link BaroneAdesiWhaleyModel}. */
 public class EquityOptionBAWImpliedVolatilityFunction extends EquityOptionBAWFunction {
 
   /** The Barone-Adesi Whaley present value calculator */
   private static final EqyOptBaroneAdesiWhaleyPresentValueCalculator PV_CALCULATOR = EqyOptBaroneAdesiWhaleyPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public EquityOptionBAWImpliedVolatilityFunction() {
     super(ValueRequirementNames.IMPLIED_VOLATILITY);
   }
 
   @Override
-  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs, final Set<ValueRequirement> desiredValues,
+  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
+      final Set<ValueRequirement> desiredValues,
       final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
 
     final double optionPrice;

@@ -39,13 +39,15 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   public WebExchangeResource(final AbstractWebExchangeResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
@@ -66,32 +68,32 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
     return Response.ok(json).tag(etag).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response putHTML(
-      @FormParam("name") String name,
-      @FormParam("idscheme") String idScheme,
-      @FormParam("idvalue") String idValue,
+      @FormParam("name") final String name,
+      @FormParam("idscheme") final String idScheme,
+      @FormParam("idvalue") final String idValue,
       @FormParam("regionscheme") final String regionScheme,
       @FormParam("regionvalue") final String regionValue) {
-    if (data().getExchange().isLatest() == false) {
+    if (!data().getExchange().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
-    name = StringUtils.trimToNull(name);
-    idScheme = StringUtils.trimToNull(idScheme);
-    idValue = StringUtils.trimToNull(idValue);
-    if (name == null || idScheme == null || idValue == null) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedIdScheme = StringUtils.trimToNull(idScheme);
+    final String trimmedIdValue = StringUtils.trimToNull(idValue);
+    if (trimmedName == null || trimmedIdScheme == null || trimmedIdValue == null) {
       final FlexiBean out = createRootData();
-      if (name == null) {
+      if (trimmedName == null) {
         out.put("err_nameMissing", true);
       }
-      if (idScheme == null) {
+      if (trimmedIdScheme == null) {
         out.put("err_idschemeMissing", true);
       }
-      if (idValue == null) {
+      if (trimmedIdValue == null) {
         out.put("err_idvalueMissing", true);
       }
       if (regionScheme == null) {
@@ -103,7 +105,7 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
       final String html = getFreemarker().build(HTML_DIR + "exchange-update.ftl", out);
       return Response.ok(html).build();
     }
-    final URI uri = updateExchange(name, idScheme, idValue, regionScheme, regionValue);
+    final URI uri = updateExchange(trimmedName, trimmedIdScheme, trimmedIdValue, regionScheme, regionValue);
     return Response.seeOther(uri).build();
   }
 
@@ -111,22 +113,22 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
   public Response putJSON(
-      @FormParam("name") String name,
-      @FormParam("idscheme") String idScheme,
-      @FormParam("idvalue") String idValue,
+      @FormParam("name") final String name,
+      @FormParam("idscheme") final String idScheme,
+      @FormParam("idvalue") final String idValue,
       @FormParam("regionscheme") final String regionScheme,
       @FormParam("regionvalue") final String regionValue) {
-    if (data().getExchange().isLatest() == false) {
+    if (!data().getExchange().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
-    name = StringUtils.trimToNull(name);
-    idScheme = StringUtils.trimToNull(idScheme);
-    idValue = StringUtils.trimToNull(idValue);
-    if (name == null || idScheme == null || idValue == null) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedIdScheme = StringUtils.trimToNull(idScheme);
+    final String trimmedIdValue = StringUtils.trimToNull(idValue);
+    if (trimmedName == null || trimmedIdScheme == null || trimmedIdValue == null) {
       return Response.status(Status.BAD_REQUEST).build();
     }
-    updateExchange(name, idScheme, idValue, regionScheme, regionValue);
+    updateExchange(trimmedName, trimmedIdScheme, trimmedIdValue, regionScheme, regionValue);
     return Response.ok().build();
   }
 
@@ -142,12 +144,12 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
     return uri;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
     final ExchangeDocument doc = data().getExchange();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     data().getExchangeMaster().remove(doc.getUniqueId());
@@ -165,9 +167,10 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
     return Response.ok().build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   *
    * @return the output root data, not null
    */
   @Override
@@ -180,16 +183,18 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("versions")
   public WebExchangeVersionsResource findVersions() {
     return new WebExchangeVersionsResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   *
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebExchangeData data) {
@@ -198,8 +203,11 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideExchangeId  the override exchange id, null uses information from data
+   *
+   * @param data
+   *          the data, not null
+   * @param overrideExchangeId
+   *          the override exchange id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebExchangeData data, final UniqueId overrideExchangeId) {

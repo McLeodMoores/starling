@@ -15,9 +15,13 @@ import com.opengamma.util.ArgumentChecker;
 public class CalendarBusinessDateUtils {
 
   /**
-   * Returns the next good business day in the calendar after a starting point. If the starting date itself is a good business day, the starting date is returned.
-   * @param startingDate The stating date for the search.
-   * @param calendar The calendar.
+   * Returns the next good business day in the calendar after a starting point. If the starting date itself is a good business day, the starting date is
+   * returned.
+   *
+   * @param startingDate
+   *          The stating date for the search.
+   * @param calendar
+   *          The calendar.
    * @return The next good business date.
    */
   public static LocalDate nextGoodBusinessDate(final LocalDate startingDate, final Calendar calendar) {
@@ -29,10 +33,13 @@ public class CalendarBusinessDateUtils {
   }
 
   /**
-   * Returns the next non-good business day in the calendar after a starting point. 
-   * If the starting date itself is a non-good business day, the starting date is returned.
-   * @param startingDate The stating date for the search.
-   * @param calendar The calendar.
+   * Returns the next non-good business day in the calendar after a starting point. If the starting date itself is a non-good business day, the starting date is
+   * returned.
+   *
+   * @param startingDate
+   *          The stating date for the search.
+   * @param calendar
+   *          The calendar.
    * @return The next non-good business date.
    */
   public static LocalDate nextNonGoodBusinessDate(final LocalDate startingDate, final Calendar calendar) {
@@ -45,10 +52,14 @@ public class CalendarBusinessDateUtils {
 
   /**
    * Compute the nth good business date for a given calendar.
-   * @param startingDate The starting date. The date itself is included in the roll period, 
-   * i.e. if the starting date is in the good business date, the first date is the starting date.
-   * @param calendar The calendar.
-   * @param numberDate The number of times the date should be rolled.
+   *
+   * @param startingDate
+   *          The starting date. The date itself is included in the roll period, i.e. if the starting date is in the good business date, the first date is the
+   *          starting date.
+   * @param calendar
+   *          The calendar.
+   * @param numberDate
+   *          The number of times the date should be rolled.
    * @return The n-th good business date.
    */
   public static LocalDate nthGoodBusinessDate(final LocalDate startingDate, final Calendar calendar, final int numberDate) {
@@ -62,10 +73,14 @@ public class CalendarBusinessDateUtils {
 
   /**
    * Compute the nth non-good business date for a given calendar.
-   * @param startingDate The starting date. The date itself is included in the roll period, 
-   * i.e. if the starting date is in the non-good business date, the first date is the starting date.
-   * @param calendar The calendar.
-   * @param numberDate The number of times the date should be rolled.
+   *
+   * @param startingDate
+   *          The starting date. The date itself is included in the roll period, i.e. if the starting date is in the non-good business date, the first date is
+   *          the starting date.
+   * @param calendar
+   *          The calendar.
+   * @param numberDate
+   *          The number of times the date should be rolled.
    * @return The n-th non-good business date.
    */
   public static LocalDate nthNonGoodBusinessDate(final LocalDate startingDate, final Calendar calendar, final int numberDate) {

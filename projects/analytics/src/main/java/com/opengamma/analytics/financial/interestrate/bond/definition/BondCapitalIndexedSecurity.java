@@ -16,7 +16,9 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Describes a capital inflation indexed bond issue. Both the coupon and the nominal are indexed on a price index.
- * @param <C> Type of inflation coupon.
+ *
+ * @param <C>
+ *          Type of inflation coupon.
  */
 public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C, C> {
 
@@ -41,8 +43,8 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
    */
   private final double _ratioPeriodToNextCoupon;
   /**
-   * The description of the bond settlement. It is used only for the dates and inflation calculation.
-   * The notional is 0 if the settlement is in the past and 1 if not.
+   * The description of the bond settlement. It is used only for the dates and inflation calculation. The notional is 0 if the settlement is in the past and 1
+   * if not.
    */
   private final CouponInflation _settlement;
   /**
@@ -64,48 +66,83 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Constructor of the Capital inflation indexed bond.
-   * @param nominal The nominal annuity.
-   * @param coupon The coupon annuity.
-   * @param settlementTime The time (in years) to settlement date.
-   * @param accruedInterest The real accrued interest at the settlement date.
-   * @param factorToNextCoupon The real accrual factor to the first coupon.
-   * @param ratioPeriodToNextCoupon TODO
-   * @param yieldConvention The bond yield convention.
-   * @param couponPerYear Number of coupon per year.
-   * @param settlement The description of the bond settlement.
-   * @param indexStartValue The index value at the start of the bond.
-   * @param lastIndexKnownFixing The last index known fixing.
-   * @param lastKnownFixingTime The last known fixing.
-   * @param indexRatio The last known fixing.
-   * @param issuer The bond issuer name.
+   *
+   * @param nominal
+   *          The nominal annuity.
+   * @param coupon
+   *          The coupon annuity.
+   * @param settlementTime
+   *          The time (in years) to settlement date.
+   * @param accruedInterest
+   *          The real accrued interest at the settlement date.
+   * @param factorToNextCoupon
+   *          The real accrual factor to the first coupon.
+   * @param ratioPeriodToNextCoupon
+   *          TODO
+   * @param yieldConvention
+   *          The bond yield convention.
+   * @param couponPerYear
+   *          Number of coupon per year.
+   * @param settlement
+   *          The description of the bond settlement.
+   * @param indexStartValue
+   *          The index value at the start of the bond.
+   * @param lastIndexKnownFixing
+   *          The last index known fixing.
+   * @param lastKnownFixingTime
+   *          The last known fixing.
+   * @param indexRatio
+   *          The last known fixing.
+   * @param issuer
+   *          The bond issuer name.
    */
-  public BondCapitalIndexedSecurity(final Annuity<C> nominal, final Annuity<C> coupon, final double settlementTime, final double accruedInterest, final double factorToNextCoupon,
-      final double ratioPeriodToNextCoupon, final YieldConvention yieldConvention, final int couponPerYear, final CouponInflation settlement, final double indexStartValue,
+  public BondCapitalIndexedSecurity(final Annuity<C> nominal, final Annuity<C> coupon, final double settlementTime, final double accruedInterest,
+      final double factorToNextCoupon,
+      final double ratioPeriodToNextCoupon, final YieldConvention yieldConvention, final int couponPerYear, final CouponInflation settlement,
+      final double indexStartValue,
       final double lastIndexKnownFixing, final double lastKnownFixingTime, final double indexRatio, final String issuer) {
-    this(nominal, coupon, settlementTime, accruedInterest, factorToNextCoupon, ratioPeriodToNextCoupon, yieldConvention, couponPerYear, settlement, indexStartValue, lastIndexKnownFixing,
+    this(nominal, coupon, settlementTime, accruedInterest, factorToNextCoupon, ratioPeriodToNextCoupon, yieldConvention, couponPerYear, settlement,
+        indexStartValue, lastIndexKnownFixing,
         lastKnownFixingTime, indexRatio, new LegalEntity(
             null, issuer, null, null, null));
   }
 
   /**
    * Constructor of the Capital inflation indexed bond.
-   * @param nominal The nominal annuity.
-   * @param coupon The coupon annuity.
-   * @param settlementTime The time (in years) to settlement date.
-   * @param accruedInterest The real accrued interest at the settlement date.
-   * @param factorToNextCoupon The real accrual factor to the first coupon.
-   * @param ratioPeriodToNextCoupon TODO
-   * @param yieldConvention The bond yield convention.
-   * @param couponPerYear Number of coupon per year.
-   * @param settlement The description of the bond settlement.
-   * @param indexStartValue The index value at the start of the bond.
-   * @param lastIndexKnownFixing The last index known fixing.
-   * @param lastKnownFixingTime The last known fixing.
-   * @param indexRatio The index Ratio.
-   * @param issuer The bond issuer name.
+   *
+   * @param nominal
+   *          The nominal annuity.
+   * @param coupon
+   *          The coupon annuity.
+   * @param settlementTime
+   *          The time (in years) to settlement date.
+   * @param accruedInterest
+   *          The real accrued interest at the settlement date.
+   * @param factorToNextCoupon
+   *          The real accrual factor to the first coupon.
+   * @param ratioPeriodToNextCoupon
+   *          TODO
+   * @param yieldConvention
+   *          The bond yield convention.
+   * @param couponPerYear
+   *          Number of coupon per year.
+   * @param settlement
+   *          The description of the bond settlement.
+   * @param indexStartValue
+   *          The index value at the start of the bond.
+   * @param lastIndexKnownFixing
+   *          The last index known fixing.
+   * @param lastKnownFixingTime
+   *          The last known fixing.
+   * @param indexRatio
+   *          The index Ratio.
+   * @param issuer
+   *          The bond issuer name.
    */
-  public BondCapitalIndexedSecurity(final Annuity<C> nominal, final Annuity<C> coupon, final double settlementTime, final double accruedInterest, final double factorToNextCoupon,
-      final double ratioPeriodToNextCoupon, final YieldConvention yieldConvention, final int couponPerYear, final CouponInflation settlement, final double indexStartValue,
+  public BondCapitalIndexedSecurity(final Annuity<C> nominal, final Annuity<C> coupon, final double settlementTime, final double accruedInterest,
+      final double factorToNextCoupon,
+      final double ratioPeriodToNextCoupon, final YieldConvention yieldConvention, final int couponPerYear, final CouponInflation settlement,
+      final double indexStartValue,
       final double lastIndexKnownFixing, final double lastKnownFixingTime, final double indexRatio, final LegalEntity issuer) {
     super(nominal, coupon, settlementTime, issuer);
     ArgumentChecker.notNull(yieldConvention, "Yield convention");
@@ -124,6 +161,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the bond yield convention.
+   *
    * @return The yield convention.
    */
   public YieldConvention getYieldConvention() {
@@ -132,6 +170,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the real accrued interest at the settlement date.
+   *
    * @return The accrued interest.
    */
   public double getAccruedInterest() {
@@ -140,6 +179,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the number of coupon per year.
+   *
    * @return The number of coupon per year.
    */
   public int getCouponPerYear() {
@@ -148,6 +188,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the real accrual factor to the first coupon.
+   *
    * @return The accrual factor to the first coupon.
    */
   public double getAccrualFactorToNextCoupon() {
@@ -156,6 +197,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the real accrual factor to the first coupon.
+   *
    * @return The accrual factor to the first coupon.
    */
   public double getRatioPeriodToNextCoupon() {
@@ -164,6 +206,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the price index associated to the bond.
+   *
    * @return The price index.
    */
   public IndexPrice getPriceIndex() {
@@ -172,6 +215,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the index value at the start of the bond.
+   *
    * @return The index value.
    */
   public double getIndexStartValue() {
@@ -179,7 +223,8 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
   }
 
   /**
-   * Gets the index value xxx
+   * Gets the index value xxx.
+   *
    * @return The index value.
    */
   public double getLastIndexKnownFixing() {
@@ -187,7 +232,8 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
   }
 
   /**
-   * Gets the index value xxx
+   * Gets the index value xxx.
+   *
    * @return The index value.
    */
   public double getLastButOneIndexKnownFixing() {
@@ -195,7 +241,8 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
   }
 
   /**
-   * Gets the index value at xxx
+   * Gets the index value at xxx.
+   *
    * @return The index value.
    */
   public double getLastKnownFixingTime() {
@@ -203,7 +250,8 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
   }
 
   /**
-   * Gets the index value xxx
+   * Gets the index value xxx.
+   *
    * @return The index value.
    */
   public double getIndexRatio() {
@@ -212,6 +260,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the index value at the start of the bond.
+   *
    * @return The index value.
    */
   public CouponInflation getSettlement() {
@@ -253,7 +302,9 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
     return result;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   *
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override

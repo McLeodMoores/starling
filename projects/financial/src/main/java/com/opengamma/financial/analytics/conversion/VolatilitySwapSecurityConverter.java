@@ -8,7 +8,6 @@ package com.opengamma.financial.analytics.conversion;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.volatilityswap.FXVolatilitySwapDefinition;
-import com.opengamma.analytics.financial.instrument.volatilityswap.VolatilitySwapDefinition;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.financial.convention.HolidaySourceCalendarAdapter;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -17,21 +16,20 @@ import com.opengamma.financial.convention.frequency.PeriodFrequency;
 import com.opengamma.financial.convention.frequency.SimpleFrequency;
 import com.opengamma.financial.security.FinancialSecurityVisitorAdapter;
 import com.opengamma.financial.security.fx.FXVolatilitySwapSecurity;
-import com.opengamma.financial.security.swap.VolatilitySwapSecurity;
 import com.opengamma.financial.security.swap.VolatilitySwapType;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Converts {@link VolatilitySwapSecurity} classes to {@link VolatilitySwapDefinition}, which is required
- * for use in the analytics library.
+ * Converts {@link FXVolatilitySwapSecurity} classes to {@link FXVolatilitySwapDefinition}, which is required for use in the analytics library.
  */
 public class VolatilitySwapSecurityConverter extends FinancialSecurityVisitorAdapter<InstrumentDefinition<?>> {
   /** The holiday source */
   private final HolidaySource _holidaySource;
 
   /**
-   * @param holidaySource The holiday source, not null
+   * @param holidaySource
+   *          The holiday source, not null
    */
   public VolatilitySwapSecurityConverter(final HolidaySource holidaySource) {
     ArgumentChecker.notNull(holidaySource, "holidaySource");
@@ -64,7 +62,9 @@ public class VolatilitySwapSecurityConverter extends FinancialSecurityVisitorAda
       default:
         throw new UnsupportedOperationException("Cannot handle VolatilitySwapType " + volatilitySwapType);
     }
-    return new FXVolatilitySwapDefinition(currency, security.getBaseCurrency(), security.getCounterCurrency(), volStrike, volNotional, security.getFirstObservationDate(),
-        security.getLastObservationDate(), security.getSettlementDate(), security.getMaturityDate(), periodFrequency, security.getAnnualizationFactor(), calendar);
+    return new FXVolatilitySwapDefinition(currency, security.getBaseCurrency(), security.getCounterCurrency(), volStrike, volNotional,
+        security.getFirstObservationDate(),
+        security.getLastObservationDate(), security.getSettlementDate(), security.getMaturityDate(), periodFrequency, security.getAnnualizationFactor(),
+        calendar);
   }
 }

@@ -217,7 +217,7 @@ public class FraNodeConverterTest {
     marketValues.setDataPoint(marketDataId, rate);
     final ZonedDateTime expectedFixingStart = DateUtils.getUTCDate(2015, 7, 7);
     final ZonedDateTime expectedFixingEnd = DateUtils.getUTCDate(2015, 10, 7);
-    final Calendar fixingCalendar = new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
+    final Calendar fixingCalendar = CalendarAdapter.of(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
     final com.opengamma.analytics.financial.instrument.index.IborIndex expectedIndex =
         new com.opengamma.analytics.financial.instrument.index.IborIndex(Currency.USD, Period.ofMonths(3), 2, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, false, USD_LIBOR_INDEX_CONVENTION.getName());
     final ForwardRateAgreementDefinition expectedDefinition = ForwardRateAgreementDefinition.from(expectedFixingStart, expectedFixingEnd, 1, expectedIndex, rate, fixingCalendar);
@@ -240,7 +240,7 @@ public class FraNodeConverterTest {
     final ZonedDateTime valuationDate = DateUtils.getUTCDate(2015, 1, 5);
     final ZonedDateTime expectedFixingStart = DateUtils.getUTCDate(2015, 7, 7);
     final ZonedDateTime expectedFixingEnd = DateUtils.getUTCDate(2015, 10, 7);
-    final Calendar fixingCalendar = new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
+    final Calendar fixingCalendar = CalendarAdapter.of(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
     final com.opengamma.analytics.financial.instrument.index.IborIndex expectedIndex =
         new com.opengamma.analytics.financial.instrument.index.IborIndex(Currency.USD, Period.ofMonths(3), 2, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, false, USD_LIBOR_INDEX_CONVENTION.getName());
     final ForwardRateAgreementDefinition expectedDefinition = ForwardRateAgreementDefinition.from(expectedFixingStart, expectedFixingEnd, 1, expectedIndex, rate, fixingCalendar);
@@ -262,7 +262,7 @@ public class FraNodeConverterTest {
     marketValues.setDataPoint(marketDataId, rate);
     final ZonedDateTime expectedFixingStart = DateUtils.getUTCDate(2015, 7, 7);
     final ZonedDateTime expectedFixingEnd = DateUtils.getUTCDate(2016, 1, 7);
-    final Calendar fixingCalendar = new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
+    final Calendar fixingCalendar = CalendarAdapter.of(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter = new FRANodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE,
         marketValues, marketDataId, NOW);
     // underlying index has a three month tenor

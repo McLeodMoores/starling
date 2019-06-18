@@ -3,6 +3,7 @@
  */
 package com.mcleodmoores.analytics.math.statistics.descriptive;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.Set;
 
@@ -52,7 +53,17 @@ public class LognormalStatisticsCalculatorFactory extends AbstractNamedInstanceF
     final AnnotationReflector reflector = new AnnotationReflector(config);
     final Set<Class<?>> classes = reflector.getReflector().getTypesAnnotatedWith(LognormalStatistic.class);
     for (final Class<?> clazz : classes) {
-      final LognormalStatistic annotation = clazz.getDeclaredAnnotation(LognormalStatistic.class);
+      final Annotation[] annotations = clazz.getDeclaredAnnotations();
+      LognormalStatistic annotation = null;
+      for (final Annotation a : annotations) {
+        if (a.annotationType().equals(LognormalStatistic.class)) {
+          annotation = (LognormalStatistic) a;
+        }
+      }
+      if (annotation == null) {
+        LOGGER.error("Could not LognormalStatistic annotation for {}", clazz.getSimpleName());
+        continue;
+      }
       final String[] aliases = annotation.aliases();
       LognormalStatisticsCalculator instance = null;
       final Constructor<?>[] constructors = clazz.getDeclaredConstructors();

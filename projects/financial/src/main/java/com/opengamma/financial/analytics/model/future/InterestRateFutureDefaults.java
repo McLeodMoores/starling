@@ -35,10 +35,10 @@ import com.opengamma.util.ArgumentChecker;
 public class InterestRateFutureDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureDefaults.class);
   private static final String[] VALUE_NAMES = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.PV01,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-    ValueRequirementNames.VALUE_THETA
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.PV01,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.VALUE_THETA
   };
   private final Map<String, String> _currencyAndCurveConfigNames;
 
@@ -70,7 +70,8 @@ public class InterestRateFutureDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.CURVE_CALCULATION_CONFIG.equals(propertyName)) {
       final String currencyName = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode();
       final String configName = _currencyAndCurveConfigNames.get(currencyName);

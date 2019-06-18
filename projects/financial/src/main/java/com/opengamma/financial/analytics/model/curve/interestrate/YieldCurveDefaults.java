@@ -27,11 +27,11 @@ import com.opengamma.util.ArgumentChecker;
 public class YieldCurveDefaults extends DefaultPropertyFunction {
   /** The value requirement names to which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.YIELD_CURVE,
-    ValueRequirementNames.YIELD_CURVE_JACOBIAN,
-    ValueRequirementNames.FX_IMPLIED_TRANSITION_MATRIX,
-    ValueRequirementNames.YIELD_CURVE_SERIES,
-    ValueRequirementNames.YIELD_CURVE_HISTORICAL_TIME_SERIES};
+                ValueRequirementNames.YIELD_CURVE,
+                ValueRequirementNames.YIELD_CURVE_JACOBIAN,
+                ValueRequirementNames.FX_IMPLIED_TRANSITION_MATRIX,
+                ValueRequirementNames.YIELD_CURVE_SERIES,
+                ValueRequirementNames.YIELD_CURVE_HISTORICAL_TIME_SERIES };
   /** The absolute tolerance */
   private final Set<String> _absoluteTolerance;
   /** The relative tolerance */
@@ -45,17 +45,25 @@ public class YieldCurveDefaults extends DefaultPropertyFunction {
   /** The currencies for which these defaults apply */
   private final Set<String> _applicableCurrencies;
   /** The curve calculation method */
-  private final Set<String> _curveCalculationMethod = ImmutableSet.of(MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING, MultiYieldCurvePropertiesAndDefaults.PRESENT_VALUE_STRING);
+  private final Set<String> _curveCalculationMethod = ImmutableSet.of(MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING,
+      MultiYieldCurvePropertiesAndDefaults.PRESENT_VALUE_STRING);
 
   /**
-   * @param absoluteTolerance The absolute tolerance used in root-finding
-   * @param relativeTolerance The relative tolerance use in root-finding
-   * @param maxIterations The maximum number of iterations used in root-finding
-   * @param decomposition The matrix decomposition method used in root-finding
-   * @param useFiniteDifference True if calculations should use finite difference in root-finding, otherwise analytic derivatives are used
-   * @param applicableCurrencies The currencies for which these defaults apply
+   * @param absoluteTolerance
+   *          The absolute tolerance used in root-finding
+   * @param relativeTolerance
+   *          The relative tolerance use in root-finding
+   * @param maxIterations
+   *          The maximum number of iterations used in root-finding
+   * @param decomposition
+   *          The matrix decomposition method used in root-finding
+   * @param useFiniteDifference
+   *          True if calculations should use finite difference in root-finding, otherwise analytic derivatives are used
+   * @param applicableCurrencies
+   *          The currencies for which these defaults apply
    */
-  public YieldCurveDefaults(final String absoluteTolerance, final String relativeTolerance, final String maxIterations, final String decomposition, final String useFiniteDifference,
+  public YieldCurveDefaults(final String absoluteTolerance, final String relativeTolerance, final String maxIterations, final String decomposition,
+      final String useFiniteDifference,
       final String... applicableCurrencies) {
     super(ComputationTargetType.CURRENCY, true);
     ArgumentChecker.notNull(absoluteTolerance, "absolute tolerance");
@@ -87,7 +95,8 @@ public class YieldCurveDefaults extends DefaultPropertyFunction {
     if (curveCalculationMethod == null) {
       return super.getRequirements(context, target, desiredValue);
     }
-    if (!(curveCalculationMethod.equals(MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING) || curveCalculationMethod.equals(MultiYieldCurvePropertiesAndDefaults.PRESENT_VALUE_STRING))) {
+    if (!(curveCalculationMethod.equals(MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING)
+        || curveCalculationMethod.equals(MultiYieldCurvePropertiesAndDefaults.PRESENT_VALUE_STRING))) {
       return null;
     }
     return super.getRequirements(context, target, desiredValue);
@@ -106,7 +115,8 @@ public class YieldCurveDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     switch (propertyName) {
       case MultiYieldCurvePropertiesAndDefaults.PROPERTY_DECOMPOSITION:
         return _decomposition;

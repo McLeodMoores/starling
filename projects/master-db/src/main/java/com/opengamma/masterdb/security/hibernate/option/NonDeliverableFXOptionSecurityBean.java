@@ -21,14 +21,14 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.financial.security.option.NonDeliverableFXOptionSecurity;
 import com.opengamma.masterdb.security.hibernate.CurrencyBean;
 import com.opengamma.masterdb.security.hibernate.ExpiryBean;
 import com.opengamma.masterdb.security.hibernate.SecurityBean;
 import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
 
 /**
- * A Hibernate bean representation of {@link NonDeliverableFXOptionSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.option.NonDeliverableFXOptionSecurity}.
  */
 @BeanDefinition
 public class NonDeliverableFXOptionSecurityBean extends SecurityBean {
@@ -73,31 +73,31 @@ public class NonDeliverableFXOptionSecurityBean extends SecurityBean {
     final NonDeliverableFXOptionSecurityBean option = (NonDeliverableFXOptionSecurityBean) other;
 
     return new EqualsBuilder()
-      .append(getId(), option.getId())
-      .append(getExpiry(), option.getExpiry())
-      .append(getPutCurrency(), option.getPutCurrency())
-      .append(getCallCurrency(), option.getCallCurrency())
-      .append(getCallAmount(), option.getCallAmount())
-      .append(getPutAmount(), option.getPutAmount())
-      .append(getSettlementDate(), option.getSettlementDate())
-      .append(getIsLong(), option.getIsLong())
-      .append(getIsDeliveryInCallCurrency(), option.getIsDeliveryInCallCurrency())
-      .isEquals();
+        .append(getId(), option.getId())
+        .append(getExpiry(), option.getExpiry())
+        .append(getPutCurrency(), option.getPutCurrency())
+        .append(getCallCurrency(), option.getCallCurrency())
+        .append(getCallAmount(), option.getCallAmount())
+        .append(getPutAmount(), option.getPutAmount())
+        .append(getSettlementDate(), option.getSettlementDate())
+        .append(getIsLong(), option.getIsLong())
+        .append(getIsDeliveryInCallCurrency(), option.getIsDeliveryInCallCurrency())
+        .isEquals();
   }
 
   //-----------------------------------------------------------------
   @Override
   public int hashCode() {
     return new HashCodeBuilder()
-      .append(getExpiry())
-      .append(getPutCurrency())
-      .append(getCallCurrency())
-      .append(getSettlementDate())
-      .append(getPutAmount())
-      .append(getCallAmount())
-      .append(getIsLong())
-      .append(getIsDeliveryInCallCurrency())
-      .toHashCode();
+        .append(getExpiry())
+        .append(getPutCurrency())
+        .append(getCallCurrency())
+        .append(getSettlementDate())
+        .append(getPutAmount())
+        .append(getCallAmount())
+        .append(getIsLong())
+        .append(getIsDeliveryInCallCurrency())
+        .toHashCode();
   }
 
   //-----------------------------------------------------------------

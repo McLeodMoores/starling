@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.timeseries;
@@ -36,7 +36,8 @@ import com.opengamma.util.tuple.Pair;
 public class HistoricalTimeSeriesLatestValueFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final HistoricalTimeSeriesSource timeSeriesSource = OpenGammaExecutionContext.getHistoricalTimeSeriesSource(executionContext);
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final Pair<LocalDate, Double> latestDataPoint = timeSeriesSource.getLatestDataPoint(target.getUniqueId());
@@ -50,7 +51,8 @@ public class HistoricalTimeSeriesLatestValueFunction extends AbstractFunction.No
       final HistoricalTimeSeriesAdjustment htsa = HistoricalTimeSeriesAdjustment.parse(adjusterString);
       value = htsa.adjust(latestDataPoint.getSecond());
     }
-    return Collections.singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), value));
+    return Collections
+        .singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), value));
   }
 
   // TODO: reverse logic here to be checkAvailable()
@@ -59,8 +61,8 @@ public class HistoricalTimeSeriesLatestValueFunction extends AbstractFunction.No
       return true;
     }
     if (ageLimit != null) {
-      LocalDate now = LocalDate.now(executionContext.getValuationClock());
-      Period difference = ageLimit.minus(Period.between(latestDataPoint.getFirst(), now));
+      final LocalDate now = LocalDate.now(executionContext.getValuationClock());
+      final Period difference = ageLimit.minus(Period.between(latestDataPoint.getFirst(), now));
       if (difference.isNegative()) {
         return true;
       }
@@ -106,14 +108,14 @@ public class HistoricalTimeSeriesLatestValueFunction extends AbstractFunction.No
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.isEmpty()) {
       // Use full results - graph builder will compose correctly against the desired value
       return getResults(context, target);
-    } else {
-      // Use the substituted result
-      return inputs.keySet();
     }
+    // Use the substituted result
+    return inputs.keySet();
   }
 
 }

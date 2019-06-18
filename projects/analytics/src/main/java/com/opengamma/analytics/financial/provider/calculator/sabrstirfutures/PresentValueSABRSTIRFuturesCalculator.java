@@ -23,6 +23,7 @@ public final class PresentValueSABRSTIRFuturesCalculator extends InstrumentDeriv
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueSABRSTIRFuturesCalculator getInstance() {
@@ -38,12 +39,14 @@ public final class PresentValueSABRSTIRFuturesCalculator extends InstrumentDeriv
   /**
    * Pricing methods.
    */
-  private static final InterestRateFutureOptionMarginTransactionSABRMethod METHOD_STRIRFUT_MARGIN = InterestRateFutureOptionMarginTransactionSABRMethod.getInstance();
+  private static final InterestRateFutureOptionMarginTransactionSABRMethod METHOD_STRIRFUT_MARGIN =
+      InterestRateFutureOptionMarginTransactionSABRMethod.getInstance();
 
-  // -----     Futures     ------
+  // ----- Futures ------
 
   @Override
-  public MultipleCurrencyAmount visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures, final SABRSTIRFuturesProviderInterface sabr) {
+  public MultipleCurrencyAmount visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures,
+      final SABRSTIRFuturesProviderInterface sabr) {
     return METHOD_STRIRFUT_MARGIN.presentValue(futures, sabr);
   }
 

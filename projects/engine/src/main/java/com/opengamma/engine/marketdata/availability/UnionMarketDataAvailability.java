@@ -125,13 +125,11 @@ public abstract class UnionMarketDataAvailability<T> {
     if (failed) {
       // Blocking mode is off, nothing declared AVAILABLE, and at least one wanted to block
       throw BlockingOperation.block();
-    } else {
-      if (missing != null) {
-        throw missing;
-      } else {
-        return null;
-      }
     }
+    if (missing != null) {
+      throw missing;
+    }
+    return null;
   }
 
 }

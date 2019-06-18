@@ -89,7 +89,8 @@ public class FXForwardFXImpliedYCNSFunction extends FXForwardSingleValuedFunctio
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final Forex fxForward, final YieldCurveBundle data, final ComputationTarget target, final Set<ValueRequirement> desiredValues,
+  protected Set<ComputedValue> getResult(final Forex fxForward, final YieldCurveBundle data, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues,
       final FunctionInputs inputs, final ValueSpecification spec, final FunctionExecutionContext executionContext) {
     final FXForwardSecurity security = (FXForwardSecurity) target.getSecurity();
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
@@ -137,7 +138,8 @@ public class FXForwardFXImpliedYCNSFunction extends FXForwardSingleValuedFunctio
     }
     final InterpolatedYieldCurveSpecificationWithSecurities curveSpec = (InterpolatedYieldCurveSpecificationWithSecurities) curveSpecObject;
     final Map<String, List<DoublesPair>> sensitivitiesForCurrency = curveSensitivities.getSensitivity(Currency.of(otherCurveCurrency)).getSensitivities();
-    final ValueSpecification adjustedSpec = new ValueSpecification(spec.getValueName(), spec.getTargetSpecification(), desiredValue.getConstraints().copy().get());
+    final ValueSpecification adjustedSpec = new ValueSpecification(spec.getValueName(), spec.getTargetSpecification(),
+        desiredValue.getConstraints().copy().get());
     return getExogenousSensitivities(inputs, curveSpec, interpolatedCurveForCurrency, sensitivitiesForCurrency, adjustedSpec);
   }
 
@@ -162,7 +164,7 @@ public class FXForwardFXImpliedYCNSFunction extends FXForwardSingleValuedFunctio
     final String receiveCurveName = Iterables.getOnlyElement(constraints.getValues(RECEIVE_CURVE));
     final String curveName = Iterables.getOnlyElement(curveNames);
     if (!(curveName.equals(payCurveName) || curveName.equals(receiveCurveName))) {
-      LOGGER.info("Curve name {} did not match either pay curve name {} or receive curve name {}", new Object[] {curveName, payCurveName, receiveCurveName });
+      LOGGER.info("Curve name {} did not match either pay curve name {} or receive curve name {}", new Object[] { curveName, payCurveName, receiveCurveName });
       return null;
     }
     final String payCurveCalculationConfig = Iterables.getOnlyElement(constraints.getValues(PAY_CURVE_CALCULATION_CONFIG));
@@ -186,12 +188,14 @@ public class FXForwardFXImpliedYCNSFunction extends FXForwardSingleValuedFunctio
     requirements.add(getCurveCalculationConfigRequirement(curveCalculationConfigName));
     if (curveCalculationConfig.getCalculationMethod().equals(FXImpliedYieldCurveFunction.FX_IMPLIED)) {
       final String exogenousCurrency = otherCurveCurrency;
-      requirements.add(getCurveSensitivitiesRequirement(payCurveName, payCurveCalculationConfig, receiveCurveName, receiveCurveCalculationConfig, target, curveCurrency, exogenousCurrency));
+      requirements.add(getCurveSensitivitiesRequirement(payCurveName, payCurveCalculationConfig, receiveCurveName, receiveCurveCalculationConfig, target,
+          curveCurrency, exogenousCurrency));
       requirements.add(getJacobianRequirement(curveCurrency, curveCalculationConfigName, FXImpliedYieldCurveFunction.FX_IMPLIED));
     } else {
       final String exogenousCurrency = curveCurrency;
-      requirements.add(getCurveSensitivitiesRequirement(payCurveName, payCurveCalculationConfig, receiveCurveName, receiveCurveCalculationConfig, target, otherCurveCurrency,
-          exogenousCurrency));
+      requirements.add(
+          getCurveSensitivitiesRequirement(payCurveName, payCurveCalculationConfig, receiveCurveName, receiveCurveCalculationConfig, target, otherCurveCurrency,
+              exogenousCurrency));
       final ComputationTargetSpecification exogenousSpec = ComputationTargetSpecification.of(Currency.of(exogenousCurrency));
       requirements.add(getFXImpliedTransitionMatrixRequirement(otherCurveCurrency, otherCurveCalculationConfigName, FXImpliedYieldCurveFunction.FX_IMPLIED));
       requirements.add(getCurveSpecRequirement(exogenousSpec, curveName));
@@ -200,7 +204,8 @@ public class FXForwardFXImpliedYCNSFunction extends FXForwardSingleValuedFunctio
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String payCurveName = null;
     String payCurveCalculationConfig = null;
     String receiveCurveName = null;
@@ -223,8 +228,9 @@ public class FXForwardFXImpliedYCNSFunction extends FXForwardSingleValuedFunctio
         currency = requirement.getConstraint(ValuePropertyNames.CURRENCY);
       }
     }
-    final ValueSpecification result = new ValueSpecification(getValueRequirementName(), target.toSpecification(), getResultProperties(payCurveName, receiveCurveName,
-        payCurveCalculationConfig, receiveCurveCalculationConfig, currency, underlyingCurrency).get());
+    final ValueSpecification result = new ValueSpecification(getValueRequirementName(), target.toSpecification(),
+        getResultProperties(payCurveName, receiveCurveName,
+            payCurveCalculationConfig, receiveCurveCalculationConfig, currency, underlyingCurrency).get());
     return Collections.singleton(result);
   }
 
@@ -305,7 +311,8 @@ public class FXForwardFXImpliedYCNSFunction extends FXForwardSingleValuedFunctio
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_JACOBIAN, ComputationTargetSpecification.of(Currency.of(currency)), properties);
   }
 
-  private static ValueRequirement getFXImpliedTransitionMatrixRequirement(final String currency, final String curveCalculationConfigName, final String curveCalculationMethod) {
+  private static ValueRequirement getFXImpliedTransitionMatrixRequirement(final String currency, final String curveCalculationConfigName,
+      final String curveCalculationMethod) {
     final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName)
         .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, curveCalculationMethod).get();
     return new ValueRequirement(ValueRequirementNames.FX_IMPLIED_TRANSITION_MATRIX, ComputationTargetSpecification.of(Currency.of(currency)), properties);
@@ -321,7 +328,8 @@ public class FXForwardFXImpliedYCNSFunction extends FXForwardSingleValuedFunctio
     return new ValueRequirement(ValueRequirementNames.CURVE_CALCULATION_CONFIG, ComputationTargetSpecification.NULL, properties);
   }
 
-  private static Set<ComputedValue> getFXImpliedSensitivities(final FunctionInputs inputs, final Tenor[] tenors, final YieldCurveBundle interpolatedCurveForCurrency,
+  private static Set<ComputedValue> getFXImpliedSensitivities(final FunctionInputs inputs, final Tenor[] tenors,
+      final YieldCurveBundle interpolatedCurveForCurrency,
       final Map<String, List<DoublesPair>> sensitivitiesForCurrency, final ValueSpecification spec) {
     if (sensitivitiesForCurrency.size() != 1) {
       throw new OpenGammaRuntimeException("Expecting one set of sensitivities");
@@ -357,7 +365,8 @@ public class FXForwardFXImpliedYCNSFunction extends FXForwardSingleValuedFunctio
     }
     final double[][] arrayFx = FunctionUtils.decodeJacobian(fxImpliedTransitionMatrixObject);
     final DoubleMatrix2D fxImpliedTransitionMatrix = new DoubleMatrix2D(arrayFx);
-    final DoubleMatrix1D resultFx = CALCULATOR.calculateFromParRateFromTransition(sensitivitiesForCurrency, interpolatedCurveForCurrency, fxImpliedTransitionMatrix);
+    final DoubleMatrix1D resultFx = CALCULATOR.calculateFromParRateFromTransition(sensitivitiesForCurrency, interpolatedCurveForCurrency,
+        fxImpliedTransitionMatrix);
     if (curveSpec.getStrips().size() != resultFx.getNumberOfElements()) {
       throw new OpenGammaRuntimeException("Number of yield curve node sensitivities did not match the number of nodes in the curve specification");
     }

@@ -1,27 +1,29 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation.data;
 
-import com.opengamma.analytics.math.function.PiecewisePolynomialWithSensitivityFunction1D;
 import com.opengamma.analytics.math.interpolation.PiecewisePolynomialInterpolator;
-import com.opengamma.analytics.math.interpolation.PiecewisePolynomialResultsWithSensitivity;
 
 /**
- * Data bundle for PiecewisePolynomialInerpolator1D with log transformation, 
- * i.e., an interpolant is F(x) = exp( f(x) ) where f(x) is a piecewise polynomial function. 
- * 
- * Since this data bundle possesses the information on f(x) via _poly of {@link PiecewisePolynomialResultsWithSensitivity}, 
- * any values computed by {@link PiecewisePolynomialWithSensitivityFunction1D} should be exponentiated.
- * 
- * yValues of the breakpoint information are transformed by this class. 
+ * Data bundle for PiecewisePolynomialInerpolator1D with log transformation,
+ * i.e., an interpolant is F(x) = exp( f(x) ) where f(x) is a piecewise
+ * polynomial function.
+ *
+ * Since this data bundle possesses the information on f(x) via _poly of
+ * {@link com.opengamma.analytics.math.interpolation.PiecewisePolynomialResultsWithSensitivity},
+ * any values computed by
+ * {@link com.opengamma.analytics.math.function.PiecewisePolynomialWithSensitivityFunction1D}
+ * should be exponentiated.
+ *
+ * yValues of the breakpoint information are transformed by this class.
  */
 public class Interpolator1DLogPiecewisePoynomialDataBundle extends Interpolator1DPiecewisePoynomialDataBundle {
 
   /**
-   * 
+   *
    * @param underlyingData Contains sorted data (x,y)
    * @param method {@link PiecewisePolynomialInterpolator}
    */

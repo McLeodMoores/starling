@@ -34,7 +34,7 @@ import net.sf.ehcache.CacheManager;
  * A cache decorating a {@code LegalEntityMaster}, mainly intended to reduce the frequency and repetition of queries
  * from the management UI to a database. In particular, prefetching is employed in paged queries,
  * which tend to scale poorly.
- * <p/>
+ * <p>
  * The cache is implemented using {@code EHCache}.
  */
 public class EHCachingLegalEntityMaster extends AbstractEHCachingMaster<LegalEntityDocument> implements LegalEntityMaster {

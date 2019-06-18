@@ -62,8 +62,8 @@ public class RemoteMarketDataSnapshotSource extends AbstractRemoteSource<Structu
 
   @Override
   public <S extends NamedSnapshot> S getSingle(final Class<S> type,
-                                               final String snapshotName,
-                                               final VersionCorrection versionCorrection) {
+      final String snapshotName,
+      final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(type, "type");
     ArgumentChecker.notNull(snapshotName, "snapshotName");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
@@ -73,9 +73,7 @@ public class RemoteMarketDataSnapshotSource extends AbstractRemoteSource<Structu
 
     if (type.isAssignableFrom(snapshot.getClass())) {
       return type.cast(snapshot);
-    } else {
-      throw new IllegalArgumentException("The requested object is of type: " +
-                                             snapshot.getClass().getName() + ", not " + type.getName());
     }
+    throw new IllegalArgumentException("The requested object is of type: " + snapshot.getClass().getName() + ", not " + type.getName());
   }
 }

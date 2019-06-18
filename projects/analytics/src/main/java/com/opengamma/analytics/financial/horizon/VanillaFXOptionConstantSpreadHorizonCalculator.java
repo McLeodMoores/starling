@@ -15,22 +15,27 @@ import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
-//CSOFF
+
 /**
  *
+ * @deprecated Deprecated
  */
-public class VanillaFXOptionConstantSpreadHorizonCalculator implements HorizonCalculatorDeprecated<ForexOptionVanillaDefinition, SmileDeltaTermStructureDataBundle, Void> {
+@Deprecated
+public class VanillaFXOptionConstantSpreadHorizonCalculator
+    implements HorizonCalculatorDeprecated<ForexOptionVanillaDefinition, SmileDeltaTermStructureDataBundle, Void> {
   /** Rolls down FX option data (surfaces and surface) */
   private static final ConstantSpreadFXOptionBlackRolldown FX_OPTION_ROLLDOWN = ConstantSpreadFXOptionBlackRolldown.getInstance();
 
   @Override
-  public MultipleCurrencyAmount getTheta(final ForexOptionVanillaDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames, final SmileDeltaTermStructureDataBundle data,
+  public MultipleCurrencyAmount getTheta(final ForexOptionVanillaDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
+      final SmileDeltaTermStructureDataBundle data,
       final int daysForward, final Calendar calendar) {
-    return getTheta(definition, date, yieldCurveNames, data, daysForward, calendar);
+    return getTheta(definition, date, yieldCurveNames, data, daysForward, calendar, null);
   }
 
   @Override
-  public MultipleCurrencyAmount getTheta(final ForexOptionVanillaDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames, final SmileDeltaTermStructureDataBundle data,
+  public MultipleCurrencyAmount getTheta(final ForexOptionVanillaDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
+      final SmileDeltaTermStructureDataBundle data,
       final int daysForward, final Calendar calendar, final Void additionalData) {
     ArgumentChecker.notNull(definition, "definition");
     ArgumentChecker.notNull(date, "date");

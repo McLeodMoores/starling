@@ -56,18 +56,29 @@ public class BondFuturesSecurity extends FuturesSecurity {
 
   /**
    * Constructor from all the details.
-   * @param tradingLastTime The last trading time.
-   * @param noticeFirstTime The first notice time.
-   * @param noticeLastTime The last notice time.
-   * @param deliveryFirstTime The first delivery time.
-   * @param deliveryLastTime The last delivery time.
-   * @param notional The notional of the bond future.
-   * @param deliveryBasketAtDeliveryDate The basket of deliverable bonds at the last delivery date.
-   * @param deliveryBasketAtSpotDate The basket of deliverable bonds at the bonds standard spot date.
-   * @param conversionFactor The conversion factor of each bond in the basket.
+   * 
+   * @param tradingLastTime
+   *          The last trading time.
+   * @param noticeFirstTime
+   *          The first notice time.
+   * @param noticeLastTime
+   *          The last notice time.
+   * @param deliveryFirstTime
+   *          The first delivery time.
+   * @param deliveryLastTime
+   *          The last delivery time.
+   * @param notional
+   *          The notional of the bond future.
+   * @param deliveryBasketAtDeliveryDate
+   *          The basket of deliverable bonds at the last delivery date.
+   * @param deliveryBasketAtSpotDate
+   *          The basket of deliverable bonds at the bonds standard spot date.
+   * @param conversionFactor
+   *          The conversion factor of each bond in the basket.
    */
   public BondFuturesSecurity(final double tradingLastTime, final double noticeFirstTime, final double noticeLastTime, final double deliveryFirstTime,
-      final double deliveryLastTime, final double notional, final BondFixedSecurity[] deliveryBasketAtDeliveryDate, final BondFixedSecurity[] deliveryBasketAtSpotDate,
+      final double deliveryLastTime, final double notional, final BondFixedSecurity[] deliveryBasketAtDeliveryDate,
+      final BondFixedSecurity[] deliveryBasketAtSpotDate,
       final double[] conversionFactor) {
     super(tradingLastTime);
     ArgumentChecker.notNull(deliveryBasketAtDeliveryDate, "Delivery basket at delivery date");
@@ -89,6 +100,7 @@ public class BondFuturesSecurity extends FuturesSecurity {
 
   /**
    * Gets the last trading time.
+   * 
    * @return The last trading time.
    */
   @Override
@@ -98,6 +110,7 @@ public class BondFuturesSecurity extends FuturesSecurity {
 
   /**
    * Gets the first notice time.
+   * 
    * @return The first notice time.
    */
   public double getNoticeFirstTime() {
@@ -106,6 +119,7 @@ public class BondFuturesSecurity extends FuturesSecurity {
 
   /**
    * Gets the last notice time.
+   * 
    * @return The last notice time.
    */
   public double getNoticeLastTime() {
@@ -114,6 +128,7 @@ public class BondFuturesSecurity extends FuturesSecurity {
 
   /**
    * Gets the first delivery time.
+   * 
    * @return The first delivery time.
    */
   public double getDeliveryFirstTime() {
@@ -122,6 +137,7 @@ public class BondFuturesSecurity extends FuturesSecurity {
 
   /**
    * Gets the last delivery time.
+   * 
    * @return The last delivery time.
    */
   public double getDeliveryLastTime() {
@@ -130,6 +146,7 @@ public class BondFuturesSecurity extends FuturesSecurity {
 
   /**
    * Gets the notional of the bond future.
+   * 
    * @return The notional of the bond future.
    */
   public double getNotional() {
@@ -138,6 +155,7 @@ public class BondFuturesSecurity extends FuturesSecurity {
 
   /**
    * Gets the basket of deliverable bonds with settlement at the futures last delivery date.
+   * 
    * @return The basket.
    */
   public BondFixedSecurity[] getDeliveryBasketAtDeliveryDate() {
@@ -146,6 +164,7 @@ public class BondFuturesSecurity extends FuturesSecurity {
 
   /**
    * Gets the basket of deliverable bonds with settlement at the bonds standard spot date.
+   * 
    * @return The basket.
    */
   public BondFixedSecurity[] getDeliveryBasketAtSpotDate() {
@@ -154,6 +173,7 @@ public class BondFuturesSecurity extends FuturesSecurity {
 
   /**
    * Gets the conversion factor of each bond in the basket.
+   * 
    * @return The conversion factor of each bond in the basket.
    */
   public double[] getConversionFactor() {
@@ -162,6 +182,7 @@ public class BondFuturesSecurity extends FuturesSecurity {
 
   /**
    * Gets the future currency.
+   * 
    * @return The currency.
    */
   @Override
@@ -187,17 +208,17 @@ public class BondFuturesSecurity extends FuturesSecurity {
     result = prime * result + Arrays.hashCode(_deliveryBasketAtDeliveryDate);
     long temp;
     temp = Double.doubleToLongBits(_deliveryFirstTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_deliveryLastTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_noticeFirstTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_noticeLastTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_tradingLastTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

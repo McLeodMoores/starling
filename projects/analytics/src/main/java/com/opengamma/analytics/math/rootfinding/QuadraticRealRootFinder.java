@@ -11,15 +11,10 @@ import com.opengamma.analytics.math.MathException;
 import com.opengamma.analytics.math.function.RealPolynomialFunction1D;
 
 /**
- * Class that calculates the real roots of a quadratic function. 
+ * Class that calculates the real roots of a quadratic function.
  * <p>
- * The roots can be found analytically. For a quadratic $ax^2 + bx + c = 0$, the roots are given by:
- * $$
- * \begin{align*}
- * x_{1, 2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
- * \end{align*}
- * $$
- * If no real roots exist (i.e. $b^2 - 4ac < 0$) then an exception is thrown.
+ * The roots can be found analytically. For a quadratic $ax^2 + bx + c = 0$, the roots are given by: $$ \begin{align*} x_{1, 2} = \frac{-b \pm \sqrt{b^2 -
+ * 4ac}}{2a} \end{align*} $$ If no real roots exist (i.e. $b^2 - 4ac &lt; 0$) then an exception is thrown.
  */
 public class QuadraticRealRootFinder implements Polynomial1DRootFinder<Double> {
 

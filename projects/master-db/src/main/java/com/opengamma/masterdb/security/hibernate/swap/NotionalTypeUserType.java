@@ -13,7 +13,7 @@ import com.opengamma.financial.security.swap.VarianceSwapNotional;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the NotionalType enum
+ * Custom Hibernate usertype for the NotionalType enum.
  */
 public class NotionalTypeUserType extends EnumUserType<NotionalType> {
 

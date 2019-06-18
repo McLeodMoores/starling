@@ -9,13 +9,14 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 
 /**
- * Result of interpolation by piecewise polynomial containing
- * _knots: Positions of knots
- * _coefMatrix: Coefficient matrix whose i-th row vector is { a_n, a_{n-1}, ...} for the i-th interval, where a_n, a_{n-1},... are coefficients of f(x) = a_n (x-x_i)^n + a_{n-1} (x-x_i)^{n-1} + ....
- * In multidimensional cases, coefficients for the i-th interval of the j-th spline is in (j*(i-1) + i) -th row vector.
- * _nIntervals: Number of intervals, which should be (Number of knots) - 1
- * _order: Number of coefficients in polynomial, which is equal to (polynomial degree) + 1
- * _dim: Number of splines
+ * Result of interpolation by piecewise polynomial containing information about:
+ * <ul>
+ * <li>the knot positions;</li>
+ * <li>a coefficient matrix whose i-th row vector is { a_n, a_{n-1}, ...} for the i-th interval, where a_n, a_{n-1},... are coefficients of f(x) = a_n (x-x_i)^n
+ * + a_{n-1} (x-x_i)^{n-1} + .... In multidimensional cases, coefficients for the i-th interval of the j-th spline is in (j*(i-1) + i) -th row vector;</li>
+ * <li>the number of coefficients in polynomial, which is equal to (polynomial degree) + 1;</li>
+ * <li>the number of splines</li>
+ * </ul>
  */
 public class PiecewisePolynomialResult {
 
@@ -26,11 +27,14 @@ public class PiecewisePolynomialResult {
   private final int _dim;
 
   /**
-   * Constructor
    * @param knots
+   *          the knot positions
    * @param coefMatrix
+   *          the polynomial coefficient matrix
    * @param order
+   *          the order
    * @param dim
+   *          the number of splines
    */
   public PiecewisePolynomialResult(final DoubleMatrix1D knots, final DoubleMatrix2D coefMatrix, final int order, final int dim) {
 
@@ -43,7 +47,8 @@ public class PiecewisePolynomialResult {
   }
 
   /**
-   * Access _knots
+   * Gets the knots.
+   *
    * @return Knots as DoubleMatrix1D
    */
   public DoubleMatrix1D getKnots() {
@@ -51,7 +56,8 @@ public class PiecewisePolynomialResult {
   }
 
   /**
-   * Access _coefMatrix
+   * Gets the coefficient matrix.
+   *
    * @return Coefficient Matrix
    */
   public DoubleMatrix2D getCoefMatrix() {
@@ -59,7 +65,8 @@ public class PiecewisePolynomialResult {
   }
 
   /**
-   * Access _nIntervals
+   * Gets the number of intervals.
+   *
    * @return Number of Intervals
    */
   public int getNumberOfIntervals() {
@@ -67,7 +74,8 @@ public class PiecewisePolynomialResult {
   }
 
   /**
-   * Access _order
+   * Gets the order of the polynomial.
+   *
    * @return Number of coefficients in polynomial; 2 if _nIntervals=1, 3 if _nIntervals=2, 4 otherwise
    */
   public int getOrder() {
@@ -75,7 +83,8 @@ public class PiecewisePolynomialResult {
   }
 
   /**
-   * Access _dim
+   * Gets the dimension of the spline.
+   *
    * @return Dimension of spline
    */
   public int getDimensions() {

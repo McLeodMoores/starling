@@ -22,12 +22,18 @@ import com.opengamma.util.tuple.IntObjectPair;
 
 import net.sf.ehcache.CacheManager;
 
+/**
+ *
+ */
 @Test(groups = TestGroup.UNIT)
 public class EHCachingSearchCacheTest {
 
   private static final int TOTAL_SIZE = 100;
   private static final String TEST_SCHEME = "TEST";
 
+  /**
+   *
+   */
   @Test
   public void testSearchCache() {
     for (int requestSize = 1; requestSize < TOTAL_SIZE; requestSize = requestSize + 17) {
@@ -36,20 +42,16 @@ public class EHCachingSearchCacheTest {
         for (int requestStartPos = 0; requestStartPos * requestStartStepSize < TOTAL_SIZE * 4; requestStartPos++) {
           final PagingRequest pagingRequest = PagingRequest.ofIndex(requestStartPos * requestStartStepSize % TOTAL_SIZE, requestSize);
           assertEquals(searchCache.search(new SecuritySearchRequest(), pagingRequest, false).getSecond(),
-                       buildResultIDs(
-                         PagingRequest.ofIndex(
-                           pagingRequest.getFirstItem(),
-                           Math.min(pagingRequest.getLastItem() - pagingRequest.getFirstItem(),
-                                    TOTAL_SIZE - pagingRequest.getFirstItem()
-                           )
-                         )
-                       )
-          );
+              buildResultIDs(PagingRequest.ofIndex(pagingRequest.getFirstItem(),
+                  Math.min(pagingRequest.getLastItem() - pagingRequest.getFirstItem(), TOTAL_SIZE - pagingRequest.getFirstItem()))));
         }
       }
     }
   }
 
+  /**
+   *
+   */
   @Test
   public void testSearchCachePrefetching() {
     for (int requestSize = 1; requestSize < TOTAL_SIZE; requestSize = requestSize + 17) {
@@ -59,15 +61,8 @@ public class EHCachingSearchCacheTest {
           final PagingRequest pagingRequest = PagingRequest.ofIndex(requestStartPos * requestStartStepSize % TOTAL_SIZE, requestSize);
           searchCache.prefetch(new SecuritySearchRequest(), pagingRequest);
           assertEquals(searchCache.search(new SecuritySearchRequest(), pagingRequest, false).getSecond(),
-                       buildResultIDs(
-                         PagingRequest.ofIndex(
-                           pagingRequest.getFirstItem(),
-                           Math.min(pagingRequest.getLastItem() - pagingRequest.getFirstItem(),
-                                    TOTAL_SIZE - pagingRequest.getFirstItem()
-                           )
-                         )
-                       )
-          );
+              buildResultIDs(PagingRequest.ofIndex(pagingRequest.getFirstItem(),
+                  Math.min(pagingRequest.getLastItem() - pagingRequest.getFirstItem(), TOTAL_SIZE - pagingRequest.getFirstItem()))));
         }
       }
     }
@@ -75,6 +70,7 @@ public class EHCachingSearchCacheTest {
 
   /**
    * Returns an empty cache manager
+   * 
    * @return the cache manager
    */
   private CacheManager getCleanCacheManager() {
@@ -96,7 +92,7 @@ public class EHCachingSearchCacheTest {
     });
   }
 
-  private List<UniqueId> buildResultIDs(final PagingRequest pagingRequest) {
+  private static List<UniqueId> buildResultIDs(final PagingRequest pagingRequest) {
     final List<UniqueId> result = new ArrayList<>();
 
     for (int i = pagingRequest.getFirstItem(); i < pagingRequest.getLastItem(); i++) {

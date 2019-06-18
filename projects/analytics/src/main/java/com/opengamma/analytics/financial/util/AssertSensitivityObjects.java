@@ -33,18 +33,26 @@ import com.opengamma.util.tuple.Pair;
 public class AssertSensitivityObjects {
 
   /**
-   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value. The two sensitivities are suppose to be in the same time order.
-   * The comparison is done on the discounting curve and forward curves sensitivities.
-   * @param msg The message.
-   * @param sensitivity1 The first sensitivity.
-   * @param sensitivity2 The second sensitivity.
-   * @param tolerance The tolerance.
-   * @param opposite The flag indicating if the opposite result should be used.
+   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value. The two sensitivities are suppose to be in the
+   * same time order. The comparison is done on the discounting curve and forward curves sensitivities.
+   * 
+   * @param msg
+   *          The message.
+   * @param sensitivity1
+   *          The first sensitivity.
+   * @param sensitivity2
+   *          The second sensitivity.
+   * @param tolerance
+   *          The tolerance.
+   * @param opposite
+   *          The flag indicating if the opposite result should be used.
    * @return True if the difference is below the tolerance and False if not. If the curves are not the same it returns False.
    */
-  private static boolean compare(final String msg, final MulticurveSensitivity sensitivity1, final MulticurveSensitivity sensitivity2, final double tolerance, final boolean opposite) {
+  private static boolean compare(final String msg, final MulticurveSensitivity sensitivity1, final MulticurveSensitivity sensitivity2, final double tolerance,
+      final boolean opposite) {
     boolean cmp = true;
-    if (!InterestRateCurveSensitivityUtils.compare(sensitivity1.getYieldDiscountingSensitivities(), sensitivity2.getYieldDiscountingSensitivities(), tolerance)) {
+    if (!InterestRateCurveSensitivityUtils.compare(sensitivity1.getYieldDiscountingSensitivities(), sensitivity2.getYieldDiscountingSensitivities(),
+        tolerance)) {
       cmp = false;
     }
     if (!compareFwd(sensitivity1.getForwardSensitivities(), sensitivity2.getForwardSensitivities(), tolerance)) {
@@ -58,30 +66,43 @@ public class AssertSensitivityObjects {
   }
 
   /**
-   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value. The two sensitivities are suppose to be in the same time order.
-   * The comparison is done on the discounting curve and forward curves sensitivities.
-   * @param msg The message.
-   * @param sensitivity1 The first sensitivity.
-   * @param sensitivity2 The second sensitivity.
-   * @param tolerance The tolerance.
+   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value. The two sensitivities are suppose to be in the
+   * same time order. The comparison is done on the discounting curve and forward curves sensitivities.
+   * 
+   * @param msg
+   *          The message.
+   * @param sensitivity1
+   *          The first sensitivity.
+   * @param sensitivity2
+   *          The second sensitivity.
+   * @param tolerance
+   *          The tolerance.
    * @return True if the difference is below the tolerance and False if not. If the curves are not the same it returns False.
    */
-  public static boolean assertEquals(final String msg, final MulticurveSensitivity sensitivity1, final MulticurveSensitivity sensitivity2, final double tolerance) {
+  public static boolean assertEquals(final String msg, final MulticurveSensitivity sensitivity1, final MulticurveSensitivity sensitivity2,
+      final double tolerance) {
     return compare(msg, sensitivity1, sensitivity2, tolerance, false);
   }
 
-  public static boolean assertDoesNotEqual(final String msg, final MulticurveSensitivity sensitivity1, final MulticurveSensitivity sensitivity2, final double tolerance) {
+  public static boolean assertDoesNotEqual(final String msg, final MulticurveSensitivity sensitivity1, final MulticurveSensitivity sensitivity2,
+      final double tolerance) {
     return compare(msg, sensitivity1, sensitivity2, tolerance, true);
   }
 
   /**
-   * Compare two maps of sensitivities with a given tolerance. The tolerance is used for both the time and the value. The two sensitivities are suppose to be in the same time order.
-   * @param sensi1 The first sensitivity (as a map).
-   * @param sensi2 The second sensitivity (as a map).
-   * @param tolerance The tolerance.
+   * Compare two maps of sensitivities with a given tolerance. The tolerance is used for both the time and the value. The two sensitivities are suppose to be in
+   * the same time order.
+   * 
+   * @param sensi1
+   *          The first sensitivity (as a map).
+   * @param sensi2
+   *          The second sensitivity (as a map).
+   * @param tolerance
+   *          The tolerance.
    * @return True if the difference is below the tolerance and False if not. If the curves are not the same it returns False.
    */
-  private static boolean compareFwd(final Map<String, List<ForwardSensitivity>> sensi1, final Map<String, List<ForwardSensitivity>> sensi2, final double tolerance) {
+  private static boolean compareFwd(final Map<String, List<ForwardSensitivity>> sensi1, final Map<String, List<ForwardSensitivity>> sensi2,
+      final double tolerance) {
     ArgumentChecker.notNull(sensi1, "sensitivity");
     ArgumentChecker.notNull(sensi2, "sensitivity");
     for (final Map.Entry<String, List<ForwardSensitivity>> entry : sensi1.entrySet()) {
@@ -103,10 +124,15 @@ public class AssertSensitivityObjects {
   }
 
   /**
-   * Compare two lists of sensitivities with a given tolerance. The tolerance is used for both the time and the value. The two sensitivities are suppose to be in the same time order.
-   * @param sensi1 The first sensitivity (as a list).
-   * @param sensi2 The second sensitivity (as a list).
-   * @param tolerance The tolerance.
+   * Compare two lists of sensitivities with a given tolerance. The tolerance is used for both the time and the value. The two sensitivities are suppose to be
+   * in the same time order.
+   * 
+   * @param sensi1
+   *          The first sensitivity (as a list).
+   * @param sensi2
+   *          The second sensitivity (as a list).
+   * @param tolerance
+   *          The tolerance.
    * @return True if the difference is below the tolerance and False if not.
    */
   private static boolean compareFwd(final List<ForwardSensitivity> sensi1, final List<ForwardSensitivity> sensi2, final double tolerance) {
@@ -121,12 +147,17 @@ public class AssertSensitivityObjects {
   }
 
   /**
-   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value. The two sensitivities are suppose to be in the same time order.
-   * The comparison is done on the discounting curve and forward curves sensitivities.
-   * @param msg The message.
-   * @param sensi1 The first sensitivity.
-   * @param sensi2 The second sensitivity.
-   * @param tolerance The tolerance.
+   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value. The two sensitivities are suppose to be in the
+   * same time order. The comparison is done on the discounting curve and forward curves sensitivities.
+   * 
+   * @param msg
+   *          The message.
+   * @param sensi1
+   *          The first sensitivity.
+   * @param sensi2
+   *          The second sensitivity.
+   * @param tolerance
+   *          The tolerance.
    * @return True if the difference is below the tolerance and False if not. If the curves are not the same it returns False.
    */
   public static boolean assertEquals(final String msg, final InflationSensitivity sensi1, final InflationSensitivity sensi2, final double tolerance) {
@@ -145,15 +176,21 @@ public class AssertSensitivityObjects {
   }
 
   /**
-   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value.
-   * For each currency, the two sensitivities are suppose to be in the same time order.
-   * @param msg The message.
-   * @param sensi1 The first sensitivity.
-   * @param sensi2 The second sensitivity.
-   * @param tolerance The tolerance.
+   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value. For each currency, the two sensitivities are
+   * suppose to be in the same time order.
+   * 
+   * @param msg
+   *          The message.
+   * @param sensi1
+   *          The first sensitivity.
+   * @param sensi2
+   *          The second sensitivity.
+   * @param tolerance
+   *          The tolerance.
    * @return True if the difference is below the tolerance and False if not. If the currencies or the curves are not the same it returns False.
    */
-  public static boolean assertEquals(final String msg, final MultipleCurrencyMulticurveSensitivity sensi1, final MultipleCurrencyMulticurveSensitivity sensi2, final double tolerance) {
+  public static boolean assertEquals(final String msg, final MultipleCurrencyMulticurveSensitivity sensi1, final MultipleCurrencyMulticurveSensitivity sensi2,
+      final double tolerance) {
     boolean cmp = true;
     final boolean keycmp = sensi1.getCurrencies().equals(sensi2.getCurrencies());
     if (!keycmp) {
@@ -169,15 +206,21 @@ public class AssertSensitivityObjects {
   }
 
   /**
-   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value.
-   * For each currency, the two sensitivities are suppose to be in the same time order.
-   * @param msg The message.
-   * @param sensi1 The first sensitivity.
-   * @param sensi2 The second sensitivity.
-   * @param tolerance The tolerance.
+   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value. For each currency, the two sensitivities are
+   * suppose to be in the same time order.
+   * 
+   * @param msg
+   *          The message.
+   * @param sensi1
+   *          The first sensitivity.
+   * @param sensi2
+   *          The second sensitivity.
+   * @param tolerance
+   *          The tolerance.
    * @return True if the difference is below the tolerance and False if not. If the currencies or the curves are not the same it returns False.
    */
-  public static boolean assertEquals(final String msg, final MultipleCurrencyInflationSensitivity sensi1, final MultipleCurrencyInflationSensitivity sensi2, final double tolerance) {
+  public static boolean assertEquals(final String msg, final MultipleCurrencyInflationSensitivity sensi1, final MultipleCurrencyInflationSensitivity sensi2,
+      final double tolerance) {
     boolean cmp = true;
     final boolean keycmp = sensi1.getCurrencies().equals(sensi2.getCurrencies());
     if (!keycmp) {
@@ -194,14 +237,21 @@ public class AssertSensitivityObjects {
 
   /**
    * Compare two sensitivities with a given tolerance.
-   * @param msg The message.
-   * @param sensitivity1 The first sensitivity.
-   * @param sensitivity2 The second sensitivity.
-   * @param tolerance The tolerance.
-   * @param opposite The flag indicating if the opposite result should be used.
+   * 
+   * @param msg
+   *          The message.
+   * @param sensitivity1
+   *          The first sensitivity.
+   * @param sensitivity2
+   *          The second sensitivity.
+   * @param tolerance
+   *          The tolerance.
+   * @param opposite
+   *          The flag indicating if the opposite result should be used.
    * @return True if the difference is below the tolerance and False if not. If the curves are not the same it returns False.
    */
-  private static boolean compare(final String msg, final MultipleCurrencyParameterSensitivity sensitivity1, final MultipleCurrencyParameterSensitivity sensitivity2, final double tolerance,
+  private static boolean compare(final String msg, final MultipleCurrencyParameterSensitivity sensitivity1,
+      final MultipleCurrencyParameterSensitivity sensitivity2, final double tolerance,
       final boolean opposite) {
     ArgumentChecker.notNull(sensitivity1, "sensitivity1");
     ArgumentChecker.notNull(sensitivity2, "sensitivity2");
@@ -247,38 +297,57 @@ public class AssertSensitivityObjects {
 
   /**
    * Assert that two sensitivities are equal within a given tolerance. The tolerance is applied for each value (not to the total).
-   * @param msg The message.
-   * @param sensitivity1 The first sensitivity.
-   * @param sensitivity2 The second sensitivity.
-   * @param tolerance The tolerance.
+   * 
+   * @param msg
+   *          The message.
+   * @param sensitivity1
+   *          The first sensitivity.
+   * @param sensitivity2
+   *          The second sensitivity.
+   * @param tolerance
+   *          The tolerance.
    * @return True if the difference is below the tolerance and False if not. If the curves are not the same it returns False.
    */
-  public static boolean assertEquals(final String msg, final MultipleCurrencyParameterSensitivity sensitivity1, final MultipleCurrencyParameterSensitivity sensitivity2, final double tolerance) {
+  public static boolean assertEquals(final String msg, final MultipleCurrencyParameterSensitivity sensitivity1,
+      final MultipleCurrencyParameterSensitivity sensitivity2, final double tolerance) {
     return compare(msg, sensitivity1, sensitivity2, tolerance, false);
   }
 
   /**
    * Compare two sensitivities with a given tolerance.
-   * @param msg The message.
-   * @param sensitivity1 The first sensitivity.
-   * @param sensitivity2 The second sensitivity.
-   * @param tolerance The tolerance.
+   * 
+   * @param msg
+   *          The message.
+   * @param sensitivity1
+   *          The first sensitivity.
+   * @param sensitivity2
+   *          The second sensitivity.
+   * @param tolerance
+   *          The tolerance.
    * @return True if the difference is above the tolerance and False if not.
    */
-  public static boolean assertDoesNotEqual(final String msg, final MultipleCurrencyParameterSensitivity sensitivity1, final MultipleCurrencyParameterSensitivity sensitivity2, final double tolerance) {
+  public static boolean assertDoesNotEqual(final String msg, final MultipleCurrencyParameterSensitivity sensitivity1,
+      final MultipleCurrencyParameterSensitivity sensitivity2, final double tolerance) {
     return compare(msg, sensitivity1, sensitivity2, tolerance, true);
   }
 
   /**
    * Compare two sensitivities with a given tolerance.
-   * @param msg The message.
-   * @param sensitivity1 The first sensitivity.
-   * @param sensitivity2 The second sensitivity.
-   * @param tolerance The tolerance.
-   * @param opposite The flag indicating if the opposite result should be used.
+   * 
+   * @param msg
+   *          The message.
+   * @param sensitivity1
+   *          The first sensitivity.
+   * @param sensitivity2
+   *          The second sensitivity.
+   * @param tolerance
+   *          The tolerance.
+   * @param opposite
+   *          The flag indicating if the opposite result should be used.
    * @return True if the difference is below the tolerance and False if not. If the curves are not the same it returns False.
    */
-  private static boolean compare(final String msg, final SimpleParameterSensitivity sensitivity1, final SimpleParameterSensitivity sensitivity2, final double tolerance, final boolean opposite) {
+  private static boolean compare(final String msg, final SimpleParameterSensitivity sensitivity1, final SimpleParameterSensitivity sensitivity2,
+      final double tolerance, final boolean opposite) {
     ArgumentChecker.notNull(sensitivity1, "sensitivity1");
     ArgumentChecker.notNull(sensitivity2, "sensitivity2");
     ArgumentChecker.isTrue(tolerance > 0, "tolerance must be greater than 0; have {}", tolerance);
@@ -307,38 +376,58 @@ public class AssertSensitivityObjects {
 
   /**
    * Assert that two sensitivities are equal within a given tolerance. The tolerance is applied for each value (not to the total).
-   * @param msg The message.
-   * @param sensitivity1 The first sensitivity.
-   * @param sensitivity2 The second sensitivity.
-   * @param tolerance The tolerance.
+   * 
+   * @param msg
+   *          The message.
+   * @param sensitivity1
+   *          The first sensitivity.
+   * @param sensitivity2
+   *          The second sensitivity.
+   * @param tolerance
+   *          The tolerance.
    * @return True if the difference is below the tolerance and False if not. If the curves are not the same it returns False.
    */
-  public static boolean assertEquals(final String msg, final SimpleParameterSensitivity sensitivity1, final SimpleParameterSensitivity sensitivity2, final double tolerance) {
+  public static boolean assertEquals(final String msg, final SimpleParameterSensitivity sensitivity1, final SimpleParameterSensitivity sensitivity2,
+      final double tolerance) {
     return compare(msg, sensitivity1, sensitivity2, tolerance, false);
   }
 
   /**
    * Compare two sensitivities with a given tolerance.
-   * @param msg The message.
-   * @param sensitivity1 The first sensitivity.
-   * @param sensitivity2 The second sensitivity.
-   * @param tolerance The tolerance.
+   * 
+   * @param msg
+   *          The message.
+   * @param sensitivity1
+   *          The first sensitivity.
+   * @param sensitivity2
+   *          The second sensitivity.
+   * @param tolerance
+   *          The tolerance.
    * @return True if the difference is above the tolerance and False if not.
    */
-  public static boolean assertDoesNotEqual(final String msg, final SimpleParameterSensitivity sensitivity1, final SimpleParameterSensitivity sensitivity2, final double tolerance) {
+  public static boolean assertDoesNotEqual(final String msg, final SimpleParameterSensitivity sensitivity1, final SimpleParameterSensitivity sensitivity2,
+      final double tolerance) {
     return compare(msg, sensitivity1, sensitivity2, tolerance, true);
   }
 
   /**
-   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value. The two sensitivities are suppose to be in the same time order.
-   * @param msg The message.
-   * @param sensitivity1 The first sensitivity.
-   * @param sensitivity2 The second sensitivity.
-   * @param tolerance The tolerance.
-   * @param opposite The flag indicating if the opposite result should be used.
+   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value. The two sensitivities are suppose to be in the
+   * same time order.
+   * 
+   * @param msg
+   *          The message.
+   * @param sensitivity1
+   *          The first sensitivity.
+   * @param sensitivity2
+   *          The second sensitivity.
+   * @param tolerance
+   *          The tolerance.
+   * @param opposite
+   *          The flag indicating if the opposite result should be used.
    * @return True if the difference is below the tolerance and False if not. If the curves are not the same it returns False.
    */
-  private static boolean compare(final String msg, final InterestRateCurveSensitivity sensitivity1, final InterestRateCurveSensitivity sensitivity2, final double tolerance, final boolean opposite) {
+  private static boolean compare(final String msg, final InterestRateCurveSensitivity sensitivity1, final InterestRateCurveSensitivity sensitivity2,
+      final double tolerance, final boolean opposite) {
     boolean cmp = true;
     cmp = InterestRateCurveSensitivityUtils.compare(sensitivity1.getSensitivities(), sensitivity2.getSensitivities(), tolerance);
     if (opposite) {
@@ -348,24 +437,31 @@ public class AssertSensitivityObjects {
     return cmp;
   }
 
-  public static boolean assertEquals(final String msg, final InterestRateCurveSensitivity sensitivity1, final InterestRateCurveSensitivity sensitivity2, final double tolerance) {
+  public static boolean assertEquals(final String msg, final InterestRateCurveSensitivity sensitivity1, final InterestRateCurveSensitivity sensitivity2,
+      final double tolerance) {
     return compare(msg, sensitivity1, sensitivity2, tolerance, false);
   }
 
-  public static boolean assertDoesNotEqual(final String msg, final InterestRateCurveSensitivity sensitivity1, final InterestRateCurveSensitivity sensitivity2, final double tolerance) {
+  public static boolean assertDoesNotEqual(final String msg, final InterestRateCurveSensitivity sensitivity1, final InterestRateCurveSensitivity sensitivity2,
+      final double tolerance) {
     return compare(msg, sensitivity1, sensitivity2, tolerance, true);
   }
 
   /**
    * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value.
-   * @param msg The message.
-   * For each currency, the two sensitivities are suppose to be in the same time order.
-   * @param sensi1 The first sensitivity.
-   * @param sensi2 The second sensitivity.
-   * @param tolerance The tolerance.
+   * 
+   * @param msg
+   *          The message. For each currency, the two sensitivities are suppose to be in the same time order.
+   * @param sensi1
+   *          The first sensitivity.
+   * @param sensi2
+   *          The second sensitivity.
+   * @param tolerance
+   *          The tolerance.
    * @return True if the difference is below the tolerance and False if not. If the currencies or the curves are not the same it returns False.
    */
-  public static boolean assertEquals(final String msg, final MultipleCurrencyInterestRateCurveSensitivity sensi1, final MultipleCurrencyInterestRateCurveSensitivity sensi2, final double tolerance) {
+  public static boolean assertEquals(final String msg, final MultipleCurrencyInterestRateCurveSensitivity sensi1,
+      final MultipleCurrencyInterestRateCurveSensitivity sensi2, final double tolerance) {
     boolean cmp = true;
     final boolean keycmp = sensi1.getCurrencies().equals(sensi2.getCurrencies());
     if (!keycmp) {

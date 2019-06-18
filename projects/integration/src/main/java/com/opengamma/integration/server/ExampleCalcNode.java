@@ -17,8 +17,10 @@ public final class ExampleCalcNode {
   }
 
   /**
-   * Starts a calculation node
-   * @param args  the arguments, not used
+   * Starts a calculation node.
+   *
+   * @param args
+   *          the arguments, not used
    */
   public static void main(final String[] args) { // CSIGNORE
     // Logging
@@ -26,7 +28,8 @@ public final class ExampleCalcNode {
     // Run mode
     PlatformConfigUtils.configureSystemProperties();
     // Configuration URL (should get from command line)
-    final String url = "http://" + System.getProperty("opengamma.viewprocessor.host", "localhost") + ":" + System.getProperty("opengamma.viewprocessor.port", "8080")
+    final String url = "http://" + System.getProperty("opengamma.viewprocessor.host", "localhost") + ":"
+        + System.getProperty("opengamma.viewprocessor.port", "8080")
         + "/calcNode/example.xml";
     // And run
     CalculationNodeProcess.main(url);

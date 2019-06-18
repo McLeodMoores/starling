@@ -6,7 +6,7 @@
 package com.opengamma.batch;
 
 /**
- * Interface combining BatchMaster and BatchRunWriter
+ * Interface combining BatchMaster and BatchRunWriter.
  */
 public interface BatchMasterWriter extends BatchMaster, BatchRunWriter {
 

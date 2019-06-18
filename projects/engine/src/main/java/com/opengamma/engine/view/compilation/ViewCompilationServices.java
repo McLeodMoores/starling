@@ -27,13 +27,18 @@ public class ViewCompilationServices {
   private final DependencyGraphBuilderFactory _dependencyGraphBuilder;
 
   /**
-   * Constructs an instance
+   * Constructs an instance.
    *
-   * @param marketDataAvailabilityProvider the market data availability provider
-   * @param functionResolver the function resolver
-   * @param compilationContext the function compilation context
-   * @param executorService the executor service
-   * @param dependencyGraphBuilder the graph building implementation
+   * @param marketDataAvailabilityProvider
+   *          the market data availability provider
+   * @param functionResolver
+   *          the function resolver
+   * @param compilationContext
+   *          the function compilation context
+   * @param executorService
+   *          the executor service
+   * @param dependencyGraphBuilder
+   *          the graph building implementation
    */
   public ViewCompilationServices(
       final MarketDataAvailabilityProvider marketDataAvailabilityProvider,
@@ -53,7 +58,7 @@ public class ViewCompilationServices {
     _dependencyGraphBuilder = dependencyGraphBuilder;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the market data availability provider.
    *

@@ -19,6 +19,7 @@ import com.opengamma.financial.analytics.model.black.BlackDiscountingPVIRFutureO
 
 /**
  * Calculates the present value of interest rate future options using the Black formula.
+ * 
  * @deprecated Use {@link BlackDiscountingPVIRFutureOptionFunction}
  */
 @Deprecated
@@ -27,7 +28,7 @@ public class InterestRateFutureOptionBlackPresentValueFunction extends InterestR
   private static final PresentValueBlackCalculator CALCULATOR = PresentValueBlackCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirement name to {@link ValueRequirementNames#PRESENT_VALUE}.
    */
   public InterestRateFutureOptionBlackPresentValueFunction() {
     super(ValueRequirementNames.PRESENT_VALUE, true);

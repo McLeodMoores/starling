@@ -13,8 +13,7 @@ import com.opengamma.livedata.LiveDataSpecification;
 import com.opengamma.util.tuple.ObjectsPair;
 
 /**
- * Selects a subscription as Fake iff
- *  any of the child subscription selectors select it as a fake
+ * Selects a subscription as Fake iff any of the child subscription selectors select it as a fake.
  */
 public class UnionFakeSubscriptionSelector implements FakeSubscriptionSelector {
 

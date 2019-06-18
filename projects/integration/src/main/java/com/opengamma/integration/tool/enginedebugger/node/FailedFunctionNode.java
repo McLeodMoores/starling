@@ -13,7 +13,7 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Node representing a failed function (more than one unsatisfied value requirements)
+ * Node representing a failed function (more than one unsatisfied value requirements).
  */
 public class FailedFunctionNode extends AbstractFailureWithRequirementsNode {
 
@@ -40,9 +40,8 @@ public class FailedFunctionNode extends AbstractFailureWithRequirementsNode {
   public int getIndexOfChild(final Object child) {
     if (child.equals(_unsatisfiedFailures)) {
       return 4;
-    } else {
-      return super.getIndexOfChild(child);
     }
+    return super.getIndexOfChild(child);
   }
 
   @Override

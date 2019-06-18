@@ -33,7 +33,7 @@ import com.opengamma.master.portfolio.PortfolioSearchResult;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Class to load configurations from an input stream
+ * Class to load configurations from an input stream.
  */
 public class ConfigLoader {
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfigLoader.class);
@@ -44,7 +44,7 @@ public class ConfigLoader {
   private final boolean _attemptToPortPortfolioIds;
 
   public ConfigLoader(final ConfigMaster configMaster, final PortfolioMaster portfolioMaster, final boolean attemptToPortPortfolioIds,
-                      final boolean actuallyStore, final boolean verbose) {
+      final boolean actuallyStore, final boolean verbose) {
     _configMaster = configMaster;
     _portfolioMaster = portfolioMaster;
     _attemptToPortPortfolioIds = attemptToPortPortfolioIds;
@@ -53,7 +53,8 @@ public class ConfigLoader {
   }
 
   public void loadConfig(final InputStream inputStream) {
-    final FudgeXMLStreamReader xmlStreamReader = new FudgeXMLStreamReader(OpenGammaFudgeContext.getInstance(), new InputStreamReader(new BufferedInputStream(inputStream)));
+    final FudgeXMLStreamReader xmlStreamReader = new FudgeXMLStreamReader(OpenGammaFudgeContext.getInstance(),
+        new InputStreamReader(new BufferedInputStream(inputStream)));
     final FudgeMsgReader fudgeMsgReader = new FudgeMsgReader(xmlStreamReader);
     final FudgeDeserializer deserializer = new FudgeDeserializer(OpenGammaFudgeContext.getInstance());
     final FudgeMsg configsMessage = fudgeMsgReader.nextMessage();
@@ -72,20 +73,18 @@ public class ConfigLoader {
       return;
     }
     @SuppressWarnings("unchecked")
-    final
-    List<ConfigEntry> configs = (List<ConfigEntry>) wrapper.get("configs");
+    final List<ConfigEntry> configs = (List<ConfigEntry>) wrapper.get("configs");
     if (wrapper.contains("idToPortfolioMap")) {
       @SuppressWarnings("unchecked")
-      final
-      Map<UniqueId, String> idToPortfolioMap = (Map<UniqueId, String>) wrapper.get("idToPortfolioMap");
+      final Map<UniqueId, String> idToPortfolioMap = (Map<UniqueId, String>) wrapper.get("idToPortfolioMap");
       if (idToPortfolioMap == null) {
         LOGGER.warn("Apparently corrupt portfolio id -> name map, won't attempt to port portfolio ids");
-        loadConfigs(configs, Collections.<UniqueId, String>emptyMap());
+        loadConfigs(configs, Collections.<UniqueId, String> emptyMap());
       } else {
         loadConfigs(configs, idToPortfolioMap);
       }
     } else {
-      loadConfigs(configs, Collections.<UniqueId, String>emptyMap());
+      loadConfigs(configs, Collections.<UniqueId, String> emptyMap());
     }
 
   }

@@ -25,7 +25,7 @@ public final class TimeSeriesWeightedVolatilityOperator extends Function1D<DateD
   private final double _lambda;
 
   private TimeSeriesWeightedVolatilityOperator(final Function1D<DateDoubleTimeSeries<?>, DateDoubleTimeSeries<?>> changeOperator,
-                                               final double lambda) {
+      final double lambda) {
     _changeOperator = changeOperator;
     if (lambda <= 0 || lambda > 1) {
       throw new OpenGammaRuntimeException("lambda must be in the range (0, 1]");
@@ -54,8 +54,10 @@ public final class TimeSeriesWeightedVolatilityOperator extends Function1D<DateD
   }
 
   /**
-   * Calculates weighted volatilities using the relative difference series
-   * @param lambda lambda value to apply
+   * Calculates weighted volatilities using the relative difference series.
+   * 
+   * @param lambda
+   *          lambda value to apply
    * @return a TimeSeriesWeightedVolatilityOperator instance
    */
   public static TimeSeriesWeightedVolatilityOperator relative(final double lambda) {
@@ -63,8 +65,10 @@ public final class TimeSeriesWeightedVolatilityOperator extends Function1D<DateD
   }
 
   /**
-   * Calculates weighted volatilities using the absolute difference series
-   * @param lambda lambda value to apply
+   * Calculates weighted volatilities using the absolute difference series.
+   * 
+   * @param lambda
+   *          lambda value to apply
    * @return a TimeSeriesWeightedVolatilityOperator instance
    */
   public static TimeSeriesWeightedVolatilityOperator absolute(final double lambda) {

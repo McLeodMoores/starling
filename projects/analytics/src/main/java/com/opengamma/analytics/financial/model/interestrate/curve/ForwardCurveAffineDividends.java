@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.interestrate.curve;
@@ -18,8 +18,7 @@ import com.opengamma.analytics.util.serialization.InvokedSerializedForm;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * ForwardCurve for Equity assets that are modelled to pay known discrete dividends 
- * with an affine form: d(i) = alpha[i] + beta[i]*share_price(tau[i])
+ * ForwardCurve for Equity assets that are modelled to pay known discrete dividends with an affine form: d(i) = alpha[i] + beta[i]*share_price(tau[i]).
  */
 public class ForwardCurveAffineDividends extends ForwardCurve {
 
@@ -33,10 +32,13 @@ public class ForwardCurveAffineDividends extends ForwardCurve {
   }
 
   /**
-   * @param spot The spot, greater than zero
-   * @param riskFreeCurve The discount curve, not null
-   * @param dividends The dividends, not null
-   * @return FunctionalDoublesCurve with discrete dividends of an affine form: d(i) = alpha[i] + beta[i]*share_price(tau[i]) 
+   * @param spot
+   *          The spot, greater than zero
+   * @param riskFreeCurve
+   *          The discount curve, not null
+   * @param dividends
+   *          The dividends, not null
+   * @return FunctionalDoublesCurve with discrete dividends of an affine form: d(i) = alpha[i] + beta[i]*share_price(tau[i])
    */
   protected static Curve<Double, Double> getForwardCurve(final double spot, final YieldAndDiscountCurve riskFreeCurve, final AffineDividends dividends) {
     ArgumentChecker.isTrue(spot > 0, "Negative spot. S_0 = {}", spot);
@@ -56,7 +58,7 @@ public class ForwardCurveAffineDividends extends ForwardCurve {
         double prod = 1.0;
         double sum = 0.0;
         for (int i = 0; i < n; i++) {
-          prod *= (1 - dividends.getBeta(i));
+          prod *= 1 - dividends.getBeta(i);
           accumProd[i] = prod;
           growthFactor[i] = prod / riskFreeCurve.getDiscountFactor(dividends.getTau(i));
           sum += dividends.getAlpha(i) / growthFactor[i];
@@ -86,19 +88,19 @@ public class ForwardCurveAffineDividends extends ForwardCurve {
     return _dividends;
   }
 
-  
   /**
-   * Shift the forward curve by a fractional amount, shift, such that the new curve F'(T) = (1 + shift) * F(T), has
-   * an unchanged drift.
-   * @param shift The fractional shift amount, i.e. 0.1 will produce a curve 10% larger than the original
+   * Shift the forward curve by a fractional amount, shift, such that the new curve F'(T) = (1 + shift) * F(T), has an unchanged drift.
+   * 
+   * @param shift
+   *          The fractional shift amount, i.e. 0.1 will produce a curve 10% larger than the original
    * @return The shifted curve
    */
   @Override
   public ForwardCurveAffineDividends withFractionalShift(final double shift) {
     ArgumentChecker.isTrue(shift > -1, "shift must be > -1");
-    return new ForwardCurveAffineDividends((1 + shift) * getSpot(),  getRiskFreeCurve(), getDividends());
+    return new ForwardCurveAffineDividends((1 + shift) * getSpot(), getRiskFreeCurve(), getDividends());
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -107,7 +109,7 @@ public class ForwardCurveAffineDividends extends ForwardCurve {
     result = prime * result + getForwardCurve().hashCode();
     long temp;
     temp = Double.doubleToLongBits(getSpot());
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + getRiskFreeCurve().hashCode();
     result = prime * result + getDividends().hashCode();
     return result;

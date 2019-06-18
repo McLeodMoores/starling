@@ -76,19 +76,21 @@ public class BondFutureLoader extends SecurityLoader {
       FIELD_FUT_CONT_SIZE));
 
   /**
-   * The valid Bloomberg future categories for Bond Futures
+   * The valid Bloomberg future categories for Bond Futures.
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = ImmutableSet.of(BLOOMBERG_BOND_FUTURE_TYPE);
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   * 
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public BondFutureLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.BOND_FUTURE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     final String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
@@ -147,7 +149,7 @@ public class BondFutureLoader extends SecurityLoader {
     final ZonedDateTime lastDeliverDate = decodeDeliveryDate(lastDeliveryDateStr);
     final Set<BondFutureDeliverable> basket = createBondDeliverables(fieldData);
     final BondFutureSecurity security = new BondFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount, basket,
-                                                         firstDeliverDate, lastDeliverDate, category);
+        firstDeliverDate, lastDeliverDate, category);
 
     // set identifiers
     parseIdentifiers(fieldData, security);

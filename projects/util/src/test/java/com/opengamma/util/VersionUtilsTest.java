@@ -21,8 +21,12 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class VersionUtilsTest {
 
+  /**
+   * @throws Exception
+   *           if there is a problem constructing the class
+   */
   @SuppressWarnings("unchecked")
-  public void test_constructor() throws Exception {
+  public void testConstructor() throws Exception {
     final Constructor<?>[] cons = VersionUtils.class.getDeclaredConstructors();
     assertEquals(1, cons.length);
     assertEquals(0, cons[0].getParameterTypes().length);
@@ -32,15 +36,24 @@ public class VersionUtilsTest {
     con.newInstance();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   public void validPropertyFile() {
     assertEquals("FIN-507", VersionUtils.getVersion("VersionUtilTest-1"));
   }
 
+  /**
+   *
+   */
   public void invalidPropertyFile() {
     checkLocalVersionOk(VersionUtils.getVersion("VersionUtilTest-2"));
   }
 
+  /**
+   *
+   */
   public void noPropertyFile() {
     checkLocalVersionOk(VersionUtils.getVersion("VersionUtilTest-3"));
   }

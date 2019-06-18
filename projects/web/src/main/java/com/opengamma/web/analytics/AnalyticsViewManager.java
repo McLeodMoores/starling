@@ -50,12 +50,11 @@ import com.opengamma.web.server.AggregatedViewDefinitionManager;
 @SuppressWarnings("deprecation")
 public class AnalyticsViewManager {
 
-  /* TODO handle userId and clientId
-  when view is created wrap in an impl that contains the IDs
-  could just add them to add them to SimpleAnalyticsView
-  when view is requested (including IDs) create another impl that wraps those IDs and delegates to the one that
-  holds the real IDs. but before delegating it compares the IDs
-  */
+  /*
+   * TODO handle userId and clientId when view is created wrap in an impl that contains the IDs could just add them to add them to SimpleAnalyticsView when view
+   * is requested (including IDs) create another impl that wraps those IDs and delegates to the one that holds the real IDs. but before delegating it compares
+   * the IDs
+   */
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AnalyticsViewManager.class);
 
@@ -74,9 +73,12 @@ public class AnalyticsViewManager {
   private final PositionMaster _positionMaster;
   private final ExecutorService _portfolioResolutionExecutor;
 
-  public AnalyticsViewManager(final ViewProcessor viewProcessor, final ExecutionFlags.ParallelRecompilationMode parallelViewRecompilation, final AggregatedViewDefinitionManager aggregatedViewDefManager,
-      final ComputationTargetResolver targetResolver, final FunctionRepositoryFactory functions, final NamedMarketDataSpecificationRepository marketDataSpecificationRepository,
-      final SecurityAttributeMapper blotterColumnMapper, final PositionSource positionSource, final ConfigSource configSource, final SecuritySource securitySource, final SecurityMaster securityMaster,
+  public AnalyticsViewManager(final ViewProcessor viewProcessor, final ExecutionFlags.ParallelRecompilationMode parallelViewRecompilation,
+      final AggregatedViewDefinitionManager aggregatedViewDefManager,
+      final ComputationTargetResolver targetResolver, final FunctionRepositoryFactory functions,
+      final NamedMarketDataSpecificationRepository marketDataSpecificationRepository,
+      final SecurityAttributeMapper blotterColumnMapper, final PositionSource positionSource, final ConfigSource configSource,
+      final SecuritySource securitySource, final SecurityMaster securityMaster,
       final PositionMaster positionMaster) {
     ArgumentChecker.notNull(viewProcessor, "viewProcessor");
     ArgumentChecker.notNull(aggregatedViewDefManager, "aggregatedViewDefManager");
@@ -105,7 +107,8 @@ public class AnalyticsViewManager {
   }
 
   public ViewRequest createViewRequest(final UniqueId webId, final List<String> aggregators,
-      final List<MarketDataSpecification> marketDataSpecs, final Instant valuationTime, final VersionCorrection portfolioVersionCorrection, final boolean blotter) {
+      final List<MarketDataSpecification> marketDataSpecs, final Instant valuationTime, final VersionCorrection portfolioVersionCorrection,
+      final boolean blotter) {
     if (isViewDefinitionId(webId)) {
       return new ViewRequest(webId, null, aggregators, marketDataSpecs, valuationTime, portfolioVersionCorrection, blotter);
     } else if (isViewProcessId(webId)) {
@@ -116,7 +119,7 @@ public class AnalyticsViewManager {
       }
       final ViewProcess viewProcess = _viewProcessor.getViewProcess(webId);
       final UniqueId viewDefinitionId = viewProcess.getDefinitionId();
-      return new ViewRequest(viewDefinitionId, webId, ImmutableList.<String>of(), marketDataSpecs, valuationTime, portfolioVersionCorrection, blotter);
+      return new ViewRequest(viewDefinitionId, webId, ImmutableList.<String> of(), marketDataSpecs, valuationTime, portfolioVersionCorrection, blotter);
     } else {
       throw new OpenGammaRuntimeException("Unknown identifier " + webId);
     }
@@ -143,17 +146,27 @@ public class AnalyticsViewManager {
   /**
    * Creates a new view.
    *
-   * @param request Details of the view
-   * @param clientId ID of the client connection
-   * @param user User requesting the view
-   * @param clientConnection Connection that will be notified of changes to the view
-   * @param viewId ID of the view, must be unique
-   * @param viewCallbackId ID that's passed to the listener when the view's portfolio grid structure changes
-   * @param portfolioGridId ID that's passed to the listener when the view's portfolio grid structure changes
-   * @param primitivesGridId ID that's passed to the listener when the view's primitives grid structure changes
-   * @param errorId the error ID
+   * @param request
+   *          Details of the view
+   * @param clientId
+   *          ID of the client connection
+   * @param user
+   *          User requesting the view
+   * @param clientConnection
+   *          Connection that will be notified of changes to the view
+   * @param viewId
+   *          ID of the view, must be unique
+   * @param viewCallbackId
+   *          ID that's passed to the listener when the view's portfolio grid structure changes
+   * @param portfolioGridId
+   *          ID that's passed to the listener when the view's portfolio grid structure changes
+   * @param primitivesGridId
+   *          ID that's passed to the listener when the view's primitives grid structure changes
+   * @param errorId
+   *          the error ID
    */
-  public void createView(final ViewRequest request, final String clientId, final UserPrincipal user, final ClientConnection clientConnection, final String viewId, final Object viewCallbackId, final String portfolioGridId,
+  public void createView(final ViewRequest request, final String clientId, final UserPrincipal user, final ClientConnection clientConnection,
+      final String viewId, final Object viewCallbackId, final String portfolioGridId,
       final String primitivesGridId, final String errorId) {
     if (_viewConnections.containsKey(viewId)) {
       throw new IllegalArgumentException("View ID " + viewId + " is already in use");
@@ -187,7 +200,8 @@ public class AnalyticsViewManager {
     // TODO add filtering change listener to portfolio master which calls portfolioChanged() on the outer view
     final boolean primitivesOnly = portfolioId == null;
     final ErrorManager errorManager = new ErrorManager(errorId);
-    final AnalyticsView view = new SimpleAnalyticsView(aggregatedViewDef.getUniqueId(), primitivesOnly, versionCorrection, viewId, portfolioGridId, primitivesGridId, _targetResolver, _functions,
+    final AnalyticsView view = new SimpleAnalyticsView(aggregatedViewDef.getUniqueId(), primitivesOnly, versionCorrection, viewId, portfolioGridId,
+        primitivesGridId, _targetResolver, _functions,
         viewportListener, _blotterColumnMapper, portfolioSupplier, entityExtractor, request.showBlotterColumns(), errorManager);
     final AnalyticsView lockingView = new LockingAnalyticsView(view);
     final AnalyticsView notifyingView = new NotifyingAnalyticsView(lockingView, clientConnection);
@@ -197,7 +211,8 @@ public class AnalyticsViewManager {
     final AutoCloseable positionListener = new MasterNotificationListener<>(_positionMaster, catchingView);
     final AutoCloseable portfolioListener = new PortfolioListener(portfolioObjectId, catchingView, _positionSource);
     final List<AutoCloseable> listeners = Lists.newArrayList(securityListener, positionListener, portfolioListener);
-    final AnalyticsViewClientConnection connection = new AnalyticsViewClientConnection(request, aggregatedViewDef, viewClient, catchingView, listeners, _parallelViewRecompilation,
+    final AnalyticsViewClientConnection connection = new AnalyticsViewClientConnection(request, aggregatedViewDef, viewClient, catchingView, listeners,
+        _parallelViewRecompilation,
         _marketDataSpecificationRepository, _portfolioResolutionExecutor, _securitySource);
     _viewConnections.put(viewId, connection);
     // need to notify the listener that the view has been created
@@ -210,8 +225,10 @@ public class AnalyticsViewManager {
   /**
    * Deletes a view.
    *
-   * @param viewId ID of the view
-   * @throws DataNotFoundException If there's no view with the specified ID
+   * @param viewId
+   *          ID of the view
+   * @throws DataNotFoundException
+   *           If there's no view with the specified ID
    */
   public void deleteView(final String viewId) {
     final AnalyticsViewClientConnection connection = _viewConnections.remove(viewId);
@@ -226,9 +243,11 @@ public class AnalyticsViewManager {
   /**
    * Returns a view given its ID.
    *
-   * @param viewId ID of the view
+   * @param viewId
+   *          ID of the view
    * @return The view
-   * @throws DataNotFoundException If there's no view with the specified ID
+   * @throws DataNotFoundException
+   *           If there's no view with the specified ID
    */
   public AnalyticsView getView(final String viewId) {
     final AnalyticsViewClientConnection connection = _viewConnections.get(viewId);
@@ -242,9 +261,11 @@ public class AnalyticsViewManager {
   /**
    * Returns a view client given its view ID.
    *
-   * @param viewId ID of the view
+   * @param viewId
+   *          ID of the view
    * @return the view client.
-   * @throws DataNotFoundException If there's no view with the specified ID
+   * @throws DataNotFoundException
+   *           If there's no view with the specified ID
    */
   public ViewClient getViewCient(final String viewId) {
     final AnalyticsViewClientConnection connection = _viewConnections.get(viewId);

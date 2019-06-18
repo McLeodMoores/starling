@@ -87,7 +87,7 @@ public class WebsiteBundleComponentFactory extends AbstractComponentFactory {
   @PropertyDefinition
   private boolean _compressorWarn;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     final WebResourceBundleInitializer webResourceInitializer = new WebResourceBundleInitializer(buildCompressorOptions(),
@@ -95,7 +95,7 @@ public class WebsiteBundleComponentFactory extends AbstractComponentFactory {
     repo.registerServletContextAware(webResourceInitializer);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   static final class WebResourceBundleInitializer implements ServletContextAware {
     private final YUICompressorOptions _compressorOptions;
     private final BundleManagerFactory _bundleManagerFactory;
@@ -103,7 +103,7 @@ public class WebsiteBundleComponentFactory extends AbstractComponentFactory {
     private final DeployMode _deployMode;
     private final ComponentRepository _repo;
 
-    public WebResourceBundleInitializer(final YUICompressorOptions compressorOptions, final BundleManagerFactory bundleManagerFactory,
+    WebResourceBundleInitializer(final YUICompressorOptions compressorOptions, final BundleManagerFactory bundleManagerFactory,
         final CacheManager cacheManager, final DeployMode deployMode, final ComponentRepository repo) {
       _compressorOptions = compressorOptions;
       _bundleManagerFactory = bundleManagerFactory;

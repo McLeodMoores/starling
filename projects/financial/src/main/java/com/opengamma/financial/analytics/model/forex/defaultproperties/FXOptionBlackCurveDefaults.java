@@ -29,42 +29,44 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  * Default properties for FX options priced using the Black functions.
+ * 
  * @deprecated These defaults are used by deprecated functions.
  */
 @Deprecated
 public class FXOptionBlackCurveDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(FXOptionBlackCurveDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.FX_PRESENT_VALUE,
-    ValueRequirementNames.FX_CURRENCY_EXPOSURE,
-    ValueRequirementNames.VALUE_DELTA,
-    ValueRequirementNames.VALUE_VEGA,
-    ValueRequirementNames.VALUE_GAMMA,
-    ValueRequirementNames.VALUE_GAMMA_P,
-    ValueRequirementNames.VEGA_MATRIX,
-    ValueRequirementNames.VEGA_QUOTE_MATRIX,
-    ValueRequirementNames.FX_CURVE_SENSITIVITIES,
-    ValueRequirementNames.PV01,
-    ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY,
-    ValueRequirementNames.VALUE_THETA,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-    ValueRequirementNames.VALUE_RHO,
-    ValueRequirementNames.VALUE_PHI,
-    ValueRequirementNames.VALUE_VOMMA,
-    ValueRequirementNames.VALUE_VANNA,
-    ValueRequirementNames.DELTA,
-    ValueRequirementNames.FORWARD_DELTA,
-    ValueRequirementNames.GAMMA,
-    ValueRequirementNames.FORWARD_GAMMA,
-    ValueRequirementNames.FORWARD_VEGA,
-    ValueRequirementNames.FORWARD_DRIFTLESS_THETA,
-    ValueRequirementNames.THETA
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.FX_PRESENT_VALUE,
+                ValueRequirementNames.FX_CURRENCY_EXPOSURE,
+                ValueRequirementNames.VALUE_DELTA,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.VALUE_GAMMA_P,
+                ValueRequirementNames.VEGA_MATRIX,
+                ValueRequirementNames.VEGA_QUOTE_MATRIX,
+                ValueRequirementNames.FX_CURVE_SENSITIVITIES,
+                ValueRequirementNames.PV01,
+                ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY,
+                ValueRequirementNames.VALUE_THETA,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.VALUE_RHO,
+                ValueRequirementNames.VALUE_PHI,
+                ValueRequirementNames.VALUE_VOMMA,
+                ValueRequirementNames.VALUE_VANNA,
+                ValueRequirementNames.DELTA,
+                ValueRequirementNames.FORWARD_DELTA,
+                ValueRequirementNames.GAMMA,
+                ValueRequirementNames.FORWARD_GAMMA,
+                ValueRequirementNames.FORWARD_VEGA,
+                ValueRequirementNames.FORWARD_DRIFTLESS_THETA,
+                ValueRequirementNames.THETA
   };
   private final Map<String, Pair<String, String>> _currencyCurveConfigAndDiscountingCurveNames;
 
   /**
-   * @param currencyCurveConfigAndDiscountingCurveNames Values for the properties per currency: an array of strings where the <i>i<sup>th</sup></i> currency has properties:
+   * @param currencyCurveConfigAndDiscountingCurveNames
+   *          Values for the properties per currency: an array of strings where the <i>i<sup>th</sup></i> currency has properties:
    *          <ul>
    *          <li><i>i</i> = currency name,
    *          <li><i>i + 1</i> = curve configuration name
@@ -88,7 +90,7 @@ public class FXOptionBlackCurveDefaults extends DefaultPropertyFunction {
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final String putCurrency = security.accept(ForexVisitors.getPutCurrencyVisitor()).getCode();
     final String callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor()).getCode();
-    return (_currencyCurveConfigAndDiscountingCurveNames.containsKey(putCurrency) && _currencyCurveConfigAndDiscountingCurveNames.containsKey(callCurrency));
+    return _currencyCurveConfigAndDiscountingCurveNames.containsKey(putCurrency) && _currencyCurveConfigAndDiscountingCurveNames.containsKey(callCurrency);
   }
 
   @Override
@@ -102,7 +104,8 @@ public class FXOptionBlackCurveDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final String putCurrency = security.accept(ForexVisitors.getPutCurrencyVisitor()).getCode();
     final String callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor()).getCode();

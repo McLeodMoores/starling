@@ -36,7 +36,9 @@ import com.opengamma.financial.security.bond.BondSecurity;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondZSpreadFromMarketCleanPriceFunction extends BondFromPriceFunction {
   private static final BondSecurityDiscountingMethod CALCULATOR = BondSecurityDiscountingMethod.getInstance();
 
@@ -62,11 +64,13 @@ public class BondZSpreadFromMarketCleanPriceFunction extends BondFromPriceFuncti
     }
     final String riskFreeCurveName = riskFreeCurves.iterator().next();
     final String curveName = curves.iterator().next();
-    return Sets.newHashSet(getCurveRequirement(target, riskFreeCurveName), getCurveRequirement(target, curveName), getCleanPriceRequirement(target, desiredValue));
+    return Sets.newHashSet(getCurveRequirement(target, riskFreeCurveName), getCurveRequirement(target, curveName),
+        getCleanPriceRequirement(target, desiredValue));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String curveName = null;
     for (final Map.Entry<ValueSpecification, ValueRequirement> input : inputs.entrySet()) {
       if (ValueRequirementNames.YIELD_CURVE.equals(input.getKey().getValueName())) {

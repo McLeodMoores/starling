@@ -49,14 +49,16 @@ public class ContractCategoryExposureFunction implements ExposureFunction {
    */
   public static final String NAME = "Contract Category";
 
-  /** Contract identifier */
+  /** Contract identifier. */
   public static final String CONTRACT_IDENTIFIER = "ContractType";
 
   private final ContractTypeVisitor _visitor;
 
   /**
    * Default constructor for ContractCategoryExposureFunction.
-   * @param securitySource the security source used to look up the underlying.
+   *
+   * @param securitySource
+   *          the security source used to look up the underlying.
    */
   public ContractCategoryExposureFunction(final SecuritySource securitySource) {
     _visitor = new ContractTypeVisitor(ArgumentChecker.notNull(securitySource, "securitySource"));
@@ -85,8 +87,8 @@ public class ContractCategoryExposureFunction implements ExposureFunction {
   }
 
   /**
-   * Implementation of the FinancialSecurityVisitor that returns the contract type for a security. If the security does
-   * not have a contract type, then null is returned.
+   * Implementation of the FinancialSecurityVisitor that returns the contract type for a security. If the security does not have a contract type, then null is
+   * returned.
    */
   private static final class ContractTypeVisitor extends FinancialSecurityVisitorSameValueAdapter<List<ExternalId>> {
 
@@ -95,7 +97,7 @@ public class ContractCategoryExposureFunction implements ExposureFunction {
     /**
      * Default constructor that initialises the default returned value to null.
      */
-    public ContractTypeVisitor(final SecuritySource securitySource) {
+    ContractTypeVisitor(final SecuritySource securitySource) {
       super(null);
       _securitySource = ArgumentChecker.notNull(securitySource, "securitySource");
     }

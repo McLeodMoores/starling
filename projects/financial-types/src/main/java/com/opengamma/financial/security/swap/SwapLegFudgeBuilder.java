@@ -43,6 +43,16 @@ public class SwapLegFudgeBuilder extends AbstractFudgeBuilder {
   /** Field name. */
   public static final String FLOATING_RATE_TYPE_FIELD_NAME = "floatingRateType";
 
+  /**
+   * Converts a swap leg to a Fudge message.
+   *
+   * @param serializer
+   *          the serializer, not null
+   * @param object
+   *          the swap leg, not null
+   * @param msg
+   *          the message, not null
+   */
   public static void toFudgeMsg(final FudgeSerializer serializer, final SwapLeg object, final MutableFudgeMsg msg) {
     addToMessage(msg, DAY_COUNT_FIELD_NAME, object.getDayCount());
     addToMessage(msg, FREQUENCY_FIELD_NAME, object.getFrequency());
@@ -52,6 +62,16 @@ public class SwapLegFudgeBuilder extends AbstractFudgeBuilder {
     addToMessage(msg, IS_EOM_FIELD_NAME, object.isEom());
   }
 
+  /**
+   * Converts a swap leg to a Fudge message.
+   *
+   * @param serializer
+   *          the serializer, not null
+   * @param object
+   *          the swap leg, not null
+   * @param msg
+   *          the message, not null
+   */
   public static void toFudgeMsg(final FudgeSerializer serializer, final FloatingInterestRateLeg object, final MutableFudgeMsg msg) {
     toFudgeMsg(serializer, (SwapLeg) object, msg);
     addToMessage(msg, FLOATING_REFERENCE_RATE_IDENTIFIER_FIELD_NAME, ExternalIdFudgeBuilder.toFudgeMsg(serializer, object.getFloatingReferenceRateId()));
@@ -61,6 +81,16 @@ public class SwapLegFudgeBuilder extends AbstractFudgeBuilder {
     addToMessage(msg, FLOATING_RATE_TYPE_FIELD_NAME, object.getFloatingRateType().name());
   }
 
+  /**
+   * Converts a Fudge message to a swap leg.
+   * 
+   * @param deserializer
+   *          the deserializer, not null
+   * @param msg
+   *          the message, not null
+   * @param object
+   *          an empty swap leg, not null
+   */
   public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final SwapLeg object) {
     object.setDayCount(msg.getValue(DayCount.class, DAY_COUNT_FIELD_NAME));
     object.setFrequency(msg.getValue(Frequency.class, FREQUENCY_FIELD_NAME));
@@ -70,6 +100,16 @@ public class SwapLegFudgeBuilder extends AbstractFudgeBuilder {
     object.setEom(msg.getBoolean(IS_EOM_FIELD_NAME));
   }
 
+  /**
+   * Converts a Fudge message to a swap leg.
+   * 
+   * @param deserializer
+   *          the deserializer, not null
+   * @param msg
+   *          the message, not null
+   * @param object
+   *          an empty swap leg, not null
+   */
   public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final FloatingInterestRateLeg object) {
     fromFudgeMsg(deserializer, msg, (SwapLeg) object);
     object.setFloatingReferenceRateId(ExternalIdFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(FLOATING_REFERENCE_RATE_IDENTIFIER_FIELD_NAME)));
@@ -79,12 +119,12 @@ public class SwapLegFudgeBuilder extends AbstractFudgeBuilder {
     object.setFloatingRateType(FloatingRateType.valueOf(msg.getString(FLOATING_RATE_TYPE_FIELD_NAME)));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * A Fudge builder for {@code FixedInterestRateLeg}.
    */
   @FudgeBuilderFor(FixedInterestRateLeg.class)
-  public static class FixedInterestRateLegBuilder extends SwapLegFudgeBuilder implements FudgeBuilder<FixedInterestRateLeg>  {
+  public static class FixedInterestRateLegBuilder extends SwapLegFudgeBuilder implements FudgeBuilder<FixedInterestRateLeg> {
     /** Field name. */
     public static final String RATE_FIELD_NAME = "rate";
 
@@ -105,12 +145,12 @@ public class SwapLegFudgeBuilder extends AbstractFudgeBuilder {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * A Fudge builder for {@code FloatingInterestRateLeg}.
    */
   @FudgeBuilderFor(FloatingInterestRateLeg.class)
-  public static class FloatingInterestRateLegBuilder extends SwapLegFudgeBuilder implements FudgeBuilder<FloatingInterestRateLeg>  {
+  public static class FloatingInterestRateLegBuilder extends SwapLegFudgeBuilder implements FudgeBuilder<FloatingInterestRateLeg> {
 
     @Override
     public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FloatingInterestRateLeg object) {
@@ -127,12 +167,12 @@ public class SwapLegFudgeBuilder extends AbstractFudgeBuilder {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * A Fudge builder for {@code FloatingSpreadIRLeg}.
    */
   @FudgeBuilderFor(FloatingSpreadIRLeg.class)
-  public static class FloatingSpreadIRLegBuilder extends SwapLegFudgeBuilder implements FudgeBuilder<FloatingSpreadIRLeg>  {
+  public static class FloatingSpreadIRLegBuilder extends SwapLegFudgeBuilder implements FudgeBuilder<FloatingSpreadIRLeg> {
     /** Field name. */
     public static final String SPREAD_FIELD_NAME = "spread";
 
@@ -153,12 +193,12 @@ public class SwapLegFudgeBuilder extends AbstractFudgeBuilder {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * A Fudge builder for {@code FloatingGearingIRLeg}.
    */
   @FudgeBuilderFor(FloatingGearingIRLeg.class)
-  public static class FloatingGearingIRLegBuilder extends SwapLegFudgeBuilder implements FudgeBuilder<FloatingGearingIRLeg>  {
+  public static class FloatingGearingIRLegBuilder extends SwapLegFudgeBuilder implements FudgeBuilder<FloatingGearingIRLeg> {
     /** Field name. */
     public static final String GEARING_FIELD_NAME = "gearing";
 
@@ -179,12 +219,12 @@ public class SwapLegFudgeBuilder extends AbstractFudgeBuilder {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * A Fudge builder for {@code FixedInflationSwapLeg}.
    */
   @FudgeBuilderFor(FixedInflationSwapLeg.class)
-  public static class FixedInflationSwapLegBuilder extends SwapLegFudgeBuilder implements FudgeBuilder<FixedInflationSwapLeg>  {
+  public static class FixedInflationSwapLegBuilder extends SwapLegFudgeBuilder implements FudgeBuilder<FixedInflationSwapLeg> {
     /** The rate field name */
     private static final String RATE_FIELD_NAME = "rate";
 
@@ -205,12 +245,12 @@ public class SwapLegFudgeBuilder extends AbstractFudgeBuilder {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * A Fudge builder for {@code InflationIndexSwapLeg}.
    */
   @FudgeBuilderFor(InflationIndexSwapLeg.class)
-  public static class InflationIndexSwapLegBuilder extends SwapLegFudgeBuilder implements FudgeBuilder<InflationIndexSwapLeg>  {
+  public static class InflationIndexSwapLegBuilder extends SwapLegFudgeBuilder implements FudgeBuilder<InflationIndexSwapLeg> {
     /** The index reference id field name */
     private static final String INDEX_ID_FIELD_NAME = "indexId";
     /** The quotation lag field name */

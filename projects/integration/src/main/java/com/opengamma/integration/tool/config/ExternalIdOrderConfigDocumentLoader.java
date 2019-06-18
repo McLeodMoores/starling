@@ -15,7 +15,7 @@ import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.ConfigMasterUtils;
 
 /**
- * Class to save a reasonable default ExternalIdOrderConfig in the config database
+ * Class to save a reasonable default ExternalIdOrderConfig in the config database.
  */
 public class ExternalIdOrderConfigDocumentLoader {
   @SuppressWarnings("unused")
@@ -27,8 +27,10 @@ public class ExternalIdOrderConfigDocumentLoader {
   /**
    * Creates an instance.
    *
-   * @param configMaster  the master for saving the currency pairs
-   * @param configName  the name for the {@link CurrencyPairs} in the config master
+   * @param configMaster
+   *          the master for saving the currency pairs
+   * @param configName
+   *          the name for the {@link CurrencyPairs} in the config master
    */
   public ExternalIdOrderConfigDocumentLoader(final ConfigMaster configMaster, final String configName) {
     _configMaster = configMaster;

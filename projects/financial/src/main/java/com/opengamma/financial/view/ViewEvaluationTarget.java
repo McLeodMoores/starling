@@ -86,8 +86,10 @@ public class ViewEvaluationTarget extends TempTarget {
   /**
    * Creates a target which is the union of this and another. The other target must have compatible valuation parameters.
    *
-   * @param other the other target, not null
-   * @return null if the other target is not compatible, otherwise a new instance containing a view definition that is the union of the two participant view definitions
+   * @param other
+   *          the other target, not null
+   * @return null if the other target is not compatible, otherwise a new instance containing a view definition that is the union of the two participant view
+   *         definitions
    */
   public ViewEvaluationTarget union(final ViewEvaluationTarget other) {
     // Check the valuation parameters are compatible

@@ -30,7 +30,7 @@ import com.opengamma.financial.security.cds.CDSSecurity;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Base class for ISDA CDS pricing functions
+ * Base class for ISDA CDS pricing functions.
  *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  * @see ISDAApproxCDSPriceHazardCurveFunction
@@ -40,7 +40,8 @@ public abstract class ISDAApproxCDSPriceFunction extends NonCompiledInvoker {
 
   protected abstract String getHazardRateStructure();
 
-  protected abstract DoublesPair executeImpl(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues);
+  protected abstract DoublesPair executeImpl(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target,
+      Set<ValueRequirement> desiredValues);
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -51,8 +52,8 @@ public abstract class ISDAApproxCDSPriceFunction extends NonCompiledInvoker {
   protected ValueProperties.Builder createValueProperties() {
     return super.createValueProperties()
         .with(ValuePropertyNames.CALCULATION_METHOD, ISDAFunctionConstants.ISDA_METHOD_NAME)
-                .with(ISDAFunctionConstants.ISDA_IMPLEMENTATION, ISDAFunctionConstants.ISDA_IMPLEMENTATION_APPROX)
-                .with(ISDAFunctionConstants.ISDA_HAZARD_RATE_STRUCTURE, getHazardRateStructure());
+        .with(ISDAFunctionConstants.ISDA_IMPLEMENTATION, ISDAFunctionConstants.ISDA_IMPLEMENTATION_APPROX)
+        .with(ISDAFunctionConstants.ISDA_HAZARD_RATE_STRUCTURE, getHazardRateStructure());
   }
 
   private ValueProperties.Builder createValueProperties(final CDSSecurity security) {
@@ -68,7 +69,7 @@ public abstract class ISDAApproxCDSPriceFunction extends NonCompiledInvoker {
     final ValueSpecification cleanPriceSpec = new ValueSpecification(ValueRequirementNames.CLEAN_PRICE, targetSpec, properties);
     final ValueSpecification dirtyPriceSpec = new ValueSpecification(ValueRequirementNames.DIRTY_PRICE, targetSpec, properties);
     final ValueSpecification presentValueSpec = new ValueSpecification(ValueRequirementNames.PRESENT_VALUE, targetSpec, properties);
-    final Set<ValueSpecification> results = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> results = new HashSet<>();
     results.add(cleanPriceSpec);
     results.add(dirtyPriceSpec);
     results.add(presentValueSpec);
@@ -76,7 +77,8 @@ public abstract class ISDAApproxCDSPriceFunction extends NonCompiledInvoker {
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
 
     final CDSSecurity cds = (CDSSecurity) target.getSecurity();
     final ComputationTargetSpecification targetSpec = target.toSpecification();
@@ -87,7 +89,7 @@ public abstract class ISDAApproxCDSPriceFunction extends NonCompiledInvoker {
     final Double dirtyPrice = calculationResult.getSecond();
 
     // Pack up the results
-    final Set<ComputedValue> results = new HashSet<ComputedValue>();
+    final Set<ComputedValue> results = new HashSet<>();
 
     final ComputedValue cleanPriceValue = new ComputedValue(new ValueSpecification(ValueRequirementNames.CLEAN_PRICE, targetSpec, properties), cleanPrice);
     final ComputedValue dirtyPriceValue = new ComputedValue(new ValueSpecification(ValueRequirementNames.DIRTY_PRICE, targetSpec, properties), dirtyPrice);

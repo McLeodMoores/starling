@@ -38,7 +38,6 @@ import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.conversion.BondFutureSecurityConverter;
 import com.opengamma.financial.analytics.conversion.BondSecurityConverter;
 import com.opengamma.financial.analytics.conversion.FutureSecurityConverterDeprecated;
-import com.opengamma.financial.analytics.conversion.InterestRateFutureSecurityConverterDeprecated;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationWithSecurities;
 import com.opengamma.financial.analytics.model.YieldCurveNodeSensitivitiesHelper;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesBundle;
@@ -50,14 +49,19 @@ import com.opengamma.util.money.Currency;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class EquityDividendYieldFuturesYCNSFunction extends EquityDividendYieldFuturesFunction<DoubleMatrix1D> {
   private FutureSecurityConverterDeprecated _converter;
 
   /**
-   * @param closingPriceField The field name of the historical time series for price, e.g. "PX_LAST", "Close". Set in *FunctionConfiguration
-   * @param costOfCarryField The field name of the historical time series for cost of carry e.g. "COST_OF_CARRY". Set in *FunctionConfiguration
-   * @param resolutionKey The key defining how the time series resolution is to occur e.g. "DEFAULT_TSS_CONFIG"
+   * @param closingPriceField
+   *          The field name of the historical time series for price, e.g. "PX_LAST", "Close". Set in *FunctionConfiguration
+   * @param costOfCarryField
+   *          The field name of the historical time series for cost of carry e.g. "COST_OF_CARRY". Set in *FunctionConfiguration
+   * @param resolutionKey
+   *          The key defining how the time series resolution is to occur e.g. "DEFAULT_TSS_CONFIG"
    */
   public EquityDividendYieldFuturesYCNSFunction(final String closingPriceField, final String costOfCarryField, final String resolutionKey) {
     super(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
@@ -72,7 +76,6 @@ public class EquityDividendYieldFuturesYCNSFunction extends EquityDividendYieldF
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
     final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-    final InterestRateFutureSecurityConverterDeprecated irFutureConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource);
     final BondSecurityConverter bondConverter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
     final BondFutureSecurityConverter bondFutureConverter = new BondFutureSecurityConverter(securitySource, bondConverter);
     _converter = new FutureSecurityConverterDeprecated(bondFutureConverter);
@@ -99,7 +102,8 @@ public class EquityDividendYieldFuturesYCNSFunction extends EquityDividendYieldF
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     // 1. Build the analytic derivative to be priced
     final Trade trade = target.getTrade();
     final FutureSecurity security = (FutureSecurity) trade.getSecurity();
@@ -129,8 +133,9 @@ public class EquityDividendYieldFuturesYCNSFunction extends EquityDividendYieldF
     }
     final InterpolatedYieldCurveSpecificationWithSecurities curveSpec = (InterpolatedYieldCurveSpecificationWithSecurities) curveSpecObject;
 
-    final ValueSpecification resultSpec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), createValueProperties(target, desiredValue)
-        .get());
+    final ValueSpecification resultSpec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(),
+        createValueProperties(target, desiredValue)
+            .get());
 
     // 4. Compute sensitivity to the discount rate, then use chain rule to distribute sensitivity across the curve
     final DoubleMatrix1D sensVector = derivative.accept(getCalculator(), getFutureDataBundle(security, inputs, timeSeriesBundle, desiredValue));

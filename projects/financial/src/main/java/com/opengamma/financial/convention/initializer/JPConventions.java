@@ -19,7 +19,7 @@ import static com.opengamma.financial.convention.initializer.PerCurrencyConventi
 
 import org.threeten.bp.LocalTime;
 
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.convention.DepositConvention;
 import com.opengamma.financial.convention.IborIndexConvention;
@@ -44,13 +44,13 @@ public class JPConventions extends ConventionMasterInitializer {
 
   /** Singleton. */
   public static final ConventionMasterInitializer INSTANCE = new JPConventions();
-  /** OIS X-Ccy USD/JPY ON leg convention string **/
+  /** OIS X-Ccy USD/JPY ON leg convention string. **/
   public static final String OIS_USD_JPY_ON_LEG = "JPY Overnight USD/JPY XCcy Leg";
-  /** The Tibor string **/
+  /** The Tibor string. **/
   public static final String TIBOR = "Tibor";
-  /** The Tibor - Japanese Yen (domestic) string **/
+  /** The Tibor - Japanese Yen (domestic) string. **/
   public static final String TIBOR_JAPANESE = TIBOR + " Japanese Yen";
-  /** The Tibor - Euroyen string **/
+  /** The Tibor - Euroyen string. **/
   public static final String TIBOR_EUROYEN = TIBOR + " Euroyen";
 
   private static final BusinessDayConvention MODIFIED_FOLLOWING = BusinessDayConventions.MODIFIED_FOLLOWING;
@@ -66,7 +66,7 @@ public class JPConventions extends ConventionMasterInitializer {
   protected JPConventions() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ConventionMaster master) {
     final String tenorString = "6M";
@@ -110,12 +110,12 @@ public class JPConventions extends ConventionMasterInitializer {
         Tenor.SIX_MONTHS, ACT_365, MODIFIED_FOLLOWING, Currency.JPY, JP, 2, true, StubType.SHORT_START, false, 2);
     final VanillaIborLegConvention irsIborLegConvention = new VanillaIborLegConvention(
         irsIborLegConventionName, getIds(Currency.JPY, tenorString, IRS_IBOR_LEG),
-        liborConventionId, true, Interpolator1DFactory.LINEAR, Tenor.SIX_MONTHS, 2, true, StubType.NONE, false, 2);
+        liborConventionId, true, LinearInterpolator1dAdapter.NAME, Tenor.SIX_MONTHS, 2, true, StubType.NONE, false, 2);
     // X-Ccy OIS
     final OISLegConvention oisXCcyUSDLegConvention = new OISLegConvention(
         OIS_USD_JPY_ON_LEG, getIds(OIS_USD_JPY_ON_LEG), onIndexId,
         Tenor.THREE_MONTHS, MODIFIED_FOLLOWING, 2, true, StubType.NONE, false, 2);
-    
+
     // Convention add
     addConvention(master, onIndex);
     addConvention(master, liborIndex);

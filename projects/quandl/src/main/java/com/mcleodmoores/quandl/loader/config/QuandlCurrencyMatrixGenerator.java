@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.config;
 
@@ -28,7 +28,9 @@ public final class QuandlCurrencyMatrixGenerator {
 
   /**
    * Creates the configuration using the dominance order from the pairs configuration.
-   * @param pairs The currency pairs, not null
+   * 
+   * @param pairs
+   *          The currency pairs, not null
    * @return A currency matrix
    */
   public static CurrencyMatrix createConfiguration(final CurrencyPairs pairs) {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.recoveryratemodel;
@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.credit.recoveryratemodel;
 import org.apache.commons.math.distribution.BetaDistributionImpl;
 
 /**
- * Class to specify a stochastic recovery rate model to tag to a given obligor/trade
+ * Class to specify a stochastic recovery rate model to tag to a given obligor/trade.
  */
 public class RecoveryRateModelStochastic extends RecoveryRateModel {
 
@@ -42,10 +42,10 @@ public class RecoveryRateModelStochastic extends RecoveryRateModel {
 
     _x = x;
 
-    BetaDistributionImpl betaDistribution = new BetaDistributionImpl(_a, _b);
+    final BetaDistributionImpl betaDistribution = new BetaDistributionImpl(_a, _b);
 
     // FIXME : Fix this
-    _recoveryRate = 0.0; //betaDistribution.inverseCumulativeProbability(_x);
+    _recoveryRate = 0.0; // betaDistribution.inverseCumulativeProbability(_x);
 
     _recoveryRateType = RecoveryRateType.STOCHASTIC;
 

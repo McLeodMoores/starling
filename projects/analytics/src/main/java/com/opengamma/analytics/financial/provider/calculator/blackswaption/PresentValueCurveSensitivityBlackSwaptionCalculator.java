@@ -16,7 +16,8 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
 /**
  * Calculator of the present value as a multiple currency amount.
  */
-public final class PresentValueCurveSensitivityBlackSwaptionCalculator extends InstrumentDerivativeVisitorAdapter<BlackSwaptionFlatProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+public final class PresentValueCurveSensitivityBlackSwaptionCalculator
+    extends InstrumentDerivativeVisitorAdapter<BlackSwaptionFlatProviderInterface, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -25,6 +26,7 @@ public final class PresentValueCurveSensitivityBlackSwaptionCalculator extends I
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityBlackSwaptionCalculator getInstance() {
@@ -37,9 +39,9 @@ public final class PresentValueCurveSensitivityBlackSwaptionCalculator extends I
   private PresentValueCurveSensitivityBlackSwaptionCalculator() {
   }
 
-  /**  Pricing method for physically-settled swaptions */
+  /** Pricing method for physically-settled swaptions */
   private static final SwaptionPhysicalFixedIborBlackMethod METHOD_SWT_PHYS = SwaptionPhysicalFixedIborBlackMethod.getInstance();
-  /**  Pricing method for cash-settled swaptions */
+  /** Pricing method for cash-settled swaptions */
   private static final SwaptionCashFixedIborBlackMethod METHOD_SWT_CASH = SwaptionCashFixedIborBlackMethod.getInstance();
 
   @Override

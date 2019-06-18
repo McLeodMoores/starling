@@ -32,7 +32,7 @@ public class EHCachingFinancialSecuritySource
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingFinancialSecuritySource.class);
 
-  /** The mulitple bonds cache key */
+  /** The mulitple bonds cache key. */
   /* package for testing */static final String MULTI_BONDS_CACHE = "multi-bonds-cache";
 
   /**
@@ -43,8 +43,10 @@ public class EHCachingFinancialSecuritySource
   /**
    * Creates an instance over an underlying source specifying the cache manager.
    *
-   * @param underlying  the underlying security source, not null
-   * @param cacheManager  the cache manager, not null
+   * @param underlying
+   *          the underlying security source, not null
+   * @param cacheManager
+   *          the cache manager, not null
    */
   public EHCachingFinancialSecuritySource(final FinancialSecuritySource underlying, final CacheManager cacheManager) {
     super(underlying, cacheManager);
@@ -53,7 +55,7 @@ public class EHCachingFinancialSecuritySource
     _bondCache = EHCacheUtils.getCacheFromManager(cacheManager, MULTI_BONDS_CACHE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @SuppressWarnings("unchecked")
   @Override
   public Collection<Security> getBondsWithIssuerName(final String issuerType) {

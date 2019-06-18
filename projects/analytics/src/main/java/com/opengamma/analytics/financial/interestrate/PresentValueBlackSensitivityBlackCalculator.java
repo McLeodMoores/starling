@@ -18,6 +18,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Present value sensitivity to SABR parameters calculator for interest rate instruments using SABR volatility formula.
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -30,6 +31,7 @@ public final class PresentValueBlackSensitivityBlackCalculator extends Instrumen
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static PresentValueBlackSensitivityBlackCalculator getInstance() {
@@ -45,17 +47,21 @@ public final class PresentValueBlackSensitivityBlackCalculator extends Instrumen
   /**
    * The methods used in the calculator.
    */
-  private static final InterestRateFutureOptionMarginTransactionBlackSurfaceMethod METHOD_OPTIONFUTURESMARGIN_BLACK = InterestRateFutureOptionMarginTransactionBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionMarginTransactionBlackSurfaceMethod METHOD_OPTIONFUTURESMARGIN_BLACK =
+      InterestRateFutureOptionMarginTransactionBlackSurfaceMethod.getInstance();
 
   @Override
-  public SurfaceValue visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction transaction, final YieldCurveBundle curves) {
+  public SurfaceValue visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction transaction,
+      final YieldCurveBundle curves) {
     Validate.notNull(transaction);
     Validate.notNull(curves);
     if (curves instanceof YieldCurveWithBlackCubeBundle) {
       final YieldCurveWithBlackCubeBundle curvesBlack = (YieldCurveWithBlackCubeBundle) curves;
       return METHOD_OPTIONFUTURESMARGIN_BLACK.presentValueBlackSensitivity(transaction, curvesBlack);
     }
-    throw new UnsupportedOperationException("The PresentValueBlackSensitivityBlackCalculator visitor visitInterestRateFutureOptionMarginTransaction requires a YieldCurveWithBlackCubeBundle as data.");
+    throw new UnsupportedOperationException(
+        "The PresentValueBlackSensitivityBlackCalculator visitor visitInterestRateFutureOptionMarginTransaction requires a "
+            + "YieldCurveWithBlackCubeBundle as data.");
   }
 
   @Override
@@ -64,12 +70,15 @@ public final class PresentValueBlackSensitivityBlackCalculator extends Instrumen
     ArgumentChecker.notNull(option, "option");
     if (curves instanceof YieldCurveWithBlackCubeBundle) {
       final InterestRateFutureOptionPremiumSecurity underlyingOption = option.getUnderlyingOption();
-      final InterestRateFutureOptionMarginSecurity underlyingMarginedOption = new InterestRateFutureOptionMarginSecurity(underlyingOption.getUnderlyingFuture(), underlyingOption.getExpirationTime(),
+      final InterestRateFutureOptionMarginSecurity underlyingMarginedOption = new InterestRateFutureOptionMarginSecurity(underlyingOption.getUnderlyingFuture(),
+          underlyingOption.getExpirationTime(),
           underlyingOption.getStrike(), underlyingOption.isCall());
-      final InterestRateFutureOptionMarginTransaction margined = new InterestRateFutureOptionMarginTransaction(underlyingMarginedOption, option.getQuantity(), option.getTradePrice());
+      final InterestRateFutureOptionMarginTransaction margined = new InterestRateFutureOptionMarginTransaction(underlyingMarginedOption, option.getQuantity(),
+          option.getTradePrice());
       return METHOD_OPTIONFUTURESMARGIN_BLACK.presentValueBlackSensitivity(margined, (YieldCurveWithBlackCubeBundle) curves);
     }
-    throw new UnsupportedOperationException("The PresentValueBlackCalculator visitor visitInterestRateFutureOptionPremiumTransaction requires a YieldCurveWithBlackCubeBundle as data.");
+    throw new UnsupportedOperationException(
+        "The PresentValueBlackCalculator visitor visitInterestRateFutureOptionPremiumTransaction requires a YieldCurveWithBlackCubeBundle as data.");
   }
 
 }

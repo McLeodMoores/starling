@@ -33,8 +33,7 @@ import com.opengamma.util.PublicSPI;
 public class ConfigMetaDataResult extends AbstractMetaDataResult {
 
   /**
-   * The list if valid configuration types.
-   * This is only populated if requested.
+   * The list of valid configuration types. This is only populated if requested.
    */
   @PropertyDefinition
   private final List<Class<?>> _configTypes = new ArrayList<>();
@@ -66,8 +65,7 @@ public class ConfigMetaDataResult extends AbstractMetaDataResult {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the list if valid configuration types.
-   * This is only populated if requested.
+   * Gets the list of valid configuration types. This is only populated if requested.
    * @return the value of the property, not null
    */
   public List<Class<?>> getConfigTypes() {
@@ -75,8 +73,7 @@ public class ConfigMetaDataResult extends AbstractMetaDataResult {
   }
 
   /**
-   * Sets the list if valid configuration types.
-   * This is only populated if requested.
+   * Sets the list of valid configuration types. This is only populated if requested.
    * @param configTypes  the new value of the property, not null
    */
   public void setConfigTypes(List<Class<?>> configTypes) {
@@ -87,7 +84,6 @@ public class ConfigMetaDataResult extends AbstractMetaDataResult {
 
   /**
    * Gets the the {@code configTypes} property.
-   * This is only populated if requested.
    * @return the property, not null
    */
   public final Property<List<Class<?>>> configTypes() {

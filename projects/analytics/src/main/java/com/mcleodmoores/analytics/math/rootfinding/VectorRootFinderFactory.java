@@ -3,6 +3,7 @@
  */
 package com.mcleodmoores.analytics.math.rootfinding;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
@@ -29,6 +30,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A factory that produces instances of vector root finders.
  */
+@SuppressWarnings("unchecked")
 public final class VectorRootFinderFactory extends AbstractNamedInstanceFactory<VectorRootFinder> {
   /** The logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(VectorRootFinderFactory.class);
@@ -37,16 +39,24 @@ public final class VectorRootFinderFactory extends AbstractNamedInstanceFactory<
   private static final ConcurrentMap<String, VectorRootFinder> DEFAULT_INSTANCES = new ConcurrentHashMap<>();
 
   static {
-    final Configuration config = new ConfigurationBuilder()
-        .setUrls(ClasspathHelper.forManifest(ClasspathHelper.forJavaClassPath()))
+    final Configuration config = new ConfigurationBuilder().setUrls(ClasspathHelper.forManifest(ClasspathHelper.forJavaClassPath()))
         .setScanners(new TypeAnnotationsScanner(), new SubTypesScanner(false))
-        .filterInputsBy(FilterBuilder.parse(AnnotationReflector.DEFAULT_ANNOTATION_REFLECTOR_FILTER))
-        .useParallelExecutor();
+        .filterInputsBy(FilterBuilder.parse(AnnotationReflector.DEFAULT_ANNOTATION_REFLECTOR_FILTER)).useParallelExecutor();
     final AnnotationReflector reflector = new AnnotationReflector(config);
     final Set<Class<?>> classes = reflector.getReflector().getTypesAnnotatedWith(VectorRootFinderType.class);
     for (final Class<?> clazz : classes) {
       try {
-        final VectorRootFinderType annotation = clazz.getDeclaredAnnotation(VectorRootFinderType.class);
+        final Annotation[] annotations = clazz.getDeclaredAnnotations();
+        VectorRootFinderType annotation = null;
+        for (final Annotation a : annotations) {
+          if (a.annotationType().equals(VectorRootFinderType.class)) {
+            annotation = (VectorRootFinderType) a;
+          }
+        }
+        if (annotation == null) {
+          LOGGER.error("Could not get VectorRootFinderType annotation for {}", clazz.getSimpleName());
+          continue;
+        }
         final String name = annotation.name();
         final VectorRootFinder instance = (VectorRootFinder) clazz.getConstructor().newInstance(new Object[0]);
         CLASS_REFERENCES.putIfAbsent(name, (Class<VectorRootFinder>) clazz);
@@ -120,10 +130,13 @@ public final class VectorRootFinderFactory extends AbstractNamedInstanceFactory<
   }
 
   /**
-   * Transforms the name of the interpolator into the extrapolator: (EXTRAPOLATOR_NAME, NAME) -> EXTRAPOLATOR_NAME[NAME].
-   * @param extrapolatorName  the version of the name of the linear extrapolator, not null
-   * @param interpolatorName  the interpolator name, not null
-   * @return  the transformed name
+   * Transforms the name of the interpolator into the extrapolator: (EXTRAPOLATOR_NAME, NAME) -&gt; EXTRAPOLATOR_NAME[NAME].
+   *
+   * @param extrapolatorName
+   *          the version of the name of the linear extrapolator, not null
+   * @param interpolatorName
+   *          the interpolator name, not null
+   * @return the transformed name
    */
   public static String transformName(final String extrapolatorName, final String interpolatorName) {
     return ArgumentChecker.notNull(extrapolatorName, "extrapolatorName") + "[" + ArgumentChecker.notNull(interpolatorName, "name") + "]";

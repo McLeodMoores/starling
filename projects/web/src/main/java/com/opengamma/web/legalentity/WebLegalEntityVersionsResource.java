@@ -24,7 +24,9 @@ import com.opengamma.master.legalentity.LegalEntityHistoryResult;
 import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.web.WebPaging;
 
-/** RESTful resource for all versions of an legalEntity. */
+/**
+ * RESTful resource for all versions of a legal entity.
+ */
 @Path("/legalentities/{legalEntityId}/versions")
 @Produces(MediaType.TEXT_HTML)
 public class WebLegalEntityVersionsResource extends AbstractWebLegalEntityResource {
@@ -32,13 +34,14 @@ public class WebLegalEntityVersionsResource extends AbstractWebLegalEntityResour
   /**
    * Creates the resource.
    *
-   * @param parent the parent resource, not null
+   * @param parent
+   *          the parent resource, not null
    */
   public WebLegalEntityVersionsResource(final AbstractWebLegalEntityResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public String getHTML() {
     final LegalEntityHistoryRequest request = new LegalEntityHistoryRequest(data().getLegalEntity().getUniqueId());
@@ -69,7 +72,7 @@ public class WebLegalEntityVersionsResource extends AbstractWebLegalEntityResour
     return Response.ok(json).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Creates the output root data.
@@ -86,13 +89,13 @@ public class WebLegalEntityVersionsResource extends AbstractWebLegalEntityResour
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{versionId}")
   public WebLegalEntityVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
     final LegalEntityDocument doc = data().getLegalEntity();
     final UniqueId combined = doc.getUniqueId().withVersion(idStr);
-    if (doc.getUniqueId().equals(combined) == false) {
+    if (!doc.getUniqueId().equals(combined)) {
       final LegalEntityDocument versioned = data().getLegalEntityMaster().get(combined);
       data().setVersioned(versioned);
     } else {
@@ -101,12 +104,13 @@ public class WebLegalEntityVersionsResource extends AbstractWebLegalEntityResour
     return new WebLegalEntityVersionResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Builds a URI for this resource.
    *
-   * @param data the data, not null
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebLegalEntityData data) {

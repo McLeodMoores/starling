@@ -67,7 +67,7 @@ import com.opengamma.master.security.SecurityMaster;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Builds the model object used in the security freemarker templates
+ * Builds the model object used in the security freemarker templates.
  */
 public class SecurityTemplateModelObjectBuilder extends FinancialSecurityVisitorSameValueAdapter<Void> {
 

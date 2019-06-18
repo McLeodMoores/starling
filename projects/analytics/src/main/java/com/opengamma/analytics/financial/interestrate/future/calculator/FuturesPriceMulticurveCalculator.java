@@ -28,6 +28,7 @@ public final class FuturesPriceMulticurveCalculator extends InstrumentDerivative
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static FuturesPriceMulticurveCalculator getInstance() {
@@ -40,11 +41,13 @@ public final class FuturesPriceMulticurveCalculator extends InstrumentDerivative
   private FuturesPriceMulticurveCalculator() {
   }
 
-  /** Implementation note: The pricing of some futures is done by calling the PresentValueDiscountingCalculator on the underlying.
-   *    The present value calculator refers to the futures calculator, that creates a circular reference of static methods.              */
+  /**
+   * Implementation note: The pricing of some futures is done by calling the PresentValueDiscountingCalculator on the underlying. The present value calculator
+   * refers to the futures calculator, that creates a circular reference of static methods.
+   */
   private static final PresentValueDiscountingCalculator PVDC = PresentValueDiscountingCalculator.getInstance();
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
   public Double visitInterestRateFutureSecurity(final InterestRateFutureSecurity futures, final ParameterProviderInterface multicurve) {
@@ -64,7 +67,8 @@ public final class FuturesPriceMulticurveCalculator extends InstrumentDerivative
     final int nbFixing = futures.getFixingPeriodAccrualFactor().length;
     final double[] rates = new double[nbFixing];
     for (int loopfix = 0; loopfix < nbFixing; loopfix++) {
-      rates[loopfix] = multicurve.getMulticurveProvider().getSimplyCompoundForwardRate(index, futures.getFixingPeriodTime()[loopfix], futures.getFixingPeriodTime()[loopfix + 1],
+      rates[loopfix] = multicurve.getMulticurveProvider().getSimplyCompoundForwardRate(index, futures.getFixingPeriodTime()[loopfix],
+          futures.getFixingPeriodTime()[loopfix + 1],
           futures.getFixingPeriodAccrualFactor()[loopfix]);
     }
     double interest = futures.getAccruedInterest();
@@ -75,10 +79,13 @@ public final class FuturesPriceMulticurveCalculator extends InstrumentDerivative
   }
 
   /**
-   * The price is 1+underlying swap present value.
-   * There is no adjustment for margining and no correction for discounting between futures settlement and valuation date.
-   * @param futures The futures security.
-   * @param multicurve The multi-curve provider.
+   * The price is 1+underlying swap present value. There is no adjustment for margining and no correction for discounting between futures settlement and
+   * valuation date.
+   *
+   * @param futures
+   *          The futures security.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The price.
    */
   @Override

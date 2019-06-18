@@ -15,8 +15,8 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.util.money.CurrencyAmount;
 
 /**
- * Method to compute the price for an interest rate future with discounting (like a forward).
- * No convexity adjustment is done.
+ * Method to compute the price for an interest rate future with discounting (like a forward). No convexity adjustment is done.
+ *
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.future.provider.InterestRateFutureTransactionDiscountingMethod}
  */
 @Deprecated
@@ -29,6 +29,7 @@ public final class InterestRateFutureTransactionDiscountingMethod extends Intere
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static InterestRateFutureTransactionDiscountingMethod getInstance() {
@@ -46,6 +47,15 @@ public final class InterestRateFutureTransactionDiscountingMethod extends Intere
    */
   private static final InterestRateFutureSecurityDiscountingMethod METHOD_SECURITY = InterestRateFutureSecurityDiscountingMethod.getInstance();
 
+  /**
+   * Calculates the present value without a convexity adjustment.
+   * 
+   * @param future
+   *          the future, not null
+   * @param curves
+   *          the discounting and forward curves.
+   * @return the present value
+   */
   public CurrencyAmount presentValue(final InterestRateFutureTransaction future, final YieldCurveBundle curves) {
     final double pv = presentValueFromPrice(future, METHOD_SECURITY.price(future.getUnderlyingSecurity(), curves));
     return CurrencyAmount.of(future.getCurrency(), pv);
@@ -59,16 +69,19 @@ public final class InterestRateFutureTransactionDiscountingMethod extends Intere
 
   /**
    * Computes the future rate (1-price) from the curves using an estimation of the future rate without convexity adjustment.
-   * @param future The future.
-   * @param curves The yield curves. Should contain the forward curve associated.
+   *
+   * @param future
+   *          The future.
+   * @param curves
+   *          The yield curves. Should contain the forward curve associated.
    * @return The rate.
    */
   public double parRate(final InterestRateFutureTransaction future, final YieldCurveBundle curves) {
     Validate.notNull(future, "Future");
     Validate.notNull(curves, "Curves");
     final YieldAndDiscountCurve forwardCurve = curves.getCurve(future.getUnderlyingSecurity().getForwardCurveName());
-    final double forward = (forwardCurve.getDiscountFactor(future.getUnderlyingSecurity().getFixingPeriodStartTime()) /
-        forwardCurve.getDiscountFactor(future.getUnderlyingSecurity().getFixingPeriodEndTime()) - 1)
+    final double forward = (forwardCurve.getDiscountFactor(future.getUnderlyingSecurity().getFixingPeriodStartTime())
+        / forwardCurve.getDiscountFactor(future.getUnderlyingSecurity().getFixingPeriodEndTime()) - 1)
         / future.getUnderlyingSecurity().getFixingPeriodAccrualFactor();
     return forward;
   }

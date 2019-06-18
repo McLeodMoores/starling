@@ -56,12 +56,12 @@ public class RecomputationPeriodTrigger implements ViewCycleTrigger {
 
   @Override
   public String toString() {
-    return "RecomputationPeriodTrigger[eligibleForDeltaFrom=" + _eligibleForDeltaComputationFromNanos +
-        ", deltaRequiredBy=" + _deltaComputationRequiredByNanos + ", eligibleForFullFrom=" + _eligibleForFullComputationFromNanos +
-        ", _fullRequiredBy=" + _fullComputationRequiredByNanos + "]";
+    return "RecomputationPeriodTrigger[eligibleForDeltaFrom=" + _eligibleForDeltaComputationFromNanos
+        + ", deltaRequiredBy=" + _deltaComputationRequiredByNanos + ", eligibleForFullFrom=" + _eligibleForFullComputationFromNanos
+        + ", _fullRequiredBy=" + _fullComputationRequiredByNanos + "]";
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private ViewDefinition getViewDefinition() {
     return _viewDefinition.get();
   }

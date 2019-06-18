@@ -44,7 +44,8 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class SwaptionUtils {
 
-  public static GeneratorInstrument<GeneratorAttributeIR> getSwapGenerator(final SwaptionSecurity security, final InstrumentDefinition<?> swaption, final SecuritySource securitySource) {
+  public static GeneratorInstrument<GeneratorAttributeIR> getSwapGenerator(final SwaptionSecurity security, final InstrumentDefinition<?> swaption,
+      final SecuritySource securitySource) {
     ArgumentChecker.notNull(security, "security");
     ArgumentChecker.notNull(swaption, "swaption");
     ArgumentChecker.notNull(securitySource, "security source");

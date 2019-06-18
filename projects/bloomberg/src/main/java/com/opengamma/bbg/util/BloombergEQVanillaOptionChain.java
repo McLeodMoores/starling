@@ -173,6 +173,7 @@ public class BloombergEQVanillaOptionChain {
    * <li>The option chain has expiries of 4/16/2011, 5/21/2011, 6/18/2011, 7/16/2011, 10/22/2011, 1/21/2012, 1/19/2013</li>
    * </ul>
    * <table>
+   * <caption>The option chain</caption>
    * <tr><th>Requested offset</th><th>Resulting Expiry</th></tr>
    * <tr><td>0</td><td>05/21/2011</td></tr>
    * <tr><td>1</td><td>05/21/2011</td></tr>
@@ -252,57 +253,121 @@ public class BloombergEQVanillaOptionChain {
 
   /**
    * <p>
-   * Returns a new chain narrowed by strike.  The strike is specified as being at least {@code strikeOffset} strikes from
-   * an arbitrary reference price (usually the current underlyer price.)  Both positive and negative strike offsets are supported.
+   * Returns a new chain narrowed by strike. The strike is specified as being at least {@code strikeOffset} strikes from an arbitrary reference price (usually
+   * the current underlyer price.) Both positive and negative strike offsets are supported.
    * </p>
    * <p>
    * The search algorithm is as follows:
    * </p>
    * <ol>
    * <li>If the {@code strikeOffset} is {@code 0}, return the strike that is nearest to the reference price, whether it is above or below.</li>
-   * <li>For non-zero {@code strikeOffset} values, simply find the place in the chain where the reference price would sit, and then
-   * find the strike that is {@code strikeOffset} strikes away from it. Return a new option chain with all options of the resulting
-   * strike.</li>
-   * <li>In either case, if the algorithm reaches the beginning or end of the chain, the strike at the beginning or end will be chosen. </li>
+   * <li>For non-zero {@code strikeOffset} values, simply find the place in the chain where the reference price would sit, and then find the strike that is
+   * {@code strikeOffset} strikes away from it. Return a new option chain with all options of the resulting strike.</li>
+   * <li>In either case, if the algorithm reaches the beginning or end of the chain, the strike at the beginning or end will be chosen.</li>
    * </ol>
    * <p>
-   * Below, we provide a table showing sample results. We cover only &#8805; 0 offsets
-   * since that is the more usual case. Assume that:
+   * Below, we provide a table showing sample results. We cover only &#8805; 0 offsets since that is the more usual case. Assume that:
    * <ul>
    * <li>Reference price is 199</li>
    * <li>The option chain has strikes of 135, 140, 145, . . . 540 at intervals of 5.</li>
    * </ul>
    * <table>
-   * <tr><th>Requested Offset</th><th>Resulting Strike</th></tr>
-   * <tr><td>0</td><td>200.0</td></tr>
-   * <tr><td>1</td><td>200.0</td></tr>
-   * <tr><td>2</td><td>205.0</td></tr>
-   * <tr><td>3</td><td>210.0</td></tr>
-   * <tr><td>4</td><td>215.0</td></tr>
-   * <tr><td>5</td><td>220.0</td></tr>
-   * <tr><td>6</td><td>225.0</td></tr>
-   * <tr><td>7</td><td>230.0</td></tr>
-   * <tr><td>8</td><td>235.0</td></tr>
-   * <tr><td>9</td><td>240.0</td></tr>
-   * <tr><td>10</td><td>245.0</td></tr>
-   * <tr><td>...</td><td>...</td></tr>
-   * <tr><td>68</td><td>535.0</td></tr>
-   * <tr><td>69</td><td>540.0</td></tr>
-   * <tr><td>70</td><td>540.0</td></tr>
-   * <tr><td>71</td><td>540.0</td></tr>
-   * <tr><td>72</td><td>540.0</td></tr>
-   * <tr><td>73</td><td>540.0</td></tr>
-   * <tr><td>74</td><td>540.0</td></tr>
-   * <tr><td>75</td><td>540.0</td></tr>
+   * <caption>The option chain</caption>
+   * <tr>
+   * <th>Requested Offset</th>
+   * <th>Resulting Strike</th>
+   * </tr>
+   * <tr>
+   * <td>0</td>
+   * <td>200.0</td>
+   * </tr>
+   * <tr>
+   * <td>1</td>
+   * <td>200.0</td>
+   * </tr>
+   * <tr>
+   * <td>2</td>
+   * <td>205.0</td>
+   * </tr>
+   * <tr>
+   * <td>3</td>
+   * <td>210.0</td>
+   * </tr>
+   * <tr>
+   * <td>4</td>
+   * <td>215.0</td>
+   * </tr>
+   * <tr>
+   * <td>5</td>
+   * <td>220.0</td>
+   * </tr>
+   * <tr>
+   * <td>6</td>
+   * <td>225.0</td>
+   * </tr>
+   * <tr>
+   * <td>7</td>
+   * <td>230.0</td>
+   * </tr>
+   * <tr>
+   * <td>8</td>
+   * <td>235.0</td>
+   * </tr>
+   * <tr>
+   * <td>9</td>
+   * <td>240.0</td>
+   * </tr>
+   * <tr>
+   * <td>10</td>
+   * <td>245.0</td>
+   * </tr>
+   * <tr>
+   * <td>...</td>
+   * <td>...</td>
+   * </tr>
+   * <tr>
+   * <td>68</td>
+   * <td>535.0</td>
+   * </tr>
+   * <tr>
+   * <td>69</td>
+   * <td>540.0</td>
+   * </tr>
+   * <tr>
+   * <td>70</td>
+   * <td>540.0</td>
+   * </tr>
+   * <tr>
+   * <td>71</td>
+   * <td>540.0</td>
+   * </tr>
+   * <tr>
+   * <td>72</td>
+   * <td>540.0</td>
+   * </tr>
+   * <tr>
+   * <td>73</td>
+   * <td>540.0</td>
+   * </tr>
+   * <tr>
+   * <td>74</td>
+   * <td>540.0</td>
+   * </tr>
+   * <tr>
+   * <td>75</td>
+   * <td>540.0</td>
+   * </tr>
    * </table>
    * <p>
-   * Notice how, for both the {@code 0} and {@code 1} offsets, the result was {@code 200}. For the {@code 0} offset, the algorithm simply
-   * looked for the strike nearest to {@code 199}; for the {@code 1} offset, the algorithm found the next strike above {@code 199}.  In both
-   * cases, that value was {@code 200}.  Notice also that after {@code 70+} offsets, we reach the end of the chain, and the resulting strike is
-   * always {@code 540}.
+   * Notice how, for both the {@code 0} and {@code 1} offsets, the result was {@code 200}. For the {@code 0} offset, the algorithm simply looked for the strike
+   * nearest to {@code 199}; for the {@code 1} offset, the algorithm found the next strike above {@code 199}. In both cases, that value was {@code 200}. Notice
+   * also that after {@code 70+} offsets, we reach the end of the chain, and the resulting strike is always {@code 540}.
    * </p>
-   * @param referencePrice the price to which the strike offset is in reference
-   * @param strikeOffset distance of strikes from the reference price to select
+   * 
+   * @param referencePrice
+   *          the price to which the strike offset is in reference
+   * @param strikeOffset
+   *          distance of strikes from the reference price to select
    * @return a new chain narrowed by strike
    */
   public BloombergEQVanillaOptionChain narrowByStrike(final double referencePrice, int strikeOffset) {
@@ -408,8 +473,7 @@ public class BloombergEQVanillaOptionChain {
     final ZonedDateTime zonedExpiry = expiry.atTime(dummyNow.toLocalTime()).atZone(dummyNow.getZone());
     if (expiry.isAfter(thirdSaturdayOfTargetMonth)) {
       return _dayCount.getDayCountFraction(zonedThirdSaturdayOfTargetMonth, zonedExpiry);
-    } else {
-      return _dayCount.getDayCountFraction(zonedExpiry, zonedThirdSaturdayOfTargetMonth);
     }
+    return _dayCount.getDayCountFraction(zonedExpiry, zonedThirdSaturdayOfTargetMonth);
   }
 }

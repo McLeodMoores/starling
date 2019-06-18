@@ -29,10 +29,10 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
 
   @Override
   public ResultsCell getResults(final int rowIndex,
-                                final TypeFormatter.Format format,
-                                final ResultsCache cache,
-                                final Class<?> columnType,
-                                final Object inlineKey) {
+      final TypeFormatter.Format format,
+      final ResultsCache cache,
+      final Class<?> columnType,
+      final Object inlineKey) {
     final Pair<String, ValueSpecification> cellTarget = _targetLookup.getTargetForCell(rowIndex, _columnKey);
     if (cellTarget != null) {
       final String calcConfigName = cellTarget.getFirst();
@@ -40,15 +40,14 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
       final ResultsCache.Result cacheResult = cache.getResult(calcConfigName, valueSpec, columnType);
       final Object value = cacheResult.getValue();
       return ResultsCell.forCalculatedValue(value,
-                                            valueSpec,
-                                            cacheResult.getHistory(),
-                                            cacheResult.getAggregatedExecutionLog(),
-                                            cacheResult.isUpdated(),
-                                            columnType,
-                                            inlineKey, format);
-    } else {
-      final Collection<Object> emptyHistory = cache.emptyHistory(columnType);
-      return ResultsCell.empty(emptyHistory, columnType);
+          valueSpec,
+          cacheResult.getHistory(),
+          cacheResult.getAggregatedExecutionLog(),
+          cacheResult.isUpdated(),
+          columnType,
+          inlineKey, format);
     }
+    final Collection<Object> emptyHistory = cache.emptyHistory(columnType);
+    return ResultsCell.empty(emptyHistory, columnType);
   }
 }

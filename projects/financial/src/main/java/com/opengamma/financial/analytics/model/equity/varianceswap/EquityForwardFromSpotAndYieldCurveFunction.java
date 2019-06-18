@@ -38,9 +38,9 @@ import com.opengamma.id.ExternalId;
  *
  */
 public class EquityForwardFromSpotAndYieldCurveFunction extends AbstractFunction.NonCompiledInvoker {
-  /** String describing the method used to calculate the forward value of an equity spot rate */
+  /** String describing the method used to calculate the forward value of an equity spot rate. */
   public static final String FORWARD_CALCULATION_METHOD = "ForwardCalculationMethod";
-  /** String describing the calculation method used in this function */
+  /** String describing the calculation method used in this function. */
   public static final String FORWARD_FROM_SPOT_AND_YIELD_CURVE = "ForwardFromSpotAndYieldCurve";
 
   @Override

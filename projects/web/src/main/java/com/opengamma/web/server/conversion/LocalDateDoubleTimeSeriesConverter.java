@@ -22,12 +22,13 @@ public class LocalDateDoubleTimeSeriesConverter implements ResultConverter<Local
   /** The number of milliseconds per day. */
   private static final long MILLIS_PER_DAY = 86400L * 1000;
 
-  /* package */static Object convertForDisplayImpl(final ResultConverterCache context, final ValueSpecification valueSpec, final LocalDateDoubleTimeSeries series, final ConversionMode mode) {
+  /* package */static Object convertForDisplayImpl(final ResultConverterCache context, final ValueSpecification valueSpec,
+      final LocalDateDoubleTimeSeries series, final ConversionMode mode) {
     final Map<String, Object> result = new HashMap<>();
     if (series.isEmpty()) {
       return result;
     }
-    final Map<String, Object> summary = ImmutableMap.<String, Object>of(
+    final Map<String, Object> summary = ImmutableMap.<String, Object> of(
         "from", series.getEarliestTime().toString(),
         "to", series.getLatestTime().toString());
     result.put("summary", summary);
@@ -36,14 +37,14 @@ public class LocalDateDoubleTimeSeriesConverter implements ResultConverter<Local
       for (int i = 0; i < series.size(); i++) {
         final LocalDate date = series.getTimeAtIndex(i);
         final long epochMillis = date.toEpochDay() * MILLIS_PER_DAY;
-        tsData[i] = new Object[]{epochMillis, series.getValueAtIndex(i)};
+        tsData[i] = new Object[] { epochMillis, series.getValueAtIndex(i) };
       }
-      final Map<String, Object> ts = ImmutableMap.<String, Object>of(
-          "template_data", ImmutableMap.<String, Object>of(
+      final Map<String, Object> ts = ImmutableMap.<String, Object> of(
+          "template_data", ImmutableMap.<String, Object> of(
               "data_field", valueSpec.getValueName(),
               "observation_time", valueSpec.getValueName()),
-          "timeseries", ImmutableMap.<String, Object>of(
-              "fieldLabels", new String[] {"Time", "Value"},
+          "timeseries", ImmutableMap.<String, Object> of(
+              "fieldLabels", new String[] { "Time", "Value" },
               "data", tsData));
       result.put("ts", ts);
     }
@@ -51,7 +52,8 @@ public class LocalDateDoubleTimeSeriesConverter implements ResultConverter<Local
   }
 
   @Override
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final LocalDateDoubleTimeSeries value, final ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final LocalDateDoubleTimeSeries value,
+      final ConversionMode mode) {
     return convertForDisplayImpl(context, valueSpec, value, mode);
   }
 

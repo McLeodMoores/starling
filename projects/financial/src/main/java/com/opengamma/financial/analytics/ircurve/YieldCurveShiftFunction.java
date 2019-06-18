@@ -30,7 +30,10 @@ import com.opengamma.financial.OpenGammaExecutionContext;
 
 /**
  * Function to shift a yield curve, implemented using properties and constraints.
+ * 
+ * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
+@Deprecated
 public class YieldCurveShiftFunction extends AbstractFunction.NonCompiledInvoker {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveShiftFunction.class);
@@ -59,7 +62,7 @@ public class YieldCurveShiftFunction extends AbstractFunction.NonCompiledInvoker
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> shift = constraints.getValues(SHIFT);
-    if ((shift == null) || shift.isEmpty() || constraints.isOptional(SHIFT)) {
+    if (shift == null || shift.isEmpty() || constraints.isOptional(SHIFT)) {
       return null;
     }
     final ValueProperties properties = desiredValue.getConstraints().copy().withoutAny(SHIFT).with(SHIFT, "0").withOptional(SHIFT).get();
@@ -71,14 +74,16 @@ public class YieldCurveShiftFunction extends AbstractFunction.NonCompiledInvoker
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     final ValueProperties properties = createValueProperties(input).withAny(SHIFT).get();
     return Collections.singleton(new ValueSpecification(input.getValueName(), input.getTargetSpecification(), properties));
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ComputedValue input = inputs.getAllValues().iterator().next();
     final ValueSpecification inputSpec = input.getSpecification();
     final YieldAndDiscountCurve curve = (YieldAndDiscountCurve) input.getValue();
@@ -92,7 +97,8 @@ public class YieldCurveShiftFunction extends AbstractFunction.NonCompiledInvoker
     LOGGER.debug("Applying {} to yield curve {}", shift, curve);
     final Object result = compiler.compile(shift, executionContext.getComputationTargetResolver()).apply(desiredValue, curve);
     LOGGER.debug("Got result {}", result);
-    return Collections.singleton(new ComputedValue(new ValueSpecification(inputSpec.getValueName(), inputSpec.getTargetSpecification(), properties.get()), result));
+    return Collections
+        .singleton(new ComputedValue(new ValueSpecification(inputSpec.getValueName(), inputSpec.getTargetSpecification(), properties.get()), result));
   }
 
 }

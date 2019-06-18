@@ -20,13 +20,12 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the delta (first order sensitivity of price with respect to spot) of a vanilla equity barrier option
- * using the Black formula.
+ * Calculates the delta (first order sensitivity of price with respect to spot) of a vanilla equity barrier option using the Black formula.
  */
 public class EquityVanillaBarrierOptionSpotDeltaFunction extends EquityVanillaBarrierOptionBlackFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityVanillaBarrierOptionSpotDeltaFunction() {
     super(ValueRequirementNames.VALUE_DELTA);
@@ -43,6 +42,5 @@ public class EquityVanillaBarrierOptionSpotDeltaFunction extends EquityVanillaBa
     }
     return Collections.singleton(new ComputedValue(resultSpec, sum));
   }
-
 
 }

@@ -21,8 +21,7 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolutionR
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Represents a cache item for storing {@link HistoricalTimeSeriesResolutionResult} instances for the same
- * {@link ExternalId} with differing validity periods.
+ * Represents a cache item for storing {@link HistoricalTimeSeriesResolutionResult} instances for the same {@link ExternalId} with differing validity periods.
  */
 public class HistoricalTimeSeriesResolutionCacheItem {
 
@@ -31,11 +30,20 @@ public class HistoricalTimeSeriesResolutionCacheItem {
   private final Set<LocalDate> _invalidDates = Collections.newSetFromMap(new ConcurrentHashMap<LocalDate, Boolean>());
   private final ConcurrentMap<ExternalIdWithDates, HistoricalTimeSeriesResolutionResult> _results = new ConcurrentHashMap<>();
 
+  /**
+   * @param externalId
+   *          the identifier
+   */
   public HistoricalTimeSeriesResolutionCacheItem(final ExternalId externalId) {
     _externalId = externalId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @param validityDate
+   *          the validity date
+   * @return true if the date is invalid
+   */
   public boolean isInvalid(final LocalDate validityDate) {
     if (_allInvalid.get()) {
       return true;
@@ -46,11 +54,15 @@ public class HistoricalTimeSeriesResolutionCacheItem {
     return _invalidDates.contains(validityDate);
   }
 
+  /**
+   * @param validityDate
+   *          the validity date
+   */
   public void putInvalid(final LocalDate validityDate) {
     if (validityDate == null) {
       if (_results.size() != 0) {
-        throw new OpenGammaRuntimeException("Already have " + _results.size() + " valid results for " + _externalId
-            + " but attempted to mark every date as invalid");
+        throw new OpenGammaRuntimeException(
+            "Already have " + _results.size() + " valid results for " + _externalId + " but attempted to mark every date as invalid");
       }
       _allInvalid.set(true);
       _invalidDates.clear();
@@ -59,7 +71,12 @@ public class HistoricalTimeSeriesResolutionCacheItem {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @param validityDate
+   *          the validity date
+   * @return the resolution result
+   */
   public HistoricalTimeSeriesResolutionResult get(final LocalDate validityDate) {
     for (final Map.Entry<ExternalIdWithDates, HistoricalTimeSeriesResolutionResult> result : _results.entrySet()) {
       if (result.getKey().isValidOn(validityDate)) {
@@ -69,6 +86,12 @@ public class HistoricalTimeSeriesResolutionCacheItem {
     return null;
   }
 
+  /**
+   * @param externalIdWithDates
+   *          the identifiers, not null
+   * @param result
+   *          the resolution result, not ull
+   */
   public void put(final ExternalIdWithDates externalIdWithDates, final HistoricalTimeSeriesResolutionResult result) {
     ArgumentChecker.notNull(externalIdWithDates, "externalIdWithDates");
     ArgumentChecker.notNull(result, "result");

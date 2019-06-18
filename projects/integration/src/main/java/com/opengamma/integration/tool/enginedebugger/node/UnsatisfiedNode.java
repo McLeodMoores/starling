@@ -8,7 +8,7 @@ package com.opengamma.integration.tool.enginedebugger.node;
 import com.opengamma.engine.value.ValueRequirement;
 
 /**
- * Node representing an unsatisfied value requirement
+ * Node representing an unsatisfied value requirement.
  */
 public class UnsatisfiedNode extends ValueRequirementNode {
 

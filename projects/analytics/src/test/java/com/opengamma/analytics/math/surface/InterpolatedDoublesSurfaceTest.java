@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.surface;
@@ -12,10 +12,10 @@ import static org.testng.internal.junit.ArrayAsserts.assertArrayEquals;
 import org.testng.annotations.Test;
 
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.Interpolator2D;
-import com.opengamma.analytics.math.interpolation.LinearInterpolator1D;
 import com.opengamma.analytics.math.interpolation.StepInterpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -23,7 +23,7 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class InterpolatedDoublesSurfaceTest extends DoublesSurfaceTestCase {
-  private static final LinearInterpolator1D INTERPOLATOR_1D = Interpolator1DFactory.LINEAR_INSTANCE;
+  private static final Interpolator1D INTERPOLATOR_1D = new LinearInterpolator1dAdapter();
   private static final Interpolator2D INTERPOLATOR = new GridInterpolator2D(INTERPOLATOR_1D, INTERPOLATOR_1D);
   private static final InterpolatedDoublesSurface SURFACE = new InterpolatedDoublesSurface(XYZ_LIST, INTERPOLATOR);
 

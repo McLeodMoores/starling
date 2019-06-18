@@ -40,12 +40,10 @@ import com.opengamma.util.money.Currency;
  * <p>
  * This is the simplest possible implementation of the {@link Region} interface.
  * <p>
- * This class is mutable and not thread-safe.
- * It is intended to be used in the engine via the read-only {@code Region} interface.
+ * This class is mutable and not thread-safe. It is intended to be used in the engine via the read-only {@code Region} interface.
  */
 @BeanDefinition
-public class SimpleRegion extends DirectBean
-    implements Region, MutableUniqueIdentifiable, Serializable {
+public class SimpleRegion extends DirectBean implements Region, MutableUniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -56,8 +54,7 @@ public class SimpleRegion extends DirectBean
   @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
-   * The bundle of identifiers that define the region.
-   * This will include the country, currency and time-zone.
+   * The bundle of identifiers that define the region. This will include the country, currency and time-zone.
    */
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
@@ -67,8 +64,7 @@ public class SimpleRegion extends DirectBean
   @PropertyDefinition(overrideGet = true)
   private RegionClassification _classification;
   /**
-   * The unique identifiers of the parent regions.
-   * For example, a country might be a member of the World, UN, European Union and NATO.
+   * The unique identifiers of the parent regions. For example, a country might be a member of the World, UN, European Union and NATO.
    */
   @PropertyDefinition(set = "setClearAddAll", overrideGet = true)
   private final Set<UniqueId> _parentRegionIds = new HashSet<>();
@@ -83,8 +79,7 @@ public class SimpleRegion extends DirectBean
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _fullName = "";
   /**
-   * The extensible data store for additional information, not null.
-   * Applications may store additional region based information here.
+   * The extensible data store for additional information, not null. Applications may store additional region based information here.
    */
   @PropertyDefinition(overrideGet = true)
   private final FlexiBean _data = new FlexiBean();
@@ -95,19 +90,21 @@ public class SimpleRegion extends DirectBean
   public SimpleRegion() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle.
    *
-   * @param externalId  the external identifier, not null
+   * @param externalId
+   *          the external identifier, not null
    */
   public void addExternalId(final ExternalId externalId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(externalId));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the country.
+   * 
    * @return the value of the property
    */
   @Override
@@ -119,7 +116,8 @@ public class SimpleRegion extends DirectBean
   /**
    * Sets the country, stored in the identifier set.
    *
-   * @param country  the country to set, null to remove any defined country
+   * @param country
+   *          the country to set, null to remove any defined country
    */
   public void setCountry(final Country country) {
     setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.ISO_COUNTRY_ALPHA2));
@@ -128,9 +126,10 @@ public class SimpleRegion extends DirectBean
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the currency.
+   * 
    * @return the value of the property
    */
   @Override
@@ -142,7 +141,8 @@ public class SimpleRegion extends DirectBean
   /**
    * Sets the currency, stored in the identifier set.
    *
-   * @param currency  the currency to set, null to remove any currency
+   * @param currency
+   *          the currency to set, null to remove any currency
    */
   public void setCurrency(final Currency currency) {
     setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.ISO_CURRENCY_ALPHA3));
@@ -151,11 +151,10 @@ public class SimpleRegion extends DirectBean
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Gets the time-zone.
-   * For larger regions, there can be multiple time-zones, so this is only reliable
-   * for municipalities.
+   * Gets the time-zone. For larger regions, there can be multiple time-zones, so this is only reliable for municipalities.
+   * 
    * @return the value of the property
    */
   @Override
@@ -167,7 +166,8 @@ public class SimpleRegion extends DirectBean
   /**
    * Sets the time-zone, stored in the identifier set.
    *
-   * @param timeZone  the time-zone to set, null to remove any time-zone
+   * @param timeZone
+   *          the time-zone to set, null to remove any time-zone
    */
   public void setTimeZone(final ZoneId timeZone) {
     setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.TZDB_TIME_ZONE));
@@ -224,8 +224,7 @@ public class SimpleRegion extends DirectBean
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bundle of identifiers that define the region.
-   * This will include the country, currency and time-zone.
+   * Gets the bundle of identifiers that define the region. This will include the country, currency and time-zone.
    * @return the value of the property, not null
    */
   @Override
@@ -234,8 +233,7 @@ public class SimpleRegion extends DirectBean
   }
 
   /**
-   * Sets the bundle of identifiers that define the region.
-   * This will include the country, currency and time-zone.
+   * Sets the bundle of identifiers that define the region. This will include the country, currency and time-zone.
    * @param externalIdBundle  the new value of the property, not null
    */
   public void setExternalIdBundle(ExternalIdBundle externalIdBundle) {
@@ -245,7 +243,6 @@ public class SimpleRegion extends DirectBean
 
   /**
    * Gets the the {@code externalIdBundle} property.
-   * This will include the country, currency and time-zone.
    * @return the property, not null
    */
   public final Property<ExternalIdBundle> externalIdBundle() {
@@ -280,8 +277,7 @@ public class SimpleRegion extends DirectBean
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the unique identifiers of the parent regions.
-   * For example, a country might be a member of the World, UN, European Union and NATO.
+   * Gets the unique identifiers of the parent regions. For example, a country might be a member of the World, UN, European Union and NATO.
    * @return the value of the property, not null
    */
   @Override
@@ -290,8 +286,7 @@ public class SimpleRegion extends DirectBean
   }
 
   /**
-   * Sets the unique identifiers of the parent regions.
-   * For example, a country might be a member of the World, UN, European Union and NATO.
+   * Sets the unique identifiers of the parent regions. For example, a country might be a member of the World, UN, European Union and NATO.
    * @param parentRegionIds  the new value of the property, not null
    */
   public void setParentRegionIds(Set<UniqueId> parentRegionIds) {
@@ -302,7 +297,6 @@ public class SimpleRegion extends DirectBean
 
   /**
    * Gets the the {@code parentRegionIds} property.
-   * For example, a country might be a member of the World, UN, European Union and NATO.
    * @return the property, not null
    */
   public final Property<Set<UniqueId>> parentRegionIds() {
@@ -365,8 +359,7 @@ public class SimpleRegion extends DirectBean
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the extensible data store for additional information, not null.
-   * Applications may store additional region based information here.
+   * Gets the extensible data store for additional information, not null. Applications may store additional region based information here.
    * @return the value of the property, not null
    */
   @Override
@@ -375,8 +368,7 @@ public class SimpleRegion extends DirectBean
   }
 
   /**
-   * Sets the extensible data store for additional information, not null.
-   * Applications may store additional region based information here.
+   * Sets the extensible data store for additional information, not null. Applications may store additional region based information here.
    * @param data  the new value of the property, not null
    */
   public void setData(FlexiBean data) {
@@ -387,7 +379,6 @@ public class SimpleRegion extends DirectBean
 
   /**
    * Gets the the {@code data} property.
-   * Applications may store additional region based information here.
    * @return the property, not null
    */
   public final Property<FlexiBean> data() {

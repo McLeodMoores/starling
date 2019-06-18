@@ -20,39 +20,40 @@ import com.opengamma.integration.copier.timeseries.TimeSeriesLoader;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * The timeseries loader tool
+ * The timeseries loader tool.
  */
 @Scriptable
 public class TimeSeriesLoaderTool extends AbstractTool<ToolContext> {
 
-  /** File name option flag */
+  /** File name option flag. */
   public static final String FILE_NAME_OPT = "f";
-  /** Time series data source option flag*/
+  /** Time series data source option flag. */
   public static final String TIME_SERIES_DATASOURCE_OPT = "s";
-  /** Time series data provider option flag*/
+  /** Time series data provider option flag. */
   public static final String TIME_SERIES_DATAPROVIDER_OPT = "p";
-  /** Time series data field option flag*/
+  /** Time series data field option flag. */
   public static final String TIME_SERIES_DATAFIELD_OPT = "d";
-  /** Time series observation time option flag*/
+  /** Time series observation time option flag. */
   public static final String TIME_SERIES_OBSERVATIONTIME_OPT = "o";
-  /** Time series ID scheme option flag*/
+  /** Time series ID scheme option flag. */
   public static final String TIME_SERIES_IDSCHEME_OPT = "i";
-  /** Time series date format option flag*/
+  /** Time series date format option flag. */
   public static final String TIME_SERIES_DATEFORMAT_OPT = "t";
-  /** Write option flag */
+  /** Write option flag. */
   public static final String WRITE_OPT = "w";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the arguments, not null
+   * @param args
+   *          the arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new TimeSeriesLoaderTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Loads the test portfolio into the position master.
    */
@@ -77,7 +78,7 @@ public class TimeSeriesLoaderTool extends AbstractTool<ToolContext> {
   }
 
   @Override
-  protected  Options createOptions(final boolean contextProvided) {
+  protected Options createOptions(final boolean contextProvided) {
 
     final Options options = super.createOptions(contextProvided);
 

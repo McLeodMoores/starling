@@ -28,6 +28,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * The function to compute the Gamma Spot of Forex options in the Black model.
+ * 
  * @deprecated Use {@link BlackDiscountingValueGammaSpotFXOptionFunction}
  */
 @Deprecated
@@ -39,7 +40,7 @@ public class FXOptionBlackValueGammaSpotFunction extends FXOptionBlackSingleValu
   private static final GammaSpotBlackForexCalculator CALCULATOR = GammaSpotBlackForexCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_GAMMA_P}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_GAMMA_P}.
    */
   public FXOptionBlackValueGammaSpotFunction() {
     super(ValueRequirementNames.VALUE_GAMMA_P);
@@ -59,9 +60,9 @@ public class FXOptionBlackValueGammaSpotFunction extends FXOptionBlackSingleValu
       } else if (forex instanceof ForexOptionDigital) {
         final ForexOptionDigital fxDerivative = (ForexOptionDigital) forex;
         if (fxDerivative.payDomestic()) {
-          spot = data.getFxRates().getFxRate(fxDerivative.getCurrency1(), fxDerivative.getCurrency2());     
+          spot = data.getFxRates().getFxRate(fxDerivative.getCurrency1(), fxDerivative.getCurrency2());
         } else {
-          spot = data.getFxRates().getFxRate(fxDerivative.getCurrency2(), fxDerivative.getCurrency1());       
+          spot = data.getFxRates().getFxRate(fxDerivative.getCurrency2(), fxDerivative.getCurrency1());
         }
       } else if (forex instanceof ForexOptionSingleBarrier) {
         final ForexOptionSingleBarrier fxDerivative = (ForexOptionSingleBarrier) forex;

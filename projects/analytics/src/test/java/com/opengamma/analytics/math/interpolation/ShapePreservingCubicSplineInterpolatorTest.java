@@ -570,7 +570,7 @@ public class ShapePreservingCubicSplineInterpolatorTest {
           ++k;
         }
       } catch (IllegalArgumentException e) {
-        if (e.getMessage() == "Spline is not found" | e.getMessage() == "Local monotonicity can not be preserved") {
+        if (e.getMessage() == "Spline is not found" || e.getMessage() == "Local monotonicity can not be preserved") {
           ctr2 += (k + 1);
           ++ctr;
         }

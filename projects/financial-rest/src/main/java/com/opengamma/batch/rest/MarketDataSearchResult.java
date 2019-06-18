@@ -29,7 +29,6 @@ import com.opengamma.util.paging.Paging;
 
 /**
  * Result from searching for live data values.
- * <p>
  */
 @PublicSPI
 @BeanDefinition

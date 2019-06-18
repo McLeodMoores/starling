@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference.applications;
@@ -18,13 +18,14 @@ import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  */
 public class TwoStateMarkovChainLocalVolCalculator {
   private static final DoubleQuadraticInterpolator1D INTERPOLATOR_1D = new DoubleQuadraticInterpolator1D();
   private static final GridInterpolator2D GRID_INTERPOLATOR2D = new GridInterpolator2D(INTERPOLATOR_1D, INTERPOLATOR_1D);
 
-  public AbsoluteLocalVolatilitySurface calc(final PDEFullResults1D[] denRes, final TwoStateMarkovChainDataBundle chainData, final AbsoluteLocalVolatilitySurface lvOverlay) {
+  public AbsoluteLocalVolatilitySurface calc(final PDEFullResults1D[] denRes, final TwoStateMarkovChainDataBundle chainData,
+      final AbsoluteLocalVolatilitySurface lvOverlay) {
 
     final Map<DoublesPair, Double> lv = getLocalVolMap(denRes, chainData, lvOverlay);
     final Map<Double, Interpolator1DDataBundle> interpolatorDB = GRID_INTERPOLATOR2D.getDataBundle(lv);
@@ -40,7 +41,8 @@ public class TwoStateMarkovChainLocalVolCalculator {
     return new AbsoluteLocalVolatilitySurface(FunctionalDoublesSurface.from(lvFunc));
   }
 
-  private Map<DoublesPair, Double> getLocalVolMap(final PDEFullResults1D[] denRes, final TwoStateMarkovChainDataBundle chainData, final AbsoluteLocalVolatilitySurface lvOverlay) {
+  private Map<DoublesPair, Double> getLocalVolMap(final PDEFullResults1D[] denRes, final TwoStateMarkovChainDataBundle chainData,
+      final AbsoluteLocalVolatilitySurface lvOverlay) {
     final int tNodes = denRes[0].getNumberTimeNodes();
     final int xNodes = denRes[0].getNumberSpaceNodes();
     final Map<DoublesPair, Double> lv = new HashMap<>(tNodes * xNodes);
@@ -52,11 +54,11 @@ public class TwoStateMarkovChainLocalVolCalculator {
 
       for (int i = 0; i < tNodes; i++) {
         final double t = denRes[0].getTimeValue(i);
-        //form the equivalent local vol
+        // form the equivalent local vol
         final double p1 = denRes[0].getFunctionValue(j, i);
         final double p2 = denRes[1].getFunctionValue(j, i);
         final double p = p1 + p2;
-        if (p > 0.0 && p1 >= 0.0 && p2 >= 0.0) { //if p = 0 can't find equivalent local vol for this t-s, so don't use point
+        if (p > 0.0 && p1 >= 0.0 && p2 >= 0.0) { // if p = 0 can't find equivalent local vol for this t-s, so don't use point
           double ol = 1.0;
           if (lvOverlay != null) {
             ol = lvOverlay.getVolatility(t, s);

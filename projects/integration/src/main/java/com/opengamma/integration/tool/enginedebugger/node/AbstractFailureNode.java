@@ -9,8 +9,7 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * @author jim
- * Represents a generic failure node to be subclassed by specific failure types
+ * @author jim Represents a generic failure node to be subclassed by specific failure types
  */
 public abstract class AbstractFailureNode implements TreeTableNode {
 
@@ -20,15 +19,15 @@ public abstract class AbstractFailureNode implements TreeTableNode {
    */
   protected Object _parent;
   /**
-   * the child value requirement node
+   * the child value requirement node.
    */
   protected ValueRequirementNode _valueRequirementNode;
   /**
-   * the child function entry node
+   * the child function entry node.
    */
   protected FunctionEntryNode _functionEntry;
   /**
-   * the child desired output value spec
+   * the child desired output value spec.
    */
   protected ValueSpecificationNode _desiredOutputNode;
 

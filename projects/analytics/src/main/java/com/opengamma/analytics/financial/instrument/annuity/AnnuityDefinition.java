@@ -23,20 +23,22 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Class describing a generic annuity (or leg) with at least one payment. All the annuity payments are in the same currency.
- * @param <P> The payment type
+ * 
+ * @param <P>
+ *          The payment type
  *
  */
-public class AnnuityDefinition<P extends PaymentDefinition> implements InstrumentDefinitionWithData<Annuity<? extends Payment>, DoubleTimeSeries<ZonedDateTime>> {
+public class AnnuityDefinition<P extends PaymentDefinition>
+    implements InstrumentDefinitionWithData<Annuity<? extends Payment>, DoubleTimeSeries<ZonedDateTime>> {
   /**
-   * The list of payments or coupons. All payments have the same currency. All payments have the same sign or are 0.
-   * There should be at least one payment.
+   * The list of payments or coupons. All payments have the same currency. All payments have the same sign or are 0. There should be at least one payment.
    */
   private final P[] _payments;
   /**
-   * Flag indicating if the annuity is payer (true) or receiver (false). Deduced from the first non-zero amount;
-   * if all amounts don't have the same sign, the flag can be incorrect.
-   * @deprecated This flag does not work correctly if the amounts do not have the same sign or if the notionals
-   * are zero
+   * Flag indicating if the annuity is payer (true) or receiver (false). Deduced from the first non-zero amount; if all amounts don't have the same sign, the
+   * flag can be incorrect.
+   * 
+   * @deprecated This flag does not work correctly if the amounts do not have the same sign or if the notionals are zero
    */
   @Deprecated
   private final boolean _isPayer;
@@ -47,8 +49,11 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
 
   /**
    * Constructor from an array of payments.
-   * @param payments The payments, not null. All of them should have the same currency.
-   * @param calendar The holiday calendar, not null
+   * 
+   * @param payments
+   *          The payments, not null. All of them should have the same currency.
+   * @param calendar
+   *          The holiday calendar, not null
    */
   public AnnuityDefinition(final P[] payments, final Calendar calendar) {
     ArgumentChecker.noNulls(payments, "payments");
@@ -66,6 +71,7 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
 
   /**
    * Gets the _payments field.
+   * 
    * @return the payments
    */
   public P[] getPayments() {
@@ -74,7 +80,9 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
 
   /**
    * Return one of the payments.
-   * @param n The payment index.
+   * 
+   * @param n
+   *          The payment index.
    * @return The payment.
    */
   public P getNthPayment(final int n) {
@@ -83,6 +91,7 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
 
   /**
    * Return the currency of the annuity.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -91,9 +100,9 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
 
   /**
    * Gets the isPayer field.
+   * 
    * @return isPayer flag.
-   * @deprecated The payer flag is no longer used; the sign of the notional
-   * determines whether a leg is paid or received
+   * @deprecated The payer flag is no longer used; the sign of the notional determines whether a leg is paid or received
    */
   @Deprecated
   public boolean isPayer() {
@@ -102,6 +111,7 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
 
   /**
    * The number of payments of the annuity.
+   * 
    * @return The number of payments.
    */
   public int getNumberOfPayments() {
@@ -110,6 +120,7 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
 
   /**
    * Gets the holiday calendar.
+   * 
    * @return The holiday calendar
    */
   public Calendar getCalendar() {
@@ -118,7 +129,9 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
 
   /**
    * Remove the payments paying on or before the given date.
-   * @param trimDate The date.
+   * 
+   * @param trimDate
+   *          The date.
    * @return The trimmed annuity.
    */
   public AnnuityDefinition<?> trimBefore(final ZonedDateTime trimDate) {
@@ -173,6 +186,7 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -180,9 +194,9 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
   public Annuity<? extends Payment> toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
     ArgumentChecker.notNull(date, "date");
     final List<Payment> resultList = new ArrayList<>();
-    for (int loopcoupon = 0; loopcoupon < _payments.length; loopcoupon++) {
-      if (!date.isAfter(_payments[loopcoupon].getPaymentDate())) {
-        resultList.add(_payments[loopcoupon].toDerivative(date, yieldCurveNames));
+    for (final P _payment : _payments) {
+      if (!date.isAfter(_payment.getPaymentDate())) {
+        resultList.add(_payment.toDerivative(date, yieldCurveNames));
       }
     }
     return new Annuity<>(resultList.toArray(new Payment[resultList.size()]));
@@ -190,21 +204,24 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @SuppressWarnings("unchecked")
   @Override
-  public Annuity<? extends Payment> toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> indexFixingTS, final String... yieldCurveNames) {
+  public Annuity<? extends Payment> toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> indexFixingTS,
+      final String... yieldCurveNames) {
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(indexFixingTS, "index fixing time series");
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");
     final List<Payment> resultList = new ArrayList<>();
     for (final P payment : _payments) {
-      //TODO check this
+      // TODO check this
       if (!date.isAfter(payment.getPaymentDate())) {
         if (payment instanceof InstrumentDefinitionWithData) {
-          resultList.add(((InstrumentDefinitionWithData<? extends Payment, DoubleTimeSeries<ZonedDateTime>>) payment).toDerivative(date, indexFixingTS, yieldCurveNames));
+          resultList.add(
+              ((InstrumentDefinitionWithData<? extends Payment, DoubleTimeSeries<ZonedDateTime>>) payment).toDerivative(date, indexFixingTS, yieldCurveNames));
         } else {
           resultList.add(payment.toDerivative(date, yieldCurveNames));
         }
@@ -217,9 +234,9 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
   public Annuity<? extends Payment> toDerivative(final ZonedDateTime date) {
     ArgumentChecker.notNull(date, "date");
     final List<Payment> resultList = new ArrayList<>();
-    for (int loopcoupon = 0; loopcoupon < _payments.length; loopcoupon++) {
-      if (!date.isAfter(_payments[loopcoupon].getPaymentDate())) {
-        resultList.add(_payments[loopcoupon].toDerivative(date));
+    for (final P _payment : _payments) {
+      if (!date.isAfter(_payment.getPaymentDate())) {
+        resultList.add(_payment.toDerivative(date));
       }
     }
     return new Annuity<>(resultList.toArray(new Payment[resultList.size()]));
@@ -232,7 +249,7 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
     ArgumentChecker.notNull(indexFixingTS, "index fixing time series");
     final List<Payment> resultList = new ArrayList<>();
     for (final P payment : _payments) {
-      //TODO check this
+      // TODO check this
       if (!date.isAfter(payment.getPaymentDate())) {
         if (payment instanceof InstrumentDefinitionWithData) {
           resultList.add(((InstrumentDefinitionWithData<? extends Payment, DoubleTimeSeries<ZonedDateTime>>) payment).toDerivative(date, indexFixingTS));

@@ -121,7 +121,7 @@ public class MinimalSecurityTemplateModelObjectBuilder extends FinancialSecurity
   @Override
   public Void visitBondFutureSecurity(final BondFutureSecurity security) {
     addFutureSecurityType("BondFuture");
-    final Map<String, String> basket = new TreeMap<String, String>();
+    final Map<String, String> basket = new TreeMap<>();
     for (final BondFutureDeliverable bondFutureDeliverable : security.getBasket()) {
       final String identifierValue = bondFutureDeliverable.getIdentifiers().getValue(ExternalSchemes.BLOOMBERG_TICKER);
       basket.put(ExternalSchemes.BLOOMBERG_TICKER.getName() + "-" + identifierValue, String.valueOf(bondFutureDeliverable.getConversionFactor()));

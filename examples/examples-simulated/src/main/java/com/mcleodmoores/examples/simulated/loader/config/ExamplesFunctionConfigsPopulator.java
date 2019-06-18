@@ -24,6 +24,9 @@ import com.opengamma.financial.view.ViewFunctions;
 import com.opengamma.master.config.ConfigMasterUtils;
 import com.opengamma.scripts.Scriptable;
 
+/**
+ * Populates the config master with functions.
+ */
 @Scriptable
 public class ExamplesFunctionConfigsPopulator extends AbstractTool<ToolContext> {
   private static final String STANDARD = "STANDARD_FUNCTIONS";
@@ -38,17 +41,18 @@ public class ExamplesFunctionConfigsPopulator extends AbstractTool<ToolContext> 
   private static final String CUBE = "CUBE_FUNCTIONS";
   private static final String TARGET = "TARGET_FUNCTIONS";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     new ExamplesFunctionConfigsPopulator().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     storeFunctionDefinition(AGGREGATION, AggregationFunctions.instance());
@@ -60,17 +64,14 @@ public class ExamplesFunctionConfigsPopulator extends AbstractTool<ToolContext> 
     storeFunctionDefinition(TARGET, TargetFunctions.instance());
 
     final FunctionConfigurationDefinition financialFunc = new FunctionConfigurationDefinition(FINANCIAL,
-        ImmutableList.of(AGGREGATION, ANALYTICS, CURRENCY, PROPERTY, TARGET, VALUE, VIEW),
-        Collections.<StaticFunctionConfiguration>emptyList(),
-        Collections.<ParameterizedFunctionConfiguration>emptyList());
+        ImmutableList.of(AGGREGATION, ANALYTICS, CURRENCY, PROPERTY, TARGET, VALUE, VIEW), Collections.<StaticFunctionConfiguration> emptyList(),
+        Collections.<ParameterizedFunctionConfiguration> emptyList());
     storeFunctionDefinition(financialFunc);
 
-    storeFunctionDefinition(STANDARD, ExamplesSimulatedFunctionConfiguration.instance());
+    storeFunctionDefinition(STANDARD, ExamplesSimulatedFunctionConfiguration.instance(getToolContext().getConfigMaster()));
 
-    final FunctionConfigurationDefinition exampleFunc = new FunctionConfigurationDefinition(EXAMPLE,
-        ImmutableList.of(FINANCIAL, STANDARD, CUBE),
-        Collections.<StaticFunctionConfiguration>emptyList(),
-        Collections.<ParameterizedFunctionConfiguration>emptyList());
+    final FunctionConfigurationDefinition exampleFunc = new FunctionConfigurationDefinition(EXAMPLE, ImmutableList.of(FINANCIAL, STANDARD, CUBE),
+        Collections.<StaticFunctionConfiguration> emptyList(), Collections.<ParameterizedFunctionConfiguration> emptyList());
     storeFunctionDefinition(exampleFunc);
 
   }

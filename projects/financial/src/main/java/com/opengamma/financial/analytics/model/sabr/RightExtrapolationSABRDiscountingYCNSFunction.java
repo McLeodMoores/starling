@@ -44,7 +44,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
@@ -62,7 +61,7 @@ public class RightExtrapolationSABRDiscountingYCNSFunction extends RightExtrapol
   private static final Logger LOGGER = LoggerFactory.getLogger(RightExtrapolationSABRDiscountingYCNSFunction.class);
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}.
    */
   public RightExtrapolationSABRDiscountingYCNSFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES);
@@ -82,8 +81,8 @@ public class RightExtrapolationSABRDiscountingYCNSFunction extends RightExtrapol
         for (final Map.Entry<Pair<String, Currency>, DoubleMatrix1D> entry : entries.entrySet()) {
           if (curveName.equals(entry.getKey().getFirst())) {
             final ValueProperties properties = desiredValue.getConstraints().copy().with(CURVE, curveName).get();
-            final CurveSpecification curveSpecification =
-                (CurveSpecification) inputs.getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL,
+            final CurveSpecification curveSpecification = (CurveSpecification) inputs
+                .getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL,
                     ValueProperties.builder().with(CURVE, curveName).get()));
             final ValueSpecification spec = new ValueSpecification(YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), properties);
             final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(entry.getValue(), curveSpecification);
@@ -95,7 +94,8 @@ public class RightExtrapolationSABRDiscountingYCNSFunction extends RightExtrapol
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(CURVE);
         if (curveNames == null || curveNames.size() != 1) {
@@ -117,7 +117,8 @@ public class RightExtrapolationSABRDiscountingYCNSFunction extends RightExtrapol
         if (mus == null || mus.size() != 1) {
           return null;
         }
-        final ValueProperties properties = ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(PROPERTY_VOLATILITY_MODEL, SABR).with(PROPERTY_STRIKE_CUTOFF, strikeCutoffs)
+        final ValueProperties properties = ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(PROPERTY_VOLATILITY_MODEL, SABR)
+            .with(PROPERTY_STRIKE_CUTOFF, strikeCutoffs)
             .with(PROPERTY_MU, mus).with(CUBE, cubeNames).with(CALCULATION_METHOD, getCalculationMethod()).with(CURVE_EXPOSURES, curveExposureConfigs).get();
         final ValueProperties curveProperties = ValueProperties.with(CURVE, curveNames).get();
         final Set<ValueRequirement> requirements = new HashSet<>();

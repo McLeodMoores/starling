@@ -53,7 +53,7 @@ import com.opengamma.util.money.Currency;
  *
  */
 public abstract class SimpleFutureFunction extends NonCompiledInvoker {
-  /** Calculation method name */
+  /** Calculation method name. */
   public static final String MARKET_METHOD = "Market";
   private static final Logger LOGGER = LoggerFactory.getLogger(SimpleFutureFunction.class);
   private static final FutureSecurityConverter CONVERTER = new FutureSecurityConverter();
@@ -65,7 +65,7 @@ public abstract class SimpleFutureFunction extends NonCompiledInvoker {
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
-    final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
 
     // 1. Build the analytic derivative to be priced
     final ZonedDateTime now = ZonedDateTime.now(executionContext.getValuationClock());
@@ -112,7 +112,7 @@ public abstract class SimpleFutureFunction extends NonCompiledInvoker {
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     final FutureSecurity security = (FutureSecurity) target.getTrade().getSecurity();
     // Live market price
     requirements.add(getMarketPriceRequirement(security));
@@ -141,7 +141,8 @@ public abstract class SimpleFutureFunction extends NonCompiledInvoker {
   private ValueRequirement getReferencePriceRequirement(final FunctionCompilationContext context, final FutureSecurity security) {
     final HistoricalTimeSeriesResolver resolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
     final ExternalIdBundle idBundle = security.getExternalIdBundle();
-    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(security.getExternalIdBundle(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, null);
+    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(security.getExternalIdBundle(), null, null, null,
+        MarketDataRequirementNames.MARKET_VALUE, null);
     if (timeSeries == null) {
       LOGGER.warn("Failed to find time series for: " + idBundle.toString());
       return null;

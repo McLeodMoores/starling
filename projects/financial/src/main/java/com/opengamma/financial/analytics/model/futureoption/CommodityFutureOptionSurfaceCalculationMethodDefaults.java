@@ -9,9 +9,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.Maps;
 import com.opengamma.core.security.Security;
 import com.opengamma.engine.ComputationTarget;
@@ -30,8 +27,6 @@ import com.opengamma.util.ArgumentChecker;
  * Populates {@link CommodityFutureOptionFunction} with defaults appropriate for pricing using an interpolated Black lognormal volatility surface.
  */
 public class CommodityFutureOptionSurfaceCalculationMethodDefaults extends StaticDefaultPropertyFunction {
-  /** The logger */
-  private static final Logger LOGGER = LoggerFactory.getLogger(CommodityFutureOptionSurfaceCalculationMethodDefaults.class);
   /** Map of currency name to surface calculation method */
   private final Map<String, Set<String>> _currencyToSurfaceCalculationMethod;
   /** The priority of this set of defaults */
@@ -94,9 +89,8 @@ public class CommodityFutureOptionSurfaceCalculationMethodDefaults extends Stati
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     if (desiredValue.getConstraints().isDefined(ValuePropertyNames.CALCULATION_METHOD)) {
       return super.getRequirements(context, target, desiredValue);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override

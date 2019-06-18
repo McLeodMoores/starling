@@ -19,9 +19,10 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Method for the pricing of interest rate future options with margin process. The pricing is done with a Black approach on the future rate (1.0-price).
- * The Black parameters are represented by (expiration-strike-delay) surfaces. The "delay" is the time between option expiration and future last trading date,
- * i.e. 0 for quarterly options and x for x-year mid-curve options. The future prices are computed without convexity adjustments.
+ * Method for the pricing of interest rate future options with margin process. The pricing is done with a Black approach on the future rate (1.0-price). The
+ * Black parameters are represented by (expiration-strike-delay) surfaces. The "delay" is the time between option expiration and future last trading date, i.e.
+ * 0 for quarterly options and x for x-year mid-curve options. The future prices are computed without convexity adjustments.
+ * 
  * @deprecated Use {@link InterestRateFutureOptionMarginSecurityBlackSmileMethod}
  */
 @Deprecated
@@ -35,6 +36,7 @@ public final class InterestRateFutureOptionMarginSecurityBlackSurfaceMethod exte
 
   /**
    * Return the method unique instance.
+   * 
    * @return The instance.
    */
   public static InterestRateFutureOptionMarginSecurityBlackSurfaceMethod getInstance() {
@@ -59,16 +61,21 @@ public final class InterestRateFutureOptionMarginSecurityBlackSurfaceMethod exte
 
   /**
    * Computes the option security price from future price.
-   * @param security The future option security.
-   * @param blackData The curve and Black volatility data.
-   * @param priceFuture The price of the underlying future.
+   * 
+   * @param security
+   *          The future option security.
+   * @param blackData
+   *          The curve and Black volatility data.
+   * @param priceFuture
+   *          The price of the underlying future.
    * @return The security price.
    */
-  public double optionPriceFromFuturePrice(final InterestRateFutureOptionMarginSecurity security, final YieldCurveWithBlackCubeBundle blackData, final double priceFuture) {
+  public double optionPriceFromFuturePrice(final InterestRateFutureOptionMarginSecurity security, final YieldCurveWithBlackCubeBundle blackData,
+      final double priceFuture) {
     final double rateStrike = 1.0 - security.getStrike();
     final EuropeanVanillaOption option = new EuropeanVanillaOption(rateStrike, security.getExpirationTime(), !security.isCall());
     final double forward = 1 - priceFuture;
-    //    final double delay = security.getUnderlyingFuture().getLastTradingTime() - security.getExpirationTime();
+    // final double delay = security.getUnderlyingFuture().getLastTradingTime() - security.getExpirationTime();
     final double volatility = blackData.getVolatility(security.getExpirationTime(), security.getStrike()); // , delay
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, 1.0, volatility);
     final double priceSecurity = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlack);
@@ -83,8 +90,11 @@ public final class InterestRateFutureOptionMarginSecurityBlackSurfaceMethod exte
 
   /**
    * Computes the option security price. The future price is computed without convexity adjustment.
-   * @param security The future option security.
-   * @param blackData The curve and Black volatility data.
+   * 
+   * @param security
+   *          The future option security.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return The security price.
    */
   public double optionPrice(final InterestRateFutureOptionMarginSecurity security, final YieldCurveWithBlackCubeBundle blackData) {
@@ -99,13 +109,17 @@ public final class InterestRateFutureOptionMarginSecurityBlackSurfaceMethod exte
   }
 
   /**
-   * Computes the option security price curve sensitivity, ie the sensitivity to the rate, not the futures price. The future price is computed without convexity adjustment.
-   * It is supposed that for a given strike the volatility does not change with the curves.
-   * @param security The future option security.
-   * @param blackData The curve and Black volatility data.
+   * Computes the option security price curve sensitivity, ie the sensitivity to the rate, not the futures price. The future price is computed without convexity
+   * adjustment. It is supposed that for a given strike the volatility does not change with the curves.
+   * 
+   * @param security
+   *          The future option security.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return The security price curve sensitivity.
    */
-  public InterestRateCurveSensitivity priceCurveSensitivity(final InterestRateFutureOptionMarginSecurity security, final YieldCurveWithBlackCubeBundle blackData) {
+  public InterestRateCurveSensitivity priceCurveSensitivity(final InterestRateFutureOptionMarginSecurity security,
+      final YieldCurveWithBlackCubeBundle blackData) {
     final double priceFutureBar = optionPriceDelta(security, blackData);
     final InterestRateCurveSensitivity priceFutureDerivative = METHOD_FUTURE.priceCurveSensitivity(security.getUnderlyingFuture(), blackData);
     return priceFutureDerivative.multipliedBy(priceFutureBar);
@@ -118,19 +132,22 @@ public final class InterestRateFutureOptionMarginSecurityBlackSurfaceMethod exte
   }
 
   /**
-   * Computes the option security price delta, wrt the futures price dV/df. The futures price is computed without convexity adjustment.
-   * It is supposed that for a given strike the volatility does not change with the curves.
-   * @param security The future option security.
-   * @param blackData The curve and Black volatility data.
+   * Computes the option security price delta, wrt the futures price dV/df. The futures price is computed without convexity adjustment. It is supposed that for
+   * a given strike the volatility does not change with the curves.
+   * 
+   * @param security
+   *          The future option security.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return The delta.
    */
   public double optionPriceDelta(final InterestRateFutureOptionMarginSecurity security, final YieldCurveWithBlackCubeBundle blackData) {
- // Forward sweep
+    // Forward sweep
     final double priceFuture = METHOD_FUTURE.price(security.getUnderlyingFuture(), blackData);
     final double rateStrike = 1.0 - security.getStrike();
     final EuropeanVanillaOption option = new EuropeanVanillaOption(rateStrike, security.getExpirationTime(), !security.isCall());
     final double forward = 1 - priceFuture;
-    //    final double delay = security.getUnderlyingFuture().getLastTradingTime() - security.getExpirationTime();
+    // final double delay = security.getUnderlyingFuture().getLastTradingTime() - security.getExpirationTime();
     final double volatility = blackData.getVolatility(security.getExpirationTime(), security.getStrike());
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, 1.0, volatility);
     final double[] priceAdjoint = BLACK_FUNCTION.getPriceAdjoint(option, dataBlack);
@@ -139,8 +156,11 @@ public final class InterestRateFutureOptionMarginSecurityBlackSurfaceMethod exte
 
   /**
    * Computes the option security Vega. The future price is computed without convexity adjustment.
-   * @param security The future option security.
-   * @param blackData The curve and Black volatility data.
+   * 
+   * @param security
+   *          The future option security.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return Black lognormal Vega.
    */
   public double optionPriceVega(final InterestRateFutureOptionMarginSecurity security, final YieldCurveWithBlackCubeBundle blackData) {
@@ -158,8 +178,11 @@ public final class InterestRateFutureOptionMarginSecurityBlackSurfaceMethod exte
 
   /**
    * Computes the option security theta. The future price is computed without convexity adjustment.
-   * @param security The future option security.
-   * @param blackData The curve and Black volatility data.
+   * 
+   * @param security
+   *          The future option security.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return Black lognormal theta.
    */
   public double optionPriceTheta(final InterestRateFutureOptionMarginSecurity security, final YieldCurveWithBlackCubeBundle blackData) {
@@ -173,8 +196,11 @@ public final class InterestRateFutureOptionMarginSecurityBlackSurfaceMethod exte
 
   /**
    * Computes the option security price volatility sensitivity. The future price is computed without convexity adjustment.
-   * @param security The future option security.
-   * @param blackData The curve and Black volatility data.
+   * 
+   * @param security
+   *          The future option security.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return The security price Black volatility sensitivity.
    */
   public SurfaceValue priceBlackSensitivity(final InterestRateFutureOptionMarginSecurity security, final YieldCurveWithBlackCubeBundle blackData) {
@@ -185,10 +211,13 @@ public final class InterestRateFutureOptionMarginSecurityBlackSurfaceMethod exte
   }
 
   /**
-   * Computes the option's value gamma, the second derivative of the security price wrt underlying futures rate.
-   * The future price is computed without convexity adjustment.
-   * @param security The future option security.
-   * @param blackData The curve and Black volatility data.
+   * Computes the option's value gamma, the second derivative of the security price wrt underlying futures rate. The future price is computed without convexity
+   * adjustment.
+   * 
+   * @param security
+   *          The future option security.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return The security price.
    */
   public double optionPriceGamma(final InterestRateFutureOptionMarginSecurity security, final YieldCurveWithBlackCubeBundle blackData) {
@@ -211,10 +240,13 @@ public final class InterestRateFutureOptionMarginSecurityBlackSurfaceMethod exte
   }
 
   /**
-   * Computes the option's value gamma, the second derivative of the security price wrt underlying futures rate.
-   * The future price is computed without convexity adjustment.
-   * @param security The future option security.
-   * @param curves The curve and Black volatility data.
+   * Computes the option's value gamma, the second derivative of the security price wrt underlying futures rate. The future price is computed without convexity
+   * adjustment.
+   * 
+   * @param security
+   *          The future option security.
+   * @param curves
+   *          The curve and Black volatility data.
    * @return The security price.
    */
   public double optionPriceGamma(final InterestRateFutureOptionMarginSecurity security, final YieldCurveBundle curves) {
@@ -223,10 +255,12 @@ public final class InterestRateFutureOptionMarginSecurityBlackSurfaceMethod exte
   }
 
   /**
-   * Interpolates and returns the option's implied volatility
-   * The future price is computed without convexity adjustment.
-   * @param security The future option security.
-   * @param curves The curve and Black volatility data.
+   * Interpolates and returns the option's implied volatility The future price is computed without convexity adjustment.
+   * 
+   * @param security
+   *          The future option security.
+   * @param curves
+   *          The curve and Black volatility data.
    * @return Lognormal Implied Volatility
    */
   public double impliedVolatility(final InterestRateFutureOptionMarginSecurity security, final YieldCurveBundle curves) {
@@ -237,10 +271,12 @@ public final class InterestRateFutureOptionMarginSecurityBlackSurfaceMethod exte
   }
 
   /**
-   * Interpolates and returns the option's implied volatility
-   * The future price is computed without convexity adjustment.
-   * @param security The future option security.
-   * @param blackData The curve and Black volatility data.
+   * Interpolates and returns the option's implied volatility The future price is computed without convexity adjustment.
+   * 
+   * @param security
+   *          The future option security.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return Lognormal Implied Volatility.
    */
   public double impliedVolatility(final InterestRateFutureOptionMarginSecurity security, final YieldCurveWithBlackCubeBundle blackData) {
@@ -256,8 +292,11 @@ public final class InterestRateFutureOptionMarginSecurityBlackSurfaceMethod exte
 
   /**
    * Computes the underlying future security price. The future price is computed without convexity adjustment.
-   * @param security The future option security.
-   * @param blackData The curve and Black volatility data.
+   * 
+   * @param security
+   *          The future option security.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return The security price.
    */
   public double underlyingFuturePrice(final InterestRateFutureOptionMarginSecurity security, final YieldCurveWithBlackCubeBundle blackData) {

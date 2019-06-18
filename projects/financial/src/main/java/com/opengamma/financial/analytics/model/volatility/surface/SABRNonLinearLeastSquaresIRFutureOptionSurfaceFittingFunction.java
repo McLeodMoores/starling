@@ -6,7 +6,6 @@
 package com.opengamma.financial.analytics.model.volatility.surface;
 
 import static com.opengamma.financial.analytics.model.volatility.surface.SABRFittingProperties.PROPERTY_ERROR;
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -52,6 +51,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.ObjectsPair;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  *
  */
@@ -62,7 +63,8 @@ public class SABRNonLinearLeastSquaresIRFutureOptionSurfaceFittingFunction exten
   private static final SABRHaganVolatilityFunction SABR_FUNCTION = new SABRHaganVolatilityFunction();
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final Object objectSurfaceData = inputs.getValue(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA);
     if (objectSurfaceData == null) {
@@ -75,9 +77,10 @@ public class SABRNonLinearLeastSquaresIRFutureOptionSurfaceFittingFunction exten
       throw new OpenGammaRuntimeException("Could not get futures price data");
     }
     final NodalDoublesCurve futurePriceData = (NodalDoublesCurve) objectFuturePriceData;
-    //assumes that the sorting is first x, then y
+    // assumes that the sorting is first x, then y
     if (volatilitySurfaceData.size() == 0) {
-      throw new OpenGammaRuntimeException("Interest rate future option volatility surface name" + desiredValue.getConstraint(ValuePropertyNames.SURFACE) + " contains no data");
+      throw new OpenGammaRuntimeException(
+          "Interest rate future option volatility surface name" + desiredValue.getConstraint(ValuePropertyNames.SURFACE) + " contains no data");
     }
     final Double error = Double.parseDouble(desiredValue.getConstraint(PROPERTY_ERROR));
     final DoubleMatrix1D sabrInitialValues = SABRFittingPropertyUtils.getStartingValues(desiredValue);
@@ -91,10 +94,10 @@ public class SABRNonLinearLeastSquaresIRFutureOptionSurfaceFittingFunction exten
     final DoubleArrayList nuList = new DoubleArrayList();
     final DoubleArrayList rhoList = new DoubleArrayList();
     final DoubleArrayList chiSqList = new DoubleArrayList();
-    final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<DoublesPair, DoubleMatrix2D>();
-    final Map<Double, List<Double>> dataPointsForStrip = new HashMap<Double, List<Double>>();
+    final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<>();
+    final Map<Double, List<Double>> dataPointsForStrip = new HashMap<>();
     for (final Number ttm : timeValues) {
-      final List<Double> fittedPointsForStrip = new ArrayList<Double>();
+      final List<Double> fittedPointsForStrip = new ArrayList<>();
       final List<ObjectsPair<Double, Double>> strip = volatilitySurfaceData.getYValuesForX(ttm);
       final DoubleArrayList errors = new DoubleArrayList();
       final DoubleArrayList strikes = new DoubleArrayList();
@@ -111,7 +114,8 @@ public class SABRNonLinearLeastSquaresIRFutureOptionSurfaceFittingFunction exten
             }
           }
           if (blackVols.size() > 4) {
-            final LeastSquareResultsWithTransform fittedResult = new SABRModelFitter(forward, strikes.toDoubleArray(), ttm.doubleValue(), blackVols.toDoubleArray(),
+            final LeastSquareResultsWithTransform fittedResult = new SABRModelFitter(forward, strikes.toDoubleArray(), ttm.doubleValue(),
+                blackVols.toDoubleArray(),
                 errors.toDoubleArray(), SABR_FUNCTION).solve(sabrInitialValues, fixed);
             final DoubleMatrix1D parameters = fittedResult.getModelParameters();
             fittedOptionExpiryList.add(ttm.doubleValue());
@@ -129,7 +133,7 @@ public class SABRNonLinearLeastSquaresIRFutureOptionSurfaceFittingFunction exten
         }
       }
     }
-    if (fittedOptionExpiryList.size() < 4) { //don't have sufficient fits to construct a surface
+    if (fittedOptionExpiryList.size() < 4) { // don't have sufficient fits to construct a surface
       throw new OpenGammaRuntimeException("Could not construct SABR parameter surfaces; have less than 3 surface points");
     }
     final double[] fittedOptionExpiry = fittedOptionExpiryList.toDoubleArray();
@@ -147,8 +151,10 @@ public class SABRNonLinearLeastSquaresIRFutureOptionSurfaceFittingFunction exten
         .withoutAny(ValuePropertyNames.FUNCTION)
         .with(ValuePropertyNames.FUNCTION, getUniqueId()).get();
     final ValueSpecification resultSpecification = new ValueSpecification(ValueRequirementNames.SABR_SURFACES, target.toSpecification(), resultProperties);
-    final ValueSpecification fittedPointsSpecification = new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_FITTED_POINTS, target.toSpecification(), resultProperties);
-    return Sets.newHashSet(new ComputedValue(resultSpecification, fittedSurfaces), new ComputedValue(fittedPointsSpecification, new SurfaceFittedSmileDataPoints(dataPointsForStrip)));
+    final ValueSpecification fittedPointsSpecification = new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_FITTED_POINTS,
+        target.toSpecification(), resultProperties);
+    return Sets.newHashSet(new ComputedValue(resultSpecification, fittedSurfaces),
+        new ComputedValue(fittedPointsSpecification, new SurfaceFittedSmileDataPoints(dataPointsForStrip)));
   }
 
   @Override
@@ -166,7 +172,8 @@ public class SABRNonLinearLeastSquaresIRFutureOptionSurfaceFittingFunction exten
         .with(SmileFittingPropertyNamesAndValues.PROPERTY_VOLATILITY_MODEL, SmileFittingPropertyNamesAndValues.SABR)
         .with(SmileFittingPropertyNamesAndValues.PROPERTY_FITTING_METHOD, SmileFittingPropertyNamesAndValues.NON_LINEAR_LEAST_SQUARES).get();
     final ValueSpecification resultSpecification = new ValueSpecification(ValueRequirementNames.SABR_SURFACES, target.toSpecification(), resultProperties);
-    final ValueSpecification fittedPointsSpecification = new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_FITTED_POINTS, target.toSpecification(), resultProperties);
+    final ValueSpecification fittedPointsSpecification = new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_FITTED_POINTS,
+        target.toSpecification(), resultProperties);
     return Sets.newHashSet(resultSpecification, fittedPointsSpecification);
   }
 
@@ -187,8 +194,10 @@ public class SABRNonLinearLeastSquaresIRFutureOptionSurfaceFittingFunction exten
     final ValueProperties futurePriceProperties = ValueProperties.builder()
         .with(ValuePropertyNames.CURVE, surfaceName)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.IR_FUTURE_PRICE).get();
-    final ValueRequirement surfaceRequirement = new ValueRequirement(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(), surfaceProperties);
-    final ValueRequirement futurePriceRequirement = new ValueRequirement(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(), futurePriceProperties);
+    final ValueRequirement surfaceRequirement = new ValueRequirement(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(),
+        surfaceProperties);
+    final ValueRequirement futurePriceRequirement = new ValueRequirement(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(),
+        futurePriceProperties);
     return Sets.newHashSet(futurePriceRequirement, surfaceRequirement);
   }
 

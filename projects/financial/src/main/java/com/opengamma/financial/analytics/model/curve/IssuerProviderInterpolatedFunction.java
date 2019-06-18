@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.financial.analytics.model.curve;
 
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
@@ -34,8 +39,8 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Issue
 import com.opengamma.analytics.financial.provider.description.interestrate.ParameterIssuerProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
@@ -73,7 +78,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 public class IssuerProviderInterpolatedFunction extends
-  MultiCurveFunction<ParameterIssuerProviderInterface, IssuerDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
+    MultiCurveFunction<ParameterIssuerProviderInterface, IssuerDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IssuerProviderInterpolatedFunction.class);
 
@@ -97,15 +102,19 @@ public class IssuerProviderInterpolatedFunction extends
   }
 
   @Override
-  public CompiledFunctionDefinition getCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames, final Set<ValueRequirement> exogenousRequirements,
-                                                        final CurveConstructionConfiguration curveConstructionConfiguration) {
-    return new IssuerProviderInterpolatedCompiledFunctionDefinition(earliestInvocation, latestInvocation, curveNames, exogenousRequirements, curveConstructionConfiguration);
+  public CompiledFunctionDefinition getCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames,
+      final Set<ValueRequirement> exogenousRequirements,
+      final CurveConstructionConfiguration curveConstructionConfiguration) {
+    return new IssuerProviderInterpolatedCompiledFunctionDefinition(earliestInvocation, latestInvocation, curveNames, exogenousRequirements,
+        curveConstructionConfiguration);
   }
 
   @Override
-  public CompiledFunctionDefinition getCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames, final Set<ValueRequirement> exogenousRequirements,
-                                                        final CurveConstructionConfiguration curveConstructionConfiguration, final String[] currencies) {
-    return new IssuerProviderInterpolatedCompiledFunctionDefinition(earliestInvocation, latestInvocation, curveNames, exogenousRequirements, curveConstructionConfiguration, currencies);
+  public CompiledFunctionDefinition getCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames,
+      final Set<ValueRequirement> exogenousRequirements,
+      final CurveConstructionConfiguration curveConstructionConfiguration, final String[] currencies) {
+    return new IssuerProviderInterpolatedCompiledFunctionDefinition(earliestInvocation, latestInvocation, curveNames, exogenousRequirements,
+        curveConstructionConfiguration, currencies);
   }
 
   private class IssuerProviderInterpolatedCompiledFunctionDefinition extends CurveCompiledFunctionDefinition {
@@ -114,14 +123,20 @@ public class IssuerProviderInterpolatedFunction extends
     private final CurveConstructionConfiguration _curveConstructionConfiguration;
 
     /**
-     * @param earliestInvocation The earliest time for which this function is valid, null if there is no bound
-     * @param latestInvocation The latest time for which this function is valid, null if there is no bound
-     * @param curveNames The names of the curves produced by this function, not null
-     * @param exogenousRequirements The exogenous requirements, not null
-     * @param curveConstructionConfiguration The curve construction configuration, not null
-     * @param currencies The set of currencies to which the curves produce sensitivities
+     * @param earliestInvocation
+     *          The earliest time for which this function is valid, null if there is no bound
+     * @param latestInvocation
+     *          The latest time for which this function is valid, null if there is no bound
+     * @param curveNames
+     *          The names of the curves produced by this function, not null
+     * @param exogenousRequirements
+     *          The exogenous requirements, not null
+     * @param curveConstructionConfiguration
+     *          The curve construction configuration, not null
+     * @param currencies
+     *          The set of currencies to which the curves produce sensitivities
      */
-    public IssuerProviderInterpolatedCompiledFunctionDefinition(
+    IssuerProviderInterpolatedCompiledFunctionDefinition(
         final ZonedDateTime earliestInvocation,
         final ZonedDateTime latestInvocation,
         final String[] curveNames,
@@ -144,17 +159,22 @@ public class IssuerProviderInterpolatedFunction extends
     }
 
     /**
-     * @param earliestInvocation The earliest time for which this function is valid, null if there is no bound
-     * @param latestInvocation The latest time for which this function is valid, null if there is no bound
-     * @param curveNames The names of the curves produced by this function, not null
-     * @param exogenousRequirements The exogenous requirements, not null
-     * @param curveConstructionConfiguration The curve construction configuration, not null
+     * @param earliestInvocation
+     *          The earliest time for which this function is valid, null if there is no bound
+     * @param latestInvocation
+     *          The latest time for which this function is valid, null if there is no bound
+     * @param curveNames
+     *          The names of the curves produced by this function, not null
+     * @param exogenousRequirements
+     *          The exogenous requirements, not null
+     * @param curveConstructionConfiguration
+     *          The curve construction configuration, not null
      */
-    public IssuerProviderInterpolatedCompiledFunctionDefinition(final ZonedDateTime earliestInvocation,
-                                                                final ZonedDateTime latestInvocation,
-                                                                final String[] curveNames,
-                                                                final Set<ValueRequirement> exogenousRequirements,
-                                                                final CurveConstructionConfiguration curveConstructionConfiguration) {
+    IssuerProviderInterpolatedCompiledFunctionDefinition(final ZonedDateTime earliestInvocation,
+        final ZonedDateTime latestInvocation,
+        final String[] curveNames,
+        final Set<ValueRequirement> exogenousRequirements,
+        final CurveConstructionConfiguration curveConstructionConfiguration) {
       super(earliestInvocation, latestInvocation, curveNames, ValueRequirementNames.YIELD_CURVE, exogenousRequirements);
       ArgumentChecker.notNull(curveConstructionConfiguration, "curve construction configuration");
       _curveConstructionConfiguration = curveConstructionConfiguration;
@@ -174,7 +194,8 @@ public class IssuerProviderInterpolatedFunction extends
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final Set<ValueRequirement> requirements = super.getRequirements(compilationContext, target, desiredValue);
       if (requirements == null) {
         return null;
@@ -202,23 +223,25 @@ public class IssuerProviderInterpolatedFunction extends
     }
 
     @Override
-    protected CurveNodeVisitor<InstrumentDefinition<?>> getCurveNodeConverter(final FunctionExecutionContext context, final SnapshotDataBundle marketData, final ExternalId dataId,
-                                                                              final HistoricalTimeSeriesBundle historicalData, final ZonedDateTime valuationTime, final FXMatrix fxMatrix) {
+    protected CurveNodeVisitor<InstrumentDefinition<?>> getCurveNodeConverter(final FunctionExecutionContext context, final SnapshotDataBundle marketData,
+        final ExternalId dataId,
+        final HistoricalTimeSeriesBundle historicalData, final ZonedDateTime valuationTime, final FXMatrix fxMatrix) {
       // No need to convert to InstrumentDefinition if we are not fitting the curve.
       return null;
     }
 
     @Override
-    protected Pair<ParameterIssuerProviderInterface, CurveBuildingBlockBundle> getCurves(final FunctionInputs inputs, final ZonedDateTime now, final IssuerDiscountBuildingRepository builder,
-                                                                                         final ParameterIssuerProviderInterface knownData, final FunctionExecutionContext context, final FXMatrix fx) {
+    protected Pair<ParameterIssuerProviderInterface, CurveBuildingBlockBundle> getCurves(final FunctionInputs inputs, final ZonedDateTime now,
+        final IssuerDiscountBuildingRepository builder,
+        final ParameterIssuerProviderInterface knownData, final FunctionExecutionContext context, final FXMatrix fx) {
       int n = 0;
       // These loops are here because the market data snapshot might not contain all of the required information
-      for (final CurveGroupConfiguration group: _curveConstructionConfiguration.getCurveGroups()) {
-        for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry: group.getTypesForCurves().entrySet()) {
+      for (final CurveGroupConfiguration group : _curveConstructionConfiguration.getCurveGroups()) {
+        for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : group.getTypesForCurves().entrySet()) {
           final String curveName = entry.getKey();
           final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, curveName).get();
-          final InterpolatedCurveSpecification specification =
-              (InterpolatedCurveSpecification) inputs.getValue(new ValueRequirement(ValueRequirementNames.CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, curveProperties));
+          final InterpolatedCurveSpecification specification = (InterpolatedCurveSpecification) inputs
+              .getValue(new ValueRequirement(ValueRequirementNames.CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, curveProperties));
           n += specification.getNodes().size();
         }
       }
@@ -227,23 +250,24 @@ public class IssuerProviderInterpolatedFunction extends
       final LinkedHashMap<String, Pair<Integer, Integer>> unitMap = new LinkedHashMap<>();
       final LinkedHashMap<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> unitBundles = new LinkedHashMap<>();
       int totalNodes = 0;
-      for (final CurveGroupConfiguration group: _curveConstructionConfiguration.getCurveGroups()) {
+      for (final CurveGroupConfiguration group : _curveConstructionConfiguration.getCurveGroups()) {
 
-        for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry: group.getTypesForCurves().entrySet()) {
+        for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : group.getTypesForCurves().entrySet()) {
 
           final String curveName = entry.getKey();
           final List<? extends CurveTypeConfiguration> types = entry.getValue();
 
           final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, curveName).get();
 
-          final Object dataObject = inputs.getValue(new ValueRequirement(ValueRequirementNames.CURVE_MARKET_DATA, ComputationTargetSpecification.NULL, curveProperties));
+          final Object dataObject = inputs
+              .getValue(new ValueRequirement(ValueRequirementNames.CURVE_MARKET_DATA, ComputationTargetSpecification.NULL, curveProperties));
           if (dataObject == null) {
             throw new OpenGammaRuntimeException("Could not get yield curve data");
           }
           final SnapshotDataBundle marketData = (SnapshotDataBundle) dataObject;
 
-          final InterpolatedCurveSpecification specification =
-              (InterpolatedCurveSpecification) inputs.getValue(new ValueRequirement(ValueRequirementNames.CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, curveProperties));
+          final InterpolatedCurveSpecification specification = (InterpolatedCurveSpecification) inputs
+              .getValue(new ValueRequirement(ValueRequirementNames.CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, curveProperties));
 
           n = specification.getNodes().size();
 
@@ -254,7 +278,7 @@ public class IssuerProviderInterpolatedFunction extends
           int i = 0;
           int compoundPeriodsPerYear = 0;
           final int nNodesForCurve = specification.getNodes().size();
-          for (final CurveNodeWithIdentifier node: specification.getNodes()) {
+          for (final CurveNodeWithIdentifier node : specification.getNodes()) {
             final CurveNode curveNode = node.getCurveNode();
             if (curveNode instanceof ContinuouslyCompoundedRateNode) {
               if (i == 0) {
@@ -297,7 +321,7 @@ public class IssuerProviderInterpolatedFunction extends
           final String interpolatorName = specification.getInterpolatorName();
           final String rightExtrapolatorName = specification.getRightExtrapolatorName();
           final String leftExtrapolatorName = specification.getLeftExtrapolatorName();
-          final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+          final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
           final InterpolatedDoublesCurve rawCurve = InterpolatedDoublesCurve.from(times, yields, interpolator, curveName);
           final YieldAndDiscountCurve discountCurve;
           if (compoundPeriodsPerYear != 0 && isYield) {
@@ -308,10 +332,10 @@ public class IssuerProviderInterpolatedFunction extends
             discountCurve = new DiscountCurve(curveName, rawCurve);
           }
 
-          for (final CurveTypeConfiguration type: types) {
+          for (final CurveTypeConfiguration type : types) {
             if (type instanceof IssuerCurveTypeConfiguration) {
               final IssuerCurveTypeConfiguration issuer = (IssuerCurveTypeConfiguration) type;
-              curveBundle.setCurve(Pairs.<Object, LegalEntityFilter<LegalEntity>>of(issuer.getKeys(), issuer.getFilters()), discountCurve);
+              curveBundle.setCurve(Pairs.<Object, LegalEntityFilter<LegalEntity>> of(issuer.getKeys(), issuer.getFilters()), discountCurve);
               curveBundle.getMulticurveProvider().setCurve(Currency.of(curveName.substring(0, 3)), discountCurve);
             }
           }
@@ -326,13 +350,13 @@ public class IssuerProviderInterpolatedFunction extends
 
     @Override
     protected Set<ComputedValue> getResults(final ValueSpecification bundleSpec, final ValueSpecification jacobianSpec, final ValueProperties bundleProperties,
-                                            final Pair<ParameterIssuerProviderInterface, CurveBuildingBlockBundle> pair) {
+        final Pair<ParameterIssuerProviderInterface, CurveBuildingBlockBundle> pair) {
 
       final Set<ComputedValue> result = new HashSet<>();
       final IssuerProviderDiscount provider = (IssuerProviderDiscount) pair.getFirst();
       result.add(new ComputedValue(bundleSpec, provider));
       result.add(new ComputedValue(jacobianSpec, pair.getSecond()));
-      for (final String curveName: getCurveNames()) {
+      for (final String curveName : getCurveNames()) {
         final ValueProperties curveProperties = bundleProperties.copy()
             .with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, getCurveTypeProperty())
             .withoutAny(ValuePropertyNames.CURVE)

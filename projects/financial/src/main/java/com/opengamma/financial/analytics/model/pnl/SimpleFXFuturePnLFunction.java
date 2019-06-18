@@ -64,7 +64,8 @@ public class SimpleFXFuturePnLFunction extends AbstractFunction.NonCompiledInvok
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Position position = target.getPosition();
     final FXFutureSecurity security = (FXFutureSecurity) position.getSecurity();
     final Clock snapshotClock = executionContext.getValuationClock();
@@ -90,7 +91,8 @@ public class SimpleFXFuturePnLFunction extends AbstractFunction.NonCompiledInvok
     }
     // TODO: If we know which way up we want the time series, don't request it in "convention order" and then lookup the convention again here, request it in
     // the desired order in getRequirements using a CurrencyPair
-    final CurrencyPairs currencyPairs = OpenGammaExecutionContext.getCurrencyPairsSource(executionContext).getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
+    final CurrencyPairs currencyPairs = OpenGammaExecutionContext.getCurrencyPairsSource(executionContext)
+        .getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
     final CurrencyPair currencyPair = currencyPairs.getCurrencyPair(security.getNumerator(), security.getDenominator());
     if (!payCurrency.equals(currencyPair.getBase()) && receiveCurrency.equals(security.getCurrency())) {
       ts = ts.reciprocal();
@@ -102,7 +104,7 @@ public class SimpleFXFuturePnLFunction extends AbstractFunction.NonCompiledInvok
     final double pv = (Double) pvObject;
     final Schedule scheduleCalculator = getScheduleCalculator(scheduleCalculatorName);
     final TimeSeriesSamplingFunction samplingFunction = getSamplingFunction(samplingFunctionName);
-    final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR); //REVIEW emcleod should "fromEnd" be hard-coded?
+    final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR);
     DateDoubleTimeSeries<?> pnlSeries = samplingFunction.getSampledTimeSeries(dbTimeSeries.getTimeSeries(), schedule);
     pnlSeries = DIFFERENCE.evaluate(pnlSeries);
     pnlSeries = pnlSeries.multiply(pv);
@@ -161,7 +163,7 @@ public class SimpleFXFuturePnLFunction extends AbstractFunction.NonCompiledInvok
     }
     final Position position = target.getPosition();
     final FXFutureSecurity future = (FXFutureSecurity) position.getSecurity();
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     final ValueProperties pvProperties = ValueProperties.builder()
         .with(ValuePropertyNames.CURRENCY, future.getCurrency().getCode())
         .with(ValuePropertyNames.PAY_CURVE, payCurveName)

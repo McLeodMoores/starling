@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.util.amount;
@@ -15,8 +15,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * Object to represent values linked to a cube (triple of doubles) for which the values can be added or multiplied by a constant.
- * Used for different sensitivities (FX,...). The objects stored as a HashMap(DoublesPair, Double).
+ * Object to represent values linked to a cube (triple of doubles) for which the values can be added or multiplied by a constant. Used for different
+ * sensitivities (FX,...). The objects stored as a HashMap(DoublesPair, Double).
  */
 public class CubeValue {
 
@@ -34,7 +34,9 @@ public class CubeValue {
 
   /**
    * Constructor from an existing map. The map is used in the new object.
-   * @param map The map.
+   *
+   * @param map
+   *          The map.
    */
   private CubeValue(final HashMap<Triple<Double, Double, Double>, Double> map) {
     ArgumentChecker.notNull(map, "Map");
@@ -43,8 +45,11 @@ public class CubeValue {
 
   /**
    * Builder from on point.
-   * @param point The surface point.
-   * @param value The associated value.
+   *
+   * @param point
+   *          The surface point.
+   * @param value
+   *          The associated value.
    * @return The surface value.
    */
   public static CubeValue from(final Triple<Double, Double, Double> point, final Double value) {
@@ -56,7 +61,9 @@ public class CubeValue {
 
   /**
    * Builder from a map. A new map is created with the same values.
-   * @param map The map.
+   *
+   * @param map
+   *          The map.
    * @return The surface value.
    */
   public static CubeValue from(final Map<Triple<Double, Double, Double>, Double> map) {
@@ -68,7 +75,9 @@ public class CubeValue {
 
   /**
    * Builder from a SurfaceValue. A new map is created with the same values.
-   * @param surface The SurfaceValue
+   *
+   * @param surface
+   *          The SurfaceValue
    * @return The surface value.
    */
   public static CubeValue from(final CubeValue surface) {
@@ -80,6 +89,7 @@ public class CubeValue {
 
   /**
    * Gets the underlying map.
+   *
    * @return The map.
    */
   public HashMap<Triple<Double, Double, Double>, Double> getMap() {
@@ -87,10 +97,13 @@ public class CubeValue {
   }
 
   /**
-   * Add a value to the object. The existing object is modified. If the point is not in the existing points of the object, it is put in the map.
-   * If a point is already in the existing points of the object, the value is added to the existing value.
-   * @param point The surface point.
-   * @param value The associated value.
+   * Add a value to the object. The existing object is modified. If the point is not in the existing points of the object, it is put in the map. If a point is
+   * already in the existing points of the object, the value is added to the existing value.
+   *
+   * @param point
+   *          The surface point.
+   * @param value
+   *          The associated value.
    */
   public void add(final Triple<Double, Double, Double> point, final Double value) {
     ArgumentChecker.notNull(point, "Point");
@@ -102,10 +115,13 @@ public class CubeValue {
   }
 
   /**
-   * Create a new object containing the point of both initial objects. If a point is only on one surface, its value is the original value.
-   * If a point is on both surfaces, the values on that point are added.
-   * @param value1 The first surface value.
-   * @param value2 The second surface value.
+   * Create a new object containing the point of both initial objects. If a point is only on one surface, its value is the original value. If a point is on both
+   * surfaces, the values on that point are added.
+   *
+   * @param value1
+   *          The first surface value.
+   * @param value2
+   *          The second surface value.
    * @return The combined/sum surface value.
    */
   public static CubeValue plus(final CubeValue value1, final CubeValue value2) {
@@ -123,11 +139,15 @@ public class CubeValue {
   }
 
   /**
-   * Create a new object containing the point of the initial object and the new point. If the point is not in the existing points of the object, it is put in the map.
-   * If a point is already in the existing point of the object, the value is added to the existing value.
-   * @param surfaceValue The surface value.
-   * @param point The surface point.
-   * @param value The associated value.
+   * Create a new object containing the point of the initial object and the new point. If the point is not in the existing points of the object, it is put in
+   * the map. If a point is already in the existing point of the object, the value is added to the existing value.
+   *
+   * @param surfaceValue
+   *          The surface value.
+   * @param point
+   *          The surface point.
+   * @param value
+   *          The associated value.
    * @return The combined/sum surface value.
    */
   public static CubeValue plus(final CubeValue surfaceValue, final Triple<Double, Double, Double> point, final Double value) {
@@ -144,8 +164,11 @@ public class CubeValue {
 
   /**
    * Create a new object containing the point of the initial object with the all values multiplied by a given factor.
-   * @param surfaceValue The surface value.
-   * @param factor The multiplicative factor.
+   *
+   * @param surfaceValue
+   *          The surface value.
+   * @param factor
+   *          The multiplicative factor.
    * @return The multiplied surface.
    */
   public static CubeValue multiplyBy(final CubeValue surfaceValue, final double factor) {
@@ -173,6 +196,7 @@ public class CubeValue {
 
   /**
    * Collapse the object to a single value. The points on which the amounts occur are ignored and the values summed.
+   *
    * @return The value.
    */
   public double toSingleValue() {

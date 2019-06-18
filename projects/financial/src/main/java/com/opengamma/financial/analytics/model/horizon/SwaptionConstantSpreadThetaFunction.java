@@ -63,8 +63,9 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class SwaptionConstantSpreadThetaFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionConstantSpreadThetaFunction.class);
   private FinancialSecurityVisitor<InstrumentDefinition<?>> _visitor;
@@ -78,12 +79,13 @@ public class SwaptionConstantSpreadThetaFunction extends AbstractFunction.NonCom
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final SwapSecurityConverterDeprecated swapConverter = new SwapSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, false);
     final SwaptionSecurityConverterDeprecated swaptionConverter = new SwaptionSecurityConverterDeprecated(securitySource, swapConverter);
-    _visitor = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder().swaptionVisitor(swaptionConverter).create();
+    _visitor = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>> builder().swaptionVisitor(swaptionConverter).create();
     _curveCalculationConfigSource = ConfigDBCurveCalculationConfigSource.init(context, this);
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String curveCalculationConfigName = desiredValue.getConstraint(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     final String surfaceName = desiredValue.getConstraint(ValuePropertyNames.SURFACE);
@@ -104,13 +106,14 @@ public class SwaptionConstantSpreadThetaFunction extends AbstractFunction.NonCom
     if (curveCalculationConfig == null) {
       throw new OpenGammaRuntimeException("Could not find curve calculation configuration named " + curveCalculationConfigName);
     }
-    final String[] curveNames = curveCalculationConfig.getYieldCurveNames(); //TODO
+    final String[] curveNames = curveCalculationConfig.getYieldCurveNames(); // TODO
     final YieldCurveBundle curves = YieldCurveFunctionUtils.getYieldCurves(inputs, curveCalculationConfig);
     final InstrumentDefinition<?> definition = security.accept(_visitor);
     if (definition == null) {
       throw new OpenGammaRuntimeException("Definition for security " + security + " was null");
     }
-    final BlackFlatSwaptionParameters parameters = new BlackFlatSwaptionParameters(volatilitySurface.getSurface(), SwaptionUtils.getSwapGenerator(security, definition, securitySource));
+    final BlackFlatSwaptionParameters parameters = new BlackFlatSwaptionParameters(volatilitySurface.getSurface(),
+        SwaptionUtils.getSwapGenerator(security, definition, securitySource));
     final YieldCurveWithBlackSwaptionBundle blackData = new YieldCurveWithBlackSwaptionBundle(parameters, curves);
     final String daysForward = desiredValue.getConstraint(PROPERTY_DAYS_TO_MOVE_FORWARD);
     final ConstantSpreadHorizonThetaCalculator calculator = ConstantSpreadHorizonThetaCalculator.getInstance();
@@ -193,6 +196,7 @@ public class SwaptionConstantSpreadThetaFunction extends AbstractFunction.NonCom
 
   private ValueSpecification getResultSpec(final ComputationTarget target, final String curveCalculationConfig, final String surfaceName,
       final String currency, final String daysForward) {
-    return new ValueSpecification(ValueRequirementNames.VALUE_THETA, target.toSpecification(), getResultProperties(currency, curveCalculationConfig, surfaceName, daysForward).get());
+    return new ValueSpecification(ValueRequirementNames.VALUE_THETA, target.toSpecification(),
+        getResultProperties(currency, curveCalculationConfig, surfaceName, daysForward).get());
   }
 }

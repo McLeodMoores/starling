@@ -87,7 +87,6 @@ import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.conversion.InterestRateInstrumentTradeOrSecurityConverter;
-import com.opengamma.financial.analytics.conversion.YieldCurveFixingSeriesProvider;
 import com.opengamma.financial.analytics.ircurve.ConfigDBInterpolatedYieldCurveSpecificationBuilder;
 import com.opengamma.financial.analytics.ircurve.FixedIncomeStripIdentifierAndMaturityBuilder;
 import com.opengamma.financial.analytics.ircurve.FixedIncomeStripWithIdentifier;
@@ -112,12 +111,11 @@ import com.opengamma.util.money.Currency;
 import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
- * Constructs yield curves and the Jacobian from {@link YieldCurveDefinition}s. Multiple curves can
- * be constructed simultaneously using root-finding. The configuration object that control the construction is
- * {@link MultiCurveCalculationConfig}. The root-finder uses present value = 0 as its target, where an appropriate spread
- * is added to the fixed rate or yield of an instrument.
- * @deprecated This function uses configuration objects that have been superseded. Use functions
- * that descend from {@link MultiCurveFunction}.
+ * Constructs yield curves and the Jacobian from {@link YieldCurveDefinition}s. Multiple curves can be constructed simultaneously using root-finding. The
+ * configuration object that control the construction is {@link MultiCurveCalculationConfig}. The root-finder uses present value = 0 as its target, where an
+ * appropriate spread is added to the fixed rate or yield of an instrument.
+ *
+ * @deprecated This function uses configuration objects that have been superseded. Use functions that descend from {@link MultiCurveFunction}.
  */
 @Deprecated
 public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveSeriesFunction {
@@ -144,13 +142,15 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ConventionBundleSource conventionSource = OpenGammaExecutionContext.getConventionBundleSource(executionContext);
     final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
     final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(executionContext);
     final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(executionContext);
-    _securityConverter = new InterestRateInstrumentTradeOrSecurityConverter(holidaySource, conventionSource, regionSource, securitySource, true, executionContext.getComputationTargetResolver()
-        .getVersionCorrection());
+    _securityConverter = new InterestRateInstrumentTradeOrSecurityConverter(holidaySource, conventionSource, regionSource, securitySource, true,
+        executionContext.getComputationTargetResolver()
+            .getVersionCorrection());
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final ValueProperties.Builder commonProperties = desiredValue.getConstraints().copy().withoutAny(CURVE);
     final String curveCalculationConfigName = desiredValue.getConstraint(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
@@ -164,8 +164,6 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
     final ConfigSource configSource = OpenGammaExecutionContext.getConfigSource(executionContext);
     final MultiCurveCalculationConfig curveCalculationConfig = new ConfigDBCurveCalculationConfigSource(configSource).getConfig(curveCalculationConfigName);
     final ComputationTargetSpecification targetSpec = target.toSpecification();
-    final ConventionBundleSource conventionBundleSource = OpenGammaExecutionContext.getConventionBundleSource(executionContext);
-    final YieldCurveFixingSeriesProvider provider = new YieldCurveFixingSeriesProvider(conventionBundleSource);
 
     final Set<ComputedValue> results = new HashSet<>();
     final double absoluteTolerance = Double.parseDouble(absoluteToleranceName);
@@ -177,8 +175,10 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
     final LinkedHashSet<String> curveNames = new LinkedHashSet<>();
     final Map<String, YieldCurveDefinition> ycDefs = Maps.newHashMap();
     int totalStrips = 0;
-    final FixedIncomeStripIdentifierAndMaturityBuilder builder = new FixedIncomeStripIdentifierAndMaturityBuilder(OpenGammaExecutionContext.getRegionSource(executionContext),
-        OpenGammaExecutionContext.getConventionBundleSource(executionContext), executionContext.getSecuritySource(), OpenGammaExecutionContext.getHolidaySource(executionContext));
+    final FixedIncomeStripIdentifierAndMaturityBuilder builder = new FixedIncomeStripIdentifierAndMaturityBuilder(
+        OpenGammaExecutionContext.getRegionSource(executionContext),
+        OpenGammaExecutionContext.getConventionBundleSource(executionContext), executionContext.getSecuritySource(),
+        OpenGammaExecutionContext.getHolidaySource(executionContext));
     for (final String curveName : curveCalculationConfig.getYieldCurveNames()) {
       curveNames.add(curveName);
       totalStrips += getYieldCurveSpecification(inputs, targetSpec, curveName).getStrips().size();
@@ -190,7 +190,7 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
     LocalDate valuationDate = startDate;
     final ConfigDBInterpolatedYieldCurveSpecificationBuilder ycSpecBuilder = new ConfigDBInterpolatedYieldCurveSpecificationBuilder(configSource);
 
-    VAL: //CSIGNORE
+    VAL: // CSIGNORE
     while (!valuationDate.isAfter(endDate)) {
 
       final YieldCurveBundle knownCurves = getKnownCurves(curveCalculationConfig, targetSpec, inputs);
@@ -201,7 +201,6 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
       final LinkedHashMap<String, Interpolator1D> interpolators = new LinkedHashMap<>();
       final Map<String, Integer> nodesPerCurve = new HashMap<>();
       for (final String curveName : curveNames) {
-
 
         final YieldCurveDefinition curveDefinition = ycDefs.get(curveName);
         final InterpolatedYieldCurveSpecification ycSpec = ycSpecBuilder.buildCurve(valuationDate, curveDefinition, VersionCorrection.LATEST);
@@ -225,7 +224,7 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
         final DoubleArrayList nodeTimes = new DoubleArrayList();
         FixedIncomeStripWithSecurity previousStrip = null;
         for (final FixedIncomeStripWithSecurity strip : spec.getStrips()) {
-          //TODO a lot of this can be moved outside the date loop
+          // TODO a lot of this can be moved outside the date loop
           final HistoricalTimeSeries historicalTimeSeries = marketData.get(MarketDataRequirementNames.MARKET_VALUE, strip.getSecurityIdentifier());
           if (historicalTimeSeries == null) {
             throw new OpenGammaRuntimeException("Could not get historical time series for " + strip);
@@ -243,9 +242,11 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
           if (derivative != null) {
             if (strip.getInstrumentType() == StripInstrumentType.FUTURE) {
               final InterestRateFutureSecurityDefinition securityDefinition = (InterestRateFutureSecurityDefinition) definition;
-              InterestRateFutureTransactionDefinition unitNotional = new InterestRateFutureTransactionDefinition(securityDefinition, 1, valuationDateTime, marketValue);
+              InterestRateFutureTransactionDefinition unitNotional = new InterestRateFutureTransactionDefinition(securityDefinition, 1, valuationDateTime,
+                  marketValue);
               unitNotional = unitNotional.withNewNotionalAndTransactionPrice(1, marketValue);
-              InstrumentDerivative unitNotionalDerivative = _definitionConverter.convert(security, unitNotional, valuationDateTime, curveNamesForSecurity, timeSeries);
+              InstrumentDerivative unitNotionalDerivative = _definitionConverter.convert(security, unitNotional, valuationDateTime, curveNamesForSecurity,
+                  timeSeries);
               unitNotionalDerivative = unitNotionalDerivative.accept(RateReplacingInterestRateDerivativeVisitor.getInstance(), marketValue);
               derivatives.add(unitNotionalDerivative);
               initialRatesGuess.add(1 - marketValue);
@@ -256,8 +257,8 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
             }
             final double t = derivative.accept(LAST_TIME_CALCULATOR);
             if (nInstruments > 0 && CompareUtils.closeEquals(nodeTimes.get(nInstruments - 1), t, 1e-12)) {
-              throw new OpenGammaRuntimeException("Strip " + strip + " has same maturity as one already added (" + previousStrip + ") - will lead to" +
-                  "equal nodes in the curve. Remove one of these strips.");
+              throw new OpenGammaRuntimeException("Strip " + strip + " has same maturity as one already added (" + previousStrip + ") - will lead to"
+                  + "equal nodes in the curve. Remove one of these strips.");
             }
             nodeTimes.add(Math.abs(t));
             marketValues.add(0.0);
@@ -275,13 +276,14 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
         continue;
       }
       try {
-        final MultipleYieldCurveFinderDataBundle data = new MultipleYieldCurveFinderDataBundle(derivatives, marketValues.toDoubleArray(), knownCurves, curveNodes, interpolators, useFiniteDifference,
+        final MultipleYieldCurveFinderDataBundle data = new MultipleYieldCurveFinderDataBundle(derivatives, marketValues.toDoubleArray(), knownCurves,
+            curveNodes, interpolators, useFiniteDifference,
             new FXMatrix(currency));
         final NewtonVectorRootFinder rootFinder = new BroydenVectorRootFinder(absoluteTolerance, relativeTolerance, iterations, decomposition);
         final Function1D<DoubleMatrix1D, DoubleMatrix1D> curveCalculator = new MultipleYieldCurveFinderFunction(data, PAR_SPREAD_RATE_CALCULATOR);
-        final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator = new MultipleYieldCurveFinderIRSJacobian(data, PAR_SPREAD_RATE_SENSITIVITY_CALCULATOR);
+        final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator = new MultipleYieldCurveFinderIRSJacobian(data,
+            PAR_SPREAD_RATE_SENSITIVITY_CALCULATOR);
         final double[] fittedYields = rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(initialRatesGuess.toDoubleArray())).getData();
-        final DoubleMatrix2D jacobianMatrix = jacobianCalculator.evaluate(new DoubleMatrix1D(fittedYields));
         int i = 0;
         for (final String curveName : curveNames) {
           final Integer offset = nodesPerCurve.get(curveName);
@@ -385,7 +387,5 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
   protected String getCalculationMethod() {
     return PAR_RATE_STRING;
   }
-
-
 
 }

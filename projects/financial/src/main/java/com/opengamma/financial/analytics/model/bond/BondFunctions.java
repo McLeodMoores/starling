@@ -48,7 +48,8 @@ public class BondFunctions extends AbstractFunctionConfigurationBean {
       public CurrencyInfo() {
       }
 
-      public CurrencyInfo(final String riskFreeCurveName, final String riskFreeCurveCalculationConfig, final String creditCurveName, final String creditCurveCalculationConfig) {
+      public CurrencyInfo(final String riskFreeCurveName, final String riskFreeCurveCalculationConfig, final String creditCurveName,
+          final String creditCurveCalculationConfig) {
         setRiskFreeCurveName(riskFreeCurveName);
         setRiskFreeCurveCalculationConfig(riskFreeCurveCalculationConfig);
         setCreditCurveName(creditCurveName);

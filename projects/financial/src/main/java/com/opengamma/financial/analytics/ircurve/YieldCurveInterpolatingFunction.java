@@ -34,8 +34,11 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.money.Currency;
 
 /**
- * Allows dumb clients to get interpolated {@link YieldCurve}s
+ * Allows dumb clients to get interpolated {@link YieldCurve}s.
+ *
+ * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
+@Deprecated
 public class YieldCurveInterpolatingFunction extends AbstractFunction {
   private final Currency _currency;
   private final String _curveName;
@@ -77,8 +80,8 @@ public class YieldCurveInterpolatingFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
-        final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       final NodalDoublesCurve curve = interpolateCurve((YieldCurve) inputs.getValue(_curveRequirement));
       return Sets.newHashSet(new ComputedValue(_interpolatedCurveResult, curve));
     }
@@ -108,7 +111,6 @@ public class YieldCurveInterpolatingFunction extends AbstractFunction {
     }
   }
 
-
   private static NodalDoublesCurve interpolateCurve(final YieldCurve yieldCurve) {
     final Curve<Double, Double> curve = yieldCurve.getCurve();
     return interpolateCurve(curve);
@@ -125,19 +127,18 @@ public class YieldCurveInterpolatingFunction extends AbstractFunction {
 
       return interpolateCurve(curve, first, last);
 
-    } else {
-      final double first = 1. / 12;
-      final double last = 30;
-
-      return interpolateCurve(curve, first, last);
     }
+    final double first = 1. / 12;
+    final double last = 30;
+
+    return interpolateCurve(curve, first, last);
   }
 
   private static NodalDoublesCurve interpolateCurve(final Curve<Double, Double> curve, final double first, final double last) {
     final int steps = 100;
 
-    final List<Double> xs = new ArrayList<Double>(steps);
-    final List<Double> ys = new ArrayList<Double>(steps);
+    final List<Double> xs = new ArrayList<>(steps);
+    final List<Double> ys = new ArrayList<>(steps);
 
     // Output 100 points equally spaced along the curve
     final double step = (last - first) / (steps - 1);
@@ -149,11 +150,9 @@ public class YieldCurveInterpolatingFunction extends AbstractFunction {
     return new NodalDoublesCurve(xs, ys, true);
   }
 
-
   @Override
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
-    final ValueRequirement curveReq = new ValueRequirement(ValueRequirementNames.YIELD_CURVE,
-        ComputationTargetSpecification.of(_currency),
+    final ValueRequirement curveReq = new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(_currency),
         ValueProperties.with(ValuePropertyNames.CURVE, _curveName).get());
     return new CompiledImpl(curveReq);
   }

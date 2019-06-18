@@ -40,14 +40,14 @@ public class ExamplesConventionMasterInitializer extends ConventionMasterInitial
     return conventionMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Restricted constructor.
    */
   protected ExamplesConventionMasterInitializer() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ConventionMaster conventionMaster, final SecurityMaster securityMaster) {
     USFXConventions.INSTANCE.init(conventionMaster, securityMaster);
@@ -62,6 +62,7 @@ public class ExamplesConventionMasterInitializer extends ConventionMasterInitial
   }
 
   @Override
+  @Deprecated
   public void init(final ConventionMaster conventionMaster) {
     USFXConventions.INSTANCE.init(conventionMaster);
     ExampleUGConventions.INSTANCE.init(conventionMaster);

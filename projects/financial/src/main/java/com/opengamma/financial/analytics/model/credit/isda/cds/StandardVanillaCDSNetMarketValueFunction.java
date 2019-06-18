@@ -31,9 +31,12 @@ import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Prototype - Reports {@link ValueRequirementNames#NET_MARKET_VALUE}
- * as the sum of the swap's {@link ValueRequirementNames#NOTIONAL} and its {@link ValueRequirementNames#PRESENT_VALUE}
+ * Prototype - Reports {@link ValueRequirementNames#NET_MARKET_VALUE} as the sum of the swap's {@link ValueRequirementNames#NOTIONAL} and its
+ * {@link ValueRequirementNames#PRESENT_VALUE}.
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class StandardVanillaCDSNetMarketValueFunction extends StandardVanillaCDSFunction {
 
   public StandardVanillaCDSNetMarketValueFunction() {
@@ -58,7 +61,6 @@ public class StandardVanillaCDSNetMarketValueFunction extends StandardVanillaCDS
     return Collections.singleton(new ComputedValue(spec, notionalAmt + pv));
   }
 
-
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<ValueRequirement> requirements = super.getRequirements(context, target, desiredValue);
@@ -69,9 +71,12 @@ public class StandardVanillaCDSNetMarketValueFunction extends StandardVanillaCDS
         desiredValue.getConstraints().withoutAny(ValuePropertyNames.FUNCTION)));
     return requirements;
   }
+
   @Override
-  protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition, final ISDACompliantYieldCurve yieldCurve, final ZonedDateTime[] times, final double[] marketSpreads, final ZonedDateTime valuationTime,
-      final ComputationTarget target, final ValueProperties properties, final FunctionInputs inputs, final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final Tenor[] tenors) {
+  protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition, final ISDACompliantYieldCurve yieldCurve,
+      final ZonedDateTime[] times, final double[] marketSpreads, final ZonedDateTime valuationTime,
+      final ComputationTarget target, final ValueProperties properties, final FunctionInputs inputs, final ISDACompliantCreditCurve hazardCurve,
+      final CDSAnalytic analytic, final Tenor[] tenors) {
     return null;
   }
 

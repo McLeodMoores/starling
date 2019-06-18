@@ -44,13 +44,13 @@ import com.opengamma.util.money.CurrencyAmount;
  * <li>Notional</li>
  * <li>Rate</li>
  * <li>Discounted payment amount</li>
- * <ul>
+ * </ul>
  * There is an entry for each coupon in a fixed leg.
  */
 @BeanDefinition
 public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
-  //TODO replace these static strings with an annotation and reference linked to the corresponding variable - PLAT-6507
+  // TODO replace these static strings with an annotation and reference linked to the corresponding variable - PLAT-6507
   /**
    * The payment year fraction label.
    */
@@ -68,7 +68,7 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
    */
   public static final String FIXED_RATE = "Fixed Rate";
   /**
-   * The discounted payment amount
+   * The discounted payment amount.
    */
   public static final String DISCOUNTED_PAYMENT_AMOUNT = "Discounted Payment Amount";
   /**
@@ -130,24 +130,33 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
   /**
    * All arrays must be the same length.
-   * @param startAccrualDates The start accrual dates, not null
-   * @param endAccrualDates The end accrual dates, not null
-   * @param discountFactors The discount factors, not null
-   * @param paymentTimes The payment times, not null
-   * @param paymentFractions The payment year fractions, not null
-   * @param paymentAmounts The payment amounts, not null
-   * @param notionals The notionals, not null
-   * @param fixedRates The fixed rates, not null
+   * 
+   * @param startAccrualDates
+   *          The start accrual dates, not null
+   * @param endAccrualDates
+   *          The end accrual dates, not null
+   * @param discountFactors
+   *          The discount factors, not null
+   * @param paymentTimes
+   *          The payment times, not null
+   * @param paymentFractions
+   *          The payment year fractions, not null
+   * @param paymentAmounts
+   *          The payment amounts, not null
+   * @param notionals
+   *          The notionals, not null
+   * @param fixedRates
+   *          The fixed rates, not null
    */
   @ImmutableConstructor
   public FixedLegCashFlows(final List<LocalDate> startAccrualDates,
-                           final List<LocalDate> endAccrualDates,
-                           final List<Double> discountFactors,
-                           final List<Double> paymentTimes,
-                           final List<Double> paymentFractions,
-                           final List<CurrencyAmount> paymentAmounts,
-                           final List<CurrencyAmount> notionals,
-                           final List<Double> fixedRates) {
+      final List<LocalDate> endAccrualDates,
+      final List<Double> discountFactors,
+      final List<Double> paymentTimes,
+      final List<Double> paymentFractions,
+      final List<CurrencyAmount> paymentAmounts,
+      final List<CurrencyAmount> notionals,
+      final List<Double> fixedRates) {
 
     ArgumentChecker.notNull(startAccrualDates, "startAccrualDates");
     ArgumentChecker.notNull(endAccrualDates, "endAccrualDates");
@@ -179,6 +188,7 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
   /**
    * Gets the discounted payment amounts.
+   * 
    * @return the discounted cashflows
    */
   @DerivedProperty
@@ -198,6 +208,7 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
   /**
    * Gets the total number of cash-flows.
+   * 
    * @return The total number of cash-flows
    */
   @DerivedProperty

@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.model.volatility.surface;
 import org.apache.commons.lang.Validate;
 
 /**
- * Defined as x = ln(strike/forward)
+ * Defined as x = ln(strike/forward).
  */
 public class LogMoneyness implements StrikeType {
 

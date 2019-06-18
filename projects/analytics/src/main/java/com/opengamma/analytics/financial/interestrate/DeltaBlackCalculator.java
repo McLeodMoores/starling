@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate;
@@ -13,7 +13,7 @@ import com.opengamma.analytics.financial.model.option.definition.YieldCurveWithB
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 @Deprecated
 public class DeltaBlackCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double> {
@@ -25,6 +25,7 @@ public class DeltaBlackCalculator extends InstrumentDerivativeVisitorAdapter<Yie
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static DeltaBlackCalculator getInstance() {
@@ -51,7 +52,8 @@ public class DeltaBlackCalculator extends InstrumentDerivativeVisitorAdapter<Yie
       final YieldCurveWithBlackSwaptionBundle curvesBlack = (YieldCurveWithBlackSwaptionBundle) curves;
       return CASH_SWAPTION.delta(swaption, curvesBlack).getAmount();
     }
-    throw new UnsupportedOperationException("The DeltaBlackCalculator visitor visitSwaptionCashFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
+    throw new UnsupportedOperationException(
+        "The DeltaBlackCalculator visitor visitSwaptionCashFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
   }
 
   @Override
@@ -62,6 +64,7 @@ public class DeltaBlackCalculator extends InstrumentDerivativeVisitorAdapter<Yie
       final YieldCurveWithBlackSwaptionBundle curvesBlack = (YieldCurveWithBlackSwaptionBundle) curves;
       return PHYSICAL_SWAPTION.delta(swaption, curvesBlack).getAmount();
     }
-    throw new UnsupportedOperationException("The DeltaBlackCalculator visitor visitSwaptionPhysicalFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
+    throw new UnsupportedOperationException(
+        "The DeltaBlackCalculator visitor visitSwaptionPhysicalFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
   }
 }

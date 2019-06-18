@@ -12,8 +12,8 @@ import java.util.List;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Shifts an {@link InterpolatedDoublesCube}. If the <i>(x, y)</i> value(s) of the shift(s) are not in the nodal points of the
- * original cube, they are added (with shift) to the nodal points of the new cube.
+ * Shifts an {@link InterpolatedDoublesCube}. If the <i>(x, y)</i> value(s) of the shift(s) are not in the nodal points of the original cube, they are added
+ * (with shift) to the nodal points of the new cube.
  */
 public class InterpolatedCubeAdditiveShiftFunction implements CubeShiftFunction<InterpolatedDoublesCube> {
 
@@ -56,7 +56,8 @@ public class InterpolatedCubeAdditiveShiftFunction implements CubeShiftFunction<
    * {@inheritDoc}
    */
   @Override
-  public InterpolatedDoublesCube evaluate(final InterpolatedDoublesCube cube, final double x, final double y, final double z, final double shift, final String newName) {
+  public InterpolatedDoublesCube evaluate(final InterpolatedDoublesCube cube, final double x, final double y, final double z, final double shift,
+      final String newName) {
     ArgumentChecker.notNull(cube, "cube");
     final double[] xData = cube.getXDataAsPrimitive();
     final double[] yData = cube.getYDataAsPrimitive();
@@ -95,7 +96,8 @@ public class InterpolatedCubeAdditiveShiftFunction implements CubeShiftFunction<
    * {@inheritDoc}
    */
   @Override
-  public InterpolatedDoublesCube evaluate(final InterpolatedDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift, final double[] shift) {
+  public InterpolatedDoublesCube evaluate(final InterpolatedDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift,
+      final double[] shift) {
     ArgumentChecker.notNull(cube, "cube");
     return evaluate(cube, xShift, yShift, zShift, shift, "MULTIPLE_SHIFT_" + cube.getName());
   }
@@ -104,7 +106,8 @@ public class InterpolatedCubeAdditiveShiftFunction implements CubeShiftFunction<
    * {@inheritDoc}
    */
   @Override
-  public InterpolatedDoublesCube evaluate(final InterpolatedDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift, final double[] shift, final String newName) {
+  public InterpolatedDoublesCube evaluate(final InterpolatedDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift,
+      final double[] shift, final String newName) {
     ArgumentChecker.notNull(cube, "cube");
     ArgumentChecker.notNull(xShift, "x shift");
     ArgumentChecker.notNull(yShift, "y shift");
@@ -112,9 +115,11 @@ public class InterpolatedCubeAdditiveShiftFunction implements CubeShiftFunction<
     ArgumentChecker.notNull(shift, "shifts");
     final int n = xShift.length;
     if (n == 0) {
-      return InterpolatedDoublesCube.from(cube.getXDataAsPrimitive(), cube.getYDataAsPrimitive(), cube.getZDataAsPrimitive(), cube.getValuesAsPrimitive(), cube.getInterpolator(), newName);
+      return InterpolatedDoublesCube.from(cube.getXDataAsPrimitive(), cube.getYDataAsPrimitive(), cube.getZDataAsPrimitive(), cube.getValuesAsPrimitive(),
+          cube.getInterpolator(), newName);
     }
-    ArgumentChecker.isTrue(n == yShift.length && n == shift.length, "number of shifts {} must be equal to number of x shift positions {} and y shift positions {}", shift.length, n, yShift.length);
+    ArgumentChecker.isTrue(n == yShift.length && n == shift.length,
+        "number of shifts {} must be equal to number of x shift positions {} and y shift positions {}", shift.length, n, yShift.length);
     final Double[] x = cube.getXData();
     final Double[] y = cube.getYData();
     final Double[] z = cube.getZData();
@@ -127,8 +132,8 @@ public class InterpolatedCubeAdditiveShiftFunction implements CubeShiftFunction<
     for (int i = 0; i < n; i++) {
       boolean foundValue = false;
       for (int j = 0; j < size; j++) {
-        if (Double.doubleToLongBits(x[j]) == Double.doubleToLongBits(xShift[i]) && Double.doubleToLongBits(y[j]) == Double.doubleToLongBits(yShift[i]) &&
-            Double.doubleToLongBits(z[j]) == Double.doubleToLongBits(zShift[i])) {
+        if (Double.doubleToLongBits(x[j]) == Double.doubleToLongBits(xShift[i]) && Double.doubleToLongBits(y[j]) == Double.doubleToLongBits(yShift[i])
+            && Double.doubleToLongBits(z[j]) == Double.doubleToLongBits(zShift[i])) {
           newV.set(j, v[j] + shift[i]);
           foundValue = true;
         }

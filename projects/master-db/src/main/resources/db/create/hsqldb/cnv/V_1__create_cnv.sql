@@ -12,13 +12,13 @@ CREATE TABLE cnv_schema_version (
 );
 INSERT INTO cnv_schema_version (version_key, version_value) VALUES ('schema_patch', '1');
 
-CREATE SEQUENCE cnv_doc_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS cnv_doc_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE cnv_idkey_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS cnv_idkey_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE cnv_attr_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS cnv_attr_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE cnv_prop_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS cnv_prop_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
 -- "as bigint" required by Derby/HSQL, not accepted by Postgresql
 

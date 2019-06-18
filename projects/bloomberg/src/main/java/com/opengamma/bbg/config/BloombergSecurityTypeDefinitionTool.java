@@ -17,24 +17,25 @@ import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * Tool to populate the config master with default bloomberg security type definitions
+ * Tool to populate the config master with default bloomberg security type definitions.
  */
 @Scriptable
 public class BloombergSecurityTypeDefinitionTool extends AbstractTool<ToolContext> {
 
   private static final String CONFIG_NAME_OPT = "n";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new BloombergSecurityTypeDefinitionTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
     final ToolContext toolContext = getToolContext();
@@ -72,11 +73,11 @@ public class BloombergSecurityTypeDefinitionTool extends AbstractTool<ToolContex
   @SuppressWarnings("static-access")
   private Option createNameOption() {
     return OptionBuilder.isRequired(false)
-                        .hasArgs()
-                        .withArgName("name config doc")
-                        .withDescription("The name of the config document")
-                        .withLongOpt("name")
-                        .create(CONFIG_NAME_OPT);
+        .hasArgs()
+        .withArgName("name config doc")
+        .withDescription("The name of the config document")
+        .withLongOpt("name")
+        .create(CONFIG_NAME_OPT);
   }
 
 }

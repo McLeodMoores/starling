@@ -24,7 +24,7 @@ import com.opengamma.util.PublicSPI;
 
 /**
  * Result from searching for legal entities.
- * <p/>
+ * <p>
  * The returned documents will match the search criteria.
  * See {@link LegalEntitySearchRequest} for more details.
  */
@@ -74,9 +74,9 @@ public class LegalEntitySearchResult extends AbstractSearchResult<LegalEntityDoc
   }
 
   /**
-   * Gets the first legalentity, or null if no documents.
+   * Gets the first legal entity, or null if no documents.
    *
-   * @return the first legalentity, null if none
+   * @return the first legal entity, null if none
    */
   public ManageableLegalEntity getFirstLegalEntity() {
     return getDocuments().size() > 0 ? getDocuments().get(0).getLegalEntity() : null;
@@ -84,12 +84,14 @@ public class LegalEntitySearchResult extends AbstractSearchResult<LegalEntityDoc
 
   /**
    * Gets the single result expected from a query.
-   * <p/>
-   * This throws an exception if more than 1 result is actually available.
-   * Thus, this method implies an assumption about uniqueness of the queried legalentity.
+   * <p>
+   * This throws an exception if more than 1 result is actually available. Thus,
+   * this method implies an assumption about uniqueness of the queried legal
+   * entity.
    *
-   * @return the matching legalentity, not null
-   * @throws IllegalStateException if no legalentity was found
+   * @return the matching legal entity, not null
+   * @throws IllegalStateException
+   *           if no legal entity was found
    */
   public ManageableLegalEntity getSingleLegalEntity() {
     if (getDocuments().size() != 1) {

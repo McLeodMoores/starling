@@ -29,8 +29,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * @deprecated Use {@link FRASecurityConverter}. {@link ConventionBundleSource} should not be used,
- * as the conventions are not typed.
+ * @deprecated Use {@link FRASecurityConverter}. {@link ConventionBundleSource} should not be used, as the conventions are not typed.
  */
 @Deprecated
 public class FRASecurityConverterDeprecated extends FinancialSecurityVisitorAdapter<InstrumentDefinition<?>> {
@@ -58,8 +57,9 @@ public class FRASecurityConverterDeprecated extends FinancialSecurityVisitorAdap
     final ZonedDateTime accrualStartDate = security.getStartDate();
     final ZonedDateTime accrualEndDate = security.getEndDate();
     final double notional = security.getAmount();
-    final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, ExternalSchemes.currencyRegionId(currency)); //TODO exchange region?
-    final IborIndex iborIndex = new IborIndex(currency, fraConvention.getPeriod(), fraConvention.getSettlementDays(), fraConvention.getDayCount(), fraConvention.getBusinessDayConvention(),
+    final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, ExternalSchemes.currencyRegionId(currency)); // TODO exchange region?
+    final IborIndex iborIndex = new IborIndex(currency, fraConvention.getPeriod(), fraConvention.getSettlementDays(), fraConvention.getDayCount(),
+        fraConvention.getBusinessDayConvention(),
         fraConvention.isEOMConvention());
     return ForwardRateAgreementDefinition.from(accrualStartDate, accrualEndDate, notional, iborIndex, security.getRate(), calendar);
   }
@@ -73,7 +73,8 @@ public class FRASecurityConverterDeprecated extends FinancialSecurityVisitorAdap
     final ZonedDateTime accrualEndDate = security.getEndDate().atStartOfDay(ZoneId.systemDefault());
     final double notional = security.getAmount();
     final Calendar calendar = new HolidaySourceCalendarAdapter(_holidaySource, security.getCalendars().toArray(new ExternalId[security.getCalendars().size()]));
-    final IborIndex iborIndex = new IborIndex(currency, period, security.getFixingLag(), security.getDayCount(), security.getFixingBusinessDayConvention(), false);
+    final IborIndex iborIndex = new IborIndex(currency, period, security.getFixingLag(), security.getDayCount(), security.getFixingBusinessDayConvention(),
+        false);
     return ForwardRateAgreementDefinition.from(accrualStartDate, accrualEndDate, notional, iborIndex, security.getRate(), calendar);
   }
 

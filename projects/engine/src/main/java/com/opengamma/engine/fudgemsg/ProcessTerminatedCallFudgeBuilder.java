@@ -15,7 +15,7 @@ import org.fudgemsg.mapping.FudgeSerializer;
 import com.opengamma.engine.view.listener.ProcessTerminatedCall;
 
 /**
- * Fudge message builder for {@link ProcessTerminatedCall}
+ * Fudge message builder for {@link ProcessTerminatedCall}.
  */
 @FudgeBuilderFor(ProcessTerminatedCall.class)
 public class ProcessTerminatedCallFudgeBuilder implements FudgeBuilder<ProcessTerminatedCall> {

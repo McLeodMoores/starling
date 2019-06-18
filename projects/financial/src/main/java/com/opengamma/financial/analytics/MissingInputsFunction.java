@@ -141,10 +141,9 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
     if (underlying == getUnderlyingCompiled()) {
       LOGGER.debug("Compiling underlying on {} gives self", this);
       return this;
-    } else {
-      LOGGER.debug("Creating delegate for compiled underlying on {}", this);
-      return create(underlying);
     }
+    LOGGER.debug("Creating delegate for compiled underlying on {}", this);
+    return create(underlying);
   }
 
   @Override
@@ -207,33 +206,38 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
     final ValueProperties constraints = desiredValue.getConstraints();
     if (constraints.getProperties() == null) {
       // No constraints - assume FULL and make it optional for the inputs
-      desiredValue = new ValueRequirement(desiredValue.getValueName(), desiredValue.getTargetReference(), ValueProperties.with(ValuePropertyNames.AGGREGATION, getAggregationStyleFull())
-          .withOptional(ValuePropertyNames.AGGREGATION).get());
+      desiredValue = new ValueRequirement(desiredValue.getValueName(), desiredValue.getTargetReference(),
+          ValueProperties.with(ValuePropertyNames.AGGREGATION, getAggregationStyleFull())
+              .withOptional(ValuePropertyNames.AGGREGATION).get());
     } else if (constraints.getProperties().isEmpty()) {
       // Infinite/near-infinite constraints - make aggregation style optional
       if (!constraints.isOptional(ValuePropertyNames.AGGREGATION)) {
-        desiredValue = new ValueRequirement(desiredValue.getValueName(), desiredValue.getTargetReference(), constraints.copy().withOptional(ValuePropertyNames.AGGREGATION).get());
+        desiredValue = new ValueRequirement(desiredValue.getValueName(), desiredValue.getTargetReference(),
+            constraints.copy().withOptional(ValuePropertyNames.AGGREGATION).get());
       }
     } else {
       final Set<String> aggregationStyle = constraints.getValues(ValuePropertyNames.AGGREGATION);
       final String full = getAggregationStyleFull();
       if (aggregationStyle == null || aggregationStyle.isEmpty()) {
         // No constraint or wild-card - assume FULL and make it optional for the inputs
-        desiredValue = new ValueRequirement(desiredValue.getValueName(), desiredValue.getTargetReference(), constraints.copy().withoutAny(ValuePropertyNames.AGGREGATION)
-            .withOptional(ValuePropertyNames.AGGREGATION).with(ValuePropertyNames.AGGREGATION, full).get());
+        desiredValue = new ValueRequirement(desiredValue.getValueName(), desiredValue.getTargetReference(),
+            constraints.copy().withoutAny(ValuePropertyNames.AGGREGATION)
+                .withOptional(ValuePropertyNames.AGGREGATION).with(ValuePropertyNames.AGGREGATION, full).get());
       } else if (aggregationStyle.contains(full)) {
         // Constraint allows FULL - make it optional for the inputs
         if (aggregationStyle.size() != 1 || !constraints.isOptional(ValuePropertyNames.AGGREGATION)) {
-          desiredValue = new ValueRequirement(desiredValue.getValueName(), desiredValue.getTargetReference(), constraints.copy().withoutAny(ValuePropertyNames.AGGREGATION)
-              .withOptional(ValuePropertyNames.AGGREGATION).with(ValuePropertyNames.AGGREGATION, full).get());
+          desiredValue = new ValueRequirement(desiredValue.getValueName(), desiredValue.getTargetReference(),
+              constraints.copy().withoutAny(ValuePropertyNames.AGGREGATION)
+                  .withOptional(ValuePropertyNames.AGGREGATION).with(ValuePropertyNames.AGGREGATION, full).get());
         }
       } else {
         final String missing = getAggregationStyleMissing();
         if (aggregationStyle.contains(missing)) {
           // Constraint allows MISSING - make it optional for the inputs
           if (aggregationStyle.size() != 1 || !constraints.isOptional(ValuePropertyNames.AGGREGATION)) {
-            desiredValue = new ValueRequirement(desiredValue.getValueName(), desiredValue.getTargetReference(), constraints.copy().withoutAny(ValuePropertyNames.AGGREGATION)
-                .withOptional(ValuePropertyNames.AGGREGATION).with(ValuePropertyNames.AGGREGATION, missing).get());
+            desiredValue = new ValueRequirement(desiredValue.getValueName(), desiredValue.getTargetReference(),
+                constraints.copy().withoutAny(ValuePropertyNames.AGGREGATION)
+                    .withOptional(ValuePropertyNames.AGGREGATION).with(ValuePropertyNames.AGGREGATION, missing).get());
           }
         } else {
           // Unsupported aggregation style
@@ -252,7 +256,8 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> underlyingResults = getUnderlyingCompiled().getResults(context, target, inputs);
     if (underlyingResults == null) {
       LOGGER.debug("Underlying returned null inputs {}", inputs);
@@ -324,9 +329,8 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
     final FunctionInvoker underlying = getUnderlyingCompiled().getFunctionInvoker();
     if (underlying == getUnderlyingInvoker()) {
       return this;
-    } else {
-      return create(underlying);
     }
+    return create(underlying);
   }
 
   // FunctionInvoker
@@ -340,10 +344,12 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
       final ValueSpecification resultSpec = underlyingResult.getSpecification();
       final ValueProperties.Builder properties = resultSpec.getProperties().copy();
       properties.withoutAny(ValuePropertyNames.AGGREGATION).with(ValuePropertyNames.AGGREGATION, getAggregationStyleMissing());
-      results.add(new ComputedValue(new ValueSpecification(resultSpec.getValueName(), resultSpec.getTargetSpecification(), properties.get()), underlyingResult.getValue()));
+      results.add(new ComputedValue(new ValueSpecification(resultSpec.getValueName(), resultSpec.getTargetSpecification(), properties.get()),
+          underlyingResult.getValue()));
       if (inputs.getMissingValues().isEmpty()) {
         properties.withoutAny(ValuePropertyNames.AGGREGATION).with(ValuePropertyNames.AGGREGATION, getAggregationStyleFull());
-        results.add(new ComputedValue(new ValueSpecification(resultSpec.getValueName(), resultSpec.getTargetSpecification(), properties.get()), underlyingResult.getValue()));
+        results.add(new ComputedValue(new ValueSpecification(resultSpec.getValueName(), resultSpec.getTargetSpecification(), properties.get()),
+            underlyingResult.getValue()));
       }
     }
     return results;

@@ -44,9 +44,8 @@ public final class MemoryUtils {
       final ValueProperties constraints = instance(valueRequirement.getConstraints());
       if (ctspec == valueRequirement.getTargetReference() && constraints == valueRequirement.getConstraints()) {
         return valueRequirement;
-      } else {
-        return new ValueRequirement(valueRequirement.getValueName(), ctspec, constraints);
       }
+      return new ValueRequirement(valueRequirement.getValueName(), ctspec, constraints);
     }
   };
 
@@ -57,9 +56,8 @@ public final class MemoryUtils {
       final ValueProperties properties = instance(valueSpecification.getProperties());
       if (ctspec == valueSpecification.getTargetSpecification() && properties == valueSpecification.getProperties()) {
         return valueSpecification;
-      } else {
-        return new ValueSpecification(valueSpecification.getValueName(), ctspec, properties);
       }
+      return new ValueSpecification(valueSpecification.getValueName(), ctspec, properties);
     }
   };
 

@@ -129,9 +129,10 @@ public class ViewDefinitionFactoryBean extends SingletonFactoryBean<ViewDefiniti
   }
 
   /**
-   * Sets the value definitions as calcConfig -> (securityType -> requirementName).
+   * Sets the value definitions as calcConfig -&gt; (securityType -&gt; requirementName).
    *
-   * @param portfolioRequirements value definitions to set
+   * @param portfolioRequirements
+   *          value definitions to set
    */
   public void setPortfolioRequirements(final Map<String, Map<String, String[]>> portfolioRequirements) {
     _portfolioRequirements = portfolioRequirements;
@@ -168,7 +169,8 @@ public class ViewDefinitionFactoryBean extends SingletonFactoryBean<ViewDefiniti
   /**
    * Parses a requirement written in the form {@code valueName[constraint=value;constraint=value;...]}.
    *
-   * @param requirement string to parse
+   * @param requirement
+   *          string to parse
    * @return the value name and constraints
    */
   private Pair<String, ValueProperties> parseValueRequirement(final String requirement) {
@@ -214,13 +216,15 @@ public class ViewDefinitionFactoryBean extends SingletonFactoryBean<ViewDefiniti
         final ViewCalculationConfiguration calcConfig = getOrCreateCalcConfig(viewDefinition, config.getKey());
         for (final String[] entry : config.getValue()) {
           if (entry.length < 4) {
-            throw new OpenGammaRuntimeException("Not enough members of array in specific requirements. Need [0]=Name [1]=ComputationTargetType [2]=UniqueIdScheme [3]=UniqueIdValue");
+            throw new OpenGammaRuntimeException(
+                "Not enough members of array in specific requirements. Need [0]=Name [1]=ComputationTargetType [2]=UniqueIdScheme [3]=UniqueIdValue");
           }
           final Pair<String, ValueProperties> requirement = parseValueRequirement(entry[0]);
           final String type = entry[1];
           final String scheme = entry[2];
           final String value = entry[3];
-          calcConfig.addSpecificRequirement(new ValueRequirement(requirement.getFirst(), ComputationTargetType.parse(type), UniqueId.of(scheme, value), requirement.getSecond()));
+          calcConfig.addSpecificRequirement(
+              new ValueRequirement(requirement.getFirst(), ComputationTargetType.parse(type), UniqueId.of(scheme, value), requirement.getSecond()));
         }
       }
     }

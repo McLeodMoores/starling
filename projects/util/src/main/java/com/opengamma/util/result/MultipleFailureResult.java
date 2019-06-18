@@ -32,12 +32,12 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A result indicating a failure with multiple underlying causes.
  * <p>
- * An example of this might be a function calling several other functions when
- * there is no market data available, causing them all to fail.
- * If all underlying results have the same status this result will use that status.
- * If they have different statues the status of this result will be {@link FailureStatus#MULTIPLE}.
+ * An example of this might be a function calling several other functions when there is no market data available, causing them all to fail. If all underlying
+ * results have the same status this result will use that status. If they have different statues the status of this result will be
+ * {@link FailureStatus#MULTIPLE}.
  *
- * @param <T> the type of the underlying result for a successful invocation
+ * @param <T>
+ *          the type of the underlying result for a successful invocation
  * @deprecated {@link FailureResult} can deal with multiple failures
  */
 @Deprecated
@@ -54,7 +54,11 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
   private final String _message;
 
   /**
-   * @param failures the failures, must contain at least two elements
+   * @param failures
+   *          the failures, must contain at least two elements
+   * @return the result
+   * @param <U>
+   *          the type of the underlying result
    */
   static <U> Result<U> of(final List<Failure> failures) {
     ArgumentChecker.notNull(failures, "failures");
@@ -113,7 +117,7 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
     return false;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public T getValue() {
     throw new IllegalStateException("Unable to get a value from a failure result");

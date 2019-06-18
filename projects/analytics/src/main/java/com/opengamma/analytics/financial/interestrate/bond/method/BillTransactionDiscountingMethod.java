@@ -21,7 +21,9 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Class with methods related to bill transaction valued by discounting.
- * <P> Reference: Bill pricing, version 1.0. OpenGamma documentation, January 2012.
+ * <P>
+ * Reference: Bill pricing, version 1.0. OpenGamma documentation, January 2012.
+ * 
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.bond.provider.BillTransactionDiscountingMethod}
  */
 @Deprecated
@@ -34,6 +36,7 @@ public final class BillTransactionDiscountingMethod implements PricingMethod {
 
   /**
    * Return the class instance.
+   * 
    * @return The instance.
    */
   public static BillTransactionDiscountingMethod getInstance() {
@@ -53,15 +56,19 @@ public final class BillTransactionDiscountingMethod implements PricingMethod {
 
   /**
    * Computes the bill transaction present value.
-   * @param bill The bill.
-   * @param curves The curves.
+   * 
+   * @param bill
+   *          The bill.
+   * @param curves
+   *          The curves.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final BillTransaction bill, final YieldCurveBundle curves) {
     ArgumentChecker.notNull(bill, "Bill");
     ArgumentChecker.notNull(curves, "Curves");
     final CurrencyAmount pvBill = METHOD_SECURITY.presentValue(bill.getBillPurchased(), curves);
-    final double pvSettle = bill.getSettlementAmount() * curves.getCurve(bill.getBillPurchased().getDiscountingCurveName()).getDiscountFactor(bill.getBillPurchased().getSettlementTime());
+    final double pvSettle = bill.getSettlementAmount()
+        * curves.getCurve(bill.getBillPurchased().getDiscountingCurveName()).getDiscountFactor(bill.getBillPurchased().getSettlementTime());
     return pvBill.multipliedBy(bill.getQuantity()).plus(pvSettle);
   }
 
@@ -73,15 +80,19 @@ public final class BillTransactionDiscountingMethod implements PricingMethod {
 
   /**
    * Computes the bill present value curve sensitivity.
-   * @param bill The bill.
-   * @param curves The curves.
+   * 
+   * @param bill
+   *          The bill.
+   * @param curves
+   *          The curves.
    * @return The sensitivity.
    */
   public InterestRateCurveSensitivity presentValueCurveSensitivity(final BillTransaction bill, final YieldCurveBundle curves) {
     ArgumentChecker.notNull(bill, "Bill");
     ArgumentChecker.notNull(curves, "Curves");
     final double dfCreditEnd = curves.getCurve(bill.getBillPurchased().getCreditCurveName()).getDiscountFactor(bill.getBillPurchased().getEndTime());
-    final double dfDscSettle = curves.getCurve(bill.getBillPurchased().getDiscountingCurveName()).getDiscountFactor(bill.getBillPurchased().getSettlementTime());
+    final double dfDscSettle = curves.getCurve(bill.getBillPurchased().getDiscountingCurveName())
+        .getDiscountFactor(bill.getBillPurchased().getSettlementTime());
     // Backward sweep
     final double pvBar = 1.0;
     final double dfCreditEndBar = bill.getQuantity() * bill.getBillPurchased().getNotional() * pvBar;
@@ -99,16 +110,21 @@ public final class BillTransactionDiscountingMethod implements PricingMethod {
   }
 
   /**
-   * The par spread for which the present value of the bill transaction is 0. If that spread was added to the transaction yield, the new transaction would have a present value of 0.
-   * @param bill The bill transaction.
-   * @param curves The yield curve bundle.
+   * The par spread for which the present value of the bill transaction is 0. If that spread was added to the transaction yield, the new transaction would have
+   * a present value of 0.
+   * 
+   * @param bill
+   *          The bill transaction.
+   * @param curves
+   *          The yield curve bundle.
    * @return The spread.
    */
   public double parSpread(final BillTransaction bill, final YieldCurveBundle curves) {
     ArgumentChecker.notNull(bill, "Bill");
     ArgumentChecker.notNull(curves, "Curves");
     final double dfCreditEnd = curves.getCurve(bill.getBillPurchased().getCreditCurveName()).getDiscountFactor(bill.getBillPurchased().getEndTime());
-    final double dfDscSettle = curves.getCurve(bill.getBillPurchased().getDiscountingCurveName()).getDiscountFactor(bill.getBillPurchased().getSettlementTime());
+    final double dfDscSettle = curves.getCurve(bill.getBillPurchased().getDiscountingCurveName())
+        .getDiscountFactor(bill.getBillPurchased().getSettlementTime());
     final double pricePar = dfCreditEnd / dfDscSettle;
     return METHOD_SECURITY.yieldFromPrice(bill.getBillPurchased(), pricePar)
         - METHOD_SECURITY.yieldFromPrice(bill.getBillPurchased(), -bill.getSettlementAmount() / (bill.getQuantity() * bill.getBillPurchased().getNotional()));
@@ -118,10 +134,11 @@ public final class BillTransactionDiscountingMethod implements PricingMethod {
     ArgumentChecker.notNull(bill, "Bill");
     ArgumentChecker.notNull(curves, "Curves");
     final double dfCreditEnd = curves.getCurve(bill.getBillPurchased().getCreditCurveName()).getDiscountFactor(bill.getBillPurchased().getEndTime());
-    final double dfDscSettle = curves.getCurve(bill.getBillPurchased().getDiscountingCurveName()).getDiscountFactor(bill.getBillPurchased().getSettlementTime());
+    final double dfDscSettle = curves.getCurve(bill.getBillPurchased().getDiscountingCurveName())
+        .getDiscountFactor(bill.getBillPurchased().getSettlementTime());
     final double pricePar = dfCreditEnd / dfDscSettle;
-    //    double spread = METHOD_SECURITY.yieldFromPrice(bill.getBillPurchased(), pricePar)
-    //        - METHOD_SECURITY.yieldFromPrice(bill.getBillPurchased(), -bill.getSettlementAmount() / (bill.getQuantity() * bill.getBillPurchased().getNotional()));
+    // double spread = METHOD_SECURITY.yieldFromPrice(bill.getBillPurchased(), pricePar)
+    // - METHOD_SECURITY.yieldFromPrice(bill.getBillPurchased(), -bill.getSettlementAmount() / (bill.getQuantity() * bill.getBillPurchased().getNotional()));
     // Backward sweep
     final double spreadBar = 1.0;
     final double priceParBar = METHOD_SECURITY.yieldFromPriceDerivative(bill.getBillPurchased(), pricePar) * spreadBar;

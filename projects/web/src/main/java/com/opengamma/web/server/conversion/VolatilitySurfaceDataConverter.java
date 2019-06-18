@@ -19,17 +19,16 @@ public class VolatilitySurfaceDataConverter implements ResultConverter<Volatilit
 
   @Override
   // TODO PLAT-2249 Add field to allow transposing the display surface
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final VolatilitySurfaceData rawValue, final ConversionMode mode) {
-    @SuppressWarnings("unchecked")
-    final
-    VolatilitySurfaceData<Object, Object> value = rawValue;
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final VolatilitySurfaceData rawValue,
+      final ConversionMode mode) {
+    final VolatilitySurfaceData<Object, Object> value = rawValue;
     final Map<String, Object> result = new HashMap<>();
 
     result.put("xCount", value.getXs().length);
     result.put("yCount", value.getYs().length);
 
     if (mode == ConversionMode.FULL) {
-      //TODO assuming that all surfaces are interpolated - bad
+      // TODO assuming that all surfaces are interpolated - bad
       final Object[] xs = value.getXs();
       final String[] xsStrings = new String[xs.length];
       for (int i = 0; i < xs.length; i++) {
@@ -43,7 +42,6 @@ public class VolatilitySurfaceDataConverter implements ResultConverter<Volatilit
       }
       result.put("ys", ysStrings);
 
-
       final double[][] surface = new double[ys.length][xs.length];
       final boolean[][] missingValues = new boolean[ys.length][xs.length];
       // Summary view includes only the actual points of the surface
@@ -54,7 +52,7 @@ public class VolatilitySurfaceDataConverter implements ResultConverter<Volatilit
           final Double volatility = value.getVolatility(xt, yt);
           if (volatility == null) {
             missingValues[y][x] = true;
-            //Some 'obviously wrong' value in case client displays it.  Can't use NaN
+            // Some 'obviously wrong' value in case client displays it. Can't use NaN
             surface[y][x] = Double.MAX_VALUE;
           } else {
             surface[y][x] = volatility;

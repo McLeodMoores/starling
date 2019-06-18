@@ -64,9 +64,11 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * For an instrument, this calculates the sensitivity of the present value (PV) to points on the yield curve(s) (i.e. dPV/dR at every point the instrument has sensitivity). The return
- * format is a map with curve names (String) as keys and List of DoublesPair as the values; each list holds set of time (corresponding to point of the yield curve) and sensitivity pairs
- * (i.e. dPV/dR at that time). <b>Note:</b> The length of the list is instrument dependent and may have repeated times (with the understanding the sensitivities should be summed).
+ * For an instrument, this calculates the sensitivity of the present value (PV) to points on the yield curve(s) (i.e. dPV/dR at every point the instrument has
+ * sensitivity). The return format is a map with curve names (String) as keys and List of DoublesPair as the values; each list holds set of time (corresponding
+ * to point of the yield curve) and sensitivity pairs (i.e. dPV/dR at that time). <b>Note:</b> The length of the list is instrument dependent and may have
+ * repeated times (with the understanding the sensitivities should be summed).
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -79,6 +81,7 @@ public class PresentValueCurveSensitivityCalculator extends InstrumentDerivative
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static PresentValueCurveSensitivityCalculator getInstance() {
@@ -111,7 +114,7 @@ public class PresentValueCurveSensitivityCalculator extends InstrumentDerivative
   private static final CouponFixedAccruedCompoundingDiscountingMethod METHOD_CPN_FIXED_ACCRUING = CouponFixedAccruedCompoundingDiscountingMethod.getInstance();
   private static final CouponONCompoundedDiscountingMethod METHOD_CPN_ON_COMPOUNDED = CouponONCompoundedDiscountingMethod.getInstance();
 
-  // -----     Deposit     ------
+  // ----- Deposit ------
 
   @Override
   public Map<String, List<DoublesPair>> visitCash(final Cash cash, final YieldCurveBundle curves) {
@@ -123,7 +126,7 @@ public class PresentValueCurveSensitivityCalculator extends InstrumentDerivative
     return METHOD_DEPOSIT_ZERO.presentValueCurveSensitivity(deposit, curves).getSensitivities();
   }
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public Map<String, List<DoublesPair>> visitFixedPayment(final PaymentFixed payment, final YieldCurveBundle data) {
@@ -176,8 +179,7 @@ public class PresentValueCurveSensitivityCalculator extends InstrumentDerivative
   }
 
   /**
-   * {@inheritDoc}
-   * Future transaction pricing without convexity adjustment.
+   * {@inheritDoc} Future transaction pricing without convexity adjustment.
    */
   @Override
   public Map<String, List<DoublesPair>> visitInterestRateFutureTransaction(final InterestRateFutureTransaction future, final YieldCurveBundle curves) {
@@ -185,8 +187,7 @@ public class PresentValueCurveSensitivityCalculator extends InstrumentDerivative
   }
 
   /**
-   * {@inheritDoc}
-   * Future security pricing without convexity adjustment.
+   * {@inheritDoc} Future security pricing without convexity adjustment.
    */
   @Override
   public Map<String, List<DoublesPair>> visitInterestRateFutureSecurity(final InterestRateFutureSecurity future, final YieldCurveBundle curves) {
@@ -273,9 +274,13 @@ public class PresentValueCurveSensitivityCalculator extends InstrumentDerivative
 
   /**
    * Compute the sensitivity of the discount factor at a given time.
-   * @param curveName The curve name associated to the discount factor.
-   * @param curve The curve from which the discount factor should be computed.
-   * @param time The time
+   * 
+   * @param curveName
+   *          The curve name associated to the discount factor.
+   * @param curve
+   *          The curve from which the discount factor should be computed.
+   * @param time
+   *          The time
    * @return The sensitivity.
    */
   public static Map<String, List<DoublesPair>> discountFactorSensitivity(final String curveName, final YieldAndDiscountCurve curve, final double time) {

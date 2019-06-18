@@ -37,16 +37,16 @@ import com.opengamma.util.ArgumentChecker;
  * A manipulator which applies a list of point shifts.
  */
 @BeanDefinition
-public final class YieldCurvePointShiftManipulator implements ImmutableBean, StructureManipulator<YieldCurve>  {
+public final class YieldCurvePointShiftManipulator implements ImmutableBean, StructureManipulator<YieldCurve> {
 
   /**
-   * Shift type
+   * Shift type.
    */
   @PropertyDefinition(validate = "notNull")
   private final ScenarioShiftType _shiftType;
 
   /**
-   * The list of point shifts to apply
+   * The list of point shifts to apply.
    */
   @PropertyDefinition(validate = "notNull")
   private final ImmutableList<YieldCurvePointShift> _pointShifts;
@@ -126,7 +126,7 @@ public final class YieldCurvePointShiftManipulator implements ImmutableBean, Str
 
   //-----------------------------------------------------------------------
   /**
-   * Gets shift type
+   * Gets shift type.
    * @return the value of the property, not null
    */
   public ScenarioShiftType getShiftType() {
@@ -135,7 +135,7 @@ public final class YieldCurvePointShiftManipulator implements ImmutableBean, Str
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the list of point shifts to apply
+   * Gets the list of point shifts to apply.
    * @return the value of the property, not null
    */
   public ImmutableList<YieldCurvePointShift> getPointShifts() {
@@ -381,7 +381,7 @@ public final class YieldCurvePointShiftManipulator implements ImmutableBean, Str
 
     //-----------------------------------------------------------------------
     /**
-     * Sets shift type
+     * Sets shift type.
      * @param shiftType  the new value, not null
      * @return this, for chaining, not null
      */
@@ -392,7 +392,7 @@ public final class YieldCurvePointShiftManipulator implements ImmutableBean, Str
     }
 
     /**
-     * Sets the list of point shifts to apply
+     * Sets the list of point shifts to apply.
      * @param pointShifts  the new value, not null
      * @return this, for chaining, not null
      */

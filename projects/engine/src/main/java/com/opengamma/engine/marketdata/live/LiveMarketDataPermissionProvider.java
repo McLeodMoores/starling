@@ -58,7 +58,7 @@ public class LiveMarketDataPermissionProvider implements MarketDataPermissionPro
     }
     if (!failures.isEmpty()) {
       LOGGER.warn("User {} does not have permission to access {} out of {} market data values",
-                    user, failures.size(), specifications.size());
+          user, failures.size(), specifications.size());
       LOGGER.info("User {} does not have permission to access {}", user, failures);
     }
     return failures;
@@ -70,7 +70,7 @@ public class LiveMarketDataPermissionProvider implements MarketDataPermissionPro
       final LiveDataSpecification liveDataSpec = LiveMarketDataAvailabilityProvider.getLiveDataSpecification(specification);
       Collection<ValueSpecification> specs = returnValue.get(liveDataSpec);
       if (specs == null) {
-        specs = new ArrayList<ValueSpecification>();
+        specs = new ArrayList<>();
         returnValue.put(liveDataSpec, specs);
       }
       specs.add(specification);

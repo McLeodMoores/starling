@@ -1,5 +1,5 @@
 <#include "modules/common/og.common.header.ftl">
-<title>OpenGamma</title>
+<title>Starling</title>
 ${ogStyle.print('og_all.css', 'all',false)}
 <style type="text/css" media="screen">
   body {background: white; height: 100%;}

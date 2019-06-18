@@ -53,7 +53,6 @@ import com.opengamma.financial.analytics.conversion.FutureTradeConverter;
 import com.opengamma.financial.analytics.conversion.InterestRateFutureOptionSecurityConverter;
 import com.opengamma.financial.analytics.model.discounting.DiscountingFunction;
 import com.opengamma.financial.analytics.model.irfutureoption.IRFutureOptionFunctionHelper;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.InterestRateFutureConvention;
 import com.opengamma.financial.security.FinancialSecurityUtils;
@@ -69,7 +68,8 @@ import com.opengamma.util.money.Currency;
 public abstract class BlackDiscountingIRFutureOptionFunction extends DiscountingFunction {
 
   /**
-   * @param valueRequirements The value requirements, not null
+   * @param valueRequirements
+   *          The value requirements, not null
    */
   public BlackDiscountingIRFutureOptionFunction(final String... valueRequirements) {
     super(valueRequirements);
@@ -80,10 +80,10 @@ public abstract class BlackDiscountingIRFutureOptionFunction extends Discounting
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
-    final ConventionBundleSource conventionBundleSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
-    final InterestRateFutureOptionSecurityConverter irFutureOptionConverter = new InterestRateFutureOptionSecurityConverter(holidaySource, conventionSource, regionSource, securitySource);
-    final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder()
+    final InterestRateFutureOptionSecurityConverter irFutureOptionConverter = new InterestRateFutureOptionSecurityConverter(holidaySource, conventionSource,
+        regionSource, securitySource);
+    final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>> builder()
         .irfutureOptionVisitor(irFutureOptionConverter).create();
     final FutureTradeConverter futureTradeConverter = new FutureTradeConverter();
     return new DefaultTradeConverter(futureTradeConverter, securityConverter);
@@ -95,11 +95,15 @@ public abstract class BlackDiscountingIRFutureOptionFunction extends Discounting
   protected abstract class BlackDiscountingCompiledFunction extends DiscountingCompiledFunction {
 
     /**
-     * @param tradeToDefinitionConverter Converts targets to definitions, not null
-     * @param definitionToDerivativeConverter Converts definitions to derivatives, not null
-     * @param withCurrency True if the result properties set the {@link ValuePropertyNames#CURRENCY} property.
+     * @param tradeToDefinitionConverter
+     *          Converts targets to definitions, not null
+     * @param definitionToDerivativeConverter
+     *          Converts definitions to derivatives, not null
+     * @param withCurrency
+     *          True if the result properties set the {@link ValuePropertyNames#CURRENCY} property.
      */
-    protected BlackDiscountingCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter, final FixedIncomeConverterDataProvider definitionToDerivativeConverter,
+    protected BlackDiscountingCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter,
+        final FixedIncomeConverterDataProvider definitionToDerivativeConverter,
         final boolean withCurrency) {
       super(tradeToDefinitionConverter, definitionToDerivativeConverter, withCurrency);
     }
@@ -112,7 +116,8 @@ public abstract class BlackDiscountingIRFutureOptionFunction extends Discounting
 
     @Override
     protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
-      final ValueProperties.Builder properties = createValueProperties().with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(PROPERTY_VOLATILITY_MODEL, BLACK).withAny(SURFACE)
+      final ValueProperties.Builder properties = createValueProperties().with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(PROPERTY_VOLATILITY_MODEL, BLACK)
+          .withAny(SURFACE)
           .withAny(CURVE_EXPOSURES);
       if (isWithCurrency()) {
         final Security security = target.getTrade().getSecurity();
@@ -133,11 +138,11 @@ public abstract class BlackDiscountingIRFutureOptionFunction extends Discounting
       final ValueProperties constraints = desiredValue.getConstraints();
       final Currency currency = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity());
       final Set<String> surfaces = constraints.getValues(SURFACE);
-      //TODO there should be a different target used here so it's not necessary to do the append
+      // TODO there should be a different target used here so it's not necessary to do the append
       final String surface = Iterables.getOnlyElement(surfaces) + "_" + IRFutureOptionFunctionHelper.getFutureOptionPrefix(target);
       final ValueProperties properties = ValueProperties.builder().with(SURFACE, surface).with(PROPERTY_SURFACE_INSTRUMENT_TYPE, IR_FUTURE_OPTION).get();
-      final ValueRequirement surfaceRequirement =
-          new ValueRequirement(INTERPOLATED_VOLATILITY_SURFACE, ComputationTargetSpecification.of(currency), properties);
+      final ValueRequirement surfaceRequirement = new ValueRequirement(INTERPOLATED_VOLATILITY_SURFACE, ComputationTargetSpecification.of(currency),
+          properties);
       requirements.add(surfaceRequirement);
       return requirements;
     }
@@ -154,13 +159,18 @@ public abstract class BlackDiscountingIRFutureOptionFunction extends Discounting
     /**
      * Gets the Black surface and curve data.
      *
-     * @param executionContext The execution context, not null
-     * @param inputs The function inputs, not null
-     * @param target The computation target, not null
-     * @param fxMatrix The FX matrix, not null
+     * @param executionContext
+     *          The execution context, not null
+     * @param inputs
+     *          The function inputs, not null
+     * @param target
+     *          The computation target, not null
+     * @param fxMatrix
+     *          The FX matrix, not null
      * @return The Black surface and curve data
      */
-    protected BlackSTIRFuturesProviderInterface getBlackSurface(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+    protected BlackSTIRFuturesProviderInterface getBlackSurface(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
+        final ComputationTarget target,
         final FXMatrix fxMatrix) {
       final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(executionContext);
       final IRFutureOptionSecurity security = (IRFutureOptionSecurity) target.getTrade().getSecurity();
@@ -169,11 +179,13 @@ public abstract class BlackDiscountingIRFutureOptionFunction extends Discounting
       final Currency currency = security.getCurrency();
       // TODO the convention name should not be hard-coded, but there's no way of getting this information until
       // there's a convention link in the security.
-      final InterestRateFutureConvention convention = conventionSource.getSingle(ExternalId.of(SCHEME_NAME, EURODOLLAR_FUTURE), InterestRateFutureConvention.class);
+      final InterestRateFutureConvention convention = conventionSource.getSingle(ExternalId.of(SCHEME_NAME, EURODOLLAR_FUTURE),
+          InterestRateFutureConvention.class);
       final IborIndexConvention iborIndexConvention = conventionSource.getSingle(convention.getIndexConvention(), IborIndexConvention.class);
-      final Period period = Period.ofMonths(3); //TODO
+      final Period period = Period.ofMonths(3); // TODO
       final int spotLag = iborIndexConvention.getSettlementDays();
-      final IborIndex iborIndex = new IborIndex(currency, period, spotLag, iborIndexConvention.getDayCount(), iborIndexConvention.getBusinessDayConvention(), iborIndexConvention.isIsEOM(),
+      final IborIndex iborIndex = new IborIndex(currency, period, spotLag, iborIndexConvention.getDayCount(), iborIndexConvention.getBusinessDayConvention(),
+          iborIndexConvention.isIsEOM(),
           iborIndexConvention.getName());
       final BlackSTIRFuturesSmileProvider blackData = new BlackSTIRFuturesSmileProvider(data, volatilitySurface.getSurface(), iborIndex);
       return blackData;

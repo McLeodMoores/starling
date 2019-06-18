@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.opengamma.core.change.ChangeManager;
-import com.opengamma.engine.ComputationTargetResolver;
 import com.opengamma.engine.target.resolver.DeepResolver;
 import com.opengamma.engine.target.resolver.IdentifierResolver;
 import com.opengamma.engine.target.resolver.ObjectResolver;
@@ -20,11 +19,12 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * Specialized form of {@link ObjectComputationTargetType} for primitive objects that can be converted directly to/from unique identifiers
- * without an external resolver service. Instances also serve as an {@link ObjectResolver} and possibly {@link IdentifierResolver} so that
- * they can be added to a {@link ComputationTargetResolver} and/or {@link ComputationTargetSpecificationResolver} to handle the type.
+ * Specialized form of {@link ObjectComputationTargetType} for primitive objects that can be converted directly to/from unique identifiers without an external
+ * resolver service. Instances also serve as an {@link ObjectResolver} and possibly {@link IdentifierResolver} so that they can be added to a
+ * {@link com.opengamma.engine.ComputationTargetResolver} and/or {@link ComputationTargetSpecificationResolver} to handle the type.
  *
- * @param <T> the target object type
+ * @param <T>
+ *          the target object type
  */
 public class PrimitiveComputationTargetType<T extends UniqueIdentifiable> extends ObjectComputationTargetType<T> implements ObjectResolver<T> {
 
@@ -80,9 +80,8 @@ public class PrimitiveComputationTargetType<T extends UniqueIdentifiable> extend
     assert resolver != null;
     if (resolver instanceof IdentifierResolver) {
       return new IdentifierResolving<>(type, clazz, resolver, (IdentifierResolver) resolver);
-    } else {
-      return new PrimitiveComputationTargetType<>(type, clazz, resolver);
     }
+    return new PrimitiveComputationTargetType<>(type, clazz, resolver);
   }
 
   public T resolve(final UniqueId identifier) {

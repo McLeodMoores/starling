@@ -37,14 +37,15 @@ public class YieldCurveDataSelectorBuilder extends Selector.Builder {
   }
 
   /**
-   * This is package scoped for testing
+   * This is package scoped for testing.
+   * 
    * @return A selector built from this builder's data
    */
-    /* package */ YieldCurveDataSelector getSelector() {
+  /* package */ YieldCurveDataSelector getSelector() {
     return new YieldCurveDataSelector(getScenario().getCalcConfigNames(),
-                                      getNames(),
-                                      getCurrencies(),
-                                      getNameMatchPattern(),
-                                      getNameLikePattern());
+        getNames(),
+        getCurrencies(),
+        getNameMatchPattern(),
+        getNameLikePattern());
   }
 }

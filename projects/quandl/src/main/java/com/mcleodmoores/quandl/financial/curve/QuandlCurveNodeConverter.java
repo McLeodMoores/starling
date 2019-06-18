@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.financial.curve;
 
@@ -38,7 +38,8 @@ public class QuandlCurveNodeConverter extends CurveNodeConverter {
   private final ConventionSource _conventionSource;
 
   /**
-   * @param conventionSource  the convention source, not null
+   * @param conventionSource
+   *          the convention source, not null
    */
   public QuandlCurveNodeConverter(final ConventionSource conventionSource) {
     super(conventionSource);
@@ -46,13 +47,18 @@ public class QuandlCurveNodeConverter extends CurveNodeConverter {
   }
 
   /**
-   * Given an {@link InstrumentDefinition} (the time-independent form used in the analytics library) and a valuation time, converts to the
-   * time-dependent {@link InstrumentDerivative} form.
-   * @param node The curve node, not null
-   * @param definition The definition, not null
-   * @param now The valuation time, not null
-   * @param timeSeries A fixing time series, not null if {@link #requiresFixingSeries(CurveNode)} is true and definition is an instance of
-   * {@link InstrumentDefinitionWithData}.
+   * Given an {@link InstrumentDefinition} (the time-independent form used in the analytics library) and a valuation time, converts to the time-dependent
+   * {@link InstrumentDerivative} form.
+   *
+   * @param node
+   *          The curve node, not null
+   * @param definition
+   *          The definition, not null
+   * @param now
+   *          The valuation time, not null
+   * @param timeSeries
+   *          A fixing time series, not null if {@link #requiresFixingSeries(CurveNode)} is true and definition is an instance of
+   *          {@link InstrumentDefinitionWithData}.
    * @return A derivative instrument
    */
   @Override
@@ -80,7 +86,7 @@ public class QuandlCurveNodeConverter extends CurveNodeConverter {
             historicalTimeSeriesUnderlyingIndex = timeSeries.get(node.getDataField(), underlyingConvention.getExternalIdBundle());
             if (historicalTimeSeriesUnderlyingIndex == null) {
               throw new OpenGammaRuntimeException("Could not get price time series for " + fedFundsConvention.getUnderlyingConventionId()
-                  + " or " + underlyingConvention.getExternalIdBundle());
+              + " or " + underlyingConvention.getExternalIdBundle());
             }
           }
           final DoubleTimeSeries<ZonedDateTime>[] tsArray = new DoubleTimeSeries[1];
@@ -95,7 +101,7 @@ public class QuandlCurveNodeConverter extends CurveNodeConverter {
     return super.getDerivative(node, definition, now, timeSeries);
   }
 
-  //TODO expose in superclass
+  // TODO expose in superclass
   private static ZonedDateTimeDoubleTimeSeries convertTimeSeries(final ZoneId timeZone, final LocalDateDoubleTimeSeries localDateTS) {
     final ZonedDateTimeDoubleTimeSeriesBuilder bld = ImmutableZonedDateTimeDoubleTimeSeries.builder(timeZone);
     for (final LocalDateDoubleEntryIterator it = localDateTS.iterator(); it.hasNext();) {

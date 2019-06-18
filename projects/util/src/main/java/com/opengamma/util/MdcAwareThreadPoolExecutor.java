@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
@@ -19,30 +18,21 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.MDC;
 
 /**
- * An extension of ThreadPoolExecutor that is aware of slf4j mapped diagnostic
- * logging (MDC). MDC allows per-thread, contextual information to be output
- * to logging files. This is a map that could hold a session id for a web
- * application or an identifier for a request from an external service. MDC
- * information is passed down to child threads when they are created but falls
- * down at the point where a thread-pool is used. In these cases no context
- * information is passed on and the information will be absent from the logs.
+ * An extension of ThreadPoolExecutor that is aware of slf4j mapped diagnostic logging (MDC). MDC allows per-thread, contextual information to be output to
+ * logging files. This is a map that could hold a session id for a web application or an identifier for a request from an external service. MDC information is
+ * passed down to child threads when they are created but falls down at the point where a thread-pool is used. In these cases no context information is passed
+ * on and the information will be absent from the logs.
  *
- * This executor ensures that MDC information is copied from the calling
- * thread onto the worker thread and removed once the worker has completed
- * and is returned to the pool.
+ * This executor ensures that MDC information is copied from the calling thread onto the worker thread and removed once the worker has completed and is returned
+ * to the pool.
  *
- * Because access to the MDC is via static methods, it is only possible
- * to access the context applicable to the current thread i.e. when submitting
- * a job to the executor we have access to the calling thread's MDC, but no way
- * of accessing the worker's. Similarly, when the worker executes the job, we
- * have access to the worker's MDC but not the original caller's. To handle
- * this, the class records the MDC information from a thread when it submits
- * a job. When the job is executed, the MDC information is looked up and
- * copied to the worker.
+ * Because access to the MDC is via static methods, it is only possible to access the context applicable to the current thread i.e. when submitting a job to the
+ * executor we have access to the calling thread's MDC, but no way of accessing the worker's. Similarly, when the worker executes the job, we have access to the
+ * worker's MDC but not the original caller's. To handle this, the class records the MDC information from a thread when it submits a job. When the job is
+ * executed, the MDC information is looked up and copied to the worker.
  *
- * Note that this class overrides {@link #execute(Runnable)} which means
- * there is no need to override the rest of the methods defined in
- * {@link ExecutorService}
+ * Note that this class overrides {@link #execute(Runnable)} which means there is no need to override the rest of the methods defined in
+ * {@link java.util.concurrent.ExecutorService}
  */
 public class MdcAwareThreadPoolExecutor extends ThreadPoolExecutor {
 
@@ -82,11 +72,11 @@ public class MdcAwareThreadPoolExecutor extends ThreadPoolExecutor {
    * @param factory the factory to use when the executor creates a new thread
    */
   public MdcAwareThreadPoolExecutor(final int coreThreads,
-                                    final int maxThreads,
-                                    final long keepAliveTime,
-                                    final TimeUnit timeUnit,
-                                    final BlockingQueue<Runnable> queue,
-                                    final ThreadFactory factory) {
+      final int maxThreads,
+      final long keepAliveTime,
+      final TimeUnit timeUnit,
+      final BlockingQueue<Runnable> queue,
+      final ThreadFactory factory) {
     super(coreThreads, maxThreads, keepAliveTime, timeUnit, queue, factory);
   }
 

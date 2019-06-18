@@ -44,7 +44,7 @@ public class IndexLoader extends SecurityLoader {
 
   private static final String BLOOMBERG_INDEX_TYPE = "Index";
   /**
-   * Valid Security type values for this index
+   * Valid Security type values for this index.
    */
   public static final Set<String> VALID_SECURITY_TYPES = Collections.unmodifiableSet(Sets.newHashSet(BLOOMBERG_INDEX_TYPE));
   /** Logger. */
@@ -61,7 +61,8 @@ public class IndexLoader extends SecurityLoader {
       FIELD_ID_ISIN,
       FIELD_ID_SEDOL1));
 
-  private static final Pattern TENOR_FROM_DES = Pattern.compile("(.*?)(Overnight.*?|O\\/N.*?|OVERNIGHT.*?|Tomorrow[\\s\\/]Next.*?|T[\\s\\/]N.*?|TOM[\\s\\/]NEXT.*?|\\d+\\s*.*?)");
+  private static final Pattern TENOR_FROM_DES = Pattern
+      .compile("(.*?)(Overnight.*?|O\\/N.*?|OVERNIGHT.*?|Tomorrow[\\s\\/]Next.*?|T[\\s\\/]N.*?|TOM[\\s\\/]NEXT.*?|\\d+\\s*.*?)");
   private static final Pattern OVERNIGHT = Pattern.compile(".*?(Overnight|O\\/N|OVERNIGHT).*?");
   private static final Pattern TOM_NEXT = Pattern.compile(".*?(Tomorrow[\\s\\/]Next|T[\\s\\/]N|TOM[\\s\\/]NEXT).*?");
   private static final Pattern NUMBER_FROM_TIME_UNIT = Pattern.compile("(\\d+)\\s*(.*?)");
@@ -70,18 +71,19 @@ public class IndexLoader extends SecurityLoader {
 
   private static final String FED_FUNDS_SECURITY_DES = "Federal Funds Effective Rate U";
   private static final Set<String> BLOOMBERG_SECURITY_DES_OVERNIGHT_EXCEPTIONS = Collections.unmodifiableSet(Sets.newHashSet(
-      FED_FUNDS_SECURITY_DES
-  ));
+      FED_FUNDS_SECURITY_DES));
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   *
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public IndexLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.INDEX);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     final String securityDes = fieldData.getString(FIELD_SECURITY_DES);
@@ -108,7 +110,7 @@ public class IndexLoader extends SecurityLoader {
     final ExternalId familyId = ExternalId.of(ExternalScheme.of(BLOOMBERG_INDEX_FAMILY), conventionId.getValue());
 
     if (indexSource.toUpperCase().contains("STAT")) {
-      // guess it's a price index as source is STATistics agency.  Crude, but hopefully effective.
+      // guess it's a price index as source is STATistics agency. Crude, but hopefully effective.
       index = new PriceIndex(name, conventionId);
       index.setIndexFamilyId(null);
     } else if (securityDes.toUpperCase().contains("ISDAFIX") && tenor != null) {
@@ -141,9 +143,8 @@ public class IndexLoader extends SecurityLoader {
     if (matcher.matches()) {
       final String descriptionPart = matcher.group(1); // remember, groups are 1 indexed!
       return ExternalId.of(ExternalScheme.of(BLOOMBERG_CONVENTION_NAME), descriptionPart.trim());
-    } else {
-      return ExternalId.of(ExternalScheme.of(BLOOMBERG_CONVENTION_NAME), securityDes.trim());
     }
+    return ExternalId.of(ExternalScheme.of(BLOOMBERG_CONVENTION_NAME), securityDes.trim());
   }
 
   // public visible for tests

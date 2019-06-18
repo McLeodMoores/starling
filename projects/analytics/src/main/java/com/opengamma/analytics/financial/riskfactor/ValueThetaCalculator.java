@@ -17,8 +17,8 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the value (or dollar) theta of an option given market data and the theta. The value theta is defined as the
- * option theta multiplied by the shares per option.
+ * Calculates the value (or dollar) theta of an option given market data and the theta. The value theta is defined as the option theta multiplied by the shares
+ * per option.
  */
 public final class ValueThetaCalculator implements ValueGreekCalculator {
   /** Static instance */
@@ -27,7 +27,8 @@ public final class ValueThetaCalculator implements ValueGreekCalculator {
   private static final MultiplierCalculator MULTIPLIER_CALCULATOR = new MultiplierCalculator();
 
   /**
-   * Gets an instance of this calculator
+   * Gets an instance of this calculator.
+   * 
    * @return The (singleton) instance
    */
   public static ValueThetaCalculator getInstance() {
@@ -55,7 +56,7 @@ public final class ValueThetaCalculator implements ValueGreekCalculator {
     /**
      * Default constructor.
      */
-    /* package */MultiplierCalculator() {
+    /* package */ MultiplierCalculator() {
     }
 
     @Override

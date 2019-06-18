@@ -118,8 +118,8 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
   }
 
   /**
-   * Returns the function input specifications. If the item has been deserialized the specifications will only be populated
-   * after {@link #resolveIdentifiers} has been called
+   * Returns the function input specifications. If the item has been deserialized the specifications will only be populated after {@link #convertIdentifiers}
+   * has been called
    *
    * @return the input specifications or null if they have not been resolved
    */
@@ -138,8 +138,8 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
   }
 
   /**
-   * Returns the function output specifications. If the item has been deserialized the specifications will only be populated
-   * after {@link #resolveIdentifiers} has been called.
+   * Returns the function output specifications. If the item has been deserialized the specifications will only be populated after {@link #convertIdentifiers}
+   * has been called.
    *
    * @return the output specifications or null if they have not been converted
    */

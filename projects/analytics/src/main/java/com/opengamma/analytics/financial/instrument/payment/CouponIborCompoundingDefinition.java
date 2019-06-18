@@ -33,22 +33,16 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a Ibor-like compounded coupon. The Ibor fixing are compounded over several sub-periods.
- * The amount paid is equal to
- * $$
- * \begin{equation*}
- * \left(\prod_{i=1}^n (1+\delta_i r_i) \right)-1
- * \end{equation*}
- * $$
- * where the $\delta_i$ are the accrual factors of the sub periods and the $r_i$ the fixing for the same periods.
- * The fixing have their own start dates, end dates and accrual factors. In general they are close to the accrual
- * dates used to compute the coupon accrual factors.
+ * Class describing a Ibor-like compounded coupon. The Ibor fixing are compounded over several sub-periods. The amount paid is equal to $$ \begin{equation*}
+ * \left(\prod_{i=1}^n (1+\delta_i r_i) \right)-1 \end{equation*} $$ where the $\delta_i$ are the accrual factors of the sub periods and the $r_i$ the fixing
+ * for the same periods. The fixing have their own start dates, end dates and accrual factors. In general they are close to the accrual dates used to compute
+ * the coupon accrual factors.
  */
 public class CouponIborCompoundingDefinition extends CouponDefinition implements InstrumentDefinitionWithData<Payment, DoubleTimeSeries<ZonedDateTime>> {
 
   /**
-   * The Ibor-like index on which the coupon fixes. The index currency should be the same as the coupon currency.
-   * All the coupon sub-periods fix on the same index.
+   * The Ibor-like index on which the coupon fixes. The index currency should be the same as the coupon currency. All the coupon sub-periods fix on the same
+   * index.
    */
   private final IborIndex _index;
   /**
@@ -87,21 +81,37 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
 
   /**
    * Constructor.
-   * @param currency The coupon currency.
-   * @param paymentDate The coupon payment date.
-   * @param accrualStartDate The start date of the accrual period.
-   * @param accrualEndDate The end date of the accrual period.
-   * @param paymentAccrualFactor The accrual factor of the accrual period.
-   * @param notional The coupon notional.
-   * @param index The Ibor-like index on which the coupon fixes. The index currency should be the same as the coupon currency.
-   * @param accrualStartDates The start dates of the accrual sub-periods.
-   * @param accrualEndDates The end dates of the accrual sub-periods.
-   * @param paymentAccrualFactors The accrual factors (or year fraction) associated to the sub-periods.
-   * @param fixingDates The coupon fixing dates.
-   * @param fixingPeriodStartDates The start dates of the fixing periods.
-   * @param fixingPeriodEndDates The end dates of the fixing periods.
-   * @param fixingPeriodAccrualFactors The accrual factors (or year fraction) associated with the fixing periods in the Index day count convention.
-   * @param initialRate The rate of the first compounded period. This is an optional field and can be set to Double.NaN.
+   * 
+   * @param currency
+   *          The coupon currency.
+   * @param paymentDate
+   *          The coupon payment date.
+   * @param accrualStartDate
+   *          The start date of the accrual period.
+   * @param accrualEndDate
+   *          The end date of the accrual period.
+   * @param paymentAccrualFactor
+   *          The accrual factor of the accrual period.
+   * @param notional
+   *          The coupon notional.
+   * @param index
+   *          The Ibor-like index on which the coupon fixes. The index currency should be the same as the coupon currency.
+   * @param accrualStartDates
+   *          The start dates of the accrual sub-periods.
+   * @param accrualEndDates
+   *          The end dates of the accrual sub-periods.
+   * @param paymentAccrualFactors
+   *          The accrual factors (or year fraction) associated to the sub-periods.
+   * @param fixingDates
+   *          The coupon fixing dates.
+   * @param fixingPeriodStartDates
+   *          The start dates of the fixing periods.
+   * @param fixingPeriodEndDates
+   *          The end dates of the fixing periods.
+   * @param fixingPeriodAccrualFactors
+   *          The accrual factors (or year fraction) associated with the fixing periods in the Index day count convention.
+   * @param initialRate
+   *          The rate of the first compounded period. This is an optional field and can be set to Double.NaN.
    */
   protected CouponIborCompoundingDefinition(
       final Currency currency,
@@ -138,19 +148,33 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
 
   /**
    * Builds an Ibor compounded coupon from all the details.
-   * @param paymentDate The coupon payment date.
-   * @param accrualStartDate The start date of the accrual period.
-   * @param accrualEndDate The end date of the accrual period.
-   * @param paymentAccrualFactor The accrual factor of the accrual period.
-   * @param notional The coupon notional.
-   * @param index The Ibor-like index on which the coupon fixes. The index currency should be the same as the coupon currency.
-   * @param accrualStartDates The start dates of the accrual sub-periods.
-   * @param accrualEndDates The end dates of the accrual sub-periods.
-   * @param paymentAccrualFactors The accrual factors (or year fraction) associated to the sub-periods.
-   * @param fixingDates The coupon fixing dates.
-   * @param fixingPeriodStartDates The start dates of the fixing periods.
-   * @param fixingPeriodEndDates The end dates of the fixing periods.
-   * @param fixingPeriodAccrualFactors The accrual factors (or year fraction) associated with the fixing periods in the Index day count convention.
+   * 
+   * @param paymentDate
+   *          The coupon payment date.
+   * @param accrualStartDate
+   *          The start date of the accrual period.
+   * @param accrualEndDate
+   *          The end date of the accrual period.
+   * @param paymentAccrualFactor
+   *          The accrual factor of the accrual period.
+   * @param notional
+   *          The coupon notional.
+   * @param index
+   *          The Ibor-like index on which the coupon fixes. The index currency should be the same as the coupon currency.
+   * @param accrualStartDates
+   *          The start dates of the accrual sub-periods.
+   * @param accrualEndDates
+   *          The end dates of the accrual sub-periods.
+   * @param paymentAccrualFactors
+   *          The accrual factors (or year fraction) associated to the sub-periods.
+   * @param fixingDates
+   *          The coupon fixing dates.
+   * @param fixingPeriodStartDates
+   *          The start dates of the fixing periods.
+   * @param fixingPeriodEndDates
+   *          The end dates of the fixing periods.
+   * @param fixingPeriodAccrualFactors
+   *          The accrual factors (or year fraction) associated with the fixing periods in the Index day count convention.
    * @return The compounded coupon.
    */
   public static CouponIborCompoundingDefinition from(
@@ -187,21 +211,37 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
 
   /**
    * Builds an Ibor compounded coupon from all the details.
-   * @param currency The currency of the notional.
-   * @param paymentDate The coupon payment date.
-   * @param accrualStartDate The start date of the accrual period.
-   * @param accrualEndDate The end date of the accrual period.
-   * @param paymentAccrualFactor The accrual factor of the accrual period.
-   * @param notional The coupon notional.
-   * @param index The Ibor-like index on which the coupon fixes. The index currency should be the same as the coupon currency.
-   * @param accrualStartDates The start dates of the accrual sub-periods.
-   * @param accrualEndDates The end dates of the accrual sub-periods.
-   * @param paymentAccrualFactors The accrual factors (or year fraction) associated to the sub-periods.
-   * @param fixingDates The coupon fixing dates.
-   * @param fixingPeriodStartDates The start dates of the fixing periods.
-   * @param fixingPeriodEndDates The end dates of the fixing periods.
-   * @param fixingPeriodAccrualFactors The accrual factors (or year fraction) associated with the fixing periods in the Index day count convention.
-   * @param initialRate The rate of the first compounded period.
+   * 
+   * @param currency
+   *          The currency of the notional.
+   * @param paymentDate
+   *          The coupon payment date.
+   * @param accrualStartDate
+   *          The start date of the accrual period.
+   * @param accrualEndDate
+   *          The end date of the accrual period.
+   * @param paymentAccrualFactor
+   *          The accrual factor of the accrual period.
+   * @param notional
+   *          The coupon notional.
+   * @param index
+   *          The Ibor-like index on which the coupon fixes. The index currency should be the same as the coupon currency.
+   * @param accrualStartDates
+   *          The start dates of the accrual sub-periods.
+   * @param accrualEndDates
+   *          The end dates of the accrual sub-periods.
+   * @param paymentAccrualFactors
+   *          The accrual factors (or year fraction) associated to the sub-periods.
+   * @param fixingDates
+   *          The coupon fixing dates.
+   * @param fixingPeriodStartDates
+   *          The start dates of the fixing periods.
+   * @param fixingPeriodEndDates
+   *          The end dates of the fixing periods.
+   * @param fixingPeriodAccrualFactors
+   *          The accrual factors (or year fraction) associated with the fixing periods in the Index day count convention.
+   * @param initialRate
+   *          The rate of the first compounded period.
    * @return The compounded coupon.
    */
   public static CouponIborCompoundingDefinition from(
@@ -239,14 +279,23 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
   }
 
   /**
-   * Builds an Ibor compounded coupon from the accrual and payment details. The fixing dates and fixing accrual periods are computed from those dates using the index conventions.
-   * @param paymentDate The coupon payment date.
-   * @param notional The coupon notional.
-   * @param index The Ibor-like index on which the coupon fixes. The index currency should be the same as the coupon currency.
-   * @param accrualStartDates The start dates of the accrual sub-periods.
-   * @param accrualEndDates The end dates of the accrual sub-periods.
-   * @param paymentAccrualFactors The accrual factors (or year fraction) associated to the sub-periods.
-   * @param calendar The holiday calendar for the ibor index.
+   * Builds an Ibor compounded coupon from the accrual and payment details. The fixing dates and fixing accrual periods are computed from those dates using the
+   * index conventions.
+   * 
+   * @param paymentDate
+   *          The coupon payment date.
+   * @param notional
+   *          The coupon notional.
+   * @param index
+   *          The Ibor-like index on which the coupon fixes. The index currency should be the same as the coupon currency.
+   * @param accrualStartDates
+   *          The start dates of the accrual sub-periods.
+   * @param accrualEndDates
+   *          The end dates of the accrual sub-periods.
+   * @param paymentAccrualFactors
+   *          The accrual factors (or year fraction) associated to the sub-periods.
+   * @param calendar
+   *          The holiday calendar for the ibor index.
    * @return The compounded coupon.
    */
   public static CouponIborCompoundingDefinition from(final ZonedDateTime paymentDate, final double notional, final IborIndex index,
@@ -284,13 +333,19 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
   }
 
   /**
-   * Builds an Ibor compounded coupon from a total period and the Ibor index. The Ibor day count is used to compute the accrual factors.
-   * If required the stub of the sub-periods will be short and last. The payment date is the start accrual date plus the tenor in the index conventions.
-   * @param notional The coupon notional.
-   * @param accrualStartDate The first accrual date. The other one are computed from that one and the index conventions.
-   * @param tenor The total coupon tenor.
-   * @param index The underlying Ibor index.
-   * @param calendar The holiday calendar for the ibor index.
+   * Builds an Ibor compounded coupon from a total period and the Ibor index. The Ibor day count is used to compute the accrual factors. If required the stub of
+   * the sub-periods will be short and last. The payment date is the start accrual date plus the tenor in the index conventions.
+   * 
+   * @param notional
+   *          The coupon notional.
+   * @param accrualStartDate
+   *          The first accrual date. The other one are computed from that one and the index conventions.
+   * @param tenor
+   *          The total coupon tenor.
+   * @param index
+   *          The underlying Ibor index.
+   * @param calendar
+   *          The holiday calendar for the ibor index.
    * @return The compounded coupon.
    */
   public static CouponIborCompoundingDefinition from(final double notional, final ZonedDateTime accrualStartDate, final Period tenor, final IborIndex index,
@@ -308,14 +363,21 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
   }
 
   /**
-   * Builds an Ibor compounded coupon from a total period and the Ibor index. The Ibor day count is used to compute the accrual factors.
-   * The payment date is the start accrual date plus the tenor in the index conventions.
-   * @param notional The coupon notional.
-   * @param accrualStartDate The first accrual date. The other one are computed from that one and the index conventions.
-   * @param tenor The total coupon tenor.
-   * @param index The underlying Ibor index.
-   * @param calendar The holiday calendar for the ibor index.
-   * @param stub The stub type used for the compounding sub-periods. Not null.
+   * Builds an Ibor compounded coupon from a total period and the Ibor index. The Ibor day count is used to compute the accrual factors. The payment date is the
+   * start accrual date plus the tenor in the index conventions.
+   * 
+   * @param notional
+   *          The coupon notional.
+   * @param accrualStartDate
+   *          The first accrual date. The other one are computed from that one and the index conventions.
+   * @param tenor
+   *          The total coupon tenor.
+   * @param index
+   *          The underlying Ibor index.
+   * @param calendar
+   *          The holiday calendar for the ibor index.
+   * @param stub
+   *          The stub type used for the compounding sub-periods. Not null.
    * @return The compounded coupon.
    */
   public static CouponIborCompoundingDefinition from(final double notional, final ZonedDateTime accrualStartDate, final Period tenor, final IborIndex index,
@@ -327,20 +389,30 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
   }
 
   /**
-   * Builds an Ibor compounded coupon from a total period and the Ibor index. The Ibor day count is used to compute the accrual factors.
-   * If required the stub of the sub-periods will be short and last. The payment date is the start accrual date plus the tenor in the index conventions.
-   * The fixing date are the one related to the index, even for long or short coupons.
-   * @param notional The coupon notional.
-   * @param accrualStartDate The first accrual date. The date is adjusted according to the conventions.
-   * @param accrualEndDate The end accrual date. The date is adjusted according to the conventions.
-   * @param index The underlying Ibor index.
-   * @param stub The stub type used for the compounding sub-periods. Not null.
-   * @param businessDayConvention The leg business day convention.
-   * @param endOfMonth The leg end-of-month convention.
-   * @param calendar The holiday calendar for the ibor leg.
+   * Builds an Ibor compounded coupon from a total period and the Ibor index. The Ibor day count is used to compute the accrual factors. If required the stub of
+   * the sub-periods will be short and last. The payment date is the start accrual date plus the tenor in the index conventions. The fixing date are the one
+   * related to the index, even for long or short coupons.
+   * 
+   * @param notional
+   *          The coupon notional.
+   * @param accrualStartDate
+   *          The first accrual date. The date is adjusted according to the conventions.
+   * @param accrualEndDate
+   *          The end accrual date. The date is adjusted according to the conventions.
+   * @param index
+   *          The underlying Ibor index.
+   * @param stub
+   *          The stub type used for the compounding sub-periods. Not null.
+   * @param businessDayConvention
+   *          The leg business day convention.
+   * @param endOfMonth
+   *          The leg end-of-month convention.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
    * @return The compounded coupon.
    */
-  public static CouponIborCompoundingDefinition from(final double notional, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final IborIndex index,
+  public static CouponIborCompoundingDefinition from(final double notional, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
+      final IborIndex index,
       final StubType stub, final BusinessDayConvention businessDayConvention, final boolean endOfMonth, final Calendar calendar) {
     ArgumentChecker.notNull(accrualStartDate, "Accrual start date");
     ArgumentChecker.notNull(accrualEndDate, "Accrual end date");
@@ -360,22 +432,34 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
   }
 
   /**
-   * Builds an Ibor compounded coupon from a total period and the Ibor index. The Ibor day count is used to compute the accrual factors.
-   * If required the stub of the sub-periods will be short and last. The payment date is the start accrual date plus the tenor in the index conventions.
-   * The fixing date are the one related to the index, even for long or short coupons.
-   * @param notional The coupon notional.
-   * @param accrualStartDate The first accrual date. The date is adjusted according to the conventions.
-   * @param accrualEndDate The end accrual date. The date is adjusted according to the conventions.
-   * @param index The underlying Ibor index.
-   * @param stub The stub type used for the compounding sub-periods. Not null.
-   * @param businessDayConvention The leg business day convention.
-   * @param endOfMonth The leg end-of-month convention.
-   * @param calendar The holiday calendar for the ibor leg.
-   * @param adjuster roll date adjuster, null for no adjustment.
+   * Builds an Ibor compounded coupon from a total period and the Ibor index. The Ibor day count is used to compute the accrual factors. If required the stub of
+   * the sub-periods will be short and last. The payment date is the start accrual date plus the tenor in the index conventions. The fixing date are the one
+   * related to the index, even for long or short coupons.
+   * 
+   * @param notional
+   *          The coupon notional.
+   * @param accrualStartDate
+   *          The first accrual date. The date is adjusted according to the conventions.
+   * @param accrualEndDate
+   *          The end accrual date. The date is adjusted according to the conventions.
+   * @param index
+   *          The underlying Ibor index.
+   * @param stub
+   *          The stub type used for the compounding sub-periods. Not null.
+   * @param businessDayConvention
+   *          The leg business day convention.
+   * @param endOfMonth
+   *          The leg end-of-month convention.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
+   * @param adjuster
+   *          roll date adjuster, null for no adjustment.
    * @return The compounded coupon.
    */
-  public static CouponIborCompoundingDefinition from(final double notional, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final IborIndex index,
-      final StubType stub, final BusinessDayConvention businessDayConvention, final boolean endOfMonth, final Calendar calendar, final RollDateAdjuster adjuster) {
+  public static CouponIborCompoundingDefinition from(final double notional, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
+      final IborIndex index,
+      final StubType stub, final BusinessDayConvention businessDayConvention, final boolean endOfMonth, final Calendar calendar,
+      final RollDateAdjuster adjuster) {
     ArgumentChecker.notNull(accrualStartDate, "Accrual start date");
     ArgumentChecker.notNull(accrualEndDate, "Accrual end date");
     ArgumentChecker.notNull(index, "Index");
@@ -399,6 +483,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
 
   /**
    * Returns the Ibor index underlying the coupon.
+   * 
    * @return The index.
    */
   public IborIndex getIndex() {
@@ -407,6 +492,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
 
   /**
    * Returns the accrual start dates of each sub-period.
+   * 
    * @return The dates.
    */
   public ZonedDateTime[] getAccrualStartDates() {
@@ -415,6 +501,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
 
   /**
    * Returns the accrual end dates of each sub-period.
+   * 
    * @return The dates.
    */
   public ZonedDateTime[] getAccrualEndDates() {
@@ -423,6 +510,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
 
   /**
    * Returns the payment accrual factors for each sub-period.
+   * 
    * @return The factors.
    */
   public double[] getPaymentAccrualFactors() {
@@ -431,6 +519,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
 
   /**
    * Returns the fixing dates for each sub-period.
+   * 
    * @return The dates.
    */
   public ZonedDateTime[] getFixingDates() {
@@ -439,6 +528,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
 
   /**
    * Returns the fixing period start dates for each sub-period.
+   * 
    * @return The dates.
    */
   public ZonedDateTime[] getFixingPeriodStartDates() {
@@ -447,6 +537,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
 
   /**
    * Returns the fixing period end dates for each sub-period.
+   * 
    * @return The dates.
    */
   public ZonedDateTime[] getFixingPeriodEndDates() {
@@ -455,6 +546,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
 
   /**
    * Returns the fixing period accrual factors for each sub-period.
+   * 
    * @return The factors.
    */
   public double[] getFixingPeriodAccrualFactors() {
@@ -462,7 +554,8 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
   }
 
   /**
-   * Returns the rate of the first compound period.  This is an optional field and may return {@link Double#NaN}.
+   * Returns the rate of the first compound period. This is an optional field and may return {@link Double#NaN}.
+   * 
    * @return the rate of the first compound period.
    */
   public double getInitialRate() {
@@ -471,13 +564,15 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
   public CouponIborCompounding toDerivative(final ZonedDateTime dateTime, final String... yieldCurveNames) {
     final LocalDate dateConversion = dateTime.toLocalDate();
-    ArgumentChecker.isTrue(!dateConversion.isAfter(_fixingDates[0].toLocalDate()), "toDerivative without time series should have a date before the first fixing date.");
+    ArgumentChecker.isTrue(!dateConversion.isAfter(_fixingDates[0].toLocalDate()),
+        "toDerivative without time series should have a date before the first fixing date.");
     final String discountingCurveName = yieldCurveNames[0];
     final String forwardCurveName = yieldCurveNames[1];
     final double paymentTime = TimeCalculator.getTimeBetween(dateTime, getPaymentDate());
@@ -490,6 +585,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -527,7 +623,8 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
     if (nbFixed == nbSubPeriods) {
       // Implementation note: all dates already fixed: CouponFixed
       final double rate = (ratioAccrued - 1.0) / getPaymentYearFraction();
-      return new CouponFixed(getCurrency(), paymentTime, discountingCurveName, getPaymentYearFraction(), getNotional(), rate, getAccrualStartDate(), getAccrualEndDate());
+      return new CouponFixed(getCurrency(), paymentTime, discountingCurveName, getPaymentYearFraction(), getNotional(), rate, getAccrualStartDate(),
+          getAccrualEndDate());
     }
     final double notionalAccrued = getNotional() * ratioAccrued;
     final int nbSubPeriodLeft = nbSubPeriods - nbFixed;
@@ -548,7 +645,8 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
   @Override
   public CouponIborCompounding toDerivative(final ZonedDateTime dateTime) {
     final LocalDate dateConversion = dateTime.toLocalDate();
-    ArgumentChecker.isTrue(!dateConversion.isAfter(_fixingDates[0].toLocalDate()), "toDerivative without time series should have a date before the first fixing date.");
+    ArgumentChecker.isTrue(!dateConversion.isAfter(_fixingDates[0].toLocalDate()),
+        "toDerivative without time series should have a date before the first fixing date.");
     final double paymentTime = TimeCalculator.getTimeBetween(dateTime, getPaymentDate());
     final double[] fixingTimes = TimeCalculator.getTimeBetween(dateTime, _fixingDates);
     final double[] fixingPeriodStartTimes = TimeCalculator.getTimeBetween(dateTime, _fixingPeriodStartDates);

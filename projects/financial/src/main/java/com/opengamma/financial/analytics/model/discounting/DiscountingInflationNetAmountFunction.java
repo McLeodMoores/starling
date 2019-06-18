@@ -27,23 +27,20 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the net amount of inflation swaps using curves constructed
- * using the discounting method.
+ * Calculates the net amount of inflation swaps using curves constructed using the discounting method.
  */
 public class DiscountingInflationNetAmountFunction extends DiscountingInflationFunction {
   /** The net amount calculator */
-  private static final InstrumentDerivativeVisitor<InflationProviderInterface, MultipleCurrencyAmount> CALCULATOR =
-      NetAmountInflationCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<InflationProviderInterface, MultipleCurrencyAmount> CALCULATOR = NetAmountInflationCalculator.getInstance();
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#INFLATION_NET_AMOUNT}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#INFLATION_NET_AMOUNT}.
    */
   public DiscountingInflationNetAmountFunction() {
     super(INFLATION_NET_AMOUNT);

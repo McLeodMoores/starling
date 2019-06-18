@@ -39,7 +39,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.conversion.CalendarUtils;
@@ -62,7 +61,7 @@ public class BondTotalReturnSwapConstantSpreadThetaFunction extends BondTotalRet
       BondTrsConstantSpreadHorizonCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VALUE_THETA}.
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#VALUE_THETA}.
    */
   public BondTotalReturnSwapConstantSpreadThetaFunction() {
     super(VALUE_THETA);
@@ -87,7 +86,8 @@ public class BondTotalReturnSwapConstantSpreadThetaFunction extends BondTotalRet
         final IssuerProviderInterface issuerCurves = getMergedWithIssuerProviders(inputs, fxMatrix);
         final BondTotalReturnSwapDefinition definition = (BondTotalReturnSwapDefinition) getTargetToDefinitionConverter(context).convert(trade);
         final int daysForward = Integer.parseInt(desiredValue.getConstraint(PROPERTY_DAYS_TO_MOVE_FORWARD));
-        final ZonedDateTimeDoubleTimeSeries fixingSeries = TotalReturnSwapUtils.getIndexTimeSeries(security.getFundingLeg(), security.getEffectiveDate(), now, timeSeries);
+        final ZonedDateTimeDoubleTimeSeries fixingSeries = TotalReturnSwapUtils.getIndexTimeSeries(security.getFundingLeg(), security.getEffectiveDate(), now,
+            timeSeries);
         final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(executionContext);
         final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
         final Set<ExternalId> fixingDateCalendars = security.getFundingLeg().getFixingDateCalendars();
@@ -111,7 +111,8 @@ public class BondTotalReturnSwapConstantSpreadThetaFunction extends BondTotalRet
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> daysForward = constraints.getValues(PROPERTY_DAYS_TO_MOVE_FORWARD);
         if (daysForward == null || daysForward.size() != 1) {

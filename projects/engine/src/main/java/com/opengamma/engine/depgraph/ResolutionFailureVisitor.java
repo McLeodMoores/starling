@@ -167,9 +167,8 @@ public abstract class ResolutionFailureVisitor<T> implements ResolutionFailureLi
       final Map<ValueSpecification, ValueRequirement> satisfied, final Set<ResolutionFailure> unsatisfied, final Set<ResolutionFailure> unsatisfiedAdditional) {
     if (unsatisfied.isEmpty() && unsatisfiedAdditional.isEmpty()) {
       return visitSuccessfulFunction(valueRequirement, function, desiredOutput, satisfied);
-    } else {
-      return visitFailedFunction(valueRequirement, function, desiredOutput, satisfied, unsatisfied, unsatisfiedAdditional);
     }
+    return visitFailedFunction(valueRequirement, function, desiredOutput, satisfied, unsatisfied, unsatisfiedAdditional);
   }
 
   protected T visitGetAdditionalRequirementsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,

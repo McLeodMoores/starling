@@ -56,7 +56,8 @@ public class EquityFutureOptionVolatilitySurfaceDataFunction extends AbstractFun
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityFutureOptionVolatilitySurfaceDataFunction.class);
   /** The supported schemes */
-  private static final Set<ExternalScheme> VALID_SCHEMES = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.ACTIVFEED_TICKER);
+  private static final Set<ExternalScheme> VALID_SCHEMES = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK,
+      ExternalSchemes.ACTIVFEED_TICKER);
 
   private ConfigDBVolatilitySurfaceSpecificationSource _volatilitySurfaceSpecificationSource;
 
@@ -67,11 +68,15 @@ public class EquityFutureOptionVolatilitySurfaceDataFunction extends AbstractFun
 
   @Override
   /**
-   * {@inheritDoc} <p>
-   * INPUT: We are taking a VolatilitySurfaceData object, which contains all number of missing data, plus strikes and vols are in percentages <p>
-   * OUTPUT: and converting this into a StandardVolatilitySurfaceData object, which has no empty values, expiry is in years, and the strike and vol scale is without unit (35% -> 0.35)
+   * {@inheritDoc}
+   * <p>
+   * INPUT: We are taking a VolatilitySurfaceData object, which contains all number of missing data, plus strikes and vols are in percentages
+   * <p>
+   * OUTPUT: and converting this into a StandardVolatilitySurfaceData object, which has no empty values, expiry is in years, and the strike and vol scale is
+   * without unit (35% -> 0.35)
    */
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
 
     final ZonedDateTime valTime = ZonedDateTime.now(executionContext.getValuationClock());
     final LocalDate valDate = valTime.toLocalDate();
@@ -152,7 +157,8 @@ public class EquityFutureOptionVolatilitySurfaceDataFunction extends AbstractFun
     final String givenName = Iterables.getOnlyElement(surfaceNames);
     final String fullName = givenName + "_" + EquitySecurityUtils.getTrimmedTarget(((ExternalIdentifiable) target.getValue()).getExternalId());
 
-    final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullName, InstrumentTypeProperties.EQUITY_FUTURE_OPTION);
+    final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullName,
+        InstrumentTypeProperties.EQUITY_FUTURE_OPTION);
     if (specification == null) {
       LOGGER.error("Could not get volatility surface specification with name " + fullName);
       return null;
@@ -160,11 +166,6 @@ public class EquityFutureOptionVolatilitySurfaceDataFunction extends AbstractFun
 
     final String quoteUnits = specification.getQuoteUnits();
     final ValueProperties properties = ValueProperties.builder()
-        .with(ValuePropertyNames.SURFACE, givenName)
-        .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.EQUITY_FUTURE_OPTION)
-        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, specification.getSurfaceQuoteType())
-        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, quoteUnits).get();
-    final ValueProperties fullNameProperties = ValueProperties.builder()
         .with(ValuePropertyNames.SURFACE, givenName)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.EQUITY_FUTURE_OPTION)
         .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, specification.getSurfaceQuoteType())
@@ -180,7 +181,7 @@ public class EquityFutureOptionVolatilitySurfaceDataFunction extends AbstractFun
         return null;
       }
       final String curveName = Iterables.getOnlyElement(curveNames);
-      //TODO get rid of hard-coding and add to properties
+      // TODO get rid of hard-coding and add to properties
       final String curveCalculationMethod = ForwardCurveValuePropertyNames.PROPERTY_YIELD_CURVE_IMPLIED_METHOD;
       final ValueProperties curveProperties = ValueProperties.builder().with(ValuePropertyNames.CURVE, curveName)
           .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, curveCalculationMethod).get();
@@ -191,8 +192,10 @@ public class EquityFutureOptionVolatilitySurfaceDataFunction extends AbstractFun
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
-    final ValueProperties.Builder properties = createValueProperties().with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.EQUITY_FUTURE_OPTION);
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
+    final ValueProperties.Builder properties = createValueProperties().with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE,
+        InstrumentTypeProperties.EQUITY_FUTURE_OPTION);
     boolean surfaceNameSet = false;
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       final ValueSpecification key = entry.getKey();
@@ -204,20 +207,22 @@ public class EquityFutureOptionVolatilitySurfaceDataFunction extends AbstractFun
         for (final String property : curveProperties.getProperties()) {
           properties.with(property, curveProperties.getValues(property));
         }
-        //don't check if forward curve is set, because it isn't needed if the quotes are volatility
+        // don't check if forward curve is set, because it isn't needed if the quotes are volatility
       }
     }
     assert surfaceNameSet;
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(), properties.get()));
   }
 
-  private static VolatilitySurfaceData<Double, Double> getSurfaceFromVolatilityQuote(final LocalDate valDate, final VolatilitySurfaceData<Pair<Integer, Tenor>, Double> rawSurface) {
+  private static VolatilitySurfaceData<Double, Double> getSurfaceFromVolatilityQuote(final LocalDate valDate,
+      final VolatilitySurfaceData<Pair<Integer, Tenor>, Double> rawSurface) {
     // Remove empties, convert expiries from number to years, and scale vols
     final Map<Pair<Double, Double>, Double> volValues = new HashMap<>();
     final DoubleArrayList tList = new DoubleArrayList();
     final DoubleArrayList kList = new DoubleArrayList();
     for (final Pair<Integer, Tenor> nthExpiry : rawSurface.getXs()) {
-      final double t = FutureOptionExpiries.EQUITY_FUTURE.getFutureOptionTtm(nthExpiry.getFirst(), valDate, nthExpiry.getSecond()); //TODO need information about expiry calculator
+      final double t = FutureOptionExpiries.EQUITY_FUTURE.getFutureOptionTtm(nthExpiry.getFirst(), valDate, nthExpiry.getSecond()); // TODO need information
+                                                                                                                                    // about expiry calculator
       if (t > 5. / 365.) { // Bootstrapping vol surface to this data causes far more trouble than any gain. The data simply isn't reliable.
         for (final Double strike : rawSurface.getYs()) {
           final Double vol = rawSurface.getVolatility(nthExpiry, strike);
@@ -229,12 +234,14 @@ public class EquityFutureOptionVolatilitySurfaceDataFunction extends AbstractFun
         }
       }
     }
-    final VolatilitySurfaceData<Double, Double> stdVolSurface = new VolatilitySurfaceData<>(rawSurface.getDefinitionName(), rawSurface.getSpecificationName(), rawSurface.getTarget(),
+    final VolatilitySurfaceData<Double, Double> stdVolSurface = new VolatilitySurfaceData<>(rawSurface.getDefinitionName(), rawSurface.getSpecificationName(),
+        rawSurface.getTarget(),
         tList.toArray(new Double[0]), kList.toArray(new Double[0]), volValues);
     return stdVolSurface;
   }
 
-  private static VolatilitySurfaceData<Double, Double> getSurfaceFromPriceQuote(final LocalDate valDate, final VolatilitySurfaceData<Pair<Integer, Tenor>, Double> rawSurface,
+  private static VolatilitySurfaceData<Double, Double> getSurfaceFromPriceQuote(final LocalDate valDate,
+      final VolatilitySurfaceData<Pair<Integer, Tenor>, Double> rawSurface,
       final ForwardCurve forwardCurve, final VolatilitySurfaceSpecification specification) {
     final String surfaceQuoteType = specification.getSurfaceQuoteType();
     double callAboveStrike = 0;
@@ -246,7 +253,8 @@ public class EquityFutureOptionVolatilitySurfaceDataFunction extends AbstractFun
     final DoubleArrayList tList = new DoubleArrayList();
     final DoubleArrayList kList = new DoubleArrayList();
     for (final Pair<Integer, Tenor> nthExpiry : rawSurface.getXs()) {
-      final double t = FutureOptionExpiries.EQUITY_FUTURE.getFutureOptionTtm(nthExpiry.getFirst(), valDate, nthExpiry.getSecond()); //TODO need information about expiry calculator
+      final double t = FutureOptionExpiries.EQUITY_FUTURE.getFutureOptionTtm(nthExpiry.getFirst(), valDate, nthExpiry.getSecond()); // TODO need information
+                                                                                                                                    // about expiry calculator
       final double forward = forwardCurve.getForward(t);
       if (t > 5. / 365.) { // Bootstrapping vol surface to this data causes far more trouble than any gain. The data simply isn't reliable.
         for (final Double strike : rawSurface.getYs()) {
@@ -273,7 +281,8 @@ public class EquityFutureOptionVolatilitySurfaceDataFunction extends AbstractFun
         }
       }
     }
-    final VolatilitySurfaceData<Double, Double> stdVolSurface = new VolatilitySurfaceData<>(rawSurface.getDefinitionName(), rawSurface.getSpecificationName(), rawSurface.getTarget(),
+    final VolatilitySurfaceData<Double, Double> stdVolSurface = new VolatilitySurfaceData<>(rawSurface.getDefinitionName(), rawSurface.getSpecificationName(),
+        rawSurface.getTarget(),
         tList.toArray(new Double[0]), kList.toArray(new Double[0]), volValues);
     return stdVolSurface;
   }

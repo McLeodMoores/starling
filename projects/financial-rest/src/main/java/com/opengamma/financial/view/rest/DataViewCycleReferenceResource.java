@@ -14,7 +14,8 @@ import com.opengamma.engine.view.cycle.ViewCycle;
  */
 public class DataViewCycleReferenceResource extends DataEngineResourceReferenceResource<ViewCycle> {
 
-  protected DataViewCycleReferenceResource(final DataEngineResourceManagerResource<ViewCycle> manager, final long referenceId, final EngineResourceReference<? extends ViewCycle> resourceReference) {
+  protected DataViewCycleReferenceResource(final DataEngineResourceManagerResource<ViewCycle> manager, final long referenceId,
+      final EngineResourceReference<? extends ViewCycle> resourceReference) {
     super(manager, referenceId, resourceReference);
   }
 

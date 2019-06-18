@@ -21,7 +21,7 @@ import com.opengamma.master.security.ManageableSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * An abstract row parser class, to be specialised for parsing a specific security/trade/position type from a row's data
+ * An abstract row parser class, to be specialised for parsing a specific security/trade/position type from a row's data.
  */
 public abstract class RowParser {
 
@@ -35,7 +35,6 @@ public abstract class RowParser {
 
   /** Standard date-time formatter for the output. */
   protected final DateTimeFormatter _outputDateFormatter;
-
 
   protected RowParser() {
     _csvDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -57,37 +56,47 @@ public abstract class RowParser {
 
   /**
    * Constructs a row from the supplied trade.
-   * @param trade The trade to convert
-   * @return      The mapping from column names to contents of the current row
-  */
+   *
+   * @param trade
+   *          The trade to convert
+   * @return The mapping from column names to contents of the current row
+   */
   public Map<String, String> constructRow(final ManageableTrade trade) {
     return new HashMap<>();
   }
 
   /**
    * Constructs a row from the supplied position.
-   * @param position The position to convert
-   * @return      The mapping from column names to contents of the current row
-  */
+   *
+   * @param position
+   *          The position to convert
+   * @return The mapping from column names to contents of the current row
+   */
   public Map<String, String> constructRow(final ManageablePosition position) {
     return new HashMap<>();
   }
 
   /**
    * Constructs a row from the supplied securities.
-   * @param securities The securities to convert (securities following the first are assumed to be underlyings)
-   * @return      The mapping from column names to contents of the current row
-  */
+   *
+   * @param securities
+   *          The securities to convert (securities following the first are assumed to be underlyings)
+   * @return The mapping from column names to contents of the current row
+   */
   public Map<String, String> constructRow(final ManageableSecurity[] securities) {
     return new HashMap<>();
   }
 
   /**
    * Constructs a row from the supplied security, position and trade.
-   * @param securities  The securities to convert
-   * @param position  The position to convert
-   * @param trade     The trade to convert
-   * @return          The mapping from column names to contents of the current row
+   *
+   * @param securities
+   *          The securities to convert
+   * @param position
+   *          The position to convert
+   * @param trade
+   *          The trade to convert
+   * @return The mapping from column names to contents of the current row
    */
   public Map<String, String> constructRow(final ManageableSecurity[] securities, final ManageablePosition position, final ManageableTrade trade) {
 
@@ -112,19 +121,22 @@ public abstract class RowParser {
   }
 
   /**
-   * Constructs one or more securities associated with the supplied row. As a convention, the underlying security
-   * is returned at array location 0.
-   * @param row The mapping between column names and contents for the current row
-   * @return An array of securities constructed from the current row's data; underlying is at index 0; null or an
-   *         empty array if unable to construct any securities from the row; this will cause the entire row to be
-   *         skipped (constructPosition() won't be called for that row
+   * Constructs one or more securities associated with the supplied row. As a convention, the underlying security is returned at array location 0.
+   *
+   * @param row
+   *          The mapping between column names and contents for the current row
+   * @return An array of securities constructed from the current row's data; underlying is at index 0; null or an empty array if unable to construct any
+   *         securities from the row; this will cause the entire row to be skipped (constructPosition() won't be called for that row
    */
   public abstract ManageableSecurity[] constructSecurity(Map<String, String> row);
 
   /**
    * Constructs a position associated with the supplied row.
-   * @param row The mapping between column names and contents for the current row
-   * @param security  The associated security
+   *
+   * @param row
+   *          The mapping between column names and contents for the current row
+   * @param security
+   *          The associated security
    * @return The constructed position or null if position construction failed
    */
   public ManageablePosition constructPosition(final Map<String, String> row, final ManageableSecurity security) {
@@ -137,18 +149,23 @@ public abstract class RowParser {
 
   /**
    * Constructs a trade associated with the supplied row.
-   * @param row The mapping between column names and contents for the current row
-   * @param security  The associated security
-   * @param position  The associated position
-   * @return  The constructed trade or null if unable to construct a trade
+   *
+   * @param row
+   *          The mapping between column names and contents for the current row
+   * @param security
+   *          The associated security
+   * @param position
+   *          The associated position
+   * @return The constructed trade or null if unable to construct a trade
    */
   public ManageableTrade constructTrade(final Map<String, String> row, final ManageableSecurity security, final ManageablePosition position) {
     return null;
   }
 
   /**
-   * Gets the list of column names that this particular row parser knows of
-   * @return  A string array containing the column names
+   * Gets the list of column names that this particular row parser knows of.
+   *
+   * @return A string array containing the column names
    */
   public abstract String[] getColumns();
 
@@ -169,7 +186,8 @@ public abstract class RowParser {
     return getDateWithException(fieldValueMap, fieldName, _csvDateFormatter, _secondaryCsvDateFormatter);
   }
 
-  public static LocalDate getDateWithException(final Map<String, String> fieldValueMap, final String fieldName, final DateTimeFormatter formatter, final DateTimeFormatter alternativeFormatter) {
+  public static LocalDate getDateWithException(final Map<String, String> fieldValueMap, final String fieldName, final DateTimeFormatter formatter,
+      final DateTimeFormatter alternativeFormatter) {
     try {
       return LocalDate.parse(getWithException(fieldValueMap, fieldName), formatter);
     } catch (final DateTimeParseException ex) {

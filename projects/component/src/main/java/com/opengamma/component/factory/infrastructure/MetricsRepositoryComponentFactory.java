@@ -142,9 +142,14 @@ public class MetricsRepositoryComponentFactory extends AbstractComponentFactory 
    * <p>
    * Only the summary registry is published.
    *
-   * @param repo  the component repository, not null
-   * @param summaryRegistry  the summary metrics registry, not null
-   * @param detailedRegistry  the detailed metrics registry, not null
+   * @param repo
+   *          the component repository, not null
+   * @param summaryRegistry
+   *          the summary metrics registry, not null
+   * @param detailedRegistry
+   *          the detailed metrics registry, not null
+   * @throws IOException
+   *           if there is a problem
    */
   protected void initGangliaPublish(final ComponentRepository repo, final MetricRegistry summaryRegistry,
       final MetricRegistry detailedRegistry) throws IOException {

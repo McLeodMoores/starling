@@ -41,7 +41,6 @@ import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.credit.DebtSeniority;
 import com.opengamma.analytics.financial.credit.RestructuringClause;
-import com.opengamma.core.security.Security;
 import com.opengamma.financial.convention.StubType;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.daycount.DayCount;
@@ -154,15 +153,15 @@ public class BlotterResource {
     _positionMaster = positionMaster;
     _portfolioMaster = portfolioMaster;
     _fungibleTradeBuilder = new FungibleTradeBuilder(_positionMaster,
-                                                     _portfolioMaster,
-                                                     _securityMaster,
-                                                     BlotterUtils.getMetaBeans(),
-                                                     BlotterUtils.getStringConvert());
+        _portfolioMaster,
+        _securityMaster,
+        BlotterUtils.getMetaBeans(),
+        BlotterUtils.getStringConvert());
     _otcTradeBuilder = new OtcTradeBuilder(_positionMaster,
-                                           _portfolioMaster,
-                                           _securityMaster,
-                                           BlotterUtils.getMetaBeans(),
-                                           BlotterUtils.getStringConvert());
+        _portfolioMaster,
+        _securityMaster,
+        BlotterUtils.getMetaBeans(),
+        BlotterUtils.getStringConvert());
   }
 
   /* package */ static boolean isSecurity(final Class<?> type) {
@@ -185,8 +184,8 @@ public class BlotterResource {
   @Path("types")
   public String getTypes() {
     final Map<Object, Object> data = map("title", "Types",
-                                   "securityTypeNames", SECURITY_TYPE_NAMES,
-                                   "otherTypeNames", OTHER_TYPE_NAMES);
+        "securityTypeNames", SECURITY_TYPE_NAMES,
+        "otherTypeNames", OTHER_TYPE_NAMES);
     return _freemarker.build("blotter/bean-types.ftl", data);
   }
 
@@ -207,9 +206,9 @@ public class BlotterResource {
         throw new DataNotFoundException("Unknown type name " + typeName);
       }
       final BeanStructureBuilder structureBuilder = new BeanStructureBuilder(BlotterUtils.getMetaBeans(),
-                                                                       UNDERLYING_SECURITY_TYPES,
-                                                                       ENDPOINTS,
-                                                                       BlotterUtils.getStringConvert());
+          UNDERLYING_SECURITY_TYPES,
+          ENDPOINTS,
+          BlotterUtils.getStringConvert());
       final BeanTraverser traverser = BlotterUtils.structureBuildingTraverser();
       beanData = (Map<String, Object>) traverser.traverse(metaBean, structureBuilder);
     }
@@ -329,9 +328,8 @@ public class BlotterResource {
   private static boolean isOtc(final ManageableSecurity security) {
     if (security instanceof FinancialSecurity) {
       return ((FinancialSecurity) security).accept(new OtcSecurityVisitor());
-    } else {
-      return false;
     }
+    return false;
   }
 
   /**
@@ -388,11 +386,11 @@ public class BlotterResource {
   /* TODO endpoint for updating positions that don't have any trades?
   create a dummy trade for the position amount?
   what about
-    * positions with trades whose position and trade amounts are inconsistent
-    * adding trade to positions with no trades but a position amount? create 2 trades?
-    * editing a position but not by adding a trade? leave empty and update the amount?
+   * positions with trades whose position and trade amounts are inconsistent
+   * adding trade to positions with no trades but a position amount? create 2 trades?
+   * editing a position but not by adding a trade? leave empty and update the amount?
   should editing a position always leave it with a consistent set of trades? even if it's empty?
-  */
+   */
 
   @PUT
   @Path("positions/{positionIdStr}")
@@ -458,9 +456,8 @@ public class BlotterResource {
       }
       if (nodeId == null) {
         return _otcTradeBuilder.updateTrade(tradeData, securityData, underlyingData);
-      } else {
-        return _otcTradeBuilder.addTrade(tradeData, securityData, underlyingData, nodeId);
       }
+      return _otcTradeBuilder.addTrade(tradeData, securityData, underlyingData, nodeId);
     } catch (final JSONException e) {
       throw new IllegalArgumentException("Failed to parse JSON", e);
     }

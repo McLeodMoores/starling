@@ -25,7 +25,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Computes the price curve sensitivity for different types of futures. Calculator using a multi-curve provider.
  */
-public final class FuturesPriceCurveSensitivityMulticurveCalculator extends InstrumentDerivativeVisitorAdapter<ParameterProviderInterface, MulticurveSensitivity> {
+public final class FuturesPriceCurveSensitivityMulticurveCalculator
+    extends InstrumentDerivativeVisitorAdapter<ParameterProviderInterface, MulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -34,6 +35,7 @@ public final class FuturesPriceCurveSensitivityMulticurveCalculator extends Inst
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static FuturesPriceCurveSensitivityMulticurveCalculator getInstance() {
@@ -46,11 +48,13 @@ public final class FuturesPriceCurveSensitivityMulticurveCalculator extends Inst
   private FuturesPriceCurveSensitivityMulticurveCalculator() {
   }
 
-  /** Implementation note: The pricing of some futures is done by calling the PresentValueCurveSensitivityDiscountingCalculator on the underlying. 
-   *    The present value curve sensitivity calculator refers to the futures calculator, that creates a circular reference of static methods.              */
+  /**
+   * Implementation note: The pricing of some futures is done by calling the PresentValueCurveSensitivityDiscountingCalculator on the underlying. The present
+   * value curve sensitivity calculator refers to the futures calculator, that creates a circular reference of static methods.
+   */
   private static final PresentValueCurveSensitivityDiscountingCalculator PVCSDC = PresentValueCurveSensitivityDiscountingCalculator.getInstance();
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
   public MulticurveSensitivity visitInterestRateFutureSecurity(final InterestRateFutureSecurity futures, final ParameterProviderInterface multicurve) {
@@ -60,7 +64,8 @@ public final class FuturesPriceCurveSensitivityMulticurveCalculator extends Inst
     final double forwardBar = -priceBar;
     final Map<String, List<ForwardSensitivity>> mapFwd = new HashMap<>();
     final List<ForwardSensitivity> listForward = new ArrayList<>();
-    listForward.add(new SimplyCompoundedForwardSensitivity(futures.getFixingPeriodStartTime(), futures.getFixingPeriodEndTime(), futures.getFixingPeriodAccrualFactor(), forwardBar));
+    listForward.add(new SimplyCompoundedForwardSensitivity(futures.getFixingPeriodStartTime(), futures.getFixingPeriodEndTime(),
+        futures.getFixingPeriodAccrualFactor(), forwardBar));
     mapFwd.put(multicurve.getMulticurveProvider().getName(futures.getIborIndex()), listForward);
     return MulticurveSensitivity.ofForward(mapFwd);
   }
@@ -73,7 +78,8 @@ public final class FuturesPriceCurveSensitivityMulticurveCalculator extends Inst
     final int nbFixing = futures.getFixingPeriodAccrualFactor().length;
     final double[] rates = new double[nbFixing];
     for (int loopfix = 0; loopfix < nbFixing; loopfix++) {
-      rates[loopfix] = multicurve.getMulticurveProvider().getSimplyCompoundForwardRate(index, futures.getFixingPeriodTime()[loopfix], futures.getFixingPeriodTime()[loopfix + 1],
+      rates[loopfix] = multicurve.getMulticurveProvider().getSimplyCompoundForwardRate(index, futures.getFixingPeriodTime()[loopfix],
+          futures.getFixingPeriodTime()[loopfix + 1],
           futures.getFixingPeriodAccrualFactor()[loopfix]);
     }
     // Backward sweep
@@ -86,7 +92,8 @@ public final class FuturesPriceCurveSensitivityMulticurveCalculator extends Inst
     final Map<String, List<ForwardSensitivity>> resultMap = new HashMap<>();
     final List<ForwardSensitivity> listON = new ArrayList<>();
     for (int loopfix = 0; loopfix < nbFixing; loopfix++) {
-      listON.add(new SimplyCompoundedForwardSensitivity(futures.getFixingPeriodTime()[loopfix], futures.getFixingPeriodTime()[loopfix + 1], futures.getFixingPeriodAccrualFactor()[loopfix],
+      listON.add(new SimplyCompoundedForwardSensitivity(futures.getFixingPeriodTime()[loopfix], futures.getFixingPeriodTime()[loopfix + 1],
+          futures.getFixingPeriodAccrualFactor()[loopfix],
           ratesBar[loopfix]));
     }
     resultMap.put(multicurve.getMulticurveProvider().getName(index), listON);
@@ -94,10 +101,11 @@ public final class FuturesPriceCurveSensitivityMulticurveCalculator extends Inst
   }
 
   @Override
-  public MulticurveSensitivity visitSwapFuturesPriceDeliverableSecurity(final SwapFuturesPriceDeliverableSecurity futures, final ParameterProviderInterface multicurve) {
+  public MulticurveSensitivity visitSwapFuturesPriceDeliverableSecurity(final SwapFuturesPriceDeliverableSecurity futures,
+      final ParameterProviderInterface multicurve) {
     ArgumentChecker.notNull(futures, "futures");
     ArgumentChecker.notNull(multicurve, "multi-curve provider");
-    MulticurveSensitivity pvcs = futures.getUnderlyingSwap().accept(PVCSDC, multicurve.getMulticurveProvider()).getSensitivity(futures.getCurrency());
+    final MulticurveSensitivity pvcs = futures.getUnderlyingSwap().accept(PVCSDC, multicurve.getMulticurveProvider()).getSensitivity(futures.getCurrency());
     return pvcs;
   }
 

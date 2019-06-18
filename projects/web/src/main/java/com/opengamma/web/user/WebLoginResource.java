@@ -70,7 +70,7 @@ public class WebLoginResource extends AbstractSingletonWebResource {
   public WebLoginResource() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getGreen(
@@ -108,7 +108,7 @@ public class WebLoginResource extends AbstractSingletonWebResource {
     return getFreemarker(servletContext).build(ftlFile, out);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Produces(MediaType.TEXT_HTML)
   public Response loginGreen(
@@ -136,19 +136,18 @@ public class WebLoginResource extends AbstractSingletonWebResource {
       final HttpServletRequest request,
       final ServletContext servletContext,
       final UriInfo uriInfo,
-      String username,
-      String password,
+      final String username, final String password,
       final String ftlFile) {
-    username = StringUtils.trimToNull(username);
-    password = StringUtils.trimToNull(password);
-    if (username == null) {
-      return displayError(servletContext, uriInfo, username, ftlFile, "UserNameMissing");
+    final String trimmedUsername = StringUtils.trimToNull(username);
+    final String trimmedPassword = StringUtils.trimToNull(password);
+    if (trimmedUsername == null) {
+      return displayError(servletContext, uriInfo, trimmedUsername, ftlFile, "UserNameMissing");
     }
-    if (password == null) {
-      return displayError(servletContext, uriInfo, username, ftlFile, "PasswordMissing");
+    if (trimmedPassword == null) {
+      return displayError(servletContext, uriInfo, trimmedUsername, ftlFile, "PasswordMissing");
     }
     final String ipAddress = findIpAddress(request);
-    final UsernamePasswordToken token = new UsernamePasswordToken(username, password, false, ipAddress);
+    final UsernamePasswordToken token = new UsernamePasswordToken(trimmedUsername, trimmedPassword, false, ipAddress);
     try {
       final Subject subject = AuthUtils.getSubject();
       subject.login(token);
@@ -169,19 +168,18 @@ public class WebLoginResource extends AbstractSingletonWebResource {
 
     } catch (final AuthenticationException ex) {
       final String errorCode = StringUtils.substringBeforeLast(ex.getClass().getSimpleName(), "Exception");
-      return displayError(servletContext, uriInfo, username, ftlFile, errorCode);
+      return displayError(servletContext, uriInfo, trimmedUsername, ftlFile, errorCode);
     }
   }
 
   /**
    * Finds the IP address of the user.
    * <p>
-   * This is a generally impossible task.
-   * We prefer a specific 'X_OPENGAMMA_CLIENT_IP' header containing a single IP address.
-   * If not found, we rely on the generic 'X-FORWARDED-FOR' header.
-   * If not found, we rely on the remote host of the servlet request.
+   * This is a generally impossible task. We prefer a specific 'X_OPENGAMMA_CLIENT_IP' header containing a single IP address. If not found, we rely on the
+   * generic 'X-FORWARDED-FOR' header. If not found, we rely on the remote host of the servlet request.
    *
-   * @param request  the servlet request, not null
+   * @param request
+   *          the servlet request, not null
    * @return the IP address, not null
    */
   private static String findIpAddress(final HttpServletRequest request) {
@@ -204,13 +202,14 @@ public class WebLoginResource extends AbstractSingletonWebResource {
   /**
    * Ensures that the IP address is non-local.
    *
-   * @param remoteIp  the remote IP address, may be null
+   * @param remoteIp
+   *          the remote IP address, may be null
    * @return the non-local IP address, not null
    */
   private static String ensureIpAddressNonLoopback(final String remoteIp) {
     try {
       final InetAddress ia = remoteIp != null ? InetAddress.getByName(remoteIp) : null;
-      if (ia != null && ia.isLoopbackAddress() == false) {
+      if (ia != null && !ia.isLoopbackAddress()) {
         return remoteIp;
       }
       // search through network interfaces to find reasonable non-loopback IP address
@@ -219,7 +218,7 @@ public class WebLoginResource extends AbstractSingletonWebResource {
         final NetworkInterface iface = ifaces.nextElement();
         for (final Enumeration<InetAddress> inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements();) {
           final InetAddress inetAddr = inetAddrs.nextElement();
-          if (inetAddr.isLoopbackAddress() == false) {
+          if (!inetAddr.isLoopbackAddress()) {
             if (inetAddr.isSiteLocalAddress()) {
               return inetAddr.getHostAddress();
             } else if (possible == null) {
@@ -242,18 +241,20 @@ public class WebLoginResource extends AbstractSingletonWebResource {
     }
   }
 
-  private Response displayError(final ServletContext servletContext, final UriInfo uriInfo, final String username, final String ftlFile, final String errorCode) {
+  private Response displayError(final ServletContext servletContext, final UriInfo uriInfo, final String username, final String ftlFile,
+      final String errorCode) {
     final FlexiBean out = createRootData(uriInfo);
     out.put("username", username);
     out.put("err_invalidLogin", errorCode);
     return Response.ok(getFreemarker(servletContext).build(ftlFile, out)).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this page.
    *
-   * @param uriInfo  the uriInfo, not null
+   * @param uriInfo
+   *          the uriInfo, not null
    * @return the URI, not null
    */
   public static URI uri(final UriInfo uriInfo) {

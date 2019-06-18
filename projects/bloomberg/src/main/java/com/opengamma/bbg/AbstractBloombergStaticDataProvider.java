@@ -83,8 +83,10 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
   /**
    * Creates an instance.
    *
-   * @param bloombergConnector  the Bloomberg connector, not null
-   * @param serviceName  the Bloomberg service to start, not null
+   * @param bloombergConnector
+   *          the Bloomberg connector, not null
+   * @param serviceName
+   *          the Bloomberg service to start, not null
    */
   public AbstractBloombergStaticDataProvider(final BloombergConnector bloombergConnector, final String serviceName) {
     ArgumentChecker.notNull(bloombergConnector, "bloombergConnector");
@@ -105,7 +107,7 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
     return serviceNames;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the Bloomberg session options.
    *
@@ -122,12 +124,13 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
    */
   protected abstract Logger getLogger();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the Bloomberg session.
    *
    * @return the session
-   * @throws OpenGammaRuntimeException If no connection to Bloomberg is available
+   * @throws OpenGammaRuntimeException
+   *           If no connection to Bloomberg is available
    */
   protected Session getSession() {
     return _sessionProvider.getSession();
@@ -135,7 +138,8 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
 
   /**
    * @return The Bloomberg service.
-   * @throws OpenGammaRuntimeException If no connection to Bloomberg is available
+   * @throws OpenGammaRuntimeException
+   *           If no connection to Bloomberg is available
    */
   protected Service getService() {
     return _sessionProvider.getService(_serviceName);
@@ -161,18 +165,19 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
     releaseBlockedRequests();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Sends a request to Bloomberg, waiting for the response.
    *
-   * @param request the request to send, not null
+   * @param request
+   *          the request to send, not null
    * @return the correlation identifier, not null
    */
   protected Future<List<Element>> submitRequest(final Request request) {
     final Session session = getSession();
     final CorrelationID cid = new CorrelationID(generateCorrelationID());
 
-    final SettableFuture<List<Element>> resultFuture = SettableFuture.<List<Element>>create();
+    final SettableFuture<List<Element>> resultFuture = SettableFuture.<List<Element>> create();
     final ArrayList<Element> result = new ArrayList<>();
     try {
       if (_requiresAuthentication) {
@@ -194,8 +199,10 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
   /**
    * Sends an authorization request to Bloomberg, waiting for the response.
    *
-   * @param request the request to send, not null
-   * @param userIdentity the user identity, not null
+   * @param request
+   *          the request to send, not null
+   * @param userIdentity
+   *          the user identity, not null
    * @return the collection of results, not null
    */
   protected Future<List<Element>> submitAuthorizationRequest(final Request request, final Identity userIdentity) {
@@ -203,7 +210,7 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
     final Session session = getSession();
     final CorrelationID cid = new CorrelationID(generateCorrelationID());
 
-    final SettableFuture<List<Element>> resultFuture = SettableFuture.<List<Element>>create();
+    final SettableFuture<List<Element>> resultFuture = SettableFuture.<List<Element>> create();
     final ArrayList<Element> result = new ArrayList<>();
     try {
       session.sendAuthorizationRequest(request, userIdentity, cid);
@@ -225,7 +232,7 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
     return _nextCorrelationId.getAndIncrement();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Starts the Bloomberg service.
    */
@@ -244,7 +251,6 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
     getLogger().info("Bloomberg event processor started");
     getLogger().info("Bloomberg started");
 
-
     if (_requiresAuthentication) {
       // we need authorization done
       final BloombergBpipeApplicationUserIdentityProvider identityProvider = new BloombergBpipeApplicationUserIdentityProvider(_sessionProvider);
@@ -252,7 +258,7 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if the Bloomberg service is running.
    *
@@ -271,18 +277,18 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
    */
   protected void ensureStarted() {
     getSession();
-    if (_thread == null || _thread.isAlive() == false) {
+    if (_thread == null || !_thread.isAlive()) {
       throw new IllegalStateException("Event polling thread not alive; has start() been called?");
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Stops the Bloomberg service.
    */
   @Override
   public synchronized void stop() {
-    if (isRunning() == false) {
+    if (!isRunning()) {
       getLogger().info("Bloomberg already stopped");
       return;
     }
@@ -302,7 +308,7 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
     getLogger().info("Bloomberg event processor stopped");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Thread runner that handles Bloomberg events.
    */
@@ -333,7 +339,7 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
         return;
       }
       if (event == null) {
-        //getLogger().debug("Got NULL event");
+        // getLogger().debug("Got NULL event");
         return;
       }
       getLogger().debug("Got event of type {}", event.eventType());

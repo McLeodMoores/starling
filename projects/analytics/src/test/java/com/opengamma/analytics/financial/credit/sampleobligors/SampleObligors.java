@@ -16,7 +16,9 @@ import com.opengamma.analytics.financial.credit.obligor.definition.Obligor;
 // CSOFF
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class SampleObligors {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------

@@ -66,7 +66,7 @@ public class BucketedSpreadCurveFunction extends AbstractFunction {
         for (final Map.Entry<ExternalIdBundle, Double> dataEntry : data.getDataPoints().entrySet()) {
           // TODO: The original code here was based on there just being one external ID per point and that having a value which is a period. It would
           // be better to use an id-scheme to tag such values just in case there are any other arbitrary tickers thrown into the bundle. The safest
-          // interim approach is to use the first parseable one 
+          // interim approach is to use the first parseable one
           Period period = null;
           for (final ExternalId id : dataEntry.getKey()) {
             try {
@@ -107,7 +107,8 @@ public class BucketedSpreadCurveFunction extends AbstractFunction {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final CreditCurveIdentifier curveId = CreditCurveIdentifier.of(target.toSpecification().getUniqueId());
         final Currency ccy = curveId.getCurrency();
         final ValueProperties properties = ValueProperties.builder()

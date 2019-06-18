@@ -27,7 +27,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- *  Class used to compute the price and sensitivity of a cash-settled swaption using the Black method.
+ * Class used to compute the price and sensitivity of a cash-settled swaption using the Black method.
  */
 public final class SwaptionCashFixedIborBlackMethod {
 
@@ -38,6 +38,7 @@ public final class SwaptionCashFixedIborBlackMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static SwaptionCashFixedIborBlackMethod getInstance() {
@@ -65,8 +66,11 @@ public final class SwaptionCashFixedIborBlackMethod {
 
   /**
    * Computes the present value of a cash-settled European swaption in the Black model.
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final SwaptionCashFixedIbor swaption, final BlackSwaptionFlatProviderInterface curveBlack) {
@@ -87,8 +91,11 @@ public final class SwaptionCashFixedIborBlackMethod {
 
   /**
    * Computes the implied Black volatility of the vanilla swaption.
-   * @param swaption The swaption.
-   * @param blackMulticurves Black volatility for swaption and multi-curves provider.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param blackMulticurves
+   *          Black volatility for swaption and multi-curves provider.
    * @return The implied volatility.
    */
   public double impliedVolatility(final SwaptionCashFixedIbor swaption, final BlackSwaptionFlatProviderInterface blackMulticurves) {
@@ -101,11 +108,15 @@ public final class SwaptionCashFixedIborBlackMethod {
 
   /**
    * Computes the present value rate sensitivity to rates of a cash-settled European swaption in the Black model.
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The present value curve sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final SwaptionCashFixedIbor swaption, final BlackSwaptionFlatProviderInterface curveBlack) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final SwaptionCashFixedIbor swaption,
+      final BlackSwaptionFlatProviderInterface curveBlack) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(curveBlack, "Curves with Black volatility");
     final double tenor = swaption.getMaturityTime();
@@ -133,11 +144,15 @@ public final class SwaptionCashFixedIborBlackMethod {
 
   /**
    * Computes the 2nd order sensitivity of the present value to rates of a cash-settled European swaption in the Black model.
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The present value curve sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueSecondOrderCurveSensitivity(final SwaptionCashFixedIbor swaption, final BlackSwaptionFlatProviderInterface curveBlack) {
+  public MultipleCurrencyMulticurveSensitivity presentValueSecondOrderCurveSensitivity(final SwaptionCashFixedIbor swaption,
+      final BlackSwaptionFlatProviderInterface curveBlack) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(curveBlack, "Curves with Black volatility");
     final double tenor = swaption.getMaturityTime();
@@ -165,11 +180,15 @@ public final class SwaptionCashFixedIborBlackMethod {
 
   /**
    * Computes the present value sensitivity to the Black volatility (also called vega) of a cash-settled European swaption in the Black swaption model.
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The present value Black sensitivity.
    */
-  public PresentValueBlackSwaptionSensitivity presentValueBlackSensitivity(final SwaptionCashFixedIbor swaption, final BlackSwaptionFlatProviderInterface curveBlack) {
+  public PresentValueBlackSwaptionSensitivity presentValueBlackSensitivity(final SwaptionCashFixedIbor swaption,
+      final BlackSwaptionFlatProviderInterface curveBlack) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(curveBlack, "Curves with Black volatility");
     final double forward = swaption.getUnderlyingSwap().accept(PRDC, curveBlack.getMulticurveProvider());

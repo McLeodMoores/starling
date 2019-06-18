@@ -23,7 +23,8 @@ import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Provides sensitivity of EquitySecurity price with respect to itself, i.e. always unity. This is essential in order to show aggregate position in this underlying in a derivatives portfolio.
+ * Provides sensitivity of EquitySecurity price with respect to itself, i.e. always unity. This is essential in order to show aggregate position in this
+ * underlying in a derivatives portfolio.
  *
  * @author casey
  */
@@ -34,7 +35,8 @@ public class EquitySecurityDeltaFunction extends AbstractFunction.NonCompiledInv
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final ValueSpecification valueSpecification = new ValueSpecification(getValueRequirementName(), target.toSpecification(), desiredValue.getConstraints());
     final ComputedValue result = new ComputedValue(valueSpecification, 1.0);

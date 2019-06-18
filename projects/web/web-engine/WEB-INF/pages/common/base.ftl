@@ -1,8 +1,8 @@
 <#-- Macro to produce a standard page with html/head/body -->
-<#macro page title="OpenGamma" aceXmlEditor=false jquery=false jqueryDate=false>
+<#macro page title="Starling" aceXmlEditor=false jquery=false jqueryDate=false>
 <html>
   <head>
-    <title>${title} - OpenGamma</title>
+    <title>${title} - Starling</title>
     <link type="text/css" rel="stylesheet" href="/green/css/og-base.css" />
 <#if jqueryDate>
     <link rel="stylesheet" href="/css/jquery/smoothness/jquery-ui-1.8.5.custom.css" />
@@ -28,7 +28,7 @@
       <table>
         <tr colcount="2">
           <td id="logo">
-            <a href="/jax"><img src="/images/opengamma.png" width="289" height="51" alt="OpenGamma - Financial Analytics and Risk Management" /></a>
+            <a href="/jax"><img src="/images/starling-inline.png" width="289" height="51" alt="Starling - Financial Analytics and Risk Management" /></a>
           </td>
           <td id="topright">
 <#if userSecurity.enabled>

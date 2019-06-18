@@ -23,34 +23,25 @@ import org.testng.annotations.Test;
 
 import com.opengamma.util.test.TestGroup;
 
-
 /**
- * Tests that MdcAwareThreadPoolExecutorTest correctly segregates MDC
- * information from different threads. Prints output to standard out
- * as it's otherwise difficult to check that everything is created by
- * the expected thread.
+ * Tests that MdcAwareThreadPoolExecutorTest correctly segregates MDC information from different threads. Prints output to standard out as it's otherwise
+ * difficult to check that everything is created by the expected thread.
  */
 @Test(groups = TestGroup.UNIT)
 public class MdcAwareThreadPoolExecutorTest {
 
   private static ExecutorService createMdcAwareService(final int threads) {
-    return new MdcAwareThreadPoolExecutor(threads,
-                                              threads,
-                                              60,
-                                              TimeUnit.SECONDS,
-                                              new SynchronousQueue<Runnable>(),
-                                              new NamedThreadPoolFactory("mdcAware"));
+    return new MdcAwareThreadPoolExecutor(threads, threads, 60, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new NamedThreadPoolFactory("mdcAware"));
   }
 
   private static ExecutorService createStandardService(final int threads) {
-    return new ThreadPoolExecutor(threads,
-                                              threads,
-                                              60,
-                                              TimeUnit.SECONDS,
-                                              new SynchronousQueue<Runnable>(),
-                                              new NamedThreadPoolFactory("standard"));
+    return new ThreadPoolExecutor(threads, threads, 60, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new NamedThreadPoolFactory("standard"));
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is a problem
+   */
   @Test(enabled = false)
   public void testMdcIdLostWhenUsingStandardPool() throws InterruptedException {
 
@@ -67,6 +58,10 @@ public class MdcAwareThreadPoolExecutorTest {
     assertThat(checkCount.get(), is(3));
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is a problem
+   */
   @Test
   public void testMdcIdLoggedForSingleThread() throws InterruptedException {
 
@@ -79,6 +74,10 @@ public class MdcAwareThreadPoolExecutorTest {
     assertThat(checkCount.get(), is(1));
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is a problem
+   */
   @Test
   public void testCorrectIdLoggedForMultipleThreads() throws InterruptedException {
 
@@ -91,6 +90,10 @@ public class MdcAwareThreadPoolExecutorTest {
     assertThat(checkCount.get(), is(3));
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is a problem
+   */
   @Test
   public void testCorrectIdLoggedForMultipleThreadsWithPoolReuse() throws InterruptedException {
 
@@ -112,10 +115,7 @@ public class MdcAwareThreadPoolExecutorTest {
     assertThat(checkCount.get(), is(12));
   }
 
-  private static void createStarterThreads(final int qty,
-                                           final ExecutorService service,
-                                           final AtomicInteger checkCount,
-                                           final boolean mdcPropagationExpected) {
+  private static void createStarterThreads(final int qty, final ExecutorService service, final AtomicInteger checkCount, final boolean mdcPropagationExpected) {
 
     final Set<Thread> threads = new HashSet<>();
     for (int i = 0; i < qty; i++) {
@@ -143,7 +143,7 @@ public class MdcAwareThreadPoolExecutorTest {
 
   private static Runnable createCheckJob(final Map<String, String> expectedContext, final AtomicInteger checkCount) {
 
-    System.out.println("Creating check job on thread - " +  Thread.currentThread().getName() + " MDC: " + MDC.getCopyOfContextMap());
+    System.out.println("Creating check job on thread - " + Thread.currentThread().getName() + " MDC: " + MDC.getCopyOfContextMap());
     return new Runnable() {
       @Override
       public void run() {

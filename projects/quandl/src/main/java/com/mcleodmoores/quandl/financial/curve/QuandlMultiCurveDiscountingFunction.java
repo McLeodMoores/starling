@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.financial.curve;
 
@@ -65,8 +65,7 @@ import com.opengamma.util.money.Currency;
 /**
  * A function that constructs a bundle of curves using
  * {@link com.opengamma.analytics.financial.provider.calculator.discounting.ParSpreadMarketQuoteDiscountingCalculator} and
- * {@link com.opengamma.analytics.financial.provider.calculator.discounting.ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator}
- * that can use Quandl data.
+ * {@link com.opengamma.analytics.financial.provider.calculator.discounting.ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator} that can use Quandl data.
  */
 public class QuandlMultiCurveDiscountingFunction extends MultiCurveDiscountingFunction {
   /** The logger */
@@ -79,7 +78,8 @@ public class QuandlMultiCurveDiscountingFunction extends MultiCurveDiscountingFu
   private CurveDefinitionSource _curveDefinitionSource;
 
   /**
-   * @param configurationName The configuration name, not null
+   * @param configurationName
+   *          The configuration name, not null
    */
   public QuandlMultiCurveDiscountingFunction(final String configurationName) {
     super(configurationName);
@@ -108,8 +108,8 @@ public class QuandlMultiCurveDiscountingFunction extends MultiCurveDiscountingFu
   @Override
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     final ZonedDateTime atZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
-    final CurveConstructionConfiguration curveConstructionConfiguration =
-        _curveConstructionConfigurationSource.getCurveConstructionConfiguration(_configurationName);
+    final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource
+        .getCurveConstructionConfiguration(_configurationName);
     if (curveConstructionConfiguration == null) {
       throw new OpenGammaRuntimeException("Could not get curve construction configuration called " + _configurationName);
     }
@@ -117,7 +117,7 @@ public class QuandlMultiCurveDiscountingFunction extends MultiCurveDiscountingFu
     if (curveConstructionConfiguration.getExogenousConfigurations() != null) {
       final List<String> exogenousConfigurations = curveConstructionConfiguration.getExogenousConfigurations();
       for (final String name : exogenousConfigurations) {
-        //TODO deal with arbitrary depth
+        // TODO deal with arbitrary depth
         final ValueProperties properties = ValueProperties.builder()
             .with(CURVE_CONSTRUCTION_CONFIG, name)
             .with(CURVE_CALCULATION_METHOD, ROOT_FINDING)
@@ -155,12 +155,19 @@ public class QuandlMultiCurveDiscountingFunction extends MultiCurveDiscountingFu
 
     /**
      * Creates an instance.
-     * @param earliestInvocation The earliest time for which the compilation is valid
-     * @param latestInvocation The latest time for which the compilation is valid
-     * @param curveNames The curve names
-     * @param exogenousRequirements The exogenous requirements
-     * @param curveConstructionConfiguration The curve construction configuration
-     * @param currencies The currencies associated with the curves
+     * 
+     * @param earliestInvocation
+     *          The earliest time for which the compilation is valid
+     * @param latestInvocation
+     *          The latest time for which the compilation is valid
+     * @param curveNames
+     *          The curve names
+     * @param exogenousRequirements
+     *          The exogenous requirements
+     * @param curveConstructionConfiguration
+     *          The curve construction configuration
+     * @param currencies
+     *          The currencies associated with the curves
      */
     protected QuandlCompiledFunctionDefinition(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames,
         final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration,
@@ -184,7 +191,7 @@ public class QuandlMultiCurveDiscountingFunction extends MultiCurveDiscountingFu
       final ConfigSource configSource = OpenGammaExecutionContext.getConfigSource(context);
       final ConfigSourceQuery<DateSet> dateSetQuery = new ConfigSourceQuery<>(configSource, DateSet.class,
           VersionCorrection.of(valuationTime.toInstant(), valuationTime.toInstant()));
-      return CurveNodeVisitorAdapter.<InstrumentDefinition<?>>builder()
+      return CurveNodeVisitorAdapter.<InstrumentDefinition<?>> builder()
           .cashNodeVisitor(new CashNodeConverter(securitySource, conventionSource, holidaySource, regionSource, marketData, dataId, valuationTime))
           .calendarSwapNode(new CalendarSwapNodeConverter(securitySource, conventionSource, holidaySource, regionSource, marketData, dataId, valuationTime,
               dateSetQuery))

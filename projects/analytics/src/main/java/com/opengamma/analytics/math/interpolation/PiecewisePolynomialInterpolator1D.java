@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -14,19 +14,21 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DPiecewisePo
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 
 /**
- * Wrapper class for {@link PiecewisePolynomialInterpolator} 
+ * Wrapper class for {@link PiecewisePolynomialInterpolator}.
  */
 public abstract class PiecewisePolynomialInterpolator1D extends Interpolator1D {
 
   /** Serialization version */
   private static final long serialVersionUID = 1L;
 
-  private PiecewisePolynomialInterpolator _baseMethod;
+  private final PiecewisePolynomialInterpolator _baseMethod;
   private static final PiecewisePolynomialWithSensitivityFunction1D FUNC = new PiecewisePolynomialWithSensitivityFunction1D();
 
   /**
-   * Constructor 
-   * @param method Piecewise polynomial interpolation method
+   * Constructor .
+   * 
+   * @param method
+   *          Piecewise polynomial interpolation method
    */
   public PiecewisePolynomialInterpolator1D(final PiecewisePolynomialInterpolator method) {
     _baseMethod = method;
@@ -68,11 +70,16 @@ public abstract class PiecewisePolynomialInterpolator1D extends Interpolator1D {
   }
 
   /**
-   * Data bundle builder ONLY FOR cubic spline interpolator or hyman filters on cubic spline interpolator using Clamped endpoint conditions
-   * @param x X values of data
-   * @param y Y values of data
-   * @param leftCond First derivative value at left endpoint 
-   * @param rightCond First derivative value at right endpoint 
+   * Data bundle builder ONLY FOR cubic spline interpolator or hyman filters on cubic spline interpolator using Clamped endpoint conditions.
+   * 
+   * @param x
+   *          X values of data
+   * @param y
+   *          Y values of data
+   * @param leftCond
+   *          First derivative value at left endpoint
+   * @param rightCond
+   *          First derivative value at right endpoint
    * @return {@link Interpolator1DPiecewisePoynomialDataBundle}
    */
   public Interpolator1DDataBundle getDataBundle(final double[] x, final double[] y, final double leftCond, final double rightCond) {
@@ -88,12 +95,17 @@ public abstract class PiecewisePolynomialInterpolator1D extends Interpolator1D {
   }
 
   /**
-   * Data bundle builder ONLY FOR cubic spline interpolator or hyman filters on cubic spline interpolator using Clamped endpoint conditions
-   * @param x X values of data
-   * @param y Y values of data
-   * @param leftCond First derivative value at left endpoint 
-   * @param rightCond First derivative value at right endpoint 
-   * @return {@link Interpolator1DPiecewisePoynomialDataBundle} 
+   * Data bundle builder ONLY FOR cubic spline interpolator or hyman filters on cubic spline interpolator using Clamped endpoint conditions.
+   * 
+   * @param x
+   *          X values of data
+   * @param y
+   *          Y values of data
+   * @param leftCond
+   *          First derivative value at left endpoint
+   * @param rightCond
+   *          First derivative value at right endpoint
+   * @return {@link Interpolator1DPiecewisePoynomialDataBundle}
    */
   public Interpolator1DDataBundle getDataBundleFromSortedArrays(final double[] x, final double[] y, final double leftCond, final double rightCond) {
     if (!(_baseMethod.getPrimaryMethod() instanceof CubicSplineInterpolator)) {
@@ -103,7 +115,8 @@ public abstract class PiecewisePolynomialInterpolator1D extends Interpolator1D {
   }
 
   /**
-   * Access interpolator
+   * Access interpolator.
+   * 
    * @return _baseMethod
    */
   public PiecewisePolynomialInterpolator getInterpolator() {

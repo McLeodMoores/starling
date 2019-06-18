@@ -10,13 +10,15 @@ import java.util.LinkedHashMap;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
-import com.opengamma.analytics.financial.provider.curve.multicurve.MulticurveDiscountBuildingRepository;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Data bundle with the data required to build curves in the Multiple Yield Curve framework. The data is based on generators.
- * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated. Use classes such as
- * {@link MulticurveDiscountBuildingRepository}.
+ * Data bundle with the data required to build curves in the Multiple Yield
+ * Curve framework. The data is based on generators.
+ * 
+ * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s
+ *             are deprecated. Use classes such as
+ *             {@link com.opengamma.analytics.financial.provider.curve.multicurve.MulticurveDiscountBuildingRepository}.
  */
 @Deprecated
 public class MultipleYieldCurveFinderGeneratorDataBundle {

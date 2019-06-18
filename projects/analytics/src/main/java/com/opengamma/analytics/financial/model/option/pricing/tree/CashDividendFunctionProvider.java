@@ -13,8 +13,10 @@ import com.opengamma.util.ArgumentChecker;
 public class CashDividendFunctionProvider extends DividendFunctionProvider {
 
   /**
-   * @param dividendTimes The dividend times
-   * @param dividends The cash dividends
+   * @param dividendTimes
+   *          The dividend times
+   * @param dividends
+   *          The cash dividends
    */
   public CashDividendFunctionProvider(final double[] dividendTimes, final double[] dividends) {
     super(dividendTimes, dividends);
@@ -42,7 +44,8 @@ public class CashDividendFunctionProvider extends DividendFunctionProvider {
   }
 
   @Override
-  public double[] getAssetPricesForDelta(final double assetPriceBase, final double interestRate, final int[] divSteps, final double upFactor, final double downFactor, final double sumDiscountDiv) {
+  public double[] getAssetPricesForDelta(final double assetPriceBase, final double interestRate, final int[] divSteps, final double upFactor,
+      final double downFactor, final double sumDiscountDiv) {
     final double[] res = new double[2];
     res[0] = assetPriceBase * downFactor + sumDiscountDiv;
     res[1] = assetPriceBase * upFactor + sumDiscountDiv;
@@ -50,7 +53,8 @@ public class CashDividendFunctionProvider extends DividendFunctionProvider {
   }
 
   @Override
-  public double[] getAssetPricesForGamma(final double assetPriceBase, final double interestRate, final int[] divSteps, final double upFactor, final double downFactor, final double sumDiscountDiv) {
+  public double[] getAssetPricesForGamma(final double assetPriceBase, final double interestRate, final int[] divSteps, final double upFactor,
+      final double downFactor, final double sumDiscountDiv) {
     final double[] res = new double[3];
     res[0] = assetPriceBase * downFactor * downFactor + sumDiscountDiv;
     res[1] = assetPriceBase * upFactor * downFactor + sumDiscountDiv;
@@ -59,7 +63,8 @@ public class CashDividendFunctionProvider extends DividendFunctionProvider {
   }
 
   @Override
-  public double[] getAssetPricesForDelta(final double assetPriceBase, final double interestRate, final int[] divSteps, final double upFactor, final double middleFactor, final double downFactor,
+  public double[] getAssetPricesForDelta(final double assetPriceBase, final double interestRate, final int[] divSteps, final double upFactor,
+      final double middleFactor, final double downFactor,
       final double sumDiscountDiv) {
     final double[] res = new double[3];
     res[0] = assetPriceBase * downFactor + sumDiscountDiv;
@@ -69,7 +74,8 @@ public class CashDividendFunctionProvider extends DividendFunctionProvider {
   }
 
   @Override
-  public double[] getAssetPricesForGamma(final double assetPriceBase, final double interestRate, final int[] divSteps, final double upFactor, final double middleFactor, final double downFactor,
+  public double[] getAssetPricesForGamma(final double assetPriceBase, final double interestRate, final int[] divSteps, final double upFactor,
+      final double middleFactor, final double downFactor,
       final double sumDiscountDiv) {
     final double[] res = new double[5];
     final double up = assetPriceBase * upFactor;

@@ -31,7 +31,8 @@ public class ComputationTargetResolverWrapper {
   }
 
   public Object get(final ComputationTargetType type, final ExternalId identifier) {
-    final ComputationTargetSpecification specification = getResolver().getSpecificationResolver().getTargetSpecification(new ComputationTargetRequirement(type, identifier));
+    final ComputationTargetSpecification specification = getResolver().getSpecificationResolver()
+        .getTargetSpecification(new ComputationTargetRequirement(type, identifier));
     if (specification == null) {
       return null;
     }

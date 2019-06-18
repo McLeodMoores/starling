@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.fxforwardcurve;
@@ -11,17 +11,18 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 
 /**
- * 
+ *
  */
 @Config(description = "FX forward curve specification", group = ConfigGroups.CURVES_LEGACY)
 public class FXForwardCurveSpecification {
-  /** The type of the FX forward quote */
+  /** The type of the FX forward quote. */
   public enum QuoteType {
-    /** Outright */
+    /** Outright. */
     Outright,
-    /** Points */
+    /** Points. */
     Points
   }
+
   private final FXForwardCurveInstrumentProvider _curveInstrumentProvider;
   private final String _name;
   private final UnorderedCurrencyPair _target;
@@ -36,7 +37,7 @@ public class FXForwardCurveSpecification {
       final QuoteType quoteType) {
     this(name, target, curveInstrumentProvider, quoteType, true);
   }
-  
+
   public FXForwardCurveSpecification(final String name, final UnorderedCurrencyPair target, final FXForwardCurveInstrumentProvider curveInstrumentProvider,
       final QuoteType quoteType, final boolean isRegularQuote) {
     ArgumentChecker.notNull(name, "name");
@@ -67,9 +68,9 @@ public class FXForwardCurveSpecification {
   }
 
   public boolean isMarketQuoteConvention() {
-    return _isRegularQuote;  
+    return _isRegularQuote;
   }
-  
+
   @Override
   public int hashCode() {
     return getName().hashCode() + getTarget().hashCode() + getQuoteType().hashCode();
@@ -90,6 +91,5 @@ public class FXForwardCurveSpecification {
         getQuoteType().equals(other.getQuoteType()) &&
         isMarketQuoteConvention() == other.isMarketQuoteConvention();
   }
-
 
 }

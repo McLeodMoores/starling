@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.financial.function.trade;
 
@@ -182,16 +182,16 @@ public class SwapDetailsFunction extends AbstractFunction.NonCompiledInvoker {
       final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
       final Set<ValueRequirement> requirements = new HashSet<>();
       for (final String curveExposureConfig : curveExposureConfigs) {
-        final Set<String> curveConstructionConfigurationNames =
-            _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
+        final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig,
+            target.getTrade());
         for (final String curveConstructionConfigurationName : curveConstructionConfigurationNames) {
           final ValueProperties curveBundleConstraints = properties.copy()
               .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName)
               .with(CURVE_EXPOSURES, curveExposureConfig).withOptional(CURVE_EXPOSURES)
               .get();
           requirements.add(new ValueRequirement(CURVE_BUNDLE, ComputationTargetSpecification.NULL, curveBundleConstraints));
-          final CurveConstructionConfiguration curveConstructionConfiguration =
-              _curveConstructionConfigurationSource.getCurveConstructionConfiguration(curveConstructionConfigurationName);
+          final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource
+              .getCurveConstructionConfiguration(curveConstructionConfigurationName);
           if (curveConstructionConfiguration == null) {
             LOGGER.error("Could not get curve construction configuration called {} from config master", curveConstructionConfigurationName);
             return null;
@@ -250,7 +250,7 @@ public class SwapDetailsFunction extends AbstractFunction.NonCompiledInvoker {
           .withoutAny(CURVE_EXPOSURES).with(CURVE_EXPOSURES, curveExposuresName);
       if (curveType != null) {
         properties.withoutAny(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE)
-                  .with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, curveType);
+            .with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, curveType);
       }
       newResults.add(new ValueSpecification(result.getValueName(), result.getTargetSpecification(), properties.get()));
     }

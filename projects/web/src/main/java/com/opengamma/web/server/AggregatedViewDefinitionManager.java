@@ -39,9 +39,8 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Manages the lifecycle of aggregated view definitions. There is really no such thing as an aggregated view
- * definition, only an aggregated portfolio, but the web client exposes the idea of aggregating a view definition as a
- * shortcut for aggregating the underlying portfolio and requesting the same outputs.
+ * Manages the lifecycle of aggregated view definitions. There is really no such thing as an aggregated view definition, only an aggregated portfolio, but the
+ * web client exposes the idea of aggregating a view definition as a shortcut for aggregating the underlying portfolio and requesting the same outputs.
  */
 public class AggregatedViewDefinitionManager {
 
@@ -58,12 +57,12 @@ public class AggregatedViewDefinitionManager {
   private final Map<Pair<UniqueId, List<String>>, ViewDefinitionReference> _aggregatedViewDefinitions = Maps.newHashMap();
 
   public AggregatedViewDefinitionManager(final PositionSource positionSource,
-                                         final SecuritySource securitySource,
-                                         final ConfigSource combinedConfigSource,
-                                         final ConfigMaster userConfigMaster,
-                                         final PortfolioMaster userPortfolioMaster,
-                                         final PositionMaster userPositionMaster,
-                                         final Map<String, AggregationFunction<?>> portfolioAggregators) {
+      final SecuritySource securitySource,
+      final ConfigSource combinedConfigSource,
+      final ConfigMaster userConfigMaster,
+      final PortfolioMaster userPortfolioMaster,
+      final PositionMaster userPositionMaster,
+      final Map<String, AggregationFunction<?>> portfolioAggregators) {
     _positionSource = positionSource;
     _securitySource = securitySource;
     _combinedConfigSource = combinedConfigSource;
@@ -113,11 +112,11 @@ public class AggregatedViewDefinitionManager {
         }
         final String aggregatedViewDefinitionName = getAggregatedViewDefinitionName(baseViewDefinition.getName(), aggregatorNames);
         final ViewDefinition aggregatedViewDefinition = baseViewDefinition.copyWith(aggregatedViewDefinitionName,
-                                                                              aggregatedPortfolioReference.incrementReferenceCount(),
-                                                                              baseViewDefinition.getMarketDataUser());
+            aggregatedPortfolioReference.incrementReferenceCount(),
+            baseViewDefinition.getMarketDataUser());
 
         // Treat as a transient view definition that should not be persistent
-        //aggregatedViewDefinition.setPersistent(false);
+        // aggregatedViewDefinition.setPersistent(false);
 
         final ConfigItem<ViewDefinition> configItem = ConfigItem.of(aggregatedViewDefinition);
         configItem.setName(aggregatedViewDefinition.getName());
@@ -164,7 +163,7 @@ public class AggregatedViewDefinitionManager {
     }
   }
 
-  private String getAggregatedViewDefinitionName(final String baseViewDefinitionName, final List<String> aggregatorNames) {
+  private static String getAggregatedViewDefinitionName(final String baseViewDefinitionName, final List<String> aggregatorNames) {
     return baseViewDefinitionName + " aggregated by " + StringUtils.join(aggregatorNames, ", ");
   }
 
@@ -175,8 +174,7 @@ public class AggregatedViewDefinitionManager {
     // clean them up when the portfolio is no longer required in case other portfolios have now referenced the new
     // positions.
     final Portfolio basePortfolio = _positionSource.getPortfolio(basePortfolioId, VersionCorrection.LATEST);
-    final Portfolio resolvedPortfolio =
-        PortfolioCompiler.resolvePortfolio(basePortfolio, Executors.newSingleThreadExecutor(), _securitySource);
+    final Portfolio resolvedPortfolio = PortfolioCompiler.resolvePortfolio(basePortfolio, Executors.newSingleThreadExecutor(), _securitySource);
     final List<AggregationFunction<?>> aggregationFunctions = Lists.newArrayListWithCapacity(aggregatorNames.size());
     for (final String aggregatorName : aggregatorNames) {
       final AggregationFunction<?> aggregationFunction = _portfolioAggregators.get(aggregatorName);
@@ -190,14 +188,14 @@ public class AggregatedViewDefinitionManager {
     return _portfolioSaver.savePortfolio(aggregatedPortfolio, false);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static class PortfolioReference {
 
     private final UniqueId _basePortfolioId;
     private final UniqueId _portfolioId;
     private long _referenceCount;
 
-    public PortfolioReference(final UniqueId basePortfolioId, final UniqueId portfolioId) {
+    PortfolioReference(final UniqueId basePortfolioId, final UniqueId portfolioId) {
       _basePortfolioId = basePortfolioId;
       _portfolioId = portfolioId;
     }
@@ -227,7 +225,7 @@ public class AggregatedViewDefinitionManager {
     private final PortfolioReference _portfolioReference;
     private long _referenceCount;
 
-    public ViewDefinitionReference(final UniqueId viewDefinitionId, final PortfolioReference portfolioReference) {
+    ViewDefinitionReference(final UniqueId viewDefinitionId, final PortfolioReference portfolioReference) {
       _viewDefinitionId = viewDefinitionId;
       _portfolioReference = portfolioReference;
     }

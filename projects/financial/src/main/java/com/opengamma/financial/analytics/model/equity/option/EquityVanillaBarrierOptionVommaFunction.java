@@ -20,13 +20,12 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the vomma (the second order sensitivity of the price w.r.t. implied volatility) for vanilla barrier options
- * using the Black formula.
+ * Calculates the vomma (the second order sensitivity of the price w.r.t. implied volatility) for vanilla barrier options using the Black formula.
  */
 public class EquityVanillaBarrierOptionVommaFunction extends EquityVanillaBarrierOptionBlackFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityVanillaBarrierOptionVommaFunction() {
     super(ValueRequirementNames.VALUE_VOMMA);

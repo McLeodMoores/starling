@@ -26,17 +26,24 @@ public class EquityTotalReturnSwap extends TotalReturnSwap {
   private final double _notionalAmount;
   /** The notional currency */
   private final Currency _notionalCurrency;
-  /** The dividend paid by the asset leg payer as a ratio of the original dividend. ratio >= 0 and <= 1. */
+  /** The dividend paid by the asset leg payer as a ratio of the original dividend. ratio &ge; 0 and &le; 1. */
   private final double _dividendRatio;
 
   /**
-   * @param effectiveTime The time to the effective date.
-   * @param terminatioTime The time to the termination date.
-   * @param fundingLeg The funding leg, not null
-   * @param equity The equity, not null
-   * @param notionalAmount The notional amount
-   * @param notionalCurrency The notional currency, not null
-   * @param dividendRatio The dividend paid by the asset leg payer as a ratio of the original dividend. ratio >= 0 and <= 1.
+   * @param effectiveTime
+   *          The time to the effective date.
+   * @param terminatioTime
+   *          The time to the termination date.
+   * @param fundingLeg
+   *          The funding leg, not null
+   * @param equity
+   *          The equity, not null
+   * @param notionalAmount
+   *          The notional amount
+   * @param notionalCurrency
+   *          The notional currency, not null
+   * @param dividendRatio
+   *          The dividend paid by the asset leg payer as a ratio of the original dividend. ratio &ge; 0 and &le; 1.
    */
   public EquityTotalReturnSwap(final double effectiveTime, final double terminatioTime,
       final Annuity<? extends Payment> fundingLeg, final Equity equity,
@@ -103,9 +110,9 @@ public class EquityTotalReturnSwap extends TotalReturnSwap {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_dividendRatio);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_notionalAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _notionalCurrency.hashCode();
     result = prime * result + _equity.hashCode();
     return result;

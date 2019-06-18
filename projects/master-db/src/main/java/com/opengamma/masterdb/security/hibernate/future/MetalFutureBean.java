@@ -5,10 +5,9 @@
  */
 package com.opengamma.masterdb.security.hibernate.future;
 
-import com.opengamma.financial.security.forward.MetalForwardSecurity;
-
 /**
- * A Hibernate bean representation of {@link MetalForwardSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.future.MetalFutureSecurity}.
  */
 public class MetalFutureBean extends CommodityFutureBean {
 

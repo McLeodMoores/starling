@@ -30,9 +30,8 @@ import com.opengamma.util.async.AsynchronousExecution;
 /**
  * Build an ISDA-style discount curve for use with the ISDA CDS price functions.
  *
- * Currently this is a simple map function that translates the existing OpenGamma curves
- * in to ISDA format. A more correct implementation would pull data from Markit and build
- * the curve replicating ISDA functionality.
+ * Currently this is a simple map function that translates the existing OpenGamma curves in to ISDA format. A more correct implementation would pull data from
+ * Markit and build the curve replicating ISDA functionality.
  *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  * @see ISDAApproxCDSPriceFunction
@@ -72,7 +71,8 @@ public class ISDAApproxDiscountCurveFunction extends AbstractFunction.NonCompile
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
 
     final YieldCurve sourceCurve = (YieldCurve) inputs.getValue(ValueRequirementNames.YIELD_CURVE);
 
@@ -83,7 +83,8 @@ public class ISDAApproxDiscountCurveFunction extends AbstractFunction.NonCompile
     final Curve<Double, Double> curveData = sourceCurve.getCurve();
     final ISDACurve isdaCurve = ISDACurve.fromBoxed(sourceCurve.getName(), curveData.getXData(), curveData.getYData(), 0.0);
 
-    final ComputedValue result = new ComputedValue(new ValueSpecification(ValueRequirementNames.YIELD_CURVE, target.toSpecification(), createValueProperties().get()), isdaCurve);
+    final ComputedValue result = new ComputedValue(
+        new ValueSpecification(ValueRequirementNames.YIELD_CURVE, target.toSpecification(), createValueProperties().get()), isdaCurve);
 
     return Collections.singleton(result);
   }

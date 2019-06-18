@@ -90,12 +90,11 @@ public final class ToolContextUtils {
     if (configResourceLocation.startsWith("http://")) {
       return createToolContextByHttp(configResourceLocation, toolContextClazz, classifierChain);
 
-    } else {  // use local file
-      final ComponentManager manager = new ComponentManager("toolcontext");
-      manager.start(configResourceLocation);
-      final ComponentRepository repo = manager.getRepository();
-      return toolContextClazz.cast(repo.getInstance(ToolContext.class, "tool"));
     }
+    final ComponentManager manager = new ComponentManager("toolcontext");
+    manager.start(configResourceLocation);
+    final ComponentRepository repo = manager.getRepository();
+    return toolContextClazz.cast(repo.getInstance(ToolContext.class, "tool"));
   }
 
   private static <T extends ToolContext> T createToolContextByHttp(String configResourceLocation, final Class<T> toolContextClazz,

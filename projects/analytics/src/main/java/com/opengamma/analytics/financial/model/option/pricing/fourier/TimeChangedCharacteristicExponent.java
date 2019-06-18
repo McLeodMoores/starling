@@ -20,24 +20,6 @@ import com.opengamma.analytics.math.number.ComplexNumber;
  * business time (where time moves at a stochastic rate relative to calendar
  * time). This has the effect of introducing stochastic changes to the model
  * parameters of the original Levy process.
- * <p>
- * If the time-changed Levy process is $X_{Y_t}$, with $Y_t$ the business time,
- * the characteristic function is given by:
- * $$
- * \begin{align*}
- * \phi(u, t) &= E\left[e^{iuX_{Y_t}}\right]\\
- * &= E\left[e^{Y_t\psi_X(u)}\right]\\
- * &= E\left[e^{i(-i\psi_X(u))Y_t}\right]\\
- * &= \phi_{Y_t}(-i\psi_X(u), t)
- * \end{align*}
- * $$
- * where $\psi_X(u)$ is the cumulant characteristic function of the Levy
- * process. The drift correction then becomes:
- * $$
- * \begin{align*}
- * \omega(t) = -\frac{\ln(\phi(-i, t))}{t}
- * \end{align*}
- * $$
  */
 public class TimeChangedCharacteristicExponent implements CharacteristicExponent {
   private final CharacteristicExponent _base;

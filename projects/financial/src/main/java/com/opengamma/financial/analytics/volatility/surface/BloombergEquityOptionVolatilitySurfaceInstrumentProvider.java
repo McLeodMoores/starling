@@ -19,16 +19,17 @@ import com.opengamma.id.ExternalScheme;
 // CSOFF
 /**
  * Generates equity option Bloomberg ticker codes from ATM strike (set via init()), tenor, double and date).
+ *
  * @deprecated This has been replaced by BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider
  */
 @Deprecated
 public class BloombergEquityOptionVolatilitySurfaceInstrumentProvider implements SurfaceInstrumentProvider<LocalDate, Double> {
   private static final Logger LOGGER = LoggerFactory.getLogger(BloombergEquityOptionVolatilitySurfaceInstrumentProvider.class);
   private static final ExternalScheme SCHEME = ExternalSchemes.BLOOMBERG_TICKER_WEAK;
-  private final String _underlyingPrefix; //expecting something like DJX
-  private final String _postfix; //expecting Index or Equity
-  private final String _dataFieldName; //expecting MarketDataRequirementNames.MARKET_VALUE
-  private static final DateTimeFormatter s_dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yy");
+  private final String _underlyingPrefix; // expecting something like DJX
+  private final String _postfix; // expecting Index or Equity
+  private final String _dataFieldName; // expecting MarketDataRequirementNames.MARKET_VALUE
+  private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yy");
 
   private Boolean _generatePuts;
 
@@ -71,11 +72,12 @@ public class BloombergEquityOptionVolatilitySurfaceInstrumentProvider implements
   private ExternalId createEquityOptionVolatilityCode(final LocalDate expiry, final Double strike) {
     if (_generatePuts == null) {
       LOGGER.error("Cannot create option volatility code until atm strike is set (use init method)");
+      return null;
     }
     final StringBuffer ticker = new StringBuffer();
     ticker.append(_underlyingPrefix);
     ticker.append(" ");
-    final String formattedDate = s_dateFormatter.format(expiry);
+    final String formattedDate = DATE_FORMATTER.format(expiry);
     ticker.append(formattedDate);
     ticker.append(" ");
     // TODO: check this logic
@@ -104,8 +106,8 @@ public class BloombergEquityOptionVolatilitySurfaceInstrumentProvider implements
       return false;
     }
     final BloombergEquityOptionVolatilitySurfaceInstrumentProvider other = (BloombergEquityOptionVolatilitySurfaceInstrumentProvider) obj;
-    return getUnderlyingPrefix().equals(other.getUnderlyingPrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getDataFieldName().equals(other.getDataFieldName());
+    return getUnderlyingPrefix().equals(other.getUnderlyingPrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getDataFieldName().equals(other.getDataFieldName());
   }
 }

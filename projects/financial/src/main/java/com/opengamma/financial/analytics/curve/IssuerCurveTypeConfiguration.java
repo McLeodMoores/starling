@@ -54,6 +54,7 @@ public class IssuerCurveTypeConfiguration extends CurveTypeConfiguration {
 
   /**
    * The issuer name.
+   * 
    * @deprecated This field is no longer used.
    */
   @Deprecated
@@ -62,6 +63,7 @@ public class IssuerCurveTypeConfiguration extends CurveTypeConfiguration {
 
   /**
    * The underlying reference.
+   * 
    * @deprecated This field is no longer used.
    */
   @Deprecated
@@ -69,24 +71,25 @@ public class IssuerCurveTypeConfiguration extends CurveTypeConfiguration {
   private String _underlyingReference;
 
   /**
-   * For the fudge builder
+   * For the fudge builder.
    */
   /* package */ IssuerCurveTypeConfiguration() {
     super();
   }
 
   /**
-   * @param issuerName The issuer name, not null
-   * @param underlyingReference The underlying reference (e.g. a currency) for the curve
-   * @deprecated This constructor can only be used to construct an (issuer name, currency) key for
-   * the issuer curve.
+   * @param issuerName
+   *          The issuer name, not null
+   * @param underlyingReference
+   *          The underlying reference (e.g. a currency) for the curve
+   * @deprecated This constructor can only be used to construct an (issuer name, currency) key for the issuer curve.
    */
   @Deprecated
   public IssuerCurveTypeConfiguration(final String issuerName, final String underlyingReference) {
     super();
-    final Set<Object> keys = Sets.<Object>newHashSet(issuerName, underlyingReference);
+    final Set<Object> keys = Sets.<Object> newHashSet(issuerName, underlyingReference);
     final Set<LegalEntityFilter<LegalEntity>> filterSet = new HashSet<>();
-    filterSet.add(new LegalEntityRegion(false, false, Collections.<Country>emptySet(), true, Collections.singleton(Currency.of(underlyingReference))));
+    filterSet.add(new LegalEntityRegion(false, false, Collections.<Country> emptySet(), true, Collections.singleton(Currency.of(underlyingReference))));
     filterSet.add(new LegalEntityShortName());
     final LegalEntityCombiningFilter filters = new LegalEntityCombiningFilter(filterSet);
     setKeys(keys);
@@ -94,8 +97,10 @@ public class IssuerCurveTypeConfiguration extends CurveTypeConfiguration {
   }
 
   /**
-   * @param keys The keys for the curves, not null
-   * @param filters The legal entity filters, not null
+   * @param keys
+   *          The keys for the curves, not null
+   * @param filters
+   *          The legal entity filters, not null
    */
   public IssuerCurveTypeConfiguration(final Set<Object> keys, final Set<LegalEntityFilter<LegalEntity>> filters) {
     super();
@@ -179,6 +184,7 @@ public class IssuerCurveTypeConfiguration extends CurveTypeConfiguration {
   //-----------------------------------------------------------------------
   /**
    * Gets the issuer name.
+   * 
    * @deprecated This field is no longer used.
    * @return the value of the property
    */
@@ -189,6 +195,7 @@ public class IssuerCurveTypeConfiguration extends CurveTypeConfiguration {
 
   /**
    * Sets the issuer name.
+   * 
    * @deprecated This field is no longer used.
    * @param issuerName  the new value of the property
    */
@@ -199,6 +206,7 @@ public class IssuerCurveTypeConfiguration extends CurveTypeConfiguration {
 
   /**
    * Gets the the {@code issuerName} property.
+   * 
    * @deprecated This field is no longer used.
    * @return the property, not null
    */
@@ -210,6 +218,7 @@ public class IssuerCurveTypeConfiguration extends CurveTypeConfiguration {
   //-----------------------------------------------------------------------
   /**
    * Gets the underlying reference.
+   * 
    * @deprecated This field is no longer used.
    * @return the value of the property
    */
@@ -220,6 +229,7 @@ public class IssuerCurveTypeConfiguration extends CurveTypeConfiguration {
 
   /**
    * Sets the underlying reference.
+   * 
    * @deprecated This field is no longer used.
    * @param underlyingReference  the new value of the property
    */
@@ -230,6 +240,7 @@ public class IssuerCurveTypeConfiguration extends CurveTypeConfiguration {
 
   /**
    * Gets the the {@code underlyingReference} property.
+   * 
    * @deprecated This field is no longer used.
    * @return the property, not null
    */

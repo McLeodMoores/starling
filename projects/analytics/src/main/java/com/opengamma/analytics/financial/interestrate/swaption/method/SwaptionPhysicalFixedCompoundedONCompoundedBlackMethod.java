@@ -31,10 +31,10 @@ import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- *  Class used to compute the price and sensitivity of a physical delivery swaption with Black model.
- *  The implied Black volatilities are expiry and underlying maturity dependent.
- *  The swap underlying the swaption should be a Fixed for Ibor (without spread) swap.
- *  @deprecated Use {@link SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod}
+ * Class used to compute the price and sensitivity of a physical delivery swaption with Black model. The implied Black volatilities are expiry and underlying
+ * maturity dependent. The swap underlying the swaption should be a Fixed for Ibor (without spread) swap.
+ *
+ * @deprecated Use {@link SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod}
  */
 @Deprecated
 public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implements PricingMethod {
@@ -46,6 +46,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod getInstance() {
@@ -65,8 +66,11 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
 
   /**
    * Computes the present value of a physical delivery European swaption in the Black model.
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final SwaptionPhysicalFixedCompoundedONCompounded swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
@@ -74,7 +78,8 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
     ArgumentChecker.notNull(curveBlack, "Curves with Black volatility");
     final Swap<CouponFixedAccruedCompounding, CouponONCompounded> swap = swaption.getUnderlyingSwap();
     final CouponFixedAccruedCompounding cpnFixed = swap.getFirstLeg().getNthPayment(0);
-    final double numeraire = curveBlack.getCurve(cpnFixed.getFundingCurveName()).getDiscountFactor(cpnFixed.getPaymentTime()) * Math.abs(cpnFixed.getNotional());
+    final double numeraire = curveBlack.getCurve(cpnFixed.getFundingCurveName()).getDiscountFactor(cpnFixed.getPaymentTime())
+        * Math.abs(cpnFixed.getNotional());
     final double delta = swap.getFirstLeg().getNthPayment(0).getPaymentYearFraction();
     final double forwardModified = METHOD_SWAP.forwardModified(swap, curveBlack);
     final double strikeModified = Math.pow(1.0d + swaption.getStrike(), delta) - 1.0;
@@ -91,15 +96,18 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
 
   /**
    * Computes the present value of a physical delivery European swaption in the Black model.
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The present value.
    */
   public double forward(final SwaptionPhysicalFixedCompoundedONCompounded swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(curveBlack, "Curves with Black volatility");
     final Swap<CouponFixedAccruedCompounding, CouponONCompounded> swap = swaption.getUnderlyingSwap();
-//    return METHOD_SWAP.forwardModified(swap, curveBlack);
+    // return METHOD_SWAP.forwardModified(swap, curveBlack);
     return METHOD_SWAP.forward(swap, curveBlack);
   }
 
@@ -112,8 +120,11 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
 
   /**
    * Computes the implied Black volatility of the vanilla swaption.
-   * @param swaption The swaption.
-   * @param curves The yield curve bundle.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curves
+   *          The yield curve bundle.
    * @return The implied volatility.
    */
   public double impliedVolatility(final SwaptionPhysicalFixedCompoundedONCompounded swaption, final YieldCurveBundle curves) {
@@ -128,16 +139,21 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
 
   /**
    * Computes the present value rate sensitivity to rates of a physical delivery European swaption in the SABR model.
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The present value curve sensitivity.
    */
-  public InterestRateCurveSensitivity presentValueCurveSensitivity(final SwaptionPhysicalFixedCompoundedONCompounded swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
+  public InterestRateCurveSensitivity presentValueCurveSensitivity(final SwaptionPhysicalFixedCompoundedONCompounded swaption,
+      final YieldCurveWithBlackSwaptionBundle curveBlack) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(curveBlack, "Curves with Black volatility");
     final Swap<CouponFixedAccruedCompounding, CouponONCompounded> swap = swaption.getUnderlyingSwap();
     final CouponFixedAccruedCompounding cpnFixed = swap.getFirstLeg().getNthPayment(0);
-    final double numeraire = Math.abs(curveBlack.getCurve(cpnFixed.getFundingCurveName()).getDiscountFactor(cpnFixed.getPaymentTime()) * cpnFixed.getNotional());
+    final double numeraire = Math
+        .abs(curveBlack.getCurve(cpnFixed.getFundingCurveName()).getDiscountFactor(cpnFixed.getPaymentTime()) * cpnFixed.getNotional());
     final double delta = swap.getFirstLeg().getNthPayment(0).getPaymentYearFraction();
     final double forwardModified = METHOD_SWAP.forwardModified(swap, curveBlack);
     final double strikeModified = Math.pow(1.0d + swaption.getStrike(), delta) - 1.0;
@@ -148,8 +164,8 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
     final double volatility = curveBlack.getBlackParameters().getVolatility(swaption.getTimeToExpiry(), maturity);
     final BlackFunctionData dataBlack = new BlackFunctionData(forwardModified, 1, volatility);
     final double[] bsAdjoint = blackFunction.getPriceAdjoint(option, dataBlack);
-    final double sign = (swaption.isLong() ? 1.0 : -1.0);
-    //    final double pv = numeraire * bsAdjoint[0] * sign;
+    final double sign = swaption.isLong() ? 1.0 : -1.0;
+    // final double pv = numeraire * bsAdjoint[0] * sign;
     // Backward sweep
     final double pvBar = 1.0;
     final double numeraireBar = bsAdjoint[0] * sign * pvBar;
@@ -168,16 +184,21 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
 
   /**
    * Computes the present value sensitivity to the Black volatility (also called vega) of a physical delivery European swaption in the Black swaption model.
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The present value Black sensitivity.
    */
-  public PresentValueBlackSwaptionSensitivity presentValueBlackSensitivity(final SwaptionPhysicalFixedCompoundedONCompounded swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
+  public PresentValueBlackSwaptionSensitivity presentValueBlackSensitivity(final SwaptionPhysicalFixedCompoundedONCompounded swaption,
+      final YieldCurveWithBlackSwaptionBundle curveBlack) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(curveBlack, "Curves with Black volatility");
     final Swap<CouponFixedAccruedCompounding, CouponONCompounded> swap = swaption.getUnderlyingSwap();
     final CouponFixedAccruedCompounding cpnFixed = swap.getFirstLeg().getNthPayment(0);
-    final double numeraire = Math.abs(curveBlack.getCurve(cpnFixed.getFundingCurveName()).getDiscountFactor(cpnFixed.getPaymentTime()) * cpnFixed.getNotional());
+    final double numeraire = Math
+        .abs(curveBlack.getCurve(cpnFixed.getFundingCurveName()).getDiscountFactor(cpnFixed.getPaymentTime()) * cpnFixed.getNotional());
     final double delta = swap.getFirstLeg().getNthPayment(0).getPaymentYearFraction();
     final double forwardModified = METHOD_SWAP.forwardModified(swap, curveBlack);
     final double strikeModified = Math.pow(1.0d + swaption.getStrike(), delta) - 1.0;
@@ -188,7 +209,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
     final double volatility = curveBlack.getBlackParameters().getVolatility(swaption.getTimeToExpiry(), maturity);
     final BlackFunctionData dataBlack = new BlackFunctionData(forwardModified, 1, volatility);
     final double[] bsAdjoint = blackFunction.getPriceAdjoint(option, dataBlack);
-    final double sign = (swaption.isLong() ? 1.0 : -1.0);
+    final double sign = swaption.isLong() ? 1.0 : -1.0;
     // Backward sweep
     final DoublesPair point = DoublesPair.of(swaption.getTimeToExpiry(), maturity);
     final Map<DoublesPair, Double> sensitivity = new HashMap<>();
@@ -197,9 +218,12 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
   }
 
   /**
-   * Calculates the delta
-   * @param swaption The swaption, not null
-   * @param curves Yield curves and swaption volatility surface, not null
+   * Calculates the delta.
+   *
+   * @param swaption
+   *          The swaption, not null
+   * @param curves
+   *          Yield curves and swaption volatility surface, not null
    * @return The delta
    */
   public CurrencyAmount delta(final SwaptionPhysicalFixedCompoundedONCompounded swaption, final YieldCurveWithBlackSwaptionBundle curves) {
@@ -209,14 +233,17 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
     final CouponFixedAccruedCompounding cpnFixed = swap.getFirstLeg().getNthPayment(0);
     final double numeraire = Math.abs(curves.getCurve(cpnFixed.getFundingCurveName()).getDiscountFactor(cpnFixed.getPaymentTime()) * cpnFixed.getNotional());
     final double forwardModified = METHOD_SWAP.forwardModified(swap, curves);
-    final double sign = (swaption.isLong() ? 1.0 : -1.0);
+    final double sign = swaption.isLong() ? 1.0 : -1.0;
     return CurrencyAmount.of(swaption.getCurrency(), forwardDeltaTheoretical(swaption, curves) * forwardModified * numeraire * sign);
   }
 
   /**
    * Computes the gamma of the swaption. The gamma is the second order derivative of the option present value to the spot fx rate.
-   * @param swaption The Forex option.
-   * @param curves The yield curve bundle.
+   *
+   * @param swaption
+   *          The Forex option.
+   * @param curves
+   *          The yield curve bundle.
    * @return The gamma.
    */
   public CurrencyAmount gamma(final SwaptionPhysicalFixedCompoundedONCompounded swaption, final YieldCurveWithBlackSwaptionBundle curves) {
@@ -226,14 +253,17 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
     final CouponFixedAccruedCompounding cpnFixed = swap.getFirstLeg().getNthPayment(0);
     final double numeraire = Math.abs(curves.getCurve(cpnFixed.getFundingCurveName()).getDiscountFactor(cpnFixed.getPaymentTime()) * cpnFixed.getNotional());
     final double forwardModified = METHOD_SWAP.forwardModified(swap, curves);
-    final double sign = (swaption.isLong() ? 1.0 : -1.0);
+    final double sign = swaption.isLong() ? 1.0 : -1.0;
     return CurrencyAmount.of(swaption.getCurrency(), gamma * forwardModified * forwardModified * numeraire * sign);
   }
 
   /**
    * Calculates the theta.
-   * @param swaption The swaption, not null
-   * @param curves Yield curves and swaption volatility surface, not null
+   *
+   * @param swaption
+   *          The swaption, not null
+   * @param curves
+   *          Yield curves and swaption volatility surface, not null
    * @return The delta
    */
   public CurrencyAmount theta(final SwaptionPhysicalFixedCompoundedONCompounded swaption, final YieldCurveWithBlackSwaptionBundle curves) {
@@ -242,14 +272,17 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
     final Swap<CouponFixedAccruedCompounding, CouponONCompounded> swap = swaption.getUnderlyingSwap();
     final CouponFixedAccruedCompounding cpnFixed = swap.getFirstLeg().getNthPayment(0);
     final double numeraire = curves.getCurve(cpnFixed.getFundingCurveName()).getDiscountFactor(cpnFixed.getPaymentTime()) * cpnFixed.getNotional();
-    final double sign = (swaption.isLong() ? 1.0 : -1.0);
+    final double sign = swaption.isLong() ? 1.0 : -1.0;
     return CurrencyAmount.of(swaption.getCurrency(), forwardThetaTheoretical(swaption, curves) * numeraire * sign);
   }
 
   /**
-   * Compute first derivative of present value with respect to forward rate
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   * Compute first derivative of present value with respect to forward rate.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The forward delta
    */
   public double forwardDeltaTheoretical(final SwaptionPhysicalFixedCompoundedONCompounded swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
@@ -268,9 +301,12 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
   }
 
   /**
-   * Compute first derivative of present value with respect to volatility
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   * Compute first derivative of present value with respect to volatility.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The forward vega
    */
   public double forwardVegaTheoretical(final SwaptionPhysicalFixedCompoundedONCompounded swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
@@ -290,9 +326,12 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
   }
 
   /**
-   * Compute second derivative of present value with respect to forward rate
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   * Compute second derivative of present value with respect to forward rate.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The forward gamma
    */
   public double forwardGammaTheoretical(final SwaptionPhysicalFixedCompoundedONCompounded swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
@@ -311,9 +350,12 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
   }
 
   /**
-   * Compute minus of first derivative of present value with respect to time, setting drift term to be 0
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   * Compute minus of first derivative of present value with respect to time, setting drift term to be 0.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The driftless theta
    */
   public double driftlessThetaTheoretical(final SwaptionPhysicalFixedCompoundedONCompounded swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
@@ -332,9 +374,12 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
   }
 
   /**
-   * Compute minus of first derivative of present value with respect to time
-   * @param swaption The swaption.
-   * @param curveBlack The curves with Black volatility data.
+   * Compute minus of first derivative of present value with respect to time.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param curveBlack
+   *          The curves with Black volatility data.
    * @return The forward theta
    */
   public double forwardThetaTheoretical(final SwaptionPhysicalFixedCompoundedONCompounded swaption, final YieldCurveWithBlackSwaptionBundle curveBlack) {
@@ -351,7 +396,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
     final double expiry = swaption.getTimeToExpiry();
     final boolean isCall = swaption.isCall();
 
-    return forwardModified * BlackFormulaRepository.price(forwardModified, strikeModified, expiry, volatility, isCall) * (swaption.isLong() ? 1.0 : -1.0) +
-        BlackFormulaRepository.driftlessTheta(forwardModified, strikeModified, expiry, volatility) * (swaption.isLong() ? 1.0 : -1.0);
+    return forwardModified * BlackFormulaRepository.price(forwardModified, strikeModified, expiry, volatility, isCall) * (swaption.isLong() ? 1.0 : -1.0)
+        + BlackFormulaRepository.driftlessTheta(forwardModified, strikeModified, expiry, volatility) * (swaption.isLong() ? 1.0 : -1.0);
   }
 }

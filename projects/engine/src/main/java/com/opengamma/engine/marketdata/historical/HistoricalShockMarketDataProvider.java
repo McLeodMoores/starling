@@ -30,9 +30,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * Provider for market data derived from 3 underlying providers. This provider's values are derived by finding the
- * difference between values in the first two providers and applying it to the value from the third provider.
- * The change applied to the base value can be the proportional or absolute difference between the two other values.
+ * Provider for market data derived from 3 underlying providers. This provider's values are derived by finding the difference between values in the first two
+ * providers and applying it to the value from the third provider. The change applied to the base value can be the proportional or absolute difference between
+ * the two other values.
  */
 public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvider {
 
@@ -42,8 +42,8 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
   private final MarketDataPermissionProvider _permissionProvider = new PermissionProvider();
 
   public HistoricalShockMarketDataProvider(final MarketDataProvider historicalProvider1,
-                                           final MarketDataProvider historicalProvider2,
-                                           final MarketDataProvider baseProvider) {
+      final MarketDataProvider historicalProvider2,
+      final MarketDataProvider baseProvider) {
     ArgumentChecker.notNull(historicalProvider1, "historicalProvider1");
     ArgumentChecker.notNull(historicalProvider2, "historicalProvider2");
     ArgumentChecker.notNull(baseProvider, "baseProvider");
@@ -96,12 +96,14 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
 
   /**
    * Returns true if marketDataSpec is equal to this object. This method isn't used anyway so it's academic.
-   * @param marketDataSpec describes the market data, not null
+   *
+   * @param marketDataSpec
+   *          describes the market data, not null
    * @return true if marketDataSpec is equal to this object
    */
   @Override
   public boolean isCompatible(final MarketDataSpecification marketDataSpec) {
-    return equals(marketDataSpec);
+    return false;
   }
 
   @Override
@@ -130,21 +132,18 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
       return false;
     }
     final HistoricalShockMarketDataProvider other = (HistoricalShockMarketDataProvider) obj;
-    return Objects.equals(this._historicalProvider1, other._historicalProvider1) &&
-        Objects.equals(this._historicalProvider2, other._historicalProvider2) &&
-        Objects.equals(this._baseProvider, other._baseProvider);
+    return Objects.equals(this._historicalProvider1, other._historicalProvider1)
+        && Objects.equals(this._historicalProvider2, other._historicalProvider2)
+        && Objects.equals(this._baseProvider, other._baseProvider);
   }
 
   private class PermissionProvider implements MarketDataPermissionProvider {
 
     @Override
     public Set<ValueSpecification> checkMarketDataPermissions(final UserPrincipal user, final Set<ValueSpecification> specifications) {
-      final Set<ValueSpecification> failedSpecs1 =
-          _historicalProvider1.getPermissionProvider().checkMarketDataPermissions(user, specifications);
-      final Set<ValueSpecification> failedSpecs2 =
-          _historicalProvider2.getPermissionProvider().checkMarketDataPermissions(user, specifications);
-      final Set<ValueSpecification> failedSpecs3 =
-          _baseProvider.getPermissionProvider().checkMarketDataPermissions(user, specifications);
+      final Set<ValueSpecification> failedSpecs1 = _historicalProvider1.getPermissionProvider().checkMarketDataPermissions(user, specifications);
+      final Set<ValueSpecification> failedSpecs2 = _historicalProvider2.getPermissionProvider().checkMarketDataPermissions(user, specifications);
+      final Set<ValueSpecification> failedSpecs3 = _baseProvider.getPermissionProvider().checkMarketDataPermissions(user, specifications);
       // if a value fails permission checking in any of the providers then it fails
       return Sets.union(Sets.union(failedSpecs1, failedSpecs2), failedSpecs3);
     }
@@ -161,19 +160,18 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
 
     @Override
     public ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec,
-                                              final Object target,
-                                              final ValueRequirement desiredValue) throws MarketDataNotSatisfiableException {
-      final ValueSpecification spec1 =
-          _historicalProvider1.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification1()).getAvailability(targetSpec, target, desiredValue);
-      final ValueSpecification spec2 =
-          _historicalProvider2.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification2()).getAvailability(targetSpec, target, desiredValue);
-      final ValueSpecification spec3 =
-          _baseProvider.getAvailabilityProvider(_marketDataSpec.getBaseSpecification()).getAvailability(targetSpec, target, desiredValue);
+        final Object target,
+        final ValueRequirement desiredValue) throws MarketDataNotSatisfiableException {
+      final ValueSpecification spec1 = _historicalProvider1.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification1()).getAvailability(targetSpec,
+          target, desiredValue);
+      final ValueSpecification spec2 = _historicalProvider2.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification2()).getAvailability(targetSpec,
+          target, desiredValue);
+      final ValueSpecification spec3 = _baseProvider.getAvailabilityProvider(_marketDataSpec.getBaseSpecification()).getAvailability(targetSpec, target,
+          desiredValue);
       if (Objects.equals(spec1, spec2) && Objects.equals(spec2, spec3)) {
         return spec1;
-      } else {
-        return null;
       }
+      return null;
     }
 
     @Override
@@ -184,8 +182,8 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
     @Override
     public Serializable getAvailabilityHintKey() {
       return Triple.of(_historicalProvider1.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification1()).getAvailabilityHintKey(),
-                       _historicalProvider2.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification2()).getAvailabilityHintKey(),
-                       _baseProvider.getAvailabilityProvider(_marketDataSpec.getBaseSpecification()).getAvailabilityHintKey());
+          _historicalProvider2.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification2()).getAvailabilityHintKey(),
+          _baseProvider.getAvailabilityProvider(_marketDataSpec.getBaseSpecification()).getAvailabilityHintKey());
     }
   }
 

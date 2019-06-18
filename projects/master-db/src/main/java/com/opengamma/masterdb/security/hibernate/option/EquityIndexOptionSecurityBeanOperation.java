@@ -19,12 +19,12 @@ import com.opengamma.masterdb.security.hibernate.HibernateSecurityMasterDao;
 import com.opengamma.masterdb.security.hibernate.OperationContext;
 
 /**
- * EquityIndexOptionSecurityBeanOperation
+ * EquityIndexOptionSecurityBeanOperation.
  */
-public final class EquityIndexOptionSecurityBeanOperation  extends AbstractSecurityBeanOperation<EquityIndexOptionSecurity, EquityIndexOptionSecurityBean> {
+public final class EquityIndexOptionSecurityBeanOperation extends AbstractSecurityBeanOperation<EquityIndexOptionSecurity, EquityIndexOptionSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final EquityIndexOptionSecurityBeanOperation INSTANCE = new EquityIndexOptionSecurityBeanOperation();
 
@@ -33,7 +33,8 @@ public final class EquityIndexOptionSecurityBeanOperation  extends AbstractSecur
   }
 
   @Override
-  public EquityIndexOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final EquityIndexOptionSecurity security) {
+  public EquityIndexOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final EquityIndexOptionSecurity security) {
     final EquityIndexOptionSecurityBean bean = new EquityIndexOptionSecurityBean();
     bean.setOptionExerciseType(OptionExerciseType.identify(security.getExerciseType()));
     bean.setOptionType(security.getOptionType());

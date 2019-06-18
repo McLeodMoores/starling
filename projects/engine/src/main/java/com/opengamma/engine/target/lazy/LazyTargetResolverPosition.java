@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -22,6 +22,7 @@ public class LazyTargetResolverPosition extends LazyTargetResolverPositionOrTrad
     super(resolver, specification);
   }
 
+  @Override
   protected Position getResolved() {
     return getResolvedTarget().getPosition();
   }

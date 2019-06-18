@@ -1,13 +1,11 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation;
 
 import java.util.BitSet;
-
-import cern.jet.random.engine.RandomEngine;
 
 import com.opengamma.analytics.financial.model.volatility.smile.fitting.SABRModelFitter;
 import com.opengamma.analytics.financial.model.volatility.smile.fitting.SmileModelFitter;
@@ -17,8 +15,10 @@ import com.opengamma.analytics.financial.model.volatility.smile.function.Volatil
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.ArgumentChecker;
 
+import cern.jet.random.engine.RandomEngine;
+
 /**
- * 
+ *
  */
 public class SmileInterpolatorSABR extends SmileInterpolator<SABRFormulaData> {
 
@@ -101,7 +101,8 @@ public class SmileInterpolatorSABR extends SmileInterpolator<SABRFormulaData> {
     _externalBeta = true;
   }
 
-  public SmileInterpolatorSABR(final int seed, final VolatilityFunctionProvider<SABRFormulaData> model, final double beta, final WeightingFunction weightFunction) {
+  public SmileInterpolatorSABR(final int seed, final VolatilityFunctionProvider<SABRFormulaData> model, final double beta,
+      final WeightingFunction weightFunction) {
     super(seed, model, weightFunction);
     ArgumentChecker.isTrue(ArgumentChecker.isInRangeInclusive(0.0, 1.0, beta), "beta value of {} not in range 0 to 1", beta);
     _beta = beta;
@@ -125,14 +126,14 @@ public class SmileInterpolatorSABR extends SmileInterpolator<SABRFormulaData> {
     final double c = fitP.getEntry(2);
 
     double alpha, beta, rho, nu;
-    //TODO make better use of the polynomial fit information
+    // TODO make better use of the polynomial fit information
     if (_externalBeta) {
       beta = _beta;
     } else {
       beta = random.nextDouble();
     }
 
-    if (a <= 0.0) { //negative ATM vol - can get this if fit points are far from ATM
+    if (a <= 0.0) { // negative ATM vol - can get this if fit points are far from ATM
       double sum = 0;
       final int n = strikes.length;
       for (int i = 0; i < n; i++) {
@@ -144,7 +145,7 @@ public class SmileInterpolatorSABR extends SmileInterpolator<SABRFormulaData> {
       nu = 0.5 * random.nextDouble() + 0.1;
       return new DoubleMatrix1D(alpha, beta, rho, nu);
     }
-    if (Math.abs(b) < 1e-3 && Math.abs(c) < 1e-3) { //almost flat smile
+    if (Math.abs(b) < 1e-3 && Math.abs(c) < 1e-3) { // almost flat smile
       if (_externalBeta && _beta != 1.0) {
         LOGGER.warn("Smile almost flat. Cannot use beta = ", +_beta + " so extenal value ignored, and beta = 1.0 used");
       }
@@ -169,7 +170,7 @@ public class SmileInterpolatorSABR extends SmileInterpolator<SABRFormulaData> {
   @Override
   protected BitSet getLocalFixedValues() {
     final BitSet res = new BitSet();
-    res.set(1); //beta is always fixed for local (3-point) fit
+    res.set(1); // beta is always fixed for local (3-point) fit
     return res;
   }
 
@@ -179,7 +180,8 @@ public class SmileInterpolatorSABR extends SmileInterpolator<SABRFormulaData> {
   }
 
   @Override
-  protected SmileModelFitter<SABRFormulaData> getFitter(final double forward, final double[] strikes, final double expiry, final double[] impliedVols, final double[] errors) {
+  protected SmileModelFitter<SABRFormulaData> getFitter(final double forward, final double[] strikes, final double expiry, final double[] impliedVols,
+      final double[] errors) {
     return new SABRModelFitter(forward, strikes, expiry, impliedVols, errors, getModel());
   }
 
@@ -191,7 +193,7 @@ public class SmileInterpolatorSABR extends SmileInterpolator<SABRFormulaData> {
     result = prime * result + (_externalBeta ? 1231 : 1237);
     if (_externalBeta) {
       temp = Double.doubleToLongBits(_beta);
-      result = prime * result + (int) (temp ^ (temp >>> 32));
+      result = prime * result + (int) (temp ^ temp >>> 32);
     }
     return result;
   }

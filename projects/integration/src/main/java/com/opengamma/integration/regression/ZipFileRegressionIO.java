@@ -24,12 +24,9 @@ import com.google.common.collect.Lists;
  */
 public abstract class ZipFileRegressionIO extends RegressionIO implements AutoCloseable {
 
-
-
   public ZipFileRegressionIO(final File zipFile, final Format format) throws IOException {
     super(zipFile, format);
   }
-
 
   protected String createObjectPath(final String type, final String identifier) {
 
@@ -40,7 +37,6 @@ public abstract class ZipFileRegressionIO extends RegressionIO implements AutoCl
     return objectPath;
   }
 
-
   public static ZipFileRegressionIO createWriter(final File zipFile, final Format format) throws IOException {
     return new WritingZipFileRegressionIO(zipFile, format);
   }
@@ -49,10 +45,8 @@ public abstract class ZipFileRegressionIO extends RegressionIO implements AutoCl
     return new ReadingZipFileRegressionIO(zipFile, format);
   }
 
-
   /**
-   * An implementation which only writes to zip files. Read operations throw
-   * {@link UnsupportedOperationException}s.
+   * An implementation which only writes to zip files. Read operations throw {@link UnsupportedOperationException}s.
    */
   private static final class WritingZipFileRegressionIO extends ZipFileRegressionIO {
 
@@ -106,14 +100,10 @@ public abstract class ZipFileRegressionIO extends RegressionIO implements AutoCl
       throw unimplemented();
     }
 
-
-
   }
 
-
   /**
-   * An implementation which only reads from zip files. Write operations throw
-   * {@link UnsupportedOperationException}s.
+   * An implementation which only reads from zip files. Write operations throw {@link UnsupportedOperationException}s.
    */
   private static final class ReadingZipFileRegressionIO extends ZipFileRegressionIO {
 
@@ -122,8 +112,7 @@ public abstract class ZipFileRegressionIO extends RegressionIO implements AutoCl
      */
     private ZipFile _zipFile;
 
-
-    public ReadingZipFileRegressionIO(final File zipFile, final Format format) throws IOException {
+    ReadingZipFileRegressionIO(final File zipFile, final Format format) throws IOException {
       super(zipFile, format);
       initZipFile(zipFile);
 
@@ -191,8 +180,6 @@ public abstract class ZipFileRegressionIO extends RegressionIO implements AutoCl
       return objectIdentifiers;
     }
 
-
   }
-
 
 }

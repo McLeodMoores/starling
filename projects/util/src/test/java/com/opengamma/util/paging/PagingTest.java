@@ -23,53 +23,77 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class PagingTest {
 
+  /**
+   *
+   */
   public void testFactoryOfCollectionEmpty() {
     final Paging test = Paging.ofAll(Arrays.asList());
     assertEquals(PagingRequest.ALL, test.getRequest());
     assertEquals(0, test.getTotalItems());
   }
 
-  public void test_factory_of_Collection_sizeTwo() {
+  /**
+   *
+   */
+  public void testFactoryOfCollectionSizeTwo() {
     final Paging test = Paging.ofAll(Arrays.asList("Hello", "There"));
     assertEquals(PagingRequest.ALL, test.getRequest());
     assertEquals(2, test.getTotalItems());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_factory_of_Collection_PagingRequest_empty() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testFactoryOfCollectionPagingRequestEmpty() {
     final PagingRequest request = PagingRequest.ofPage(1, 20);
     final Paging test = Paging.of(request, Arrays.asList());
     assertEquals(request, test.getRequest());
     assertEquals(0, test.getTotalItems());
   }
 
-  public void test_factory_of_Collection_PagingRequest_sizeTwo() {
+  /**
+   *
+   */
+  public void testFactoryOfCollectionPagingRequestSizeTwo() {
     final PagingRequest request = PagingRequest.ofPage(1, 20);
     final Paging test = Paging.of(request, Arrays.asList("Hello", "There"));
     assertEquals(request, test.getRequest());
     assertEquals(2, test.getTotalItems());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_factory_of_PagingRequest_int() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testFactoryOfPagingRequestInt() {
     final PagingRequest request = PagingRequest.ofPage(1, 20);
     final Paging test = Paging.of(request, 32);
     assertEquals(request, test.getRequest());
     assertEquals(32, test.getTotalItems());
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_factory_of_PagingRequest_int_totalItemsNegative() {
+  public void testFactoryOfPagingRequestIntTotalItemsNegative() {
     Paging.of(PagingRequest.ofPage(1, 20), -1);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_factory_of_PagingRequest_int_null() {
+  public void testFactoryOfPagingRequestIntNull() {
     Paging.of(null, 0);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getItems_page1() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetItemsPage1() {
     final Paging test = Paging.of(PagingRequest.ofPage(1, 20), 52);
     assertEquals(1, test.getPageNumber());
     assertEquals(0, test.getFirstItem());
@@ -78,7 +102,10 @@ public class PagingTest {
     assertEquals(20, test.getLastItemOneBased());
   }
 
-  public void test_getItems_page2() {
+  /**
+   *
+   */
+  public void testGetItemsPage2() {
     final Paging test = Paging.of(PagingRequest.ofPage(2, 20), 52);
     assertEquals(2, test.getPageNumber());
     assertEquals(20, test.getFirstItem());
@@ -87,7 +114,10 @@ public class PagingTest {
     assertEquals(40, test.getLastItemOneBased());
   }
 
-  public void test_getItems_page3() {
+  /**
+   *
+   */
+  public void testGetItemsPage3() {
     final Paging test = Paging.of(PagingRequest.ofPage(3, 20), 52);
     assertEquals(3, test.getPageNumber());
     assertEquals(40, test.getFirstItem());
@@ -96,19 +126,28 @@ public class PagingTest {
     assertEquals(52, test.getLastItemOneBased());
   }
 
-  public void test_getTotalPages() {
+  /**
+   *
+   */
+  public void testGetTotalPages() {
     assertEquals(2, Paging.of(PagingRequest.ofPage(1, 20), 39).getTotalPages());
     assertEquals(2, Paging.of(PagingRequest.ofPage(1, 20), 40).getTotalPages());
     assertEquals(3, Paging.of(PagingRequest.ofPage(1, 20), 41).getTotalPages());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_isSizeOnly() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testIsSizeOnly() {
     assertTrue(Paging.of(PagingRequest.NONE, 39).isSizeOnly());
     assertFalse(Paging.of(PagingRequest.ofPage(1, 20), 39).isSizeOnly());
   }
 
-  public void test_isNextPage() {
+  /**
+   *
+   */
+  public void testIsNextPage() {
     assertFalse(Paging.of(PagingRequest.ofPage(2, 20), 39).isNextPage());
     assertFalse(Paging.of(PagingRequest.ofPage(2, 20), 40).isNextPage());
     assertTrue(Paging.of(PagingRequest.ofPage(2, 20), 41).isNextPage());
@@ -116,7 +155,10 @@ public class PagingTest {
     assertTrue(Paging.of(PagingRequest.ofPage(1, 20), 40).isNextPage());
   }
 
-  public void test_isLastPage() {
+  /**
+   *
+   */
+  public void testIsLastPage() {
     assertTrue(Paging.of(PagingRequest.ofPage(2, 20), 39).isLastPage());
     assertTrue(Paging.of(PagingRequest.ofPage(2, 20), 40).isLastPage());
     assertFalse(Paging.of(PagingRequest.ofPage(2, 20), 41).isLastPage());
@@ -124,7 +166,10 @@ public class PagingTest {
     assertFalse(Paging.of(PagingRequest.ofPage(1, 20), 40).isLastPage());
   }
 
-  public void test_isPreviousPage() {
+  /**
+   *
+   */
+  public void testIsPreviousPage() {
     assertTrue(Paging.of(PagingRequest.ofPage(2, 20), 39).isPreviousPage());
     assertTrue(Paging.of(PagingRequest.ofPage(2, 20), 40).isPreviousPage());
     assertTrue(Paging.of(PagingRequest.ofPage(2, 20), 41).isPreviousPage());
@@ -132,7 +177,10 @@ public class PagingTest {
     assertFalse(Paging.of(PagingRequest.ofPage(1, 20), 40).isPreviousPage());
   }
 
-  public void test_isFirstPage() {
+  /**
+   *
+   */
+  public void testIsFirstPage() {
     assertFalse(Paging.of(PagingRequest.ofPage(2, 20), 39).isFirstPage());
     assertFalse(Paging.of(PagingRequest.ofPage(2, 20), 40).isFirstPage());
     assertFalse(Paging.of(PagingRequest.ofPage(2, 20), 41).isFirstPage());
@@ -140,42 +188,66 @@ public class PagingTest {
     assertTrue(Paging.of(PagingRequest.ofPage(1, 20), 40).isFirstPage());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_toPagingRequest() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testToPagingRequest() {
     assertEquals(PagingRequest.ofPage(2, 20), Paging.of(PagingRequest.ofPage(2, 20), 39).toPagingRequest());
     assertEquals(PagingRequest.NONE, Paging.of(PagingRequest.NONE, 349).toPagingRequest());
   }
 
-  public void test_nextPagingRequest() {
+  /**
+   *
+   */
+  public void testNextPagingRequest() {
     assertEquals(PagingRequest.ofPage(2, 20), Paging.of(PagingRequest.ofPage(1, 20), 39).nextPagingRequest());
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalStateException.class)
-  public void test_nextPagingRequest_pagingSizeZero() {
+  public void testNextPagingRequestPagingSizeZero() {
     Paging.of(PagingRequest.NONE, 39).nextPagingRequest();
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = NoSuchElementException.class)
-  public void test_nextPagingRequest_lastPage() {
+  public void testNextPagingRequestLastPage() {
     Paging.of(PagingRequest.ofPage(2, 20), 39).nextPagingRequest();
   }
 
-  public void test_previousPagingRequest() {
+  /**
+   *
+   */
+  public void testPreviousPagingRequest() {
     assertEquals(PagingRequest.ofPage(1, 20), Paging.of(PagingRequest.ofPage(2, 20), 39).previousPagingRequest());
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalStateException.class)
-  public void test_previousPagingRequest_pagingSizeZero() {
+  public void testPreviousPagingRequestPagingSizeZero() {
     Paging.of(PagingRequest.NONE, 39).previousPagingRequest();
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = NoSuchElementException.class)
-  public void test_previousPagingRequest_lastPage() {
+  public void testPreviousPagingRequestLastPage() {
     Paging.of(PagingRequest.ofPage(1, 20), 39).previousPagingRequest();
   }
 
-  //-------------------------------------------------------------------------
-  public void test_equals_equal() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testEqualsEqual() {
     final Paging test1 = Paging.of(PagingRequest.ofPage(1, 20), 52);
     final Paging test2 = Paging.of(PagingRequest.ofPage(1, 20), 52);
     assertEquals(true, test1.equals(test1));
@@ -184,42 +256,60 @@ public class PagingTest {
     assertEquals(true, test2.equals(test2));
   }
 
-  public void test_equals_notEqualPage() {
+  /**
+   *
+   */
+  public void testEqualsNotEqualPage() {
     final Paging test1 = Paging.of(PagingRequest.ofPage(1, 20), 52);
     final Paging test2 = Paging.of(PagingRequest.ofPage(2, 20), 52);
     assertEquals(false, test1.equals(test2));
     assertEquals(false, test2.equals(test1));
   }
 
-  public void test_equals_notEqualPagingSize() {
+  /**
+   *
+   */
+  public void testEqualsNotEqualPagingSize() {
     final Paging test1 = Paging.of(PagingRequest.ofPage(1, 20), 52);
     final Paging test2 = Paging.of(PagingRequest.NONE, 52);
     assertEquals(false, test1.equals(test2));
     assertEquals(false, test2.equals(test1));
   }
 
-  public void test_equals_notEqualTotalItems() {
+  /**
+   *
+   */
+  public void testEqualsNotEqualTotalItems() {
     final Paging test1 = Paging.of(PagingRequest.ofPage(1, 20), 52);
     final Paging test2 = Paging.of(PagingRequest.ofPage(1, 20), 12);
     assertEquals(false, test1.equals(test2));
     assertEquals(false, test2.equals(test1));
   }
 
-  public void test_equals_other() {
+  /**
+   *
+   */
+  public void testEqualsOther() {
     final Paging test = Paging.of(PagingRequest.ofPage(1, 20), 52);
     assertNotEquals("Paging", test);
     assertEquals(false, test.equals(null));
   }
 
-  //-------------------------------------------------------------------------
-  public void test_hashCode_equal() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testHashCodeEqual() {
     final Paging test1 = Paging.of(PagingRequest.ofPage(1, 20), 52);
     final Paging test2 = Paging.of(PagingRequest.ofPage(1, 20), 52);
     assertEquals(test1.hashCode(), test2.hashCode());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_toString() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testToString() {
     final Paging test = Paging.of(PagingRequest.ofPage(1, 20), 52);
     assertEquals("Paging[first=0, size=20, totalItems=52]", test.toString());
   }

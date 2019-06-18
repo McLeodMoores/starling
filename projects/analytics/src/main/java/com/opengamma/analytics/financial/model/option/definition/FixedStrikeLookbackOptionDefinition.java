@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.definition;
@@ -11,13 +11,12 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.util.time.Expiry;
 
 /**
- * A fixed-strike lookback call(put) option pays out the maximum of the
- * difference between the highest(lowest) observed price of the
- * underlying(strike) and the strike(minimum observed price of the underlying)
- * and zero.
+ * A fixed-strike lookback call(put) option pays out the maximum of the difference between the highest(lowest) observed price of the underlying(strike) and the
+ * strike(minimum observed price of the underlying) and zero.
  */
 public class FixedStrikeLookbackOptionDefinition extends OptionDefinition {
-  private final OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle> _payoffFunction = new OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle>() {
+  private final OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle> _payoffFunction =
+      new OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle>() {
 
     @Override
     public double getPayoff(final StandardOptionWithSpotTimeSeriesDataBundle data, final Double optionPrice) {

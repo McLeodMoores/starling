@@ -23,8 +23,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PlatformConfigUtils;
 
 /**
- * A utility to refresh some portion of a mongodb cache by requerying fields from the underlying
- * [BBG-88]
+ * A utility to refresh some portion of a mongodb cache by requerying fields from the underlying [BBG-88].
  */
 public class MongoDBReferenceDataCacheRefresher {
 
@@ -46,11 +45,13 @@ public class MongoDBReferenceDataCacheRefresher {
 
   /**
    *
-   * @param numberOfSecurities Approximately how many securities to refresh each time
-   * @param id some id number, should increment for each call.  Will result in all securities being refreshed after #securities in cache/numberOfSecurities ids.
+   * @param numberOfSecurities
+   *          Approximately how many securities to refresh each time
+   * @param id
+   *          some id number, should increment for each call. Will result in all securities being refreshed after #securities in cache/numberOfSecurities ids.
    */
   public void refreshCaches(final int numberOfSecurities, final long id) {
-    ArgumentChecker.isTrue(numberOfSecurities > 0 , "Positive number of securities must be specified");
+    ArgumentChecker.isTrue(numberOfSecurities > 0, "Positive number of securities must be specified");
 
     final Set<String> securities = _cache.getAllCachedSecurities();
     final int hashBasis = Math.max(securities.size() / numberOfSecurities, 1);
@@ -65,8 +66,10 @@ public class MongoDBReferenceDataCacheRefresher {
   }
 
   /**
-   * NOTE: only refreshes securities where this field was _succesfully_ looked up
-   * @param field The field which a security must have for it to be updated
+   * NOTE: only refreshes securities where this field was _succesfully_ looked up.
+   * 
+   * @param field
+   *          The field which a security must have for it to be updated
    */
   public void refreshCachesHaving(final String field) {
     final Set<String> securities = _cache.getAllCachedSecurities();
@@ -89,8 +92,10 @@ public class MongoDBReferenceDataCacheRefresher {
   /**
    * Runs the tool.
    *
-   * @param args  empty arguments
+   * @param args
+   *          empty arguments
    * @throws Exception
+   *           if there is a problem
    */
   public static void main(final String[] args) throws Exception { // CSIGNORE
     PlatformConfigUtils.configureSystemProperties();
@@ -100,7 +105,8 @@ public class MongoDBReferenceDataCacheRefresher {
     final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(configLocation);
     try {
       context.start();
-      final MongoDBValueCachingReferenceDataProvider mongoProvider = context.getBean("bloombergReferenceDataProvider", MongoDBValueCachingReferenceDataProvider.class);
+      final MongoDBValueCachingReferenceDataProvider mongoProvider = context.getBean("bloombergReferenceDataProvider",
+          MongoDBValueCachingReferenceDataProvider.class);
       final MongoDBReferenceDataCacheRefresher refresher = new MongoDBReferenceDataCacheRefresher(mongoProvider);
 
       final Options options = createOptions();
@@ -117,7 +123,7 @@ public class MongoDBReferenceDataCacheRefresher {
         return;
       }
 
-      //TODO other options, e.g. explicitly specify security
+      // TODO other options, e.g. explicitly specify security
       final int numberOfSecurities = Integer.parseInt(line.getArgs()[0]);
       final int id = Integer.parseInt(line.getArgs()[1]);
       System.out.println("Refreshing " + numberOfSecurities + " securities, id " + id);

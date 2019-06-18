@@ -12,7 +12,10 @@ import com.opengamma.id.UniqueId;
 
 /**
  * Default implementation of ConventinBundleSource that uses an underlying ConventionBundleMaster as a data source.
+ *
+ * @deprecated ConventionBundles are deprecated. Use {@link com.opengamma.core.convention.Convention}s instead.
  */
+@Deprecated
 public class DefaultConventionBundleSource implements ConventionBundleSource {
 
   private final ConventionBundleMaster _referenceRateMaster;
@@ -53,9 +56,8 @@ public class DefaultConventionBundleSource implements ConventionBundleSource {
     final ConventionBundleDocument doc = _referenceRateMaster.getConventionBundle(identifier);
     if (doc != null) {
       return doc.getValue();
-    } else {
-      return null;
     }
+    return null;
   }
 
 }

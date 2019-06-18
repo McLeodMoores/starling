@@ -9,13 +9,19 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * A collection of result documents from a search
+ * A collection of result documents from a search.
+ *
+ * @deprecated ConventionBundles should no longer be used. Use {@link com.opengamma.master.convention.ConventionDocument} and
+ *             {@link com.opengamma.master.convention.ConventionSearchResult}.
  */
+@Deprecated
 public class ConventionBundleSearchResult {
   private final Collection<ConventionBundleDocument> _results;
+
   public ConventionBundleSearchResult(final ConventionBundleDocument singleResult) {
     _results = Collections.singletonList(singleResult);
   }
+
   public ConventionBundleSearchResult(final Collection<ConventionBundleDocument> results) {
     _results = results;
   }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.function;
@@ -51,9 +51,9 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * 
+ *
  */
-//TODO this class needs to be re-written, as each instrument type needs a different set of inputs
+// TODO this class needs to be re-written, as each instrument type needs a different set of inputs
 public class ExampleEquityOptionVolatilitySurfaceDataFunction extends AbstractFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExampleEquityOptionVolatilitySurfaceDataFunction.class);
   private VolatilitySurfaceDefinition<?, ?> _definition;
@@ -99,24 +99,32 @@ public class ExampleEquityOptionVolatilitySurfaceDataFunction extends AbstractFu
     if (_specification == null) {
       throw new OpenGammaRuntimeException("Couldn't find Equity Option Volatility Surface Specification " + _specificationName);
     }
-    _result = new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ComputationTargetSpecification.of(_definition.getTarget().getUniqueId()),
-        createValueProperties().with(ValuePropertyNames.SURFACE, _definitionName).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)
-            .withAny(EquityVarianceSwapStaticReplicationFunction.STRIKE_PARAMETERIZATION_METHOD/*, VarianceSwapStaticReplication.StrikeParameterization.STRIKE.toString()*/).get());
+    _result = new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA,
+        ComputationTargetSpecification.of(_definition.getTarget().getUniqueId()),
+        createValueProperties().with(ValuePropertyNames.SURFACE, _definitionName)
+            .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)
+            .withAny(EquityVarianceSwapStaticReplicationFunction.STRIKE_PARAMETERIZATION_METHOD/*
+                                                                                                * , VarianceSwapStaticReplication.StrikeParameterization.STRIKE.
+                                                                                                * toString()
+                                                                                                */).get());
     _results = Collections.singleton(_result);
   }
 
   @Override
   public String getShortName() {
-    return "ExampleEquityOptionVolatilitySurfaceDataFunction " + _underlyingIdentifierAsString + "-" + _definitionName + " for " + _instrumentType + " from " + _specificationName +
-        " Volatility Surface Data";
+    return "ExampleEquityOptionVolatilitySurfaceDataFunction " + _underlyingIdentifierAsString + "-" + _definitionName + " for " + _instrumentType + " from "
+        + _specificationName
+        + " Volatility Surface Data";
   }
 
-  public static <X, Y> Set<ValueRequirement> buildRequirements(final VolatilitySurfaceSpecification specification, final VolatilitySurfaceDefinition<X, Y> definition,
+  public static <X, Y> Set<ValueRequirement> buildRequirements(final VolatilitySurfaceSpecification specification,
+      final VolatilitySurfaceDefinition<X, Y> definition,
 
-  final ZonedDateTime atInstant) {
-    final Set<ValueRequirement> result = new HashSet<ValueRequirement>();
+      final ZonedDateTime atInstant) {
+    final Set<ValueRequirement> result = new HashSet<>();
 
-    final ExampleEquityOptionVolatilitySurfaceInstrumentProvider provider = (ExampleEquityOptionVolatilitySurfaceInstrumentProvider) specification.getSurfaceInstrumentProvider();
+    final ExampleEquityOptionVolatilitySurfaceInstrumentProvider provider = (ExampleEquityOptionVolatilitySurfaceInstrumentProvider) specification
+        .getSurfaceInstrumentProvider();
     for (final X x : definition.getXs()) {
       // don't care what these are
       for (final Y y : definition.getYs()) {
@@ -138,12 +146,13 @@ public class ExampleEquityOptionVolatilitySurfaceDataFunction extends AbstractFu
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     final ZonedDateTime atZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
     final Set<ValueRequirement> requirements = Collections.unmodifiableSet(buildRequirements(_specification, _definition, atZDT));
-    //TODO ENG-252 see MarketInstrumentImpliedYieldCurveFunction; need to work out the expiry more efficiently
+    // TODO ENG-252 see MarketInstrumentImpliedYieldCurveFunction; need to work out the expiry more efficiently
     return new AbstractInvokingCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000)) {
 
       @Override
       public ComputationTargetType getTargetType() {
-        return ComputationTargetType.ANYTHING; // [PLAT-2286] Change to something more specific if possible, but the definition's target could be anything unique identifiable
+        return ComputationTargetType.ANYTHING; // [PLAT-2286] Change to something more specific if possible, but the definition's target could be anything
+                                               // unique identifiable
       }
 
       @SuppressWarnings("synthetic-access")
@@ -156,7 +165,8 @@ public class ExampleEquityOptionVolatilitySurfaceDataFunction extends AbstractFu
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         if (canApplyTo(myContext, target)) {
           return requirements;
         }
@@ -175,20 +185,22 @@ public class ExampleEquityOptionVolatilitySurfaceDataFunction extends AbstractFu
           final Set<ValueRequirement> desiredValues) {
         final Clock snapshotClock = executionContext.getValuationClock();
         final ExternalId temp = ExternalId.of(ExternalSchemes.OG_SYNTHETIC_TICKER, _definition.getTarget().getUniqueId().getValue());
-        final ValueRequirement underlyingSpotValueRequirement = new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, temp);
+        final ValueRequirement underlyingSpotValueRequirement = new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE,
+            temp);
         final Double underlyingSpot = (Double) inputs.getValue(underlyingSpotValueRequirement);
         if (underlyingSpot == null) {
           LOGGER.error("Could not get underlying spot value for " + _definition.getTarget().getUniqueId());
           return Collections.emptySet();
         }
         final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
-        final Map<Pair<Object, Object>, Double> volatilityValues = new HashMap<Pair<Object, Object>, Double>();
-        //int numFound = 0;
+        final Map<Pair<Object, Object>, Double> volatilityValues = new HashMap<>();
+        // int numFound = 0;
         for (final Object x : _definition.getXs()) {
           for (final Object y : _definition.getYs()) {
             final double strike = (Double) y;
             final LocalDate expiry = (LocalDate) x;
-            final ExampleEquityOptionVolatilitySurfaceInstrumentProvider provider = (ExampleEquityOptionVolatilitySurfaceInstrumentProvider) _specification.getSurfaceInstrumentProvider();
+            final ExampleEquityOptionVolatilitySurfaceInstrumentProvider provider = (ExampleEquityOptionVolatilitySurfaceInstrumentProvider) _specification
+                .getSurfaceInstrumentProvider();
             if (strike < underlyingSpot) {
               provider.init(false); // generate identifiers for call options
             } else {
@@ -202,7 +214,8 @@ public class ExampleEquityOptionVolatilitySurfaceDataFunction extends AbstractFu
             }
           }
         }
-        final VolatilitySurfaceData<?, ?> volSurfaceData = new VolatilitySurfaceData<Object, Object>(_definition.getName(), _specification.getName(), _definition.getTarget().getUniqueId(),
+        final VolatilitySurfaceData<?, ?> volSurfaceData = new VolatilitySurfaceData<>(_definition.getName(), _specification.getName(),
+            _definition.getTarget().getUniqueId(),
             _definition.getXs(), _definition.getYs(), volatilityValues);
         final ComputedValue resultValue = new ComputedValue(_result, volSurfaceData);
         return Collections.singleton(resultValue);

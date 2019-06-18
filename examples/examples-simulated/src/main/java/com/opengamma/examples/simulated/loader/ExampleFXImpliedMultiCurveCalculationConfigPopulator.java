@@ -20,10 +20,12 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 
 /**
- * Populates the examples database with multi-curve calculation configurations that
- * produce FX-implied curves.
+ * Populates the examples database with multi-curve calculation configurations
+ * that produce FX-implied curves.
+ * 
+ * @deprecated
  */
-
+@Deprecated
 public class ExampleFXImpliedMultiCurveCalculationConfigPopulator {
   /** Curve names */
   private static final String[] CURVE_NAMES = new String[] {"DEFAULT"};

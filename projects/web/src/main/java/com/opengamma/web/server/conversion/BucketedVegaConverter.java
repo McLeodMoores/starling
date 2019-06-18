@@ -16,14 +16,15 @@ import com.opengamma.analytics.financial.greeks.BucketedGreekResultCollection;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- *
+ * Converts bucketed vega values into a labelled table for display.
  */
 public class BucketedVegaConverter implements ResultConverter<BucketedGreekResultCollection> {
   private static final Logger LOGGER = LoggerFactory.getLogger(BucketedVegaConverter.class);
   private static final DecimalFormat FORMAT = new DecimalFormat("##.###");
 
   @Override
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final BucketedGreekResultCollection value, final ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final BucketedGreekResultCollection value,
+      final ConversionMode mode) {
     final Map<String, Object> result = new HashMap<>();
     if (value.getBucketedGreeks(BucketedGreekResultCollection.BUCKETED_VEGA) != null) {
       final double[] expiries = value.getExpiries();
@@ -46,7 +47,7 @@ public class BucketedVegaConverter implements ResultConverter<BucketedGreekResul
           yLabels[i] = FORMAT.format(expiries[i]);
         }
         for (int i = 0; i < uniqueStrikes.length; i++) {
-          xLabels[i] = FORMAT.format(i);
+          xLabels[i] = FORMAT.format(uniqueStrikes[i]);
         }
         result.put("xs", xLabels);
         result.put("ys", yLabels);

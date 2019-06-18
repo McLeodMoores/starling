@@ -17,6 +17,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class LiveDataSpecificationTest extends AbstractFudgeBuilderTestCase {
 
+  /**
+   * Tests a cycle.
+   */
   public void testBasic() {
     final LiveDataSpecification object = new LiveDataSpecification("Foo", ExternalId.of("bar", "baz"));
     assertEncodeDecodeCycle(LiveDataSpecification.class, object);

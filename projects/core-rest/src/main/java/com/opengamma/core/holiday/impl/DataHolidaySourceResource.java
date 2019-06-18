@@ -45,14 +45,15 @@ public class DataHolidaySourceResource extends AbstractDataResource {
   /**
    * Creates the resource, exposing the underlying source over REST.
    *
-   * @param holidaySource  the underlying holiday source, not null
+   * @param holidaySource
+   *          the underlying holiday source, not null
    */
   public DataHolidaySourceResource(final HolidaySource holidaySource) {
     ArgumentChecker.notNull(holidaySource, "holidaySource");
     _holSource = holidaySource;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the holiday source.
    *
@@ -62,7 +63,7 @@ public class DataHolidaySourceResource extends AbstractDataResource {
     return _holSource;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
@@ -80,11 +81,10 @@ public class DataHolidaySourceResource extends AbstractDataResource {
     if (version != null) {
       final Holiday result = getHolidaySource().get(objectId.atVersion(version));
       return responseOkObject(result);
-    } else {
-      final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
-      final Holiday result = getHolidaySource().get(objectId, vc);
-      return responseOkObject(result);
     }
+    final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
+    final Holiday result = getHolidaySource().get(objectId, vc);
+    return responseOkObject(result);
   }
 
   @GET
@@ -94,14 +94,14 @@ public class DataHolidaySourceResource extends AbstractDataResource {
       @QueryParam("currency") final String currencyCode,
       @QueryParam("id") final List<String> externalIdStrs) {
 
-    final Collection<Holiday> result = holidayType == HolidayType.CURRENCY ?
-        getHolidaySource().get(Currency.of(currencyCode)) :
-        getHolidaySource().get(holidayType, ExternalIdBundle.parse(externalIdStrs));
+    final Collection<Holiday> result = holidayType == HolidayType.CURRENCY
+        ? getHolidaySource().get(Currency.of(currencyCode))
+        : getHolidaySource().get(holidayType, ExternalIdBundle.parse(externalIdStrs));
     return responseOkObject(result);
   }
 
   // deprecated
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @SuppressWarnings("deprecation")
   @GET
   @Path("holidaySearches/check")
@@ -115,10 +115,9 @@ public class DataHolidaySourceResource extends AbstractDataResource {
     if (holidayType == HolidayType.CURRENCY) {
       final boolean result = getHolidaySource().isHoliday(date, Currency.of(currencyCode));
       return responseOkObject(FudgeBooleanWrapper.of(result));
-    } else {
-      final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
-      final boolean result = getHolidaySource().isHoliday(date, holidayType, bundle);
-      return responseOkObject(FudgeBooleanWrapper.of(result));
     }
+    final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
+    final boolean result = getHolidaySource().isHoliday(date, holidayType, bundle);
+    return responseOkObject(FudgeBooleanWrapper.of(result));
   }
 }

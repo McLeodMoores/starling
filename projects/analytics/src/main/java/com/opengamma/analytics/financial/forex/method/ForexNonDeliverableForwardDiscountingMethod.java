@@ -23,8 +23,8 @@ import com.opengamma.util.tuple.DoublesPair;
 // CSOFF
 /**
  * Pricing method for Forex non-deliverable forward transactions by discounting.
- * @deprecated {@link YieldCurveBundle} is deprecated.
- * Use {@link com.opengamma.analytics.financial.forex.provider.ForexNonDeliverableForwardDiscountingMethod}
+ * 
+ * @deprecated {@link YieldCurveBundle} is deprecated. Use {@link com.opengamma.analytics.financial.forex.provider.ForexNonDeliverableForwardDiscountingMethod}
  */
 @Deprecated
 public final class ForexNonDeliverableForwardDiscountingMethod implements ForexPricingMethod {
@@ -36,6 +36,7 @@ public final class ForexNonDeliverableForwardDiscountingMethod implements ForexP
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static ForexNonDeliverableForwardDiscountingMethod getInstance() {
@@ -49,10 +50,13 @@ public final class ForexNonDeliverableForwardDiscountingMethod implements ForexP
   }
 
   /**
-   * Computes the present value of the non-deliverable forward. The present value is in currency2 and equal to P*N*(1-X/F) where
-   * <i>P</i> is the currency2 discount factor for the payment date, <i>N</i> is the notional, <i>X</i> is NDF rate and <i>F</i> the estimated forward exchange rate at the payment date.
-   * @param ndf The non-deliverable forward.
-   * @param curves The curve bundle (with FX rates).
+   * Computes the present value of the non-deliverable forward. The present value is in currency2 and equal to P*N*(1-X/F) where <i>P</i> is the currency2
+   * discount factor for the payment date, <i>N</i> is the notional, <i>X</i> is NDF rate and <i>F</i> the estimated forward exchange rate at the payment date.
+   * 
+   * @param ndf
+   *          The non-deliverable forward.
+   * @param curves
+   *          The curve bundle (with FX rates).
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final ForexNonDeliverableForward ndf, final YieldCurveBundle curves) {
@@ -70,11 +74,14 @@ public final class ForexNonDeliverableForwardDiscountingMethod implements ForexP
   }
 
   /**
-   * Computes the currency exposure of the non-deliverable forward. The currency exposure is P_2 * N in currency2 and -P_1 * N * X in currency1
-   * where <i>P_2</i> is the currency2 discount factor for the payment date, <i>N</i> is the notional, <i>P_1</i> is the currency1 discount factor for the payment date
-   * and <i>X</i> is NDF rate.
-   * @param ndf The non-deliverable forward.
-   * @param curves The curve bundle (with FX rates).
+   * Computes the currency exposure of the non-deliverable forward. The currency exposure is P_2 * N in currency2 and -P_1 * N * X in currency1 where <i>P_2</i>
+   * is the currency2 discount factor for the payment date, <i>N</i> is the notional, <i>P_1</i> is the currency1 discount factor for the payment date and
+   * <i>X</i> is NDF rate.
+   * 
+   * @param ndf
+   *          The non-deliverable forward.
+   * @param curves
+   *          The curve bundle (with FX rates).
    * @return The currency exposure.
    */
   public MultipleCurrencyAmount currencyExposure(final ForexNonDeliverableForward ndf, final YieldCurveBundle curves) {
@@ -82,7 +89,7 @@ public final class ForexNonDeliverableForwardDiscountingMethod implements ForexP
     final double df1 = curves.getCurve(ndf.getDiscountingCurve1Name()).getDiscountFactor(ndf.getPaymentTime());
     final double pv1 = -ndf.getNotionalCurrency2() * ndf.getExchangeRate() * df1;
     final double pv2 = ndf.getNotionalCurrency2() * df2;
-    return MultipleCurrencyAmount.of(new Currency[] {ndf.getCurrency1(), ndf.getCurrency2()}, new double[] {pv1, pv2});
+    return MultipleCurrencyAmount.of(new Currency[] { ndf.getCurrency1(), ndf.getCurrency2() }, new double[] { pv1, pv2 });
 
   }
 
@@ -94,8 +101,11 @@ public final class ForexNonDeliverableForwardDiscountingMethod implements ForexP
 
   /**
    * Computes the forward exchange rate associated to the NDF (1 Cyy2 = fwd Cyy1).
-   * @param ndf The non-deliverable forward.
-   * @param curves The curve bundle (with FX rates).
+   * 
+   * @param ndf
+   *          The non-deliverable forward.
+   * @param curves
+   *          The curve bundle (with FX rates).
    * @return The forward rate.
    */
   public double forwardForexRate(final ForexNonDeliverableForward ndf, final YieldCurveBundle curves) {
@@ -107,13 +117,16 @@ public final class ForexNonDeliverableForwardDiscountingMethod implements ForexP
 
   /**
    * The present value curve sensitivity for the non-deliverable forward.
-   * @param ndf The non-deliverable forward.
-   * @param curves The curve bundle (with FX rates).
+   * 
+   * @param ndf
+   *          The non-deliverable forward.
+   * @param curves
+   *          The curve bundle (with FX rates).
    * @return The present value currency exposure.
    */
   public MultipleCurrencyInterestRateCurveSensitivity presentValueCurveSensitivity(final ForexNonDeliverableForward ndf, final YieldCurveBundle curves) {
-    //    Validate.isTrue(curves instanceof YieldCurveWithFXBundle, "Bundle should contain FX rate");
-    //    YieldCurveWithFXBundle curvesFX = (YieldCurveWithFXBundle) curves;
+    // Validate.isTrue(curves instanceof YieldCurveWithFXBundle, "Bundle should contain FX rate");
+    // YieldCurveWithFXBundle curvesFX = (YieldCurveWithFXBundle) curves;
     final double df2 = curves.getCurve(ndf.getDiscountingCurve2Name()).getDiscountFactor(ndf.getPaymentTime());
     final double df1 = curves.getCurve(ndf.getDiscountingCurve1Name()).getDiscountFactor(ndf.getPaymentTime());
     final double spot = curves.getFxRates().getFxRate(ndf.getCurrency2(), ndf.getCurrency1());

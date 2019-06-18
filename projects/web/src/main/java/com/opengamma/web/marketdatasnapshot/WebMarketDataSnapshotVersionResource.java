@@ -70,11 +70,11 @@ public class WebMarketDataSnapshotVersionResource extends AbstractWebMarketDataS
     final MarketDataSnapshotDocument latestDoc = data().getSnapshot();
     final MarketDataSnapshotDocument versionedSnapshot = data().getVersioned();
     out.put("latestSnapshotDoc", latestDoc);
-    out.put("latestSnapshot", latestDoc.getSnapshot());
+    out.put("latestSnapshot", latestDoc.getNamedSnapshot());
     out.put("snapshotDoc", versionedSnapshot);
-    out.put("snapshot", versionedSnapshot.getSnapshot());
+    out.put("snapshot", versionedSnapshot.getNamedSnapshot());
     out.put("deleted", !latestDoc.isLatest());
-    out.put("snapshotXml", StringEscapeUtils.escapeJavaScript(createBeanXML(versionedSnapshot.getSnapshot())));
+    out.put("snapshotXml", StringEscapeUtils.escapeJavaScript(createBeanXML(versionedSnapshot.getNamedSnapshot())));
     return out;
   }
 

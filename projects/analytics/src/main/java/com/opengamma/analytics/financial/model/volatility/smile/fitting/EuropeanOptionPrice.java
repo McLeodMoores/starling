@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.model.volatility.smile.fitting;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Simple container for European option price date - contains the price, strike, expiry and whether the option is a call or put
+ * Simple container for European option price date - contains the price, strike, expiry and whether the option is a call or put.
  */
 public class EuropeanOptionPrice {
 
@@ -29,6 +29,7 @@ public class EuropeanOptionPrice {
 
   /**
    * Gets the price.
+   * 
    * @return the price
    */
   public double getPrice() {
@@ -37,6 +38,7 @@ public class EuropeanOptionPrice {
 
   /**
    * Gets the strike.
+   * 
    * @return the strike
    */
   public double getStrike() {
@@ -45,6 +47,7 @@ public class EuropeanOptionPrice {
 
   /**
    * Gets the expiry.
+   * 
    * @return the expiry
    */
   public double getExpiry() {
@@ -53,6 +56,7 @@ public class EuropeanOptionPrice {
 
   /**
    * Gets the isCall.
+   * 
    * @return the isCall
    */
   public boolean isCall() {

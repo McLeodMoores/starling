@@ -12,15 +12,6 @@ import com.opengamma.util.time.Expiry;
 /**
  * 
  * Definition for a powered option.
- * <p>
- * The exercise style is European. The payoff of these options is:
- * $$
- * \begin{align*}
- * c &= \max(S - K, 0)^i\\
- * p &= \max(K - S, 0)^i
- * \end{align*}
- * $$
- * where $K$ is the strike, $i$ is the power and $S$ is the spot.
  */
 public class PoweredOptionDefinition extends OptionDefinition {
   private final OptionPayoffFunction<StandardOptionDataBundle> _payoffFunction = new OptionPayoffFunction<StandardOptionDataBundle>() {
@@ -77,7 +68,7 @@ public class PoweredOptionDefinition extends OptionDefinition {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_power);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

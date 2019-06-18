@@ -65,8 +65,10 @@ public abstract class AbstractGoldenCopyDumpCreator {
   private final ToolContext _tc;
 
   /**
-   * @param regressionIO  the regression I/O, not null
-   * @param tc  the tool context, not null
+   * @param regressionIO
+   *          the regression I/O, not null
+   * @param tc
+   *          the tool context, not null
    */
   public AbstractGoldenCopyDumpCreator(final RegressionIO regressionIO, final ToolContext tc) {
     _regressionIO = ArgumentChecker.notNull(regressionIO, "regressionIO");
@@ -75,26 +77,28 @@ public abstract class AbstractGoldenCopyDumpCreator {
 
   /**
    * Run the db dump, building appropriate filters from the passed DataTracking masters.
-   * @throws IOException  if there is a problem writing the output
+   * 
+   * @throws IOException
+   *           if there is a problem writing the output
    */
   public void execute() throws IOException {
     final MasterQueryManager filterManager = buildFilterManager();
     _regressionIO.beginWrite();
     try {
-      //dump ref data accesses first
+      // dump ref data accesses first
       recordDataAccessed();
       final DatabaseDump databaseDump = new DatabaseDump(_regressionIO,
-                                                  _tc.getSecurityMaster(),
-                                                  _tc.getPositionMaster(),
-                                                  _tc.getPortfolioMaster(),
-                                                  _tc.getConfigMaster(),
-                                                  _tc.getHistoricalTimeSeriesMaster(),
-                                                  _tc.getHolidayMaster(),
-                                                  _tc.getExchangeMaster(),
-                                                  _tc.getMarketDataSnapshotMaster(),
-                                                  _tc.getLegalEntityMaster(),
-                                                  _tc.getConventionMaster(),
-                                                  filterManager);
+          _tc.getSecurityMaster(),
+          _tc.getPositionMaster(),
+          _tc.getPortfolioMaster(),
+          _tc.getConfigMaster(),
+          _tc.getHistoricalTimeSeriesMaster(),
+          _tc.getHolidayMaster(),
+          _tc.getExchangeMaster(),
+          _tc.getMarketDataSnapshotMaster(),
+          _tc.getLegalEntityMaster(),
+          _tc.getConventionMaster(),
+          filterManager);
 
       databaseDump.dumpDatabase();
     } finally {
@@ -104,7 +108,8 @@ public abstract class AbstractGoldenCopyDumpCreator {
 
   /**
    * Gets the regression I/O.
-   * @return  the regression I/O
+   * 
+   * @return the regression I/O
    */
   public RegressionIO getRegressionIO() {
     return _regressionIO;
@@ -112,13 +117,16 @@ public abstract class AbstractGoldenCopyDumpCreator {
 
   /**
    * Records the data that has been accessed.
-   * @throws IOException  if there is a problem writing the output
+   * 
+   * @throws IOException
+   *           if there is a problem writing the output
    */
   protected abstract void recordDataAccessed() throws IOException;
 
   /**
    * Builds a filter manager for the ids used when creating the dump.
-   * @return  the manager
+   * 
+   * @return the manager
    */
   private MasterQueryManager buildFilterManager() {
     return new MasterQueryManager(
@@ -126,17 +134,18 @@ public abstract class AbstractGoldenCopyDumpCreator {
         new UniqueIdentifiableQuery<PositionDocument, PositionMaster>(((DataTrackingPositionMaster) _tc.getPositionMaster()).getIdsAccessed()),
         new UniqueIdentifiableQuery<PortfolioDocument, PortfolioMaster>(((DataTrackingPortfolioMaster) _tc.getPortfolioMaster()).getIdsAccessed()),
         new UniqueIdentifiableQuery<ConfigDocument, ConfigMaster>(((DataTrackingConfigMaster) _tc.getConfigMaster()).getIdsAccessed()),
-        new UniqueIdentifiableQuery<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeriesMaster>(((DataTrackingHistoricalTimeSeriesMaster) _tc.getHistoricalTimeSeriesMaster()).getIdsAccessed()),
+        new UniqueIdentifiableQuery<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeriesMaster>(
+            ((DataTrackingHistoricalTimeSeriesMaster) _tc.getHistoricalTimeSeriesMaster()).getIdsAccessed()),
         new UniqueIdentifiableQuery<HolidayDocument, HolidayMaster>(((DataTrackingHolidayMaster) _tc.getHolidayMaster()).getIdsAccessed()),
         new UniqueIdentifiableQuery<ExchangeDocument, ExchangeMaster>(((DataTrackingExchangeMaster) _tc.getExchangeMaster()).getIdsAccessed()),
-        new UniqueIdentifiableQuery<MarketDataSnapshotDocument, MarketDataSnapshotMaster>(((DataTrackingMarketDataSnapshotMaster) _tc.getMarketDataSnapshotMaster()).getIdsAccessed()),
+        new UniqueIdentifiableQuery<MarketDataSnapshotDocument, MarketDataSnapshotMaster>(
+            ((DataTrackingMarketDataSnapshotMaster) _tc.getMarketDataSnapshotMaster()).getIdsAccessed()),
         new UniqueIdentifiableQuery<LegalEntityDocument, LegalEntityMaster>(((DataTrackingLegalEntityMaster) _tc.getLegalEntityMaster()).getIdsAccessed()),
         new UniqueIdentifiableQuery<ConventionDocument, ConventionMaster>(((DataTrackingConventionMaster) _tc.getConventionMaster()).getIdsAccessed()));
   }
 
   /**
-   * Filter which checks a {@link UniqueIdentifiable} object is identified by one of
-   * a set of ids.
+   * Filter which checks a {@link UniqueIdentifiable} object is identified by one of a set of ids.
    */
   private static class UniqueIdentifiableQuery<D extends AbstractDocument, M extends AbstractMaster<D>> implements Function<M, Collection<D>> {
     /** The ids to include */
@@ -144,9 +153,11 @@ public abstract class AbstractGoldenCopyDumpCreator {
 
     /**
      * Creates a query.
-     * @param uniqueId  the unique ids
+     * 
+     * @param uniqueId
+     *          the unique ids
      */
-    public UniqueIdentifiableQuery(final Set<UniqueId> uniqueId) {
+    UniqueIdentifiableQuery(final Set<UniqueId> uniqueId) {
       _idsToInclude = uniqueId;
     }
 

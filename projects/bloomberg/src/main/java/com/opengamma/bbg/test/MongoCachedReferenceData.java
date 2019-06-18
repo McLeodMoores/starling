@@ -11,16 +11,17 @@ import com.opengamma.util.mongo.MongoConnector;
 import com.opengamma.util.test.MongoTestUtils;
 
 /**
- * Encapsulates settings for writing Bloomberg reference data unit testing which
- * can run through the shared MongoDB cache.
+ * Encapsulates settings for writing Bloomberg reference data unit testing which can run through the shared MongoDB cache.
  */
 public class MongoCachedReferenceData {
 
   /**
    * Wraps a Bloomberg reference data provider with Mongo for caching.
    *
-   * @param underlying  the underlying provider
-   * @param testClass  the test class, not null
+   * @param underlying
+   *          the underlying provider
+   * @param testClass
+   *          the test class, not null
    * @return the wrapped provider, not null
    */
   public static MongoDBValueCachingReferenceDataProvider makeMongoProvider(final ReferenceDataProvider underlying, final Class<?> testClass) {
@@ -30,12 +31,16 @@ public class MongoCachedReferenceData {
   /**
    * Wraps a Bloomberg reference data provider with Mongo for caching.
    *
-   * @param underlying  the underlying provider
-   * @param testClass  the test class, not null
-   * @param makeUnique  whether to make the database totally unique
+   * @param underlying
+   *          the underlying provider
+   * @param testClass
+   *          the test class, not null
+   * @param makeUnique
+   *          whether to make the database totally unique
    * @return the wrapped provider, not null
    */
-  public static MongoDBValueCachingReferenceDataProvider makeMongoProvider(final ReferenceDataProvider underlying, final Class<?> testClass, final boolean makeUnique) {
+  public static MongoDBValueCachingReferenceDataProvider makeMongoProvider(final ReferenceDataProvider underlying, final Class<?> testClass,
+      final boolean makeUnique) {
     final MongoConnector mongoConnector = getMongoConnector(testClass, makeUnique);
     final MongoDBValueCachingReferenceDataProvider mongoProvider = new MongoDBValueCachingReferenceDataProvider(underlying, mongoConnector);
     return mongoProvider;
@@ -44,8 +49,10 @@ public class MongoCachedReferenceData {
   /**
    * Creates a Mongo connector specific to the specified class.
    *
-   * @param testClass  the test class, not null
-   * @param makeUnique  whether to make the database totally unique
+   * @param testClass
+   *          the test class, not null
+   * @param makeUnique
+   *          whether to make the database totally unique
    * @return the connector, not null
    */
   private static MongoConnector getMongoConnector(final Class<?> testClass, final boolean makeUnique) {

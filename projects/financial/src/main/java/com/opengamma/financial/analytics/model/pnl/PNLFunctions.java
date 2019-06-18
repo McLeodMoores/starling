@@ -14,7 +14,8 @@ import org.springframework.beans.factory.InitializingBean;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculatorFactory;
 import com.opengamma.analytics.financial.schedule.TimeSeriesSamplingFunctionFactory;
 import com.opengamma.analytics.financial.timeseries.returns.TimeSeriesReturnCalculatorFactory;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.FunctionConfiguration;
@@ -40,13 +41,21 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
     return new PNLFunctions().getObjectCreating();
   }
 
+  /**
+   * @return the functions
+   * @deprecated Deprecated
+   */
+  @Deprecated
   public static FunctionConfigurationSource deprecated() {
     return new DeprecatedFunctions().getObjectCreating();
   }
 
   /**
    * Function repository configuration source for the deprecated functions contained in this package.
+   * 
+   * @deprecated Deprecated
    */
+  @Deprecated
   public static class DeprecatedFunctions extends AbstractFunctionConfigurationBean {
 
     @Override
@@ -191,8 +200,8 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
 
     }
 
-    private final Map<String, CurrencyInfo> _perCurrencyInfo = new HashMap<String, CurrencyInfo>();
-    private final Map<Pair<String, String>, CurrencyPairInfo> _perCurrencyPairInfo = new HashMap<Pair<String, String>, CurrencyPairInfo>();
+    private final Map<String, CurrencyInfo> _perCurrencyInfo = new HashMap<>();
+    private final Map<Pair<String, String>, CurrencyPairInfo> _perCurrencyPairInfo = new HashMap<>();
     private String _curveName;
     private String _payCurveName;
     private String _receiveCurveName;
@@ -206,9 +215,9 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
 
     private String _scheduleName = ScheduleCalculatorFactory.DAILY;
     private String _samplingCalculatorName = TimeSeriesSamplingFunctionFactory.PREVIOUS_AND_FIRST_VALUE_PADDING;
-    private String _interpolator = Interpolator1DFactory.DOUBLE_QUADRATIC;
-    private String _leftExtrapolator = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
-    private String _rightExtrapolator = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
+    private String _interpolator = DoubleQuadraticInterpolator1dAdapter.NAME;
+    private String _leftExtrapolator = LinearExtrapolator1dAdapter.NAME;
+    private String _rightExtrapolator = LinearExtrapolator1dAdapter.NAME;
 
     public void setPerCurrencyInfo(final Map<String, CurrencyInfo> perCurrencyInfo) {
       _perCurrencyInfo.clear();
@@ -278,7 +287,8 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      *
-     * @param samplingPeriodName  the sampling period name
+     * @param samplingPeriodName
+     *          the sampling period name
      * @deprecated use start and end instead
      */
     @Deprecated
@@ -289,7 +299,7 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
     /**
      *
      * @return the sampling period name
-     * @deprecated  use start and end instead
+     * @deprecated use start and end instead
      */
     @Deprecated
     public String getSamplingPeriodName() {
@@ -518,8 +528,9 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
         functions.add(functionConfiguration(SimpleFuturePnLDefaultPropertiesFunction.class, getCurveName(), getSamplingPeriodName(), getScheduleName(),
             getSamplingCalculatorName()));
       }
-      if ((getPayCurveName() != null) && (getReceiveCurveName() != null)) {
-        functions.add(functionConfiguration(SimpleFXFuturePnLDefaultPropertiesFunction.class, getPayCurveName(), getReceiveCurveName(), getSamplingPeriodName(), getScheduleName(),
+      if (getPayCurveName() != null && getReceiveCurveName() != null) {
+        functions.add(functionConfiguration(SimpleFXFuturePnLDefaultPropertiesFunction.class, getPayCurveName(), getReceiveCurveName(), getSamplingPeriodName(),
+            getScheduleName(),
             getSamplingCalculatorName()));
       }
       functions.add(functionConfiguration(ValueGreekSensitivityPnLDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(),
@@ -562,7 +573,8 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(PositionPnLFunction.class));
     functions.add(functionConfiguration(SwaptionBlackYieldCurveNodePnLFunction.class));
     functions.add(functionConfiguration(YieldCurveNodePnLFunction.class));
-    functions.add(functionConfiguration(AggregationDefaultPropertyFunction.class, ValueRequirementNames.DAILY_PNL, MissingInputsFunction.AGGREGATION_STYLE_FULL));
+    functions
+        .add(functionConfiguration(AggregationDefaultPropertyFunction.class, ValueRequirementNames.DAILY_PNL, MissingInputsFunction.AGGREGATION_STYLE_FULL));
     functions.add(functionConfiguration(PnLPeriodTranslationFunction.class, ValueRequirementNames.PNL_SERIES));
     functions.add(functionConfiguration(PnLPeriodTranslationFunction.class, ValueRequirementNames.YIELD_CURVE_PNL_SERIES));
     functions.add(functionConfiguration(PnLPeriodTranslationFunction.class, ValueRequirementNames.CURVE_PNL_SERIES));

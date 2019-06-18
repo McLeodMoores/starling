@@ -35,14 +35,15 @@ public class DataFunctionCostsMasterResource extends AbstractDataResource {
   /**
    * Creates the resource, exposing the underlying master over REST.
    *
-   * @param functionCostsMaster  the underlying master, not null
+   * @param functionCostsMaster
+   *          the underlying master, not null
    */
   public DataFunctionCostsMasterResource(final FunctionCostsMaster functionCostsMaster) {
     ArgumentChecker.notNull(functionCostsMaster, "functionCostsMaster");
     _functionCostsMaster = functionCostsMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the master.
    *
@@ -52,7 +53,7 @@ public class DataFunctionCostsMasterResource extends AbstractDataResource {
     return _functionCostsMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
@@ -67,7 +68,8 @@ public class DataFunctionCostsMasterResource extends AbstractDataResource {
 
   @GET
   @Path("functioncosts")
-  public Response search(@QueryParam("configurationName") final String configurationName, @QueryParam("functionId") final String functionId, @QueryParam("versionAsOf") final String versionAsOfStr) {
+  public Response search(@QueryParam("configurationName") final String configurationName, @QueryParam("functionId") final String functionId,
+      @QueryParam("versionAsOf") final String versionAsOfStr) {
     final Instant versionAsOf = versionAsOfStr != null ? Instant.parse(versionAsOfStr) : null;
     final FunctionCostsDocument result = getFunctionCostsMaster().load(configurationName, functionId, versionAsOf);
     return responseOkObject(result);

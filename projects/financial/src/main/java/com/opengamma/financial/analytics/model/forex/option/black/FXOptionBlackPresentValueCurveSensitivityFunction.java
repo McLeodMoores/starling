@@ -25,12 +25,15 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Calculates the curve sensitivities of FX options using the Black method.
+ *
  * @deprecated The parent is deprecated
  */
 @Deprecated
 public class FXOptionBlackPresentValueCurveSensitivityFunction extends FXOptionBlackMultiValuedFunction {
-  private static final PresentValueCurveSensitivityBlackSmileForexCalculator SMILE_CALCULATOR = PresentValueCurveSensitivityBlackSmileForexCalculator.getInstance();
-  private static final PresentValueCurveSensitivityBlackTermStructureForexCalculator FLAT_CALCULATOR = PresentValueCurveSensitivityBlackTermStructureForexCalculator.getInstance();
+  private static final PresentValueCurveSensitivityBlackSmileForexCalculator SMILE_CALCULATOR = PresentValueCurveSensitivityBlackSmileForexCalculator
+      .getInstance();
+  private static final PresentValueCurveSensitivityBlackTermStructureForexCalculator FLAT_CALCULATOR =
+      PresentValueCurveSensitivityBlackTermStructureForexCalculator.getInstance();
 
   public FXOptionBlackPresentValueCurveSensitivityFunction() {
     super(ValueRequirementNames.FX_CURVE_SENSITIVITIES);

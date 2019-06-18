@@ -16,15 +16,17 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Contains a yield curve specification and the market data required to build the curve.
+ * 
+ * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
+@Deprecated
 public class YieldCurveData {
 
   private final InterpolatedYieldCurveSpecificationWithSecurities _curveSpec;
   private final Map<ExternalIdBundle, Double> _dataPoints;
   private final Map<ExternalId, ExternalIdBundle> _index;
 
-  public YieldCurveData(final InterpolatedYieldCurveSpecificationWithSecurities curveSpec,
-                        final Map<ExternalIdBundle, Double> dataPoints) {
+  public YieldCurveData(final InterpolatedYieldCurveSpecificationWithSecurities curveSpec, final Map<ExternalIdBundle, Double> dataPoints) {
     ArgumentChecker.notNull(curveSpec, "curveSpec");
     ArgumentChecker.notEmpty(dataPoints, "dataPoints");
     _curveSpec = curveSpec;
@@ -39,11 +41,11 @@ public class YieldCurveData {
   }
 
   /**
-   * Queries the data using an identifier bundle. Any data point matching one of the identifiers in the supplied bundle
-   * will be returned. If the identifier bundle is such that multiple points match
-   * then an arbitrary one will be returned.
+   * Queries the data using an identifier bundle. Any data point matching one of the identifiers in the supplied bundle will be returned. If the identifier
+   * bundle is such that multiple points match then an arbitrary one will be returned.
    *
-   * @param identifiers the identifier(s) to search for
+   * @param identifiers
+   *          the identifier(s) to search for
    * @return the data point found, or null if none
    */
   public Double getDataPoint(final ExternalIdBundle identifiers) {
@@ -70,7 +72,8 @@ public class YieldCurveData {
   /**
    * Queries the data using a single identifier.
    *
-   * @param identifier the identifier to search for
+   * @param identifier
+   *          the identifier to search for
    * @return the data point found, or null if none
    */
   public Double getDataPoint(final ExternalId identifier) {

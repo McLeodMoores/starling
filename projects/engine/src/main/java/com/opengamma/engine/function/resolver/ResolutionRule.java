@@ -24,7 +24,6 @@ import com.opengamma.engine.target.ComputationTargetReference;
 import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.target.ComputationTargetTypeVisitor;
 import com.opengamma.engine.value.ValueProperties;
-import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdentifiable;
@@ -122,11 +121,13 @@ public class ResolutionRule {
   }
 
   /**
-   * The first half of the full {@link #getResult(ValueRequirement,ComputationTarget,FunctionCompilationContext)} implementation returning the set
-   * of all function outputs for use by {@link #getResult(ValueRequirement,ComputationTarget,FunctionCompilationContext,Set)}.
+   * The first half of the full {@link #getResult(String, ComputationTarget, ValueProperties, FunctionCompilationContext)} implementation returning the set of
+   * all function outputs for use by {@link #getResult(String, ComputationTarget, ValueProperties, Collection)}.
    *
-   * @param target the computation target
-   * @param context Function compilation context
+   * @param target
+   *          the computation target
+   * @param context
+   *          Function compilation context
    * @return the set of all value specifications produced by the function, null if none can be produced
    */
   public Set<ValueSpecification> getResults(final ComputationTarget target, final FunctionCompilationContext context) {
@@ -205,15 +206,19 @@ public class ResolutionRule {
   }
 
   /**
-   * The second half of the full {@link #getResult(ValueRequirement, ComputationTarget, FunctionCompilationContext)}) implementation taking the set of
+   * The second half of the full {@link #getResult(String, ComputationTarget, ValueProperties, FunctionCompilationContext)}) implementation taking the set of
    * all function outputs produced by {@link #getResults}.
    *
-   * @param valueName output value name to be produced, not null and interned
-   * @param target Computation target, not null
-   * @param constraints the constraints that must be satisfied, not null
-   * @param resultSpecs The results from {@code getResults()}, not null
-   * @return Null if the function advertised by this rule cannot produce the desired output, a valid ValueSpecification otherwise - as returned by
-   * the function. The specification is not composed against the requirement constraints.
+   * @param valueName
+   *          output value name to be produced, not null and interned
+   * @param target
+   *          Computation target, not null
+   * @param constraints
+   *          the constraints that must be satisfied, not null
+   * @param resultSpecs
+   *          The results from {@code getResults()}, not null
+   * @return Null if the function advertised by this rule cannot produce the desired output, a valid ValueSpecification otherwise - as returned by the function.
+   *         The specification is not composed against the requirement constraints.
    */
   public ValueSpecification getResult(final String valueName, final ComputationTarget target, final ValueProperties constraints,
       final Collection<ValueSpecification> resultSpecs) {

@@ -26,8 +26,11 @@ public class CouponInflationYearOnYearInterpolationDiscountingMethod {
 
   /**
    * Computes the net amount of the Year on Year coupon with reference index at start of the month.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   *
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The net amount.
    */
 
@@ -42,8 +45,11 @@ public class CouponInflationYearOnYearInterpolationDiscountingMethod {
 
   /**
    * Computes the present value of the Year on Year coupon without convexity adjustment.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   *
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponInflationYearOnYearInterpolation coupon, final InflationProviderInterface inflation) {
@@ -55,8 +61,11 @@ public class CouponInflationYearOnYearInterpolationDiscountingMethod {
 
   /**
    * Computes the estimated index with the weight and the reference start date.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   *
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The estimated index for the reference start date.
    */
   public double indexEstimationStart(final CouponInflationYearOnYearInterpolation coupon, final InflationProviderInterface inflation) {
@@ -68,8 +77,11 @@ public class CouponInflationYearOnYearInterpolationDiscountingMethod {
 
   /**
    * Computes the estimated index with the weight and the reference end date.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   *
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The estimated index for the reference end date.
    */
   public double indexEstimationEnd(final CouponInflationYearOnYearInterpolation coupon, final InflationProviderInterface inflation) {
@@ -80,11 +92,15 @@ public class CouponInflationYearOnYearInterpolationDiscountingMethod {
 
   /**
    * Compute the present value sensitivity to rates of a Inflation coupon.
-   * @param coupon The coupon.
-   * @param inflation The inflation provider.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param inflation
+   *          The inflation provider.
    * @return The present value sensitivity.
    */
-  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CouponInflationYearOnYearInterpolation coupon, final InflationProviderInterface inflation) {
+  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CouponInflationYearOnYearInterpolation coupon,
+      final InflationProviderInterface inflation) {
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(inflation, "Inflation");
     final double estimatedIndexStartMonth0 = inflation.getPriceIndex(coupon.getPriceIndex(), coupon.getReferenceStartTime()[0]);

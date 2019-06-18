@@ -78,7 +78,8 @@ public class FXOptionBlackValuePhiFunction extends AbstractFunction.NonCompiledI
     final String fullCurveName = putCurrencyCurve + "_" + putCurrency.getCode();
     final MultipleCurrencyInterestRateCurveSensitivity curveSensitivities = (MultipleCurrencyInterestRateCurveSensitivity) curveSensitivitiesObject;
     final Map<String, List<DoublesPair>> sensitivitiesForCurrency = curveSensitivities.getSensitivity(Currency.of(resultCurrency)).getSensitivities();
-    final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.VALUE_PHI, target.toSpecification(), getResultProperties(target, desiredValue, baseQuotePair).get());
+    final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.VALUE_PHI, target.toSpecification(),
+        getResultProperties(target, desiredValue, baseQuotePair).get());
     final double phi = sensitivitiesForCurrency.get(fullCurveName).get(0).second;
     return Collections.singleton(new ComputedValue(spec, phi));
   }
@@ -148,7 +149,8 @@ public class FXOptionBlackValuePhiFunction extends AbstractFunction.NonCompiledI
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String currencyPairConfigName = null;
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       final ValueSpecification specification = entry.getKey();

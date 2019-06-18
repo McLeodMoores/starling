@@ -22,13 +22,13 @@ CREATE TABLE hts_schema_version (
 );
 INSERT INTO hts_schema_version (version_key, version_value) VALUES ('schema_patch', '44');
 
-CREATE SEQUENCE hts_master_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS hts_master_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE hts_idkey_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS hts_idkey_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE hts_doc2idkey_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS hts_doc2idkey_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE hts_dimension_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS hts_dimension_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
 -- "as bigint" required by Derby, not accepted by Postgresql
 

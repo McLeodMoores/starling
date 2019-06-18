@@ -77,10 +77,12 @@ import com.opengamma.util.ArgumentChecker;
   /**
    * Creates a new instance.
    *
-   * @param outerType the type(s) of the outer context object(s), not null
-   * @param innerType the type(s) of the target object(s), not null
+   * @param outerType
+   *          the type(s) of the outer context object(s), not null
+   * @param innerType
+   *          the type(s) of the target object(s), not null
    */
-  public NestedComputationTargetType(final ComputationTargetType outerType, final ComputationTargetType innerType) {
+  NestedComputationTargetType(final ComputationTargetType outerType, final ComputationTargetType innerType) {
     this(copy(outerType, innerType));
   }
 
@@ -288,9 +290,8 @@ import com.opengamma.util.ArgumentChecker;
     }
     if (o instanceof ComputationTargetType) {
       return ((ComputationTargetType) o).accept(EQUALS, this).booleanValue();
-    } else {
-      return false;
     }
+    return false;
   }
 
 }

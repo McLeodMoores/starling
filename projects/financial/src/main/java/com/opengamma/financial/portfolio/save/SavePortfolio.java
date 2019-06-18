@@ -60,10 +60,10 @@ public class SavePortfolio {
   private final ExecutorService _executor;
   private final PortfolioMaster _portfolios;
   private final PositionMaster _positions;
-  private final Map<UniqueId, ObjectId> _positionMap = new HashMap<UniqueId, ObjectId>();
+  private final Map<UniqueId, ObjectId> _positionMap = new HashMap<>();
   private final boolean _rewriteExistingPositions;
 
-  private static final ConcurrentMap<ExternalId, ObjectId> CACHE = new ConcurrentHashMap<ExternalId, ObjectId>();
+  private static final ConcurrentMap<ExternalId, ObjectId> CACHE = new ConcurrentHashMap<>();
   private static final ObjectId MISSING = ObjectId.of("SavePortfolio", "MISSING_VALUE");
 
   // TODO: cache this properly with EHCache or something or there may be a memory leak
@@ -71,8 +71,9 @@ public class SavePortfolio {
   public SavePortfolio(final ExecutorService executor, final PortfolioMaster portfolios, final PositionMaster positions) {
     this(executor, portfolios, positions, false);
   }
-  
-  protected SavePortfolio(final ExecutorService executor, final PortfolioMaster portfolios, final PositionMaster positions, final boolean rewriteExistingPositions) {
+
+  protected SavePortfolio(final ExecutorService executor, final PortfolioMaster portfolios, final PositionMaster positions,
+      final boolean rewriteExistingPositions) {
     _executor = executor;
     _portfolios = portfolios;
     _positions = positions;
@@ -89,8 +90,8 @@ public class SavePortfolio {
     manageablePosition.setSecurityLink(new ManageableSecurityLink(position.getSecurityLink()));
     manageablePosition.setAttributes(position.getAttributes());
     final Collection<Trade> trades = position.getTrades();
-    final List<ManageableTrade> manageableTrades = new ArrayList<ManageableTrade>(trades.size());
-    for (Trade trade : trades) {
+    final List<ManageableTrade> manageableTrades = new ArrayList<>(trades.size());
+    for (final Trade trade : trades) {
       final ManageableTrade mtrade = new ManageableTrade(trade);
       final ExternalIdBundle replacementKey = mapSecurityKey(mtrade.getSecurityLink().getExternalId());
       if (replacementKey != null) {
@@ -111,12 +112,12 @@ public class SavePortfolio {
   }
 
   private void populatePositionMapCache(final PortfolioNode node) {
-    final List<Future<Pair<UniqueId, ObjectId>>> futures = new LinkedList<Future<Pair<UniqueId, ObjectId>>>();
+    final List<Future<Pair<UniqueId, ObjectId>>> futures = new LinkedList<>();
     PortfolioNodeTraverser.depthFirst(new AbstractPortfolioNodeTraversalCallback() {
       @Override
       public void preOrderOperation(final PortfolioNode parentNode, final Position position) {
         final ExternalId positionId = position.getUniqueId().toExternalId();
-        ObjectId id = CACHE.get(positionId);
+        final ObjectId id = CACHE.get(positionId);
         if (id == null) {
           futures.add(_executor.submit(new Callable<Pair<UniqueId, ObjectId>>() {
             @Override
@@ -187,15 +188,15 @@ public class SavePortfolio {
     final ManageablePortfolioNode manageableNode = new ManageablePortfolioNode();
     manageableNode.setName(node.getName());
     final List<PortfolioNode> childNodes = node.getChildNodes();
-    final List<ManageablePortfolioNode> manageableChildNodes = new ArrayList<ManageablePortfolioNode>(childNodes.size());
+    final List<ManageablePortfolioNode> manageableChildNodes = new ArrayList<>(childNodes.size());
     // TODO: put a hook here so a sub-class can choose to flatten the portfolio if it wishes
-    for (PortfolioNode childNode : childNodes) {
+    for (final PortfolioNode childNode : childNodes) {
       manageableChildNodes.add(createManageablePortfolioNode(childNode));
     }
     manageableNode.setChildNodes(manageableChildNodes);
     final List<Position> positions = node.getPositions();
-    final List<ObjectId> positionIdentifiers = new ArrayList<ObjectId>(positions.size());
-    for (Position position : positions) {
+    final List<ObjectId> positionIdentifiers = new ArrayList<>(positions.size());
+    for (final Position position : positions) {
       positionIdentifiers.add(mapPositionIdentifier(position));
     }
     manageableNode.setPositionIds(positionIdentifiers);
@@ -236,7 +237,7 @@ public class SavePortfolio {
     }
     return true;
   }
-  
+
   public UniqueId savePortfolio(final Portfolio portfolio, final boolean updateMatchingName) {
     return savePortfolio(portfolio, updateMatchingName, DocumentVisibility.VISIBLE);
   }
@@ -245,7 +246,7 @@ public class SavePortfolio {
     LOGGER.debug("Saving portfolio '{}'", portfolio.getName());
     final PortfolioSearchRequest request = new PortfolioSearchRequest();
     request.setName(getPortfolioName(portfolio));
-    request.setVisibility(visibility);  // Any existing match needs to be at least as visible 
+    request.setVisibility(visibility);  // Any existing match needs to be at least as visible
     final PortfolioSearchResult result = _portfolios.search(request);
     final ManageablePortfolio manageablePortfolio = createManageablePortfolio(portfolio);
     PortfolioDocument document;
@@ -261,7 +262,7 @@ public class SavePortfolio {
       }
     } else {
       document = null;
-      for (PortfolioDocument resultDocument : result.getDocuments()) {
+      for (final PortfolioDocument resultDocument : result.getDocuments()) {
         final ManageablePortfolio resultPortfolio = resultDocument.getPortfolio();
         if (manageablePortfolio.getName().equals(resultPortfolio.getName()) && nodesEqual(manageablePortfolio.getRootNode(), resultPortfolio.getRootNode())) {
           LOGGER.debug("Found existing match at {}", resultDocument.getUniqueId());

@@ -78,8 +78,11 @@ public class CacheManagerComponentFactory extends AbstractAliasedComponentFactor
   /**
    * Creates the cache manager without registering it.
    *
-   * @param repo  the component repository, only used to register secondary items like lifecycle, not null
+   * @param repo
+   *          the component repository, only used to register secondary items like lifecycle, not null
    * @return the cache manager, not null
+   * @throws IOException
+   *           if there is a problem
    */
   protected CacheManager createCacheManager(final ComponentRepository repo) throws IOException {
     final EhCacheManagerFactoryBean factoryBean = new EhCacheManagerFactoryBean();
