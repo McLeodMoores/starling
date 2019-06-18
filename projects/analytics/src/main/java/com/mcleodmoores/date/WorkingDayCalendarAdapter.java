@@ -16,7 +16,7 @@ import com.opengamma.util.ArgumentChecker;
  * <p>
  * This class should be used when backwards compatibility is required.
  */
-public class WorkingDayCalendarAdapter implements WorkingDayCalendar {
+public final class WorkingDayCalendarAdapter implements WorkingDayCalendar {
 
   /**
    * A static factory method that sets the weekend to Saturday and Sunday.
