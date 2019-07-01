@@ -43,6 +43,7 @@ import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.curve.exposure.ConfigDBInstrumentExposuresProvider;
 import com.opengamma.financial.analytics.curve.exposure.InstrumentExposuresProvider;
 import com.opengamma.financial.analytics.model.BondAndBondFutureFunctionUtils;
+import com.opengamma.financial.analytics.model.curve.IssuerProviderDiscountingFunction;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.bond.BondSecurity;
@@ -129,8 +130,8 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
     if (curveExposureConfigs == null || curveExposureConfigs.size() != 1) {
       return null;
     }
-    System.out.println("Curve exposures = " + curveExposureConfigs);
     final Set<String> curveTypes = constraints.getValues(PROPERTY_CURVE_TYPE);
+    final Set<String> underlyingCurveTypes = constraints.getValues(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY);
     final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
     final Set<ValueRequirement> requirements = new HashSet<>();
     try {
@@ -147,6 +148,11 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
           if (curveTypes != null && !curveTypes.isEmpty()) {
             builder = builder.with(PROPERTY_CURVE_TYPE, curveTypes);
           }
+          if (underlyingCurveTypes != null && !underlyingCurveTypes.isEmpty()) {
+            builder = builder.with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, underlyingCurveTypes);
+          } else {
+            builder = builder.with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, curveTypes);
+          }
           final ValueProperties properties = builder.get();
           requirements.add(new ValueRequirement(CURVE_BUNDLE, ComputationTargetSpecification.NULL, properties));
           requirements.add(new ValueRequirement(JACOBIAN_BUNDLE, ComputationTargetSpecification.NULL, properties));
@@ -154,7 +160,6 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
       }
       final HistoricalTimeSeriesResolver timeSeriesResolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
       requirements.addAll(BondAndBondFutureFunctionUtils.getConversionRequirements(security, timeSeriesResolver));
-      System.out.println("requirements: " + requirements);
       return requirements;
     } catch (final Exception e) {
       LOGGER.error(e.getMessage());
@@ -173,7 +178,8 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
     return Collections.singleton(createValueProperties()
         .with(CALCULATION_METHOD, CURVES_METHOD)
         .withAny(CURVE_EXPOSURES)
-        .withAny(PROPERTY_CURVE_TYPE));
+        .withAny(PROPERTY_CURVE_TYPE)
+        .withAny(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY));
   }
 
 }

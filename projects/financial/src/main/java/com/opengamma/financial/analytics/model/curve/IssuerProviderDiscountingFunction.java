@@ -252,6 +252,10 @@ public class IssuerProviderDiscountingFunction
     public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
         final ValueRequirement desiredValue) {
       final Set<ValueRequirement> requirements = super.getRequirements(compilationContext, target, desiredValue);
+      if (requirements == null) {
+        return null;
+      }
+      final Set<ValueRequirement> newRequirements = new HashSet<>(requirements);
       final ValueProperties constraints = desiredValue.getConstraints();
       final Set<String> underlyingCurveType = constraints.getValues(UNDERLYING_CURVE_TYPE_PROPERTY);
       if (underlyingCurveType != null && !underlyingCurveType.isEmpty()) {
@@ -262,9 +266,8 @@ public class IssuerProviderDiscountingFunction
             case YIELD_CURVE:
               final ValueProperties replaced = requirement.getConstraints().copy().withoutAny(PROPERTY_CURVE_TYPE)
                   .with(PROPERTY_CURVE_TYPE, underlyingCurveType).get();
-              requirements.remove(requirement);
-              requirements.add(new ValueRequirement(requirement.getValueName(), requirement.getTargetReference(), replaced));
-              System.out.println(requirement + " " + new ValueRequirement(requirement.getValueName(), requirement.getTargetReference(), replaced));
+              newRequirements.remove(requirement);
+              newRequirements.add(new ValueRequirement(requirement.getValueName(), requirement.getTargetReference(), replaced));
               break;
             default:
               // don't need to do anything
@@ -272,7 +275,7 @@ public class IssuerProviderDiscountingFunction
           }
         }
       }
-      return requirements;
+      return newRequirements;
     }
 
     @SuppressWarnings("unchecked")
@@ -467,13 +470,33 @@ public class IssuerProviderDiscountingFunction
     @Override
     protected Set<ComputedValue> getResults(final ValueSpecification bundleSpec, final ValueSpecification jacobianSpec, final ValueProperties bundleProperties,
         final Pair<ParameterIssuerProviderInterface, CurveBuildingBlockBundle> pair) {
+      final Set<String> underlyingCurveNames = bundleProperties.getValues(UNDERLYING_CURVE_TYPE_PROPERTY);
+      final ValueProperties properties;
+      final ValueSpecification bSpec, jSpec;
+      if (underlyingCurveNames == null || underlyingCurveNames.isEmpty()) {
+        // wasn't specified, so set equal to the curve type - keeps previous behaviour
+        properties = bundleProperties.copy()
+                                     .withoutAny(UNDERLYING_CURVE_TYPE_PROPERTY)
+                                     .with(UNDERLYING_CURVE_TYPE_PROPERTY, bundleProperties.getValues(PROPERTY_CURVE_TYPE))
+                                     .get();
+        bSpec = new ValueSpecification(bundleSpec.getValueName(), bundleSpec.getTargetSpecification(), properties);
+        jSpec = new ValueSpecification(jacobianSpec.getValueName(), jacobianSpec.getTargetSpecification(), properties);
+      } else {
+        properties = bundleProperties.copy().get();
+        bSpec = bundleSpec;
+        jSpec = jacobianSpec;
+      }
       final Set<ComputedValue> result = new HashSet<>();
       final IssuerProviderDiscount provider = (IssuerProviderDiscount) pair.getFirst();
-      result.add(new ComputedValue(bundleSpec, provider));
-      result.add(new ComputedValue(jacobianSpec, pair.getSecond()));
+      result.add(new ComputedValue(bSpec, provider));
+      result.add(new ComputedValue(jSpec, pair.getSecond()));
       for (final String curveName : getCurveNames()) {
-        final ValueProperties curveProperties = bundleProperties.copy().withoutAny(CURVE).withoutAny(CURVE_SENSITIVITY_CURRENCY).with(CURVE, curveName)
-            .with(PROPERTY_CURVE_TYPE, getCurveTypeProperty()).get();
+        final ValueProperties curveProperties = bundleProperties.copy()
+            .withoutAny(CURVE)
+            .withoutAny(CURVE_SENSITIVITY_CURRENCY)
+            .with(CURVE, curveName)
+            .with(PROPERTY_CURVE_TYPE, getCurveTypeProperty())
+            .get();
         YieldAndDiscountCurve curve = provider.getIssuerCurve(curveName);
         if (curve == null) {
           curve = provider.getMulticurveProvider().getCurve(curveName);

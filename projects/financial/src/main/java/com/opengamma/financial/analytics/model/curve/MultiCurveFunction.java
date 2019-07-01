@@ -309,7 +309,8 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
       final T knownData = getKnownData(inputs);
       final Clock snapshotClock = executionContext.getValuationClock();
       final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
-      final ValueProperties.Builder propertiesBuilder = desiredValues.iterator().next().getConstraints().copy().withoutAny(CURVE).with(CURVE,
+      final ValueRequirement desiredValue = desiredValues.iterator().next();
+      final ValueProperties.Builder propertiesBuilder = desiredValue.getConstraints().copy().withoutAny(CURVE).with(CURVE,
           Arrays.asList(_curveNames));
       // TODO remove and use input properties
       final Set<String> currencies;

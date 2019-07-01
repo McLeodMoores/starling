@@ -70,7 +70,6 @@ import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.view.ViewCalculationConfiguration;
 import com.opengamma.engine.view.ViewDefinition;
 import com.opengamma.examples.simulated.loader.ExampleEquityPortfolioLoader;
@@ -613,8 +612,10 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
     viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    final ValueProperties properties1 = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CALCULATION_METHOD, CURVES_METHOD).get();
-    final ValueProperties properties2 = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, NELSON_SIEGEL).with(CALCULATION_METHOD, CURVES_METHOD).get();
+    final ValueProperties properties1 = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CALCULATION_METHOD, CURVES_METHOD)
+        .get();
+    final ValueProperties properties2 = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, NELSON_SIEGEL).with(CALCULATION_METHOD, CURVES_METHOD)
+        .get();
     calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
         ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "US Treasury").get()));
     calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
@@ -667,9 +668,14 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
         ValueProperties.with(CURVE, "US C Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
             .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA").get()));
-    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING)
-        .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA").get());
-    config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.none());
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, 
+        ValueProperties
+          .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
+          .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
+    config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, PRESENT_VALUE, 
+        ValueProperties
+        .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
+        .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
     definition.addViewCalculationConfiguration(config);
     return definition;
   }

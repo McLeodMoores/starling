@@ -80,6 +80,7 @@ import com.opengamma.financial.analytics.curve.DiscountingCurveTypeConfiguration
 import com.opengamma.financial.analytics.curve.IssuerCurveTypeConfiguration;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNodeVisitor;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNodeWithIdentifier;
+import com.opengamma.financial.analytics.model.curve.IssuerProviderDiscountingFunction;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.async.AsynchronousExecution;
@@ -178,8 +179,11 @@ public class NelsonSiegelBondCurveFunction extends AbstractFunction {
         }
       }
       final ValueProperties constraints = desiredValues.iterator().next().getConstraints();
-      final ValueProperties.Builder builder = createValueProperties().with(CURVE_CALCULATION_METHOD, NON_LINEAR_LEAST_SQUARE)
-          .with(PROPERTY_CURVE_TYPE, NELSON_SIEGEL).with(CURVE_CONSTRUCTION_CONFIG, constraints.getValues(CURVE_CONSTRUCTION_CONFIG));
+      final ValueProperties.Builder builder = createValueProperties()
+          .with(CURVE_CALCULATION_METHOD, NON_LINEAR_LEAST_SQUARE)
+          .with(PROPERTY_CURVE_TYPE, NELSON_SIEGEL)
+          .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, NELSON_SIEGEL)
+          .with(CURVE_CONSTRUCTION_CONFIG, constraints.getValues(CURVE_CONSTRUCTION_CONFIG));
       final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
       final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(executionContext);
       final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(executionContext);
@@ -261,8 +265,12 @@ public class NelsonSiegelBondCurveFunction extends AbstractFunction {
 
     @Override
     public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-      final ValueProperties properties = createValueProperties().with(CURVE_CALCULATION_METHOD, NON_LINEAR_LEAST_SQUARE)
-          .with(PROPERTY_CURVE_TYPE, NELSON_SIEGEL).with(CURVE_CONSTRUCTION_CONFIG, _curveConstructionConfiguration.getName()).with(CURVE, _curveNames).get();
+      final ValueProperties properties = createValueProperties()
+          .with(CURVE_CALCULATION_METHOD, NON_LINEAR_LEAST_SQUARE)
+          .with(PROPERTY_CURVE_TYPE, NELSON_SIEGEL)
+          .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, NELSON_SIEGEL)
+          .with(CURVE_CONSTRUCTION_CONFIG, _curveConstructionConfiguration.getName())
+          .with(CURVE, _curveNames).get();
       final Set<ValueSpecification> results = new HashSet<>();
       results.add(new ValueSpecification(CURVE_BUNDLE, target.toSpecification(), properties));
       results.add(new ValueSpecification(JACOBIAN_BUNDLE, target.toSpecification(), properties));

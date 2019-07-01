@@ -8,9 +8,7 @@ import static com.mcleodmoores.financial.function.credit.cds.isda.util.IsdaFunct
 import static com.mcleodmoores.financial.function.credit.cds.isda.util.IsdaFunctionUtils.getUpfrontAmount;
 import static com.mcleodmoores.financial.function.properties.CurveCalculationProperties.ISDA;
 import static com.opengamma.core.value.MarketDataRequirementNames.MARKET_VALUE;
-import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CALCULATION_METHOD;
-import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CONSTRUCTION_CONFIG;
-import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
+import static com.opengamma.engine.value.ValuePropertyNames.*;
 import static com.opengamma.engine.value.ValueRequirementNames.ACCRUED_DAYS;
 import static com.opengamma.engine.value.ValueRequirementNames.ACCRUED_PREMIUM;
 import static com.opengamma.engine.value.ValueRequirementNames.CLEAN_PRESENT_VALUE;
@@ -69,6 +67,7 @@ import com.opengamma.financial.analytics.model.credit.CreditSecurityToIdentifier
 import com.opengamma.financial.convention.IsdaCreditCurveConvention;
 import com.opengamma.financial.credit.CdsRecoveryRateIdentifier;
 import com.opengamma.financial.security.FinancialSecurity;
+import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.credit.StandardCDSSecurity;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.async.AsynchronousExecution;
@@ -92,8 +91,9 @@ import com.opengamma.util.money.CurrencyAmount;
  */
 public class IsdaCdsAnalyticsFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(IsdaCdsAnalyticsFunction.class);
-  private static final String[] RESULTS = new String[] { ACCRUED_DAYS, ACCRUED_PREMIUM, POINTS_UPFRONT, CLEAN_PRESENT_VALUE, DIRTY_PRESENT_VALUE, CLEAN_PRICE,
-      QUOTED_SPREAD, UPFRONT_AMOUNT, PARALLEL_CS01, PRINCIPAL, PRESENT_VALUE };
+  private static final String[] RESULTS = new String[] { ACCRUED_DAYS, POINTS_UPFRONT, CLEAN_PRICE, QUOTED_SPREAD };
+  private static final String[] RESULTS_WITH_CURRENCY = new String[] { ACCRUED_PREMIUM, CLEAN_PRESENT_VALUE, DIRTY_PRESENT_VALUE,
+    UPFRONT_AMOUNT, PARALLEL_CS01, PRINCIPAL, PRESENT_VALUE };
   private CreditSecurityToIdentifierVisitor _identifierVisitor;
   private InstrumentExposuresProvider _instrumentExposuresProvider;
   private static final AnalyticSpreadSensitivityCalculator CS01_CALCULATOR = new AnalyticSpreadSensitivityCalculator();
@@ -110,9 +110,10 @@ public class IsdaCdsAnalyticsFunction extends AbstractFunction.NonCompiledInvoke
     final ZonedDateTime now = ZonedDateTime.now(executionContext.getValuationClock());
     final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
     final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(executionContext);
-    final ValueProperties constraints = desiredValues.iterator().next().getConstraints();
     final StandardCDSSecurity security = (StandardCDSSecurity) target.getTrade().getSecurity();
     final Currency currency = security.getNotional().getCurrency();
+    final ValueProperties constraints = desiredValues.iterator().next().getConstraints().withoutAny(CURRENCY);
+    final ValueProperties constraintsWithCurrency = constraints.copy().with(CURRENCY, currency.getCode()).get();
     final IsdaCurveProvider curves = (IsdaCurveProvider) inputs.getValue(CURVE_BUNDLE);
     if (curves == null) {
       throw new OpenGammaRuntimeException("Could not get yield curve bundle");
@@ -148,17 +149,16 @@ public class IsdaCdsAnalyticsFunction extends AbstractFunction.NonCompiledInvoke
     final double parallelCs01 = CS01_CALCULATOR.parallelCS01(cds, quotedSpread, yieldCurve);
     final Set<ComputedValue> results = new HashSet<>();
     results.add(new ComputedValue(new ValueSpecification(ACCRUED_DAYS, target.toSpecification(), constraints), accruedDays));
-    results.add(new ComputedValue(new ValueSpecification(ACCRUED_PREMIUM, target.toSpecification(), constraints), CurrencyAmount.of(currency, accruedPremium)));
-    results.add(new ComputedValue(new ValueSpecification(CLEAN_PRESENT_VALUE, target.toSpecification(), constraints), CurrencyAmount.of(currency, cleanPv)));
+    results.add(new ComputedValue(new ValueSpecification(ACCRUED_PREMIUM, target.toSpecification(), constraintsWithCurrency), accruedPremium));
+    results.add(new ComputedValue(new ValueSpecification(CLEAN_PRESENT_VALUE, target.toSpecification(), constraintsWithCurrency), cleanPv));
     results.add(new ComputedValue(new ValueSpecification(CLEAN_PRICE, target.toSpecification(), constraints), cleanPrice));
-    results
-        .add(new ComputedValue(new ValueSpecification(DIRTY_PRESENT_VALUE, target.toSpecification(), constraints), CurrencyAmount.of(currency, upfrontAmount)));
-    results.add(new ComputedValue(new ValueSpecification(PARALLEL_CS01, target.toSpecification(), constraints), CurrencyAmount.of(currency, parallelCs01)));
+    results.add(new ComputedValue(new ValueSpecification(DIRTY_PRESENT_VALUE, target.toSpecification(), constraintsWithCurrency), upfrontAmount));
+    results.add(new ComputedValue(new ValueSpecification(PARALLEL_CS01, target.toSpecification(), constraintsWithCurrency), parallelCs01));
     results.add(new ComputedValue(new ValueSpecification(POINTS_UPFRONT, target.toSpecification(), constraints), pointsUpfront.getPointsUpFront()));
-    results.add(new ComputedValue(new ValueSpecification(PRESENT_VALUE, target.toSpecification(), constraints), CurrencyAmount.of(currency, cleanPv)));
-    results.add(new ComputedValue(new ValueSpecification(PRINCIPAL, target.toSpecification(), constraints), CurrencyAmount.of(currency, principal)));
+    results.add(new ComputedValue(new ValueSpecification(PRESENT_VALUE, target.toSpecification(), constraintsWithCurrency), cleanPv));
+    results.add(new ComputedValue(new ValueSpecification(PRINCIPAL, target.toSpecification(), constraintsWithCurrency), principal));
     results.add(new ComputedValue(new ValueSpecification(QUOTED_SPREAD, target.toSpecification(), constraints), quotedSpread.getQuotedSpread()));
-    results.add(new ComputedValue(new ValueSpecification(UPFRONT_AMOUNT, target.toSpecification(), constraints), CurrencyAmount.of(currency, upfrontAmount)));
+    results.add(new ComputedValue(new ValueSpecification(UPFRONT_AMOUNT, target.toSpecification(), constraintsWithCurrency), upfrontAmount));
     return results;
   }
 
@@ -184,11 +184,25 @@ public class IsdaCdsAnalyticsFunction extends AbstractFunction.NonCompiledInvoke
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    final ValueProperties properties = createValueProperties().with(PROPERTY_CURVE_TYPE, ISDA).withAny(CURVE_EXPOSURES).with(CURVE_CALCULATION_METHOD, ISDA)
-        .withAny(ISDAFunctionConstants.CDS_QUOTE_CONVENTION).get();
+    final ValueProperties properties = createValueProperties()
+        .with(PROPERTY_CURVE_TYPE, ISDA)
+        .withAny(CURVE_EXPOSURES)
+        .with(CURVE_CALCULATION_METHOD, ISDA)
+        .withAny(ISDAFunctionConstants.CDS_QUOTE_CONVENTION)
+        .get();
+    final ValueProperties propertiesWithCurrency = createValueProperties()
+        .with(PROPERTY_CURVE_TYPE, ISDA)
+        .withAny(CURVE_EXPOSURES)
+        .with(CURVE_CALCULATION_METHOD, ISDA)
+        .withAny(ISDAFunctionConstants.CDS_QUOTE_CONVENTION)
+        .with(CURRENCY, FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode())
+        .get();
     final Set<ValueSpecification> results = new HashSet<>();
     for (final String result : RESULTS) {
       results.add(new ValueSpecification(result, target.toSpecification(), properties));
+    }
+    for (String result : RESULTS_WITH_CURRENCY) {
+      results.add(new ValueSpecification(result, target.toSpecification(), propertiesWithCurrency));
     }
     return results;
   }
