@@ -76,8 +76,10 @@ import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.core.value.MarketDataRequirementNames;
+import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.function.CompiledFunctionDefinition;
+import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
@@ -127,6 +129,7 @@ public class IssuerProviderDiscountingFunction
     extends MultiCurveFunction<ParameterIssuerProviderInterface, IssuerDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(IssuerProviderDiscountingFunction.class);
+  public static final String UNDERLYING_CURVE_TYPE_PROPERTY = "UnderlyingCurveType";
   /** The calculator */
   // TODO: [PLAT-5430] A mechanism to change the calculator should be implemented.
   private static final ParSpreadMarketQuoteIssuerDiscountingCalculator PSXIC = ParSpreadMarketQuoteIssuerDiscountingCalculator.getInstance();
@@ -211,8 +214,65 @@ public class IssuerProviderDiscountingFunction
     protected MyCompiledFunctionDefinition(final ZonedDateTime earliestInvokation, final ZonedDateTime latestInvokation, final String[] curveNames,
         final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration, final String[] currencies) {
       super(earliestInvokation, latestInvokation, curveNames, YIELD_CURVE, exogenousRequirements, currencies);
-      ArgumentChecker.notNull(curveConstructionConfiguration, "curve construction configuration");
+      ArgumentChecker.notNull(curveConstructionConfiguration, "curveConstructionConfiguration");
       _curveConstructionConfiguration = curveConstructionConfiguration;
+    }
+
+    @Override
+    public boolean canHandleMissingInputs() {
+      return true;
+    }
+
+    @Override
+    public boolean canHandleMissingRequirements() {
+      return true;
+    }
+
+    @Override
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
+      final Set<ValueSpecification> results = new HashSet<>(getResults());
+      for (final ValueSpecification result : getResults()) {
+        switch (result.getValueName()) {
+          case CURVE_BUNDLE:
+          case JACOBIAN_BUNDLE:
+          case YIELD_CURVE:
+            final ValueProperties replaced = result.getProperties().copy().withAny(UNDERLYING_CURVE_TYPE_PROPERTY).get();
+            results.remove(result);
+            results.add(new ValueSpecification(result.getValueName(), result.getTargetSpecification(), replaced));
+            break;
+          default:
+            // no need to do anything
+            break;
+        }
+      }
+      return results;
+    }
+
+    @Override
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
+      final Set<ValueRequirement> requirements = super.getRequirements(compilationContext, target, desiredValue);
+      final ValueProperties constraints = desiredValue.getConstraints();
+      final Set<String> underlyingCurveType = constraints.getValues(UNDERLYING_CURVE_TYPE_PROPERTY);
+      if (underlyingCurveType != null && !underlyingCurveType.isEmpty()) {
+        for (final ValueRequirement requirement : requirements) {
+          switch (requirement.getValueName()) {
+            case CURVE_BUNDLE:
+            case JACOBIAN_BUNDLE:
+            case YIELD_CURVE:
+              final ValueProperties replaced = requirement.getConstraints().copy().withoutAny(PROPERTY_CURVE_TYPE)
+                  .with(PROPERTY_CURVE_TYPE, underlyingCurveType).get();
+              requirements.remove(requirement);
+              requirements.add(new ValueRequirement(requirement.getValueName(), requirement.getTargetReference(), replaced));
+              System.out.println(requirement + " " + new ValueRequirement(requirement.getValueName(), requirement.getTargetReference(), replaced));
+              break;
+            default:
+              // don't need to do anything
+              break;
+          }
+        }
+      }
+      return requirements;
     }
 
     @SuppressWarnings("unchecked")

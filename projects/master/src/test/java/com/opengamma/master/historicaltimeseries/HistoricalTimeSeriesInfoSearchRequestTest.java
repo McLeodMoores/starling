@@ -31,6 +31,7 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesInfoSearchRequest.Meta;
 import com.opengamma.master.holiday.HolidayDocument;
+import com.opengamma.test.Assert;
 import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.util.test.AbstractFudgeBuilderTestCase;
 import com.opengamma.util.test.TestGroup;
@@ -147,21 +148,21 @@ public class HistoricalTimeSeriesInfoSearchRequestTest extends AbstractFudgeBuil
       request.addExternalId(eid);
     }
     // uses the default search type
-    assertEquals(request.getExternalIdSearch(), ExternalIdSearch.of(EID_SEARCH.getExternalIds()));
+    Assert.assertEqualsNoOrder(request.getExternalIdSearch(), ExternalIdSearch.of(EID_SEARCH.getExternalIds()));
     request.setExternalIdSearch(null);
     request.setExternalIdSearchType(ExternalIdSearchType.NONE);
     for (final ExternalId eid : EID_SEARCH.getExternalIds()) {
       request.addExternalId(eid);
     }
-    assertEquals(request.getExternalIdSearch(), ExternalIdSearch.of(ExternalIdSearchType.NONE, EID_SEARCH.getExternalIds()));
+    Assert.assertEqualsNoOrder(request.getExternalIdSearch(), ExternalIdSearch.of(ExternalIdSearchType.NONE, EID_SEARCH.getExternalIds()));
     request.setExternalIdSearch(null);
     request.setExternalIdSearchType(SEARCH_TYPE);
     request.addExternalIds(EID_SEARCH.getExternalIds().toArray(new ExternalId[0]));
-    assertEquals(request.getExternalIdSearch(), EID_SEARCH);
+    Assert.assertEqualsNoOrder(request.getExternalIdSearch(), EID_SEARCH);
     request.setExternalIdSearch(null);
     request.setExternalIdSearchType(SEARCH_TYPE);
     request.addExternalIds(EID_SEARCH.getExternalIds());
-    assertEquals(request.getExternalIdSearch(), EID_SEARCH);
+    Assert.assertEqualsNoOrder(request.getExternalIdSearch(), EID_SEARCH);
     final List<ExternalId> eids = new ArrayList<>(EID_SEARCH.getExternalIds());
     eids.add(ExternalId.of("C", "1"));
     request.addExternalIds(eids);

@@ -11,11 +11,11 @@ import com.opengamma.engine.target.ComputationTargetType;
 /**
  *
  */
-public class CAPMBetaDefaultPropertiesPositionFunction extends CAPMBetaDefaultPropertiesFunction {
+public class CAPMBetaDefaultPropertiesSecurityFunction extends CAPMBetaDefaultPropertiesFunction {
 
-  public CAPMBetaDefaultPropertiesPositionFunction(final String samplingPeriodName, final String scheduleCalculatorName, final String samplingFunctionName,
+  public CAPMBetaDefaultPropertiesSecurityFunction(final String samplingPeriodName, final String scheduleCalculatorName, final String samplingFunctionName,
       final String returnCalculatorName, final String covarianceCalculatorName, final String varianceCalculatorName) {
     super(samplingPeriodName, scheduleCalculatorName, samplingFunctionName, returnCalculatorName, covarianceCalculatorName, varianceCalculatorName,
-        ComputationTargetType.SECURITY);
+        ComputationTargetType.POSITION);
   }
 }

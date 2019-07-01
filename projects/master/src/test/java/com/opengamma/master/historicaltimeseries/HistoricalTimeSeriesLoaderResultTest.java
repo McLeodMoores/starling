@@ -40,8 +40,7 @@ public class HistoricalTimeSeriesLoaderResultTest extends AbstractFudgeBuilderTe
     assertTrue(result.getResultMap().isEmpty());
     result.setResultMap(RESULTS);
     assertEquals(result, result);
-    assertEquals(result.toString(),
-        "HistoricalTimeSeriesLoaderResult{resultMap={eid~1=uid~1, eid~0=uid~0, eid~3=uid~11, eid~2=uid~10, eid~5=uid~101, eid~4=uid~100}}");
+    assertTrue(result.toString().startsWith("HistoricalTimeSeriesLoaderResult{resultMap"));
     final HistoricalTimeSeriesLoaderResult other = new HistoricalTimeSeriesLoaderResult();
     other.setResultMap(RESULTS);
     assertEquals(result, other);

@@ -334,7 +334,8 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
     addUnitScalingAndSummingFunction(functions, ValueRequirementNames.HEDGE_NOTIONAL);
 
     addUnitScalingAndSummingFunction(functions, ValueRequirementNames.BUCKETED_PV01);
-
+    addUnitScalingFunction(functions, ValueRequirementNames.SHARPE_RATIO);
+    addUnitScalingFunction(functions, ValueRequirementNames.CAPM_BETA);
     functions.add(functionConfiguration(MarketQuotePositionFunction.class));
 
   }

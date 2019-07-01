@@ -70,10 +70,12 @@ import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
+import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.view.ViewCalculationConfiguration;
 import com.opengamma.engine.view.ViewDefinition;
 import com.opengamma.examples.simulated.loader.ExampleEquityPortfolioLoader;
 import com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues;
+import com.opengamma.financial.analytics.model.curve.IssuerProviderDiscountingFunction;
 import com.opengamma.financial.analytics.model.discounting.DiscountingYCNSFunction;
 import com.opengamma.financial.currency.CurrencyConversionFunction;
 import com.opengamma.financial.security.bond.BillSecurity;
@@ -651,16 +653,22 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     definition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration config = new ViewCalculationConfiguration(definition, DEFAULT_CALC_CONFIG);
     config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(CURVE, "US AA Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING).get()));
+        ValueProperties.with(CURVE, "US AA Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
+            .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA").get()));
     config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(CURVE, "US A Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING).get()));
+        ValueProperties.with(CURVE, "US A Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
+            .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA").get()));
     config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(CURVE, "US B Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING).get()));
+        ValueProperties.with(CURVE, "US B Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
+            .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA").get()));
     config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(CURVE, "US CC Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING).get()));
+        ValueProperties.with(CURVE, "US CC Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
+            .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA").get()));
     config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(CURVE, "US C Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING).get()));
-    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.none());
+        ValueProperties.with(CURVE, "US C Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
+            .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA").get()));
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING)
+        .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA").get());
     config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.none());
     definition.addViewCalculationConfiguration(config);
     return definition;

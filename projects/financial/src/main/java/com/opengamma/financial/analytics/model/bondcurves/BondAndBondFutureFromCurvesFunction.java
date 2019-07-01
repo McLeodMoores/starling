@@ -54,8 +54,10 @@ import com.opengamma.util.async.AsynchronousExecution;
 /**
  * Base class for bond and bond future analytic calculations from yield curves.
  *
- * @param <S> The type of the curves required by the calculator
- * @param <T> The type of the result
+ * @param <S>
+ *          The type of the curves required by the calculator
+ * @param <T>
+ *          The type of the result
  */
 public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIssuerProviderInterface, T> extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
@@ -68,8 +70,10 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
   private InstrumentExposuresProvider _instrumentExposuresProvider;
 
   /**
-   * @param valueRequirementName The value requirement name, not null
-   * @param calculator The calculator
+   * @param valueRequirementName
+   *          The value requirement name, not null
+   * @param calculator
+   *          The calculator
    */
   public BondAndBondFutureFromCurvesFunction(final String valueRequirementName, final InstrumentDerivativeVisitor<S, T> calculator) {
     ArgumentChecker.notNull(valueRequirementName, "value requirement");
@@ -125,13 +129,14 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
     if (curveExposureConfigs == null || curveExposureConfigs.size() != 1) {
       return null;
     }
+    System.out.println("Curve exposures = " + curveExposureConfigs);
     final Set<String> curveTypes = constraints.getValues(PROPERTY_CURVE_TYPE);
     final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
     final Set<ValueRequirement> requirements = new HashSet<>();
     try {
       for (final String curveExposureConfig : curveExposureConfigs) {
-        final Set<String> curveConstructionConfigurationNames =
-            _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
+        final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig,
+            target.getTrade());
         if (curveConstructionConfigurationNames == null) {
           LOGGER.error("Could not get curve construction configuration names for curve exposure configuration called {}", curveExposureConfig);
           return null;
@@ -149,6 +154,7 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
       }
       final HistoricalTimeSeriesResolver timeSeriesResolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
       requirements.addAll(BondAndBondFutureFunctionUtils.getConversionRequirements(security, timeSeriesResolver));
+      System.out.println("requirements: " + requirements);
       return requirements;
     } catch (final Exception e) {
       LOGGER.error(e.getMessage());
@@ -159,7 +165,8 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
   /**
    * Gets the value properties of the result.
    *
-   * @param target The computation target
+   * @param target
+   *          The computation target
    * @return The properties
    */
   protected Collection<ValueProperties.Builder> getResultProperties(final ComputationTarget target) {

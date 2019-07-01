@@ -48,7 +48,7 @@ public class SimulatedHistoricalData {
   private final Map<Pair<ExternalId, String>, Double> _finishValues = new HashMap<>();
 
   private static final int NUM_FIELDS = 4;
-  private static final double SCALING_FACTOR = 0.0005; // i.e. 0.5% * 1SD
+  private static final double SCALING_FACTOR = 0.005; // i.e. 0.5% * 1SD
 
   /**
    * Default constructor.
@@ -103,21 +103,6 @@ public class SimulatedHistoricalData {
    */
   public Map<Pair<ExternalId, String>, Double> getFinishValues() {
     return _finishValues;
-  }
-
-  /**
-   * Returns a value with a random perturbation applied.
-   *
-   * @param random
-   *          a random number generator
-   * @param value
-   *          the initial value
-   * @param centre
-   *          the central value
-   * @return the value
-   */
-  public static double wiggleValue(final Random random, final double value, final double centre) {
-    return Math.round(100 * (9 * value + centre) / 10 + random.nextGaussian() * (value * SCALING_FACTOR)) / 100.;
   }
 
 }

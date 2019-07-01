@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.Type;
 import org.hibernate.usertype.CompositeUserType;
@@ -71,8 +71,8 @@ public class PersistentCompositeUniqueId implements CompositeUserType {
   }
 
   @Override
-  public Object nullSafeGet(final ResultSet resultSet, final String[] names, final SharedSessionContractImplementor session,
-      final Object owner) throws HibernateException, SQLException {
+  public Object nullSafeGet(final ResultSet resultSet, final String[] names, final SessionImplementor session, Object owner) 
+      throws HibernateException, SQLException {
     final String scheme = resultSet.getString(names[0]);
     if (resultSet.wasNull()) {
       return null;
@@ -84,7 +84,7 @@ public class PersistentCompositeUniqueId implements CompositeUserType {
 
   @Override
   public void nullSafeSet(final PreparedStatement statement, final Object value, final int index,
-      final SharedSessionContractImplementor session) throws HibernateException, SQLException {
+      final SessionImplementor session) throws HibernateException, SQLException {
     if (value == null) {
       statement.setNull(index, StandardBasicTypes.STRING.sqlType());
       statement.setNull(index + 1, StandardBasicTypes.STRING.sqlType());
@@ -112,17 +112,17 @@ public class PersistentCompositeUniqueId implements CompositeUserType {
   }
 
   @Override
-  public Serializable disassemble(final Object value, final SharedSessionContractImplementor session) throws HibernateException {
+  public Serializable disassemble(final Object value, final SessionImplementor session) throws HibernateException {
     return (Serializable) value;
   }
 
   @Override
-  public Object assemble(final Serializable cached, final SharedSessionContractImplementor session, final Object owner) {
+  public Object assemble(final Serializable cached, final SessionImplementor session, final Object owner) {
     return cached;
   }
 
   @Override
-  public Object replace(final Object original, final Object target, final SharedSessionContractImplementor session,
+  public Object replace(final Object original, final Object target, final SessionImplementor session,
       final Object owner) throws HibernateException {
     return original;
   }

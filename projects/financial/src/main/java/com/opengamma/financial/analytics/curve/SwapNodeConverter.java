@@ -87,10 +87,18 @@ public class SwapNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
   public InstrumentDefinition<?> visitSwapNode(final SwapNode swapNode) {
     final FinancialConvention payLegConvention = _conventionSource.getSingle(swapNode.getPayLegConvention(), FinancialConvention.class);
     final FinancialConvention receiveLegConvention = _conventionSource.getSingle(swapNode.getReceiveLegConvention(), FinancialConvention.class);
-    final Period startTenor = swapNode.getStartTenor().getPeriod();
-    final Period maturityTenor = swapNode.getMaturityTenor().getPeriod();
-    return NodeConverterUtils.getSwapDefinition(payLegConvention, receiveLegConvention, startTenor, maturityTenor, _securitySource, _regionSource,
-        _holidaySource, _conventionSource, _marketData, _dataId, _valuationTime, _fx);
+    try {
+      final Period startTenor = swapNode.getStartTenor().getPeriod();
+      final Period maturityTenor = swapNode.getMaturityTenor().getPeriod();
+      return NodeConverterUtils.getSwapDefinition(payLegConvention, receiveLegConvention, startTenor, maturityTenor, _securitySource, _regionSource,
+          _holidaySource, _conventionSource, _marketData, _dataId, _valuationTime, _fx);
+    } catch (final Exception e) {
+      final String s = "-----------------------------------------------------\n"
+          + payLegConvention.getName() + " " + receiveLegConvention.getName() + " " + swapNode.getMaturityTenor() + "\n"
+          + "-----------------------------------------------------";
+      System.out.println(s);
+      throw e;
+    }
   }
 
 }

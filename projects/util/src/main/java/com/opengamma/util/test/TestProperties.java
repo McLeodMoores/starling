@@ -10,6 +10,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -26,9 +28,9 @@ public class TestProperties {
   /** Default file name. */
   private static final String DEFAULT_PROPS_FILE_NAME = "tests.properties";
   /** Relative file location, deprecated (just use classpath). */
-  private static final String DEFAULT_PROPS_DIR1 = "../../../Integration-Tests/src/test/resources/";
+  private static final String DEFAULT_PROPS_DIR1 = "../../../../../../../../master-db/config/";
   /** Relative file location, deprecated (just use classpath). */
-  private static final String DEFAULT_PROPS_DIR2 = "../Integration-Tests/src/test/resources/";
+  private static final String DEFAULT_PROPS_DIR2 = "../../../../../../master-db/config/";
   /** Relative file location, deprecated (just use classpath). */
   private static final String DEFAULT_PROPS_DIR3 = "../../common/"; // OG-Platform/common/
   /** The properties. */

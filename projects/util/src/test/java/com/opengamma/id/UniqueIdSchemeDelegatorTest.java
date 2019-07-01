@@ -11,11 +11,13 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableMap;
+import com.opengamma.test.Assert;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -50,7 +52,10 @@ public class UniqueIdSchemeDelegatorTest {
    */
   @Test
   public void testConstructorDefaultAndMap() {
-    final Map<String, String> map = ImmutableMap.of("A", "adapt", "B", "bootup", "C", "curve");
+    final Map<String, String> map = new LinkedHashMap<>();
+    map.put("A", "adapt");
+    map.put("B", "bootup");
+    map.put("C", "curve");
     final UniqueIdSchemeDelegator<String> test = new UniqueIdSchemeDelegator<>("default", map);
     assertEquals(test.chooseDelegate("A"), "adapt");
     assertEquals(test.chooseDelegate("B"), "bootup");
@@ -58,7 +63,7 @@ public class UniqueIdSchemeDelegatorTest {
     assertEquals(test.chooseDelegate("D"), "default");
     assertEquals(test.getDefaultDelegate(), "default");
     assertEquals(test.getDelegates(), map);
-    assertEquals(test.getAllDelegates(), Arrays.asList("default", "adapt", "bootup", "curve"));
+    Assert.assertEqualsNoOrder(test.getAllDelegates(), Arrays.asList("default", "adapt", "bootup", "curve"));
   }
 
   /**

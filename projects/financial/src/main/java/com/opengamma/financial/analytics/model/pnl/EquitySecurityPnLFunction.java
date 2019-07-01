@@ -5,7 +5,6 @@
  */
 package com.opengamma.financial.analytics.model.pnl;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +12,6 @@ import java.util.Set;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.timeseries.returns.TimeSeriesReturnCalculator;
 import com.opengamma.analytics.financial.timeseries.returns.TimeSeriesReturnCalculatorFactory;
-import com.opengamma.core.position.Trade;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.function.AbstractFunction;
@@ -34,26 +32,21 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 /**
  *
  */
-public class EquityPnLFunction extends AbstractFunction.NonCompiledInvoker {
+public class EquitySecurityPnLFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
   public ComputationTargetType getTargetType() {
-    return ComputationTargetType.POSITION;
+    return ComputationTargetType.SECURITY;
   }
 
+  @Override
   public boolean canApplyTo(FunctionCompilationContext context, ComputationTarget target) {
-    Collection<Trade> trades = target.getPosition().getTrades();
-    for (Trade trade : trades) {
-      if (!(trade.getSecurity() instanceof EquitySecurity)) {
-        return false;
-      }
-    }
-    return true;
+    return target.getSecurity() instanceof EquitySecurity;
   }
   
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    final String currency = FinancialSecurityUtils.getCurrency(target.getPosition().getSecurity()).getCode();
+    final String currency = FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();
     final ValueProperties properties = createValueProperties()
         .with(ValuePropertyNames.CURRENCY, currency)
         .withAny(ValuePropertyNames.SAMPLING_PERIOD)
@@ -83,7 +76,7 @@ public class EquityPnLFunction extends AbstractFunction.NonCompiledInvoker {
     if (returnCalculatorName == null || returnCalculatorName.size() != 1) {
       return null;
     }
-    final String currency = FinancialSecurityUtils.getCurrency(target.getPosition().getSecurity()).getCode();
+    final String currency = FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();
     final Set<ValueRequirement> requirements = new HashSet<>();
     final ValueProperties priceSeriesProperties = ValueProperties.builder()
         .with(ValuePropertyNames.CURRENCY, currency)
@@ -91,7 +84,7 @@ public class EquityPnLFunction extends AbstractFunction.NonCompiledInvoker {
         .with(ValuePropertyNames.SCHEDULE_CALCULATOR, scheduleCalculatorName)
         .with(ValuePropertyNames.SAMPLING_FUNCTION, samplingFunctionName).get();
     final ComputationTargetSpecification targetSpec =
-        new ComputationTargetSpecification(ComputationTargetType.SECURITY, target.getPosition().getSecurity().getUniqueId());
+        new ComputationTargetSpecification(ComputationTargetType.SECURITY, target.getSecurity().getUniqueId());
     requirements.add(new ValueRequirement(ValueRequirementNames.FAIR_VALUE, targetSpec, ValueProperties.with(ValuePropertyNames.CURRENCY, currency).get()));
     requirements.add(new ValueRequirement(ValueRequirementNames.PRICE_SERIES, targetSpec, priceSeriesProperties));
     return requirements;
@@ -115,7 +108,7 @@ public class EquityPnLFunction extends AbstractFunction.NonCompiledInvoker {
     final TimeSeriesReturnCalculator returnCalculator = getTimeSeriesReturnCalculator(returnCalculatorNames);
     final LocalDateDoubleTimeSeries returnSeries = returnCalculator.evaluate((LocalDateDoubleTimeSeries) priceSeriesObj);
     final ValueSpecification resultSpec = new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), desiredValue.getConstraints());
-    final Object result = returnSeries.multiply(fairValue).multiply(target.getPosition().getQuantity().doubleValue());
+    final Object result = returnSeries.multiply(fairValue);
     return Collections.singleton(new ComputedValue(resultSpec, result));
   }
 

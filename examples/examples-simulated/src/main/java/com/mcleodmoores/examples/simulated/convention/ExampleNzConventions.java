@@ -67,11 +67,11 @@ public final class ExampleNzConventions extends ConventionMasterInitializer {
         ExternalId.of("CONVENTION", "NZDLIBORP6M"), false, InterpolationMethod.NONE.name(), Tenor.SIX_MONTHS, 0, false, StubType.SHORT_START, false, 0);
 
     // Swap conventions
-    final SwapConvention shortVanillaSwap = new SwapConvention("AUD Fixed/3M LIBOR", ExternalIdBundle.of("CONVENTION", "AUD Fixed/3M LIBOR"),
+    final SwapConvention shortVanillaSwap = new SwapConvention("NZD Fixed/3M LIBOR", ExternalIdBundle.of("CONVENTION", "NZD Fixed/3M LIBOR"),
         ibor3mFixedLeg.getExternalIdBundle().iterator().next(), ibor6mLeg.getExternalIdBundle().iterator().next());
-    final SwapConvention longVanillaSwap = new SwapConvention("AUD Fixed/6M LIBOR", ExternalIdBundle.of("CONVENTION", "AUD Fixed/6M LIBOR"),
+    final SwapConvention longVanillaSwap = new SwapConvention("NZD Fixed/6M LIBOR", ExternalIdBundle.of("CONVENTION", "NZD Fixed/6M LIBOR"),
         ibor6mFixedLeg.getExternalIdBundle().iterator().next(), ibor6mLeg.getExternalIdBundle().iterator().next());
-    final SwapConvention oisSwap = new SwapConvention("AUD OIS", ExternalIdBundle.of("CONVENTION", "AUD OIS"),
+    final SwapConvention oisSwap = new SwapConvention("NZD OIS", ExternalIdBundle.of("CONVENTION", "NZD OIS"),
         oisFixedLeg.getExternalIdBundle().iterator().next(), oisLeg.getExternalIdBundle().iterator().next());
 
     addConvention(master, deposit);

@@ -428,6 +428,24 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
     }
 
     /**
+     * Gets the configuration name.
+     *
+     * @return The configuration name
+     */
+    protected String getConfigurationName() {
+      return _configurationName;
+    }
+
+    /**
+     * Gets the results.
+     * 
+     * @return The results
+     */
+    protected Set<ValueSpecification> getResults() {
+      return _results;
+    }
+
+    /**
      * Gets the known data from the FX matrix.
      *
      * @param inputs

@@ -55,11 +55,6 @@ public abstract class SharpeRatioFunction extends AbstractFunction.NonCompiledIn
   }
 
   @Override
-  public boolean canApplyTo(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
-    return true;
-  }
-
-  @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) {
     final ComputationTargetSpecification targetSpec = target.toSpecification();

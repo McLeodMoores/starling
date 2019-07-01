@@ -119,8 +119,6 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
           case BOND:
             functions.add(functionConfiguration(IssuerProviderDiscountingFunction.class, config));
             functions.add(functionConfiguration(FXMatrixFunction.class, config));
-            addCurveFunctions(functions, Arrays.asList(InterpolatedCurveDefinition.class, ConstantSpreadCurveDefinition.class, SpreadCurveDefinition.class),
-                config);
             functions.add(functionConfiguration(NelsonSiegelBondCurveFunction.class, config));
             addCurveFunctions(functions, Collections.<Class<? extends AbstractCurveDefinition>> singletonList(InterpolatedCurveDefinition.class), config);
             break;

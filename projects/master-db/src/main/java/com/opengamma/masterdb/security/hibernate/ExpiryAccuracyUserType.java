@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.usertype.UserType;
 
@@ -58,7 +58,7 @@ public class ExpiryAccuracyUserType implements UserType {
   }
 
   @Override
-  public Object nullSafeGet(final ResultSet resultSet, final String[] columnNames, final SharedSessionContractImplementor session,
+  public Object nullSafeGet(final ResultSet resultSet, final String[] columnNames, final SessionImplementor session,
       final Object owner) throws HibernateException, SQLException {
     final Integer databaseValue = resultSet.getInt(columnNames[0]);
     if (resultSet.wasNull()) {
@@ -82,7 +82,7 @@ public class ExpiryAccuracyUserType implements UserType {
 
   @Override
   public void nullSafeSet(final PreparedStatement stmt, final Object value, final int index,
-      final SharedSessionContractImplementor session) throws HibernateException, SQLException {
+      final SessionImplementor session) throws HibernateException, SQLException {
     if (value == null) {
       stmt.setNull(index, StandardBasicTypes.INTEGER.sqlType());
     } else {

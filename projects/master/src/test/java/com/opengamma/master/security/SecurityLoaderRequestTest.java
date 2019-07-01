@@ -88,8 +88,10 @@ public class SecurityLoaderRequestTest extends AbstractFudgeBuilderTestCase {
     assertEquals(request, request);
     assertEquals(request, other);
     assertEquals(request.hashCode(), other.hashCode());
-    assertEquals(request.toString(), "SecurityLoaderRequest{externalIdBundles=[Bundle[scheme1~value1, scheme1~value2], "
-        + "Bundle[scheme2~value1, scheme2~value2]], forceUpdate=false, returnSecurityObjects=false}");
+    SecurityLoaderRequest toStringTest = request.clone();
+    toStringTest.setExternalIdBundles(Collections.singleton(ExternalIdBundle.of("scheme1", "value1")));
+    assertEquals(toStringTest.toString(), "SecurityLoaderRequest{externalIdBundles=[Bundle[scheme1~value1]], "
+        + "forceUpdate=false, returnSecurityObjects=false}");
     assertNotEquals(null, request);
     assertNotEquals(IDS_1, request);
     other.setExternalIdBundles(Collections.singleton(IDS_1));

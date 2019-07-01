@@ -82,11 +82,13 @@ public class SecurityLoaderResultTest extends AbstractFudgeBuilderTestCase {
     assertEquals(result, other);
     assertEquals(result.hashCode(), other.hashCode());
     assertNotEquals(null, result);
-    assertEquals(result.toString(), "SecurityLoaderResult{resultMap={Bundle[eid1~value1, eid2~value2]=oid1~v1~v1, "
-        + "Bundle[eid3~value3]=oid2~v2~v2, Bundle[eid4~value4]=null}, "
-        + "securityMap={oid1~v1~v1=ManageableSecurity{uniqueId=oid1~v1~v1, externalIdBundle=Bundle[eid1~value1, eid2~value2], name=, "
-        + "securityType=MANAGEABLE, attributes={}, requiredPermissions=[]}, oid2~v2~v2=ManageableSecurity{uniqueId=oid2~v2~v2, "
-        + "externalIdBundle=Bundle[eid3~value3], name=, securityType=MANAGEABLE, attributes={}, requiredPermissions=[]}}}");
+    SecurityLoaderResult toStringTest = result.clone();
+    toStringTest.setResultMap(Collections.singletonMap(EID_1.toBundle(), UID_1));
+    assertEquals(toStringTest.toString(), "SecurityLoaderResult{resultMap={Bundle[eid1~value1]=oid1~v1~v1}, "
+        + "securityMap={oid2~v2~v2=ManageableSecurity{uniqueId=oid2~v2~v2, externalIdBundle=Bundle[eid3~value3], "
+        + "name=, securityType=MANAGEABLE, attributes={}, requiredPermissions=[]}, "
+        + "oid1~v1~v1=ManageableSecurity{uniqueId=oid1~v1~v1, externalIdBundle=Bundle[eid1~value1, eid2~value2], "
+        + "name=, securityType=MANAGEABLE, attributes={}, requiredPermissions=[]}}}");
     // no security map
     result = new SecurityLoaderResult(RETRIEVED, false);
     assertEquals(result.getResultMap(), RESULT_UIDS);
@@ -96,8 +98,9 @@ public class SecurityLoaderResultTest extends AbstractFudgeBuilderTestCase {
     assertEquals(result, other);
     assertEquals(result.hashCode(), other.hashCode());
     assertNotEquals(null, result);
-    assertEquals(result.toString(), "SecurityLoaderResult{resultMap={Bundle[eid1~value1, eid2~value2]=oid1~v1~v1, "
-        + "Bundle[eid3~value3]=oid2~v2~v2, Bundle[eid4~value4]=null}, securityMap={}}");
+    toStringTest = result.clone();
+    toStringTest.setResultMap(Collections.singletonMap(EID_1.toBundle(), UID_1));
+    assertEquals(toStringTest.toString(), "SecurityLoaderResult{resultMap={Bundle[eid1~value1]=oid1~v1~v1}, securityMap={}}");
     other = new SecurityLoaderResult(Collections.<ExternalIdBundle, Security>emptyMap(), false);
     assertNotEquals(result, other);
     other = new SecurityLoaderResult(RETRIEVED, true);

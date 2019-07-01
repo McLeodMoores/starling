@@ -76,8 +76,10 @@ public class HistoricalTimeSeriesLoaderRequestTest extends AbstractFudgeBuilderT
     final HistoricalTimeSeriesLoaderRequest request = HistoricalTimeSeriesLoaderRequest.create(EIDS, DATA_PROVIDER, DATA_FIELD, START_DATE, END_DATE);
     HistoricalTimeSeriesLoaderRequest other = HistoricalTimeSeriesLoaderRequest.create(EIDS, DATA_PROVIDER, DATA_FIELD, START_DATE, END_DATE);
     assertEquals(request, request);
-    assertEquals(request.toString(),
-        "HistoricalTimeSeriesLoaderRequest{externalIds=[A~1, A~2, B~1], dataProvider=BBG, dataField=VOLUME, " + "startDate=2016-01-01, endDate=2019-01-01}");
+    HistoricalTimeSeriesLoaderRequest toStringTest = request.clone();
+    toStringTest.setExternalIds(Collections.singleton(ExternalId.of("A", "1"))); 
+    assertEquals(toStringTest.toString(),
+        "HistoricalTimeSeriesLoaderRequest{externalIds=[A~1], dataProvider=BBG, dataField=VOLUME, " + "startDate=2016-01-01, endDate=2019-01-01}");     
     assertEquals(request, other);
     assertEquals(request.hashCode(), other.hashCode());
     other = HistoricalTimeSeriesLoaderRequest.create(Collections.<ExternalId> emptySet(), DATA_PROVIDER, DATA_FIELD, START_DATE, END_DATE);

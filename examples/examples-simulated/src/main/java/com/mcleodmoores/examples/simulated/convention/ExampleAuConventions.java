@@ -68,7 +68,7 @@ public final class ExampleAuConventions extends ConventionMasterInitializer {
 
     // Swap conventions
     final SwapConvention shortVanillaSwap = new SwapConvention("AUD Fixed/3M LIBOR", ExternalIdBundle.of("CONVENTION", "AUD Fixed/3M LIBOR"),
-        ibor3mFixedLeg.getExternalIdBundle().iterator().next(), ibor6mLeg.getExternalIdBundle().iterator().next());
+        ibor3mFixedLeg.getExternalIdBundle().iterator().next(), ibor3mLeg.getExternalIdBundle().iterator().next());
     final SwapConvention longVanillaSwap = new SwapConvention("AUD Fixed/6M LIBOR", ExternalIdBundle.of("CONVENTION", "AUD Fixed/6M LIBOR"),
         ibor6mFixedLeg.getExternalIdBundle().iterator().next(), ibor6mLeg.getExternalIdBundle().iterator().next());
     final SwapConvention oisSwap = new SwapConvention("AUD OIS", ExternalIdBundle.of("CONVENTION", "AUD OIS"),
