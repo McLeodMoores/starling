@@ -275,12 +275,22 @@ public class ManageableTradeTest {
     final ManageableTrade other = new ManageableTrade();
     setFields(other);
     assertEquals(trade, trade);
-    assertEquals(trade.toString(),
-        "ManageableTrade{uniqueId=trade~1, parentPositionId=pos~100, quantity=1760, "
-            + "securityLink=ManageableSecurityLink{objectId=sec~34, externalId=Bundle[], target=SimpleSecurity{uniqueId=sec~34, "
-            + "externalIdBundle=Bundle[abc~def], securityType=type, name=name, attributes={}}}, counterpartyExternalId=counter~zxc, "
-            + "tradeDate=2018-01-01, tradeTime=01:53Z, premium=3678.0, premiumCurrency=AUD, premiumDate=2018-01-02, premiumTime=08:00Z, "
-            + "attributes={a=b, c=d}, deal=com.opengamma.master.position.ManageableTradeTest$DummyDeal@9bb1, providerId=prov~9087}");
+    String tradeStr = trade.toString();
+    if (tradeStr.contains("a=b, c=d")) {
+      assertEquals(trade.toString(),
+          "ManageableTrade{uniqueId=trade~1, parentPositionId=pos~100, quantity=1760, "
+              + "securityLink=ManageableSecurityLink{objectId=sec~34, externalId=Bundle[], target=SimpleSecurity{uniqueId=sec~34, "
+              + "externalIdBundle=Bundle[abc~def], securityType=type, name=name, attributes={}}}, counterpartyExternalId=counter~zxc, "
+              + "tradeDate=2018-01-01, tradeTime=01:53Z, premium=3678.0, premiumCurrency=AUD, premiumDate=2018-01-02, premiumTime=08:00Z, "
+              + "attributes={a=b, c=d}, deal=com.opengamma.master.position.ManageableTradeTest$DummyDeal@9bb1, providerId=prov~9087}");
+    } else {
+      assertEquals(trade.toString(),
+              "ManageableTrade{uniqueId=trade~1, parentPositionId=pos~100, quantity=1760, "
+                  + "securityLink=ManageableSecurityLink{objectId=sec~34, externalId=Bundle[], target=SimpleSecurity{uniqueId=sec~34, "
+                  + "externalIdBundle=Bundle[abc~def], securityType=type, name=name, attributes={}}}, counterpartyExternalId=counter~zxc, "
+                  + "tradeDate=2018-01-01, tradeTime=01:53Z, premium=3678.0, premiumCurrency=AUD, premiumDate=2018-01-02, premiumTime=08:00Z, "
+                  + "attributes={c=d, a=b}, deal=com.opengamma.master.position.ManageableTradeTest$DummyDeal@9bb1, providerId=prov~9087}");
+    }
     assertEquals(trade, other);
     assertEquals(trade.hashCode(), other.hashCode());
     other.setAttributes(new HashMap<String, String>());

@@ -50,17 +50,22 @@ public final class CurveUtils {
   }
 
   /**
-   * Builds a {@link CurveSpecification} from a curve definition that is valid at a particular time.
-   * This method handles only {@link CurveDefinition} and {@link InterpolatedCurveDefinition}.
+   * Builds a {@link CurveSpecification} from a curve definition that is valid at a particular time. This method handles only {@link CurveDefinition} and
+   * {@link InterpolatedCurveDefinition}.
    *
-   * @param valuationTime  the valuation time, not null
-   * @param curveDefinitionSource  the curve definition source, not null
-   * @param curveSpecificationBuilder  the curve specification builder, not null
-   * @param curveDate  the curve date, not null
-   * @param curveName  the curve name, not null
-   * @return  the curve specification
-   * @deprecated  this method does not handle definition types other than {@link CurveDefinition} and {@link InterpolatedCurveDefinition}. Use
-   * {@link #getSpecification(Instant, CurveDefinitionSource, CurveSpecificationBuilder, LocalDate, String)}.
+   * @param valuationTime
+   *          the valuation time, not null
+   * @param curveDefinitionSource
+   *          the curve definition source, not null
+   * @param curveSpecificationBuilder
+   *          the curve specification builder, not null
+   * @param curveDate
+   *          the curve date, not null
+   * @param curveName
+   *          the curve name, not null
+   * @return the curve specification
+   * @deprecated this method does not handle definition types other than {@link CurveDefinition} and {@link InterpolatedCurveDefinition}. Use
+   *             {@link #getSpecification(Instant, CurveDefinitionSource, CurveSpecificationBuilder, LocalDate, String)}.
    */
   @Deprecated
   public static CurveSpecification getCurveSpecification(final Instant valuationTime, final CurveDefinitionSource curveDefinitionSource,
@@ -80,12 +85,17 @@ public final class CurveUtils {
   /**
    * Builds a {@link CurveSpecification} from a curve definition that is valid at a particular time.
    *
-   * @param valuationTime  the valuation time, not null
-   * @param curveDefinitionSource  the curve definition source, not null
-   * @param curveSpecificationBuilder  the curve specification builder, not null
-   * @param curveDate  the curve date, not null
-   * @param curveName  the curve name, not null
-   * @return  the curve specification
+   * @param valuationTime
+   *          the valuation time, not null
+   * @param curveDefinitionSource
+   *          the curve definition source, not null
+   * @param curveSpecificationBuilder
+   *          the curve specification builder, not null
+   * @param curveDate
+   *          the curve date, not null
+   * @param curveName
+   *          the curve name, not null
+   * @return the curve specification
    */
   public static AbstractCurveSpecification getSpecification(final Instant valuationTime, final CurveDefinitionSource curveDefinitionSource,
       final CurveSpecificationBuilder curveSpecificationBuilder, final LocalDate curveDate, final String curveName) {
@@ -104,8 +114,9 @@ public final class CurveUtils {
   /**
    * Gets the names of all the curves that are to be constructed in this configuration.
    *
-   * @param configuration  the curve construction configuration, not null
-   * @return  the names of all of the curves to be constructed
+   * @param configuration
+   *          the curve construction configuration, not null
+   * @return the names of all of the curves to be constructed
    */
   public static String[] getCurveNamesForConstructionConfiguration(final CurveConstructionConfiguration configuration) {
     ArgumentChecker.notNull(configuration, "configuration");
@@ -119,15 +130,18 @@ public final class CurveUtils {
   }
 
   /**
-   * Gets the currencies for all curve nodes in the interpolated curve definitions in a curve construction configuration
-   * including exogenous configurations. If the curve definitions are of a different type, it is assumed that there are
-   * no relevant currencies.
+   * Gets the currencies for all curve nodes in the interpolated curve definitions in a curve construction configuration including exogenous configurations. If
+   * the curve definitions are of a different type, it is assumed that there are no relevant currencies.
    *
-   * @param configuration  the curve construction configuration, not null
-   * @param curveDefinitionSource  the curve definition source, not null
-   * @param curveConstructionConfigurationSource  the config source that contains information about any exogenous curve configurations, not null
-   * @param curveNodeCurrencyVisitor  the curve node currency visitor, not null
-   * @return  an ordered set of currencies for these curves
+   * @param configuration
+   *          the curve construction configuration, not null
+   * @param curveDefinitionSource
+   *          the curve definition source, not null
+   * @param curveConstructionConfigurationSource
+   *          the config source that contains information about any exogenous curve configurations, not null
+   * @param curveNodeCurrencyVisitor
+   *          the curve node currency visitor, not null
+   * @return an ordered set of currencies for these curves
    */
   public static Set<Currency> getCurrencies(final CurveConstructionConfiguration configuration, final CurveDefinitionSource curveDefinitionSource,
       final CurveConstructionConfigurationSource curveConstructionConfigurationSource, final CurveNodeVisitor<Set<Currency>> curveNodeCurrencyVisitor) {
@@ -164,10 +178,11 @@ public final class CurveUtils {
   }
 
   /**
-   * Extracts the currency from a discounting curve type configuration or throws an exception if the reference cannot be
-   * parsed as a currency.
-   * @param configuration  the configuration, not null
-   * @return  the currency
+   * Extracts the currency from a discounting curve type configuration or throws an exception if the reference cannot be parsed as a currency.
+   *
+   * @param configuration
+   *          the configuration, not null
+   * @return the currency
    */
   public static Currency getCurrencyFromConfiguration(final DiscountingCurveTypeConfiguration configuration) {
     ArgumentChecker.notNull(configuration, "configuration");
@@ -180,14 +195,17 @@ public final class CurveUtils {
   }
 
   /**
-   * Creates the {@link IborIndex} from an ibor curve type configuration by trying first to use a {@link com.opengamma.financial.security.index.IborIndex}
-   * from the security source (to preserve the original behaviour). If the security is not found, a search for an {@link IborIndexConvention} in
-   * the convention source is made using the convention id from the configuration. If neither a security nor convention can be found, throws an
-   * exception.
-   * @param configuration  the configuration, not null
-   * @param securitySource  the security source, not null
-   * @param conventionSource  the convention source, not null
-   * @return  the index
+   * Creates the {@link IborIndex} from an ibor curve type configuration by trying first to use a {@link com.opengamma.financial.security.index.IborIndex} from
+   * the security source (to preserve the original behaviour). If the security is not found, a search for an {@link IborIndexConvention} in the convention
+   * source is made using the convention id from the configuration. If neither a security nor convention can be found, throws an exception.
+   *
+   * @param configuration
+   *          the configuration, not null
+   * @param securitySource
+   *          the security source, not null
+   * @param conventionSource
+   *          the convention source, not null
+   * @return the index
    */
   public static IborIndex getIborIndexFromConfiguration(final IborCurveTypeConfiguration configuration, final SecuritySource securitySource,
       final ConventionSource conventionSource) {
@@ -218,13 +236,16 @@ public final class CurveUtils {
 
   /**
    * Creates the {@link IndexON} from an overnight curve type configuration by trying to use a {@link com.opengamma.financial.security.index.OvernightIndex}
-   * from the security source (to preserve the original behaviour). If the security is not found, a search for an {@link OvernightIndexConvention} in
-   * the convention source is made using the convention id from the configuration. If neither a security nor convention can be found, throws an
-   * exception.
-   * @param configuration  the configuration, not null
-   * @param securitySource  the security source, not null
-   * @param conventionSource  the convention source, not null
-   * @return  the index
+   * from the security source (to preserve the original behaviour). If the security is not found, a search for an {@link OvernightIndexConvention} in the
+   * convention source is made using the convention id from the configuration. If neither a security nor convention can be found, throws an exception.
+   *
+   * @param configuration
+   *          the configuration, not null
+   * @param securitySource
+   *          the security source, not null
+   * @param conventionSource
+   *          the convention source, not null
+   * @return the index
    */
   public static IndexON getOvernightIndexFromConfiguration(final OvernightCurveTypeConfiguration configuration, final SecuritySource securitySource,
       final ConventionSource conventionSource) {

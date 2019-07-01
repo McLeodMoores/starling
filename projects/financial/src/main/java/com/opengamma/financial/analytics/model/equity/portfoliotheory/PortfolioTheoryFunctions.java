@@ -54,9 +54,11 @@ public class PortfolioTheoryFunctions extends AbstractFunctionConfigurationBean 
 
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
+      functions.add(functionConfiguration(CAPMBetaModelSecurityFunction.class, getHtsResolutionKey()));
       functions.add(functionConfiguration(CAPMBetaModelPositionFunction.class, getHtsResolutionKey()));
       functions.add(functionConfiguration(CAPMBetaModelPortfolioNodeFunction.class, getHtsResolutionKey()));
       functions.add(functionConfiguration(CAPMFromRegressionModelFunction.class, getHtsResolutionKey()));
+      functions.add(functionConfiguration(SharpeRatioSecurityFunction.class, getHtsResolutionKey()));
       functions.add(functionConfiguration(SharpeRatioPositionFunction.class, getHtsResolutionKey()));
       functions.add(functionConfiguration(SharpeRatioPortfolioNodeFunction.class, getHtsResolutionKey()));
       functions.add(functionConfiguration(TreynorRatioPositionFunction.class, getHtsResolutionKey()));
@@ -165,6 +167,8 @@ public class PortfolioTheoryFunctions extends AbstractFunctionConfigurationBean 
           getSamplingFunctionName(), getReturnCalculatorName(), getCovarianceCalculatorName(), getVarianceCalculatorName()));
       functions.add(functionConfiguration(CAPMBetaDefaultPropertiesPositionFunction.class, getSamplingPeriodName(), getScheduleName(),
           getSamplingFunctionName(), getReturnCalculatorName(), getCovarianceCalculatorName(), getVarianceCalculatorName()));
+      functions.add(functionConfiguration(CAPMBetaDefaultPropertiesSecurityFunction.class, getSamplingPeriodName(), getScheduleName(),
+          getSamplingFunctionName(), getReturnCalculatorName(), getCovarianceCalculatorName(), getVarianceCalculatorName()));
       functions.add(functionConfiguration(CAPMFromRegressionDefaultPropertiesPortfolioNodeFunction.class, getSamplingPeriodName(), getScheduleName(),
           getSamplingFunctionName(), getReturnCalculatorName()));
       functions.add(functionConfiguration(CAPMFromRegressionDefaultPropertiesPositionFunction.class, getSamplingPeriodName(), getScheduleName(),
@@ -172,6 +176,8 @@ public class PortfolioTheoryFunctions extends AbstractFunctionConfigurationBean 
       functions.add(functionConfiguration(SharpeRatioDefaultPropertiesPortfolioNodeFunction.class, getSamplingPeriodName(), getScheduleName(),
           getSamplingFunctionName(), getReturnCalculatorName(), getStdDevCalculatorName(), getExcessReturnCalculatorName()));
       functions.add(functionConfiguration(SharpeRatioDefaultPropertiesPositionFunction.class, getSamplingPeriodName(), getScheduleName(),
+          getSamplingFunctionName(), getReturnCalculatorName(), getStdDevCalculatorName(), getExcessReturnCalculatorName()));
+      functions.add(functionConfiguration(SharpeRatioDefaultPropertiesSecurityFunction.class, getSamplingPeriodName(), getScheduleName(),
           getSamplingFunctionName(), getReturnCalculatorName(), getStdDevCalculatorName(), getExcessReturnCalculatorName()));
       functions.add(functionConfiguration(TreynorRatioDefaultPropertiesPortfolioNodeFunction.class, getSamplingPeriodName(), getScheduleName(),
           getSamplingFunctionName(), getReturnCalculatorName(), getStdDevCalculatorName(), getExcessReturnCalculatorName(), getCovarianceCalculatorName(),

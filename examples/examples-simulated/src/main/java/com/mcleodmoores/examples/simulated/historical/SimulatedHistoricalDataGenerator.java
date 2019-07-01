@@ -10,7 +10,9 @@ import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.temporal.ChronoUnit;
 
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesConstants;
 import com.opengamma.id.ExternalId;
@@ -94,16 +96,33 @@ public class SimulatedHistoricalDataGenerator extends SimulatedHistoricalData {
   }
 
   private static LocalDateDoubleTimeSeries getHistoricalDataPoints(final Random random, final Double finishValue, final int tsLength) {
-    final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
-    LocalDate now = LocalDate.now();
+    final double scale = finishValue * 0.01;
+    final double trend = random.nextBoolean() ? finishValue * 0.01 / 252. : 0;
+    final LocalDate now = LocalDate.now();
     final LocalDate stopDate = DateUtils.previousWeekDay(now.minusMonths(tsLength));
+    final int nValues = Long.valueOf(ChronoUnit.DAYS.between(stopDate, now)).intValue();
+    final double[] deltas = new double[nValues - 1];
+    for (int i = 0; i < nValues - 1; i++) {
+      deltas[i] = random.nextGaussian() * scale;
+    }
+    final LocalDate[] dates = new LocalDate[nValues];
+    final double[] values = new double[nValues];
+    dates[nValues - 1] = now;
+    values[nValues - 1] = finishValue;
+    LocalDate currentDate = now;
     double currentValue = finishValue;
-    do {
-      currentValue = wiggleValue(random, currentValue, finishValue);
-      bld.put(now, currentValue);
-      now = DateUtils.previousWeekDay(now);
-    } while (now.isAfter(stopDate));
-    return bld.build();
+    for (int i = nValues - 2; i >= 0; i--) {
+      currentDate = currentDate.minusDays(1);
+      if (currentDate.getDayOfWeek() == DayOfWeek.SATURDAY) {
+        currentDate = currentDate.minusDays(1);
+      } else if (currentDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+        currentDate = currentDate.minusDays(2);
+      }
+      currentValue = currentValue + deltas[i] - trend * random.nextDouble();
+      dates[i] = currentDate;
+      values[i] = currentValue;      
+    }
+    return ImmutableLocalDateDoubleTimeSeries.of(dates, values);
   }
 
 }

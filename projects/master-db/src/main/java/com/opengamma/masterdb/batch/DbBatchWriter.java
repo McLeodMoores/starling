@@ -821,7 +821,7 @@ public class DbBatchWriter extends AbstractDbMaster {
       }
       final ResultConverter<Object> resultConverter;
       try {
-        resultConverter = _resultConverterCache.getConverter(value.getValue());
+        resultConverter = (ResultConverter<Object>) _resultConverterCache.getConverter(value.getValue());
       } catch (final IllegalArgumentException e) {
         LOGGER.error("No converter for market data value of type " + value.getValue().getClass() + " for " + value.getSpecification());
         continue;
@@ -928,7 +928,7 @@ public class DbBatchWriter extends AbstractDbMaster {
           ResultConverter<Object> resultConverter = null;
           if (!(computedValue.getValue() instanceof MissingValue)) {
             try {
-              resultConverter = _resultConverterCache.getConverter(computedValue.getValue());
+              resultConverter = (ResultConverter<Object>) _resultConverterCache.getConverter(computedValue.getValue());
             } catch (final IllegalArgumentException e) {
               LOGGER.info("No converter for value of type " + computedValue.getValue().getClass() + " for " + computedValue.getSpecification());
             }

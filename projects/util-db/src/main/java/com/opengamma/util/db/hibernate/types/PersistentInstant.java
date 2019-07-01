@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.type.TimestampType;
 import org.hibernate.usertype.EnhancedUserType;
 import org.slf4j.Logger;
@@ -65,11 +65,11 @@ public class PersistentInstant implements EnhancedUserType {
 
   @Override
   public Object nullSafeGet(final ResultSet resultSet, final String[] names,
-      final SharedSessionContractImplementor session, final Object owner) throws HibernateException, SQLException {
+      final SessionImplementor session, final Object owner) throws HibernateException, SQLException {
     return nullSafeGet(resultSet, names[0], session);
   }
 
-  public Object nullSafeGet(final ResultSet resultSet, final String name, final SharedSessionContractImplementor session) throws SQLException {
+  public Object nullSafeGet(final ResultSet resultSet, final String name, final SessionImplementor session) throws SQLException {
     final java.sql.Timestamp value = (java.sql.Timestamp) new TimestampType().nullSafeGet(resultSet, name, session);
     if (value == null) {
       return null;
@@ -79,7 +79,7 @@ public class PersistentInstant implements EnhancedUserType {
 
   @Override
   public void nullSafeSet(final PreparedStatement preparedStatement, final Object value, final int index,
-      final SharedSessionContractImplementor session) throws HibernateException, SQLException {
+      final SessionImplementor session) throws HibernateException, SQLException {
     if (value == null) {
       LOGGER.debug("INSTANT -> TIMESTAMP : NULL -> NULL");
       new TimestampType().nullSafeSet(preparedStatement, null, index, session);

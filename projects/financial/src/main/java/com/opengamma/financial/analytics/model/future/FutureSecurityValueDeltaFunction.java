@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.Iterables;
 import com.opengamma.OpenGammaRuntimeException;
@@ -75,13 +76,16 @@ public class FutureSecurityValueDeltaFunction extends AbstractFunction.NonCompil
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final FutureSecurity security = (FutureSecurity) target.getSecurity();
+    if (!security.getExpiry().getExpiry().isAfter(ZonedDateTime.now(executionContext.getValuationClock()))) {
+      throw new IllegalArgumentException("Future " + security.getExternalIdBundle() + " has expired");
+    }
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     ValueProperties.Builder properties = desiredValue.getConstraints().copy()
         .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(security).getCode());
 
     String scaleProperty = Double.toString(1);
     double scaleFactor = 1.0;
-    if (target.getSecurity() instanceof InterestRateFutureSecurity) {
+    if (security instanceof InterestRateFutureSecurity) {
       // Add scaling and adjust properties to reflect
       final Set<String> scaleValue = desiredValue.getConstraints().getValues(ValuePropertyNames.SCALE);
       if (scaleValue != null && scaleValue.size() > 0) {

@@ -102,7 +102,7 @@ $.register_module({
             		resource: 'conventions.conventionIds',
             		data_generator: function (handler) {
             			api.conventions.all_convention_ids.get({ conventionTypes: 
-            				'ConstantMaturitySwapLeg&CompoundingIborLeg&FixedLegRollDate&InflationLeg&OISLeg&ONArithmeticAverageLeg&ONCompoundedLegRollDate&SwapFixedLeg&VanillaIborLeg&VanillaIborLegRollDate'}).pipe(function (result) {
+            				'ConstantMaturitySwapLeg&CompoundingIborLeg&FixedLegRollDate&InflationLeg&OvernightIndexSwapLeg&ONArithmeticAverageLeg&ONCompoundedLegRollDate&SwapFixedLeg&VanillaIborLeg&VanillaIborLegRollDate'}).pipe(function (result) {
             				handler(result.data.map(function (convention) {
             					var split = convention.split('|');
             					return { value: split[0], text: split[0], selected: split[0] === payLegConventionName };
@@ -118,7 +118,7 @@ $.register_module({
             		resource: 'conventions.conventionIds',
             		data_generator: function (handler) {
             			api.conventions.all_convention_ids.get({ conventionTypes: 
-            				'ConstantMaturitySwapLeg&CompoundingIborLeg&FixedLegRollDate&InflationLeg&OISLeg&ONArithmeticAverageLeg&ONCompoundedLegRollDate&SwapFixedLeg&VanillaIborLeg&VanillaIborLegRollDate'}).pipe(function (result) {
+            				'ConstantMaturitySwapLeg&CompoundingIborLeg&FixedLegRollDate&InflationLeg&OvernightIndexSwapLeg&ONArithmeticAverageLeg&ONCompoundedLegRollDate&SwapFixedLeg&VanillaIborLeg&VanillaIborLegRollDate'}).pipe(function (result) {
             				handler(result.data.map(function (convention) {
             					var split = convention.split('|');
             					return { value: split[0], text: split[0], selected: split[0] === receiveLegConventionName };

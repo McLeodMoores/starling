@@ -53,7 +53,11 @@ public class DelegatingHistoricalTimeSeriesProviderTest {
    * Tests toString.
    */
   public void testToString() {
-    assertEquals(PROVIDER.toString(), "DelegatingHistoricalTimeSeriesProvider[source1, source2]");
+    if (PROVIDER.toString().contains("source1, ")) {
+      assertEquals(PROVIDER.toString(), "DelegatingHistoricalTimeSeriesProvider[source1, source2]");
+    } else {
+      assertEquals(PROVIDER.toString(), "DelegatingHistoricalTimeSeriesProvider[source2, source1]");      
+    }
   }
 
   /**

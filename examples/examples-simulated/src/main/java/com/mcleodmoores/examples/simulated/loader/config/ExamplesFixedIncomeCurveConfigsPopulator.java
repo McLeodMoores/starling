@@ -255,8 +255,9 @@ public final class ExamplesFixedIncomeCurveConfigsPopulator {
     }
     for (final int i : new int[] { 1, 2, 3, 4, 5, 10 }) {
       final Tenor nodeTenor = Tenor.ofYears(i);
-      discountingCurveNodes.add(new SwapNode(ZERO, Tenor.ofYears(i), ExternalId.of("CONVENTION", "AUD OIS Fixed"), ExternalId.of("CONVENTION", "AUD OIS"),
-          discountingCurveNodeIdMapperName));
+      discountingCurveNodes
+          .add(new SwapNode(ZERO, Tenor.ofYears(i), ExternalId.of("CONVENTION", "AUD OIS Fixed"), ExternalId.of("CONVENTION", "AUD RBA IBOC OIS"),
+              discountingCurveNodeIdMapperName));
       oisNodes.put(nodeTenor, new StaticCurveInstrumentProvider(ExternalSchemes.syntheticSecurityId(currency + "OIS_SWAP" + nodeTenor.toFormattedString())));
     }
     final CurveDefinition discountingCurveDefinition = new InterpolatedCurveDefinition(discountingCurveName, discountingCurveNodes,
