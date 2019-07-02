@@ -1036,7 +1036,6 @@ public class DelegatingSecurityMasterTest {
   }
 
   /**
-   * @author emcleod
    *
    */
   private static class TestSecurity extends RawSecurity implements ObjectIdentifiable {
