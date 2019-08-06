@@ -45,7 +45,7 @@ The source code can be cloned using git from GitHub:
 ```
 
 A source tarball can also be downloaded from 
-http://github.com/McleodMoores/starling
+https://github.com/McLeodMoores/starling/tree/v1.5.x
 
 ### Building
 
@@ -84,7 +84,7 @@ Wait for the server to start:
 
 ![Server startup](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/example-server-startup.png)
 
-and then point your browser at
+and then point your browser to
 `http://localhost:8080` to see the web user interface:
 
 ![UI landing page](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/example-server-web-ui.png)
