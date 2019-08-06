@@ -38,15 +38,15 @@ This shows the live daily P&L - the difference between the last close price and 
 #### HistoricalVaR
 This is the one-day historical VaR at 99% confidence level. Two years of daily returns are used. 
 
-The properties of the result show what values can be changed to customise the results. 
+The properties of the outputs show what values can be changed to customise the results. 
 
 ![VaR Properties](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/var-properties.png)
 
 Going to the view definition editor:
 
-![View Definition Editor 1](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/go-to-view-definition.png)
+![View Definition Editor 1](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/go-to-view-definition.png)
 
-![View Definition Editor 2](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/edit-equity-view-definition-1.png)
+![View Definition Editor 2](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/edit-equity-view-definition-1.png)
 
 and adding a column (```+add column```), we select ```HistoricalVaR``` from the dropdown and add properties (```+add constraint```):
   - Change the percentile to 99.73%
