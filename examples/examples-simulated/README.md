@@ -2,20 +2,17 @@
 # Examples Using Simulated Data
 -------------------------------
 
-# Table of Contents
-1. [Introduction](#introduction)
-2. [Equities](#equity-example)
-3. [ETFs](#etf-example)
-4. [FX Forwards](#fx-forwards-example)
-5. [FX Options](#fx-options-example)
-6. [Swaps](#swap-example)
-7. [CDS](#cds-example)
-
-
-## Introduction <a name="introduction"></a>
--------------------------------------------
-
 ## The Analytics UI
+-------------------
+
+## Table of Contents
+1. [Equities](#equity-example)
+2. [ETFs](#etf-example)
+3. [FX Forwards](#fx-forwards-example)
+4. [FX Options](#fx-options-example)
+5. [Swaps](#swap-example)
+6. [CDS](#cds-example)
+
 
 ## Equities <a name="equity-example"></a>
 -----------------------------------------
