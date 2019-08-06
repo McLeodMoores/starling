@@ -23,7 +23,7 @@
 
 This view references a long-only equity portfolio consisting of stocks in the S&P 500 index. It shows some simple portfolio analytic values, the live daily P&L and VaR.
 
-The trades are originally arranged into sub-portfolios by sector. 
+The portfolio structure consists of sub-portfolios of equity trades aggregated by sector. 
 
 #### FairValue
 This is the (live) price of one share multiplied by the number of shares held in the portfolio
@@ -38,11 +38,11 @@ This measures the excess return (return of the trade / sub-portfolio minus the r
 This shows the live daily P&L - the difference between the last close price and current price multiplied by the number of shares. This is an additive quantity and so portfolio-level P&L is simply the sum of the P&l of its positions.
 
 #### HistoricalVaR
-This is one-day horizon VaR, assuming an underlying normal distribution of returns, at 99% confidence level. Two years of daily returns are used. 
+This is the one-day historical VaR at 99% confidence level. Two years of daily returns are used. 
 
 The properties of the result show what values can be changed to customise the results. 
 
-![VaR Properties](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/var-properties.png)
+![VaR Properties](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/var-properties.png)
 
 Going to the view definition editor:
 
