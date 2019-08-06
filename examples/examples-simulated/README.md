@@ -15,14 +15,14 @@
 ## Introduction <a name="introduction"></a>
 -------------------------------------------
 
-### The Analytics UI
+## The Analytics UI
 
 ## Equities <a name="equity-example"></a>
 -----------------------------------------
 
 ### Equity Portfolio View
 
-![Equity Portfolio View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/equity-portfolio-view.png)
+![Equity Portfolio View](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/equity-portfolio-view.png)
 
 This view references a long-only equity portfolio consisting of stocks in the S&P 500 index. It shows some simple portfolio analytic values, the live daily P&L and VaR.
 
