@@ -23,7 +23,7 @@ public class AnalyticBondPricer {
 
   /**
    * Compute the equivalent CDS spread for a bond. This works by first finding a constant hazard rate that reprices the bond (given the supplied yield curve),
-   * the using this hazard rate to calculate the par spread of a CDS.
+   * then using this hazard rate to calculate the par spread of a CDS.
    *
    * @param bond
    *          Simple analytic representation of a fixed coupon bond
@@ -55,7 +55,7 @@ public class AnalyticBondPricer {
    * @param yieldCurve
    *          The yield curve
    * @param bondPrice
-   *          The bond price (for unit notional). Can be given clean or dirty (see below). The dirty price cannot be low that the bond's recovery rate or
+   *          The bond price (for unit notional). Can be given clean or dirty (see below). The dirty price cannot be lower than the bond's recovery rate or
    *          greater than its risk free price.
    * @param cleanOrDirty
    *          Clean or dirty price for the bond
@@ -71,7 +71,7 @@ public class AnalyticBondPricer {
       return 0.0;
     }
     if (bondPrice > zeroRiskPrice) {
-      throw new IllegalArgumentException("Bond price of " + bondPrice + ", is greater that zero-risk price of " + zeroRiskPrice
+      throw new IllegalArgumentException("Bond price of " + bondPrice + ", is greater than zero-risk price of " + zeroRiskPrice
           + ". It is not possible to imply a hazard rate for this bond. Please check inputs");
     }
     final double dp = cleanOrDirty == PriceType.DIRTY ? bondPrice : bondPrice + bond.getAccruedInterest();
@@ -129,7 +129,6 @@ public class AnalyticBondPricer {
 
     final int nPayments = bond.getnPayments();
     final double[] discPayments = new double[nPayments];
-
     for (int i = 0; i < nPayments; i++) {
       discPayments[i] = bond.getPaymentAmount(i) * yieldCurve.getDiscountFactor(bond.getPaymentTime(i));
     }

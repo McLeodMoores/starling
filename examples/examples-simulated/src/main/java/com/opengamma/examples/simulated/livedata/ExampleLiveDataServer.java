@@ -23,6 +23,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
+import net.sf.ehcache.CacheManager;
+
 import org.apache.commons.io.IOUtils;
 import org.fudgemsg.FudgeContext;
 import org.fudgemsg.FudgeField;
@@ -31,6 +33,8 @@ import org.fudgemsg.MutableFudgeMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicates;
@@ -45,9 +49,6 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.NamedThreadPoolFactory;
 import com.opengamma.util.TerminatableJob;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
-
-import au.com.bytecode.opencsv.CSVReader;
-import net.sf.ehcache.CacheManager;
 
 /**
  * An ultra-simple market data simulator, we load the initial values from a CSV file (with a header row) and the format identification-scheme, identifier-value,
@@ -302,7 +303,7 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
               final double lastValue = (Double) field.getValue();
               final double baseValue = baseValues.getDouble(field.getName());
               final List<FudgeField> allFields = baseValues.getAllFields();
-              if (allFields.size() == 1 && allFields.get(0).getName().equals("LAST_IMPVOL")) {
+              if (allFields.size() == 1 && allFields.get(0).getName().equals("LAST_IMPVOL") || allFields.get(0).getName().equals("LAST_YIELD")) {
                 nextValues.add(field.getName(), baseValue);
               } else {
                 final double value = wiggleValue(lastValue, baseValue);

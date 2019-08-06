@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
 
+import java.util.Arrays;
+
 import org.apache.log4j.Logger;
 import org.threeten.bp.LocalDate;
 
@@ -24,7 +26,7 @@ public class BondAnalytic {
   private final int _nPayments;
   private final double _recoveryRate;
 
-  private final double _accuredInterest;
+  private final double _accruedInterest;
 
   /**
    * Simple analytic representation of a fixed coupon bond that allows it to be priced consistently with a CDS (i.e. using the ISDA model)
@@ -80,7 +82,7 @@ public class BondAnalytic {
       _paymentTimes[i] = curveDCC.getDayCountFraction(today, schedule.getPaymentDate(i));
     }
     _paymentAmounts[_nPayments - 1] += 1.0;
-    _accuredInterest = coupon * accrualDCC.getDayCountFraction(schedule.getAccStartDate(0), today);
+    _accruedInterest = coupon * accrualDCC.getDayCountFraction(schedule.getAccStartDate(0), today);
     _recoveryRate = recoveryRate;
   }
 
@@ -94,26 +96,26 @@ public class BondAnalytic {
    *          Actual payment amounts paid on the payment dates. The final value should include the return of par.
    * @param recoveryRate
    *          The expected recovery rate for the bond (this should be the same as that use for the CDS)
-   * @param accuredInterest
+   * @param accruedInterest
    *          Amount of accrued interest on the bond today
    */
-  public BondAnalytic(final double[] paymentTimes, final double[] paymentAmounts, final double recoveryRate, final double accuredInterest) {
+  public BondAnalytic(final double[] paymentTimes, final double[] paymentAmounts, final double recoveryRate, final double accruedInterest) {
     ArgumentChecker.notEmpty(paymentTimes, "paymentTimes");
     ArgumentChecker.notNull(paymentAmounts, "paymentAmounts");
     _nPayments = paymentTimes.length;
     ArgumentChecker.isTrue(paymentAmounts.length == _nPayments, "number of payment times ({}) does not match number of payment amounts ({})", _nPayments,
         paymentAmounts.length);
     ArgumentChecker.isTrue(recoveryRate >= 0.0 && recoveryRate <= 1.0, "recovery rate must be in range 0 - 1. value gives: ", recoveryRate);
-    ArgumentChecker.isTrue(accuredInterest >= 0.0, "accrued intrest must be give as positive");
+    ArgumentChecker.isTrue(accruedInterest >= 0.0, "accrued interest must be give as positive");
     ArgumentChecker.isTrue(paymentTimes[0] >= 0.0, "payments times must be positive. first value: ", paymentTimes[0]);
 
     for (int i = 1; i < _nPayments; i++) {
-      ArgumentChecker.isTrue(paymentTimes[i] > paymentTimes[i - 1], "payment times must be assending");
+      ArgumentChecker.isTrue(paymentTimes[i] > paymentTimes[i - 1], "payment times must be ascending");
     }
     _paymentTimes = paymentTimes.clone();
     _paymentAmounts = paymentAmounts.clone();
     _recoveryRate = recoveryRate;
-    _accuredInterest = accuredInterest;
+    _accruedInterest = accruedInterest;
   }
 
   /**
@@ -122,7 +124,7 @@ public class BondAnalytic {
    * @return the accuredInterest
    */
   public double getAccruedInterest() {
-    return _accuredInterest;
+    return _accruedInterest;
   }
 
   /**
@@ -151,11 +153,21 @@ public class BondAnalytic {
    * Gets the number of payments.
    *
    * @return the nPayments
+   * @deprecated Use {@link #getNPayments()}.
    */
   public int getnPayments() {
-    return _nPayments;
+    return getNPayments();
   }
 
+  /**
+   * Gets the number of payments.
+   * 
+   * @return the number of payments.
+   */
+  public int getNPayments() {
+    return _nPayments;
+  }
+  
   /**
    * Gets the recovery rate.
    *
@@ -165,4 +177,59 @@ public class BondAnalytic {
     return _recoveryRate;
   }
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    long temp;
+    temp = Double.doubleToLongBits(_accruedInterest);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + _nPayments;
+    result = prime * result + Arrays.hashCode(_paymentAmounts);
+    result = prime * result + Arrays.hashCode(_paymentTimes);
+    temp = Double.doubleToLongBits(_recoveryRate);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (!(obj instanceof BondAnalytic)) {
+      return false;
+    }
+    final BondAnalytic other = (BondAnalytic) obj;
+    if (Double.doubleToLongBits(_accruedInterest) != Double.doubleToLongBits(other._accruedInterest)) {
+      return false;
+    }
+    if (_nPayments != other._nPayments) {
+      return false;
+    }
+    if (!Arrays.equals(_paymentAmounts, other._paymentAmounts)) {
+      return false;
+    }
+    if (!Arrays.equals(_paymentTimes, other._paymentTimes)) {
+      return false;
+    }
+    if (Double.doubleToLongBits(_recoveryRate) != Double.doubleToLongBits(other._recoveryRate)) {
+      return false;
+    }
+    return true;
+  }
+
+  public String toString() {
+    final StringBuilder sb = new StringBuilder("BondAnalytic[");
+    sb.append("accruedInterest=");
+    sb.append(_accruedInterest);
+    sb.append(", recoveryRate=");
+    sb.append(_recoveryRate);
+    sb.append(", paymentTimes=");
+    sb.append(Arrays.toString(_paymentTimes));
+    sb.append(", paymentAmounts=");
+    sb.append(Arrays.toString(_paymentAmounts));
+    sb.append("]");
+    return sb.toString();
+  }
 }

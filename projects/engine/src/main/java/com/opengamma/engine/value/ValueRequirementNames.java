@@ -563,6 +563,16 @@ public final class ValueRequirementNames {
   public static final String JUMP_TO_DEFAULT = "Jump to Default";
 
   /**
+   * The credit spread of an instrument.
+   */
+  public static final String CREDIT_SPREAD = "Credit Spread";
+  
+  /**
+   * The hazard rate of an instrument.
+   */
+  public static final String HAZARD_RATE = "Hazard Rate";
+  
+  /**
    * The bucketed (CS01) spreads for a credit default swap.
    */
   public static final String BUCKETED_SPREADS = "Bucketed Spreads";

@@ -207,14 +207,14 @@ public class ISDAPremiumLegSchedule {
    *          Options are FRONTSHORT, FRONTLONG, BACKSHORT, BACKLONG or NONE - <b>Note</b> in this code NONE is not allowed
    * @param businessdayAdjustmentConvention
    *          options are 'following' or 'proceeding'
-   * @param calandar
+   * @param calendar
    *          A holiday calendar
    * @param protectionStart
    *          If true, protection starts are the beginning rather than end of day (protection still ends at end of day).
    */
   public ISDAPremiumLegSchedule(final LocalDate startDate, final LocalDate endDate, final Period step, final StubType stubType,
-      final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calandar, final boolean protectionStart) {
-    this(getUnadjustedDates(startDate, endDate, step, stubType), businessdayAdjustmentConvention, calandar, protectionStart);
+      final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calendar, final boolean protectionStart) {
+    this(getUnadjustedDates(startDate, endDate, step, stubType), businessdayAdjustmentConvention, calendar, protectionStart);
   }
 
   public ISDAPremiumLegSchedule(final LocalDate[] unadjustedDates, final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calendar,

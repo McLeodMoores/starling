@@ -59,5 +59,5 @@ public class IsdaCompliantYieldCurveAdapter extends YieldAndDiscountCurve {
   public List<String> getUnderlyingCurvesNames() {
     return Collections.singletonList(_underlying.getName());
   }
-
+  
 }

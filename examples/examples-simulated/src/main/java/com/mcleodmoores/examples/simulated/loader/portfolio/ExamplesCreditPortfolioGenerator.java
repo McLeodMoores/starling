@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import org.threeten.bp.LocalDate;
@@ -109,6 +110,7 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
    * Sets up the security generator.
    */
   public ExamplesCreditPortfolioGenerator() {
+    setRandom(new Random(123451L));
   }
 
   /**
@@ -213,10 +215,10 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
         }
         final List<FinancialSecurity> securities = new ArrayList<>();
         for (int i = 0; i < N * 2; i += 2) {
-          final LegalEntity referenceEntity = ENTITIES.get(getRandom().nextInt(5));
+          final LegalEntity referenceEntity = ENTITIES.get(getRandom().nextInt(ENTITIES.size()));
           final int term = getRandom().nextInt(10) + 1;
-          final double spread = (referenceEntity.getRatings().get(0).getScore().ordinal() + 0.001) / 10000.;
-          final double bondCoupon = BigDecimal.valueOf((getRandom().nextBoolean() ? 3 : 5) + spread * 1000 * term + (1 - getRandom().nextDouble()) / 80.)
+          final double spread = (referenceEntity.getRatings().get(0).getScore().ordinal() * 0.5 + 0.001) / 10000.;
+          final double bondCoupon = BigDecimal.valueOf((getRandom().nextBoolean() ? 4 : 6) + spread * 1000 * term + (1 - getRandom().nextDouble()) / 80.)
               .round(MC).doubleValue();
           final double cdsCoupon = 0.01;
           final ZonedDateTime startDate = TODAY.minusDays(7);
@@ -238,6 +240,8 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
           final CreditCurveIdentifier id = cds.accept(_idGenerator);
           final String value = id.getObjectId().getValue().replace("_", "") + Tenor.ofYears(term).toFormattedString();
           cds.setExternalIdBundle(ExternalSchemes.syntheticSecurityId(value).toBundle());
+          bond.addAttribute("RED_CODE", id.getRedCode());
+          bond.addAttribute("SENIORITY", id.getSeniority());
           securities.add(bond);
           securities.add(cds);
         }

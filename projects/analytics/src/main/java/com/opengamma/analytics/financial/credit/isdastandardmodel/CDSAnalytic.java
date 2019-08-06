@@ -231,14 +231,6 @@ public class CDSAnalytic {
     return _payAccOnDefault;
   }
 
-  // /**
-  // * Gets the protectionFromStartOfDay.
-  // * @return the protectionFromStartOfDay
-  // */
-  // public boolean isProtectionFromStartOfDay() {
-  // return _protectionFromStartOfDay;
-  // }
-
   /**
    * The loss-given-default. This is 1 - recovery rate
    *
