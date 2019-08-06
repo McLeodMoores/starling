@@ -159,7 +159,7 @@ Looking at an AUD/USD trade, we can see sensitivities to the USD and AUD curves 
 
 ### FX Option View
 
-![FX Optiopn View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-option-view.png)
+![FX Option View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-option-view.png)
 
 This view shows analytics for a portfolio of vanilla European FX options priced using the Black model. The curve configurations are the same as those used to price [FX forwards](#fx-forwards-example). The volatility surfaces for each currency pair are quoted as ATM, 15 risk reversal and butterfly, and 25 risk reversal and butterfly. These data are converted to an interpolated delta matrix before pricing. 
 
