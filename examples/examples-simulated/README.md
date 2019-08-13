@@ -67,7 +67,7 @@ After saving this view definition, we go back to the analyics viewer and see tha
 
 ### Futures View
 
-![Futures View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/futures-view.png)
+![Futures View](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/futures-view.png)
 
 This view shows analytics for a small equity futures portfolio, calculated with a mark-to-market method (i.e. using market quotes directly, rather than implying a forward curve).
 
