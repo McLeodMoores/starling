@@ -179,7 +179,7 @@ Note that in this porfolio, there are options that are not CCY/USD (EUR/GBP, in 
 #### Vega Matrix
 This is the vega with respect to the node points of the put delta matrix. The total vega is dispersed to surrounding node points: the amounts depend on the time and delta interpolation methods used.
 
-![Vega Matrix](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-vega-matrix.png)
+![Vega Matrix](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/fx-vega-matrix.png)
 
 #### Vega Quote Matrix
 This is the vega with respect to the **market quotes** that the volatility surface was constructed from.
