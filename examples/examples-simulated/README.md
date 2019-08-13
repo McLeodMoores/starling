@@ -53,11 +53,11 @@ and adding a column (```+add column```), we select ```HistoricalVaR``` from the 
   - Change the sampling frequency to weekly
   - Change the VaR horizon to 7 days
 
-![View Definition Editor 3](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/edit-equity-view-definition-2.png)
+![View Definition Editor 3](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/edit-equity-view-definition-2.png)
 
 After saving this view definition, we go back to the analyics viewer and see that a second ```HistoricalVaR``` column has appeared. The properties show our changes, and we can see the effect on the distribution that changing these parameters has had by looking at the returns as a distribution (the top distribution is daily returns, the lower is weekly returns).
 
-![Second VaR Column](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/equity-portfolio-view-new-column.png)
+![Second VaR Column](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/equity-portfolio-view-new-column.png)
 
 **NOTE**: if you're running the examples server and edit or add view definitions, these will be overwritten with the originals / deleted if the databases are re-initialised.
 
