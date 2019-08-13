@@ -111,12 +111,12 @@ The USD discounting curve is a simple curve constructed from cash deposits and i
 
 ### FX Forward Details View
 
-![FX Forward Details View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-details.png)
+![FX Forward Details View](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/fx-forward-details.png)
 
 #### FX Present Value
 The FX present value is the discounted value of the pay and receive amounts of the forward. This multi-valued output is summed at the portfolio level, giving a total PV in each currency.
 
-![FX PV](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-fx-pv-top-level.png)
+![FX PV](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/fx-forward-fx-pv-top-level.png)
 
 #### Present Value
 The present value is the sum of the discounted pay and receive amounts converted into the required currency.
@@ -124,9 +124,9 @@ The present value is the sum of the discounted pay and receive amounts converted
 #### FX Forward Details
 This output gives the pricing details for each leg of the trade: the pay and receive amounts, the discount factors used for each leg and equivalent zero rate.
 
-![FX Forward Details](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-details-details.png)
+![FX Forward Details](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/fx-forward-details-details.png)
 
-Note that this value is not summed at portfolio node level (which is why the column appears to be empty when the positions are collapsed to portfolio nodes). Whether or not a value can be summed is a decision for the person writing the code that integrates an analytics library and the engine.
+Note that this value is not summed at portfolio node level (which is why the column appears to be empty when the positions are collapsed to portfolio nodes). Whether or not a value can be summed is a decision for the person writing the code that integrates an analytics library into the platform.
 
 ### FX Forward View
 
