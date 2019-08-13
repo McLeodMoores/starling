@@ -159,7 +159,7 @@ Looking at an AUD/USD trade, we can see sensitivities to the USD and AUD curves 
 
 ### FX Option View
 
-![FX Option View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-option-view.png)
+![FX Option View](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/fx-option-view.png)
 
 This view shows analytics for a portfolio of vanilla European FX options priced using the Black model. The curve configurations are the same as those used to price [FX forwards](#fx-forwards-example). The volatility surfaces for each currency pair are quoted as ATM, 15 risk reversal and butterfly, and 25 risk reversal and butterfly. These data are converted to an interpolated delta matrix before pricing. 
 
@@ -174,7 +174,7 @@ This is the change in PV of the trade to a change of 1 basis point in the **mark
 
 Note that in this porfolio, there are options that are not CCY/USD (EUR/GBP, in this case). These options have sensitivities to the GBP, EUR and USD curves, because the USD curve was used to construct the EUR and GBP curves.
 
-![FX Option PV01](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-option-pv01.png)
+![FX Option PV01](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/fx-option-pv01.png)
 
 #### Vega Matrix
 This is the vega with respect to the node points of the put delta matrix. The total vega is dispersed to surrounding node points: the amounts depend on the time and delta interpolation methods used.
@@ -184,7 +184,7 @@ This is the vega with respect to the node points of the put delta matrix. The to
 #### Vega Quote Matrix
 This is the vega with respect to the **market quotes** that the volatility surface was constructed from.
 
-![Vega Quote Matrix](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-vega-quote-matrix.png)
+![Vega Quote Matrix](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/fx-vega-quote-matrix.png)
 
 ### FX Option Greeks View
 This is another view of the same portfolio, this time returning greeks and their value equivalents (i.e. the greeks scaled by trade details). Again, Black pricing and the same curves / surface definitions are used.
