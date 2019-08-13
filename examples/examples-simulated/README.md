@@ -189,7 +189,7 @@ This is the vega with respect to the **market quotes** that the volatility surfa
 ### FX Option Greeks View
 This is another view of the same portfolio, this time returning greeks and their value equivalents (i.e. the greeks scaled by trade details). Again, Black pricing and the same curves / surface definitions are used.
 
-![FX Option Greeks](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-option-greeks.png)
+![FX Option Greeks](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/fx-option-greeks.png)
 
 Note that there are several non-additive quantities (e.g. implied volatility) that only give values at position level.
 
