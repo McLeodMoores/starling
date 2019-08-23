@@ -28,7 +28,7 @@ The portfolio structure consists of sub-portfolios of equity trades aggregated b
 This is the (live) price of one share multiplied by the number of shares held in the portfolio
 
 #### CAPM Beta
-This is the ratio of the covariance of the trade / sub-portfolio returns and SPX returns (the underlying index) and the variance of SPX returns.
+This is the ratio of the covariance of the trade / sub-portfolio returns and SPX returns (the underlying index) to the variance of SPX returns.
 
 #### Sharpe Ratio
 This measures the excess return (return of the trade / sub-portfolio minus the return of the index) with respect to SPX per unit of risk (i.e. the standard deviation of returns) for the trade / sub-portfolio.
