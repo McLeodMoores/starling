@@ -1,7 +1,7 @@
 
 # Examples Using Simulated Data
 -------------------------------
-All values in these examples are calculated using simulated live and historical market data, which is regenerated when the server is initialised.  
+All values in these examples are calculated using simulated live and historical market data, which is generated when the server is initialised.  
 
 ## Table of Contents
 1. [Equities](#equity-example)
