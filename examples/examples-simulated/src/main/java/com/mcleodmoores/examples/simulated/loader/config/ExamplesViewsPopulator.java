@@ -616,10 +616,10 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
     viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    final ValueProperties properties1 = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CALCULATION_METHOD, CURVES_METHOD)
-        .get();
-    final ValueProperties properties2 = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, NELSON_SIEGEL).with(CALCULATION_METHOD, CURVES_METHOD)
-        .get();
+    final ValueProperties properties1 = ValueProperties.builder().with(CURVE_EXPOSURES, "Govt Bond Exposures")
+        .with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CALCULATION_METHOD, CURVES_METHOD).get();
+    final ValueProperties properties2 = ValueProperties.builder().with(CURVE_EXPOSURES, "Govt Bond Exposures")
+        .with(PROPERTY_CURVE_TYPE, NELSON_SIEGEL).with(CALCULATION_METHOD, CURVES_METHOD).get();
     calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
         ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "US Treasury").get()));
     calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
