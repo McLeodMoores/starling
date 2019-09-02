@@ -367,13 +367,17 @@ This is a convenient way of seeing the effects of different calculation methods 
 This view shows the results of calculations on a portfolio of corporate bonds and CDS. The CDS are priced using the Starling implementation of the ISDA CDS model. The bonds are priced using two curves: 
 
 * the same yield curve that is used in pricing CDS (of the same currency - in fact, all trades in this portfolio are USD) is used to discount any bond payments that are known but that have not settled; 
-* a bond yield curve that depends on the credit rating of the bond. This curve is constructed using generic-type bond quotes, i.e. the bonds in the portfolio are not used to construct the curves.
+* a bond yield curve that depends on the country and credit rating of the bond. This curve is constructed using generic-type bond quotes, i.e. the bonds in the portfolio are not used to construct the curves. 
+
+There are many possible ways that the bond yield curve can be specified. In this example, the credit rating and country are used to pick the correct curve, but configurations can be created that use currency, country only, sector, rating or issuer, or any combination of these trade properties. For example, the US Treasury example view uses the country in which the bonds were issued.
 
 The bond curves can be viewed by navigating to the ```PRIMITIVES``` tab:
 
 ![Credit View Primitives](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/credit-view-primitives.png)
 
-![Credit View Primitives](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/credit-view.png)
+The trades can be aggregated by issuer:
+
+![Credit View](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/credit-view.png)
 
 #### Present Value
 The present value of the trades.
@@ -386,3 +390,37 @@ The equivalent CDS spread for a bond, calculated by finding a constant hazard ra
 
 #### Hazard Rate
 The constant hazard rate implied by the bond or CDS price. 
+
+### US Treasuries View
+This view shows side-by-side results for US Treasury bonds and bills using two different methods to construct the yield curve: discounting and Nelson-Siegel.
+
+The ```PRIMITIVES``` tab shows the two curves that are used in the calculations. The curve in the upper right is constructed using an interpolated discounted curve, while that in the middle right shows a curve constructed using the same bonds but using the Nelson-Siegel method.
+
+![Treasury View Primitives](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/treasury-view-primitives.png)
+
+The ```PORTFOLIO``` tab shows side-by-side values of present value, yield to maturity, modified and Macaulay duration, and chas-flow information for the trades.
+
+![Treasury View](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/treasury-view.png)
+
+Each pair of calculations is identical apart from the type of the bond yield curves that are used. Hovering over the column header will show which curve type is used.
+
+![Modified Duration 1](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/modified-duration-1.png)
+
+![Modified Duration 2](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/modified-duration-2.png)
+
+The curve type can also be found from the properties of the results for the trade or portfolio.
+
+#### Present Value
+The present value of the bonds and bills.
+
+#### Yield to Maturity
+This is the total return of a bond assuming that it is held until the bond matures.
+
+#### Modified Duration
+This is the percentage change of the price of a bond when the yield changes by one percent.
+
+#### Macaulay Duration
+This is the weighted average maturity of the cash flows of a bond.
+
+#### Bond Details
+This shows all cash flows and pricing inputs for a bond or bill.
