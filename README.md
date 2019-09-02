@@ -103,12 +103,6 @@ An explanation of what the example views calculate can be found
 
 ___
 
-Eclipse
--------
-Importing the projects into Eclipse requires following a very specific set of
-instructions to work properly.
-Full details are in the [README of the eclipse subdirectory](https://github.com/McLeodMoores/starling/blob/v1.5.x/eclipse/README.md).
-
 
 More information
 ----------------
