@@ -402,7 +402,7 @@ The ```PORTFOLIO``` tab shows side-by-side values of present value, yield to mat
 
 ![Treasury View](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/treasury-view.png)
 
-Each pair of calculations is identical apart from the type of the bond yield curves that are used. Hovering over the column header will show which curve type is used.
+Each pair of calculations is identical apart from the type of the bond yield curves that is used. Hovering over the column header will show which curve type is used:
 
 ![Modified Duration 1](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/modified-duration-1.png)
 
