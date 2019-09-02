@@ -1,7 +1,7 @@
 
 # Examples Using Simulated Data
 -------------------------------
-All values in these examples are calculated using simulated live and historical market data, which is regenerated when the server is initialised.  
+All values in these examples are calculated using simulated live and historical market data, which is generated when the server is initialised.  
 
 ## Table of Contents
 1. [Equities](#equity-example)
@@ -9,7 +9,7 @@ All values in these examples are calculated using simulated live and historical 
 3. [FX Forwards](#fx-forwards-example)
 4. [FX Options](#fx-options-example)
 5. [Swaps](#swap-example)
-6. [CDS](#cds-example)
+6. [Credit](#credit-example)
 
 
 ## Equities <a name="equity-example"></a>
@@ -27,7 +27,7 @@ The portfolio structure consists of sub-portfolios of equity trades aggregated b
 This is the (live) price of one share multiplied by the number of shares held in the portfolio
 
 #### CAPM Beta
-This is the ratio of the covariance of the trade / sub-portfolio returns and SPX returns (the underlying index) and the variance of SPX returns.
+This is the ratio of the covariance of the trade / sub-portfolio returns and SPX returns (the underlying index) to the variance of SPX returns.
 
 #### Sharpe Ratio
 This measures the excess return (return of the trade / sub-portfolio minus the return of the index) with respect to SPX per unit of risk (i.e. the standard deviation of returns) for the trade / sub-portfolio.
@@ -259,14 +259,14 @@ All swap example views reference a portfolio containing vanilla USD, EUR, CHF, J
 
 This view shows the present value of the swaps and details of the inputs used to calculate this value.
 
-![Swap Details](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-details-view.png)
+![Swap Details](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/swap-details-view.png)
 
 #### Present Value
 The present value of the swaps, using one curve for discounting cash-flows and the appropriate index curve to calculate the forward rates of the swaps. Note that there is not a portfolio-level value because we haven't specified a currency for the results.
 
 #### Fixed Cash Flows
 
-![Swap Fixed Leg](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-fixed-leg-details.png)
+![Swap Fixed Leg](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/swap-fixed-leg-details.png)
 
 The table shows all data for each cash-flow that is used to calculate the present value of the fixed leg:
     - The notional.
@@ -280,7 +280,7 @@ The table shows all data for each cash-flow that is used to calculate the presen
     
 #### Floating Cash Flows
 
-![Swap Floating Leg](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-floating-leg-details.png)
+![Swap Floating Leg](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/swap-floating-leg-details.png)
 
 This table shows all data for each cash-flow that is used to calculate the present vlaue of the floating leg:
   - The notional.
@@ -305,18 +305,18 @@ This table shows all data for each cash-flow that is used to calculate the prese
 
 This is a view that shows present value and PV01s for the same swap portfolio as above, using the same curve configurations.
 
-![Swap View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-view.png)
+![Swap View](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/swap-view.png)
 
 #### Present Value
 The present value of the swaps in USD.
 
 #### Par Rate
-The par rate of the swap i.e. the rate that would price the swap to par. This is not additivie, so there are only values at the trade level.
+The par rate of the swap i.e. the rate that would price the swap to par. This is not additive, so there are only values at the trade level.
 
 #### Bucketed PV01
-As for the FX forward and option views, these are the sensitivities of a swap to each curve used overall in the portfolio. As there is no coupling between curves of different currencies in the configuration used in this view, each swap will have sensitivities to the discounting and forward curve for the appropriate currency, and zero sensitivities to all other curves.
+As for the FX forward and option views, these are the sensitivities of a swap to each curve used overall in the portfolio. As there is no coupling between curves of different currencies in the configuration used in this view, each swap will have sensitivities to the discounting and forward curve for the appropriate currency, and zero sensitivities to all other curves. For example, a USD swap has no sensitivities to the EUR discounting curve.
 
-![Swap PV01](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-pv01.png)
+![Swap PV01](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/swap-pv01.png)
 
 
 ### AUD Swap View
@@ -342,38 +342,47 @@ In the previous swap examples, the portfolio contained swaps one underlying inde
 
 We have some choice about the calculation method: although the 3M and 6M curves depend on the discounting curve, the discounting curve does not depend on either of the bank bill curves. This means that we can either construct all three curves at once, or we can construct the discounting curve first and use this as an input when building bank bill curves. The latter method means that the root-finding problem is smaller and so the calculation is faster. However, the results are the same:
 
-![AUD swap view](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/aud-swap-view.png)
+![AUD swap view](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/aud-swap-view.png)
 
 Going to the ```PRIMITIVES``` tab:
 
-![Primitives tab](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/aud-swap-primitives.png)
+![Primitives tab](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/aud-swap-primitives.png)
 
 we display the three curves calculated using the two methods:
 
-![AUD 6M bank bill](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/aud-6m-bank-bill.png)
+![AUD 6M bank bill](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/aud-6m-bank-bill.png)
 
 We have constructed this view with side-by-side comparisons of calculations (```Column Sets```):
 
-![Column Set 1](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/aud-column-set-1.png)
+![Column Set 1](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/aud-column-set-1.png)
 
-![Column Set 2](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/aud-column-set-2.png)
+![Column Set 2](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/aud-column-set-2.png)
 
 This is a convenient way of seeing the effects of different calculation methods and makes retrieving the correct values programmatically or via REST easier.
 
 
-## Swaptions
-------------
+## Credit <a name="credit-example"></a>
 
-## Bonds
---------
+### Credit View
+This view shows the results of calculations on a portfolio of corporate bonds and CDS. The CDS are priced using the Starling implementation of the ISDA CDS model. The bonds are priced using two curves: 
 
-### US Treasuries View
+* the same yield curve that is used in pricing CDS (of the same currency - in fact, all trades in this portfolio are USD) is used to discount any bond payments that are known but that have not settled; 
+* a bond yield curve that depends on the credit rating of the bond. This curve is constructed using generic-type bond quotes, i.e. the bonds in the portfolio are not used to construct the curves.
 
-### GB Corporates View
+The bond curves can be viewed by navigating to the ```PRIMITIVES``` tab:
 
+![Credit View Primitives](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/credit-view-primitives.png)
 
-## CDS <a name="cds-example"></a>
----------------------------------
+![Credit View Primitives](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/credit-view.png)
 
-## Equity Options
------------------
+#### Present Value
+The present value of the trades.
+
+#### Clean Price
+The clean price of the bonds and CDS i.e. the value of the security ignoring any accrued interest. Note that this is non-additive, so only trade-level results are shown.
+
+#### Credit Spread
+The equivalent CDS spread for a bond, calculated by finding a constant hazard rate that reprices the bond given a yield curve and then using this hazard rate to calculate the par spread of a standard CDS.
+
+#### Hazard Rate
+The constant hazard rate implied by the bond or CDS price. 
