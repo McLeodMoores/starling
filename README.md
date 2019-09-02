@@ -44,9 +44,6 @@ The source code can be cloned using git from GitHub:
   git clone https://github.com/McLeodMoores/starling.git
 ```
 
-A source tarball can also be downloaded from 
-https://github.com/McLeodMoores/starling/tree/v1.5.x
-
 ### Building
 
 The source code must be compiled before use. This will build multiple jar
@@ -82,32 +79,26 @@ be stopped and restarted without having to repopulate the databases.
 
 Wait for the server to start:
 
-![Server startup](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/example-server-startup.png)
+![Server startup](https://github.com/McLeodMoores/starling/blob/master/examples/examples-simulated/docs/images/example-server-startup.png)
 
 and then point your browser to
 `http://localhost:8080` to see the web user interface:
 
-![UI landing page](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/example-server-web-ui.png)
+![UI landing page](https://github.com/McLeodMoores/starling/blob/master/examples/examples-simulated/docs/images/example-server-web-ui.png)
 
 Go to `http://localhost:8080/jax/components` to get a sense of
 the underlying power of the system, available via REST. Some of the components that are available can be seen below:
 
-![Rest](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/example-server-rest-interface.png)
+![Rest](https://github.com/McLeodMoores/starling/blob/master/examples/examples-simulated/docs/images/example-server-rest-interface.png)
 
 Clicking on "Analytics" opens a UI that shows calculation results when a view is selected:
 
-![Analytics results](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/example-server-analytics-ui.png)
+![Analytics results](https://github.com/McLeodMoores/starling/blob/master/examples/examples-simulated/docs/images/example-server-analytics-ui.png)
 
 An explanation of what the example views calculate can be found 
-[here](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/README.md).
+[here](https://github.com/McLeodMoores/starling/blob/master/examples/examples-simulated/README.md).
 
 ___
-
-Eclipse
--------
-Importing the projects into Eclipse requires following a very specific set of
-instructions to work properly.
-Full details are in the [README of the eclipse subdirectory](https://github.com/McLeodMoores/starling/blob/v1.5.x/eclipse/README.md).
 
 
 More information
