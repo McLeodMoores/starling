@@ -362,6 +362,7 @@ This is a convenient way of seeing the effects of different calculation methods 
 
 
 ## Credit <a name="credit-example"></a>
+---------------------------------------
 
 ### Credit View
 This view shows the results of calculations on a portfolio of corporate bonds and CDS. The CDS are priced using the Starling implementation of the ISDA CDS model. The bonds are priced using two curves: 
