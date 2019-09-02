@@ -10,7 +10,6 @@ All values in these examples are calculated using simulated live and historical 
 4. [FX Options](#fx-options-example)
 5. [Swaps](#swap-example)
 6. [Credit](#credit-example)
-7. [Government Bonds](#government-bond-example)
 
 
 ## Equities <a name="equity-example"></a>
@@ -364,4 +363,26 @@ This is a convenient way of seeing the effects of different calculation methods 
 
 ## Credit <a name="credit-example"></a>
 
-## Government Bonds <a name="government-bond-example"></a>
+### Credit View
+This view shows the results of calculations on a portfolio of corporate bonds and CDS. The CDS are priced using the Starling implementation of the ISDA CDS model. The bonds are priced using two curves: 
+
+* the same yield curve that is used in pricing CDS (of the same currency - in fact, all trades in this portfolio are USD) is used to discount any bond payments that are known but that have not settled; 
+* a bond yield curve that depends on the credit rating of the bond. This curve is constructed using generic-type bond quotes, i.e. the bonds in the portfolio are not used to construct the curves.
+
+The bond curves can be viewed by navigating to the ```PRIMITIVES``` tab:
+
+![Credit View Primitives](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/credit-view-primitives.png)
+
+![Credit View Primitives](https://github.com/McLeodMoores/starling/blob/v1.5.x/examples/examples-simulated/docs/images/credit-view.png)
+
+#### Present Value
+The present value of the trades.
+
+#### Clean Price
+The clean price of the bonds and CDS i.e. the value of the security ignoring any accrued interest. Note that this is non-additive, so only trade-level results are shown.
+
+#### Credit Spread
+The equivalent CDS spread for a bond, calculated by finding a constant hazard rate that reprices the bond given a yield curve and then using this hazard rate to calculate the par spread of a standard CDS.
+
+#### Hazard Rate
+The constant hazard rate implied by the bond or CDS price. 
