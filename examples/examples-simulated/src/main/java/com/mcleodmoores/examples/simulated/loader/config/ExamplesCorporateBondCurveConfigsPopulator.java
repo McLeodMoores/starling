@@ -111,6 +111,7 @@ public class ExamplesCorporateBondCurveConfigsPopulator {
         }
       }
       final String issuerName = "US " + fitchRating + " Corp";
+      final String curveName = "US " + fitchRating + " Rated";
       final Map<Tenor, CurveInstrumentProvider> bondNodeIds = new HashMap<>();
       for (final int i : new int[] { 1, 2, 3, 5, 10, 15 }) {
         final double bondCoupon = BigDecimal.valueOf(5 + entity.getRatings().get(0).getScore().ordinal() / 5. + i * 0.05 * RANDOM.nextDouble()).round(MC)
@@ -128,14 +129,14 @@ public class ExamplesCorporateBondCurveConfigsPopulator {
         for (final Rating rating : entity.getRatings()) {
           bond.addAttribute(rating.getRater(), rating.getScore().name());
         }
-        nodes.add(new BondNode(Tenor.ofYears(i), issuerName));
+        nodes.add(new BondNode(Tenor.ofYears(i), curveName));
         bondNodeIds.put(Tenor.ofYears(i), new StaticCurveInstrumentProvider(ExternalSchemes.syntheticSecurityId(isinString),
             MarketDataRequirementNames.YIELD_YIELD_TO_MATURITY_MID, DataFieldType.OUTRIGHT));
         securityMaster.add(new SecurityDocument(bond));
       }
-      final InterpolatedCurveDefinition curveDefinition = new InterpolatedCurveDefinition(issuerName, nodes, LinearInterpolator1dAdapter.NAME,
+      final InterpolatedCurveDefinition curveDefinition = new InterpolatedCurveDefinition(curveName, nodes, LinearInterpolator1dAdapter.NAME,
           FlatExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
-      final CurveNodeIdMapper idMapper = CurveNodeIdMapper.builder().name(issuerName).bondNodeIds(bondNodeIds).build();
+      final CurveNodeIdMapper idMapper = CurveNodeIdMapper.builder().name(curveName).bondNodeIds(bondNodeIds).build();
       final LegalEntityRegion regionFilter = new LegalEntityRegion(false, true, Collections.singleton(Country.US), false, Collections.<Currency> emptySet());
       final LegalEntityCreditRatings ratingFilter = new LegalEntityCreditRatings(true, Collections.singleton("RatingFitch"), false,
           Collections.<String> emptySet());
@@ -143,7 +144,7 @@ public class ExamplesCorporateBondCurveConfigsPopulator {
       final Set<LegalEntityFilter<LegalEntity>> filters = new HashSet<LegalEntityFilter<LegalEntity>>(Arrays.asList(ratingFilter, regionFilter));
       final CurveTypeConfiguration curveType = new IssuerCurveTypeConfiguration(keys, filters);
       final Map<String, List<? extends CurveTypeConfiguration>> curveTypes = new HashMap<>();
-      curveTypes.put(issuerName, Arrays.asList(curveType));
+      curveTypes.put(curveName, Arrays.asList(curveType));
       configMaster.add(new ConfigDocument(ConfigItem.of(curveDefinition)));
       configMaster.add(new ConfigDocument(ConfigItem.of(idMapper)));
       groups.add(new CurveGroupConfiguration(j++, curveTypes));
