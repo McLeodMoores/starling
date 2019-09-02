@@ -20,6 +20,8 @@ import static com.opengamma.engine.value.ValuePropertyNames.SURFACE;
 import static com.opengamma.engine.value.ValueRequirementNames.BOND_DETAILS;
 import static com.opengamma.engine.value.ValueRequirementNames.BUCKETED_PV01;
 import static com.opengamma.engine.value.ValueRequirementNames.CAPM_BETA;
+import static com.opengamma.engine.value.ValueRequirementNames.CLEAN_PRICE;
+import static com.opengamma.engine.value.ValueRequirementNames.CREDIT_SPREAD;
 import static com.opengamma.engine.value.ValueRequirementNames.FAIR_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.FIXED_CASH_FLOWS;
 import static com.opengamma.engine.value.ValueRequirementNames.FLOATING_CASH_FLOWS;
@@ -31,6 +33,7 @@ import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_VEGA;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_CURRENCY_EXPOSURE;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_FORWARD_DETAILS;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_PRESENT_VALUE;
+import static com.opengamma.engine.value.ValueRequirementNames.HAZARD_RATE;
 import static com.opengamma.engine.value.ValueRequirementNames.HISTORICAL_VAR;
 import static com.opengamma.engine.value.ValueRequirementNames.MACAULAY_DURATION;
 import static com.opengamma.engine.value.ValueRequirementNames.MODIFIED_DURATION;
@@ -70,6 +73,7 @@ import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
+import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.view.ViewCalculationConfiguration;
 import com.opengamma.engine.view.ViewDefinition;
 import com.opengamma.examples.simulated.loader.ExampleEquityPortfolioLoader;
@@ -612,10 +616,10 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
     viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    final ValueProperties properties1 = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CALCULATION_METHOD, CURVES_METHOD)
-        .get();
-    final ValueProperties properties2 = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, NELSON_SIEGEL).with(CALCULATION_METHOD, CURVES_METHOD)
-        .get();
+    final ValueProperties properties1 = ValueProperties.builder().with(CURVE_EXPOSURES, "Govt Bond Exposures")
+        .with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CALCULATION_METHOD, CURVES_METHOD).get();
+    final ValueProperties properties2 = ValueProperties.builder().with(CURVE_EXPOSURES, "Govt Bond Exposures")
+        .with(PROPERTY_CURVE_TYPE, NELSON_SIEGEL).with(CALCULATION_METHOD, CURVES_METHOD).get();
     calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
         ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "US Treasury").get()));
     calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
@@ -654,28 +658,48 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     definition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration config = new ViewCalculationConfiguration(definition, DEFAULT_CALC_CONFIG);
     config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(CURVE, "US AA Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
+        ValueProperties.with(CURVE, "US AA Rated").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
             .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA").get()));
     config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(CURVE, "US A Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
+        ValueProperties.with(CURVE, "US A Rated").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
             .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA").get()));
     config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(CURVE, "US B Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
+        ValueProperties.with(CURVE, "US B Rated").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
             .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA").get()));
     config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(CURVE, "US CC Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
+        ValueProperties.with(CURVE, "US CC Rated").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
             .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA").get()));
     config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(CURVE, "US C Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
+        ValueProperties.with(CURVE, "US C Rated").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING)
             .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA").get()));
-    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, 
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE,
         ValueProperties
           .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
           .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
-    config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, PRESENT_VALUE, 
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, ValueRequirementNames.CLEAN_PRICE,
+        ValueProperties
+          .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
+          .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, CREDIT_SPREAD,
+        ValueProperties
+          .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
+          .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, HAZARD_RATE,
+        ValueProperties
+          .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
+          .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
+    config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, PRESENT_VALUE,
         ValueProperties
         .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
         .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
+    config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, CLEAN_PRICE,
+        ValueProperties
+          .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
+          .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
+    config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, HAZARD_RATE,
+        ValueProperties
+          .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
+          .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
     definition.addViewCalculationConfiguration(config);
     return definition;
   }

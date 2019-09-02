@@ -10,6 +10,7 @@ import static com.opengamma.engine.value.ValueRequirementNames.BUCKETED_CS01;
 import static com.opengamma.engine.value.ValueRequirementNames.CLEAN_PRESENT_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.CLEAN_PRICE;
 import static com.opengamma.engine.value.ValueRequirementNames.DIRTY_PRESENT_VALUE;
+import static com.opengamma.engine.value.ValueRequirementNames.HAZARD_RATE;
 import static com.opengamma.engine.value.ValueRequirementNames.IR01;
 import static com.opengamma.engine.value.ValueRequirementNames.PARALLEL_CS01;
 import static com.opengamma.engine.value.ValueRequirementNames.POINTS_UPFRONT;
@@ -38,7 +39,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class CdsPerCurrencyDefaults extends DefaultPropertyFunction {
   private static final String[] VALUE_REQUIREMENTS = new String[] { ACCRUED_DAYS, ACCRUED_PREMIUM, POINTS_UPFRONT, CLEAN_PRESENT_VALUE, DIRTY_PRESENT_VALUE,
-      CLEAN_PRICE, QUOTED_SPREAD, UPFRONT_AMOUNT, PARALLEL_CS01, PRINCIPAL, PRESENT_VALUE, BUCKETED_CS01, RR01, IR01 };
+    CLEAN_PRICE, QUOTED_SPREAD, UPFRONT_AMOUNT, PARALLEL_CS01, PRINCIPAL, PRESENT_VALUE, BUCKETED_CS01, RR01, IR01, HAZARD_RATE };
   private final String _currencyCode;
   private final String _curveExposuresName;
 

@@ -8,13 +8,17 @@ import static com.mcleodmoores.financial.function.credit.cds.isda.util.IsdaFunct
 import static com.mcleodmoores.financial.function.credit.cds.isda.util.IsdaFunctionUtils.getUpfrontAmount;
 import static com.mcleodmoores.financial.function.properties.CurveCalculationProperties.ISDA;
 import static com.opengamma.core.value.MarketDataRequirementNames.MARKET_VALUE;
-import static com.opengamma.engine.value.ValuePropertyNames.*;
+import static com.opengamma.engine.value.ValuePropertyNames.CURRENCY;
+import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CALCULATION_METHOD;
+import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CONSTRUCTION_CONFIG;
+import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValueRequirementNames.ACCRUED_DAYS;
 import static com.opengamma.engine.value.ValueRequirementNames.ACCRUED_PREMIUM;
 import static com.opengamma.engine.value.ValueRequirementNames.CLEAN_PRESENT_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.CLEAN_PRICE;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_BUNDLE;
 import static com.opengamma.engine.value.ValueRequirementNames.DIRTY_PRESENT_VALUE;
+import static com.opengamma.engine.value.ValueRequirementNames.HAZARD_RATE;
 import static com.opengamma.engine.value.ValueRequirementNames.HAZARD_RATE_CURVE;
 import static com.opengamma.engine.value.ValueRequirementNames.PARALLEL_CS01;
 import static com.opengamma.engine.value.ValueRequirementNames.POINTS_UPFRONT;
@@ -39,6 +43,7 @@ import com.opengamma.analytics.financial.credit.BuySellProtection;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.AnalyticSpreadSensitivityCalculator;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.CDSAnalytic;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.CDSQuoteConvention;
+import com.opengamma.analytics.financial.credit.isdastandardmodel.FastCreditCurveBuilder;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantCreditCurve;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantYieldCurve;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.PointsUpFront;
@@ -64,6 +69,7 @@ import com.opengamma.financial.analytics.isda.credit.FlatSpreadQuote;
 import com.opengamma.financial.analytics.isda.credit.PointsUpFrontQuote;
 import com.opengamma.financial.analytics.model.cds.ISDAFunctionConstants;
 import com.opengamma.financial.analytics.model.credit.CreditSecurityToIdentifierVisitor;
+import com.opengamma.financial.analytics.model.curve.IssuerProviderDiscountingFunction;
 import com.opengamma.financial.convention.IsdaCreditCurveConvention;
 import com.opengamma.financial.credit.CdsRecoveryRateIdentifier;
 import com.opengamma.financial.security.FinancialSecurity;
@@ -73,7 +79,6 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.credit.CreditCurveIdentifier;
 import com.opengamma.util.money.Currency;
-import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Returns:
@@ -91,12 +96,13 @@ import com.opengamma.util.money.CurrencyAmount;
  */
 public class IsdaCdsAnalyticsFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(IsdaCdsAnalyticsFunction.class);
-  private static final String[] RESULTS = new String[] { ACCRUED_DAYS, POINTS_UPFRONT, CLEAN_PRICE, QUOTED_SPREAD };
+  private static final String[] RESULTS = new String[] { ACCRUED_DAYS, POINTS_UPFRONT, CLEAN_PRICE, QUOTED_SPREAD, HAZARD_RATE };
   private static final String[] RESULTS_WITH_CURRENCY = new String[] { ACCRUED_PREMIUM, CLEAN_PRESENT_VALUE, DIRTY_PRESENT_VALUE,
     UPFRONT_AMOUNT, PARALLEL_CS01, PRINCIPAL, PRESENT_VALUE };
+  private static final FastCreditCurveBuilder HAZARD_RATE_CALCULATOR = new FastCreditCurveBuilder();
+  private static final AnalyticSpreadSensitivityCalculator CS01_CALCULATOR = new AnalyticSpreadSensitivityCalculator();
   private CreditSecurityToIdentifierVisitor _identifierVisitor;
   private InstrumentExposuresProvider _instrumentExposuresProvider;
-  private static final AnalyticSpreadSensitivityCalculator CS01_CALCULATOR = new AnalyticSpreadSensitivityCalculator();
 
   @Override
   public void init(final FunctionCompilationContext context) {
@@ -116,7 +122,7 @@ public class IsdaCdsAnalyticsFunction extends AbstractFunction.NonCompiledInvoke
     final ValueProperties constraintsWithCurrency = constraints.copy().with(CURRENCY, currency.getCode()).get();
     final IsdaCurveProvider curves = (IsdaCurveProvider) inputs.getValue(CURVE_BUNDLE);
     if (curves == null) {
-      throw new OpenGammaRuntimeException("Could not get yield curve bundle");
+      throw new OpenGammaRuntimeException("Could not get yield curve bundle for " + security);
     }
     final ISDACompliantYieldCurve yieldCurve = curves.getIsdaDiscountingCurve(currency);
     final ISDACompliantCreditCurve creditCurve = (ISDACompliantCreditCurve) inputs.getValue(HAZARD_RATE_CURVE);
@@ -147,12 +153,15 @@ public class IsdaCdsAnalyticsFunction extends AbstractFunction.NonCompiledInvoke
     final double principal = cleanPv;
     final double cleanPrice = 100 * (1 - pointsUpfront.getPointsUpFront());
     final double parallelCs01 = CS01_CALCULATOR.parallelCS01(cds, quotedSpread, yieldCurve);
+    final ISDACompliantCreditCurve flatHazardRateCurve = HAZARD_RATE_CALCULATOR.calibrateCreditCurve(cds, quote, yieldCurve);
+    final double hazardRate = flatHazardRateCurve.getHazardRate(flatHazardRateCurve.getTimeAtIndex(0));
     final Set<ComputedValue> results = new HashSet<>();
     results.add(new ComputedValue(new ValueSpecification(ACCRUED_DAYS, target.toSpecification(), constraints), accruedDays));
     results.add(new ComputedValue(new ValueSpecification(ACCRUED_PREMIUM, target.toSpecification(), constraintsWithCurrency), accruedPremium));
     results.add(new ComputedValue(new ValueSpecification(CLEAN_PRESENT_VALUE, target.toSpecification(), constraintsWithCurrency), cleanPv));
     results.add(new ComputedValue(new ValueSpecification(CLEAN_PRICE, target.toSpecification(), constraints), cleanPrice));
     results.add(new ComputedValue(new ValueSpecification(DIRTY_PRESENT_VALUE, target.toSpecification(), constraintsWithCurrency), upfrontAmount));
+    results.add(new ComputedValue(new ValueSpecification(HAZARD_RATE, target.toSpecification(), constraints), hazardRate));
     results.add(new ComputedValue(new ValueSpecification(PARALLEL_CS01, target.toSpecification(), constraintsWithCurrency), parallelCs01));
     results.add(new ComputedValue(new ValueSpecification(POINTS_UPFRONT, target.toSpecification(), constraints), pointsUpfront.getPointsUpFront()));
     results.add(new ComputedValue(new ValueSpecification(PRESENT_VALUE, target.toSpecification(), constraintsWithCurrency), cleanPv));
@@ -188,20 +197,17 @@ public class IsdaCdsAnalyticsFunction extends AbstractFunction.NonCompiledInvoke
         .with(PROPERTY_CURVE_TYPE, ISDA)
         .withAny(CURVE_EXPOSURES)
         .with(CURVE_CALCULATION_METHOD, ISDA)
+        .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, ISDA)
         .withAny(ISDAFunctionConstants.CDS_QUOTE_CONVENTION)
         .get();
-    final ValueProperties propertiesWithCurrency = createValueProperties()
-        .with(PROPERTY_CURVE_TYPE, ISDA)
-        .withAny(CURVE_EXPOSURES)
-        .with(CURVE_CALCULATION_METHOD, ISDA)
-        .withAny(ISDAFunctionConstants.CDS_QUOTE_CONVENTION)
+    final ValueProperties propertiesWithCurrency = properties.copy()
         .with(CURRENCY, FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode())
         .get();
     final Set<ValueSpecification> results = new HashSet<>();
     for (final String result : RESULTS) {
       results.add(new ValueSpecification(result, target.toSpecification(), properties));
     }
-    for (String result : RESULTS_WITH_CURRENCY) {
+    for (final String result : RESULTS_WITH_CURRENCY) {
       results.add(new ValueSpecification(result, target.toSpecification(), propertiesWithCurrency));
     }
     return results;
@@ -219,10 +225,15 @@ public class IsdaCdsAnalyticsFunction extends AbstractFunction.NonCompiledInvoke
         target.getTrade());
     final CreditCurveIdentifier cdsId = security.accept(_identifierVisitor);
     for (final String curveConstructionConfigurationName : curveConstructionConfigurationNames) {
-      final ValueProperties curveBundleConstraints = ValueProperties.with(CURVE_CALCULATION_METHOD, ROOT_FINDING).with(PROPERTY_CURVE_TYPE, ISDA)
-          .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName).get();
-      final ValueProperties hazardRateCurveConstraints = ValueProperties.builder().with(CURVE_CALCULATION_METHOD, ISDA)
-          .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName).get();
+      final ValueProperties curveBundleConstraints = ValueProperties.builder()
+          .with(CURVE_CALCULATION_METHOD, ROOT_FINDING)
+          .with(PROPERTY_CURVE_TYPE, ISDA)
+          .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName)
+          .get();
+      final ValueProperties hazardRateCurveConstraints = ValueProperties.builder()
+          .with(CURVE_CALCULATION_METHOD, ISDA)
+          .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName)
+          .get();
       requirements.add(new ValueRequirement(CURVE_BUNDLE, ComputationTargetSpecification.NULL, curveBundleConstraints));
       requirements.add(new ValueRequirement(HAZARD_RATE_CURVE, ComputationTargetSpecification.of(cdsId), hazardRateCurveConstraints));
     }

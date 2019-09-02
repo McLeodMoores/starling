@@ -7,6 +7,7 @@ package com.opengamma.analytics.financial.credit.isdastandardmodel;
 
 import java.util.Map;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
@@ -63,6 +64,19 @@ public class ISDACompliantYieldCurve extends ISDACompliantCurve {
    */
   public ISDACompliantYieldCurve(final double[] t, final double[] r) {
     super(t, r);
+  }
+
+  /**
+   * Creates a yield (discount) curve with knots at times, t, zero rates, r, at the knots and piecewise constant forward rates between knots (i.e. linear
+   * interpolation of r*t or the -log(discountFactor).
+   *
+   * @param t
+   *          the set of times that form the knots of the curve. Must be ascending with the first value &ge; 0, not null
+   * @param r
+   *          the set of zero rates, not null
+   */
+  public ISDACompliantYieldCurve(final Double[] t, final Double[] r) {
+    super(ArrayUtils.toPrimitive(t), ArrayUtils.toPrimitive(r));
   }
 
   /**

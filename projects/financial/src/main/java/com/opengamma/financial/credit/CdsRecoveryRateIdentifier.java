@@ -42,7 +42,7 @@ public final class CdsRecoveryRateIdentifier {
 
   /**
    * Create an identifier for a Sameday recovery rate with the specified properties.
-   *
+   * 
    * @param redCode
    *          the red code of the CDS
    * @param currency
@@ -52,14 +52,13 @@ public final class CdsRecoveryRateIdentifier {
    * @return a new identifier
    */
   public static CdsRecoveryRateIdentifier forSamedayCds(final String redCode, final Currency currency, final String seniority) {
-
     final String idValue = generateCdsId(redCode, currency, seniority);
     return new CdsRecoveryRateIdentifier(SAMEDAY_CDS_SCHEME, idValue);
   }
 
   /**
    * Create an identifier for a Sameday recovery rate with the specified properties.
-   *
+   * 
    * @param redCode
    *          the red code of the CDS
    * @param currency
@@ -70,8 +69,7 @@ public final class CdsRecoveryRateIdentifier {
    *          the restructuring clause of the CDS
    * @return a new identifier
    */
-  public static CdsRecoveryRateIdentifier forSamedayCds(final String redCode, final Currency currency, final String seniority,
-      final String restructuringClause) {
+  public static CdsRecoveryRateIdentifier forSamedayCds(final String redCode, final Currency currency, final String seniority, final String restructuringClause) {
 
     final String idValue = generateCdsId(redCode, currency, seniority, restructuringClause);
     return new CdsRecoveryRateIdentifier(SAMEDAY_CDS_SCHEME, idValue);
@@ -79,7 +77,7 @@ public final class CdsRecoveryRateIdentifier {
 
   /**
    * Create an identifier for a Composite CDS with the specified properties.
-   *
+   * 
    * @param redCode
    *          the red code of the CDS
    * @param currency
@@ -120,7 +118,7 @@ public final class CdsRecoveryRateIdentifier {
 
   /**
    * Return the external id.
-   *
+   * 
    * @return the external id
    */
   public ExternalId getExternalId() {
@@ -129,7 +127,7 @@ public final class CdsRecoveryRateIdentifier {
 
   /**
    * Returns a suitable hash code for the identifier.
-   *
+   * 
    * @return the hash code
    */
   @Override
@@ -139,7 +137,7 @@ public final class CdsRecoveryRateIdentifier {
 
   /**
    * Checks if this identifier equals another identifier.
-   *
+   * 
    * @param obj
    *          the other identifier, null returns false
    * @return true if equal
@@ -156,7 +154,7 @@ public final class CdsRecoveryRateIdentifier {
 
   /**
    * Gets the credit curve identifier as a string.
-   *
+   * 
    * @return the string representing this identifier, not null
    */
   @Override

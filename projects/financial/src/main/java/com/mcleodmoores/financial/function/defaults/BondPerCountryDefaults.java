@@ -6,7 +6,11 @@ package com.mcleodmoores.financial.function.defaults;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValueRequirementNames.BOND_DETAILS;
 import static com.opengamma.engine.value.ValueRequirementNames.BUCKETED_PV01;
+import static com.opengamma.engine.value.ValueRequirementNames.CLEAN_PRICE;
 import static com.opengamma.engine.value.ValueRequirementNames.CONVEXITY;
+import static com.opengamma.engine.value.ValueRequirementNames.CREDIT_SPREAD;
+import static com.opengamma.engine.value.ValueRequirementNames.DIRTY_PRICE;
+import static com.opengamma.engine.value.ValueRequirementNames.HAZARD_RATE;
 import static com.opengamma.engine.value.ValueRequirementNames.MACAULAY_DURATION;
 import static com.opengamma.engine.value.ValueRequirementNames.MODIFIED_DURATION;
 import static com.opengamma.engine.value.ValueRequirementNames.PRESENT_VALUE;
@@ -58,7 +62,7 @@ public class BondPerCountryDefaults extends DefaultPropertyFunction {
   }
 
   private static final String[] VALUE_REQUIREMENTS = new String[] { PRESENT_VALUE, PV01, BUCKETED_PV01, YIELD_CURVE_NODE_SENSITIVITIES, BOND_DETAILS,
-                MODIFIED_DURATION, MACAULAY_DURATION, CONVEXITY, YTM };
+    MODIFIED_DURATION, MACAULAY_DURATION, CONVEXITY, YTM, CREDIT_SPREAD, CLEAN_PRICE, DIRTY_PRICE, HAZARD_RATE };
   private final String _countryCode;
   private final String _curveExposuresName;
   private final BondType _bondType;
