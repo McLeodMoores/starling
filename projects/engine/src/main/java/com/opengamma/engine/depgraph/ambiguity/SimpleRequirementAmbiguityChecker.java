@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.bp.Instant;
 
-import com.google.common.collect.MapMaker;
+import com.google.common.cache.CacheBuilder;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetResolver;
 import com.opengamma.engine.ComputationTargetSpecification;
@@ -178,8 +178,9 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
   }
 
   public void setSharedCaching(final boolean sharedCaching) {
-    //_sharedCaching = sharedCaching ? new ConcurrentHashMap<Object, FullRequirementResolution>() : null;
-    _sharedCaching = sharedCaching ? new MapMaker().softValues().<Object, FullRequirementResolution>makeMap() : null;
+    // _sharedCaching = sharedCaching ? new ConcurrentHashMap<Object, FullRequirementResolution>() : null;
+    _sharedCaching = sharedCaching ? CacheBuilder.newBuilder().softValues().<Object, FullRequirementResolution> build()
+        .asMap() : null;
   }
 
   public boolean isSharedCaching() {
@@ -311,7 +312,7 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
         LOGGER.debug("Market data satisfies {} with {}", requirement, marketData);
         marketData = alias(marketData, targetSpec, requirement);
         resolved.addResolutions(
-            Collections.singleton(new RequirementResolution(marketData, MARKET_DATA_SOURCING_FUNCTION, Collections.<FullRequirementResolution>emptySet())));
+            Collections.singleton(new RequirementResolution(marketData, MARKET_DATA_SOURCING_FUNCTION, Collections.<FullRequirementResolution> emptySet())));
       } else {
         if (target != null) {
           final List<Collection<RequirementResolution>> resolutions = new ArrayList<>();
@@ -324,8 +325,8 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
                   continue;
                 }
                 final ComputationTarget adjustedTarget = rule.adjustTarget(targetCache, target);
-                final ValueSpecification nominalResult =
-                    rule.getResult(requirement.getValueName(), adjustedTarget, requirement.getConstraints(), getCompilationContext());
+                final ValueSpecification nominalResult = rule.getResult(requirement.getValueName(), adjustedTarget, requirement.getConstraints(),
+                    getCompilationContext());
                 if (nominalResult != null) {
                   LOGGER.debug("Possible resolution of {} to {}", requirement, nominalResult);
                   Set<ValueRequirement> inputs = null;
@@ -406,8 +407,8 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
                                 resolutions.get(resolutionIndex).add(new RequirementResolution(finalResult, rule.getParameterizedFunction(), resolvedInputs));
                                 succeeded = true;
                               } else {
-                                final Collection<FullRequirementResolution> additionalResolvedRequirements =
-                                    resolve(cache, exclusions, target, requirement, rule, additionalRequirements);
+                                final Collection<FullRequirementResolution> additionalResolvedRequirements = resolve(cache, exclusions, target, requirement,
+                                    rule, additionalRequirements);
                                 if (additionalResolvedRequirements.size() == additionalRequirements.size()
                                     || rule.getParameterizedFunction().getFunction().canHandleMissingRequirements()) {
                                   resolvedInputs.addAll(additionalResolvedRequirements);

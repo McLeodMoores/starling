@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.MapMaker;
 import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
@@ -22,8 +23,8 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * A wrapper around an existing {@link ViewComputationCache} implementation that will attempt to buffer data in memory to
- * speed up writes rapidly followed by a read.
+ * A wrapper around an existing {@link ViewComputationCache} implementation that will attempt to buffer data in memory to speed up writes rapidly followed by a
+ * read.
  */
 public class WriteThroughViewComputationCache implements ViewComputationCache {
 
@@ -74,7 +75,8 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
 
   private final ViewComputationCache _underlying;
 
-  private final ConcurrentMap<ValueSpecification, Object> _readCache = new MapMaker().softValues().makeMap();
+  private final ConcurrentMap<ValueSpecification, Object> _readCache = CacheBuilder.newBuilder().softValues().<ValueSpecification, Object> build()
+      .asMap();
 
   private final ConcurrentMap<ValueSpecification, Pending> _pending = new MapMaker().weakValues().makeMap();
 
@@ -97,8 +99,8 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
   }
 
   /**
-   * This method will clear all instances of this class. It should be called after confirming with OpenGamma support that it
-   * is necessary to handle certain memory situations regarding custom View Processor configurations.
+   * This method will clear all instances of this class. It should be called after confirming with OpenGamma support that it is necessary to handle certain
+   * memory situations regarding custom View Processor configurations.
    */
   public static void clearAllWriteThroughCaches() {
     for (final WriteThroughViewComputationCache cache : INSTANCES.values()) {
@@ -147,10 +149,10 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
       }
     }
     if (value == NULL) {
-      //LOGGER.debug("Cached NULL for {}", specification);
+      // LOGGER.debug("Cached NULL for {}", specification);
       value = null;
     } else if (value == null) {
-      //LOGGER.debug("Cached miss for {}", specification);
+      // LOGGER.debug("Cached miss for {}", specification);
       value = getUnderlying().getValue(specification);
       post(specification, value);
     } else {
@@ -170,10 +172,10 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
       }
     }
     if (value == NULL) {
-      //LOGGER.debug("Cached NULL for {}", specification);
+      // LOGGER.debug("Cached NULL for {}", specification);
       value = null;
     } else if (value == null) {
-      //LOGGER.debug("Cached miss for {}", specification);
+      // LOGGER.debug("Cached miss for {}", specification);
       value = getUnderlying().getValue(specification, filter);
       post(specification, value);
     } else {
@@ -201,12 +203,12 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
         }
       }
       if (value == NULL) {
-        //LOGGER.debug("Cached NULL for {}", specification);
+        // LOGGER.debug("Cached NULL for {}", specification);
         result.add(Pairs.of(specification, null));
       } else if (value == null) {
-        //LOGGER.debug("Cache miss for {}", specification);
+        // LOGGER.debug("Cache miss for {}", specification);
         if (query == null) {
-          query = Sets.<ValueSpecification>newHashSetWithExpectedSize(specifications.size());
+          query = Sets.<ValueSpecification> newHashSetWithExpectedSize(specifications.size());
         }
         query.add(specification);
       } else {
@@ -255,12 +257,12 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
         }
       }
       if (value == NULL) {
-        //LOGGER.debug("Cached NULL for {}", specification);
+        // LOGGER.debug("Cached NULL for {}", specification);
         result.add(Pairs.of(specification, null));
       } else if (value == null) {
-        //LOGGER.debug("Cache miss for {}", specification);
+        // LOGGER.debug("Cache miss for {}", specification);
         if (query == null) {
-          query = Sets.<ValueSpecification>newHashSetWithExpectedSize(specifications.size());
+          query = Sets.<ValueSpecification> newHashSetWithExpectedSize(specifications.size());
         }
         query.add(specification);
       } else {

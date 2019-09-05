@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
@@ -54,8 +54,7 @@ import com.opengamma.util.time.LocalDateRange;
 /**
  * Loads time-series data from Quandl into a {@link HistoricalTimeSeriesMaster}.
  * <p>
- * This loads missing historical time-series data from Quandl and stores it
- * into a master.
+ * This loads missing historical time-series data from Quandl and stores it into a master.
  */
 public class QuandlHistoricalTimeSeriesLoader extends AbstractHistoricalTimeSeriesLoader {
   /** The logger */
@@ -80,8 +79,10 @@ public class QuandlHistoricalTimeSeriesLoader extends AbstractHistoricalTimeSeri
   /**
    * Creates an instance.
    *
-   * @param htsMaster  the time-series master, not null
-   * @param underlyingHtsProvider  the time-series provider for the underlying data source, not null
+   * @param htsMaster
+   *          the time-series master, not null
+   * @param underlyingHtsProvider
+   *          the time-series provider for the underlying data source, not null
    */
   public QuandlHistoricalTimeSeriesLoader(
       final HistoricalTimeSeriesMaster htsMaster,
@@ -95,14 +96,15 @@ public class QuandlHistoricalTimeSeriesLoader extends AbstractHistoricalTimeSeri
   /**
    * The observation time map.
    */
-  private static final Map<String, String> OBSERVATION_TIME_MAP = ImmutableMap.<String, String>builder()
+  private static final Map<String, String> OBSERVATION_TIME_MAP = ImmutableMap.<String, String> builder()
       .put(DEFAULT_DATA_PROVIDER, HistoricalTimeSeriesConstants.DEFAULT_OBSERVATION_TIME)
       .build();
 
   /**
    * Resolves the data provider name.
    *
-   * @param dataProvider the data provider, null returns the unknown value
+   * @param dataProvider
+   *          the data provider, null returns the unknown value
    * @return the resolver data provider, not null
    */
   private static String resolveDataProvider(final String dataProvider) {
@@ -113,7 +115,8 @@ public class QuandlHistoricalTimeSeriesLoader extends AbstractHistoricalTimeSeri
   /**
    * Resolves the data provider to provide an observation time.
    *
-   * @param dataProvider the data provider, null returns the unknown value
+   * @param dataProvider
+   *          the data provider, null returns the unknown value
    * @return the corresponding observation time for the given data provider
    */
   public static String resolveObservationTime(final String dataProvider) {
@@ -123,7 +126,7 @@ public class QuandlHistoricalTimeSeriesLoader extends AbstractHistoricalTimeSeri
     return OBSERVATION_TIME_MAP.get(dataProvider);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected HistoricalTimeSeriesLoaderResult doBulkLoad(final HistoricalTimeSeriesLoaderRequest request) {
     ArgumentChecker.notNull(request, "request");
@@ -156,10 +159,14 @@ public class QuandlHistoricalTimeSeriesLoader extends AbstractHistoricalTimeSeri
   /**
    * Finds those time-series that are not in the master.
    *
-   * @param externalIds  the identifiers to lookup, not null
-   * @param dataProvider  the data provider, not null
-   * @param dataField  the data field, not null
-   * @param result  the result map of identifiers, updated if already in database, not null
+   * @param externalIds
+   *          the identifiers to lookup, not null
+   * @param dataProvider
+   *          the data provider, not null
+   * @param dataField
+   *          the data field, not null
+   * @param result
+   *          the result map of identifiers, updated if already in database, not null
    * @return the missing identifiers, not null
    */
   protected Set<ExternalId> findTimeSeries(final Set<ExternalId> externalIds, final String dataProvider, final String dataField,
@@ -192,12 +199,18 @@ public class QuandlHistoricalTimeSeriesLoader extends AbstractHistoricalTimeSeri
   /**
    * Fetches the time-series from Quandl and stores them in the master.
    *
-   * @param identifiers  the identifiers to fetch, not null
-   * @param dataField  the data field, not null
-   * @param dataProvider  the data provider, not null
-   * @param startDate  the start date to load, not null
-   * @param endDate  the end date to load, not null
-   * @param result  the result map of identifiers, updated if already in database, not null
+   * @param identifiers
+   *          the identifiers to fetch, not null
+   * @param dataField
+   *          the data field, not null
+   * @param dataProvider
+   *          the data provider, not null
+   * @param startDate
+   *          the start date to load, not null
+   * @param endDate
+   *          the end date to load, not null
+   * @param result
+   *          the result map of identifiers, updated if already in database, not null
    */
   protected void fetchTimeSeries(
       final Set<ExternalId> identifiers, final String dataField, final String dataProvider, final LocalDate startDate, final LocalDate endDate,
@@ -235,16 +248,21 @@ public class QuandlHistoricalTimeSeriesLoader extends AbstractHistoricalTimeSeri
   /**
    * Loads time-series from the underlying source.
    *
-   * @param externalIds  the external identifies to load, not null
-   * @param dataField  the data field, not null
-   * @param dataProvider  the data provider, not null
-   * @param startDate  the start date to load, not null
-   * @param endDate  the end date to load, not null
+   * @param externalIds
+   *          the external identifies to load, not null
+   * @param dataField
+   *          the data field, not null
+   * @param dataProvider
+   *          the data provider, not null
+   * @param startDate
+   *          the start date to load, not null
+   * @param endDate
+   *          the end date to load, not null
    * @return the map of results, not null
    */
   protected HistoricalTimeSeriesProviderGetResult provideTimeSeries(
       final Set<ExternalIdBundle> externalIds, final String dataField, final String dataProvider, final LocalDate startDate, final LocalDate endDate) {
-    LOGGER.debug("Loading time series {} ({}-{}) {}: {}", new Object[] {dataField, startDate, endDate, dataProvider, externalIds });
+    LOGGER.debug("Loading time series {} ({}-{}) {}: {}", new Object[] { dataField, startDate, endDate, dataProvider, externalIds });
     final LocalDateRange dateRange = LocalDateRange.of(startDate, endDate, true);
 
     final HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGetBulk(externalIds,
@@ -255,12 +273,18 @@ public class QuandlHistoricalTimeSeriesLoader extends AbstractHistoricalTimeSeri
   /**
    * Stores the time-series in the master.
    *
-   * @param tsResult  the time-series result, not null
-   * @param dataField  the data field, not null
-   * @param dataProvider  the data provider, not null
-   * @param bundleToIdentifier  the lookup map, not null
-   * @param identifiersToBundleWithDates  the lookup map, not null
-   * @param result  the result map of identifiers, updated if already in database, not null
+   * @param tsResult
+   *          the time-series result, not null
+   * @param dataField
+   *          the data field, not null
+   * @param dataProvider
+   *          the data provider, not null
+   * @param bundleToIdentifier
+   *          the lookup map, not null
+   * @param identifiersToBundleWithDates
+   *          the lookup map, not null
+   * @param result
+   *          the result map of identifiers, updated if already in database, not null
    */
   protected void storeTimeSeries(
       final HistoricalTimeSeriesProviderGetResult tsResult,
@@ -282,7 +306,7 @@ public class QuandlHistoricalTimeSeriesLoader extends AbstractHistoricalTimeSeri
         info.setDataField(dataField);
         info.setDataSource(QuandlConstants.QUANDL_DATA_SOURCE_NAME);
         final ExternalIdBundle bundle = bundleWithDates.toBundle(LocalDate.now(OpenGammaClock.getInstance()));
-        final String idStr = Objects.firstNonNull(
+        final String idStr = MoreObjects.firstNonNull(
             bundle.getValue(QuandlConstants.QUANDL_CODE),
             bundle.getExternalIds().iterator().next()).toString();
         info.setName(dataField + " " + idStr);
@@ -341,7 +365,7 @@ public class QuandlHistoricalTimeSeriesLoader extends AbstractHistoricalTimeSeri
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean updateTimeSeries(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
@@ -361,4 +385,3 @@ public class QuandlHistoricalTimeSeriesLoader extends AbstractHistoricalTimeSeri
   }
 
 }
-

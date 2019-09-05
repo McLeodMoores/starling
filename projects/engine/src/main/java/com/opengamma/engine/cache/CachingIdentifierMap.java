@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import com.google.common.collect.MapMaker;
+import com.google.common.cache.CacheBuilder;
 import com.opengamma.engine.MemoryUtils;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.ArgumentChecker;
@@ -38,7 +38,8 @@ public class CachingIdentifierMap implements IdentifierMap {
 
   // NOTE andrew 2010-09-06 -- Don't use the Google map with weakKeys; it will do comparison by identity which isn't right!
   private final Map<ValueSpecification, Long> _specificationToIdentifier = Collections.synchronizedMap(new WeakHashMap<ValueSpecification, Long>());
-  private final ConcurrentMap<Long, ValueSpecification> _identifierToSpecification = new MapMaker().softValues().makeMap();
+  private final ConcurrentMap<Long, ValueSpecification> _identifierToSpecification = CacheBuilder.newBuilder().softValues().<Long, ValueSpecification> build()
+      .asMap();
 
   public CachingIdentifierMap(final IdentifierMap underlying) {
     ArgumentChecker.notNull(underlying, "Underlying source");

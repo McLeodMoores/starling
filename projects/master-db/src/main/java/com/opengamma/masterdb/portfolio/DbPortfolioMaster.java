@@ -27,7 +27,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.threeten.bp.Instant;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.elsql.ElSqlBundle;
@@ -351,8 +351,8 @@ public class DbPortfolioMaster
     final Instant now = now();
     final DbMapSqlParameterSource args = createParameterSource()
         .addValue("node_oid", extractOid(uniqueId))
-        .addTimestamp("version_as_of_instant", Objects.firstNonNull(versionAsOf, now))
-        .addTimestamp("corrected_to_instant", Objects.firstNonNull(correctedTo, now));
+        .addTimestamp("version_as_of_instant", MoreObjects.firstNonNull(versionAsOf, now))
+        .addTimestamp("corrected_to_instant", MoreObjects.firstNonNull(correctedTo, now));
     final PortfolioDocumentExtractor extractor = new PortfolioDocumentExtractor(true, false);
     final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();
     final String sql = getElSqlBundle().getSql("GetNodeByOidInstants", args);
