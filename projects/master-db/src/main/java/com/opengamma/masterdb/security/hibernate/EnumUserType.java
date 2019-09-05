@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.usertype.UserType;
 
@@ -23,7 +23,9 @@ import com.opengamma.OpenGammaRuntimeException;
 
 /**
  * Custom Hibernate type for trivial enums.
- * @param <E> the enum type
+ * 
+ * @param <E>
+ *          the enum type
  */
 public abstract class EnumUserType<E extends Enum<E>> implements UserType {
 
@@ -87,7 +89,7 @@ public abstract class EnumUserType<E extends Enum<E>> implements UserType {
   }
 
   @Override
-  public Object nullSafeGet(final ResultSet resultSet, final String[] columnNames, final SessionImplementor session,
+  public Object nullSafeGet(final ResultSet resultSet, final String[] columnNames, final SharedSessionContractImplementor session,
       final Object owner) throws HibernateException, SQLException {
     final String databaseValue = resultSet.getString(columnNames[0]);
     if (resultSet.wasNull()) {
@@ -103,7 +105,7 @@ public abstract class EnumUserType<E extends Enum<E>> implements UserType {
   @SuppressWarnings({ "unchecked" })
   @Override
   public void nullSafeSet(final PreparedStatement stmt, final Object value, final int index,
-      final SessionImplementor session) throws HibernateException, SQLException {
+      final SharedSessionContractImplementor session) throws HibernateException, SQLException {
     if (value == null) {
       stmt.setNull(index, StandardBasicTypes.STRING.sqlType());
     } else {
@@ -123,6 +125,6 @@ public abstract class EnumUserType<E extends Enum<E>> implements UserType {
 
   @Override
   public int[] sqlTypes() {
-    return new int[] {StandardBasicTypes.STRING.sqlType()};
+    return new int[] { StandardBasicTypes.STRING.sqlType() };
   }
 }
