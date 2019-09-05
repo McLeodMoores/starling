@@ -483,13 +483,13 @@ public class InstrumentDerivativeVisitorDelegate<DATA_TYPE, RESULT_TYPE> impleme
   @Override
   public RESULT_TYPE visitInterpolatedStubCoupon(
       final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> payment, final DATA_TYPE data) {
-    return _delegate.visitInterpolatedStubCoupon(payment, data);
+    return (RESULT_TYPE) _delegate.visitInterpolatedStubCoupon((InterpolatedStubCoupon) payment, data);
   }
 
   @Override
   public RESULT_TYPE visitInterpolatedStubCoupon(
       final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> payment) {
-    return _delegate.visitInterpolatedStubCoupon(payment);
+    return (RESULT_TYPE) _delegate.visitInterpolatedStubCoupon((InterpolatedStubCoupon) payment);
   }
 
   @Override

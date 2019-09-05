@@ -14,15 +14,15 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Parameter object for interpolated stub instrument derivative visitor.
  */
-public final class InterpolatedStubData {
+public final class InterpolatedStubData<C extends DepositIndexCoupon<I>, I extends IndexDeposit> {
 
   private final MulticurveProviderInterface _multicurve;
 
-  private final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> _interpolatedStubCoupon;
+  private final InterpolatedStubCoupon<C, I> _interpolatedStubCoupon;
 
   private InterpolatedStubData(
       final MulticurveProviderInterface multicurve,
-      final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> interpolatedStubCoupon) {
+      final InterpolatedStubCoupon<C, I> interpolatedStubCoupon) {
     ArgumentChecker.notNull(multicurve, "multicurve");
     ArgumentChecker.notNull(interpolatedStubCoupon, "interpolatedStubCoupon");
     _multicurve = multicurve;
@@ -33,13 +33,13 @@ public final class InterpolatedStubData {
     return _multicurve;
   }
 
-  public InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> getInterpolatedStubCoupon() {
+  public InterpolatedStubCoupon<C, I> getInterpolatedStubCoupon() {
     return _interpolatedStubCoupon;
   }
 
-  public static InterpolatedStubData of(
+  public static <C extends DepositIndexCoupon<I>, I extends IndexDeposit> InterpolatedStubData<C, I> of(
       final MulticurveProviderInterface multicurve,
-      final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> interpolatedStubCoupon) {
+      final InterpolatedStubCoupon interpolatedStubCoupon) {
     return new InterpolatedStubData(multicurve, interpolatedStubCoupon);
   }
 }
