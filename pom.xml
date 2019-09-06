@@ -817,7 +817,7 @@
       <dependency>
         <groupId>org.springframework.amqp</groupId>
         <artifactId>spring-amqp</artifactId>
-        <version>1.5.7.RELEASE</version>
+        <version>1.7.10.RELEASE</version>
         <optional>true</optional>
       </dependency>
       <dependency>
@@ -1288,7 +1288,7 @@
     <joda.beans.prefix>_</joda.beans.prefix>
     <fudge-java.version>0.3.9.20-MM</fudge-java.version>
     <fudge-proto.version>0.3.9.7</fudge-proto.version>
-    <og.spring.version>4.3.18.RELEASE</og.spring.version>
+    <og.spring.version>4.3.20.RELEASE</og.spring.version>
     <jetty.version>8.1.11.v20130520</jetty.version>
     <jersey.version>1.17.1</jersey.version>
     <!-- Testing properties -->
