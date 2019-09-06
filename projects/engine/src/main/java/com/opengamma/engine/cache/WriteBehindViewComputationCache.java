@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.MapMaker;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueSpecification;
@@ -183,12 +184,12 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
   private final ViewComputationCache _underlying;
   private final ExecutorService _executorService;
   /**
-   * The in memory map contains all entries that are in the queues and have not been written to the underlying yet as well
-   * as values that have been retrieved from the underlying. Use of a soft reference on the values will keep the values
-   * in memory for as long as possible so that the serialization/deserialization overhead of the underlying can probably
-   * be avoided for frequently used objects.
+   * The in memory map contains all entries that are in the queues and have not been written to the underlying yet as well as values that have been retrieved
+   * from the underlying. Use of a soft reference on the values will keep the values in memory for as long as possible so that the serialization/deserialization
+   * overhead of the underlying can probably be avoided for frequently used objects.
    */
-  private final Map<ValueSpecification, Object> _buffer = new MapMaker().softValues().makeMap();
+  private final Map<ValueSpecification, Object> _buffer = CacheBuilder.newBuilder().softValues().<ValueSpecification, Object> build()
+      .asMap();
   private final Queue<Entry> _pendingPrivateValues;
   private final Queue<Entry> _pendingSharedValues;
   private final ConcurrentMap<Thread, PendingLock> _pendingWrites = new MapMaker().weakKeys().makeMap();
@@ -294,8 +295,8 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
     ArgumentChecker.notNull(executorService, "executorService");
     _underlying = underlying;
     _executorService = executorService;
-    _pendingPrivateValues = usePrivate ? new ConcurrentLinkedQueue<Entry>() : null;
-    _pendingSharedValues = useShared ? new ConcurrentLinkedQueue<Entry>() : null;
+    _pendingPrivateValues = usePrivate ? new ConcurrentLinkedQueue<>() : null;
+    _pendingSharedValues = useShared ? new ConcurrentLinkedQueue<>() : null;
   }
 
   protected ViewComputationCache getUnderlying() {

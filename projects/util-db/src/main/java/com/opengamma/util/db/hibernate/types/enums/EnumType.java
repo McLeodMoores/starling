@@ -15,7 +15,7 @@ import java.sql.Types;
 import java.util.Properties;
 
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.EnhancedUserType;
 import org.hibernate.usertype.ParameterizedType;
 
@@ -23,7 +23,8 @@ import org.hibernate.usertype.ParameterizedType;
 /**
  * An enum type for Hibernate.
  *
- * @param <T> the enum type
+ * @param <T>
+ *          the enum type
  */
 public class EnumType<T extends Enum<T>> implements EnhancedUserType, ParameterizedType {
 
@@ -64,6 +65,7 @@ public class EnumType<T extends Enum<T>> implements EnhancedUserType, Parameteri
 
   /**
    * The class returned by <tt>nullSafeGet()</tt>.
+   * 
    * @return Class
    */
   @Override
@@ -73,7 +75,7 @@ public class EnumType<T extends Enum<T>> implements EnhancedUserType, Parameteri
 
   @Override
   public int[] sqlTypes() {
-    return new int[] {Types.VARCHAR };
+    return new int[] { Types.VARCHAR };
   }
 
   @Override
@@ -97,12 +99,12 @@ public class EnumType<T extends Enum<T>> implements EnhancedUserType, Parameteri
    *           if there is a problem
    */
   @Override
-  public Object nullSafeGet(final ResultSet rs, final String[] names, final SessionImplementor session,
+  public Object nullSafeGet(final ResultSet rs, final String[] names, final SharedSessionContractImplementor session,
       final Object owner) throws HibernateException, SQLException {
     String value = rs.getString(names[0]);
     if (value == null) {
       value = getDefaultValue();
-      if (value == null) { //no default value
+      if (value == null) { // no default value
         return null;
       }
     }
@@ -130,7 +132,7 @@ public class EnumType<T extends Enum<T>> implements EnhancedUserType, Parameteri
   @Override
   @SuppressWarnings("unchecked")
   public void nullSafeSet(final PreparedStatement st, final Object value, final int index,
-      final SessionImplementor session) throws HibernateException, SQLException {
+      final SharedSessionContractImplementor session) throws HibernateException, SQLException {
     if (value == null) {
       st.setNull(index, Types.VARCHAR);
     } else {

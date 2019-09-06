@@ -6,7 +6,6 @@
 
 package com.opengamma.bbg.util;
 
-
 import static org.threeten.bp.DayOfWeek.FRIDAY;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import java.util.TreeSet;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZonedDateTime;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.opengamma.financial.convention.daycount.ActualActualISDA;
@@ -28,22 +27,23 @@ import com.opengamma.util.OpenGammaClock;
 
 /**
  * <p>
- * Class for narrowing an option chain by expiry, strike, and option type.  Typically, this class is initialized with the output
- * of {@link com.opengamma.bbg.util.BloombergDataUtils#getOptionChain(com.opengamma.bbg.referencedata.ReferenceDataProvider, String)}.
- * The caller then uses the different {@code narrow*} methods to select the desired option or options.  In this way, the caller can pick
- * very specific options before looking up their information in Bloomberg.
+ * Class for narrowing an option chain by expiry, strike, and option type. Typically, this class is initialized with the output of
+ * {@link com.opengamma.bbg.util.BloombergDataUtils#getOptionChain(com.opengamma.bbg.referencedata.ReferenceDataProvider, String)}. The caller then uses the
+ * different {@code narrow*} methods to select the desired option or options. In this way, the caller can pick very specific options before looking up their
+ * information in Bloomberg.
  * </p>
  * <p>
- * Each instance of {@code BloombergEQVanillaOptionChain} is immutable. Each of the {@code narrow*} methods returns a new immutable instance
- * of {@code BloombergEQVanillaOptionChain}. The chain is a wrapper around a list of {@link com.opengamma.id.ExternalId Identifiers}, which
- * are obtainable via a getter method after narrowing is complete. This getter method returns the {@code Identifiers} as a {@code Set}, in order
- * to mimic the behavior of {@code BloombergDataUtil.getOptionChain()}. Different instances of the chain may share instances of the contained
- * {@code Identifiers}, but these are themselves immutable, so this is completely safe.
+ * Each instance of {@code BloombergEQVanillaOptionChain} is immutable. Each of the {@code narrow*} methods returns a new immutable instance of
+ * {@code BloombergEQVanillaOptionChain}. The chain is a wrapper around a list of {@link com.opengamma.id.ExternalId Identifiers}, which are obtainable via a
+ * getter method after narrowing is complete. This getter method returns the {@code Identifiers} as a {@code Set}, in order to mimic the behavior of
+ * {@code BloombergDataUtil.getOptionChain()}. Different instances of the chain may share instances of the contained {@code Identifiers}, but these are
+ * themselves immutable, so this is completely safe.
  * </p>
  * <p>
- * The above setup works well with a method-chaining idiom. For example, here is how you would obtain a single call option that expires 2
- * or more months from the present, and is within 1 strike of the current price:
+ * The above setup works well with a method-chaining idiom. For example, here is how you would obtain a single call option that expires 2 or more months from
+ * the present, and is within 1 strike of the current price:
  * </p>
+ *
  * <pre>
    double currentPrice = . . . ;
    Set&lt;Identifier&gt; identifiers = BloombergDataUtil.getOptionChain( . . . .);
@@ -56,6 +56,7 @@ import com.opengamma.util.OpenGammaClock;
  * <p>
  * To get both the put and call options, one could reuse a chain instance, like so:
  * </p>
+ *
  * <pre>
    double currentPrice = . . . ;
    Set&lt;Identifier&gt; identifiers = BloombergDataUtil.getOptionChain( . . . .);
@@ -68,9 +69,8 @@ import com.opengamma.util.OpenGammaClock;
    Identifier desiredPut  = optionPair.narrowByOptionType(OptionType.PUT).getIdentifiers().first();
  * </pre>
  * <p>
- * The narrow methods are <b>guaranteed</b> to return a chain with at least one element, <b>unless</b> the
- * chain was built around an empty {@code Identifier} set to begin with, in which case the methods will return
- * an empty, non-null chain.
+ * The narrow methods are <b>guaranteed</b> to return a chain with at least one element, <b>unless</b> the chain was built around an empty {@code Identifier}
+ * set to begin with, in which case the methods will return an empty, non-null chain.
  * </p>
  * Internally, this class uses {@link BloombergTickerParserEQVanillaOption}.
  */
@@ -79,19 +79,19 @@ public class BloombergEQVanillaOptionChain {
   private final List<ExternalId> _identifiers;
   private final ActualActualISDA _dayCount = new ActualActualISDA();
 
-
-
   // ------------ METHODS ------------
   // -------- CONSTRUCTORS --------
   /**
    * <p>
-   * Create an option chain around a {@link java.util.Set} of identifiers. Typically, these come from the result of
-   * a call to {@link com.opengamma.bbg.util.BloombergDataUtils#getOptionChain BloombergDataUtil.getOptionChain()}.
+   * Create an option chain around a {@link java.util.Set} of identifiers. Typically, these come from the result of a call to
+   * {@link com.opengamma.bbg.util.BloombergDataUtils#getOptionChain BloombergDataUtil.getOptionChain()}.
    * </p>
    * <p>
    * The identifiers must have an {@link com.opengamma.id.ExternalScheme} of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.
    * </p>
-   * @param identifiers the identifiers that comprise the chain
+   *
+   * @param identifiers
+   *          the identifiers that comprise the chain
    */
   public BloombergEQVanillaOptionChain(final Set<ExternalId> identifiers) {
     _identifiers = new ArrayList<>(identifiers);
@@ -99,34 +99,38 @@ public class BloombergEQVanillaOptionChain {
 
   /**
    * <p>
-   * Create an option chain around a {@link java.util.List} of identifiers. Typically, these come from the result of
-   * a call to {@link com.opengamma.bbg.util.BloombergDataUtils#getOptionChain BloombergDataUtil.getOptionChain()}.
+   * Create an option chain around a {@link java.util.List} of identifiers. Typically, these come from the result of a call to
+   * {@link com.opengamma.bbg.util.BloombergDataUtils#getOptionChain BloombergDataUtil.getOptionChain()}.
    * </p>
    * <p>
    * The identifiers must have an {@link com.opengamma.id.ExternalScheme} of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.
    * </p>
-   * @param identifiers the identifiers that comprise the chain
+   *
+   * @param identifiers
+   *          the identifiers that comprise the chain
    */
   public BloombergEQVanillaOptionChain(final List<ExternalId> identifiers) {
     _identifiers = identifiers;
   }
 
   /**
-   * Creates a copy of a {@code BloombergEQVanillaOptionChain}. Note that this is a shallow
-   * copy; since both {@code Identifier} and {@code BloombergEQVanillaOptionChain} are immutable,
-   * this is not an issue.
-   * @param original the original chain to copy
+   * Creates a copy of a {@code BloombergEQVanillaOptionChain}. Note that this is a shallow copy; since both {@code Identifier} and
+   * {@code BloombergEQVanillaOptionChain} are immutable, this is not an issue.
+   *
+   * @param original
+   *          the original chain to copy
    */
   public BloombergEQVanillaOptionChain(final BloombergEQVanillaOptionChain original) {
     _identifiers = original._identifiers;
   }
 
-
   // -------- MAIN OPERATIONS --------
   /**
-   * Returns a new chain narrowed by option type (either {@link com.opengamma.financial.security.option.OptionType#CALL CALL}
-   * or {@link com.opengamma.financial.security.option.OptionType#PUT PUT}).
-   * @param optionType the option type to narrow on
+   * Returns a new chain narrowed by option type (either {@link com.opengamma.financial.security.option.OptionType#CALL CALL} or
+   * {@link com.opengamma.financial.security.option.OptionType#PUT PUT}).
+   *
+   * @param optionType
+   *          the option type to narrow on
    * @return a new chain narrowed by option type
    */
   public BloombergEQVanillaOptionChain narrowByOptionType(final OptionType optionType) {
@@ -140,11 +144,12 @@ public class BloombergEQVanillaOptionChain {
     return new BloombergEQVanillaOptionChain(result);
   }
 
-
   /**
-   * Returns a new chain narrowed by expiry.  The expiry is specified as being at least {@code monthsFromToday} months from
-   * today. See {@link #narrowByExpiry(LocalDate, int)} for details of the algorithm.
-   * @param monthsFromToday number of months from today to start searching for the expiry
+   * Returns a new chain narrowed by expiry. The expiry is specified as being at least {@code monthsFromToday} months from today. See
+   * {@link #narrowByExpiry(LocalDate, int)} for details of the algorithm.
+   *
+   * @param monthsFromToday
+   *          number of months from today to start searching for the expiry
    * @return a new chain narrowed by expiry
    */
   public BloombergEQVanillaOptionChain narrowByExpiry(final int monthsFromToday) {
@@ -153,57 +158,126 @@ public class BloombergEQVanillaOptionChain {
 
   /**
    * <p>
-   * Returns a new chain narrowed by expiry.  The expiry is specified as being at least {@code monthsFromToday} months from
-   * an arbitrary reference date.  Both positive and negative month offsets are supported.
+   * Returns a new chain narrowed by expiry. The expiry is specified as being at least {@code monthsFromToday} months from an arbitrary reference date. Both
+   * positive and negative month offsets are supported.
    * </p>
    * The search algorithm is as follows:
    * <ol>
-   * <li>Search the chain for an expiry date exactly {@code monthsFromReferenceDate} months from the reference date. An expiry date is
-   * defined as the Saturday after the third Friday of the month. If {@code monthsFromReferenceDate} is {@code 0}, then the algorithm
-   * will start in month of the reference date, but will skip the expiry if it has already passed.</li>
+   * <li>Search the chain for an expiry date exactly {@code monthsFromReferenceDate} months from the reference date. An expiry date is defined as the Saturday
+   * after the third Friday of the month. If {@code monthsFromReferenceDate} is {@code 0}, then the algorithm will start in month of the reference date, but
+   * will skip the expiry if it has already passed.</li>
    * <li>If options with the above expiry were found, then the algorithm stops, and the resulting chain is returned.</li>
-   * <li>If not, then the algorithm will find the expiry that is nearest to the exact expiry from step 1. It measures the difference using
-   * actual days.  The resulting chain is then returned.
+   * <li>If not, then the algorithm will find the expiry that is nearest to the exact expiry from step 1. It measures the difference using actual days. The
+   * resulting chain is then returned.
    * </ol>
    * <p>
-   * Below, we provide a table showing sample results. We use US date format for Bloomberg compatibility. We cover only &#8805; 0 offsets
-   * since that is the more usual case. Assume that:
+   * Below, we provide a table showing sample results. We use US date format for Bloomberg compatibility. We cover only &#8805; 0 offsets since that is the more
+   * usual case. Assume that:
    * <ul>
    * <li>Reference date is 4/18/2011</li>
    * <li>The option chain has expiries of 4/16/2011, 5/21/2011, 6/18/2011, 7/16/2011, 10/22/2011, 1/21/2012, 1/19/2013</li>
    * </ul>
    * <table>
    * <caption>The option chain</caption>
-   * <tr><th>Requested offset</th><th>Resulting Expiry</th></tr>
-   * <tr><td>0</td><td>05/21/2011</td></tr>
-   * <tr><td>1</td><td>05/21/2011</td></tr>
-   * <tr><td>2</td><td>06/18/2011</td></tr>
-   * <tr><td>3</td><td>07/16/2011</td></tr>
-   * <tr><td>4</td><td>07/16/2011</td></tr>
-   * <tr><td>5</td><td>10/22/2011</td></tr>
-   * <tr><td>6</td><td>10/22/2011</td></tr>
-   * <tr><td>7</td><td>10/22/2011</td></tr>
-   * <tr><td>8</td><td>01/21/2012</td></tr>
-   * <tr><td>9</td><td>01/21/2012</td></tr>
-   * <tr><td>10</td><td>01/21/2012</td></tr>
-   * <tr><td>11</td><td>01/21/2012</td></tr>
-   * <tr><td>12</td><td>01/21/2012</td></tr>
-   * <tr><td>13</td><td>01/21/2012</td></tr>
-   * <tr><td>14</td><td>01/21/2012</td></tr>
-   * <tr><td>15</td><td>01/21/2012</td></tr>
-   * <tr><td>16</td><td>01/19/2013</td></tr>
-   * <tr><td>17</td><td>01/19/2013</td></tr>
-   * <tr><td>18</td><td>01/19/2013</td></tr>
-   * <tr><td>19</td><td>01/19/2013</td></tr>
-   * <tr><td>20</td><td>01/19/2013</td></tr>
+   * <tr>
+   * <th>Requested offset</th>
+   * <th>Resulting Expiry</th>
+   * </tr>
+   * <tr>
+   * <td>0</td>
+   * <td>05/21/2011</td>
+   * </tr>
+   * <tr>
+   * <td>1</td>
+   * <td>05/21/2011</td>
+   * </tr>
+   * <tr>
+   * <td>2</td>
+   * <td>06/18/2011</td>
+   * </tr>
+   * <tr>
+   * <td>3</td>
+   * <td>07/16/2011</td>
+   * </tr>
+   * <tr>
+   * <td>4</td>
+   * <td>07/16/2011</td>
+   * </tr>
+   * <tr>
+   * <td>5</td>
+   * <td>10/22/2011</td>
+   * </tr>
+   * <tr>
+   * <td>6</td>
+   * <td>10/22/2011</td>
+   * </tr>
+   * <tr>
+   * <td>7</td>
+   * <td>10/22/2011</td>
+   * </tr>
+   * <tr>
+   * <td>8</td>
+   * <td>01/21/2012</td>
+   * </tr>
+   * <tr>
+   * <td>9</td>
+   * <td>01/21/2012</td>
+   * </tr>
+   * <tr>
+   * <td>10</td>
+   * <td>01/21/2012</td>
+   * </tr>
+   * <tr>
+   * <td>11</td>
+   * <td>01/21/2012</td>
+   * </tr>
+   * <tr>
+   * <td>12</td>
+   * <td>01/21/2012</td>
+   * </tr>
+   * <tr>
+   * <td>13</td>
+   * <td>01/21/2012</td>
+   * </tr>
+   * <tr>
+   * <td>14</td>
+   * <td>01/21/2012</td>
+   * </tr>
+   * <tr>
+   * <td>15</td>
+   * <td>01/21/2012</td>
+   * </tr>
+   * <tr>
+   * <td>16</td>
+   * <td>01/19/2013</td>
+   * </tr>
+   * <tr>
+   * <td>17</td>
+   * <td>01/19/2013</td>
+   * </tr>
+   * <tr>
+   * <td>18</td>
+   * <td>01/19/2013</td>
+   * </tr>
+   * <tr>
+   * <td>19</td>
+   * <td>01/19/2013</td>
+   * </tr>
+   * <tr>
+   * <td>20</td>
+   * <td>01/19/2013</td>
+   * </tr>
    * </table>
    * <p>
-   * Notice how, for the {@code 0} offset, the result was {@code 05/21/2011} and not {@code 04/16/2011}. That is because the reference date
-   * was {@code 04/18/2011}, which is after {@code 04/16/2011}.  If the reference date had been, for example, {@code 04/11/2011}, then the
-   * result would have been {@code 4/16/2011} for a {@code 0} offset.
+   * Notice how, for the {@code 0} offset, the result was {@code 05/21/2011} and not {@code 04/16/2011}. That is because the reference date was
+   * {@code 04/18/2011}, which is after {@code 04/16/2011}. If the reference date had been, for example, {@code 04/11/2011}, then the result would have been
+   * {@code 4/16/2011} for a {@code 0} offset.
    * </p>
-   * @param referenceDate the date to which the expiry is in reference
-   * @param monthsFromReferenceDate number of months from the reference date to start searching for the expiry
+   *
+   * @param referenceDate
+   *          the date to which the expiry is in reference
+   * @param monthsFromReferenceDate
+   *          number of months from the reference date to start searching for the expiry
    * @return a new chain narrowed by expiry
    */
   public BloombergEQVanillaOptionChain narrowByExpiry(final LocalDate referenceDate, final int monthsFromReferenceDate) {
@@ -225,10 +299,10 @@ public class BloombergEQVanillaOptionChain {
 
     // Find the desired expiry
     final LocalDate thirdSaturdayOfTargetMonth = determineTargetExpiry(referenceDate, monthsFromReferenceDate);
-    final LocalDate floorValue = Objects.firstNonNull(expiries.floor(thirdSaturdayOfTargetMonth), expiries.first());
+    final LocalDate floorValue = MoreObjects.firstNonNull(expiries.floor(thirdSaturdayOfTargetMonth), expiries.first());
     LocalDate targetValue = floorValue;
     if (!floorValue.equals(thirdSaturdayOfTargetMonth)) {
-      final LocalDate ceilingValue = Objects.firstNonNull(expiries.ceiling(thirdSaturdayOfTargetMonth), expiries.last());
+      final LocalDate ceilingValue = MoreObjects.firstNonNull(expiries.ceiling(thirdSaturdayOfTargetMonth), expiries.last());
       final double diff1 = calcDayDiff(thirdSaturdayOfTargetMonth, floorValue);
       final double diff2 = calcDayDiff(thirdSaturdayOfTargetMonth, ceilingValue);
       if (diff1 < diff2) {
@@ -363,7 +437,7 @@ public class BloombergEQVanillaOptionChain {
    * nearest to {@code 199}; for the {@code 1} offset, the algorithm found the next strike above {@code 199}. In both cases, that value was {@code 200}. Notice
    * also that after {@code 70+} offsets, we reach the end of the chain, and the resulting strike is always {@code 540}.
    * </p>
-   * 
+   *
    * @param referencePrice
    *          the price to which the strike offset is in reference
    * @param strikeOffset
@@ -385,12 +459,12 @@ public class BloombergEQVanillaOptionChain {
     // Find the desired strike
     Double targetValue = null;
 
-    // Special case:  offset is 0 to begin with, just find the nearest strike
+    // Special case: offset is 0 to begin with, just find the nearest strike
     if (strikeOffset == 0) {
-      final double floorValue = Objects.firstNonNull(strikes.floor(referencePrice), strikes.first());
+      final double floorValue = MoreObjects.firstNonNull(strikes.floor(referencePrice), strikes.first());
       targetValue = floorValue;
       if (floorValue != referencePrice) {
-        final double ceilingValue = Objects.firstNonNull(strikes.ceiling(referencePrice), strikes.last());
+        final double ceilingValue = MoreObjects.firstNonNull(strikes.ceiling(referencePrice), strikes.last());
         final double diff1 = Math.abs(referencePrice - floorValue);
         final double diff2 = Math.abs(referencePrice - ceilingValue);
         if (diff1 < diff2) {
@@ -437,17 +511,16 @@ public class BloombergEQVanillaOptionChain {
     return new BloombergEQVanillaOptionChain(identifiers);
   }
 
-
   // -------- PROPERTIES --------
   /**
-   * Returns the {@code Identifiers} in the chain. They will be in a set sorted by alphabetical order, in order to mimic the output ordering
-   * of {@link com.opengamma.bbg.util.BloombergDataUtils#getOptionChain BloombergDataUtil.getOptionChain()}.
+   * Returns the {@code Identifiers} in the chain. They will be in a set sorted by alphabetical order, in order to mimic the output ordering of
+   * {@link com.opengamma.bbg.util.BloombergDataUtils#getOptionChain BloombergDataUtil.getOptionChain()}.
+   *
    * @return the {@code Identifiers} in the chain
    */
   public NavigableSet<ExternalId> getIdentifiers() {
     return new TreeSet<>(_identifiers);
   }
-
 
   // -------- PRIVATE SUBROUTINES --------
   private LocalDate determineTargetExpiry(final LocalDate referenceDate, final int monthsFromReferenceDate) {

@@ -12,14 +12,13 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.StringType;
 import org.hibernate.usertype.EnhancedUserType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opengamma.id.VersionCorrection;
-
 
 /**
  * Persist {@link com.opengamma.id.VersionCorrection} via hibernate as a String.
@@ -34,7 +33,7 @@ public class PersistentVersionCorrection implements EnhancedUserType {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PersistentVersionCorrection.class);
 
-  private static final int[] SQL_TYPES = new int[]{Types.VARCHAR};
+  private static final int[] SQL_TYPES = new int[] { Types.VARCHAR };
 
   @Override
   public int[] sqlTypes() {
@@ -65,12 +64,12 @@ public class PersistentVersionCorrection implements EnhancedUserType {
   }
 
   @Override
-  public Object nullSafeGet(final ResultSet resultSet, final String[] names, final SessionImplementor session,
+  public Object nullSafeGet(final ResultSet resultSet, final String[] names, final SharedSessionContractImplementor session,
       final Object object) throws HibernateException, SQLException {
     return nullSafeGet(resultSet, names[0], session);
   }
 
-  public Object nullSafeGet(final ResultSet resultSet, final String name, final SessionImplementor session) throws SQLException {
+  public Object nullSafeGet(final ResultSet resultSet, final String name, final SharedSessionContractImplementor session) throws SQLException {
     final String value = new StringType().nullSafeGet(resultSet, name, session);
     if (value == null) {
       return null;
@@ -80,7 +79,7 @@ public class PersistentVersionCorrection implements EnhancedUserType {
 
   @Override
   public void nullSafeSet(final PreparedStatement preparedStatement, final Object value, final int index,
-      final SessionImplementor session) throws HibernateException, SQLException {
+      final SharedSessionContractImplementor session) throws HibernateException, SQLException {
     if (value == null) {
       LOGGER.debug("VersionCorrection -> String : NULL -> NULL");
       new StringType().nullSafeSet(preparedStatement, null, index, session);

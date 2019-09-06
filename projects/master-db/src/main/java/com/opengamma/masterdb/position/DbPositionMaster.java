@@ -33,7 +33,7 @@ import org.threeten.bp.ZoneOffset;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.opengamma.DataNotFoundException;
@@ -396,8 +396,8 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
     LOGGER.debug("getTradeByLatest {}", uniqueId);
     final Instant now = now();
     final DbMapSqlParameterSource args = createParameterSource().addValue("trade_oid", extractOid(uniqueId))
-        .addTimestamp("version_as_of_instant", Objects.firstNonNull(versionAsOf, now))
-        .addTimestamp("corrected_to_instant", Objects.firstNonNull(correctedTo, now));
+        .addTimestamp("version_as_of_instant", MoreObjects.firstNonNull(versionAsOf, now))
+        .addTimestamp("corrected_to_instant", MoreObjects.firstNonNull(correctedTo, now));
     final PositionDocumentExtractor extractor = new PositionDocumentExtractor();
     final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();
     final String sql = getElSqlBundle().getSql("GetTradeByOidInstants", args);

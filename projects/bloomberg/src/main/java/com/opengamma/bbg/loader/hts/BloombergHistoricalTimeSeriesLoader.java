@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
@@ -289,9 +289,9 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
         info.setDataField(dataField);
         info.setDataSource(BLOOMBERG_DATA_SOURCE_NAME);
         final ExternalIdBundle bundle = bundleWithDates.toBundle(LocalDate.now(OpenGammaClock.getInstance()));
-        final String idStr = Objects.firstNonNull(
+        final String idStr = MoreObjects.firstNonNull(
             bundle.getValue(ExternalSchemes.BLOOMBERG_TICKER),
-            Objects.firstNonNull(
+            MoreObjects.firstNonNull(
                 bundle.getExternalId(ExternalSchemes.BLOOMBERG_BUID),
                 bundle.getExternalIds().iterator().next()))
             .toString();

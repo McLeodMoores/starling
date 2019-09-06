@@ -14,7 +14,7 @@ import com.opengamma.util.ArgumentChecker;
  * An adapter for {@link WorkingDayCalendar}s that converts them into {@link Calendar}s. This class should be used when backwards compatibility is required.
  */
 @SuppressWarnings("deprecation")
-public class CalendarAdapter implements Calendar {
+public final class CalendarAdapter implements Calendar {
 
   /**
    * Creates an adapter.

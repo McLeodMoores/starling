@@ -18,7 +18,6 @@ import org.fudgemsg.MutableFudgeMsg;
 import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
 
-import com.google.common.collect.Iterators;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -189,7 +188,7 @@ public final class HistoricalTimeSeriesBundle {
     ArgumentChecker.notNull(field, "field");
     final Entry e = _data.get(field);
     if (e == null) {
-      return Iterators.emptyIterator();
+      return Collections.emptyIterator();
     }
     return e.iterator();
   }

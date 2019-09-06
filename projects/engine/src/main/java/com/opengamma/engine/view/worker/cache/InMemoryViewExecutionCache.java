@@ -10,7 +10,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.MapMaker;
+import com.google.common.cache.CacheBuilder;
 import com.opengamma.engine.view.compilation.CompiledViewDefinitionWithGraphs;
 
 /**
@@ -23,7 +23,9 @@ public class InMemoryViewExecutionCache implements ViewExecutionCache {
   /**
    * The buffer to hold compiled view definitions.
    */
-  private final Map<ViewExecutionCacheKey, CompiledViewDefinitionWithGraphs> _compiledViewDefinitions = new MapMaker().softValues().makeMap();
+  private final Map<ViewExecutionCacheKey, CompiledViewDefinitionWithGraphs> _compiledViewDefinitions = CacheBuilder.newBuilder().softValues()
+      .<ViewExecutionCacheKey, CompiledViewDefinitionWithGraphs> build()
+      .asMap();
 
   @Override
   public CompiledViewDefinitionWithGraphs getCompiledViewDefinitionWithGraphs(final ViewExecutionCacheKey key) {
