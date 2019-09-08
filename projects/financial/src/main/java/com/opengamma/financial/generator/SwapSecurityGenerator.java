@@ -23,9 +23,7 @@ import com.opengamma.core.holiday.Holiday;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.position.Counterparty;
 import com.opengamma.core.value.MarketDataRequirementNames;
-import com.opengamma.financial.convention.ConventionBundle;
 import com.opengamma.financial.convention.IborIndexConvention;
-import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
 import com.opengamma.financial.convention.SwapFixedLegConvention;
 import com.opengamma.financial.convention.VanillaIborLegConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -104,12 +102,12 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
   /**
    * Return the time series identifier.
    *
-   * @param liborConvention
-   *          the convention bundle, not null
+   * @param iborConvention
+   *          the convention, not null
    * @return the time series identifier
    */
-  protected ExternalId getTimeSeriesIdentifier(final ConventionBundle liborConvention) {
-    return liborConvention.getIdentifiers().getExternalId(getPreferredScheme());
+  protected ExternalId getTimeSeriesIdentifier(final IborIndexConvention iborConvention) {
+    return iborConvention.getExternalIdBundle().getExternalId(getPreferredScheme());
   }
 
   @Override
@@ -151,11 +149,13 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
         fixedLegConvention = conventionSource.getSingle(FIXED_LEG_CONVENTION_FOR_CCY.get(ccy), SwapFixedLegConvention.class);
       } catch (final DataNotFoundException e) {
         LOGGER.error("Could not get SwapFixedLegConvention with id {}", FIXED_LEG_CONVENTION_FOR_CCY.get(ccy));
+        return null;
       }
       try {
         iborLegConvention = conventionSource.getSingle(IBOR_LEG_CONVENTION_FOR_CCY.get(ccy), VanillaIborLegConvention.class);
       } catch (final DataNotFoundException e) {
         LOGGER.error("Could not get VanillaIborLegConvention with id {}", IBOR_LEG_CONVENTION_FOR_CCY.get(ccy));
+        return null;
       }
       if (fixedLegConvention != null) {
         fixedLegDayCount = fixedLegConvention.getDayCount();
@@ -164,6 +164,7 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
         fixedLegRegion = fixedLegConvention.getRegionCalendar();
       } else {
         LOGGER.error("Could not get SwapFixedLegConvention for {}", ccy);
+        return null;
       }
       if (iborLegConvention != null) {
         IborIndexConvention indexConvention = null;
@@ -189,59 +190,22 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
             }
           } catch (final Exception e) {
             LOGGER.error("Could not get any securities with id {}", UNDERLYING_INDEX_FOR_CCY.get(ccy));
+            return null;
           }
         } else {
           LOGGER.error("Could not get IborIndexConvention with identifier {}", indexConvention);
+          return null;
         }
       } else {
         LOGGER.error("Could not get VanillaIborLegConvention for {}", ccy);
-      }
-    }
-    // just need to test that either the fixed or floating leg was missing
-    if (fixedLegDayCount == null || floatingLegFrequency == null || tsIdentifier == null || indexId == null) {
-      // couldn't find information from convention, try the old way
-      // discouraged use of ConventionBundleSource
-      final ConventionBundle swapConvention = getConventionBundleSource()
-          .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
-      if (swapConvention == null) {
-        LOGGER.error("Couldn't get swap convention for {}", ccy.getCode());
-        return null;
-      }
-      // get the convention of the identifier of the initial rate
-      final ConventionBundle liborConvention = getConventionBundleSource().getConventionBundle(swapConvention.getSwapFloatingLegInitialRate());
-      if (liborConvention == null) {
-        LOGGER.error("Couldn't get libor convention for {}", swapConvention.getSwapFloatingLegInitialRate());
-        return null;
-      }
-      if (tsIdentifier == null) {
-        // look up the rate timeseries identifier out of the bundle
-        tsIdentifier = getTimeSeriesIdentifier(liborConvention);
-      }
-      if (tsIdentifier == null) {
-        LOGGER.error("Could not get time series identifier for {}", tsIdentifier);
-        return null;
-      }
-      if (fixedLegDayCount == null) {
-        fixedLegDayCount = swapConvention.getSwapFixedLegDayCount();
-        fixedLegFrequency = swapConvention.getSwapFixedLegFrequency();
-        fixedLegBusinessDayConvention = swapConvention.getSwapFixedLegBusinessDayConvention();
-        fixedLegRegion = swapConvention.getSwapFixedLegRegion();
-      }
-      if (floatingLegDayCount == null) {
-        floatingLegDayCount = swapConvention.getSwapFloatingLegDayCount();
-        floatingLegFrequency = swapConvention.getSwapFloatingLegFrequency();
-        floatingLegBusinessDayConvention = swapConvention.getSwapFloatingLegBusinessDayConvention();
-        floatingLegRegion = swapConvention.getSwapFloatingLegRegion();
-      }
-      if (indexId == null) {
-        indexId = swapConvention.getSwapFloatingLegInitialRate();
-      }
-      if (indexId == null) {
-        LOGGER.error("Could not get index id for {}", swapConvention);
         return null;
       }
     }
-    // look up the value on our chosen trade date or use the last available data, dep
+    if (tsIdentifier == null) {
+      LOGGER.error("Could not find a time series identifier for {}", ccy);
+      return null;
+    }
+    // look up the value on our chosen trade date or use the last available data
     final HistoricalTimeSeries rateSeries;
     if (_useLastAvailableSwapRate) {
       rateSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, tsIdentifier.toBundle(), null, null, true, tradeDate,

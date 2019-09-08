@@ -19,7 +19,6 @@ import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecifica
 import com.opengamma.financial.analytics.model.pnl.PnLRequirementsGatherer;
 import com.opengamma.financial.analytics.riskfactors.RiskFactorsGatherer;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.currency.CurrencyPair;
 import com.opengamma.financial.currency.CurrencyPairs;
 import com.opengamma.financial.currency.CurrencyPairsResolver;
@@ -46,10 +45,6 @@ public final class OpenGammaCompilationContext {
    * The name under which an instance of {@link RegionSource} should be bound.
    */
   public static final String REGION_SOURCE_NAME = "regionSource";
-  /**
-   * The name under which an instance of {@link ConventionBundleSource} should be bound.
-   */
-  public static final String CONVENTION_BUNDLE_SOURCE_NAME = "conventionBundleSource";
   /**
    * The name under which an instance of {@link ConventionSource} should be bound.
    */
@@ -110,7 +105,7 @@ public final class OpenGammaCompilationContext {
   private static final String PERMISSIVE_FLAG_NAME = "permissive";
   /**
    * The name under which an instance of {@link PnLRequirementsGatherer} should be bound.
-   * 
+   *
    * @deprecated this functionality will be removed
    */
   @Deprecated
@@ -204,33 +199,6 @@ public final class OpenGammaCompilationContext {
   }
 
   // -------------------------------------------------------------------------
-  /**
-   * Gets a {@code ConventionBundleSource} from the context.
-   *
-   * @param compilationContext
-   *          the context to examine, not null
-   * @return the convention bundle source, null if not found
-   * @deprecated {@link ConventionBundleSource} is deprecated. Use {@link ConventionSource} instead
-   */
-  @Deprecated
-  public static ConventionBundleSource getConventionBundleSource(final FunctionCompilationContext compilationContext) {
-    return get(compilationContext, CONVENTION_BUNDLE_SOURCE_NAME);
-  }
-
-  /**
-   * Stores a {@code ConventionBundleSource} in the context.
-   *
-   * @param compilationContext
-   *          the context to store in, not null
-   * @param conventionBundleSource
-   *          the convention bundle source to store, not null
-   * @deprecated {@link ConventionBundleSource} is deprecated. Use {@link ConventionSource} instead
-   */
-  @Deprecated
-  public static void setConventionBundleSource(final FunctionCompilationContext compilationContext, final ConventionBundleSource conventionBundleSource) {
-    set(compilationContext, CONVENTION_BUNDLE_SOURCE_NAME, conventionBundleSource);
-  }
-
   /**
    * @deprecated Use config source instead.
    * @param compilationContext

@@ -66,7 +66,6 @@ import com.opengamma.financial.analytics.model.curve.interestrate.MultiYieldCurv
 import com.opengamma.financial.analytics.model.curve.interestrate.MultiYieldCurvePropertiesAndDefaults;
 import com.opengamma.financial.analytics.model.forex.FXUtils;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesBundle;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.currency.ConfigDBCurrencyMatrixSource;
 import com.opengamma.financial.currency.ConfigDBCurrencyPairsSource;
 import com.opengamma.financial.currency.CurrencyMatrixResolver;
@@ -126,7 +125,6 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
   protected static final double YEAR_LENGTH = 365.25;
 
   private Random _random = new Random();
-  private ConventionBundleSource _conventionBundleSource;
   private ConfigSource _configSource;
   private ConfigMaster _configMaster;
   private HolidaySource _holidaySource;
@@ -175,14 +173,6 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
 
   protected double getRandom(final double[] xs) {
     return xs[getRandom(xs.length)];
-  }
-
-  public ConventionBundleSource getConventionBundleSource() {
-    return _conventionBundleSource;
-  }
-
-  public void setConventionBundleSource(final ConventionBundleSource conventionBundleSource) {
-    _conventionBundleSource = conventionBundleSource;
   }
 
   public ConventionSource getConventionSource() {
@@ -315,7 +305,6 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
     context.setComputationTargetResolver(new DefaultComputationTargetResolver(context.getSecuritySource()).atVersionCorrection(VersionCorrection.LATEST));
     OpenGammaExecutionContext.setHolidaySource(context, getHolidaySource());
     OpenGammaExecutionContext.setRegionSource(context, getRegionSource());
-    OpenGammaExecutionContext.setConventionBundleSource(context, getConventionBundleSource());
     OpenGammaExecutionContext.setConventionSource(context, getConventionSource());
     OpenGammaExecutionContext.setSecuritySource(context, new MasterSecuritySource(getSecurityMaster()));
     OpenGammaExecutionContext.setHistoricalTimeSeriesSource(context, getHistoricalSource());
@@ -333,7 +322,6 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
     OpenGammaCompilationContext.setHolidaySource(context, getHolidaySource());
     OpenGammaCompilationContext.setRegionSource(context, getRegionSource());
     OpenGammaCompilationContext.setLegalEntitySource(context, getLegalEntitySource());
-    OpenGammaCompilationContext.setConventionBundleSource(context, getConventionBundleSource());
     OpenGammaCompilationContext.setConventionSource(context, getConventionSource());
     OpenGammaCompilationContext.setSecuritySource(context, new MasterSecuritySource(getSecurityMaster()));
     OpenGammaCompilationContext.setHistoricalTimeSeriesResolver(context,

@@ -43,10 +43,8 @@ import com.opengamma.financial.analytics.model.irfutureoption.IRFutureOptionFunc
 import com.opengamma.financial.analytics.model.option.OptionFunctions;
 import com.opengamma.financial.analytics.model.pnl.PNLFunctions;
 import com.opengamma.financial.analytics.model.sabr.SABRDiscountingPricingFunctions;
-import com.opengamma.financial.analytics.model.sabrcube.SABRCubeFunctions;
 import com.opengamma.financial.analytics.model.sensitivities.SensitivitiesFunctions;
 import com.opengamma.financial.analytics.model.simpleinstrument.SimpleInstrumentFunctions;
-import com.opengamma.financial.analytics.model.swaption.SwaptionFunctions;
 import com.opengamma.financial.analytics.model.timeseries.TimeSeriesFunctions;
 import com.opengamma.financial.analytics.model.trs.TotalReturnSwapFunctions;
 import com.opengamma.financial.analytics.model.var.VaRFunctions;
@@ -312,17 +310,6 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
     return new SimpleFunctionConfigurationSource(new FunctionConfigurationBundle(Collections.<FunctionConfiguration> emptyList()));
   }
 
-  /**
-   * Adds SABR pricing functions for swaptions, cap/floors, CMS and cap/floor CMS spreads.
-   *
-   * @return A configuration source containing the deprecated functions
-   * @deprecated The current versions of these functions are added in {@link ModelFunctions#sabrDiscountingFunctionConfiguration()}
-   */
-  @Deprecated
-  protected FunctionConfigurationSource sabrCubeFunctionConfiguration() {
-    return SABRCubeFunctions.instance();
-  }
-
   protected FunctionConfigurationSource sabrDiscountingFunctionConfiguration() {
     return SABRDiscountingPricingFunctions.instance();
   }
@@ -333,10 +320,6 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   protected FunctionConfigurationSource simpleInstrumentFunctionConfiguration() {
     return SimpleInstrumentFunctions.instance();
-  }
-
-  protected FunctionConfigurationSource swaptionFunctionConfiguration() {
-    return SwaptionFunctions.instance();
   }
 
   protected FunctionConfigurationSource varFunctionConfiguration() {
@@ -375,7 +358,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
         inflationbondCurveFunctionConfiguration(), bondYieldFunctionConfiguration(), carrLeeFunctionConfiguration(), curveFunctionConfiguration(),
         equityFunctionConfiguration(), forexFunctionConfiguration(), futureFunctionConfiguration(), futureOptionFunctionConfiguration(),
         horizonFunctionConfiguration(), irFutureOptionFunctionConfiguration(), pnlFunctionConfiguration(), riskFactorFunctionConfiguration(),
-        sensitivitiesFunctionConfiguration(), simpleInstrumentFunctionConfiguration(), swaptionFunctionConfiguration(), varFunctionConfiguration(),
+        sensitivitiesFunctionConfiguration(), simpleInstrumentFunctionConfiguration(), varFunctionConfiguration(),
         volatilityFunctionConfiguration(), yieldCurveFunctionConfiguration(), forwardFunctionConfiguration(), futureCurveFunctionConfiguration(),
         discountingFunctionConfiguration(), hullWhitePricingFunctionConfiguration(), fxPricingFunctionConfiguration(), blackDiscountingFunctionConfiguration(),
         sabrDiscountingFunctionConfiguration(), g2ppPricingFunctionConfiguration(), timeSeriesFunctionConfiguration(), totalReturnSwapFunctionConfiguration(),

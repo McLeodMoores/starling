@@ -24,7 +24,6 @@ import com.opengamma.batch.BatchMaster;
 import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractComponentFactory;
 import com.opengamma.core.config.ConfigSource;
-import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.exchange.ExchangeSource;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesSource;
 import com.opengamma.core.holiday.HolidaySource;
@@ -35,7 +34,6 @@ import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.engine.view.ViewProcessor;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.convention.ConventionMaster;
@@ -171,16 +169,6 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
   @PropertyDefinition
   private MarketDataSnapshotSource _marketDataSnapshotSource;
   /**
-   * The convention bundle source.
-   */
-  @PropertyDefinition
-  private ConventionBundleSource _conventionBundleSource;
-  /**
-   * The convention source.
-   */
-  @PropertyDefinition
-  private ConventionSource _conventionSource;
-  /**
    * The security provider.
    */
   @PropertyDefinition
@@ -211,7 +199,7 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
   @PropertyDefinition
   private FunctionConfigurationSource _functionConfigSource;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     final ToolContext context = createToolContext();
@@ -804,56 +792,6 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the convention bundle source.
-   * @return the value of the property
-   */
-  public ConventionBundleSource getConventionBundleSource() {
-    return _conventionBundleSource;
-  }
-
-  /**
-   * Sets the convention bundle source.
-   * @param conventionBundleSource  the new value of the property
-   */
-  public void setConventionBundleSource(ConventionBundleSource conventionBundleSource) {
-    this._conventionBundleSource = conventionBundleSource;
-  }
-
-  /**
-   * Gets the the {@code conventionBundleSource} property.
-   * @return the property, not null
-   */
-  public final Property<ConventionBundleSource> conventionBundleSource() {
-    return metaBean().conventionBundleSource().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
-   * Gets the convention source.
-   * @return the value of the property
-   */
-  public ConventionSource getConventionSource() {
-    return _conventionSource;
-  }
-
-  /**
-   * Sets the convention source.
-   * @param conventionSource  the new value of the property
-   */
-  public void setConventionSource(ConventionSource conventionSource) {
-    this._conventionSource = conventionSource;
-  }
-
-  /**
-   * Gets the the {@code conventionSource} property.
-   * @return the property, not null
-   */
-  public final Property<ConventionSource> conventionSource() {
-    return metaBean().conventionSource().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
    * Gets the security provider.
    * @return the value of the property
    */
@@ -1037,8 +975,6 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
           JodaBeanUtils.equal(getLegalEntitySource(), other.getLegalEntitySource()) &&
           JodaBeanUtils.equal(getHistoricalTimeSeriesSource(), other.getHistoricalTimeSeriesSource()) &&
           JodaBeanUtils.equal(getMarketDataSnapshotSource(), other.getMarketDataSnapshotSource()) &&
-          JodaBeanUtils.equal(getConventionBundleSource(), other.getConventionBundleSource()) &&
-          JodaBeanUtils.equal(getConventionSource(), other.getConventionSource()) &&
           JodaBeanUtils.equal(getSecurityProvider(), other.getSecurityProvider()) &&
           JodaBeanUtils.equal(getSecurityLoader(), other.getSecurityLoader()) &&
           JodaBeanUtils.equal(getHistoricalTimeSeriesProvider(), other.getHistoricalTimeSeriesProvider()) &&
@@ -1075,8 +1011,6 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
     hash = hash * 31 + JodaBeanUtils.hashCode(getLegalEntitySource());
     hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesSource());
     hash = hash * 31 + JodaBeanUtils.hashCode(getMarketDataSnapshotSource());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getConventionBundleSource());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getConventionSource());
     hash = hash * 31 + JodaBeanUtils.hashCode(getSecurityProvider());
     hash = hash * 31 + JodaBeanUtils.hashCode(getSecurityLoader());
     hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesProvider());
@@ -1088,7 +1022,7 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(992);
+    StringBuilder buf = new StringBuilder(928);
     buf.append("ToolContextComponentFactory{");
     int len = buf.length();
     toString(buf);
@@ -1124,8 +1058,6 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
     buf.append("legalEntitySource").append('=').append(JodaBeanUtils.toString(getLegalEntitySource())).append(',').append(' ');
     buf.append("historicalTimeSeriesSource").append('=').append(JodaBeanUtils.toString(getHistoricalTimeSeriesSource())).append(',').append(' ');
     buf.append("marketDataSnapshotSource").append('=').append(JodaBeanUtils.toString(getMarketDataSnapshotSource())).append(',').append(' ');
-    buf.append("conventionBundleSource").append('=').append(JodaBeanUtils.toString(getConventionBundleSource())).append(',').append(' ');
-    buf.append("conventionSource").append('=').append(JodaBeanUtils.toString(getConventionSource())).append(',').append(' ');
     buf.append("securityProvider").append('=').append(JodaBeanUtils.toString(getSecurityProvider())).append(',').append(' ');
     buf.append("securityLoader").append('=').append(JodaBeanUtils.toString(getSecurityLoader())).append(',').append(' ');
     buf.append("historicalTimeSeriesProvider").append('=').append(JodaBeanUtils.toString(getHistoricalTimeSeriesProvider())).append(',').append(' ');
@@ -1255,16 +1187,6 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
     private final MetaProperty<MarketDataSnapshotSource> _marketDataSnapshotSource = DirectMetaProperty.ofReadWrite(
         this, "marketDataSnapshotSource", ToolContextComponentFactory.class, MarketDataSnapshotSource.class);
     /**
-     * The meta-property for the {@code conventionBundleSource} property.
-     */
-    private final MetaProperty<ConventionBundleSource> _conventionBundleSource = DirectMetaProperty.ofReadWrite(
-        this, "conventionBundleSource", ToolContextComponentFactory.class, ConventionBundleSource.class);
-    /**
-     * The meta-property for the {@code conventionSource} property.
-     */
-    private final MetaProperty<ConventionSource> _conventionSource = DirectMetaProperty.ofReadWrite(
-        this, "conventionSource", ToolContextComponentFactory.class, ConventionSource.class);
-    /**
      * The meta-property for the {@code securityProvider} property.
      */
     private final MetaProperty<SecurityProvider> _securityProvider = DirectMetaProperty.ofReadWrite(
@@ -1321,8 +1243,6 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
         "legalEntitySource",
         "historicalTimeSeriesSource",
         "marketDataSnapshotSource",
-        "conventionBundleSource",
-        "conventionSource",
         "securityProvider",
         "securityLoader",
         "historicalTimeSeriesProvider",
@@ -1383,10 +1303,6 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
           return _historicalTimeSeriesSource;
         case -2019554651:  // marketDataSnapshotSource
           return _marketDataSnapshotSource;
-        case -1281578674:  // conventionBundleSource
-          return _conventionBundleSource;
-        case 225875692:  // conventionSource
-          return _conventionSource;
         case 809869649:  // securityProvider
           return _securityProvider;
         case -903470221:  // securityLoader
@@ -1596,22 +1512,6 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
     }
 
     /**
-     * The meta-property for the {@code conventionBundleSource} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<ConventionBundleSource> conventionBundleSource() {
-      return _conventionBundleSource;
-    }
-
-    /**
-     * The meta-property for the {@code conventionSource} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<ConventionSource> conventionSource() {
-      return _conventionSource;
-    }
-
-    /**
      * The meta-property for the {@code securityProvider} property.
      * @return the meta-property, not null
      */
@@ -1707,10 +1607,6 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
           return ((ToolContextComponentFactory) bean).getHistoricalTimeSeriesSource();
         case -2019554651:  // marketDataSnapshotSource
           return ((ToolContextComponentFactory) bean).getMarketDataSnapshotSource();
-        case -1281578674:  // conventionBundleSource
-          return ((ToolContextComponentFactory) bean).getConventionBundleSource();
-        case 225875692:  // conventionSource
-          return ((ToolContextComponentFactory) bean).getConventionSource();
         case 809869649:  // securityProvider
           return ((ToolContextComponentFactory) bean).getSecurityProvider();
         case -903470221:  // securityLoader
@@ -1795,12 +1691,6 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
           return;
         case -2019554651:  // marketDataSnapshotSource
           ((ToolContextComponentFactory) bean).setMarketDataSnapshotSource((MarketDataSnapshotSource) newValue);
-          return;
-        case -1281578674:  // conventionBundleSource
-          ((ToolContextComponentFactory) bean).setConventionBundleSource((ConventionBundleSource) newValue);
-          return;
-        case 225875692:  // conventionSource
-          ((ToolContextComponentFactory) bean).setConventionSource((ConventionSource) newValue);
           return;
         case 809869649:  // securityProvider
           ((ToolContextComponentFactory) bean).setSecurityProvider((SecurityProvider) newValue);

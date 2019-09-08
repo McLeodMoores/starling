@@ -43,7 +43,6 @@ import com.opengamma.financial.analytics.conversion.InterestRateFutureOptionSecu
 import com.opengamma.financial.analytics.conversion.InterestRateFutureOptionTradeConverter;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesBundle;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesFunctionUtils;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.security.future.InterestRateFutureSecurity;
 import com.opengamma.financial.security.option.IRFutureOptionSecurity;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
@@ -64,14 +63,13 @@ public class MarginPriceFunction extends AbstractFunction {
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
-    final ConventionBundleSource conventionBundleSource = OpenGammaCompilationContext.getConventionBundleSource(context); // TODO [PLAT-5966] Remove
     final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final HistoricalTimeSeriesResolver timeSeriesResolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
     final InterestRateFutureOptionSecurityConverter irFutureOptionConverter = new InterestRateFutureOptionSecurityConverter(holidaySource, conventionSource,
         regionSource, securitySource);
     final InterestRateFutureOptionTradeConverter optionTradeToTxnDefnConverter = new InterestRateFutureOptionTradeConverter(irFutureOptionConverter);
     final FutureTradeConverter futureTradeConverter = new FutureTradeConverter();
-    final FixedIncomeConverterDataProvider definitionConverter = new FixedIncomeConverterDataProvider(conventionBundleSource, securitySource,
+    final FixedIncomeConverterDataProvider definitionConverter = new FixedIncomeConverterDataProvider(conventionSource, securitySource,
         timeSeriesResolver);
 
     return new AbstractInvokingCompiledFunction() {

@@ -17,7 +17,6 @@ import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.function.PortfolioStructure;
 import com.opengamma.engine.marketdata.OverrideOperationCompiler;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.util.SingletonFactoryBean;
 
@@ -31,7 +30,6 @@ public class OpenGammaExecutionContextFactoryBean extends SingletonFactoryBean<F
   private PositionSource _positionSource;
   private RegionSource _regionSource;
   private HolidaySource _holidaySource;
-  private ConventionBundleSource _conventionBundleSource;
   private ExchangeSource _exchangeSource;
   private ConfigSource _configSource;
   private LegalEntitySource _legalEntitySource;
@@ -95,14 +93,6 @@ public class OpenGammaExecutionContextFactoryBean extends SingletonFactoryBean<F
     _holidaySource = holidaySource;
   }
 
-  public ConventionBundleSource getConventionBundleSource() {
-    return _conventionBundleSource;
-  }
-
-  public void setConventionBundleSource(final ConventionBundleSource referenceRateRepository) {
-    _conventionBundleSource = referenceRateRepository;
-  }
-
   public ConfigSource getConfigSource() {
     return _configSource;
   }
@@ -154,9 +144,6 @@ public class OpenGammaExecutionContextFactoryBean extends SingletonFactoryBean<F
     }
     if (getHolidaySource() != null) {
       OpenGammaExecutionContext.setHolidaySource(context, getHolidaySource());
-    }
-    if (getConventionBundleSource() != null) {
-      OpenGammaExecutionContext.setConventionBundleSource(context, getConventionBundleSource());
     }
     if (getConventionSource() != null) {
       OpenGammaExecutionContext.setConventionSource(context, getConventionSource());

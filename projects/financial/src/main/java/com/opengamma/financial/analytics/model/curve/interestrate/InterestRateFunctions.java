@@ -46,7 +46,7 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
     /** The matrix decomposition method used by the root-finder */
     private String _decomposition = DecompositionFactory.SV_COLT_NAME;
     /** True if finite difference is used to calculate derivatives */
-    private boolean _useFiniteDifference; /* = false;*/
+    private boolean _useFiniteDifference; /* = false; */
     /** The interpolator name */
     private String _interpolatorName = LinearInterpolator1dAdapter.NAME;
     /** The left extrapolator name */
@@ -56,7 +56,9 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the currencies for which these defaults apply.
-     * @param applicableCurrencies The applicable currencies
+     * 
+     * @param applicableCurrencies
+     *          The applicable currencies
      */
     public void setApplicableCurrencies(final Set<String> applicableCurrencies) {
       _applicableCurrencies.clear();
@@ -65,6 +67,7 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the currencies for which these defaults apply.
+     * 
      * @return The applicable currencies
      */
     public Set<String> getApplicableCurrencies() {
@@ -73,6 +76,7 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the absolute tolerance used by the root-finder.
+     * 
      * @return The absolute tolerance
      */
     public double getAbsoluteTolerance() {
@@ -81,7 +85,9 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the absolute tolerance used by the root-finder.
-     * @param absoluteTolerance The absolute tolerance
+     * 
+     * @param absoluteTolerance
+     *          The absolute tolerance
      */
     public void setAbsoluteTolerance(final double absoluteTolerance) {
       _absoluteTolerance = absoluteTolerance;
@@ -89,6 +95,7 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the relative tolerance used by the root-finder.
+     * 
      * @return The relative tolerance
      */
     public double getRelativeTolerance() {
@@ -97,7 +104,9 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the relative tolerance used by the root-finder.
-     * @param relativeTolerance The relative tolerance
+     * 
+     * @param relativeTolerance
+     *          The relative tolerance
      */
     public void setRelativeTolerance(final double relativeTolerance) {
       _relativeTolerance = relativeTolerance;
@@ -105,6 +114,7 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the maximum number of iterations used by the root-finder.
+     * 
      * @return The maximum number of iterations
      */
     public int getMaxIterations() {
@@ -113,7 +123,9 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the maximum number of iterations used by the root-finder.
-     * @param maxIterations The maximum number of iterations
+     * 
+     * @param maxIterations
+     *          The maximum number of iterations
      */
     public void setMaxIterations(final int maxIterations) {
       _maxIterations = maxIterations;
@@ -121,6 +133,7 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the matrix decomposition used by the root-finder.
+     * 
      * @return The matrix decomposition
      */
     public String getDecomposition() {
@@ -129,7 +142,9 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the matrix decomposition used by the root-finder.
-     * @param decomposition The matrix decomposition
+     * 
+     * @param decomposition
+     *          The matrix decomposition
      */
     public void setDecomposition(final String decomposition) {
       _decomposition = decomposition;
@@ -137,6 +152,7 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Does the root-finder use finite difference to calculate derivatives.
+     * 
      * @return True if the root-finder uses finite difference
      */
     public boolean isUseFiniteDifference() {
@@ -145,7 +161,9 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the derivative calculation method, finite difference or analytic.
-     * @param useFiniteDifference True if the root-finder uses finite difference
+     * 
+     * @param useFiniteDifference
+     *          True if the root-finder uses finite difference
      */
     public void setUseFiniteDifference(final boolean useFiniteDifference) {
       _useFiniteDifference = useFiniteDifference;
@@ -153,6 +171,7 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the interpolator name.
+     * 
      * @return The interpolator name
      */
     public String getInterpolatorName() {
@@ -161,7 +180,9 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the interpolator name.
-     * @param interpolatorName The interpolator name
+     * 
+     * @param interpolatorName
+     *          The interpolator name
      */
     public void setInterpolatorName(final String interpolatorName) {
       _interpolatorName = interpolatorName;
@@ -169,6 +190,7 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the left extrapolator name.
+     * 
      * @return The left extrapolator name
      */
     public String getLeftExtrapolatorName() {
@@ -177,7 +199,9 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the left extrapolator name.
-     * @param leftExtrapolatorName The left extrapolator name
+     * 
+     * @param leftExtrapolatorName
+     *          The left extrapolator name
      */
     public void setLeftExtrapolatorName(final String leftExtrapolatorName) {
       _leftExtrapolatorName = leftExtrapolatorName;
@@ -185,6 +209,7 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the right extrapolator name.
+     * 
      * @return The right extrapolator name
      */
     public String getRightExtrapolatorName() {
@@ -193,7 +218,9 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the right extrapolator name.
-     * @param rightExtrapolatorName The right extrapolator name
+     * 
+     * @param rightExtrapolatorName
+     *          The right extrapolator name
      */
     public void setRightExtrapolatorName(final String rightExtrapolatorName) {
       _rightExtrapolatorName = rightExtrapolatorName;
@@ -210,7 +237,9 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Adds default functions for FX implied curves for all applicable currencies.
-     * @param functions A list of function configurations
+     * 
+     * @param functions
+     *          A list of function configurations
      */
     protected void addFXImpliedYieldCurveDefaults(final List<FunctionConfiguration> functions) {
       final String[] args = new String[8 + getApplicableCurrencies().size()];
@@ -231,7 +260,9 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Adds default functions for yield curves calculated using the present value or par rate method.
-     * @param functions A list of function configurations
+     * 
+     * @param functions
+     *          A list of function configurations
      * @deprecated Deprecated
      */
     @Deprecated
@@ -265,12 +296,7 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(FXImpliedYieldCurveFunction.class));
     functions.add(functionConfiguration(FXImpliedYieldCurveSeriesFunction.class));
     functions.add(functionConfiguration(InterpolatedYieldCurveFunction.class));
-    functions.add(functionConfiguration(MarketInstrumentImpliedYieldCurveFunction.class, MarketInstrumentImpliedYieldCurveFunction.PAR_RATE_STRING));
-    functions.add(functionConfiguration(MarketInstrumentImpliedYieldCurveFunction.class, MarketInstrumentImpliedYieldCurveFunction.PRESENT_VALUE_STRING));
-    functions.add(functionConfiguration(MultiYieldCurveParRateMethodFunction.class));
-    functions.add(functionConfiguration(MultiYieldCurvePresentValueMethodFunction.class));
     functions.add(functionConfiguration(MultiCurveCalculationConfigFunction.class));
-    functions.add(functionConfiguration(MultiYieldCurveParRateMethodSeriesFunction.class));
   }
 
 }

@@ -18,7 +18,6 @@ import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.legalentity.LegalEntitySource;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.SecuritySource;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.security.FinancialSecurityVisitorAdapter;
 import com.opengamma.financial.security.future.BondFutureSecurity;
 import com.opengamma.financial.security.option.BondFutureOptionSecurity;
@@ -47,11 +46,9 @@ public class BondFutureOptionSecurityConverter extends FinancialSecurityVisitorA
 
   /**
    * Constructs a bond future option converter.
-   * 
+   *
    * @param holidaySource
    *          the holiday source, not null.
-   * @param conventionBundleSource
-   *          the convention bundle source, not null.
    * @param regionSource
    *          the region source, not null.
    * @param securitySource
@@ -62,21 +59,19 @@ public class BondFutureOptionSecurityConverter extends FinancialSecurityVisitorA
    *          the legal entity source, not null.
    */
   public BondFutureOptionSecurityConverter(final HolidaySource holidaySource,
-      final ConventionBundleSource conventionBundleSource,
       final RegionSource regionSource,
       final SecuritySource securitySource,
       final ConventionSource conventionSource,
       final LegalEntitySource legalEntitySource) {
     ArgumentChecker.notNull(holidaySource, "holidaySource");
-    ArgumentChecker.notNull(conventionBundleSource, "conventionBundleSource");
     ArgumentChecker.notNull(regionSource, "regionSource");
     ArgumentChecker.notNull(securitySource, "securitySource");
     ArgumentChecker.notNull(conventionSource, "conventionSource");
     ArgumentChecker.notNull(legalEntitySource, "legalEntitySource");
-    final BondSecurityConverter bondSecurityConverter = new BondSecurityConverter(holidaySource, conventionBundleSource, regionSource);
+    final BondSecurityConverter bondSecurityConverter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
     _underlyingConverter = new BondFutureSecurityConverter(securitySource, bondSecurityConverter);
     _securitySource = securitySource;
-    _bondAndBondFutureConverter = new BondAndBondFutureTradeWithEntityConverter(holidaySource, conventionBundleSource, conventionSource, regionSource,
+    _bondAndBondFutureConverter = new BondAndBondFutureTradeWithEntityConverter(holidaySource, conventionSource, regionSource,
         securitySource, legalEntitySource);
   }
 

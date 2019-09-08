@@ -69,7 +69,7 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Function repository configuration source for yield curve functions based on the items defined in a Config Master.
-   * 
+   *
    * @deprecated This configuration type should no longer be used.
    */
   @Deprecated
@@ -142,9 +142,7 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(HistoricalTimeSeriesLatestSecurityValueFunction.class));
     functions.add(functionConfiguration(HistoricalTimeSeriesLatestValueFunction.class));
     functions.add(functionConfiguration(HistoricalValuationFunction.class));
-    functions.add(functionConfiguration(YieldCurveInstrumentConversionHistoricalTimeSeriesFunction.class));
     functions.add(functionConfiguration(YieldCurveInstrumentConversionHistoricalTimeSeriesShiftFunction.class));
-    functions.add(functionConfiguration(YieldCurveInstrumentConversionHistoricalTimeSeriesFunctionDeprecated.class));
     functions.add(functionConfiguration(YieldCurveInstrumentConversionHistoricalTimeSeriesShiftFunctionDeprecated.class));
     functions.add(functionConfiguration(VolatilityWeightedFXForwardCurveNodeReturnSeriesFunction.class));
     functions.add(functionConfiguration(VolatilityWeightedFXReturnSeriesFunction.class));

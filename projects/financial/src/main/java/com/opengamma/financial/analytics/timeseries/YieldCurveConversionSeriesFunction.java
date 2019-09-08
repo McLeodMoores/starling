@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 
 import com.google.common.collect.Iterables;
+import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesSource;
 import com.opengamma.core.security.Security;
@@ -36,7 +37,6 @@ import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.conversion.YieldCurveFixingSeriesProvider;
 import com.opengamma.financial.analytics.ircurve.FixedIncomeStripWithSecurity;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationWithSecurities;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
@@ -68,7 +68,7 @@ public class YieldCurveConversionSeriesFunction extends AbstractFunction.NonComp
 
   /**
    * Parses a string and returns null if the string is empty, otherwise returns the original string.
-   * 
+   *
    * @param str
    *          The input string
    * @return The parsed string
@@ -84,8 +84,8 @@ public class YieldCurveConversionSeriesFunction extends AbstractFunction.NonComp
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) {
     final HistoricalTimeSeriesSource timeSeriesSource = OpenGammaExecutionContext.getHistoricalTimeSeriesSource(executionContext);
-    final ConventionBundleSource conventionBundleSource = OpenGammaExecutionContext.getConventionBundleSource(executionContext);
-    final YieldCurveFixingSeriesProvider provider = new YieldCurveFixingSeriesProvider(conventionBundleSource);
+    final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(executionContext);
+    final YieldCurveFixingSeriesProvider provider = new YieldCurveFixingSeriesProvider(conventionSource);
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String dataField = desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY);
     final String resolutionKey = parseString(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY));

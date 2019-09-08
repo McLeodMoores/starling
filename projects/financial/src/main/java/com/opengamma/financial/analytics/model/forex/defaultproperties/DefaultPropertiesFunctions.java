@@ -330,23 +330,6 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
   }
 
   /**
-   * Adds defaults for FX options relevant to the curves.
-   *
-   * @param functions
-   *          The list of functions
-   */
-  protected void addFXOptionBlackCurveDefaults(final List<FunctionConfiguration> functions) {
-    final String[] args = new String[getPerCurrencyInfo().size() * 3];
-    int i = 0;
-    for (final Map.Entry<String, CurrencyInfo> e : getPerCurrencyInfo().entrySet()) {
-      args[i++] = e.getKey();
-      args[i++] = e.getValue().getCurveConfiguration();
-      args[i++] = e.getValue().getDiscountingCurve();
-    }
-    functions.add(functionConfiguration(FXOptionBlackCurveDefaults.class, args));
-  }
-
-  /**
    * Adds defaults for FX options relevant to FX volatility surfaces.
    *
    * @param functions
@@ -370,7 +353,6 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
     if (!getPerCurrencyInfo().isEmpty()) {
       addFXForwardDefaults(functions);
-      addFXOptionBlackCurveDefaults(functions);
     }
     if (!getPerCurrencyPairInfo().isEmpty()) {
       addFXOptionBlackSurfaceDefaults(functions);

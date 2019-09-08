@@ -61,9 +61,6 @@ import com.opengamma.financial.analytics.ircurve.rest.RemoteInterpolatedYieldCur
 import com.opengamma.financial.analytics.ircurve.rest.RemoteInterpolatedYieldCurveSpecificationBuilder;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
 import com.opengamma.financial.analytics.volatility.cube.rest.RemoteVolatilityCubeDefinitionSource;
-import com.opengamma.financial.convention.ConventionBundleSource;
-import com.opengamma.financial.convention.EHCachingConventionBundleSource;
-import com.opengamma.financial.convention.rest.RemoteConventionBundleSource;
 import com.opengamma.financial.security.EHCachingFinancialSecuritySource;
 import com.opengamma.financial.security.FinancialSecuritySource;
 import com.opengamma.financial.security.RemoteFinancialSecuritySource;
@@ -117,9 +114,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   private Class<? extends AbstractComponentFactory> _templateEngineContexts = EngineContextsComponentFactory.class;
 
   /**
-   * The component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely
-   * as the components that make them up are often used independently. Performance is better if the resolver goes
-   * through these, cached, instances rather than make independently cached remote requests.
+   * The component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often
+   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
    */
   @PropertyDefinition(validate = "notNull")
   private Class<? extends AbstractComponentFactory> _templateTargetResolver = TargetResolverComponentFactory.class;
@@ -156,13 +152,6 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
       return new EHCachingConfigSource(configSource, getCacheManager());
     }
     return configSource;
-  }
-
-  protected ConventionBundleSource cache(final ConventionBundleSource conventionBundleSource) {
-    if (getCacheManager() != null) {
-      return new EHCachingConventionBundleSource(conventionBundleSource, getCacheManager());
-    }
-    return conventionBundleSource;
   }
 
   protected ConventionSource cache(final ConventionSource conventionSource) {
@@ -244,13 +233,6 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   protected ConfigSource createConfigSource(final URI uri) {
     if (uri != null) {
       return cache(new RemoteConfigSource(uri/* , TODO: change manager */));
-    }
-    return null;
-  }
-
-  protected ConventionBundleSource createConventionBundleSource(final URI uri) {
-    if (uri != null) {
-      return cache(new RemoteConventionBundleSource(uri));
     }
     return null;
   }
@@ -452,9 +434,6 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
         break;
       case "configSource":
         remoteComponent(repo, property, template, createConfigSource(fetchURI(remoteConfiguration, "configSource")));
-        break;
-      case "conventionBundleSource":
-        remoteComponent(repo, property, template, createConventionBundleSource(fetchURI(remoteConfiguration, "conventionBundleSource")));
         break;
       case "conventionSource":
         remoteComponent(repo, property, template, createConventionSource(fetchURI(remoteConfiguration, "conventionSource")));
@@ -710,9 +689,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely
-   * as the components that make them up are often used independently. Performance is better if the resolver goes
-   * through these, cached, instances rather than make independently cached remote requests.
+   * Gets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often
+   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
    * @return the value of the property, not null
    */
   public Class<? extends AbstractComponentFactory> getTemplateTargetResolver() {
@@ -720,9 +698,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Sets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely
-   * as the components that make them up are often used independently. Performance is better if the resolver goes
-   * through these, cached, instances rather than make independently cached remote requests.
+   * Sets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often
+   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
    * @param templateTargetResolver  the new value of the property, not null
    */
   public void setTemplateTargetResolver(Class<? extends AbstractComponentFactory> templateTargetResolver) {
@@ -732,8 +709,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Gets the the {@code templateTargetResolver} property.
-   * as the components that make them up are often used independently. Performance is better if the resolver goes
-   * through these, cached, instances rather than make independently cached remote requests.
+   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
    * @return the property, not null
    */
   public final Property<Class<? extends AbstractComponentFactory>> templateTargetResolver() {
