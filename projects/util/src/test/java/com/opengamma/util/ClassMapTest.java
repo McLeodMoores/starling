@@ -4,6 +4,7 @@
 package com.opengamma.util;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertEqualsDeep;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -56,8 +57,8 @@ public class ClassMapTest {
     assertTrue(map.isEmpty());
     final ClassMap<Interface1> other = new ClassMap<>();
     other.putAll(map);
-    assertEquals(map, other); // same elements
-    assertFalse(map.equals(other));  // hashCode and equals not overridden
+    assertEqualsDeep(map, other); // same elements
+    assertFalse(map.equals(other)); // hashCode and equals not overridden
   }
 
   /**
@@ -81,8 +82,8 @@ public class ClassMapTest {
     assertTrue(map.isEmpty());
     final ClassMap<Interface1> other = new ClassMap<>();
     other.putAll(map);
-    assertEquals(map, other); // same elements
-    assertFalse(map.equals(other));  // hashCode and equals not overridden
+    assertEqualsDeep(map, other); // same elements
+    assertFalse(map.equals(other)); // hashCode and equals not overridden
   }
 
   /**

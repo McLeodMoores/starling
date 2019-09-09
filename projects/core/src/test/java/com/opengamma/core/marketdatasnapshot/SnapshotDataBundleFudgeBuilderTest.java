@@ -38,9 +38,9 @@ public class SnapshotDataBundleFudgeBuilderTest extends AbstractFudgeBuilderTest
     in.setDataPoint(ExternalIdBundle.of(ExternalId.of("Foo", "2"), ExternalId.of("Bar", "Cow")), 2d);
     final SnapshotDataBundle out = cycleObject(SnapshotDataBundle.class, in);
     assertEquals(out.size(), 2);
-    assertEquals(out.getDataPoint(ExternalId.of("Foo", "1")), 1d);
-    assertEquals(out.getDataPoint(ExternalId.of("Foo", "2")), 2d);
-    assertEquals(out.getDataPoint(ExternalId.of("Bar", "Cow")), 2d);
+    assertEquals(out.getDataPoint(ExternalId.of("Foo", "1")), 1d, 1e-15);
+    assertEquals(out.getDataPoint(ExternalId.of("Foo", "2")), 2d, 1e-15);
+    assertEquals(out.getDataPoint(ExternalId.of("Bar", "Cow")), 2d, 1e-15);
   }
 
 }

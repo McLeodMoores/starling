@@ -49,7 +49,7 @@ public class QuadrupleTest {
     assertEquals(test.getFirst(), "A");
     assertEquals(test.getSecond(), "B");
     assertEquals(test.getThird(), "C");
-    assertEquals(test.getFourth(), 2F);
+    assertEquals(test.getFourth(), 2F, 1e-15);
   }
 
   /**

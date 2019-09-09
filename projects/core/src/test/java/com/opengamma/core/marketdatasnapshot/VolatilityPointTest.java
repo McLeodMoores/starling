@@ -70,7 +70,7 @@ public class VolatilityPointTest extends AbstractFudgeBuilderTestCase {
     assertNotNull(point.metaBean().relativeStrike());
     assertEquals(point.metaBean().swapTenor().get(point), SWAP_TENOR);
     assertEquals(point.metaBean().optionExpiry().get(point), OPTION_EXPIRY);
-    assertEquals(point.metaBean().relativeStrike().get(point), RELATIVE_STRIKE);
+    assertEquals(point.metaBean().relativeStrike().get(point), RELATIVE_STRIKE, 1e-15);
     assertEquals(point.property("swapTenor").get(), SWAP_TENOR);
     assertEquals(point.property("optionExpiry").get(), OPTION_EXPIRY);
     assertEquals(point.property("relativeStrike").get(), RELATIVE_STRIKE);

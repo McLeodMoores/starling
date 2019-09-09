@@ -43,8 +43,8 @@ public class SnapshotDataBundleTest {
    */
   public void testGetBundleExactMatch() {
     final SnapshotDataBundle object = createObject();
-    assertEquals(object.getDataPoint(ExternalIdBundle.of(ExternalId.of("Foo", "1"))), 1d);
-    assertEquals(object.getDataPoint(ExternalIdBundle.of(ExternalId.of("Foo", "3"), ExternalId.of("Bar", "Cow"))), 3d);
+    assertEquals(object.getDataPoint(ExternalIdBundle.of(ExternalId.of("Foo", "1"))), 1d, 1e-15);
+    assertEquals(object.getDataPoint(ExternalIdBundle.of(ExternalId.of("Foo", "3"), ExternalId.of("Bar", "Cow"))), 3d, 1e-15);
   }
 
   /**
@@ -52,7 +52,7 @@ public class SnapshotDataBundleTest {
    */
   public void testGetBundlePartialMatch() {
     final SnapshotDataBundle object = createObject();
-    assertEquals(object.getDataPoint(ExternalIdBundle.of(ExternalId.of("Foo", "2"), ExternalId.of("Missing", "1"))), 2d);
+    assertEquals(object.getDataPoint(ExternalIdBundle.of(ExternalId.of("Foo", "2"), ExternalId.of("Missing", "1"))), 2d, 1e-15);
   }
 
   /**
@@ -68,8 +68,8 @@ public class SnapshotDataBundleTest {
    */
   public void testGetSingleMatch() {
     final SnapshotDataBundle object = createObject();
-    assertEquals(object.getDataPoint(ExternalId.of("Foo", "1")), 1d);
-    assertEquals(object.getDataPoint(ExternalId.of("Foo", "4")), 4d);
+    assertEquals(object.getDataPoint(ExternalId.of("Foo", "1")), 1d, 1e-15);
+    assertEquals(object.getDataPoint(ExternalId.of("Foo", "4")), 4d, 1e-15);
   }
 
   /**
@@ -87,10 +87,10 @@ public class SnapshotDataBundleTest {
     final SnapshotDataBundle object = createObject();
     object.setDataPoint(ExternalIdBundle.of(ExternalId.of("Foo", "2"), ExternalId.of("Bar", "Cow")), 42d);
     assertEquals(object.size(), 3);
-    assertEquals(object.getDataPoint(ExternalId.of("Foo", "1")), 1d);
-    assertEquals(object.getDataPoint(ExternalId.of("Foo", "2")), 42d);
+    assertEquals(object.getDataPoint(ExternalId.of("Foo", "1")), 1d, 1e-15);
+    assertEquals(object.getDataPoint(ExternalId.of("Foo", "2")), 42d, 1e-15);
     assertNull(object.getDataPoint(ExternalId.of("Foo", "3")));
-    assertEquals(object.getDataPoint(ExternalId.of("Foo", "4")), 4d);
+    assertEquals(object.getDataPoint(ExternalId.of("Foo", "4")), 4d, 1e-15);
   }
 
   /**
@@ -100,7 +100,7 @@ public class SnapshotDataBundleTest {
     final SnapshotDataBundle object = createObject();
     object.setDataPoint(ExternalIdBundle.of(ExternalId.of("Foo", "3"), ExternalId.of("Bar", "Cow")), 42d);
     assertEquals(object.size(), 4);
-    assertEquals(object.getDataPoint(ExternalId.of("Foo", "3")), 42d);
+    assertEquals(object.getDataPoint(ExternalId.of("Foo", "3")), 42d, 1e-15);
   }
 
   /**
@@ -110,8 +110,8 @@ public class SnapshotDataBundleTest {
     final SnapshotDataBundle object = createObject();
     object.setDataPoint(ExternalId.of("Foo", "3"), 42d);
     assertEquals(object.size(), 4);
-    assertEquals(object.getDataPoint(ExternalId.of("Foo", "3")), 42d);
-    assertEquals(object.getDataPoint(ExternalId.of("Bar", "Cow")), 42d);
+    assertEquals(object.getDataPoint(ExternalId.of("Foo", "3")), 42d, 1e-15);
+    assertEquals(object.getDataPoint(ExternalId.of("Bar", "Cow")), 42d, 1e-15);
   }
 
   /**
@@ -176,7 +176,7 @@ public class SnapshotDataBundleTest {
     assertEquals(object.getDataPointSet().size(), 1);
     final Map.Entry<ExternalIdBundle, Double> e = object.getDataPointSet().iterator().next();
     assertEquals(e.getKey(), ExternalIdBundle.of(ExternalId.of("Foo", "Bar")));
-    assertEquals(e.getValue(), 42d);
+    assertEquals(e.getValue(), 42d, 1e-15);
   }
 
   /**

@@ -122,7 +122,7 @@ public class SecurityRuleApplierTest {
     final MutableFudgeMsg applied2 = applier.apply(MSG, uid + "1", new FieldHistoryStore());
     assertEquals(applied1.getAllFields().size(), 1);
     assertEquals(applied2.getAllFields().size(), 1);
-    assertEquals(applied1.getDouble(MarketDataRequirementNames.LAST), 17800.);
-    assertEquals(applied2.getDouble(MarketDataRequirementNames.LAST), 178.);
+    assertEquals(applied1.getDouble(MarketDataRequirementNames.LAST), 17800., 1e-15);
+    assertEquals(applied2.getDouble(MarketDataRequirementNames.LAST), 178., 1e-15);
   }
 }

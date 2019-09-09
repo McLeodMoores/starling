@@ -72,11 +72,11 @@ public class CreditDefaultSwapOptionSecurityTest extends AbstractBeanTestCase {
     assertEquals(security.getCurrency(), CCY);
     assertEquals(security.getExerciseType(), TYPE);
     assertEquals(security.getMaturityDate(), MATURITY_DATE);
-    assertEquals(security.getNotional(), NOTIONAL);
+    assertEquals(security.getNotional(), NOTIONAL, 1e-15);
     assertEquals(security.getProtectionBuyer(), BUYER);
     assertEquals(security.getProtectionSeller(), SELLER);
     assertEquals(security.getStartDate(), START_DATE);
-    assertEquals(security.getStrike(), STRIKE);
+    assertEquals(security.getStrike(), STRIKE, 1e-15);
     assertEquals(security.getUnderlyingId(), UNDERLYING);
     assertEquals(security.isBuy(), IS_BUY);
     assertEquals(security.isKnockOut(), IS_KNOCK_OUT);

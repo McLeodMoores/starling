@@ -412,7 +412,8 @@ public class EHCachingConfigSourceTest {
     assertEquals(_source.get(VERSIONED_ITEM_1.getUniqueId().getObjectId(), VC_1), VERSIONED_ITEM_1);
 
     assertEquals(uidCache.get(VERSIONED_ITEM_1.getUniqueId()).getObjectValue(), VERSIONED_ITEM_1);
-    assertEquals(oidCache.get(Pairs.of(VERSIONED_ITEM_1.getUniqueId().getObjectId(), VC_1)).getObjectValue(), VERSIONED_ITEM_1.getUniqueId());
+    assertEquals(oidCache.get(Pairs.of(VERSIONED_ITEM_1.getUniqueId().getObjectId(), VC_1)).getObjectValue(),
+        VERSIONED_ITEM_1.getUniqueId());
   }
 
   /**
@@ -450,10 +451,12 @@ public class EHCachingConfigSourceTest {
     _source.get(VERSIONED_ITEM_1.getUniqueId().getObjectId(), VC_1);
 
     assertEquals(uidCache.get(VERSIONED_ITEM_1.getUniqueId()).getObjectValue(), VERSIONED_ITEM_1);
-    assertEquals(oidCache.get(Pairs.of(VERSIONED_ITEM_1.getUniqueId().getObjectId(), VC_1)).getObjectValue(), VERSIONED_ITEM_1.getUniqueId());
+    assertEquals(oidCache.get(Pairs.of(VERSIONED_ITEM_1.getUniqueId().getObjectId(), VC_1)).getObjectValue(),
+        VERSIONED_ITEM_1.getUniqueId());
 
     assertEquals(_source.get(VERSIONED_ITEM_1.getUniqueId().getObjectId(), VC_1), VERSIONED_ITEM_1);
-    assertEquals(oidCache.get(Pairs.of(VERSIONED_ITEM_1.getUniqueId().getObjectId(), VC_1)).getObjectValue(), VERSIONED_ITEM_1.getUniqueId());
+    assertEquals(oidCache.get(Pairs.of(VERSIONED_ITEM_1.getUniqueId().getObjectId(), VC_1)).getObjectValue(),
+        VERSIONED_ITEM_1.getUniqueId());
   }
 
   /**
@@ -469,7 +472,9 @@ public class EHCachingConfigSourceTest {
    */
   @Test
   public void testGetNullItemObjectIdCollection() {
-    assertTrue(_source.get(Arrays.asList(UniqueId.of("test", "3").getObjectId(), UniqueId.of("test", "30").getObjectId()), VersionCorrection.LATEST).isEmpty());
+    assertTrue(_source
+        .get(Arrays.asList(UniqueId.of("test", "3").getObjectId(), UniqueId.of("test", "30").getObjectId()), VersionCorrection.LATEST)
+        .isEmpty());
   }
 
   /**
@@ -526,7 +531,8 @@ public class EHCachingConfigSourceTest {
 
     // cache items
     _source.get(Arrays.asList(VERSIONED_ITEM_1.getObjectId(), VERSIONED_ITEM_2.getObjectId()), VC_1);
-    final Map<ObjectId, ConfigItem<?>> result = _source.get(Arrays.asList(VERSIONED_ITEM_1.getObjectId(), VERSIONED_ITEM_2.getObjectId()), VC_1);
+    final Map<ObjectId, ConfigItem<?>> result = _source.get(Arrays.asList(VERSIONED_ITEM_1.getObjectId(), VERSIONED_ITEM_2.getObjectId()),
+        VC_1);
     assertEquals(result.size(), 2);
     assertEquals(result.get(VERSIONED_ITEM_1.getObjectId()), VERSIONED_ITEM_1);
     assertEquals(result.get(VERSIONED_ITEM_2.getObjectId()), VERSIONED_ITEM_2);
@@ -562,10 +568,11 @@ public class EHCachingConfigSourceTest {
     assertTrue(_source.get(UnorderedCurrencyPair.class, "LATEST 3", null).isEmpty());
 
     assertNull(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "LATEST 1", VersionCorrection.LATEST)));
-    assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 1", VC_1)).getObjectValue(), Collections.singleton(VERSIONED_ITEM_1));
+    assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 1", VC_1)).getObjectValue(),
+        Collections.singleton(VERSIONED_ITEM_1));
     assertNull(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "LATEST 3", VersionCorrection.LATEST)));
-    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>)
-        nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1)).getObjectValue()).isEmpty());
+    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>) nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1))
+        .getObjectValue()).isEmpty());
     assertNull(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VersionCorrection.LATEST)));
     assertNull(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VC_1)));
   }
@@ -593,10 +600,11 @@ public class EHCachingConfigSourceTest {
     _source.get(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1);
 
     assertNull(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "LATEST 1", VersionCorrection.LATEST)));
-    assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 1", VC_1)).getObjectValue(), Collections.singleton(VERSIONED_ITEM_1));
+    assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 1", VC_1)).getObjectValue(),
+        Collections.singleton(VERSIONED_ITEM_1));
     assertNull(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "LATEST 3", VersionCorrection.LATEST)));
-    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>)
-        nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1)).getObjectValue()).isEmpty());
+    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>) nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1))
+        .getObjectValue()).isEmpty());
     assertNull(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VersionCorrection.LATEST)));
     assertNull(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VC_1)));
 
@@ -607,10 +615,11 @@ public class EHCachingConfigSourceTest {
     assertEquals(_source.get(UnorderedCurrencyPair.class, "LATEST 1", null), Collections.singleton(LATEST_ITEM_1));
 
     assertNull(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "LATEST 1", VersionCorrection.LATEST)));
-    assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 1", VC_1)).getObjectValue(), Collections.singleton(VERSIONED_ITEM_1));
+    assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 1", VC_1)).getObjectValue(),
+        Collections.singleton(VERSIONED_ITEM_1));
     assertNull(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "LATEST 3", VersionCorrection.LATEST)));
-    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>)
-        nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1)).getObjectValue()).isEmpty());
+    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>) nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1))
+        .getObjectValue()).isEmpty());
     assertNull(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VersionCorrection.LATEST)));
     assertNull(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VC_1)));
   }
@@ -652,10 +661,11 @@ public class EHCachingConfigSourceTest {
     assertEquals(_source.get(UnorderedCurrencyPair.class, "VERSIONED 1", null), Collections.singleton(VERSIONED_ITEM_1));
 
     assertNull(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "LATEST 1", VersionCorrection.LATEST)));
-    assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 1", VC_1)).getObjectValue(), Arrays.asList(VERSIONED_ITEM_1));
+    assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 1", VC_1)).getObjectValue(),
+        Arrays.asList(VERSIONED_ITEM_1));
     assertNull(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "LATEST 3", VersionCorrection.LATEST)));
-    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>)
-        nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1)).getObjectValue()).isEmpty());
+    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>) nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1))
+        .getObjectValue()).isEmpty());
     assertNull(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VersionCorrection.LATEST)));
     assertEquals(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VC_1)).getObjectValue(), Collections.singleton(VERSIONED_ITEM_1));
   }
@@ -799,8 +809,8 @@ public class EHCachingConfigSourceTest {
     assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "LATEST 1", VersionCorrection.LATEST)).getObjectValue(), latestItem1);
     assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 1", VC_1)).getObjectValue(), versionedItem1);
     assertNull(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VersionCorrection.LATEST)));
-    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>)
-        nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1)).getObjectValue()).isEmpty());
+    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>) nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1))
+        .getObjectValue()).isEmpty());
     assertNull(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VersionCorrection.LATEST)));
     assertNull(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VC_1)));
   }
@@ -835,10 +845,10 @@ public class EHCachingConfigSourceTest {
 
     assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "LATEST 1", VersionCorrection.LATEST)).getObjectValue(), latestItem1);
     assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 1", VC_1)).getObjectValue(), versionedItem1);
-    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>)
-        nameCache.get(Triple.of(UnorderedCurrencyPair.class, "LATEST 3", VersionCorrection.LATEST)).getObjectValue()).isEmpty());
-    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>)
-        nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1)).getObjectValue()).isEmpty());
+    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>) nameCache
+        .get(Triple.of(UnorderedCurrencyPair.class, "LATEST 3", VersionCorrection.LATEST)).getObjectValue()).isEmpty());
+    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>) nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1))
+        .getObjectValue()).isEmpty());
     assertNull(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VersionCorrection.LATEST)));
     assertNull(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VC_1)));
 
@@ -851,8 +861,8 @@ public class EHCachingConfigSourceTest {
     assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "LATEST 1", VersionCorrection.LATEST)).getObjectValue(), latestItem1);
     assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 1", VC_1)).getObjectValue(), versionedItem1);
     assertNull(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VersionCorrection.LATEST)));
-    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>)
-        nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1)).getObjectValue()).isEmpty());
+    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>) nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1))
+        .getObjectValue()).isEmpty());
     assertNull(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VersionCorrection.LATEST)));
     assertNull(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VC_1)));
   }
@@ -898,10 +908,10 @@ public class EHCachingConfigSourceTest {
 
     assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "LATEST 1", VersionCorrection.LATEST)).getObjectValue(), latestItem1);
     assertEquals(nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 1", VC_1)).getObjectValue(), versionedItem1);
-    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>)
-        nameCache.get(Triple.of(UnorderedCurrencyPair.class, "LATEST 3", VersionCorrection.LATEST)).getObjectValue()).isEmpty());
-    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>)
-        nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1)).getObjectValue()).isEmpty());
+    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>) nameCache
+        .get(Triple.of(UnorderedCurrencyPair.class, "LATEST 3", VersionCorrection.LATEST)).getObjectValue()).isEmpty());
+    assertTrue(((Collection<ConfigItem<UnorderedCurrencyPair>>) nameCache.get(Triple.of(UnorderedCurrencyPair.class, "VERSIONED 3", VC_1))
+        .getObjectValue()).isEmpty());
     assertNull(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VersionCorrection.LATEST)));
     assertEquals(classCache.get(Pairs.of(UnorderedCurrencyPair.class, VC_1)).getObjectValue(), Collections.singleton(VERSIONED_ITEM_1));
   }
@@ -933,7 +943,8 @@ public class EHCachingConfigSourceTest {
         .get(Arrays.asList(LATEST_ITEM_1.getUniqueId(), LATEST_ITEM_2.getUniqueId())))
         .thenReturn(latestUid);
     Mockito.when(source
-        .get(Arrays.asList(VERSIONED_ITEM_1.getUniqueId(), VERSIONED_ITEM_2.getUniqueId(), LATEST_ITEM_1.getUniqueId(), LATEST_ITEM_2.getUniqueId())))
+        .get(Arrays.asList(VERSIONED_ITEM_1.getUniqueId(), VERSIONED_ITEM_2.getUniqueId(), LATEST_ITEM_1.getUniqueId(),
+            LATEST_ITEM_2.getUniqueId())))
         .thenReturn(allUid);
     // add a non-existent item
     Mockito.when(source.get(UniqueId.of("test", "3"))).thenReturn(null);
@@ -977,17 +988,17 @@ public class EHCachingConfigSourceTest {
     Mockito.when(source.changeManager()).thenReturn(new BasicChangeManager());
 
     Mockito.when(source.get(UnorderedCurrencyPair.class, "LATEST 1", VersionCorrection.LATEST))
-           .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>>singleton(LATEST_ITEM_1));
+        .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>> singleton(LATEST_ITEM_1));
     Mockito.when(source.get(UnorderedCurrencyPair.class, "LATEST 1", null))
-           .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>>singleton(LATEST_ITEM_1));
+        .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>> singleton(LATEST_ITEM_1));
     Mockito.when(source.get(UnorderedCurrencyPair.class, "LATEST 2", VersionCorrection.LATEST))
-           .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>>singleton(LATEST_ITEM_2));
+        .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>> singleton(LATEST_ITEM_2));
     Mockito.when(source.get(UnorderedCurrencyPair.class, "VERSIONED 1", VC_1))
-           .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>>singleton(VERSIONED_ITEM_1));
+        .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>> singleton(VERSIONED_ITEM_1));
     Mockito.when(source.get(UnorderedCurrencyPair.class, "VERSIONED 1", null))
-    .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>>singleton(VERSIONED_ITEM_1));
+        .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>> singleton(VERSIONED_ITEM_1));
     Mockito.when(source.get(UnorderedCurrencyPair.class, "VERSIONED 2", VC_2))
-           .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>>singleton(VERSIONED_ITEM_2));
+        .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>> singleton(VERSIONED_ITEM_2));
 
     Mockito.when(source.getSingle(UnorderedCurrencyPair.class, "LATEST 1", VersionCorrection.LATEST))
         .thenReturn(LATEST_1);
@@ -997,20 +1008,20 @@ public class EHCachingConfigSourceTest {
         .thenReturn(VERSIONED_1);
     Mockito.when(source.getSingle(UnorderedCurrencyPair.class, "VERSIONED 2", VC_2))
         .thenReturn(VERSIONED_2);
-}
+  }
 
   private static void populateByClass(final ConfigSource source) {
     Mockito.when(source.changeManager()).thenReturn(new BasicChangeManager());
 
     Mockito.when(source.getAll(UnorderedCurrencyPair.class, VersionCorrection.LATEST))
-           .thenReturn(Arrays.asList(LATEST_ITEM_1, LATEST_ITEM_2));
+        .thenReturn(Arrays.asList(LATEST_ITEM_1, LATEST_ITEM_2));
     Mockito.when(source.getAll(UnorderedCurrencyPair.class, null))
-           .thenReturn(Arrays.asList(LATEST_ITEM_1, LATEST_ITEM_2));
+        .thenReturn(Arrays.asList(LATEST_ITEM_1, LATEST_ITEM_2));
     Mockito.when(source.getAll(UnorderedCurrencyPair.class, VC_1))
-           .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>>singleton(VERSIONED_ITEM_1));
+        .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>> singleton(VERSIONED_ITEM_1));
     Mockito.when(source.getAll(UnorderedCurrencyPair.class, VC_2))
-           .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>>singleton(VERSIONED_ITEM_2));
+        .thenReturn(Collections.<ConfigItem<UnorderedCurrencyPair>> singleton(VERSIONED_ITEM_2));
     Mockito.when(source.getAll(Currency.class, VC_1))
-           .thenReturn(null);
+        .thenReturn(null);
   }
 }
