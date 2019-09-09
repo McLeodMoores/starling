@@ -70,7 +70,7 @@ public class EnergyFutureSecurityTest extends AbstractBeanTestCase {
     assertEquals(future.getCurrency(), CCY);
     assertEquals(future.getUnitAmount(), UNIT_AMOUNT);
     assertEquals(future.getContractCategory(), CONTRACT_CATEGORY);
-    assertEquals(future.getUnitNumber(), UNIT_NUMBER);
+    assertEquals(future.getUnitNumber(), UNIT_NUMBER, 1e-15);
     assertEquals(future.getUnitName(), UNIT_NAME);
     assertEquals(future.getUnderlyingId(), UNDERLYING_ID);
   }

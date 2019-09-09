@@ -72,7 +72,7 @@ public class ImmutableInstantDoubleTimeSeriesTest extends InstantDoubleTimeSerie
     final InstantDoubleTimeSeries ts = ImmutableInstantDoubleTimeSeries.of(Instant.ofEpochSecond(12345), 2.0);
     assertEquals(ts.size(), 1);
     assertEquals(ts.getTimeAtIndex(0), Instant.ofEpochSecond(12345));
-    assertEquals(ts.getValueAtIndex(0), 2.0);
+    assertEquals(ts.getValueAtIndex(0), 2.0, 1e-15);
   }
 
   /**
@@ -94,9 +94,9 @@ public class ImmutableInstantDoubleTimeSeriesTest extends InstantDoubleTimeSerie
     final InstantDoubleTimeSeries ts = ImmutableInstantDoubleTimeSeries.of(inDates, inValues);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), Instant.ofEpochSecond(2222));
-    assertEquals(ts.getValueAtIndex(0), 2.0);
+    assertEquals(ts.getValueAtIndex(0), 2.0, 1e-15);
     assertEquals(ts.getTimeAtIndex(1), Instant.ofEpochSecond(3333));
-    assertEquals(ts.getValueAtIndex(1), 3.0);
+    assertEquals(ts.getValueAtIndex(1), 3.0, 1e-15);
   }
 
   /**
@@ -147,9 +147,9 @@ public class ImmutableInstantDoubleTimeSeriesTest extends InstantDoubleTimeSerie
     final InstantDoubleTimeSeries ts = ImmutableInstantDoubleTimeSeries.of(inDates, inValues);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), Instant.ofEpochSecond(2222));
-    assertEquals(ts.getValueAtIndex(0), 2.0);
+    assertEquals(ts.getValueAtIndex(0), 2.0, 1e-15);
     assertEquals(ts.getTimeAtIndex(1), Instant.ofEpochSecond(3333));
-    assertEquals(ts.getValueAtIndex(1), 3.0);
+    assertEquals(ts.getValueAtIndex(1), 3.0, 1e-15);
   }
 
   /**
@@ -201,9 +201,9 @@ public class ImmutableInstantDoubleTimeSeriesTest extends InstantDoubleTimeSerie
     final InstantDoubleTimeSeries ts = ImmutableInstantDoubleTimeSeries.of(inDates, inValues);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), Instant.ofEpochSecond(2222));
-    assertEquals(ts.getValueAtIndex(0), 2.0);
+    assertEquals(ts.getValueAtIndex(0), 2.0, 1e-15);
     assertEquals(ts.getTimeAtIndex(1), Instant.ofEpochSecond(3333));
-    assertEquals(ts.getValueAtIndex(1), 3.0);
+    assertEquals(ts.getValueAtIndex(1), 3.0, 1e-15);
   }
 
   /**
@@ -612,7 +612,7 @@ public class ImmutableInstantDoubleTimeSeriesTest extends InstantDoubleTimeSerie
     assertEquals(new AbstractMap.SimpleImmutableEntry<>(I_1111, 1.0d), it.next());
     assertEquals(I_1111, it.currentTime());
     assertEquals(1111_000_000_000L, it.currentTimeFast());
-    assertEquals(1.0d, it.currentValue());
+    assertEquals(1.0d, it.currentValue(), 1e-15);
     assertEquals(1.0d, it.currentValueFast());
     assertEquals(I_2222, it.nextTime());
     assertEquals(I_3333, it.nextTime());
@@ -631,7 +631,7 @@ public class ImmutableInstantDoubleTimeSeriesTest extends InstantDoubleTimeSerie
     assertEquals(new AbstractMap.SimpleImmutableEntry<>(I_1111, 1.0d), it.next());
     assertEquals(I_1111, it.currentTime());
     assertEquals(1111_000_000_000L, it.currentTimeFast());
-    assertEquals(1.0d, it.currentValue());
+    assertEquals(1.0d, it.currentValue(), 1e-15);
     assertEquals(1.0d, it.currentValueFast());
     assertEquals(I_2222, it.nextTime());
     assertEquals(I_3333, it.nextTime());

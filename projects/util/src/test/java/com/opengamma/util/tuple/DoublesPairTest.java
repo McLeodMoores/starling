@@ -345,8 +345,8 @@ public class DoublesPairTest {
     assertNotNull(pair.metaBean());
     assertNotNull(pair.metaBean().first());
     assertNotNull(pair.metaBean().second());
-    assertEquals(pair.metaBean().first().get(pair), 2.);
-    assertEquals(pair.metaBean().second().get(pair), 3.);
+    assertEquals(pair.metaBean().first().get(pair), 2., 1e-15);
+    assertEquals(pair.metaBean().second().get(pair), 3., 1e-15);
     assertEquals(pair.property("first").get(), 2.);
     assertEquals(pair.property("second").get(), 3.);
   }

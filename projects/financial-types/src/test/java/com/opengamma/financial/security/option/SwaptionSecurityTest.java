@@ -82,7 +82,7 @@ public class SwaptionSecurityTest extends AbstractBeanTestCase {
     assertEquals(security.getExerciseType(), TYPE);
     assertEquals(security.getExpiry(), EXPIRY);
     assertEquals(security.getLongShort(), LongShort.SHORT);
-    assertEquals(security.getNotional(), NOTIONAL);
+    assertEquals(security.getNotional(), NOTIONAL, 1e-15);
     assertEquals(security.getSettlementDate(), SETTLEMENT_DATE);
     assertEquals(security.getUnderlyingId(), UNDERLYING_ID);
     assertEquals(security.getUnderlyingLink(), UNDERLYING_LINK);
@@ -94,7 +94,7 @@ public class SwaptionSecurityTest extends AbstractBeanTestCase {
     assertEquals(security.getExerciseType(), TYPE);
     assertEquals(security.getExpiry(), EXPIRY);
     assertEquals(security.getLongShort(), LongShort.SHORT);
-    assertEquals(security.getNotional(), NOTIONAL);
+    assertEquals(security.getNotional(), NOTIONAL, 1e-15);
     assertEquals(security.getSettlementDate(), SETTLEMENT_DATE);
     assertEquals(security.getUnderlyingId(), UNDERLYING_ID);
     assertEquals(security.getUnderlyingLink(), UNDERLYING_LINK);

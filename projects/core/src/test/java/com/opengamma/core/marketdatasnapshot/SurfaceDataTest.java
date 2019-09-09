@@ -63,7 +63,7 @@ public class SurfaceDataTest extends AbstractFudgeBuilderTestCase {
     assertNull(DATA.getValue(-1., -1.));
     for (final double x : XS) {
       for (final double y : YS) {
-        assertEquals(DATA.getValue(x, y), x);
+        assertEquals(DATA.getValue(x, y), x, 1e-15);
       }
     }
   }
@@ -77,7 +77,7 @@ public class SurfaceDataTest extends AbstractFudgeBuilderTestCase {
     assertEquals(xs.size(), XS.length);
     int i = 0;
     for (final Double x : xs) {
-      assertEquals(x, XS[i++]);
+      assertEquals(x, XS[i++], 1e-15);
     }
   }
 
@@ -99,8 +99,8 @@ public class SurfaceDataTest extends AbstractFudgeBuilderTestCase {
       assertEquals(ys.size(), YS.length);
       int j = 0;
       for (final ObjectsPair<Double, Double> p : ys) {
-        assertEquals(p.first, YS[j++]);
-        assertEquals(p.second, x);
+        assertEquals(p.first, YS[j++], 1e-15);
+        assertEquals(p.second, x, 1e-15);
       }
     }
   }

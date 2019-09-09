@@ -23,22 +23,23 @@ public class DbDialectTest {
   /**
    * Gets the dialect.
    *
-   * @return  the dialect
+   * @return the dialect
    */
-  public DbDialect getDialect() {
+  protected DbDialect getDialect() {
     return _dialect;
   }
 
   /**
    * Sets the dialect.
    *
-   * @param dialect  the dialect
+   * @param dialect
+   *          the dialect
    */
-  public void setDialect(final DbDialect dialect) {
+  protected void setDialect(final DbDialect dialect) {
     _dialect = dialect;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Tests if there is a wildcard present.
    */
@@ -55,7 +56,7 @@ public class DbDialectTest {
     assertEquals(false, _dialect.isWildcard(null));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Tests the SQL for a wildcard operator.
    */
@@ -72,7 +73,7 @@ public class DbDialectTest {
     assertEquals("=", _dialect.sqlWildcardOperator(null));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Tests the SQL for a wildcard adjust value.
    */
@@ -92,7 +93,7 @@ public class DbDialectTest {
     assertEquals("a_b\\_c", _dialect.sqlWildcardAdjustValue("a?b_c"));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Tests the SQL for a wildcard query.
    */
@@ -109,7 +110,7 @@ public class DbDialectTest {
     assertEquals("", _dialect.sqlWildcardQuery("AND col ", ":arg", null));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Tests the SQL when no paging is used.
    */
@@ -140,7 +141,7 @@ public class DbDialectTest {
         _dialect.sqlApplyPaging("SELECT foo FROM bar WHERE TRUE ", "ORDER BY foo ", PagingRequest.ofPage(3, 20)));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Tests the SQL for null default.
    */

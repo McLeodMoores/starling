@@ -34,9 +34,9 @@ public class HistoricalTimeSeriesAdjustmentTest {
     assertEquals(noop.toString(), "");
     assertTrue(HistoricalTimeSeriesAdjustment.parse("") instanceof HistoricalTimeSeriesAdjustment.NoOp);
     final HistoricalTimeSeries hts = noop.adjust(createTestSeries());
-    assertEquals(hts.getTimeSeries().getLatestValue(), 100d);
+    assertEquals(hts.getTimeSeries().getLatestValue(), 100d, 1e-15);
     assertEquals(noop.adjust(100d), 100d);
-    assertEquals(noop.adjust(hts.getTimeSeries()).getLatestValue(), 100d);
+    assertEquals(noop.adjust(hts.getTimeSeries()).getLatestValue(), 100d, 1e-15);
   }
 
   /**
@@ -48,7 +48,7 @@ public class HistoricalTimeSeriesAdjustmentTest {
     final HistoricalTimeSeriesAdjustment dec = HistoricalTimeSeriesAdjustment.parse("100.0 /");
     assertEquals(((HistoricalTimeSeriesAdjustment.DivideBy) dec).getAmountToDivideBy(), 100d);
     final HistoricalTimeSeries hts = dec.adjust(createTestSeries());
-    assertEquals(hts.getTimeSeries().getLatestValue(), 1d);
+    assertEquals(hts.getTimeSeries().getLatestValue(), 1d, 1e-15);
     assertEquals(dec.adjust(100d), 1d);
   }
 
@@ -61,9 +61,9 @@ public class HistoricalTimeSeriesAdjustmentTest {
     final HistoricalTimeSeriesAdjustment dec = HistoricalTimeSeriesAdjustment.parse("1.0 -");
     assertEquals(((HistoricalTimeSeriesAdjustment.Subtract) dec).getAmountToSubtract(), 1d);
     final HistoricalTimeSeries hts = dec.adjust(createTestSeries());
-    assertEquals(hts.getTimeSeries().getLatestValue(), 99d);
+    assertEquals(hts.getTimeSeries().getLatestValue(), 99d, 1e-15);
     assertEquals(dec.adjust(100d), 99d);
-    assertEquals(dec.adjust(hts.getTimeSeries()).getLatestValue(), 98d);
+    assertEquals(dec.adjust(hts.getTimeSeries()).getLatestValue(), 98d, 1e-15);
   }
 
   /**
@@ -79,7 +79,7 @@ public class HistoricalTimeSeriesAdjustmentTest {
     assertTrue(((HistoricalTimeSeriesAdjustment.Sequence) dec).getFirst() instanceof HistoricalTimeSeriesAdjustment.Subtract);
     assertTrue(((HistoricalTimeSeriesAdjustment.Sequence) dec).getSecond() instanceof HistoricalTimeSeriesAdjustment.Sequence);
     final HistoricalTimeSeries hts = dec.adjust(createTestSeries());
-    assertEquals(hts.getTimeSeries().getLatestValue(), 0.4);
+    assertEquals(hts.getTimeSeries().getLatestValue(), 0.4, 1e-15);
     assertEquals(dec.adjust(100d), 0.4);
   }
 

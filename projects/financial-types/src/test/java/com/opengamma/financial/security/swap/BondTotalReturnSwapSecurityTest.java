@@ -109,7 +109,7 @@ public class BondTotalReturnSwapSecurityTest extends AbstractBeanTestCase {
     assertEquals(security.getEffectiveDate(), EFFECTIVE_DATE);
     assertEquals(security.getMaturityDate(), MATURITY_DATE);
     assertEquals(security.getNotionalCurrency(), CCY);
-    assertEquals(security.getNotionalAmount(), NOTIONAL);
+    assertEquals(security.getNotionalAmount(), NOTIONAL, 1e-15);
     assertEquals(security.getPaymentSettlementDays(), SETTLEMENT_DAYS);
     assertEquals(security.getPaymentBusinessDayConvention(), BDC);
     assertEquals(security.getPaymentFrequency(), FREQ);

@@ -76,7 +76,7 @@ public class ImmutableZonedDateTimeDoubleTimeSeriesTest extends ZonedDateTimeDou
     final ZonedDateTimeDoubleTimeSeries ts = ImmutableZonedDateTimeDoubleTimeSeries.of(ZDT_12345, 2.0);
     assertEquals(ts.size(), 1);
     assertEquals(ts.getTimeAtIndex(0), ZDT_12345);
-    assertEquals(ts.getValueAtIndex(0), 2.0);
+    assertEquals(ts.getValueAtIndex(0), 2.0, 1e-15);
   }
 
   /**
@@ -98,9 +98,9 @@ public class ImmutableZonedDateTimeDoubleTimeSeriesTest extends ZonedDateTimeDou
     final ZonedDateTimeDoubleTimeSeries ts = ImmutableZonedDateTimeDoubleTimeSeries.of(inDates, inValues, null);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), ZDT_2222);
-    assertEquals(ts.getValueAtIndex(0), 2.0);
+    assertEquals(ts.getValueAtIndex(0), 2.0, 1e-15);
     assertEquals(ts.getTimeAtIndex(1), ZDT_3333);
-    assertEquals(ts.getValueAtIndex(1), 3.0);
+    assertEquals(ts.getValueAtIndex(1), 3.0, 1e-15);
     assertEquals(ts, ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(inDates, inValues));
   }
 
@@ -153,9 +153,9 @@ public class ImmutableZonedDateTimeDoubleTimeSeriesTest extends ZonedDateTimeDou
     final ZonedDateTimeDoubleTimeSeries ts = ImmutableZonedDateTimeDoubleTimeSeries.of(inDates, inValues, null);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), ZDT_2222);
-    assertEquals(ts.getValueAtIndex(0), 2.0);
+    assertEquals(ts.getValueAtIndex(0), 2.0, 1e-15);
     assertEquals(ts.getTimeAtIndex(1), ZDT_3333);
-    assertEquals(ts.getValueAtIndex(1), 3.0);
+    assertEquals(ts.getValueAtIndex(1), 3.0, 1e-15);
     assertEquals(ts, ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(inDates, inValues));
   }
 
@@ -208,9 +208,9 @@ public class ImmutableZonedDateTimeDoubleTimeSeriesTest extends ZonedDateTimeDou
     final ZonedDateTimeDoubleTimeSeries ts = ImmutableZonedDateTimeDoubleTimeSeries.of(inDates, inValues, ZoneOffset.UTC);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), ZDT_2222);
-    assertEquals(ts.getValueAtIndex(0), 2.0);
+    assertEquals(ts.getValueAtIndex(0), 2.0, 1e-15);
     assertEquals(ts.getTimeAtIndex(1), ZDT_3333);
-    assertEquals(ts.getValueAtIndex(1), 3.0);
+    assertEquals(ts.getValueAtIndex(1), 3.0, 1e-15);
     assertEquals(ts, ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(inDates, inValues));
   }
 
@@ -621,7 +621,7 @@ public class ImmutableZonedDateTimeDoubleTimeSeriesTest extends ZonedDateTimeDou
     assertEquals(new AbstractMap.SimpleImmutableEntry<>(ZDT_1111, 1.0d), it.next());
     assertEquals(ZDT_1111, it.currentTime());
     assertEquals(1111_000_000_000L, it.currentTimeFast());
-    assertEquals(1.0d, it.currentValue());
+    assertEquals(1.0d, it.currentValue(), 1e-15);
     assertEquals(1.0d, it.currentValueFast());
     assertEquals(ZDT_2222, it.nextTime());
     assertEquals(ZDT_3333, it.nextTime());
@@ -640,7 +640,7 @@ public class ImmutableZonedDateTimeDoubleTimeSeriesTest extends ZonedDateTimeDou
     assertEquals(new AbstractMap.SimpleImmutableEntry<>(ZDT_1111, 1.0d), it.next());
     assertEquals(ZDT_1111, it.currentTime());
     assertEquals(1111_000_000_000L, it.currentTimeFast());
-    assertEquals(1.0d, it.currentValue());
+    assertEquals(1.0d, it.currentValue(), 1e-15);
     assertEquals(1.0d, it.currentValueFast());
     assertEquals(ZDT_2222, it.nextTime());
     assertEquals(ZDT_3333, it.nextTime());

@@ -169,7 +169,7 @@ public class VolatilityCubeDataTest extends AbstractFudgeBuilderTestCase {
     for (final Double x : XS) {
       for (final Double y : YS) {
         for (final Double z : ZS) {
-          assertEquals(CUBE.getVolatility(x, y, z), x * y * z);
+          assertEquals(CUBE.getVolatility(x, y, z), x * y * z, 1e-15);
         }
       }
     }
