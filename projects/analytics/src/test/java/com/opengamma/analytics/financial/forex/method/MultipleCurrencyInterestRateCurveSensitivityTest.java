@@ -39,16 +39,25 @@ public class MultipleCurrencyInterestRateCurveSensitivityTest {
   }
   private static final InterestRateCurveSensitivity IRCS = new InterestRateCurveSensitivity(SENSI_MAP);
 
+  /**
+   * Tests that the currency cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullCurrency() {
     MultipleCurrencyInterestRateCurveSensitivity.of(null, IRCS);
   }
 
+  /**
+   * Tests that the sensitivity cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullIRCS() {
     MultipleCurrencyInterestRateCurveSensitivity.of(USD, null);
   }
 
+  /**
+   * Tests construction.
+   */
   @Test
   public void of() {
     final MultipleCurrencyInterestRateCurveSensitivity mcIRCS = MultipleCurrencyInterestRateCurveSensitivity.of(USD, IRCS);
@@ -56,6 +65,9 @@ public class MultipleCurrencyInterestRateCurveSensitivityTest {
     assertEquals("MultipleCurrencyInterestRateCurveSensitivity", IRCS_EMPTY, mcIRCS.getSensitivity(EUR));
   }
 
+  /**
+   * Tests the addition of two sets of sensitivities.
+   */
   @Test
   public void plus() {
     final double tolerance = 1.0E-2;
@@ -65,7 +77,8 @@ public class MultipleCurrencyInterestRateCurveSensitivityTest {
     assertEquals("MultipleCurrencyInterestRateCurveSensitivity", IRCS, mcIRCS.getSensitivity(USD));
     assertEquals("MultipleCurrencyInterestRateCurveSensitivity", IRCS_EMPTY, mcIRCS.getSensitivity(EUR));
     mcIRCS = mcIRCS.plus(USD, IRCS);
-    AssertSensitivityObjects.assertEquals("MultipleCurrencyInterestRateCurveSensitivity", IRCS.multipliedBy(2.0), mcIRCS.getSensitivity(USD).cleaned(), tolerance);
+    AssertSensitivityObjects.assertEquals("MultipleCurrencyInterestRateCurveSensitivity", IRCS.multipliedBy(2.0),
+        mcIRCS.getSensitivity(USD).cleaned(), tolerance);
     assertEquals("MultipleCurrencyInterestRateCurveSensitivity", IRCS_EMPTY, mcIRCS.getSensitivity(EUR));
   }
 

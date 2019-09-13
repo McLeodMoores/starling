@@ -92,13 +92,13 @@ public class SmileDeltaParameters {
    * @return The strikes.
    */
   public double[] getStrike(final double forward) {
-    final int nbDelta = _delta.length;
-    final double[] strike = new double[2 * nbDelta + 1];
-    strike[nbDelta] = forward * Math.exp(_volatility[nbDelta] * _volatility[nbDelta] * _timeToExpiry / 2.0);
-    for (int loopdelta = 0; loopdelta < nbDelta; loopdelta++) {
-      strike[loopdelta] = BlackFormulaRepository.impliedStrike(-_delta[loopdelta], false, forward, _timeToExpiry, _volatility[loopdelta]); // Put
-      strike[2 * nbDelta - loopdelta] = BlackFormulaRepository.impliedStrike(_delta[loopdelta], true, forward, _timeToExpiry,
-          _volatility[2 * nbDelta - loopdelta]); // Call
+    final int n = _delta.length;
+    final double[] strike = new double[2 * n + 1];
+    strike[n] = forward * Math.exp(_volatility[n] * _volatility[n] * _timeToExpiry / 2.0);
+    for (int i = 0; i < n; i++) {
+      strike[i] = BlackFormulaRepository.impliedStrike(-_delta[i], false, forward, _timeToExpiry, _volatility[i]); // Put
+      strike[2 * n - i] = BlackFormulaRepository.impliedStrike(_delta[i], true, forward, _timeToExpiry,
+          _volatility[2 * n - i]); // Call
     }
     return strike;
   }

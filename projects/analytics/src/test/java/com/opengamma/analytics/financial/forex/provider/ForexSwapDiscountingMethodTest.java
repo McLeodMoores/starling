@@ -47,7 +47,8 @@ public class ForexSwapDiscountingMethodTest {
   private static final ZonedDateTime FAR_DATE = DateUtils.getUTCDate(2011, 6, 27); // 1m
   private static final double NOMINAL_1 = 100000000;
   private static final double FORWARD_POINTS = -0.0007;
-  private static final ForexSwapDefinition FX_SWAP_DEFINITION = new ForexSwapDefinition(CUR_1, CUR_2, NEAR_DATE, FAR_DATE, NOMINAL_1, MULTICURVES.getFxRate(CUR_1, CUR_2),
+  private static final ForexSwapDefinition FX_SWAP_DEFINITION = new ForexSwapDefinition(CUR_1, CUR_2, NEAR_DATE, FAR_DATE, NOMINAL_1,
+      MULTICURVES.getFxRate(CUR_1, CUR_2),
       FORWARD_POINTS);
 
   private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2011, 5, 20);
@@ -57,11 +58,13 @@ public class ForexSwapDiscountingMethodTest {
   private static final ForexSwapDiscountingMethod METHOD_FX_SWAP = ForexSwapDiscountingMethod.getInstance();
   private static final ForexDiscountingMethod METHOD_FX = ForexDiscountingMethod.getInstance();
   private static final PresentValueDiscountingCalculator PVDC = PresentValueDiscountingCalculator.getInstance();
-  private static final PresentValueCurveSensitivityDiscountingCalculator PVCSDC = PresentValueCurveSensitivityDiscountingCalculator.getInstance();
+  private static final PresentValueCurveSensitivityDiscountingCalculator PVCSDC = PresentValueCurveSensitivityDiscountingCalculator
+      .getInstance();
 
   private static final CurrencyExposureDiscountingCalculator CEDC = CurrencyExposureDiscountingCalculator.getInstance();
   private static final ParSpreadMarketQuoteDiscountingCalculator PSMQDC = ParSpreadMarketQuoteDiscountingCalculator.getInstance();
-  private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator PSMQCSDC = ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator.getInstance();
+  private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator PSMQCSDC = ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator
+      .getInstance();
   private static final SimpleParameterSensitivityParameterCalculator<MulticurveProviderInterface> PSPSC = new SimpleParameterSensitivityParameterCalculator<>(
       PSMQCSDC);
   private static final double SHIFT = 1.0E-7;
@@ -74,32 +77,32 @@ public class ForexSwapDiscountingMethodTest {
   private static final double TOLERANCE_RATE = 1.0E-10;
   private static final double TOLERANCE_RATE_DELTA = 1.0E-8;
 
-  @Test
   /**
    * Tests the present value computation.
    */
+  @Test
   public void presentValue() {
     final MultipleCurrencyAmount pv = METHOD_FX_SWAP.presentValue(FX_SWAP, MULTICURVES);
-    final MultipleCurrencyAmount pvNear = METHOD_FX.presentValue((FX_SWAP).getNearLeg(), MULTICURVES);
-    final MultipleCurrencyAmount pvFar = METHOD_FX.presentValue((FX_SWAP).getFarLeg(), MULTICURVES);
+    final MultipleCurrencyAmount pvNear = METHOD_FX.presentValue(FX_SWAP.getNearLeg(), MULTICURVES);
+    final MultipleCurrencyAmount pvFar = METHOD_FX.presentValue(FX_SWAP.getFarLeg(), MULTICURVES);
     assertEquals(pvNear.getAmount(CUR_1) + pvFar.getAmount(CUR_1), pv.getAmount(CUR_1));
     assertEquals(pvNear.getAmount(CUR_2) + pvFar.getAmount(CUR_2), pv.getAmount(CUR_2));
   }
 
-  @Test
   /**
    * Test the present value through the method and through the calculator.
    */
+  @Test
   public void presentValueMethodVsCalculator() {
     final MultipleCurrencyAmount pvMethod = METHOD_FX_SWAP.presentValue(FX_SWAP, MULTICURVES);
     final MultipleCurrencyAmount pvCalculator = FX_SWAP.accept(PVDC, MULTICURVES);
     assertEquals("Forex present value: Method vs Calculator", pvMethod, pvCalculator);
   }
 
-  @Test
   /**
    * Tests the currency exposure computation.
    */
+  @Test
   public void currencyExposure() {
     final MultipleCurrencyAmount exposureMethod = METHOD_FX_SWAP.currencyExposure(FX_SWAP, MULTICURVES);
     final MultipleCurrencyAmount pv = METHOD_FX_SWAP.presentValue(FX_SWAP, MULTICURVES);
@@ -108,34 +111,34 @@ public class ForexSwapDiscountingMethodTest {
     assertEquals("Currency exposure: Method vs Calculator", exposureMethod, exposureCalculator);
   }
 
-  @Test
   /**
    * Test the present value sensitivity to interest rate.
    */
+  @Test
   public void presentValueCurveSensitivity() {
     MultipleCurrencyMulticurveSensitivity pvs = METHOD_FX_SWAP.presentValueCurveSensitivity(FX_SWAP, MULTICURVES);
     pvs = pvs.cleaned();
-    MultipleCurrencyMulticurveSensitivity pvsNear = METHOD_FX.presentValueCurveSensitivity((FX_SWAP).getNearLeg(), MULTICURVES);
-    final MultipleCurrencyMulticurveSensitivity pvsFar = METHOD_FX.presentValueCurveSensitivity((FX_SWAP).getFarLeg(), MULTICURVES);
+    MultipleCurrencyMulticurveSensitivity pvsNear = METHOD_FX.presentValueCurveSensitivity(FX_SWAP.getNearLeg(), MULTICURVES);
+    final MultipleCurrencyMulticurveSensitivity pvsFar = METHOD_FX.presentValueCurveSensitivity(FX_SWAP.getFarLeg(), MULTICURVES);
     pvsNear = pvsNear.plus(pvsFar);
     pvsNear = pvsNear.cleaned();
     assertTrue("Forex swap present value curve sensitivity", pvs.equals(pvsNear));
   }
 
-  @Test
   /**
    * Test the present value curve sensitivity through the method and through the calculator.
    */
+  @Test
   public void presentValueCurveSensitivityMethodVsCalculator() {
     final MultipleCurrencyMulticurveSensitivity pvcsMethod = METHOD_FX_SWAP.presentValueCurveSensitivity(FX_SWAP, MULTICURVES);
     final MultipleCurrencyMulticurveSensitivity pvcsCalculator = FX_SWAP.accept(PVCSDC, MULTICURVES);
     assertEquals("Forex swap present value curve sensitivity: Method vs Calculator", pvcsMethod, pvcsCalculator);
   }
 
-  @Test
   /**
    * Tests the TodayPaymentCalculator for forex transactions.
    */
+  @Test
   public void forexTodayPaymentBeforeNearDate() {
     final InstrumentDerivative fx = FX_SWAP_DEFINITION.toDerivative(NEAR_DATE.minusDays(1));
     final MultipleCurrencyAmount cash = fx.accept(TPC);
@@ -144,10 +147,10 @@ public class ForexSwapDiscountingMethodTest {
     assertEquals("TodayPaymentCalculator: forex", 2, cash.getCurrencyAmounts().length);
   }
 
-  @Test
   /**
    * Tests the TodayPaymentCalculator for forex transactions.
    */
+  @Test
   public void forexTodayPaymentOnNearDate() {
     final InstrumentDerivative fx = FX_SWAP_DEFINITION.toDerivative(NEAR_DATE);
     final MultipleCurrencyAmount cash = fx.accept(TPC);
@@ -158,10 +161,10 @@ public class ForexSwapDiscountingMethodTest {
     assertEquals("TodayPaymentCalculator: forex", 2, cash.getCurrencyAmounts().length);
   }
 
-  @Test
   /**
    * Tests the TodayPaymentCalculator for forex transactions.
    */
+  @Test
   public void forexTodayPaymentBeforeFarDate() {
     final InstrumentDerivative fx = FX_SWAP_DEFINITION.toDerivative(FAR_DATE.minusDays(1));
     final MultipleCurrencyAmount cash = fx.accept(TPC);
@@ -170,10 +173,10 @@ public class ForexSwapDiscountingMethodTest {
     assertEquals("TodayPaymentCalculator: forex", 2, cash.getCurrencyAmounts().length);
   }
 
-  @Test
   /**
    * Tests the TodayPaymentCalculator for forex transactions.
    */
+  @Test
   public void forexTodayPaymentOnFarDate() {
     final InstrumentDerivative fx = FX_SWAP_DEFINITION.toDerivative(FAR_DATE);
     final MultipleCurrencyAmount cash = fx.accept(TPC);
@@ -184,43 +187,45 @@ public class ForexSwapDiscountingMethodTest {
     assertEquals("TodayPaymentCalculator: forex", 2, cash.getCurrencyAmounts().length);
   }
 
-  @Test
   /**
    * Tests the parSpread method.
    */
+  @Test
   public void parSpread() {
     final double parSpread = METHOD_FX_SWAP.parSpread(FX_SWAP, MULTICURVES);
-    final ForexSwapDefinition fxSwap0Definition = new ForexSwapDefinition(CUR_1, CUR_2, NEAR_DATE, FAR_DATE, NOMINAL_1, MULTICURVES.getFxRate(CUR_1, CUR_2), FORWARD_POINTS
-        + parSpread);
+    final ForexSwapDefinition fxSwap0Definition = new ForexSwapDefinition(CUR_1, CUR_2, NEAR_DATE, FAR_DATE, NOMINAL_1,
+        MULTICURVES.getFxRate(CUR_1, CUR_2), FORWARD_POINTS
+            + parSpread);
     final ForexSwap fxSwap0 = (ForexSwap) fxSwap0Definition.toDerivative(REFERENCE_DATE);
     final MultipleCurrencyAmount pv0 = METHOD_FX_SWAP.presentValue(fxSwap0, MULTICURVES);
     assertEquals("Forex swap: par spread", 0, MULTICURVES.getFxRates().convert(pv0, CUR_1).getAmount(), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests the par spread method vs calculator
    */
+  @Test
   public void parSpreadMethodVsCalculator() {
     final double parSpreadMethod = METHOD_FX_SWAP.parSpread(FX_SWAP, MULTICURVES);
     final double parSpreadCalculator = FX_SWAP.accept(PSMQDC, MULTICURVES);
     assertEquals("Forex swap: par spread", parSpreadMethod, parSpreadCalculator, TOLERANCE_RATE);
   }
 
-  @Test
   /**
    * Tests the par spread curve sensitivity versus a finite difference computation.
    */
+  @Test
   public void parSpreadCurveSensitivity() {
     final SimpleParameterSensitivity psComputed = PSPSC.calculateSensitivity(FX_SWAP, MULTICURVES, MULTICURVES.getAllNames());
     final SimpleParameterSensitivity psFD = PSMQCS_FDC.calculateSensitivity(FX_SWAP, MULTICURVES);
-    AssertSensitivityObjects.assertEquals("CashDiscountingProviderMethod: presentValueCurveSensitivity ", psFD, psComputed, TOLERANCE_RATE_DELTA);
+    AssertSensitivityObjects.assertEquals("Forex swap: par spread curve sensitivity", psFD, psComputed,
+        TOLERANCE_RATE_DELTA);
   }
 
-  @Test
   /**
    * Tests the par spread curve sensitivity through the method and through the calculator.
    */
+  @Test
   public void parSpreadCurveSensitivityMethodVsCalculator() {
     final MulticurveSensitivity pvcsMethod = METHOD_FX_SWAP.parSpreadCurveSensitivity(FX_SWAP, MULTICURVES);
     final MulticurveSensitivity pvcsCalculator = FX_SWAP.accept(PSMQCSDC, MULTICURVES);

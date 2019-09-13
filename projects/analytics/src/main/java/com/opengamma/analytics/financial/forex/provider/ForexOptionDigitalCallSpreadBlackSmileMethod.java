@@ -178,9 +178,9 @@ public class ForexOptionDigitalCallSpreadBlackSmileMethod {
           smileMulticurves.getVolatilityAndSensitivities(optionDigital.getCurrency1(), optionDigital.getCurrency2(),
           optionDigital.getExpirationTime(), point.second, forward);
       final double[][] nodeWeight = volAndSensitivities.getBucketedSensitivities();
-      for (int loopexp = 0; loopexp < volatilityModel.getNumberExpiration(); loopexp++) {
-        for (int loopstrike = 0; loopstrike < volatilityModel.getNumberStrike(); loopstrike++) {
-          vega[loopexp][loopstrike] += nodeWeight[loopexp][loopstrike] * pointSensitivity.getVega().getMap().get(point);
+      for (int i = 0; i < volatilityModel.getNumberExpiration(); i++) {
+        for (int j = 0; j < volatilityModel.getNumberStrike(); j++) {
+          vega[i][j] += nodeWeight[i][j] * pointSensitivity.getVega().getMap().get(point);
         }
       }
     }
