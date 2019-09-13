@@ -44,7 +44,6 @@ import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionSource;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationBuilder;
-import com.opengamma.financial.analytics.model.pnl.DefaultPnLRequirementsGatherer;
 import com.opengamma.financial.analytics.model.pnl.PnLRequirementsGatherer;
 import com.opengamma.financial.analytics.riskfactors.DefaultRiskFactorsConfigurationProvider;
 import com.opengamma.financial.analytics.riskfactors.DefaultRiskFactorsGatherer;
@@ -75,20 +74,19 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   /**
    * The config source.
    * <p>
-   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface,
-   * with an implementation that is backed by a ConfigSource, allows the flexibility to source that data from an
-   * external system, or a more efficient storage mechanism, in the future.
+   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an
+   * implementation that is backed by a ConfigSource, allows the flexibility to source that data from an external system, or a more
+   * efficient storage mechanism, in the future.
    */
   @PropertyDefinition(validate = "notNull")
   private ConfigSource _configSource;
   /**
-   * The config master. This might only be a temporary addition; most services should be written to back onto
-   * this if necessary rather than data be accessed directly from the config master. This allows the flexibility
-   * to have data stored in another system or more efficient storage specific to that type.
+   * The config master. This might only be a temporary addition; most services should be written to back onto this if necessary rather than
+   * data be accessed directly from the config master. This allows the flexibility to have data stored in another system or more efficient
+   * storage specific to that type.
    * <p>
-   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which
-   * exposed both user maintained views from the persistent config master and temporary/short-lived views
-   * created programatically.
+   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which exposed both user
+   * maintained views from the persistent config master and temporary/short-lived views created programatically.
    */
   @PropertyDefinition
   private ConfigMaster _configMaster;
@@ -179,8 +177,8 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   private TempTargetRepository _tempTargetRepository;
 
   /**
-   * The slave view processor executing functions can make requests to. This might be the view processor that owns
-   * the context, but might be a different but compatible one.
+   * The slave view processor executing functions can make requests to. This might be the view processor that owns the context, but might be
+   * a different but compatible one.
    */
   @PropertyDefinition
   private ViewProcessor _viewProcessor;
@@ -203,42 +201,10 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
-    initPnlRequirementsGatherer();
     initThreadLocalServiceContext();
     initFunctionCompilationContext(repo, configuration);
     final OverrideOperationCompiler ooc = initOverrideOperationCompiler(repo, configuration);
     initFunctionExecutionContext(repo, configuration, ooc);
-  }
-
-  protected void initPnlRequirementsGatherer() {
-    _pnlRequirementsGatherer = new DefaultPnLRequirementsGatherer() {
-      {
-        addCurveCalculationConfig("USD", "DefaultTwoCurveUSDConfig");
-        addFXCurveCalculationConfig("USD", "DefaultTwoCurveUSDConfig");
-        addIRFuturesCurveCalculationConfig("USD", "DefaultTwoCurveUSDConfig");
-        addFXDiscountingCurveName("USD", "Forward3M");
-        addCurveCalculationConfig("EUR", "DefaultTwoCurveEURConfig");
-        addFXCurveCalculationConfig("EUR", "DefaultTwoCurveEURConfig");
-        addIRFuturesCurveCalculationConfig("EUR", "DefaultTwoCurveEURConfig");
-        addFXDiscountingCurveName("EUR", "Forward6M");
-        addCurveCalculationConfig("CAD", "DefaultTwoCurveCADConfig");
-        addFXCurveCalculationConfig("CAD", "DefaultTwoCurveCADConfig");
-        addIRFuturesCurveCalculationConfig("CAD", "DefaultTwoCurveCADConfig");
-        addFXDiscountingCurveName("CAD", "Forward3M");
-        addCurveCalculationConfig("AUD", "DefaultThreeCurveAUDConfig");
-        addFXCurveCalculationConfig("AUD", "DefaultThreeCurveAUDConfig");
-        addIRFuturesCurveCalculationConfig("AUD", "DefaultThreeCurveAUDConfig");
-        addFXDiscountingCurveName("AUD", "ForwardBasis3M");
-        addCurveCalculationConfig("CHF", "DefaultTwoCurveCHFConfig");
-        addFXCurveCalculationConfig("CHF", "DefaultTwoCurveCHFConfig");
-        addIRFuturesCurveCalculationConfig("CHF", "DefaultTwoCurveCHFConfig");
-        addFXDiscountingCurveName("CHF", "Forward6M");
-        addCurveCalculationConfig("GBP", "DefaultTwoCurveGBPConfig");
-        addFXCurveCalculationConfig("GBP", "DefaultTwoCurveGBPConfig");
-        addIRFuturesCurveCalculationConfig("GBP", "DefaultTwoCurveGBPConfig");
-        addFXDiscountingCurveName("USD", "Forward3M");
-      }
-    };
   }
 
   private void initThreadLocalServiceContext() {
@@ -321,7 +287,8 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
     repo.registerComponent(info, context);
   }
 
-  protected OverrideOperationCompiler initOverrideOperationCompiler(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+  protected OverrideOperationCompiler initOverrideOperationCompiler(final ComponentRepository repo,
+      final LinkedHashMap<String, String> configuration) {
     final OverrideOperationCompiler ooc = new MarketDataELCompiler();
     final ComponentInfo info = new ComponentInfo(OverrideOperationCompiler.class, getClassifier());
     repo.registerComponent(info, ooc);
@@ -402,9 +369,9 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   /**
    * Gets the config source.
    * <p>
-   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface,
-   * with an implementation that is backed by a ConfigSource, allows the flexibility to source that data from an
-   * external system, or a more efficient storage mechanism, in the future.
+   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an
+   * implementation that is backed by a ConfigSource, allows the flexibility to source that data from an external system, or a more
+   * efficient storage mechanism, in the future.
    * @return the value of the property, not null
    */
   public ConfigSource getConfigSource() {
@@ -414,9 +381,9 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   /**
    * Sets the config source.
    * <p>
-   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface,
-   * with an implementation that is backed by a ConfigSource, allows the flexibility to source that data from an
-   * external system, or a more efficient storage mechanism, in the future.
+   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an
+   * implementation that is backed by a ConfigSource, allows the flexibility to source that data from an external system, or a more
+   * efficient storage mechanism, in the future.
    * @param configSource  the new value of the property, not null
    */
   public void setConfigSource(ConfigSource configSource) {
@@ -427,9 +394,9 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   /**
    * Gets the the {@code configSource} property.
    * <p>
-   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface,
-   * with an implementation that is backed by a ConfigSource, allows the flexibility to source that data from an
-   * external system, or a more efficient storage mechanism, in the future.
+   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an
+   * implementation that is backed by a ConfigSource, allows the flexibility to source that data from an external system, or a more
+   * efficient storage mechanism, in the future.
    * @return the property, not null
    */
   public final Property<ConfigSource> configSource() {
@@ -438,13 +405,12 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the config master. This might only be a temporary addition; most services should be written to back onto
-   * this if necessary rather than data be accessed directly from the config master. This allows the flexibility
-   * to have data stored in another system or more efficient storage specific to that type.
+   * Gets the config master. This might only be a temporary addition; most services should be written to back onto this if necessary rather than
+   * data be accessed directly from the config master. This allows the flexibility to have data stored in another system or more efficient
+   * storage specific to that type.
    * <p>
-   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which
-   * exposed both user maintained views from the persistent config master and temporary/short-lived views
-   * created programatically.
+   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which exposed both user
+   * maintained views from the persistent config master and temporary/short-lived views created programatically.
    * @return the value of the property
    */
   public ConfigMaster getConfigMaster() {
@@ -452,13 +418,12 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   }
 
   /**
-   * Sets the config master. This might only be a temporary addition; most services should be written to back onto
-   * this if necessary rather than data be accessed directly from the config master. This allows the flexibility
-   * to have data stored in another system or more efficient storage specific to that type.
+   * Sets the config master. This might only be a temporary addition; most services should be written to back onto this if necessary rather than
+   * data be accessed directly from the config master. This allows the flexibility to have data stored in another system or more efficient
+   * storage specific to that type.
    * <p>
-   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which
-   * exposed both user maintained views from the persistent config master and temporary/short-lived views
-   * created programatically.
+   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which exposed both user
+   * maintained views from the persistent config master and temporary/short-lived views created programatically.
    * @param configMaster  the new value of the property
    */
   public void setConfigMaster(ConfigMaster configMaster) {
@@ -467,12 +432,11 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
 
   /**
    * Gets the the {@code configMaster} property.
-   * this if necessary rather than data be accessed directly from the config master. This allows the flexibility
-   * to have data stored in another system or more efficient storage specific to that type.
+   * data be accessed directly from the config master. This allows the flexibility to have data stored in another system or more efficient
+   * storage specific to that type.
    * <p>
-   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which
-   * exposed both user maintained views from the persistent config master and temporary/short-lived views
-   * created programatically.
+   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which exposed both user
+   * maintained views from the persistent config master and temporary/short-lived views created programatically.
    * @return the property, not null
    */
   public final Property<ConfigMaster> configMaster() {
@@ -917,8 +881,8 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the slave view processor executing functions can make requests to. This might be the view processor that owns
-   * the context, but might be a different but compatible one.
+   * Gets the slave view processor executing functions can make requests to. This might be the view processor that owns the context, but might be
+   * a different but compatible one.
    * @return the value of the property
    */
   public ViewProcessor getViewProcessor() {
@@ -926,8 +890,8 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   }
 
   /**
-   * Sets the slave view processor executing functions can make requests to. This might be the view processor that owns
-   * the context, but might be a different but compatible one.
+   * Sets the slave view processor executing functions can make requests to. This might be the view processor that owns the context, but might be
+   * a different but compatible one.
    * @param viewProcessor  the new value of the property
    */
   public void setViewProcessor(ViewProcessor viewProcessor) {
@@ -936,7 +900,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
 
   /**
    * Gets the the {@code viewProcessor} property.
-   * the context, but might be a different but compatible one.
+   * a different but compatible one.
    * @return the property, not null
    */
   public final Property<ViewProcessor> viewProcessor() {

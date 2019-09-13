@@ -15,7 +15,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Function repository configuration source for the functions contained in this package.
- * 
+ *
  * @deprecated Deprecated
  */
 @Deprecated
@@ -39,7 +39,7 @@ public class HorizonFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the number of days forward.
-     * 
+     *
      * @return The number of days to move forward
      */
     public int getDaysForward() {
@@ -48,7 +48,7 @@ public class HorizonFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the number of days to move forward.
-     * 
+     *
      * @param daysForward
      *          The number of days to move forward
      */
@@ -73,20 +73,6 @@ public class HorizonFunctions extends AbstractFunctionConfigurationBean {
 
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-    functions.add(functionConfiguration(FXDigitalCallSpreadBlackConstantSpreadThetaFunction.class));
-    functions.add(functionConfiguration(FXForwardConstantSpreadThetaFunction.class));
-    functions.add(functionConfiguration(FXForwardConstantSpreadSingleThetaFunction.class));
-    functions.add(functionConfiguration(FXOptionBlackConstantSpreadThetaFunction.class));
-    functions.add(functionConfiguration(FXOptionBlackForwardSlideThetaFunction.class));
-    functions.add(functionConfiguration(FXOptionBlackVolatilitySurfaceConstantSpreadThetaFunction.class));
-    functions.add(functionConfiguration(FXOptionBlackVolatilitySurfaceForwardSlideThetaFunction.class));
-    functions.add(functionConfiguration(FXOptionBlackYieldCurvesConstantSpreadThetaFunction.class));
-    functions.add(functionConfiguration(FXOptionBlackYieldCurvesForwardSlideThetaFunction.class));
-    functions.add(functionConfiguration(InterestRateFutureOptionConstantSpreadThetaFunction.class));
-    functions.add(functionConfiguration(InterestRateFutureConstantSpreadThetaFunction.class));
-    functions.add(functionConfiguration(InterestRateFutureOptionConstantSpreadPositionThetaFunction.class));
-    functions.add(functionConfiguration(SwapConstantSpreadThetaFunction.class));
-    functions.add(functionConfiguration(SwaptionConstantSpreadThetaFunction.class));
   }
 
 }

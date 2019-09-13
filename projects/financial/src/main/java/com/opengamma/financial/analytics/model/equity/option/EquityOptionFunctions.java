@@ -666,7 +666,6 @@ public class EquityOptionFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(EquityOptionBjerksundStenslandImpliedVolFunction.class));
     functions.add(functionConfiguration(EquityOptionPDEPresentValueFunction.class));
     functions.add(functionConfiguration(EquityOptionPDEScenarioPnLFunction.class));
-    functions.add(functionConfiguration(EquityOptionBlackFundingCurveSensitivitiesFunction.class));
     functions.add(functionConfiguration(EquityOptionBlackImpliedVolFunction.class));
     functions.add(functionConfiguration(EquityOptionBlackPresentValueFunction.class));
     functions.add(functionConfiguration(EquityOptionBlackRhoFunction.class));

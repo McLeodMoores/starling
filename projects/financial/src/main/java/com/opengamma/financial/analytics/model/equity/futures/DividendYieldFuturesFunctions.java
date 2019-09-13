@@ -90,8 +90,6 @@ public class DividendYieldFuturesFunctions extends AbstractFunctionConfiguration
         getCostOfCarryField(), getHtsResolutionKey()));
     functions.add(functionConfiguration(EquityDividendYieldValueRhoFuturesFunction.class, getClosingPriceField(),
         getCostOfCarryField(), getHtsResolutionKey()));
-    functions.add(functionConfiguration(EquityDividendYieldFuturesYCNSFunction.class, getClosingPriceField(),
-        getCostOfCarryField(), getHtsResolutionKey()));
     // TODO: add other package functions
   }
 

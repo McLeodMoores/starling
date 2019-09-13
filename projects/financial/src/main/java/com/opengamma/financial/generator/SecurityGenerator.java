@@ -20,15 +20,12 @@ import org.slf4j.LoggerFactory;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
-import org.threeten.bp.Period;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeFormatterBuilder;
 
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurve;
-import com.opengamma.analytics.math.linearalgebra.DecompositionFactory;
 import com.opengamma.core.config.ConfigSource;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesSource;
@@ -47,25 +44,17 @@ import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.function.FunctionInputsImpl;
 import com.opengamma.engine.marketdata.ExternalIdBundleResolver;
-import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.ircurve.ConfigDBInterpolatedYieldCurveDefinitionSource;
 import com.opengamma.financial.analytics.ircurve.ConfigDBInterpolatedYieldCurveSpecificationBuilder;
 import com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration;
-import com.opengamma.financial.analytics.ircurve.YieldCurveDataFunction;
-import com.opengamma.financial.analytics.ircurve.YieldCurveMarketDataFunction;
-import com.opengamma.financial.analytics.model.curve.forward.FXForwardCurveFromYieldCurvesFunction;
-import com.opengamma.financial.analytics.model.curve.interestrate.MultiYieldCurvePresentValueMethodFunction;
-import com.opengamma.financial.analytics.model.curve.interestrate.MultiYieldCurvePropertiesAndDefaults;
 import com.opengamma.financial.analytics.model.forex.FXUtils;
-import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesBundle;
 import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.currency.ConfigDBCurrencyMatrixSource;
 import com.opengamma.financial.currency.ConfigDBCurrencyPairsSource;
@@ -74,7 +63,6 @@ import com.opengamma.financial.currency.CurrencyPairs;
 import com.opengamma.financial.currency.CurrencyPairsResolver;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalScheme;
-import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.lambdava.functions.Function2;
 import com.opengamma.master.config.ConfigMaster;
@@ -91,7 +79,6 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.async.AsynchronousOperation;
 import com.opengamma.util.money.Currency;
-import com.opengamma.util.money.UnorderedCurrencyPair;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Pair;
 
@@ -401,104 +388,7 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
   }
 
   protected Double getApproxFXRate(final LocalDate date, final Pair<Currency, Currency> currencies) {
-    final Currency payCurrency;
-    final Currency receiveCurrency;
-    if (FXUtils.isInBaseQuoteOrder(currencies.getFirst(), currencies.getSecond())) {
-      payCurrency = currencies.getFirst();
-      receiveCurrency = currencies.getSecond();
-    } else {
-      payCurrency = currencies.getSecond();
-      receiveCurrency = currencies.getFirst();
-    }
-    final ExternalId spotRateIdentifier = getSpotRateIdentifier().execute(payCurrency, receiveCurrency);
-    final Pair<LocalDate, Double> spotRate = getHistoricalSource().getLatestDataPoint(MarketDataRequirementNames.MARKET_VALUE, spotRateIdentifier.toBundle(),
-        null);
-    if (spotRate == null) {
-      LOGGER.debug("No spot rate for {}", spotRateIdentifier);
-      return null;
-    }
-    LOGGER.debug("Got spot rate {} for {}", spotRate, spotRateIdentifier);
-    final FunctionExecutionContext execContext = createFunctionExecutionContext(spotRate.getFirst());
-    final FunctionCompilationContext compContext = createFunctionCompilationContext();
-    final CompiledFunctionDefinition payYieldCurveSpecificationFunction = createFunction(compContext, execContext,
-        new YieldCurveDataFunction(payCurrency, getCurrencyCurveName()));
-    final CompiledFunctionDefinition payYieldCurveMarketDataFunction = createFunction(compContext, execContext,
-        new YieldCurveMarketDataFunction(payCurrency, getCurrencyCurveName()));
-    final CompiledFunctionDefinition receiveYieldCurveSpecificationFunction = createFunction(compContext, execContext,
-        new YieldCurveDataFunction(receiveCurrency, getCurrencyCurveName()));
-    final CompiledFunctionDefinition receiveYieldCurveMarketDataFunction = createFunction(compContext, execContext,
-        new YieldCurveMarketDataFunction(receiveCurrency, getCurrencyCurveName()));
-    final CompiledFunctionDefinition yieldCurveFunction = createFunction(compContext, execContext, new MultiYieldCurvePresentValueMethodFunction());
-    final CompiledFunctionDefinition fxForwardCurveFromYieldCurveFunction = createFunction(compContext, execContext,
-        new FXForwardCurveFromYieldCurvesFunction());
-    ComputationTarget target;
-    // PAY
-    target = new ComputationTarget(ComputationTargetType.CURRENCY, payCurrency);
-    // PAY - YieldCurveMarketDataFunction
-    final ComputedValue[] payCurveDataRequirements = findMarketData(compContext, payYieldCurveMarketDataFunction.getRequirements(compContext, target, null));
-    if (payCurveDataRequirements == null) {
-      LOGGER.debug("Missing market data for curve on {}", payCurrency);
-      return null;
-    }
-    final ComputedValue payCurveMarketData = execute(execContext, payYieldCurveMarketDataFunction, target,
-        new ValueRequirement(ValueRequirementNames.YIELD_CURVE_MARKET_DATA, target.toSpecification()), payCurveDataRequirements);
-    // PAY - YieldCurveSpecificationFunction
-    final ComputedValue payCurveSpec = execute(execContext, payYieldCurveSpecificationFunction, target,
-        new ValueRequirement(ValueRequirementNames.YIELD_CURVE_SPEC, target.toSpecification(), ValueProperties.none()), payCurveMarketData);
-    // PAY - MultiYieldCurvePresentValueMethodFunction
-    final ComputedValue payHtsConversion = new ComputedValue(
-        new ValueSpecification(ValueRequirementNames.YIELD_CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES, target.toSpecification(), ValueProperties
-            .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, getCurveCalculationConfig(payCurrency)).with(ValuePropertyNames.FUNCTION, "").get()),
-        new HistoricalTimeSeriesBundle());
-    final ComputedValue payCurve = execute(execContext, yieldCurveFunction, target,
-        new ValueRequirement(ValueRequirementNames.YIELD_CURVE, target.toSpecification(),
-            ValueProperties.with(ValuePropertyNames.CURVE, getCurrencyCurveName())
-                .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, getCurveCalculationConfig(payCurrency))
-                .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE, "0.0001")
-                .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE, "0.0001")
-                .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_ROOT_FINDER_MAX_ITERATIONS, "1000")
-                .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_DECOMPOSITION, DecompositionFactory.SV_COLT_NAME)
-                .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_USE_FINITE_DIFFERENCE, "false").get()),
-        payCurveSpec, payCurveMarketData, payHtsConversion);
-    // RECEIVE
-    target = new ComputationTarget(ComputationTargetType.CURRENCY, receiveCurrency);
-    // RECEIVE - YieldCurveMarketDataFunction
-    final ComputedValue[] receiveCurveDataRequirements = findMarketData(compContext,
-        receiveYieldCurveMarketDataFunction.getRequirements(compContext, target, null));
-    if (receiveCurveDataRequirements == null) {
-      LOGGER.debug("Missing market data for curve on {}", receiveCurrency);
-      return null;
-    }
-    final ComputedValue receiveCurveMarketData = execute(execContext, receiveYieldCurveMarketDataFunction, target,
-        new ValueRequirement(ValueRequirementNames.YIELD_CURVE_MARKET_DATA, target.toSpecification()), receiveCurveDataRequirements);
-    // RECEIVE - YieldCurveSpecificationFunction
-    final ComputedValue receiveCurveSpec = execute(execContext, receiveYieldCurveSpecificationFunction, target,
-        new ValueRequirement(ValueRequirementNames.YIELD_CURVE_SPEC, target.toSpecification(), ValueProperties.none()), receiveCurveMarketData);
-    // RECEIVE - MultiYieldCurvePresentValueMethodFunction
-    final ComputedValue receiveHtsConversion = new ComputedValue(
-        new ValueSpecification(ValueRequirementNames.YIELD_CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES, target.toSpecification(), ValueProperties
-            .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, getCurveCalculationConfig(receiveCurrency)).with(ValuePropertyNames.FUNCTION, "").get()),
-        new HistoricalTimeSeriesBundle());
-    final ComputedValue receiveCurve = execute(execContext, yieldCurveFunction, target,
-        new ValueRequirement(ValueRequirementNames.YIELD_CURVE, target.toSpecification(),
-            ValueProperties.with(ValuePropertyNames.CURVE, getCurrencyCurveName())
-                .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, getCurveCalculationConfig(receiveCurrency))
-                .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE, "0.0001")
-                .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE, "0.0001")
-                .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_ROOT_FINDER_MAX_ITERATIONS, "1000")
-                .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_DECOMPOSITION, DecompositionFactory.SV_COLT_NAME)
-                .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_USE_FINITE_DIFFERENCE, "false").get()),
-        receiveCurveSpec, receiveCurveMarketData, receiveHtsConversion);
-    // FXForwardCurveFromYieldCurveFunction
-    target = new ComputationTarget(ComputationTargetType.UNORDERED_CURRENCY_PAIR, UnorderedCurrencyPair.of(payCurrency, receiveCurrency));
-    final ForwardCurve fxForwardCurve = (ForwardCurve) execute(execContext, fxForwardCurveFromYieldCurveFunction, target,
-        new ValueRequirement(
-            ValueRequirementNames.FORWARD_CURVE, target.toSpecification(), ValueProperties.with(ValuePropertyNames.CURVE, getCurrencyCurveName()).get()),
-        payCurve, receiveCurve,
-        new ComputedValue(ValueSpecification.of(ValueRequirementNames.SPOT_RATE, ComputationTargetType.PRIMITIVE,
-            UniqueId.of(spotRateIdentifier.getScheme().getName(), spotRateIdentifier.getValue()),
-            ValueProperties.with(ValuePropertyNames.FUNCTION, "SPOT").get()), spotRate.getSecond())).getValue();
-    double rate = fxForwardCurve.getForward(Period.between(spotRate.getFirst(), date).getDays() / YEAR_LENGTH);
+    double rate = 1;
     if (!FXUtils.isInBaseQuoteOrder(currencies.getFirst(), currencies.getSecond())) {
       rate = 1 / rate;
     }

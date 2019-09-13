@@ -18,7 +18,6 @@ import com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues
 import com.opengamma.financial.analytics.model.forex.FXOptionsCalculationMethodDefaults;
 import com.opengamma.financial.analytics.model.forex.option.black.BlackFunctions;
 import com.opengamma.financial.analytics.model.forex.option.callspreadblack.CallSpreadBlackFunctions;
-import com.opengamma.financial.analytics.model.forex.option.callspreadblack.FXDigitalCallSpreadBlackFunction;
 import com.opengamma.financial.analytics.model.forex.option.localvol.LocalVolFunctions;
 import com.opengamma.financial.analytics.model.futureoption.BarrierOptionDistanceDefaults;
 import com.opengamma.financial.analytics.model.futureoption.BarrierOptionDistanceFunction;
@@ -88,7 +87,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(FXOptionSpotRateFunction.class));
     functions.add(functionConfiguration(FXBarrierOptionDistanceFunction.class));
     functions.add(functionConfiguration(FXOptionsCalculationMethodDefaults.class, CalculationPropertyNamesAndValues.BLACK_METHOD,
-        FXDigitalCallSpreadBlackFunction.CALL_SPREAD_BLACK_METHOD));
+        CalculationPropertyNamesAndValues.CALL_SPREAD_BLACK_METHOD));
   }
 
   /**

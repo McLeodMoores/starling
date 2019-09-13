@@ -29,7 +29,6 @@ import com.opengamma.financial.analytics.model.cds.CDSFunctions;
 import com.opengamma.financial.analytics.model.credit.CreditFunctions;
 import com.opengamma.financial.analytics.model.curve.CurveFunctions;
 import com.opengamma.financial.analytics.model.curve.forward.ForwardFunctions;
-import com.opengamma.financial.analytics.model.curve.interestrate.InterestRateFunctions;
 import com.opengamma.financial.analytics.model.discounting.DiscountingPricingFunctions;
 import com.opengamma.financial.analytics.model.equity.EquityFunctions;
 import com.opengamma.financial.analytics.model.forex.ForexFunctions;
@@ -248,10 +247,6 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
     return FXForwardPricingFunctions.instance();
   }
 
-  protected FunctionConfigurationSource yieldCurveFunctionConfiguration() {
-    return InterestRateFunctions.instance();
-  }
-
   protected FunctionConfigurationSource forwardFunctionConfiguration() {
     return ForwardFunctions.instance();
   }
@@ -376,7 +371,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
         equityFunctionConfiguration(), forexFunctionConfiguration(), futureFunctionConfiguration(), futureOptionFunctionConfiguration(),
         horizonFunctionConfiguration(), irFutureOptionFunctionConfiguration(), pnlFunctionConfiguration(), riskFactorFunctionConfiguration(),
         sensitivitiesFunctionConfiguration(), simpleInstrumentFunctionConfiguration(), swaptionFunctionConfiguration(), varFunctionConfiguration(),
-        volatilityFunctionConfiguration(), yieldCurveFunctionConfiguration(), forwardFunctionConfiguration(), futureCurveFunctionConfiguration(),
+        volatilityFunctionConfiguration(), forwardFunctionConfiguration(), futureCurveFunctionConfiguration(),
         discountingFunctionConfiguration(), hullWhitePricingFunctionConfiguration(), fxPricingFunctionConfiguration(), blackDiscountingFunctionConfiguration(),
         sabrDiscountingFunctionConfiguration(), g2ppPricingFunctionConfiguration(), timeSeriesFunctionConfiguration(), totalReturnSwapFunctionConfiguration(),
         isdaModelFunctionConfiguration());

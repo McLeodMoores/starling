@@ -52,7 +52,7 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Function repository configuration source for the deprecated functions contained in this package.
-   * 
+   *
    * @deprecated Deprecated
    */
   @Deprecated
@@ -421,17 +421,6 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
       functions.add(functionConfiguration(FXForwardPnLDefaults.class, args));
     }
 
-    protected void addFXOptionBlackPnLCurveDefaults(final List<FunctionConfiguration> functions) {
-      final String[] args = new String[getPerCurrencyInfo().size() * 3];
-      int i = 0;
-      for (final Map.Entry<String, CurrencyInfo> e : getPerCurrencyInfo().entrySet()) {
-        args[i++] = e.getKey();
-        args[i++] = e.getValue().getCurveConfiguration();
-        args[i++] = e.getValue().getDiscountingCurve();
-      }
-      functions.add(functionConfiguration(FXOptionBlackPnLCurveDefaults.class, args));
-    }
-
     protected void addFXOptionBlackPnLSurfaceDefaults(final List<FunctionConfiguration> functions) {
       final String[] args = new String[3 + getPerCurrencyPairInfo().size() * 3];
       int i = 0;
@@ -520,7 +509,7 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       functions.add(functionConfiguration(EquityPnLDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName(),
           getReturnCalculatorName()));
-      functions.add(functionConfiguration(EquitySecurityPnLDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(), 
+      functions.add(functionConfiguration(EquitySecurityPnLDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(),
           getSamplingCalculatorName(), getReturnCalculatorName()));
       functions.add(functionConfiguration(FXOptionBlackPnLDefaults.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName()));
       functions.add(functionConfiguration(PositionPnLDefaults.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName()));
@@ -540,7 +529,6 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
       if (!getPerCurrencyInfo().isEmpty()) {
         addBondFutureOptionBlackYieldCurveNodePnLDefaults(functions);
         addFXForwardPnLDefaults(functions);
-        addFXOptionBlackPnLCurveDefaults(functions);
         addInterestRateFutureOptionBlackYieldCurveNodePnLDefaults(functions);
         addInterestRateFutureYieldCurveNodePnLDefaults(functions);
         addSwaptionBlackYieldCurveNodePnLDefaults(functions);
@@ -556,7 +544,6 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
 
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-    functions.add(functionConfiguration(BondFutureOptionBlackYieldCurveNodePnLFunction.class));
     functions.add(functionConfiguration(CreditDefaultSwapIndexCS01PnLFunction.class));
     functions.add(functionConfiguration(CreditDefaultSwapOptionCS01PnLFunction.class));
     functions.add(functionConfiguration(CreditInstrumentCS01PnLFunction.class));
@@ -565,19 +552,12 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(FXForwardCurrencyExposurePnLFunction.class));
     functions.add(functionConfiguration(FXForwardYieldCurvesPnLFunction.class));
     functions.add(functionConfiguration(FXForwardYieldCurvePnLFunction.class));
-    functions.add(functionConfiguration(FXForwardYieldCurveNodePnLFunction.class));
-    functions.add(functionConfiguration(FXOptionBlackDeltaPnLFunction.class));
-    functions.add(functionConfiguration(FXOptionBlackVegaPnLFunction.class));
-    functions.add(functionConfiguration(InterestRateFutureOptionBlackYieldCurveNodePnLFunction.class));
-    functions.add(functionConfiguration(InterestRateFutureYieldCurveNodePnLFunction.class));
     functions.add(functionConfiguration(PortfolioExchangeTradedDailyPnLFunction.Impl.class));
     functions.add(functionConfiguration(PortfolioExchangeTradedPnLFunction.class));
     functions.add(functionConfiguration(PositionExchangeTradedPnLFunction.class));
     functions.add(functionConfiguration(PositionPnLFunction.class));
-    functions.add(functionConfiguration(SwaptionBlackYieldCurveNodePnLFunction.class));
-    functions.add(functionConfiguration(YieldCurveNodePnLFunction.class));
     functions
-        .add(functionConfiguration(AggregationDefaultPropertyFunction.class, ValueRequirementNames.DAILY_PNL, MissingInputsFunction.AGGREGATION_STYLE_FULL));
+    .add(functionConfiguration(AggregationDefaultPropertyFunction.class, ValueRequirementNames.DAILY_PNL, MissingInputsFunction.AGGREGATION_STYLE_FULL));
     functions.add(functionConfiguration(PnLPeriodTranslationFunction.class, ValueRequirementNames.PNL_SERIES));
     functions.add(functionConfiguration(PnLPeriodTranslationFunction.class, ValueRequirementNames.YIELD_CURVE_PNL_SERIES));
     functions.add(functionConfiguration(PnLPeriodTranslationFunction.class, ValueRequirementNames.CURVE_PNL_SERIES));

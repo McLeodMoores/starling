@@ -405,75 +405,11 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
     functions.add(functionConfiguration(SABRNoExtrapolationVegaDefaults.class, args.toArray(new String[args.size()])));
   }
 
-  /**
-   * Adds defaults for SABR calculations with right extrapolation.
-   *
-   * @param functions
-   *          The functions
-   */
-  protected void addRightExtrapolationDefaults(final List<FunctionConfiguration> functions) {
-    final List<String> args = new ArrayList<>();
-    args.add(getFittingMethod());
-    args.add(Double.toString(getCutOff()));
-    args.add(Double.toString(getMu()));
-    for (final Map.Entry<String, CurrencyInfo> e : getPerCurrencyInfo().entrySet()) {
-      if (e.getValue().isCubeNameParameterSet()) {
-        args.add(e.getKey());
-        args.add(e.getValue().getCurveConfiguration());
-        args.add(e.getValue().getCubeName());
-      } else {
-        args.add(e.getKey());
-        args.add(e.getValue().getCurveConfiguration());
-        args.add(e.getValue().getCubeDefinitionName());
-        args.add(e.getValue().getCubeSpecificationName());
-        args.add(e.getValue().getSurfaceDefinitionName());
-        args.add(e.getValue().getSurfaceSpecificationName());
-      }
-    }
-    functions.add(functionConfiguration(SABRRightExtrapolationDefaults.class, args.toArray(new String[args.size()])));
-  }
-
-  /**
-   * Adds defaults for the calculation of vega using SABR with right extrapolation.
-   *
-   * @param functions
-   *          The functions
-   */
-  protected void addRightExtrapolationVegaDefaults(final List<FunctionConfiguration> functions) {
-    final List<String> args = new ArrayList<>();
-    args.add(getFittingMethod());
-    args.add(Double.toString(getCutOff()));
-    args.add(Double.toString(getMu()));
-    args.add(getXInterpolator());
-    args.add(getXLeftExtrapolator());
-    args.add(getXRightExtrapolator());
-    args.add(getYInterpolator());
-    args.add(getYLeftExtrapolator());
-    args.add(getYRightExtrapolator());
-    for (final Map.Entry<String, CurrencyInfo> e : getPerCurrencyInfo().entrySet()) {
-      if (e.getValue().isCubeNameParameterSet()) {
-        args.add(e.getKey());
-        args.add(e.getValue().getCurveConfiguration());
-        args.add(e.getValue().getCubeName());
-      } else {
-        args.add(e.getKey());
-        args.add(e.getValue().getCurveConfiguration());
-        args.add(e.getValue().getCubeDefinitionName());
-        args.add(e.getValue().getCubeSpecificationName());
-        args.add(e.getValue().getSurfaceDefinitionName());
-        args.add(e.getValue().getSurfaceSpecificationName());
-      }
-    }
-    functions.add(functionConfiguration(SABRRightExtrapolationVegaDefaults.class, args.toArray(new String[args.size()])));
-  }
-
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
     if (!getPerCurrencyInfo().isEmpty()) {
       addNoExtrapolationDefaults(functions);
       addNoExtrapolationVegaDefaults(functions);
-      addRightExtrapolationDefaults(functions);
-      addRightExtrapolationVegaDefaults(functions);
     }
   }
 
