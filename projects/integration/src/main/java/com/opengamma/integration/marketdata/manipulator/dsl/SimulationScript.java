@@ -82,8 +82,8 @@ public abstract class SimulationScript extends Script {
       }
       final Object varValue = binding.getVariable(varName);
       if (!varType.isInstance(varValue)) {
-        throw new IllegalArgumentException("Parameter " + varName + " has type " + varValue.getClass().getName() + ", "
-            + "required type is " + varType.getName());
+        throw new IllegalArgumentException(
+            "Parameter " + varName + " has type " + varValue.getClass().getName() + ", " + "required type is " + varType.getName());
       }
     }
   }
@@ -165,19 +165,6 @@ public abstract class SimulationScript extends Script {
    */
   public void curve(final Closure<?> body) {
     final DslYieldCurveSelectorBuilder selector = new DslYieldCurveSelectorBuilder(_scenario);
-    body.setDelegate(selector);
-    body.setResolveStrategy(Closure.DELEGATE_FIRST);
-    body.call();
-  }
-
-  /**
-   * Defines a method in the DSL that takes a closure which defines how to select and transform a curve.
-   *
-   * @param body
-   *          The block that defines the selection and transformation
-   */
-  public void curveData(final Closure<?> body) {
-    final DslYieldCurveDataSelectorBuilder selector = new DslYieldCurveDataSelectorBuilder(_scenario);
     body.setDelegate(selector);
     body.setResolveStrategy(Closure.DELEGATE_FIRST);
     body.call();

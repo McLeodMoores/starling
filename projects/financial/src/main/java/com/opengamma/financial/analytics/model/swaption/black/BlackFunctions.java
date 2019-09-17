@@ -19,6 +19,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Function repository configuration source for the functions contained in this package.
+ * 
  * @deprecated The functions that are added are deprecated
  */
 @Deprecated
@@ -136,7 +137,6 @@ public class BlackFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(SwaptionBlackPresentValueFunction.class));
     functions.add(functionConfiguration(SwaptionBlackVolatilitySensitivityFunction.class));
     functions.add(functionConfiguration(SwaptionBlackPV01Function.class));
-    functions.add(functionConfiguration(SwaptionBlackYieldCurveNodeSensitivitiesFunction.class));
     functions.add(functionConfiguration(SwaptionBlackImpliedVolatilityFunction.class));
     functions.add(functionConfiguration(SwaptionBlackTheoreticaForwardDeltaFunction.class));
     functions.add(functionConfiguration(SwaptionBlackTheoreticalForwardGammaFunction.class));

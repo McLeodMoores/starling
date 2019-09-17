@@ -10,7 +10,6 @@ import java.util.Map;
 
 import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.financial.analytics.fxforwardcurve.FXForwardCurveConfigPopulator;
-import com.opengamma.financial.analytics.ircurve.YieldCurveConfigPopulator;
 import com.opengamma.financial.analytics.volatility.surface.FXOptionVolatilitySurfaceConfigPopulator;
 import com.opengamma.financial.analytics.volatility.surface.SwaptionVolatilitySurfaceConfigPopulator;
 import com.opengamma.financial.tool.ToolContext;
@@ -29,13 +28,14 @@ public class ExampleCurveAndSurfaceDefinitionLoader extends AbstractTool<ToolCon
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     new ExampleCurveAndSurfaceDefinitionLoader().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
     final ConfigMaster configMaster = getToolContext().getConfigMaster();
@@ -49,7 +49,6 @@ public class ExampleCurveAndSurfaceDefinitionLoader extends AbstractTool<ToolCon
     }
     final Map<UnorderedCurrencyPair, Triple<String, String, String>> fxForward = new HashMap<>();
     fxForward.put(UnorderedCurrencyPair.of(Currency.USD, Currency.JPY), Triple.of("DEFAULT", "JPY", "JPY"));
-    new YieldCurveConfigPopulator(configMaster, false);
     FXOptionVolatilitySurfaceConfigPopulator.populateVolatilitySurfaceConfigMaster(configMaster, fxSurfaces);
     SwaptionVolatilitySurfaceConfigPopulator.populateVolatilitySurfaceConfigMaster(configMaster, swaptionSurfaces);
     FXForwardCurveConfigPopulator.populateFXForwardCurveConfigMaster(configMaster, fxForward);

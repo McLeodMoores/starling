@@ -9,8 +9,6 @@ import java.net.URI;
 
 import org.fudgemsg.FudgeContext;
 
-import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionMaster;
-import com.opengamma.financial.analytics.ircurve.rest.RemoteInterpolatedYieldCurveDefinitionMaster;
 import com.opengamma.financial.convention.ConventionBundleMaster;
 import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
 import com.opengamma.master.config.ConfigMaster;
@@ -30,10 +28,9 @@ import com.opengamma.util.GUIDGenerator;
 import com.opengamma.util.rest.FudgeRestClient;
 
 /**
- * Provides access to a remote representation of a "client". A client is defined as a set of coherent
- * and related masters. These might be the set of masters corresponding to the "shared" data used by
- * all users of an OpenGamma instance, or the masters containing data specific to a single user or
- * perhaps a group of users.
+ * Provides access to a remote representation of a "client". A client is defined as a set of coherent and related masters. These might be the set of masters
+ * corresponding to the "shared" data used by all users of an OpenGamma instance, or the masters containing data specific to a single user or perhaps a group of
+ * users.
  */
 public class RemoteClient {
 
@@ -100,7 +97,7 @@ public class RemoteClient {
 
     @Override
     public URI getPortfolioMaster() {
-      return (_portfolioMaster != null) ? _portfolioMaster : super.getPortfolioMaster();
+      return _portfolioMaster != null ? _portfolioMaster : super.getPortfolioMaster();
     }
 
     public void setPositionMaster(final URI positionMaster) {
@@ -109,7 +106,7 @@ public class RemoteClient {
 
     @Override
     public URI getPositionMaster() {
-      return (_positionMaster != null) ? _positionMaster : super.getPositionMaster();
+      return _positionMaster != null ? _positionMaster : super.getPositionMaster();
     }
 
     public void setSecurityMaster(final URI securityMaster) {
@@ -118,7 +115,7 @@ public class RemoteClient {
 
     @Override
     public URI getSecurityMaster() {
-      return (_securityMaster != null) ? _securityMaster : super.getSecurityMaster();
+      return _securityMaster != null ? _securityMaster : super.getSecurityMaster();
     }
 
     public void setConfigMaster(final URI configMaster) {
@@ -127,7 +124,7 @@ public class RemoteClient {
 
     @Override
     public URI getConfigMaster() {
-      return (_configMaster != null) ? _configMaster : super.getConfigMaster();
+      return _configMaster != null ? _configMaster : super.getConfigMaster();
     }
 
     public void setInterpolatedYieldCurveDefinitionMaster(final URI interpolatedYieldCurveDefinitionMaster) {
@@ -136,7 +133,7 @@ public class RemoteClient {
 
     @Override
     public URI getInterpolatedYieldCurveDefinitionMaster() {
-      return (_interpolatedYieldCurveDefinitionMaster != null) ? _interpolatedYieldCurveDefinitionMaster : super.getInterpolatedYieldCurveDefinitionMaster();
+      return _interpolatedYieldCurveDefinitionMaster != null ? _interpolatedYieldCurveDefinitionMaster : super.getInterpolatedYieldCurveDefinitionMaster();
     }
 
     public void setHeartbeat(final URI heartbeat) {
@@ -145,7 +142,7 @@ public class RemoteClient {
 
     @Override
     public URI getHeartbeat() {
-      return (_heartbeat != null) ? _heartbeat : super.getHeartbeat();
+      return _heartbeat != null ? _heartbeat : super.getHeartbeat();
     }
 
     public void setMarketDataSnapshotMaster(final URI marketDataSnapshotMaster) {
@@ -154,7 +151,7 @@ public class RemoteClient {
 
     @Override
     public URI getMarketDataSnapshotMaster() {
-      return (_marketDataSnapshotMaster != null) ? _marketDataSnapshotMaster : super.getMarketDataSnapshotMaster();
+      return _marketDataSnapshotMaster != null ? _marketDataSnapshotMaster : super.getMarketDataSnapshotMaster();
     }
 
     public void setHistoricalTimeSeriesMaster(final URI historicalTimeSeriesMaster) {
@@ -163,7 +160,7 @@ public class RemoteClient {
 
     @Override
     public URI getHistoricalTimeSeriesMaster() {
-      return (_historicalTimeSeriesMaster != null) ? _historicalTimeSeriesMaster : super.getHistoricalTimeSeriesMaster();
+      return _historicalTimeSeriesMaster != null ? _historicalTimeSeriesMaster : super.getHistoricalTimeSeriesMaster();
     }
   }
 
@@ -224,7 +221,6 @@ public class RemoteClient {
   private volatile PositionMaster _positionMaster;
   private volatile SecurityMaster _securityMaster;
   private volatile ConfigMaster _configMaster;
-  private volatile InterpolatedYieldCurveDefinitionMaster _interpolatedYieldCurveDefinitionMaster;
   private volatile MarketDataSnapshotMaster _marketDataSnapshotMaster;
   private volatile HistoricalTimeSeriesMaster _historicalTimeSeriesMaster;
   // TODO [PLAT-637] We're using the in memory job as a hack
@@ -267,13 +263,6 @@ public class RemoteClient {
     return _configMaster;
   }
 
-  public InterpolatedYieldCurveDefinitionMaster getInterpolatedYieldCurveDefinitionMaster() {
-    if (_interpolatedYieldCurveDefinitionMaster == null) {
-      _interpolatedYieldCurveDefinitionMaster = new RemoteInterpolatedYieldCurveDefinitionMaster(_targetProvider.getInterpolatedYieldCurveDefinitionMaster());
-    }
-    return _interpolatedYieldCurveDefinitionMaster;
-  }
-
   public MarketDataSnapshotMaster getMarketDataSnapshotMaster() {
     if (_marketDataSnapshotMaster == null) {
       _marketDataSnapshotMaster = new RemoteMarketDataSnapshotMaster(_targetProvider.getMarketDataSnapshotMaster());
@@ -299,32 +288,29 @@ public class RemoteClient {
   }
 
   /**
-   * Creates a heartbeat sender. If nothing has happened for a timeout duration, that would result in messages being sent to the server,
-   * the heartbeat signal should be sent as a keep-alive.
+   * Creates a heartbeat sender. If nothing has happened for a timeout duration, that would result in messages being sent to the server, the heartbeat signal
+   * should be sent as a keep-alive.
    *
    * @return a runnable sender. Each invocation of {@link Runnable#run} will send a heartbeat signal
    */
   public Runnable createHeartbeatSender() {
     final FudgeRestClient client = FudgeRestClient.create();
     final URI uri = _targetProvider.getHeartbeat();
-    return new Runnable() {
-      @Override
-      public void run() {
-        client.accessFudge(uri).post();
-      }
-    };
+    return () -> client.accessFudge(uri).post();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * A hack to allow the Excel side to get hold of a RemoteClient without it having to be aware of the URI. Eventually
-   * we will need a UserMaster to host users and their clients, and the entry point for Excel will be a
-   * RemoteUserMaster.
+   * A hack to allow the Excel side to get hold of a RemoteClient without it having to be aware of the URI. Eventually we will need a UserMaster to host users
+   * and their clients, and the entry point for Excel will be a RemoteUserMaster.
    *
-   * @param fudgeContext  the Fudge context, not null
-   * @param baseUserManagerUri  base URI for the user manager, does not include "users/{user}", not null
-   * @param userName  the username
-   * @return  a {@link RemoteClient} instance for the new client
+   * @param fudgeContext
+   *          the Fudge context, not null
+   * @param baseUserManagerUri
+   *          base URI for the user manager, does not include "users/{user}", not null
+   * @param userName
+   *          the username
+   * @return a {@link RemoteClient} instance for the new client
    */
   public static RemoteClient forNewClient(final FudgeContext fudgeContext, final URI baseUserManagerUri, final String userName) {
     final String clientName = GUIDGenerator.generate().toString();

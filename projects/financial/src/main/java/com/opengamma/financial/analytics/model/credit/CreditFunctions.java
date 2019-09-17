@@ -51,14 +51,14 @@ import com.opengamma.financial.analytics.model.credit.isda.cdx.ISDACDXAsSingleNa
 import com.opengamma.financial.analytics.model.credit.isda.cdx.ISDACDXAsSingleNameRR01Function;
 import com.opengamma.financial.analytics.model.credit.isdanew.ISDACompliantCDSFunction;
 import com.opengamma.financial.analytics.model.credit.isdanew.ISDACompliantCreditCurveFunction;
-import com.opengamma.financial.analytics.model.credit.isdanew.ISDACompliantYieldCurveFunction;
 import com.opengamma.financial.property.DefaultPropertyFunction.PriorityClass;
 import com.opengamma.util.ArgumentChecker;
 
 /**
  * Function repository configuration source for the functions contained in this package.
- * @deprecated Deprecated
-s */
+ * 
+ * @deprecated Deprecated s
+ */
 @Deprecated
 public class CreditFunctions extends AbstractFunctionConfigurationBean {
 
@@ -389,12 +389,9 @@ public class CreditFunctions extends AbstractFunctionConfigurationBean {
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
     functions.add(functionConfiguration(ISDACreditSpreadCurveFunction.class));
     functions.add(functionConfiguration(ISDACreditSpreadCurveShiftFunction.class));
-    functions.add(functionConfiguration(ISDAYieldCurveFunction.class));
     functions.add(functionConfiguration(ISDACDSHazardRateCurveFunction.class));
 
     functions.add(functionConfiguration(ISDACDXAsSingleNameHazardRateCurveFunction.class));
-    functions.add(functionConfiguration(BucketedSpreadCurveFunction.class));
-    functions.add(functionConfiguration(ISDACompliantCreditCurveFunction.class));
     functions.add(functionConfiguration(StandardVanillaParallelCS01CDSFunction.class));
     functions.add(functionConfiguration(StandardVanillaBucketedCS01CDSFunction.class));
     functions.add(functionConfiguration(StandardVanillaParallelGammaCS01CDSFunction.class));
@@ -421,10 +418,8 @@ public class CreditFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(ISDACDXAsSingleNameParSpreadFunction.class));
 
     functions.add(functionConfiguration(ISDACompliantCDSFunction.class));
-    functions.add(functionConfiguration(ISDACompliantYieldCurveFunction.class));
     functions.add(functionConfiguration(ISDACompliantCreditCurveFunction.class));
 
-    functions.add(functionConfiguration(JumpToDefaultPortfolioNodeFunction.class));
   }
 
 }

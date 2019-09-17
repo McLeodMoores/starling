@@ -20,6 +20,7 @@ import com.opengamma.financial.analytics.model.horizon.FXOptionBlackYieldCurvesF
 
 /**
  * Function repository configuration source for the functions contained in this package.
+ * 
  * @deprecated This class adds deprecated functions
  */
 @Deprecated
@@ -39,7 +40,7 @@ public class BlackFunctions extends AbstractFunctionConfigurationBean {
    */
   public static class Defaults extends AbstractFunctionConfigurationBean {
 
-    private double _overhedge; /* = 0.0;*/
+    private double _overhedge; /* = 0.0; */
     private double _relativeStrikeSmoothing = 0.001;
 
     public void setOverhedge(final double overhedge) {
@@ -103,7 +104,6 @@ public class BlackFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(FXOptionBlackVolatilitySurfaceConstantSpreadThetaFunction.class));
     functions.add(functionConfiguration(FXOptionBlackVolatilitySurfaceForwardSlideThetaFunction.class));
     functions.add(functionConfiguration(FXOptionBlackVommaFunction.class));
-    functions.add(functionConfiguration(FXOptionBlackYCNSFunction.class));
     functions.add(functionConfiguration(FXOptionBlackYieldCurvesConstantSpreadThetaFunction.class));
     functions.add(functionConfiguration(FXOptionBlackYieldCurvesForwardSlideThetaFunction.class));
     functions.add(functionConfiguration(FXOptionVannaVolgaPresentValueFunction.class));

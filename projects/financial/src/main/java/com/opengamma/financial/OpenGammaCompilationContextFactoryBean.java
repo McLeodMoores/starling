@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial;
@@ -17,8 +17,6 @@ import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.ComputationTargetResolver;
 import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.function.PortfolioStructure;
-import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionSource;
-import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationBuilder;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
 import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
@@ -35,8 +33,6 @@ public class OpenGammaCompilationContextFactoryBean extends SingletonFactoryBean
   private RegionSource _regionSource;
   private LegalEntitySource _legalEntitySource;
   private ConventionBundleSource _conventionBundleSource;
-  private InterpolatedYieldCurveDefinitionSource _interpolatedYieldCurveDefinitionSource;
-  private InterpolatedYieldCurveSpecificationBuilder _interpolatedYieldCurveSpecificationBuilder;
   private VolatilityCubeDefinitionSource _volatilityCubeDefinitionSource;
   private HolidaySource _holidaySource;
   private ExchangeSource _exchangeSource;
@@ -109,24 +105,6 @@ public class OpenGammaCompilationContextFactoryBean extends SingletonFactoryBean
     return _configSource;
   }
 
-  public InterpolatedYieldCurveDefinitionSource getInterpolatedYieldCurveDefinitionSource() {
-    return _interpolatedYieldCurveDefinitionSource;
-  }
-
-  public void setInterpolatedYieldCurveDefinitionSource(
-      final InterpolatedYieldCurveDefinitionSource interpolatedYieldCurveDefinitionSource) {
-    _interpolatedYieldCurveDefinitionSource = interpolatedYieldCurveDefinitionSource;
-  }
-
-  public InterpolatedYieldCurveSpecificationBuilder getInterpolatedYieldCurveSpecificationBuilder() {
-    return _interpolatedYieldCurveSpecificationBuilder;
-  }
-
-  public void setInterpolatedYieldCurveSpecificationBuilder(
-      final InterpolatedYieldCurveSpecificationBuilder interpolatedYieldCurveSpecificationBuilder) {
-    _interpolatedYieldCurveSpecificationBuilder = interpolatedYieldCurveSpecificationBuilder;
-  }
-
   public VolatilityCubeDefinitionSource getVolatilityCubeDefinitionSource() {
     return _volatilityCubeDefinitionSource;
   }
@@ -179,12 +157,6 @@ public class OpenGammaCompilationContextFactoryBean extends SingletonFactoryBean
     }
     if (getConventionSource() != null) {
       OpenGammaCompilationContext.setConventionSource(context, getConventionSource());
-    }
-    if (getInterpolatedYieldCurveDefinitionSource() != null) {
-      OpenGammaCompilationContext.setInterpolatedYieldCurveDefinitionSource(context, getInterpolatedYieldCurveDefinitionSource());
-    }
-    if (getInterpolatedYieldCurveSpecificationBuilder() != null) {
-      OpenGammaCompilationContext.setInterpolatedYieldCurveSpecificationBuilder(context, getInterpolatedYieldCurveSpecificationBuilder());
     }
     if (getVolatilityCubeDefinitionSource() != null) {
       OpenGammaCompilationContext.setVolatilityCubeDefinitionSource(context, getVolatilityCubeDefinitionSource());

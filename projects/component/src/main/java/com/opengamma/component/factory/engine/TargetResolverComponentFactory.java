@@ -31,7 +31,6 @@ import com.opengamma.engine.ComputationTargetResolver;
 import com.opengamma.engine.DefaultCachingComputationTargetResolver;
 import com.opengamma.engine.DefaultComputationTargetResolver;
 import com.opengamma.engine.view.ViewDefinition;
-import com.opengamma.financial.analytics.ircurve.YieldCurveDefinition;
 import com.opengamma.financial.currency.ConfigDBCurrencyMatrixSource;
 import com.opengamma.financial.currency.ConfigDBCurrencyPairsSource;
 import com.opengamma.financial.currency.CurrencyMatrixResolver;
@@ -132,7 +131,6 @@ public class TargetResolverComponentFactory extends AbstractComponentFactory imp
     if (getConfigSource() != null) {
       // Resolvers for types which don't have wrappers to abstract their provision away from the config source
       ConfigTargetResolver.initResolver(resolver, ViewDefinition.class, getConfigSource());
-      ConfigTargetResolver.initResolver(resolver, YieldCurveDefinition.class, getConfigSource());
     }
     if (getOrCreateCurrencyMatrixSource() != null) {
       resolver.addResolver(CurrencyMatrixResolver.TYPE, new CurrencyMatrixResolver(getOrCreateCurrencyMatrixSource()));

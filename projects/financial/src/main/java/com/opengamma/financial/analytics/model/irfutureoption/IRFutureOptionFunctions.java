@@ -33,7 +33,7 @@ public class IRFutureOptionFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * @return  the functions
+   * @return the functions
    */
   public static FunctionConfigurationSource deprecated() {
     return new Deprecated().getObjectCreating();
@@ -139,7 +139,7 @@ public class IRFutureOptionFunctions extends AbstractFunctionConfigurationBean {
     // TODO Needs improvement: defaultNumberOfDaysForward should not be hardcoded here
     protected void addIRFutureOptionBlackThetaDefaults(final List<FunctionConfiguration> functions) {
 
-      final int defaultNumberOfDaysForward = 1;       // TODO !!! Hardcode
+      final int defaultNumberOfDaysForward = 1; // TODO !!! Hardcode
 
       final String[] daysPlusBlackArgs = new String[getPerCurrencyInfo().size() * 3 + 1];
       int i = 0;
@@ -225,7 +225,6 @@ public class IRFutureOptionFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(InterestRateFutureOptionBlackVolatilitySensitivityFunction.class));
     functions.add(functionConfiguration(InterestRateFutureOptionBlackImpliedVolatilityFunction.class));
     functions.add(functionConfiguration(InterestRateFutureOptionBlackPV01Function.class));
-    functions.add(functionConfiguration(InterestRateFutureOptionBlackYieldCurveNodeSensitivitiesFunction.class));
     functions.add(functionConfiguration(InterestRateFutureOptionBlackGammaFunction.class));
     functions.add(functionConfiguration(InterestRateFutureOptionBlackPriceFunction.class));
     functions.add(functionConfiguration(InterestRateFutureOptionBlackDeltaFunction.class));
@@ -245,7 +244,6 @@ public class IRFutureOptionFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(InterestRateFutureOptionHestonPresentValueFunction.class));
     functions.add(functionConfiguration(IRFutureOptionSABRPresentValueFunction.class));
     functions.add(functionConfiguration(IRFutureOptionSABRSensitivitiesFunction.class));
-    functions.add(functionConfiguration(IRFutureOptionSABRYCNSFunction.class));
   }
 
 }

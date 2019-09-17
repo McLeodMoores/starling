@@ -16,8 +16,8 @@ import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesRating
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Function repository configuration source for the functions contained in this package.
- * Currently not referenced from StandardFunctionConfiguration or its children.
+ * Function repository configuration source for the functions contained in this package. Currently not referenced from StandardFunctionConfiguration or its
+ * children.
  */
 public class DividendYieldFuturesFunctions extends AbstractFunctionConfigurationBean {
 
@@ -78,21 +78,15 @@ public class DividendYieldFuturesFunctions extends AbstractFunctionConfiguration
 
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-    functions.add(functionConfiguration(EquityDividendYieldForwardFuturesFunction.class, getClosingPriceField(),
-        getCostOfCarryField(), getHtsResolutionKey()));
-    functions.add(functionConfiguration(EquityDividendYieldPresentValueFuturesFunction.class, getClosingPriceField(),
-        getCostOfCarryField(), getHtsResolutionKey()));
-    functions.add(functionConfiguration(EquityDividendYieldPV01FuturesFunction.class, getClosingPriceField(),
-        getCostOfCarryField(), getHtsResolutionKey()));
-    functions.add(functionConfiguration(EquityDividendYieldSpotFuturesFunction.class, getClosingPriceField(),
-        getCostOfCarryField(), getHtsResolutionKey()));
-    functions.add(functionConfiguration(EquityDividendYieldValueDeltaFuturesFunction.class, getClosingPriceField(),
-        getCostOfCarryField(), getHtsResolutionKey()));
-    functions.add(functionConfiguration(EquityDividendYieldValueRhoFuturesFunction.class, getClosingPriceField(),
-        getCostOfCarryField(), getHtsResolutionKey()));
-    functions.add(functionConfiguration(EquityDividendYieldFuturesYCNSFunction.class, getClosingPriceField(),
-        getCostOfCarryField(), getHtsResolutionKey()));
-    // TODO: add other package functions
+    functions.add(functionConfiguration(EquityDividendYieldForwardFuturesFunction.class, getClosingPriceField(), getCostOfCarryField(), getHtsResolutionKey()));
+    functions
+        .add(functionConfiguration(EquityDividendYieldPresentValueFuturesFunction.class, getClosingPriceField(), getCostOfCarryField(), getHtsResolutionKey()));
+    functions.add(functionConfiguration(EquityDividendYieldPV01FuturesFunction.class, getClosingPriceField(), getCostOfCarryField(), getHtsResolutionKey()));
+    functions.add(functionConfiguration(EquityDividendYieldSpotFuturesFunction.class, getClosingPriceField(), getCostOfCarryField(), getHtsResolutionKey()));
+    functions
+        .add(functionConfiguration(EquityDividendYieldValueDeltaFuturesFunction.class, getClosingPriceField(), getCostOfCarryField(), getHtsResolutionKey()));
+    functions
+        .add(functionConfiguration(EquityDividendYieldValueRhoFuturesFunction.class, getClosingPriceField(), getCostOfCarryField(), getHtsResolutionKey()));
   }
 
 }

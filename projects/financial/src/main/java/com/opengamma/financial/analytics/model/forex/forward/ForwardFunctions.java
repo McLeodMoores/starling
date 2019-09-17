@@ -13,6 +13,7 @@ import com.opengamma.engine.function.config.FunctionConfigurationSource;
 
 /**
  * Function repository configuration source for the functions contained in this package.
+ * 
  * @deprecated The functions that are added to the repository are deprecated.
  */
 @Deprecated
@@ -33,8 +34,6 @@ public class ForwardFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(FXForwardFXPresentValueFunction.class));
     functions.add(functionConfiguration(FXForwardPresentValueFunction.class));
     functions.add(functionConfiguration(FXForwardCurrencyExposureFunction.class));
-    functions.add(functionConfiguration(FXForwardYCNSFunction.class));
-    functions.add(functionConfiguration(FXForwardFXImpliedYCNSFunction.class));
     functions.add(functionConfiguration(FXForwardPresentValueCurveSensitivityFunction.class));
     functions.add(functionConfiguration(FXForwardPointsMethodPresentValueFunction.class));
     functions.add(functionConfiguration(FXForwardPointsMethodCurrencyExposureFunction.class));

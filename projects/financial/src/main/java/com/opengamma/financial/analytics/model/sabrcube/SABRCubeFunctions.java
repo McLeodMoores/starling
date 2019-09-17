@@ -13,6 +13,7 @@ import com.opengamma.engine.function.config.FunctionConfigurationSource;
 
 /**
  * Function repository configuration source for the functions contained in this package.
+ * 
  * @deprecated The functions that this configuration adds are deprecated
  */
 @Deprecated
@@ -35,7 +36,6 @@ public class SABRCubeFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(SABRCMSSpreadNoExtrapolationPVSABRSensitivityFunction.Nu.class));
     functions.add(functionConfiguration(SABRCMSSpreadNoExtrapolationPVSABRSensitivityFunction.Rho.class));
     functions.add(functionConfiguration(SABRCMSSpreadNoExtrapolationVegaFunction.class));
-    functions.add(functionConfiguration(SABRCMSSpreadNoExtrapolationYCNSFunction.class));
     functions.add(functionConfiguration(SABRCMSSpreadRightExtrapolationPVCurveSensitivityFunction.class));
     functions.add(functionConfiguration(SABRCMSSpreadRightExtrapolationPresentValueFunction.class));
     functions.add(functionConfiguration(SABRCMSSpreadRightExtrapolationPVSABRSensitivityFunction.Alpha.class));
@@ -45,14 +45,12 @@ public class SABRCubeFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(SABRCMSSpreadRightExtrapolationPVSABRNodeSensitivityFunction.Nu.class));
     functions.add(functionConfiguration(SABRCMSSpreadRightExtrapolationPVSABRNodeSensitivityFunction.Rho.class));
     functions.add(functionConfiguration(SABRCMSSpreadRightExtrapolationVegaFunction.class));
-    functions.add(functionConfiguration(SABRCMSSpreadRightExtrapolationYCNSFunction.class));
     functions.add(functionConfiguration(SABRNoExtrapolationPVCurveSensitivityFunction.class));
     functions.add(functionConfiguration(SABRNoExtrapolationPresentValueFunction.class));
     functions.add(functionConfiguration(SABRNoExtrapolationPVSABRSensitivityFunction.Alpha.class));
     functions.add(functionConfiguration(SABRNoExtrapolationPVSABRSensitivityFunction.Nu.class));
     functions.add(functionConfiguration(SABRNoExtrapolationPVSABRSensitivityFunction.Rho.class));
     functions.add(functionConfiguration(SABRNoExtrapolationVegaFunction.class));
-    functions.add(functionConfiguration(SABRNoExtrapolationYCNSFunction.class));
     functions.add(functionConfiguration(SABRRightExtrapolationPVCurveSensitivityFunction.class));
     functions.add(functionConfiguration(SABRRightExtrapolationPresentValueFunction.class));
     functions.add(functionConfiguration(SABRRightExtrapolationPVSABRSensitivityFunction.Alpha.class));
@@ -62,6 +60,5 @@ public class SABRCubeFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(SABRRightExtrapolationPVSABRNodeSensitivityFunction.Nu.class));
     functions.add(functionConfiguration(SABRRightExtrapolationPVSABRNodeSensitivityFunction.Rho.class));
     functions.add(functionConfiguration(SABRRightExtrapolationVegaFunction.class));
-    functions.add(functionConfiguration(SABRRightExtrapolationYCNSFunction.class));
   }
 }

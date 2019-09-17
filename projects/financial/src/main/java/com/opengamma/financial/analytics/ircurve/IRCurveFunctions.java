@@ -27,8 +27,6 @@ import com.opengamma.financial.analytics.curve.CurveSpecificationFunction;
 import com.opengamma.financial.analytics.curve.InterpolatedCurveDefinition;
 import com.opengamma.financial.analytics.curve.SpreadCurveDefinition;
 import com.opengamma.financial.analytics.ircurve.calcconfig.MultiCurveCalculationConfig;
-import com.opengamma.financial.analytics.model.curve.interestrate.ImpliedDepositCurveFunction;
-import com.opengamma.financial.analytics.model.curve.interestrate.ImpliedDepositCurveSeriesFunction;
 import com.opengamma.financial.config.ConfigMasterChangeProvider;
 import com.opengamma.financial.security.function.ISINFunction;
 import com.opengamma.master.config.ConfigDocument;
@@ -81,7 +79,6 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
     static {
       MONITORED_TYPES = new HashSet<>();
       MONITORED_TYPES.add(MultiCurveCalculationConfig.class.getName());
-      MONITORED_TYPES.add(YieldCurveDefinition.class.getName());
       for (final Class<?> curveClass : CURVE_CLASSES) {
         MONITORED_TYPES.add(curveClass.getName());
       }
@@ -98,9 +95,7 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
     }
 
     protected void addYieldCurveFunctions(final List<FunctionConfiguration> functions, final String currency, final String curveName) {
-      functions.add(functionConfiguration(YieldCurveMarketDataFunction.class, currency, curveName));
       functions.add(functionConfiguration(YieldCurveInterpolatingFunction.class, currency, curveName));
-      functions.add(functionConfiguration(YieldCurveDataFunction.class, currency, curveName));
     }
 
     protected void addCurveFunctions(final List<FunctionConfiguration> functions, final String curveName) {
@@ -115,25 +110,14 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
 
       // implied deposit curves
       final List<String> impliedDepositCurveNames = new ArrayList<>();
-      final ConfigSearchRequest<YieldCurveDefinition> searchRequest = new ConfigSearchRequest<>();
+      final ConfigSearchRequest<?> searchRequest = new ConfigSearchRequest<>();
       searchRequest.setType(MultiCurveCalculationConfig.class);
       searchRequest.setVersionCorrection(getVersionCorrection());
       for (final ConfigDocument configDocument : ConfigSearchIterator.iterable(_configMaster, searchRequest)) {
         final String documentName = configDocument.getName();
         final MultiCurveCalculationConfig config = ((ConfigItem<MultiCurveCalculationConfig>) configDocument.getConfig()).getValue();
-        if (config.getCalculationMethod().equals(ImpliedDepositCurveFunction.IMPLIED_DEPOSIT)) {
-          functions.add(functionConfiguration(ImpliedDepositCurveFunction.class, documentName));
-          functions.add(functionConfiguration(ImpliedDepositCurveSeriesFunction.class, documentName));
-          final String currencyISO = config.getTarget().getUniqueId().getValue();
-          final String[] yieldCurveNames = config.getYieldCurveNames();
-          for (final String curveName : yieldCurveNames) {
-            functions.add(functionConfiguration(ImpliedYieldCurveSpecificationFunction.class, currencyISO, curveName));
-            impliedDepositCurveNames.add(curveName);
-          }
-        }
       }
 
-      searchRequest.setType(YieldCurveDefinition.class);
       searchRequest.setVersionCorrection(getVersionCorrection());
       for (final ConfigDocument configDocument : ConfigSearchIterator.iterable(getConfigMaster(), searchRequest)) {
         final String documentName = configDocument.getName();

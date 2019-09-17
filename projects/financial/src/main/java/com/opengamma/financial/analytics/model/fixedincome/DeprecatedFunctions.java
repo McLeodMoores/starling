@@ -18,6 +18,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Function repository configuration source for the deprecated functions in this package.
+ * 
  * @deprecated Deprecated
  */
 @Deprecated
@@ -120,13 +121,10 @@ public class DeprecatedFunctions extends AbstractFunctionConfigurationBean {
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
     functions.add(functionConfiguration(BondTradePV01Function.class));
-    functions.add(functionConfiguration(BondTradeYCNSFunction.class));
-    functions.add(functionConfiguration(InterestRateInstrumentParRateCurveSensitivityFunction.class));
     functions.add(functionConfiguration(InterestRateInstrumentParRateFunction.class));
     functions.add(functionConfiguration(InterestRateInstrumentParRateParallelCurveSensitivityFunction.class));
     functions.add(functionConfiguration(InterestRateInstrumentPresentValueFunction.class));
     functions.add(functionConfiguration(InterestRateInstrumentPV01Function.class));
-    functions.add(functionConfiguration(InterestRateInstrumentYieldCurveNodeSensitivitiesFunction.class));
     functions.add(functionConfiguration(CrossCurrencySwapFXPVFunction.class));
     functions.add(functionConfiguration(SwapPayLegPresentValueFunction.class));
     functions.add(functionConfiguration(SwapReceiveLegPresentValueFunction.class));

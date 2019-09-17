@@ -23,12 +23,10 @@ import org.joda.beans.impl.flexi.FlexiBean;
 
 import com.opengamma.engine.view.ViewDefinition;
 import com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration;
-import com.opengamma.financial.analytics.ircurve.YieldCurveDefinition;
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.config.ConfigDocument;
 import com.opengamma.web.json.CurveSpecificationBuilderConfigurationJSONBuilder;
 import com.opengamma.web.json.ViewDefinitionJSONBuilder;
-import com.opengamma.web.json.YieldCurveDefinitionJSONBuilder;
 
 /**
  * RESTful resource for a version of a config.
@@ -39,13 +37,15 @@ public class WebConfigVersionResource extends AbstractWebConfigResource {
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   public WebConfigVersionResource(final AbstractWebConfigResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public String getHTML() {
     final FlexiBean out = createRootData();
@@ -77,10 +77,7 @@ public class WebConfigVersionResource extends AbstractWebConfigResource {
 
   private static String toJSON(final Object config) {
     if (config.getClass().isAssignableFrom(ViewDefinition.class)) {
-      return  ViewDefinitionJSONBuilder.INSTANCE.toJSON((ViewDefinition) config);
-    }
-    if (config.getClass().isAssignableFrom(YieldCurveDefinition.class)) {
-      return YieldCurveDefinitionJSONBuilder.INSTANCE.toJSON((YieldCurveDefinition) config);
+      return ViewDefinitionJSONBuilder.INSTANCE.toJSON((ViewDefinition) config);
     }
     if (config.getClass().isAssignableFrom(CurveSpecificationBuilderConfiguration.class)) {
       return CurveSpecificationBuilderConfigurationJSONBuilder.INSTANCE.toJSON((CurveSpecificationBuilderConfiguration) config);
@@ -88,9 +85,10 @@ public class WebConfigVersionResource extends AbstractWebConfigResource {
     return null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   *
    * @return the output root data, not null
    */
   @Override
@@ -108,10 +106,12 @@ public class WebConfigVersionResource extends AbstractWebConfigResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   *
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebConfigData data) {
@@ -120,8 +120,11 @@ public class WebConfigVersionResource extends AbstractWebConfigResource {
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideVersionId  the override version id, null uses information from data
+   *
+   * @param data
+   *          the data, not null
+   * @param overrideVersionId
+   *          the override version id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebConfigData data, final UniqueId overrideVersionId) {

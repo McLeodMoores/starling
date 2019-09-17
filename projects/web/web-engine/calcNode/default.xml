@@ -146,24 +146,6 @@
     </constructor-arg>
   </bean>
 
-  <!-- Curves -->
-  <!-- TODO: need a cache; not incredibly high priority as only fetched at function compilation -->
-  <bean id="interpolatedYieldCurveDefinitionSource" class="com.opengamma.financial.analytics.ircurve.rest.RemoteInterpolatedYieldCurveDefinitionSource">
-    <constructor-arg>
-      <bean class="com.opengamma.transport.jaxrs.UriEndPointUriFactoryBean">
-        <property name="uri" value="${opengamma.engine.configuration.url}/interpolatedYieldCurveDefinitionSource" />
-      </bean>
-    </constructor-arg>
-  </bean>
-  <!-- TODO: need a cache; not incredibly high priority as only fetched at function compilation -->
-  <bean id="interpolatedYieldCurveSpecificationBuilder" class="com.opengamma.financial.analytics.ircurve.rest.RemoteInterpolatedYieldCurveSpecificationBuilder">
-    <constructor-arg>
-      <bean class="com.opengamma.transport.jaxrs.UriEndPointUriFactoryBean">
-        <property name="uri" value="${opengamma.engine.configuration.url}/interpolatedYieldCurveSpecificationBuilder" />
-      </bean>
-    </constructor-arg>
-  </bean>
-
   <!-- Volatility cubes -->
   <!-- TODO: need a cache; not incredibly high priority as only fetched at function compilation -->
   <bean id="combinedVolatilityCubeDefinitionSource" class="com.opengamma.financial.analytics.volatility.cube.rest.RemoteVolatilityCubeDefinitionSource">

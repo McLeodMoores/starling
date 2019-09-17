@@ -341,19 +341,6 @@ public abstract class StandAloneScenarioScript extends Script {
   }
 
   /**
-   * Defines a method in the DSL that takes a closure which defines how to select and transform a curve.
-   *
-   * @param body
-   *          The block that defines the selection and transformation
-   */
-  public void curveData(final Closure<?> body) {
-    final DslYieldCurveDataSelectorBuilder selector = new DslYieldCurveDataSelectorBuilder(_scenario);
-    body.setDelegate(selector);
-    body.setResolveStrategy(Closure.DELEGATE_FIRST);
-    body.call();
-  }
-
-  /**
    * Defines a method in the DSL that takes a closure which defines how to select and transform a market data point.
    *
    * @param body

@@ -112,7 +112,6 @@ public class BondFutureOptionFunctions extends AbstractFunctionConfigurationBean
     functions.add(functionConfiguration(BondFutureOptionBlackDeltaFunction.class));
     functions.add(functionConfiguration(BondFutureOptionBlackGammaFunction.class));
     functions.add(functionConfiguration(BondFutureOptionBlackPV01Function.class));
-    functions.add(functionConfiguration(BondFutureOptionBlackYCNSFunction.class));
     functions.add(functionConfiguration(BondFutureOptionBlackVegaFunction.class));
     functions.add(functionConfiguration(BondFutureOptionBlackFromFuturePresentValueFunction.class));
   }

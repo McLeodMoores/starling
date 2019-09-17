@@ -81,10 +81,6 @@ public class Scenario {
     return new YieldCurveSelector.Builder(this);
   }
 
-  public YieldCurveDataSelectorBuilder curveData() {
-    return new YieldCurveDataSelectorBuilder(this);
-  }
-
   /**
    * @return An object for specifying which market data points should be transformed
    */
@@ -141,8 +137,7 @@ public class Scenario {
       final LocalDateTime localTime = LocalDateTime.parse(valuationTime, DATE_FORMATTER);
       _valuationTime = ZonedDateTime.of(localTime, OpenGammaClock.getZone()).toInstant();
     } catch (final DateTimeParseException e) {
-      throw new IllegalArgumentException("Valuation time isn't in a valid format. Expected format "
-          + "'yyyy-MM-dd HH:mm', value: " + valuationTime);
+      throw new IllegalArgumentException("Valuation time isn't in a valid format. Expected format " + "'yyyy-MM-dd HH:mm', value: " + valuationTime);
     }
     return this;
   }
@@ -246,21 +241,14 @@ public class Scenario {
       return false;
     }
     final Scenario other = (Scenario) obj;
-    return Objects.equals(this._manipulations, other._manipulations)
-        && Objects.equals(this._name, other._name)
-        && Objects.equals(this._calcConfigNames, other._calcConfigNames)
-        && Objects.equals(this._valuationTime, other._valuationTime)
+    return Objects.equals(this._manipulations, other._manipulations) && Objects.equals(this._name, other._name)
+        && Objects.equals(this._calcConfigNames, other._calcConfigNames) && Objects.equals(this._valuationTime, other._valuationTime)
         && Objects.equals(this._resolverVersionCorrection, other._resolverVersionCorrection);
   }
 
   @Override
   public String toString() {
-    return "Scenario ["
-        + "_name='" + _name + "'"
-        + ", _calcConfigNames=" + _calcConfigNames
-        + ", _valuationTime=" + _valuationTime
-        + ", _resolverVersionCorrection=" + _resolverVersionCorrection
-        + ", _manipulations=" + _manipulations
-        + "]";
+    return "Scenario [" + "_name='" + _name + "'" + ", _calcConfigNames=" + _calcConfigNames + ", _valuationTime=" + _valuationTime
+        + ", _resolverVersionCorrection=" + _resolverVersionCorrection + ", _manipulations=" + _manipulations + "]";
   }
 }

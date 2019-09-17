@@ -14,8 +14,6 @@ import com.opengamma.core.legalentity.LegalEntitySource;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.function.FunctionCompilationContext;
-import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionSource;
-import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationBuilder;
 import com.opengamma.financial.analytics.model.pnl.PnLRequirementsGatherer;
 import com.opengamma.financial.analytics.riskfactors.RiskFactorsGatherer;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
@@ -54,20 +52,6 @@ public final class OpenGammaCompilationContext {
    * The name under which an instance of {@link ConventionSource} should be bound.
    */
   public static final String CONVENTION_SOURCE_NAME = "conventionSource";
-  /**
-   * The name under which an instance of {@link InterpolatedYieldCurveDefinitionSource} should be bound.
-   *
-   * @deprecated use a config source to look up the object
-   */
-  @Deprecated
-  public static final String INTERPOLATED_YIELD_CURVE_DEFINITION_SOURCE_NAME = "interpolatedYieldCurveDefinitionSource";
-  /**
-   * The name under which an instance of {@link InterpolatedYieldCurveSpecificationBuilder} should be bound.
-   *
-   * @deprecated use a config source to look up the object
-   */
-  @Deprecated
-  public static final String INTERPOLATED_YIELD_CURVE_SPECIFICATION_BUILDER_NAME = "interpolatedYieldCurveSpecificationBuilder";
   /**
    * The name under which an instance of {@link VolatilityCubeDefinitionSource} should be bound.
    *
@@ -110,7 +94,7 @@ public final class OpenGammaCompilationContext {
   private static final String PERMISSIVE_FLAG_NAME = "permissive";
   /**
    * The name under which an instance of {@link PnLRequirementsGatherer} should be bound.
-   * 
+   *
    * @deprecated this functionality will be removed
    */
   @Deprecated
@@ -229,39 +213,6 @@ public final class OpenGammaCompilationContext {
   @Deprecated
   public static void setConventionBundleSource(final FunctionCompilationContext compilationContext, final ConventionBundleSource conventionBundleSource) {
     set(compilationContext, CONVENTION_BUNDLE_SOURCE_NAME, conventionBundleSource);
-  }
-
-  /**
-   * @deprecated Use config source instead.
-   * @param compilationContext
-   *          the compilation context
-   * @return the InterpolatedYieldCurveDefinitionSource
-   */
-  @Deprecated
-  public static InterpolatedYieldCurveDefinitionSource getInterpolatedYieldCurveDefinitionSource(final FunctionCompilationContext compilationContext) {
-    return get(compilationContext, INTERPOLATED_YIELD_CURVE_DEFINITION_SOURCE_NAME);
-  }
-
-  /**
-   * @deprecated Use config source instead.
-   * @param compilationContext
-   *          the compilation context
-   * @param source
-   *          the InterpolatedYieldCurveDefinitionSource
-   */
-  @Deprecated
-  public static void setInterpolatedYieldCurveDefinitionSource(final FunctionCompilationContext compilationContext,
-      final InterpolatedYieldCurveDefinitionSource source) {
-    set(compilationContext, INTERPOLATED_YIELD_CURVE_DEFINITION_SOURCE_NAME, source);
-  }
-
-  public static InterpolatedYieldCurveSpecificationBuilder getInterpolatedYieldCurveSpecificationBuilder(final FunctionCompilationContext compilationContext) {
-    return get(compilationContext, INTERPOLATED_YIELD_CURVE_SPECIFICATION_BUILDER_NAME);
-  }
-
-  public static void setInterpolatedYieldCurveSpecificationBuilder(final FunctionCompilationContext compilationContext,
-      final InterpolatedYieldCurveSpecificationBuilder builder) {
-    set(compilationContext, INTERPOLATED_YIELD_CURVE_SPECIFICATION_BUILDER_NAME, builder);
   }
 
   public static VolatilityCubeDefinitionSource getVolatilityCubeDefinitionSource(final FunctionCompilationContext compilationContext) {
