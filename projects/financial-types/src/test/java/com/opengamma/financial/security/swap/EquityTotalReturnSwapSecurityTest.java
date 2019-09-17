@@ -113,7 +113,7 @@ public class EquityTotalReturnSwapSecurityTest extends AbstractBeanTestCase {
     assertEquals(security.getEffectiveDate(), EFFECTIVE_DATE);
     assertEquals(security.getMaturityDate(), MATURITY_DATE);
     assertEquals(security.getNotionalCurrency(), CCY);
-    assertEquals(security.getNotionalAmount(), NOTIONAL);
+    assertEquals(security.getNotionalAmount(), NOTIONAL, 1e-15);
     assertEquals(security.getPaymentSettlementDays(), SETTLEMENT_DAYS);
     assertEquals(security.getPaymentBusinessDayConvention(), BDC);
     assertEquals(security.getPaymentFrequency(), FREQ);
@@ -126,7 +126,7 @@ public class EquityTotalReturnSwapSecurityTest extends AbstractBeanTestCase {
   public void testAccept() {
     final EquityTotalReturnSwapSecurity security = new EquityTotalReturnSwapSecurity(FLOATING, ASSET_ID, EFFECTIVE_DATE, MATURITY_DATE, NUMBER_OF_SHARES, CCY,
         NOTIONAL, SETTLEMENT_DAYS, BDC, FREQ, ROLL);
-    assertEquals(security.accept(TestVisitor.INSTANCE), NUMBER_OF_SHARES);
+    assertEquals(security.accept(TestVisitor.INSTANCE), NUMBER_OF_SHARES, 1e-15);
   }
 
   /**

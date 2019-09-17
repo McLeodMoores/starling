@@ -89,7 +89,7 @@ public class IndexCDSDefinitionSecurityTest extends AbstractBeanTestCase {
     assertEquals(security.getBusinessDayConvention(), BDC);
     assertEquals(security.getCalendars(), CALENDARS);
     assertEquals(security.getComponents(), COMPONENTS);
-    assertEquals(security.getCoupon(), COUPON);
+    assertEquals(security.getCoupon(), COUPON, 1e-15);
     assertEquals(security.getCouponFrequency(), COUPON_FREQUENCY);
     assertEquals(security.getCurrency(), CCY);
     assertEquals(security.getExternalIdBundle(), IDS);
@@ -106,7 +106,7 @@ public class IndexCDSDefinitionSecurityTest extends AbstractBeanTestCase {
     assertEquals(security.getBusinessDayConvention(), BDC);
     assertEquals(security.getCalendars(), CALENDARS);
     assertEquals(security.getComponents(), COMPONENTS);
-    assertEquals(security.getCoupon(), COUPON);
+    assertEquals(security.getCoupon(), COUPON, 1e-15);
     assertEquals(security.getCouponFrequency(), COUPON_FREQUENCY);
     assertEquals(security.getCurrency(), CCY);
     assertEquals(security.getExternalIdBundle(), IDS);

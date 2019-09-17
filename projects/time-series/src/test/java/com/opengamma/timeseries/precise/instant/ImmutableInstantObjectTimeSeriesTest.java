@@ -75,7 +75,7 @@ public class ImmutableInstantObjectTimeSeriesTest extends InstantObjectTimeSerie
     final InstantObjectTimeSeries<Float> ts = ImmutableInstantObjectTimeSeries.of(Instant.ofEpochSecond(12345), 2.0f);
     assertEquals(ts.size(), 1);
     assertEquals(ts.getTimeAtIndex(0), Instant.ofEpochSecond(12345));
-    assertEquals(ts.getValueAtIndex(0), 2.0f);
+    assertEquals(ts.getValueAtIndex(0), 2.0f, 1e-15);
   }
 
   /**
@@ -97,9 +97,9 @@ public class ImmutableInstantObjectTimeSeriesTest extends InstantObjectTimeSerie
     final InstantObjectTimeSeries<Float> ts = ImmutableInstantObjectTimeSeries.of(inDates, inValues);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), Instant.ofEpochSecond(2222));
-    assertEquals(ts.getValueAtIndex(0), 2.0f);
+    assertEquals(ts.getValueAtIndex(0), 2.0f, 1e-15);
     assertEquals(ts.getTimeAtIndex(1), Instant.ofEpochSecond(3333));
-    assertEquals(ts.getValueAtIndex(1), 3.0f);
+    assertEquals(ts.getValueAtIndex(1), 3.0f, 1e-15);
   }
 
   /**
@@ -151,9 +151,9 @@ public class ImmutableInstantObjectTimeSeriesTest extends InstantObjectTimeSerie
     final InstantObjectTimeSeries<Float> ts = ImmutableInstantObjectTimeSeries.of(inDates, inValues);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), Instant.ofEpochSecond(2222));
-    assertEquals(ts.getValueAtIndex(0), 2.0f);
+    assertEquals(ts.getValueAtIndex(0), 2.0f, 1e-15);
     assertEquals(ts.getTimeAtIndex(1), Instant.ofEpochSecond(3333));
-    assertEquals(ts.getValueAtIndex(1), 3.0f);
+    assertEquals(ts.getValueAtIndex(1), 3.0f, 1e-15);
   }
 
   /**
@@ -503,7 +503,7 @@ public class ImmutableInstantObjectTimeSeriesTest extends InstantObjectTimeSerie
     assertEquals(new AbstractMap.SimpleImmutableEntry<>(I_1111, 1.0d), it.next());
     assertEquals(I_1111, it.currentTime());
     assertEquals(1111_000_000_000L, it.currentTimeFast());
-    assertEquals(1.0d, it.currentValue());
+    assertEquals(1.0d, it.currentValue(), 1e-15);
     assertEquals(I_2222, it.nextTime());
     assertEquals(I_3333, it.nextTime());
     assertEquals(false, it.hasNext());
@@ -521,7 +521,7 @@ public class ImmutableInstantObjectTimeSeriesTest extends InstantObjectTimeSerie
     assertEquals(new AbstractMap.SimpleImmutableEntry<>(I_1111, 1.0d), it.next());
     assertEquals(I_1111, it.currentTime());
     assertEquals(1111_000_000_000L, it.currentTimeFast());
-    assertEquals(1.0d, it.currentValue());
+    assertEquals(1.0d, it.currentValue(), 1e-15);
     assertEquals(I_2222, it.nextTime());
     assertEquals(I_3333, it.nextTime());
     assertEquals(false, it.hasNext());

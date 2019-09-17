@@ -47,7 +47,7 @@ public class ISDAApproxCDSPricingMethodTest extends ISDAApproxCDSPricingMethodTe
     for(final Entry<Double, Double> testCase : testCases.entrySet()) {
       cds = loadCDS_ISDAExampleMainC(testCase.getKey()).toDerivative(pricingDate, stepinDate, settlementDate, "IR_CURVE", "HAZARD_RATE_CURVE");
       upfrontCharge = method.calculateUpfrontCharge(cds, discountCurve, hazardRateCurve, false);
-      Assert.assertEquals(upfrontCharge, testCase.getValue());
+      Assert.assertEquals(upfrontCharge, testCase.getValue(), 1e-15);
     }
   }
 

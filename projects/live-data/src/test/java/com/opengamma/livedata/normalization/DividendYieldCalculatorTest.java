@@ -47,9 +47,9 @@ public class DividendYieldCalculatorTest {
     lkv.liveDataReceived(history);
     final MutableFudgeMsg normalized = CALCULATOR.apply(msg, "uid", lkv);
     assertEquals(normalized.getAllFields().size(), 3);
-    assertEquals(normalized.getDouble(MarketDataRequirementNames.ANNUAL_DIVIDEND), 20.);
-    assertEquals(normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE), 100.);
-    assertEquals(normalized.getDouble(MarketDataRequirementNames.DIVIDEND_YIELD), 0.2);
+    assertEquals(normalized.getDouble(MarketDataRequirementNames.ANNUAL_DIVIDEND), 20., 1e-15);
+    assertEquals(normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE), 100., 1e-15);
+    assertEquals(normalized.getDouble(MarketDataRequirementNames.DIVIDEND_YIELD), 0.2, 1e-15);
   }
 
   /**
@@ -65,7 +65,7 @@ public class DividendYieldCalculatorTest {
     lkv.liveDataReceived(history);
     final MutableFudgeMsg normalized = CALCULATOR.apply(msg, "uid", lkv);
     assertEquals(normalized.getAllFields().size(), 1);
-    assertEquals(normalized.getDouble(MarketDataRequirementNames.DIVIDEND_YIELD), 21 / 101.);
+    assertEquals(normalized.getDouble(MarketDataRequirementNames.DIVIDEND_YIELD), 21 / 101., 1e-15);
   }
 
   /**
@@ -95,8 +95,8 @@ public class DividendYieldCalculatorTest {
     lkv.liveDataReceived(history);
     final MutableFudgeMsg normalized = CALCULATOR.apply(msg, "uid", lkv);
     assertEquals(normalized.getAllFields().size(), 2);
-    assertEquals(normalized.getDouble(MarketDataRequirementNames.ANNUAL_DIVIDEND), 21.);
-    assertEquals(normalized.getDouble(MarketDataRequirementNames.DIVIDEND_YIELD), 0.23);
+    assertEquals(normalized.getDouble(MarketDataRequirementNames.ANNUAL_DIVIDEND), 21., 1e-15);
+    assertEquals(normalized.getDouble(MarketDataRequirementNames.DIVIDEND_YIELD), 0.23, 1e-15);
   }
 
   /**
@@ -113,8 +113,8 @@ public class DividendYieldCalculatorTest {
     lkv.liveDataReceived(history);
     final MutableFudgeMsg normalized = CALCULATOR.apply(msg, "uid", lkv);
     assertEquals(normalized.getAllFields().size(), 3);
-    assertEquals(normalized.getDouble(MarketDataRequirementNames.ANNUAL_DIVIDEND), 21.);
-    assertEquals(normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE), 0.);
-    assertEquals(normalized.getDouble(MarketDataRequirementNames.DIVIDEND_YIELD), 0.23);
+    assertEquals(normalized.getDouble(MarketDataRequirementNames.ANNUAL_DIVIDEND), 21., 1e-15);
+    assertEquals(normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE), 0., 1e-15);
+    assertEquals(normalized.getDouble(MarketDataRequirementNames.DIVIDEND_YIELD), 0.23, 1e-15);
   }
 }

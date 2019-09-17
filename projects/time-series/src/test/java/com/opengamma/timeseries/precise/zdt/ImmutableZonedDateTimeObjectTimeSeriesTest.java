@@ -79,7 +79,7 @@ public class ImmutableZonedDateTimeObjectTimeSeriesTest extends ZonedDateTimeObj
     final ZonedDateTimeObjectTimeSeries<Float> ts = ImmutableZonedDateTimeObjectTimeSeries.of(ZDT_12345, 2.0f);
     assertEquals(ts.size(), 1);
     assertEquals(ts.getTimeAtIndex(0), ZDT_12345);
-    assertEquals(ts.getValueAtIndex(0), 2.0f);
+    assertEquals(ts.getValueAtIndex(0), 2.0f, 1e-15);
   }
 
   /**
@@ -101,9 +101,9 @@ public class ImmutableZonedDateTimeObjectTimeSeriesTest extends ZonedDateTimeObj
     final ZonedDateTimeObjectTimeSeries<Float> ts = ImmutableZonedDateTimeObjectTimeSeries.of(inDates, inValues, null);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), ZDT_2222);
-    assertEquals(ts.getValueAtIndex(0), 2.0f);
+    assertEquals(ts.getValueAtIndex(0), 2.0f, 1e-15);
     assertEquals(ts.getTimeAtIndex(1), ZDT_3333);
-    assertEquals(ts.getValueAtIndex(1), 3.0f);
+    assertEquals(ts.getValueAtIndex(1), 3.0f, 1e-15);
   }
 
   /**
@@ -155,9 +155,9 @@ public class ImmutableZonedDateTimeObjectTimeSeriesTest extends ZonedDateTimeObj
     final ZonedDateTimeObjectTimeSeries<Float> ts = ImmutableZonedDateTimeObjectTimeSeries.of(inDates, inValues, ZoneOffset.UTC);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), ZDT_2222);
-    assertEquals(ts.getValueAtIndex(0), 2.0f);
+    assertEquals(ts.getValueAtIndex(0), 2.0f, 1e-15);
     assertEquals(ts.getTimeAtIndex(1), ZDT_3333);
-    assertEquals(ts.getValueAtIndex(1), 3.0f);
+    assertEquals(ts.getValueAtIndex(1), 3.0f, 1e-15);
   }
 
   /**
@@ -508,7 +508,7 @@ public class ImmutableZonedDateTimeObjectTimeSeriesTest extends ZonedDateTimeObj
     assertEquals(new AbstractMap.SimpleImmutableEntry<>(ZDT_1111, 1.0d), it.next());
     assertEquals(ZDT_1111, it.currentTime());
     assertEquals(1111_000_000_000L, it.currentTimeFast());
-    assertEquals(1.0d, it.currentValue());
+    assertEquals(1.0d, it.currentValue(), 1e-15);
     assertEquals(ZDT_2222, it.nextTime());
     assertEquals(ZDT_3333, it.nextTime());
     assertEquals(false, it.hasNext());
@@ -526,7 +526,7 @@ public class ImmutableZonedDateTimeObjectTimeSeriesTest extends ZonedDateTimeObj
     assertEquals(new AbstractMap.SimpleImmutableEntry<>(ZDT_1111, 1.0d), it.next());
     assertEquals(ZDT_1111, it.currentTime());
     assertEquals(1111_000_000_000L, it.currentTimeFast());
-    assertEquals(1.0d, it.currentValue());
+    assertEquals(1.0d, it.currentValue(), 1e-15);
     assertEquals(ZDT_2222, it.nextTime());
     assertEquals(ZDT_3333, it.nextTime());
     assertEquals(false, it.hasNext());
