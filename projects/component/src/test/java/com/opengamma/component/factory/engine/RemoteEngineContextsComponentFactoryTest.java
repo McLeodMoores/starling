@@ -45,8 +45,6 @@ public class RemoteEngineContextsComponentFactoryTest {
     factory.setStrict(true);
     final ComponentRepository repo = new ComponentRepository(null);
     final LinkedHashMap<String, String> localConfiguration = new LinkedHashMap<>();
-    localConfiguration.put("ignorePnlRequirementsGatherer", "true"); // TODO: Implement this properly
-    localConfiguration.put("ignoreRiskFactorsGatherer", "true"); // TODO: Implement this properly
     localConfiguration.put("permissive", "false");
     factory.init(repo, localConfiguration);
     final FunctionCompilationContext compilation = repo.findInstance(FunctionCompilationContext.class, "test");
@@ -68,7 +66,7 @@ public class RemoteEngineContextsComponentFactoryTest {
 
       @Override
       protected Pair<UriEndPointDescriptionProvider.Validater, FudgeMsg> fetchConfiguration() {
-        return Pairs.<UriEndPointDescriptionProvider.Validater, FudgeMsg>of(null, configurationMsg);
+        return Pairs.<UriEndPointDescriptionProvider.Validater, FudgeMsg> of(null, configurationMsg);
       }
 
       @Override

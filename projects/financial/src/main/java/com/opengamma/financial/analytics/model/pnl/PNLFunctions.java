@@ -513,16 +513,15 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
           getSamplingCalculatorName(), getReturnCalculatorName()));
       functions.add(functionConfiguration(FXOptionBlackPnLDefaults.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName()));
       functions.add(functionConfiguration(PositionPnLDefaults.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName()));
-      functions.add(functionConfiguration(SecurityPriceSeriesDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(),
-          getSamplingCalculatorName()));
+      functions.add(
+          functionConfiguration(SecurityPriceSeriesDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName()));
       if (getCurveName() != null) {
         functions.add(functionConfiguration(SimpleFuturePnLDefaultPropertiesFunction.class, getCurveName(), getSamplingPeriodName(), getScheduleName(),
             getSamplingCalculatorName()));
       }
       if (getPayCurveName() != null && getReceiveCurveName() != null) {
         functions.add(functionConfiguration(SimpleFXFuturePnLDefaultPropertiesFunction.class, getPayCurveName(), getReceiveCurveName(), getSamplingPeriodName(),
-            getScheduleName(),
-            getSamplingCalculatorName()));
+            getScheduleName(), getSamplingCalculatorName()));
       }
       functions.add(functionConfiguration(ValueGreekSensitivityPnLDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(),
           getSamplingCalculatorName(), getReturnCalculatorName()));
@@ -559,7 +558,6 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(PortfolioExchangeTradedDailyPnLFunction.Impl.class));
     functions.add(functionConfiguration(PortfolioExchangeTradedPnLFunction.class));
     functions.add(functionConfiguration(PositionExchangeTradedPnLFunction.class));
-    functions.add(functionConfiguration(PositionPnLFunction.class));
     functions.add(functionConfiguration(SwaptionBlackYieldCurveNodePnLFunction.class));
     functions.add(functionConfiguration(YieldCurveNodePnLFunction.class));
     functions

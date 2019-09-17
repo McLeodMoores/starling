@@ -16,7 +16,6 @@ import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionSource;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationBuilder;
-import com.opengamma.financial.analytics.model.pnl.PnLRequirementsGatherer;
 import com.opengamma.financial.analytics.riskfactors.RiskFactorsGatherer;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
 import com.opengamma.financial.currency.CurrencyPair;
@@ -103,13 +102,6 @@ public final class OpenGammaCompilationContext {
    * non-default mode of behavior that is not usually required.
    */
   private static final String PERMISSIVE_FLAG_NAME = "permissive";
-  /**
-   * The name under which an instance of {@link PnLRequirementsGatherer} should be bound.
-   *
-   * @deprecated this functionality will be removed
-   */
-  @Deprecated
-  public static final String PNL_REQUIREMENTS_GATHERER_NAME = "pnlRequirementsGatherer";
 
   /**
    * Restricted constructor.
@@ -339,14 +331,6 @@ public final class OpenGammaCompilationContext {
 
   public static void setRiskFactorsGatherer(final FunctionCompilationContext compilationContext, final RiskFactorsGatherer riskFactorsGatherer) {
     set(compilationContext, RISK_FACTORS_GATHERER_NAME, riskFactorsGatherer);
-  }
-
-  public static PnLRequirementsGatherer getPnLRequirementsGatherer(final FunctionCompilationContext compilationContext) {
-    return get(compilationContext, PNL_REQUIREMENTS_GATHERER_NAME);
-  }
-
-  public static void setPnLRequirementsGatherer(final FunctionCompilationContext compilationContext, final PnLRequirementsGatherer pnlRequirementsGatherer) {
-    set(compilationContext, PNL_REQUIREMENTS_GATHERER_NAME, pnlRequirementsGatherer);
   }
 
   /**

@@ -44,9 +44,6 @@ import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionSource;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationBuilder;
-import com.opengamma.financial.analytics.model.pnl.PnLRequirementsGatherer;
-import com.opengamma.financial.analytics.riskfactors.DefaultRiskFactorsConfigurationProvider;
-import com.opengamma.financial.analytics.riskfactors.DefaultRiskFactorsGatherer;
 import com.opengamma.financial.analytics.riskfactors.RiskFactorsGatherer;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
 import com.opengamma.financial.marketdata.MarketDataELCompiler;
@@ -179,16 +176,12 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    */
   @PropertyDefinition
   private Boolean _permissive = Boolean.FALSE;
-  /**
-   * The PnL requirements gatherer.
-   */
-  @PropertyDefinition
-  private PnLRequirementsGatherer _pnlRequirementsGatherer;
+
   /**
    * The risk factors requirements gatherer.
    */
-  @PropertyDefinition
-  private RiskFactorsGatherer _riskFactorsGatherer;
+  // @PropertyDefinition
+  // private RiskFactorsGatherer _riskFactorsGatherer;
 
   // -------------------------------------------------------------------------
   @Override
@@ -258,15 +251,14 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
       context.setGraphExecutionBlacklist(new DefaultFunctionBlacklistQuery(getExecutionBlacklist()));
     }
     OpenGammaCompilationContext.setPermissive(context, Boolean.TRUE.equals(getPermissive()));
-    OpenGammaCompilationContext.setPnLRequirementsGatherer(context, getPnlRequirementsGatherer());
-    if (getRiskFactorsGatherer() == null) {
-      if (getSecuritySource() != null) {
-        setRiskFactorsGatherer(new DefaultRiskFactorsGatherer(getSecuritySource(), new DefaultRiskFactorsConfigurationProvider()));
-      }
-    }
-    if (getRiskFactorsGatherer() != null) {
-      OpenGammaCompilationContext.setRiskFactorsGatherer(context, getRiskFactorsGatherer());
-    }
+    // if (getRiskFactorsGatherer() == null) {
+    // if (getSecuritySource() != null) {
+    // setRiskFactorsGatherer(new DefaultRiskFactorsGatherer(getSecuritySource(), new DefaultRiskFactorsConfigurationProvider()));
+    // }
+    // }
+    // if (getRiskFactorsGatherer() != null) {
+    // OpenGammaCompilationContext.setRiskFactorsGatherer(context, getRiskFactorsGatherer());
+    // }
     final ComponentInfo info = new ComponentInfo(FunctionCompilationContext.class, getClassifier());
     repo.registerComponent(info, context);
   }
@@ -883,56 +875,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   }
 
   //-----------------------------------------------------------------------
-  /**
-   * Gets the PnL requirements gatherer.
-   * @return the value of the property
-   */
-  public PnLRequirementsGatherer getPnlRequirementsGatherer() {
-    return _pnlRequirementsGatherer;
-  }
-
-  /**
-   * Sets the PnL requirements gatherer.
-   * @param pnlRequirementsGatherer  the new value of the property
-   */
-  public void setPnlRequirementsGatherer(PnLRequirementsGatherer pnlRequirementsGatherer) {
-    this._pnlRequirementsGatherer = pnlRequirementsGatherer;
-  }
-
-  /**
-   * Gets the the {@code pnlRequirementsGatherer} property.
-   * @return the property, not null
-   */
-  public final Property<PnLRequirementsGatherer> pnlRequirementsGatherer() {
-    return metaBean().pnlRequirementsGatherer().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
-   * Gets the risk factors requirements gatherer.
-   * @return the value of the property
-   */
-  public RiskFactorsGatherer getRiskFactorsGatherer() {
-    return _riskFactorsGatherer;
-  }
-
-  /**
-   * Sets the risk factors requirements gatherer.
-   * @param riskFactorsGatherer  the new value of the property
-   */
-  public void setRiskFactorsGatherer(RiskFactorsGatherer riskFactorsGatherer) {
-    this._riskFactorsGatherer = riskFactorsGatherer;
-  }
-
-  /**
-   * Gets the the {@code riskFactorsGatherer} property.
-   * @return the property, not null
-   */
-  public final Property<RiskFactorsGatherer> riskFactorsGatherer() {
-    return metaBean().riskFactorsGatherer().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
   @Override
   public EngineContextsComponentFactory clone() {
     return JodaBeanUtils.cloneAlways(this);
@@ -966,8 +908,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
           JodaBeanUtils.equal(getTempTargetRepository(), other.getTempTargetRepository()) &&
           JodaBeanUtils.equal(getViewProcessor(), other.getViewProcessor()) &&
           JodaBeanUtils.equal(getPermissive(), other.getPermissive()) &&
-          JodaBeanUtils.equal(getPnlRequirementsGatherer(), other.getPnlRequirementsGatherer()) &&
-          JodaBeanUtils.equal(getRiskFactorsGatherer(), other.getRiskFactorsGatherer()) &&
           super.equals(obj);
     }
     return false;
@@ -997,14 +937,12 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
     hash = hash * 31 + JodaBeanUtils.hashCode(getTempTargetRepository());
     hash = hash * 31 + JodaBeanUtils.hashCode(getViewProcessor());
     hash = hash * 31 + JodaBeanUtils.hashCode(getPermissive());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPnlRequirementsGatherer());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getRiskFactorsGatherer());
     return hash ^ super.hashCode();
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(768);
+    StringBuilder buf = new StringBuilder(704);
     buf.append("EngineContextsComponentFactory{");
     int len = buf.length();
     toString(buf);
@@ -1039,8 +977,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
     buf.append("tempTargetRepository").append('=').append(JodaBeanUtils.toString(getTempTargetRepository())).append(',').append(' ');
     buf.append("viewProcessor").append('=').append(JodaBeanUtils.toString(getViewProcessor())).append(',').append(' ');
     buf.append("permissive").append('=').append(JodaBeanUtils.toString(getPermissive())).append(',').append(' ');
-    buf.append("pnlRequirementsGatherer").append('=').append(JodaBeanUtils.toString(getPnlRequirementsGatherer())).append(',').append(' ');
-    buf.append("riskFactorsGatherer").append('=').append(JodaBeanUtils.toString(getRiskFactorsGatherer())).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -1159,16 +1095,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
     private final MetaProperty<Boolean> _permissive = DirectMetaProperty.ofReadWrite(
         this, "permissive", EngineContextsComponentFactory.class, Boolean.class);
     /**
-     * The meta-property for the {@code pnlRequirementsGatherer} property.
-     */
-    private final MetaProperty<PnLRequirementsGatherer> _pnlRequirementsGatherer = DirectMetaProperty.ofReadWrite(
-        this, "pnlRequirementsGatherer", EngineContextsComponentFactory.class, PnLRequirementsGatherer.class);
-    /**
-     * The meta-property for the {@code riskFactorsGatherer} property.
-     */
-    private final MetaProperty<RiskFactorsGatherer> _riskFactorsGatherer = DirectMetaProperty.ofReadWrite(
-        this, "riskFactorsGatherer", EngineContextsComponentFactory.class, RiskFactorsGatherer.class);
-    /**
      * The meta-properties.
      */
     private final Map<String, MetaProperty<?>> _metaPropertyMap$ = new DirectMetaPropertyMap(
@@ -1193,9 +1119,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
         "compilationBlacklist",
         "tempTargetRepository",
         "viewProcessor",
-        "permissive",
-        "pnlRequirementsGatherer",
-        "riskFactorsGatherer");
+        "permissive");
 
     /**
      * Restricted constructor.
@@ -1248,10 +1172,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
           return _viewProcessor;
         case -517618017:  // permissive
           return _permissive;
-        case -1266263066:  // pnlRequirementsGatherer
-          return _pnlRequirementsGatherer;
-        case 861249085:  // riskFactorsGatherer
-          return _riskFactorsGatherer;
       }
       return super.metaPropertyGet(propertyName);
     }
@@ -1440,22 +1360,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
       return _permissive;
     }
 
-    /**
-     * The meta-property for the {@code pnlRequirementsGatherer} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<PnLRequirementsGatherer> pnlRequirementsGatherer() {
-      return _pnlRequirementsGatherer;
-    }
-
-    /**
-     * The meta-property for the {@code riskFactorsGatherer} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<RiskFactorsGatherer> riskFactorsGatherer() {
-      return _riskFactorsGatherer;
-    }
-
     //-----------------------------------------------------------------------
     @Override
     protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
@@ -1502,10 +1406,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
           return ((EngineContextsComponentFactory) bean).getViewProcessor();
         case -517618017:  // permissive
           return ((EngineContextsComponentFactory) bean).getPermissive();
-        case -1266263066:  // pnlRequirementsGatherer
-          return ((EngineContextsComponentFactory) bean).getPnlRequirementsGatherer();
-        case 861249085:  // riskFactorsGatherer
-          return ((EngineContextsComponentFactory) bean).getRiskFactorsGatherer();
       }
       return super.propertyGet(bean, propertyName, quiet);
     }
@@ -1575,12 +1475,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
           return;
         case -517618017:  // permissive
           ((EngineContextsComponentFactory) bean).setPermissive((Boolean) newValue);
-          return;
-        case -1266263066:  // pnlRequirementsGatherer
-          ((EngineContextsComponentFactory) bean).setPnlRequirementsGatherer((PnLRequirementsGatherer) newValue);
-          return;
-        case 861249085:  // riskFactorsGatherer
-          ((EngineContextsComponentFactory) bean).setRiskFactorsGatherer((RiskFactorsGatherer) newValue);
           return;
       }
       super.propertySet(bean, propertyName, newValue, quiet);
