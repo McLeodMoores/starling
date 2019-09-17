@@ -11,7 +11,6 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.value.MarketDataRequirementNames;
-import com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration;
 import com.opengamma.financial.convention.ConventionBundle;
 import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
 import com.opengamma.financial.convention.daycount.DayCount;
@@ -33,11 +32,7 @@ public class CashSecurityGenerator extends SecurityGenerator<CashSecurity> {
   }
 
   private ExternalId getCashRate(final Currency ccy, final LocalDate tradeDate, final Tenor tenor) {
-    final CurveSpecificationBuilderConfiguration curveSpecConfig = getCurrencyCurveConfig(ccy);
-    if (curveSpecConfig == null) {
-      return null;
-    }
-    return curveSpecConfig.getCashSecurity(tradeDate, tenor);
+    return null;
   }
 
   @Override
@@ -58,8 +53,7 @@ public class CashSecurityGenerator extends SecurityGenerator<CashSecurity> {
       return null;
     }
     final HistoricalTimeSeries timeSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, cashRate.toBundle(), null,
-        start.toLocalDate(), true,
-        start.toLocalDate(), true);
+        start.toLocalDate(), true, start.toLocalDate(), true);
     if (timeSeries == null || timeSeries.getTimeSeries().isEmpty()) {
       return null;
     }

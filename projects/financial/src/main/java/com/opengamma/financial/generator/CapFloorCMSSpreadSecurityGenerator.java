@@ -8,7 +8,6 @@ package com.opengamma.financial.generator;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZonedDateTime;
 
-import com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.financial.convention.frequency.Frequency;
@@ -30,8 +29,7 @@ public class CapFloorCMSSpreadSecurityGenerator extends SecurityGenerator<CapFlo
   private static final double[] STRIKES = new double[] { 0.001, 0.0015, 0.002, 0.0025, 0.003, 0.004, 0.005, 0.0075, 0.01, 0.015, 0.02, 0.03, 0.04 };
 
   protected String createName(final boolean cap, final Tenor tenor1, final Tenor tenor2, final double strike, final ZonedDateTime startDate,
-      final ZonedDateTime maturityDate,
-      final Frequency frequency, final Currency currency, final double notional) {
+      final ZonedDateTime maturityDate, final Frequency frequency, final Currency currency, final double notional) {
     final StringBuilder sb = new StringBuilder("CMS ");
     sb.append(cap ? "cap" : "floor");
     sb.append(" spread on ").append(tenor1.getPeriod().toString().substring(1)).append(" and ").append(tenor2.getPeriod().toString().substring(1));
@@ -42,19 +40,7 @@ public class CapFloorCMSSpreadSecurityGenerator extends SecurityGenerator<CapFlo
   }
 
   private ExternalId getUnderlying(final Currency ccy, final LocalDate tradeDate, final Tenor tenor) {
-    final CurveSpecificationBuilderConfiguration curveSpecConfig = getCurrencyCurveConfig(ccy);
-    if (curveSpecConfig == null) {
-      return null;
-    }
-    final ExternalId swapSecurity;
-    if (ccy.equals(Currency.USD)) {
-      // Standard (i.e. matches convention) floating leg tenor for USD is 3M
-      swapSecurity = curveSpecConfig.getSwap3MSecurity(tradeDate, tenor);
-    } else {
-      // Standard (i.e. matches convention) floating leg tenor for CHF, JPY, GBP, EUR is 6M
-      swapSecurity = curveSpecConfig.getSwap6MSecurity(tradeDate, tenor);
-    }
-    return swapSecurity;
+    return null;
   }
 
   @Override

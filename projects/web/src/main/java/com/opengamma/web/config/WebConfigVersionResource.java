@@ -22,10 +22,8 @@ import org.apache.commons.lang.StringUtils;
 import org.joda.beans.impl.flexi.FlexiBean;
 
 import com.opengamma.engine.view.ViewDefinition;
-import com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration;
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.config.ConfigDocument;
-import com.opengamma.web.json.CurveSpecificationBuilderConfigurationJSONBuilder;
 import com.opengamma.web.json.ViewDefinitionJSONBuilder;
 
 /**
@@ -78,9 +76,6 @@ public class WebConfigVersionResource extends AbstractWebConfigResource {
   private static String toJSON(final Object config) {
     if (config.getClass().isAssignableFrom(ViewDefinition.class)) {
       return ViewDefinitionJSONBuilder.INSTANCE.toJSON((ViewDefinition) config);
-    }
-    if (config.getClass().isAssignableFrom(CurveSpecificationBuilderConfiguration.class)) {
-      return CurveSpecificationBuilderConfigurationJSONBuilder.INSTANCE.toJSON((CurveSpecificationBuilderConfiguration) config);
     }
     return null;
   }

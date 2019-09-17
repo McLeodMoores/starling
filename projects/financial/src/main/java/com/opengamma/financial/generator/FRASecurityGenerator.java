@@ -13,7 +13,6 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.value.MarketDataRequirementNames;
-import com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration;
 import com.opengamma.financial.security.fra.FRASecurity;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.money.Currency;
@@ -34,11 +33,7 @@ public class FRASecurityGenerator extends SecurityGenerator<FRASecurity> {
   }
 
   private ExternalId getUnderlyingRate(final Currency ccy, final LocalDate tradeDate, final Tenor tenor) {
-    final CurveSpecificationBuilderConfiguration curveSpecConfig = getCurrencyCurveConfig(ccy);
-    if (curveSpecConfig == null) {
-      return null;
-    }
-    return curveSpecConfig.getLiborSecurity(tradeDate, tenor);
+    return null;
   }
 
   @Override
@@ -62,8 +57,7 @@ public class FRASecurityGenerator extends SecurityGenerator<FRASecurity> {
     }
 
     final HistoricalTimeSeries underlyingSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE,
-        underlyingIdentifier.toBundle(), null, start.toLocalDate(),
-        true, start.toLocalDate(), true);
+        underlyingIdentifier.toBundle(), null, start.toLocalDate(), true, start.toLocalDate(), true);
     if (underlyingSeries == null || underlyingSeries.getTimeSeries().isEmpty()) {
       return null;
     }

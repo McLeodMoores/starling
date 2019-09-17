@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZonedDateTime;
 
-import com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.financial.convention.frequency.Frequency;
@@ -31,13 +30,11 @@ public class CapFloorSecurityGenerator extends SecurityGenerator<CapFloorSecurit
   private static final Frequency[] FREQUENCY = new Frequency[] { SimpleFrequency.QUARTERLY, SimpleFrequency.SEMI_ANNUAL, SimpleFrequency.ANNUAL };
   private static final Tenor[] TENORS = new Tenor[] { Tenor.TWO_YEARS, Tenor.FIVE_YEARS, Tenor.ofYears(10), Tenor.ofYears(20) };
   private static final Tenor[] IBOR_TENORS = new Tenor[] { Tenor.ONE_DAY, Tenor.TWO_DAYS, Tenor.THREE_DAYS, Tenor.ofDays(7), Tenor.ofDays(14), Tenor.ofDays(21),
-                Tenor.ONE_MONTH, Tenor.TWO_MONTHS, Tenor.THREE_MONTHS, Tenor.FOUR_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS, Tenor.SEVEN_MONTHS,
-                Tenor.EIGHT_MONTHS,
-                Tenor.NINE_MONTHS, Tenor.TEN_MONTHS, Tenor.ELEVEN_MONTHS };
+      Tenor.ONE_MONTH, Tenor.TWO_MONTHS, Tenor.THREE_MONTHS, Tenor.FOUR_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS, Tenor.SEVEN_MONTHS, Tenor.EIGHT_MONTHS,
+      Tenor.NINE_MONTHS, Tenor.TEN_MONTHS, Tenor.ELEVEN_MONTHS };
 
   public static String createName(final boolean ibor, final boolean cap, final double strike, final ZonedDateTime startDate, final ZonedDateTime maturityDate,
-      final Frequency frequency,
-      final Currency currency, final double notional) {
+      final Frequency frequency, final Currency currency, final double notional) {
     final StringBuilder sb = new StringBuilder();
     sb.append(ibor ? "Ibor " : "CMS ");
     sb.append(cap ? "cap " : "floor");
@@ -48,17 +45,7 @@ public class CapFloorSecurityGenerator extends SecurityGenerator<CapFloorSecurit
   }
 
   private ExternalId getUnderlying(final Currency ccy, final LocalDate tradeDate, final Tenor tenor, final boolean ibor) {
-    final CurveSpecificationBuilderConfiguration curveSpecConfig = getCurrencyCurveConfig(ccy);
-    if (curveSpecConfig == null) {
-      return null;
-    }
-    if (ibor) {
-      return curveSpecConfig.getLiborSecurity(tradeDate, tenor);
-    }
-    if (ccy.equals(Currency.USD)) {
-      return curveSpecConfig.getSwap3MSecurity(tradeDate, tenor);
-    }
-    return curveSpecConfig.getSwap6MSecurity(tradeDate, tenor);
+    return null;
   }
 
   @Override

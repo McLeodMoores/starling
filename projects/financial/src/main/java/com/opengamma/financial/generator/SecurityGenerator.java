@@ -51,7 +51,6 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.OpenGammaExecutionContext;
-import com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration;
 import com.opengamma.financial.analytics.model.forex.FXUtils;
 import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.currency.ConfigDBCurrencyMatrixSource;
@@ -277,12 +276,6 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
 
   public void setCurveCalculationConfig(final Currency currency, final String curveCalculationConfig) {
     _curveCalculationConfig.put(currency, curveCalculationConfig);
-  }
-
-  protected CurveSpecificationBuilderConfiguration getCurrencyCurveConfig(final Currency currency) {
-    final CurveSpecificationBuilderConfiguration config = getConfigSource().getSingle(CurveSpecificationBuilderConfiguration.class,
-        getCurrencyCurveName() + "_" + currency.getCode(), null);
-    return config;
   }
 
   public Function2<Currency, Currency, ExternalId> getSpotRateIdentifier() {

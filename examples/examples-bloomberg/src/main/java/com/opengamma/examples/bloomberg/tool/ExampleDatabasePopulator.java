@@ -29,9 +29,6 @@ import com.opengamma.examples.bloomberg.loader.ExampleEURFixedIncomePortfolioLoa
 import com.opengamma.examples.bloomberg.loader.ExampleEquityPortfolioLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleFunctionConfigurationPopulator;
 import com.opengamma.examples.bloomberg.loader.ExampleFxForwardPortfolioLoader;
-import com.opengamma.examples.bloomberg.loader.ExampleMixedCMCapFloorPortfolioLoader;
-import com.opengamma.examples.bloomberg.loader.ExampleMultiCurrencySwapPortfolioLoader;
-import com.opengamma.examples.bloomberg.loader.ExampleSwaptionPortfolioLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleTimeSeriesRatingLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleVanillaFxOptionPortfolioLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleViewsPopulator;
@@ -111,15 +108,11 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
     // Note: historical time series need to be loaded before swap, swaption and FX portfolios can be created.
     loadHistoricalData();
     loadVolSurfaceData();
-    loadMultiCurrencySwapPortfolio();
     loadEquityOptionPortfolio();
     loadFXForwardPortfolio();
     loadVanillaFXOptionPortfolio();
-    loadSwaptionPortfolio();
     loadAUDSwapPortfolio();
-    loadCMCapFloorPortfolio();
     loadEURSwapDeskPortfolio();
-    // loadBondPortfolio();
     loadViews();
     loadFunctionConfigurations();
   }
@@ -280,10 +273,8 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
   private void loadHistoricalData() {
     final Log log = new Log("Loading historical reference data");
     try {
-      final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(
-          getToolContext().getHistoricalTimeSeriesMaster(),
-          getToolContext().getHistoricalTimeSeriesProvider(),
-          new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
+      final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(getToolContext().getHistoricalTimeSeriesMaster(),
+          getToolContext().getHistoricalTimeSeriesProvider(), new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
       for (final SecurityDocument doc : readEquitySecurities()) {
         final Security security = doc.getSecurity();
         loader.loadTimeSeries(ImmutableSet.of(security.getExternalIdBundle().getExternalId(ExternalSchemes.BLOOMBERG_TICKER)), "UNKNOWN", "PX_LAST",
@@ -316,17 +307,6 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
     }
   }
 
-  private void loadMultiCurrencySwapPortfolio() {
-    final Log log = new Log("Creating example multi-currency swap portfolio");
-    try {
-      final ExampleMultiCurrencySwapPortfolioLoader multiCurrSwapLoader = new ExampleMultiCurrencySwapPortfolioLoader();
-      multiCurrSwapLoader.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
   private void loadFXForwardPortfolio() {
     final Log log = new Log("Creating example FX forward portfolio");
     try {
@@ -349,33 +329,11 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
     }
   }
 
-  private void loadSwaptionPortfolio() {
-    final Log log = new Log("Creating example swaption portfolio");
-    try {
-      final ExampleSwaptionPortfolioLoader swaptionLoader = new ExampleSwaptionPortfolioLoader();
-      swaptionLoader.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
   private void loadAUDSwapPortfolio() {
     final Log log = new Log("Creating example AUD swap portfolio");
     try {
       final ExampleAUDSwapPortfolioLoader swapLoader = new ExampleAUDSwapPortfolioLoader();
       swapLoader.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
-  private void loadCMCapFloorPortfolio() {
-    final Log log = new Log("Creating example constant maturity swap and cap/floor portfolio");
-    try {
-      final ExampleMixedCMCapFloorPortfolioLoader loader = new ExampleMixedCMCapFloorPortfolioLoader();
-      loader.run(getToolContext());
       log.done();
     } catch (final RuntimeException t) {
       log.fail(t);
