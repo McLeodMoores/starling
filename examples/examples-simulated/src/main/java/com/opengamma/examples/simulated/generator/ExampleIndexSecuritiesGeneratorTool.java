@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.examples.simulated.tool.AbstractSecuritiesGeneratorTool;
-import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
 import com.opengamma.financial.generator.SecurityGenerator;
 import com.opengamma.financial.security.index.IborIndex;
 import com.opengamma.financial.security.index.OvernightIndex;
@@ -33,11 +32,9 @@ public class ExampleIndexSecuritiesGeneratorTool extends AbstractSecuritiesGener
     Tenor[] tenors = new Tenor[] { Tenor.ONE_MONTH, Tenor.TWO_MONTHS, Tenor.THREE_MONTHS, Tenor.FOUR_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS };
     for (final Tenor tenor : tenors) {
       final String iborTicker = "EUREURIBOR" + tenor.toFormattedString();
-      final String referenceRateTicker = " EURIBOR " + tenor.toFormattedString().substring(1).toLowerCase();
       final ExternalId iborIndexId = ExternalSchemes.syntheticSecurityId(iborTicker);
-      final ExternalId iborIndexReferenceRateId = ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, referenceRateTicker);
       final IborIndex iborIndex = new IborIndex(iborTicker, tenor, iborIndexId);
-      iborIndex.setExternalIdBundle(ExternalIdBundle.of(iborIndexId, iborIndexReferenceRateId));
+      iborIndex.setExternalIdBundle(ExternalIdBundle.of(iborIndexId));
       iborIndex.setName(iborTicker);
       INDICES.add(iborIndex);
     }
@@ -46,11 +43,9 @@ public class ExampleIndexSecuritiesGeneratorTool extends AbstractSecuritiesGener
       final String overnightTicker = overnightTickers[i];
       for (final Tenor tenor : tenors) {
         final String iborTicker = currency + "LIBOR" + tenor.toFormattedString();
-        final String referenceRateTicker = currency + " LIBOR " + tenor.toFormattedString().substring(1).toLowerCase();
         final ExternalId iborIndexId = ExternalSchemes.syntheticSecurityId(iborTicker);
-        final ExternalId iborIndexReferenceRateId = ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, referenceRateTicker);
         final IborIndex iborIndex = new IborIndex(iborTicker, tenor, iborIndexId);
-        iborIndex.setExternalIdBundle(ExternalIdBundle.of(iborIndexId, iborIndexReferenceRateId));
+        iborIndex.setExternalIdBundle(ExternalIdBundle.of(iborIndexId));
         iborIndex.setName(iborTicker);
         INDICES.add(iborIndex);
       }

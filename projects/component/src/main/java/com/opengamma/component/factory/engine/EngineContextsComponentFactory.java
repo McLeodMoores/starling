@@ -44,7 +44,6 @@ import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionSource;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationBuilder;
-import com.opengamma.financial.analytics.model.pnl.DefaultPnLRequirementsGatherer;
 import com.opengamma.financial.analytics.model.pnl.PnLRequirementsGatherer;
 import com.opengamma.financial.analytics.riskfactors.DefaultRiskFactorsConfigurationProvider;
 import com.opengamma.financial.analytics.riskfactors.DefaultRiskFactorsGatherer;
@@ -194,42 +193,10 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
-    initPnlRequirementsGatherer();
     initThreadLocalServiceContext();
     initFunctionCompilationContext(repo, configuration);
     final OverrideOperationCompiler ooc = initOverrideOperationCompiler(repo, configuration);
     initFunctionExecutionContext(repo, configuration, ooc);
-  }
-
-  protected void initPnlRequirementsGatherer() {
-    _pnlRequirementsGatherer = new DefaultPnLRequirementsGatherer() {
-      {
-        addCurveCalculationConfig("USD", "DefaultTwoCurveUSDConfig");
-        addFXCurveCalculationConfig("USD", "DefaultTwoCurveUSDConfig");
-        addIRFuturesCurveCalculationConfig("USD", "DefaultTwoCurveUSDConfig");
-        addFXDiscountingCurveName("USD", "Forward3M");
-        addCurveCalculationConfig("EUR", "DefaultTwoCurveEURConfig");
-        addFXCurveCalculationConfig("EUR", "DefaultTwoCurveEURConfig");
-        addIRFuturesCurveCalculationConfig("EUR", "DefaultTwoCurveEURConfig");
-        addFXDiscountingCurveName("EUR", "Forward6M");
-        addCurveCalculationConfig("CAD", "DefaultTwoCurveCADConfig");
-        addFXCurveCalculationConfig("CAD", "DefaultTwoCurveCADConfig");
-        addIRFuturesCurveCalculationConfig("CAD", "DefaultTwoCurveCADConfig");
-        addFXDiscountingCurveName("CAD", "Forward3M");
-        addCurveCalculationConfig("AUD", "DefaultThreeCurveAUDConfig");
-        addFXCurveCalculationConfig("AUD", "DefaultThreeCurveAUDConfig");
-        addIRFuturesCurveCalculationConfig("AUD", "DefaultThreeCurveAUDConfig");
-        addFXDiscountingCurveName("AUD", "ForwardBasis3M");
-        addCurveCalculationConfig("CHF", "DefaultTwoCurveCHFConfig");
-        addFXCurveCalculationConfig("CHF", "DefaultTwoCurveCHFConfig");
-        addIRFuturesCurveCalculationConfig("CHF", "DefaultTwoCurveCHFConfig");
-        addFXDiscountingCurveName("CHF", "Forward6M");
-        addCurveCalculationConfig("GBP", "DefaultTwoCurveGBPConfig");
-        addFXCurveCalculationConfig("GBP", "DefaultTwoCurveGBPConfig");
-        addIRFuturesCurveCalculationConfig("GBP", "DefaultTwoCurveGBPConfig");
-        addFXDiscountingCurveName("USD", "Forward3M");
-      }
-    };
   }
 
   private void initThreadLocalServiceContext() {

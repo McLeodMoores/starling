@@ -18,8 +18,8 @@ public class DiscountingPricingFunctions extends AbstractFunctionConfigurationBe
 
   /**
    * Creates an instance of this function configuration source.
-   * @return A function configuration source populated with pricing functions
-   * from this package.
+   * 
+   * @return A function configuration source populated with pricing functions from this package.
    */
   public static FunctionConfigurationSource instance() {
     return new DiscountingPricingFunctions().getObjectCreating();
@@ -35,8 +35,6 @@ public class DiscountingPricingFunctions extends AbstractFunctionConfigurationBe
     functions.add(functionConfiguration(DiscountingPVFunction.class));
     functions.add(functionConfiguration(DiscountingParRateFunction.class));
     functions.add(functionConfiguration(DiscountingPV01Function.class));
-    functions.add(functionConfiguration(DiscountingSwapLegDetailFunction.class, "false"));
-    functions.add(functionConfiguration(DiscountingSwapLegDetailFunction.class, "true"));
     functions.add(functionConfiguration(DiscountingYCNSFunction.class));
 
     functions.add(functionConfiguration(XCcySwapDiscountingFxPvFunction.class));

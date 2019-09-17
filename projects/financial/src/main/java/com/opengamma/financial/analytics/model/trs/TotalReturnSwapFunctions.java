@@ -18,6 +18,7 @@ public class TotalReturnSwapFunctions extends AbstractFunctionConfigurationBean 
 
   /**
    * Gets an instance of this class.
+   * 
    * @return The instance
    */
   public static FunctionConfigurationSource instance() {
@@ -26,12 +27,10 @@ public class TotalReturnSwapFunctions extends AbstractFunctionConfigurationBean 
 
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-    functions.add(functionConfiguration(BondTotalReturnSwapAssetLegDetailsFunction.class));
     functions.add(functionConfiguration(BondTotalReturnSwapAssetLegPVFunction.class));
     functions.add(functionConfiguration(BondTotalReturnSwapBCSFunction.class));
     functions.add(functionConfiguration(BondTotalReturnSwapYCNSFunction.class));
     functions.add(functionConfiguration(BondTotalReturnSwapConstantSpreadThetaFunction.class));
-    functions.add(functionConfiguration(BondTotalReturnSwapFundingLegDetailsFunction.class));
     functions.add(functionConfiguration(BondTotalReturnSwapGammaPV01Function.class));
     functions.add(functionConfiguration(BondTotalReturnSwapFundingLegPVFunction.class));
     functions.add(functionConfiguration(BondTotalReturnSwapPVFunction.class));
@@ -41,7 +40,6 @@ public class TotalReturnSwapFunctions extends AbstractFunctionConfigurationBean 
     functions.add(functionConfiguration(EquityTotalReturnSwapAssetLegPVFunction.class));
     functions.add(functionConfiguration(EquityTotalReturnSwapYCNSFunction.class));
     functions.add(functionConfiguration(EquityTotalReturnSwapBCSFunction.class));
-    functions.add(functionConfiguration(EquityTotalReturnSwapFundingLegDetailsFunction.class));
     functions.add(functionConfiguration(EquityTotalReturnSwapFundingLegPVFunction.class));
     functions.add(functionConfiguration(EquityTotalReturnSwapGammaPV01Function.class));
     functions.add(functionConfiguration(EquityTotalReturnSwapPV01Function.class));

@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.component.tool.AbstractTool;
-import com.opengamma.examples.simulated.convention.SyntheticInMemoryConventionMasterInitializer;
 import com.opengamma.examples.simulated.generator.ExampleEquityOptionPortfolioGeneratorTool;
 import com.opengamma.examples.simulated.generator.ExampleMultiCountryPortfolioGeneratorTool;
 import com.opengamma.examples.simulated.generator.ExampleOisPortfolioGeneratorTool;
@@ -48,7 +47,6 @@ import com.opengamma.financial.generator.AbstractPortfolioGeneratorTool;
 import com.opengamma.financial.generator.StaticNameGenerator;
 import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.integration.tool.portfolio.PortfolioLoader;
-import com.opengamma.master.convention.ConventionMaster;
 import com.opengamma.scripts.Scriptable;
 
 /**
@@ -141,23 +139,23 @@ public class ExampleDatabasePopulator extends AbstractTool<ToolContext> {
   /** Logger. */
   /* package */static final Logger LOGGER = LoggerFactory.getLogger(ExampleDatabasePopulator.class);
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     LOGGER.info("Populating example database");
     new ExampleDatabasePopulator().invokeAndTerminate(args, TOOLCONTEXT_EXAMPLE_PROPERTIES, null);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     loadExchanges();
     loadHolidays();
-    loadConventions();
     loadCurrencyConfiguration();
     loadCurveAndSurfaceDefinitions();
     loadCurveCalculationConfigurations();
@@ -202,6 +200,7 @@ public class ExampleDatabasePopulator extends AbstractTool<ToolContext> {
 
   /**
    * Creates a synthetic portfolio generator tool.
+   * 
    * @return The tool
    */
   private static SyntheticPortfolioGeneratorTool portfolioGeneratorTool() {
@@ -211,9 +210,8 @@ public class ExampleDatabasePopulator extends AbstractTool<ToolContext> {
   }
 
   /**
-   * Logging helper. All stages must go through this. When run as part of the Windows install, the logger is customized to recognize messages
-   * formatted in this fashion and route them towards the
-   * progress indicators.
+   * Logging helper. All stages must go through this. When run as part of the Windows install, the logger is customized to recognize messages formatted in this
+   * fashion and route them towards the progress indicators.
    */
   private static final class Log {
     /** The string */
@@ -221,9 +219,11 @@ public class ExampleDatabasePopulator extends AbstractTool<ToolContext> {
 
     /**
      * Create an instance
-     * @param str The string
+     * 
+     * @param str
+     *          The string
      */
-    /* package */Log(final String str) {
+    /* package */ Log(final String str) {
       LOGGER.info("{}", str);
       _str = str;
     }
@@ -237,27 +237,15 @@ public class ExampleDatabasePopulator extends AbstractTool<ToolContext> {
 
     /**
      * Appends an error message.
-     * @param e The error
+     * 
+     * @param e
+     *          The error
      */
     /* package */void fail(final RuntimeException e) {
       LOGGER.error("{} - failed - {}", _str, e.getMessage());
       throw e;
     }
 
-  }
-
-  /**
-   * Loads conventions into an in-memory {@link ConventionMaster}.
-   */
-  private void loadConventions() {
-    final Log log = new Log("Creating convention data");
-    try {
-      final ConventionMaster master = getToolContext().getConventionMaster();
-      SyntheticInMemoryConventionMasterInitializer.INSTANCE.init(master, getToolContext().getSecurityMaster());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
   }
 
   /**
@@ -379,8 +367,7 @@ public class ExampleDatabasePopulator extends AbstractTool<ToolContext> {
     try {
       final URL resource = ExampleEquityPortfolioLoader.class.getResource("futures.zip");
       final String file = unpackJar(resource);
-      final PortfolioLoader futureLoader = new PortfolioLoader(getToolContext(), FUTURE_PORTFOLIO_NAME, null,
-          file, true, true, true, false, true, false, null);
+      final PortfolioLoader futureLoader = new PortfolioLoader(getToolContext(), FUTURE_PORTFOLIO_NAME, null, file, true, true, true, false, true, false, null);
       futureLoader.execute();
       log.done();
     } catch (final RuntimeException t) {
@@ -629,7 +616,9 @@ public class ExampleDatabasePopulator extends AbstractTool<ToolContext> {
 
   /**
    * Workaround for poor handling of resources.
-   * @param resource The resource.
+   * 
+   * @param resource
+   *          The resource.
    * @return The file name
    */
   private static String unpackJar(final URL resource) {
