@@ -109,7 +109,7 @@ public class InterestRateFutureOptionMarginBlackSurfaceMethodTest {
     final double forward = 1 - priceFuture;
     final double volatility = BLACK_BUNDLE.getVolatility(expiry, STRIKE);
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, 1.0, volatility);
-    final double priceExpected = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlack);
+    final double priceExpected = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlack);
     final double priceComputed = METHOD_SECURITY_OPTION_BLACK.optionPrice(OPTION_ERU2, BLACK_BUNDLE);
     assertEquals("Future option with Black volatilities: option security price", priceExpected, priceComputed);
   }
@@ -217,8 +217,8 @@ public class InterestRateFutureOptionMarginBlackSurfaceMethodTest {
     final BlackFunctionData dataBlackUp = new BlackFunctionData(1.0 - priceFutureUp, 1.0, volatility);
     final BlackFunctionData dataBlackDown = new BlackFunctionData(1.0 - priceFutureDown, 1.0, volatility);
 
-    final double priceUp = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlackUp);
-    final double priceDown = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlackDown);
+    final double priceUp = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlackUp);
+    final double priceDown = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlackDown);
 
     final double deltaExpected = (priceUp - priceDown) / (2 * shift);
     final double deltaComputed = METHOD_SECURITY_OPTION_BLACK.optionPriceDelta(OPTION_ERU2, BLACK_BUNDLE);
@@ -270,9 +270,9 @@ public class InterestRateFutureOptionMarginBlackSurfaceMethodTest {
     final BlackFunctionData dataBlackUp = new BlackFunctionData(1.0 - priceFutureUp, 1.0, volatility);
     final BlackFunctionData dataBlackDown = new BlackFunctionData(1.0 - priceFutureDown, 1.0, volatility);
 
-    final double priceBase = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlackBase);
-    final double priceUp = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlackUp);
-    final double priceDown = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlackDown);
+    final double priceBase = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlackBase);
+    final double priceUp = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlackUp);
+    final double priceDown = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlackDown);
 
     final double gammaExpected = (priceUp - 2.0 * priceBase + priceDown) / (shift * shift);
     final double gammaComputed = METHOD_SECURITY_OPTION_BLACK.optionPriceGamma(OPTION_ERU2, BLACK_BUNDLE);
@@ -298,9 +298,9 @@ public class InterestRateFutureOptionMarginBlackSurfaceMethodTest {
     final BlackFunctionData dataBlackUp = new BlackFunctionData(1.0 - priceFutureUp, 1.0, volatility);
     final BlackFunctionData dataBlackDown = new BlackFunctionData(1.0 - priceFutureDown, 1.0, volatility);
 
-    final double priceBase = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlackBase);
-    final double priceUp = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlackUp);
-    final double priceDown = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlackDown);
+    final double priceBase = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlackBase);
+    final double priceUp = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlackUp);
+    final double priceDown = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlackDown);
 
     final double deltaUp = (priceUp - priceBase) / shift;
     final double deltaDown = (priceBase - priceDown) / shift;
@@ -329,9 +329,9 @@ public class InterestRateFutureOptionMarginBlackSurfaceMethodTest {
     final BlackFunctionData dataBlackUp = new BlackFunctionData(1.0 - priceFutureUp, 1.0, volatility);
     final BlackFunctionData dataBlackDown = new BlackFunctionData(1.0 - priceFutureDown, 1.0, volatility);
 
-    final double priceBase = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlackBase);
-    final double priceUp = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlackUp);
-    final double priceDown = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlackDown);
+    final double priceBase = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlackBase);
+    final double priceUp = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlackUp);
+    final double priceDown = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlackDown);
 
     final double deltaUp = (priceUp - priceBase);
     final double deltaDown = (priceBase - priceDown);

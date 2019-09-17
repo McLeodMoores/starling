@@ -105,7 +105,7 @@ public class GeneratorIssuerProviderDiscount extends Function1D<DoubleMatrix1D, 
   }
 
   @Override
-  public IssuerProviderDiscount evaluate(final DoubleMatrix1D x) {
+  public IssuerProviderDiscount apply(final DoubleMatrix1D x) {
     final IssuerProviderDiscount provider = _knownData.copy();
     final Set<String> nameSet = _generatorsMap.keySet();
     int indexParam = 0;

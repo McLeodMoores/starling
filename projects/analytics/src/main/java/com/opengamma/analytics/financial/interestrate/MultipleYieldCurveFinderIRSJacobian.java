@@ -52,9 +52,9 @@ public class MultipleYieldCurveFinderIRSJacobian extends Function1D<DoubleMatrix
   }
 
   @Override
-  public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+  public DoubleMatrix2D apply(final DoubleMatrix1D x) {
 
-    final YieldCurveBundle curves = _curveBuilderFunction.evaluate(x);
+    final YieldCurveBundle curves = _curveBuilderFunction.apply(x);
 
     final YieldCurveBundle knownCurves = _data.getKnownCurves();
     // set any known (i.e. fixed) curves

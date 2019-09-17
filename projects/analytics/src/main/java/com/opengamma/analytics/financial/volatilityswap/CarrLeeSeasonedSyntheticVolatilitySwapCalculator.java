@@ -164,7 +164,7 @@ public class CarrLeeSeasonedSyntheticVolatilitySwapCalculator {
 
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         final double cosx = Math.cos(x);
         return Math.exp(-0.125 * resRV * Math.pow(Math.sin(x), 2.)) * (cosx * Math.cosh(0.5 * logKF * cosx) - Math.sinh(0.5 * logKF * cosx));
       }
@@ -175,7 +175,7 @@ public class CarrLeeSeasonedSyntheticVolatilitySwapCalculator {
 
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         final double tmp = 1. + x * x;
         final double half = 0.5 * logKF;
         return Math.exp(-0.125 * resRV * tmp) * ((0.25 * resRV * x * x - half) * tmp - 1.) * Math.sin(half * x) / Math.pow(tmp, 1.5) / half;
@@ -187,7 +187,7 @@ public class CarrLeeSeasonedSyntheticVolatilitySwapCalculator {
 
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return Math.exp(-0.125 * resRV * Math.pow(Math.sin(x), 2.)) * Math.sinh(0.5 * logKF * Math.cos(x));
       }
     };
@@ -197,7 +197,7 @@ public class CarrLeeSeasonedSyntheticVolatilitySwapCalculator {
 
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         final double tmp = 1. + x * x;
         return Math.exp(-0.125 * resRV * tmp) * Math.sin(0.5 * logKF * x) / Math.sqrt(tmp);
       }

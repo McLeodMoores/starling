@@ -29,7 +29,7 @@ public class InverseTridiagonalMatrixCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullArray() {
-    CALCULATOR.evaluate((TridiagonalMatrix) null);
+    CALCULATOR.apply((TridiagonalMatrix) null);
   }
 
   @Test
@@ -43,7 +43,7 @@ public class InverseTridiagonalMatrixCalculatorTest {
     for (i = 0; i < n; i++) {
       a[i] = 1.0;
     }
-    final DoubleMatrix2D res = CALCULATOR.evaluate(new TridiagonalMatrix(a, b, c));
+    final DoubleMatrix2D res = CALCULATOR.apply(new TridiagonalMatrix(a, b, c));
     for (i = 0; i < n; i++) {
       for (j = 0; j < n; j++) {
         assertEquals((i == j ? 1.0 : 0.0), res.getEntry(i, j), EPS);
@@ -54,7 +54,7 @@ public class InverseTridiagonalMatrixCalculatorTest {
 
   @Test
   public void testInvert() {
-    final DoubleMatrix2D res = CALCULATOR.evaluate(MATRIX);
+    final DoubleMatrix2D res = CALCULATOR.apply(MATRIX);
     final DoubleMatrix2D idet = (DoubleMatrix2D) OG_ALGEBRA.multiply(TRI, res);
 
     final int n = idet.getNumberOfRows();

@@ -49,8 +49,8 @@ public class VectorFieldSecondOrderDifferentiator implements Differentiator<Doub
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D[]>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix2D[] evaluate(final DoubleMatrix1D x) {
-        final DoubleMatrix2D[] gamma = hFunc.evaluate(x);
+      public DoubleMatrix2D[] apply(final DoubleMatrix1D x) {
+        final DoubleMatrix2D[] gamma = hFunc.apply(x);
         return reshapeTensor(gamma);
       }
     };
@@ -65,9 +65,9 @@ public class VectorFieldSecondOrderDifferentiator implements Differentiator<Doub
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D[]>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix2D[] evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix2D[] apply(final DoubleMatrix1D x) {
 
-        final DoubleMatrix2D[] gamma = hFunc.evaluate(x);
+        final DoubleMatrix2D[] gamma = hFunc.apply(x);
         return reshapeTensor(gamma);
       }
     };
@@ -110,9 +110,9 @@ public class VectorFieldSecondOrderDifferentiator implements Differentiator<Doub
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix2D[] evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix2D[] apply(final DoubleMatrix1D x) {
         Validate.notNull(x, "x");
-        final DoubleMatrix1D y = function.evaluate(x);
+        final DoubleMatrix1D y = function.apply(x);
         final int n = x.getNumberOfElements();
         final int m = y.getNumberOfElements();
         final double[] xData = x.getData();
@@ -124,22 +124,22 @@ public class VectorFieldSecondOrderDifferentiator implements Differentiator<Doub
         for (j = 0; j < n; j++) {
           oldValueJ = xData[j];
           xData[j] += _eps;
-          up = function.evaluate(x);
+          up = function.apply(x);
           xData[j] -= _twoEps;
-          down = function.evaluate(x);
+          down = function.apply(x);
           for (i = 0; i < m; i++) {
             res[i][j][j] = (up.getEntry(i) + down.getEntry(i) - 2 * y.getEntry(i)) / _epsSqr;
           }
           for (k = j + 1; k < n; k++) {
             oldValueK = xData[k];
             xData[k] += _eps;
-            downup = function.evaluate(x);
+            downup = function.apply(x);
             xData[k] -= _twoEps;
-            downdown = function.evaluate(x);
+            downdown = function.apply(x);
             xData[j] += _twoEps;
-            updown = function.evaluate(x);
+            updown = function.apply(x);
             xData[k] += _twoEps;
-            upup = function.evaluate(x);
+            upup = function.apply(x);
             xData[k] = oldValueK;
             for (i = 0; i < m; i++) {
               res[i][j][k] = (upup.getEntry(i) + downdown.getEntry(i) - updown.getEntry(i) - downup.getEntry(i)) / 4 / _epsSqr;
@@ -166,9 +166,9 @@ public class VectorFieldSecondOrderDifferentiator implements Differentiator<Doub
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D x) {
         Validate.notNull(x, "x");
-        final DoubleMatrix1D y = function.evaluate(x);
+        final DoubleMatrix1D y = function.apply(x);
         final int n = x.getNumberOfElements();
         final int m = y.getNumberOfElements();
         final double[] xData = x.getData();
@@ -180,9 +180,9 @@ public class VectorFieldSecondOrderDifferentiator implements Differentiator<Doub
         for (j = 0; j < n; j++) {
           oldValue = xData[j];
           xData[j] += _eps;
-          up = function.evaluate(x);
+          up = function.apply(x);
           xData[j] -= _twoEps;
-          down = function.evaluate(x);
+          down = function.apply(x);
           for (i = 0; i < m; i++) {
             res[i][j] = (up.getEntry(i) + down.getEntry(i) - 2 * y.getEntry(i)) / _epsSqr;
           }

@@ -38,7 +38,7 @@ public class JuZhongModel extends AnalyticOptionModel<AmericanVanillaOptionDefin
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final StandardOptionDataBundle data) {
+      public Double apply(final StandardOptionDataBundle data) {
         Validate.notNull(data);
         final GreekResultCollection bsmResult = BSM.getGreeks(definition, data, PRICE);
         final double bsmPrice = bsmResult.get(Greek.FAIR_PRICE);
@@ -119,7 +119,7 @@ public class JuZhongModel extends AnalyticOptionModel<AmericanVanillaOptionDefin
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         final GreekResultCollection bsmPrice = BSM.getGreeks(definition, data.withSpot(x), PRICE);
         final double price = bsmPrice.get(Greek.FAIR_PRICE);
         return phi * (df * NORMAL.getCDF(phi * getD1(x, k, t, sigma, b)) + lambda * (phi * (x - k) - price) / x - 1);

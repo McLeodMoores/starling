@@ -17,8 +17,8 @@ public class TimeSeriesRelativeWeightedDifferenceOperator extends Function2D<Dat
   private static final TimeSeriesDifferenceOperator DIFFERENCE = new TimeSeriesDifferenceOperator();
 
   @Override
-  public DateDoubleTimeSeries<?> evaluate(final DateDoubleTimeSeries<?> ts, final DateDoubleTimeSeries<?> weights) {
-    final DateDoubleTimeSeries<?> differenceSeries = DIFFERENCE.evaluate(ts);
+  public DateDoubleTimeSeries<?> apply(final DateDoubleTimeSeries<?> ts, final DateDoubleTimeSeries<?> weights) {
+    final DateDoubleTimeSeries<?> differenceSeries = DIFFERENCE.apply(ts);
     if (differenceSeries.size() != weights.size()) {
       throw new IllegalArgumentException("Difference series has " + differenceSeries.size() + " points but weighting series has " + weights.size());
     }

@@ -90,7 +90,7 @@ public class SABRExtrapolationRightFunction {
 
   /**
    * Constructor.
-   * 
+   *
    * @param forward
    *          The forward (rate or price).
    * @param sabrData
@@ -114,7 +114,7 @@ public class SABRExtrapolationRightFunction {
     if (timeToExpiry > SMALL_EXPIRY) {
       _parameter = computesFittingParameters();
     } else { // Implementation note: when time to expiry is very small, the price above the cut-off strike and its derivatives should be 0 (or at least very
-             // small).
+      // small).
       _parameter = new double[] { SMALL_PARAMETER, 0.0, 0.0 };
       _parameterDerivativeForward = new double[3];
       _parameterDerivativeForwardComputed = true;
@@ -125,7 +125,7 @@ public class SABRExtrapolationRightFunction {
 
   /**
    * Computes the option price with numeraire=1. The price is SABR below the cut-off strike and extrapolated beyond.
-   * 
+   *
    * @param option
    *          The option.
    * @return The option price.
@@ -135,10 +135,10 @@ public class SABRExtrapolationRightFunction {
     final double k = option.getStrike();
     if (k <= _cutOffStrike) { // Uses Hagan et al SABR function.
       final Function1D<SABRFormulaData, Double> funcSabr = _sabrFunction.getVolatilityFunction(option, _forward);
-      final double volatility = funcSabr.evaluate(_sabrData);
+      final double volatility = funcSabr.apply(_sabrData);
       final BlackFunctionData dataBlack = new BlackFunctionData(_forward, 1.0, volatility);
       final Function1D<BlackFunctionData, Double> funcBlack = BLACK_FUNCTION.getPriceFunction(option);
-      p = funcBlack.evaluate(dataBlack);
+      p = funcBlack.apply(dataBlack);
     } else { // Uses extrapolation for call.
       p = extrapolation(k);
       if (!option.isCall()) { // Put by call/put parity
@@ -150,7 +150,7 @@ public class SABRExtrapolationRightFunction {
 
   /**
    * Computes the option price derivative with respect to the strike. The price is SABR below the cut-off strike and extrapolated beyond.
-   * 
+   *
    * @param option
    *          The option.
    * @return The option derivative.
@@ -175,7 +175,7 @@ public class SABRExtrapolationRightFunction {
 
   /**
    * Computes the option price derivative with respect to the forward. The price is SABR below the cut-off strike and extrapolated beyond.
-   * 
+   *
    * @param option
    *          The option.
    * @return The option derivative.
@@ -209,7 +209,7 @@ public class SABRExtrapolationRightFunction {
 
   /**
    * Computes the option price derivative with respect to the SABR parameters. The price is SABR below the cut-off strike and extrapolated beyond.
-   * 
+   *
    * @param option
    *          The option.
    * @param priceDerivativeSABR
@@ -250,7 +250,7 @@ public class SABRExtrapolationRightFunction {
 
   /**
    * Gets the underlying Sabr data.
-   * 
+   *
    * @return the _sabrData
    */
   public SABRFormulaData getSabrData() {
@@ -259,7 +259,7 @@ public class SABRExtrapolationRightFunction {
 
   /**
    * Gets the cut-off strike. The smile is extrapolated above that level.
-   * 
+   *
    * @return the _cutOffStrike
    */
   public double getCutOffStrike() {
@@ -268,7 +268,7 @@ public class SABRExtrapolationRightFunction {
 
   /**
    * Gets the tail thickness parameter.
-   * 
+   *
    * @return The mu parameter.
    */
   public double getMu() {
@@ -277,7 +277,7 @@ public class SABRExtrapolationRightFunction {
 
   /**
    * Gets the time to expiry.
-   * 
+   *
    * @return The time to expiry.
    */
   public double getTimeToExpiry() {
@@ -286,7 +286,7 @@ public class SABRExtrapolationRightFunction {
 
   /**
    * Gets the three fitting parameters.
-   * 
+   *
    * @return The parameters.
    */
   public double[] getParameter() {
@@ -295,7 +295,7 @@ public class SABRExtrapolationRightFunction {
 
   /**
    * Gets the three fitting parameters derivatives with respect to the forward.
-   * 
+   *
    * @return The parameters derivative.
    */
   public double[] getParameterDerivativeForward() {
@@ -308,7 +308,7 @@ public class SABRExtrapolationRightFunction {
 
   /**
    * Gets the three fitting parameters derivatives with respect to the SABR parameters.
-   * 
+   *
    * @return The parameters derivative.
    */
   public double[][] getParameterDerivativeSABR() {
@@ -321,7 +321,7 @@ public class SABRExtrapolationRightFunction {
 
   /**
    * Computes the three fitting parameters to ensure a C^2 price curve.
-   * 
+   *
    * @return The parameters.
    */
   private double[] computesFittingParameters() {
@@ -356,7 +356,7 @@ public class SABRExtrapolationRightFunction {
   /**
    * Computes the derivative of the three fitting parameters with respect to the forward. The computation requires some third order derivatives; they are
    * computed by finite difference on the second order derivatives. Used to compute the derivative of the price with respect to the forward.
-   * 
+   *
    * @return The derivatives.
    */
   private double[] computesParametersDerivativeForward() {
@@ -398,8 +398,8 @@ public class SABRExtrapolationRightFunction {
     final double vD3KKF = (vD2KP[1][0] - vD2[1][0]) / (_cutOffStrike * shift);
     pDF[2] = bsD3FKK + bsD3sFK * vD[1] + (bsD3sFK + bsD3sFs * vD[1]) * vD[1] + bsD2[1][0] * vD2[1][1]
         + (bsD3sKK + bsD3ssK * vD[1] + (bsD3ssK + bsD3sss * vD[1]) * vD[1] + bsD2[1][1] * vD2[1][1])
-            * vD[0]
-        + 2 * (bsD2[2][1] + bsD2[1][1] * vD[1]) * vD2[1][0] + bsD[1] * vD3KKF;
+        * vD[0]
+            + 2 * (bsD2[2][1] + bsD2[1][1] * vD[1]) * vD2[1][0] + bsD[1] * vD3KKF;
     final DoubleMatrix1D pDFvector = new DoubleMatrix1D(pDF);
     // Derivative of f with respect to abc.
     final double[][] fD = new double[3][3]; // fD[i][j]: derivative with respect to jth variable of f_i
@@ -428,7 +428,7 @@ public class SABRExtrapolationRightFunction {
   /**
    * Computes the derivative of the three fitting parameters with respect to the SABR parameters. The computation requires some third order derivatives; they
    * are computed by finite difference on the second order derivatives. Used to compute the derivative of the price with respect to the SABR parameters.
-   * 
+   *
    * @return The derivatives.
    */
   private double[][] computesParametersDerivativeSABR() {
@@ -524,7 +524,7 @@ public class SABRExtrapolationRightFunction {
 
   /**
    * The extrapolation function.
-   * 
+   *
    * @param strike
    *          The strike.
    * @return The extrapolated price.
@@ -535,7 +535,7 @@ public class SABRExtrapolationRightFunction {
 
   /**
    * The first order derivative of the extrapolation function with respect to the strike.
-   * 
+   *
    * @param strike
    *          The strike.
    * @return The extrapolated price.
@@ -563,7 +563,7 @@ public class SABRExtrapolationRightFunction {
 
     /**
      * Constructor of the two dimension function.
-     * 
+     *
      * @param price
      *          The option price and its derivatives.
      * @param cutOffStrike
@@ -578,7 +578,7 @@ public class SABRExtrapolationRightFunction {
     }
 
     @Override
-    public Double evaluate(final Double c) {
+    public Double apply(final Double c) {
       final double b = -2 * c / _cCutOffStrike - (_cPriceK[1] / _cPriceK[0] * _cCutOffStrike + _cMu) * _cCutOffStrike;
       final double k2 = _cCutOffStrike * _cCutOffStrike;
       final double res = -_cPriceK[2] / _cPriceK[0] * k2 + _cMu * (_cMu + 1)

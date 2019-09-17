@@ -28,7 +28,7 @@ public class StudentTDistributionMaximumLikelihoodEstimator extends Distribution
   private final Function1D<double[], Double> _std = new PopulationStandardDeviationCalculator();
 
   @Override
-  public ProbabilityDistribution<Double> evaluate(final double[] x) {
+  public ProbabilityDistribution<Double> apply(final double[] x) {
     Validate.notNull(x, "x");
     ArgumentChecker.notEmpty(x, "x");
     final double[] standardized = getStandardizedData(x);
@@ -36,11 +36,11 @@ public class StudentTDistributionMaximumLikelihoodEstimator extends Distribution
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double nu) {
+      public Double apply(final Double nu) {
         double sum = 0;
         for (final double t : standardized) {
           sum += Math
-              .log(_gamma.evaluate((nu + 1) / 2.) * Math.pow(1 + t * t / (nu - 2), -(nu + 1) / 2.) / Math.sqrt(Math.PI * (nu - 2)) / _gamma.evaluate(nu / 2.));
+              .log(_gamma.apply((nu + 1) / 2.) * Math.pow(1 + t * t / (nu - 2), -(nu + 1) / 2.) / Math.sqrt(Math.PI * (nu - 2)) / _gamma.apply(nu / 2.));
         }
         return -sum;
       }
@@ -50,8 +50,8 @@ public class StudentTDistributionMaximumLikelihoodEstimator extends Distribution
   }
 
   protected double[] getStandardizedData(final double[] x) {
-    final double mean = _mean.evaluate(x);
-    final double std = _std.evaluate(x);
+    final double mean = _mean.apply(x);
+    final double std = _std.apply(x);
     final double[] z = new double[x.length];
     for (int i = 0; i < x.length; i++) {
       z[i] = (x[i] - mean) / std;

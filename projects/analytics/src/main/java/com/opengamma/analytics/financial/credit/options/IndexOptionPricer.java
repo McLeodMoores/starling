@@ -78,7 +78,7 @@ public class IndexOptionPricer {
     _coupon = coupon;
     _df = yieldCurve.getDiscountFactor(timeToExpiry + fwdCDS.getCashSettleTime());
 
-    _minExercisePrice = -coupon * _annuityFunc.evaluate(0.);
+    _minExercisePrice = -coupon * _annuityFunc.apply(0.);
     _maxExercisePrice = fwdCDS.getLGD();
   }
 
@@ -110,7 +110,7 @@ public class IndexOptionPricer {
   public double getOptionPriceForSpreadQuotedIndex(final double defaultAdjIndexValue, final double vol, final double strike, final boolean isPayer) {
     ArgumentChecker.isTrue(strike >= 0.0, "strike cannot be negative");
     final double x0 = calibrateX0(defaultAdjIndexValue, vol); // mean of pseudo-spread
-    final double gK = (strike - _coupon) * _annuityFunc.evaluate(strike); // the excise price
+    final double gK = (strike - _coupon) * _annuityFunc.apply(strike); // the excise price
     return optionPrice(defaultAdjIndexValue, x0, vol, gK, isPayer);
   }
 
@@ -178,7 +178,7 @@ public class IndexOptionPricer {
   private double impliedVol(final double atmFwd, final double gK, final double otmPrice) {
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double vol) {
+      public Double apply(final Double vol) {
         final double x0 = calibrateX0(atmFwd, vol);
         final double ratio = otmOptionPrice(atmFwd, x0, vol, gK) / otmPrice;
         return ratio - 1.0;
@@ -201,7 +201,7 @@ public class IndexOptionPricer {
 
     final DoubleFunction1D funcLowAccuracy = new DoubleFunction1D() {
       @Override
-      public Double evaluate(final Double x0) {
+      public Double apply(final Double x0) {
         final Function1D<Double, Double> intergrand = getGaussHermiteIntegrand(x0, vol);
         return GHQ2.integrateFromPolyFunc(intergrand) - defaultAdjIndexValue;
       }
@@ -209,7 +209,7 @@ public class IndexOptionPricer {
 
     final DoubleFunction1D funcHiAccuracy = new DoubleFunction1D() {
       @Override
-      public Double evaluate(final Double x0) {
+      public Double apply(final Double x0) {
         final Function1D<Double, Double> intergrand = getGaussHermiteIntegrand(x0, vol);
         return GHQ7.integrateFromPolyFunc(intergrand) - defaultAdjIndexValue;
       }
@@ -231,8 +231,8 @@ public class IndexOptionPricer {
   public Function1D<Double, Double> getDefaultAdjForwardForX(final double coupon) {
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
-        return (x - coupon) * _annuityFunc.evaluate(x);
+      public Double apply(final Double x) {
+        return (x - coupon) * _annuityFunc.apply(x);
       }
     };
   }
@@ -252,8 +252,8 @@ public class IndexOptionPricer {
 
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double zeta) {
-        return func.evaluate(zeta * Math.sqrt(2)) * ONE_OVER_ROOT_PI;
+      public Double apply(final Double zeta) {
+        return func.apply(zeta * Math.sqrt(2)) * ONE_OVER_ROOT_PI;
       }
     };
   }
@@ -272,9 +272,9 @@ public class IndexOptionPricer {
     final double sigmaSqrTOver2 = vol * vol * _expiry / 2;
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double z) {
+      public Double apply(final Double z) {
         final double x = x0 * Math.exp(sigmaRootT * z - sigmaSqrTOver2);
-        return (x - _coupon) * _annuityFuncQuick.evaluate(x);
+        return (x - _coupon) * _annuityFuncQuick.apply(x);
       }
     };
   }
@@ -285,8 +285,8 @@ public class IndexOptionPricer {
     final Function1D<Double, Double> fi = getFiForZ(x0, vol);
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double z) {
-        return Math.max(0.0, sign * (fi.evaluate(z) - exciseAmt)) * NORMAL.getPDF(z);
+      public Double apply(final Double z) {
+        return Math.max(0.0, sign * (fi.apply(z) - exciseAmt)) * NORMAL.getPDF(z);
       }
     };
 
@@ -307,8 +307,8 @@ public class IndexOptionPricer {
     final Function1D<Double, Double> fi = getFiForZ(x0, vol);
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double z) {
-        return fi.evaluate(z) - exciseAmt;
+      public Double apply(final Double z) {
+        return fi.apply(z) - exciseAmt;
       }
     };
 

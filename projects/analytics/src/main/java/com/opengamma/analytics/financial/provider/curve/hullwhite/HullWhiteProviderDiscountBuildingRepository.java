@@ -113,7 +113,7 @@ public class HullWhiteProviderDiscountBuildingRepository {
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator =
         new HullWhiteProviderDiscountFinderJacobian(new ParameterSensitivityHullWhiteMatrixCalculator(sensitivityCalculator), data);
     final double[] parameters = _rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(initGuess)).getData();
-    final HullWhiteOneFactorProviderDiscount newCurves = data.getGeneratorMarket().evaluate(new DoubleMatrix1D(parameters));
+    final HullWhiteOneFactorProviderDiscount newCurves = data.getGeneratorMarket().apply(new DoubleMatrix1D(parameters));
     return newCurves;
   }
 

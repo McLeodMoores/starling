@@ -161,7 +161,7 @@ public abstract class VolatilitySurfaceFitter<T extends SmileModelData> {
     return new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
         final LinkedHashMap<String, InterpolatedDoublesCurve> curves = _curveBuilder.evaluate(x);
 
         ArgumentChecker.isTrue(x.getNumberOfElements() == _nKnotPoints, "number of elements {} does not equal number of knot points {}",
@@ -179,7 +179,7 @@ public abstract class VolatilitySurfaceFitter<T extends SmileModelData> {
             theta[p++] = curve.getYValue(t);
           }
           final T data = toSmileModelData(theta);
-          final double[] temp = _volFuncs.get(i).evaluate(data);
+          final double[] temp = _volFuncs.get(i).apply(data);
           final int l = temp.length;
           System.arraycopy(temp, 0, res, index, l);
           index += l;
@@ -200,7 +200,7 @@ public abstract class VolatilitySurfaceFitter<T extends SmileModelData> {
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D x) {
         final LinkedHashMap<String, InterpolatedDoublesCurve> curves = _curveBuilder.evaluate(x);
 
         final double[][] res = new double[_nOptions][_nKnotPoints];
@@ -221,7 +221,7 @@ public abstract class VolatilitySurfaceFitter<T extends SmileModelData> {
           }
           final T data = toSmileModelData(theta);
           // this thing will be (#strikes/vols) x (# model Params)
-          final double[][] temp = _volAdjointFuncs.get(i).evaluate(data);
+          final double[][] temp = _volAdjointFuncs.get(i).apply(data);
           final int l = temp.length;
           ArgumentChecker.isTrue(l == _strikes[i].length, "number of elements {} does not equal number of knot points {}", l, _strikes[i].length); // TODO
                                                                                                                                                    // remove

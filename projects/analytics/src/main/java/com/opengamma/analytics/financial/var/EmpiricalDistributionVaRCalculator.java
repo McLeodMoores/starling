@@ -23,7 +23,7 @@ public class EmpiricalDistributionVaRCalculator implements VaRCalculator<Empiric
     ArgumentChecker.isTrue(returns.length > 0, "No return series data");
     final double[] data = returns[0].valuesArrayFast();
     Arrays.sort(data);
-    final double result = -parameters.getMult() * parameters.getPercentileCalculator().evaluate(data);
+    final double result = -parameters.getMult() * parameters.getPercentileCalculator().apply(data);
     return new VaRCalculationResult(result, null);
   }
 

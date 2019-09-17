@@ -29,7 +29,7 @@ public class JarrowRuddSkewnessKurtosisModel extends AnalyticOptionModel<OptionD
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final SkewKurtosisOptionDataBundle data) {
+      public Double apply(final SkewKurtosisOptionDataBundle data) {
         Validate.notNull(data);
         final double s = data.getSpot();
         final double k = definition.getStrike();
@@ -41,7 +41,7 @@ public class JarrowRuddSkewnessKurtosisModel extends AnalyticOptionModel<OptionD
         final double kurtosis = data.getAnnualizedPearsonKurtosis();
         final OptionDefinition callDefinition = definition.isCall() ? definition : new EuropeanVanillaOptionDefinition(k, definition.getExpiry(), true);
         final Function1D<StandardOptionDataBundle, Double> bsm = BSM.getPricingFunction(callDefinition);
-        final double bsmCall = bsm.evaluate(data);
+        final double bsmCall = bsm.apply(data);
         final double d2 = getD2(getD1(s, k, t, sigma, b), sigma, t);
         final double sigmaT = sigma * Math.sqrt(t);
         final double a = getA(d2, k, sigmaT);

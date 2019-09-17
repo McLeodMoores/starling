@@ -116,7 +116,7 @@ public class G2ppMonteCarloMethod extends MonteCarloMethod {
       }
     }
     final CholeskyDecompositionCommons cd = new CholeskyDecompositionCommons();
-    final CholeskyDecompositionResult cdr = cd.evaluate(new DoubleMatrix2D(cov));
+    final CholeskyDecompositionResult cdr = cd.apply(new DoubleMatrix2D(cov));
     final double[][] covCD = cdr.getL().getData();
     final int nbBlock = (int) Math.round(Math.ceil(getNbPath() / (double) BLOCK_SIZE));
     final int[] nbPath2 = new int[nbBlock];

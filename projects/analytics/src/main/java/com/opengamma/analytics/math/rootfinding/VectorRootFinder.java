@@ -51,7 +51,7 @@ public abstract class VectorRootFinder implements SingleRootFinder<DoubleMatrix1
         throw new IllegalArgumentException("Invalid start position x0 = " + x0.toString());
       }
     }
-    final DoubleMatrix1D y = function.evaluate(x0);
+    final DoubleMatrix1D y = function.apply(x0);
     final int m = y.getNumberOfElements();
     for (int i = 0; i < m; i++) {
       if (!Doubles.isFinite(y.getEntry(i))) {

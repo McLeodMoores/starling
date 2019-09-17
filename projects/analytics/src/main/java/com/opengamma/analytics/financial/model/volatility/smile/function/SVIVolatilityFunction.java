@@ -27,7 +27,7 @@ public class SVIVolatilityFunction extends VolatilityFunctionProvider<SVIFormula
     return new Function1D<SVIFormulaData, Double>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final SVIFormulaData data) {
+      public Double apply(final SVIFormulaData data) {
         return getVolatility(kappa, data);
       }
     };
@@ -68,7 +68,7 @@ public class SVIVolatilityFunction extends VolatilityFunctionProvider<SVIFormula
     return new Function1D<SVIFormulaData, double[]>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public double[] evaluate(final SVIFormulaData data) {
+      public double[] apply(final SVIFormulaData data) {
         return getVolatilityAdjoint(forward, strike, kappa, data);
       }
     };
@@ -90,7 +90,7 @@ public class SVIVolatilityFunction extends VolatilityFunctionProvider<SVIFormula
     return new Function1D<SVIFormulaData, double[]>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public double[] evaluate(final SVIFormulaData data) {
+      public double[] apply(final SVIFormulaData data) {
         return getModelAdjoint(kappa, data);
       }
     };

@@ -27,7 +27,7 @@ public class InterpolatedYieldCurveBuildingFunction extends YieldCurveBundleBuil
   }
 
   @Override
-  public YieldCurveBundle evaluate(final DoubleMatrix1D x) {
+  public YieldCurveBundle apply(final DoubleMatrix1D x) {
     final YieldCurveBundle res = new YieldCurveBundle();
     final LinkedHashMap<String, InterpolatedDoublesCurve> curves = _curveBuilder.evaluate(x);
     for (final Map.Entry<String, InterpolatedDoublesCurve> entry : curves.entrySet()) {

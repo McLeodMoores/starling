@@ -96,7 +96,7 @@ public class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethodTest {
     final BlackPriceFunction blackFunction = new BlackPriceFunction();
     final BlackFunctionData dataBlack = new BlackFunctionData(forwardModified, num, vol);
     final Function1D<BlackFunctionData, Double> func = blackFunction.getPriceFunction(option);
-    final double pvExpected = -func.evaluate(dataBlack); // Short
+    final double pvExpected = -func.apply(dataBlack); // Short
     final CurrencyAmount pvComputed = METHOD_BLACK.presentValue(SWAPTION_LONG_REC, CURVES_BLACK);
     assertEquals("SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod: forward", pvExpected, pvComputed.getAmount(), TOLERANCE_PV);
   }

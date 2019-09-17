@@ -23,7 +23,7 @@ public class SVDecompositionCommons extends Decomposition<SVDecompositionResult>
    * {@inheritDoc}
    */
   @Override
-  public SVDecompositionResult evaluate(final DoubleMatrix2D x) {
+  public SVDecompositionResult apply(final DoubleMatrix2D x) {
     Validate.notNull(x);
     MatrixValidate.notNaNOrInfinite(x);
     final RealMatrix commonsMatrix = CommonsMathWrapper.wrap(x);

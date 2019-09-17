@@ -199,7 +199,7 @@ public class BaroneAdesiWhaleyModel {
     ArgumentChecker.isTrue(t > 0.0, "t must be greater than zero");
     return new Function1D<Double, double[]>() {
       @Override
-      public double[] evaluate(final Double sigma) {
+      public double[] apply(final Double sigma) {
         return getPriceAndVega(s0, k, r, b, t, sigma, isCall);
       }
     };

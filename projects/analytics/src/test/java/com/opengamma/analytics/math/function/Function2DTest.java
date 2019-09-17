@@ -17,7 +17,7 @@ public class Function2DTest {
   private static final Function2D<Double, Double> F = new Function2D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x1, final Double x2) {
+    public Double apply(final Double x1, final Double x2) {
       return 0.;
     }
 

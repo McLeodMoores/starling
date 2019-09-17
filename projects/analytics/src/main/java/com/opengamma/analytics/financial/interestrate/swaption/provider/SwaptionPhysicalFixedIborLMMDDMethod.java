@@ -235,7 +235,7 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod {
     final BlackPriceFunction blackFunction = new BlackPriceFunction();
     final BlackFunctionData dataBlack = new BlackFunctionData(b0, 1.0, impliedBlackVol);
     final Function1D<BlackFunctionData, Double> func = blackFunction.getPriceFunction(option);
-    final double pv = dfLMM[0] * func.evaluate(dataBlack);
+    final double pv = dfLMM[0] * func.apply(dataBlack);
     return MultipleCurrencyAmount.of(swaption.getUnderlyingSwap().getFirstLeg().getCurrency(), pv * (swaption.isLong() ? 1.0 : -1.0));
   }
 

@@ -55,8 +55,8 @@ public class VolatilityWeightedFXReturnSeriesFunction extends FXReturnSeriesFunc
   protected LocalDateDoubleTimeSeries getReturnSeries(final LocalDateDoubleTimeSeries spotSeries, final ValueRequirement desiredValue) {
     final double lambda = Double.parseDouble(desiredValue.getConstraint(VolatilityWeightingFunctionUtils.VOLATILITY_WEIGHTING_LAMBDA_PROPERTY));
     final TimeSeriesWeightedVolatilityOperator weightedVolOp = TimeSeriesWeightedVolatilityOperator.relative(lambda);
-    final LocalDateDoubleTimeSeries weightedVolSeries = (LocalDateDoubleTimeSeries) weightedVolOp.evaluate(spotSeries);
-    return (LocalDateDoubleTimeSeries) RELATIVE_WEIGHTED_DIFFERENCE.evaluate(spotSeries, weightedVolSeries);
+    final LocalDateDoubleTimeSeries weightedVolSeries = (LocalDateDoubleTimeSeries) weightedVolOp.apply(spotSeries);
+    return (LocalDateDoubleTimeSeries) RELATIVE_WEIGHTED_DIFFERENCE.apply(spotSeries, weightedVolSeries);
   }
 
 }

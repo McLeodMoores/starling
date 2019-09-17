@@ -79,7 +79,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   public Function1D<ComplexNumber, ComplexNumber> getFunction(final double t) {
     return new Function1D<ComplexNumber, ComplexNumber>() {
       @Override
-      public ComplexNumber evaluate(final ComplexNumber u) {
+      public ComplexNumber apply(final ComplexNumber u) {
         return getValue(u, t);
       }
     };
@@ -111,7 +111,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(final double t) {
     return new Function1D<ComplexNumber, ComplexNumber[]>() {
       @Override
-      public ComplexNumber[] evaluate(final ComplexNumber u) {
+      public ComplexNumber[] apply(final ComplexNumber u) {
         return getCharacteristicExponentAdjoint(u, t);
       }
     };
@@ -360,7 +360,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
 
   /**
    * Gets the mean-reverting speed.
-   * 
+   *
    * @return kappa
    */
   public double getKappa() {
@@ -369,7 +369,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
 
   /**
    * Gets the mean-reverting level.
-   * 
+   *
    * @return theta
    */
   public double getTheta() {
@@ -378,7 +378,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
 
   /**
    * Gets the initial volatility.
-   * 
+   *
    * @return initial volatility
    */
   public double getVol0() {
@@ -387,7 +387,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
 
   /**
    * Gets the volatility-of-volatility.
-   * 
+   *
    * @return omega volatility of volatility
    */
   public double getOmega() {
@@ -396,7 +396,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
 
   /**
    * Gets the correlation.
-   * 
+   *
    * @return rho
    */
   public double getRho() {

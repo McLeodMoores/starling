@@ -36,15 +36,15 @@ public class BoxLjungPortmanteauIIDHypothesisTest extends IIDHypothesisTestCase 
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testInsufficientData() {
-    BOX_LJUNG.evaluate(RANDOM.subSeries(RANDOM.getTimeAtIndex(0), RANDOM.getTimeAtIndex(3)));
+    BOX_LJUNG.apply(RANDOM.subSeries(RANDOM.getTimeAtIndex(0), RANDOM.getTimeAtIndex(3)));
   }
 
   @Test
   public void test() {
     super.assertNullTS(BOX_LJUNG);
     super.assertEmptyTS(BOX_LJUNG);
-    assertTrue(BOX_LJUNG.evaluate(RANDOM));
-    assertFalse(BOX_LJUNG.evaluate(SIGNAL));
-    assertFalse(BOX_LJUNG.evaluate(INCREASING));
+    assertTrue(BOX_LJUNG.apply(RANDOM));
+    assertFalse(BOX_LJUNG.apply(SIGNAL));
+    assertFalse(BOX_LJUNG.apply(INCREASING));
   }
 }

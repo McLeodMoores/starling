@@ -52,14 +52,14 @@ public class GramCharlierModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    GRAM_CHARLIER.getPricingFunction(CALL).evaluate((SkewKurtosisOptionDataBundle) null);
+    GRAM_CHARLIER.getPricingFunction(CALL).apply((SkewKurtosisOptionDataBundle) null);
   }
 
   @Test
   public void test() {
-    assertEquals(BSM.getPricingFunction(CALL).evaluate(NORMAL_DATA), GRAM_CHARLIER.getPricingFunction(CALL).evaluate(NORMAL_DATA), EPS);
-    assertEquals(BSM.getPricingFunction(PUT).evaluate(NORMAL_DATA), GRAM_CHARLIER.getPricingFunction(PUT).evaluate(NORMAL_DATA), EPS);
-    assertEquals(2.519585, GRAM_CHARLIER.getPricingFunction(CALL).evaluate(DATA), EPS);
-    assertEquals(1.901050, GRAM_CHARLIER.getPricingFunction(PUT).evaluate(DATA), EPS);
+    assertEquals(BSM.getPricingFunction(CALL).apply(NORMAL_DATA), GRAM_CHARLIER.getPricingFunction(CALL).apply(NORMAL_DATA), EPS);
+    assertEquals(BSM.getPricingFunction(PUT).apply(NORMAL_DATA), GRAM_CHARLIER.getPricingFunction(PUT).apply(NORMAL_DATA), EPS);
+    assertEquals(2.519585, GRAM_CHARLIER.getPricingFunction(CALL).apply(DATA), EPS);
+    assertEquals(1.901050, GRAM_CHARLIER.getPricingFunction(PUT).apply(DATA), EPS);
   }
 }

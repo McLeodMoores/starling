@@ -35,28 +35,28 @@ public class PearsonSkewnessCoefficientCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullFirst() {
-    FIRST.evaluate((double[]) null);
+    FIRST.apply((double[]) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullSecond() {
-    SECOND.evaluate((double[]) null);
+    SECOND.apply((double[]) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmptyFirst() {
-    FIRST.evaluate(new double[0]);
+    FIRST.apply(new double[0]);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmptySecond() {
-    SECOND.evaluate(new double[0]);
+    SECOND.apply(new double[0]);
   }
 
   @Test
   public void test() {
-    final Double t1 = FIRST.evaluate(NORMAL_DATA);
-    final Double t2 = SECOND.evaluate(NORMAL_DATA);
+    final Double t1 = FIRST.apply(NORMAL_DATA);
+    final Double t2 = SECOND.apply(NORMAL_DATA);
     assertEquals(t1, 0, 0.1);
     assertEquals(t2, 0, 0.1);
   }

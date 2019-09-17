@@ -27,7 +27,7 @@ public class IntegratorRepeated2DTest {
     // Test function.
     final Function2D<Double, Double> f = new Function2D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x1, final Double x2) {
+      public Double apply(final Double x1, final Double x2) {
         return x1 + Math.sin(x2);
       }
     };

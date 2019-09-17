@@ -24,7 +24,7 @@ import com.opengamma.util.tuple.Pair;
 public class GreekToValueGreekConverter extends Function1D<GreekDataBundle, Map<ValueGreek, Double>> {
 
   @Override
-  public Map<ValueGreek, Double> evaluate(final GreekDataBundle data) {
+  public Map<ValueGreek, Double> apply(final GreekDataBundle data) {
     ArgumentChecker.notNull(data, "data");
     final GreekResultCollection greeks = data.getGreekResults();
     final Map<ValueGreek, Double> riskFactors = new HashMap<>();

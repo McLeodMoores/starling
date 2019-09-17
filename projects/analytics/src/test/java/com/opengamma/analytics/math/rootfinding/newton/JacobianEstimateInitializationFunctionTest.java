@@ -24,7 +24,7 @@ public class JacobianEstimateInitializationFunctionTest {
   private static final Function1D<DoubleMatrix1D, DoubleMatrix2D> J = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
 
     @Override
-    public DoubleMatrix2D evaluate(final DoubleMatrix1D v) {
+    public DoubleMatrix2D apply(final DoubleMatrix1D v) {
       final double[] x = v.getData();
       return new DoubleMatrix2D(new double[][] { {x[0] * x[0], x[0] * x[1]}, {x[0] - x[1], x[1] * x[1]}});
     }
@@ -45,7 +45,7 @@ public class JacobianEstimateInitializationFunctionTest {
   @Test
   public void test() {
     final DoubleMatrix2D m1 = ESTIMATE.getInitializedMatrix(J, X);
-    final DoubleMatrix2D m2 = J.evaluate(X);
+    final DoubleMatrix2D m2 = J.apply(X);
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
         assertEquals(m1.getEntry(i, j), m2.getEntry(i, j), 1e-9);

@@ -52,9 +52,9 @@ public class BinomialOptionModel<T extends StandardOptionDataBundle> extends Tre
     }
     _model = model;
     _n = n;
-    _j = RecombiningBinomialTree.NODES.evaluate(_n);
+    _j = RecombiningBinomialTree.NODES.apply(_n);
     _maxDepthToSave = maxDepthToSave;
-    _maxWidthToSave = RecombiningBinomialTree.NODES.evaluate(maxDepthToSave);
+    _maxWidthToSave = RecombiningBinomialTree.NODES.apply(maxDepthToSave);
   }
 
   @Override
@@ -74,12 +74,12 @@ public class BinomialOptionModel<T extends StandardOptionDataBundle> extends Tre
     final Function1D<T, Double> function = new Function1D<T, Double>() {
 
       @Override
-      public Double evaluate(final T t) {
-        return treeFunction.evaluate(t).getNode(0, 0).second;
+      public Double apply(final T t) {
+        return treeFunction.apply(t).getNode(0, 0).second;
       }
 
     };
-    return new BinomialModelFiniteDifferenceGreekVisitor(treeFunction.evaluate(data), function, data, definition);
+    return new BinomialModelFiniteDifferenceGreekVisitor(treeFunction.apply(data), function, data, definition);
   }
 
   @Override
@@ -88,7 +88,7 @@ public class BinomialOptionModel<T extends StandardOptionDataBundle> extends Tre
 
       @SuppressWarnings({ "synthetic-access", "unchecked" })
       @Override
-      public RecombiningBinomialTree<DoublesPair> evaluate(final T data) {
+      public RecombiningBinomialTree<DoublesPair> apply(final T data) {
         final DoublesPair[] tempResults = new DoublesPair[_j];
         final DoublesPair[][] spotAndOptionPrices = new DoublesPair[_maxDepthToSave + 1][_maxWidthToSave];
         final OptionPayoffFunction<T> payoffFunction = definition.getPayoffFunction();
@@ -112,7 +112,7 @@ public class BinomialOptionModel<T extends StandardOptionDataBundle> extends Tre
         T newData;
         double p;
         for (int i = _n - 1; i >= 0; i--) {
-          for (int j = 0; j < RecombiningBinomialTree.NODES.evaluate(i); j++) {
+          for (int j = 0; j < RecombiningBinomialTree.NODES.apply(i); j++) {
             p = pTree.getNode(i, j);
             optionValue = df * ((1 - p) * tempResults[j].second + p * tempResults[j + 1].second);
             spotValue = tempResults[j].first / d;

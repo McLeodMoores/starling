@@ -22,7 +22,7 @@ public class GaussianRadialBasisFunction extends Function1D<Double, Double> {
   }
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     return Math.exp(-0.5 * x * x / _scaleFactor);
   }
 

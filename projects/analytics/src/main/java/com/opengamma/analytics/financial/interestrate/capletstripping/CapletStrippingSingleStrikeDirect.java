@@ -153,7 +153,7 @@ public class CapletStrippingSingleStrikeDirect extends CapletStrippingAbsoluteSt
 
     final Function1D<DoubleMatrix1D, Boolean> allowed = new Function1D<DoubleMatrix1D, Boolean>() {
       @Override
-      public Boolean evaluate(final DoubleMatrix1D x) {
+      public Boolean apply(final DoubleMatrix1D x) {
         final double[] temp = x.getData();
         final int n = temp.length;
         for (int i = 0; i < n; i++) {
@@ -167,7 +167,7 @@ public class CapletStrippingSingleStrikeDirect extends CapletStrippingAbsoluteSt
 
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> modelPriceFunc = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
         final double[] modelPrices = getPricer().priceFromCapletVols(x.getData());
         return new DoubleMatrix1D(modelPrices);
       }
@@ -175,7 +175,7 @@ public class CapletStrippingSingleStrikeDirect extends CapletStrippingAbsoluteSt
 
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> modelPriceJac = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D x) {
         return getPricer().vegaFromCapletVols(x.getData());
       }
     };
@@ -190,7 +190,7 @@ public class CapletStrippingSingleStrikeDirect extends CapletStrippingAbsoluteSt
 
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> modelVolFunc = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
         final double[] modelPrices = pricer.priceFromCapletVols(x.getData());
         final double[] modelVols = pricer.impliedVols(modelPrices);
         return new DoubleMatrix1D(modelVols);
@@ -199,7 +199,7 @@ public class CapletStrippingSingleStrikeDirect extends CapletStrippingAbsoluteSt
 
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> modelVolJac = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D x) {
         final double[] modelPrices = pricer.priceFromCapletVols(x.getData());
         final double[] modelVols = pricer.impliedVols(modelPrices);
         final double[] vega = pricer.vega(modelVols);

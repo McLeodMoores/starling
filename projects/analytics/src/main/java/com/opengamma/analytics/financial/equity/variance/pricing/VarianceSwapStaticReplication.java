@@ -81,7 +81,7 @@ public class VarianceSwapStaticReplication {
     }
 
     // Compute contribution from past realizations
-    final double realizedVar = new RealizedVariance().evaluate(deriv); // Realized variance of log returns already observed
+    final double realizedVar = new RealizedVariance().apply(deriv); // Realized variance of log returns already observed
     // Compute contribution from future realizations
     final double remainingVar = expectedVariance(deriv, market); // Remaining variance implied by option prices
 

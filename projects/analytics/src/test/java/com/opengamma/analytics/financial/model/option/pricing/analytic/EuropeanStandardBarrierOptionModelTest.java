@@ -46,7 +46,7 @@ public class EuropeanStandardBarrierOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(new EuropeanStandardBarrierOptionDefinition(SPOT, EXPIRY, true, new Barrier(KnockType.IN, BarrierType.DOWN, ObservationType.CONTINUOUS, SPOT))).evaluate(
+    MODEL.getPricingFunction(new EuropeanStandardBarrierOptionDefinition(SPOT, EXPIRY, true, new Barrier(KnockType.IN, BarrierType.DOWN, ObservationType.CONTINUOUS, SPOT))).apply(
         (StandardOptionDataBundle) null);
   }
 
@@ -56,10 +56,10 @@ public class EuropeanStandardBarrierOptionModelTest {
     final StandardOptionDataBundle data = new StandardOptionDataBundle(YieldCurve.from(ConstantDoublesCurve.from(0.)), 0, new VolatilitySurface(ConstantDoublesSurface.from(0.)), SPOT, DATE);
     Barrier barrier = new Barrier(KnockType.OUT, BarrierType.DOWN, ObservationType.CONTINUOUS, 95);
     EuropeanStandardBarrierOptionDefinition option = new EuropeanStandardBarrierOptionDefinition(SPOT - delta, EXPIRY, true, barrier, REBATE);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), 10, 0);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), 10, 0);
     barrier = new Barrier(KnockType.IN, BarrierType.UP, ObservationType.CONTINUOUS, 105);
     option = new EuropeanStandardBarrierOptionDefinition(SPOT - delta, EXPIRY, true, barrier, REBATE);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), REBATE, 0);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), REBATE, 0);
   }
 
   @Test
@@ -67,27 +67,27 @@ public class EuropeanStandardBarrierOptionModelTest {
     final StandardOptionDataBundle data = new StandardOptionDataBundle(R, B, new VolatilitySurface(ConstantDoublesSurface.from(0.25)), SPOT, DATE);
     Barrier barrier = new Barrier(KnockType.OUT, BarrierType.DOWN, ObservationType.CONTINUOUS, 95);
     EuropeanStandardBarrierOptionDefinition option = new EuropeanStandardBarrierOptionDefinition(90, EXPIRY, true, barrier, REBATE);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), 9.0246, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), 9.0246, EPS);
     barrier = new Barrier(KnockType.OUT, BarrierType.UP, ObservationType.CONTINUOUS, 105);
     option = new EuropeanStandardBarrierOptionDefinition(90, EXPIRY, true, barrier, REBATE);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), 2.6789, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), 2.6789, EPS);
     barrier = new Barrier(KnockType.OUT, BarrierType.DOWN, ObservationType.CONTINUOUS, 95);
     option = new EuropeanStandardBarrierOptionDefinition(90, EXPIRY, false, barrier, REBATE);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), 2.2798, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), 2.2798, EPS);
     barrier = new Barrier(KnockType.OUT, BarrierType.UP, ObservationType.CONTINUOUS, 105);
     option = new EuropeanStandardBarrierOptionDefinition(90, EXPIRY, false, barrier, REBATE);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), 3.7760, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), 3.7760, EPS);
     barrier = new Barrier(KnockType.IN, BarrierType.DOWN, ObservationType.CONTINUOUS, 95);
     option = new EuropeanStandardBarrierOptionDefinition(90, EXPIRY, true, barrier, REBATE);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), 7.7627, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), 7.7627, EPS);
     barrier = new Barrier(KnockType.IN, BarrierType.UP, ObservationType.CONTINUOUS, 105);
     option = new EuropeanStandardBarrierOptionDefinition(90, EXPIRY, true, barrier, REBATE);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), 14.1112, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), 14.1112, EPS);
     barrier = new Barrier(KnockType.IN, BarrierType.DOWN, ObservationType.CONTINUOUS, 95);
     option = new EuropeanStandardBarrierOptionDefinition(90, EXPIRY, false, barrier, REBATE);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), 2.9586, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), 2.9586, EPS);
     barrier = new Barrier(KnockType.IN, BarrierType.UP, ObservationType.CONTINUOUS, 105);
     option = new EuropeanStandardBarrierOptionDefinition(90, EXPIRY, false, barrier, REBATE);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), 1.4653, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), 1.4653, EPS);
   }
 }

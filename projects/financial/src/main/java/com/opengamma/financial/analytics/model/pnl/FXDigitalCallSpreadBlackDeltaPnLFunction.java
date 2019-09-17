@@ -216,7 +216,7 @@ public class FXDigitalCallSpreadBlackDeltaPnLFunction extends AbstractFunction {
     final LocalDate[] dates = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR);
     LocalDateDoubleTimeSeries result = samplingFunction.getSampledTimeSeries(dbTimeSeries.getTimeSeries(), dates);
     result = result.reciprocal(); // Implementation note: to obtain the P/L for one unit of non-base currency expressed in base currency.
-    return DIFFERENCE.evaluate(result);
+    return DIFFERENCE.apply(result);
   }
 
 }

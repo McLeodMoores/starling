@@ -234,7 +234,7 @@ public final class SwaptionPhysicalFixedIborLMMDDMethod implements PricingMethod
     final BlackPriceFunction blackFunction = new BlackPriceFunction();
     final BlackFunctionData dataBlack = new BlackFunctionData(b0, 1.0, impliedBlackVol);
     final Function1D<BlackFunctionData, Double> func = blackFunction.getPriceFunction(option);
-    final double pv = dfLMM[0] * func.evaluate(dataBlack);
+    final double pv = dfLMM[0] * func.apply(dataBlack);
     return CurrencyAmount.of(swaption.getUnderlyingSwap().getFirstLeg().getCurrency(), pv * (swaption.isLong() ? 1.0 : -1.0));
   }
 

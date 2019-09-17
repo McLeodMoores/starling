@@ -37,7 +37,7 @@ public class CommonsMathWrapperTest {
   private static final Function1D<Double, Double> OG_FUNCTION_1D = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return x * x + 7 * x + 12;
     }
 
@@ -116,7 +116,7 @@ public class CommonsMathWrapperTest {
   public void test1DFunction() throws FunctionEvaluationException {
     final UnivariateRealFunction commons = CommonsMathWrapper.wrapUnivariate(OG_FUNCTION_1D);
     for (int i = 0; i < 100; i++) {
-      assertEquals(OG_FUNCTION_1D.evaluate((double) i), commons.value(i), 1e-15);
+      assertEquals(OG_FUNCTION_1D.apply((double) i), commons.value(i), 1e-15);
     }
   }
 
@@ -160,11 +160,11 @@ public class CommonsMathWrapperTest {
     final double[] y = new double[n];
     for (int i = 0; i < n; i++) {
       x[i] = i;
-      y[i] = OG_POLYNOMIAL.evaluate(x[i]);
+      y[i] = OG_POLYNOMIAL.apply(x[i]);
     }
     final Function1D<Double, Double> unwrapped = CommonsMathWrapper.unwrap(new PolynomialFunctionLagrangeForm(x, y));
     for (int i = 0; i < 100; i++) {
-      assertEquals(unwrapped.evaluate(i + 0.5), OG_POLYNOMIAL.evaluate(i + 0.5), 1e-9);
+      assertEquals(unwrapped.apply(i + 0.5), OG_POLYNOMIAL.apply(i + 0.5), 1e-9);
     }
   }
 

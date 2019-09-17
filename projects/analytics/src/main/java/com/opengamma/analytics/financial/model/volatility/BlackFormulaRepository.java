@@ -39,10 +39,10 @@ public abstract class BlackFormulaRepository {
   private static final double SMALL = 1.0E-13;
   private static final double EPS = 1e-15;
   private static final int MAX_ITERATIONS = 15; // something's wrong if
-                                                // Newton-Raphson taking longer
-                                                // than this
+  // Newton-Raphson taking longer
+  // than this
   private static final double VOL_TOL = 1e-9; // 1 part in 100,000 basis points
-                                              // will do for implied vol
+  // will do for implied vol
 
   /**
    * The <b>forward</b> price of an option using the Black formula.
@@ -216,7 +216,7 @@ public abstract class BlackFormulaRepository {
         forward);
     ArgumentChecker.isTrue(
         isCall && forwardDelta > 0 && forwardDelta < 1
-            || !isCall && forwardDelta > -1 && forwardDelta < 0,
+        || !isCall && forwardDelta > -1 && forwardDelta < 0,
         "delta out of range", forwardDelta);
     ArgumentChecker.isTrue(timeToExpiry >= 0.0,
         "negative/NaN timeToExpiry; have {}", timeToExpiry);
@@ -588,42 +588,42 @@ public abstract class BlackFormulaRepository {
     double priceLike = Double.NaN;
     final double rt = timeToExpiry < SMALL && Math.abs(interestRate) > LARGE
         ? interestRate > 0. ? 1. : -1.
-        : interestRate * timeToExpiry;
-    if (bFwd && bStr) {
-      LOGGER.info("(large value)/(large value) ambiguous");
-      priceLike = isCall ? forward >= strike ? forward : 0.
-          : strike >= forward ? strike : 0.;
-    } else {
-      if (sigmaRootT < SMALL) {
-        if (rt > LARGE) {
-          priceLike = isCall ? forward > strike ? forward : 0.0
-              : forward > strike ? 0.0 : -forward;
+            : interestRate * timeToExpiry;
+        if (bFwd && bStr) {
+          LOGGER.info("(large value)/(large value) ambiguous");
+          priceLike = isCall ? forward >= strike ? forward : 0.
+              : strike >= forward ? strike : 0.;
         } else {
-          priceLike = isCall
-              ? forward > strike ? forward - strike * Math.exp(-rt) : 0.0
-              : forward > strike ? 0.0 : -forward + strike * Math.exp(-rt);
+          if (sigmaRootT < SMALL) {
+            if (rt > LARGE) {
+              priceLike = isCall ? forward > strike ? forward : 0.0
+                  : forward > strike ? 0.0 : -forward;
+            } else {
+              priceLike = isCall
+                  ? forward > strike ? forward - strike * Math.exp(-rt) : 0.0
+                      : forward > strike ? 0.0 : -forward + strike * Math.exp(-rt);
+            }
+          } else {
+            if (Math.abs(forward - strike) < SMALL | bSigRt) {
+              d1 = 0.5 * sigmaRootT;
+              d2 = -0.5 * sigmaRootT;
+            } else {
+              d1 = Math.log(forward / strike) / sigmaRootT + 0.5 * sigmaRootT;
+              d2 = d1 - sigmaRootT;
+            }
+            final double nF = NORMAL.getCDF(sign * d1);
+            final double nS = NORMAL.getCDF(sign * d2);
+            final double first = nF == 0. ? 0. : forward * nF;
+            final double second = nS == 0.
+                || Math.exp(-interestRate * timeToExpiry) == 0. ? 0.
+                    : strike * Math.exp(-interestRate * timeToExpiry) * nS;
+            priceLike = sign * (first - second);
+          }
         }
-      } else {
-        if (Math.abs(forward - strike) < SMALL | bSigRt) {
-          d1 = 0.5 * sigmaRootT;
-          d2 = -0.5 * sigmaRootT;
-        } else {
-          d1 = Math.log(forward / strike) / sigmaRootT + 0.5 * sigmaRootT;
-          d2 = d1 - sigmaRootT;
-        }
-        final double nF = NORMAL.getCDF(sign * d1);
-        final double nS = NORMAL.getCDF(sign * d2);
-        final double first = nF == 0. ? 0. : forward * nF;
-        final double second = nS == 0.
-            || Math.exp(-interestRate * timeToExpiry) == 0. ? 0.
-                : strike * Math.exp(-interestRate * timeToExpiry) * nS;
-        priceLike = sign * (first - second);
-      }
-    }
 
-    final double res = interestRate > LARGE && Math.abs(priceLike) < SMALL ? 0.
-        : interestRate * priceLike;
-    return Math.abs(res) > LARGE ? res : driftLess + res;
+        final double res = interestRate > LARGE && Math.abs(priceLike) < SMALL ? 0.
+            : interestRate * priceLike;
+        return Math.abs(res) > LARGE ? res : driftLess + res;
   }
 
   /**
@@ -684,32 +684,32 @@ public abstract class BlackFormulaRepository {
     double priceLike = Double.NaN;
     final double rt = timeToExpiry < SMALL && Math.abs(interestRate) > LARGE
         ? interestRate > 0. ? 1. : -1.
-        : interestRate * timeToExpiry;
-    if (bFwd && bStr) {
-      LOGGER.info("(large value)/(large value) ambiguous");
-      priceLike = isCall ? 0. : strike >= forward ? strike : 0.;
-    } else {
-      if (sigmaRootT < SMALL) {
-        if (rt > LARGE) {
-          priceLike = 0.;
+            : interestRate * timeToExpiry;
+        if (bFwd && bStr) {
+          LOGGER.info("(large value)/(large value) ambiguous");
+          priceLike = isCall ? 0. : strike >= forward ? strike : 0.;
         } else {
-          priceLike = isCall ? forward > strike ? -strike : 0.0
-              : forward > strike ? 0.0 : +strike;
+          if (sigmaRootT < SMALL) {
+            if (rt > LARGE) {
+              priceLike = 0.;
+            } else {
+              priceLike = isCall ? forward > strike ? -strike : 0.0
+                  : forward > strike ? 0.0 : +strike;
+            }
+          } else {
+            if (Math.abs(forward - strike) < SMALL | bSigRt) {
+              d2 = -0.5 * sigmaRootT;
+            } else {
+              d2 = Math.log(forward / strike) / sigmaRootT - 0.5 * sigmaRootT;
+            }
+            final double nS = NORMAL.getCDF(sign * d2);
+            priceLike = nS == 0. ? 0. : -sign * strike * nS;
+          }
         }
-      } else {
-        if (Math.abs(forward - strike) < SMALL | bSigRt) {
-          d2 = -0.5 * sigmaRootT;
-        } else {
-          d2 = Math.log(forward / strike) / sigmaRootT - 0.5 * sigmaRootT;
-        }
-        final double nS = NORMAL.getCDF(sign * d2);
-        priceLike = nS == 0. ? 0. : -sign * strike * nS;
-      }
-    }
 
-    final double res = interestRate > LARGE && Math.abs(priceLike) < SMALL ? 0.
-        : interestRate * priceLike;
-    return Math.abs(res) > LARGE ? res : driftLess + res;
+        final double res = interestRate > LARGE && Math.abs(priceLike) < SMALL ? 0.
+            : interestRate * priceLike;
+        return Math.abs(res) > LARGE ? res : driftLess + res;
   }
 
   /**
@@ -1023,7 +1023,7 @@ public abstract class BlackFormulaRepository {
       }
       return lognormalVol < SMALL
           ? forward * NORMAL.getPDF(0.) * rootT / lognormalVol
-          : -forward * NORMAL.getPDF(0.) * timeToExpiry * lognormalVol / 4.;
+              : -forward * NORMAL.getPDF(0.) * timeToExpiry * lognormalVol / 4.;
     }
     if (Math.abs(forward - strike) < SMALL | (bFwd && bStr)) {
       d1 = 0.5 * sigmaRootT;
@@ -1095,9 +1095,9 @@ public abstract class BlackFormulaRepository {
         (isCall ? 1 : -1) * (forward - strike));
 
     final double targetPrice = price - intrinsicPrice; // Math.max(0., price -
-                                                       // intrinsicPrice) should
-                                                       // not used for least chi
-                                                       // square
+    // intrinsicPrice) should
+    // not used for least chi
+    // square
     final double sigmaGuess = 0.3;
     return impliedVolatility(targetPrice, forward, strike, timeToExpiry,
         sigmaGuess);
@@ -1265,7 +1265,7 @@ public abstract class BlackFormulaRepository {
     for (final SimpleOptionData option : data) {
       intrinsicPrice += Math.max(0,
           (option.isCall() ? 1 : -1) * option.getDiscountFactor()
-              * (option.getForward() - option.getStrike()));
+          * (option.getForward() - option.getStrike()));
     }
     Validate.isTrue(price >= intrinsicPrice, "option price (" + price
         + ") less than intrinsic value (" + intrinsicPrice + ")");
@@ -1448,7 +1448,7 @@ public abstract class BlackFormulaRepository {
     final BracketRoot bracketer = new BracketRoot();
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double volatility) {
+      public Double apply(final Double volatility) {
         return price(forward, strike, expiry, volatility, isCall) / forwardPrice
             - 1.0;
       }
@@ -1466,7 +1466,7 @@ public abstract class BlackFormulaRepository {
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double volatility) {
+      public Double apply(final Double volatility) {
         final double trialPrice = price(forward, strike, expiry, volatility,
             isCall);
         return trialPrice / forwardPrice - 1.0;
@@ -1484,7 +1484,7 @@ public abstract class BlackFormulaRepository {
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double volatility) {
+      public Double apply(final Double volatility) {
         double sum = 0.0;
         for (int i = 0; i < n; i++) {
           sum += price(data[i], volatility);

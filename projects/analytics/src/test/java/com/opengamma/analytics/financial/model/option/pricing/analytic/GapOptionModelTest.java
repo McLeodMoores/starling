@@ -49,7 +49,7 @@ public class GapOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(new GapOptionDefinition(STRIKE, EXPIRY, true, PAYOFF_STRIKE)).evaluate((StandardOptionDataBundle) null);
+    MODEL.getPricingFunction(new GapOptionDefinition(STRIKE, EXPIRY, true, PAYOFF_STRIKE)).apply((StandardOptionDataBundle) null);
   }
 
   @Test
@@ -59,12 +59,12 @@ public class GapOptionModelTest {
     final Function1D<StandardOptionDataBundle, Double> put = MODEL.getPricingFunction(new GapOptionDefinition(STRIKE, EXPIRY, false, STRIKE));
     final Function1D<StandardOptionDataBundle, Double> bsmCall = BSM.getPricingFunction(new EuropeanVanillaOptionDefinition(STRIKE, EXPIRY, true));
     final Function1D<StandardOptionDataBundle, Double> bsmPut = BSM.getPricingFunction(new EuropeanVanillaOptionDefinition(STRIKE, EXPIRY, false));
-    assertEquals(call.evaluate(data), bsmCall.evaluate(data), EPS);
-    assertEquals(put.evaluate(data), bsmPut.evaluate(data), EPS);
+    assertEquals(call.apply(data), bsmCall.apply(data), EPS);
+    assertEquals(put.apply(data), bsmPut.apply(data), EPS);
   }
 
   @Test
   public void test() {
-    assertEquals(MODEL.getPricingFunction(new GapOptionDefinition(STRIKE, EXPIRY, true, PAYOFF_STRIKE)).evaluate(DATA), -0.0053, 1e-4);
+    assertEquals(MODEL.getPricingFunction(new GapOptionDefinition(STRIKE, EXPIRY, true, PAYOFF_STRIKE)).apply(DATA), -0.0053, 1e-4);
   }
 }

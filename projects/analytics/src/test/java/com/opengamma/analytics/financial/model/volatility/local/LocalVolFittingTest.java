@@ -137,7 +137,7 @@ public class LocalVolFittingTest {
       final Function1D<DoubleMatrix1D, DoubleMatrix1D> volFunc = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
 
         @Override
-        public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+        public DoubleMatrix1D apply(final DoubleMatrix1D x) {
           final double[] weights = new double[nWeights];
           for (int i = 0; i < nWeights; i++) {
             weights[i] = TRANSFORM.inverseTransform(x.getEntry(i));
@@ -219,7 +219,7 @@ public class LocalVolFittingTest {
       final Function1D<DoubleMatrix1D, DoubleMatrix1D> volFunc = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
 
         @Override
-        public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+        public DoubleMatrix1D apply(final DoubleMatrix1D x) {
 
           final double[] weights = new double[nKnots];
           for (int i = 0; i < nKnots; i++) {
@@ -337,7 +337,7 @@ public class LocalVolFittingTest {
       final Function<Double, Double> temp2 = new Function<Double, Double>() {
         @Override
         public Double evaluate(final Double... tk) {
-          return func.evaluate(new double[] {tk[0], tk[1] });
+          return func.apply(new double[] {tk[0], tk[1] });
         }
       };
 
@@ -365,7 +365,7 @@ public class LocalVolFittingTest {
         @Override
         public Double evaluate(final Double... tx) {
           final double x = tx[1];
-          return func.evaluate(x);
+          return func.apply(x);
         }
       };
 
@@ -379,7 +379,7 @@ public class LocalVolFittingTest {
 
         @Override
         public Double evaluate(final Double... x) {
-          return func.evaluate(new double[] {x[0], x[1] });
+          return func.apply(new double[] {x[0], x[1] });
         }
 
       };

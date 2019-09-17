@@ -269,7 +269,7 @@ public class SwaptionBlackYieldCurveNodePnLFunction extends AbstractFunction.Non
         throw new OpenGammaRuntimeException("Time series " + id + " is empty");
       }
       DateDoubleTimeSeries<?> nodeTimeSeries = samplingFunction.getSampledTimeSeries(dbNodeTimeSeries.getTimeSeries(), schedule);
-      nodeTimeSeries = DIFFERENCE.evaluate(nodeTimeSeries);
+      nodeTimeSeries = DIFFERENCE.apply(nodeTimeSeries);
       if (pnlSeries == null) {
         pnlSeries = nodeTimeSeries.multiply(sensitivity);
       } else {
@@ -289,7 +289,7 @@ public class SwaptionBlackYieldCurveNodePnLFunction extends AbstractFunction.Non
       final ExternalId id = (ExternalId) labels[i];
       final HistoricalTimeSeries dbNodeTimeSeries = timeSeriesBundle.get(MarketDataRequirementNames.MARKET_VALUE, id);
       DateDoubleTimeSeries<?> nodeTimeSeries = samplingFunction.getSampledTimeSeries(dbNodeTimeSeries.getTimeSeries(), schedule);
-      nodeTimeSeries = DIFFERENCE.evaluate(nodeTimeSeries);
+      nodeTimeSeries = DIFFERENCE.apply(nodeTimeSeries);
       if (pnlSeries == null) {
         pnlSeries = nodeTimeSeries.multiply(values[i]);
       } else {

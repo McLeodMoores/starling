@@ -7,6 +7,7 @@ package com.opengamma.core.historicaltimeseries.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,11 +91,27 @@ public abstract class HierarchicalEHCache<A, B> {
     return value;
   }
 
+  @Deprecated
   private B deepInsertAndMarkMissed(final A aKey, final Function0<B> closure) {
     if (closure == null) {
       return null;
     }
     final B b = closure.execute();
+    if (b == null) {
+      _missedCache.put(new Element(aKey, null));
+      return null;
+    }
+    final Object bKey = extractKey(aKey, b);
+    deepInsert(aKey, bKey, b);
+    _aCache.put(new Element(aKey, bKey));
+    return b;
+  }
+
+  private B deepInsertAndMarkMissed(final A aKey, final Supplier<B> closure) {
+    if (closure == null) {
+      return null;
+    }
+    final B b = closure.get();
     if (b == null) {
       _missedCache.put(new Element(aKey, null));
       return null;
@@ -129,6 +146,7 @@ public abstract class HierarchicalEHCache<A, B> {
     return value;
   }
 
+  @Deprecated
   private B shallowInsertAndMarkMissed(final Object bKey, final Function0<B> closure) {
     if (closure == null) {
       return null;
@@ -142,6 +160,43 @@ public abstract class HierarchicalEHCache<A, B> {
     return b;
   }
 
+  private B shallowInsertAndMarkMissed(final Object bKey, final Supplier<B> closure) {
+    if (closure == null) {
+      return null;
+    }
+    final B b = closure.get();
+    if (b == null) {
+      _missedCache.put(new Element(bKey, null));
+      return null;
+    }
+    shallowInsert(bKey, b);
+    return b;
+  }
+
+  public B get(final A aKey, final Supplier<B> closure) {
+    if (_missedCache.isKeyInCache(aKey)) {
+      LOGGER.debug(getCachePrefix() + ": Caching miss on {}", aKey);
+      return null;
+    }
+    final Element aElement = _aCache.get(aKey);
+    if (aElement != null) {
+      final Object bKey = aElement.getObjectValue();
+      final Element bElement = _bCache.get(bKey);
+      if (bElement != null) {
+        @SuppressWarnings("unchecked")
+        final
+        Map<Object, B> map = (Map<Object, B>) bElement.getObjectValue();
+        final B value = map.get(aKey);
+        if (value == null) {
+          return deepInsertAndMarkMissed(aKey, closure);
+        }
+        return value;
+      }
+    }
+    return deepInsertAndMarkMissed(aKey, closure);
+  }
+
+  @Deprecated
   public B get(final A aKey, final Function0<B> closure) {
     if (_missedCache.isKeyInCache(aKey)) {
       LOGGER.debug(getCachePrefix() + ": Caching miss on {}", aKey);
@@ -165,6 +220,26 @@ public abstract class HierarchicalEHCache<A, B> {
     return deepInsertAndMarkMissed(aKey, closure);
   }
 
+  public B getBySecondKey(final Object bKey, final Supplier<B> closure) {
+    if (_missedCache.isKeyInCache(bKey)) {
+      LOGGER.debug(getCachePrefix() + ": Caching miss on {}", bKey);
+      return null;
+    }
+    final Element bElement = _bCache.get(bKey);
+    if (bElement != null) {
+      @SuppressWarnings("unchecked")
+      final
+      Map<Object, B> map = (Map<Object, B>) bElement.getObjectValue();
+      final B value = map.get(bKey);
+      if (value == null) {
+        return shallowInsertAndMarkMissed(bKey, closure);
+      }
+      return value;
+    }
+    return shallowInsertAndMarkMissed(bKey, closure);
+  }
+
+  @Deprecated
   public B getBySecondKey(final Object bKey, final Function0<B> closure) {
     if (_missedCache.isKeyInCache(bKey)) {
       LOGGER.debug(getCachePrefix() + ": Caching miss on {}", bKey);

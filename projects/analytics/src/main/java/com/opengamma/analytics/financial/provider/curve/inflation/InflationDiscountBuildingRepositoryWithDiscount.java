@@ -130,7 +130,7 @@ public class InflationDiscountBuildingRepositoryWithDiscount {
         new ParameterSensitivityInflationMatrixCalculator(sensitivityCalculator),
         data);
     final double[] parameters = _rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(initGuess)).getData();
-    final InflationProviderDiscount newCurves = data.getGeneratorMarket().evaluate(new DoubleMatrix1D(parameters));
+    final InflationProviderDiscount newCurves = data.getGeneratorMarket().apply(new DoubleMatrix1D(parameters));
     return newCurves;
   }
 

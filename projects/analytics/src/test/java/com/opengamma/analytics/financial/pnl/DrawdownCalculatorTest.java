@@ -52,19 +52,19 @@ public class DrawdownCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullTS() {
-    CALCULATOR.evaluate((DateDoubleTimeSeries<?>) null);
+    CALCULATOR.apply((DateDoubleTimeSeries<?>) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmptyTS() {
-    CALCULATOR.evaluate(ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES);
+    CALCULATOR.apply(ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES);
   }
 
   @Test
   public void test() {
-    assertTimeSeriesEquals(CALCULATOR.evaluate(ImmutableLocalDateDoubleTimeSeries.of(T, FLAT)), ImmutableLocalDateDoubleTimeSeries.of(T, FLAT_DRAWDOWN));
-    assertTimeSeriesEquals(CALCULATOR.evaluate(ImmutableLocalDateDoubleTimeSeries.of(T, HIGH_FIRST)), ImmutableLocalDateDoubleTimeSeries.of(T, HIGH_FIRST_DRAWDOWN));
-    assertTimeSeriesEquals(CALCULATOR.evaluate(ImmutableLocalDateDoubleTimeSeries.of(T, X)), ImmutableLocalDateDoubleTimeSeries.of(T, X_DRAWDOWN));
+    assertTimeSeriesEquals(CALCULATOR.apply(ImmutableLocalDateDoubleTimeSeries.of(T, FLAT)), ImmutableLocalDateDoubleTimeSeries.of(T, FLAT_DRAWDOWN));
+    assertTimeSeriesEquals(CALCULATOR.apply(ImmutableLocalDateDoubleTimeSeries.of(T, HIGH_FIRST)), ImmutableLocalDateDoubleTimeSeries.of(T, HIGH_FIRST_DRAWDOWN));
+    assertTimeSeriesEquals(CALCULATOR.apply(ImmutableLocalDateDoubleTimeSeries.of(T, X)), ImmutableLocalDateDoubleTimeSeries.of(T, X_DRAWDOWN));
   }
 
   private void assertTimeSeriesEquals(final DateDoubleTimeSeries<?> ts1, final DateDoubleTimeSeries<?> ts2) {

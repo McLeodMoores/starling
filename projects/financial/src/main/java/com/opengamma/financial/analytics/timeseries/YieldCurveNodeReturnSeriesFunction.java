@@ -239,7 +239,7 @@ public class YieldCurveNodeReturnSeriesFunction extends AbstractFunction.NonComp
   }
 
   protected LocalDateDoubleTimeSeries getReturnSeries(final LocalDateDoubleTimeSeries ts, final ValueRequirement desiredValue) {
-    return (LocalDateDoubleTimeSeries) DIFFERENCE.evaluate(ts);
+    return (LocalDateDoubleTimeSeries) DIFFERENCE.apply(ts);
   }
 
   private TenorLabelledLocalDateDoubleTimeSeriesMatrix1D getReturnSeriesVector(final HistoricalTimeSeriesBundle timeSeriesBundle, final Tenor[] tenors,

@@ -26,7 +26,7 @@ public class CornishFisherDeltaGammaVaRCalculatorTest {
   private static final Function1D<Double, Double> ZERO = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 0.;
     }
 
@@ -34,7 +34,7 @@ public class CornishFisherDeltaGammaVaRCalculatorTest {
   private static final Function1D<Double, Double> STD = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 0.3;
     }
 
@@ -42,7 +42,7 @@ public class CornishFisherDeltaGammaVaRCalculatorTest {
   private static final Function1D<Double, Double> SKEW = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 1.5;
     }
 
@@ -50,7 +50,7 @@ public class CornishFisherDeltaGammaVaRCalculatorTest {
   private static final Function1D<Double, Double> KURTOSIS = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 5.6;
     }
 

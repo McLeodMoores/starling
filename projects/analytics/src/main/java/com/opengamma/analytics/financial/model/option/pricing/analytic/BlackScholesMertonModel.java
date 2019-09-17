@@ -61,7 +61,7 @@ public class BlackScholesMertonModel extends AnalyticOptionModel<OptionDefinitio
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final StandardOptionDataBundle data) {
+      public Double apply(final StandardOptionDataBundle data) {
         Validate.notNull(data);
         final ZonedDateTime date = data.getDate();
         final double s = data.getSpot();
@@ -122,7 +122,7 @@ public class BlackScholesMertonModel extends AnalyticOptionModel<OptionDefinitio
       _df = getDF(_r, _b, _t);
       _d1 = getD1(_s, _k, _t, _sigma, _b);
       _d2 = getD2(_d1, _sigma, _t);
-      _price = pricingFunction.evaluate(data);
+      _price = pricingFunction.apply(data);
     }
 
     @Override

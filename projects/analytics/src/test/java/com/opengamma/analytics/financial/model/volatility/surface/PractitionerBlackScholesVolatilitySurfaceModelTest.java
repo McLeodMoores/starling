@@ -75,7 +75,7 @@ public class PractitionerBlackScholesVolatilitySurfaceModelTest {
     for (final Expiry expiry : EXPIRY) {
       for (final double strike : STRIKE) {
         definition = new EuropeanVanillaOptionDefinition(strike, expiry, IS_CALL);
-        prices.put(definition, BSM.getPricingFunction(definition).evaluate(data));
+        prices.put(definition, BSM.getPricingFunction(definition).apply(data));
       }
     }
     final VolatilitySurface surface = MODEL.getSurface(prices, data);
@@ -98,7 +98,7 @@ public class PractitionerBlackScholesVolatilitySurfaceModelTest {
       for (final double strike : STRIKE) {
         definition = new EuropeanVanillaOptionDefinition(strike, EXPIRY[i], IS_CALL);
         data = data.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(sigma[i])));
-        prices.put(definition, BSM.getPricingFunction(definition).evaluate(data));
+        prices.put(definition, BSM.getPricingFunction(definition).apply(data));
       }
     }
     final VolatilitySurface surface = MODEL.getSurface(prices, data);

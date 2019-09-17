@@ -51,18 +51,18 @@ public class PolynomialsLeastSquaresFitterTest {
 
     for (int i = 0; i < nPts; ++i) {
       xValues[i] = -5. + 10 * i / (nPts - 1);
-      yValues[i] = func.evaluate(xValues[i]);
+      yValues[i] = func.apply(xValues[i]);
     }
 
     double[] yValuesNorm = new double[nPts];
 
-    final double mean = _meanCal.evaluate(xValues);
-    final double std = _stdCal.evaluate(xValues);
+    final double mean = _meanCal.apply(xValues);
+    final double std = _stdCal.apply(xValues);
     final double ratio = mean / std;
 
     for (int i = 0; i < nPts; ++i) {
       final double tmp = xValues[i] / std - ratio;
-      yValuesNorm[i] = func.evaluate(tmp);
+      yValuesNorm[i] = func.apply(tmp);
     }
 
     /**
@@ -81,7 +81,7 @@ public class PolynomialsLeastSquaresFitterTest {
     func = new RealPolynomialFunction1D(coeffResult);
     double[] yValuesFit = new double[nPts];
     for (int i = 0; i < nPts; ++i) {
-      yValuesFit[i] = func.evaluate(xValues[i]);
+      yValuesFit[i] = func.apply(xValues[i]);
     }
 
     for (int i = 0; i < nPts; ++i) {
@@ -106,7 +106,7 @@ public class PolynomialsLeastSquaresFitterTest {
     coeffResult = resultVer.getCoeff();
     func = new RealPolynomialFunction1D(coeffResult);
     for (int i = 0; i < nPts; ++i) {
-      yValuesFit[i] = func.evaluate(xValues[i]);
+      yValuesFit[i] = func.apply(xValues[i]);
     }
 
     assertEquals(nPts - (degree + 1), resultVer.getDof(), 0);
@@ -139,7 +139,7 @@ public class PolynomialsLeastSquaresFitterTest {
     func = new RealPolynomialFunction1D(coeffResult);
     for (int i = 0; i < nPts; ++i) {
       final double tmp = xValues[i] / std - ratio;
-      yValuesFit[i] = func.evaluate(tmp);
+      yValuesFit[i] = func.apply(tmp);
     }
 
     for (int i = 0; i < nPts; ++i) {
@@ -742,7 +742,7 @@ public class PolynomialsLeastSquaresFitterTest {
     for (int i = 0; i < nPts; ++i) {
       xValues[i] = -5. + 10 * i / (nPts - 1);
       //xValues[i] = 3. * (randObj.nextDouble() + .5);
-      yValues[i] = func.evaluate(xValues[i]);
+      yValues[i] = func.apply(xValues[i]);
     }
 
     PolynomialsLeastSquaresFitterResult result = regObj.regressVerbose(xValues, yValues, degree, false);
@@ -821,7 +821,7 @@ public class PolynomialsLeastSquaresFitterTest {
       //  xValues[i] = -5. + 10 * i / (nPts - 1);
       //xValues[i] = 3. * (randObj.nextDouble() + .5);
       xValuesNom[i] = xValues[i] / std - mean / std;
-      yValues[i] = func.evaluate(xValuesNom[i]);
+      yValues[i] = func.apply(xValuesNom[i]);
     }
 
     PolynomialsLeastSquaresFitterResult resultNom = regObj.regressVerbose(xValues, yValues, degree, true);
@@ -973,7 +973,7 @@ public class PolynomialsLeastSquaresFitterTest {
 
     for (int i = 0; i < 100; ++i) {
       final double k = -5. + 10. * i / 100.;
-      System.out.println(k + "\t" + func.evaluate(k));
+      System.out.println(k + "\t" + func.apply(k));
     }
 
     System.out.println("\n");

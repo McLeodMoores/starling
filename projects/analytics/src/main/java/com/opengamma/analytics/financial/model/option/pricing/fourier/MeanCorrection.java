@@ -27,7 +27,7 @@ public abstract class MeanCorrection implements MartingaleCharacteristicExponent
 
   /**
    * Returns the mean (drift) corrected characteristic exponent.
-   * 
+   *
    * @param t
    *          The time
    * @return A function to calculate the characteristic exponent
@@ -36,14 +36,14 @@ public abstract class MeanCorrection implements MartingaleCharacteristicExponent
   public Function1D<ComplexNumber, ComplexNumber> getFunction(final double t) {
 
     final Function1D<ComplexNumber, ComplexNumber> func = _base.getFunction(t);
-    final ComplexNumber temp = func.evaluate(MINUS_I);
+    final ComplexNumber temp = func.apply(MINUS_I);
     Validate.isTrue(Math.abs(temp.getImaginary()) < 1e-12, "problem with CharacteristicExponent");
     final ComplexNumber w = new ComplexNumber(0, -temp.getReal());
 
     return new Function1D<ComplexNumber, ComplexNumber>() {
       @Override
-      public ComplexNumber evaluate(final ComplexNumber u) {
-        return add(func.evaluate(u), multiply(w, u));
+      public ComplexNumber apply(final ComplexNumber u) {
+        return add(func.apply(u), multiply(w, u));
       }
     };
   }
@@ -59,12 +59,12 @@ public abstract class MeanCorrection implements MartingaleCharacteristicExponent
   @Override
   public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(final double t) {
     final Function1D<ComplexNumber, ComplexNumber[]> func = _base.getAdjointFunction(t);
-    final ComplexNumber[] temp = func.evaluate(MINUS_I);
+    final ComplexNumber[] temp = func.apply(MINUS_I);
     return new Function1D<ComplexNumber, ComplexNumber[]>() {
 
       @Override
-      public ComplexNumber[] evaluate(final ComplexNumber u) {
-        final ComplexNumber[] uncorrected = func.evaluate(u);
+      public ComplexNumber[] apply(final ComplexNumber u) {
+        final ComplexNumber[] uncorrected = func.apply(u);
         final ComplexNumber minusUi = multiply(MINUS_I, u);
         final ComplexNumber[] res = new ComplexNumber[temp.length];
         for (int i = 0; i < temp.length; i++) {

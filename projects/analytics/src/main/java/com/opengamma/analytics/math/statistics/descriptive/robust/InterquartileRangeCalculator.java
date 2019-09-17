@@ -29,7 +29,7 @@ public class InterquartileRangeCalculator extends DescriptiveStatisticsCalculato
   public static final String NAME = "InterquartileRange";
 
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notNull(x, "x");
     final int n = x.length;
     ArgumentChecker.isTrue(n > 3, "Need at least four points to calculate IQR");
@@ -44,7 +44,7 @@ public class InterquartileRangeCalculator extends DescriptiveStatisticsCalculato
       upper = Arrays.copyOfRange(copy, n / 2, n);
     }
     final DescriptiveStatisticsCalculator medianCalculator = DescriptiveStatisticsFactory.of(MedianCalculator.NAME);
-    return medianCalculator.evaluate(upper) - medianCalculator.evaluate(lower);
+    return medianCalculator.apply(upper) - medianCalculator.apply(lower);
   }
 
   @Override

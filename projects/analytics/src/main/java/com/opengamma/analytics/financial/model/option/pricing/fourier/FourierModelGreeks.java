@@ -79,9 +79,9 @@ public class FourierModelGreeks {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         final ComplexNumber z = new ComplexNumber(x, -1 - alpha);
-        final ComplexNumber[] ajoint = ajointFunctions.evaluate(z);
+        final ComplexNumber[] ajoint = ajointFunctions.apply(z);
         ComplexNumber num = exp(add(new ComplexNumber(0, -x * kappa), ajoint[0]));
         if (index > 0) {
           num = multiply(num, ajoint[index]);

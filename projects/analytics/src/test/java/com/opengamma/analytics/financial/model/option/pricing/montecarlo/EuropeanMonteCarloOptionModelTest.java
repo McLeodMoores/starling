@@ -55,22 +55,22 @@ public class EuropeanMonteCarloOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(CALL1).evaluate((StandardOptionDataBundle) null);
+    MODEL.getPricingFunction(CALL1).apply((StandardOptionDataBundle) null);
   }
 
   @Test
   public void test() {
-    double x1 = BSM.getPricingFunction(CALL1).evaluate(DATA);
-    double x2 = MODEL.getPricingFunction(CALL1).evaluate(DATA);
+    double x1 = BSM.getPricingFunction(CALL1).apply(DATA);
+    double x2 = MODEL.getPricingFunction(CALL1).apply(DATA);
     assertTrue(Math.abs(x1 - x2) / x1 < EPS);
-    x1 = BSM.getPricingFunction(CALL2).evaluate(DATA);
-    x2 = MODEL.getPricingFunction(CALL2).evaluate(DATA);
+    x1 = BSM.getPricingFunction(CALL2).apply(DATA);
+    x2 = MODEL.getPricingFunction(CALL2).apply(DATA);
     assertTrue(Math.abs(x1 - x2) / x1 < EPS);
-    x1 = BSM.getPricingFunction(PUT1).evaluate(DATA);
-    x2 = MODEL.getPricingFunction(PUT1).evaluate(DATA);
+    x1 = BSM.getPricingFunction(PUT1).apply(DATA);
+    x2 = MODEL.getPricingFunction(PUT1).apply(DATA);
     assertTrue(Math.abs(x1 - x2) / x1 < EPS);
-    x1 = BSM.getPricingFunction(PUT2).evaluate(DATA);
-    x2 = MODEL.getPricingFunction(PUT2).evaluate(DATA);
+    x1 = BSM.getPricingFunction(PUT2).apply(DATA);
+    x2 = MODEL.getPricingFunction(PUT2).apply(DATA);
     assertTrue(Math.abs(x1 - x2) / x1 < EPS);
   }
 }

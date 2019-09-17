@@ -54,7 +54,7 @@ public class LocalVolatilityBackwardsPDEPricerTest {
     RISK_FREE_CURVE = ConstantDoublesCurve.from(R);
     final Function1D<Double, Double> df = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return Math.exp(-t * R);
       }
     };
@@ -69,7 +69,7 @@ public class LocalVolatilityBackwardsPDEPricerTest {
       private final static double D = 0.3;
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         final double tau = T - t;
         return (A + B * tau) * Math.exp(-C * tau) + D;
       }
@@ -77,16 +77,16 @@ public class LocalVolatilityBackwardsPDEPricerTest {
 
     final Function1D<Double, Double> vol2TS = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t) {
-        final double vol = volTS.evaluate(t);
+      public Double apply(final Double t) {
+        final double vol = volTS.apply(t);
         return vol * vol;
       }
     };
 
     final Function<Double, Double> vol = new Function2D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t, final Double s) {
-        return volTS.evaluate(t);
+      public Double apply(final Double t, final Double s) {
+        return volTS.apply(t);
       }
     };
 
@@ -153,7 +153,7 @@ public class LocalVolatilityBackwardsPDEPricerTest {
     final double beta = 0.5;
     final Function<Double, Double> vol = new Function2D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t, final Double s) {
+      public Double apply(final Double t, final Double s) {
         final double tau = T - t;
         final double rt = Math.exp(tau * R);
         return sigma * Math.pow(rt * s, beta - 1.0);
@@ -165,7 +165,7 @@ public class LocalVolatilityBackwardsPDEPricerTest {
     final CEVFunctionData data = new CEVFunctionData(fwd, df, sigma, beta);
 
     final Function1D<CEVFunctionData, Double> priceFunc = cev.getPriceFunction(option);
-    final double cevPrice = priceFunc.evaluate(data);
+    final double cevPrice = priceFunc.apply(data);
 
     double pdePrice = PRICER.price(FWD_CURVE, RISK_FREE_CURVE, option, volSurf, isCall, xNodes, tNodes);
     //    double relErr = Math.abs((pdePrice - cevPrice) / cevPrice);

@@ -19,7 +19,7 @@ import com.opengamma.util.tuple.DoublesPair;
  * + sigma(f,t)dw. From a node at (f,t) the two daughter nodes f+ and f- (at time t + dt) are set such that p*(1-p)*(ln(f+/f-))^2 = dt*sigma(f,t)^2, where p is
  * the probability of reaching f+ from f. The forwarding condition is p*f+ + (1-p)*f- = f*exp(mu(f,t)*dt). This is adapted from the paper Derman and Kani, The
  * Volatility Smile and Its Implied Tree
- * 
+ *
  * @param <T>
  *          A GeneralLogNormalOptionDataBundle or anything that extends it
  */
@@ -89,7 +89,7 @@ public class LogNormalBinomialTreeBuilder<T extends GeneralLogNormalOptionDataBu
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double p = (_f - _s) / (x - _s);
 
       final double res = _s * Math.exp(_rootdt * _sigma / Math.sqrt(p * (1 - p))) - x;
@@ -112,7 +112,7 @@ public class LogNormalBinomialTreeBuilder<T extends GeneralLogNormalOptionDataBu
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double p = (_f - x) / (_s - x);
       final double res = _s * Math.exp(-_rootdt * _sigma / Math.sqrt(p * (1 - p))) - x;
       return res;
@@ -134,7 +134,7 @@ public class LogNormalBinomialTreeBuilder<T extends GeneralLogNormalOptionDataBu
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       double p;
       if (_f == _spot) {
         p = _f / (x + _f);

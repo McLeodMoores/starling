@@ -60,7 +60,7 @@ public class CoupledFiniteDifferenceTest {
     INITIAL_COND = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return Math.max(0, x - STRIKE);
       }
     };
@@ -87,12 +87,12 @@ public class CoupledFiniteDifferenceTest {
 
     final double[] timeGrid = new double[timeNodes];
     for (int n = 0; n < timeNodes; n++) {
-      timeGrid[n] = timeMesh.evaluate(n);
+      timeGrid[n] = timeMesh.apply(n);
     }
 
     final double[] spaceGrid = new double[spaceNodes];
     for (int i = 0; i < spaceNodes; i++) {
-      spaceGrid[i] = spaceMesh.evaluate(i);
+      spaceGrid[i] = spaceMesh.apply(i);
     }
 
     final PDEGrid1D grid = new PDEGrid1D(timeGrid, spaceGrid);
@@ -148,12 +148,12 @@ public class CoupledFiniteDifferenceTest {
     //
     final double[] timeGrid = new double[timeNodes];
     for (int n = 0; n < timeNodes; n++) {
-      timeGrid[n] = timeMesh.evaluate(n);
+      timeGrid[n] = timeMesh.apply(n);
     }
 
     final double[] spaceGrid = new double[spaceNodes];
     for (int i = 0; i < spaceNodes; i++) {
-      spaceGrid[i] = spaceMesh.evaluate(i);
+      spaceGrid[i] = spaceMesh.apply(i);
     }
 
     final PDEGrid1D grid = new PDEGrid1D(timeGrid, spaceGrid);
@@ -240,12 +240,12 @@ public class CoupledFiniteDifferenceTest {
 
     final double[] timeGrid = new double[timeNodes];
     for (int n = 0; n < timeNodes; n++) {
-      timeGrid[n] = timeMesh.evaluate(n);
+      timeGrid[n] = timeMesh.apply(n);
     }
 
     final double[] spaceGrid = new double[spaceNodes];
     for (int i = 0; i < spaceNodes; i++) {
-      spaceGrid[i] = spaceMesh.evaluate(i);
+      spaceGrid[i] = spaceMesh.apply(i);
     }
 
     final PDEGrid1D grid = new PDEGrid1D(timeGrid, spaceGrid);

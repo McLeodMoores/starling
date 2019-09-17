@@ -72,7 +72,7 @@ public class ZSpreadCalculator<T extends ParameterProviderInterface> {
 
     final Function1D<Double, Double> f = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double y) {
+      public Double apply(final Double y) {
         return calculatePriceForZSpread(annuity, curves, y) - price;
       }
     };

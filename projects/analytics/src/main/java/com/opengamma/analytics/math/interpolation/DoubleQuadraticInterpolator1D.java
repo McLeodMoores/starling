@@ -47,17 +47,17 @@ public class DoubleQuadraticInterpolator1D extends Interpolator1D {
     } else if (low == 0) {
       final RealPolynomialFunction1D quadratic = quadraticData.getQuadratic(0);
       final double x = value - xData[1];
-      return quadratic.evaluate(x);
+      return quadratic.apply(x);
     } else if (high == n) {
       final RealPolynomialFunction1D quadratic = quadraticData.getQuadratic(n - 2);
       final double x = value - xData[n - 1];
-      return quadratic.evaluate(x);
+      return quadratic.apply(x);
     }
     final RealPolynomialFunction1D quadratic1 = quadraticData.getQuadratic(low - 1);
     final RealPolynomialFunction1D quadratic2 = quadraticData.getQuadratic(high - 1);
     final double w = _weightFunction.getWeight((xData[high] - value) / (xData[high] - xData[low]));
     // final double w = (xData[high] - value) / (xData[high] - xData[low]);
-    final double res = w * quadratic1.evaluate(value - xData[low]) + (1 - w) * quadratic2.evaluate(value - xData[high]);
+    final double res = w * quadratic1.apply(value - xData[low]) + (1 - w) * quadratic2.apply(value - xData[high]);
     return res;
   }
 
@@ -76,19 +76,19 @@ public class DoubleQuadraticInterpolator1D extends Interpolator1D {
     } else if (low == 0) {
       final RealPolynomialFunction1D quadraticFirstDerivative = quadraticData.getQuadraticFirstDerivative(0);
       final double x = value - xData[1];
-      return quadraticFirstDerivative.evaluate(x);
+      return quadraticFirstDerivative.apply(x);
     } else if (high == n) {
       final RealPolynomialFunction1D quadraticFirstDerivative = quadraticData.getQuadraticFirstDerivative(n - 2);
       final double x = value - xData[n - 1];
-      return quadraticFirstDerivative.evaluate(x);
+      return quadraticFirstDerivative.apply(x);
     }
     final RealPolynomialFunction1D quadratic1 = quadraticData.getQuadratic(low - 1);
     final RealPolynomialFunction1D quadratic2 = quadraticData.getQuadratic(high - 1);
     final RealPolynomialFunction1D quadratic1FirstDerivative = quadraticData.getQuadraticFirstDerivative(low - 1);
     final RealPolynomialFunction1D quadratic2FirstDerivative = quadraticData.getQuadraticFirstDerivative(high - 1);
     final double w = _weightFunction.getWeight((xData[high] - value) / (xData[high] - xData[low]));
-    final double res = w * quadratic1FirstDerivative.evaluate(value - xData[low]) + (1 - w) * quadratic2FirstDerivative.evaluate(value - xData[high])
-        + (quadratic2.evaluate(value - xData[high]) - quadratic1.evaluate(value - xData[low])) / (xData[high] - xData[low]);
+    final double res = w * quadratic1FirstDerivative.apply(value - xData[low]) + (1 - w) * quadratic2FirstDerivative.apply(value - xData[high])
+        + (quadratic2.apply(value - xData[high]) - quadratic1.apply(value - xData[low])) / (xData[high] - xData[low]);
     return res;
   }
 

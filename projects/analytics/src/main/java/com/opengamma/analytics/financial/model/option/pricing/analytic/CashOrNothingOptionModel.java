@@ -30,7 +30,7 @@ public class CashOrNothingOptionModel extends AnalyticOptionModel<CashOrNothingO
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final StandardOptionDataBundle data) {
+      public Double apply(final StandardOptionDataBundle data) {
         Validate.notNull(data);
         final double s = data.getSpot();
         final double k = definition.getStrike();

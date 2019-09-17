@@ -27,12 +27,12 @@ public class LUDecompositionCommonsTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullObjectMatrix() {
-    LU.evaluate((DoubleMatrix2D) null);
+    LU.apply((DoubleMatrix2D) null);
   }
 
   @Test
   public void testRecoverOrginal() {
-    final DecompositionResult result = LU.evaluate(A);
+    final DecompositionResult result = LU.apply(A);
     assertTrue(result instanceof LUDecompositionResult);
     final LUDecompositionResult lu = (LUDecompositionResult) result;
     final DoubleMatrix2D a = (DoubleMatrix2D) ALGEBRA.multiply(lu.getL(), lu.getU());

@@ -23,16 +23,16 @@ public class LognormalPearsonKurtosisFromVolatilityCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullSigma() {
-    F.evaluate(null, T);
+    F.apply(null, T);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullT() {
-    F.evaluate(SIGMA, null);
+    F.apply(SIGMA, null);
   }
 
   @Test
   public void test() {
-    assertEquals(F.evaluate(SIGMA, T), 3.3719, 1e-4);
+    assertEquals(F.apply(SIGMA, T), 3.3719, 1e-4);
   }
 }

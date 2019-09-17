@@ -158,7 +158,7 @@ public abstract class FDCurveSensitivityCalculator {
 
     final Function1D<Double, Double> blip = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return Math.abs(x - t) < 3.0e-6 ? eps : 0.0; // 100 second tolerance
       }
     };
@@ -184,7 +184,7 @@ public abstract class FDCurveSensitivityCalculator {
 
     final Function1D<Double, Double> blip = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return Math.abs(x - t) < 3.0e-6 ? eps : 0.0; // 100 second tolerance
       }
     };

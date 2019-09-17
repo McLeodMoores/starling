@@ -141,78 +141,78 @@ public class HestonCharacteristicExponentTest {
   private ComplexNumber[] finiteDifferenceSensitivity(final HestonCharacteristicExponent heston, final ComplexNumber z, final double t) {
     final double eps = 1e-5;
     final ComplexNumber[] res = new ComplexNumber[6];
-    res[0] = heston.getFunction(t).evaluate(z);
+    res[0] = heston.getFunction(t).apply(z);
     //bump kappa
     final double kappa = heston.getKappa();
     HestonCharacteristicExponent hestonT = heston.withKappa(kappa + eps);
-    ComplexNumber up = hestonT.getFunction(t).evaluate(z);
+    ComplexNumber up = hestonT.getFunction(t).apply(z);
     if (kappa > eps) {
       hestonT = heston.withKappa(kappa - eps);
-      final ComplexNumber down = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber down = hestonT.getFunction(t).apply(z);
       res[1] = divide(subtract(up, down), 2 * eps);
     } else {
       hestonT = heston.withKappa(kappa + 2 * eps);
-      final ComplexNumber up2 = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber up2 = hestonT.getFunction(t).apply(z);
       res[1] = add(multiply(-1.5 / eps, res[0]), multiply(2 / eps, up), multiply(-0.5 / eps, up2));
     }
     //bump theta
     final double theta = heston.getTheta();
     hestonT = heston.withTheta(theta + eps);
-    up = hestonT.getFunction(t).evaluate(z);
+    up = hestonT.getFunction(t).apply(z);
     if (theta > eps) {
       hestonT = heston.withTheta(theta - eps);
-      final ComplexNumber down = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber down = hestonT.getFunction(t).apply(z);
       res[2] = divide(subtract(up, down), 2 * eps);
     } else {
       hestonT = heston.withTheta(theta + 2 * eps);
-      final ComplexNumber up2 = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber up2 = hestonT.getFunction(t).apply(z);
       res[2] = add(multiply(-1.5 / eps, res[0]), multiply(2 / eps, up), multiply(-0.5 / eps, up2));
     }
     //bump vol0
     final double vol0 = heston.getVol0();
     hestonT = heston.withVol0(vol0 + eps);
-    up = hestonT.getFunction(t).evaluate(z);
+    up = hestonT.getFunction(t).apply(z);
     if (vol0 > eps) {
       hestonT = heston.withVol0(vol0 - eps);
-      final ComplexNumber down = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber down = hestonT.getFunction(t).apply(z);
       res[3] = divide(subtract(up, down), 2 * eps);
     } else {
       hestonT = heston.withVol0(vol0 + 2 * eps);
-      final ComplexNumber up2 = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber up2 = hestonT.getFunction(t).apply(z);
       res[3] = add(multiply(-1.5 / eps, res[0]), multiply(2 / eps, up), multiply(-0.5 / eps, up2));
     }
     //bump omega
     final double omega = heston.getOmega();
     hestonT = heston.withOmega(omega + eps);
-    up = hestonT.getFunction(t).evaluate(z);
+    up = hestonT.getFunction(t).apply(z);
     if (omega > eps) {
       hestonT = heston.withOmega(omega - eps);
-      final ComplexNumber down = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber down = hestonT.getFunction(t).apply(z);
       res[4] = divide(subtract(up, down), 2 * eps);
     } else {
       hestonT = heston.withOmega(omega + 2 * eps);
-      final ComplexNumber up2 = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber up2 = hestonT.getFunction(t).apply(z);
       res[4] = add(multiply(-1.5 / eps, res[0]), multiply(2 / eps, up), multiply(-0.5 / eps, up2));
     }
     //bump rho
     final double rho = heston.getRho();
     if (rho + 1 < eps) {
       hestonT = heston.withRho(rho + eps);
-      up = hestonT.getFunction(t).evaluate(z);
+      up = hestonT.getFunction(t).apply(z);
       hestonT = heston.withRho(rho + 2 * eps);
-      final ComplexNumber up2 = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber up2 = hestonT.getFunction(t).apply(z);
       res[5] = add(multiply(-1.5 / eps, res[0]), multiply(2 / eps, up), multiply(-0.5 / eps, up2));
     } else if (1 - rho < eps) {
       hestonT = heston.withRho(rho - eps);
-      final ComplexNumber down = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber down = hestonT.getFunction(t).apply(z);
       hestonT = heston.withRho(rho - 2 * eps);
-      final ComplexNumber down2 = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber down2 = hestonT.getFunction(t).apply(z);
       res[5] = add(multiply(0.5 / eps, down2), multiply(-2 / eps, down), multiply(1.5 / eps, res[0]));
     } else {
       hestonT = heston.withRho(rho + eps);
-      up = hestonT.getFunction(t).evaluate(z);
+      up = hestonT.getFunction(t).apply(z);
       hestonT = heston.withRho(rho - eps);
-      final ComplexNumber down = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber down = hestonT.getFunction(t).apply(z);
       res[5] = divide(subtract(up, down), 2 * eps);
     }
     return res;

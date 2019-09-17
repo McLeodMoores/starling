@@ -55,14 +55,14 @@ public class TermStructureRatesTest {
 
     final Function1D<Double, Double> r = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return (-0.04 + 0.1 * t) * Math.exp(-0.5 * t) + 0.08;
       }
     };
 
     final Function1D<Double, Double> b = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return (-0.04 + 0.1 * t) * Math.exp(-0.5 * t) - 0.08 * Math.exp(-0.3 * t) - 0.05;
       }
     };
@@ -105,7 +105,7 @@ public class TermStructureRatesTest {
     final ConvectionDiffusionPDE1DStandardCoefficients coef = PDE.getBackwardsLocalVol(RISK_FREE_CURVE, FWD_CURVE.getDriftCurve(), T, LOCAL_VOL_SUR);
     final Function1D<Double, Double> payoff = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return 1.0;
       }
     };

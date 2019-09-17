@@ -136,7 +136,7 @@ public class IssuerDiscountBuildingRepository {
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator = new IssuerDiscountFinderJacobian(
         new ParameterSensitivityIssuerMatrixCalculator(sensitivityCalculator), data);
     final double[] parameters = _rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(initGuess)).getData();
-    final IssuerProviderDiscount newCurves = data.getGeneratorMarket().evaluate(new DoubleMatrix1D(parameters));
+    final IssuerProviderDiscount newCurves = data.getGeneratorMarket().apply(new DoubleMatrix1D(parameters));
     return newCurves;
   }
 

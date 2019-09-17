@@ -24,7 +24,7 @@ public class LognormalSkewnessFromVolatilityCalculator extends LognormalStatisti
   public static final String NAME = "LognormalSkewnessFromVolatility";
 
   @Override
-  public Double evaluate(final Double sigma, final Double t) {
+  public Double apply(final Double sigma, final Double t) {
     ArgumentChecker.notNull(sigma, "sigma");
     ArgumentChecker.notNull(t, "t");
     final double y = Math.sqrt(Math.exp(sigma * sigma * t) - 1);

@@ -39,19 +39,19 @@ public class QuartileSkewnessCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {
-    SKEW.evaluate((double[]) null);
+    SKEW.apply((double[]) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmpty() {
-    SKEW.evaluate(new double[0]);
+    SKEW.apply(new double[0]);
   }
 
   @Test
   public void test() {
-    Double t = SKEW.evaluate(NORMAL_DATA);
+    Double t = SKEW.apply(NORMAL_DATA);
     assertEquals(t, 0, 0.1);
-    t = SKEW.evaluate(CHI_SQ_DATA);
+    t = SKEW.apply(CHI_SQ_DATA);
     assertFalse(Math.abs(t) < 0.1);
   }
 }

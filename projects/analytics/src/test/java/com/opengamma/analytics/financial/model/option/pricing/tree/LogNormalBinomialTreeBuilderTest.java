@@ -165,7 +165,7 @@ public class LogNormalBinomialTreeBuilderTest {
       final OptionDefinition option = new EuropeanVanillaOptionDefinition(strike, OPTION.getExpiry(), OPTION.isCall());
       optionPriceTree = BUILDER.buildOptionPriceTree(option, data, assetPriceTree);
       o = new EuropeanVanillaOption(strike, T, true);
-      final double cevPrice = CEV_PRICE.getPriceFunction(o).evaluate(cfd);
+      final double cevPrice = CEV_PRICE.getPriceFunction(o).apply(cfd);
       final double cevVol = BLACK_IMPLIED_VOL.getImpliedVolatility(new BlackFunctionData(FORWARD, YIELD_CURVE.getDiscountFactor(T), SIGMA_BETA), o, cevPrice);
       final double impVol = BLACK_IMPLIED_VOL.getImpliedVolatility(new BlackFunctionData(FORWARD, YIELD_CURVE.getDiscountFactor(T), SIGMA_BETA), o, optionPriceTree.getNode(0, 0).getValue());
       //      final double cevPrice = CEVFormula.optionPrice(FORWARD, strike, BETA, df, SIGMA_BETA, T, true);

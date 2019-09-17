@@ -26,7 +26,7 @@ public class NormalLinearVaRCalculatorTest {
   private static final Function1D<Double, Double> MEAN_CALCULATOR = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 0.4;
     }
 
@@ -34,7 +34,7 @@ public class NormalLinearVaRCalculatorTest {
   private static final Function1D<Double, Double> STD_CALCULATOR = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 1.;
     }
 

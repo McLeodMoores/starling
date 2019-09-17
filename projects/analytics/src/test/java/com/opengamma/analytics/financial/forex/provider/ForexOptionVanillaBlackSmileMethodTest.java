@@ -161,7 +161,7 @@ public class ForexOptionVanillaBlackSmileMethodTest {
     final double volatility = SMILE_TERM.getVolatility(Triple.of(TIME_TO_EXPIRY[indexPay + 1], strike, forward));
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, df, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(forexOption);
-    final double priceExpected = func.evaluate(dataBlack) * notional;
+    final double priceExpected = func.apply(dataBlack) * notional;
     final MultipleCurrencyAmount priceComputed = METHOD_OPTION.presentValue(forexOption, SMILE_MULTICURVES);
     assertEquals("Forex vanilla option: present value", priceExpected, priceComputed.getAmount(USD), TOLERANCE_PV);
   }
@@ -186,7 +186,7 @@ public class ForexOptionVanillaBlackSmileMethodTest {
     final double volatility = SMILE_TERM.getVolatility(Triple.of(timeToExpiry, strike, forward));
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, df, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(forexOption);
-    final double priceExpected = func.evaluate(dataBlack) * notional;
+    final double priceExpected = func.apply(dataBlack) * notional;
     final MultipleCurrencyAmount priceComputed = METHOD_OPTION.presentValue(forexOption, SMILE_MULTICURVES);
     assertEquals("Forex vanilla option: present value", priceExpected, priceComputed.getAmount(USD), TOLERANCE_PV);
   }

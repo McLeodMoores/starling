@@ -21,11 +21,11 @@ public class GammaDistributionMomentEstimator extends DistributionParameterEstim
   private final Function1D<double[], Double> _second = new SampleMomentCalculator(2);
 
   @Override
-  public ProbabilityDistribution<Double> evaluate(final double[] x) {
+  public ProbabilityDistribution<Double> apply(final double[] x) {
     Validate.notNull(x, "x");
     ArgumentChecker.notEmpty(x, "x");
-    final double m1 = _first.evaluate(x);
-    final double m2 = _second.evaluate(x);
+    final double m1 = _first.apply(x);
+    final double m2 = _second.apply(x);
     final double m1Sq = m1 * m1;
     final double k = m1Sq / (m2 - m1Sq);
     final double theta = m1 / k;

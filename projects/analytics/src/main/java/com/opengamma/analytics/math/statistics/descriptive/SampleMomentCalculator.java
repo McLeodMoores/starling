@@ -46,7 +46,7 @@ public class SampleMomentCalculator extends DescriptiveStatisticsCalculator {
    * @return  the sample raw moment
    */
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notEmpty(x, "x");
     if (_n == 0) {
       return 1.;

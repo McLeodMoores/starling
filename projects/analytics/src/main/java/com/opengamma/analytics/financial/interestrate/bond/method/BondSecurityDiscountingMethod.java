@@ -326,7 +326,7 @@ public final class BondSecurityDiscountingMethod {
      */
     final Function1D<Double, Double> priceResidual = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double y) {
+      public Double apply(final Double y) {
         return dirtyPriceFromYield(bond, y) - dirtyPrice;
       }
     };
@@ -602,7 +602,7 @@ public final class BondSecurityDiscountingMethod {
 
     final Function1D<Double, Double> residual = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double z) {
+      public Double apply(final Double z) {
         return presentValueFromZSpread(bond, curves, z) - pv;
       }
     };

@@ -84,7 +84,7 @@ public class BondFuturesOptionMarginSecurityBlackFlatMethodTest {
     final EuropeanVanillaOption option = new EuropeanVanillaOption(STRIKE_125, CALL_BOBL_125.getExpirationTime(), CALL_BOBL_125.isCall());
     final double volatility = METHOD_OPT.impliedVolatility(CALL_BOBL_125, BLACK_FLAT_BNDFUT);
     final BlackFunctionData dataBlack = new BlackFunctionData(price, 1.0, volatility);
-    final double priceExpected = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlack);
+    final double priceExpected = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlack);
     final double priceComputed = METHOD_OPT.price(CALL_BOBL_125, BLACK_FLAT_BNDFUT, price);
     assertEquals("BondFuturesOptionMarginSecurityBlackFlatMethod: underlying futures price", priceExpected, priceComputed, TOLERANCE_RATE);
   }

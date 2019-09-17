@@ -70,7 +70,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
 
   @Override
   public Double visitPrice() {
-    return _pricingFunction.evaluate(_data);
+    return _pricingFunction.apply(_data);
   }
 
   @SuppressWarnings("unchecked")
@@ -373,31 +373,31 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
   }
 
   private double getFirstDerivative(final S dataUp, final S dataDown) {
-    return (_pricingFunction.evaluate(dataUp) - _pricingFunction.evaluate(dataDown)) / (2 * EPS);
+    return (_pricingFunction.apply(dataUp) - _pricingFunction.apply(dataDown)) / (2 * EPS);
   }
 
   private double getForwardFirstDerivative(final S dataUp, final S data) {
-    return (_pricingFunction.evaluate(dataUp) - _pricingFunction.evaluate(data)) / EPS;
+    return (_pricingFunction.apply(dataUp) - _pricingFunction.apply(data)) / EPS;
   }
 
   private double getSecondDerivative(final S dataUp, final S dataDown, final S data) {
-    return (_pricingFunction.evaluate(dataUp) + _pricingFunction.evaluate(dataDown) - 2 * _pricingFunction.evaluate(data)) / (EPS * EPS);
+    return (_pricingFunction.apply(dataUp) + _pricingFunction.apply(dataDown) - 2 * _pricingFunction.apply(data)) / (EPS * EPS);
   }
 
   private double getMixedSecondDerivative(final S dataUp1Up2, final S dataUp1Down2, final S dataDown1Up2, final S dataDown1Down2) {
-    return (_pricingFunction.evaluate(dataUp1Up2) - _pricingFunction.evaluate(dataUp1Down2) - _pricingFunction.evaluate(dataDown1Up2)
-        + _pricingFunction.evaluate(dataDown1Down2)) / (4 * EPS * EPS);
+    return (_pricingFunction.apply(dataUp1Up2) - _pricingFunction.apply(dataUp1Down2) - _pricingFunction.apply(dataDown1Up2)
+        + _pricingFunction.apply(dataDown1Down2)) / (4 * EPS * EPS);
   }
 
   private double getThirdDerivative(final S dataUpUp, final S dataUp, final S data, final S dataDown) {
-    return (_pricingFunction.evaluate(dataUpUp) + 3 * _pricingFunction.evaluate(data) - 3 * _pricingFunction.evaluate(dataUp)
-        - _pricingFunction.evaluate(dataDown)) / (EPS * EPS * EPS);
+    return (_pricingFunction.apply(dataUpUp) + 3 * _pricingFunction.apply(data) - 3 * _pricingFunction.apply(dataUp)
+        - _pricingFunction.apply(dataDown)) / (EPS * EPS * EPS);
   }
 
   private double getMixedThirdDerivative(final S dataUp1Up1, final S dataUp2, final S dataDown1Up2, final S dataUp1Down2, final S dataDown2,
       final S dataDown1Down2) {
-    return (_pricingFunction.evaluate(dataUp1Up1) - 2 * _pricingFunction.evaluate(dataUp2) + _pricingFunction.evaluate(dataDown1Up2)
-        - _pricingFunction.evaluate(dataUp1Down2) + 2 * _pricingFunction.evaluate(dataDown2) - _pricingFunction.evaluate(dataDown1Down2))
+    return (_pricingFunction.apply(dataUp1Up1) - 2 * _pricingFunction.apply(dataUp2) + _pricingFunction.apply(dataDown1Up2)
+        - _pricingFunction.apply(dataUp1Down2) + 2 * _pricingFunction.apply(dataDown2) - _pricingFunction.apply(dataDown1Down2))
         / (2 * EPS * EPS * EPS);
   }
 

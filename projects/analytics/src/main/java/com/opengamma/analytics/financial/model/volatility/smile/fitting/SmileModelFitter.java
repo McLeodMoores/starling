@@ -33,7 +33,7 @@ public abstract class SmileModelFitter<T extends SmileModelData> {
   private static final NonLinearLeastSquare SOLVER = new NonLinearLeastSquare(DecompositionFactory.SV_COLT, MA, 1e-12);
   private static final Function1D<DoubleMatrix1D, Boolean> UNCONSTRAINED = new Function1D<DoubleMatrix1D, Boolean>() {
     @Override
-    public Boolean evaluate(final DoubleMatrix1D x) {
+    public Boolean apply(final DoubleMatrix1D x) {
       return true;
     }
   };
@@ -127,9 +127,9 @@ public abstract class SmileModelFitter<T extends SmileModelData> {
     return new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
         final T data = toSmileModelData(x);
-        final double[] res = _volFunc.evaluate(data);
+        final double[] res = _volFunc.apply(data);
         return new DoubleMatrix1D(res);
       }
     };
@@ -140,10 +140,10 @@ public abstract class SmileModelFitter<T extends SmileModelData> {
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D x) {
         final T data = toSmileModelData(x);
         // this thing will be (#strikes/vols) x (# model Params)
-        final double[][] volAdjoint = _volAdjointFunc.evaluate(data);
+        final double[][] volAdjoint = _volAdjointFunc.apply(data);
         return new DoubleMatrix2D(volAdjoint);
       }
     };

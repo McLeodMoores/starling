@@ -37,7 +37,7 @@ public class NonLinearLeastSquare {
   private static final int MAX_ATTEMPTS = 10000;
   private static final Function1D<DoubleMatrix1D, Boolean> UNCONSTAINED = new Function1D<DoubleMatrix1D, Boolean>() {
     @Override
-    public Boolean evaluate(final DoubleMatrix1D x) {
+    public Boolean apply(final DoubleMatrix1D x) {
       return true;
     }
   };
@@ -137,7 +137,7 @@ public class NonLinearLeastSquare {
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> func1D = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
 
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D theta) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D theta) {
         final int m = x.getNumberOfElements();
         final double[] res = new double[m];
         for (int i = 0; i < m; i++) {
@@ -240,7 +240,7 @@ public class NonLinearLeastSquare {
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> func1D = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
 
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D theta) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D theta) {
         final int m = x.getNumberOfElements();
         final double[] res = new double[m];
         for (int i = 0; i < m; i++) {
@@ -253,7 +253,7 @@ public class NonLinearLeastSquare {
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jac = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
 
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D theta) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D theta) {
         final int m = x.getNumberOfElements();
         final double[][] res = new double[m][];
         for (int i = 0; i < m; i++) {
@@ -407,7 +407,7 @@ public class NonLinearLeastSquare {
     final int nParms = startPos.getNumberOfElements();
     Validate.isTrue(nObs == sigma.getNumberOfElements(), "observedValues and sigma must be same length");
     ArgumentChecker.isTrue(nObs >= nParms, "must have data points greater or equal to number of parameters. #date points = {}, #parameters = {}", nObs, nParms);
-    ArgumentChecker.isTrue(constraints.evaluate(startPos), "The inital value of the parameters (startPos) is {} - this is not an allowed value", startPos);
+    ArgumentChecker.isTrue(constraints.apply(startPos), "The inital value of the parameters (startPos) is {} - this is not an allowed value", startPos);
     DoubleMatrix2D alpha;
     DecompositionResult decmp;
     DoubleMatrix1D theta = startPos;
@@ -432,7 +432,7 @@ public class NonLinearLeastSquare {
 
       DoubleMatrix1D deltaTheta;
       try {
-        decmp = _decomposition.evaluate(alpha);
+        decmp = _decomposition.apply(alpha);
         deltaTheta = decmp.solve(beta);
       } catch (final Exception e) {
         throw new MathException(e);
@@ -441,7 +441,7 @@ public class NonLinearLeastSquare {
       DoubleMatrix1D trialTheta = (DoubleMatrix1D) _algebra.add(theta, deltaTheta);
 
       // if the new value of theta is not in the model domain or the jump is too large, keep increasing lambda until an acceptable step is found
-      if (!constraints.evaluate(trialTheta) || !allowJump(deltaTheta, maxJumps)) {
+      if (!constraints.apply(trialTheta) || !allowJump(deltaTheta, maxJumps)) {
         lambda = increaseLambda(lambda);
         continue;
       }
@@ -457,7 +457,7 @@ public class NonLinearLeastSquare {
         // if the model is an exact fit to the data, then no more improvement is possible
         if (newChiSqr < _eps) {
           if (lambda > 0.0) {
-            decmp = _decomposition.evaluate(alpha0);
+            decmp = _decomposition.apply(alpha0);
           }
           return finish(alpha0, decmp, newChiSqr, jacobian, trialTheta, sigma);
         }
@@ -467,7 +467,7 @@ public class NonLinearLeastSquare {
         // add the second derivative information to the Hessian matrix to check we are not at a local maximum or saddle point
         final VectorFieldSecondOrderDifferentiator diff = new VectorFieldSecondOrderDifferentiator();
         final Function1D<DoubleMatrix1D, DoubleMatrix2D[]> secDivFunc = diff.differentiate(func, constraints);
-        final DoubleMatrix2D[] secDiv = secDivFunc.evaluate(trialTheta);
+        final DoubleMatrix2D[] secDiv = secDivFunc.apply(trialTheta);
         final double[][] temp = new double[nParms][nParms];
         for (int i = 0; i < nObs; i++) {
           for (int j = 0; j < nParms; j++) {
@@ -478,7 +478,7 @@ public class NonLinearLeastSquare {
         }
         final DoubleMatrix2D newAlpha = (DoubleMatrix2D) _algebra.add(alpha0, new DoubleMatrix2D(temp));
 
-        final SVDecompositionResult svdRes = svd.evaluate(newAlpha);
+        final SVDecompositionResult svdRes = svd.apply(newAlpha);
         final double[] w = svdRes.getSingularValues();
         final DoubleMatrix2D u = svdRes.getU();
         final DoubleMatrix2D v = svdRes.getV();
@@ -517,7 +517,7 @@ public class NonLinearLeastSquare {
           trialTheta = (DoubleMatrix1D) _algebra.add(theta, deltaTheta);
           int i = 0;
           double scale = 1.0;
-          while (!constraints.evaluate(trialTheta)) {
+          while (!constraints.apply(trialTheta)) {
             scale *= -0.5;
             deltaTheta = (DoubleMatrix1D) _algebra.scale(direction, scale);
             trialTheta = (DoubleMatrix1D) _algebra.add(theta, deltaTheta);
@@ -613,13 +613,13 @@ public class NonLinearLeastSquare {
     final DoubleMatrix2D jacobian = getJacobian(jac, sigma, originalSolution);
     final DoubleMatrix2D a = getModifiedCurvatureMatrix(jacobian, 0.0);
     final DoubleMatrix2D bT = getBTranspose(jacobian, sigma);
-    final DecompositionResult decRes = _decomposition.evaluate(a);
+    final DecompositionResult decRes = _decomposition.apply(a);
     return decRes.solve(bT);
   }
 
   private LeastSquareResults finish(final double newChiSqr, final DoubleMatrix2D jacobian, final DoubleMatrix1D newTheta, final DoubleMatrix1D sigma) {
     final DoubleMatrix2D alpha = getModifiedCurvatureMatrix(jacobian, 0.0);
-    final DecompositionResult decmp = _decomposition.evaluate(alpha);
+    final DecompositionResult decmp = _decomposition.apply(alpha);
     return finish(alpha, decmp, newChiSqr, jacobian, newTheta, sigma);
   }
 
@@ -634,7 +634,7 @@ public class NonLinearLeastSquare {
   private DoubleMatrix1D getError(final Function1D<DoubleMatrix1D, DoubleMatrix1D> func, final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma,
       final DoubleMatrix1D theta) {
     final int n = observedValues.getNumberOfElements();
-    final DoubleMatrix1D modelValues = func.evaluate(theta);
+    final DoubleMatrix1D modelValues = func.apply(theta);
     Validate.isTrue(n == modelValues.getNumberOfElements(),
         "Number of data points different between model (" + modelValues.getNumberOfElements() + ") and observed ("
             + n + ")");
@@ -661,7 +661,7 @@ public class NonLinearLeastSquare {
   }
 
   private DoubleMatrix2D getJacobian(final Function1D<DoubleMatrix1D, DoubleMatrix2D> jac, final DoubleMatrix1D sigma, final DoubleMatrix1D theta) {
-    final DoubleMatrix2D res = jac.evaluate(theta);
+    final DoubleMatrix2D res = jac.apply(theta);
     final double[][] data = res.getData();
     final int n = res.getNumberOfRows();
     final int m = res.getNumberOfColumns();

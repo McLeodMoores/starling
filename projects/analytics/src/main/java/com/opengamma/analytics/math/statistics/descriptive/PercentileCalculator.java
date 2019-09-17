@@ -46,7 +46,7 @@ public class PercentileCalculator extends DescriptiveStatisticsCalculator {
    * @return The percentile
    */
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notEmpty(x, "x");
     final int length = x.length;
     final double[] copy = Arrays.copyOf(x, length);

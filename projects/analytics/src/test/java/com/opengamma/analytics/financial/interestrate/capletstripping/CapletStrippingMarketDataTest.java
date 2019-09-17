@@ -233,7 +233,7 @@ public class CapletStrippingMarketDataTest {
         System.out.println("CapletStrippingMarketDataTest");
         System.out.println("chi2: " + lsRes.getChiSq() + "\n");
 
-        final SABRTermStructureParameters sabrTS = (SABRTermStructureParameters) VOL_MODEL_PROVIDER.evaluate(lsRes.getFitParameters());
+        final SABRTermStructureParameters sabrTS = (SABRTermStructureParameters) VOL_MODEL_PROVIDER.apply(lsRes.getFitParameters());
         // print the SABR curves
         final int nPoints = 101;
         System.out.println("t\talpha\tbeta\trho\tnu");

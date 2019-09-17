@@ -38,11 +38,11 @@ public class SampleFisherKurtosisCalculator extends DescriptiveStatisticsCalcula
    * @return  the sample Fisher kurtosis
    */
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notNull(x, "x");
     ArgumentChecker.isTrue(x.length >= 4, "Need at least four points to calculate kurtosis");
     double sum = 0;
-    final double mean = DescriptiveStatisticsFactory.of(MeanCalculator.NAME).evaluate(x);
+    final double mean = DescriptiveStatisticsFactory.of(MeanCalculator.NAME).apply(x);
     double variance = 0;
     for (final Double d : x) {
       final double diff = d - mean;

@@ -288,7 +288,7 @@ public class FXForwardPointsFCNSPnLFunction extends AbstractFunction.NonCompiled
     final LocalDate[] dates = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(returnSeriesStart, returnSeriesEnd, true, false),
         WEEKEND_CALENDAR);
     final LocalDateDoubleTimeSeries sampledTimeSeries = samplingFunction.getSampledTimeSeries(ts, dates);
-    final LocalDateDoubleTimeSeries returnSeries = (LocalDateDoubleTimeSeries) DIFFERENCE.evaluate(sampledTimeSeries);
+    final LocalDateDoubleTimeSeries returnSeries = (LocalDateDoubleTimeSeries) DIFFERENCE.apply(sampledTimeSeries);
     // Clip the time-series to the range originally asked for
     return returnSeries.subSeries(returnSeriesStart, includeStart, returnSeries.getLatestTime(), true);
   }

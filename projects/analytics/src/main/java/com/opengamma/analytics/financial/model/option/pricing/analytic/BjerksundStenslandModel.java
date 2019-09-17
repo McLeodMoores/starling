@@ -45,7 +45,7 @@ public class BjerksundStenslandModel {
     final Function1D<StandardOptionDataBundle, Double> pricingFunction = new Function1D<StandardOptionDataBundle, Double>() {
 
       @Override
-      public Double evaluate(final StandardOptionDataBundle data) {
+      public Double apply(final StandardOptionDataBundle data) {
         Validate.notNull(data);
         final ZonedDateTime date = data.getDate();
         final double s = data.getSpot();
@@ -166,10 +166,10 @@ public class BjerksundStenslandModel {
     final double alpha1 = getAlpha(x1, beta, k);
     final double alpha2 = getAlpha(x2, beta, k);
     return alpha2 * Math.pow(s0, beta) - alpha2 * getPhi(s0, t1, beta, x2, x2, r, b, sigma) + getPhi(s0, t1, 1, x2, x2, r, b, sigma)
-        - getPhi(s0, t1, 1, x1, x2, r, b, sigma) - k * getPhi(s0, t1, 0, x2, x2, r, b, sigma) + k * getPhi(s0, t1, 0, x1, x2, r, b, sigma) + alpha1
-            * getPhi(s0, t1, beta, x1, x2, r, b, sigma)
-        - alpha1 * getPsi(s0, t1, t, beta, x1, x2, x1, r, b, sigma) + getPsi(s0, t1, t, 1, x1, x2, x1, r, b, sigma)
-        - getPsi(s0, t1, t, 1, k, x2, x1, r, b, sigma) - k * getPsi(s0, t1, t, 0, x1, x2, x1, r, b, sigma) + k * getPsi(s0, t1, t, 0, k, x2, x1, r, b, sigma);
+    - getPhi(s0, t1, 1, x1, x2, r, b, sigma) - k * getPhi(s0, t1, 0, x2, x2, r, b, sigma) + k * getPhi(s0, t1, 0, x1, x2, r, b, sigma) + alpha1
+    * getPhi(s0, t1, beta, x1, x2, r, b, sigma)
+    - alpha1 * getPsi(s0, t1, t, beta, x1, x2, x1, r, b, sigma) + getPsi(s0, t1, t, 1, x1, x2, x1, r, b, sigma)
+    - getPsi(s0, t1, t, 1, k, x2, x1, r, b, sigma) - k * getPsi(s0, t1, t, 0, x1, x2, x1, r, b, sigma) + k * getPsi(s0, t1, t, 0, k, x2, x1, r, b, sigma);
   }
 
   private double getH(final double b, final double t, final double sigma, final double k, final double b0, final double bInfinity) {
@@ -221,7 +221,7 @@ public class BjerksundStenslandModel {
         * Math.pow(s, gamma)
         * (BIVARIATE_NORMAL.getCDF(new double[] { d1, e1, rho }) - Math.pow(x2 / s, kappa) * BIVARIATE_NORMAL.getCDF(new double[] { d2, e2, rho })
             - Math.pow(x1 / s, kappa)
-                * BIVARIATE_NORMAL.getCDF(new double[] { d3, e3, -rho })
+            * BIVARIATE_NORMAL.getCDF(new double[] { d3, e3, -rho })
             + Math.pow(x1 / x2, kappa) * BIVARIATE_NORMAL.getCDF(new double[] { d4, e4, -rho }));
   }
 
@@ -410,7 +410,7 @@ public class BjerksundStenslandModel {
 
     return new Function1D<Double, double[]>() {
       @Override
-      public double[] evaluate(final Double sigma) {
+      public double[] apply(final Double sigma) {
         return getPriceAndVega(s0, k, r, b, t, sigma, isCall);
       }
     };
@@ -544,7 +544,7 @@ public class BjerksundStenslandModel {
         + phi6Adj[8] * phi6Bar
         + phi5Adj[8] * phi5Bar + phi4Adj[8] * phi4Bar + phi3Adj[8] * phi3Bar + phi2Adj[8] * phi2Bar + phi1Adj[8] * phi1Bar + x2Adj[4] * x2Bar + x1Adj[4] * x1Bar
         + 2
-            * sigma * betaAdj[3] * betaBar;
+        * sigma * betaAdj[3] * betaBar;
 
     res[0] = w9;
     res[1] = sBar;

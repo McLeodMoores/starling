@@ -59,7 +59,7 @@ public class AnalyticBondPricerTest extends ISDABaseTest {
     final AnalyticBondPricer bondSpreadCal = new AnalyticBondPricer();
     final Function1D<Double, Double> bondPriceFunc = bondSpreadCal.getBondPriceForHazardRateFunction(bond, yieldCurve, PriceType.CLEAN);
     //now price will zero hazard rate - should get same number
-    final double price = bondPriceFunc.evaluate(0.0);
+    final double price = bondPriceFunc.apply(0.0);
     assertEquals(cleanPrice, price, 1e-15);
 
     assertEquals("Hazard rate limit", recoveryRate, bondSpreadCal.bondPriceForHazardRate(bond, yieldCurve, 1000.0, PriceType.DIRTY), 2e-5);
@@ -68,7 +68,7 @@ public class AnalyticBondPricerTest extends ISDABaseTest {
     if (PRINT) {
       for (int i = 0; i < 100; i++) {
         final double lambda = i * 1.0 / 99;
-        final double rPrice = bondPriceFunc.evaluate(lambda);
+        final double rPrice = bondPriceFunc.apply(lambda);
         final double s = bondSpreadCal.getEquivalentCDSSpread(bond, yieldCurve, rPrice, PriceType.CLEAN, cds);
         System.out.println(lambda + "\t" + rPrice + "\t" + s);
       }

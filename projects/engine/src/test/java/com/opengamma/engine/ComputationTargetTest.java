@@ -35,41 +35,53 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ComputationTargetTest {
 
-  private static final SimplePortfolioNode NODE =
-      new SimplePortfolioNode(UniqueId.of("A", "B"), "Name");
-  private static final Position POSITION =
-      new SimplePosition(UniqueId.of("Test", "1"), new BigDecimal(1), ExternalId.of("Foo", "Sec").toBundle());
-  private static final Security SECURITY =
-      new SimpleSecurity(UniqueId.of("Test", "SEC"), ExternalId.of("Foo", "Sec").toBundle(), "EQUITY", "Test Security");
-  private static final SimpleTrade TRADE =
-      new SimpleTrade(SECURITY, BigDecimal.ONE, new SimpleCounterparty(ExternalId.of("Cpty", "Foo")), LocalDate.now(), OffsetTime.now());
+  private static final SimplePortfolioNode NODE = new SimplePortfolioNode(UniqueId.of("A", "B"), "Name");
+  private static final Position POSITION = new SimplePosition(UniqueId.of("Test", "1"), new BigDecimal(1), ExternalId.of("Foo", "Sec").toBundle());
+  private static final Security SECURITY = new SimpleSecurity(UniqueId.of("Test", "SEC"), ExternalId.of("Foo", "Sec").toBundle(), "EQUITY", "Test Security");
+  private static final SimpleTrade TRADE = new SimpleTrade(SECURITY, BigDecimal.ONE, new SimpleCounterparty(ExternalId.of("Cpty", "Foo")), LocalDate.now(),
+      OffsetTime.now());
 
+  /**
+   *
+   */
   public ComputationTargetTest() {
     TRADE.setUniqueId(UniqueId.of("Test", "Trade"));
   }
 
-  public void testConstructor_null() {
+  /**
+   *
+   */
+  public void testConstructorNull() {
     final ComputationTarget target = new ComputationTarget(ComputationTargetType.NULL, null);
     assertNull(target.getContextSpecification());
     assertEquals(target.toSpecification(), ComputationTargetSpecification.NULL);
   }
 
-  public void testConstructor_single() {
+  /**
+   *
+   */
+  public void testConstructorSingle() {
     final ComputationTarget target = new ComputationTarget(ComputationTargetType.PORTFOLIO_NODE, NODE);
     assertNull(target.getContextSpecification());
     assertEquals(target.toSpecification(), ComputationTargetSpecification.of(NODE));
   }
 
-  public void testConstructor_nested_1() {
-    final ComputationTargetSpecification targetSpec =
-        ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId());
+  /**
+   *
+   */
+  public void testConstructorNested1() {
+    final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION,
+        POSITION.getUniqueId());
     final ComputationTarget target = new ComputationTarget(targetSpec, POSITION);
     assertEquals(target.toSpecification(), ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()));
     assertEquals(target.getContextSpecification(), ComputationTargetSpecification.of(NODE));
     assertEquals(target.getLeafSpecification(), ComputationTargetSpecification.of(POSITION));
   }
 
-  public void testConstructor_nested_2() {
+  /**
+   *
+   */
+  public void testConstructorNested2() {
     final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId())
         .containing(ComputationTargetType.SECURITY, SECURITY.getUniqueId());
     final ComputationTarget target = new ComputationTarget(targetSpec, SECURITY);
@@ -78,63 +90,96 @@ public class ComputationTargetTest {
     assertEquals(target.getLeafSpecification(), ComputationTargetSpecification.of(SECURITY));
   }
 
-  public void testGetPortfolioNode_ok() {
+  /**
+   *
+   */
+  public void testGetPortfolioNodeOk() {
     final ComputationTarget target = new ComputationTarget(ComputationTargetType.PORTFOLIO_NODE, NODE);
     assertEquals(target.getPortfolioNode(), NODE);
   }
 
-  @Test(expectedExceptions = {IllegalStateException.class })
-  public void testGetPortfolioNode_fail() {
+  /**
+   *
+   */
+  @Test(expectedExceptions = { IllegalStateException.class })
+  public void testGetPortfolioNodeFail() {
     final ComputationTarget target = new ComputationTarget(ComputationTargetType.NULL, null);
     target.getPortfolioNode();
   }
 
-  public void testGetPosition_ok() {
+  /**
+   *
+   */
+  public void testGetPositionOk() {
     final ComputationTarget target = new ComputationTarget(ComputationTargetType.POSITION, POSITION);
     assertEquals(target.getPosition(), POSITION);
   }
 
-  @Test(expectedExceptions = {IllegalStateException.class })
-  public void testGetPosition_fail() {
+  /**
+   *
+   */
+  @Test(expectedExceptions = { IllegalStateException.class })
+  public void testGetPositionFail() {
     final ComputationTarget target = new ComputationTarget(ComputationTargetType.NULL, null);
     target.getPosition();
   }
 
-  public void testGetTrade_ok() {
+  /**
+   *
+   */
+  public void testGetTradeOk() {
     final ComputationTarget target = new ComputationTarget(ComputationTargetType.TRADE, TRADE);
     target.getTrade();
   }
 
-  @Test(expectedExceptions = {IllegalStateException.class })
-  public void testGetTrade_fail() {
+  /**
+   *
+   */
+  @Test(expectedExceptions = { IllegalStateException.class })
+  public void testGetTradeFail() {
     final ComputationTarget target = new ComputationTarget(ComputationTargetType.NULL, null);
     target.getTrade();
   }
 
-  public void testGetPositionOrTrade_ok() {
+  /**
+   *
+   */
+  public void testGetPositionOrTradeOk() {
     ComputationTarget target = new ComputationTarget(ComputationTargetType.TRADE, TRADE);
     assertEquals(target.getPositionOrTrade(), TRADE);
     target = new ComputationTarget(ComputationTargetType.POSITION, POSITION);
     assertEquals(target.getPositionOrTrade(), POSITION);
   }
 
-  @Test(expectedExceptions = {IllegalStateException.class })
-  public void testGetPositionOrTrade_fail() {
+  /**
+   *
+   */
+  @Test(expectedExceptions = { IllegalStateException.class })
+  public void testGetPositionOrTradeFail() {
     final ComputationTarget target = new ComputationTarget(ComputationTargetType.NULL, null);
     target.getPositionOrTrade();
   }
 
-  public void testGetSecurity_ok() {
+  /**
+   *
+   */
+  public void testGetSecurityOk() {
     final ComputationTarget target = new ComputationTarget(ComputationTargetType.SECURITY, SECURITY);
     target.getSecurity();
   }
 
-  @Test(expectedExceptions = {IllegalStateException.class })
-  public void testGetSecurity_fail() {
+  /**
+   *
+   */
+  @Test(expectedExceptions = { IllegalStateException.class })
+  public void testGetSecurityFail() {
     final ComputationTarget target = new ComputationTarget(ComputationTargetType.NULL, null);
     target.getSecurity();
   }
 
+  /**
+   *
+   */
   public void testGetName() {
     ComputationTarget target = new ComputationTarget(ComputationTargetType.PORTFOLIO_NODE, NODE);
     assertEquals(target.getName(), "Name");
@@ -150,13 +195,16 @@ public class ComputationTargetTest {
     assertEquals(target.getName(), null);
   }
 
+  /**
+   *
+   */
   public void testEquals() {
     final ComputationTarget pos1 = new ComputationTarget(ComputationTargetType.POSITION, POSITION);
     final ComputationTarget pos2 = new ComputationTarget(ComputationTargetType.POSITION, POSITION);
     final ComputationTarget prim1 = new ComputationTarget(ComputationTargetType.CURRENCY, Currency.USD);
     final ComputationTarget prim2 = new ComputationTarget(ComputationTargetType.CURRENCY, Currency.GBP);
-    final ComputationTarget prtPos =
-        new ComputationTarget(ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
+    final ComputationTarget prtPos = new ComputationTarget(
+        ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
     final ComputationTarget nil = new ComputationTarget(ComputationTargetType.NULL, null);
     assertTrue(pos1.equals(pos2));
     assertTrue(pos2.equals(pos1));
@@ -174,28 +222,37 @@ public class ComputationTargetTest {
     assertTrue(ComputationTarget.NULL.equals(nil));
   }
 
+  /**
+   *
+   */
   public void testHashCode() {
     final ComputationTarget pos1 = new ComputationTarget(ComputationTargetType.POSITION, POSITION);
     final ComputationTarget pos2 = new ComputationTarget(ComputationTargetType.POSITION, POSITION);
     assertEquals(pos1.hashCode(), pos2.hashCode());
-    final ComputationTarget prtPos1 =
-        new ComputationTarget(ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
-    final ComputationTarget prtPos2 =
-        new ComputationTarget(ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
+    final ComputationTarget prtPos1 = new ComputationTarget(
+        ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
+    final ComputationTarget prtPos2 = new ComputationTarget(
+        ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
     assertEquals(prtPos1.hashCode(), prtPos2.hashCode());
     final ComputationTarget nil1 = new ComputationTarget(ComputationTargetType.NULL, null);
     assertEquals(nil1.hashCode(), ComputationTarget.NULL.hashCode());
   }
 
-  public void testGetValue_ok() {
+  /**
+   *
+   */
+  public void testGetValueOk() {
     final ComputationTarget target = new ComputationTarget(ComputationTargetType.CURRENCY, Currency.GBP);
     assertEquals(target.getValue(), Currency.GBP);
     final Currency c = target.getValue(ComputationTargetType.CURRENCY);
     assertEquals(c, Currency.GBP);
   }
 
-  @Test(expectedExceptions = {IllegalStateException.class })
-  public void testGetValue_fail() {
+  /**
+   *
+   */
+  @Test(expectedExceptions = { IllegalStateException.class })
+  public void testGetValueFail() {
     final ComputationTarget target = new ComputationTarget(ComputationTargetType.CURRENCY, Currency.GBP);
     target.getValue(ComputationTargetType.UNORDERED_CURRENCY_PAIR);
   }

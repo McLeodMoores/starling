@@ -82,7 +82,7 @@ public class KrigingInterpolatorDataBundle extends InterpolatorNDDataBundle {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return alpha * Math.pow(x, beta);
       }
     };
@@ -102,7 +102,7 @@ public class KrigingInterpolatorDataBundle extends InterpolatorNDDataBundle {
       for (int j = i + 1; j < n; j++) {
         dataPoint = data.get(j);
         x2 = dataPoint.getFirst();
-        final double temp = variogram.evaluate(DistanceCalculator.getDistance(x1, x2));
+        final double temp = variogram.apply(DistanceCalculator.getDistance(x1, x2));
         v[i][j] = temp;
         v[j][i] = temp;
       }
@@ -124,7 +124,7 @@ public class KrigingInterpolatorDataBundle extends InterpolatorNDDataBundle {
   }
 
   private double[] solve(final double[][] v, final double[] y, final Decomposition<?> decomp) {
-    final DecompositionResult decompRes = decomp.evaluate(new DoubleMatrix2D(v));
+    final DecompositionResult decompRes = decomp.apply(new DoubleMatrix2D(v));
     final DoubleMatrix1D res = decompRes.solve(new DoubleMatrix1D(y));
     return res.getData();
   }

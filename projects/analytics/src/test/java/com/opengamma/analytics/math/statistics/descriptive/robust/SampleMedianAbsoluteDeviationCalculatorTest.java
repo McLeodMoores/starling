@@ -45,7 +45,7 @@ public class SampleMedianAbsoluteDeviationCalculatorTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {
-    MAD_CALC.evaluate((double[]) null);
+    MAD_CALC.apply((double[]) null);
   }
 
   /**
@@ -53,7 +53,7 @@ public class SampleMedianAbsoluteDeviationCalculatorTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testInsufficientData() {
-    MAD_CALC.evaluate(new double[] {3.});
+    MAD_CALC.apply(new double[] {3.});
   }
 
   /**
@@ -61,7 +61,7 @@ public class SampleMedianAbsoluteDeviationCalculatorTest {
    */
   @Test
   public void test() {
-    assertEquals(STD_CALC.evaluate(NORMAL_DATA), MAD_CALC.evaluate(NORMAL_DATA) / .6745, EPS);
+    assertEquals(STD_CALC.apply(NORMAL_DATA), MAD_CALC.apply(NORMAL_DATA) / .6745, EPS);
   }
 
   /**

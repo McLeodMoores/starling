@@ -21,11 +21,11 @@ public class NormalDistributionMomentEstimator extends DistributionParameterEsti
   private final Function1D<double[], Double> _second = new SampleMomentCalculator(2);
 
   @Override
-  public ProbabilityDistribution<Double> evaluate(final double[] x) {
+  public ProbabilityDistribution<Double> apply(final double[] x) {
     Validate.notNull(x, "x");
     ArgumentChecker.notEmpty(x, "x");
-    final double m1 = _first.evaluate(x);
-    return new NormalDistribution(m1, Math.sqrt(_second.evaluate(x) - m1 * m1));
+    final double m1 = _first.apply(x);
+    return new NormalDistribution(m1, Math.sqrt(_second.apply(x) - m1 * m1));
   }
 
 }

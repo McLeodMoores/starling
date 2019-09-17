@@ -351,7 +351,7 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
      */
     final Function1D<Double, Double> priceResidual = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double y) {
+      public Double apply(final Double y) {
         return dirtyPriceFromRealYield(bond, y) - dirtyPrice;
       }
     };
@@ -598,7 +598,7 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
     ArgumentChecker.notNull(issuerMulticurves, "Issuer and multi-curves provider");
     final Function1D<Double, Double> residual = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double z) {
+      public Double apply(final Double z) {
         return cleanPriceFromZSpread(bond, issuerMulticurves, z) - cleanRealPrice;
       }
     };
@@ -627,7 +627,7 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
     final Function1D<Double, Double> residual = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double z) {
+      public Double apply(final Double z) {
         return presentValueFromZSpread(bond, issuerMulticurves, z).getAmount(ccy) - pv.getAmount(ccy);
       }
     };

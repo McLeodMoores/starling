@@ -103,7 +103,7 @@ public class SwaptionCashFixedIborBlackMethodTest {
     final BlackPriceFunction blackFunction = new BlackPriceFunction();
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, pvbp * discountFactorSettle, volatility);
     final Function1D<BlackFunctionData, Double> func = blackFunction.getPriceFunction(SWAPTION_LONG_REC);
-    final double pvExpected = func.evaluate(dataBlack);
+    final double pvExpected = func.apply(dataBlack);
     assertEquals("Swaption Black method: present value", 1, pvMethod.size());
     final CurrencyAmount ca = pvMethod.getCurrencyAmounts()[0];
     assertEquals("Swaption Black method: present value", SWAPTION_LONG_REC.getCurrency(), ca.getCurrency());

@@ -165,7 +165,7 @@ public class AnalyticSpreadSensitivityCalculator {
     }
     final DoubleMatrix1D vLambda = new DoubleMatrix1D(temp);
     final DoubleMatrix2D jacT = new DoubleMatrix2D(res);
-    final LUDecompositionResult luRes = decomp.evaluate(jacT);
+    final LUDecompositionResult luRes = decomp.apply(jacT);
     final DoubleMatrix1D vS = luRes.solve(vLambda);
     return vS.getData();
   }
@@ -190,7 +190,7 @@ public class AnalyticSpreadSensitivityCalculator {
 
     final double[] vLambda = new double[n];
     final double[][] res = new double[m][];
-    final LUDecompositionResult luRes = decomp.evaluate(jacT);
+    final LUDecompositionResult luRes = decomp.apply(jacT);
     for (int i = 0; i < m; i++) {
       for (int j = 0; j < n; j++) {
         vLambda[j] = _pricer.pvCreditSensitivity(cds[i], yieldCurve, creditCurve, cdsCoupon[i], j);

@@ -19,7 +19,7 @@ public class JacobianEstimateInitializationFunction implements NewtonRootFinderM
   public DoubleMatrix2D getInitializedMatrix(final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianFunction, final DoubleMatrix1D x) {
     ArgumentChecker.notNull(jacobianFunction, "Jacobian Function");
     ArgumentChecker.notNull(x, "x");
-    return jacobianFunction.evaluate(x);
+    return jacobianFunction.apply(x);
   }
 
 }

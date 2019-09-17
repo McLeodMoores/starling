@@ -64,7 +64,7 @@ public class SABRFittingTest {
     for (int i = 0; i < n; i++) {
       final EuropeanVanillaOption option = new EuropeanVanillaOption(STRIKES[i], T, true);
       OPTIONS[i] = option;
-      final double vol = SABR.getVolatilityFunction(option, F).evaluate(SABR_DATA);
+      final double vol = SABR.getVolatilityFunction(option, F).apply(SABR_DATA);
       DATA[i] = new BlackFunctionData(F, 1, vol);
       ERRORS[i] = 0.01;
       NOISY_DATA[i] = new BlackFunctionData(F, 1, vol + ERRORS[i] * RANDOM.nextRandom());
@@ -109,12 +109,12 @@ public class SABRFittingTest {
     final Function1D<SABRFormulaData, Double> f = sabr.getVolatilityFunction(option, F);
     double x = 0;
     for (int i = 0; i < _hotspotWarmupCycles; i++) {
-      x += f.evaluate(data);
+      x += f.apply(data);
     }
     if (_benchmarkCycles > 0) {
       final OperationTimer timer = new OperationTimer(_logger, "processing {} cycles generating SABR smile", _benchmarkCycles);
       for (int i = 0; i < _benchmarkCycles; i++) {
-        x += f.evaluate(data);
+        x += f.apply(data);
       }
       timer.finished();
     }

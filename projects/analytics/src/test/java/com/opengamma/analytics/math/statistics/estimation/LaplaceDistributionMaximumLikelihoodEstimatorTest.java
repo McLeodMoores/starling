@@ -25,12 +25,12 @@ public class LaplaceDistributionMaximumLikelihoodEstimatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {
-    ESTIMATOR.evaluate((double[]) null);
+    ESTIMATOR.apply((double[]) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmpty() {
-    ESTIMATOR.evaluate(new double[0]);
+    ESTIMATOR.apply(new double[0]);
   }
 
   @Test
@@ -43,7 +43,7 @@ public class LaplaceDistributionMaximumLikelihoodEstimatorTest {
     for (int i = 0; i < n; i++) {
       x[i] = distribution.nextRandom();
     }
-    final LaplaceDistribution result = (LaplaceDistribution) ESTIMATOR.evaluate(x);
+    final LaplaceDistribution result = (LaplaceDistribution) ESTIMATOR.apply(x);
     final double eps = 1e-2;
     assertEquals(1, result.getB() / b, eps);
     assertEquals(1, result.getMu() / mu, eps);

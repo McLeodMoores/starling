@@ -110,7 +110,7 @@ public class CapFloorInflationyearOnYearInterpolationBlackNormalSmileMethodTest 
     final double volatility = BLACK_INFLATION.getBlackParameters().getVolatility(YEAR_ON_YEAR_CAP.getReferenceEndTime()[1], YEAR_ON_YEAR_CAP.getStrike());
     final NormalFunctionData dataBlack = new NormalFunctionData(forward, 1.0, volatility);
     final Function1D<NormalFunctionData, Double> func = NORMAL_FUNCTION.getPriceFunction(option);
-    final double pvExpected = df * func.evaluate(dataBlack) * YEAR_ON_YEAR_CAP.getNotional() * YEAR_ON_YEAR_CAP.getPaymentYearFraction();
+    final double pvExpected = df * func.apply(dataBlack) * YEAR_ON_YEAR_CAP.getNotional() * YEAR_ON_YEAR_CAP.getPaymentYearFraction();
     assertEquals("Year on year coupon inflation DiscountingMethod: Present value", pvExpected, pv.getAmount(YEAR_ON_YEAR_CAP.getCurrency()), TOLERANCE_PV);
   }
 

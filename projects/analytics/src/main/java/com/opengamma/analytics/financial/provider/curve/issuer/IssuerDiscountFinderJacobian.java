@@ -43,9 +43,9 @@ public class IssuerDiscountFinderJacobian extends Function1D<DoubleMatrix1D, Dou
   }
 
   @Override
-  public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+  public DoubleMatrix2D apply(final DoubleMatrix1D x) {
     final IssuerProviderDiscount provider = _data.getKnownData().copy();
-    final IssuerProviderDiscount newCurves = _data.getGeneratorMarket().evaluate(x);
+    final IssuerProviderDiscount newCurves = _data.getGeneratorMarket().apply(x);
     provider.setAll(newCurves);
     final Set<String> curvesSet = _data.getGeneratorMarket().getCurvesList();
     final int nbParameters = _data.getNumberOfInstruments();

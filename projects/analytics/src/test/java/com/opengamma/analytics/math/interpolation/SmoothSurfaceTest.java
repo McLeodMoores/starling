@@ -72,7 +72,7 @@ public class SmoothSurfaceTest {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final DoubleMatrix1D weights) {
+      public Double apply(final DoubleMatrix1D weights) {
         final List<Pair<double[], Double>> weightsAndPos = combineWeightsAndPos(nodePos, weights);
         final double chi2 = getChiSquared(data, basisFunction, weightsAndPos, isNormalized);
         final double plenty = getPlenty(data, basisFunction, weightsAndPos, isNormalized);
@@ -89,7 +89,7 @@ public class SmoothSurfaceTest {
         }
 
     final DoubleMatrix1D res = minimizer.minimize(fom, new DoubleMatrix1D(start));
-    final double chiSquare = fom.evaluate(res);
+    final double chiSquare = fom.apply(res);
      System.out.println(res);
      System.out.println("chi2: " + chiSquare);
 

@@ -46,22 +46,22 @@ public class FixedStrikeLookbackOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(new FixedStrikeLookbackOptionDefinition(100, EXPIRY, true)).evaluate((StandardOptionWithSpotTimeSeriesDataBundle) null);
+    MODEL.getPricingFunction(new FixedStrikeLookbackOptionDefinition(100, EXPIRY, true)).apply((StandardOptionWithSpotTimeSeriesDataBundle) null);
   }
 
   @Test
   public void test() {
     FixedStrikeLookbackOptionDefinition option = new FixedStrikeLookbackOptionDefinition(95, EXPIRY, false);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(DATA), 4.4448, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(DATA), 4.4448, EPS);
     option = new FixedStrikeLookbackOptionDefinition(100, EXPIRY, false);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(DATA), 8.3177, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(DATA), 8.3177, EPS);
     option = new FixedStrikeLookbackOptionDefinition(105, EXPIRY, false);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(DATA), 13.0739, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(DATA), 13.0739, EPS);
     option = new FixedStrikeLookbackOptionDefinition(95, EXPIRY, true);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(DATA), 18.9263, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(DATA), 18.9263, EPS);
     option = new FixedStrikeLookbackOptionDefinition(100, EXPIRY, true);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(DATA), 14.1702, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(DATA), 14.1702, EPS);
     option = new FixedStrikeLookbackOptionDefinition(105, EXPIRY, true);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(DATA), 9.8905, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(DATA), 9.8905, EPS);
   }
 }

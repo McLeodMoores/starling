@@ -43,7 +43,7 @@ public class ShepardInterpolatorND extends InterpolatorND {
       if (dist == 0.0) {
         return yi;
       }
-      phi = _basisFunction.evaluate(dist);
+      phi = _basisFunction.apply(dist);
       sum += yi * phi;
       normSum += phi;
     }

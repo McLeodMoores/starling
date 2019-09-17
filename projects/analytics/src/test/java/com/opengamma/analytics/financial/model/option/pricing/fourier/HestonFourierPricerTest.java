@@ -98,7 +98,7 @@ public class HestonFourierPricerTest {
     for (int i = 0; i < 201; i++) {
       final double x = -0. + i * 80. / 200.0;
       final EuropeanVanillaOption option = new EuropeanVanillaOption(2, t, true);
-      final Double res = integrand.getFunction(data, option).evaluate(x);
+      final Double res = integrand.getFunction(data, option).apply(x);
       System.out.println(x + "\t" + res);
     }
 
@@ -121,7 +121,7 @@ public class HestonFourierPricerTest {
 
     for (int i = 0; i < 201; i++) {
       final double x = -0. + i * 20. / 200.0;
-      final ComplexNumber res = func.evaluate(new ComplexNumber(x, alpha));
+      final ComplexNumber res = func.apply(new ComplexNumber(x, alpha));
       System.out.println(x + "\t" + res.getReal() + "\t" + res.getImaginary());
     }
   }
@@ -219,7 +219,7 @@ public class HestonFourierPricerTest {
       System.out.print(x);
 
       for (int index = 0; index < 5; index++) {
-        final double value = funcs.get(index).evaluate(x);
+        final double value = funcs.get(index).apply(x);
         System.out.print("\t" + value);
       }
       System.out.print("\n");

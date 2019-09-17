@@ -25,7 +25,7 @@ public abstract class MultidimensionalMinimizerTestCase {
 
   private static final Function1D<DoubleMatrix1D, Double> F_2D = new Function1D<DoubleMatrix1D, Double>() {
     @Override
-    public Double evaluate(final DoubleMatrix1D x) {
+    public Double apply(final DoubleMatrix1D x) {
       return (x.getEntry(0) + 3.4) * (x.getEntry(0) + 3.4) + (x.getEntry(1) - 1) * (x.getEntry(1) - 1);
     }
   };

@@ -37,7 +37,7 @@ public class NaturalCubicSplineInterpolator1DNodeSensitivityCalculatorTest {
     private static final double D = 0.05;
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return (A + B * x) * Math.exp(-C * x) + D;
     }
 
@@ -48,7 +48,7 @@ public class NaturalCubicSplineInterpolator1DNodeSensitivityCalculatorTest {
     final int n = t.length;
     final double[] r = new double[n];
     for (int i = 0; i < n; i++) {
-      r[i] = FUNCTION.evaluate(t[i]);
+      r[i] = FUNCTION.apply(t[i]);
     }
     DATA1 = INTERPOLATOR.getDataBundleFromSortedArrays(t, r);
   }
@@ -92,7 +92,7 @@ public class NaturalCubicSplineInterpolator1DNodeSensitivityCalculatorTest {
     final int n = fwdTimes.length;
     final double[] rates = new double[n];
     for (int i = 0; i < n; i++) {
-      rates[i] = FUNCTION.evaluate(fwdTimes[i]);
+      rates[i] = FUNCTION.apply(fwdTimes[i]);
     }
     final Interpolator1DCubicSplineDataBundle data = new Interpolator1DCubicSplineDataBundle(INTERPOLATOR.getDataBundleFromSortedArrays(fwdTimes, rates));
     final double[] sensitivity1 = INTERPOLATOR.getNodeSensitivitiesForValue(data, 0.25);

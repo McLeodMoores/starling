@@ -28,7 +28,7 @@ public class DeltaGammaCovarianceMatrixStandardDeviationCalculator extends Funct
   }
 
   @Override
-  public Double evaluate(final Map<Integer, ParametricVaRDataBundle> data) {
+  public Double apply(final Map<Integer, ParametricVaRDataBundle> data) {
     Validate.notNull(data);
     final ParametricVaRDataBundle firstOrderData = data.get(1);
     final ParametricVaRDataBundle secondOrderData = data.get(2);

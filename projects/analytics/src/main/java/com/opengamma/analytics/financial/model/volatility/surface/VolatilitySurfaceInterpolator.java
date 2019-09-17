@@ -192,7 +192,7 @@ public class VolatilitySurfaceInterpolator {
 
         // Case 1: Only a single expiry is available
         if (n == 1) {
-          return smileFunctions[0].evaluate(forwards[0] * m);
+          return smileFunctions[0].apply(forwards[0] * m);
         }
 
         // Case 2 & 3: Extrapolation OR Less than 4 Expiries => Linear Extrapolation / Interpolation
@@ -212,8 +212,8 @@ public class VolatilitySurfaceInterpolator {
           final double x = _useLogTime ? Math.log(t) : t;
           final double k0 = forwards[lowIdx] * Math.pow(m, Math.sqrt(expiries[lowIdx] / t));
           final double k1 = forwards[lowIdx + 1] * Math.pow(m, Math.sqrt(expiries[lowIdx + 1] / t));
-          double var0 = square(smileFunctions[lowIdx].evaluate(k0));
-          double var1 = square(smileFunctions[lowIdx + 1].evaluate(k1));
+          double var0 = square(smileFunctions[lowIdx].apply(k0));
+          double var1 = square(smileFunctions[lowIdx + 1].apply(k1));
           if (_useIntegratedVariance) {
             var0 *= expiries[lowIdx];
             var1 *= expiries[lowIdx + 1];
@@ -258,7 +258,7 @@ public class VolatilitySurfaceInterpolator {
         for (int i = 0; i < 4; i++) {
           final double time = expiries[lower + i];
           final double k = forwards[lower + i] * Math.pow(m, Math.sqrt(time / t));
-          double y = square(smileFunctions[lower + i].evaluate(k));
+          double y = square(smileFunctions[lower + i].apply(k));
           if (_useIntegratedVariance) {
             y *= time;
           }

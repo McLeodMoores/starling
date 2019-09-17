@@ -10,8 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.Validate;
-
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityPaymentFixed;
 import com.opengamma.analytics.financial.interestrate.future.derivative.BondFuture;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
@@ -39,7 +37,7 @@ import com.opengamma.util.tuple.DoublesPair;
  * <P>
  * Reference: Henrard, M. Bonds futures and their options: more than the cheapest-to-deliver; quality option and margining. Journal of Fixed
  * Income, 2006, 16, 62-75
- * 
+ *
  * @deprecated Use the {@link BondFuturesTransactionHullWhiteMethod}.
  */
 @Deprecated
@@ -58,7 +56,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
 
   /**
    * Return the method unique instance.
-   * 
+   *
    * @return The instance.
    */
   public static BondFutureHullWhiteMethod getInstance() {
@@ -84,7 +82,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
 
   /**
    * Computes the future price from the curves used to price the underlying bonds and a Hull-White one factor model.
-   * 
+   *
    * @param future
    *          The future security.
    * @param data
@@ -223,7 +221,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
   /**
    * Computes the future price from the curves used to price the underlying bonds and a Hull-White one factor model. The default number of
    * points is used for the numerical search.
-   * 
+   *
    * @param future
    *          The future security.
    * @param data
@@ -236,7 +234,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
 
   /**
    * Computes the present value of future from the curves using the cheapest-to-deliver and computing the value as a forward.
-   * 
+   *
    * @param future
    *          The future.
    * @param data
@@ -250,7 +248,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
 
   /**
    * Computes the future price curve sensitivity.
-   * 
+   *
    * @param future
    *          The future security.
    * @param data
@@ -379,7 +377,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
         cfaAdjustedBar[ctd.get(0)][loopcf] = priceBar;
         dfBar[ctd.get(0)][loopcf] = beta[ctd.get(0)][loopcf] / dfdelivery * cf[ctd.get(0)].getNthPayment(loopcf).getAmount()
             / future.getConversionFactor()[ctd.get(0)]
-            * cfaAdjustedBar[ctd.get(0)][loopcf];
+                * cfaAdjustedBar[ctd.get(0)][loopcf];
         listCredit.add(
             DoublesPair.of(cfTime[ctd.get(0)][loopcf], -cfTime[ctd.get(0)][loopcf] * df[ctd.get(0)][loopcf] * dfBar[ctd.get(0)][loopcf]));
         dfdeliveryBar += -cfaAdjusted[ctd.get(0)][loopcf] / dfdelivery * cfaAdjustedBar[ctd.get(0)][loopcf];
@@ -417,7 +415,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
 
   /**
    * Computes the future price curve sensitivity. The default number of points is used for the numerical search.
-   * 
+   *
    * @param future
    *          The future derivative.
    * @param data
@@ -430,7 +428,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
 
   /**
    * Compute the present value sensitivity to rates of a bond future by discounting.
-   * 
+   *
    * @param future
    *          The future.
    * @param data
@@ -439,7 +437,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
    */
   public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final BondFuture future,
       final HullWhiteIssuerProviderInterface data) {
-    Validate.notNull(future, "Future");
+    ArgumentChecker.notNull(future, "Future");
     final MulticurveSensitivity priceSensitivity = priceCurveSensitivity(future, data);
     final MultipleCurrencyMulticurveSensitivity transactionSensitivity = MultipleCurrencyMulticurveSensitivity.of(future.getCurrency(),
         priceSensitivity.multipliedBy(future.getNotional()));
@@ -469,10 +467,10 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       double pv = 0.0;
-      for (int loopcf = 0; loopcf < _cfa1.length; loopcf++) {
-        pv += _cfa1[loopcf] * Math.exp(-_alpha1[loopcf] * _alpha1[loopcf] / 2.0 - _alpha1[loopcf] * x);
+      for (int i = 0; i < _cfa1.length; i++) {
+        pv += _cfa1[i] * Math.exp(-_alpha1[i] * _alpha1[i] / 2.0 - _alpha1[i] * x);
       }
       pv -= _e1;
       for (int loopcf = 0; loopcf < _cfa2.length; loopcf++) {

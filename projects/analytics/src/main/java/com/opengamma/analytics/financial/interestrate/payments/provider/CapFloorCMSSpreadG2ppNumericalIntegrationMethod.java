@@ -209,7 +209,7 @@ public final class CapFloorCMSSpreadG2ppNumericalIntegrationMethod {
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public Double evaluate(final Double x0, final Double x1) {
+    public Double apply(final Double x0, final Double x1) {
       final double[] rate = new double[2];
       final double[] x = new double[] { x0, x1 };
       rate[0] = MODEL_G2PP.swapRate(x, _discountedCashFlowFixed[0], _alphaFixed[0], _tau2Fixed[0], _discountedCashFlowIbor[0], _alphaIbor[0], _tau2Ibor[0]);

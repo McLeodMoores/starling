@@ -129,7 +129,7 @@ public class CommodityForwardCurve {
     final Function1D<Double, Double> f = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return spot * convenienceYieldCurve.getDiscountFactor(t) / discountCurve.getDiscountFactor(t);
       }
 
@@ -148,7 +148,7 @@ public class CommodityForwardCurve {
     final Function1D<Double, Double> f = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return -Math.log(fwdCurve.getYValue(t) / spot) / t - discountCurve.getInterestRate(t);
       }
 

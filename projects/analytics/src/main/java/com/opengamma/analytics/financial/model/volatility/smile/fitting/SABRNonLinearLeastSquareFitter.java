@@ -120,7 +120,7 @@ public class SABRNonLinearLeastSquareFitter extends LeastSquareSmileFitter {
           sabrFormulaData = new SABRFormulaData(alpha, beta, rho, nu);
         }
         final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, maturity, true);
-        return _formula.getVolatilityFunction(option, forward).evaluate(sabrFormulaData);
+        return _formula.getVolatilityFunction(option, forward).apply(sabrFormulaData);
       }
     };
 

@@ -38,15 +38,15 @@ public class SampleAutocorrelationIIDHypothesisTest extends IIDHypothesisTestCas
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testInsufficientData() {
     final InstantDoubleTimeSeries subSeries = RANDOM.subSeries(RANDOM.getTimeAtIndex(0), RANDOM.getTimeAtIndex(3));
-    SAMPLE_ACF.evaluate(subSeries);
+    SAMPLE_ACF.apply(subSeries);
   }
 
   @Test
   public void test() {
     super.assertNullTS(SAMPLE_ACF);
     super.assertEmptyTS(SAMPLE_ACF);
-    assertTrue(SAMPLE_ACF.evaluate(RANDOM));
-    assertFalse(SAMPLE_ACF.evaluate(SIGNAL));
-    assertFalse(SAMPLE_ACF.evaluate(INCREASING));
+    assertTrue(SAMPLE_ACF.apply(RANDOM));
+    assertFalse(SAMPLE_ACF.apply(SIGNAL));
+    assertFalse(SAMPLE_ACF.apply(INCREASING));
   }
 }

@@ -80,7 +80,7 @@ public class TwoStateMarkovChainPricer {
     final Function1D<Double, Double> strikeZeroPrice1 = new Function1D<Double, Double>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return probState1(t) * _forward.getSpot();
       }
     };
@@ -88,7 +88,7 @@ public class TwoStateMarkovChainPricer {
     final Function1D<Double, Double> strikeZeroPrice2 = new Function1D<Double, Double>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return (1 - probState1(t)) * _forward.getSpot();
       }
     };
@@ -126,7 +126,7 @@ public class TwoStateMarkovChainPricer {
   private Function1D<Double, Double> getInitialCond(final double s0, final double p0) {
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double k) {
+      public Double apply(final Double k) {
         return p0 * Math.max(0.0, s0 - k);
       }
     };

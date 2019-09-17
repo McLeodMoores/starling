@@ -39,7 +39,7 @@ public class BasisSplineVolatilityTermStructureProvider implements VolatilityTer
 
       @Override
       public Double getVolatility(final Double t) {
-        return func.evaluate(t);
+        return func.apply(t);
       }
     };
   }

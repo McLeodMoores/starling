@@ -155,14 +155,14 @@ public class PiecewiseMixedLogNormalFitter {
 
     return new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
         final double sigma = x.getEntry(0);
         final double dSigma = x.getEntry(1);
 
         final double phi = x.getEntry(2);
         final double[] params = new double[] { sigma, dSigma, theta, phi };
         final MixedLogNormalModelData data = new MixedLogNormalModelData(params);
-        final double[] vols = func.evaluate(data);
+        final double[] vols = func.apply(data);
         final double[] res = new double[n];
         for (int i = 0; i < n; i++) {
           res[i] = vols[i] - impliedVols[i];
@@ -179,14 +179,14 @@ public class PiecewiseMixedLogNormalFitter {
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
 
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D x) {
         final double sigma = x.getEntry(0);
         final double dTheta = x.getEntry(1);
         final double phi = x.getEntry(2);
         final double[] params = new double[] { sigma, dTheta, theta, phi };
         final MixedLogNormalModelData data = new MixedLogNormalModelData(params);
 
-        final double[][] temp = adjointFunc.evaluate(data);
+        final double[][] temp = adjointFunc.apply(data);
         // remove the theta sense
         final double[][] res = new double[3][3];
         for (int i = 0; i < 3; i++) {
@@ -208,7 +208,7 @@ public class PiecewiseMixedLogNormalFitter {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double strike) {
+      public Double apply(final Double strike) {
         final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, expiry, true);
         final int index = SurfaceArrayUtils.getLowerBoundIndex(strikes, strike);
         if (index == 0) {

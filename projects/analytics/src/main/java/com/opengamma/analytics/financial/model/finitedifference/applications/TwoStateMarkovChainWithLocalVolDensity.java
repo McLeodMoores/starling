@@ -64,52 +64,37 @@ public class TwoStateMarkovChainWithLocalVolDensity {
       final double initialProb,
       final double beta, final AbsoluteLocalVolatilitySurface localVol) {
 
-    final Function<Double, Double> a = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        return -1.0;
-      }
+    final Function<Double, Double> a = ts -> {
+      Validate.isTrue(ts.length == 2);
+      return -1.0;
     };
 
-    final Function<Double, Double> aStar = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double t = ts[0];
-        final double s = ts[1];
-        final double temp = localVol.getVolatility(t, s) * vol * Math.pow(s, beta);
+    final Function<Double, Double> aStar = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double t = ts[0];
+      final double s = ts[1];
+      final double temp = localVol.getVolatility(t, s) * vol * Math.pow(s, beta);
 
-        return 0.5 * temp * temp;
-      }
+      return 0.5 * temp * temp;
     };
 
-    final Function<Double, Double> b = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double t = ts[0];
-        final double s = ts[1];
-        return s * forward.getDrift(t);
-      }
+    final Function<Double, Double> b = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double t = ts[0];
+      final double s = ts[1];
+      return s * forward.getDrift(t);
     };
 
-    final Function<Double, Double> bStar = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        return 1.0;
-      }
+    final Function<Double, Double> bStar = ts -> {
+      Validate.isTrue(ts.length == 2);
+      return 1.0;
     };
 
-    final Function<Double, Double> c = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double t = ts[0];
+    final Function<Double, Double> c = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double t = ts[0];
 
-        return forward.getDrift(t) + lambda1;
-      }
+      return forward.getDrift(t) + lambda1;
     };
 
     // using a log-normal distribution with a very small Standard deviation as a proxy for a Dirac delta
@@ -117,7 +102,7 @@ public class TwoStateMarkovChainWithLocalVolDensity {
       private final double _volRootTOffset = 0.01;
 
       @Override
-      public Double evaluate(final Double s) {
+      public Double apply(final Double s) {
         if (s == 0) {
           return 0.0;
         }

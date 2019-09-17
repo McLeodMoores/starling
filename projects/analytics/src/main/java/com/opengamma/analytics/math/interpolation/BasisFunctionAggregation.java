@@ -28,11 +28,11 @@ public class BasisFunctionAggregation<T> extends Function1D<T, Double> {
   }
 
   @Override
-  public Double evaluate(final T x) {
+  public Double apply(final T x) {
     double sum = 0;
     final int n = _w.length;
     for (int i = 0; i < n; i++) {
-      sum += _w[i] * _f.get(i).evaluate(x);
+      sum += _w[i] * _f.get(i).apply(x);
     }
     return sum;
   }

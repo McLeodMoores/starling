@@ -70,7 +70,7 @@ public class EquityDividendsCurvesBundle {
    * @return the forward value
    */
   public double getF(final double t) {
-    return _f.evaluate(t);
+    return _f.apply(t);
   }
 
   /**
@@ -79,7 +79,7 @@ public class EquityDividendsCurvesBundle {
    * @return the growth factor value
    */
   public double getR(final double t) {
-    return _r.evaluate(t);
+    return _r.apply(t);
   }
 
   /**
@@ -88,7 +88,7 @@ public class EquityDividendsCurvesBundle {
    * @return the growth factor discounted cash dividends value
    */
   public double getD(final double t) {
-    return _d.evaluate(t);
+    return _d.apply(t);
   }
 
   @Override
@@ -131,30 +131,30 @@ public class EquityDividendsCurvesBundle {
     if (dividends.getNumberOfDividends() == 0) {
       return new Function1D<Double, Double>() {
         @Override
-        public Double evaluate(final Double t) {
-          return spot * growthFactorCurve.evaluate(t);
+        public Double apply(final Double t) {
+          return spot * growthFactorCurve.apply(t);
         }
       };
     }
 
     final int n = dividends.getNumberOfDividends();
     final double[] accum = new double[n];
-    double sum = dividends.getAlpha(0) / growthFactorCurve.evaluate(dividends.getTau(0));
+    double sum = dividends.getAlpha(0) / growthFactorCurve.apply(dividends.getTau(0));
     accum[0] = sum;
     for (int i = 1; i < n; i++) {
-      sum += dividends.getAlpha(i) / growthFactorCurve.evaluate(dividends.getTau(i));
+      sum += dividends.getAlpha(i) / growthFactorCurve.apply(dividends.getTau(i));
       accum[i] = sum;
     }
 
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         if (t < dividends.getTau(0)) {
-          return spot * growthFactorCurve.evaluate(t);
+          return spot * growthFactorCurve.apply(t);
         }
         final int index = getLowerBoundIndex(dividends.getTau(), t);
         final double total = accum[index];
-        return growthFactorCurve.evaluate(t) * (spot - total);
+        return growthFactorCurve.apply(t) * (spot - total);
       }
     };
 
@@ -166,7 +166,7 @@ public class EquityDividendsCurvesBundle {
     if (dividends.getNumberOfDividends() == 0) {
       return new Function1D<Double, Double>() {
         @Override
-        public Double evaluate(final Double t) {
+        public Double apply(final Double t) {
           return 0.0;
         }
       };
@@ -174,25 +174,25 @@ public class EquityDividendsCurvesBundle {
 
     final int n = dividends.getNumberOfDividends();
     final double[] accum = new double[n];
-    double sum = dividends.getAlpha(n - 1) / growthFactorCurve.evaluate(dividends.getTau(n - 1));
+    double sum = dividends.getAlpha(n - 1) / growthFactorCurve.apply(dividends.getTau(n - 1));
     accum[n - 1] = sum;
     for (int i = n - 2; i >= 0; i--) {
-      sum += dividends.getAlpha(i) / growthFactorCurve.evaluate(dividends.getTau(i));
+      sum += dividends.getAlpha(i) / growthFactorCurve.apply(dividends.getTau(i));
       accum[i] = sum;
     }
 
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         if (t >= dividends.getTau(n - 1)) {
           return 0.0;
         }
         if (t < dividends.getTau(0)) {
-          return growthFactorCurve.evaluate(t) * accum[0];
+          return growthFactorCurve.apply(t) * accum[0];
         }
         final int index = getLowerBoundIndex(dividends.getTau(), t) + 1;
         final double total = accum[index];
-        return growthFactorCurve.evaluate(t) * total;
+        return growthFactorCurve.apply(t) * total;
       }
     };
 
@@ -203,7 +203,7 @@ public class EquityDividendsCurvesBundle {
     if (dividends.getNumberOfDividends() == 0) {
       return new Function1D<Double, Double>() {
         @Override
-        public Double evaluate(final Double t) {
+        public Double apply(final Double t) {
           return 1.0 / discCurve.getDiscountFactor(t);
         }
       };
@@ -219,7 +219,7 @@ public class EquityDividendsCurvesBundle {
 
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         if (t < dividends.getTau(0)) {
           return 1.0 / discCurve.getDiscountFactor(t);
         }

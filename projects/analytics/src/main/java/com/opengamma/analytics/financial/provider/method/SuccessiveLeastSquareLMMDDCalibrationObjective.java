@@ -138,7 +138,7 @@ public class SuccessiveLeastSquareLMMDDCalibrationObjective extends SuccessiveLe
   /**
    * The inputs are the multiplicative factor on the volatilities and the additive term on the displacement.
    */
-  public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+  public DoubleMatrix1D apply(final DoubleMatrix1D x) {
     final int nbVol = _endIndex - _startIndex + 1;
     final double[][] volChanged = new double[nbVol][_lmmParameters.getNbFactor()];
     for (int loopperiod = 0; loopperiod < nbVol; loopperiod++) {

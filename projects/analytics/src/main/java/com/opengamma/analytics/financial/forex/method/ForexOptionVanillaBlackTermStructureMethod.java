@@ -85,7 +85,7 @@ public final class ForexOptionVanillaBlackTermStructureMethod implements ForexPr
     final double volatility = black.getVolatilityModel().getVolatility(optionForex.getTimeToExpiry());
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, dfDomestic, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(optionForex);
-    final double price = func.evaluate(dataBlack) * Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount())
+    final double price = func.apply(dataBlack) * Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount())
         * (optionForex.isLong() ? 1.0 : -1.0);
     final CurrencyAmount priceCurrency = CurrencyAmount.of(optionForex.getUnderlyingForex().getCurrency2(), price);
     return MultipleCurrencyAmount.of(priceCurrency);

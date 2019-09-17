@@ -44,7 +44,7 @@ public class LiMcLeodPortmanteauIIDHypothesis extends IIDHypothesis {
       throw new IllegalArgumentException("Time series must have at least " + _h + " points");
     }
     final DoubleTimeSeries<?> tsSq = x.multiply(x);
-    final double[] autocorrelation = _calculator.evaluate(tsSq);
+    final double[] autocorrelation = _calculator.apply(tsSq);
     double q = 0;
     final int n = x.size();
     for (int i = 1; i < _h; i++) {

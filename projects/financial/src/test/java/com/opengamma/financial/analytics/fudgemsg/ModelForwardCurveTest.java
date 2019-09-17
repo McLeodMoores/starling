@@ -100,7 +100,7 @@ public class ModelForwardCurveTest extends AnalyticsTestBase {
   protected static Curve<Double, Double> getForwardCurve() {
     final Function1D<Double, Double> f = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return x * x;
       }
     };

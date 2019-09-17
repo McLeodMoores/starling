@@ -134,7 +134,7 @@ public class ForexOptionVanillaBlackTermStructureMethodTest {
     final double volatility = TERM_STRUCTURE_VOL.getYValue(timeToExpiry);
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, df, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(CALL_LONG);
-    final double priceExpected = func.evaluate(dataBlack) * NOTIONAL_EUR;
+    final double priceExpected = func.apply(dataBlack) * NOTIONAL_EUR;
     final MultipleCurrencyAmount priceComputed = METHOD_BLACK_TS.presentValue(CALL_LONG, BUNDLE_BLACK_TS);
     assertEquals("Forex vanilla option: present value", priceExpected, priceComputed.getAmount(USD), TOLERANCE_PV);
   }

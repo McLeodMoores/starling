@@ -147,7 +147,7 @@ public class SwaptionCashFixedIborG2ppNumericalIntegrationMethod {
     }
 
     @Override
-    public Double evaluate(final Double x0, final Double x1) {
+    public Double apply(final Double x0, final Double x1) {
       double resultFixed = 0.0;
       for (int loopcf = 0; loopcf < _discountedCashFlowFixed.length; loopcf++) {
         resultFixed += _discountedCashFlowFixed[loopcf] * Math.exp(-_alphaFixed[0][loopcf] * x0 - _alphaFixed[1][loopcf] * x1 - _tau2Fixed[loopcf] / 2.0);

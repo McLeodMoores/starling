@@ -23,7 +23,7 @@ public class RungeKuttaIntegrator1DTest {
   private static final Function1D<Double, Double> CUBE = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return x * x * x;
     }
 
@@ -32,7 +32,7 @@ public class RungeKuttaIntegrator1DTest {
   private static final Function1D<Double, Double> TRIANGLE = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       if (x > 1.0 || x < 0.0)
         return x - Math.floor(x);
 
@@ -49,7 +49,7 @@ public class RungeKuttaIntegrator1DTest {
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final int n = W.length;
       double res = 0.0;
       double expo;
@@ -63,7 +63,7 @@ public class RungeKuttaIntegrator1DTest {
 
   private static final Function1D<Double, Double> SIN_INV_X = new Function1D<Double, Double>() {
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double eps = 1e-127;
       if (Math.abs(x) < eps)
         return 0.0;

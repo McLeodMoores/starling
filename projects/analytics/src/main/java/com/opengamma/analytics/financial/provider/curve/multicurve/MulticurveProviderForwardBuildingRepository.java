@@ -108,7 +108,7 @@ public class MulticurveProviderForwardBuildingRepository {
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator = new MulticurveProviderForwardFinderJacobian(
         new ParameterSensitivityMulticurveMatrixCalculator(sensitivityCalculator), data);
     final double[] parameters = _rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(initGuess)).getData();
-    final MulticurveProviderForward newCurves = data.getGeneratorMarket().evaluate(new DoubleMatrix1D(parameters));
+    final MulticurveProviderForward newCurves = data.getGeneratorMarket().apply(new DoubleMatrix1D(parameters));
     return Pairs.of(newCurves, ArrayUtils.toObject(parameters));
   }
 
@@ -139,7 +139,7 @@ public class MulticurveProviderForwardBuildingRepository {
     final MulticurveProviderForwardBuildingData data = new MulticurveProviderForwardBuildingData(instruments, generator);
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator = new MulticurveProviderForwardFinderJacobian(
         new ParameterSensitivityMulticurveMatrixCalculator(sensitivityCalculator), data);
-    final DoubleMatrix2D jacobian = jacobianCalculator.evaluate(new DoubleMatrix1D(parameters));
+    final DoubleMatrix2D jacobian = jacobianCalculator.apply(new DoubleMatrix1D(parameters));
     final DoubleMatrix2D inverseJacobian = MATRIX_ALGEBRA.getInverse(jacobian);
     final double[][] matrixTotal = inverseJacobian.getData();
     final DoubleMatrix2D[] result = new DoubleMatrix2D[nbParameters.length];

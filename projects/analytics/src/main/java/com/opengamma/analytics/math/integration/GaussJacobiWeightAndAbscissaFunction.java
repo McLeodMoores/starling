@@ -68,9 +68,9 @@ public class GaussJacobiWeightAndAbscissaFunction implements QuadratureWeightAnd
       root = getInitialRootGuess(root, i, n, x);
       root = ROOT_FINDER.getRoot(function, derivative, root);
       x[i] = root;
-      w[i] = GAMMA_FUNCTION.evaluate(_alpha + n) * GAMMA_FUNCTION.evaluate(_beta + n) / MathUtils.factorialDouble(n) / GAMMA_FUNCTION.evaluate(n + _c + 1) * d
+      w[i] = GAMMA_FUNCTION.apply(_alpha + n) * GAMMA_FUNCTION.apply(_beta + n) / MathUtils.factorialDouble(n) / GAMMA_FUNCTION.apply(n + _c + 1) * d
           * Math.pow(2, _c)
-          / (derivative.evaluate(root) * previous.evaluate(root));
+          / (derivative.apply(root) * previous.apply(root));
     }
     return new GaussianQuadratureData(x, w);
   }

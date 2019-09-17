@@ -60,7 +60,7 @@ public class NamedVariableLeastSquaresRegressionResultTest {
     final Function2D<Double, Double> f1 = new Function2D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x1, final Double x2) {
+      public Double apply(final Double x1, final Double x2) {
         return beta1 * x1 + beta2 * x2;
       }
 
@@ -68,7 +68,7 @@ public class NamedVariableLeastSquaresRegressionResultTest {
     final Function2D<Double, Double> f2 = new Function2D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x1, final Double x2) {
+      public Double apply(final Double x1, final Double x2) {
         return beta0 + beta1 * x1 + beta2 * x2;
       }
 
@@ -79,8 +79,8 @@ public class NamedVariableLeastSquaresRegressionResultTest {
     for (int i = 0; i < n; i++) {
       x[i][0] = RANDOM.nextDouble();
       x[i][1] = RANDOM.nextDouble();
-      y1[i] = f1.evaluate(x[i][0], x[i][1]);
-      y2[i] = f2.evaluate(x[i][0], x[i][1]);
+      y1[i] = f1.apply(x[i][0], x[i][1]);
+      y2[i] = f2.apply(x[i][0], x[i][1]);
     }
     final LeastSquaresRegression ols = new OrdinaryLeastSquaresRegression();
     final List<String> names = Arrays.asList("1", "2");
@@ -111,11 +111,11 @@ public class NamedVariableLeastSquaresRegressionResultTest {
       x3 = RANDOM.nextDouble();
       var.put("1", x1);
       var.put("2", x2);
-      assertEquals(result1.getPredictedValue(var), f1.evaluate(x1, x2), EPS);
-      assertEquals(result2.getPredictedValue(var), f2.evaluate(x1, x2), EPS);
+      assertEquals(result1.getPredictedValue(var), f1.apply(x1, x2), EPS);
+      assertEquals(result2.getPredictedValue(var), f2.apply(x1, x2), EPS);
       var.put("3", x3);
-      assertEquals(result1.getPredictedValue(var), f1.evaluate(x1, x2), EPS);
-      assertEquals(result2.getPredictedValue(var), f2.evaluate(x1, x2), EPS);
+      assertEquals(result1.getPredictedValue(var), f1.apply(x1, x2), EPS);
+      assertEquals(result2.getPredictedValue(var), f2.apply(x1, x2), EPS);
     }
   }
 }

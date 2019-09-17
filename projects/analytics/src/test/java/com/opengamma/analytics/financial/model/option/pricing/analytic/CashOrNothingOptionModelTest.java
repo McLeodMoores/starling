@@ -50,7 +50,7 @@ public class CashOrNothingOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(PUT).evaluate((StandardOptionDataBundle) null);
+    MODEL.getPricingFunction(PUT).apply((StandardOptionDataBundle) null);
   }
 
   @Test
@@ -59,16 +59,16 @@ public class CashOrNothingOptionModelTest {
     final StandardOptionDataBundle data = DATA.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(0)));
     Function1D<StandardOptionDataBundle, Double> f = MODEL.getPricingFunction(PUT);
     final double df = Math.exp(-R * T);
-    assertEquals(f.evaluate(data.withSpot(STRIKE - delta)), df * PAYMENT, EPS);
-    assertEquals(f.evaluate(data.withSpot(STRIKE + delta)), 0, EPS);
+    assertEquals(f.apply(data.withSpot(STRIKE - delta)), df * PAYMENT, EPS);
+    assertEquals(f.apply(data.withSpot(STRIKE + delta)), 0, EPS);
     final CashOrNothingOptionDefinition call = new CashOrNothingOptionDefinition(STRIKE, EXPIRY, true, PAYMENT);
     f = MODEL.getPricingFunction(call);
-    assertEquals(f.evaluate(data.withSpot(STRIKE + delta)), df * PAYMENT, EPS);
-    assertEquals(f.evaluate(data.withSpot(STRIKE - delta)), 0, EPS);
+    assertEquals(f.apply(data.withSpot(STRIKE + delta)), df * PAYMENT, EPS);
+    assertEquals(f.apply(data.withSpot(STRIKE - delta)), 0, EPS);
   }
 
   @Test
   public void test() {
-    assertEquals(MODEL.getPricingFunction(PUT).evaluate(DATA), 2.6710, 1e-4);
+    assertEquals(MODEL.getPricingFunction(PUT).apply(DATA), 2.6710, 1e-4);
   }
 }

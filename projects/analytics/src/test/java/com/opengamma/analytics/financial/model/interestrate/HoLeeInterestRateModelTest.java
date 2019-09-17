@@ -46,18 +46,18 @@ public class HoLeeInterestRateModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getDiscountBondFunction(START, MATURITY).evaluate((StandardDiscountBondModelDataBundle) null);
+    MODEL.getDiscountBondFunction(START, MATURITY).apply((StandardDiscountBondModelDataBundle) null);
   }
 
   @Test
   public void test() {
     final double eps = 1e-9;
-    assertEquals(MODEL.getDiscountBondFunction(START, START).evaluate(DATA), 1, 0);
+    assertEquals(MODEL.getDiscountBondFunction(START, START).apply(DATA), 1, 0);
     StandardDiscountBondModelDataBundle data = new StandardDiscountBondModelDataBundle(YieldCurve.from(ConstantDoublesCurve.from(0.)), new VolatilityCurve(ConstantDoublesCurve.from(0)), TODAY);
-    assertEquals(MODEL.getDiscountBondFunction(START, MATURITY).evaluate(data), 1, 0);
+    assertEquals(MODEL.getDiscountBondFunction(START, MATURITY).apply(data), 1, 0);
     data = new StandardDiscountBondModelDataBundle(YieldCurve.from(ConstantDoublesCurve.from(0.)), SIGMA, TODAY);
-    assertEquals(MODEL.getDiscountBondFunction(START, MATURITY).evaluate(data), Math.exp(-0.5 * VOL * VOL * YEARS * YEARS), 0);
+    assertEquals(MODEL.getDiscountBondFunction(START, MATURITY).apply(data), Math.exp(-0.5 * VOL * VOL * YEARS * YEARS), 0);
     data = new StandardDiscountBondModelDataBundle(R, new VolatilityCurve(ConstantDoublesCurve.from(0)), TODAY);
-    assertEquals(MODEL.getDiscountBondFunction(START, MATURITY).evaluate(data), Math.exp(-IR * YEARS), eps);
+    assertEquals(MODEL.getDiscountBondFunction(START, MATURITY).apply(data), Math.exp(-IR * YEARS), eps);
   }
 }

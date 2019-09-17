@@ -22,7 +22,7 @@ public class InverseMultiquadraticRadialBasisFunction extends Function1D<Double,
   }
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     return 1. / Math.sqrt(x * x + _scaleFactor);
   }
 

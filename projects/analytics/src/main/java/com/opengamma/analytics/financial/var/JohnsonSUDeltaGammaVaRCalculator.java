@@ -112,7 +112,7 @@ public class JohnsonSUDeltaGammaVaRCalculator<T> implements VaRCalculator<Normal
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double w) {
+      public Double apply(final Double w) {
         final double w2 = w * w;
         final double m = -2 + Math.sqrt(4 + 2 * (w2 - (k + 6) / (w2 + 2 * w + 3)));
         return (w - 1 - m) * Math.pow(w + 2 + m / 2., 2) - t * t;

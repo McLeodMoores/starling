@@ -116,7 +116,7 @@ public class ForwardCurve {
     final Function1D<Double, Double> f = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return spot * costOfCarryCurve.getDiscountFactor(t) / riskFreeCurve.getDiscountFactor(t);
       }
 
@@ -132,7 +132,7 @@ public class ForwardCurve {
     final Function1D<Double, Double> fwd = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return spot * Math.exp(drift * t);
       }
 
@@ -150,11 +150,11 @@ public class ForwardCurve {
     final Function1D<Double, Double> fwd = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         final Function1D<Double, Double> driftFunc = new Function1D<Double, Double>() {
 
           @Override
-          public Double evaluate(final Double y) {
+          public Double apply(final Double y) {
             return driftCurve.getYValue(y);
           }
 
@@ -178,7 +178,7 @@ public class ForwardCurve {
       private final double _eps = 1e-3;
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
 
         final double up = Math.log(fwdCurve.getYValue(t + _eps));
 
@@ -212,7 +212,7 @@ public class ForwardCurve {
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return (1 + shift) * _fwdCurve.getYValue(t);
       }
     };

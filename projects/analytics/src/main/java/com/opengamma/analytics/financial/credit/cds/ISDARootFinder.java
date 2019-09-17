@@ -51,7 +51,7 @@ public class ISDARootFinder {
     double x1, x2, y1, y2, temp;
 
     x1 = guess;
-    y1 = function.evaluate(x1);
+    y1 = function.apply(x1);
 
     if (Math.abs(y1) <= _tolerance && (Math.abs(x1 - lowerBound) <= _tolerance || Math.abs(x1 - upperBound) <= _tolerance)) {
       return y1;
@@ -70,7 +70,7 @@ public class ISDARootFinder {
       }
     }
 
-    y2 = function.evaluate(x2);
+    y2 = function.apply(x2);
 
     if (Math.abs(y2) <= _tolerance && (Math.abs(x2 - lowerBound) <= _tolerance || Math.abs(x2 - upperBound) <= _tolerance)) {
       return y2;
@@ -87,8 +87,8 @@ public class ISDARootFinder {
       x2 = secant.getUpper();
     } else {
 
-      final double yLo = function.evaluate(lowerBound);
-      final double yHi = function.evaluate(upperBound);
+      final double yLo = function.apply(lowerBound);
+      final double yHi = function.apply(upperBound);
 
       if (Math.abs(yLo) <= _tolerance && Math.abs(lowerBound - x1) <= _tolerance) {
         return lowerBound;
@@ -150,7 +150,7 @@ public class ISDARootFinder {
         return new SecantResultData();
       }
 
-      y2 = function.evaluate(x2);
+      y2 = function.apply(x2);
 
       if (Math.abs(y2) <= _tolerance && (Math.abs(x2 - lowerBound) <= _tolerance || Math.abs(x2 - upperBound) <= _tolerance)) {
         // Root found

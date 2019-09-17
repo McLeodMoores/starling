@@ -37,7 +37,7 @@ public class PiecewiseSABRFitterRootFinderTest {
 
     for (int i = 0; i < 200; i++) {
       final double k = 700 + 1300 * i / 199.;
-      final double vol = smile.evaluate(k);
+      final double vol = smile.apply(k);
       System.out.println(k + "\t" + vol);
     }
   }
@@ -59,7 +59,7 @@ public class PiecewiseSABRFitterRootFinderTest {
 
     for (int i = 0; i < 200; i++) {
       final double k = 700 + 1300 * i / 199.;
-      final double vol = smile.evaluate(k);
+      final double vol = smile.apply(k);
       System.out.println(k + "\t" + vol);
     }
   }
@@ -76,7 +76,7 @@ public class PiecewiseSABRFitterRootFinderTest {
 
     for (int i = 0; i < 200; i++) {
       final double k = 700 + 1300 * i / 199.;
-      final double vol = smile.evaluate(k);
+      final double vol = smile.apply(k);
       assertEquals(0.2, vol, 1e-9);
     }
   }

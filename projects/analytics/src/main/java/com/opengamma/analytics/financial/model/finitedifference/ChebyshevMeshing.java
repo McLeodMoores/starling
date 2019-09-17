@@ -30,7 +30,7 @@ public class ChebyshevMeshing extends MeshingFunction {
   }
 
   @Override
-  public Double evaluate(final Integer i) {
+  public Double apply(final Integer i) {
     Validate.isTrue(i >= 0 && i < getNumberOfPoints(), "i out of range");
     return _a + _r * (1 - Math.cos(i * Math.PI / _n));
   }

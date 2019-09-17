@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
@@ -26,7 +26,7 @@ public class AsymmetricPowerOptionModel extends AnalyticOptionModel<AsymmetricPo
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final StandardOptionDataBundle data) {
+      public Double apply(final StandardOptionDataBundle data) {
         Validate.notNull(data);
         final double s = data.getSpot();
         final double k = definition.getStrike();

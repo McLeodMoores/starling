@@ -61,7 +61,7 @@ public abstract class MonteCarloOptionModel<T extends OptionDefinition, U extend
     }
     final GreekResultCollection greeks = new GreekResultCollection();
     final Function1D<U, Double> price = getPricingFunction(definition);
-    greeks.put(Greek.FAIR_PRICE, price.evaluate(data));
+    greeks.put(Greek.FAIR_PRICE, price.apply(data));
     return greeks;
   }
 

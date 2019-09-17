@@ -37,7 +37,7 @@ public class DeltaGammaCovarianceMatrixFisherKurtosisCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    F.evaluate((Map<Integer, ParametricVaRDataBundle>) null);
+    F.apply((Map<Integer, ParametricVaRDataBundle>) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -48,7 +48,7 @@ public class DeltaGammaCovarianceMatrixFisherKurtosisCalculatorTest {
     final Map<Integer, ParametricVaRDataBundle> m = new HashMap<>();
     m.put(1, delta);
     m.put(2, gamma);
-    F.evaluate(m);
+    F.apply(m);
   }
 
   @Test
@@ -65,9 +65,9 @@ public class DeltaGammaCovarianceMatrixFisherKurtosisCalculatorTest {
     final ParametricVaRDataBundle delta = new ParametricVaRDataBundle(DELTA_VECTOR, COVARIANCE_MATRIX, 1);
     final Map<Integer, ParametricVaRDataBundle> m = new HashMap<>();
     m.put(1, delta);
-    assertEquals(F.evaluate(m), 0, 0);
+    assertEquals(F.apply(m), 0, 0);
     m.put(2, new ParametricVaRDataBundle(new DoubleMatrix2D(new double[0][0]), new DoubleMatrix2D(new double[0][0]), 2));
-    assertEquals(F.evaluate(m), 0, 0);
+    assertEquals(F.apply(m), 0, 0);
   }
 
   @Test
@@ -77,6 +77,6 @@ public class DeltaGammaCovarianceMatrixFisherKurtosisCalculatorTest {
     final Map<Integer, ParametricVaRDataBundle> m = new HashMap<>();
     m.put(1, delta);
     m.put(2, gamma);
-    assertEquals(F.evaluate(m), 47.153, 1e-3);
+    assertEquals(F.apply(m), 47.153, 1e-3);
   }
 }

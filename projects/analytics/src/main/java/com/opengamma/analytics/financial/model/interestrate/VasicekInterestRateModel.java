@@ -24,7 +24,7 @@ public class VasicekInterestRateModel implements DiscountBondModel<VasicekDataBu
     return new Function1D<VasicekDataBundle, Double>() {
 
       @Override
-      public Double evaluate(final VasicekDataBundle data) {
+      public Double apply(final VasicekDataBundle data) {
         Validate.notNull(data);
         final double lt = data.getLongTermInterestRate();
         final double speed = data.getReversionSpeed();

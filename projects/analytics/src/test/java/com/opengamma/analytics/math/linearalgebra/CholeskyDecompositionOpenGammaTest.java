@@ -32,7 +32,7 @@ public class CholeskyDecompositionOpenGammaTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullObjectMatrix() {
-    CDOG.evaluate((DoubleMatrix2D) null);
+    CDOG.apply((DoubleMatrix2D) null);
   }
 
   @Test
@@ -40,7 +40,7 @@ public class CholeskyDecompositionOpenGammaTest {
    * Tests A = L L^T.
    */
   public void recoverOrginal() {
-    final CholeskyDecompositionResult result = CDOG.evaluate(A3);
+    final CholeskyDecompositionResult result = CDOG.apply(A3);
     final DoubleMatrix2D a = (DoubleMatrix2D) ALGEBRA.multiply(result.getL(), result.getLT());
     checkEquals(A3, a);
   }
@@ -50,7 +50,7 @@ public class CholeskyDecompositionOpenGammaTest {
    * Tests solve Ax = b from A and b.
    */
   public void solveVector() {
-    final CholeskyDecompositionResult result = CDOG.evaluate(A5);
+    final CholeskyDecompositionResult result = CDOG.apply(A5);
     final double[] b = new double[] {1.0, 2.0, 3.0, 4.0, -1.0};
     final double[] x = result.solve(b);
     final DoubleMatrix1D ax = (DoubleMatrix1D) ALGEBRA.multiply(A5, new DoubleMatrix1D(x));
@@ -62,7 +62,7 @@ public class CholeskyDecompositionOpenGammaTest {
    * Tests solve AX = B from A and B.
    */
   public void solveMatrix() {
-    final CholeskyDecompositionResult result = CDOG.evaluate(A5);
+    final CholeskyDecompositionResult result = CDOG.apply(A5);
     final double[][] b = new double[][] { {1.0, 2.0}, {2.0, 3.0}, {3.0, 4.0}, {4.0, -2.0}, {-1.0, -1.0}};
     final DoubleMatrix2D x = result.solve(new DoubleMatrix2D(b));
     final DoubleMatrix2D ax = (DoubleMatrix2D) ALGEBRA.multiply(A5, x);
@@ -75,8 +75,8 @@ public class CholeskyDecompositionOpenGammaTest {
    * Compare results with Common decomposition
    */
   public void compareCommon() {
-    final CholeskyDecompositionResult resultOG = CDOG.evaluate(A3);
-    final CholeskyDecompositionResult resultC = CDC.evaluate(A3);
+    final CholeskyDecompositionResult resultOG = CDOG.apply(A3);
+    final CholeskyDecompositionResult resultC = CDC.apply(A3);
     checkEquals(resultC.getL(), resultOG.getL());
     checkEquals(ALGEBRA.getTranspose(resultC.getL()), resultOG.getLT());
     assertEquals("Determinant", resultC.getDeterminant(), resultOG.getDeterminant(), 1.0E-10);
@@ -90,22 +90,22 @@ public class CholeskyDecompositionOpenGammaTest {
     long startTime, endTime;
     final int nbTest = 100000;
 
-    CholeskyDecompositionResult resultOG3 = CDOG.evaluate(A3);
-    CholeskyDecompositionResult resultC3 = CDC.evaluate(A3);
-    CholeskyDecompositionResult resultOG5 = CDOG.evaluate(A5);
-    CholeskyDecompositionResult resultC5 = CDC.evaluate(A5);
+    CholeskyDecompositionResult resultOG3 = CDOG.apply(A3);
+    CholeskyDecompositionResult resultC3 = CDC.apply(A3);
+    CholeskyDecompositionResult resultOG5 = CDOG.apply(A5);
+    CholeskyDecompositionResult resultC5 = CDC.apply(A5);
 
     // ===== 3 x 3 =====
     startTime = System.currentTimeMillis();
     for (int looptest = 0; looptest < nbTest; looptest++) {
-      resultOG3 = CDOG.evaluate(A3);
+      resultOG3 = CDOG.apply(A3);
     }
     endTime = System.currentTimeMillis();
     System.out.println(nbTest + " Cholesky decomposition 3x3 (OpenGamma): " + (endTime - startTime) + " ms - " + resultOG3.getL());
     // Performance note: Cholesky decomposition: 4-Nov-11: On Mac Pro 3.2 GHz Quad-Core Intel Xeon: 105 ms for 10000 decomposition 3x3.
     startTime = System.currentTimeMillis();
     for (int looptest = 0; looptest < nbTest; looptest++) {
-      resultC3 = CDC.evaluate(A3);
+      resultC3 = CDC.apply(A3);
     }
     endTime = System.currentTimeMillis();
     System.out.println(nbTest + " Cholesky decomposition 3x3 (Common wrapper): " + (endTime - startTime) + " ms - " + resultC3.getL());
@@ -114,14 +114,14 @@ public class CholeskyDecompositionOpenGammaTest {
     // ===== 5 x 5 =====
     startTime = System.currentTimeMillis();
     for (int looptest = 0; looptest < nbTest; looptest++) {
-      resultOG5 = CDOG.evaluate(A5);
+      resultOG5 = CDOG.apply(A5);
     }
     endTime = System.currentTimeMillis();
     System.out.println(nbTest + " Cholesky decomposition 5x5 (OpenGamma): " + (endTime - startTime) + " ms - " + resultOG5.getL());
     // Performance note: Cholesky decomposition: 4-Nov-11: On Mac Pro 3.2 GHz Quad-Core Intel Xeon: 105 ms for 10000 decomposition 5x5.
     startTime = System.currentTimeMillis();
     for (int looptest = 0; looptest < nbTest; looptest++) {
-      resultC5 = CDC.evaluate(A5);
+      resultC5 = CDC.apply(A5);
     }
     endTime = System.currentTimeMillis();
     System.out.println(nbTest + " Cholesky decomposition 5x5 (Common wrapper): " + (endTime - startTime) + " ms - " + resultC5.getL());

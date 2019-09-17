@@ -44,8 +44,8 @@ public class BisectionSingleRootFinder extends RealSingleRootFinder {
   @Override
   public Double getRoot(final Function1D<Double, Double> function, final Double x1, final Double x2) {
     checkInputs(function, x1, x2);
-    final double y1 = function.evaluate(x1);
-    double y = function.evaluate(x2);
+    final double y1 = function.apply(x1);
+    double y = function.apply(x2);
     if (Math.abs(y) < _accuracy) {
       return x2;
     }
@@ -63,7 +63,7 @@ public class BisectionSingleRootFinder extends RealSingleRootFinder {
     for (int i = 0; i < MAX_ITER; i++) {
       dx *= 0.5;
       xMid = xRoot + dx;
-      y = function.evaluate(xMid);
+      y = function.apply(xMid);
       if (y <= 0) {
         xRoot = xMid;
       }

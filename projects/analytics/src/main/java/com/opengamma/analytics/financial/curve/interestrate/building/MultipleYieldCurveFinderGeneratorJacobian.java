@@ -16,7 +16,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
  * Function computing the Jacobian of the error of valuation produce by a array
  * representing the curve parameters. The meaning of value is given by a
  * calculator (usually present value or par spread).
- * 
+ *
  * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s
  *             are deprecated. Use classes such as
  *             {@link com.opengamma.analytics.financial.provider.curve.multicurve.MulticurveDiscountBuildingRepository}.
@@ -45,9 +45,9 @@ public class MultipleYieldCurveFinderGeneratorJacobian extends Function1D<Double
   }
 
   @Override
-  public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+  public DoubleMatrix2D apply(final DoubleMatrix1D x) {
     final YieldCurveBundle bundle = _data.getKnownData().copy();
-    final YieldCurveBundle newCurves = _data.getBuildingFunction().evaluate(x);
+    final YieldCurveBundle newCurves = _data.getBuildingFunction().apply(x);
     bundle.addAll(newCurves);
     final int nbParameters = _data.getNumberOfInstruments();
     final double[][] res = new double[nbParameters][nbParameters];

@@ -41,7 +41,7 @@ public class WinsorizedMeanCalculator extends DescriptiveStatisticsCalculator {
   }
 
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notEmpty(x, "x was null");
     final int length = x.length;
     final double[] winsorized = Arrays.copyOf(x, length);
@@ -53,7 +53,7 @@ public class WinsorizedMeanCalculator extends DescriptiveStatisticsCalculator {
       winsorized[i] = x1;
       winsorized[length - 1 - i] = x2;
     }
-    return DescriptiveStatisticsFactory.of(MeanCalculator.NAME).evaluate(winsorized);
+    return DescriptiveStatisticsFactory.of(MeanCalculator.NAME).apply(winsorized);
   }
 
   @Override

@@ -118,7 +118,7 @@ public class CapFloorInflationZeroCouponInterpolationBlackSmileMethodTest {
     final double volatility = BLACK_INFLATION.getBlackParameters().getVolatility(ZERO_COUPON_CAP.getReferenceEndTime()[1], ZERO_COUPON_CAP.getStrike());
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, 1.0, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(option);
-    final double pvExpected = df * func.evaluate(dataBlack) * ZERO_COUPON_CAP.getNotional() * ZERO_COUPON_CAP.getPaymentYearFraction();
+    final double pvExpected = df * func.apply(dataBlack) * ZERO_COUPON_CAP.getNotional() * ZERO_COUPON_CAP.getPaymentYearFraction();
     assertEquals("Zero-coupon inflation DiscountingMethod: Present value", pvExpected, pv.getAmount(ZERO_COUPON_CAP.getCurrency()), TOLERANCE_PV);
   }
 
@@ -189,7 +189,7 @@ public class CapFloorInflationZeroCouponInterpolationBlackSmileMethodTest {
     final double volatility = blackInflation.getBlackParameters().getVolatility(capZeroCouponUsd.getReferenceEndTime()[1], capZeroCouponUsd.getStrike());
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, 1.0, volatility);
     final Function1D<BlackFunctionData, Double> func = blackFunction.getPriceFunction(option);
-    final double pvExpected = df * func.evaluate(dataBlack) * capZeroCouponUsd.getNotional() * capZeroCouponUsd.getPaymentYearFraction();
+    final double pvExpected = df * func.apply(dataBlack) * capZeroCouponUsd.getNotional() * capZeroCouponUsd.getPaymentYearFraction();
     assertEquals("PV in market with seasonal adjustment", pvExpected, pvInflation.getAmount(zeroCouponUsd.getCurrency()), 1E-2);
   }
 }

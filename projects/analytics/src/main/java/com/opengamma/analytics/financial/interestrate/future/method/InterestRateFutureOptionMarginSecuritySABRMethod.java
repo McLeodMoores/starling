@@ -77,7 +77,7 @@ public final class InterestRateFutureOptionMarginSecuritySABRMethod extends Inte
     final double delay = security.getUnderlyingFuture().getTradingLastTime() - security.getExpirationTime();
     final double volatility = sabrData.getSABRParameter().getVolatility(new double[] { security.getExpirationTime(), delay, rateStrike, forward });
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, 1.0, volatility);
-    final double priceSecurity = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlack);
+    final double priceSecurity = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlack);
     return priceSecurity;
   }
 

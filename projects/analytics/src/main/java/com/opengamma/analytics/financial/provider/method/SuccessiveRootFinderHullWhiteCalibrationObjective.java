@@ -90,7 +90,7 @@ public class SuccessiveRootFinderHullWhiteCalibrationObjective extends Successiv
   }
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     _hwProvider.getHullWhiteParameters().setLastVolatility(x);
     return _hwProvider.getMulticurveProvider().getFxRates().convert(getInstrument().accept(PVHWC, _hwProvider), _ccyHW).getAmount() - getPrice();
   }

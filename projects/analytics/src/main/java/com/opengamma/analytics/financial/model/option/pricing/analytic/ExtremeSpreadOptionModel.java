@@ -28,7 +28,7 @@ public class ExtremeSpreadOptionModel extends AnalyticOptionModel<ExtremeSpreadO
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final StandardOptionWithSpotTimeSeriesDataBundle data) {
+      public Double apply(final StandardOptionWithSpotTimeSeriesDataBundle data) {
         Validate.notNull(data, "data");
         final double s = data.getSpot();
         final double b = data.getCostOfCarry();

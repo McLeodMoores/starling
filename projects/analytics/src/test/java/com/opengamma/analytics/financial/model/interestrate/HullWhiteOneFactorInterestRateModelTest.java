@@ -48,16 +48,16 @@ public class HullWhiteOneFactorInterestRateModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getDiscountBondFunction(START, MATURITY).evaluate((HullWhiteOneFactorDataBundle) null);
+    MODEL.getDiscountBondFunction(START, MATURITY).apply((HullWhiteOneFactorDataBundle) null);
   }
 
   @Test
   public void test() {
     HullWhiteOneFactorDataBundle data = new HullWhiteOneFactorDataBundle(R, SIGMA, TODAY, SPEED);
-    assertEquals(MODEL.getDiscountBondFunction(START, START).evaluate(data), 1, EPS);
+    assertEquals(MODEL.getDiscountBondFunction(START, START).apply(data), 1, EPS);
     data = new HullWhiteOneFactorDataBundle(R, new VolatilityCurve(ConstantDoublesCurve.from(0)), TODAY, SPEED);
-    assertEquals(Math.log(MODEL.getDiscountBondFunction(START, MATURITY).evaluate(data)), -RATE * YEARS, EPS);
+    assertEquals(Math.log(MODEL.getDiscountBondFunction(START, MATURITY).apply(data)), -RATE * YEARS, EPS);
     data = new HullWhiteOneFactorDataBundle(R, SIGMA, TODAY, 200);
-    assertEquals(Math.log(MODEL.getDiscountBondFunction(START, MATURITY).evaluate(data)), -RATE * YEARS, EPS);
+    assertEquals(Math.log(MODEL.getDiscountBondFunction(START, MATURITY).apply(data)), -RATE * YEARS, EPS);
   }
 }

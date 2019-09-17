@@ -22,7 +22,7 @@ public class MultiquadraticRadialBasisFunction extends Function1D<Double, Double
   }
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     return Math.sqrt(x * x + _scaleFactor);
   }
 

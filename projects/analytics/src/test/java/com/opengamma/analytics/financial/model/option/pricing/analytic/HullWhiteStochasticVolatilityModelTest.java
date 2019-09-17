@@ -46,7 +46,7 @@ public class HullWhiteStochasticVolatilityModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(new EuropeanVanillaOptionDefinition(100, EXPIRY, true)).evaluate((HullWhiteStochasticVolatilityModelDataBundle) null);
+    MODEL.getPricingFunction(new EuropeanVanillaOptionDefinition(100, EXPIRY, true)).apply((HullWhiteStochasticVolatilityModelDataBundle) null);
   }
 
   @Test
@@ -77,6 +77,6 @@ public class HullWhiteStochasticVolatilityModelTest {
   }
 
   private void assertModel(final double value, final OptionDefinition definition, final HullWhiteStochasticVolatilityModelDataBundle data) {
-    assertEquals(value, MODEL.getPricingFunction(definition).evaluate(data), EPS);
+    assertEquals(value, MODEL.getPricingFunction(definition).apply(data), EPS);
   }
 }

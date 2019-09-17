@@ -265,7 +265,7 @@ abstract class CubicSplineSolver {
    * @return Solution to the linear equation, x
    */
   protected double[] matrixEqnSolver(final double[][] doubMat, final double[] doubVec) {
-    final LUDecompositionResult result = _luObj.evaluate(new DoubleMatrix2D(doubMat));
+    final LUDecompositionResult result = _luObj.apply(new DoubleMatrix2D(doubMat));
 
     final double[][] lMat = result.getL().getData();
     final double[][] uMat = result.getU().getData();
@@ -288,7 +288,7 @@ abstract class CubicSplineSolver {
    */
   protected DoubleMatrix1D[] combinedMatrixEqnSolver(final double[][] doubMat1, final double[] doubVec, final double[][] doubMat2) {
     final int nDataPts = doubVec.length;
-    final LUDecompositionResult result = _luObj.evaluate(new DoubleMatrix2D(doubMat1));
+    final LUDecompositionResult result = _luObj.apply(new DoubleMatrix2D(doubMat1));
 
     final double[][] lMat = result.getL().getData();
     final double[][] uMat = result.getU().getData();

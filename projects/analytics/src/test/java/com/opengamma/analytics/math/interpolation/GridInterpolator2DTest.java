@@ -32,7 +32,7 @@ public class GridInterpolator2DTest {
   private static final Function2D<Double, Double> F = new Function2D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x, final Double y) {
+    public Double apply(final Double x, final Double y) {
       return 2 * x - 3.5 * y - 3;
     }
 
@@ -103,9 +103,9 @@ public class GridInterpolator2DTest {
     assertEquals(INTERPOLATOR_2D.interpolate(FLAT_DATA_BUNDLE, DoublesPair.of(2.5, 5.4)), 0., EPS);
     final Map<DoublesPair, Double> nonTrivial = new HashMap<>();
     for (final DoublesPair pair : FLAT_DATA.keySet()) {
-      nonTrivial.put(pair, F.evaluate(pair.getFirst(), pair.getSecond()));
+      nonTrivial.put(pair, F.apply(pair.getFirst(), pair.getSecond()));
     }
     final DoublesPair pair = DoublesPair.of(RANDOM.nextDouble() + 2, RANDOM.nextDouble() + 4);
-    assertEquals(INTERPOLATOR_2D.interpolate(INTERPOLATOR_2D.getDataBundle(nonTrivial), pair), F.evaluate(pair.getFirst(), pair.getSecond()), EPS);
+    assertEquals(INTERPOLATOR_2D.interpolate(INTERPOLATOR_2D.getDataBundle(nonTrivial), pair), F.apply(pair.getFirst(), pair.getSecond()), EPS);
   }
 }

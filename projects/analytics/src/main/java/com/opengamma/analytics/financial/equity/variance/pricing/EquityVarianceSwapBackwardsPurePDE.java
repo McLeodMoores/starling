@@ -92,7 +92,7 @@ public class EquityVarianceSwapBackwardsPurePDE {
 
     final PDEGrid1D grid = new PDEGrid1D(timeMesh, spaceMesh);
     final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> db =
-        new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, logPayoff, lower, upper, grid);
+        new PDE1DDataBundle<>(pde, logPayoff, lower, upper, grid);
     final PDEResults1D res = _solver.solve(db);
 
     final int index = getLowerBoundIndex(res.getGrid().getSpaceNodes(), 0.0);
@@ -144,7 +144,7 @@ public class EquityVarianceSwapBackwardsPurePDE {
 
     final PDEGrid1D grid = new PDEGrid1D(timeMesh, spaceMesh);
     final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> db =
-        new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, initalCond, lower, upper, grid);
+        new PDE1DDataBundle<>(pde, initalCond, lower, upper, grid);
     final PDEResults1D res = _solver.solve(db);
 
     final int gIndex = getLowerBoundIndex(res.getGrid().getSpaceNodes(), 0.0);
@@ -163,7 +163,7 @@ public class EquityVarianceSwapBackwardsPurePDE {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double y) {
+      public Double apply(final Double y) {
         if (d == 0) {
           return logF + y;
         }
@@ -181,7 +181,7 @@ public class EquityVarianceSwapBackwardsPurePDE {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double y) {
+      public Double apply(final Double y) {
         if (d == 0) {
           return 1.0;
         }
@@ -202,7 +202,7 @@ public class EquityVarianceSwapBackwardsPurePDE {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double y) {
+      public Double apply(final Double y) {
 
         final double x = Math.exp(y);
         final double s = (f - d) * x + d;
@@ -228,7 +228,7 @@ public class EquityVarianceSwapBackwardsPurePDE {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return res;
       }
     };

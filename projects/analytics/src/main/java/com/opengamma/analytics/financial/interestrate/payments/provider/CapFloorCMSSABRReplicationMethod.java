@@ -285,7 +285,7 @@ public class CapFloorCMSSABRReplicationMethod extends CapFloorCMSSABRReplication
     final SABRFormulaData sabrPoint = new SABRFormulaData(alpha, beta, rho, nu);
     final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, cmsCapFloor.getFixingTime(), cmsCapFloor.isCap());
     final Function1D<SABRFormulaData, double[]> sabrFunctionAdjoint = sabrParameter.getSabrFunction().getVolatilityAdjointFunction(option, forward);
-    final double[] volA = sabrFunctionAdjoint.evaluate(sabrPoint);
+    final double[] volA = sabrFunctionAdjoint.apply(sabrPoint);
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, 1.0, volA[0]);
     final BlackPriceFunction blackFunction = new BlackPriceFunction();
     final double[] bsA = blackFunction.getPriceAdjoint(option, dataBlack);
@@ -362,7 +362,7 @@ public class CapFloorCMSSABRReplicationMethod extends CapFloorCMSSABRReplication
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double[] kD = kpkpp(x);
       // Implementation note: kD[0] contains the first derivative of k; kD[1] the second derivative of k.
       return (kD[1] * (x - _strike) + 2.0 * kD[0]) * bs(x) * _factor;
@@ -436,7 +436,7 @@ public class CapFloorCMSSABRReplicationMethod extends CapFloorCMSSABRReplication
         gp = -g / x + _nbFixedPeriod / x / _nbFixedPaymentYear * nPeriodDiscount / periodFactor;
         gpp = 2.0 / (x * x) * g - 2.0 * _nbFixedPeriod / (x * x) / _nbFixedPaymentYear * nPeriodDiscount / periodFactor
             - (_nbFixedPeriod + 1.0) * _nbFixedPeriod / x
-                / (_nbFixedPaymentYear * _nbFixedPaymentYear) * nPeriodDiscount / (periodFactor * periodFactor);
+            / (_nbFixedPaymentYear * _nbFixedPaymentYear) * nPeriodDiscount / (periodFactor * periodFactor);
       } else {
         // Implementation comment: When x is (almost) 0, useful for CMS swaps which are priced as CMS cap of strike 0.
         g = (double) _nbFixedPeriod / _nbFixedPaymentYear;
@@ -463,10 +463,10 @@ public class CapFloorCMSSABRReplicationMethod extends CapFloorCMSSABRReplication
     double bs(final double strike) {
       final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, _timeToExpiry, _isCall);
       final Function1D<SABRFormulaData, Double> funcSabr = _sabrFunction.getVolatilityFunction(option, _forward);
-      final double volatility = funcSabr.evaluate(_sabrData);
+      final double volatility = funcSabr.apply(_sabrData);
       final BlackFunctionData dataBlack = new BlackFunctionData(_forward, 1.0, volatility);
       final Function1D<BlackFunctionData, Double> func = _blackFunction.getPriceFunction(option);
-      return func.evaluate(dataBlack);
+      return func.apply(dataBlack);
     }
 
     /**
@@ -496,7 +496,7 @@ public class CapFloorCMSSABRReplicationMethod extends CapFloorCMSSABRReplication
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double[] kD = super.kpkpp(x);
       // Implementation note: kD[0] contains the first derivative of k; kD[1] the second derivative of k.
       final double[] bs = bsbsp(x);
@@ -582,7 +582,7 @@ public class CapFloorCMSSABRReplicationMethod extends CapFloorCMSSABRReplication
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double[] kD = super.kpkpp(x);
       // Implementation note: kD[0] contains the first derivative of k; kD[1] the second derivative of k.
       final EuropeanVanillaOption option = new EuropeanVanillaOption(x, super._timeToExpiry, super._isCall);
@@ -603,7 +603,7 @@ public class CapFloorCMSSABRReplicationMethod extends CapFloorCMSSABRReplication
     double bs(final double strike) {
       final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, super._timeToExpiry, super._isCall);
       final Function1D<SABRFormulaData, Double> funcSabr = super._sabrFunction.getVolatilityFunction(option, super._forward);
-      final double volatility = funcSabr.evaluate(super._sabrData);
+      final double volatility = funcSabr.apply(super._sabrData);
       final BlackFunctionData dataBlack = new BlackFunctionData(super._forward, 1.0, volatility);
       final double[] bsAdjoint = super._blackFunction.getPriceAdjoint(option, dataBlack);
       return bsAdjoint[2];
@@ -623,7 +623,7 @@ public class CapFloorCMSSABRReplicationMethod extends CapFloorCMSSABRReplication
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double[] kD = super.kpkpp(x);
       // Implementation note: kD[0] contains the first derivative of k; kD[1] the second derivative of k.
       return -kD[1] * bs(x);

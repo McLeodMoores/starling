@@ -44,7 +44,7 @@ public class TwoStateMarkovChainWithLocalVolDensityTest {
     final Function1D<Double, Double> fwd = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return SPOT * Math.exp(t * RATE);
       }
     };

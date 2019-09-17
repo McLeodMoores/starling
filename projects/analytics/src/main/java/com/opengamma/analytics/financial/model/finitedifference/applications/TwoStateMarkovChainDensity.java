@@ -77,7 +77,7 @@ public class TwoStateMarkovChainDensity {
       private final double _volRootTOffset = 0.01;
 
       @Override
-      public Double evaluate(final Double s) {
+      public Double apply(final Double s) {
         if (s <= 0 || initialProb == 0) {
           return 0.0;
         }
@@ -91,48 +91,39 @@ public class TwoStateMarkovChainDensity {
   private ConvectionDiffusionPDE1DCoupledCoefficients getCoupledPDEDataBundle(final ForwardCurve forward, final double vol, final double lambda1,
       final double lambda2, final double beta) {
 
-    final Function<Double, Double> a = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        double s = ts[1];
-        if (s <= 0.0) { // TODO review how to handle absorption
-          s = -s;
-        }
-        return -Math.pow(s, 2 * beta) * vol * vol / 2;
+    final Function<Double, Double> a = ts -> {
+      Validate.isTrue(ts.length == 2);
+      double s = ts[1];
+      if (s <= 0.0) { // TODO review how to handle absorption
+        s = -s;
       }
+      return -Math.pow(s, 2 * beta) * vol * vol / 2;
     };
 
-    final Function<Double, Double> b = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double t = ts[0];
-        double s = ts[1];
-        if (s < 0.0) {
-          s = -s;
-        }
-        final double temp = s < 0.0 ? 0.0 : 2 * vol * vol * beta * Math.pow(s, 2 * (beta - 1));
-        return s * (forward.getDrift(t) - temp);
+    final Function<Double, Double> b = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double t = ts[0];
+      double s = ts[1];
+      if (s < 0.0) {
+        s = -s;
       }
+      final double temp = s < 0.0 ? 0.0 : 2 * vol * vol * beta * Math.pow(s, 2 * (beta - 1));
+      return s * (forward.getDrift(t) - temp);
     };
 
-    final Function<Double, Double> c = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double t = ts[0];
-        double s = ts[1];
+    final Function<Double, Double> c = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double t = ts[0];
+      double s = ts[1];
 
-        if (s < 0.) {
-          s = -s;
-        }
-        double temp = beta == 1.0 ? 1.0 : Math.pow(s, 2 * (beta - 1));
-        if (s < 0) {
-          temp = 0.0;
-        }
-        return lambda1 + forward.getDrift(t) - vol * vol * beta * (2 * beta - 1) * temp;
+      if (s < 0.) {
+        s = -s;
       }
+      double temp = beta == 1.0 ? 1.0 : Math.pow(s, 2 * (beta - 1));
+      if (s < 0) {
+        temp = 0.0;
+      }
+      return lambda1 + forward.getDrift(t) - vol * vol * beta * (2 * beta - 1) * temp;
     };
 
     return new ConvectionDiffusionPDE1DCoupledCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),

@@ -93,7 +93,7 @@ public abstract class SABRCMSSpreadNoExtrapolationFunction extends SABRFunction 
     return new DoubleFunction1D() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return 0.8;
       }
 

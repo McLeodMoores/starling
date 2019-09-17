@@ -48,13 +48,13 @@ public class SampleCentralMomentCalculator extends DescriptiveStatisticsCalculat
    * @return The sample central moment.
    */
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notNull(x, "x");
     ArgumentChecker.isTrue(x.length >= 2, "Need at least 2 data points to calculate central moment");
     if (_n == 0) {
       return 1.;
     }
-    final double mu = DescriptiveStatisticsFactory.of(MeanCalculator.NAME).evaluate(x);
+    final double mu = DescriptiveStatisticsFactory.of(MeanCalculator.NAME).apply(x);
     double sum = 0;
     for (final Double d : x) {
       sum += Math.pow(d - mu, _n);

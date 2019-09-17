@@ -21,18 +21,18 @@ public class HeavisideFunctionTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {
-    F.evaluate((Double) null);
+    F.apply((Double) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testZero() {
-    F.evaluate(0.);
+    F.apply(0.);
   }
   @Test
   public void test() {
-    assertEquals(F.evaluate(-2.), 0, 0);
-    assertEquals(F.evaluate(-1e-15), 0, 0);
-    assertEquals(F.evaluate(1e-15), 1, 0);
-    assertEquals(F.evaluate(2.), 1, 0);
+    assertEquals(F.apply(-2.), 0, 0);
+    assertEquals(F.apply(-1e-15), 0, 0);
+    assertEquals(F.apply(1e-15), 1, 0);
+    assertEquals(F.apply(2.), 1, 0);
   }
 }

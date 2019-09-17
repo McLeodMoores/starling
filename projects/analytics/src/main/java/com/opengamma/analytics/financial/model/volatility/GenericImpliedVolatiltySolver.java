@@ -36,7 +36,7 @@ public class GenericImpliedVolatiltySolver {
     double sigma = (lowerSigma + upperSigma) / 2.0;
     final double maxChange = 0.5;
 
-    double[] pnv = pavFunc.evaluate(sigma);
+    double[] pnv = pavFunc.apply(sigma);
 
     // This can happen for American options, where low volatilities puts you in the early excise region which obviously has zero vega
     if (pnv[1] == 0 || Double.isNaN(pnv[1])) {
@@ -61,7 +61,7 @@ public class GenericImpliedVolatiltySolver {
     int count = 0;
     while (Math.abs(actChange) > VOL_TOL) {
       sigma += actChange;
-      pnv = pavFunc.evaluate(sigma);
+      pnv = pavFunc.apply(sigma);
 
       if (pnv[1] == 0 || Double.isNaN(pnv[1])) {
         return solveByBisection(optionPrice, pavFunc, lowerSigma, upperSigma);
@@ -118,7 +118,7 @@ public class GenericImpliedVolatiltySolver {
     double sigma = (lowerSigma + upperSigma) / 2.0;
     final double maxChange = 0.5;
 
-    double[] pnv = pavFunc.evaluate(sigma);
+    double[] pnv = pavFunc.apply(sigma);
 
     // This can happen for American options, where low volatilities puts you in the early excise region which obviously has zero vega
     if (Math.abs(pnv[1]) < 1.e-14 || Double.isNaN(pnv[1])) {
@@ -143,7 +143,7 @@ public class GenericImpliedVolatiltySolver {
     int count = 0;
     while (Math.abs(actChange) > VOL_TOL) {
       sigma += actChange;
-      pnv = pavFunc.evaluate(sigma);
+      pnv = pavFunc.apply(sigma);
 
       if (Math.abs(pnv[1]) < 1.e-14 || Double.isNaN(pnv[1])) {
         return solveByBisection(optionPrice, pavFunc, lowerSigma, upperSigma);
@@ -176,8 +176,8 @@ public class GenericImpliedVolatiltySolver {
     final BracketRoot bracketer = new BracketRoot();
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double volatility) {
-        return pavFunc.evaluate(volatility)[0] / optionPrice - 1.0;
+      public Double apply(final Double volatility) {
+        return pavFunc.apply(volatility)[0] / optionPrice - 1.0;
       }
     };
     return bracketer.getBracketedPoints(func, sigma - Math.abs(change), sigma + Math.abs(change), 0, Double.POSITIVE_INFINITY);
@@ -188,8 +188,8 @@ public class GenericImpliedVolatiltySolver {
     final BracketRoot bracketer = new BracketRoot();
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double volatility) {
-        return pavFunc.evaluate(volatility)[0] / optionPrice - 1.0;
+      public Double apply(final Double volatility) {
+        return pavFunc.apply(volatility)[0] / optionPrice - 1.0;
       }
     };
     final double absChange = Math.abs(change);
@@ -203,8 +203,8 @@ public class GenericImpliedVolatiltySolver {
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double volatility) {
-        final double trialPrice = pavFunc.evaluate(volatility)[0];
+      public Double apply(final Double volatility) {
+        final double trialPrice = pavFunc.apply(volatility)[0];
         return trialPrice / optionPrice - 1.0;
       }
     };

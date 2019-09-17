@@ -74,7 +74,7 @@ public final class CapFloorIborSABRMethod implements PricingMethod {
     final double volatility = sabrData.getSABRParameter().getVolatility(cap.getFixingTime(), maturity, cap.getStrike(), forward);
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, df, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(option);
-    final double price = func.evaluate(dataBlack) * cap.getNotional() * cap.getPaymentYearFraction();
+    final double price = func.apply(dataBlack) * cap.getNotional() * cap.getPaymentYearFraction();
     return CurrencyAmount.of(cap.getCurrency(), price);
   }
 

@@ -57,8 +57,8 @@ public class GaussHermiteQuadratureIntegrator1D extends GaussianQuadratureIntegr
       return new Function1D<Double, Double>() {
 
         @Override
-        public Double evaluate(final Double x) {
-          return Math.exp(x * x) * function.evaluate(x);
+        public Double apply(final Double x) {
+          return Math.exp(x * x) * function.apply(x);
         }
 
       };

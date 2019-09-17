@@ -26,12 +26,12 @@ public class StudentTDistributionMaximumLikelihoodEstimatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {
-    ESTIMATOR.evaluate((double[]) null);
+    ESTIMATOR.apply((double[]) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmpty() {
-    ESTIMATOR.evaluate(new double[0]);
+    ESTIMATOR.apply(new double[0]);
   }
 
   @Test(groups = TestGroup.UNIT_SLOW)
@@ -44,7 +44,7 @@ public class StudentTDistributionMaximumLikelihoodEstimatorTest {
     for (int i = 0; i < n; i++) {
       x[i] = p1.nextRandom();
     }
-    final StudentTDistribution p2 = (StudentTDistribution) ESTIMATOR.evaluate(x);
+    final StudentTDistribution p2 = (StudentTDistribution) ESTIMATOR.apply(x);
     assertEquals(p2.getDegreesOfFreedom(), nu, eps);
   }
 }

@@ -45,21 +45,21 @@ public class EuropeanOptionOnEuropeanVanillaOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(OPTION).evaluate((StandardOptionDataBundle) null);
+    MODEL.getPricingFunction(OPTION).apply((StandardOptionDataBundle) null);
   }
 
   @Test
   public void test() {
-    assertEquals(MODEL.getPricingFunction(OPTION).evaluate(DATA), 21.196, 1e-3);
+    assertEquals(MODEL.getPricingFunction(OPTION).apply(DATA), 21.196, 1e-3);
     final EuropeanVanillaOptionDefinition call = new EuropeanVanillaOptionDefinition(UNDERLYING_STRIKE, UNDERLYING_EXPIRY, true);
     final EuropeanVanillaOptionDefinition put = new EuropeanVanillaOptionDefinition(UNDERLYING_STRIKE, EXPIRY, false);
     final EuropeanOptionOnEuropeanVanillaOptionDefinition callOnCall = new EuropeanOptionOnEuropeanVanillaOptionDefinition(STRIKE, EXPIRY, true, call);
     final EuropeanOptionOnEuropeanVanillaOptionDefinition putOnCall = new EuropeanOptionOnEuropeanVanillaOptionDefinition(STRIKE, EXPIRY, false, call);
-    assertEquals(MODEL.getPricingFunction(callOnCall).evaluate(DATA) - MODEL.getPricingFunction(putOnCall).evaluate(DATA),
-        BSM.getPricingFunction(call).evaluate(DATA) - STRIKE * Math.exp(-0.08 * 0.25), 1e-3);
+    assertEquals(MODEL.getPricingFunction(callOnCall).apply(DATA) - MODEL.getPricingFunction(putOnCall).apply(DATA),
+        BSM.getPricingFunction(call).apply(DATA) - STRIKE * Math.exp(-0.08 * 0.25), 1e-3);
     final EuropeanOptionOnEuropeanVanillaOptionDefinition callOnPut = new EuropeanOptionOnEuropeanVanillaOptionDefinition(STRIKE, EXPIRY, true, put);
     final EuropeanOptionOnEuropeanVanillaOptionDefinition putOnPut = new EuropeanOptionOnEuropeanVanillaOptionDefinition(STRIKE, EXPIRY, false, put);
-    assertEquals(MODEL.getPricingFunction(callOnPut).evaluate(DATA) - MODEL.getPricingFunction(putOnPut).evaluate(DATA), BSM.getPricingFunction(put).evaluate(DATA) - STRIKE * Math.exp(-0.08 * 0.25),
+    assertEquals(MODEL.getPricingFunction(callOnPut).apply(DATA) - MODEL.getPricingFunction(putOnPut).apply(DATA), BSM.getPricingFunction(put).apply(DATA) - STRIKE * Math.exp(-0.08 * 0.25),
         1e-3);
   }
 }

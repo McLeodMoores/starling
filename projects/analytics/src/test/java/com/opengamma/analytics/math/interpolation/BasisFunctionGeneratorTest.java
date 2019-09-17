@@ -63,39 +63,39 @@ public class BasisFunctionGeneratorTest {
   @Test
   public void testZeroOrder() {
     final Function1D<Double, Double> func = GENERATOR.generate(KNOTS, 0, 4);
-    assertEquals(0.0, func.evaluate(3.5), 0.0);
-    assertEquals(1.0, func.evaluate(4.78), 0.0);
-    assertEquals(1.0, func.evaluate(4.0), 0.0);
-    assertEquals(0.0, func.evaluate(5.0), 0.0);
+    assertEquals(0.0, func.apply(3.5), 0.0);
+    assertEquals(1.0, func.apply(4.78), 0.0);
+    assertEquals(1.0, func.apply(4.0), 0.0);
+    assertEquals(0.0, func.apply(5.0), 0.0);
   }
 
   @Test
   public void testFirstOrder() {
     final Function1D<Double, Double> func = GENERATOR.generate(KNOTS, 1, 3);
-    assertEquals(0.0, func.evaluate(1.76), 0.0);
-    assertEquals(1.0, func.evaluate(4.0), 0.0);
-    assertEquals(0, func.evaluate(5.0), 0.0);
-    assertEquals(0.5, func.evaluate(3.5), 0.0);
+    assertEquals(0.0, func.apply(1.76), 0.0);
+    assertEquals(1.0, func.apply(4.0), 0.0);
+    assertEquals(0, func.apply(5.0), 0.0);
+    assertEquals(0.5, func.apply(3.5), 0.0);
   }
 
   @Test
   public void testSecondOrder() {
     final Function1D<Double, Double> func = GENERATOR.generate(KNOTS, 2, 3);
-    assertEquals(0.0, func.evaluate(1.76), 0.0);
-    assertEquals(0.125, func.evaluate(3.5), 0.0);
-    assertEquals(0.5, func.evaluate(4.0), 0.0);
-    assertEquals(0.75, func.evaluate(4.5), 0.0);
-    assertEquals(0.0, func.evaluate(6.0), 0.0);
+    assertEquals(0.0, func.apply(1.76), 0.0);
+    assertEquals(0.125, func.apply(3.5), 0.0);
+    assertEquals(0.5, func.apply(4.0), 0.0);
+    assertEquals(0.75, func.apply(4.5), 0.0);
+    assertEquals(0.0, func.apply(6.0), 0.0);
   }
 
   @Test
   public void testThirdOrder() {
     final Function1D<Double, Double> func = GENERATOR.generate(KNOTS, 3, 3);
-    assertEquals(0.0, func.evaluate(1.76), 0.0);
-    assertEquals(1. / 6., func.evaluate(4.0), 0.0);
-    assertEquals(2. / 3., func.evaluate(5.0), 0.0);
-    assertEquals(1 / 48., func.evaluate(6.5), 0.0);
-    assertEquals(0.0, func.evaluate(7.0), 0.0);
+    assertEquals(0.0, func.apply(1.76), 0.0);
+    assertEquals(1. / 6., func.apply(4.0), 0.0);
+    assertEquals(2. / 3., func.apply(5.0), 0.0);
+    assertEquals(1 / 48., func.apply(6.5), 0.0);
+    assertEquals(0.0, func.apply(7.0), 0.0);
   }
 
   @Test
@@ -118,7 +118,7 @@ public class BasisFunctionGeneratorTest {
         System.out.print(x[0]);
         for (int j = 0; j < 101; j++) {
           x[1] = 0 + j * 10.0 / 100.0;
-          final double y = func.evaluate(x);
+          final double y = func.apply(x);
           System.out.print("\t" + y);
         }
         System.out.print("\n");
@@ -140,7 +140,7 @@ public class BasisFunctionGeneratorTest {
 
     for (int i = 0; i < 101; i++) {
       final double x = -3 + i * 8.0 / 100.0;
-      final double y = fun.evaluate(x);
+      final double y = fun.apply(x);
       // System.out.println(x + "\t" + y);
     }
   }
@@ -163,12 +163,12 @@ public class BasisFunctionGeneratorTest {
 
     for (int i = 0; i < 100; i++) {
       final double x = -1 + i * 6 / 100.0;
-      final double y = fun.evaluate(x);
+      final double y = fun.apply(x);
       // System.out.println(x + "\t" + y);
     }
     for (int i = 0; i < 101; i++) {
       final double x = 6 + i * 54 / 100.0;
-      final double y = fun.evaluate(x);
+      final double y = fun.apply(x);
       // System.out.println(x + "\t" + y);
     }
   }
@@ -201,7 +201,7 @@ public class BasisFunctionGeneratorTest {
         System.out.print(x[0]);
         for (int j = 0; j < 101; j++) {
           x[1] = -0.4 + j * 1.8 / 100.0;
-          final double y = fun.evaluate(x);
+          final double y = fun.apply(x);
           System.out.print("\t" + y);
         }
         System.out.print("\n");

@@ -34,17 +34,17 @@ public class GeometricMeanCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullArray() {
-    GEOMETRIC.evaluate((double[]) null);
+    GEOMETRIC.apply((double[]) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmptyArray() {
-    GEOMETRIC.evaluate(new double[0]);
+    GEOMETRIC.apply(new double[0]);
   }
 
   @Test
   public void test() {
-    assertEquals(GEOMETRIC.evaluate(FLAT), 2, 0);
-    assertEquals(GEOMETRIC.evaluate(X), Math.exp(ARITHMETIC.evaluate(LN_X)), 1e-15);
+    assertEquals(GEOMETRIC.apply(FLAT), 2, 0);
+    assertEquals(GEOMETRIC.apply(X), Math.exp(ARITHMETIC.apply(LN_X)), 1e-15);
   }
 }

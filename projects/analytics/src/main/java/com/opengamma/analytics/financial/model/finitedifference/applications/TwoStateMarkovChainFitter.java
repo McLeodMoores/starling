@@ -144,7 +144,7 @@ public class TwoStateMarkovChainFitter {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
         final DoubleMatrix1D y = TRANSFORMS.inverseTransform(x);
         final double vol1 = y.getEntry(0);
         final double deltaVol = y.getEntry(1);
@@ -176,7 +176,7 @@ public class TwoStateMarkovChainFitter {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
         final DoubleMatrix1D y = TRANSFORMS.inverseTransform(x);
         final double vol1 = y.getEntry(0);
         final double deltaVol = y.getEntry(1);
@@ -221,7 +221,7 @@ public class TwoStateMarkovChainFitter {
 
   /**
    * Transforms the price data (in PDEFullResults1D form) to implied volatility in a form used by 2D interpolator
-   * 
+   *
    * @param forward
    * @param yield
    * @param prices

@@ -43,9 +43,9 @@ public class HullWhiteProviderDiscountFinderJacobian extends Function1D<DoubleMa
   }
 
   @Override
-  public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+  public DoubleMatrix2D apply(final DoubleMatrix1D x) {
     final HullWhiteOneFactorProviderDiscount bundle = _data.getKnownData().copy();
-    final HullWhiteOneFactorProviderDiscount newCurves = _data.getGeneratorMarket().evaluate(x);
+    final HullWhiteOneFactorProviderDiscount newCurves = _data.getGeneratorMarket().apply(x);
     bundle.setAll(newCurves);
     final Set<String> curvesSet = _data.getGeneratorMarket().getCurvesList();
     final int nbParameters = _data.getNumberOfInstruments();

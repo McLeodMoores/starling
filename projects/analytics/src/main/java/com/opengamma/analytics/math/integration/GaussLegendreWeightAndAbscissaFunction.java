@@ -46,7 +46,7 @@ public class GaussLegendreWeightAndAbscissaFunction implements QuadratureWeightA
       final double root = ROOT_FINDER.getRoot(function, derivative, getInitialRootGuess(i, n));
       x[i] = -root;
       x[n - i - 1] = root;
-      final double dp = derivative.evaluate(root);
+      final double dp = derivative.apply(root);
       w[i] = 2 / ((1 - root * root) * dp * dp);
       w[n - i - 1] = w[i];
     }

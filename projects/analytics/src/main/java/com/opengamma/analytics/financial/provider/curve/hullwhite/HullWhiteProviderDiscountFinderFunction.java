@@ -43,9 +43,9 @@ public class HullWhiteProviderDiscountFinderFunction extends Function1D<DoubleMa
   }
 
   @Override
-  public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+  public DoubleMatrix1D apply(final DoubleMatrix1D x) {
     final HullWhiteOneFactorProviderDiscount bundle = _data.getKnownData().copy();
-    final HullWhiteOneFactorProviderDiscount newCurves = _data.getGeneratorMarket().evaluate(x);
+    final HullWhiteOneFactorProviderDiscount newCurves = _data.getGeneratorMarket().apply(x);
     bundle.setAll(newCurves);
     final double[] res = new double[_data.getNumberOfInstruments()];
     for (int i = 0; i < _data.getNumberOfInstruments(); i++) {

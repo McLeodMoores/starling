@@ -98,7 +98,7 @@ public class BondFuturesOptionMarginSecurityBlackExpLogMoneynessMethodTest {
     final double expiry = CALL_BOBL_116.getExpirationTime();
     final double volatility = BLACK_SURFACE.getZValue(expiry, logmoney);
     final BlackFunctionData dataBlack = new BlackFunctionData(price, 1.0, volatility);
-    final double priceExpected = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlack);
+    final double priceExpected = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlack);
     final double priceComputed = METHOD_OPT.price(CALL_BOBL_116, BLACK_FLAT_BNDFUT, price);
     assertEquals("BondFuturesOptionMarginSecurityBlackFlatMethod: underlying futures price", priceExpected, priceComputed, TOLERANCE_RATE);
   }

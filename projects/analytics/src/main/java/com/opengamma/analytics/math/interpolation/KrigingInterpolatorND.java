@@ -39,7 +39,7 @@ public class KrigingInterpolatorND extends InterpolatorND {
     double r;
     for (int i = 0; i < n; i++) {
       r = DistanceCalculator.getDistance(x, rawData.get(i).getFirst());
-      sum += variogram.evaluate(r) * w[i];
+      sum += variogram.apply(r) * w[i];
     }
     sum += w[n];
 

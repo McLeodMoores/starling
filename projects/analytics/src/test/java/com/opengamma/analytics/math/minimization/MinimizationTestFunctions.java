@@ -17,7 +17,7 @@ public abstract class MinimizationTestFunctions {
   public static final Function1D<DoubleMatrix1D, Double> ROSENBROCK = new Function1D<DoubleMatrix1D, Double>() {
 
     @Override
-    public Double evaluate(final DoubleMatrix1D x) {
+    public Double apply(final DoubleMatrix1D x) {
       return square(1 - x.getEntry(0)) + 100 * square(x.getEntry(1) - square(x.getEntry(0)));
     }
   };
@@ -25,7 +25,7 @@ public abstract class MinimizationTestFunctions {
   public static final Function1D<DoubleMatrix1D, DoubleMatrix1D> ROSENBROCK_GRAD = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
 
     @Override
-    public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+    public DoubleMatrix1D apply(final DoubleMatrix1D x) {
       final double[] temp = new double[2];
       temp[0] = 2 * (x.getEntry(0) - 1) + 400 * x.getEntry(0) * (square(x.getEntry(0)) - x.getEntry(1));
       temp[1] = 200 * (x.getEntry(1) - square(x.getEntry(0)));
@@ -36,7 +36,7 @@ public abstract class MinimizationTestFunctions {
   public static final Function1D<DoubleMatrix1D, Double> UNCOUPLED_ROSENBROCK = new Function1D<DoubleMatrix1D, Double>() {
 
     @Override
-    public Double evaluate(final DoubleMatrix1D x) {
+    public Double apply(final DoubleMatrix1D x) {
       final int n = x.getNumberOfElements();
       if (n % 2 != 0) {
         throw new IllegalArgumentException("vector length must be even");
@@ -52,7 +52,7 @@ public abstract class MinimizationTestFunctions {
   public static final Function1D<DoubleMatrix1D, Double> COUPLED_ROSENBROCK = new Function1D<DoubleMatrix1D, Double>() {
 
     @Override
-    public Double evaluate(final DoubleMatrix1D x) {
+    public Double apply(final DoubleMatrix1D x) {
       final int n = x.getNumberOfElements();
 
       double sum = 0;
@@ -66,7 +66,7 @@ public abstract class MinimizationTestFunctions {
   public static final Function1D<DoubleMatrix1D, DoubleMatrix1D> COUPLED_ROSENBROCK_GRAD = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
 
     @Override
-    public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+    public DoubleMatrix1D apply(final DoubleMatrix1D x) {
       final int n = x.getNumberOfElements();
 
       final double[] res = new double[n];

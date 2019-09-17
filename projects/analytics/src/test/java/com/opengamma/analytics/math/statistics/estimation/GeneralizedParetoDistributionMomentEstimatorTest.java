@@ -36,13 +36,13 @@ public class GeneralizedParetoDistributionMomentEstimatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullArray() {
-    ESTIMATOR.evaluate((double[]) null);
+    ESTIMATOR.apply((double[]) null);
   }
 
   @Test
   public void test() {
     final double eps = 0.05;
-    final GeneralizedParetoDistribution result = (GeneralizedParetoDistribution) ESTIMATOR.evaluate(X);
+    final GeneralizedParetoDistribution result = (GeneralizedParetoDistribution) ESTIMATOR.apply(X);
     assertEquals(MU, result.getMu(), MU * eps);
     assertEquals(SIGMA, result.getSigma(), SIGMA * eps);
     assertEquals(KSI, result.getKsi(), KSI * eps);

@@ -59,7 +59,7 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
     _minAlpha = -(_g + 1.0);
     _maxAlpha = _m - 1.0;
     _r1 = Math.pow(_m, _y) + Math.pow(_g, _y);
-    _r2 = _c * GAMMA_FUNCTION.evaluate(-_y);
+    _r2 = _c * GAMMA_FUNCTION.apply(-_y);
     _r3 = Math.pow(_m - 1, _y) + Math.pow(_g + 1, _y) - _r1;
   }
 
@@ -67,7 +67,7 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
   public Function1D<ComplexNumber, ComplexNumber> getFunction(final double t) {
     return new Function1D<ComplexNumber, ComplexNumber>() {
       @Override
-      public ComplexNumber evaluate(final ComplexNumber u) {
+      public ComplexNumber apply(final ComplexNumber u) {
         return getValue(u, t);
       }
     };

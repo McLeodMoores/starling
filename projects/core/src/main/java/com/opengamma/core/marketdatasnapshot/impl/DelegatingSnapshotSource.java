@@ -32,7 +32,8 @@ public class DelegatingSnapshotSource extends UniqueIdSchemeDelegator<MarketData
   /**
    * Creates an instance specifying the default delegate.
    *
-   * @param defaultSource the source to use when no scheme matches, not null
+   * @param defaultSource
+   *          the source to use when no scheme matches, not null
    */
   public DelegatingSnapshotSource(final MarketDataSnapshotSource defaultSource) {
     super(defaultSource);
@@ -41,8 +42,10 @@ public class DelegatingSnapshotSource extends UniqueIdSchemeDelegator<MarketData
   /**
    * Creates an instance specifying the default delegate.
    *
-   * @param defaultSource the source to use when no scheme matches, not null
-   * @param schemePrefixToSourceMap the map of sources by scheme to switch on, not null
+   * @param defaultSource
+   *          the source to use when no scheme matches, not null
+   * @param schemePrefixToSourceMap
+   *          the map of sources by scheme to switch on, not null
    */
   public DelegatingSnapshotSource(final MarketDataSnapshotSource defaultSource, final Map<String, MarketDataSnapshotSource> schemePrefixToSourceMap) {
     super(defaultSource, schemePrefixToSourceMap);
@@ -102,9 +105,7 @@ public class DelegatingSnapshotSource extends UniqueIdSchemeDelegator<MarketData
   }
 
   @Override
-  public <S extends NamedSnapshot> S getSingle(final Class<S> type,
-                                               final String snapshotName,
-                                               final VersionCorrection versionCorrection) {
+  public <S extends NamedSnapshot> S getSingle(final Class<S> type, final String snapshotName, final VersionCorrection versionCorrection) {
     // As we have noi information about the scheme we can't do anything but use the default
     return getDefaultDelegate().getSingle(type, snapshotName, versionCorrection);
   }

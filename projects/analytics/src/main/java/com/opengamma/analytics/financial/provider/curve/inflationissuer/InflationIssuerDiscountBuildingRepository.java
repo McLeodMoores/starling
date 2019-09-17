@@ -116,7 +116,7 @@ public class InflationIssuerDiscountBuildingRepository {
         new ParameterSensitivityInflationIssuerMatrixCalculator(sensitivityCalculator),
         data);
     final double[] parameters = _rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(initGuess)).getData();
-    final InflationIssuerProviderDiscount newCurves = data.getGeneratorMarket().evaluate(new DoubleMatrix1D(parameters));
+    final InflationIssuerProviderDiscount newCurves = data.getGeneratorMarket().apply(new DoubleMatrix1D(parameters));
     return newCurves;
   }
 

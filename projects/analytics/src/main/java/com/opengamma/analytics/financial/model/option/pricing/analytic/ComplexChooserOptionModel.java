@@ -32,7 +32,7 @@ public class ComplexChooserOptionModel extends AnalyticOptionModel<ComplexChoose
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final StandardOptionDataBundle data) {
+      public Double apply(final StandardOptionDataBundle data) {
         Validate.notNull(data, "data");
         final double s = data.getSpot();
         final double kCall = definition.getCallStrike();
@@ -59,7 +59,7 @@ public class ComplexChooserOptionModel extends AnalyticOptionModel<ComplexChoose
         final double rho2 = Math.sqrt(tChoose / tPut);
         return s * Math.exp(tCall * (b - r)) * BIVARIATE_NORMAL.getCDF(new double[] { d1, d3, rho1 })
             - kCall * Math.exp(-r * tCall) * BIVARIATE_NORMAL.getCDF(new double[] { d2, d4, rho1 }) - s
-                * Math.exp(tPut * (b - r)) * BIVARIATE_NORMAL.getCDF(new double[] { -d1, -d5, rho2 })
+            * Math.exp(tPut * (b - r)) * BIVARIATE_NORMAL.getCDF(new double[] { -d1, -d5, rho2 })
             + kPut * Math.exp(-r * tPut) * BIVARIATE_NORMAL.getCDF(new double[] { -d2, -d6, rho2 });
       }
 
@@ -73,13 +73,13 @@ public class ComplexChooserOptionModel extends AnalyticOptionModel<ComplexChoose
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double criticalValue) {
+      public Double apply(final Double criticalValue) {
         final double d1Call = getD1(criticalValue, kCall, deltaTCall, sigma, b);
         final double d2Call = getD2(d1Call, sigma, deltaTCall);
         final double d1Put = getD1(criticalValue, kPut, deltaTPut, sigma, b);
         final double d2Put = getD2(d1Put, sigma, deltaTPut);
         return criticalValue * dfCall1 * NORMAL.getCDF(d1Call) - kCall * dfCall2 * NORMAL.getCDF(d2Call) + criticalValue * dfPut1 * NORMAL.getCDF(-d1Put)
-            - kPut * dfPut2 * NORMAL.getCDF(-d2Put);
+        - kPut * dfPut2 * NORMAL.getCDF(-d2Put);
       }
 
     };

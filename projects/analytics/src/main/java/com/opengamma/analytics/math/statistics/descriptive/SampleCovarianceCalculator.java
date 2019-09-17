@@ -37,8 +37,8 @@ public class SampleCovarianceCalculator implements Function<double[], Double> {
     final int n = x1.length;
     ArgumentChecker.isTrue(x2.length == n, "The two series must be the same length");
     final DescriptiveStatisticsCalculator meanCalculator = DescriptiveStatisticsFactory.of(MeanCalculator.NAME);
-    final double mean1 = meanCalculator.evaluate(x1);
-    final double mean2 = meanCalculator.evaluate(x2);
+    final double mean1 = meanCalculator.apply(x1);
+    final double mean2 = meanCalculator.apply(x2);
     double sum = 0;
     for (int i = 0; i < n; i++) {
       sum += (x1[i] - mean1) * (x2[i] - mean2);

@@ -291,7 +291,7 @@ public class CreditInstrumentCS01PnLFunction extends AbstractFunction.NonCompile
           nodeTimeSeries = nodeTimeSeries.multiply(fxSeries);
         }
       }
-      nodeTimeSeries = DIFFERENCE.evaluate(nodeTimeSeries.multiply(10000));
+      nodeTimeSeries = DIFFERENCE.apply(nodeTimeSeries.multiply(10000));
       final double sensitivity = cs01[i++];
       if (pnlSeries == null) {
         pnlSeries = nodeTimeSeries.multiply(sensitivity);

@@ -29,7 +29,7 @@ public class NewtonDefaultUpdateFunctionTest {
     F.getUpdatedMatrix(new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
 
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D x) {
         return null;
       }
     }, null, null, null, null);

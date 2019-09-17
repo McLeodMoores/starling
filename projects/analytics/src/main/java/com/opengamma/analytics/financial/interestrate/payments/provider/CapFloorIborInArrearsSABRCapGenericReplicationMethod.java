@@ -39,7 +39,7 @@ public class CapFloorIborInArrearsSABRCapGenericReplicationMethod {
 
   /**
    * Constructor of the in-arrears pricing method.
-   * 
+   *
    * @param baseMethod
    *          The base method for the pricing of standard cap/floors.
    */
@@ -49,7 +49,7 @@ public class CapFloorIborInArrearsSABRCapGenericReplicationMethod {
 
   /**
    * Computes the present value of an Ibor cap/floor in arrears by replication.
-   * 
+   *
    * @param cap
    *          The cap/floor.
    * @param sabr
@@ -108,7 +108,7 @@ public class CapFloorIborInArrearsSABRCapGenericReplicationMethod {
 
     /**
      * Constructor with the required data.
-     * 
+     *
      * @param baseMethod
      *          The base method for the pricing of standard cap/floors.
      * @param capStandard
@@ -123,7 +123,7 @@ public class CapFloorIborInArrearsSABRCapGenericReplicationMethod {
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final CapFloorIbor capStrike = _capStandard.withStrike(x);
       return _basePricingMethod.presentValue(capStrike, _sabrData).getAmount(_capStandard.getCurrency());
     }

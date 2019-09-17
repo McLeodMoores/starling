@@ -66,7 +66,7 @@ public class AnalyticBondPricer {
 
     final Function1D<Double, Double> priceFunc = getBondPriceForHazardRateFunction(bond, yieldCurve, cleanOrDirty);
 
-    final double zeroRiskPrice = priceFunc.evaluate(0.);
+    final double zeroRiskPrice = priceFunc.apply(0.);
     if (bondPrice == zeroRiskPrice) {
       return 0.0;
     }
@@ -82,8 +82,8 @@ public class AnalyticBondPricer {
 
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double lambda) {
-        return priceFunc.evaluate(lambda) - bondPrice;
+      public Double apply(final Double lambda) {
+        return priceFunc.apply(lambda) - bondPrice;
       }
     };
 
@@ -107,7 +107,7 @@ public class AnalyticBondPricer {
    */
   public double bondPriceForHazardRate(final BondAnalytic bond, final ISDACompliantYieldCurve yieldCurve, final double hazardRate,
       final PriceType cleanOrDirty) {
-    return getBondPriceForHazardRateFunction(bond, yieldCurve, cleanOrDirty).evaluate(hazardRate);
+    return getBondPriceForHazardRateFunction(bond, yieldCurve, cleanOrDirty).apply(hazardRate);
   }
 
   /**
@@ -156,7 +156,7 @@ public class AnalyticBondPricer {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double lambda) {
+      public Double apply(final Double lambda) {
 
         double riskyDisPayments = cleanOrDirty == PriceType.CLEAN ? -bond.getAccruedInterest() : 0.0;
         for (int i = 0; i < nPayments; i++) {

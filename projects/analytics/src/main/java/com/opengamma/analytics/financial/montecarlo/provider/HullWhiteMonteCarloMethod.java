@@ -134,7 +134,7 @@ public class HullWhiteMonteCarloMethod extends MonteCarloMethod {
       }
     }
     final CholeskyDecompositionCommons cd = new CholeskyDecompositionCommons();
-    final CholeskyDecompositionResult cdr2 = cd.evaluate(new DoubleMatrix2D(cov2));
+    final CholeskyDecompositionResult cdr2 = cd.apply(new DoubleMatrix2D(cov2));
     final double[][] covCD2 = cdr2.getL().toArray();
     final double[][] covCD = new double[nbJump][nbJump];
     for (int loopjump = 0; loopjump < nbJump - nbZero; loopjump++) {
@@ -231,7 +231,7 @@ public class HullWhiteMonteCarloMethod extends MonteCarloMethod {
       }
     }
     final CholeskyDecompositionCommons cd = new CholeskyDecompositionCommons();
-    final CholeskyDecompositionResult cdr2 = cd.evaluate(new DoubleMatrix2D(cov2));
+    final CholeskyDecompositionResult cdr2 = cd.apply(new DoubleMatrix2D(cov2));
     final double[][] covCD2 = cdr2.getL().toArray();
     final double[][] covCD = new double[nbJump][nbJump];
     for (int loopjump = 0; loopjump < nbJump - nbZero; loopjump++) {

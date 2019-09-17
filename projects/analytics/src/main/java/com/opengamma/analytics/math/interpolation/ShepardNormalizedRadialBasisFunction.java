@@ -18,7 +18,7 @@ public class ShepardNormalizedRadialBasisFunction extends Function1D<Double, Dou
   }
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     return Math.pow(x, -_power);
   }
 

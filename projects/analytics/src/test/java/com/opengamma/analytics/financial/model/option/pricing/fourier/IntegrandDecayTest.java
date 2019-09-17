@@ -38,12 +38,12 @@ public class IntegrandDecayTest {
   public void test() {
     ComplexNumber z = new ComplexNumber(0.0, -(1 + ALPHA));
     final Function1D<ComplexNumber, ComplexNumber> f = PSI.getFunction(T);
-    final double mod0 = ComplexMathUtils.mod(f.evaluate(z));
+    final double mod0 = ComplexMathUtils.mod(f.apply(z));
     double previous = 0;
     for (int i = 1; i < 101; i++) {
       final double x = 0.0 + 100.0 * i / 100;
       z = new ComplexNumber(x, -(1 + ALPHA));
-      final ComplexNumber u = f.evaluate(z);
+      final ComplexNumber u = f.apply(z);
       assertEquals(u.getImaginary(), 0, 1e-16);
       final double res = Math.log10(ComplexMathUtils.mod(u) / mod0);
       assertTrue(res < previous);
@@ -57,12 +57,12 @@ public class IntegrandDecayTest {
     final EuropeanCallFourierTransform psi = new EuropeanCallFourierTransform(heston);
     final Function1D<ComplexNumber, ComplexNumber> f = psi.getFunction(T);
     ComplexNumber z = new ComplexNumber(0.0, -(1 + ALPHA));
-    final double mod0 = ComplexMathUtils.mod(f.evaluate(z));
+    final double mod0 = ComplexMathUtils.mod(f.apply(z));
     double previous = 0;
     for (int i = 1; i < 101; i++) {
       final double x = 0.0 + 100.0 * i / 100;
       z = new ComplexNumber(x, -(1 + ALPHA));
-      final ComplexNumber u = f.evaluate(z);
+      final ComplexNumber u = f.apply(z);
       final double res = Math.log10(ComplexMathUtils.mod(u) / mod0);
       assertTrue(res < previous);
       previous = res;

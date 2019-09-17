@@ -60,7 +60,7 @@ public class ForwardPDETest {
     final Function1D<Double, Double> strikeZeroPrice = new Function1D<Double, Double>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         if (ISCALL) {
           return 1.0;
         }
@@ -167,7 +167,7 @@ public class ForwardPDETest {
 
     final Function1D<Double, Double> initCon = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return Math.max(0, 1 - Math.exp(x));
       }
     };
@@ -179,8 +179,8 @@ public class ForwardPDETest {
 
     PDEUtilityTools.printSurface("lv", lv.getSurface(), 0, 2.0, Math.exp(xMin), Math.exp(xMax));
 
-    final DirichletBoundaryCondition lower = new DirichletBoundaryCondition(initCon.evaluate(xMin), xMin);
-    final DirichletBoundaryCondition upper = new DirichletBoundaryCondition(initCon.evaluate(xMax), xMax);
+    final DirichletBoundaryCondition lower = new DirichletBoundaryCondition(initCon.apply(xMin), xMin);
+    final DirichletBoundaryCondition upper = new DirichletBoundaryCondition(initCon.apply(xMax), xMax);
     final MeshingFunction timeMesh = new ExponentialMeshing(0, 2.0, 12, 0.0);
     final MeshingFunction spaceMesh = new ExponentialMeshing(xMin, xMax, 17, 0.0);
     final PDEGrid1D grid = new PDEGrid1D(timeMesh, spaceMesh);

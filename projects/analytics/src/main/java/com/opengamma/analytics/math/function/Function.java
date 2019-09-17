@@ -14,6 +14,7 @@ package com.opengamma.analytics.math.function;
  * @param <S> Type of the arguments
  * @param <T> Return type of the function
  */
+@FunctionalInterface
 public interface Function<S, T> {
 
   /**
@@ -21,6 +22,5 @@ public interface Function<S, T> {
    * @param x The list of inputs into the function, not null and no null elements
    * @return The value of the function
    */
-  @SuppressWarnings("unchecked")
-  T evaluate(S... x);
+  T evaluate(final S... x);
 }

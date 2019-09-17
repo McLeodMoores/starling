@@ -47,40 +47,40 @@ public class EuropeanExchangeAssetOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(new EuropeanExchangeAssetOptionDefinition(EXPIRY1, Q1, Q2)).evaluate((StandardTwoAssetOptionDataBundle) null);
+    MODEL.getPricingFunction(new EuropeanExchangeAssetOptionDefinition(EXPIRY1, Q1, Q2)).apply((StandardTwoAssetOptionDataBundle) null);
   }
 
   @Test
   public void test() {
     final double eps = 1e-4;
     StandardTwoAssetOptionDataBundle data = new StandardTwoAssetOptionDataBundle(R, B1, B2, SIGMA1, new VolatilitySurface(ConstantDoublesSurface.from(0.15)), S1, S2, -0.5, DATE);
-    assertEquals(MODEL.getPricingFunction(OPTION1).evaluate(data), 2.1251, eps);
-    assertEquals(MODEL.getPricingFunction(OPTION2).evaluate(data), 2.7619, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION1).apply(data), 2.1251, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION2).apply(data), 2.7619, eps);
     data = data.withCorrelation(0);
-    assertEquals(MODEL.getPricingFunction(OPTION1).evaluate(data), 2.0446, eps);
-    assertEquals(MODEL.getPricingFunction(OPTION2).evaluate(data), 2.4793, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION1).apply(data), 2.0446, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION2).apply(data), 2.4793, eps);
     data = data.withCorrelation(0.5);
-    assertEquals(MODEL.getPricingFunction(OPTION1).evaluate(data), 1.9736, eps);
-    assertEquals(MODEL.getPricingFunction(OPTION2).evaluate(data), 2.1378, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION1).apply(data), 1.9736, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION2).apply(data), 2.1378, eps);
     data = data.withSecondVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(0.2)));
     data = data.withCorrelation(-0.5);
-    assertEquals(MODEL.getPricingFunction(OPTION1).evaluate(data), 2.1986, eps);
-    assertEquals(MODEL.getPricingFunction(OPTION2).evaluate(data), 2.9881, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION1).apply(data), 2.1986, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION2).apply(data), 2.9881, eps);
     data = data.withCorrelation(0.);
-    assertEquals(MODEL.getPricingFunction(OPTION1).evaluate(data), 2.0913, eps);
-    assertEquals(MODEL.getPricingFunction(OPTION2).evaluate(data), 2.6496, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION1).apply(data), 2.0913, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION2).apply(data), 2.6496, eps);
     data = data.withCorrelation(0.5);
-    assertEquals(MODEL.getPricingFunction(OPTION1).evaluate(data), 1.9891, eps);
-    assertEquals(MODEL.getPricingFunction(OPTION2).evaluate(data), 2.2306, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION1).apply(data), 1.9891, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION2).apply(data), 2.2306, eps);
     data = data.withSecondVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(0.25)));
     data = data.withCorrelation(-0.5);
-    assertEquals(MODEL.getPricingFunction(OPTION1).evaluate(data), 2.2827, eps);
-    assertEquals(MODEL.getPricingFunction(OPTION2).evaluate(data), 3.2272, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION1).apply(data), 2.2827, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION2).apply(data), 3.2272, eps);
     data = data.withCorrelation(0.);
-    assertEquals(MODEL.getPricingFunction(OPTION1).evaluate(data), 2.1520, eps);
-    assertEquals(MODEL.getPricingFunction(OPTION2).evaluate(data), 2.8472, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION1).apply(data), 2.1520, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION2).apply(data), 2.8472, eps);
     data = data.withCorrelation(0.5);
-    assertEquals(MODEL.getPricingFunction(OPTION1).evaluate(data), 2.0189, eps);
-    assertEquals(MODEL.getPricingFunction(OPTION2).evaluate(data), 2.3736, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION1).apply(data), 2.0189, eps);
+    assertEquals(MODEL.getPricingFunction(OPTION2).apply(data), 2.3736, eps);
   }
 }

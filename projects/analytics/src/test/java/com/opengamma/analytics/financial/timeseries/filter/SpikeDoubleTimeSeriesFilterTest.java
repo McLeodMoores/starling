@@ -45,12 +45,12 @@ public class SpikeDoubleTimeSeriesFilterTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullTS() {
-    FILTER.evaluate((LocalDateDoubleTimeSeries) null);
+    FILTER.apply((LocalDateDoubleTimeSeries) null);
   }
 
   @Test
   public void testEmptyTS() {
-    final FilteredTimeSeries filtered = FILTER.evaluate(EMPTY_SERIES);
+    final FilteredTimeSeries filtered = FILTER.apply(EMPTY_SERIES);
     assertEquals(filtered.getFilteredTS(), EMPTY_SERIES);
     assertEquals(filtered.getRejectedTS(), EMPTY_SERIES);
   }
@@ -60,7 +60,7 @@ public class SpikeDoubleTimeSeriesFilterTest {
     final double[] data = Arrays.copyOf(DATA, N);
     data[0] = 100.;
     final LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.of(DATES, data);
-    final LocalDateDoubleTimeSeries rejected = FILTER.evaluate(ts).getRejectedTS();
+    final LocalDateDoubleTimeSeries rejected = FILTER.apply(ts).getRejectedTS();
     assertEquals(rejected.size(), 1);
     assertEquals(rejected.getTimeAtIndex(0), ts.getTimeAtIndex(0));
     assertEquals(rejected.getValueAtIndex(0), ts.getValueAtIndex(0));
@@ -71,11 +71,11 @@ public class SpikeDoubleTimeSeriesFilterTest {
     final double[] data = Arrays.copyOf(DATA, N);
     data[10] = 100.;
     LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.of(DATES, data);
-    FilteredTimeSeries filtered = FILTER.evaluate(ts);
+    FilteredTimeSeries filtered = FILTER.apply(ts);
     assertSeries(ts, filtered, 10);
     data[10] = -100.;
     ts = ImmutableLocalDateDoubleTimeSeries.of(DATES, data);
-    filtered = FILTER.evaluate(ts);
+    filtered = FILTER.apply(ts);
     assertSeries(ts, filtered, 10);
   }
 

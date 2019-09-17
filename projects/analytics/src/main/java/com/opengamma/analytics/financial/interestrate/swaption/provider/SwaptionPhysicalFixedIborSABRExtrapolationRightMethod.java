@@ -87,7 +87,7 @@ public class SwaptionPhysicalFixedIborSABRExtrapolationRightMethod {
       final double volatility = sabrData.getSABRParameter().getVolatility(swaption.getTimeToExpiry(), maturity, strikeModified, forwardModified);
       final BlackFunctionData dataBlack = new BlackFunctionData(forwardModified, pvbpModified, volatility);
       final Function1D<BlackFunctionData, Double> func = blackFunction.getPriceFunction(option);
-      return MultipleCurrencyAmount.of(ccy, func.evaluate(dataBlack) * (swaption.isLong() ? 1.0 : -1.0));
+      return MultipleCurrencyAmount.of(ccy, func.apply(dataBlack) * (swaption.isLong() ? 1.0 : -1.0));
     }
     // With extrapolation
     final DoublesPair expiryMaturity = DoublesPair.of(swaption.getTimeToExpiry(), maturity);

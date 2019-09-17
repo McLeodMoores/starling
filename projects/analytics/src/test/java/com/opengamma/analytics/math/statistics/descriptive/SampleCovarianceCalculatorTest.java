@@ -32,7 +32,7 @@ public class SampleCovarianceCalculatorTest {
       X1[i] = X0[i] * COV1;
     }
     final SampleVarianceCalculator calc = new SampleVarianceCalculator();
-    VAR0 = calc.evaluate(X0);
+    VAR0 = calc.apply(X0);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)

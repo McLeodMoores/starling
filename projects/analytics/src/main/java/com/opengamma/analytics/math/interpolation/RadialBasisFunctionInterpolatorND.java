@@ -49,7 +49,7 @@ public class RadialBasisFunctionInterpolatorND extends InterpolatorND {
     double phi;
     for (int i = 0; i < n; i++) {
       xi = rawData.get(i).getFirst();
-      phi = basisFunction.evaluate(DistanceCalculator.getDistance(x, xi));
+      phi = basisFunction.apply(DistanceCalculator.getDistance(x, xi));
       sum += w[i] * phi;
       normSum += phi;
     }
@@ -73,7 +73,7 @@ public class RadialBasisFunctionInterpolatorND extends InterpolatorND {
     final double[] phiNorm = new double[n];
     for (int i = 0; i < n; i++) {
       xi = rawData.get(i).getFirst();
-      phi[i] = basisFunction.evaluate(DistanceCalculator.getDistance(x, xi));
+      phi[i] = basisFunction.apply(DistanceCalculator.getDistance(x, xi));
 
       if (radialData.isNormalized()) {
         normSum += phi[i];
@@ -82,7 +82,7 @@ public class RadialBasisFunctionInterpolatorND extends InterpolatorND {
         double[] xj;
         for (int j = 0; j < n; j++) {
           xj = rawData.get(j).getFirst();
-          sum += basisFunction.evaluate(DistanceCalculator.getDistance(xj, xi));
+          sum += basisFunction.apply(DistanceCalculator.getDistance(xj, xi));
         }
         phiNorm[i] = sum;
       }

@@ -58,8 +58,8 @@ public class VolatilityWeightedHistoricalValuationPnLFunction extends Historical
       final ValueRequirement desiredValue) {
     final double lambda = Double.parseDouble(desiredValue.getConstraint(VolatilityWeightingFunctionUtils.VOLATILITY_WEIGHTING_LAMBDA_PROPERTY));
     final TimeSeriesWeightedVolatilityOperator weightedVolatilityOperator = TimeSeriesWeightedVolatilityOperator.relative(lambda);
-    final DateDoubleTimeSeries<?> weightedVolatilitySeries = weightedVolatilityOperator.evaluate(priceSeries);
-    LocalDateDoubleTimeSeries weightedPnlSeries = (LocalDateDoubleTimeSeries) RELATIVE_WEIGHTED_DIFFERENCE.evaluate(priceSeries, weightedVolatilitySeries);
+    final DateDoubleTimeSeries<?> weightedVolatilitySeries = weightedVolatilityOperator.apply(priceSeries);
+    LocalDateDoubleTimeSeries weightedPnlSeries = (LocalDateDoubleTimeSeries) RELATIVE_WEIGHTED_DIFFERENCE.apply(priceSeries, weightedVolatilitySeries);
     final LocalDate pnlSeriesStart = DateConstraint.evaluate(executionContext,
         desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY));
     if (pnlSeriesStart.isAfter(weightedPnlSeries.getEarliestTime())) {

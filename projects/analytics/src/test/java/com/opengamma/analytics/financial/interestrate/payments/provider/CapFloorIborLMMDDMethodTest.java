@@ -131,7 +131,7 @@ public class CapFloorIborLMMDDMethodTest {
     final double df = MULTICURVES.getDiscountFactor(EUR, CAP_LAST.getPaymentTime());
     final BlackFunctionData dataBlack = new BlackFunctionData(forwardDsc + displacement, df, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(option);
-    final double pvLastExpected = beta * func.evaluate(dataBlack) * NOTIONAL * CAP_LAST.getPaymentYearFraction();
+    final double pvLastExpected = beta * func.apply(dataBlack) * NOTIONAL * CAP_LAST.getPaymentYearFraction();
     assertEquals("Cap/floor: LMM pricing by explicit formula - Multi-curves", pvLastExpected, pvLastExplicit.getAmount(EUR), TOLERANCE_PV);
   }
 

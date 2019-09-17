@@ -83,7 +83,7 @@ public final class CapFloorInflationYearOnYearMonthlyConvexityAdjustmentMethod {
     final double volatility = black.getBlackParameters().getVolatility(cap.getReferenceEndTime(), cap.getStrike());
     final NormalFunctionData dataNormaL = new NormalFunctionData(forward, 1.0, volatility);
     final Function1D<NormalFunctionData, Double> func = NORMAL_FUNCTION.getPriceFunction(option);
-    final double price = func.evaluate(dataNormaL) * cap.getNotional() * cap.getPaymentYearFraction();
+    final double price = func.apply(dataNormaL) * cap.getNotional() * cap.getPaymentYearFraction();
     return MultipleCurrencyAmount.of(cap.getCurrency(), price);
   }
 

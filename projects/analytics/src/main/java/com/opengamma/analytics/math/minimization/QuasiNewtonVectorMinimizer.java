@@ -72,10 +72,10 @@ public class QuasiNewtonVectorMinimizer
   public DoubleMatrix1D minimize(final Function1D<DoubleMatrix1D, Double> function, final Function1D<DoubleMatrix1D, DoubleMatrix1D> grad,
       final DoubleMatrix1D startPosition) {
     final DataBundle data = new DataBundle();
-    final double y = function.evaluate(startPosition);
+    final double y = function.apply(startPosition);
     data.setX(startPosition);
     data.setG0(y * y);
-    data.setGrad(grad.evaluate(startPosition));
+    data.setGrad(grad.apply(startPosition));
     data.setInverseHessianEsimate(getInitializedMatrix(startPosition));
 
     if (!getNextPosition(function, grad, data)) {
@@ -144,7 +144,7 @@ public class QuasiNewtonVectorMinimizer
     final DoubleMatrix1D deltaX = data.getDeltaX();
     data.setX((DoubleMatrix1D) MA.add(data.getX(), deltaX));
     data.setG0(data.getG1());
-    final DoubleMatrix1D gradNew = grad.evaluate(data.getX());
+    final DoubleMatrix1D gradNew = grad.apply(data.getX());
     data.setDeltaGrad((DoubleMatrix1D) MA.subtract(gradNew, data.getGrad()));
     data.setGrad(gradNew);
     return true;
@@ -156,7 +156,7 @@ public class QuasiNewtonVectorMinimizer
     final DoubleMatrix1D xNew = (DoubleMatrix1D) MA.add(data.getX(), deltaX);
     data.setDeltaX(deltaX);
     data.setG2(data.getG1());
-    final double y = function.evaluate(xNew);
+    final double y = function.apply(xNew);
     data.setG1(y * y);
   }
 

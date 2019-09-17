@@ -38,15 +38,15 @@ public class PortmanteauIIDHypothesisTest extends IIDHypothesisTestCase {
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testInsufficientData() {
     final InstantDoubleTimeSeries subSeries = RANDOM.subSeries(RANDOM.getTimeAtIndex(0), RANDOM.getTimeAtIndex(3));
-    TEST.evaluate(subSeries);
+    TEST.apply(subSeries);
   }
 
   @Test
   public void test() {
     super.assertNullTS(TEST);
     super.assertEmptyTS(TEST);
-    assertTrue(TEST.evaluate(RANDOM));
-    assertFalse(TEST.evaluate(SIGNAL));
-    assertFalse(TEST.evaluate(INCREASING));
+    assertTrue(TEST.apply(RANDOM));
+    assertFalse(TEST.apply(SIGNAL));
+    assertFalse(TEST.apply(INCREASING));
   }
 }

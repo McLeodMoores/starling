@@ -19,7 +19,7 @@ import cern.colt.matrix.linalg.SingularValueDecomposition;
 public class SVDecompositionColt extends Decomposition<SVDecompositionResult> {
 
   @Override
-  public SVDecompositionResult evaluate(final DoubleMatrix2D x) {
+  public SVDecompositionResult apply(final DoubleMatrix2D x) {
     Validate.notNull(x);
     MatrixValidate.notNaNOrInfinite(x);
     final cern.colt.matrix.DoubleMatrix2D coltMatrix = ColtMathWrapper.wrap(x);

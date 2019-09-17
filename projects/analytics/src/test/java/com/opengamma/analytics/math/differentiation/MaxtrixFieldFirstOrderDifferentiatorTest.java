@@ -24,7 +24,7 @@ public class MaxtrixFieldFirstOrderDifferentiatorTest {
   private static final Function1D<DoubleMatrix1D, DoubleMatrix2D> F = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
 
     @Override
-    public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+    public DoubleMatrix2D apply(final DoubleMatrix1D x) {
       double x1 = x.getEntry(0);
       double x2 = x.getEntry(1);
       double[][] y = new double[3][2];
@@ -41,7 +41,7 @@ public class MaxtrixFieldFirstOrderDifferentiatorTest {
   private static final Function1D<DoubleMatrix1D, DoubleMatrix2D[]> G = new Function1D<DoubleMatrix1D, DoubleMatrix2D[]>() {
 
     @Override
-    public DoubleMatrix2D[] evaluate(final DoubleMatrix1D x) {
+    public DoubleMatrix2D[] apply(final DoubleMatrix1D x) {
       double x1 = x.getEntry(0);
       double x2 = x.getEntry(1);
       double[][] y = new double[3][2];
@@ -69,8 +69,8 @@ public class MaxtrixFieldFirstOrderDifferentiatorTest {
 
     final DoubleMatrix1D x = new DoubleMatrix1D(new double[] {1.3423, 0.235 });
 
-    DoubleMatrix2D[] alRes = analDiffFunc.evaluate(x);
-    DoubleMatrix2D[] fdRes = G.evaluate(x);
+    DoubleMatrix2D[] alRes = analDiffFunc.apply(x);
+    DoubleMatrix2D[] fdRes = G.apply(x);
 
     final int p = fdRes.length;
     final int n = fdRes[0].getNumberOfRows();

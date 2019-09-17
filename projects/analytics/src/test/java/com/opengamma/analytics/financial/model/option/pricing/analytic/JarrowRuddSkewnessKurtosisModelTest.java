@@ -45,8 +45,8 @@ public class JarrowRuddSkewnessKurtosisModelTest {
   private static final SkewKurtosisOptionDataBundle NORMAL_DATA;
 
   static {
-    SKEW = new LognormalSkewnessFromVolatilityCalculator().evaluate(SIGMA, T);
-    KURTOSIS = new LognormalFisherKurtosisFromVolatilityCalculator().evaluate(SIGMA, T) + 3;
+    SKEW = new LognormalSkewnessFromVolatilityCalculator().apply(SIGMA, T);
+    KURTOSIS = new LognormalFisherKurtosisFromVolatilityCalculator().apply(SIGMA, T) + 3;
     NORMAL_DATA = new SkewKurtosisOptionDataBundle(R, B, SURFACE, SPOT, DATE, SKEW, KURTOSIS);
   }
 
@@ -57,12 +57,12 @@ public class JarrowRuddSkewnessKurtosisModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(CALL).evaluate((SkewKurtosisOptionDataBundle) null);
+    MODEL.getPricingFunction(CALL).apply((SkewKurtosisOptionDataBundle) null);
   }
 
   @Test
   public void testNormal() {
-    assertEquals(MODEL.getPricingFunction(CALL).evaluate(NORMAL_DATA), BSM.getPricingFunction(CALL).evaluate(NORMAL_DATA), 1e-9);
-    assertEquals(MODEL.getPricingFunction(PUT).evaluate(NORMAL_DATA), BSM.getPricingFunction(PUT).evaluate(NORMAL_DATA), 1e-9);
+    assertEquals(MODEL.getPricingFunction(CALL).apply(NORMAL_DATA), BSM.getPricingFunction(CALL).apply(NORMAL_DATA), 1e-9);
+    assertEquals(MODEL.getPricingFunction(PUT).apply(NORMAL_DATA), BSM.getPricingFunction(PUT).apply(NORMAL_DATA), 1e-9);
   }
 }

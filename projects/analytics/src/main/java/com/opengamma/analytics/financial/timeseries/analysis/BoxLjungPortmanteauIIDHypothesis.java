@@ -43,7 +43,7 @@ public class BoxLjungPortmanteauIIDHypothesis extends IIDHypothesis {
     if (ts.size() < _h) {
       throw new IllegalArgumentException("Time series must have at least " + _h + " points");
     }
-    final double[] autocorrelation = _calculator.evaluate(ts);
+    final double[] autocorrelation = _calculator.apply(ts);
     double q = 0;
     final int n = ts.size();
     for (int i = 1; i < _h; i++) {

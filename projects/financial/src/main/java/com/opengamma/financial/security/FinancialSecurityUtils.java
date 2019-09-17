@@ -6,6 +6,7 @@
 package com.opengamma.financial.security;
 
 import java.util.Collection;
+import java.util.function.Function;
 
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
@@ -16,7 +17,6 @@ import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.financial.currency.CurrencyPairs;
 import com.opengamma.id.ExternalId;
-import com.opengamma.lambdava.functions.Function1;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.CurrencyAmount;
 
@@ -25,50 +25,35 @@ import com.opengamma.util.money.CurrencyAmount;
  */
 public class FinancialSecurityUtils {
 
-  private static ComputationTargetTypeMap<Function1<ComputationTarget, ValueProperties>> s_getCurrencyConstraint = getCurrencyConstraint();
+  private static ComputationTargetTypeMap<Function<ComputationTarget, ValueProperties>> s_getCurrencyConstraint = getCurrencyConstraint();
 
-  private static ComputationTargetTypeMap<Function1<ComputationTarget, ValueProperties>> getCurrencyConstraint() {
-    final ComputationTargetTypeMap<Function1<ComputationTarget, ValueProperties>> map = new ComputationTargetTypeMap<>();
-    final CurrencyVisitor ccyVisitor = CurrencyVisitor.getInstance();
-    map.put(ComputationTargetType.POSITION, new Function1<ComputationTarget, ValueProperties>() {
-      @Override
-      public ValueProperties execute(final ComputationTarget target) {
-        final Security security = target.getPosition().getSecurity();
-        final Currency ccy = ccyVisitor.getCurrency(security);
-        if (ccy != null) {
-          return ValueProperties.with(ValuePropertyNames.CURRENCY, ccy.getCode()).get();
-        }
-        return ValueProperties.none();
+  private static ComputationTargetTypeMap<Function<ComputationTarget, ValueProperties>> getCurrencyConstraint() {
+    final ComputationTargetTypeMap<Function<ComputationTarget, ValueProperties>> map = new ComputationTargetTypeMap<>();
+    map.put(ComputationTargetType.POSITION, target -> {
+      final Security security = target.getPosition().getSecurity();
+      final Currency ccy = CurrencyVisitor.getCurrency(security);
+      if (ccy != null) {
+        return ValueProperties.with(ValuePropertyNames.CURRENCY, ccy.getCode()).get();
       }
+      return ValueProperties.none();
     });
-    map.put(ComputationTargetType.SECURITY, new Function1<ComputationTarget, ValueProperties>() {
-      @Override
-      public ValueProperties execute(final ComputationTarget target) {
-        final Security security = target.getSecurity();
-        final Currency ccy = ccyVisitor.getCurrency(security);
-        if (ccy != null) {
-          return ValueProperties.with(ValuePropertyNames.CURRENCY, ccy.getCode()).get();
-        }
-        return ValueProperties.none();
+    map.put(ComputationTargetType.SECURITY, target -> {
+      final Security security = target.getSecurity();
+      final Currency ccy = CurrencyVisitor.getCurrency(security);
+      if (ccy != null) {
+        return ValueProperties.with(ValuePropertyNames.CURRENCY, ccy.getCode()).get();
       }
+      return ValueProperties.none();
     });
-    map.put(ComputationTargetType.TRADE, new Function1<ComputationTarget, ValueProperties>() {
-      @Override
-      public ValueProperties execute(final ComputationTarget target) {
-        final Security security = target.getTrade().getSecurity();
-        final Currency ccy = ccyVisitor.getCurrency(security);
-        if (ccy != null) {
-          return ValueProperties.with(ValuePropertyNames.CURRENCY, ccy.getCode()).get();
-        }
-        return ValueProperties.none();
+    map.put(ComputationTargetType.TRADE, target -> {
+      final Security security = target.getTrade().getSecurity();
+      final Currency ccy = CurrencyVisitor.getCurrency(security);
+      if (ccy != null) {
+        return ValueProperties.with(ValuePropertyNames.CURRENCY, ccy.getCode()).get();
       }
+      return ValueProperties.none();
     });
-    map.put(ComputationTargetType.CURRENCY, new Function1<ComputationTarget, ValueProperties>() {
-      @Override
-      public ValueProperties execute(final ComputationTarget target) {
-        return ValueProperties.with(ValuePropertyNames.CURRENCY, target.getUniqueId().getValue()).get();
-      }
-    });
+    map.put(ComputationTargetType.CURRENCY, target -> ValueProperties.with(ValuePropertyNames.CURRENCY, target.getUniqueId().getValue()).get());
     return map;
   }
 
@@ -78,9 +63,9 @@ public class FinancialSecurityUtils {
    * @return ValueProperties containing a constraint of the CurrencyUnit or empty if not possible
    */
   public static ValueProperties getCurrencyConstraint(final ComputationTarget target) {
-    final Function1<ComputationTarget, ValueProperties> operation = s_getCurrencyConstraint.get(target.getType());
+    final Function<ComputationTarget, ValueProperties> operation = s_getCurrencyConstraint.get(target.getType());
     if (operation != null) {
-      return operation.execute(target);
+      return operation.apply(target);
     }
     return ValueProperties.none();
   }

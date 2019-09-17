@@ -29,7 +29,7 @@ public class BlackDermanToyYieldOnlyInterestRateModel {
       throw new IllegalArgumentException("Must have more than one node");
     }
     _n = n;
-    _j = RecombiningBinomialTree.NODES.evaluate(_n);
+    _j = RecombiningBinomialTree.NODES.apply(_n);
   }
 
   public Function1D<StandardDiscountBondModelDataBundle, RecombiningBinomialTree<Triple<Double, Double, Double>>> getTrees(final ZonedDateTime time) {
@@ -38,7 +38,7 @@ public class BlackDermanToyYieldOnlyInterestRateModel {
 
       @SuppressWarnings({"unchecked", "synthetic-access" })
       @Override
-      public RecombiningBinomialTree<Triple<Double, Double, Double>> evaluate(final StandardDiscountBondModelDataBundle data) {
+      public RecombiningBinomialTree<Triple<Double, Double, Double>> apply(final StandardDiscountBondModelDataBundle data) {
         Validate.notNull(data, "data");
         final double[][] r = new double[_n + 1][_j];
         final double[][] q = new double[_n + 1][_j];
@@ -86,7 +86,7 @@ public class BlackDermanToyYieldOnlyInterestRateModel {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double u) {
+      public Double apply(final Double u) {
         double sum = 0.;
         final double dtSqrt = Math.sqrt(dt);
         for (int j = -i, k = 0; j <= i; j += 2, k++) {

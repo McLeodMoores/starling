@@ -19,7 +19,7 @@ public class RecombiningTrinomialTree<T> extends RecombiningTree<T> {
   public static final Function1D<Integer, Integer> NODES = new Function1D<Integer, Integer>() {
 
     @Override
-    public Integer evaluate(final Integer i) {
+    public Integer apply(final Integer i) {
       return 2 * i + 1;
     }
 
@@ -31,7 +31,7 @@ public class RecombiningTrinomialTree<T> extends RecombiningTree<T> {
 
   @Override
   protected int getMaxNodesForStep(final int step) {
-    return NODES.evaluate(step);
+    return NODES.apply(step);
   }
 
   //  @SuppressWarnings("unchecked")

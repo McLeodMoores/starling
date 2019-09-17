@@ -26,12 +26,12 @@ public class ChiSquareDistributionMomentEstimatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {
-    CALCULATOR.evaluate((double[]) null);
+    CALCULATOR.apply((double[]) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmpty() {
-    CALCULATOR.evaluate(new double[0]);
+    CALCULATOR.apply(new double[0]);
   }
 
   @Test
@@ -43,7 +43,7 @@ public class ChiSquareDistributionMomentEstimatorTest {
     for (int i = 0; i < n; i++) {
       x[i] = p1.nextRandom();
     }
-    final ChiSquareDistribution p2 = (ChiSquareDistribution) CALCULATOR.evaluate(x);
+    final ChiSquareDistribution p2 = (ChiSquareDistribution) CALCULATOR.apply(x);
     assertEquals(p2.getDegreesOfFreedom(), k, 2.5e-2);
   }
 }

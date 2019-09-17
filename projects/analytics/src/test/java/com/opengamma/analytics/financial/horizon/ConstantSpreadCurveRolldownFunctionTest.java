@@ -29,7 +29,7 @@ public class ConstantSpreadCurveRolldownFunctionTest {
   private static final YieldCurve FUNCTIONAL_CURVE = YieldCurve.from(FunctionalDoublesCurve.from(new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 0.03 - x * 0.01;
     }
 
@@ -88,14 +88,14 @@ public class ConstantSpreadCurveRolldownFunctionTest {
     final Function1D<Double, Double> newF = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return 0.02 - x * 0.01;
       }
 
     };
-    assertEquals(newF.evaluate(1.5), newYieldCurve.getInterestRate(1.5), EPS);
-    assertEquals(newF.evaluate(0.5), newYieldCurve.getInterestRate(0.5), EPS);
-    assertEquals(newF.evaluate(8.), newYieldCurve.getInterestRate(8.), EPS);
+    assertEquals(newF.apply(1.5), newYieldCurve.getInterestRate(1.5), EPS);
+    assertEquals(newF.apply(0.5), newYieldCurve.getInterestRate(0.5), EPS);
+    assertEquals(newF.apply(8.), newYieldCurve.getInterestRate(8.), EPS);
 
   }
 }

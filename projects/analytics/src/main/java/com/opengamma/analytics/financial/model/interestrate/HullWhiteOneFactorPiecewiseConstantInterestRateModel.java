@@ -25,7 +25,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
    * \exp\left(\int_t^{t_0} \nu(s,t_2) (\nu(s,t_2)-\nu(s,t_1)) ds \right). \end{equation*} $$
    * <p>
    * Reference: Henrard, M. The Irony in the derivatives discounting Part II: the crisis. Wilmott Journal, 2010, 2, 301-316
-   * 
+   *
    * @param data
    *          The Hull-White model parameters.
    * @param t0
@@ -61,7 +61,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
    * \end{equation*} $$
    * <p>
    * Reference: Henrard, M. The Irony in the derivatives discounting Part II: the crisis. Wilmott Journal, 2010, 2, 301-316
-   * 
+   *
    * @param data
    *          The Hull-White model parameters.
    * @param t0
@@ -110,7 +110,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
    * \begin{equation*} \zeta = \exp\left(\int_{\theta_0}^{\theta_1} (\nu(s,v)-\nu(s,t_p)) (\nu(s,v)-\nu(s,u)) ds \right). \end{equation*} $$
    * <p>
    * Reference: Henrard, M. xxx
-   * 
+   *
    * @param parameters
    *          The Hull-White model parameters.
    * @param startExpiry
@@ -153,7 +153,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * Computes the (zero-coupon) bond volatility divided by a bond numeraire for a given period.
-   * 
+   *
    * @param data
    *          Hull-White model data.
    * @param startExpiry
@@ -193,7 +193,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * The adjoint version of the method. Computes the (zero-coupon) bond volatility divided by a bond numeraire for a given period ant its derivatives.
-   * 
+   *
    * @param data
    *          Hull-White model data.
    * @param startExpiry
@@ -252,7 +252,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
   /**
    * Computes the exercise boundary for swaptions. Reference: Henrard, M. (2003). Explicit bond option and swaption formula in Heath-Jarrow-Morton one-factor
    * model. International Journal of Theoretical and Applied Finance, 6(1):57--72.
-   * 
+   *
    * @param discountedCashFlow
    *          The cash flow equivalent discounted to today.
    * @param alpha
@@ -262,10 +262,10 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
   public double kappa(final double[] discountedCashFlow, final double[] alpha) {
     final Function1D<Double, Double> swapValue = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         double error = 0.0;
-        for (int loopcf = 0; loopcf < alpha.length; loopcf++) {
-          error += discountedCashFlow[loopcf] * Math.exp(-0.5 * alpha[loopcf] * alpha[loopcf] - (alpha[loopcf] - alpha[0]) * x);
+        for (int i = 0; i < alpha.length; i++) {
+          error += discountedCashFlow[i] * Math.exp(-0.5 * alpha[i] * alpha[i] - (alpha[i] - alpha[0]) * x);
         }
         return error;
       }
@@ -293,9 +293,9 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
     System.arraycopy(data.getVolatilityTime(), indexStart, s, 1, sLen - 1);
     s[sLen] = endExpiry;
     double denominator = 0.0;
-    for (int loopperiod = 0; loopperiod < sLen; loopperiod++) {
-      denominator += data.getVolatility()[loopperiod + indexStart - 1] * data.getVolatility()[loopperiod + indexStart - 1]
-          * (Math.exp(2 * data.getMeanReversion() * s[loopperiod + 1]) - Math.exp(2 * data.getMeanReversion() * s[loopperiod]));
+    for (int i = 0; i < sLen; i++) {
+      denominator += data.getVolatility()[i + indexStart - 1] * data.getVolatility()[i + indexStart - 1]
+          * (Math.exp(2 * data.getMeanReversion() * s[i + 1]) - Math.exp(2 * data.getMeanReversion() * s[i]));
     }
     return Math.sqrt(denominator / numerator);
   }
@@ -305,7 +305,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
    * <p>
    * Reference: Henrard, M. Bermudan Swaptions in Gaussian HJM One-Factor Model: Analytical and Numerical Approaches. SSRN, October 2008. Available at SSRN:
    * http://ssrn.com/abstract=1287982
-   * 
+   *
    * @param discountedCashFlow
    *          The swap discounted cash flows.
    * @param alpha2
@@ -317,10 +317,10 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
   public double lambda(final double[] discountedCashFlow, final double[] alpha2, final double[] hwH) {
     final Function1D<Double, Double> swapValue = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         double value = 0.0;
-        for (int loopcf = 0; loopcf < alpha2.length; loopcf++) {
-          value += discountedCashFlow[loopcf] * Math.exp(-0.5 * alpha2[loopcf] - hwH[loopcf] * x);
+        for (int i = 0; i < alpha2.length; i++) {
+          value += discountedCashFlow[i] * Math.exp(-0.5 * alpha2[i] - hwH[i] * x);
         }
         return value;
       }
@@ -334,7 +334,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * The maturity dependent part of the volatility (function called H in the implementation note).
-   * 
+   *
    * @param hwParameters
    *          The model parameters.
    * @param u
@@ -358,7 +358,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * The expiry time dependent part of the volatility.
-   * 
+   *
    * @param hwParameters
    *          The model parameters.
    * @param theta0
@@ -397,7 +397,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * Compute the swap rate for a given value of the standard normal random variable in the $P(.,\theta)$ numeraire.
-   * 
+   *
    * @param x
    *          The random variable value.
    * @param discountedCashFlowFixed
@@ -426,7 +426,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * Compute the first order derivative of the swap rate with respect to the value of the standard normal random variable in the $P(.,\theta)$ numeraire.
-   * 
+   *
    * @param x
    *          The random variable value.
    * @param discountedCashFlowFixed
@@ -461,7 +461,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * Computes the second order derivative of the swap rate with respect to the value of the standard normal random variable in the $P(.,\theta)$ numeraire.
-   * 
+   *
    * @param x
    *          The random variable value.
    * @param discountedCashFlowFixed
@@ -503,7 +503,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * Compute the first order derivative of the swap rate with respect to the discountedCashFlowIbor in the $P(.,\theta)$ numeraire.
-   * 
+   *
    * @param x
    *          The random variable value.
    * @param discountedCashFlowFixed
@@ -533,7 +533,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * Compute the first order derivative of the swap rate with respect to the discountedCashFlowFixed in the $P(.,\theta)$ numeraire.
-   * 
+   *
    * @param x
    *          The random variable value.
    * @param discountedCashFlowFixed
@@ -570,7 +570,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * Compute the first order derivative of the swap rate with respect to the alphaIbor in the $P(.,\theta)$ numeraire.
-   * 
+   *
    * @param x
    *          The random variable value.
    * @param discountedCashFlowFixed
@@ -601,7 +601,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
 
   /**
    * Compute the first order derivative of the swap rate with respect to the alphaFixed in the $P(.,\theta)$ numeraire.
-   * 
+   *
    * @param x
    *          The random variable value.
    * @param discountedCashFlowFixed
@@ -639,7 +639,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
   /**
    * Compute the first order derivative with respect to the discountedCashFlowFixed and to the discountedCashFlowIbor of the of swap rate second derivative with
    * respect to the random variable x in the $P(.,\theta)$ numeraire.
-   * 
+   *
    * @param x
    *          The random variable value.
    * @param discountedCashFlowFixed
@@ -712,7 +712,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
   /**
    * Compute the first order derivative with respect to the alphaFixed and to the alphaIbor of the of swap rate second derivative with respect to the random
    * variable x in the $P(.,\theta)$ numeraire.
-   * 
+   *
    * @param x
    *          The random variable value.
    * @param discountedCashFlowFixed

@@ -92,7 +92,7 @@ public class GeneratorMulticurveProviderDiscount extends Function1D<DoubleMatrix
   }
 
   @Override
-  public MulticurveProviderDiscount evaluate(final DoubleMatrix1D x) {
+  public MulticurveProviderDiscount apply(final DoubleMatrix1D x) {
     final MulticurveProviderDiscount provider = _knownData.copy();
     final Set<String> nameSet = _generatorsMap.keySet();
     int indexParam = 0;

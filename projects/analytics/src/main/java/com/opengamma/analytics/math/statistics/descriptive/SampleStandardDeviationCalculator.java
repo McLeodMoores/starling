@@ -29,8 +29,8 @@ public class SampleStandardDeviationCalculator extends DescriptiveStatisticsCalc
    * @return  the sample standard deviation
    */
   @Override
-  public Double evaluate(final double[] x) {
-    return Math.sqrt(DescriptiveStatisticsFactory.of(SampleVarianceCalculator.NAME).evaluate(x));
+  public Double apply(final double[] x) {
+    return Math.sqrt(DescriptiveStatisticsFactory.of(SampleVarianceCalculator.NAME).apply(x));
   }
 
   @Override

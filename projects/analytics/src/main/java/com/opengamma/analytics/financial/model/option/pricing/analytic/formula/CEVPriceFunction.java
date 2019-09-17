@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic.formula;
@@ -11,7 +11,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.statistics.distribution.NonCentralChiSquaredDistribution;
 
 /**
- * 
+ *
  */
 public class CEVPriceFunction implements OptionPriceFunction<CEVFunctionData> {
   private static final BlackPriceFunction BLACK_PRICE_FUNCTION = new BlackPriceFunction();
@@ -26,7 +26,7 @@ public class CEVPriceFunction implements OptionPriceFunction<CEVFunctionData> {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final CEVFunctionData data) {
+      public Double apply(final CEVFunctionData data) {
         Validate.notNull(data, "data");
         final double forward = data.getForward();
         final double numeraire = data.getNumeraire();
@@ -34,11 +34,11 @@ public class CEVPriceFunction implements OptionPriceFunction<CEVFunctionData> {
         final double beta = data.getBeta();
         if (beta == 1.0) {
           final Function1D<BlackFunctionData, Double> blackFormula = BLACK_PRICE_FUNCTION.getPriceFunction(option);
-          return blackFormula.evaluate(new BlackFunctionData(forward, numeraire, sigma));
+          return blackFormula.apply(new BlackFunctionData(forward, numeraire, sigma));
         }
         if (beta == 0.0) {
           final Function1D<NormalFunctionData, Double> normalFormula = NORMAL_PRICE_FUNCTION.getPriceFunction(option);
-          return normalFormula.evaluate(new NormalFunctionData(forward, numeraire, sigma));
+          return normalFormula.apply(new NormalFunctionData(forward, numeraire, sigma));
         }
         final double b = 1.0 / (1 - beta);
         final double x = b * b / sigma / sigma / t;

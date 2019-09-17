@@ -44,7 +44,7 @@ public class SABRBerestyckiVolatilityFunction extends VolatilityFunctionProvider
     return new Function1D<SABRFormulaData, Double>() {
 
       @Override
-      public Double evaluate(final SABRFormulaData data) {
+      public Double apply(final SABRFormulaData data) {
         ArgumentChecker.notNull(data, "data");
         final double alpha = data.getAlpha();
         final double beta = data.getBeta();
@@ -97,10 +97,10 @@ public class SABRBerestyckiVolatilityFunction extends VolatilityFunctionProvider
     }
     return new Function1D<SABRFormulaData, double[]>() {
       @Override
-      public double[] evaluate(final SABRFormulaData data) {
+      public double[] apply(final SABRFormulaData data) {
         final double[] res = new double[n];
         for (int i = 0; i < n; i++) {
-          res[i] = funcs.get(i).evaluate(data);
+          res[i] = funcs.get(i).apply(data);
         }
         return res;
       }

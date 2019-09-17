@@ -51,7 +51,7 @@ public class BlackImpliedVolatilityFunctionTest {
       STRIKES[i] = FORWARD - 20 + 40 / N * i;
       DATA[i] = new BlackFunctionData(FORWARD, DF, SIGMA);
       OPTIONS[i] = new EuropeanVanillaOption(STRIKES[i], T, true);
-      PRICES[i] = FORMULA.getPriceFunction(OPTIONS[i]).evaluate(DATA[i]);
+      PRICES[i] = FORMULA.getPriceFunction(OPTIONS[i]).apply(DATA[i]);
     }
 
     double beta = 0.6;

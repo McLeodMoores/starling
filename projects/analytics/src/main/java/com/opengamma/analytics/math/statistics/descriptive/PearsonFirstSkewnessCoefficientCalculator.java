@@ -35,11 +35,11 @@ public class PearsonFirstSkewnessCoefficientCalculator extends DescriptiveStatis
    * @return  the Pearson first skewness coefficient
    */
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notNull(x, "x");
     ArgumentChecker.isTrue(x.length > 1, "Need at least two data points to calculate Pearson first skewness coefficient");
-    return 3 * (DescriptiveStatisticsFactory.of(MeanCalculator.NAME).evaluate(x) - DescriptiveStatisticsFactory.of(ModeCalculator.NAME).evaluate(x))
-        / DescriptiveStatisticsFactory.of(SampleStandardDeviationCalculator.NAME).evaluate(x);
+    return 3 * (DescriptiveStatisticsFactory.of(MeanCalculator.NAME).apply(x) - DescriptiveStatisticsFactory.of(ModeCalculator.NAME).apply(x))
+        / DescriptiveStatisticsFactory.of(SampleStandardDeviationCalculator.NAME).apply(x);
   }
 
   @Override

@@ -39,7 +39,7 @@ public class MovingAverageTimeSeriesOrderIdentifier {
     if (ts.size() < _maxOrder) {
       throw new IllegalArgumentException("Number of data points lower than the maximum order to calculate");
     }
-    final double[] acf = _calculator.evaluate(ts);
+    final double[] acf = _calculator.apply(ts);
     final int n = ts.size();
     final double bound = _criticalValue / Math.sqrt(n);
     for (int i = _maxOrder; i > 0; i--) {

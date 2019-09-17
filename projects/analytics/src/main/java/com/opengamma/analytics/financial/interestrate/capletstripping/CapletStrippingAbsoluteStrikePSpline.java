@@ -41,7 +41,7 @@ public class CapletStrippingAbsoluteStrikePSpline extends CapletStrippingAbsolut
    * transformation so it remains everywhere positive. For co-starting caps the knots are the first caplet expiry, then the end time of all the caps expect the
    * final one (i.e. all but the first unique caplets in the longest cap see volatilities from the extrapolated part of the curve). If the caps are not
    * co-starting it is not possible to auto-generate the knots and these should be supplied.
-   * 
+   *
    * @param caps
    *          List of caps with identical strikes
    * @param yieldCurves
@@ -117,7 +117,7 @@ public class CapletStrippingAbsoluteStrikePSpline extends CapletStrippingAbsolut
     } else {
       final Function1D<DoubleMatrix1D, DoubleMatrix1D> modelVolFunc = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
         @Override
-        public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+        public DoubleMatrix1D apply(final DoubleMatrix1D x) {
           final double[] modelVols = pricer.impliedVols(_volModel.evaluate(x));
           return new DoubleMatrix1D(modelVols);
         }
@@ -143,7 +143,7 @@ public class CapletStrippingAbsoluteStrikePSpline extends CapletStrippingAbsolut
 
     final Function1D<DoubleMatrix1D, Boolean> allowed = new Function1D<DoubleMatrix1D, Boolean>() {
       @Override
-      public Boolean evaluate(final DoubleMatrix1D x) {
+      public Boolean apply(final DoubleMatrix1D x) {
         final double[] temp = x.getData();
         final int m = temp.length;
         for (int i = 0; i < m; i++) {
@@ -157,7 +157,7 @@ public class CapletStrippingAbsoluteStrikePSpline extends CapletStrippingAbsolut
 
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> modelPriceFunc = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
         final double[] modelPrices = pricer.price(_volModel.evaluate(x));
         return new DoubleMatrix1D(modelPrices);
       }

@@ -16,7 +16,7 @@ import com.opengamma.util.ArgumentChecker;
 public class SimplyCompoundedGeometricMeanReturnCalculator extends Function1D<double[], Double> {
 
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     Validate.notNull(x, "x");
     ArgumentChecker.notEmpty(x, "x");
     final int n = x.length;

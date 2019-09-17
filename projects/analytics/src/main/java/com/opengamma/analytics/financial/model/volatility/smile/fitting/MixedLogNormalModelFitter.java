@@ -66,7 +66,7 @@ public class MixedLogNormalModelFitter extends SmileModelFitter<MixedLogNormalMo
     return new Function1D<DoubleMatrix1D, Boolean>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public Boolean evaluate(final DoubleMatrix1D x) {
+      public Boolean apply(final DoubleMatrix1D x) {
         if (x.getEntry(0) <= 1e-4) {
           return false;
         }

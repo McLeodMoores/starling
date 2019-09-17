@@ -17,7 +17,7 @@ import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSerie
 public class TimeSeriesDifferenceOperator extends Function1D<DateDoubleTimeSeries<?>, DateDoubleTimeSeries<?>> {
 
   @Override
-  public DateDoubleTimeSeries<?> evaluate(final DateDoubleTimeSeries<?> ts) {
+  public DateDoubleTimeSeries<?> apply(final DateDoubleTimeSeries<?> ts) {
     Validate.notNull(ts, "time series");
     Validate.isTrue(ts.size() > 1, "time series length must be > 1");
     final int[] times = ts.timesArrayFast();

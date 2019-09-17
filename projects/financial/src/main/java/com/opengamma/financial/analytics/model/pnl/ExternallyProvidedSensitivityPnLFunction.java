@@ -181,7 +181,7 @@ public class ExternallyProvidedSensitivityPnLFunction extends AbstractFunction.N
         continue;
       }
       DateDoubleTimeSeries<?> nodeTimeSeries = samplingFunction.getSampledTimeSeries(dbNodeTimeSeries.getTimeSeries(), schedule);
-      nodeTimeSeries = DIFFERENCE.evaluate(nodeTimeSeries);
+      nodeTimeSeries = DIFFERENCE.apply(nodeTimeSeries);
       final Double sensitivity = (Double) inputs.getValue(getSensitivityRequirement(factor.getExposureExternalId()));
       if (sensitivity != null) {
         if (pnlSeries == null) {

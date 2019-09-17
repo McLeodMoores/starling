@@ -64,17 +64,17 @@ public class ScalarFieldFirstOrderDifferentiator implements Differentiator<Doubl
 
           @SuppressWarnings("synthetic-access")
           @Override
-          public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+          public DoubleMatrix1D apply(final DoubleMatrix1D x) {
             Validate.notNull(x, "x");
             final int n = x.getNumberOfElements();
-            final double y = function.evaluate(x);
+            final double y = function.apply(x);
             final double[] xData = x.getData();
             double oldValue;
             final double[] res = new double[n];
             for (int i = 0; i < n; i++) {
               oldValue = xData[i];
               xData[i] += _eps;
-              res[i] = (function.evaluate(x) - y) / _eps;
+              res[i] = (function.apply(x) - y) / _eps;
               xData[i] = oldValue;
             }
             return new DoubleMatrix1D(res);
@@ -85,7 +85,7 @@ public class ScalarFieldFirstOrderDifferentiator implements Differentiator<Doubl
 
           @SuppressWarnings("synthetic-access")
           @Override
-          public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+          public DoubleMatrix1D apply(final DoubleMatrix1D x) {
             Validate.notNull(x, "x");
             final int n = x.getNumberOfElements();
             final double[] xData = x.getData();
@@ -95,9 +95,9 @@ public class ScalarFieldFirstOrderDifferentiator implements Differentiator<Doubl
             for (int i = 0; i < n; i++) {
               oldValue = xData[i];
               xData[i] += _eps;
-              up = function.evaluate(x);
+              up = function.apply(x);
               xData[i] -= _twoEps;
-              down = function.evaluate(x);
+              down = function.apply(x);
               res[i] = (up - down) / _twoEps;
               xData[i] = oldValue;
             }
@@ -109,9 +109,9 @@ public class ScalarFieldFirstOrderDifferentiator implements Differentiator<Doubl
 
           @SuppressWarnings("synthetic-access")
           @Override
-          public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+          public DoubleMatrix1D apply(final DoubleMatrix1D x) {
             Validate.notNull(x, "x");
-            final double y = function.evaluate(x);
+            final double y = function.apply(x);
             final int n = x.getNumberOfElements();
             final double[] xData = x.getData();
             double oldValue;
@@ -119,7 +119,7 @@ public class ScalarFieldFirstOrderDifferentiator implements Differentiator<Doubl
             for (int i = 0; i < n; i++) {
               oldValue = xData[i];
               xData[i] -= _eps;
-              res[i] = (y - function.evaluate(x)) / _eps;
+              res[i] = (y - function.apply(x)) / _eps;
               xData[i] = oldValue;
             }
             return new DoubleMatrix1D(res);
@@ -144,9 +144,9 @@ public class ScalarFieldFirstOrderDifferentiator implements Differentiator<Doubl
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
         Validate.notNull(x, "x");
-        ArgumentChecker.isTrue(domain.evaluate(x), "point {} is not in the function domain", x.toString());
+        ArgumentChecker.isTrue(domain.apply(x), "point {} is not in the function domain", x.toString());
 
         final int n = x.getNumberOfElements();
         final double[] xData = x.getData();
@@ -157,31 +157,31 @@ public class ScalarFieldFirstOrderDifferentiator implements Differentiator<Doubl
         for (int i = 0; i < n; i++) {
           oldValue = xData[i];
           xData[i] += _eps;
-          if (!domain.evaluate(x)) {
+          if (!domain.apply(x)) {
             xData[i] = oldValue - _twoEps;
-            if (!domain.evaluate(x)) {
+            if (!domain.apply(x)) {
               throw new MathException("cannot get derivative at point " + x.toString() + " in direction " + i);
             }
-            y[0] = function.evaluate(x);
+            y[0] = function.apply(x);
             xData[i] = oldValue;
-            y[2] = function.evaluate(x);
+            y[2] = function.apply(x);
             xData[i] = oldValue - _eps;
-            y[1] = function.evaluate(x);
+            y[1] = function.apply(x);
             w = wBack;
           } else {
-            final double temp = function.evaluate(x);
+            final double temp = function.apply(x);
             xData[i] = oldValue - _eps;
-            if (!domain.evaluate(x)) {
+            if (!domain.apply(x)) {
               y[1] = temp;
               xData[i] = oldValue;
-              y[0] = function.evaluate(x);
+              y[0] = function.apply(x);
               xData[i] = oldValue + _twoEps;
-              y[2] = function.evaluate(x);
+              y[2] = function.apply(x);
               w = wFwd;
             } else {
               y[2] = temp;
               xData[i] = oldValue - _eps;
-              y[0] = function.evaluate(x);
+              y[0] = function.apply(x);
               w = wCent;
             }
           }

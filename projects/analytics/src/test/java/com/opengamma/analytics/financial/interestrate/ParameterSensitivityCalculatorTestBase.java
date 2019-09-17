@@ -181,7 +181,7 @@ public abstract class ParameterSensitivityCalculatorTestBase {
 
     final Function1D<DoubleMatrix1D, Double> f = new Function1D<DoubleMatrix1D, Double>() {
       @Override
-      public Double evaluate(final DoubleMatrix1D x) {
+      public Double apply(final DoubleMatrix1D x) {
         final YieldCurveBundle curves = interpolatedCurves.copy();
         int index2 = 0;
         for (final String name : interpolatedCurves.getAllNames()) {
@@ -203,7 +203,7 @@ public abstract class ParameterSensitivityCalculatorTestBase {
     final ScalarFieldFirstOrderDifferentiator fd = new ScalarFieldFirstOrderDifferentiator();
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> grad = fd.differentiate(f);
 
-    return grad.evaluate(new DoubleMatrix1D(yields));
+    return grad.apply(new DoubleMatrix1D(yields));
 
   }
 
@@ -229,7 +229,7 @@ public abstract class ParameterSensitivityCalculatorTestBase {
 
     final Function1D<DoubleMatrix1D, Double> f = new Function1D<DoubleMatrix1D, Double>() {
       @Override
-      public Double evaluate(final DoubleMatrix1D x) {
+      public Double apply(final DoubleMatrix1D x) {
         final YieldCurveBundle curves = spreadCurves.copy();
         int index2 = 0;
         for (final String name : spreadCurves.getAllNames()) {
@@ -253,6 +253,6 @@ public abstract class ParameterSensitivityCalculatorTestBase {
 
     final ScalarFieldFirstOrderDifferentiator fd = new ScalarFieldFirstOrderDifferentiator();
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> grad = fd.differentiate(f);
-    return grad.evaluate(new DoubleMatrix1D(param));
+    return grad.apply(new DoubleMatrix1D(param));
   }
 }

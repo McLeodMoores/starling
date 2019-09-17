@@ -25,7 +25,7 @@ public class NaturalLogGammaFunction extends Function1D<Double, Double> {
    * @return The value of the function
    */
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     Validate.isTrue(x > 0, "x must be greater than zero");
     return Gamma.logGamma(x);
   }

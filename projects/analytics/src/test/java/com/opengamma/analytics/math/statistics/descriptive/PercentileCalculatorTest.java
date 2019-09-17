@@ -55,12 +55,12 @@ public class PercentileCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullArray() {
-    CALCULATOR.evaluate((double[]) null);
+    CALCULATOR.apply((double[]) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmptyArray() {
-    CALCULATOR.evaluate(new double[0]);
+    CALCULATOR.apply(new double[0]);
   }
 
   @Test
@@ -68,9 +68,9 @@ public class PercentileCalculatorTest {
     final double[] y = Arrays.copyOf(X, X.length);
     Arrays.sort(y);
     CALCULATOR.setPercentile(1e-15);
-    assertEquals(CALCULATOR.evaluate(X), y[0], 0);
+    assertEquals(CALCULATOR.apply(X), y[0], 0);
     CALCULATOR.setPercentile(1 - 1e-15);
-    assertEquals(CALCULATOR.evaluate(X), y[N - 1], 0);
+    assertEquals(CALCULATOR.apply(X), y[N - 1], 0);
   }
 
   @Test
@@ -85,7 +85,7 @@ public class PercentileCalculatorTest {
     Arrays.sort(copy);
     int count = 0;
     CALCULATOR.setPercentile(((double) percentile) / N);
-    final double value = CALCULATOR.evaluate(x);
+    final double value = CALCULATOR.apply(x);
     while (copy[count++] < value) {
       //intended
     }

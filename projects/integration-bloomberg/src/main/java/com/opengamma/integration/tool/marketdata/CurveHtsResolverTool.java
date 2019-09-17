@@ -6,12 +6,12 @@
 package com.opengamma.integration.tool.marketdata;
 
 import static com.google.common.collect.Sets.newHashSet;
-import static com.opengamma.lambdava.streams.Lambdava.functional;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -37,7 +37,6 @@ import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.integration.tool.IntegrationToolContext;
-import com.opengamma.lambdava.functions.Function1;
 import com.opengamma.master.config.ConfigDocument;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.ConfigSearchRequest;
@@ -99,22 +98,15 @@ public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
 
     // Get all other required hts external ids for curves
     final List<LocalDate> dates = buildDates();
-    final Set<String> curveNames = functional(curves).map(new Function1<YieldCurveDefinition, String>() {
-      @Override
-      public String execute(final YieldCurveDefinition yieldCurveDefinition) {
-        return yieldCurveDefinition.getName() + "_" + yieldCurveDefinition.getCurrency().getCode();
-      }
-    }).asSet();
+    final Set<String> curveNames = curves.stream().map(c -> c.getName() + "_" + c.getCurrency().getCode()).collect(Collectors.toSet());
     curveNodesExternalIds = getCurveRequiredExternalIds(configSource, curveNames, dates);
 
     // Load the required time series
     loadHistoricalData(getCommandLine().hasOption(WRITE_OPT),
         getCommandLine().getOptionValues(TIME_SERIES_DATAFIELD_OPT) == null ? new String[] { "PX_LAST" }
-            : getCommandLine()
-                .getOptionValues(TIME_SERIES_DATAFIELD_OPT),
+            : getCommandLine().getOptionValues(TIME_SERIES_DATAFIELD_OPT),
         getCommandLine().getOptionValue(TIME_SERIES_DATAPROVIDER_OPT) == null ? "CMPL" : getCommandLine().getOptionValue(TIME_SERIES_DATAPROVIDER_OPT),
-        initialRateExternalIds,
-        curveNodesExternalIds);
+        initialRateExternalIds, curveNodesExternalIds);
   }
 
   private Set<ExternalId> getInitialRateExternalIds(final Set<Currency> currencies) {
@@ -211,9 +203,7 @@ public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
 
   private void loadHistoricalData(final boolean write, final String[] dataFields, final String dataProvider, final Set<ExternalId>... externalIdSets) {
     final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(getToolContext().getHistoricalTimeSeriesMaster(),
-        getToolContext()
-            .getHistoricalTimeSeriesProvider(),
-        new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
+        getToolContext().getHistoricalTimeSeriesProvider(), new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
 
     for (final Set<ExternalId> externalIds : externalIdSets) {
       if (externalIds.size() > 0) {

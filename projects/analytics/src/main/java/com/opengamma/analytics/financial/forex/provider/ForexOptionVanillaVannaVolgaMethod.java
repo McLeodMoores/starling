@@ -85,10 +85,10 @@ public final class ForexOptionVanillaVannaVolgaMethod {
     for (int loopvv = 0; loopvv < 3; loopvv = loopvv + 2) { // Implementation note: The adjustment for K2 is 0
       final BlackFunctionData dataBlackSmile = new BlackFunctionData(forward, dfDomestic, volVV[loopvv]);
       final EuropeanVanillaOption optionVV = new EuropeanVanillaOption(strikesVV[loopvv], optionForex.getTimeToExpiry(), true);
-      priceVVATM[loopvv] = BLACK_FUNCTION.getPriceFunction(optionVV).evaluate(dataBlackATM);
-      priceVVsmile[loopvv] = BLACK_FUNCTION.getPriceFunction(optionVV).evaluate(dataBlackSmile);
+      priceVVATM[loopvv] = BLACK_FUNCTION.getPriceFunction(optionVV).apply(dataBlackATM);
+      priceVVsmile[loopvv] = BLACK_FUNCTION.getPriceFunction(optionVV).apply(dataBlackSmile);
     }
-    final double priceFlat = BLACK_FUNCTION.getPriceFunction(optionForex).evaluate(dataBlackATM);
+    final double priceFlat = BLACK_FUNCTION.getPriceFunction(optionForex).apply(dataBlackATM);
     final double[] x = vannaVolgaWeights(optionForex, forward, dfDomestic, strikesVV, volVV);
     double price = priceFlat;
     for (int loopvv = 0; loopvv < 3; loopvv = loopvv + 2) {
@@ -181,9 +181,9 @@ public final class ForexOptionVanillaVannaVolgaMethod {
     for (int loopvv = 0; loopvv < 3; loopvv = loopvv + 2) { // Implementation note: The adjustment for K2 is 0
       final BlackFunctionData dataBlackSmile = new BlackFunctionData(forward, dfDomestic, volVV[loopvv]);
       final EuropeanVanillaOption optionVV = new EuropeanVanillaOption(strikesVV[loopvv], optionForex.getTimeToExpiry(), true);
-      priceVVATM[loopvv] = BLACK_FUNCTION.getPriceFunction(optionVV).evaluate(dataBlackATM);
-      priceVVsmile[loopvv] = BLACK_FUNCTION.getPriceFunction(optionVV).evaluate(dataBlackSmile);
-      vegaSmile[loopvv] = BLACK_FUNCTION.getVegaFunction(optionVV).evaluate(dataBlackSmile);
+      priceVVATM[loopvv] = BLACK_FUNCTION.getPriceFunction(optionVV).apply(dataBlackATM);
+      priceVVsmile[loopvv] = BLACK_FUNCTION.getPriceFunction(optionVV).apply(dataBlackSmile);
+      vegaSmile[loopvv] = BLACK_FUNCTION.getVegaFunction(optionVV).apply(dataBlackSmile);
     }
     //    final double priceFlat = BLACK_FUNCTION.getPriceFunction(optionForex).evaluate(dataBlackATM);
     final double[] vega = new double[3];
@@ -319,9 +319,9 @@ public final class ForexOptionVanillaVannaVolgaMethod {
     final BlackFunctionData dataBlackATM = new BlackFunctionData(forward, dfDomestic, volATM);
     for (int loopvv = 0; loopvv < 3; loopvv = loopvv + 2) { // Implementation note: The adjustment for K2 is 0
       final EuropeanVanillaOption optionVV = new EuropeanVanillaOption(strikesReference[loopvv], optionForex.getTimeToExpiry(), true);
-      vega[loopvv] = BLACK_FUNCTION.getVegaFunction(optionVV).evaluate(dataBlackATM);
+      vega[loopvv] = BLACK_FUNCTION.getVegaFunction(optionVV).apply(dataBlackATM);
     }
-    final double vegaFlat = BLACK_FUNCTION.getVegaFunction(optionForex).evaluate(dataBlackATM);
+    final double vegaFlat = BLACK_FUNCTION.getVegaFunction(optionForex).apply(dataBlackATM);
     vega[1] = vegaFlat;
     final double lnk21 = Math.log(strikesReference[1] / strikesReference[0]);
     final double lnk31 = Math.log(strikesReference[2] / strikesReference[0]);

@@ -68,7 +68,7 @@ public class NonLinearLeastSquareWithPenaltyTest {
     swapRateFunction = new Function1D<Curve<Double, Double>, DoubleMatrix1D>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix1D evaluate(final Curve<Double, Double> curve) {
+      public DoubleMatrix1D apply(final Curve<Double, Double> curve) {
         final double[] res = new double[N_SWAPS];
         double sum = 0.0;
 
@@ -91,10 +91,10 @@ public class NonLinearLeastSquareWithPenaltyTest {
     WEIGHTS_TO_SWAP_FUNC = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
         final Function1D<Double, Double> func = new BasisFunctionAggregation<>(B_SPLINES, x.getData());
         final FunctionalDoublesCurve curve = FunctionalDoublesCurve.from(func);
-        return swapRateFunction.evaluate(curve);
+        return swapRateFunction.apply(curve);
       }
     };
 
@@ -119,7 +119,7 @@ public class NonLinearLeastSquareWithPenaltyTest {
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> func = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
 
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
         final double[] temp = new double[n];
         for (int i = 0; i < n; i++) {
           temp[i] = x.getEntry(onIndex[i]);
@@ -131,7 +131,7 @@ public class NonLinearLeastSquareWithPenaltyTest {
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jac = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
 
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D x) {
         final DoubleMatrix2D res = new DoubleMatrix2D(n, nWeights);
         for (int i = 0; i < n; i++) {
           res.getData()[i][onIndex[i]] = 1.0;
@@ -178,9 +178,9 @@ public class NonLinearLeastSquareWithPenaltyTest {
       final double x = j * 20. / 100;
       System.out.print(x);
       for (int i = 0; i < n; i++) {
-        System.out.print("\t" + bSplines.get(i).evaluate(x));
+        System.out.print("\t" + bSplines.get(i).apply(x));
       }
-      System.out.print("\t" +func.evaluate(x));
+      System.out.print("\t" +func.apply(x));
       System.out.print("\n");
     }
 
@@ -201,7 +201,7 @@ public class NonLinearLeastSquareWithPenaltyTest {
       System.out.println("chi2: "+res.getChiSq());
       System.out.println();
     }
-    final DoubleMatrix1D fittedSwaps = WEIGHTS_TO_SWAP_FUNC.evaluate(res.getFitParameters());
+    final DoubleMatrix1D fittedSwaps = WEIGHTS_TO_SWAP_FUNC.apply(res.getFitParameters());
     for (int i = 0; i < N_SWAPS; i++) {
       if (print) {
         System.out.println("swap rates: " + RATES[i] + "\t" + fittedSwaps.getEntry(i));
@@ -215,7 +215,7 @@ public class NonLinearLeastSquareWithPenaltyTest {
       System.out.println("t\t yield");
       for (int i = 0; i < 101; i++) {
         final double t = i * 20.0 / 100;
-        System.out.println(t + "\t" + func.evaluate(t));
+        System.out.println(t + "\t" + func.apply(t));
       }
     }
   }
@@ -230,10 +230,10 @@ public class NonLinearLeastSquareWithPenaltyTest {
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> residualFunc = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
         final InterpolatedDoublesCurve curve = new InterpolatedDoublesCurve(TENORS, x.getData(), baseInterpolator, true);
 
-        final DoubleMatrix1D modelRates = swapRateFunction.evaluate(curve);
+        final DoubleMatrix1D modelRates = swapRateFunction.apply(curve);
         return (DoubleMatrix1D) MA.subtract(new DoubleMatrix1D(RATES), modelRates);
       }
     };

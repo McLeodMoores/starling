@@ -87,7 +87,7 @@ public class CapFloorHullWhiteCalibrationObjective extends SuccessiveRootFinderC
   }
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     _hwBundle.getHullWhiteParameter().setLastVolatility(x);
     return METHOD_HW_CAP.presentValue(getInstrument(), _hwBundle).getAmount() - getPrice();
   }

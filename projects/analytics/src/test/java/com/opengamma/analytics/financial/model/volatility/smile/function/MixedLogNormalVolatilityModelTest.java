@@ -104,8 +104,8 @@ public class MixedLogNormalVolatilityModelTest {
     final Function1D<MixedLogNormalModelData, double[]> modelAdjointFunc = VOL_FUNC.getModelAdjointFunction(option, FORWARD);
     final Function1D<MixedLogNormalModelData, double[]> fdModelAdjointFunc = FD_VOL_FUNC.getModelAdjointFunction(option, FORWARD);
 
-    final double[] sense = modelAdjointFunc.evaluate(data);
-    final double[] fdSense = fdModelAdjointFunc.evaluate(data);
+    final double[] sense = modelAdjointFunc.apply(data);
+    final double[] fdSense = fdModelAdjointFunc.apply(data);
     final int nParms = data.getNumberOfParameters();
     for (int i = 0; i < nParms; i++) {
       assertEquals(" : parameter " + i, fdSense[i], sense[i], 1e-6);
@@ -126,8 +126,8 @@ public class MixedLogNormalVolatilityModelTest {
     final Function1D<MixedLogNormalModelData, double[]> modelAdjointFunc = VOL_FUNC.getVolatilityAdjointFunction(option, FORWARD);
     final Function1D<MixedLogNormalModelData, double[]> fdModelAdjointFunc = FD_VOL_FUNC.getVolatilityAdjointFunction(option, FORWARD);
 
-    final double[] sense = modelAdjointFunc.evaluate(data);
-    final double[] fdSense = fdModelAdjointFunc.evaluate(data);
+    final double[] sense = modelAdjointFunc.apply(data);
+    final double[] fdSense = fdModelAdjointFunc.apply(data);
     final int nParms = 3 + data.getNumberOfParameters();
     for (int i = 0; i < nParms; i++) {
       assertEquals("parameter " + i, fdSense[i], sense[i], 1e-6);

@@ -81,25 +81,22 @@ public class LocalVolPDEPricer {
         upper = new NeumannBoundaryCondition(0.0, sMax, false);
       }
 
-      final Function<Double, Double> func = new Function<Double, Double>() {
-        @Override
-        public Double evaluate(final Double... tx) {
-          final double x = tx[1];
-          return isCall ? Math.max(x - k, 0.0) : Math.max(k - x, 0);
-        }
+      final Function<Double, Double> func = tx -> {
+        final double x = tx[1];
+        return isCall ? Math.max(x - k, 0.0) : Math.max(k - x, 0);
       };
 
       final FunctionalDoublesSurface free = new FunctionalDoublesSurface(func);
       if (USE_BURNIN) {
-        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> dataBurn = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, payoff, lower,
+        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> dataBurn = new PDE1DDataBundle<>(coef, payoff, lower,
             upper, free, gridBurn);
         final PDEResults1D resBurn = INITIAL_SOLVER.solve(dataBurn);
 
-        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef,
+        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<>(coef,
             resBurn.getTerminalResults(), lower, upper, free, grid);
         res = SOLVER.solve(data);
       } else {
-        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, payoff, lower, upper,
+        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<>(coef, payoff, lower, upper,
             free, grid);
         res = SOLVER.solve(data);
       }
@@ -109,7 +106,7 @@ public class LocalVolPDEPricer {
         lower = new NeumannBoundaryCondition(0.0, sMin, true);
         final Function1D<Double, Double> upFunc = new Function1D<Double, Double>() {
           @Override
-          public Double evaluate(final Double time) {
+          public Double apply(final Double time) {
             return Math.exp(-q * time);
           }
         };
@@ -117,7 +114,7 @@ public class LocalVolPDEPricer {
       } else {
         final Function1D<Double, Double> downFunc = new Function1D<Double, Double>() {
           @Override
-          public Double evaluate(final Double time) {
+          public Double apply(final Double time) {
             return -Math.exp(-q * time);
           }
         };
@@ -125,15 +122,15 @@ public class LocalVolPDEPricer {
         upper = new NeumannBoundaryCondition(0.0, sMax, false);
       }
       if (USE_BURNIN) {
-        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> dataBurn = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, payoff, lower,
+        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> dataBurn = new PDE1DDataBundle<>(coef, payoff, lower,
             upper, gridBurn);
         final PDEResults1D resBurn = INITIAL_SOLVER.solve(dataBurn);
 
-        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef,
+        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<>(coef,
             resBurn.getTerminalResults(), lower, upper, grid);
         res = SOLVER.solve(data);
       } else {
-        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, payoff, lower, upper,
+        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<>(coef, payoff, lower, upper,
             grid);
         res = SOLVER.solve(data);
       }

@@ -16,7 +16,7 @@ import com.opengamma.analytics.math.function.Function1D;
 public class HeavisideFunction extends Function1D<Double, Double> {
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     Validate.notNull(x);
     if (x < 0) {
       return 0.;

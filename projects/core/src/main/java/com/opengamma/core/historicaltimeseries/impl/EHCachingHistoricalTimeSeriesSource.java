@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.slf4j.Logger;
@@ -18,7 +19,6 @@ import org.threeten.bp.LocalDate;
 
 import com.google.common.collect.Maps;
 import com.opengamma.core.change.BasicChangeManager;
-import com.opengamma.core.change.ChangeEvent;
 import com.opengamma.core.change.ChangeListener;
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
@@ -26,7 +26,7 @@ import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesSource;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
-import com.opengamma.lambdava.functions.Function0;
+//import com.opengamma.lambdava.functions.Function0;
 import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSeries;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
@@ -117,18 +117,13 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
   }
 
   private ChangeListener createChangeListener() {
-    return new ChangeListener() {
-
-      @Override
-      public void entityChanged(final ChangeEvent event) {
-        cleanCaches(event.getObjectId());
-        changeManager().entityChanged(event.getType(),
-                                      event.getObjectId(),
-                                      event.getVersionFrom(),
-                                      event.getVersionTo(),
-                                      event.getVersionInstant());
-      }
-
+    return event -> {
+      cleanCaches(event.getObjectId());
+      changeManager().entityChanged(event.getType(),
+          event.getObjectId(),
+          event.getVersionFrom(),
+          event.getVersionTo(),
+          event.getVersionInstant());
     };
   }
 
@@ -162,13 +157,7 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
   @Override
   public HistoricalTimeSeries getHistoricalTimeSeries(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-
-    return _cache.getBySecondKey(uniqueId.getObjectId(), new Function0<HistoricalTimeSeries>() {
-      @Override
-      public HistoricalTimeSeries execute() {
-        return _underlying.getHistoricalTimeSeries(uniqueId);
-      }
-    });
+    return _cache.getBySecondKey(uniqueId.getObjectId(), () -> _underlying.getHistoricalTimeSeries(uniqueId));
   }
 
   @Override
@@ -194,10 +183,10 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
 
   @Override
   public Pair<LocalDate, Double> getLatestDataPoint(final UniqueId uniqueId,
-                                                    final LocalDate start,
-                                                    final boolean includeStart,
-                                                    final LocalDate end,
-                                                    final boolean includeEnd) {
+      final LocalDate start,
+      final boolean includeStart,
+      final LocalDate end,
+      final boolean includeEnd) {
     final HistoricalTimeSeries hts = doGetHistoricalTimeSeries(uniqueId, start, includeStart, end, includeEnd, -1);
     if (hts == null || hts.getTimeSeries() == null || hts.getTimeSeries().isEmpty()) {
       return null;
@@ -215,23 +204,20 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
     final SubSeriesKey subseriesKey = new SubSeriesKey(start, end, maxPoints);
     final ObjectsPair<UniqueId, SubSeriesKey> key = ObjectsPair.of(uniqueId, subseriesKey);
 
-    final Function0<HistoricalTimeSeries> fetchHts = new Function0<HistoricalTimeSeries>() {
-      @Override
-      public HistoricalTimeSeries execute() {
-        if (maxPoints == null) {
-          return _underlying.getHistoricalTimeSeries(uniqueId,
-                                                     subseriesKey.getStart(),
-                                                     true,
-                                                     subseriesKey.getEnd(),
-                                                     subseriesKey.getIncludeEnd());
-        }
+    final Supplier<HistoricalTimeSeries> fetchHts = () -> {
+      if (maxPoints == null) {
         return _underlying.getHistoricalTimeSeries(uniqueId,
-                                                   subseriesKey.getStart(),
-                                                   true,
-                                                   subseriesKey.getEnd(),
-                                                   subseriesKey.getIncludeEnd(),
-                                                   subseriesKey.getMaxPoints());
+            subseriesKey.getStart(),
+            true,
+            subseriesKey.getEnd(),
+            subseriesKey.getIncludeEnd());
       }
+      return _underlying.getHistoricalTimeSeries(uniqueId,
+          subseriesKey.getStart(),
+          true,
+          subseriesKey.getEnd(),
+          subseriesKey.getIncludeEnd(),
+          subseriesKey.getMaxPoints());
     };
 
     HistoricalTimeSeries hts = _cache.get(key, fetchHts);
@@ -258,22 +244,13 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
       final String dataField) {
     ArgumentChecker.notNull(identifiers, "identifiers");
     final HistoricalTimeSeriesKey key = new HistoricalTimeSeriesKey(null,
-                                                              identifierValidityDate,
-                                                              identifiers,
-                                                              dataSource,
-                                                              dataProvider,
-                                                              dataField);
+        identifierValidityDate,
+        identifiers,
+        dataSource,
+        dataProvider,
+        dataField);
 
-    return _cache.get(key, new Function0<HistoricalTimeSeries>() {
-      @Override
-      public HistoricalTimeSeries execute() {
-        return _underlying.getHistoricalTimeSeries(identifiers,
-                                                   identifierValidityDate,
-                                                   dataSource,
-                                                   dataProvider,
-                                                   dataField);
-      }
-    });
+    return _cache.get(key, () -> _underlying.getHistoricalTimeSeries(identifiers, identifierValidityDate, dataSource, dataProvider, dataField));
   }
 
   @Override
@@ -290,15 +267,15 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
       final ExternalIdBundle identifiers, final LocalDate currentDate, final String dataSource, final String dataProvider, final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     return doGetHistoricalTimeSeries(identifiers,
-                                     currentDate,
-                                     dataSource,
-                                     dataProvider,
-                                     dataField,
-                                     start,
-                                     includeStart,
-                                     end,
-                                     includeEnd,
-                                     null);
+        currentDate,
+        dataSource,
+        dataProvider,
+        dataField,
+        start,
+        includeStart,
+        end,
+        includeEnd,
+        null);
   }
 
   @Override
@@ -313,15 +290,15 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
       final boolean includeEnd,
       final int maxPoints) {
     return getHistoricalTimeSeries(identifierBundle,
-                                   LocalDate.now(getClock()),
-                                   dataSource,
-                                   dataProvider,
-                                   dataField,
-                                   start,
-                                   includeStart,
-                                   end,
-                                   includeEnd,
-                                   maxPoints);
+        LocalDate.now(getClock()),
+        dataSource,
+        dataProvider,
+        dataField,
+        start,
+        includeStart,
+        end,
+        includeEnd,
+        maxPoints);
   }
 
   @Override
@@ -329,30 +306,30 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
       final ExternalIdBundle identifiers, final LocalDate currentDate, final String dataSource, final String dataProvider, final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
     return doGetHistoricalTimeSeries(identifiers,
-                                     currentDate,
-                                     dataSource,
-                                     dataProvider,
-                                     dataField,
-                                     start,
-                                     includeStart,
-                                     end,
-                                     includeEnd,
-                                     maxPoints);
+        currentDate,
+        dataSource,
+        dataProvider,
+        dataField,
+        start,
+        includeStart,
+        end,
+        includeEnd,
+        maxPoints);
   }
 
   @Override
   public Pair<LocalDate, Double> getLatestDataPoint(
       final ExternalIdBundle identifiers, final LocalDate currentDate, final String dataSource, final String dataProvider, final String dataField) {
     final HistoricalTimeSeries hts = doGetHistoricalTimeSeries(identifiers,
-                                                         currentDate,
-                                                         dataSource,
-                                                         dataProvider,
-                                                         dataField,
-                                                         null,
-                                                         true,
-                                                         null,
-                                                         true,
-                                                         -1);
+        currentDate,
+        dataSource,
+        dataProvider,
+        dataField,
+        null,
+        true,
+        null,
+        true,
+        -1);
     if (hts == null || hts.getTimeSeries() == null || hts.getTimeSeries().isEmpty()) {
       return null;
     }
@@ -364,15 +341,15 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
       final ExternalIdBundle identifiers, final LocalDate currentDate, final String dataSource, final String dataProvider, final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     final HistoricalTimeSeries hts = doGetHistoricalTimeSeries(identifiers,
-                                                         currentDate,
-                                                         dataSource,
-                                                         dataProvider,
-                                                         dataField,
-                                                         start,
-                                                         includeStart,
-                                                         end,
-                                                         includeEnd,
-                                                         -1);
+        currentDate,
+        dataSource,
+        dataProvider,
+        dataField,
+        start,
+        includeStart,
+        end,
+        includeEnd,
+        -1);
     if (hts == null || hts.getTimeSeries() == null || hts.getTimeSeries().isEmpty()) {
       return null;
     }
@@ -390,7 +367,7 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
       final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider, final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     return getLatestDataPoint(identifierBundle, LocalDate.now(getClock()), dataSource, dataProvider, dataField,
-                              start, includeStart, end, includeEnd);
+        start, includeStart, end, includeEnd);
   }
 
   private HistoricalTimeSeries doGetHistoricalTimeSeries(
@@ -405,39 +382,36 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
       final boolean includeEnd,
       final Integer maxPoints) {
     final HistoricalTimeSeriesKey seriesKey = new HistoricalTimeSeriesKey(null,
-                                                                    currentDate,
-                                                                    identifiers,
-                                                                    dataSource,
-                                                                    dataProvider,
-                                                                    dataField);
+        currentDate,
+        identifiers,
+        dataSource,
+        dataProvider,
+        dataField);
     final SubSeriesKey subseriesKey = new SubSeriesKey(start, end, maxPoints);
     final ObjectsPair<HistoricalTimeSeriesKey, SubSeriesKey> key = ObjectsPair.of(seriesKey, subseriesKey);
 
-    final Function0<HistoricalTimeSeries> fetchHts = new Function0<HistoricalTimeSeries>() {
-      @Override
-      public HistoricalTimeSeries execute() {
-        if (maxPoints == null) {
-          return _underlying.getHistoricalTimeSeries(identifiers,
-                                                     currentDate,
-                                                     dataSource,
-                                                     dataProvider,
-                                                     dataField,
-                                                     subseriesKey.getStart(),
-                                                     true,
-                                                     subseriesKey.getEnd(),
-                                                     subseriesKey.getIncludeEnd());
-        }
+    final Supplier<HistoricalTimeSeries> fetchHts = () -> {
+      if (maxPoints == null) {
         return _underlying.getHistoricalTimeSeries(identifiers,
-                                                   currentDate,
-                                                   dataSource,
-                                                   dataProvider,
-                                                   dataField,
-                                                   subseriesKey.getStart(),
-                                                   true,
-                                                   subseriesKey.getEnd(),
-                                                   subseriesKey.getIncludeEnd(),
-                                                   subseriesKey.getMaxPoints());
+            currentDate,
+            dataSource,
+            dataProvider,
+            dataField,
+            subseriesKey.getStart(),
+            true,
+            subseriesKey.getEnd(),
+            subseriesKey.getIncludeEnd());
       }
+      return _underlying.getHistoricalTimeSeries(identifiers,
+          currentDate,
+          dataSource,
+          dataProvider,
+          dataField,
+          subseriesKey.getStart(),
+          true,
+          subseriesKey.getEnd(),
+          subseriesKey.getIncludeEnd(),
+          subseriesKey.getMaxPoints());
     };
 
     HistoricalTimeSeries hts = _cache.get(key, fetchHts);
@@ -468,20 +442,15 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
     ArgumentChecker.notNull(dataField, "dataField");
     ArgumentChecker.notEmpty(identifierBundle, "identifierBundle");
     final HistoricalTimeSeriesKey key = new HistoricalTimeSeriesKey(resolutionKey,
-                                                              identifierValidityDate,
-                                                              identifierBundle,
-                                                              null,
-                                                              null,
-                                                              dataField);
+        identifierValidityDate,
+        identifierBundle,
+        null,
+        null,
+        dataField);
 
-    final Function0<HistoricalTimeSeries> fetchHts = new Function0<HistoricalTimeSeries>() {
-      @Override
-      public HistoricalTimeSeries execute() {
-        return _underlying.getHistoricalTimeSeries(dataField, identifierBundle, identifierValidityDate, resolutionKey);
-      }
-    };
-
-    return _cache.get(key, fetchHts);
+    final Supplier<HistoricalTimeSeries> fetchHts =
+        () -> _underlying.getHistoricalTimeSeries(dataField, identifierBundle, identifierValidityDate, resolutionKey);
+        return _cache.get(key, fetchHts);
   }
 
   @Override
@@ -579,10 +548,10 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
      * @return  true if an exact match, false if it needs trimming
      */
     public boolean isMatch(final LocalDate start,
-                           final boolean includeStart,
-                           final LocalDate end,
-                           final boolean includeEnd,
-                           final Integer maxPoints) {
+        final boolean includeStart,
+        final LocalDate end,
+        final boolean includeEnd,
+        final Integer maxPoints) {
       return ObjectUtils.equals(start, _start)
           && ObjectUtils.equals(end, _end)
           && includeStart
@@ -624,27 +593,27 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
 
   @Override
   public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField,
-                                                      final ExternalIdBundle identifierBundle,
-                                                      final LocalDate identifierValidityDate,
-                                                      final String resolutionKey,
-                                                      final LocalDate start,
-                                                      final boolean includeStart,
-                                                      final LocalDate end,
-                                                      final boolean includeEnd) {
+      final ExternalIdBundle identifierBundle,
+      final LocalDate identifierValidityDate,
+      final String resolutionKey,
+      final LocalDate start,
+      final boolean includeStart,
+      final LocalDate end,
+      final boolean includeEnd) {
     return doGetHistoricalTimeSeries(
         dataField, identifierBundle, identifierValidityDate, resolutionKey, start, includeStart, end, includeEnd, null);
   }
 
   @Override
   public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField,
-                                                      final ExternalIdBundle identifierBundle,
-                                                      final LocalDate identifierValidityDate,
-                                                      final String resolutionKey,
-                                                      final LocalDate start,
-                                                      final boolean includeStart,
-                                                      final LocalDate end,
-                                                      final boolean includeEnd,
-                                                      final int maxPoints) {
+      final ExternalIdBundle identifierBundle,
+      final LocalDate identifierValidityDate,
+      final String resolutionKey,
+      final LocalDate start,
+      final boolean includeStart,
+      final LocalDate end,
+      final boolean includeEnd,
+      final int maxPoints) {
     return doGetHistoricalTimeSeries(
         dataField,
         identifierBundle,
@@ -668,14 +637,14 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
       final String dataField, final ExternalIdBundle identifierBundle, final String resolutionKey,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     return getLatestDataPoint(dataField, identifierBundle, LocalDate.now(getClock()), resolutionKey,
-                              start, includeStart, end, includeEnd);
+        start, includeStart, end, includeEnd);
   }
 
   @Override
   public Pair<LocalDate, Double> getLatestDataPoint(
       final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String resolutionKey) {
     return getLatestDataPoint(dataField, identifierBundle, identifierValidityDate, resolutionKey,
-                              (LocalDate) null, true, (LocalDate) null, true);
+        (LocalDate) null, true, (LocalDate) null, true);
   }
 
   @Override
@@ -692,46 +661,43 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
   }
 
   private HistoricalTimeSeries doGetHistoricalTimeSeries(final String dataField,
-                                                         final ExternalIdBundle identifierBundle,
-                                                         final LocalDate identifierValidityDate,
-                                                         final String resolutionKey,
-                                                         final LocalDate start,
-                                                         final boolean includeStart,
-                                                         final LocalDate end,
-                                                         final boolean includeEnd,
-                                                         final Integer maxPoints) {
+      final ExternalIdBundle identifierBundle,
+      final LocalDate identifierValidityDate,
+      final String resolutionKey,
+      final LocalDate start,
+      final boolean includeStart,
+      final LocalDate end,
+      final boolean includeEnd,
+      final Integer maxPoints) {
     final HistoricalTimeSeriesKey seriesKey = new HistoricalTimeSeriesKey(resolutionKey,
-                                                                    identifierValidityDate,
-                                                                    identifierBundle,
-                                                                    null,
-                                                                    null,
-                                                                    dataField);
+        identifierValidityDate,
+        identifierBundle,
+        null,
+        null,
+        dataField);
     final SubSeriesKey subseriesKey = new SubSeriesKey(start, end, maxPoints);
     final ObjectsPair<HistoricalTimeSeriesKey, SubSeriesKey> key = ObjectsPair.of(seriesKey, subseriesKey);
 
-    final Function0<HistoricalTimeSeries> fetchHts = new Function0<HistoricalTimeSeries>() {
-      @Override
-      public HistoricalTimeSeries execute() {
-        if (maxPoints == null) {
-          return _underlying.getHistoricalTimeSeries(dataField,
-                                                     identifierBundle,
-                                                     identifierValidityDate,
-                                                     resolutionKey,
-                                                     subseriesKey.getStart(),
-                                                     true,
-                                                     subseriesKey.getEnd(),
-                                                     subseriesKey.getIncludeEnd());
-        }
+    final Supplier<HistoricalTimeSeries> fetchHts = () -> {
+      if (maxPoints == null) {
         return _underlying.getHistoricalTimeSeries(dataField,
-                                                   identifierBundle,
-                                                   identifierValidityDate,
-                                                   resolutionKey,
-                                                   subseriesKey.getStart(),
-                                                   true,
-                                                   subseriesKey.getEnd(),
-                                                   subseriesKey.getIncludeEnd(),
-                                                   subseriesKey.getMaxPoints());
+            identifierBundle,
+            identifierValidityDate,
+            resolutionKey,
+            subseriesKey.getStart(),
+            true,
+            subseriesKey.getEnd(),
+            subseriesKey.getIncludeEnd());
       }
+      return _underlying.getHistoricalTimeSeries(dataField,
+          identifierBundle,
+          identifierValidityDate,
+          resolutionKey,
+          subseriesKey.getStart(),
+          true,
+          subseriesKey.getEnd(),
+          subseriesKey.getIncludeEnd(),
+          subseriesKey.getMaxPoints());
     };
 
     HistoricalTimeSeries hts = _cache.get(key, fetchHts);
@@ -752,12 +718,12 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
 
     for (final ExternalIdBundle identifiers : identifierSet) {
       final HistoricalTimeSeriesKey key = new HistoricalTimeSeriesKey(null,
-                                                                null,
-                                                                identifiers,
-                                                                dataSource,
-                                                                dataProvider,
-                                                                dataField);
-      final HistoricalTimeSeries hts = _cache.get(key, null);
+          null,
+          identifiers,
+          dataSource,
+          dataProvider,
+          dataField);
+      final HistoricalTimeSeries hts = _cache.get(key, (Supplier<HistoricalTimeSeries>) null);
       if (hts == null) {
         //TODO handle misses
         remainingIds.add(identifiers);
@@ -768,22 +734,22 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
     if (remainingIds.size() > 0) {
       final Map<ExternalIdBundle, HistoricalTimeSeries> remainingTsResults =
           _underlying.getHistoricalTimeSeries(remainingIds,
-                                              dataSource,
-                                              dataProvider,
-                                              dataField,
-                                              start,
-                                              includeStart,
-                                              end,
-                                              includeEnd);
+              dataSource,
+              dataProvider,
+              dataField,
+              start,
+              includeStart,
+              end,
+              includeEnd);
       for (final Map.Entry<ExternalIdBundle, HistoricalTimeSeries> tsResult : remainingTsResults.entrySet()) {
         final ExternalIdBundle identifiers = tsResult.getKey();
         HistoricalTimeSeries hts = tsResult.getValue();
         final HistoricalTimeSeriesKey key = new HistoricalTimeSeriesKey(null,
-                                                                  null,
-                                                                  identifiers,
-                                                                  dataSource,
-                                                                  dataProvider,
-                                                                  dataField);
+            null,
+            identifiers,
+            dataSource,
+            dataProvider,
+            dataField);
         if (hts != null) {
           LOGGER.debug("Caching time-series {}", hts);
           _cache.deepInsert(key, hts.getUniqueId().getObjectId(), hts);
@@ -863,13 +829,7 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
 
   @Override
   public ExternalIdBundle getExternalIdBundle(final UniqueId uniqueId) {
-
-    return _identifierBundleCache.get(uniqueId, new Function0<ExternalIdBundle>() {
-      @Override
-      public ExternalIdBundle execute() {
-        return _underlying.getExternalIdBundle(uniqueId);
-      }
-    });
+    return _identifierBundleCache.get(uniqueId, () -> _underlying.getExternalIdBundle(uniqueId));
   }
 
   /**

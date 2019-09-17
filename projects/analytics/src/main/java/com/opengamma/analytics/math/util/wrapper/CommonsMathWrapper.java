@@ -46,7 +46,7 @@ public final class CommonsMathWrapper {
 
       @Override
       public double value(final double x) {
-        return f.evaluate(x);
+        return f.apply(x);
       }
     };
   }
@@ -63,7 +63,7 @@ public final class CommonsMathWrapper {
       @Override
       public double value(final double[] point) throws FunctionEvaluationException, IllegalArgumentException {
 
-        return f.evaluate(new DoubleMatrix1D(point));
+        return f.apply(new DoubleMatrix1D(point));
       }
     };
   }
@@ -164,7 +164,7 @@ public final class CommonsMathWrapper {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         try {
           return lagrange.value(x);
         } catch (final org.apache.commons.math.MathException e) {
@@ -196,7 +196,7 @@ public final class CommonsMathWrapper {
 
       @Override
       public double value(final double x) throws FunctionEvaluationException {
-        return f.evaluate(x);
+        return f.apply(x);
       }
 
       @Override

@@ -121,7 +121,7 @@ public class GeneratorInflationIssuerProviderDiscount extends Function1D<DoubleM
   }
 
   @Override
-  public InflationIssuerProviderDiscount evaluate(final DoubleMatrix1D x) {
+  public InflationIssuerProviderDiscount apply(final DoubleMatrix1D x) {
     final InflationIssuerProviderDiscount provider = _knownData.copy();
     final Set<String> nameSet = _generatorsMap.keySet();
     int indexParam = 0;

@@ -90,7 +90,7 @@ public class DupireLocalVolatilityTest {
         final SABRFormulaData sabrdata = new SABRFormulaData(ALPHA, BETA, RHO, NU);
         final EuropeanVanillaOption option = new EuropeanVanillaOption(k, t, true);
         final Function1D<SABRFormulaData, Double> func = SABR.getVolatilityFunction(option, FORWARD_CURVE.getForward(t));
-        return func.evaluate(sabrdata);
+        return func.apply(sabrdata);
       }
     };
 

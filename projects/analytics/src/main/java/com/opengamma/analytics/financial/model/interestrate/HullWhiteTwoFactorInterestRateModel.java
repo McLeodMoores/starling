@@ -24,7 +24,7 @@ public class HullWhiteTwoFactorInterestRateModel implements DiscountBondModel<Hu
     return new Function1D<HullWhiteTwoFactorDataBundle, Double>() {
 
       @Override
-      public Double evaluate(final HullWhiteTwoFactorDataBundle data) {
+      public Double apply(final HullWhiteTwoFactorDataBundle data) {
         Validate.notNull(data, "data");
         final double t1 = 0;
         final double t2 = DateUtils.getDifferenceInYears(data.getDate(), time);

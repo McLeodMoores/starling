@@ -89,7 +89,7 @@ public final class ForexNonDeliverableOptionBlackMethod implements ForexPricingM
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, dfDelivery, volatility);
     final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, expiryTime, !optionForex.isCall());
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(option);
-    final double price = func.evaluate(dataBlack) * Math.abs(optionForex.getUnderlyingNDF().getNotionalCurrency1()) * (optionForex.isLong() ? 1.0 : -1.0);
+    final double price = func.apply(dataBlack) * Math.abs(optionForex.getUnderlyingNDF().getNotionalCurrency1()) * (optionForex.isLong() ? 1.0 : -1.0);
     final CurrencyAmount priceCurrency = CurrencyAmount.of(optionForex.getCurrency2(), price);
     return MultipleCurrencyAmount.of(priceCurrency);
   }

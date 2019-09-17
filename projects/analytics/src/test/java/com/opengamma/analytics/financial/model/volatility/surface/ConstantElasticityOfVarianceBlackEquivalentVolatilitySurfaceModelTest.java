@@ -62,25 +62,25 @@ public class ConstantElasticityOfVarianceBlackEquivalentVolatilitySurfaceModelTe
     OptionDefinition option = new EuropeanVanillaOptionDefinition(90, EXPIRY, true);
     ConstantElasticityOfVarianceModelDataBundle data = DATA.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(0)));
     VolatilitySurface blackEquivalent = MODEL.getSurface(Collections.<OptionDefinition, Double> singletonMap(option, 0.), data);
-    assertEquals(BSM.getPricingFunction(option).evaluate(data.withVolatilitySurface(blackEquivalent)), BSM.getPricingFunction(option).evaluate(data), 0);
+    assertEquals(BSM.getPricingFunction(option).apply(data.withVolatilitySurface(blackEquivalent)), BSM.getPricingFunction(option).apply(data), 0);
     data = DATA.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(0.5)));
     blackEquivalent = MODEL.getSurface(Collections.<OptionDefinition, Double> singletonMap(option, 0.), data);
-    assertEquals(BSM.getPricingFunction(option).evaluate(data.withVolatilitySurface(blackEquivalent)), 9.7531, eps);
+    assertEquals(BSM.getPricingFunction(option).apply(data.withVolatilitySurface(blackEquivalent)), 9.7531, eps);
     data = DATA.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(1)));
     option = new EuropeanVanillaOptionDefinition(95, EXPIRY, true);
     blackEquivalent = MODEL.getSurface(Collections.<OptionDefinition, Double> singletonMap(option, 0.), data);
-    assertEquals(BSM.getPricingFunction(option).evaluate(data.withVolatilitySurface(blackEquivalent)), 5.2678, eps);
+    assertEquals(BSM.getPricingFunction(option).apply(data.withVolatilitySurface(blackEquivalent)), 5.2678, eps);
     data = DATA.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(2)));
     option = new EuropeanVanillaOptionDefinition(100, EXPIRY, true);
     blackEquivalent = MODEL.getSurface(Collections.<OptionDefinition, Double> singletonMap(option, 0.), data);
-    assertEquals(BSM.getPricingFunction(option).evaluate(data.withVolatilitySurface(blackEquivalent)), 3.8897, eps);
+    assertEquals(BSM.getPricingFunction(option).apply(data.withVolatilitySurface(blackEquivalent)), 3.8897, eps);
     data = DATA.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(3)));
     option = new EuropeanVanillaOptionDefinition(105, EXPIRY, true);
     blackEquivalent = MODEL.getSurface(Collections.<OptionDefinition, Double> singletonMap(option, 0.), data);
-    assertEquals(BSM.getPricingFunction(option).evaluate(data.withVolatilitySurface(blackEquivalent)), 3.7832, eps);
+    assertEquals(BSM.getPricingFunction(option).apply(data.withVolatilitySurface(blackEquivalent)), 3.7832, eps);
     data = DATA.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(4)));
     option = new EuropeanVanillaOptionDefinition(115, EXPIRY, true);
     blackEquivalent = MODEL.getSurface(Collections.<OptionDefinition, Double> singletonMap(option, 0.), data);
-    assertEquals(BSM.getPricingFunction(option).evaluate(data.withVolatilitySurface(blackEquivalent)), 2.7613, eps);
+    assertEquals(BSM.getPricingFunction(option).apply(data.withVolatilitySurface(blackEquivalent)), 2.7613, eps);
   }
 }

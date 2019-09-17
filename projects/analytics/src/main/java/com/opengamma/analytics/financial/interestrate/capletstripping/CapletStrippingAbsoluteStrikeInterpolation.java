@@ -181,7 +181,7 @@ public class CapletStrippingAbsoluteStrikeInterpolation extends CapletStrippingA
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> volDiffFunc = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
 
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
         final VolatilityTermStructure vol = _volModel.evaluate(x);
         final double[] modelVols = pricer.impliedVols(vol);
         final double[] res = new double[nCaps];
@@ -215,7 +215,7 @@ public class CapletStrippingAbsoluteStrikeInterpolation extends CapletStrippingA
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> weightedPriceFunc = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
 
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
 
         final VolatilityTermStructure vol = _volModel.evaluate(x);
         final double[] modelPrices = pricer.price(vol);
@@ -231,7 +231,7 @@ public class CapletStrippingAbsoluteStrikeInterpolation extends CapletStrippingA
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> priceJac = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
 
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D x) {
 
         final Interpolator1DDataBundle db = _interpolator.getDataBundle(_knots, x.getData());
 

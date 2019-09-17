@@ -30,18 +30,18 @@ public class NonLinearTransformFunction {
     _func = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D yStar) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D yStar) {
         final DoubleMatrix1D y = _transform.inverseTransform(yStar);
-        return func.evaluate(y);
+        return func.apply(y);
       }
     };
 
     _jac = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D yStar) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D yStar) {
         final DoubleMatrix1D y = _transform.inverseTransform(yStar);
-        final DoubleMatrix2D h = jac.evaluate(y);
+        final DoubleMatrix2D h = jac.apply(y);
         final DoubleMatrix2D invJ = _transform.inverseJacobian(yStar);
         return (DoubleMatrix2D) MA.multiply(h, invJ);
       }

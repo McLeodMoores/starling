@@ -51,38 +51,38 @@ public class ModifiedCorradoSuSkewnessKurtosisModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    CORRADO_SU.getPricingFunction(CALL_100).evaluate((SkewKurtosisOptionDataBundle) null);
+    CORRADO_SU.getPricingFunction(CALL_100).apply((SkewKurtosisOptionDataBundle) null);
   }
 
   @Test
   public void test() {
-    assertEquals(BSM.getPricingFunction(CALL_100).evaluate(NORMAL_DATA), CORRADO_SU.getPricingFunction(CALL_100).evaluate(NORMAL_DATA), EPS);
-    assertEquals(BSM.getPricingFunction(PUT_75).evaluate(NORMAL_DATA), CORRADO_SU.getPricingFunction(PUT_75).evaluate(NORMAL_DATA), EPS);
+    assertEquals(BSM.getPricingFunction(CALL_100).apply(NORMAL_DATA), CORRADO_SU.getPricingFunction(CALL_100).apply(NORMAL_DATA), EPS);
+    assertEquals(BSM.getPricingFunction(PUT_75).apply(NORMAL_DATA), CORRADO_SU.getPricingFunction(PUT_75).apply(NORMAL_DATA), EPS);
     final SkewKurtosisOptionDataBundle data = new SkewKurtosisOptionDataBundle(CURVE, B, SURFACE, SPOT, DATE, -0.2, 3);
     Function1D<SkewKurtosisOptionDataBundle, Double> f = CORRADO_SU.getPricingFunction(PUT_75);
-    assertEquals(0.3103, f.evaluate(data), EPS);
-    assertEquals(0.3186, f.evaluate(data.withSkew(-0.1).withKurtosis(3.5)), EPS);
-    assertEquals(0.3267, f.evaluate(data.withSkew(0.).withKurtosis(4.)), EPS);
-    assertEquals(0.3347, f.evaluate(data.withSkew(0.1).withKurtosis(4.5)), EPS);
-    assertEquals(0.3427, f.evaluate(data.withSkew(0.2).withKurtosis(5.)), EPS);
+    assertEquals(0.3103, f.apply(data), EPS);
+    assertEquals(0.3186, f.apply(data.withSkew(-0.1).withKurtosis(3.5)), EPS);
+    assertEquals(0.3267, f.apply(data.withSkew(0.).withKurtosis(4.)), EPS);
+    assertEquals(0.3347, f.apply(data.withSkew(0.1).withKurtosis(4.5)), EPS);
+    assertEquals(0.3427, f.apply(data.withSkew(0.2).withKurtosis(5.)), EPS);
     f = CORRADO_SU.getPricingFunction(PUT_100);
-    assertEquals(6.0422, f.evaluate(data), EPS);
-    assertEquals(5.9217, f.evaluate(data.withSkew(-0.1).withKurtosis(3.5)), EPS);
-    assertEquals(5.8015, f.evaluate(data.withSkew(0.).withKurtosis(4.)), EPS);
-    assertEquals(5.6814, f.evaluate(data.withSkew(0.1).withKurtosis(4.5)), EPS);
-    assertEquals(5.5615, f.evaluate(data.withSkew(0.2).withKurtosis(5.)), EPS);
+    assertEquals(6.0422, f.apply(data), EPS);
+    assertEquals(5.9217, f.apply(data.withSkew(-0.1).withKurtosis(3.5)), EPS);
+    assertEquals(5.8015, f.apply(data.withSkew(0.).withKurtosis(4.)), EPS);
+    assertEquals(5.6814, f.apply(data.withSkew(0.1).withKurtosis(4.5)), EPS);
+    assertEquals(5.5615, f.apply(data.withSkew(0.2).withKurtosis(5.)), EPS);
     f = CORRADO_SU.getPricingFunction(CALL_100);
-    assertEquals(7.7770, f.evaluate(data), EPS);
-    assertEquals(7.6565, f.evaluate(data.withSkew(-0.1).withKurtosis(3.5)), EPS);
-    assertEquals(7.5363, f.evaluate(data.withSkew(0.).withKurtosis(4.)), EPS);
-    assertEquals(7.4162, f.evaluate(data.withSkew(0.1).withKurtosis(4.5)), EPS);
-    assertEquals(7.2963, f.evaluate(data.withSkew(0.2).withKurtosis(5.)), EPS);
+    assertEquals(7.7770, f.apply(data), EPS);
+    assertEquals(7.6565, f.apply(data.withSkew(-0.1).withKurtosis(3.5)), EPS);
+    assertEquals(7.5363, f.apply(data.withSkew(0.).withKurtosis(4.)), EPS);
+    assertEquals(7.4162, f.apply(data.withSkew(0.1).withKurtosis(4.5)), EPS);
+    assertEquals(7.2963, f.apply(data.withSkew(0.2).withKurtosis(5.)), EPS);
     f = CORRADO_SU.getPricingFunction(CALL_125);
-    assertEquals(0.9567, f.evaluate(data), EPS);
-    assertEquals(1.1173, f.evaluate(data.withSkew(-0.1).withKurtosis(3.5)), EPS);
-    assertEquals(1.2782, f.evaluate(data.withSkew(0.).withKurtosis(4.)), EPS);
-    assertEquals(1.4391, f.evaluate(data.withSkew(0.1).withKurtosis(4.5)), EPS);
-    assertEquals(1.6000, f.evaluate(data.withSkew(0.2).withKurtosis(5.)), EPS);
+    assertEquals(0.9567, f.apply(data), EPS);
+    assertEquals(1.1173, f.apply(data.withSkew(-0.1).withKurtosis(3.5)), EPS);
+    assertEquals(1.2782, f.apply(data.withSkew(0.).withKurtosis(4.)), EPS);
+    assertEquals(1.4391, f.apply(data.withSkew(0.1).withKurtosis(4.5)), EPS);
+    assertEquals(1.6000, f.apply(data.withSkew(0.2).withKurtosis(5.)), EPS);
 
   }
 }

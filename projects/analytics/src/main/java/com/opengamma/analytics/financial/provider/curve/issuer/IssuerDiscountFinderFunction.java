@@ -43,9 +43,9 @@ public class IssuerDiscountFinderFunction extends Function1D<DoubleMatrix1D, Dou
   }
 
   @Override
-  public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+  public DoubleMatrix1D apply(final DoubleMatrix1D x) {
     final IssuerProviderDiscount provider = _data.getKnownData().copy();
-    final IssuerProviderDiscount newCurves = _data.getGeneratorMarket().evaluate(x);
+    final IssuerProviderDiscount newCurves = _data.getGeneratorMarket().apply(x);
     provider.setAll(newCurves);
     final double[] res = new double[_data.getNumberOfInstruments()];
     for (int i = 0; i < _data.getNumberOfInstruments(); i++) {

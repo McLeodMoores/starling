@@ -328,7 +328,7 @@ public class FXOptionBlackVegaPnLFunction extends AbstractFunction {
         if (tsForTicker == null) {
           throw new OpenGammaRuntimeException("Could not get identifier / vol series for " + id);
         }
-        final DoubleTimeSeries<?> volHistory = DIFFERENCE.evaluate(samplingFunction.getSampledTimeSeries(tsForTicker.getTimeSeries(), schedule));
+        final DoubleTimeSeries<?> volHistory = DIFFERENCE.apply(samplingFunction.getSampledTimeSeries(tsForTicker.getTimeSeries(), schedule));
         final double vega = vegas[j][i] / 100;
         if (vegaPnL == null) {
           vegaPnL = volHistory.multiply(vega);

@@ -150,7 +150,7 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
   }
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
 
     // setting the volatility in the volatility matrix
     _inflationCapZeroCouponParameters.setVolatility(x, _expiryIndex, _strikeIndex);

@@ -66,7 +66,7 @@ public final class PortfolioHedgingCalculator {
     final DoubleMatrix2D rWtW = (DoubleMatrix2D) MATRIX.multiply(r, wtW);
     final DoubleMatrix2D rWtWRt = (DoubleMatrix2D) MATRIX.multiply(rWtW, MATRIX.getTranspose(r));
     final DoubleMatrix1D rWtWP = ((DoubleMatrix2D) MATRIX.scale(MATRIX.multiply(rWtW, p), -1.0)).getColumnVector(0);
-    final SVDecompositionResult dec = DECOMPOSITION.evaluate(rWtWRt);
+    final SVDecompositionResult dec = DECOMPOSITION.apply(rWtWRt);
     final DoubleMatrix1D q = dec.solve(rWtWP);
     return q.getData();
   }

@@ -88,7 +88,7 @@ public class InterestRateFutureOptionMarginSecuritySABRMethodTest {
     final BlackPriceFunction blackFunction = new BlackPriceFunction();
     final BlackFunctionData dataBlack = new BlackFunctionData(1 - priceFuture, 1.0, volatility);
     final EuropeanVanillaOption option = new EuropeanVanillaOption(1 - STRIKE, EXPIRATION_TIME, !IS_CALL);
-    final double priceOptionExpected = blackFunction.getPriceFunction(option).evaluate(dataBlack);
+    final double priceOptionExpected = blackFunction.getPriceFunction(option).apply(dataBlack);
     assertEquals("Future option with SABR volatilities: option price from future price", priceOptionExpected, priceOption);
   }
 
@@ -106,7 +106,7 @@ public class InterestRateFutureOptionMarginSecuritySABRMethodTest {
     final BlackPriceFunction blackFunction = new BlackPriceFunction();
     final BlackFunctionData dataBlack = new BlackFunctionData(1 - priceFuture, 1.0, volatility);
     final EuropeanVanillaOption option = new EuropeanVanillaOption(1 - STRIKE, expirationTime, !IS_CALL);
-    final double priceOptionExpected = blackFunction.getPriceFunction(option).evaluate(dataBlack);
+    final double priceOptionExpected = blackFunction.getPriceFunction(option).apply(dataBlack);
     assertEquals("Future option with SABR volatilities: option price from future price", priceOptionExpected, priceOption);
   }
 

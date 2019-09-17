@@ -21,7 +21,7 @@ import com.opengamma.util.tuple.Pair;
 public class GreekToPositionGreekConverter extends Function1D<GreekDataBundle, Map<PositionGreek, Double>> {
 
   @Override
-  public Map<PositionGreek, Double> evaluate(final GreekDataBundle data) {
+  public Map<PositionGreek, Double> apply(final GreekDataBundle data) {
     ArgumentChecker.notNull(data, "Risk factor data bundle");
     final GreekResultCollection greeks = data.getGreekResults();
     final Map<PositionGreek, Double> riskFactors = new HashMap<>();

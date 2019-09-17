@@ -40,7 +40,7 @@ public class VasicekInterestRateModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getDiscountBondFunction(START, MATURITY).evaluate((VasicekDataBundle) null);
+    MODEL.getDiscountBondFunction(START, MATURITY).apply((VasicekDataBundle) null);
   }
 
   @Test
@@ -50,10 +50,10 @@ public class VasicekInterestRateModelTest {
     final double speed = 0.01;
     final VolatilityCurve sigma = new VolatilityCurve(ConstantDoublesCurve.from(0.01));
     VasicekDataBundle data = new VasicekDataBundle(shortRate, sigma, TODAY, longRate, speed);
-    assertEquals(MODEL.getDiscountBondFunction(START, START).evaluate(data), 1, 0);
+    assertEquals(MODEL.getDiscountBondFunction(START, START).apply(data), 1, 0);
     data = new VasicekDataBundle(shortRate, new VolatilityCurve(ConstantDoublesCurve.from(0)), TODAY, longRate, speed);
     final double factor = (1 - Math.exp(-speed * YEARS));
     final double lnA = longRate * (factor / speed - YEARS);
-    assertEquals(MODEL.getDiscountBondFunction(START, MATURITY).evaluate(data), Math.exp(lnA - data.getShortRate(0) * factor / speed), 0);
+    assertEquals(MODEL.getDiscountBondFunction(START, MATURITY).apply(data), Math.exp(lnA - data.getShortRate(0) * factor / speed), 0);
   }
 }

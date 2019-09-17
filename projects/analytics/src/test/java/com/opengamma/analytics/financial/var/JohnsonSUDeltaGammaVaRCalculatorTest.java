@@ -106,7 +106,7 @@ public class JohnsonSUDeltaGammaVaRCalculatorTest {
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return _x;
     }
 

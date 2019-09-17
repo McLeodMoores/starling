@@ -46,7 +46,7 @@ public class WeightedMeanCalculatorTest {
       values[i] = random.nextDouble();
     }
     final EqualWeightFunction f = EqualWeightFunction.of(n);
-    assertEquals(CALCULATOR.apply(f, values), new MeanCalculator().evaluate(values), 1e-15);
+    assertEquals(CALCULATOR.apply(f, values), new MeanCalculator().apply(values), 1e-15);
   }
 
   /**
@@ -60,7 +60,7 @@ public class WeightedMeanCalculatorTest {
       values[i] = i;
     }
     final ExponentialWeightFunction f = ExponentialWeightFunction.of(0.06);
-    assertTrue(CALCULATOR.apply(f, values) < new MeanCalculator().evaluate(values));
+    assertTrue(CALCULATOR.apply(f, values) < new MeanCalculator().apply(values));
   }
 
   /**

@@ -29,17 +29,17 @@ public class DoubleExponentialMeshingTest {
 
   @Test
   public void testEndPoints() {
-    assertEquals(LOWER, MESHER.evaluate(0));
-    assertEquals(UPPER, MESHER.evaluate(N-1));
+    assertEquals(LOWER, MESHER.apply(0));
+    assertEquals(UPPER, MESHER.apply(N-1));
     double frac = (CENTRE-LOWER) / (UPPER - LOWER);
-    assertEquals(CENTRE, MESHER.evaluate((int) (frac * N)-1));
+    assertEquals(CENTRE, MESHER.apply((int) (frac * N)-1));
   }
 
   @Test
   public void testIncreassing() {
     double vOld = LOWER;
     for (int i = 1; i < N; i++) {
-      double vNew = MESHER.evaluate(i);
+      double vNew = MESHER.apply(i);
       assertTrue(vNew > vOld);
       vOld = vNew;
     }
@@ -49,7 +49,7 @@ public class DoubleExponentialMeshingTest {
   public void testIncreassingprint() {
 
     for (int i = 0; i < N; i++) {
-      double vNew = MESHER.evaluate(i);
+      double vNew = MESHER.apply(i);
       System.out.println(i+"\t"+vNew);
     }
   }

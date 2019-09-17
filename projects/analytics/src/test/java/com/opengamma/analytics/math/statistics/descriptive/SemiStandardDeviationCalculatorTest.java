@@ -37,7 +37,7 @@ public class SemiStandardDeviationCalculatorTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullArray() {
-    UPSIDE.evaluate((double[]) null);
+    UPSIDE.apply((double[]) null);
   }
 
   /**
@@ -47,8 +47,8 @@ public class SemiStandardDeviationCalculatorTest {
   public void test() {
     final double eps = 1e-3;
     PartialMomentCalculator pm = new PartialMomentCalculator(0, true);
-    assertEquals(UPSIDE.evaluate(X), pm.evaluate(X), eps);
+    assertEquals(UPSIDE.apply(X), pm.apply(X), eps);
     pm = new PartialMomentCalculator(0, false);
-    assertEquals(DOWNSIDE.evaluate(X), pm.evaluate(X), eps);
+    assertEquals(DOWNSIDE.apply(X), pm.apply(X), eps);
   }
 }

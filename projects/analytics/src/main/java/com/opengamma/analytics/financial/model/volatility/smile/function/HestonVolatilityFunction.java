@@ -67,8 +67,8 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
     return new Function1D<HestonModelData, Double>() {
 
       @Override
-      public Double evaluate(final HestonModelData x) {
-        return func.evaluate(x)[0];
+      public Double apply(final HestonModelData x) {
+        return func.apply(x)[0];
       }
     };
   }
@@ -84,7 +84,7 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public double[] evaluate(final HestonModelData x) {
+      public double[] apply(final HestonModelData x) {
         final MartingaleCharacteristicExponent ce = new HestonCharacteristicExponent(x);
         // TODO calculations relating to the FFT setup are made each call, even though they will be very similar (depends on Characteristic
         // Exponent). Maybe worth calculating a typical setup, outside of this function
@@ -163,7 +163,7 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
       final double rho) {
     final Function1D<HestonModelData, Double> func = getVolatilityFunction(new EuropeanVanillaOption(strike, timeToExpiry, true), forward);
     final HestonModelData data = new HestonModelData(kappa, theta, vol0, omega, rho);
-    return func.evaluate(data);
+    return func.apply(data);
   }
 
   /**
@@ -193,7 +193,7 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
       final double rho) {
     final Function1D<HestonModelData, double[]> func = getVolatilityFunction(forward, strikes, timeToExpiry);
     final HestonModelData data = new HestonModelData(kappa, theta, vol0, omega, rho);
-    return func.evaluate(data);
+    return func.apply(data);
   }
 
   @Override
@@ -203,8 +203,8 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
     return new Function1D<HestonModelData, double[]>() {
 
       @Override
-      public double[] evaluate(final HestonModelData x) {
-        final double[][] temp = func.evaluate(x);
+      public double[] apply(final HestonModelData x) {
+        final double[][] temp = func.apply(x);
         Validate.isTrue(temp.length == 1);
         return temp[0];
       }
@@ -226,7 +226,7 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public double[][] evaluate(final HestonModelData x) {
+      public double[][] apply(final HestonModelData x) {
         final MartingaleCharacteristicExponent ce = new HestonCharacteristicExponent(x);
         final double[][] greeks = greekCal.getGreeks(forward, 1.0, timeToExpiry, true, ce, lowestStrike, highestStrike, n, _limitSigma, _alpha,
             _limitTolerance);
@@ -285,8 +285,8 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
     return new Function1D<HestonModelData, double[]>() {
 
       @Override
-      public double[] evaluate(final HestonModelData x) {
-        final double[][] temp = func.evaluate(x);
+      public double[] apply(final HestonModelData x) {
+        final double[][] temp = func.apply(x);
         Validate.isTrue(temp.length == 1);
         return temp[0];
       }
@@ -307,7 +307,7 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public double[][] evaluate(final HestonModelData x) {
+      public double[][] apply(final HestonModelData x) {
         final MartingaleCharacteristicExponent ce = new HestonCharacteristicExponent(x);
         final double[][] greeks = greekCal.getGreeks(forward, 1.0, timeToExpiry, true, ce, lowestStrike, highestStrike, n, _limitSigma, _alpha,
             _limitTolerance);

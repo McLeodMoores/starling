@@ -61,7 +61,7 @@ public class FadeInOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(DEFINITION).evaluate((StandardOptionWithSpotTimeSeriesDataBundle) null);
+    MODEL.getPricingFunction(DEFINITION).apply((StandardOptionWithSpotTimeSeriesDataBundle) null);
   }
 
   @Test
@@ -69,20 +69,20 @@ public class FadeInOptionModelTest {
     final double eps = 1e-6;
     FadeInOptionDefinition definition = new FadeInOptionDefinition(SPOT, EXPIRY, false, 20, 180);
     final StandardOptionWithSpotTimeSeriesDataBundle data = DATA.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(0)));
-    assertEquals(BSM.getPricingFunction(definition).evaluate(data), MODEL.getPricingFunction(definition).evaluate(data), eps);
+    assertEquals(BSM.getPricingFunction(definition).apply(data), MODEL.getPricingFunction(definition).apply(data), eps);
     definition = new FadeInOptionDefinition(SPOT, EXPIRY, true, 95, 105);
-    assertEquals(BSM.getPricingFunction(definition).evaluate(data), MODEL.getPricingFunction(definition).evaluate(data), eps);
+    assertEquals(BSM.getPricingFunction(definition).apply(data), MODEL.getPricingFunction(definition).apply(data), eps);
     definition = new FadeInOptionDefinition(SPOT, EXPIRY, false, 95, 105);
-    assertEquals(BSM.getPricingFunction(definition).evaluate(data), MODEL.getPricingFunction(definition).evaluate(data), eps);
+    assertEquals(BSM.getPricingFunction(definition).apply(data), MODEL.getPricingFunction(definition).apply(data), eps);
   }
 
   @Test
   public void test() {
     StandardOptionWithSpotTimeSeriesDataBundle data = DATA;
     FadeInOptionDefinition definition = new FadeInOptionDefinition(SPOT, EXPIRY, true, 85, 115);
-    assertEquals(MODEL.getPricingFunction(definition).evaluate(data), 2.58, 1e-2);
+    assertEquals(MODEL.getPricingFunction(definition).apply(data), 2.58, 1e-2);
     data = DATA.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(0.4)));
     definition = new FadeInOptionDefinition(SPOT, EXPIRY, true, 95, 105);
-    assertEquals(MODEL.getPricingFunction(definition).evaluate(data), 2.036, 1e-3);
+    assertEquals(MODEL.getPricingFunction(definition).apply(data), 2.036, 1e-3);
   }
 }

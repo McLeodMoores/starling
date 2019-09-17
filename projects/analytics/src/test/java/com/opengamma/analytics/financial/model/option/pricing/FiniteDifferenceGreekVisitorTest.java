@@ -30,7 +30,7 @@ public class FiniteDifferenceGreekVisitorTest {
   private static final Function1D<StandardOptionDataBundle, Double> FUNCTION = new Function1D<StandardOptionDataBundle, Double>() {
 
     @Override
-    public Double evaluate(final StandardOptionDataBundle x) {
+    public Double apply(final StandardOptionDataBundle x) {
       return 0.;
     }
 

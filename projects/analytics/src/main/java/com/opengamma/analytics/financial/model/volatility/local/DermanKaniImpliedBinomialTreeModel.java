@@ -35,8 +35,8 @@ public class DermanKaniImpliedBinomialTreeModel implements ImpliedTreeModel<Opti
     Validate.notNull(definition, "definition");
     Validate.notNull(data, "data");
 
-    final int m1 = RecombiningBinomialTree.NODES.evaluate(_n);
-    final int m2 = RecombiningBinomialTree.NODES.evaluate(_n - 1);
+    final int m1 = RecombiningBinomialTree.NODES.apply(_n);
+    final int m2 = RecombiningBinomialTree.NODES.apply(_n - 1);
     final double[][] impliedTree = new double[_n + 1][m1]; // TODO this wastes space
 
     final double[] transitionProbabilities = new double[m2];
@@ -50,7 +50,7 @@ public class DermanKaniImpliedBinomialTreeModel implements ImpliedTreeModel<Opti
     int previousNodes = 1;
     final ZonedDateTime date = data.getDate();
     for (int i = 1; i < _n + 1; i++) {
-      final int nodes = RecombiningBinomialTree.NODES.evaluate(i);
+      final int nodes = RecombiningBinomialTree.NODES.apply(i);
       final BinomialOptionModel<StandardOptionDataBundle> crrModel = new BinomialOptionModel<>(CRR, i);
       t += dt;
       final double df1 = Math.exp(dt * data.getInterestRate(t));
@@ -62,7 +62,7 @@ public class DermanKaniImpliedBinomialTreeModel implements ImpliedTreeModel<Opti
         addUpperNodes(data, impliedTree, arrowDebreu, i, crrModel, df1, df2, expiry, mid + 1);
         addLowerNodes(data, impliedTree, arrowDebreu, i, crrModel, df1, df2, expiry, mid - 1);
       } else {
-        final double c = crrModel.getTreeGeneratingFunction(new EuropeanVanillaOptionDefinition(spot, expiry, true)).evaluate(data).getNode(0, 0).second;
+        final double c = crrModel.getTreeGeneratingFunction(new EuropeanVanillaOptionDefinition(spot, expiry, true)).apply(data).getNode(0, 0).second;
         final double sigma = getUpperSigma(impliedTree, arrowDebreu, i - 1, df2, mid + 1);
         impliedTree[i][mid + 1] = spot * (df1 * c + arrowDebreu[mid] * spot - sigma) / (arrowDebreu[mid] * impliedTree[i - 1][mid] * df2 - df1 * c + sigma);
         impliedTree[i][mid] = spot * spot / impliedTree[i][mid + 1];
@@ -103,7 +103,7 @@ public class DermanKaniImpliedBinomialTreeModel implements ImpliedTreeModel<Opti
       final BinomialOptionModel<StandardOptionDataBundle> crrModel, final double df1, final double df2, final Expiry expiry, final int mid) {
     double sigma = getLowerSigma(impliedTree, arrowDebreu, step - 1, df2, mid);
     for (int i = mid; i >= 0; i--) {
-      final double p = crrModel.getTreeGeneratingFunction(new EuropeanVanillaOptionDefinition(impliedTree[step - 1][i], expiry, false)).evaluate(data)
+      final double p = crrModel.getTreeGeneratingFunction(new EuropeanVanillaOptionDefinition(impliedTree[step - 1][i], expiry, false)).apply(data)
           .getNode(0, 0).second;
       final double forward = impliedTree[step - 1][i] * df2;
       impliedTree[step][i] = (impliedTree[step][i + 1] * (df1 * p - sigma) + arrowDebreu[i] * impliedTree[step - 1][i] * (forward - impliedTree[step][i + 1]))
@@ -117,8 +117,8 @@ public class DermanKaniImpliedBinomialTreeModel implements ImpliedTreeModel<Opti
   private void addUpperNodes(final StandardOptionDataBundle data, final double[][] impliedTree, final double[] arrowDebreu, final int step,
       final BinomialOptionModel<StandardOptionDataBundle> crrModel, final double df1, final double df2, final Expiry expiry, final int mid) {
     double sigma = getUpperSigma(impliedTree, arrowDebreu, step - 1, df2, mid);
-    for (int i = mid; i < RecombiningBinomialTree.NODES.evaluate(step); i++) {
-      final double c = crrModel.getTreeGeneratingFunction(new EuropeanVanillaOptionDefinition(impliedTree[step - 1][i - 1], expiry, true)).evaluate(data)
+    for (int i = mid; i < RecombiningBinomialTree.NODES.apply(step); i++) {
+      final double c = crrModel.getTreeGeneratingFunction(new EuropeanVanillaOptionDefinition(impliedTree[step - 1][i - 1], expiry, true)).apply(data)
           .getNode(0, 0).second;
       final double forward = impliedTree[step - 1][i - 1] * df2;
       impliedTree[step][i] = (impliedTree[step][i - 1] * (df1 * c - sigma)
@@ -138,7 +138,7 @@ public class DermanKaniImpliedBinomialTreeModel implements ImpliedTreeModel<Opti
 
   private double getUpperSigma(final double[][] impliedTree, final double[] arrowDebreu, final int previousStep, final double df2, final int start) {
     double sigma = 0;
-    for (int i = start; i < RecombiningBinomialTree.NODES.evaluate(previousStep + 1); i++) {
+    for (int i = start; i < RecombiningBinomialTree.NODES.apply(previousStep + 1); i++) {
       sigma += arrowDebreu[i] * (impliedTree[previousStep][i] * df2 - impliedTree[previousStep][start - 1]);
     }
     return sigma;

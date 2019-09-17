@@ -8,6 +8,7 @@ package com.opengamma.engine;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.apache.commons.lang.ObjectUtils;
 
@@ -26,7 +27,6 @@ import com.opengamma.engine.target.PrimitiveComputationTargetType;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdentifiable;
-import com.opengamma.lambdava.functions.Function1;
 import com.opengamma.util.PublicAPI;
 
 /**
@@ -56,29 +56,34 @@ public class ComputationTarget implements Serializable {
   /**
    * The cached hash code.
    */
-  private transient int _hashCode;  // safe via racy single check idiom
+  private transient int _hashCode; // safe via racy single check idiom
 
   /**
-   * Creates a target for computation. The type is a primitive type that is capable of converting the unique identifier
-   * form of the value to its {@link UniqueIdentifiable} form without any resolution services. This is intended for
-   * creating test cases only. Code requiring resolution of a type/unique identifier pair to a target should use a
-   * {@link ComputationTargetResolver} instance.
+   * Creates a target for computation. The type is a primitive type that is capable of converting the unique identifier form of the value to its
+   * {@link UniqueIdentifiable} form without any resolution services. This is intended for creating test cases only. Code requiring resolution of a type/unique
+   * identifier pair to a target should use a {@link ComputationTargetResolver} instance.
    *
-   * @param type the type of the target, not null
-   * @param value the target itself, not null
-   * @throws IllegalArgumentException if the value is invalid for the type
+   * @param type
+   *          the type of the target, not null
+   * @param value
+   *          the target itself, not null
+   * @throws IllegalArgumentException
+   *           if the value is invalid for the type
    */
   public ComputationTarget(final PrimitiveComputationTargetType<?> type, final UniqueId value) {
     this(new ComputationTargetSpecification(type, value), type.resolve(value));
   }
 
   /**
-   * Creates a target for computation. This is intended for creating test cases only. Code which is resolving a target
-   * specification should use the constructor which takes that specification.
+   * Creates a target for computation. This is intended for creating test cases only. Code which is resolving a target specification should use the constructor
+   * which takes that specification.
    *
-   * @param type the type of the target, not null
-   * @param value the target itself, not null
-   * @throws IllegalArgumentException if the value is invalid for the type
+   * @param type
+   *          the type of the target, not null
+   * @param value
+   *          the target itself, not null
+   * @throws IllegalArgumentException
+   *           if the value is invalid for the type
    */
   public ComputationTarget(final ComputationTargetType type, final UniqueIdentifiable value) {
     this(new ComputationTargetSpecification(type, value != null ? value.getUniqueId() : null), value);
@@ -87,8 +92,10 @@ public class ComputationTarget implements Serializable {
   /**
    * Creates a target for computation.
    *
-   * @param specification the target specification, not null
-   * @param value the target itself, may be null if the specification of {@link ComputationTargetSpecification#NULL}
+   * @param specification
+   *          the target specification, not null
+   * @param value
+   *          the target itself, may be null if the specification of {@link ComputationTargetSpecification#NULL}
    */
   public ComputationTarget(final ComputationTargetSpecification specification, final UniqueIdentifiable value) {
     assert specification != null;
@@ -125,34 +132,33 @@ public class ComputationTarget implements Serializable {
     return _specification.getUniqueId();
   }
 
-  private static final ComputationTargetTypeVisitor<ComputationTarget, ComputationTargetSpecification> GET_LEAF_SPECIFICATION =
-      new ComputationTargetTypeVisitor<ComputationTarget, ComputationTargetSpecification>() {
+  private static final ComputationTargetTypeVisitor<ComputationTarget, ComputationTargetSpecification> GET_LEAF_SPECIFICATION = new ComputationTargetTypeVisitor<ComputationTarget, ComputationTargetSpecification>() {
 
-        @Override
-        public ComputationTargetSpecification visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final ComputationTarget self) {
-          throw new IllegalStateException();
-        }
+    @Override
+    public ComputationTargetSpecification visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final ComputationTarget self) {
+      throw new IllegalStateException();
+    }
 
-        @Override
-        public ComputationTargetSpecification visitNestedComputationTargetTypes(final List<ComputationTargetType> types, final ComputationTarget self) {
-          return new ComputationTargetSpecification(types.get(types.size() - 1), self._specification.getUniqueId());
-        }
+    @Override
+    public ComputationTargetSpecification visitNestedComputationTargetTypes(final List<ComputationTargetType> types, final ComputationTarget self) {
+      return new ComputationTargetSpecification(types.get(types.size() - 1), self._specification.getUniqueId());
+    }
 
-        @Override
-        public ComputationTargetSpecification visitNullComputationTargetType(final ComputationTarget self) {
-          return ComputationTargetSpecification.NULL;
-        }
+    @Override
+    public ComputationTargetSpecification visitNullComputationTargetType(final ComputationTarget self) {
+      return ComputationTargetSpecification.NULL;
+    }
 
-        @Override
-        public ComputationTargetSpecification visitClassComputationTargetType(final Class<? extends UniqueIdentifiable> type, final ComputationTarget self) {
-          return self.toSpecification();
-        }
+    @Override
+    public ComputationTargetSpecification visitClassComputationTargetType(final Class<? extends UniqueIdentifiable> type, final ComputationTarget self) {
+      return self.toSpecification();
+    }
 
-      };
+  };
 
   /**
-   * Returns the target specification of the context this target is part of. If the actual target object is required a
-   * {@link ComputationTargetResolver} can be used to obtain it.
+   * Returns the target specification of the context this target is part of. If the actual target object is required a {@link ComputationTargetResolver} can be
+   * used to obtain it.
    *
    * @return the reference of the containing object, or null if there is none
    */
@@ -161,8 +167,8 @@ public class ComputationTarget implements Serializable {
   }
 
   /**
-   * Returns the target specification of the leaf target object. The specification of the whole target (as returned by
-   * {@link #toSpecification}) is equivalent to {@code getContextSpecification().containing(getLeafSpecification())}.
+   * Returns the target specification of the leaf target object. The specification of the whole target (as returned by {@link #toSpecification}) is equivalent
+   * to {@code getContextSpecification().containing(getLeafSpecification())}.
    *
    * @return the specification of the leaf object, never null
    */
@@ -174,7 +180,8 @@ public class ComputationTarget implements Serializable {
    * Safely converts the target to a {@code PortfolioNode}.
    *
    * @return the portfolio node, not null
-   * @throws IllegalStateException if the type is not PORTFOLIO_NODE
+   * @throws IllegalStateException
+   *           if the type is not PORTFOLIO_NODE
    */
   public PortfolioNode getPortfolioNode() {
     if (getValue() instanceof PortfolioNode) {
@@ -187,7 +194,8 @@ public class ComputationTarget implements Serializable {
    * Safely converts the target to a {@code Position}.
    *
    * @return the position, not null
-   * @throws IllegalStateException if the type is not POSITION
+   * @throws IllegalStateException
+   *           if the type is not POSITION
    */
   public Position getPosition() {
     if (getValue() instanceof Position) {
@@ -200,7 +208,8 @@ public class ComputationTarget implements Serializable {
    * Safely converts the target to a {@code Trade}.
    *
    * @return the trade, not null
-   * @throws IllegalStateException if the type is not TRADE
+   * @throws IllegalStateException
+   *           if the type is not TRADE
    */
   public Trade getTrade() {
     if (getValue() instanceof Trade) {
@@ -213,7 +222,8 @@ public class ComputationTarget implements Serializable {
    * Safely converts the target to a {@code Position} or {@code Trade}.
    *
    * @return the position or trade, not null
-   * @throws IllegalStateException if the type is not a POSITION or TRADE
+   * @throws IllegalStateException
+   *           if the type is not a POSITION or TRADE
    */
   public PositionOrTrade getPositionOrTrade() {
     if (getValue() instanceof PositionOrTrade) {
@@ -226,7 +236,8 @@ public class ComputationTarget implements Serializable {
    * Safely converts the target to a {@code Security}.
    *
    * @return the security, not null
-   * @throws IllegalStateException if the type is not SECURITY
+   * @throws IllegalStateException
+   *           if the type is not SECURITY
    */
   public Security getSecurity() {
     if (getValue() instanceof Security) {
@@ -254,48 +265,35 @@ public class ComputationTarget implements Serializable {
     return null;
   }
 
-  private static final ComputationTargetTypeMap<Function1<ComputationTarget, String>> GET_NAME = createGetName();
+  private static final ComputationTargetTypeMap<Function<ComputationTarget, String>> GET_NAME = createGetName();
 
-  private static ComputationTargetTypeMap<Function1<ComputationTarget, String>> createGetName() {
-    final ComputationTargetTypeMap<Function1<ComputationTarget, String>> getName = new ComputationTargetTypeMap<>();
-    getName.put(ComputationTargetType.PORTFOLIO_NODE, new Function1<ComputationTarget, String>() {
-      @Override
-      public String execute(final ComputationTarget target) {
-        return target.getPortfolioNode().getName();
+  private static ComputationTargetTypeMap<Function<ComputationTarget, String>> createGetName() {
+    final ComputationTargetTypeMap<Function<ComputationTarget, String>> getName = new ComputationTargetTypeMap<>();
+    getName.put(ComputationTargetType.PORTFOLIO_NODE, (Function<ComputationTarget, String>) target -> target.getPortfolioNode().getName());
+    getName.put(ComputationTargetType.SECURITY, (Function<ComputationTarget, String>) target -> target.getSecurity().getName());
+    getName.put(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), (Function<ComputationTarget, String>) target -> {
+      final PositionOrTrade position = target.getPositionOrTrade();
+      Security security = position.getSecurity();
+      if (security != null) {
+        return security.getName();
       }
-    });
-    getName.put(ComputationTargetType.SECURITY, new Function1<ComputationTarget, String>() {
-      @Override
-      public String execute(final ComputationTarget target) {
-        return target.getSecurity().getName();
-      }
-    });
-    getName.put(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), new Function1<ComputationTarget, String>() {
-      @Override
-      public String execute(final ComputationTarget target) {
-        final PositionOrTrade position = target.getPositionOrTrade();
-        Security security = position.getSecurity();
+      final SecurityLink link = position.getSecurityLink();
+      if (link != null) {
+        security = link.getTarget();
         if (security != null) {
           return security.getName();
         }
-        final SecurityLink link = position.getSecurityLink();
-        if (link != null) {
-          security = link.getTarget();
-          if (security != null) {
-            return security.getName();
+        final ExternalIdBundle identifiers = link.getExternalId();
+        if (identifiers != null) {
+          if (identifiers.size() > 0) {
+            return position.getQuantity() + " x " + identifiers.iterator().next();
           }
-          final ExternalIdBundle identifiers = link.getExternalId();
-          if (identifiers != null) {
-            if (identifiers.size() > 0) {
-              return position.getQuantity() + " x " + identifiers.iterator().next();
-            }
-            return position.getQuantity() + " x " + identifiers;
-          } else if (link.getObjectId() != null) {
-            return position.getQuantity() + " x " + link.getObjectId();
-          }
+          return position.getQuantity() + " x " + identifiers;
+        } else if (link.getObjectId() != null) {
+          return position.getQuantity() + " x " + link.getObjectId();
         }
-        return null;
       }
+      return null;
     });
     return getName;
   }
@@ -308,9 +306,9 @@ public class ComputationTarget implements Serializable {
    * @return the name of the computation target, null if a primitive and no identifier is available
    */
   public String getName() {
-    final Function1<ComputationTarget, String> getName = GET_NAME.get(getType());
+    final Function<ComputationTarget, String> getName = GET_NAME.get(getType());
     if (getName != null) {
-      return getNameImpl(getName.execute(this));
+      return getNameImpl(getName.apply(this));
     }
     return getNameImpl(null);
   }
@@ -331,8 +329,7 @@ public class ComputationTarget implements Serializable {
     }
     if (obj instanceof ComputationTarget) {
       final ComputationTarget other = (ComputationTarget) obj;
-      return _specification.equals(other._specification)
-          && ObjectUtils.equals(_value, other._value);
+      return _specification.equals(other._specification) && ObjectUtils.equals(_value, other._value);
     }
     return false;
   }

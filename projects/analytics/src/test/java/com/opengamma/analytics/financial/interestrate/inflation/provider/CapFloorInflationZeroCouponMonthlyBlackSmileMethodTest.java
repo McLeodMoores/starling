@@ -110,7 +110,7 @@ public class CapFloorInflationZeroCouponMonthlyBlackSmileMethodTest {
     final double volatility = BLACK_INFLATION.getBlackParameters().getVolatility(ZERO_COUPON_CAP.getReferenceEndTime(), ZERO_COUPON_CAP.getStrike());
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, 1.0, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(option);
-    final double pvExpected = df * func.evaluate(dataBlack) * ZERO_COUPON_CAP.getNotional() * ZERO_COUPON_CAP.getPaymentYearFraction();
+    final double pvExpected = df * func.apply(dataBlack) * ZERO_COUPON_CAP.getNotional() * ZERO_COUPON_CAP.getPaymentYearFraction();
     assertEquals("Zero-coupon inflation DiscountingMethod: Present value", pvExpected, pv.getAmount(ZERO_COUPON_CAP.getCurrency()), TOLERANCE_PV);
   }
 

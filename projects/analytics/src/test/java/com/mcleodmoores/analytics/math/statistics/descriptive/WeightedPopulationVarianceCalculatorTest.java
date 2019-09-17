@@ -52,7 +52,7 @@ public class WeightedPopulationVarianceCalculatorTest {
       values[i] = Math.random();
     }
     final EqualWeightFunction f = EqualWeightFunction.ofInverse(n);
-    assertEquals(CALCULATOR.apply(f, values), new PopulationVarianceCalculator().evaluate(values), 1e-15);
+    assertEquals(CALCULATOR.apply(f, values), new PopulationVarianceCalculator().apply(values), 1e-15);
   }
 
   /**
@@ -66,7 +66,7 @@ public class WeightedPopulationVarianceCalculatorTest {
       values[i] = i;
     }
     final ExponentialWeightFunction f = ExponentialWeightFunction.of(0.03);
-    assertTrue(CALCULATOR.apply(f, values) < new SampleVarianceCalculator().evaluate(values));
+    assertTrue(CALCULATOR.apply(f, values) < new SampleVarianceCalculator().apply(values));
   }
 
   /**

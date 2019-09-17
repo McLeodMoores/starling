@@ -45,19 +45,19 @@ public class RelativeOutperformanceOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(new RelativeOutperformanceOptionDefinition(0.1, EXPIRY, true)).evaluate((StandardTwoAssetOptionDataBundle) null);
+    MODEL.getPricingFunction(new RelativeOutperformanceOptionDefinition(0.1, EXPIRY, true)).apply((StandardTwoAssetOptionDataBundle) null);
   }
 
   @Test
   public void test() {
     RelativeOutperformanceOptionDefinition option = new RelativeOutperformanceOptionDefinition(0.1, EXPIRY, true);
     StandardTwoAssetOptionDataBundle data = new StandardTwoAssetOptionDataBundle(R, B1, B2, SIGMA1, SIGMA2, S1, S2, -0.5, DATE);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), 1.2582, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), 1.2582, EPS);
     option = new RelativeOutperformanceOptionDefinition(0.5, EXPIRY, true);
     data = data.withCorrelation(0);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), 0.8449, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), 0.8449, EPS);
     option = new RelativeOutperformanceOptionDefinition(1, EXPIRY, true);
     data = data.withCorrelation(0.5);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), 0.3382, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), 0.3382, EPS);
   }
 }

@@ -27,7 +27,7 @@ public class DrawdownCalculator extends Function1D<DateDoubleTimeSeries<?>, Date
    *           If the time series is null or empty
    */
   @Override
-  public DateDoubleTimeSeries<?> evaluate(final DateDoubleTimeSeries<?> ts) {
+  public DateDoubleTimeSeries<?> apply(final DateDoubleTimeSeries<?> ts) {
     Validate.notNull(ts, "time series");
     Validate.isTrue(ts.size() > 0);
     final int n = ts.size();

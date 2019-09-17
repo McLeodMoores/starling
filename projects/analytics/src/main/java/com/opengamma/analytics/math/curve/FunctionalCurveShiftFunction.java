@@ -34,7 +34,7 @@ public class FunctionalCurveShiftFunction implements CurveShiftFunction<Function
     final Function1D<Double, Double> shiftedFunction = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return f.evaluate(x) + shift;
       }
 

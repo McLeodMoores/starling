@@ -17,7 +17,7 @@ import com.opengamma.util.CompareUtils;
 public class DiracDeltaFunction extends Function1D<Double, Double> {
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     Validate.notNull(x, "x");
     return CompareUtils.closeEquals(x, 0, 1e-16) ? Double.POSITIVE_INFINITY : 0;
   }

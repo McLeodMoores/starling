@@ -74,7 +74,7 @@ public class LogPayoffWithDividendsTest {
       final double dT = DIV_CURVES.getD(EXPIRY);
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         final double s = (fT - dT) * Math.exp(x) + dT;
         return Math.log(s);
       }
@@ -186,7 +186,7 @@ public class LogPayoffWithDividendsTest {
     final Function1D<Double, Double> payoff = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double y) {
+      public Double apply(final Double y) {
         return y - lnFT;
       }
     };

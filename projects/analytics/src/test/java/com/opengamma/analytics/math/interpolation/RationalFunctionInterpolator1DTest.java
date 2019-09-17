@@ -33,7 +33,7 @@ public class RationalFunctionInterpolator1DTest {
     double x;
     for (int i = 0; i < 10; i++) {
       x = Double.valueOf(i) / 10.;
-      data.put(x, F.evaluate(x));
+      data.put(x, F.apply(x));
     }
     MODEL = INTERPOLATOR.getDataBundle(data);
   }
@@ -65,6 +65,6 @@ public class RationalFunctionInterpolator1DTest {
 
   @Test
   public void test() {
-    assertEquals(F.evaluate(0.467), INTERPOLATOR.interpolate(MODEL, 0.467), EPS);
+    assertEquals(F.apply(0.467), INTERPOLATOR.interpolate(MODEL, 0.467), EPS);
   }
 }

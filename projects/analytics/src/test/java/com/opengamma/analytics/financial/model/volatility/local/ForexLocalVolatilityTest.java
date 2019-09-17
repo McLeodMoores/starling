@@ -147,7 +147,7 @@ public class ForexLocalVolatilityTest {
       for (int j = 0; j < 100; j++) {
         final double m = 0.3 + j * 2.7 / 99.;
         final double k = m * f;
-        final double vol = smiles[i].evaluate(k);
+        final double vol = smiles[i].apply(k);
         System.out.print(vol + "\t");
       }
       System.out.print("\n");
@@ -392,13 +392,13 @@ public class ForexLocalVolatilityTest {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double delta) {
+      public Double apply(final Double delta) {
 
         final Function1D<Double, Double> deltaFunc = new Function1D<Double, Double>() {
 
           @Override
-          public Double evaluate(final Double strike) {
-            final double vol = volFunc.evaluate(strike);
+          public Double apply(final Double strike) {
+            final double vol = volFunc.apply(strike);
             final double deltaTry = BlackFormulaRepository.delta(forward, strike, expiry, vol, isCall);
             return deltaTry - delta;
           }

@@ -125,12 +125,12 @@ public class ExpectedVarianceStaticReplicationCalculator {
 
     double u = forward * Math.exp(-invNorTol * atmVol * rootT); // initial estimate of upper limit
     double callPart = _integrator.integrate(integrand, forward, u);
-    double rem = remainderFunction.evaluate(u);
+    double rem = remainderFunction.apply(u);
     double error = rem / callPart;
     while (error > _tol) {
       callPart += _integrator.integrate(integrand, u, 2 * u);
       u *= 2.0;
-      rem = remainderFunction.evaluate(u);
+      rem = remainderFunction.apply(u);
       error = rem / putPart;
     }
 
@@ -186,26 +186,26 @@ public class ExpectedVarianceStaticReplicationCalculator {
 
     final double l = invNorTol * atmVol * rootT; // initial estimate of lower limit
     double putPart = _integrator.integrate(integrand, l, 0.0);
-    double rem = integrand.evaluate(l); // this comes from transforming the strike remainder estimate
+    double rem = integrand.apply(l); // this comes from transforming the strike remainder estimate
     double error = rem / putPart;
     int step = 1;
     while (error > _tol) {
       putPart += _integrator.integrate(integrand, (step + 1) * l, step * l);
       step++;
-      rem = integrand.evaluate((step + 1) * l);
+      rem = integrand.apply((step + 1) * l);
       error = rem / putPart;
     }
     putPart += rem; // add on the (very small) remainder estimate otherwise we'll always underestimate variance
 
     final double u = -invNorTol * atmVol * rootT; // initial estimate of upper limit
     double callPart = _integrator.integrate(integrand, 0.0, u);
-    rem = integrand.evaluate(u);
+    rem = integrand.apply(u);
     error = rem / callPart;
     step = 1;
     while (error > _tol) {
       callPart += _integrator.integrate(integrand, step * u, (1 + step) * u);
       step++;
-      rem = integrand.evaluate((1 + step) * u);
+      rem = integrand.apply((1 + step) * u);
       error = rem / putPart;
     }
 
@@ -251,7 +251,7 @@ public class ExpectedVarianceStaticReplicationCalculator {
   private Function1D<Double, Double> getStrikeIntegrand(final double forward, final double expiry, final BlackVolatilitySurfaceStrike surface) {
     final Function1D<Double, Double> integrand = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double strike) {
+      public Double apply(final Double strike) {
         if (strike == 0) {
           return 0.0;
         }
@@ -270,7 +270,7 @@ public class ExpectedVarianceStaticReplicationCalculator {
 
     final Function1D<Double, Double> integrand = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double logMoneyness) {
+      public Double apply(final Double logMoneyness) {
         final boolean isCall = logMoneyness >= 0.0;
         final int sign = isCall ? 1 : -1;
         final double vol = surface.getVolatilityForLogMoneyness(expiry, logMoneyness);
@@ -297,7 +297,7 @@ public class ExpectedVarianceStaticReplicationCalculator {
 
     final Function1D<Double, Double> integrand = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double delta) {
+      public Double apply(final Double delta) {
 
         final double vol = surface.getVolatilityForDelta(expiry, delta);
         final double sigmaRootT = vol * rootT;
@@ -335,7 +335,7 @@ public class ExpectedVarianceStaticReplicationCalculator {
   private Function1D<Double, Double> getRemainderFunction(final double forward, final double expiry, final BlackVolatilitySurfaceStrike surface) {
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double strike) {
+      public Double apply(final Double strike) {
         if (strike == 0) {
           return 0.0;
         }

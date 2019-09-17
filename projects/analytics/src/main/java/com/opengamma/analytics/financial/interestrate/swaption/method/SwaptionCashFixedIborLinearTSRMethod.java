@@ -155,7 +155,7 @@ public class SwaptionCashFixedIborLinearTSRMethod implements PricingMethod {
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double[] kD = kpkpp(x);
       // Implementation note: kD[0] contains the first derivative of k; kD[1] the second derivative of k.
       return (kD[1] * (x - _strike) + 2.0 * kD[0]) * bs(x);
@@ -223,10 +223,10 @@ public class SwaptionCashFixedIborLinearTSRMethod implements PricingMethod {
     double bs(final double strike) {
       final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, _timeToExpiry, _isCall);
       final Function1D<SABRFormulaData, Double> funcSabr = _sabrFunction.getVolatilityFunction(option, _forward);
-      final double volatility = funcSabr.evaluate(_sabrData);
+      final double volatility = funcSabr.apply(_sabrData);
       final BlackFunctionData dataBlack = new BlackFunctionData(_forward, 1.0, volatility);
       final Function1D<BlackFunctionData, Double> func = _blackFunction.getPriceFunction(option);
-      return func.evaluate(dataBlack);
+      return func.apply(dataBlack);
     }
 
   }

@@ -37,10 +37,10 @@ public class SamplePearsonKurtosisCalculator extends DescriptiveStatisticsCalcul
    * @return  the sample Pearson kurtosis
    */
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notNull(x, "x");
     ArgumentChecker.isTrue(x.length >= 4, "Need at least four points to calculate kurtosis");
-    return DescriptiveStatisticsFactory.of(SampleFisherKurtosisCalculator.NAME).evaluate(x) + 3;
+    return DescriptiveStatisticsFactory.of(SampleFisherKurtosisCalculator.NAME).apply(x) + 3;
   }
 
   @Override

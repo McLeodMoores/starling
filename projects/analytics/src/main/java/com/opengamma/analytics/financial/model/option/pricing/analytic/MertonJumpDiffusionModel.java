@@ -29,7 +29,7 @@ public class MertonJumpDiffusionModel extends AnalyticOptionModel<OptionDefiniti
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final MertonJumpDiffusionModelDataBundle data) {
+      public Double apply(final MertonJumpDiffusionModelDataBundle data) {
         Validate.notNull(data);
         final ZonedDateTime date = data.getDate();
         final double k = definition.getStrike();
@@ -48,11 +48,11 @@ public class MertonJumpDiffusionModel extends AnalyticOptionModel<OptionDefiniti
             new VolatilitySurface(ConstantDoublesSurface.from(sigmaAdjusted)),
             data.getSpot(), date);
         final Function1D<StandardOptionDataBundle, Double> bsmFunction = BSM.getPricingFunction(definition);
-        double price = mult * bsmFunction.evaluate(bsmData);
+        double price = mult * bsmFunction.apply(bsmData);
         for (int i = 1; i < N; i++) {
           sigmaAdjusted = Math.sqrt(zSq + delta * delta * i / t);
           mult *= lambdaT / i;
-          price += mult * bsmFunction.evaluate(bsmData.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(sigmaAdjusted))));
+          price += mult * bsmFunction.apply(bsmData.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(sigmaAdjusted))));
         }
         return price;
       }

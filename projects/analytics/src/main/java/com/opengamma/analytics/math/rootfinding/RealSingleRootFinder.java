@@ -34,6 +34,6 @@ public abstract class RealSingleRootFinder implements SingleRootFinder<Double, D
     ArgumentChecker.notNull(x1, "x1");
     ArgumentChecker.notNull(x2, "x2");
     ArgumentChecker.isTrue(x1 <= x2, "x1 {} must be less or equal to  x2 {}", x1, x2);
-    ArgumentChecker.isTrue(function.evaluate(x1) * function.evaluate(x2) <= 0, "x1 {} and x2 {} do not bracket a root", x1, x2);
+    ArgumentChecker.isTrue(function.apply(x1) * function.apply(x2) <= 0, "x1 {} and x2 {} do not bracket a root", x1, x2);
   }
 }

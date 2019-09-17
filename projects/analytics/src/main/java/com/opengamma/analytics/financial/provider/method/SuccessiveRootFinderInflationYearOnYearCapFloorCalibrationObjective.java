@@ -151,7 +151,7 @@ public class SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective
   }
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
 
     // setting the volatility in the volatility matrix
     _inflationCapYearOnYearParameters.setVolatility(x, _expiryIndex, _strikeIndex);

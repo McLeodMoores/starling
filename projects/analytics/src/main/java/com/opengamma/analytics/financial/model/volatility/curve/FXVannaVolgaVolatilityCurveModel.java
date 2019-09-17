@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.curve;
@@ -15,7 +15,7 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.util.time.DateUtils;
 
 /**
- * 
+ *
  */
 public class FXVannaVolgaVolatilityCurveModel implements VolatilityCurveModel<FXVannaVolgaVolatilityCurveDataBundle, FXOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
@@ -49,7 +49,7 @@ public class FXVannaVolgaVolatilityCurveModel implements VolatilityCurveModel<FX
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         Validate.notNull(x);
 
         final double k = x;

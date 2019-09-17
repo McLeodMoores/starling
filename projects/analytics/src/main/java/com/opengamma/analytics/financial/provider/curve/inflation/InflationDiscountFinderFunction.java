@@ -44,9 +44,9 @@ public class InflationDiscountFinderFunction extends Function1D<DoubleMatrix1D, 
   }
 
   @Override
-  public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+  public DoubleMatrix1D apply(final DoubleMatrix1D x) {
     final InflationProviderDiscount inflationBundle = _data.getKnownData().copy();
-    final InflationProviderDiscount inflationnewCurves = _data.getGeneratorMarket().evaluate(x);
+    final InflationProviderDiscount inflationnewCurves = _data.getGeneratorMarket().apply(x);
     inflationBundle.setAll(inflationnewCurves);
     final double[] res = new double[_data.getNumberOfInstruments()];
     for (int i = 0; i < _data.getNumberOfInstruments(); i++) {

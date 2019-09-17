@@ -20,7 +20,7 @@ public abstract class Integrator1DTestCase {
   private static final Function1D<Double, Double> DF = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 1 + Math.exp(-x);
     }
 
@@ -28,7 +28,7 @@ public abstract class Integrator1DTestCase {
   private static final Function1D<Double, Double> F = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return x - Math.exp(-x);
     }
 
@@ -54,7 +54,7 @@ public abstract class Integrator1DTestCase {
 
   @Test
   public void test() {
-    assertEquals(getIntegrator().integrate(DF, LOWER, UPPER), F.evaluate(UPPER) - F.evaluate(LOWER), EPS);
+    assertEquals(getIntegrator().integrate(DF, LOWER, UPPER), F.apply(UPPER) - F.apply(LOWER), EPS);
     assertEquals(getIntegrator().integrate(DF, UPPER, LOWER), -getIntegrator().integrate(DF, LOWER, UPPER), EPS);
   }
 

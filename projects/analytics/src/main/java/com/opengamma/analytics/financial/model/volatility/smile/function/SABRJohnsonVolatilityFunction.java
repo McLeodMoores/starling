@@ -34,7 +34,7 @@ public class SABRJohnsonVolatilityFunction extends VolatilityFunctionProvider<SA
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final SABRFormulaData data) {
+      public Double apply(final SABRFormulaData data) {
         Validate.notNull(data, "data");
         final double alpha = data.getAlpha();
         final double beta = data.getBeta();
@@ -62,7 +62,7 @@ public class SABRJohnsonVolatilityFunction extends VolatilityFunctionProvider<SA
           sigmaBlend *= 1 + (rho * nu * sigmaDD / 4 + (2 - 3 * rho * rho) * nu * nu / 24) * t;
           final double sigmaCEV = sigmaBlend * Math.pow(forward, 1 - beta) / beta;
           final CEVFunctionData cevData = new CEVFunctionData(forward, 1, sigmaCEV, beta);
-          final double price = priceFunction.evaluate(cevData);
+          final double price = priceFunction.apply(cevData);
           return BLACK_IMPLIED_VOL.getImpliedVolatility(new BlackFunctionData(forward, 1, sigmaCEV), option, price);
         }
         throw new NotImplementedException("Have not implemented the case where b <= 0");

@@ -5,11 +5,10 @@
  */
 package com.opengamma.engine.function.dsl.functions;
 
-import static com.opengamma.lambdava.streams.Lambdava.functional;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import com.opengamma.engine.ComputationTarget;
@@ -26,7 +25,6 @@ import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
-import com.opengamma.lambdava.functions.Function1;
 import com.opengamma.lambdava.functions.Function2;
 import com.opengamma.lambdava.streams.Stream;
 import com.opengamma.lambdava.streams.StreamI;
@@ -218,24 +216,10 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
         if (vps != null) {
           valueProperties = vps;
         } else {
-          //FunctionInput copyFrom = inputsByName.get(rvps.getCopiedFrom()).first();
-
-          //Find the apropierate valueSpecifications
-
-          final ValueSpecification copyFrom = functional(inputSpecificationsMap.keySet()).filter(new Function1<ValueSpecification, Boolean>() {
-            @Override
-            public Boolean execute(final ValueSpecification valueSpecification) {
-              return valueSpecification.getValueName().equals(rvps.getCopiedFrom());
-              //&& valueSpecification.getTargetSpecification().equals(computationTargetSpecification) && valueSpecification.getProperties().isSatisfiedBy()
-            }
-          }).first();
-
-          ValueProperties.Builder builder;
-          if (copyFrom != null) {
-            builder = copyFrom.getProperties().copy();
-          } else {
-            builder = ValueProperties.all().copy();
-          }
+          //Find the appropriate valueSpecifications
+          final Optional<ValueSpecification> copyFrom =
+              inputSpecificationsMap.keySet().stream().filter(v -> v.getValueName().equals(rvps.getCopiedFrom())).findFirst();
+          final ValueProperties.Builder builder = copyFrom.isPresent() ? copyFrom.get().getProperties().copy() : ValueProperties.all().copy();
           final StreamI<ValuePropertiesModifier> recorderValueProperties = rvps.getRecordedValueProperties();
           final ValueProperties.Builder valuePropertiesBuilder = recorderValueProperties.reduce(builder,
               new Function2<ValueProperties.Builder, ValuePropertiesModifier, ValueProperties.Builder>() {

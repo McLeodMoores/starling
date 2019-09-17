@@ -88,7 +88,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double volatility = marketData.getVolatility(option.getCurrency1(), option.getCurrency2(), option.getTimeToExpiry(), option.getStrike(), forward);
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, dfDomestic, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(option);
-    final double price = func.evaluate(dataBlack) * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()) * (option.isLong() ? 1.0 : -1.0);
+    final double price = func.apply(dataBlack) * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()) * (option.isLong() ? 1.0 : -1.0);
     final CurrencyAmount priceCurrency = CurrencyAmount.of(option.getUnderlyingForex().getCurrency2(), price);
     return MultipleCurrencyAmount.of(priceCurrency);
   }

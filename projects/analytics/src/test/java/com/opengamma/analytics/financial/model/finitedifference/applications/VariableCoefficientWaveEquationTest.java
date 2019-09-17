@@ -54,7 +54,7 @@ public class VariableCoefficientWaveEquationTest {
     final Function1D<Double, Double> initial = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return Math.exp(-100 * (x - 1) * (x - 1));
       }
     };

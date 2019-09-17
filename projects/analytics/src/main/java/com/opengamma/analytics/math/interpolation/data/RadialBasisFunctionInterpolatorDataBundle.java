@@ -73,7 +73,7 @@ public class RadialBasisFunctionInterpolatorDataBundle extends InterpolatorNDDat
     final double[] y = new double[n];
     double phi;
     double[] x1, x2;
-    final double zeroValue = _basisFunction.evaluate(0.0);
+    final double zeroValue = _basisFunction.apply(0.0);
 
     for (int i = 0; i < n; i++) {
 
@@ -82,7 +82,7 @@ public class RadialBasisFunctionInterpolatorDataBundle extends InterpolatorNDDat
 
       for (int j = i + 1; j < n; j++) {
         x2 = data.get(j).getFirst();
-        phi = _basisFunction.evaluate(DistanceCalculator.getDistance(x1, x2));
+        phi = _basisFunction.apply(DistanceCalculator.getDistance(x1, x2));
         Validate.isTrue(!Double.isNaN(phi) || !Double.isInfinite(phi), "basis function return invalide number");
         radii[i][j] = phi;
         radii[j][i] = phi; // matrix symmetric since basis function depends on distance only
@@ -98,7 +98,7 @@ public class RadialBasisFunctionInterpolatorDataBundle extends InterpolatorNDDat
       }
     }
 
-    _decompRes = _decomp.evaluate(new com.opengamma.analytics.math.matrix.DoubleMatrix2D(radii));
+    _decompRes = _decomp.apply(new com.opengamma.analytics.math.matrix.DoubleMatrix2D(radii));
     final DoubleMatrix1D res = _decompRes.solve(new DoubleMatrix1D(y));
 
     return res.toArray();

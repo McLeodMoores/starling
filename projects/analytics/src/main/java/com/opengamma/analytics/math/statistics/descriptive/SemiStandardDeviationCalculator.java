@@ -48,10 +48,10 @@ public class SemiStandardDeviationCalculator extends DescriptiveStatisticsCalcul
    * @return  the semi-standard deviation
    */
   @Override
-  public Double evaluate(final double[] x) {
-    final double mean = DescriptiveStatisticsFactory.of(MeanCalculator.NAME).evaluate(x);
+  public Double apply(final double[] x) {
+    final double mean = DescriptiveStatisticsFactory.of(MeanCalculator.NAME).apply(x);
     final int n = x.length;
-    return new PartialMomentCalculator(mean, _useDownSide).evaluate(x) * n / (n - 1);
+    return new PartialMomentCalculator(mean, _useDownSide).apply(x) * n / (n - 1);
   }
 
   @Override

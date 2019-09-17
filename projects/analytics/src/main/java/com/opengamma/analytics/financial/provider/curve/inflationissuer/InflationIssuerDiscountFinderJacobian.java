@@ -40,9 +40,9 @@ public class InflationIssuerDiscountFinderJacobian extends Function1D<DoubleMatr
   }
 
   @Override
-  public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+  public DoubleMatrix2D apply(final DoubleMatrix1D x) {
     final InflationIssuerProviderDiscount bundle = _data.getKnownData().copy();
-    final InflationIssuerProviderDiscount newCurves = _data.getGeneratorMarket().evaluate(x);
+    final InflationIssuerProviderDiscount newCurves = _data.getGeneratorMarket().apply(x);
     bundle.setAll(newCurves);
     final Set<String> curvesSet = _data.getGeneratorMarket().getInflationCurvesList();
     final int nbParameters = _data.getNumberOfInstruments();

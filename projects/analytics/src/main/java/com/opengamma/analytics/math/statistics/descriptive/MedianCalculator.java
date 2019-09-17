@@ -30,7 +30,7 @@ public class MedianCalculator extends DescriptiveStatisticsCalculator {
    * @return  the median
    */
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notEmpty(x, "x");
     if (x.length == 1) {
       return x[0];

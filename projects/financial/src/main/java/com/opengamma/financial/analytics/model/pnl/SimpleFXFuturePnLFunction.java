@@ -106,7 +106,7 @@ public class SimpleFXFuturePnLFunction extends AbstractFunction.NonCompiledInvok
     final TimeSeriesSamplingFunction samplingFunction = getSamplingFunction(samplingFunctionName);
     final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR);
     DateDoubleTimeSeries<?> pnlSeries = samplingFunction.getSampledTimeSeries(dbTimeSeries.getTimeSeries(), schedule);
-    pnlSeries = DIFFERENCE.evaluate(pnlSeries);
+    pnlSeries = DIFFERENCE.apply(pnlSeries);
     pnlSeries = pnlSeries.multiply(pv);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), desiredValue.getConstraints());
     return Collections.singleton(new ComputedValue(spec, pnlSeries));

@@ -31,7 +31,7 @@ public class ZeroValueDoubleTimeSeriesFilterTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullTS() {
-    SMALL_ZERO_FILTER.evaluate((LocalDateDoubleTimeSeries) null);
+    SMALL_ZERO_FILTER.apply((LocalDateDoubleTimeSeries) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -46,7 +46,7 @@ public class ZeroValueDoubleTimeSeriesFilterTest {
 
   @Test
   public void testEmptyTS() {
-    final FilteredTimeSeries filtered = SMALL_ZERO_FILTER.evaluate(EMPTY_SERIES);
+    final FilteredTimeSeries filtered = SMALL_ZERO_FILTER.apply(EMPTY_SERIES);
     assertEquals(filtered.getFilteredTS(), EMPTY_SERIES);
     assertEquals(filtered.getRejectedTS(), EMPTY_SERIES);
   }
@@ -102,10 +102,10 @@ public class ZeroValueDoubleTimeSeriesFilterTest {
     largeZeroRejectedDates = trimToCapacity(largeZeroRejectedDates, j);
     largeZeroRejectedData = Arrays.trimToCapacity(largeZeroRejectedData, j);
     final LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.of(dates, data);
-    FilteredTimeSeries result = SMALL_ZERO_FILTER.evaluate(ts);
+    FilteredTimeSeries result = SMALL_ZERO_FILTER.apply(ts);
     assertEquals(result, new FilteredTimeSeries(ImmutableLocalDateDoubleTimeSeries.of(smallZeroFilteredDates, smallZeroFilteredData),
         ImmutableLocalDateDoubleTimeSeries.of(smallZeroRejectedDates, smallZeroRejectedData)));
-    result = LARGE_ZERO_FILTER.evaluate(ts);
+    result = LARGE_ZERO_FILTER.apply(ts);
     assertEquals(result, new FilteredTimeSeries(ImmutableLocalDateDoubleTimeSeries.of(largeZeroFilteredDates, largeZeroFilteredData),
         ImmutableLocalDateDoubleTimeSeries.of(largeZeroRejectedDates, largeZeroRejectedData)));
   }

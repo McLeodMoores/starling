@@ -54,7 +54,7 @@ public abstract class TwoAssetAnalyticOptionModel<T extends OptionDefinition, U 
       if (greek != Greek.FAIR_PRICE) {
         LOGGER.warn("Can only calculate price for two-asset options, not calculating " + greek);
       } else {
-        results.put(greek, pricingFunction.evaluate(data));
+        results.put(greek, pricingFunction.apply(data));
       }
     }
     return results;

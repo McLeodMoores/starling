@@ -127,7 +127,7 @@ public final class SwaptionPhysicalFixedIborHullWhiteApproximationMethod {
     final BlackPriceFunction blackFunction = new BlackPriceFunction();
     final BlackFunctionData dataBlack = new BlackFunctionData(b0, dfswap[0], sigmaK);
     final Function1D<BlackFunctionData, Double> func = blackFunction.getPriceFunction(option);
-    final double pv = func.evaluate(dataBlack);
+    final double pv = func.apply(dataBlack);
     return MultipleCurrencyAmount.of(swaption.getUnderlyingSwap().getFirstLeg().getCurrency(), pv * (swaption.isLong() ? 1.0 : -1.0));
   }
 

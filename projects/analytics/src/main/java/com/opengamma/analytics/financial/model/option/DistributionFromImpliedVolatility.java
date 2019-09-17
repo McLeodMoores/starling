@@ -65,11 +65,11 @@ public class DistributionFromImpliedVolatility implements ProbabilityDistributio
 
   private double[] getSigmas(final double k) {
     final double[] res = new double[3];
-    res[1] = _volFunc.evaluate(k);
+    res[1] = _volFunc.apply(k);
     final double kUp = k * (1 + EPS);
     final double kDown = k * (1 - EPS);
-    res[2] = _volFunc.evaluate(kUp);
-    res[0] = _volFunc.evaluate(kDown);
+    res[2] = _volFunc.apply(kUp);
+    res[0] = _volFunc.apply(kDown);
     return res;
   }
 

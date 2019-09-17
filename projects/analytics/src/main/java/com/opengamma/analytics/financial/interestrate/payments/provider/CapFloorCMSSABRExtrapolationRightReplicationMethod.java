@@ -443,7 +443,7 @@ public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloor
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double[] kD = kpkpp(x);
       // Implementation note: kD[0] contains the first derivative of k; kD[1] the second derivative of k.
       return _factor * (kD[1] * (x - _strike) + 2.0 * kD[0]) * bs(x);
@@ -517,7 +517,7 @@ public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloor
         gp = -g / x + _nbFixedPeriod / x / _nbFixedPaymentYear * nPeriodDiscount / periodFactor;
         gpp = 2.0 / (x * x) * g - 2.0 * _nbFixedPeriod / (x * x) / _nbFixedPaymentYear * nPeriodDiscount / periodFactor
             - (_nbFixedPeriod + 1.0) * _nbFixedPeriod / x
-                / (_nbFixedPaymentYear * _nbFixedPaymentYear) * nPeriodDiscount / (periodFactor * periodFactor);
+            / (_nbFixedPaymentYear * _nbFixedPaymentYear) * nPeriodDiscount / (periodFactor * periodFactor);
       } else {
         // Implementation comment: When x is (almost) 0, useful for CMS swaps which are priced as CMS cap of strike 0.
         g = (double) _nbFixedPeriod / _nbFixedPaymentYear;
@@ -557,7 +557,7 @@ public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloor
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double[] kD = kpkpp(x);
       // Implementation note: kD[0] contains the first derivative of k; kD[1] the second derivative of k.
       final double[] bs = bsbsp(x);
@@ -649,7 +649,7 @@ public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloor
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double[] kD = super.kpkpp(x);
       // Implementation note: kD[0] contains the first derivative of k; kD[1] the second derivative of k.
       final EuropeanVanillaOption option = new EuropeanVanillaOption(x, super._timeToExpiry, super._isCall);
@@ -673,7 +673,7 @@ public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloor
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double[] kD = super.kpkpp(x);
       // Implementation note: kD[0] contains the first derivative of k; kD[1] the second derivative of k.
       return -kD[1] * bs(x);

@@ -58,32 +58,32 @@ public class HyperbolicMeshingTest extends MeshingTest {
 
   @Test
   public void testEndPoints() {
-    assertEquals(A, HYP_MESH.evaluate(0), 1e-10);
-    assertEquals(B, HYP_MESH.evaluate(N - 1), 1e-10);
+    assertEquals(A, HYP_MESH.apply(0), 1e-10);
+    assertEquals(B, HYP_MESH.apply(N - 1), 1e-10);
   }
 
   @Test
   public void testSpacing() {
     double dx, oldDx;
     double x = A;
-    oldDx = HYP_MESH.evaluate(1) - HYP_MESH.evaluate(0);
+    oldDx = HYP_MESH.apply(1) - HYP_MESH.apply(0);
     int i = 2;
     while (x < K) {
-      dx = HYP_MESH.evaluate(i) - HYP_MESH.evaluate(i - 1);
+      dx = HYP_MESH.apply(i) - HYP_MESH.apply(i - 1);
       assertTrue(dx < oldDx);
       oldDx = dx;
       i++;
-      x = HYP_MESH.evaluate(i);
+      x = HYP_MESH.apply(i);
     }
     x = B;
-    oldDx = HYP_MESH.evaluate(N - 1) - HYP_MESH.evaluate(N - 2);
+    oldDx = HYP_MESH.apply(N - 1) - HYP_MESH.apply(N - 2);
     i = N - 2;
     while (x > K) {
-      dx = HYP_MESH.evaluate(i) - HYP_MESH.evaluate(i - 1);
+      dx = HYP_MESH.apply(i) - HYP_MESH.apply(i - 1);
       assertTrue(dx < oldDx);
       oldDx = dx;
       i--;
-      x = HYP_MESH.evaluate(i);
+      x = HYP_MESH.apply(i);
     }
   }
 

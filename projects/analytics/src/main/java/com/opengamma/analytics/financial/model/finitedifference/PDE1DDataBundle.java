@@ -313,7 +313,7 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
 
     final double[] res = new double[n];
     for (int i = 0; i < n; i++) {
-      res[i] = initialCondition.evaluate(grid.getSpaceNode(i));
+      res[i] = initialCondition.apply(grid.getSpaceNode(i));
     }
     return res;
   }

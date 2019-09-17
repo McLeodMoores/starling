@@ -165,7 +165,7 @@ public class OptionGreekToValueGreekConverterFunction extends AbstractFunction.N
       underlyingData.put(underlying, underlyingValue);
     }
     final GreekDataBundle dataBundle = new GreekDataBundle(greekResultCollection, underlyingData, tradeData);
-    final Map<ValueGreek, Double> sensitivities = _converter.evaluate(dataBundle);
+    final Map<ValueGreek, Double> sensitivities = _converter.apply(dataBundle);
     final Set<ComputedValue> results = new HashSet<>();
     ValueGreek valueGreek;
     Double valueGreekResult;

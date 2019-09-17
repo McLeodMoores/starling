@@ -278,7 +278,7 @@ public class YieldCurveNodePnLFunctionDeprecated extends AbstractFunction.NonCom
             "Could not identifier / price series pair for " + id + " using the field " + MarketDataRequirementNames.MARKET_VALUE);
       }
       DateDoubleTimeSeries<?> nodeTimeSeries = samplingFunction.getSampledTimeSeries(dbNodeTimeSeries.getTimeSeries(), schedule);
-      nodeTimeSeries = DIFFERENCE.evaluate(nodeTimeSeries);
+      nodeTimeSeries = DIFFERENCE.apply(nodeTimeSeries);
       if (pnlSeries == null) {
         pnlSeries = nodeTimeSeries.multiply(sensitivity);
       } else {

@@ -5,9 +5,8 @@
  */
 package com.opengamma.financial.analytics.conversion;
 
-import static com.opengamma.lambdava.streams.Lambdava.functional;
-
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.threeten.bp.ZonedDateTime;
 
@@ -18,10 +17,10 @@ import com.opengamma.analytics.financial.credit.RestructuringClause;
 import com.opengamma.analytics.financial.credit.creditdefaultswap.definition.legacy.LegacyVanillaCreditDefaultSwapDefinition;
 import com.opengamma.analytics.financial.credit.creditdefaultswap.definition.vanilla.CreditDefaultSwapDefinition;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.StubType;
+import com.opengamma.analytics.financial.legalentity.CreditRating;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.legalentity.LegalEntity;
 import com.opengamma.core.legalentity.LegalEntitySource;
-import com.opengamma.core.legalentity.Rating;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.financial.convention.HolidaySourceCalendarAdapter;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -38,7 +37,6 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ExternalScheme;
 import com.opengamma.id.UniqueId;
-import com.opengamma.lambdava.functions.Function1;
 import com.opengamma.master.legalentity.ManageableLegalEntity;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -85,23 +83,19 @@ public class CreditDefaultSwapSecurityConverter extends FinancialSecurityVisitor
   public static com.opengamma.analytics.financial.legalentity.LegalEntity convert(final LegalEntity legalEntity) {
     final String ticker = legalEntity.getExternalIdBundle().getValue(ExternalScheme.of("TICKER"));
     final String name = legalEntity.getName();
-    final Set<com.opengamma.analytics.financial.legalentity.CreditRating> creditRatings = functional(legalEntity.getRatings()).map(
-        new Function1<Rating, com.opengamma.analytics.financial.legalentity.CreditRating>() {
-          @Override
-          public com.opengamma.analytics.financial.legalentity.CreditRating execute(final Rating rating) {
-            return com.opengamma.analytics.financial.legalentity.CreditRating.of(rating.getScore().name(), rating.getRater(), true); // TODO check the long term
-                                                                                                                                     // flag
-          }
-        }).asSet();
+    final Set<CreditRating> creditRatings = legalEntity.getRatings()
+        .parallelStream()
+        .map(r -> com.opengamma.analytics.financial.legalentity.CreditRating.of(r.getScore().name(), r.getRater(), true))
+        .collect(Collectors.toSet());
     final com.opengamma.analytics.financial.legalentity.Region region = legalEntity.getAttributes().get("region") != null
         ? com.opengamma.analytics.financial.legalentity.Region.of(legalEntity
             .getAttributes().get("region"))
-        : null;
-    final com.opengamma.analytics.financial.legalentity.Sector sector = legalEntity.getAttributes().get("sector") != null
-        ? com.opengamma.analytics.financial.legalentity.Sector.of(legalEntity
-            .getAttributes().get("sector"))
-        : null;
-    return new com.opengamma.analytics.financial.legalentity.LegalEntity(ticker, name, creditRatings, sector, region);
+            : null;
+        final com.opengamma.analytics.financial.legalentity.Sector sector = legalEntity.getAttributes().get("sector") != null
+            ? com.opengamma.analytics.financial.legalentity.Sector.of(legalEntity
+                .getAttributes().get("sector"))
+                : null;
+            return new com.opengamma.analytics.financial.legalentity.LegalEntity(ticker, name, creditRatings, sector, region);
   }
 
   @Override
@@ -145,7 +139,7 @@ public class CreditDefaultSwapSecurityConverter extends FinancialSecurityVisitor
     final Calendar calendar = new HolidaySourceCalendarAdapter(_holidaySource, security.getNotional().getCurrency());
     final ZonedDateTime startDate = security.getStartDate();
     final ZonedDateTime effectiveDate = security.getEffectiveDate(); // FOLLOWING.adjustDate(calendar,
-                                                                     // valuationDate.withHour(0).withMinute(0).withSecond(0).withNano(0).plusDays(1));
+    // valuationDate.withHour(0).withMinute(0).withSecond(0).withNano(0).plusDays(1));
     final ZonedDateTime maturityDate = security.getMaturityDate();
     final PeriodFrequency couponFrequency = getPeriodFrequency(security.getCouponFrequency());
     final DayCount dayCount = security.getDayCount();

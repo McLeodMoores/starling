@@ -275,7 +275,7 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
     final SABRFormulaData data = new SABRFormulaData(getAlpha(expiryMaturity), getBeta(expiryMaturity), getRho(expiryMaturity), getNu(expiryMaturity));
     final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, expiryTime, true);
     final Function1D<SABRFormulaData, Double> funcSabrLongPayer = _sabrFunction.getVolatilityFunction(option, forward);
-    return funcSabrLongPayer.evaluate(data);
+    return funcSabrLongPayer.apply(data);
   }
 
   @Override

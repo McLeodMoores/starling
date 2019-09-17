@@ -58,7 +58,7 @@ public class ComplexChooserOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(CHOOSER).evaluate((StandardOptionDataBundle) null);
+    MODEL.getPricingFunction(CHOOSER).apply((StandardOptionDataBundle) null);
   }
 
   @Test
@@ -69,6 +69,6 @@ public class ComplexChooserOptionModelTest {
     // final ComplexChooserOptionDefinition chooser = new ComplexChooserOptionDefinition(new Expiry(DATE), CALL_STRIKE, CALL_EXPIRY, PUT_STRIKE, PUT_EXPIRY);
     // assertEquals(MODEL.getPricingFunction(chooser).evaluate(data), BSM.getPricingFunction(
     // new EuropeanVanillaOptionDefinition(CALL_STRIKE, new Expiry(DateUtil.getDateOffsetWithYearFraction(DATE, CALL_LIFE)), true)).evaluate(data), 0);
-    assertEquals(MODEL.getPricingFunction(CHOOSER).evaluate(DATA), 6.0508, 1e-4);
+    assertEquals(MODEL.getPricingFunction(CHOOSER).apply(DATA), 6.0508, 1e-4);
   }
 }

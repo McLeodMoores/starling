@@ -56,7 +56,7 @@ public class CoupledForwardFiniteDifferenceTest {
     final Function1D<Double, Double> strikeZeroPrice1 = new Function1D<Double, Double>() {
       @SuppressWarnings({"synthetic-access" })
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         if (ISCALL) {
           return probState1(LAMBDA12, LAMBDA21, PROB_STATE1, t) * SPOT;
         }
@@ -67,7 +67,7 @@ public class CoupledForwardFiniteDifferenceTest {
     final Function1D<Double, Double> strikeZeroPrice2 = new Function1D<Double, Double>() {
       @SuppressWarnings({"synthetic-access" })
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         if (ISCALL) {
           return (1 - probState1(LAMBDA12, LAMBDA21, PROB_STATE1, t)) * SPOT;
         }
@@ -90,14 +90,14 @@ public class CoupledForwardFiniteDifferenceTest {
 
     INITIAL_COND1 = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return PROB_STATE1 * Math.max(0, SPOT - x);
       }
     };
 
     INITIAL_COND2 = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return (1.0 - PROB_STATE1) * Math.max(0, SPOT - x);
       }
     };

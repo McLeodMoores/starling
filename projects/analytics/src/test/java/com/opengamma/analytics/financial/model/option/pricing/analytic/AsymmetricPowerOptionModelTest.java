@@ -51,7 +51,7 @@ public class AsymmetricPowerOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(new AsymmetricPowerOptionDefinition(STRIKE, EXPIRY, 1, true)).evaluate((StandardOptionDataBundle) null);
+    MODEL.getPricingFunction(new AsymmetricPowerOptionDefinition(STRIKE, EXPIRY, 1, true)).apply((StandardOptionDataBundle) null);
   }
 
   @Test

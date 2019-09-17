@@ -37,7 +37,7 @@ public class EuropeanMonteCarloOptionModel extends MonteCarloOptionModel<OptionD
     return new Function1D<StandardOptionDataBundle, Double>() {
 
       @Override
-      public Double evaluate(final StandardOptionDataBundle data) {
+      public Double apply(final StandardOptionDataBundle data) {
         Validate.notNull(data, "data");
         final Function1D<Double, Double> generator = process.getPathGeneratingFunction(definition, data, steps);
         double[] e;
@@ -48,7 +48,7 @@ public class EuropeanMonteCarloOptionModel extends MonteCarloOptionModel<OptionD
           e = randomNumbers.getVector(steps);
           st = s0;
           for (int j = 0; j < steps; j++) {
-            st = accumulator.evaluate(generator.evaluate(e[j]), st);
+            st = accumulator.apply(generator.apply(e[j]), st);
           }
           sum += payoffFunction.getPayoff(data.withSpot(process.getFinalValue(st)), 0.);
         }

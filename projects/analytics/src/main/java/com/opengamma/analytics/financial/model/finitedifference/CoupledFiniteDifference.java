@@ -233,7 +233,7 @@ public class CoupledFiniteDifference {
 
       if (first) {
         final DoubleMatrix2D mM = new DoubleMatrix2D(m);
-        decompRes = DCOMP.evaluate(mM);
+        decompRes = DCOMP.apply(mM);
 
         // first = false;
       }

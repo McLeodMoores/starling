@@ -78,7 +78,7 @@ public class HyperbolicMeshing extends MeshingFunction {
   }
 
   @Override
-  public Double evaluate(final Integer i) {
+  public Double apply(final Integer i) {
     Validate.isTrue(i >= 0 && i < getNumberOfPoints(), "i out of range");
     if (i == 0) {
       return _l;
@@ -95,7 +95,7 @@ public class HyperbolicMeshing extends MeshingFunction {
       }
     }
 
-    final double z = _um.evaluate(i);
+    final double z = _um.apply(i);
     return _alpha + _beta * Math.sinh(_gamma * z + _delta);
   }
 

@@ -33,9 +33,9 @@ public class JarqueBeraIIDHypothesisTest extends IIDHypothesisTestCase {
   public void test() {
     super.assertNullTS(JARQUE_BERA);
     super.assertEmptyTS(JARQUE_BERA);
-    assertTrue(JARQUE_BERA.evaluate(RANDOM));
-    assertFalse(JARQUE_BERA.evaluate(SIGNAL));
-    assertFalse(JARQUE_BERA.evaluate(INCREASING));
+    assertTrue(JARQUE_BERA.apply(RANDOM));
+    assertFalse(JARQUE_BERA.apply(SIGNAL));
+    assertFalse(JARQUE_BERA.apply(INCREASING));
   }
 
 }

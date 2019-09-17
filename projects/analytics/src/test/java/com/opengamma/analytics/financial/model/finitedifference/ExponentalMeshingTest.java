@@ -40,26 +40,26 @@ public class ExponentalMeshingTest extends MeshingTest {
 
   @Test
   public void testEndPoints() {
-    assertEquals(A, EXP_MESH.evaluate(0), 1e-10);
-    assertEquals(B, EXP_MESH.evaluate(N - 1), 1e-10);
-    assertEquals(A, LINEAR_MESH.evaluate(0), 1e-10);
-    assertEquals(B, LINEAR_MESH.evaluate(N - 1), 1e-10);
+    assertEquals(A, EXP_MESH.apply(0), 1e-10);
+    assertEquals(B, EXP_MESH.apply(N - 1), 1e-10);
+    assertEquals(A, LINEAR_MESH.apply(0), 1e-10);
+    assertEquals(B, LINEAR_MESH.apply(N - 1), 1e-10);
 
   }
 
   @Test
   public void testSpacing() {
     double dx, oldDx;
-    oldDx = EXP_MESH.evaluate(1) - EXP_MESH.evaluate(0);
+    oldDx = EXP_MESH.apply(1) - EXP_MESH.apply(0);
     for (int i = 2; i < N; i++) {
-      dx = EXP_MESH.evaluate(i) - EXP_MESH.evaluate(i - 1);
+      dx = EXP_MESH.apply(i) - EXP_MESH.apply(i - 1);
       assertTrue(dx > oldDx);
       oldDx = dx;
     }
 
     final double exDx = (B - A) / (N - 1);
     for (int i = 1; i < N; i++) {
-      dx = LINEAR_MESH.evaluate(i) - LINEAR_MESH.evaluate(i - 1);
+      dx = LINEAR_MESH.apply(i) - LINEAR_MESH.apply(i - 1);
       assertEquals(exDx, dx, 1e-10);
     }
   }

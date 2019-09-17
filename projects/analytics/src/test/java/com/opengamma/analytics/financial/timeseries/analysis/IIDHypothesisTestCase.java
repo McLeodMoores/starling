@@ -45,7 +45,7 @@ public abstract class IIDHypothesisTestCase {
 
   static void assertNullTS(final IIDHypothesis h) {
     try {
-      h.evaluate((DoubleTimeSeries<Long>) null);
+      h.apply((DoubleTimeSeries<Long>) null);
       Assert.fail();
     } catch (final IllegalArgumentException e) {
       // Expected
@@ -54,7 +54,7 @@ public abstract class IIDHypothesisTestCase {
 
   static void assertEmptyTS(final IIDHypothesis h) {
     try {
-      h.evaluate(ImmutableInstantDoubleTimeSeries.EMPTY_SERIES);
+      h.apply(ImmutableInstantDoubleTimeSeries.EMPTY_SERIES);
       Assert.fail();
     } catch (final IllegalArgumentException e) {
       // Expected

@@ -93,7 +93,7 @@ public class BinomialOptionModelTest {
     final StandardOptionDataBundle data = new StandardOptionDataBundle(YieldCurve.from(ConstantDoublesCurve.from(0.06)), 0., new VolatilitySurface(ConstantDoublesSurface.from(0.)), 100., date);
     final OptionDefinition option = new EuropeanVanillaOptionDefinition(100, new Expiry(DateUtils.getDateOffsetWithYearFraction(date, 1)), true);
     final Function1D<StandardOptionDataBundle, RecombiningBinomialTree<DoublesPair>> f = BINOMIAL_THREE_STEPS.getTreeGeneratingFunction(option);
-    final DoublesPair[][] result = f.evaluate(data).getNodes();
+    final DoublesPair[][] result = f.apply(data).getNodes();
     final DoublesPair[][] expected = new DoublesPair[4][4];
     expected[0][0] = DoublesPair.of(100., 10.1457);
     expected[1][0] = DoublesPair.of(90.91, 3.2545);
@@ -114,7 +114,7 @@ public class BinomialOptionModelTest {
     final StandardOptionDataBundle data = new StandardOptionDataBundle(YieldCurve.from(ConstantDoublesCurve.from(0.06)), 0., new VolatilitySurface(ConstantDoublesSurface.from(0.)), 100., date);
     final OptionDefinition option = new AmericanVanillaOptionDefinition(100, new Expiry(DateUtils.getDateOffsetWithYearFraction(date, 1)), false);
     final Function1D<StandardOptionDataBundle, RecombiningBinomialTree<DoublesPair>> f = BINOMIAL_THREE_STEPS.getTreeGeneratingFunction(option);
-    final DoublesPair[][] result = f.evaluate(data).getNodes();
+    final DoublesPair[][] result = f.apply(data).getNodes();
     final DoublesPair[][] expected = new DoublesPair[4][4];
     expected[0][0] = DoublesPair.of(100., 4.6546);
     expected[1][0] = DoublesPair.of(90.91, 9.2356);

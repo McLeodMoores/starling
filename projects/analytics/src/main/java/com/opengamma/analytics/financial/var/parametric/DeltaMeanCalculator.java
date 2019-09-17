@@ -26,7 +26,7 @@ public class DeltaMeanCalculator extends Function1D<Map<Integer, ParametricVaRDa
   }
 
   @Override
-  public Double evaluate(final Map<Integer, ParametricVaRDataBundle> data) {
+  public Double apply(final Map<Integer, ParametricVaRDataBundle> data) {
     Validate.notNull(data, "data");
     Validate.isTrue(data.containsKey(1));
     final ParametricVaRDataBundle deltaData = data.get(1);

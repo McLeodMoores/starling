@@ -43,7 +43,7 @@ public class UniformMeshingTest extends MeshingTest {
     int n = 7;
     MeshingFunction mesh = new UniformMeshing(n);
     for (int ii = 0; ii < n; ii++) {
-      assertEquals(((double) ii) / (n - 1), mesh.evaluate(ii), 1e-15);
+      assertEquals(((double) ii) / (n - 1), mesh.apply(ii), 1e-15);
     }
   }
 

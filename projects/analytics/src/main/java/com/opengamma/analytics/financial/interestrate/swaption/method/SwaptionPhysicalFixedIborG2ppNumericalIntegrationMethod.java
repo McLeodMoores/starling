@@ -128,7 +128,7 @@ public class SwaptionPhysicalFixedIborG2ppNumericalIntegrationMethod implements 
     }
 
     @Override
-    public Double evaluate(final Double x0, final Double x1) {
+    public Double apply(final Double x0, final Double x1) {
       double result = 0.0;
       final double densityPart = -(x0 * x0 + x1 * x1 - 2 * _rhobar * x0 * x1) / (2.0 * (1 - _rhobar * _rhobar));
       for (int loopcf = 0; loopcf < _discountedCashFlow.length; loopcf++) {

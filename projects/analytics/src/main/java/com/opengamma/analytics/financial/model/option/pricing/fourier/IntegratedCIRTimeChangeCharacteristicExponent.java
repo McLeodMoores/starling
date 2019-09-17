@@ -46,7 +46,7 @@ public class IntegratedCIRTimeChangeCharacteristicExponent implements StocasticC
   public Function1D<ComplexNumber, ComplexNumber> getFunction(final double t) {
     return new Function1D<ComplexNumber, ComplexNumber>() {
       @Override
-      public ComplexNumber evaluate(final ComplexNumber u) {
+      public ComplexNumber apply(final ComplexNumber u) {
         return getValue(u, t);
       }
     };

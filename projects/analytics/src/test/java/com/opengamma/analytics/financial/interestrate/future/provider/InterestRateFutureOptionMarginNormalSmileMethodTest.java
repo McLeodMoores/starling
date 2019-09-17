@@ -112,7 +112,7 @@ public class InterestRateFutureOptionMarginNormalSmileMethodTest {
     final double priceFuture = METHOD_FUTURES.price(ERU2, MULTICURVES);
     final double volatility = NORMAL_PARAMETERS.getZValue(expiry, STRIKE);
     final NormalFunctionData dataNormal = new NormalFunctionData(priceFuture, 1.0, volatility);
-    final double priceExpected = NORMAL_FUNCTION.getPriceFunction(option).evaluate(dataNormal);
+    final double priceExpected = NORMAL_FUNCTION.getPriceFunction(option).apply(dataNormal);
     final double priceComputed = METHOD_SECURITY_OPTION_NORMAL.price(OPTION_ERU2, NORMAL_MULTICURVES);
     assertEquals("Future option with Black volatilities: option security price", priceExpected, priceComputed, TOLERANCE_PRICE);
   }

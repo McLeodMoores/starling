@@ -44,7 +44,7 @@ public class ProductOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(new ProductOptionDefinition(0.1, EXPIRY1, true)).evaluate((StandardTwoAssetOptionDataBundle) null);
+    MODEL.getPricingFunction(new ProductOptionDefinition(0.1, EXPIRY1, true)).apply((StandardTwoAssetOptionDataBundle) null);
   }
 
   @Test
@@ -52,10 +52,10 @@ public class ProductOptionModelTest {
     ProductOptionDefinition option = new ProductOptionDefinition(15000, EXPIRY1, true);
     StandardTwoAssetOptionDataBundle data = new StandardTwoAssetOptionDataBundle(R, B1, B2, new VolatilitySurface(ConstantDoublesSurface.from(0.2)), new VolatilitySurface(
         ConstantDoublesSurface.from(0.3)), S1, S2, -0.5, DATE);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), 0.0028, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), 0.0028, EPS);
     data = data.withFirstVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(0.3))).withCorrelation(0);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), 2.4026, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), 2.4026, EPS);
     option = new ProductOptionDefinition(15000, EXPIRY2, true);
-    assertEquals(MODEL.getPricingFunction(option).evaluate(data), 266.1594, EPS);
+    assertEquals(MODEL.getPricingFunction(option).apply(data), 266.1594, EPS);
   }
 }

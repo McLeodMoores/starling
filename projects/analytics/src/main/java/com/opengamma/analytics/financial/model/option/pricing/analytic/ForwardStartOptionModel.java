@@ -15,7 +15,7 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * 
+ *
  */
 public class ForwardStartOptionModel extends AnalyticOptionModel<ForwardStartOptionDefinition, StandardOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
@@ -27,7 +27,7 @@ public class ForwardStartOptionModel extends AnalyticOptionModel<ForwardStartOpt
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final StandardOptionDataBundle data) {
+      public Double apply(final StandardOptionDataBundle data) {
         Validate.notNull(data, "data");
         final ZonedDateTime date = data.getDate();
         final double s = data.getSpot();

@@ -59,26 +59,26 @@ public class RealizedVarianceTest {
 
   @Test
   public void testNullObs() {
-    assertEquals(REALIZED_VARIANCE.evaluate(SWAP_NULL), 0.0, 1e-9);
+    assertEquals(REALIZED_VARIANCE.apply(SWAP_NULL), 0.0, 1e-9);
   }
 
   @Test
   public void testOneObs() {
-    assertEquals(REALIZED_VARIANCE.evaluate(SWAP_ONE_OBS), 0.0, 1e-9);
+    assertEquals(REALIZED_VARIANCE.apply(SWAP_ONE_OBS), 0.0, 1e-9);
   }
 
   @Test
   public void testTwoObs() {
-    assertEquals(REALIZED_VARIANCE.evaluate(SWAP_TWO_OBS), ANNUALIZATION_FACTOR * FunctionUtils.square(Math.log(1.5)), 1e-9);
+    assertEquals(REALIZED_VARIANCE.apply(SWAP_TWO_OBS), ANNUALIZATION_FACTOR * FunctionUtils.square(Math.log(1.5)), 1e-9);
   }
 
   @Test
   public void testThreeObs() {
-    assertEquals(REALIZED_VARIANCE.evaluate(SWAP_THREE_OBS), ANNUALIZATION_FACTOR * FunctionUtils.square(Math.log(1.5)), 1e-9);
+    assertEquals(REALIZED_VARIANCE.apply(SWAP_THREE_OBS), ANNUALIZATION_FACTOR * FunctionUtils.square(Math.log(1.5)), 1e-9);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testZeroInTimeSeries() {
-    REALIZED_VARIANCE.evaluate(SWAP_WITH_ZERO_OBS);
+    REALIZED_VARIANCE.apply(SWAP_WITH_ZERO_OBS);
   }
 }

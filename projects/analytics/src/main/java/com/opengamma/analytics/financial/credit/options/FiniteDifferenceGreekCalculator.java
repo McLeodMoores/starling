@@ -85,7 +85,7 @@ public class FiniteDifferenceGreekCalculator {
 
     final Function1D<Double, Double> optPriceFunc = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double indexPrice) {
+      public Double apply(final Double indexPrice) {
         final double puf = indexPrice / indexFactor;
         final IntrinsicIndexDataBundle adjCurves = PSA.adjustCurves(puf, indexCDX, indexCoupon, yieldCurve, intrinsicData);
         final double atmFwd = INDEX_CAL.defaultAdjustedForwardIndexValue(fwdStartingCDS, timeToExpiry, yieldCurve, indexCoupon, adjCurves);
@@ -96,7 +96,7 @@ public class FiniteDifferenceGreekCalculator {
     final ScalarFirstOrderDifferentiator diff = new ScalarFirstOrderDifferentiator(type, bumpAmount);
     final Function1D<Double, Double> g = diff.differentiate(optPriceFunc);
     final double indexPrice = INDEX_CAL.indexPV(indexCDX, indexCoupon, yieldCurve, intrinsicData);
-    return g.evaluate(indexPrice);
+    return g.apply(indexPrice);
   }
 
   private double optPrice(final double timeToExpiry, final CDSAnalytic indexCDX, final double indexCoupon, final ISDACompliantYieldCurve yieldCurve,
@@ -328,14 +328,14 @@ public class FiniteDifferenceGreekCalculator {
 
     final Function1D<Double, Double> priceForSigmaFunc = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double sigma) {
+      public Double apply(final Double sigma) {
         return pricer.getOptionPremium(atmFwdPrice, sigma, strike, isPayer);
       }
     };
 
     final ScalarFirstOrderDifferentiator differ = new ScalarFirstOrderDifferentiator(type, bumpAmount);
     final Function1D<Double, Double> vega = differ.differentiate(priceForSigmaFunc);
-    return vega.evaluate(vol);
+    return vega.apply(vol);
   }
 
   /**

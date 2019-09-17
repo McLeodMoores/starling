@@ -50,7 +50,7 @@ public abstract class ParameterizedFunction<S, T, U> {
     return new Function1D<T, U>() {
 
       @Override
-      public U evaluate(final T params) {
+      public U apply(final T params) {
         return ParameterizedFunction.this.evaluate(x, params);
       }
 
@@ -71,7 +71,7 @@ public abstract class ParameterizedFunction<S, T, U> {
     return new Function1D<S, U>() {
 
       @Override
-      public U evaluate(final S x) {
+      public U apply(final S x) {
         return ParameterizedFunction.this.evaluate(x, params);
       }
 

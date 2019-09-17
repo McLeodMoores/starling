@@ -63,10 +63,10 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
 
     return new Function1D<T, double[]>() {
       @Override
-      public double[] evaluate(final T data) {
+      public double[] apply(final T data) {
         final double[] res = new double[n];
         for (int i = 0; i < n; i++) {
-          res[i] = funcs.get(i).evaluate(data);
+          res[i] = funcs.get(i).apply(data);
         }
         return res;
       }
@@ -92,10 +92,10 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
     return new Function1D<T, double[]>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public double[] evaluate(final T data) {
+      public double[] apply(final T data) {
         Validate.notNull(data, "data");
         final double[] x = new double[3 + data.getNumberOfParameters()]; // vol, fwd, strike, the model parameters
-        x[0] = func.evaluate(data);
+        x[0] = func.apply(data);
         x[1] = forwardBar(option, forward, data);
         x[2] = strikeBar(option, forward, data);
         System.arraycopy(paramBar(func, data), 0, x, 3, data.getNumberOfParameters());
@@ -122,7 +122,7 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
     return new Function1D<T, double[]>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public double[] evaluate(final T data) {
+      public double[] apply(final T data) {
         Validate.notNull(data, "data");
         return paramBar(func, data);
       }
@@ -149,10 +149,10 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
     return new Function1D<T, double[][]>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public double[][] evaluate(final T data) {
+      public double[][] apply(final T data) {
         Validate.notNull(data, "data");
         final double[][] res = new double[3 + data.getNumberOfParameters()][n];
-        res[0] = func.evaluate(data);
+        res[0] = func.apply(data);
         res[1] = forwardBar(strikes, timeToExpiry, forward, data);
         res[2] = strikeBar(strikes, timeToExpiry, forward, data);
         final double[][] temp = paramBarSet(func, data);
@@ -179,10 +179,10 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
 
     return new Function1D<T, double[][]>() {
       @Override
-      public double[][] evaluate(final T data) {
+      public double[][] apply(final T data) {
         final double[][] res = new double[n][];
         for (int i = 0; i < n; i++) {
-          res[i] = funcs.get(i).evaluate(data);
+          res[i] = funcs.get(i).apply(data);
         }
         return res;
       }
@@ -209,7 +209,7 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
     return new Function1D<T, double[][]>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public double[][] evaluate(final T data) {
+      public double[][] apply(final T data) {
         Validate.notNull(data, "data");
         final double[][] temp = paramBarSet(func, data);
 
@@ -231,10 +231,10 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
 
     return new Function1D<T, double[][]>() {
       @Override
-      public double[][] evaluate(final T data) {
+      public double[][] apply(final T data) {
         final double[][] res = new double[n][];
         for (int i = 0; i < n; i++) {
-          res[i] = funcs.get(i).evaluate(data);
+          res[i] = funcs.get(i).apply(data);
         }
         return res;
       }
@@ -245,7 +245,7 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
   private double forwardBar(final EuropeanVanillaOption option, final double forward, final T data) {
     final Function1D<T, Double> funcUp = getVolatilityFunction(option, forward + EPS);
     final Function1D<T, Double> funcDown = getVolatilityFunction(option, forward - EPS);
-    return (funcUp.evaluate(data) - funcDown.evaluate(data)) / 2 / EPS;
+    return (funcUp.apply(data) - funcDown.apply(data)) / 2 / EPS;
   }
 
   private double[] forwardBar(final double[] strikes, final double timeToExpiry, final double forward, final T data) {
@@ -253,8 +253,8 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
     final Function1D<T, double[]> funcUp = getVolatilityFunction(forward + EPS, strikes, timeToExpiry);
     final Function1D<T, double[]> funcDown = getVolatilityFunction(forward - EPS, strikes, timeToExpiry);
     final double[] res = new double[n];
-    final double[] up = funcUp.evaluate(data);
-    final double[] down = funcDown.evaluate(data);
+    final double[] up = funcUp.apply(data);
+    final double[] down = funcDown.apply(data);
     for (int i = 0; i < n; i++) {
       res[i] = (up[i] - down[i]) / 2 / EPS;
     }
@@ -264,7 +264,7 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
   private double strikeBar(final EuropeanVanillaOption option, final double forward, final T data) {
     final Function1D<T, Double> funcUp = getVolatilityFunction(option.withStrike(option.getStrike() + EPS), forward);
     final Function1D<T, Double> funcDown = getVolatilityFunction(option.withStrike(option.getStrike() - EPS), forward);
-    return (funcUp.evaluate(data) - funcDown.evaluate(data)) / 2 / EPS;
+    return (funcUp.apply(data) - funcDown.apply(data)) / 2 / EPS;
   }
 
   private double[] strikeBar(final double[] strikes, final double timeToExpiry, final double forward, final T data) {
@@ -280,8 +280,8 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
     }
     final Function1D<T, double[]> funcUp = getVolatilityFunction(forward, strikesUp, timeToExpiry);
     final Function1D<T, double[]> funcDown = getVolatilityFunction(forward, strikesDown, timeToExpiry);
-    final double[] up = funcUp.evaluate(data);
-    final double[] down = funcDown.evaluate(data);
+    final double[] up = funcUp.apply(data);
+    final double[] down = funcDown.apply(data);
     for (int i = 0; i < n; i++) {
       res[i] = (up[i] - down[i]) / 2 / EPS;
     }
@@ -318,14 +318,14 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
       if (data.isAllowed(index, up)) {
         final T dUp = (T) data.with(index, up);
         final T dDown = (T) data.with(index, down);
-        return (func.evaluate(dUp) - func.evaluate(dDown)) / 2 / EPS;
+        return (func.apply(dUp) - func.apply(dDown)) / 2 / EPS;
       }
       final T dDown = (T) data.with(index, down);
-      return (func.evaluate(data) - func.evaluate(dDown)) / EPS;
+      return (func.apply(data) - func.apply(dDown)) / EPS;
     }
     ArgumentChecker.isTrue(data.isAllowed(index, up), "No values and index {} = {} are allowed", index, mid);
     final T dUp = (T) data.with(index, up);
-    return (func.evaluate(dUp) - func.evaluate(data)) / EPS;
+    return (func.apply(dUp) - func.apply(data)) / EPS;
   }
 
   private double[][] paramBarSet(final Function1D<T, double[]> func, final T data) {
@@ -357,8 +357,8 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
       if (data.isAllowed(index, up)) {
         final T dUp = (T) data.with(index, up);
         final T dDown = (T) data.with(index, down);
-        final double[] rUp = func.evaluate(dUp);
-        final double[] rDown = func.evaluate(dDown);
+        final double[] rUp = func.apply(dUp);
+        final double[] rDown = func.apply(dDown);
         final int m = rUp.length;
         final double[] res = new double[m];
         for (int i = 0; i < m; i++) {
@@ -366,8 +366,8 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
         }
         return res;
       }
-      final double[] rMid = func.evaluate(data);
-      final double[] rDown = func.evaluate((T) data.with(index, down));
+      final double[] rMid = func.apply(data);
+      final double[] rDown = func.apply((T) data.with(index, down));
       final int m = rMid.length;
       final double[] res = new double[m];
       for (int i = 0; i < m; i++) {
@@ -376,8 +376,8 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
       return res;
     }
     ArgumentChecker.isTrue(data.isAllowed(index, up), "No values and index {} = {} are allowed", index, mid);
-    final double[] rMid = func.evaluate(data);
-    final double[] rUp = func.evaluate((T) data.with(index, up));
+    final double[] rMid = func.apply(data);
+    final double[] rUp = func.apply((T) data.with(index, up));
     final int m = rMid.length;
     final double[] res = new double[m];
     for (int i = 0; i < m; i++) {

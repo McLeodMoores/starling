@@ -31,7 +31,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
     final Function1D<StandardOptionDataBundle, Double> pricingFunction = new Function1D<StandardOptionDataBundle, Double>() {
 
       @Override
-      public Double evaluate(final StandardOptionDataBundle data) {
+      public Double apply(final StandardOptionDataBundle data) {
         ArgumentChecker.notNull(data, "data");
         final ZonedDateTime date = data.getDate();
         final double s = data.getSpot();

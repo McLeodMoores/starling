@@ -92,7 +92,7 @@ public final class ForexNonDeliverableOptionBlackSmileMethod {
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, dfDelivery, volatility);
     final EuropeanVanillaOption vanillaOption = new EuropeanVanillaOption(strike, expiryTime, !option.isCall());
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(vanillaOption);
-    final double price = func.evaluate(dataBlack) * Math.abs(option.getUnderlyingNDF().getNotionalCurrency1()) * (option.isLong() ? 1.0 : -1.0);
+    final double price = func.apply(dataBlack) * Math.abs(option.getUnderlyingNDF().getNotionalCurrency1()) * (option.isLong() ? 1.0 : -1.0);
     final CurrencyAmount priceCurrency = CurrencyAmount.of(option.getCurrency2(), price);
     return MultipleCurrencyAmount.of(priceCurrency);
   }

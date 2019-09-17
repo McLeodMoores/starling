@@ -175,7 +175,7 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
     final double rootT = Math.sqrt(timeToExpiry);
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double strike) {
+      public Double apply(final Double strike) {
         final double vol = smile.getVolatility(Triple.of(timeToExpiry, strike, forward));
         final double sigRootT = vol * rootT;
         final double d1 = Math.log(forward / strike) / sigRootT + 0.5 * sigRootT;
@@ -189,7 +189,7 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
     final double rootT = Math.sqrt(timeToExpiry);
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double strike) {
+      public Double apply(final Double strike) {
         final double vol = smile.getVolatility(Triple.of(timeToExpiry, strike, forward));
         final double sigRootT = vol * rootT;
         final double d1 = Math.log(forward / strike) / sigRootT + 0.5 * sigRootT;

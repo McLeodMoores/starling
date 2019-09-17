@@ -30,7 +30,7 @@ public class StudentTLinearVaRCalculatorTest {
   private static final Function1D<Double, Double> MEAN = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 0.4;
     }
 
@@ -38,7 +38,7 @@ public class StudentTLinearVaRCalculatorTest {
   private static final Function1D<Double, Double> STD = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 1.;
     }
 

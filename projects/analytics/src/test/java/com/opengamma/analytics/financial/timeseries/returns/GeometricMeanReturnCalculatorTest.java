@@ -22,22 +22,22 @@ public class GeometricMeanReturnCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull1() {
-    SIMPLE.evaluate((double[]) null);
+    SIMPLE.apply((double[]) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmpty1() {
-    SIMPLE.evaluate(new double[0]);
+    SIMPLE.apply(new double[0]);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull2() {
-    CONTINUOUS.evaluate((double[]) null);
+    CONTINUOUS.apply((double[]) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmpty2() {
-    CONTINUOUS.evaluate(new double[0]);
+    CONTINUOUS.apply(new double[0]);
   }
 
   @Test
@@ -48,7 +48,7 @@ public class GeometricMeanReturnCalculatorTest {
     for (int i = 0; i < n; i++) {
       x[i] = r;
     }
-    assertEquals(SIMPLE.evaluate(x), r, 1e-12);
-    assertEquals(CONTINUOUS.evaluate(x), r, 1e-12);
+    assertEquals(SIMPLE.apply(x), r, 1e-12);
+    assertEquals(CONTINUOUS.apply(x), r, 1e-12);
   }
 }

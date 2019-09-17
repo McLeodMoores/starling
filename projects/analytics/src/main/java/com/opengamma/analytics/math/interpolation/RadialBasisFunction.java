@@ -32,7 +32,7 @@ public class RadialBasisFunction {
       final Pair<double[], Double> pair = weights.get(i);
       xi = pair.getFirst();
       wi = pair.getSecond();
-      phi = basisFunction.evaluate(DistanceCalculator.getDistance(x, xi));
+      phi = basisFunction.apply(DistanceCalculator.getDistance(x, xi));
       sum += wi * phi;
       normSum += phi;
     }

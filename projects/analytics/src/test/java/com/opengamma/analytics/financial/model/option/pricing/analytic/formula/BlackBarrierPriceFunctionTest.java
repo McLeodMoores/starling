@@ -66,7 +66,7 @@ public class BlackBarrierPriceFunctionTest {
 
     // Vanilla
     final Function1D<BlackFunctionData, Double> fcnVanillaCall = BLACK_FUNCTION.getPriceFunction(VANILLA_CALL_K100);
-    final double pxVanillaCall = fcnVanillaCall.evaluate(DATA_BLACK);
+    final double pxVanillaCall = fcnVanillaCall.apply(DATA_BLACK);
 
     // Barriers without rebate
     final double noRebate = 0.0;
@@ -85,7 +85,7 @@ public class BlackBarrierPriceFunctionTest {
     // Vanilla
     final Function1D<BlackFunctionData, Double> fcnVanillaCall = BLACK_FUNCTION.getPriceFunction(VANILLA_CALL_K100);
     final BlackFunctionData zeroRatesMarket = new BlackFunctionData(SPOT, 1.0, VOLATILITY);
-    final double pxVanillaCall = fcnVanillaCall.evaluate(zeroRatesMarket);
+    final double pxVanillaCall = fcnVanillaCall.apply(zeroRatesMarket);
 
     // Barriers with rebate
     final double priceDownInRebate = BARRIER_FUNCTION.getPrice(VANILLA_CALL_K100, BARRIER_DOWN_IN, REBATE, SPOT, 0.0, 0.0, VOLATILITY);
@@ -107,9 +107,9 @@ public class BlackBarrierPriceFunctionTest {
     final double pxRebate = REBATE;
     // 2 - Vanillas - Call and Put
     final Function1D<BlackFunctionData, Double> fcnVanillaCall = BLACK_FUNCTION.getPriceFunction(VANILLA_CALL_K100);
-    final double pxVanillaCall = fcnVanillaCall.evaluate(zeroRatesMarket);
+    final double pxVanillaCall = fcnVanillaCall.apply(zeroRatesMarket);
     final Function1D<BlackFunctionData, Double> fcnVanillaPut = BLACK_FUNCTION.getPriceFunction(VANILLA_PUT_K100);
-    final double pxVanillaPut = fcnVanillaPut.evaluate(zeroRatesMarket);
+    final double pxVanillaPut = fcnVanillaPut.apply(zeroRatesMarket);
     // Barriers: Up and Down, Call and Put, In and Out
     final double pxDownInCall = BARRIER_FUNCTION.getPrice(VANILLA_CALL_K100, BARRIER_DOWN_IN, REBATE, SPOT, costOfCarry, rateDomestic, VOLATILITY);
     final double pxDownOutCall = BARRIER_FUNCTION.getPrice(VANILLA_CALL_K100, BARRIER_DOWN_OUT, REBATE, SPOT, costOfCarry, rateDomestic, VOLATILITY);
@@ -130,7 +130,7 @@ public class BlackBarrierPriceFunctionTest {
 
     // Let's try the Up case with Barrier < Strike. To do this, I create a new vanilla with K120 (> Barrier110)
     final Function1D<BlackFunctionData, Double> fcnVanillaPutHiK = BLACK_FUNCTION.getPriceFunction(VANILLA_PUT_KHI);
-    final double pxVanillaPutHiK = fcnVanillaPutHiK.evaluate(zeroRatesMarket);
+    final double pxVanillaPutHiK = fcnVanillaPutHiK.apply(zeroRatesMarket);
 
     final double pxUpInPutHiK = BARRIER_FUNCTION.getPrice(VANILLA_PUT_KHI, BARRIER_UP_IN, REBATE, SPOT, costOfCarry, rateDomestic, VOLATILITY);
     final double pxUpOutPutHiK = BARRIER_FUNCTION.getPrice(VANILLA_PUT_KHI, BARRIER_UP_OUT, REBATE, SPOT, costOfCarry, rateDomestic, VOLATILITY);
@@ -148,7 +148,7 @@ public class BlackBarrierPriceFunctionTest {
 
     final double pxRebate = DF_DOM * REBATE;
     final Function1D<BlackFunctionData, Double> fcnVanillaCall = BLACK_FUNCTION.getPriceFunction(VANILLA_CALL_K100);
-    final double pxVanillaCall = fcnVanillaCall.evaluate(DATA_BLACK);
+    final double pxVanillaCall = fcnVanillaCall.apply(DATA_BLACK);
 
     // KnockIn's with impossible to reach barrier's are guaranteed to pay the rebate at maturity
     final double pxDownInPut = BARRIER_FUNCTION.getPrice(VANILLA_PUT_K100, veryLowKnockIn, REBATE, SPOT, COST_OF_CARRY, RATE_DOM, VOLATILITY);
@@ -199,22 +199,22 @@ public class BlackBarrierPriceFunctionTest {
 
     final double priceDI1 = BARRIER_FUNCTION.getPrice(VANILLA_CALL_K100, BARRIER_DOWN_IN, REBATE, SPOT, COST_OF_CARRY, RATE_DOM, VOLATILITY);
     final EuropeanStandardBarrierOptionDefinition optionBarrierDI = new EuropeanStandardBarrierOptionDefinition(STRIKE_MID, expiry, IS_CALL, BARRIER_DOWN_IN, REBATE);
-    final double priceDI2 = model.getPricingFunction(optionBarrierDI).evaluate(data);
+    final double priceDI2 = model.getPricingFunction(optionBarrierDI).apply(data);
     assertEquals("Comparison Down In", priceDI2, priceDI1, 1.0E-10);
 
     final double priceDO1 = BARRIER_FUNCTION.getPrice(VANILLA_CALL_K100, BARRIER_DOWN_OUT, REBATE, SPOT, COST_OF_CARRY, RATE_DOM, VOLATILITY);
     final EuropeanStandardBarrierOptionDefinition optionBarrierDO = new EuropeanStandardBarrierOptionDefinition(STRIKE_MID, expiry, IS_CALL, BARRIER_DOWN_OUT, REBATE);
-    final double priceDO2 = model.getPricingFunction(optionBarrierDO).evaluate(data);
+    final double priceDO2 = model.getPricingFunction(optionBarrierDO).apply(data);
     assertEquals("Comparison Down Out", priceDO2, priceDO1, 1.0E-10);
 
     final double priceUI1 = BARRIER_FUNCTION.getPrice(VANILLA_CALL_K100, BARRIER_UP_IN, REBATE, SPOT, COST_OF_CARRY, RATE_DOM, VOLATILITY);
     final EuropeanStandardBarrierOptionDefinition optionBarrierUI = new EuropeanStandardBarrierOptionDefinition(STRIKE_MID, expiry, IS_CALL, BARRIER_UP_IN, REBATE);
-    final double priceUI2 = model.getPricingFunction(optionBarrierUI).evaluate(data);
+    final double priceUI2 = model.getPricingFunction(optionBarrierUI).apply(data);
     assertEquals("Comparison Up In", priceUI2, priceUI1, 1.0E-10);
 
     final double priceUO1 = BARRIER_FUNCTION.getPrice(VANILLA_CALL_K100, BARRIER_UP_OUT, REBATE, SPOT, COST_OF_CARRY, RATE_DOM, VOLATILITY);
     final EuropeanStandardBarrierOptionDefinition optionBarrierUO = new EuropeanStandardBarrierOptionDefinition(STRIKE_MID, expiry, IS_CALL, BARRIER_UP_OUT, REBATE);
-    final double priceUO2 = model.getPricingFunction(optionBarrierUO).evaluate(data);
+    final double priceUO2 = model.getPricingFunction(optionBarrierUO).apply(data);
     assertEquals("Comparison Up Out", priceUO2, priceUO1, 1.0E-10);
 
     final double vol0 = 0.0;
@@ -222,7 +222,7 @@ public class BlackBarrierPriceFunctionTest {
     final StandardOptionDataBundle data0 = new StandardOptionDataBundle(YieldCurve.from(ConstantDoublesCurve.from(RATE_DOM)), COST_OF_CARRY, new VolatilitySurface(ConstantDoublesSurface.from(vol0)),
         SPOT,
         REFERENCE_DATE);
-    final double priceVol02 = model.getPricingFunction(optionBarrierDI).evaluate(data0);
+    final double priceVol02 = model.getPricingFunction(optionBarrierDI).apply(data0);
     assertEquals(priceVol02, priceVol01, 1.0E-10);
   }
 

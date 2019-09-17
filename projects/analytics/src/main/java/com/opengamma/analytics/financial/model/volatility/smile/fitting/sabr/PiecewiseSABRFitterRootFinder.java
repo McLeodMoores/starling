@@ -150,13 +150,13 @@ public class PiecewiseSABRFitterRootFinder {
 
     return new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
         final double sigma = x.getEntry(0);
         final double theta = x.getEntry(1);
         final double phi = x.getEntry(2);
         final double[] params = new double[] { sigma, 0.0, theta, phi };
         final SABRFormulaData data = new SABRFormulaData(params);
-        final double[] vols = func.evaluate(data);
+        final double[] vols = func.apply(data);
         final double[] res = new double[n];
         for (int i = 0; i < n; i++) {
           res[i] = vols[i] - impliedVols[i];
@@ -173,14 +173,14 @@ public class PiecewiseSABRFitterRootFinder {
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
 
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D x) {
         final double alpha = x.getEntry(0);
         final double rho = x.getEntry(1);
         final double nu = x.getEntry(2);
         final double[] params = new double[] { alpha, beta, rho, nu };
         final SABRFormulaData data = new SABRFormulaData(params);
 
-        final double[][] temp = adjointFunc.evaluate(data);
+        final double[][] temp = adjointFunc.apply(data);
         // remove the delta sigma sense
         final double[][] res = new double[3][3];
         for (int i = 0; i < 3; i++) {
@@ -202,30 +202,30 @@ public class PiecewiseSABRFitterRootFinder {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double strike) {
+      public Double apply(final Double strike) {
         final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, expiry, true);
         final Function1D<SABRFormulaData, Double> vFunc = MODEL.getVolatilityFunction(option, forward);
         final int index = SurfaceArrayUtils.getLowerBoundIndex(strikes, strike);
         if (index == 0) {
           final SABRFormulaData p = modelParams[0];
 
-          return vFunc.evaluate(p);
+          return vFunc.apply(p);
         }
         if (index >= n - 2) {
           final SABRFormulaData p = modelParams[n - 3];
-          return vFunc.evaluate(p);
+          return vFunc.apply(p);
         }
         final double w = _weightingFunction.getWeight(strikes, index, strike);
         if (w == 1) {
           final SABRFormulaData p1 = modelParams[index - 1];
-          return vFunc.evaluate(p1);
+          return vFunc.apply(p1);
         } else if (w == 0) {
           final SABRFormulaData p2 = modelParams[index];
-          return vFunc.evaluate(p2);
+          return vFunc.apply(p2);
         } else {
           final SABRFormulaData p1 = modelParams[index - 1];
           final SABRFormulaData p2 = modelParams[index];
-          return w * vFunc.evaluate(p1) + (1 - w) * vFunc.evaluate(p2);
+          return w * vFunc.apply(p1) + (1 - w) * vFunc.apply(p2);
         }
       }
     };

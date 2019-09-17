@@ -46,9 +46,9 @@ public class MultipleYieldCurveFinderGeneratorFunction extends Function1D<Double
   }
 
   @Override
-  public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+  public DoubleMatrix1D apply(final DoubleMatrix1D x) {
     final YieldCurveBundle bundle = _data.getKnownData().copy();
-    final YieldCurveBundle newCurves = _data.getBuildingFunction().evaluate(x);
+    final YieldCurveBundle newCurves = _data.getBuildingFunction().apply(x);
     bundle.addAll(newCurves);
     final double[] res = new double[_data.getNumberOfInstruments()];
     for (int i = 0; i < _data.getNumberOfInstruments(); i++) {

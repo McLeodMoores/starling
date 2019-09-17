@@ -71,7 +71,7 @@ public class ChiSquareDistribution implements ProbabilityDistribution<Double> {
   public double getInverseCDF(final Double p) {
     Validate.notNull(p);
     Validate.isTrue(p >= 0 && p <= 1, "Probability must lie between 0 and 1");
-    return 2 * _inverseFunction.evaluate(0.5 * _degrees, p);
+    return 2 * _inverseFunction.apply(0.5 * _degrees, p);
   }
 
   /**

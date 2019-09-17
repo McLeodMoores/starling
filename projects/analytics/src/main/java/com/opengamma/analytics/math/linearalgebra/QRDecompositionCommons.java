@@ -23,7 +23,7 @@ public class QRDecompositionCommons extends Decomposition<QRDecompositionResult>
    * {@inheritDoc}
    */
   @Override
-  public QRDecompositionResult evaluate(final DoubleMatrix2D x) {
+  public QRDecompositionResult apply(final DoubleMatrix2D x) {
     Validate.notNull(x);
     final RealMatrix temp = CommonsMathWrapper.wrap(x);
     final QRDecomposition qr = new QRDecompositionImpl(temp);

@@ -52,7 +52,7 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Return the class instance.
-   * 
+   *
    * @return The instance.
    */
   public static BillSecurityDiscountingMethod getInstance() {
@@ -67,7 +67,7 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Computes the present value of the bill security by discounting.
-   * 
+   *
    * @param bill
    *          The bill.
    * @param issuer
@@ -83,7 +83,7 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Compute the bill price from the yield. The price is the relative price at settlement. The yield is in the bill yield convention.
-   * 
+   *
    * @param bill
    *          The bill.
    * @param yield
@@ -96,7 +96,7 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Compute the bill price from the yield. The price is the relative price at settlement.
-   * 
+   *
    * @param convention
    *          The yield convention.
    * @param yield
@@ -117,7 +117,7 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Computes the bill yield from the price. The yield is in the bill yield convention.
-   * 
+   *
    * @param bill
    *          The bill.
    * @param price
@@ -136,7 +136,7 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Computes the derivative of the bill yield with respect to the price. The yield is in the bill yield convention.
-   * 
+   *
    * @param bill
    *          The bill.
    * @param price
@@ -155,7 +155,7 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Computes the present value of the bill security by discounting from its yield.
-   * 
+   *
    * @param bill
    *          The bill.
    * @param yield
@@ -173,7 +173,7 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Computes the present value of the bill security by discounting from its price.
-   * 
+   *
    * @param bill
    *          The bill.
    * @param price
@@ -191,7 +191,7 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Compute the bill price from the curves. The price is the relative price at settlement.
-   * 
+   *
    * @param bill
    *          The bill.
    * @param issuer
@@ -208,7 +208,7 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Computes the bill yield from the curves. The yield is in the bill yield convention.
-   * 
+   *
    * @param bill
    *          The bill.
    * @param issuer
@@ -225,7 +225,7 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Computes the bill present value curve sensitivity.
-   * 
+   *
    * @param bill
    *          The bill.
    * @param issuer
@@ -250,7 +250,7 @@ public final class BillSecurityDiscountingMethod {
   /**
    * Computes a bill z-spread from the curves and a present value. The z-spread is a parallel shift applied to the discounting curve associated to the bill
    * (Issuer Entity) to match the present value.
-   * 
+   *
    * @param bill
    *          The bill.
    * @param issuerMulticurves
@@ -266,7 +266,7 @@ public final class BillSecurityDiscountingMethod {
 
     final Function1D<Double, Double> residual = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double z) {
+      public Double apply(final Double z) {
         return presentValueFromZSpread(bill, issuerMulticurves, z).getAmount(ccy) - pv.getAmount(ccy);
       }
     };
@@ -278,7 +278,7 @@ public final class BillSecurityDiscountingMethod {
   /**
    * Computes the present value of a bill security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bill
    * (Issuer Entity). The parallel shift is done in the curve convention.
-   * 
+   *
    * @param bill
    *          The bill security.
    * @param issuerMulticurves
@@ -294,7 +294,7 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Computes a bill z-spread from the curves and a yield.
-   * 
+   *
    * @param bill
    *          The bill.
    * @param issuerMulticurves

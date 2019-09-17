@@ -15,7 +15,7 @@ import com.opengamma.analytics.math.function.Function2D;
 public class KroneckerDeltaFunction extends Function2D<Integer, Integer> {
 
   @Override
-  public Integer evaluate(final Integer i, final Integer j) {
+  public Integer apply(final Integer i, final Integer j) {
     Validate.notNull(i, "i");
     Validate.notNull(j, "j");
     return i.intValue() == j.intValue() ? 1 : 0;

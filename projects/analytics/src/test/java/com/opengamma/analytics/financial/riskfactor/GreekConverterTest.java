@@ -53,12 +53,12 @@ public class GreekConverterTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull1() {
-    G_TO_PG_CONVERTER.evaluate((GreekDataBundle) null);
+    G_TO_PG_CONVERTER.apply((GreekDataBundle) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull2() {
-    G_TO_VG_CONVERTER.evaluate((GreekDataBundle) null);
+    G_TO_VG_CONVERTER.apply((GreekDataBundle) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -66,17 +66,17 @@ public class GreekConverterTest {
     final GreekResultCollection greeks = new GreekResultCollection();
     greeks.put(Greek.DELTA, 5.);
     final Map<UnderlyingType, Double> data = Collections.<UnderlyingType, Double> singletonMap(UnderlyingType.BOND_YIELD, 0.04);
-    G_TO_VG_CONVERTER.evaluate(new GreekDataBundle(greeks, data, TRADE_DATA));
+    G_TO_VG_CONVERTER.apply(new GreekDataBundle(greeks, data, TRADE_DATA));
   }
 
   @Test
   public void test() {
-    final Map<PositionGreek, Double> positionGreeks = G_TO_PG_CONVERTER.evaluate(GREEKS_DATA);
+    final Map<PositionGreek, Double> positionGreeks = G_TO_PG_CONVERTER.apply(GREEKS_DATA);
     assertEquals(DELTA * N, positionGreeks.get(new PositionGreek(Greek.DELTA)), EPS);
     assertEquals(GAMMA * N, positionGreeks.get(new PositionGreek(Greek.GAMMA)), EPS);
     assertEquals(VANNA * N, positionGreeks.get(new PositionGreek(Greek.VANNA)), EPS);
 
-    final Map<ValueGreek, Double> valueGreeks = G_TO_VG_CONVERTER.evaluate(GREEKS_DATA);
+    final Map<ValueGreek, Double> valueGreeks = G_TO_VG_CONVERTER.apply(GREEKS_DATA);
     assertEquals(DELTA * N * PV * SPOT_PRICE, valueGreeks.get(new ValueGreek(Greek.DELTA)), EPS);
     assertEquals(GAMMA * N * PV * SPOT_PRICE * SPOT_PRICE, valueGreeks.get(new ValueGreek(Greek.GAMMA)), EPS);
     assertEquals(VANNA * N * PV * SPOT_PRICE * IMPLIED_VOLATILITY, valueGreeks.get(new ValueGreek(Greek.VANNA)), EPS);

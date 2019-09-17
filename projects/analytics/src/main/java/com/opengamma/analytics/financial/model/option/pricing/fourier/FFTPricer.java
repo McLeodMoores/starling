@@ -255,11 +255,11 @@ public class FFTPricer {
 
     ComplexNumber u = new ComplexNumber(0.0, -(1 + alpha));
     final int offset = halfN - 1;
-    z[offset] = func.evaluate(u);
+    z[offset] = func.apply(u);
 
     for (int i = 1; i < m; i++) {
       u = new ComplexNumber(i * delta, -(1 + alpha));
-      final ComplexNumber f = func.evaluate(u);
+      final ComplexNumber f = func.apply(u);
       z[offset + i] = f;
       z[offset - i] = ComplexMathUtils.conjugate(f); // TODO the FFT should take care of this
     }

@@ -25,7 +25,7 @@ public class ThinPlateSplineRadialBasisFunction extends Function1D<Double, Doubl
   }
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     if (x == 0.0) {
       return 0.0;
     }

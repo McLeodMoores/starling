@@ -27,7 +27,7 @@ public class BlackPriceFunction implements OptionPriceFunction<BlackFunctionData
     return new Function1D<BlackFunctionData, Double>() {
 
       @Override
-      public Double evaluate(final BlackFunctionData data) {
+      public Double apply(final BlackFunctionData data) {
         Validate.notNull(data, "data");
         final double forward = data.getForward();
         final double sigma = data.getBlackVolatility();
@@ -214,7 +214,7 @@ public class BlackPriceFunction implements OptionPriceFunction<BlackFunctionData
     return new Function1D<BlackFunctionData, Double>() {
 
       @Override
-      public Double evaluate(final BlackFunctionData data) {
+      public Double apply(final BlackFunctionData data) {
         Validate.notNull(data, "data");
         final double sigma = data.getBlackVolatility();
         final double f = data.getForward();

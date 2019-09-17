@@ -47,7 +47,7 @@ public class SABRPaulotVolatilityFunction extends VolatilityFunctionProvider<SAB
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final SABRFormulaData data) {
+      public Double apply(final SABRFormulaData data) {
         Validate.notNull(data, "data");
         final double alpha = data.getAlpha();
         final double beta = data.getBeta();
@@ -69,14 +69,14 @@ public class SABRPaulotVolatilityFunction extends VolatilityFunctionProvider<SAB
         // the formula behaves very badly close to ATM
         if (CompareUtils.closeEquals(x, 0.0, 1e-3)) {
           final double delta = 1.01e-3;
-          final double a0 = HAGAN.getVolatilityFunction(option, forward).evaluate(data);
+          final double a0 = HAGAN.getVolatilityFunction(option, forward).apply(data);
           double kPlus, kMinus;
           kPlus = forward * Math.exp(delta);
           kMinus = forward * Math.exp(-delta);
           EuropeanVanillaOption other = new EuropeanVanillaOption(kPlus, option.getTimeToExpiry(), option.isCall());
-          final double yPlus = getVolatilityFunction(other, forward).evaluate(data);
+          final double yPlus = getVolatilityFunction(other, forward).apply(data);
           other = new EuropeanVanillaOption(kMinus, option.getTimeToExpiry(), option.isCall());
-          final double yMinus = getVolatilityFunction(other, forward).evaluate(data);
+          final double yMinus = getVolatilityFunction(other, forward).apply(data);
           final double a2 = (yPlus + yMinus - 2 * a0) / 2 / delta / delta;
           final double a1 = (yPlus - yMinus) / 2 / delta;
           return a2 * x * x + a1 * x + a0;

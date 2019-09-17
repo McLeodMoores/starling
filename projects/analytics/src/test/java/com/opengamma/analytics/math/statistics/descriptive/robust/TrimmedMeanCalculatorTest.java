@@ -50,7 +50,7 @@ public class TrimmedMeanCalculatorTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullArray() {
-    CALCULATOR.evaluate((double[]) null);
+    CALCULATOR.apply((double[]) null);
   }
 
   /**
@@ -58,7 +58,7 @@ public class TrimmedMeanCalculatorTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmptyArray() {
-    CALCULATOR.evaluate(new double[0]);
+    CALCULATOR.apply(new double[0]);
   }
 
   /**
@@ -78,12 +78,12 @@ public class TrimmedMeanCalculatorTest {
     for (int i = N - 10; i < N; i++) {
       x[i] = 0.;
     }
-    assertEquals(CALCULATOR.evaluate(x), MEAN.evaluate(y), EPS);
+    assertEquals(CALCULATOR.apply(x), MEAN.apply(y), EPS);
     for (int i = 0; i < N - 1; i++) {
       x[i] = Double.valueOf(i);
     }
     x[N - 1] = 100000.;
-    assertTrue(CALCULATOR.evaluate(x) < MEAN.evaluate(x));
+    assertTrue(CALCULATOR.apply(x) < MEAN.apply(x));
   }
 
   /**

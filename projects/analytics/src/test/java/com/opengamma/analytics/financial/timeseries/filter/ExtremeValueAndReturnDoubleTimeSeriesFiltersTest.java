@@ -39,12 +39,12 @@ public class ExtremeValueAndReturnDoubleTimeSeriesFiltersTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullTS1() {
-    VALUE_FILTER.evaluate((LocalDateDoubleTimeSeries) null);
+    VALUE_FILTER.apply((LocalDateDoubleTimeSeries) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullTS2() {
-    RETURN_FILTER.evaluate((LocalDateDoubleTimeSeries) null);
+    RETURN_FILTER.apply((LocalDateDoubleTimeSeries) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -114,7 +114,7 @@ public class ExtremeValueAndReturnDoubleTimeSeriesFiltersTest {
 
   @Test
   public void testEmptyTS() {
-    final FilteredTimeSeries filtered = VALUE_FILTER.evaluate(EMPTY_SERIES);
+    final FilteredTimeSeries filtered = VALUE_FILTER.apply(EMPTY_SERIES);
     assertEquals(filtered.getFilteredTS(), EMPTY_SERIES);
     assertEquals(filtered.getRejectedTS(), EMPTY_SERIES);
   }
@@ -161,10 +161,10 @@ public class ExtremeValueAndReturnDoubleTimeSeriesFiltersTest {
         returnFilteredData.add(d);
       }
     }
-    FilteredTimeSeries result = VALUE_FILTER.evaluate(ts);
+    FilteredTimeSeries result = VALUE_FILTER.apply(ts);
     assertEquals(result, new FilteredTimeSeries(ImmutableLocalDateDoubleTimeSeries.of(filteredDates, filteredData), ImmutableLocalDateDoubleTimeSeries.of(rejectedDates,
         rejectedData)));
-    result = RETURN_FILTER.evaluate(ts);
+    result = RETURN_FILTER.apply(ts);
     assertEquals(result, new FilteredTimeSeries(ImmutableLocalDateDoubleTimeSeries.of(returnFilteredDates, returnFilteredData), ImmutableLocalDateDoubleTimeSeries.of(
         returnRejectedDates, returnRejectedData)));
   }

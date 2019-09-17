@@ -109,7 +109,7 @@ public class BlackIndexOptionPricer {
     _daFwdSpread = defaultAdjustedFwdSpread;
     _fAnnuity = pvFwdAnnuity;
 
-    _minExercisePrice = -indexCoupon * _annuityFunc.evaluate(0.);
+    _minExercisePrice = -indexCoupon * _annuityFunc.apply(0.);
     _maxExercisePrice = fwdCDS.getLGD();
   }
 
@@ -161,7 +161,7 @@ public class BlackIndexOptionPricer {
   public double getOptionPriceForSpreadQuotedIndex(final double strike, final double vol, final boolean isPayer) {
     ArgumentChecker.isTrue(strike >= 0.0, "strike cannot be negative");
 
-    final double gK = (strike - _coupon) * _annuityFunc.evaluate(strike); // the excise price
+    final double gK = (strike - _coupon) * _annuityFunc.apply(strike); // the excise price
     return getOptionPriceForPriceQuotedIndex(gK, vol, isPayer);
   }
 
@@ -219,7 +219,7 @@ public class BlackIndexOptionPricer {
    * @return The implied volatility
    */
   public double getImpliedVolForSpreadStrike(final double strike, final double optionPremium, final boolean isPayer) {
-    final double gK = (strike - _coupon) * _annuityFunc.evaluate(strike); // the excise price
+    final double gK = (strike - _coupon) * _annuityFunc.apply(strike); // the excise price
     return getImpliedVolForExercisePrice(gK, optionPremium, isPayer);
   }
 

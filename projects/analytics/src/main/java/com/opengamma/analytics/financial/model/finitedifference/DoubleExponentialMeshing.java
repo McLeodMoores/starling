@@ -48,11 +48,11 @@ public class DoubleExponentialMeshing extends MeshingFunction {
   }
 
   @Override
-  public Double evaluate(final Integer i) {
+  public Double apply(final Integer i) {
     if (i < _nPointsLower) {
-      return _lowerMesh.evaluate(i);
+      return _lowerMesh.apply(i);
     }
-    return _upperMesh.evaluate(i - _nPointsLower + 1);
+    return _upperMesh.apply(i - _nPointsLower + 1);
   }
 
 }

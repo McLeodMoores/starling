@@ -35,7 +35,7 @@ public class ModeCalculator extends DescriptiveStatisticsCalculator {
    * @return  the arithmetic mean
    */
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notEmpty(x, "x");
     if (x.length == 1) {
       return x[0];

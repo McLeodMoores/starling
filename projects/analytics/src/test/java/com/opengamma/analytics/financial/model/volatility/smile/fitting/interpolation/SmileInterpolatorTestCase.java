@@ -72,7 +72,7 @@ public abstract class SmileInterpolatorTestCase {
     final int n = STRIKES.length;
     for (int i = 0; i < n; i++) {
       final double k = STRIKES[i];
-      final double vol = smile.evaluate(k);
+      final double vol = smile.apply(k);
       assertEquals(VOLS[i], vol, 1e-6);
     }
     //    final long endTime = System.nanoTime();
@@ -91,7 +91,7 @@ public abstract class SmileInterpolatorTestCase {
 
     for (int i = 0; i < 200; i++) {
       final double k = 700 + 1300 * i / 199.;
-      final double vol = smile.evaluate(k);
+      final double vol = smile.apply(k);
       assertEquals(flatVol, vol, 1e-8);
     }
     //    final long endTime = System.nanoTime();
@@ -109,7 +109,7 @@ public abstract class SmileInterpolatorTestCase {
       final Function1D<Double, Double> smile = interpolator.getVolatilityFunction(FORWARD, STRIKES, EXPIRY, vols);
       for (int i = 0; i < n; i++) {
         final double k = STRIKES[i];
-        final double vol = smile.evaluate(k);
+        final double vol = smile.apply(k);
         assertEquals(vols[i], vol, 1e-6);
       }
     }
@@ -127,7 +127,7 @@ public abstract class SmileInterpolatorTestCase {
 
     for (int i = 0; i < 200; i++) {
       final double k = 700 + 1300 * i / 199.;
-      final double vol = smile.evaluate(k);
+      final double vol = smile.apply(k);
       System.out.println(k + "\t" + vol);
     }
   }
@@ -143,7 +143,7 @@ public abstract class SmileInterpolatorTestCase {
 
     for (int i = 0; i < 200; i++) {
       final double k = 700 + 1300 * i / 199.;
-      final double vol = smile.evaluate(k);
+      final double vol = smile.apply(k);
       System.out.println(k + "\t" + vol);
     }
   }
@@ -162,7 +162,7 @@ public abstract class SmileInterpolatorTestCase {
 
     for (int i = 0; i < 200; i++) {
       final double k = 700 + 1300 * i / 199.;
-      final double vol = smile.evaluate(k);
+      final double vol = smile.apply(k);
       System.out.println(k + "\t" + vol);
     }
   }
@@ -181,7 +181,7 @@ public abstract class SmileInterpolatorTestCase {
 
     for (int i = 0; i < 200; i++) {
       final double k = 0.8 + 1.2 * i / 199.;
-      final double vol = smile.evaluate(k);
+      final double vol = smile.apply(k);
       System.out.println(k + "\t" + vol);
     }
   }

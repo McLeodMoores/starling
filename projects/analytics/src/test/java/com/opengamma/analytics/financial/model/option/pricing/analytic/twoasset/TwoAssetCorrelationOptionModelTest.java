@@ -47,11 +47,11 @@ public class TwoAssetCorrelationOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(OPTION).evaluate((StandardTwoAssetOptionDataBundle) null);
+    MODEL.getPricingFunction(OPTION).apply((StandardTwoAssetOptionDataBundle) null);
   }
 
   @Test
   public void test() {
-    assertEquals(MODEL.getPricingFunction(OPTION).evaluate(DATA), 4.7073, 1e-4);
+    assertEquals(MODEL.getPricingFunction(OPTION).apply(DATA), 4.7073, 1e-4);
   }
 }

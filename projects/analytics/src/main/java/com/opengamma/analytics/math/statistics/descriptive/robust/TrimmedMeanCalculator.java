@@ -41,7 +41,7 @@ public class TrimmedMeanCalculator extends DescriptiveStatisticsCalculator {
   }
 
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notEmpty(x, "x was null");
     final int length = x.length;
     final int value = (int) Math.round(length * _gamma);
@@ -51,7 +51,7 @@ public class TrimmedMeanCalculator extends DescriptiveStatisticsCalculator {
     for (int i = 0; i < trimmed.length; i++) {
       trimmed[i] = x[i + value];
     }
-    return DescriptiveStatisticsFactory.of(MeanCalculator.NAME).evaluate(trimmed);
+    return DescriptiveStatisticsFactory.of(MeanCalculator.NAME).apply(trimmed);
   }
 
   @Override

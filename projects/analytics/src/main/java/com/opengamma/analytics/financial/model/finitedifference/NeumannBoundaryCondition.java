@@ -35,7 +35,7 @@ public class NeumannBoundaryCondition implements BoundaryCondition {
     _timeValue = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return fixedValue;
       }
     };
@@ -45,7 +45,7 @@ public class NeumannBoundaryCondition implements BoundaryCondition {
 
   @Override
   public double getConstant(final ConvectionDiffusionPDE1DStandardCoefficients data, final double t) {
-    return _timeValue.evaluate(t);
+    return _timeValue.apply(t);
   }
 
   @Override

@@ -38,15 +38,15 @@ public class LiMcLeodPortmanteauIIDHypothesisTest extends IIDHypothesisTestCase 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testInsufficientData() {
     final InstantDoubleTimeSeries subSeries = RANDOM.subSeries(RANDOM.getTimeAtIndex(0), RANDOM.getTimeAtIndex(3));
-    LI_MCLEOD.evaluate(subSeries);
+    LI_MCLEOD.apply(subSeries);
   }
 
   @Test
   public void test() {
     super.assertNullTS(LI_MCLEOD);
     super.assertEmptyTS(LI_MCLEOD);
-    assertTrue(LI_MCLEOD.evaluate(RANDOM));
-    assertFalse(LI_MCLEOD.evaluate(SIGNAL));
-    assertFalse(LI_MCLEOD.evaluate(INCREASING));
+    assertTrue(LI_MCLEOD.apply(RANDOM));
+    assertFalse(LI_MCLEOD.apply(SIGNAL));
+    assertFalse(LI_MCLEOD.apply(INCREASING));
   }
 }

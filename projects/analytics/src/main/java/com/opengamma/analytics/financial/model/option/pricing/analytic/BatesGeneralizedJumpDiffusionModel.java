@@ -37,7 +37,7 @@ public class BatesGeneralizedJumpDiffusionModel extends AnalyticOptionModel<Opti
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final BatesGeneralizedJumpDiffusionModelDataBundle data) {
+      public Double apply(final BatesGeneralizedJumpDiffusionModelDataBundle data) {
         Validate.notNull(data);
         final double s = data.getSpot();
         final YieldAndDiscountCurve discountCurve = data.getInterestRateCurve();
@@ -58,13 +58,13 @@ public class BatesGeneralizedJumpDiffusionModel extends AnalyticOptionModel<Opti
         b -= lambda * expectedJumpSize;
         StandardOptionDataBundle bsmData = new StandardOptionDataBundle(discountCurve, b, volSurface, s, date);
         final Function1D<StandardOptionDataBundle, Double> bsmFunction = BSM.getPricingFunction(definition);
-        double price = mult * bsmFunction.evaluate(bsmData);
+        double price = mult * bsmFunction.apply(bsmData);
         for (int i = 1; i < N; i++) {
           z = Math.sqrt(sigmaSq + delta * delta * i / t);
           b += gamma / t;
           bsmData = bsmData.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(z))).withCostOfCarry(b);
           mult *= lambdaT / i;
-          price += mult * bsmFunction.evaluate(bsmData);
+          price += mult * bsmFunction.apply(bsmData);
         }
         return price;
       }

@@ -134,7 +134,7 @@ public class SwaptionPhysicalFixedIborG2ppApproximationMethod implements Pricing
     final BlackPriceFunction blackFunction = new BlackPriceFunction();
     final BlackFunctionData dataBlack = new BlackFunctionData(b0, dfswap[0], sigmaBar);
     final Function1D<BlackFunctionData, Double> func = blackFunction.getPriceFunction(option);
-    final double price = func.evaluate(dataBlack) * (swaption.isLong() ? 1.0 : -1.0);
+    final double price = func.apply(dataBlack) * (swaption.isLong() ? 1.0 : -1.0);
     return CurrencyAmount.of(swaption.getCurrency(), price);
   }
 

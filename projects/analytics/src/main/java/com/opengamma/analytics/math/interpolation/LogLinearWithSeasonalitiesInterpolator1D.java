@@ -83,7 +83,7 @@ public class LogLinearWithSeasonalitiesInterpolator1D extends Interpolator1D {
     final Function1D<Double, Double> function = new Function1D<Double, Double>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         double result = y1;
         for (int loopmonth = 0; loopmonth < NB_MONTH; loopmonth++) {
           result = result * (1 + x + _seasonalValues[loopmonth]);

@@ -25,12 +25,12 @@ public class NormalDistributionMaximumLikelihoodEstimatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {
-    ESTIMATOR.evaluate((double[]) null);
+    ESTIMATOR.apply((double[]) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmpty() {
-    ESTIMATOR.evaluate(new double[0]);
+    ESTIMATOR.apply(new double[0]);
   }
 
   @Test
@@ -44,7 +44,7 @@ public class NormalDistributionMaximumLikelihoodEstimatorTest {
     for (int i = 0; i < n; i++) {
       x[i] = p1.nextRandom();
     }
-    final NormalDistribution p2 = (NormalDistribution) ESTIMATOR.evaluate(x);
+    final NormalDistribution p2 = (NormalDistribution) ESTIMATOR.apply(x);
     assertEquals(p2.getMean(), mu, eps);
     assertEquals(p2.getStandardDeviation(), sigma, eps);
   }

@@ -114,7 +114,7 @@ public class CapFloorIborSABRMethodTest {
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, df, volatility);
     final EuropeanVanillaOption option = new EuropeanVanillaOption(STRIKE, CAP_LONG.getFixingTime(), IS_CAP);
     final Function1D<BlackFunctionData, Double> funcBlack = BLACK_FUNCTION.getPriceFunction(option);
-    final double expectedPrice = funcBlack.evaluate(dataBlack) * CAP_LONG.getNotional() * CAP_LONG.getPaymentYearFraction();
+    final double expectedPrice = funcBlack.apply(dataBlack) * CAP_LONG.getNotional() * CAP_LONG.getPaymentYearFraction();
     assertEquals("Cap/floor: SABR pricing", expectedPrice, methodPrice, 1E-2);
   }
 

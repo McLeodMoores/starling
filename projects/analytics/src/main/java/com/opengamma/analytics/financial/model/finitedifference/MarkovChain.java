@@ -58,7 +58,7 @@ public class MarkovChain {
     double sum = 0;
     for (final double sigma : sigmas) {
       final BlackFunctionData data = new BlackFunctionData(forward, df, sigma);
-      sum += priceFunc.evaluate(data);
+      sum += priceFunc.apply(data);
     }
     return sum / sigmas.length;
   }
@@ -70,7 +70,7 @@ public class MarkovChain {
     double sum = 0;
     for (final double sigma : sigmas) {
       final CEVFunctionData data = new CEVFunctionData(forward, df, sigma, beta);
-      sum += priceFunc.evaluate(data);
+      sum += priceFunc.apply(data);
     }
     return sum / sigmas.length;
   }
@@ -96,7 +96,7 @@ public class MarkovChain {
         double sum = 0;
         for (final double sigma : tSigmas) {
           final BlackFunctionData data = new BlackFunctionData(forwards[j], df[j], sigma);
-          sum += priceFunc.evaluate(data);
+          sum += priceFunc.apply(data);
         }
         price[j][i] = sum / tSigmas.length;
       }

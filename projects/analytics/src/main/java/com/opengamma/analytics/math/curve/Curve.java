@@ -102,7 +102,7 @@ public abstract class Curve<T extends Comparable<T>, U>
   public Function1D<T, U> toFunction1D() {
     return new Function1D<T, U>() {
       @Override
-      public U evaluate(final T x) {
+      public U apply(final T x) {
         return Curve.this.getYValue(x);
       }
     };

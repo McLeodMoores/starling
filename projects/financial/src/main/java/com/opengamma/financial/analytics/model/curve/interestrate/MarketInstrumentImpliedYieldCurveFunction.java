@@ -495,7 +495,7 @@ public class MarketInstrumentImpliedYieldCurveFunction extends AbstractFunction.
     final ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CURVE_CALCULATION_METHOD, getCalculationType())
         .with(YieldCurveFunction.PROPERTY_FORWARD_CURVE, curveName).with(YieldCurveFunction.PROPERTY_FUNDING_CURVE, curveName);
     if (createJacobian) {
-      final DoubleMatrix2D jacobianMatrix = jacobianCalculator.evaluate(new DoubleMatrix1D(yields));
+      final DoubleMatrix2D jacobianMatrix = jacobianCalculator.apply(new DoubleMatrix1D(yields));
       result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.YIELD_CURVE_JACOBIAN, targetSpec, properties.get()), jacobianMatrix.getData()));
     }
     if (createSensitivities) {
@@ -648,7 +648,7 @@ public class MarketInstrumentImpliedYieldCurveFunction extends AbstractFunction.
     final ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CURVE_CALCULATION_METHOD, getCalculationType())
         .with(YieldCurveFunction.PROPERTY_FORWARD_CURVE, forwardCurveName).with(YieldCurveFunction.PROPERTY_FUNDING_CURVE, fundingCurveName);
     if (createJacobian) {
-      final DoubleMatrix2D jacobian = jacobianCalculator.evaluate(new DoubleMatrix1D(yields));
+      final DoubleMatrix2D jacobian = jacobianCalculator.apply(new DoubleMatrix1D(yields));
       result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.YIELD_CURVE_JACOBIAN, targetSpec, properties.get()), jacobian.getData()));
     }
     if (createSensitivities) { // calcType is PresentValue. Compute CouponSens ( dPrice / dParRate ) used in conjunction with Jacobian to get Yield Curve Node

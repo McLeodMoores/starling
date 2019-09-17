@@ -5,12 +5,11 @@
  */
 package com.opengamma.batch.domain;
 
-import static com.opengamma.lambdava.streams.Lambdava.functional;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
@@ -35,7 +34,6 @@ import com.opengamma.id.ObjectId;
 import com.opengamma.id.ObjectIdentifiable;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
-import com.opengamma.lambdava.functions.Function1;
 
 /**
  * Bean to hold data about a risk run.
@@ -96,6 +94,7 @@ public class RiskRun extends DirectBean implements ObjectIdentifiable {
 
   /**
    * Gets the viewDefinitionUid.
+   *
    * @return the value of the property
    */
   public UniqueId getViewDefinitionUid() {
@@ -104,7 +103,9 @@ public class RiskRun extends DirectBean implements ObjectIdentifiable {
 
   /**
    * Sets the viewDefinitionUid.
-   * @param viewDefinitionUid  the new value of the property
+   *
+   * @param viewDefinitionUid
+   *          the new value of the property
    */
   public void setViewDefinitionUid(final UniqueId viewDefinitionUid) {
     setViewDefinitionUidScheme(viewDefinitionUid.getScheme());
@@ -140,17 +141,16 @@ public class RiskRun extends DirectBean implements ObjectIdentifiable {
   }
 
   public RiskRun(final ViewCycleMetadata cycleMetadata) {
-    this(new MarketData(cycleMetadata.getMarketDataSnapshotId()),
-        Instant.now(),
-        cycleMetadata.getValuationTime(),
-        0,
-        functional(cycleMetadata.getAllCalculationConfigurationNames()).map(new Function1<String, CalculationConfiguration>() {
-          @Override
-          public CalculationConfiguration execute(final String configName) {
-            return new CalculationConfiguration(configName);
-          }
-        }).asSet(),
-        Sets.<RiskRunProperty>newHashSet(),
+    this(new MarketData(cycleMetadata.getMarketDataSnapshotId()), Instant.now(),
+        cycleMetadata.getValuationTime(), 0,
+        cycleMetadata.getAllCalculationConfigurationNames().stream().map(CalculationConfiguration::new).collect(Collectors.toSet()),
+        // functional(cycleMetadata.getAllCalculationConfigurationNames()).map(new Function1<String, CalculationConfiguration>() {
+        // @Override
+        // public CalculationConfiguration execute(final String configName) {
+        // return new CalculationConfiguration(configName);
+        // }
+        // }).asSet(),
+        Sets.<RiskRunProperty> newHashSet(),
         false,
         cycleMetadata.getVersionCorrection(),
         cycleMetadata.getViewDefinitionId(),

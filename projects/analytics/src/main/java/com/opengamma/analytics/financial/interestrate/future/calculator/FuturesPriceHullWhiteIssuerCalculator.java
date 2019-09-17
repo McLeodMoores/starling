@@ -29,7 +29,7 @@ import com.opengamma.util.ArgumentChecker;
  * Computes the price for different types of futures. Calculator using a multi-curve, issuer and Hull-White one-factor parameters provider.
  */
 public final class FuturesPriceHullWhiteIssuerCalculator
-    extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, Double> {
+extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, Double> {
 
   /**
    * The unique instance of the calculator.
@@ -38,7 +38,7 @@ public final class FuturesPriceHullWhiteIssuerCalculator
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static FuturesPriceHullWhiteIssuerCalculator getInstance() {
@@ -224,14 +224,14 @@ public final class FuturesPriceHullWhiteIssuerCalculator
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       double pv = 0.0;
-      for (int loopcf = 0; loopcf < _cfa1.length; loopcf++) {
-        pv += _cfa1[loopcf] * Math.exp(-_alpha1[loopcf] * _alpha1[loopcf] / 2.0 - _alpha1[loopcf] * x);
+      for (int i = 0; i < _cfa1.length; i++) {
+        pv += _cfa1[i] * Math.exp(-_alpha1[i] * _alpha1[i] / 2.0 - _alpha1[i] * x);
       }
       pv -= _e1;
-      for (int loopcf = 0; loopcf < _cfa2.length; loopcf++) {
-        pv -= _cfa2[loopcf] * Math.exp(-_alpha2[loopcf] * _alpha2[loopcf] / 2.0 - _alpha2[loopcf] * x);
+      for (int i = 0; i < _cfa2.length; i++) {
+        pv -= _cfa2[i] * Math.exp(-_alpha2[i] * _alpha2[i] / 2.0 - _alpha2[i] * x);
       }
       pv += _e2;
       return pv;

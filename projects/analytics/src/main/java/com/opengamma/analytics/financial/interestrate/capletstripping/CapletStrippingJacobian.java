@@ -83,9 +83,9 @@ public class CapletStrippingJacobian extends Function1D<DoubleMatrix1D, DoubleMa
   }
 
   @Override
-  public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+  public DoubleMatrix2D apply(final DoubleMatrix1D x) {
 
-    final LinkedHashMap<String, Interpolator1DDataBundle> db = _dataBundleBuilder.evaluate(x); //TODO merge these - they do the same work!
+    final LinkedHashMap<String, Interpolator1DDataBundle> db = _dataBundleBuilder.apply(x); //TODO merge these - they do the same work!
     final LinkedHashMap<String, InterpolatedDoublesCurve> curves = _curveBuilder.evaluate(x);
 
     // set any known (i.e. fixed) curves

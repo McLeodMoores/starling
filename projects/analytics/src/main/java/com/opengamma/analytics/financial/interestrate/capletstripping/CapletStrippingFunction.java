@@ -43,9 +43,9 @@ public class CapletStrippingFunction extends Function1D<DoubleMatrix1D, DoubleMa
   }
 
   @Override
-  public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+  public DoubleMatrix1D apply(final DoubleMatrix1D x) {
 
-    final VolatilityModel1D volModel = _volModelProvider.evaluate(x);
+    final VolatilityModel1D volModel = _volModelProvider.apply(x);
 
     final double[] res = new double[_capPricers.size()];
     for (int i = 0; i < _capPricers.size(); i++) {

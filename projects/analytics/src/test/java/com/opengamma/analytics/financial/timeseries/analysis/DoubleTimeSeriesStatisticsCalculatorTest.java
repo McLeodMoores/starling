@@ -48,6 +48,6 @@ public class DoubleTimeSeriesStatisticsCalculatorTest {
 
   @Test
   public void test() {
-    assertEquals(CALC.evaluate(TS), MEAN.evaluate(TS.valuesArrayFast()), 1e-15);
+    assertEquals(CALC.evaluate(TS), MEAN.apply(TS.valuesArrayFast()), 1e-15);
   }
 }

@@ -40,9 +40,9 @@ public class MulticurveProviderForwardFinderJacobian extends Function1D<DoubleMa
   }
 
   @Override
-  public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+  public DoubleMatrix2D apply(final DoubleMatrix1D x) {
     final MulticurveProviderForward bundle = _data.getKnownData().copy();
-    final MulticurveProviderForward newCurves = _data.getGeneratorMarket().evaluate(x);
+    final MulticurveProviderForward newCurves = _data.getGeneratorMarket().apply(x);
     final Set<String> curvesSet = _data.getGeneratorMarket().getCurvesList();
     bundle.setAll(newCurves);
     final int nbParameters = _data.getNumberOfInstruments();

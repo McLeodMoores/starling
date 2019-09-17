@@ -104,7 +104,7 @@ public class STIRFuturesOptionMarginSecurityBlackExpLogMoneynessMethodTest {
     final double expiry = CALL_ERZ4_099.getExpirationTime();
     final double volatility = BLACK_SURFACE_LOGMONEY.getZValue(expiry, logmoney);
     final BlackFunctionData dataBlack = new BlackFunctionData(rateFutures, 1.0, volatility);
-    final double priceExpected = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlack);
+    final double priceExpected = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlack);
     final double priceComputed = METHOD_OPT.price(CALL_ERZ4_099, MULTICURVE_BLACK, priceFutures);
     assertEquals("STIRFuturesOptionMarginSecurityBlackExpLogMoneynessMethod: underlying futures price", priceExpected, priceComputed, TOLERANCE_RATE);
   }

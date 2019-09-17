@@ -91,7 +91,7 @@ public class GeneratorHullWhiteProviderDiscount extends Function1D<DoubleMatrix1
   }
 
   @Override
-  public HullWhiteOneFactorProviderDiscount evaluate(final DoubleMatrix1D x) {
+  public HullWhiteOneFactorProviderDiscount apply(final DoubleMatrix1D x) {
     final HullWhiteOneFactorProviderDiscount provider = _knownData.copy();
     final Set<String> nameSet = _generatorsMap.keySet();
     int indexParam = 0;

@@ -15,7 +15,7 @@ public class IntegralLimitCalculatorTest {
   private static final Function1D<ComplexNumber, ComplexNumber> PSI = new Function1D<ComplexNumber, ComplexNumber>() {
 
     @Override
-    public ComplexNumber evaluate(final ComplexNumber x) {
+    public ComplexNumber apply(final ComplexNumber x) {
       return ComplexMathUtils.exp(x);
     }
 

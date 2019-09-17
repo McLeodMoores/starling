@@ -311,7 +311,7 @@ public class ImpliedDepositCurveFunction extends AbstractFunction {
       final Function1D<DoubleMatrix1D, DoubleMatrix1D> curveCalculator = new MultipleYieldCurveFinderFunction(data, PAR_RATE_CALCULATOR);
       final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator = new MultipleYieldCurveFinderJacobian(data, PAR_RATE_SENSITIVITY_CALCULATOR);
       final double[] fittedYields = rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(r)).getData();
-      final DoubleMatrix2D jacobianMatrix = jacobianCalculator.evaluate(new DoubleMatrix1D(fittedYields));
+      final DoubleMatrix2D jacobianMatrix = jacobianCalculator.apply(new DoubleMatrix1D(fittedYields));
       final YieldCurve impliedDepositCurve = new YieldCurve(impliedDepositCurveName, InterpolatedDoublesCurve.from(t, fittedYields, interpolator));
       final ValueSpecification curveSpec = new ValueSpecification(YIELD_CURVE, target.toSpecification(), resultCurveProperties);
       final ValueSpecification jacobianSpec = new ValueSpecification(YIELD_CURVE_JACOBIAN, target.toSpecification(), resultJacobianProperties);

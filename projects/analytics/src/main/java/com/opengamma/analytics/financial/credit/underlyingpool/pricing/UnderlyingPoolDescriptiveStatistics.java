@@ -94,7 +94,7 @@ public class UnderlyingPoolDescriptiveStatistics {
 
     final MeanCalculator mean = new MeanCalculator();
 
-    return mean.evaluate(underlyingPool.getObligorNotionals());
+    return mean.apply(underlyingPool.getObligorNotionals());
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -108,7 +108,7 @@ public class UnderlyingPoolDescriptiveStatistics {
 
     final double[] recoveryRates = underlyingPool.getRecoveryRates();
 
-    return mean.evaluate(recoveryRates);
+    return mean.apply(recoveryRates);
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -165,7 +165,7 @@ public class UnderlyingPoolDescriptiveStatistics {
 
     final double[] spreads = getSpreads(underlyingPool, creditSpreadTenors, creditSpreadTermStructures, creditSpreadTenor);
 
-    return mean.evaluate(spreads);
+    return mean.apply(spreads);
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -184,7 +184,7 @@ public class UnderlyingPoolDescriptiveStatistics {
 
     final double[] spreads = getSpreads(underlyingPool, creditSpreadTenors, creditSpreadTermStructures, creditSpreadTenor);
 
-    return median.evaluate(spreads);
+    return median.apply(spreads);
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -203,7 +203,7 @@ public class UnderlyingPoolDescriptiveStatistics {
 
     final double[] spreads = getSpreads(underlyingPool, creditSpreadTenors, creditSpreadTermStructures, creditSpreadTenor);
 
-    return mode.evaluate(spreads);
+    return mode.apply(spreads);
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -222,7 +222,7 @@ public class UnderlyingPoolDescriptiveStatistics {
 
     final double[] spreads = getSpreads(underlyingPool, creditSpreadTenors, creditSpreadTermStructures, creditSpreadTenor);
 
-    return variance.evaluate(spreads);
+    return variance.apply(spreads);
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -241,7 +241,7 @@ public class UnderlyingPoolDescriptiveStatistics {
 
     final double[] spreads = getSpreads(underlyingPool, creditSpreadTenors, creditSpreadTermStructures, creditSpreadTenor);
 
-    return standardDeviation.evaluate(spreads);
+    return standardDeviation.apply(spreads);
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -260,7 +260,7 @@ public class UnderlyingPoolDescriptiveStatistics {
 
     final double[] spreads = getSpreads(underlyingPool, creditSpreadTenors, creditSpreadTermStructures, creditSpreadTenor);
 
-    return skewness.evaluate(spreads);
+    return skewness.apply(spreads);
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -279,7 +279,7 @@ public class UnderlyingPoolDescriptiveStatistics {
 
     final double[] spreads = getSpreads(underlyingPool, creditSpreadTenors, creditSpreadTermStructures, creditSpreadTenor);
 
-    return excessKurtosis.evaluate(spreads);
+    return excessKurtosis.apply(spreads);
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -300,7 +300,7 @@ public class UnderlyingPoolDescriptiveStatistics {
 
     final double[] spreads = getSpreads(underlyingPool, creditSpreadTenors, creditSpreadTermStructures, creditSpreadTenor);
 
-    return percentile.evaluate(spreads);
+    return percentile.apply(spreads);
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------------------

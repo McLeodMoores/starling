@@ -1,28 +1,27 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.timeseries.analysis;
 
 import java.util.Arrays;
 
-import org.apache.commons.lang.Validate;
-
 import com.opengamma.analytics.math.function.Function;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.statistics.descriptive.MeanCalculator;
 import com.opengamma.timeseries.DoubleTimeSeries;
+import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class AutocovarianceFunctionCalculator extends Function1D<DoubleTimeSeries<?>, double[]> {
   private final Function<DoubleTimeSeries<?>, Double> _meanCalculator = new DoubleTimeSeriesStatisticsCalculator(new MeanCalculator());
 
   @Override
-  public double[] evaluate(final DoubleTimeSeries<?> x) {
-    Validate.notNull(x, "x");
+  public double[] apply(final DoubleTimeSeries<?> x) {
+    ArgumentChecker.notNull(x, "x");
     if (x.isEmpty()) {
       throw new IllegalArgumentException("Time series was empty");
     }

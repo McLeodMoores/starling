@@ -164,7 +164,7 @@ public class SpreadOptionPDETestCase {
     final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, T, true);
     final BlackPriceFunction pricer = new BlackPriceFunction();
     final Function1D<BlackFunctionData, Double> func = pricer.getPriceFunction(option);
-    final double price = func.evaluate(data);
+    final double price = func.apply(data);
 
     final double pdfPrice = res[(int) (SPOT_A * spotASteps / (A_UPPER.getLevel() - A_LOWER.getLevel()))][(int) (SPOT_B * spotBSteps / (B_UPPER.getLevel() - B_LOWER.getLevel()))];
 

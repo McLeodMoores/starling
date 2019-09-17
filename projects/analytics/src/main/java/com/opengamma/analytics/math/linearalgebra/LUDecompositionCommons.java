@@ -23,7 +23,7 @@ public class LUDecompositionCommons extends Decomposition<LUDecompositionResult>
    * {@inheritDoc}
    */
   @Override
-  public LUDecompositionResult evaluate(final DoubleMatrix2D x) {
+  public LUDecompositionResult apply(final DoubleMatrix2D x) {
     Validate.notNull(x);
     final RealMatrix temp = CommonsMathWrapper.wrap(x);
     final LUDecomposition lu = new LUDecompositionImpl(temp);

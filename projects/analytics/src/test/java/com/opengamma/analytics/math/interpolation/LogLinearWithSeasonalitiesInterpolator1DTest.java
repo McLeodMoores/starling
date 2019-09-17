@@ -33,7 +33,7 @@ public class LogLinearWithSeasonalitiesInterpolator1DTest {
   private static final Function1D<Double, Double> FUNCTION = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 2 * x + 7;
     }
   };
@@ -57,15 +57,15 @@ public class LogLinearWithSeasonalitiesInterpolator1DTest {
     double x;
     for (int i = 0; i < 10; i++) {
       x = Double.valueOf(i);
-      data.put(x, FUNCTION.evaluate(x));
+      data.put(x, FUNCTION.apply(x));
 
     }
     MODEL = STEP.getDataBundle(data);
 
     final double x1 = 3.0;
-    final double y1 = FUNCTION.evaluate(x1);
+    final double y1 = FUNCTION.apply(x1);
     final double x2 = 4.0;
-    final double y2 = FUNCTION.evaluate(x2);
+    final double y2 = FUNCTION.apply(x2);
     final double[] nodes = new double[NB_MONTH];
     final double[] values = new double[NB_MONTH];
     nodes[0] = x1;
@@ -77,7 +77,7 @@ public class LogLinearWithSeasonalitiesInterpolator1DTest {
     // definition of the function to minimize
     final Function1D<Double, Double> function = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double xf) {
+      public Double apply(final Double xf) {
         double result = y1;
         for (int loopmonth = 0; loopmonth < NB_MONTH; loopmonth++) {
           result = result * (1 + xf + seasonalValues[loopmonth]);

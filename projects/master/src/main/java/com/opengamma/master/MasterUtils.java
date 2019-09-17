@@ -6,21 +6,19 @@
 package com.opengamma.master;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static com.opengamma.lambdava.streams.Lambdava.functional;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.threeten.bp.Instant;
 
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdentifiable;
-import com.opengamma.lambdava.functions.Function1;
 
 /**
  * Utilities for managing masters.
@@ -29,8 +27,7 @@ import com.opengamma.lambdava.functions.Function1;
  */
 public class MasterUtils {
 
-  public static <D extends AbstractDocument> List<D> adjustVersionInstants(final Instant now, final Instant from,
-      final Instant to, final List<D> documents) {
+  public static <D extends AbstractDocument> List<D> adjustVersionInstants(final Instant now, final Instant from, final Instant to, final List<D> documents) {
     for (final D document : documents) {
       final Instant fromInstant = document.getVersionFromInstant();
       if (fromInstant == null) {
@@ -38,13 +35,10 @@ public class MasterUtils {
       }
     }
     final List<D> copy = newArrayList(documents);
-    Collections.sort(copy, new Comparator<D>() {
-      @Override
-      public int compare(final D a, final D b) {
-        final Instant fromA = a.getVersionFromInstant();
-        final Instant fromB = b.getVersionFromInstant();
-        return fromA.compareTo(fromB);
-      }
+    Collections.sort(copy, (a, b) -> {
+      final Instant fromA = a.getVersionFromInstant();
+      final Instant fromB = b.getVersionFromInstant();
+      return fromA.compareTo(fromB);
     });
     final Instant latestDocumentVersionTo = copy.get(copy.size() - 1).getVersionToInstant();
     D prevDocument = null;
@@ -68,8 +62,8 @@ public class MasterUtils {
     return instants.size() == documents.size();
   }
 
-  public static <D extends AbstractDocument> boolean checkVersionInstantsWithinRange(final Instant missing, final Instant from,
-      final Instant to, final List<D> documents, final boolean equalFrom) {
+  public static <D extends AbstractDocument> boolean checkVersionInstantsWithinRange(final Instant missing, final Instant from, final Instant to,
+      final List<D> documents, final boolean equalFrom) {
     if (!documents.isEmpty()) {
       final SortedSet<Instant> instants = new TreeSet<>();
       for (final D document : documents) {
@@ -82,19 +76,12 @@ public class MasterUtils {
       }
       final Instant minFromVersion = instants.first();
       final Instant maxFromVersion = instants.last();
-      return (equalFrom && minFromVersion.equals(from) || !equalFrom && !minFromVersion.isBefore(from))
-          && (to == null || !maxFromVersion.isAfter(to));
+      return (equalFrom && minFromVersion.equals(from) || !equalFrom && !minFromVersion.isBefore(from)) && (to == null || !maxFromVersion.isAfter(to));
     }
     return true;
   }
 
   public static <D extends UniqueIdentifiable> List<UniqueId> mapToUniqueIDs(final List<D> documents) {
-    return functional(documents).map(new Function1<D, UniqueId>() {
-      @Override
-      public UniqueId execute(final D d) {
-        return d.getUniqueId();
-      }
-    }).asList();
+    return documents.parallelStream().map(d -> d.getUniqueId()).collect(Collectors.toList());
   }
-
 }

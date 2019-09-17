@@ -226,8 +226,8 @@ public class FXReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker 
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> returnProperty = constraints.getValues(ValuePropertyNames.RETURN_CALCULATOR);
     if (returnProperty != null && returnProperty.size() == 1 && Iterables.getOnlyElement(returnProperty).equals(RELATIVE_RETURNS)) {
-      return (LocalDateDoubleTimeSeries) PERCENTAGE_CHANGE.evaluate(spotSeries);
+      return (LocalDateDoubleTimeSeries) PERCENTAGE_CHANGE.apply(spotSeries);
     }
-    return (LocalDateDoubleTimeSeries) DIFFERENCE.evaluate(spotSeries);
+    return (LocalDateDoubleTimeSeries) DIFFERENCE.apply(spotSeries);
   }
 }

@@ -63,7 +63,7 @@ public class CurveBuildingGeneratorFunction extends YieldCurveBundleBuildingFunc
   }
 
   @Override
-  public YieldCurveBundle evaluate(final DoubleMatrix1D x) {
+  public YieldCurveBundle apply(final DoubleMatrix1D x) {
     final YieldCurveBundle bundle = _knownData.copy();
     final Set<String> names = _curveGenerators.keySet();
     int index = 0;

@@ -36,7 +36,7 @@ public final class CapFloorCMSHullWhiteNumericalIntegrationMethod {
 
   /**
    * Return the unique instance of the class.
-   * 
+   *
    * @return The instance.
    */
   public static CapFloorCMSHullWhiteNumericalIntegrationMethod getInstance() {
@@ -125,7 +125,7 @@ public final class CapFloorCMSHullWhiteNumericalIntegrationMethod {
 
     /**
      * Constructor to the integrant function.
-     * 
+     *
      * @param discountedCashFlowFixed
      *          The discounted cash flows of the underlying swap fixed leg.
      * @param alphaFixed
@@ -154,7 +154,7 @@ public final class CapFloorCMSHullWhiteNumericalIntegrationMethod {
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       @SuppressWarnings("synthetic-access")
       final double swapRate = MODEL.swapRate(x, _discountedCashFlowFixed, _alphaFixed, _discountedCashFlowIbor, _alphaIbor);
       final double dfDensity = Math.exp(-(x + _alphaPayment) * (x + _alphaPayment) / 2.0);

@@ -32,8 +32,8 @@ public class InverseMultiquadraticRadialBasisFunctionTest {
     assertFalse(other.equals(f));
     for (int i = 0; i < 10; i++) {
       final double x = Math.random();
-      assertEquals(f.evaluate(x), 1. / Math.sqrt(x * x + 1), 0);
-      assertEquals(other.evaluate(x), 1. / Math.sqrt(x * x + X1 * X1), 0);
+      assertEquals(f.apply(x), 1. / Math.sqrt(x * x + 1), 0);
+      assertEquals(other.apply(x), 1. / Math.sqrt(x * x + X1 * X1), 0);
     }
   }
 }

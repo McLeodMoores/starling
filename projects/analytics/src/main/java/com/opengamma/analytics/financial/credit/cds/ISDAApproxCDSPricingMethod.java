@@ -115,7 +115,7 @@ public class ISDAApproxCDSPricingMethod {
 
     dataPoints[0] = HAZARD_SOLVER.findRoot(new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         dataPoints[0] = x;
         final ISDACurve tempCurve = new ISDACurve(cds.getSpreadCurveName(), timePoints, dataPoints, 0.0);
         return valueCDS(bootstrapCDS, tempCurve, paymentTimeline, accrualTimeline, contingentTimeline, offsetStepinTime,

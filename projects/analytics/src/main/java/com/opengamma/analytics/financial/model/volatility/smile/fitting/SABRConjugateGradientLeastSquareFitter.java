@@ -74,7 +74,7 @@ public class SABRConjugateGradientLeastSquareFitter extends LeastSquareSmileFitt
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final DoubleMatrix1D fp) {
+      public Double apply(final DoubleMatrix1D fp) {
         final DoubleMatrix1D mp = transforms.inverseTransform(fp);
         final double alpha = mp.getEntry(0);
         final double beta = mp.getEntry(1);
@@ -84,7 +84,7 @@ public class SABRConjugateGradientLeastSquareFitter extends LeastSquareSmileFitt
         final SABRFormulaData sabrFormulaData = new SABRFormulaData(alpha, beta, rho, nu);
         for (int i = 0; i < n; i++) {
           chiSqr += FunctionUtils
-              .square((data[i].getBlackVolatility() - _formula.getVolatilityFunction(options[i], forward).evaluate(sabrFormulaData)) / errors[i]);
+              .square((data[i].getBlackVolatility() - _formula.getVolatilityFunction(options[i], forward).apply(sabrFormulaData)) / errors[i]);
         }
         return chiSqr;
       }
@@ -93,7 +93,7 @@ public class SABRConjugateGradientLeastSquareFitter extends LeastSquareSmileFitt
     final ConjugateDirectionVectorMinimizer minimzer = new ConjugateDirectionVectorMinimizer(lineMinimizer, 1e-6, 10000);
     final DoubleMatrix1D fp = transforms.transform(new DoubleMatrix1D(initialFitParameters));
     final DoubleMatrix1D minPos = minimzer.minimize(function, fp);
-    final double chiSquare = function.evaluate(minPos);
+    final double chiSquare = function.apply(minPos);
     final DoubleMatrix1D res = transforms.inverseTransform(minPos);
     return new LeastSquareResultsWithTransform(new LeastSquareResults(chiSquare, res, new DoubleMatrix2D(new double[N_PARAMETERS][N_PARAMETERS])), transforms);
     // return new LeastSquareResults(chiSquare, res, new DoubleMatrix2D(new double[N_PARAMETERS][N_PARAMETERS]));

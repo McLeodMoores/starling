@@ -34,7 +34,7 @@ import com.opengamma.util.tuple.DoublesPair;
  * Computes the par rate for different instrument. The meaning of "par rate" is instrument dependent.
  */
 public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator
-    extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, MulticurveSensitivity> {
+extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, MulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -43,7 +43,7 @@ public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static FuturesPriceCurveSensitivityHullWhiteIssuerCalculator getInstance() {
@@ -75,7 +75,7 @@ public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator
 
   /**
    * Computes the future price curve sensitivity.
-   * 
+   *
    * @param futures
    *          The future security.
    * @param data
@@ -203,7 +203,7 @@ public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator
         cfaAdjustedBar[ctd.get(0)][loopcf] = priceBar;
         dfBar[ctd.get(0)][loopcf] = beta[ctd.get(0)][loopcf] / dfdelivery * cf[ctd.get(0)].getNthPayment(loopcf).getAmount()
             / futures.getConversionFactor()[ctd.get(0)]
-            * cfaAdjustedBar[ctd.get(0)][loopcf];
+                * cfaAdjustedBar[ctd.get(0)][loopcf];
         listCredit.add(
             DoublesPair.of(cfTime[ctd.get(0)][loopcf], -cfTime[ctd.get(0)][loopcf] * df[ctd.get(0)][loopcf] * dfBar[ctd.get(0)][loopcf]));
         dfdeliveryBar += -cfaAdjusted[ctd.get(0)][loopcf] / dfdelivery * cfaAdjustedBar[ctd.get(0)][loopcf];
@@ -261,14 +261,14 @@ public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       double pv = 0.0;
-      for (int loopcf = 0; loopcf < _cfa1.length; loopcf++) {
-        pv += _cfa1[loopcf] * Math.exp(-_alpha1[loopcf] * _alpha1[loopcf] / 2.0 - _alpha1[loopcf] * x);
+      for (int i = 0; i < _cfa1.length; i++) {
+        pv += _cfa1[i] * Math.exp(-_alpha1[i] * _alpha1[i] / 2.0 - _alpha1[i] * x);
       }
       pv -= _e1;
-      for (int loopcf = 0; loopcf < _cfa2.length; loopcf++) {
-        pv -= _cfa2[loopcf] * Math.exp(-_alpha2[loopcf] * _alpha2[loopcf] / 2.0 - _alpha2[loopcf] * x);
+      for (int i = 0; i < _cfa2.length; i++) {
+        pv -= _cfa2[i] * Math.exp(-_alpha2[i] * _alpha2[i] / 2.0 - _alpha2[i] * x);
       }
       pv += _e2;
       return pv;

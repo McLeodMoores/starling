@@ -78,7 +78,7 @@ public final class InterestRateFutureOptionMarginSecurityBlackSurfaceMethod exte
     // final double delay = security.getUnderlyingFuture().getLastTradingTime() - security.getExpirationTime();
     final double volatility = blackData.getVolatility(security.getExpirationTime(), security.getStrike()); // , delay
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, 1.0, volatility);
-    final double priceSecurity = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlack);
+    final double priceSecurity = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlack);
     return priceSecurity;
   }
 

@@ -109,8 +109,8 @@ public class PolynomialInterpolator1DTest {
     double x;
     for (int i = 0; i < 10; i++) {
       x = i / 10.;
-      quadraticMap.put(x, quadratic.evaluate(x));
-      quarticMap.put(x, quartic.evaluate(x));
+      quadraticMap.put(x, quadratic.apply(x));
+      quarticMap.put(x, quartic.apply(x));
     }
     x = 0.35;
     Interpolator1D quadraticInterpolator = new PolynomialInterpolator1D(2);
@@ -119,14 +119,14 @@ public class PolynomialInterpolator1DTest {
     final Interpolator1DDataBundle quarticData = quarticInterpolator.getDataBundle(quarticMap);
     Double quadraticResult = quadraticInterpolator.interpolate(quadraticData, x);
     Double quarticResult = quarticInterpolator.interpolate(quarticData, x);
-    assertEquals(quadraticResult, quadratic.evaluate(x), EPS);
-    assertEquals(quarticResult, quartic.evaluate(x), EPS);
+    assertEquals(quadraticResult, quadratic.apply(x), EPS);
+    assertEquals(quarticResult, quartic.apply(x), EPS);
     quadraticInterpolator = new PolynomialInterpolator1D(2, 1);
     quadraticResult = quadraticInterpolator.interpolate(quadraticData, x);
     quarticInterpolator = new PolynomialInterpolator1D(4, 1);
     quarticResult = quarticInterpolator.interpolate(quarticData, x);
-    assertEquals(quadraticResult, quadratic.evaluate(x), EPS);
-    assertEquals(quarticResult, quartic.evaluate(x), EPS);
+    assertEquals(quadraticResult, quadratic.apply(x), EPS);
+    assertEquals(quarticResult, quartic.apply(x), EPS);
   }
 
 }

@@ -35,7 +35,7 @@ public class GeometricMeanCalculator extends DescriptiveStatisticsCalculator {
    * @return  the geometric mean
    */
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notEmpty(x, "x");
     final int n = x.length;
     double mult = x[0];

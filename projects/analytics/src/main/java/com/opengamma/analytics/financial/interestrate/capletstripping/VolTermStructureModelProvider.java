@@ -39,7 +39,7 @@ public class VolTermStructureModelProvider extends VolatilityModelProvider {
   }
 
   @Override
-  public VolatilityModel1D evaluate(final DoubleMatrix1D x) {
+  public VolatilityModel1D apply(final DoubleMatrix1D x) {
     final InterpolatedDoublesCurve curve = InterpolatedDoublesCurve.from(_knots, x.getData(), _interpolator);
     return new VolatilityModel1D() {
 

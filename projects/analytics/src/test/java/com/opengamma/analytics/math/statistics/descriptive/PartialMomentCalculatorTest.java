@@ -40,17 +40,17 @@ public class PartialMomentCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullArray() {
-    UPSIDE1.evaluate((double[]) null);
+    UPSIDE1.apply((double[]) null);
   }
 
   @Test
   public void test() {
     final double eps = 1e-15;
-    assertEquals(UPSIDE1.evaluate(POSITIVE_X), 0.5, eps);
-    assertEquals(DOWNSIDE1.evaluate(POSITIVE_X), 0, eps);
-    assertEquals(UPSIDE1.evaluate(NEGATIVE_X), 0, eps);
-    assertEquals(DOWNSIDE1.evaluate(NEGATIVE_X), 0.5, eps);
-    assertEquals(UPSIDE2.evaluate(X1), 0.14, eps);
-    assertEquals(DOWNSIDE2.evaluate(X2), 0.1, eps);
+    assertEquals(UPSIDE1.apply(POSITIVE_X), 0.5, eps);
+    assertEquals(DOWNSIDE1.apply(POSITIVE_X), 0, eps);
+    assertEquals(UPSIDE1.apply(NEGATIVE_X), 0, eps);
+    assertEquals(DOWNSIDE1.apply(NEGATIVE_X), 0.5, eps);
+    assertEquals(UPSIDE2.apply(X1), 0.14, eps);
+    assertEquals(DOWNSIDE2.apply(X2), 0.1, eps);
   }
 }

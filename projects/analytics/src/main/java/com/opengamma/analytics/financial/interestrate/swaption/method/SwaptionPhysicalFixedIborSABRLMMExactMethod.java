@@ -293,7 +293,7 @@ public class SwaptionPhysicalFixedIborSABRLMMExactMethod implements PricingMetho
     }
 
     @Override
-    public Double[] evaluate(final Double x) {
+    public Double[] apply(final Double x) {
       final Double[] result = new Double[2];
       result[0] = 0.01 / (_displacement + 0.05) * Math.cos(x / 20.0 * _angle);
       result[1] = 0.01 / (_displacement + 0.05) * Math.sin(x / 20.0 * _angle);

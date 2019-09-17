@@ -31,7 +31,7 @@ public final class BondFuturesSecurityHullWhiteNumericalIntegrationMethod {
 
   /**
    * Return the method unique instance.
-   * 
+   *
    * @return The instance.
    */
   public static BondFuturesSecurityHullWhiteNumericalIntegrationMethod getInstance() {
@@ -64,7 +64,7 @@ public final class BondFuturesSecurityHullWhiteNumericalIntegrationMethod {
   /**
    * Computes the future price from the curves used to price the underlying bonds and a Hull-White one factor model. Computation by
    * numerical integration.
-   * 
+   *
    * @param futures
    *          The future security.
    * @param data
@@ -106,7 +106,7 @@ public final class BondFuturesSecurityHullWhiteNumericalIntegrationMethod {
         df[loopb][loopcf] = data.getIssuerProvider().getDiscountFactor(issuer, cfe[loopb].getNthPayment(loopcf).getPaymentTime());
         discountedCashFlow[loopb][loopcf] = df[loopb][loopcf] / df[loopb][0] * cfe[loopb].getNthPayment(loopcf).getAmount()
             * beta[loopb][loopcf]
-            / futures.getConversionFactor()[loopb];
+                / futures.getConversionFactor()[loopb];
       }
     }
     // Integration
@@ -135,7 +135,7 @@ public final class BondFuturesSecurityHullWhiteNumericalIntegrationMethod {
 
     /**
      * Constructor to the integrant function.
-     * 
+     *
      * @param discountedCashFlow
      *          The discounted cash flows.
      * @param alpha
@@ -148,11 +148,11 @@ public final class BondFuturesSecurityHullWhiteNumericalIntegrationMethod {
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double[] bond = new double[_nbBonds];
-      for (int loopb = 0; loopb < _nbBonds; loopb++) {
-        for (int loopcf = 0; loopcf < _discountedCashFlow[loopb].length; loopcf++) {
-          bond[loopb] += _discountedCashFlow[loopb][loopcf] * Math.exp(-(x + _alpha[loopb][loopcf]) * (x + _alpha[loopb][loopcf]) / 2.0);
+      for (int i = 0; i < _nbBonds; i++) {
+        for (int loopcf = 0; loopcf < _discountedCashFlow[i].length; loopcf++) {
+          bond[i] += _discountedCashFlow[i][loopcf] * Math.exp(-(x + _alpha[i][loopcf]) * (x + _alpha[i][loopcf]) / 2.0);
         }
       }
       return MIN_FUNCTION.evaluate(bond);

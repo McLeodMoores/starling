@@ -54,9 +54,9 @@ public class TimeChangeTest {
     for (int i = 0; i < 101; i++) {
       final double x = 10.0 * i / 100.0;
       final ComplexNumber z = new ComplexNumber(x, -(1 + ALPHA));
-      final ComplexNumber res1 = NORMAL_CIR.getFunction(T).evaluate(z);
-      final ComplexNumber res2 = NORMAL.getFunction(1).evaluate(z);
-      final ComplexNumber res3 = HESTON.getFunction(T).evaluate(z);
+      final ComplexNumber res1 = NORMAL_CIR.getFunction(T).apply(z);
+      final ComplexNumber res2 = NORMAL.getFunction(1).apply(z);
+      final ComplexNumber res3 = HESTON.getFunction(T).apply(z);
       assertTrue(Math.abs(res1.getImaginary()) < EPS);
       assertTrue(Math.abs(res2.getImaginary()) < EPS);
       assertTrue(Math.abs(res3.getImaginary()) < EPS);

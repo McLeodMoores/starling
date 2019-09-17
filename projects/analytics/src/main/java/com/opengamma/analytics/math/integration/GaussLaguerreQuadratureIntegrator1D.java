@@ -55,8 +55,8 @@ public class GaussLaguerreQuadratureIntegrator1D extends GaussianQuadratureInteg
       return new Function1D<Double, Double>() {
 
         @Override
-        public Double evaluate(final Double x) {
-          return function.evaluate(x) * Math.exp(x);
+        public Double apply(final Double x) {
+          return function.apply(x) * Math.exp(x);
         }
 
       };

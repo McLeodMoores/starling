@@ -47,7 +47,7 @@ public class MatrixFieldFirstOrderDifferentiator implements Differentiator<Doubl
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D[]>() {
 
       @Override
-      public DoubleMatrix2D[] evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix2D[] apply(final DoubleMatrix1D x) {
         Validate.notNull(x, "x");
         final int n = x.getNumberOfElements();
 
@@ -56,9 +56,9 @@ public class MatrixFieldFirstOrderDifferentiator implements Differentiator<Doubl
         for (int i = 0; i < n; i++) {
           final double oldValue = xData[i];
           xData[i] += _eps;
-          final DoubleMatrix2D up = function.evaluate(x);
+          final DoubleMatrix2D up = function.apply(x);
           xData[i] -= _twoEps;
-          final DoubleMatrix2D down = function.evaluate(x);
+          final DoubleMatrix2D down = function.apply(x);
           res[i] = (DoubleMatrix2D) MA.scale(MA.subtract(up, down), _oneOverTwpEps); // TODO have this in one operation
           xData[i] = oldValue;
         }
@@ -80,9 +80,9 @@ public class MatrixFieldFirstOrderDifferentiator implements Differentiator<Doubl
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D[]>() {
 
       @Override
-      public DoubleMatrix2D[] evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix2D[] apply(final DoubleMatrix1D x) {
         Validate.notNull(x, "x");
-        ArgumentChecker.isTrue(domain.evaluate(x), "point {} is not in the function domain", x.toString());
+        ArgumentChecker.isTrue(domain.apply(x), "point {} is not in the function domain", x.toString());
 
         final int n = x.getNumberOfElements();
         final double[] xData = x.getData();
@@ -93,31 +93,31 @@ public class MatrixFieldFirstOrderDifferentiator implements Differentiator<Doubl
         for (int i = 0; i < n; i++) {
           oldValue = xData[i];
           xData[i] += _eps;
-          if (!domain.evaluate(x)) {
+          if (!domain.apply(x)) {
             xData[i] = oldValue - _twoEps;
-            if (!domain.evaluate(x)) {
+            if (!domain.apply(x)) {
               throw new MathException("cannot get derivative at point " + x.toString() + " in direction " + i);
             }
-            y[0] = function.evaluate(x);
+            y[0] = function.apply(x);
             xData[i] = oldValue;
-            y[2] = function.evaluate(x);
+            y[2] = function.apply(x);
             xData[i] = oldValue - _eps;
-            y[1] = function.evaluate(x);
+            y[1] = function.apply(x);
             w = wBack;
           } else {
-            final DoubleMatrix2D temp = function.evaluate(x);
+            final DoubleMatrix2D temp = function.apply(x);
             xData[i] = oldValue - _eps;
-            if (!domain.evaluate(x)) {
+            if (!domain.apply(x)) {
               y[1] = temp;
               xData[i] = oldValue;
-              y[0] = function.evaluate(x);
+              y[0] = function.apply(x);
               xData[i] = oldValue + _twoEps;
-              y[2] = function.evaluate(x);
+              y[2] = function.apply(x);
               w = wFwd;
             } else {
               y[2] = temp;
               xData[i] = oldValue - _eps;
-              y[0] = function.evaluate(x);
+              y[0] = function.apply(x);
               w = wCent;
             }
           }

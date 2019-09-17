@@ -122,7 +122,7 @@ public class AutoregressiveMovingAverageTimeSeriesModelTest {
       assertEquals(Math.abs(rhoARMA0Q[i] - rhoMA[i]), 0., eps);
     }
     final double[] rhoARMA11 = autocorrelation.evaluate(ARMA11);
-    final double[] gammaARMA11 = autocovariance.evaluate(ARMA11);
+    final double[] gammaARMA11 = autocovariance.apply(ARMA11);
     assertEquals(PHI[1] - THETA[1] * STD * STD / gammaARMA11[0], rhoARMA11[1], eps);
   }
 }

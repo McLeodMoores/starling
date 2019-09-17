@@ -30,17 +30,17 @@ public class SampleMedianAbsoluteDeviationCalculator extends DescriptiveStatisti
   public static final String NAME = "SampleMedianAbsoluteDeviation";
 
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notNull(x, "x");
     final int n = x.length;
     ArgumentChecker.isTrue(n > 1, "Need at least two data points to calculate MAD");
     final DescriptiveStatisticsCalculator medianCalculator = DescriptiveStatisticsFactory.of(MedianCalculator.NAME);
-    final double median = medianCalculator.evaluate(x);
+    final double median = medianCalculator.apply(x);
     final double[] diff = new double[n];
     for (int i = 0; i < n; i++) {
       diff[i] = Math.abs(x[i] - median);
     }
-    return medianCalculator.evaluate(diff);
+    return medianCalculator.apply(diff);
   }
 
   @Override

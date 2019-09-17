@@ -224,13 +224,13 @@ public final class SurfaceConverter {
 
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         final double sigma = logMoneynessSurface.getZValue(t, x);
         return sigma * sigma * t / 2 - inDelta * sigma * rootT - x;
       }
     };
 
-    final double xEst = func.evaluate(0.0);
+    final double xEst = func.apply(0.0);
 
     double l, u;
     double xMin, xMax;
@@ -270,7 +270,7 @@ public final class SurfaceConverter {
 
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double d1) {
+      public Double apply(final Double d1) {
         @SuppressWarnings("synthetic-access")
         final double delta = NORMAL.getCDF(d1);
         if (delta == 1.0 || delta == 0.0) {
@@ -285,7 +285,7 @@ public final class SurfaceConverter {
       }
     };
 
-    final double dEst = func.evaluate(0.0);
+    final double dEst = func.apply(0.0);
     double l, u;
     if (dEst < 0.0) {
       l = 1.25 * dEst;

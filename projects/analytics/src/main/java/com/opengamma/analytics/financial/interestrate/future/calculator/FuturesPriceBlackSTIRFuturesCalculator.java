@@ -59,7 +59,7 @@ public final class FuturesPriceBlackSTIRFuturesCalculator extends InstrumentDeri
     final double delay = security.getUnderlyingFuture().getTradingLastTime() - security.getExpirationTime();
     final double volatility = black.getVolatility(security.getExpirationTime(), delay, security.getStrike(), priceFuture);
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, 1.0, volatility);
-    final double priceSecurity = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlack);
+    final double priceSecurity = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlack);
     return priceSecurity;
   }
 

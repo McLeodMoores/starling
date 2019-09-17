@@ -247,7 +247,7 @@ public class DeprecatedCouponCMSTest {
     }
 
     @Override
-    public Double evaluate(final Double x) {//evaluate(Double x)
+    public Double apply(final Double x) {//evaluate(Double x)
       final double[] kD = kpkpp(x);
       // Implementation note: kD[0] contains the first derivative of k; kD[1] the second derivative of k.
       return (kD[1] * (x - _strike) + 2.0 * kD[0]) * bs(x, _forward);
@@ -263,7 +263,7 @@ public class DeprecatedCouponCMSTest {
         final double nPeriodDiscount = Math.pow(periodFactor, -_nbFixedPeriod);
         return 1.0 / x * (1.0 - nPeriodDiscount);
       }
-      return ((double) _nbFixedPeriod) / _nbFixedPaymentYear;
+      return (double) _nbFixedPeriod / _nbFixedPaymentYear;
     }
 
     public double k(final double x) {
@@ -275,7 +275,7 @@ public class DeprecatedCouponCMSTest {
         G = 1.0 / x * (1.0 - nPeriodDiscount);
         h = Math.pow(1.0 + _tau * x, _eta);
       } else {
-        G = ((double) _nbFixedPeriod) / _nbFixedPaymentYear;
+        G = (double) _nbFixedPeriod / _nbFixedPaymentYear;
         h = 1.0;
       }
       return h / G;
@@ -292,7 +292,7 @@ public class DeprecatedCouponCMSTest {
             / (_nbFixedPaymentYear * _nbFixedPaymentYear) * nPeriodDiscount / (periodFactor * periodFactor);
       } else {
         // Implementation comment: When x is (almost) 0, useful for CMS swaps which are priced as CMS cap of strike 0.
-        G = ((double) _nbFixedPeriod) / _nbFixedPaymentYear;
+        G = (double) _nbFixedPeriod / _nbFixedPaymentYear;
         Gp = -_nbFixedPeriod / 2.0 * (_nbFixedPeriod + 1.0) / (_nbFixedPaymentYear * _nbFixedPaymentYear);
         Gpp = _nbFixedPeriod / 2.0 * (_nbFixedPeriod + 1.0) * (1.0 + (_nbFixedPeriod + 2.0) / 3.0) / (_nbFixedPaymentYear * _nbFixedPaymentYear * _nbFixedPaymentYear);
       }
@@ -309,7 +309,7 @@ public class DeprecatedCouponCMSTest {
       final double volatility = _sabrParameter.getVolatility(_timeToExpiry, _maturity, strike, forward);
       final BlackFunctionData dataBlack = new BlackFunctionData(forward, 1.0, volatility);
       final Function1D<BlackFunctionData, Double> func = _blackFunction.getPriceFunction(option);
-      return func.evaluate(dataBlack);
+      return func.apply(dataBlack);
     }
   }
 }

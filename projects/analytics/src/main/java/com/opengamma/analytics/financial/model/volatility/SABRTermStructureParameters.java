@@ -118,7 +118,7 @@ public class SABRTermStructureParameters implements VolatilityModel1D {
     final SABRFormulaData data = new SABRFormulaData(getAlpha(timeToExpiry), getBeta(timeToExpiry), getRho(timeToExpiry), getNu(timeToExpiry));
     final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, timeToExpiry, true);
     final Function1D<SABRFormulaData, Double> func = _sabrFunction.getVolatilityFunction(option, fwd);
-    final double vol = func.evaluate(data);
+    final double vol = func.apply(data);
     // The SABR Hagan formula can produce negative vols
     return Math.max(0, vol);
   }

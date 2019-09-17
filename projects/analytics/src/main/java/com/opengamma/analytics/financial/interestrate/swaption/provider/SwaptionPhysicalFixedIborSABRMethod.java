@@ -81,7 +81,7 @@ public final class SwaptionPhysicalFixedIborSABRMethod {
     final double volatility = sabrData.getSABRParameter().getVolatility(swaption.getTimeToExpiry(), maturity, strikeModified, forwardModified);
     final BlackFunctionData dataBlack = new BlackFunctionData(forwardModified, pvbpModified, volatility);
     final Function1D<BlackFunctionData, Double> func = blackFunction.getPriceFunction(option);
-    final double pv = func.evaluate(dataBlack) * (swaption.isLong() ? 1.0 : -1.0);
+    final double pv = func.apply(dataBlack) * (swaption.isLong() ? 1.0 : -1.0);
     return MultipleCurrencyAmount.of(swaption.getCurrency(), pv);
   }
 
@@ -207,7 +207,7 @@ public final class SwaptionPhysicalFixedIborSABRMethod {
     final BlackFunctionData dataBlack = new BlackFunctionData(forwardModified, 1.0, volatilityAdjoint[0]);
     final Function1D<BlackFunctionData, Double> func = blackFunction.getPriceFunction(option);
     final MultipleCurrencyAmount pv = MultipleCurrencyAmount.of(swaption.getCurrency(),
-        pvbpModified * func.evaluate(dataBlack) * (swaption.isLong() ? 1.0 : -1.0));
+        pvbpModified * func.apply(dataBlack) * (swaption.isLong() ? 1.0 : -1.0));
     // Curve sensitivity
     final MulticurveSensitivity pvbpModifiedDr = METHOD_SWAP.presentValueBasisPointCurveSensitivity(swaption.getUnderlyingSwap(), dayCountModification,
         sabrData.getMulticurveProvider());

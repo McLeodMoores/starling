@@ -33,8 +33,8 @@ public class TurningPointIIDHypothesisTest extends IIDHypothesisTestCase {
   public void test() {
     super.assertNullTS(TURNING_POINT);
     super.assertEmptyTS(TURNING_POINT);
-    assertTrue(TURNING_POINT.evaluate(RANDOM));
-    assertTrue(TURNING_POINT.evaluate(SIGNAL));
-    assertFalse(TURNING_POINT.evaluate(INCREASING));
+    assertTrue(TURNING_POINT.apply(RANDOM));
+    assertTrue(TURNING_POINT.apply(SIGNAL));
+    assertFalse(TURNING_POINT.apply(INCREASING));
   }
 }

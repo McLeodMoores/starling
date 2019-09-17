@@ -29,7 +29,7 @@ public class FloatingStrikeLookbackOptionModel extends AnalyticOptionModel<Float
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final StandardOptionWithSpotTimeSeriesDataBundle data) {
+      public Double apply(final StandardOptionWithSpotTimeSeriesDataBundle data) {
         Validate.notNull(data, "data");
         final DoubleTimeSeries<?> ts = data.getSpotTimeSeries();
         final double s = data.getSpot();

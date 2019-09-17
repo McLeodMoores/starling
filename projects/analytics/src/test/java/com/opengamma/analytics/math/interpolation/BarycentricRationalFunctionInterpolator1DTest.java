@@ -62,10 +62,10 @@ public class BarycentricRationalFunctionInterpolator1DTest {
     final double[] y = new double[n];
     for (int i = 0; i < n; i++) {
       x[i] = Double.valueOf(i) / n;
-      y[i] = F.evaluate(x[i]);
+      y[i] = F.apply(x[i]);
     }
     final double value = 0.9;
-    assertEquals(F.evaluate(value), INTERPOLATOR.interpolate(INTERPOLATOR.getDataBundle(x, y), value), EPS);
+    assertEquals(F.apply(value), INTERPOLATOR.interpolate(INTERPOLATOR.getDataBundle(x, y), value), EPS);
   }
 
 }

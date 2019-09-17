@@ -156,13 +156,13 @@ public class DeprecatedSwaptionPhysicalFixedIborTest {
     final BlackFunctionData data = new BlackFunctionData(forward, pvbp, sigmaBlack);
 
     final Function1D<BlackFunctionData, Double> funcLongPayer = BLACK_FUNCTION.getPriceFunction(SWAPTION_LONG_PAYER);
-    final double priceLongPayer = funcLongPayer.evaluate(data) * (SWAPTION_LONG_PAYER.isLong() ? 1.0 : -1.0);
+    final double priceLongPayer = funcLongPayer.apply(data) * (SWAPTION_LONG_PAYER.isLong() ? 1.0 : -1.0);
     final Function1D<BlackFunctionData, Double> funcLongReceiver = BLACK_FUNCTION.getPriceFunction(SWAPTION_LONG_RECEIVER);
-    final double priceLongReceiver = funcLongReceiver.evaluate(data) * (SWAPTION_LONG_RECEIVER.isLong() ? 1.0 : -1.0);
+    final double priceLongReceiver = funcLongReceiver.apply(data) * (SWAPTION_LONG_RECEIVER.isLong() ? 1.0 : -1.0);
     final Function1D<BlackFunctionData, Double> funcShortPayer = BLACK_FUNCTION.getPriceFunction(SWAPTION_SHORT_PAYER);
-    final double priceShortPayer = funcShortPayer.evaluate(data) * (SWAPTION_SHORT_PAYER.isLong() ? 1.0 : -1.0);
+    final double priceShortPayer = funcShortPayer.apply(data) * (SWAPTION_SHORT_PAYER.isLong() ? 1.0 : -1.0);
     final Function1D<BlackFunctionData, Double> funcShortReceiver = BLACK_FUNCTION.getPriceFunction(SWAPTION_SHORT_RECEIVER);
-    final double priceShortReceiver = funcShortReceiver.evaluate(data) * (SWAPTION_SHORT_RECEIVER.isLong() ? 1.0 : -1.0);
+    final double priceShortReceiver = funcShortReceiver.apply(data) * (SWAPTION_SHORT_RECEIVER.isLong() ? 1.0 : -1.0);
     // Long/Short parity
     assertEquals(priceLongPayer, -priceShortPayer, 1E-2);
     // Payer/Receiver parity
@@ -189,28 +189,28 @@ public class DeprecatedSwaptionPhysicalFixedIborTest {
     final SABRFormulaData data = new SABRFormulaData(alpha, beta, rho, nu);
 
     final Function1D<SABRFormulaData, Double> funcSabrLongPayer = SABR_FUNCTION.getVolatilityFunction(SWAPTION_LONG_PAYER, forward);
-    final double volatilityLongPayer = funcSabrLongPayer.evaluate(data);
+    final double volatilityLongPayer = funcSabrLongPayer.apply(data);
     final BlackFunctionData dataBlackLP = new BlackFunctionData(forward, pvbp, volatilityLongPayer);
     final Function1D<BlackFunctionData, Double> funcBlackLongPayer = BLACK_FUNCTION.getPriceFunction(SWAPTION_LONG_PAYER);
-    final double priceLongPayer = funcBlackLongPayer.evaluate(dataBlackLP) * (SWAPTION_LONG_PAYER.isLong() ? 1.0 : -1.0);
+    final double priceLongPayer = funcBlackLongPayer.apply(dataBlackLP) * (SWAPTION_LONG_PAYER.isLong() ? 1.0 : -1.0);
 
     final Function1D<SABRFormulaData, Double> funcSabrShortPayer = SABR_FUNCTION.getVolatilityFunction(SWAPTION_SHORT_PAYER, forward);
-    final double volatilityShortPayer = funcSabrShortPayer.evaluate(data);
+    final double volatilityShortPayer = funcSabrShortPayer.apply(data);
     final BlackFunctionData dataBlackSP = new BlackFunctionData(forward, pvbp, volatilityShortPayer);
     final Function1D<BlackFunctionData, Double> funcBlackShortPayer = BLACK_FUNCTION.getPriceFunction(SWAPTION_SHORT_PAYER);
-    final double priceShortPayer = funcBlackShortPayer.evaluate(dataBlackSP) * (SWAPTION_SHORT_PAYER.isLong() ? 1.0 : -1.0);
+    final double priceShortPayer = funcBlackShortPayer.apply(dataBlackSP) * (SWAPTION_SHORT_PAYER.isLong() ? 1.0 : -1.0);
 
     final Function1D<SABRFormulaData, Double> funcSabrLongReceiver = SABR_FUNCTION.getVolatilityFunction(SWAPTION_LONG_RECEIVER, forward);
-    final double volatilityLongReceiver = funcSabrLongReceiver.evaluate(data);
+    final double volatilityLongReceiver = funcSabrLongReceiver.apply(data);
     final BlackFunctionData dataBlackLR = new BlackFunctionData(forward, pvbp, volatilityLongReceiver);
     final Function1D<BlackFunctionData, Double> funcBlackLongReceiver = BLACK_FUNCTION.getPriceFunction(SWAPTION_LONG_RECEIVER);
-    final double priceLongReceiver = funcBlackLongReceiver.evaluate(dataBlackLR) * (SWAPTION_LONG_RECEIVER.isLong() ? 1.0 : -1.0);
+    final double priceLongReceiver = funcBlackLongReceiver.apply(dataBlackLR) * (SWAPTION_LONG_RECEIVER.isLong() ? 1.0 : -1.0);
 
     final Function1D<SABRFormulaData, Double> funcSabrShortReceiver = SABR_FUNCTION.getVolatilityFunction(SWAPTION_SHORT_RECEIVER, forward);
-    final double volatilityShortReceiver = funcSabrShortReceiver.evaluate(data);
+    final double volatilityShortReceiver = funcSabrShortReceiver.apply(data);
     final BlackFunctionData dataBlackSR = new BlackFunctionData(forward, pvbp, volatilityShortReceiver);
     final Function1D<BlackFunctionData, Double> funcBlackShortReceiver = BLACK_FUNCTION.getPriceFunction(SWAPTION_SHORT_RECEIVER);
-    final double priceShortReceiver = funcBlackShortReceiver.evaluate(dataBlackSR) * (SWAPTION_SHORT_RECEIVER.isLong() ? 1.0 : -1.0);
+    final double priceShortReceiver = funcBlackShortReceiver.apply(dataBlackSR) * (SWAPTION_SHORT_RECEIVER.isLong() ? 1.0 : -1.0);
     // Long/Short parity
     assertEquals(priceLongPayer, -priceShortPayer, 1E-2);
     // Payer/Receiver parity

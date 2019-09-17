@@ -59,7 +59,7 @@ public class PartialMomentCalculator extends DescriptiveStatisticsCalculator {
    * @return  the partial moment
    */
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notEmpty(x, "x");
     double sum = 0;
     int count = 0;

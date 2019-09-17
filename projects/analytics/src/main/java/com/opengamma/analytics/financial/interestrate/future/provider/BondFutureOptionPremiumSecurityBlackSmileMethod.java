@@ -70,7 +70,7 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
     final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, security.getExpirationTime(), security.isCall());
     final double volatility = blackPrice.getBlackProvider().getVolatility(security.getExpirationTime(), security.getStrike());
     final BlackFunctionData dataBlack = new BlackFunctionData(blackPrice.getFuturesPrice(), 1.0, volatility);
-    final double priceSecurity = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlack);
+    final double priceSecurity = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlack);
     return priceSecurity;
   }
 

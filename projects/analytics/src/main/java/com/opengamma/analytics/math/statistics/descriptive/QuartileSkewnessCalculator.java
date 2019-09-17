@@ -39,7 +39,7 @@ public class QuartileSkewnessCalculator extends DescriptiveStatisticsCalculator 
    * @return  the quartile skewness.
    */
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notNull(x, "x");
     final int n = x.length;
     ArgumentChecker.isTrue(n >= 3, "Need at least three points to calculate interquartile range");
@@ -57,9 +57,9 @@ public class QuartileSkewnessCalculator extends DescriptiveStatisticsCalculator 
       upper = Arrays.copyOfRange(copy, n / 2, n);
     }
     final DescriptiveStatisticsCalculator medianCalculator = DescriptiveStatisticsFactory.of(MedianCalculator.NAME);
-    final double q1 = medianCalculator.evaluate(lower);
-    final double q2 = medianCalculator.evaluate(x);
-    final double q3 = medianCalculator.evaluate(upper);
+    final double q1 = medianCalculator.apply(lower);
+    final double q2 = medianCalculator.apply(x);
+    final double q3 = medianCalculator.apply(upper);
     return (q1 - 2 * q2 + q3) / (q3 - q1);
   }
 

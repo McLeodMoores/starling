@@ -145,7 +145,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
     final double[] iborTime = new double[nbPeriod + 1];
     final double[] accrualFactor = new double[nbPeriod];
     final double[] d = new double[nbPeriod];
-    final Double[] tmp = volatilityFunction.evaluate(0.0);
+    final Double[] tmp = volatilityFunction.apply(0.0);
     final double[][] vol = new double[nbPeriod][tmp.length];
     iborDate[0] = annuity.getNthPayment(0).getAccrualStartDate();
     iborTime[0] = TimeCalculator.getTimeBetween(modelDate, iborDate[0]);
@@ -155,7 +155,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
       accrualFactor[loopcf] = dayCount.getDayCountFraction(iborDate[loopcf], iborDate[loopcf + 1], annuity.getCalendar());
       d[loopcf] = displacement;
       // TODO: better conversion to double[]
-      final Double[] tmp2 = volatilityFunction.evaluate(iborTime[loopcf]);
+      final Double[] tmp2 = volatilityFunction.apply(iborTime[loopcf]);
       for (int looptmp = 0; looptmp < tmp2.length; looptmp++) {
         vol[loopcf][looptmp] = tmp2[looptmp];
       }
@@ -184,7 +184,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
     final double[] iborTime = new double[nbPeriod + 1];
     final double[] accrualFactor = new double[nbPeriod];
     final double[] d = new double[nbPeriod];
-    final Double[] tmp = volatilityFunction.evaluate(0.0);
+    final Double[] tmp = volatilityFunction.apply(0.0);
     final double[][] vol = new double[nbPeriod][tmp.length];
     iborTime[0] = swaption.getSettlementTime();
     for (int loopcf = 0; loopcf < nbPeriod; loopcf++) {
@@ -192,7 +192,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
       accrualFactor[loopcf] = swaption.getUnderlyingSwap().getSecondLeg().getNthPayment(loopcf).getPaymentYearFraction();
       d[loopcf] = displacement;
       // TODO: better conversion to double[]
-      final Double[] tmp2 = volatilityFunction.evaluate(iborTime[loopcf]);
+      final Double[] tmp2 = volatilityFunction.apply(iborTime[loopcf]);
       for (int looptmp = 0; looptmp < tmp2.length; looptmp++) {
         vol[loopcf][looptmp] = tmp2[looptmp];
       }

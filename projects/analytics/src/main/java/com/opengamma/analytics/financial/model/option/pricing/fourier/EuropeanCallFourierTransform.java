@@ -33,8 +33,8 @@ public class EuropeanCallFourierTransform {
     return new Function1D<ComplexNumber, ComplexNumber>() {
 
       @Override
-      public ComplexNumber evaluate(final ComplexNumber z) {
-        final ComplexNumber num = exp(function.evaluate(z));
+      public ComplexNumber apply(final ComplexNumber z) {
+        final ComplexNumber num = exp(function.apply(z));
         final ComplexNumber denom = multiply(z, add(z, ComplexNumber.I));
         final ComplexNumber res = multiply(-1.0, divide(num, denom));
         return res;
@@ -44,7 +44,7 @@ public class EuropeanCallFourierTransform {
 
   /**
    * Gets the _ce field.
-   * 
+   *
    * @return the _ce
    */
   public CharacteristicExponent getCharacteristicExponent() {

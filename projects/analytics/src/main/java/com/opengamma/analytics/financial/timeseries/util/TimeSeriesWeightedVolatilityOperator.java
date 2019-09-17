@@ -34,10 +34,10 @@ public final class TimeSeriesWeightedVolatilityOperator extends Function1D<DateD
   }
 
   @Override
-  public DateDoubleTimeSeries<?> evaluate(final DateDoubleTimeSeries<?> ts) {
+  public DateDoubleTimeSeries<?> apply(final DateDoubleTimeSeries<?> ts) {
     Validate.notNull(ts, "time series");
     Validate.isTrue(ts.size() > 1, "time series length must be > 1");
-    final DateDoubleTimeSeries<?> percentageChangeSeries = _changeOperator.evaluate(ts);
+    final DateDoubleTimeSeries<?> percentageChangeSeries = _changeOperator.apply(ts);
     final int n = percentageChangeSeries.size();
     final double[] weightedVariances = new double[n];
     final double[] weightedVolatilities = new double[n];

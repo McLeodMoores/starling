@@ -50,7 +50,7 @@ public class ForwardCurveAffineDividends extends ForwardCurve {
     final Function1D<Double, Double> f = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         final int n = dividends.getNumberOfDividends();
         final double[] growthFactor = new double[n];
         final double[] accumProd = new double[n];

@@ -260,7 +260,7 @@ public class FXImpliedYieldCurveFunction extends AbstractFunction.NonCompiledInv
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> curveCalculator = new MultipleYieldCurveFinderFunction(data, PAR_RATE_CALCULATOR);
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator = new MultipleYieldCurveFinderJacobian(data, PAR_RATE_SENSITIVITY_CALCULATOR);
     final double[] fittedYields = rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(initialRatesGuess.toDoubleArray())).getData();
-    final DoubleMatrix2D jacobianMatrix = jacobianCalculator.evaluate(new DoubleMatrix1D(fittedYields));
+    final DoubleMatrix2D jacobianMatrix = jacobianCalculator.apply(new DoubleMatrix1D(fittedYields));
     final YieldCurve curve = YieldCurve.from(InterpolatedDoublesCurve.from(nodeTimes.toDoubleArray(), fittedYields, interpolator));
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final ValueProperties curveProperties = getCurveProperties(curveCalculationConfigName, domesticCurveName, absoluteToleranceName, relativeToleranceName,
@@ -277,7 +277,7 @@ public class FXImpliedYieldCurveFunction extends AbstractFunction.NonCompiledInv
         interpolators, useFiniteDifference, fxMatrix);
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculatorAllCurves = new MultipleYieldCurveFinderJacobian(dataAllCurves,
         PAR_RATE_SENSITIVITY_CALCULATOR);
-    final DoubleMatrix2D jacobianMatrixAllCurves = jacobianCalculatorAllCurves.evaluate(new DoubleMatrix1D(fittedYields));
+    final DoubleMatrix2D jacobianMatrixAllCurves = jacobianCalculatorAllCurves.apply(new DoubleMatrix1D(fittedYields));
     // Order is: previous curves (domestic), current curves (foreign)
     final DoubleMatrix2D jacobianMatrixInverse = MATRIX_ALGEBRA.getInverse(jacobianMatrix);
     final int nbLine = nodeTimes.size();

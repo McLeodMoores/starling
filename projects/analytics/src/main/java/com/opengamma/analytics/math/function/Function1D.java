@@ -11,8 +11,10 @@ import com.opengamma.util.ArgumentChecker;
  * 1-D function implementation.
  * @param <ARG_TYPE> Type of the arguments
  * @param <RESULT_TYPE> Return type of the function
+ * @deprecated Use {@link java.util.function.Function}.
  */
-public abstract class Function1D<ARG_TYPE, RESULT_TYPE> implements Function<ARG_TYPE, RESULT_TYPE> {
+@Deprecated
+public abstract class Function1D<ARG_TYPE, RESULT_TYPE> implements Function<ARG_TYPE, RESULT_TYPE>, java.util.function.Function<ARG_TYPE, RESULT_TYPE> {
 
   /**
    * Implementation of the interface. This method only uses the first argument.
@@ -24,7 +26,7 @@ public abstract class Function1D<ARG_TYPE, RESULT_TYPE> implements Function<ARG_
   public RESULT_TYPE evaluate(final ARG_TYPE... x) {
     ArgumentChecker.noNulls(x, "parameter list");
     ArgumentChecker.isTrue(x.length == 1, "parameter list must have one element");
-    return evaluate(x[0]);
+    return apply(x[0]);
   }
 
   /**
@@ -32,6 +34,8 @@ public abstract class Function1D<ARG_TYPE, RESULT_TYPE> implements Function<ARG_
    * @param x  the argument of the function, not null
    * @return  the value of the function
    */
-  public abstract RESULT_TYPE evaluate(ARG_TYPE x);
+  public RESULT_TYPE evaluate(final ARG_TYPE x) {
+    return apply(x);
+  }
 
 }

@@ -53,8 +53,8 @@ public class SkewKurtosisFromImpliedVolatilityFunction extends AbstractFunction.
     final double t = DateUtils.getDifferenceInYears(now, expiry.getExpiry());
     final VolatilitySurface surface = (VolatilitySurface) inputs.getValue(getVolatilitySurfaceRequirement(option));
     final double volatility = surface.getVolatility(DoublesPair.of(t, option.getStrike()));
-    final double skew = SKEW_CALCULATOR.evaluate(volatility, t);
-    final double pearson = KURTOSIS_CALCULATOR.evaluate(volatility, t);
+    final double skew = SKEW_CALCULATOR.apply(volatility, t);
+    final double pearson = KURTOSIS_CALCULATOR.apply(volatility, t);
     final double fisher = pearson - 3;
     final Set<ComputedValue> results = new HashSet<>();
     final ComputationTargetSpecification targetSpec = target.toSpecification();

@@ -67,7 +67,7 @@ public class GaussianFourierPricerTest {
   public void testMeanCorrectedExpectation() {
     final double sigma = 0.2;
     final MartingaleCharacteristicExponent ce = new GaussianMartingaleCharacteristicExponent(sigma);
-    final ComplexNumber res = ce.getFunction(1.0).evaluate(new ComplexNumber(0, -1));
+    final ComplexNumber res = ce.getFunction(1.0).apply(new ComplexNumber(0, -1));
     assertEquals(0.0, res.getReal(), 1e-12);
     assertEquals(0.0, res.getImaginary(), 1e-12);
   }
@@ -83,7 +83,7 @@ public class GaussianFourierPricerTest {
       for (int count = 0; count < WARMUP_CYCLES; count++) {
         for (int i = 0; i < 100; i++) {
           final double x = -0. + i * 1000. / 100.0;
-          res += function.evaluate(x);
+          res += function.apply(x);
         }
       }
       res *= 2;
@@ -92,7 +92,7 @@ public class GaussianFourierPricerTest {
         for (int count = 0; count < BENCHMARK_CYCLES; count++) {
           for (int i = 0; i < 100; i++) {
             final double x = -0. + i * 1000. / 100.0;
-            res += function.evaluate(x);
+            res += function.apply(x);
           }
         }
         timer.finished();

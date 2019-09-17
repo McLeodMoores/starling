@@ -35,7 +35,7 @@ public class EuropeanExchangeAssetOptionModel extends TwoAssetAnalyticOptionMode
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final StandardTwoAssetOptionDataBundle data) {
+      public Double apply(final StandardTwoAssetOptionDataBundle data) {
         Validate.notNull(data, "data");
         final double s1 = data.getFirstSpot();
         final double s2 = data.getSecondSpot();

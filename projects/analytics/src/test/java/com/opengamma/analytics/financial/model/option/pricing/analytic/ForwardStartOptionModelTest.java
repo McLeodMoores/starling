@@ -52,14 +52,14 @@ public class ForwardStartOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(FORWARD).evaluate((StandardOptionDataBundle) null);
+    MODEL.getPricingFunction(FORWARD).apply((StandardOptionDataBundle) null);
   }
 
   @Test
   public void test() {
-    assertEquals(MODEL.getPricingFunction(END).evaluate(DATA), 0, 0);
-    assertEquals(MODEL.getPricingFunction(FORWARD).evaluate(DATA.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(1e-9)))), 0, 0);
-    assertEquals(MODEL.getPricingFunction(NOW).evaluate(DATA), BSM.getPricingFunction(VANILLA).evaluate(DATA), 1e-4);
-    assertEquals(MODEL.getPricingFunction(FORWARD).evaluate(DATA), 4.4064, 1e-4);
+    assertEquals(MODEL.getPricingFunction(END).apply(DATA), 0, 0);
+    assertEquals(MODEL.getPricingFunction(FORWARD).apply(DATA.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(1e-9)))), 0, 0);
+    assertEquals(MODEL.getPricingFunction(NOW).apply(DATA), BSM.getPricingFunction(VANILLA).apply(DATA), 1e-4);
+    assertEquals(MODEL.getPricingFunction(FORWARD).apply(DATA), 4.4064, 1e-4);
   }
 }

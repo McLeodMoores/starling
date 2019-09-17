@@ -47,12 +47,12 @@ public class StandardDeviationDoubleTimeSeriesFilterTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {
-    FILTER.evaluate((LocalDateDoubleTimeSeries) null);
+    FILTER.apply((LocalDateDoubleTimeSeries) null);
   }
 
   @Test
   public void testEmptyTS() {
-    final FilteredTimeSeries filtered = FILTER.evaluate(EMPTY_SERIES);
+    final FilteredTimeSeries filtered = FILTER.apply(EMPTY_SERIES);
     assertEquals(filtered.getFilteredTS(), EMPTY_SERIES);
     assertEquals(filtered.getRejectedTS(), EMPTY_SERIES);
   }
@@ -60,13 +60,13 @@ public class StandardDeviationDoubleTimeSeriesFilterTest {
   @Test
   public void testMasked() {
     final LocalDateDoubleTimeSeries subSeries = TS.subSeries(DATES[0], DATES[11]);
-    final FilteredTimeSeries result = FILTER.evaluate(ImmutableLocalDateDoubleTimeSeries.of(subSeries.timesArray(), subSeries.valuesArrayFast()));
+    final FilteredTimeSeries result = FILTER.apply(ImmutableLocalDateDoubleTimeSeries.of(subSeries.timesArray(), subSeries.valuesArrayFast()));
     assertEquals(result.getFilteredTS().size(), 11);
   }
 
   @Test
   public void test() {
-    final FilteredTimeSeries result = FILTER.evaluate(TS);
+    final FilteredTimeSeries result = FILTER.apply(TS);
     assertEquals(result.getFilteredTS().size(), 498);
     final LocalDateDoubleTimeSeries rejected = result.getRejectedTS();
     assertEquals(rejected.getTimeAtIndex(0), LocalDate.ofEpochDay(0));

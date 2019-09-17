@@ -26,12 +26,12 @@ public class NormalDistributionMomentEstimatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {
-    CALCULATOR.evaluate((double[]) null);
+    CALCULATOR.apply((double[]) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmpty() {
-    CALCULATOR.evaluate(new double[0]);
+    CALCULATOR.apply(new double[0]);
   }
 
   @Test
@@ -44,7 +44,7 @@ public class NormalDistributionMomentEstimatorTest {
     for (int i = 0; i < n; i++) {
       x[i] = p1.nextRandom();
     }
-    final NormalDistribution p2 = (NormalDistribution) CALCULATOR.evaluate(x);
+    final NormalDistribution p2 = (NormalDistribution) CALCULATOR.apply(x);
     assertEquals(p2.getMean(), mu, 2.5e-2);
     assertEquals(p2.getStandardDeviation(), sigma, 2.5e-2);
   }

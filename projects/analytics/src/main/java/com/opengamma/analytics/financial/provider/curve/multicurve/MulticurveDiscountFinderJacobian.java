@@ -40,9 +40,9 @@ public class MulticurveDiscountFinderJacobian extends Function1D<DoubleMatrix1D,
   }
 
   @Override
-  public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+  public DoubleMatrix2D apply(final DoubleMatrix1D x) {
     final MulticurveProviderDiscount bundle = _data.getKnownData().copy();
-    final MulticurveProviderDiscount newCurves = _data.getGeneratorMarket().evaluate(x);
+    final MulticurveProviderDiscount newCurves = _data.getGeneratorMarket().apply(x);
     bundle.setAll(newCurves);
     final Set<String> curvesSet = _data.getGeneratorMarket().getCurvesList();
     final int nbParameters = _data.getNumberOfInstruments();

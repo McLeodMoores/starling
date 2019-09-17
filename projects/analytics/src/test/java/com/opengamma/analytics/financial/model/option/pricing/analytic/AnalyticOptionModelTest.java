@@ -60,7 +60,7 @@ public abstract class AnalyticOptionModelTest {
     }
 
     try {
-      model.getPricingFunction(definition).evaluate((T) null);
+      model.getPricingFunction(definition).apply((T) null);
       Assert.fail();
     } catch (final IllegalArgumentException e) {
       // Expected

@@ -140,7 +140,7 @@ public class SwaptionPhysicalFixedIborSABRMethodTest {
     assertEquals("SwaptionPhysicalFixedIborSABRMethod: implied volatility", volatility, METHOD_SWPT_SABR.impliedVolatility(SWAPTION_LONG_PAYER, SABR_MULTICURVES), TOLERANCE_PV);
     final BlackFunctionData data = new BlackFunctionData(forward, pvbp, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(SWAPTION_LONG_PAYER);
-    final double expectedPrice = func.evaluate(data);
+    final double expectedPrice = func.apply(data);
     assertEquals("SwaptionPhysicalFixedIborSABRMethod: presentValue", expectedPrice, priceLongPayer.getAmount(EUR), TOLERANCE_PV);
     // Long/Short parity
     assertEquals("SwaptionPhysicalFixedIborSABRMethod: presentValue", priceLongPayer.getAmount(EUR), -priceShortPayer.getAmount(EUR), TOLERANCE_PV);

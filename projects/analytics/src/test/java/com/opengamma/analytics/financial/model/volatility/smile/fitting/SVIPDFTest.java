@@ -42,9 +42,9 @@ public class SVIPDFTest {
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public Double evaluate(final Double k) {
+    public Double apply(final Double k) {
       final EuropeanVanillaOption option = new EuropeanVanillaOption(k, T, true);
-      return svi.getVolatilityFunction(option, F).evaluate(DATA);
+      return svi.getVolatilityFunction(option, F).apply(DATA);
     }
   };
 
@@ -63,7 +63,7 @@ public class SVIPDFTest {
     final EuropeanVanillaOption[] options = new EuropeanVanillaOption[n];
     for (int i = 0; i < n; i++) {
       errors[i] = 0.001;
-      data[i] = new BlackFunctionData(F, 1, SVI.evaluate(strikes[i]));
+      data[i] = new BlackFunctionData(F, 1, SVI.apply(strikes[i]));
       options[i] = new EuropeanVanillaOption(strikes[i], T, true);
     }
     final double[] initialValues = new double[] {0.04, 1, -0.3, 0.2 };
@@ -78,9 +78,9 @@ public class SVIPDFTest {
 
     final Function1D<Double, Double> sabrFunction = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double k) {
+      public Double apply(final Double k) {
         final EuropeanVanillaOption option = new EuropeanVanillaOption(k, T, true);
-        return sabr.getVolatilityFunction(option, F).evaluate(fittedData);
+        return sabr.getVolatilityFunction(option, F).apply(fittedData);
       }
     };
 
@@ -89,7 +89,7 @@ public class SVIPDFTest {
     for (int i = 0; i < 100; i++) {
       final double k = 0.001 + i * 0.1 / 100;
 
-      final double vol = sabrFunction.evaluate(k);
+      final double vol = sabrFunction.apply(k);
       final double pdf = sabrDist.getPDF(k);
       final double cdf = sabrDist.getCDF(k);
     }

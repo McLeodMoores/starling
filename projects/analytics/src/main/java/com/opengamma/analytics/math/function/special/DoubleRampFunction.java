@@ -38,7 +38,7 @@ public class DoubleRampFunction extends Function1D<Double, Double> {
    * @return The value of the function
    */
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     Validate.notNull(x, "x");
     if (x < _x1) {
       return _y1;

@@ -76,7 +76,7 @@ public final class CapFloorInflationZeroCouponInterpolationBlackSmileMethod {
     final double volatility = black.getBlackParameters().getVolatility(cap.getReferenceEndTime()[1], cap.getStrike());
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, 1.0, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(option);
-    final double price = func.evaluate(dataBlack) * cap.getNotional() * cap.getPaymentYearFraction();
+    final double price = func.apply(dataBlack) * cap.getNotional() * cap.getPaymentYearFraction();
     return MultipleCurrencyAmount.of(cap.getCurrency(), price);
   }
 

@@ -60,11 +60,11 @@ class SeasonalFunction extends Function1D<Double, Double> implements Bean {
     /**
      * monthlyFactors
      */
-    for (int loopmonth = 1; loopmonth < NB_MONTH; loopmonth++) {
+    for (int i = 1; i < NB_MONTH; i++) {
       if (isAdditive) {
-        cumulativeFactors[loopmonth] = cumulativeFactors[loopmonth - 1] + monthlyFactors[loopmonth - 1];
+        cumulativeFactors[i] = cumulativeFactors[i - 1] + monthlyFactors[i - 1];
       } else {
-        cumulativeFactors[loopmonth] = cumulativeFactors[loopmonth - 1] * monthlyFactors[loopmonth - 1];
+        cumulativeFactors[i] = cumulativeFactors[i - 1] * monthlyFactors[i - 1];
       }
     }
     /**
@@ -72,13 +72,13 @@ class SeasonalFunction extends Function1D<Double, Double> implements Bean {
      */
     final int numberOfSteps = steps.length;
     _monthlyCumulativeFactors = new double[numberOfSteps];
-    for (int loopmonth = 0; loopmonth < numberOfSteps; loopmonth++) {
-      _monthlyCumulativeFactors[loopmonth] = cumulativeFactors[loopmonth % 12];
+    for (int i = 0; i < numberOfSteps; i++) {
+      _monthlyCumulativeFactors[i] = cumulativeFactors[i % 12];
     }
   }
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     final StepInterpolator1D interpolator = new StepInterpolator1D();
     final Interpolator1DDataBundle dataBundle = interpolator.getDataBundleFromSortedArrays(_steps, _monthlyCumulativeFactors);
     return interpolator.interpolate(dataBundle, x);
@@ -88,7 +88,7 @@ class SeasonalFunction extends Function1D<Double, Double> implements Bean {
   /// CLOVER:OFF
   /**
    * The meta-bean for {@code SeasonalFunction}.
-   * 
+   *
    * @return the meta-bean, not null
    */
   public static SeasonalFunction.Meta meta() {
@@ -118,7 +118,7 @@ class SeasonalFunction extends Function1D<Double, Double> implements Bean {
   /**
    * Gets the cumulative multiplicative seasonal factors from the reference time to the next. Array of size 12 (the 1st is 1.0, it is added to simplify the
    * implementation).
-   * 
+   *
    * @return the value of the property
    */
   private double[] getMonthlyCumulativeFactors() {
@@ -127,7 +127,7 @@ class SeasonalFunction extends Function1D<Double, Double> implements Bean {
 
   /**
    * Gets the the {@code monthlyCumulativeFactors} property.
-   * 
+   *
    * @return the property, not null
    */
   public final Property<double[]> monthlyCumulativeFactors() {
@@ -138,7 +138,7 @@ class SeasonalFunction extends Function1D<Double, Double> implements Bean {
   /**
    * Gets the cumulative multiplicative seasonal factors from the reference time to the next. Array of size 12 (the 1st is 1.0, it is added to simplify the
    * implementation).
-   * 
+   *
    * @return the value of the property
    */
   private double[] getSteps() {
@@ -147,7 +147,7 @@ class SeasonalFunction extends Function1D<Double, Double> implements Bean {
 
   /**
    * Gets the the {@code steps} property.
-   * 
+   *
    * @return the property, not null
    */
   public final Property<double[]> steps() {
@@ -272,7 +272,7 @@ class SeasonalFunction extends Function1D<Double, Double> implements Bean {
     // -----------------------------------------------------------------------
     /**
      * The meta-property for the {@code monthlyCumulativeFactors} property.
-     * 
+     *
      * @return the meta-property, not null
      */
     public final MetaProperty<double[]> monthlyCumulativeFactors() {
@@ -281,7 +281,7 @@ class SeasonalFunction extends Function1D<Double, Double> implements Bean {
 
     /**
      * The meta-property for the {@code steps} property.
-     * 
+     *
      * @return the meta-property, not null
      */
     public final MetaProperty<double[]> steps() {

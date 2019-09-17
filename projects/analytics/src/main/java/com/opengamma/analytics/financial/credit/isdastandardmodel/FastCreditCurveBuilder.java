@@ -109,7 +109,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
                 : ROOTFINDER.getRoot(func, bracket[0], bracket[1]); // Negative guess handled
             creditCurve = creditCurve.withRate(zeroRate, i);
           } catch (final MathException e) { // handling bracketing failure due to small survival probability
-            if (Math.abs(func.evaluate(creditCurve.getZeroRateAtIndex(i - 1))) < 1.e-12) {
+            if (Math.abs(func.apply(creditCurve.getZeroRateAtIndex(i - 1))) < 1.e-12) {
               creditCurve = creditCurve.withRate(creditCurve.getZeroRateAtIndex(i - 1), i);
             } else {
               throw new MathException(e);
@@ -119,7 +119,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
         }
         case Fail: {
           final double minValue = i == 0 ? 0.0 : creditCurve.getRTAtIndex(i - 1) / creditCurve.getTimeAtIndex(i);
-          if (i > 0 && func.evaluate(minValue) > 0.0) { // can never fail on the first spread
+          if (i > 0 && func.apply(minValue) > 0.0) { // can never fail on the first spread
             final StringBuilder msg = new StringBuilder();
             if (pointsUpfront[i] == 0.0) {
               msg.append("The par spread of " + premiums[i] + " at index " + i);
@@ -137,7 +137,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
         }
         case ZeroHazardRate: {
           final double minValue = i == 0 ? 0.0 : creditCurve.getRTAtIndex(i - 1) / creditCurve.getTimeAtIndex(i);
-          if (i > 0 && func.evaluate(minValue) > 0.0) { // can never fail on the first spread
+          if (i > 0 && func.apply(minValue) > 0.0) { // can never fail on the first spread
             creditCurve = creditCurve.withRate(minValue, i);
           } else {
             guess[i] = Math.max(minValue, guess[i]);
@@ -258,7 +258,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
     public Function1D<Double, Double> getPointFunction(final int index, final ISDACompliantCreditCurve creditCurve) {
       return new Function1D<Double, Double>() {
         @Override
-        public Double evaluate(final Double x) {
+        public Double apply(final Double x) {
           final ISDACompliantCreditCurve cc = creditCurve.withRate(x, index);
           final double rpv01 = rpv01(cc, PriceType.CLEAN);
           final double pro = protectionLeg(cc);

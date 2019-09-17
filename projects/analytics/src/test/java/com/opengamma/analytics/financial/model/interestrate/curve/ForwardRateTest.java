@@ -57,14 +57,14 @@ public class ForwardRateTest {
 
     final Function1D<Double, Double> fwd1 = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return YIELD_CURVE.getForwardRate(t);
       }
     };
 
     final Function1D<Double, Double> fwd2 = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return DISCOUNT_CURVE.getForwardRate(t);
       }
     };

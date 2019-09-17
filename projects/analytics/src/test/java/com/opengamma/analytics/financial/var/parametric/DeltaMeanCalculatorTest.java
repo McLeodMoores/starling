@@ -39,14 +39,14 @@ public class DeltaMeanCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    F.evaluate((Map<Integer, ParametricVaRDataBundle>) null);
+    F.apply((Map<Integer, ParametricVaRDataBundle>) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmptyValueDeltaVector() {
     final ParametricVaRDataBundle data = new ParametricVaRDataBundle(null, null, EMPTY_VECTOR, EMPTY_MATRIX, 1);
     final Map<Integer, ParametricVaRDataBundle> bundle = Collections.singletonMap(1, data);
-    F.evaluate(bundle);
+    F.apply(bundle);
   }
 
   @Test
@@ -62,9 +62,9 @@ public class DeltaMeanCalculatorTest {
   public void test() {
     ParametricVaRDataBundle data = new ParametricVaRDataBundle(null, ZERO, VECTOR, MATRIX, 1);
     Map<Integer, ParametricVaRDataBundle> bundle = Collections.singletonMap(1, data);
-    assertEquals(F.evaluate(bundle), 0, 1e-9);
+    assertEquals(F.apply(bundle), 0, 1e-9);
     data = new ParametricVaRDataBundle(null, VECTOR, VECTOR, MATRIX, 1);
     bundle = Collections.singletonMap(1, data);
-    assertEquals(F.evaluate(bundle), 9, 1e-9);
+    assertEquals(F.apply(bundle), 9, 1e-9);
   }
 }

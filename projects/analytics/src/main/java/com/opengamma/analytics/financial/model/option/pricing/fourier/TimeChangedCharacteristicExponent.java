@@ -44,9 +44,9 @@ public class TimeChangedCharacteristicExponent implements CharacteristicExponent
 
     return new Function1D<ComplexNumber, ComplexNumber>() {
       @Override
-      public ComplexNumber evaluate(final ComplexNumber u) {
-        final ComplexNumber z = ComplexMathUtils.multiply(MINUS_I, baseFunction.evaluate(u));
-        return timeChangeFunction.evaluate(z);
+      public ComplexNumber apply(final ComplexNumber u) {
+        final ComplexNumber z = ComplexMathUtils.multiply(MINUS_I, baseFunction.apply(u));
+        return timeChangeFunction.apply(z);
       }
     };
   }
@@ -54,7 +54,7 @@ public class TimeChangedCharacteristicExponent implements CharacteristicExponent
   @Override
   public ComplexNumber getValue(final ComplexNumber u, final double t) {
     final Function1D<ComplexNumber, ComplexNumber> func = getFunction(t);
-    return func.evaluate(u);
+    return func.apply(u);
   }
 
   /**

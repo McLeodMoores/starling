@@ -50,11 +50,11 @@ public class SampleNormalizedCentralMomentCalculator extends DescriptiveStatisti
    * @return  the normalized sample central moment
    */
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     if (_n == 0) {
       return 1.;
     }
-    return _momentCalculator.evaluate(x) / Math.pow(DescriptiveStatisticsFactory.of(SampleStandardDeviationCalculator.NAME).evaluate(x), _n);
+    return _momentCalculator.apply(x) / Math.pow(DescriptiveStatisticsFactory.of(SampleStandardDeviationCalculator.NAME).apply(x), _n);
   }
 
   @Override

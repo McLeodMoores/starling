@@ -61,9 +61,9 @@ public class HestonVolatilityFunctionTest {
   @Test
   public void testVolFunction() {
     final int n = STRIKES.length;
-    final double[] vols = VOL_FUNC_SET.evaluate(DATA);
+    final double[] vols = VOL_FUNC_SET.apply(DATA);
     for (int i = 0; i < n; i++) {
-      assertEquals(vols[i], VOL_FUNC_LIST.get(i).evaluate(DATA), 1e-4, "Strike: " + STRIKES[i]);
+      assertEquals(vols[i], VOL_FUNC_LIST.get(i).apply(DATA), 1e-4, "Strike: " + STRIKES[i]);
     }
   }
 
@@ -73,8 +73,8 @@ public class HestonVolatilityFunctionTest {
     final Function1D<HestonModelData, double[][]> adjointSetFunc = VOL_FUNC_PROVIDER.getVolatilityAdjointFunction(FORWARD, STRIKES, TIME);
     final Function1D<HestonModelData, double[][]> adjointSetFuncFD = VOL_FUNC_PROVIDER_FD.getVolatilityAdjointFunction(FORWARD, STRIKES, TIME);
 
-    final double[][] adjointSet = adjointSetFunc.evaluate(DATA);
-    final double[][] adjointSetFD = adjointSetFuncFD.evaluate(DATA);
+    final double[][] adjointSet = adjointSetFunc.apply(DATA);
+    final double[][] adjointSetFD = adjointSetFuncFD.apply(DATA);
 
     assertEquals(adjointSet.length, n, "#strikes");
     assertEquals(adjointSetFD.length, n, "#strikes FD");

@@ -312,7 +312,7 @@ public class RollGeskeWhaleyModel {
     final double[][] d2Adjoint = getD2Adjoint(strike, interestRate, timeToExpiry, volatility, dividendTime, pVal, modSpot);
 
     final double[] factorAdjoint = new double[] { factor, 0., 0., factor * (timeToExpiry - dividendTime), factor * interestRate, -factor * interestRate, 0.,
-                  0. };
+        0. };
     final double[] corrAdjoint = new double[] { corr, 0., 0., 0., -0.5 * corr / timeToExpiry, 0.5 * corr / dividendTime, 0., 0. };
     final double[] cdf1Adjoint = getCdfAdjoint(d1Adjoint[0], d2Adjoint[0], corrAdjoint, new double[] { 1., 0., 0., 0., 0., 0., 0., 0. });
     final double[] cdf2Adjoint = getCdfAdjoint(d1Adjoint[1], d2Adjoint[1], corrAdjoint, factorAdjoint);
@@ -320,38 +320,38 @@ public class RollGeskeWhaleyModel {
 
     res[0] = modSpot * cdf1Adjoint[0]
         - dscStrike * cdf2Adjoint[0]
-        + pVal * cdfFracAdjoint[0];
+            + pVal * cdfFracAdjoint[0];
     res[1] = cdf1Adjoint[0]
         + modSpot * cdf1Adjoint[1]
-        - dscStrike * cdf2Adjoint[1]
-        + pVal * cdfFracAdjoint[1] * d1Adjoint[1][1];
+            - dscStrike * cdf2Adjoint[1]
+                + pVal * cdfFracAdjoint[1] * d1Adjoint[1][1];
     res[2] = modSpot * cdf1Adjoint[2]
         - discountFactor * cdf2Adjoint[0]
-        - dscStrike * cdf2Adjoint[2]
-        + pVal * cdfFracAdjoint[1] * d1Adjoint[1][2];
+            - dscStrike * cdf2Adjoint[2]
+                + pVal * cdfFracAdjoint[1] * d1Adjoint[1][2];
     res[3] = dividendTime * pVal * cdf1Adjoint[0]
         + modSpot * cdf1Adjoint[3]
-        + timeToExpiry * dscStrike * cdf2Adjoint[0]
-        - dscStrike * cdf2Adjoint[3]
-        - dividendTime * pVal * cdfFracAdjoint[0]
-        + pVal * cdfFracAdjoint[1] * d1Adjoint[1][3];
+            + timeToExpiry * dscStrike * cdf2Adjoint[0]
+                - dscStrike * cdf2Adjoint[3]
+                    - dividendTime * pVal * cdfFracAdjoint[0]
+                        + pVal * cdfFracAdjoint[1] * d1Adjoint[1][3];
     res[4] = modSpot * cdf1Adjoint[4]
         + interestRate * dscStrike * cdf2Adjoint[0]
-        - dscStrike * cdf2Adjoint[4]
-        + pVal * cdfFracAdjoint[1] * d1Adjoint[1][4];
+            - dscStrike * cdf2Adjoint[4]
+                + pVal * cdfFracAdjoint[1] * d1Adjoint[1][4];
     res[5] = modSpot * cdf1Adjoint[5]
         + interestRate * pVal * cdf1Adjoint[0]
-        - dscStrike * cdf2Adjoint[5]
-        - interestRate * pVal * cdfFracAdjoint[0]
-        + pVal * cdfFracAdjoint[1] * d1Adjoint[1][5];
+            - dscStrike * cdf2Adjoint[5]
+                - interestRate * pVal * cdfFracAdjoint[0]
+                    + pVal * cdfFracAdjoint[1] * d1Adjoint[1][5];
     res[6] = modSpot * cdf1Adjoint[6]
         - dscStrike * cdf2Adjoint[6]
-        + pVal * cdfFracAdjoint[1] * d1Adjoint[1][6];
+            + pVal * cdfFracAdjoint[1] * d1Adjoint[1][6];
     res[7] = 2. * cdf1Adjoint[1]
         + modSpot * cdf1Adjoint[7]
-        - dscStrike * cdf2Adjoint[7]
-        + pVal * cdfFracAdjoint[1] * d1Adjoint[1][7]
-        + pVal * cdfFracAdjoint[2] * d1Adjoint[1][1] * d1Adjoint[1][1];
+            - dscStrike * cdf2Adjoint[7]
+                + pVal * cdfFracAdjoint[1] * d1Adjoint[1][7]
+                    + pVal * cdfFracAdjoint[2] * d1Adjoint[1][1] * d1Adjoint[1][1];
 
     return res;
   }
@@ -409,7 +409,7 @@ public class RollGeskeWhaleyModel {
     res[7] = factorAdjoint[0] * normAdj[1] * d1Adjoint[7] + factorAdjoint[0] * normAdj[2] * d1Adjoint[1] * d1Adjoint[1] + biAdj[1] * d2Adjoint[7]
         - biAdj[2] * d1Adjoint[7] + biAdj[4] * d2Adjoint[1]
             * d2Adjoint[1]
-        + biAdj[5] * d1Adjoint[1] * d1Adjoint[1] - 2. * biAdj[6] * d1Adjoint[1] * d2Adjoint[1];
+                + biAdj[5] * d1Adjoint[1] * d1Adjoint[1] - 2. * biAdj[6] * d1Adjoint[1] * d2Adjoint[1];
     return res;
   }
 
@@ -515,7 +515,7 @@ public class RollGeskeWhaleyModel {
 
     return new Function1D<Double, double[]>() {
       @Override
-      public double[] evaluate(final Double sigma) {
+      public double[] apply(final Double sigma) {
         final double[] greeks = getPriceAdjoint(spot, strike, interestRate, timeToExpiry, sigma, dividendAmount, dividendTime);
         return new double[] { greeks[0], greeks[6] };
       }
@@ -538,7 +538,7 @@ public class RollGeskeWhaleyModel {
       final double dividendTime) {
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double sStar) {
+      public Double apply(final Double sStar) {
         return BlackScholesFormulaRepository.price(sStar, strike, timeToExpiry - dividendTime, volatility, interestRate, interestRate, true) - sStar
             - dividendAmount + strike;
       }

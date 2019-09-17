@@ -45,18 +45,23 @@ import com.opengamma.util.test.TestGroup;
 /**
  * Test.
  */
-@Test(groups = TestGroup.UNIT, enabled = false, description = "FAILING")
+@Test(groups = TestGroup.UNIT)
 public class BaseNonCompiledInvokerTest {
 
   public void getResultsTest1() {
     final FunctionCompilationContext fcctx = mock(FunctionCompilationContext.class);
     final DV01TestFun dv01 = new DV01TestFun();
 
-    assertTrue(dv01.canApplyTo(fcctx, new ComputationTarget(ComputationTargetType.POSITION, new SimplePosition())));
+    final SimplePosition position = new SimplePosition();
+    position.setUniqueId(UniqueId.of("uid", "456"));
+    assertTrue(dv01.canApplyTo(fcctx, new ComputationTarget(ComputationTargetType.POSITION, position)));
 
     final ComputationTargetSpecification cts = new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("a", "b"));
     final ComputationTarget ct = mock(ComputationTarget.class);
     when(ct.toSpecification()).thenReturn(cts);
+    when(ct.getType()).thenReturn(ComputationTargetType.POSITION);
+    when(ct.getUniqueId()).thenReturn(position.getUniqueId());
+
     final Set<ValueSpecification> specs = dv01.getResults(null, ct);
     assertEquals(specs.size(), 1);
 
@@ -69,12 +74,15 @@ public class BaseNonCompiledInvokerTest {
   public void getRequirements() {
     final FunctionCompilationContext fcctx = mock(FunctionCompilationContext.class);
     final DV01TestFun dv01 = new DV01TestFun();
-
-    assertTrue(dv01.canApplyTo(fcctx, new ComputationTarget(ComputationTargetType.POSITION, new SimplePosition())));
+    final SimplePosition position = new SimplePosition();
+    position.setUniqueId(UniqueId.of("uid", "123"));
+    assertTrue(dv01.canApplyTo(fcctx, new ComputationTarget(ComputationTargetType.POSITION, position)));
 
     final ComputationTargetSpecification cts = new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("a", "b"));
     final ComputationTarget ct = mock(ComputationTarget.class);
     when(ct.toSpecification()).thenReturn(cts);
+    when(ct.getType()).thenReturn(ComputationTargetType.POSITION);
+    when(ct.getUniqueId()).thenReturn(position.getUniqueId());
 
     final ValueProperties valueProperties = ValueProperties.builder().with("A", "1").with("B", "1").with(ValuePropertyNames.FUNCTION, "PV01_Function").get();
     final ValueRequirement desiredValue = new ValueRequirement("PV01", ct.getType(), ct.getUniqueId(), valueProperties);
@@ -91,11 +99,16 @@ public class BaseNonCompiledInvokerTest {
     final FunctionCompilationContext fcctx = mock(FunctionCompilationContext.class);
     final DV01TestFun dv01 = new DV01TestFun();
 
-    assertTrue(dv01.canApplyTo(fcctx, new ComputationTarget(ComputationTargetType.POSITION, new SimplePosition())));
+    final SimplePosition position = new SimplePosition();
+    position.setUniqueId(UniqueId.of("uid", "789"));
+    assertTrue(dv01.canApplyTo(fcctx, new ComputationTarget(ComputationTargetType.POSITION, position)));
 
     final ComputationTargetSpecification cts = new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("a", "b"));
     final ComputationTarget ct = mock(ComputationTarget.class);
     when(ct.toSpecification()).thenReturn(cts);
+    when(ct.getType()).thenReturn(ComputationTargetType.POSITION);
+    when(ct.getUniqueId()).thenReturn(position.getUniqueId());
+
     final ValueProperties valueProperties = ValueProperties.builder().with("A", "1").with("B", "1").with(ValuePropertyNames.FUNCTION, "PV01_Function").get();
     final ValueRequirement desiredValue = new ValueRequirement("PV01", ct.getType(), ct.getUniqueId(), valueProperties);
     final ValueSpecification specifiedValue = new ValueSpecification(desiredValue.getValueName(),
@@ -120,18 +133,18 @@ public class BaseNonCompiledInvokerTest {
           .outputs(
 
               output(DV01)
-                  .targetSpec(originalTarget())  //takes  ComputationTargetSpecification or TargetSpecificationReference
-                  .properties(copyFrom(PV01)
-                      .withReplacement(ValuePropertyNames.FUNCTION, getUniqueId())
-                      .withAny(ValuePropertyNames.SHIFT))
-          )
+              .targetSpec(originalTarget())  //takes  ComputationTargetSpecification or TargetSpecificationReference
+              .properties(copyFrom(PV01)
+                  .withReplacement(ValuePropertyNames.FUNCTION, getUniqueId())
+                  .withAny(ValuePropertyNames.SHIFT))
+              )
           .inputs(
               input(PV01)
-                  .targetSpec(originalTarget())
-                  .properties(desiredValue()
-                      .withoutAny(ValuePropertyNames.SHIFT)
+              .targetSpec(originalTarget())
+              .properties(desiredValue()
+                  .withoutAny(ValuePropertyNames.SHIFT)
                   )
-          );
+              );
     }
 
     @Override

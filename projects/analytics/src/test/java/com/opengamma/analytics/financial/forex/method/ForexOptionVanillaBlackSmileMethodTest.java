@@ -144,7 +144,7 @@ public class ForexOptionVanillaBlackSmileMethodTest {
     final double volatility = SMILE_TERM.getVolatility(new Triple<>(TIME_TO_EXPIRY[indexPay + 1], strike, forward));
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, df, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(forexOption);
-    final double priceExpected = func.evaluate(dataBlack) * notional;
+    final double priceExpected = func.apply(dataBlack) * notional;
     final MultipleCurrencyAmount priceComputed = METHOD_OPTION.presentValue(forexOption, SMILE_BUNDLE);
     assertEquals("Forex vanilla option: present value", priceExpected, priceComputed.getAmount(USD), 1E-2);
   }
@@ -169,7 +169,7 @@ public class ForexOptionVanillaBlackSmileMethodTest {
     final double volatility = SMILE_TERM.getVolatility(new Triple<>(timeToExpiry, strike, forward));
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, df, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(forexOption);
-    final double priceExpected = func.evaluate(dataBlack) * notional;
+    final double priceExpected = func.apply(dataBlack) * notional;
     final MultipleCurrencyAmount priceComputed = METHOD_OPTION.presentValue(forexOption, SMILE_BUNDLE);
     assertEquals("Forex vanilla option: present value", priceExpected, priceComputed.getAmount(USD), 1E-2);
   }
@@ -766,12 +766,12 @@ public class ForexOptionVanillaBlackSmileMethodTest {
     dfForeignBumped = curveBumpedPlus.getDiscountFactor(forexForward.getPaymentTime());
     forwardBumped = SPOT * dfForeignBumped / dfDomestic;
     dataBlack = new BlackFunctionData(forwardBumped, dfDomestic, volatility);
-    final double bumpedPvForeignPlus = func.evaluate(dataBlack) * notional;
+    final double bumpedPvForeignPlus = func.apply(dataBlack) * notional;
     curvesForeign.replaceCurve(bumpedCurveName, curveBumpedMinus);
     dfForeignBumped = curveBumpedMinus.getDiscountFactor(forexForward.getPaymentTime());
     forwardBumped = SPOT * dfForeignBumped / dfDomestic;
     dataBlack = new BlackFunctionData(forwardBumped, dfDomestic, volatility);
-    final double bumpedPvForeignMinus = func.evaluate(dataBlack) * notional;
+    final double bumpedPvForeignMinus = func.apply(dataBlack) * notional;
     final double resultForeign = (bumpedPvForeignPlus - bumpedPvForeignMinus) / (2 * deltaShift);
     assertEquals("Forex vanilla option: curve exposure", forexForward.getPaymentTime(), sensi.getSensitivity(USD).getSensitivities().get(CURVES_NAME[0]).get(0).first, 1E-2);
     assertEquals("Forex vanilla option: curve exposure", resultForeign, sensi.getSensitivity(USD).getSensitivities().get(CURVES_NAME[0]).get(0).second, 1E-2);
@@ -787,12 +787,12 @@ public class ForexOptionVanillaBlackSmileMethodTest {
     dfDomesticBumped = curveBumpedPlus.getDiscountFactor(forexForward.getPaymentTime());
     forwardBumped = SPOT * dfForeign / dfDomesticBumped;
     dataBlack = new BlackFunctionData(forwardBumped, dfDomesticBumped, volatility);
-    final double bumpedPvDomesticPlus = func.evaluate(dataBlack) * notional;
+    final double bumpedPvDomesticPlus = func.apply(dataBlack) * notional;
     curvesForeign.replaceCurve(bumpedCurveName, curveBumpedMinus);
     dfDomesticBumped = curveBumpedMinus.getDiscountFactor(forexForward.getPaymentTime());
     forwardBumped = SPOT * dfForeign / dfDomesticBumped;
     dataBlack = new BlackFunctionData(forwardBumped, dfDomesticBumped, volatility);
-    final double bumpedPvDomesticMinus = func.evaluate(dataBlack) * notional;
+    final double bumpedPvDomesticMinus = func.apply(dataBlack) * notional;
     final double resultDomestic = (bumpedPvDomesticPlus - bumpedPvDomesticMinus) / (2 * deltaShift);
     assertEquals("Forex vanilla option: curve exposure", forexForward.getPaymentTime(), sensi.getSensitivity(USD).getSensitivities().get(CURVES_NAME[1]).get(0).first, 1E-2);
     assertEquals("Forex vanilla option: curve exposure", resultDomestic, sensi.getSensitivity(USD).getSensitivities().get(CURVES_NAME[1]).get(0).second, 1E-2);

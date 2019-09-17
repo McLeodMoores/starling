@@ -99,7 +99,7 @@ public class ConjugateGradientVectorMinimizer
     final int n = startPosition.getNumberOfElements();
     DoubleMatrix1D x = startPosition;
     DoubleMatrix1D deltaX;
-    DoubleMatrix1D g = grad.evaluate(x);
+    DoubleMatrix1D g = grad.apply(x);
     DoubleMatrix1D d = (DoubleMatrix1D) OG_ALGEBRA.scale(g, -1.0);
 
     final double delta0 = -OG_ALGEBRA.getInnerProduct(g, d);
@@ -114,7 +114,7 @@ public class ConjugateGradientVectorMinimizer
 
       deltaX = (DoubleMatrix1D) OG_ALGEBRA.scale(d, lambda);
       x = (DoubleMatrix1D) OG_ALGEBRA.add(x, deltaX);
-      final DoubleMatrix1D gNew = grad.evaluate(x);
+      final DoubleMatrix1D gNew = grad.apply(x);
       final double deltaMid = OG_ALGEBRA.getInnerProduct(g, gNew);
       g = gNew;
       deltaOld = deltaNew;
@@ -151,7 +151,7 @@ public class ConjugateGradientVectorMinimizer
         }
       }
     }
-    final double value = function.evaluate(x);
+    final double value = function.apply(x);
     throw new MathException(
         "ConjugateGradient failed to converge after " + _maxIterations + " iterations, with a tolerance of " + _relTol + ". Final value: " + value
             + ". Final position reached was " + x.toString());

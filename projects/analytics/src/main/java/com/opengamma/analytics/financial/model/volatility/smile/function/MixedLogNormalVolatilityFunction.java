@@ -30,7 +30,7 @@ public final class MixedLogNormalVolatilityFunction extends VolatilityFunctionPr
 
     return new Function1D<MixedLogNormalModelData, Double>() {
       @Override
-      public Double evaluate(final MixedLogNormalModelData data) {
+      public Double apply(final MixedLogNormalModelData data) {
         ArgumentChecker.notNull(data, "data");
         return getVolatility(option, forward, data);
       }
@@ -72,7 +72,7 @@ public final class MixedLogNormalVolatilityFunction extends VolatilityFunctionPr
     return new Function1D<MixedLogNormalModelData, double[]>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public double[] evaluate(final MixedLogNormalModelData data) {
+      public double[] apply(final MixedLogNormalModelData data) {
         return getVolatilityAdjoint(forward, strike, expiry, data);
       }
     };
@@ -91,7 +91,7 @@ public final class MixedLogNormalVolatilityFunction extends VolatilityFunctionPr
 
     return new Function1D<MixedLogNormalModelData, double[]>() {
       @Override
-      public double[] evaluate(final MixedLogNormalModelData data) {
+      public double[] apply(final MixedLogNormalModelData data) {
         return getModelAjoint(forward, strike, expiry, data);
       }
     };

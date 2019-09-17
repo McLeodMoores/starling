@@ -45,38 +45,38 @@ public class AverageCalculatorTest {
   public void testSingleValue() {
     final double value = 3.;
     final double[] x = {value};
-    assertEquals(value, MEAN.evaluate(x), EPS);
-    assertEquals(value, MEDIAN.evaluate(x), EPS);
-    assertEquals(value, MODE.evaluate(x), EPS);
+    assertEquals(value, MEAN.apply(x), EPS);
+    assertEquals(value, MEDIAN.apply(x), EPS);
+    assertEquals(value, MODE.apply(x), EPS);
   }
 
   @Test
   public void testMean() {
-    assertEquals(MEAN.evaluate(DATA), 3.33, EPS);
+    assertEquals(MEAN.apply(DATA), 3.33, EPS);
   }
 
   @Test
   public void testMedian() {
-    assertEquals(MEDIAN.evaluate(DATA), 3.35, EPS);
+    assertEquals(MEDIAN.apply(DATA), 3.35, EPS);
     final double[] x = Arrays.copyOf(DATA, DATA.length - 1);
-    assertEquals(MEDIAN.evaluate(x), 3, EPS);
+    assertEquals(MEDIAN.apply(x), 3, EPS);
   }
 
   @Test
   public void testMode() {
     final double[] x = {1., 2., 3., 4., 5., 6., 7., 8., 9., 10.};
     try {
-      MODE.evaluate(x);
+      MODE.apply(x);
       Assert.fail();
     } catch (final MathException e) {
       // Expected
     }
-    assertEquals(MODE.evaluate(DATA), 5.7, EPS);
+    assertEquals(MODE.apply(DATA), 5.7, EPS);
   }
 
   private void assertNull(final Function1D<double[], Double> calculator) {
     try {
-      calculator.evaluate((double[]) null);
+      calculator.apply((double[]) null);
       Assert.fail();
     } catch (final IllegalArgumentException e) {
       // Expected
@@ -86,7 +86,7 @@ public class AverageCalculatorTest {
   private void assertEmpty(final Function1D<double[], Double> calculator) {
     final double[] x = new double[0];
     try {
-      calculator.evaluate(x);
+      calculator.apply(x);
       Assert.fail();
     } catch (final IllegalArgumentException e) {
       // Expected

@@ -31,7 +31,7 @@ public class EquityVarianceSwapStaticReplication {
    * coinciding with that of the variance swap, and the value of the dividend corrections at all dividend dates, using the method of static replication from
    * pure option prices obtained from the <b>pure</b> implied volatility surface (The pure implied volatility is a number that put into Black formula (with unit
    * forward) gives the price of puts and calls of the pure stock).
-   * 
+   *
    * @param spot
    *          The current level of the stock or index
    * @param discountCurve
@@ -141,7 +141,7 @@ public class EquityVarianceSwapStaticReplication {
 
     final Function1D<Double, Double> integrand = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         if (x == 0.0) {
           return 0.0;
         }
@@ -159,7 +159,7 @@ public class EquityVarianceSwapStaticReplication {
 
     final Function1D<Double, Double> integrand = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         if (x == 0) {
           return 0.0;
         }
@@ -183,7 +183,7 @@ public class EquityVarianceSwapStaticReplication {
 
     final Function1D<Double, Double> integrand = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         if (x == 0) {
           return 0.0;
         }
@@ -206,7 +206,7 @@ public class EquityVarianceSwapStaticReplication {
 
     final Function1D<Double, Double> integrand = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         if (x == 0) {
           return 0.0;
         }
@@ -232,7 +232,7 @@ public class EquityVarianceSwapStaticReplication {
 
     final Function1D<Double, Double> integrand = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         if (x == 0) {
           return 0.0;
         }
@@ -260,7 +260,7 @@ public class EquityVarianceSwapStaticReplication {
 
     final Function1D<Double, Double> integrand = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         if (x == 0) {
           return 0.0;
         }

@@ -37,7 +37,7 @@ public class TwoAssetAnalyticOptionModelTest {
   private static final Function1D<StandardTwoAssetOptionDataBundle, Double> F = new Function1D<StandardTwoAssetOptionDataBundle, Double>() {
 
     @Override
-    public Double evaluate(final StandardTwoAssetOptionDataBundle x) {
+    public Double apply(final StandardTwoAssetOptionDataBundle x) {
       return RESULT;
     }
 

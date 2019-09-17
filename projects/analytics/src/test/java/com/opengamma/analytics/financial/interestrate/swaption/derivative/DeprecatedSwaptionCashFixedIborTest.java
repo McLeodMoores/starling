@@ -144,13 +144,13 @@ public class DeprecatedSwaptionCashFixedIborTest {
     final BlackFunctionData data = new BlackFunctionData(forward, pvbp, sigmaBlack);
 
     final Function1D<BlackFunctionData, Double> funcLongPayer = BLACK_FUNCTION.getPriceFunction(SWAPTION_LONG_PAYER);
-    final double priceLongPayer = funcLongPayer.evaluate(data) * (SWAPTION_LONG_PAYER.isLong() ? 1.0 : -1.0);
+    final double priceLongPayer = funcLongPayer.apply(data) * (SWAPTION_LONG_PAYER.isLong() ? 1.0 : -1.0);
     final Function1D<BlackFunctionData, Double> funcLongReceiver = BLACK_FUNCTION.getPriceFunction(SWAPTION_LONG_RECEIVER);
-    final double priceLongReceiver = funcLongReceiver.evaluate(data) * (SWAPTION_LONG_RECEIVER.isLong() ? 1.0 : -1.0);
+    final double priceLongReceiver = funcLongReceiver.apply(data) * (SWAPTION_LONG_RECEIVER.isLong() ? 1.0 : -1.0);
     final Function1D<BlackFunctionData, Double> funcShortPayer = BLACK_FUNCTION.getPriceFunction(SWAPTION_SHORT_PAYER);
-    final double priceShortPayer = funcShortPayer.evaluate(data) * (SWAPTION_SHORT_PAYER.isLong() ? 1.0 : -1.0);
+    final double priceShortPayer = funcShortPayer.apply(data) * (SWAPTION_SHORT_PAYER.isLong() ? 1.0 : -1.0);
     final Function1D<BlackFunctionData, Double> funcShortReceiver = BLACK_FUNCTION.getPriceFunction(SWAPTION_SHORT_RECEIVER);
-    final double priceShortReceiver = funcShortReceiver.evaluate(data) * (SWAPTION_SHORT_RECEIVER.isLong() ? 1.0 : -1.0);
+    final double priceShortReceiver = funcShortReceiver.apply(data) * (SWAPTION_SHORT_RECEIVER.isLong() ? 1.0 : -1.0);
     // From previous run
     final double expectedPvbp = 190280393.401;
     assertEquals(expectedPvbp, pvbp, 1E-2);

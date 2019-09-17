@@ -114,7 +114,7 @@ public class SwaptionPhysicalG2ppCalibrationObjective extends SuccessiveRootFind
   }
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     _g2Bundle.getG2ppParameter().setLastVolatilities(new double[] { x, x / _ratio });
     return METHOD_G2_SWAPTION.presentValue((SwaptionPhysicalFixedIbor) getInstrument(), _cfe, _g2Bundle).getAmount() - getPrice();
   }

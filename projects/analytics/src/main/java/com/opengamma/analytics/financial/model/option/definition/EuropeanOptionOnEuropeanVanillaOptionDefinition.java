@@ -23,7 +23,7 @@ public class EuropeanOptionOnEuropeanVanillaOptionDefinition extends OptionDefin
     @Override
     public double getPayoff(final StandardOptionDataBundle data, final Double optionPrice) {
       Validate.notNull(data, "data");
-      final double underlyingPrice = UNDERLYING_MODEL.getPricingFunction(_underlyingOption).evaluate(data);
+      final double underlyingPrice = UNDERLYING_MODEL.getPricingFunction(_underlyingOption).apply(data);
       return isCall() ? Math.max(underlyingPrice - getStrike(), 0) : Math.max(getStrike() - underlyingPrice, 0);
     }
   };

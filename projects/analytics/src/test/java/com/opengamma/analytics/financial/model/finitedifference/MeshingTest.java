@@ -29,7 +29,7 @@ public class MeshingTest {
     final int n = mesh.getNumberOfPoints();
     final double[] y = new double[n];
     for (int ii = 0; ii < n; ii++) {
-      y[ii] = mesh.evaluate(ii);
+      y[ii] = mesh.apply(ii);
     }
 
     assertEquals(l, y[0], 1e-18);

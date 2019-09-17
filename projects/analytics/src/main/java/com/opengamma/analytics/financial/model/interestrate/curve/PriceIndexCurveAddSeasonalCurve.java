@@ -44,7 +44,7 @@ public class PriceIndexCurveAddSeasonalCurve extends PriceIndexCurve {
 
   @Override
   public double getPriceIndex(final Double timeToIndex) {
-    return _curve.getPriceIndex(timeToIndex) + _seasonalCurve.getFunction().evaluate(timeToIndex);
+    return _curve.getPriceIndex(timeToIndex) + _seasonalCurve.getFunction().apply(timeToIndex);
   }
 
   @Override

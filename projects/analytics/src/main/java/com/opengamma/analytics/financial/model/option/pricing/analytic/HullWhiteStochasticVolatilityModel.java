@@ -37,7 +37,7 @@ public class HullWhiteStochasticVolatilityModel extends AnalyticOptionModel<Opti
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final HullWhiteStochasticVolatilityModelDataBundle data) {
+      public Double apply(final HullWhiteStochasticVolatilityModelDataBundle data) {
         Validate.notNull(data);
         final ZonedDateTime date = data.getDate();
         final double s = data.getSpot();
@@ -65,7 +65,7 @@ public class HullWhiteStochasticVolatilityModel extends AnalyticOptionModel<Opti
         final double d2 = d1 - Math.sqrt(meanVariance * t);
         final double nD1 = NORMAL.getPDF(d1);
         final double f0 = BSM.getPricingFunction(call)
-            .evaluate(bsmData.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(Math.sqrt(meanVariance)))));
+            .apply(bsmData.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(Math.sqrt(meanVariance)))));
         final double f1 = getF1(betaIsZero, variance, rho, alpha, t, beta, delta, eDelta, sDf, nD1, d2, meanVariance);
         final double f2 = getF2(betaIsZero, variance, rho, alpha, t, beta, delta, eDelta, sDf, nD1, d1, d2, meanVariance);
         final double callPrice = f0 + f1 * volOfSigma + f2 * volOfSigma * volOfSigma;

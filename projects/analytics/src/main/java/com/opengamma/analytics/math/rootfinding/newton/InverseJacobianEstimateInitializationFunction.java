@@ -29,8 +29,8 @@ public class InverseJacobianEstimateInitializationFunction implements NewtonRoot
   public DoubleMatrix2D getInitializedMatrix(final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianFunction, final DoubleMatrix1D x) {
     Validate.notNull(jacobianFunction);
     Validate.notNull(x);
-    final DoubleMatrix2D estimate = jacobianFunction.evaluate(x);
-    final DecompositionResult decompositionResult = _decomposition.evaluate(estimate);
+    final DoubleMatrix2D estimate = jacobianFunction.apply(x);
+    final DecompositionResult decompositionResult = _decomposition.apply(estimate);
     return decompositionResult.solve(DoubleMatrixUtils.getIdentityMatrix2D(x.getNumberOfElements()));
   }
 

@@ -38,12 +38,12 @@ public class SampleSkewnessCalculator extends DescriptiveStatisticsCalculator {
    * @return The sample skewness
    */
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notNull(x, "x");
     ArgumentChecker.isTrue(x.length >= 3, "Need at least three points to calculate sample skewness");
     double sum = 0;
     double variance = 0;
-    final double mean = DescriptiveStatisticsFactory.of(MeanCalculator.NAME).evaluate(x);
+    final double mean = DescriptiveStatisticsFactory.of(MeanCalculator.NAME).apply(x);
     for (final Double d : x) {
       final double diff = d - mean;
       variance += diff * diff;

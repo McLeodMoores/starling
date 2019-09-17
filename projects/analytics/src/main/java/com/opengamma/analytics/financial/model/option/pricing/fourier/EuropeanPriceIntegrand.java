@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.fourier;
@@ -21,7 +21,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * 
+ *
  */
 public class EuropeanPriceIntegrand {
   private final MartingaleCharacteristicExponent _ce;
@@ -54,7 +54,7 @@ public class EuropeanPriceIntegrand {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         @SuppressWarnings("synthetic-access")
         final ComplexNumber res = getIntegrand(x, characteristicFunction, gaussianFunction, k);
         return res.getReal();
@@ -65,8 +65,8 @@ public class EuropeanPriceIntegrand {
   private ComplexNumber getIntegrand(final double x, final Function1D<ComplexNumber, ComplexNumber> ce, final Function1D<ComplexNumber, ComplexNumber> gaussian,
       final double k) {
     final ComplexNumber z = new ComplexNumber(x, -1 - _alpha);
-    final ComplexNumber num1 = exp(add(new ComplexNumber(0, -x * k), ce.evaluate(z)));
-    final ComplexNumber num2 = gaussian == null ? new ComplexNumber(0.0) : exp(add(new ComplexNumber(0, -x * k), gaussian.evaluate(z)));
+    final ComplexNumber num1 = exp(add(new ComplexNumber(0, -x * k), ce.apply(z)));
+    final ComplexNumber num2 = gaussian == null ? new ComplexNumber(0.0) : exp(add(new ComplexNumber(0, -x * k), gaussian.apply(z)));
     final ComplexNumber denom = multiply(z, subtract(MINUS_I, z));
     final ComplexNumber res = divide(subtract(num1, num2), denom);
     return res;
@@ -90,7 +90,7 @@ public class EuropeanPriceIntegrand {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_alpha);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _ce.hashCode();
     result = prime * result + (_useVarianceReduction ? 1231 : 1237);
     return result;

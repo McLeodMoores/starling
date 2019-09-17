@@ -74,7 +74,7 @@ public class CapletStrippingTest {
     private static final double D = 0.04;
 
     @Override
-    public Double evaluate(final Double t) {
+    public Double apply(final Double t) {
       return (A + t * B) * Math.exp(-C * t) + D;
     }
   };
@@ -82,7 +82,7 @@ public class CapletStrippingTest {
   private static final Function1D<Double, Double> BETA = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double t) {
+    public Double apply(final Double t) {
       return 0.5;
     }
   };
@@ -95,7 +95,7 @@ public class CapletStrippingTest {
     private static final double D = 0.0;
 
     @Override
-    public Double evaluate(final Double t) {
+    public Double apply(final Double t) {
       return (A + t * B) * Math.exp(-C * t) + D;
     }
   };
@@ -108,7 +108,7 @@ public class CapletStrippingTest {
     private static final double D = 0.4;
 
     @Override
-    public Double evaluate(final Double t) {
+    public Double apply(final Double t) {
       return (A + t * B) * Math.exp(-C * t) + D;
     }
   };
@@ -121,7 +121,7 @@ public class CapletStrippingTest {
     private static final double D = 0.04;
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return (A + B * x) * Math.exp(-C * x) + D;
     }
   };
@@ -134,7 +134,7 @@ public class CapletStrippingTest {
     private static final double D = 0.001;
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return (A + B * x) * Math.exp(-C * x) + D;
     }
   };
@@ -180,7 +180,7 @@ public class CapletStrippingTest {
       final Function1D<Double, Double> func = PARAMETER_FUNCTIONS.get(NAMES[i]);
       final ParameterLimitsTransform trans = TRANSFORMS.get(NAMES[i]);
       for (int j = 0; j < NODES.length; j++) {
-        values[i][j] = trans.transform(func.evaluate(NODES[j])); // fitting parameters
+        values[i][j] = trans.transform(func.apply(NODES[j])); // fitting parameters
       }
     }
 
@@ -261,8 +261,8 @@ public class CapletStrippingTest {
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacFDFunc = jacFDCal.differentiate(func);
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacAnalFunc = new CapletStrippingJacobian(CAPS, YIELD_CURVES, CURVE_NODES, INTERPOLATORS, TRANSFORMS, null);
 
-    final DoubleMatrix2D jacFD = jacFDFunc.evaluate(END);
-    final DoubleMatrix2D jacAnal = jacAnalFunc.evaluate(END);
+    final DoubleMatrix2D jacFD = jacFDFunc.apply(END);
+    final DoubleMatrix2D jacAnal = jacAnalFunc.apply(END);
     final int rows = jacFD.getNumberOfRows();
     final int cols = jacFD.getNumberOfColumns();
 
@@ -315,7 +315,7 @@ public class CapletStrippingTest {
       System.out.println("CapletStripingTest");
     }
 
-    final VolatilityModel1D volModel = VOL_MODEL_PROVIDER.evaluate(lsRes.getFitParameters());
+    final VolatilityModel1D volModel = VOL_MODEL_PROVIDER.apply(lsRes.getFitParameters());
     final Iterator<CapFloor> iter = CAPS.iterator();
 
     CapFloor cap;

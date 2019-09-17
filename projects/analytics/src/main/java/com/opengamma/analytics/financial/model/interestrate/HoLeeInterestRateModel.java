@@ -13,7 +13,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.time.DateUtils;
 
 /**
- * 
+ *
  */
 public class HoLeeInterestRateModel implements DiscountBondModel<StandardDiscountBondModelDataBundle> {
 
@@ -24,7 +24,7 @@ public class HoLeeInterestRateModel implements DiscountBondModel<StandardDiscoun
     return new Function1D<StandardDiscountBondModelDataBundle, Double>() {
 
       @Override
-      public Double evaluate(final StandardDiscountBondModelDataBundle data) {
+      public Double apply(final StandardDiscountBondModelDataBundle data) {
         Validate.notNull(data);
         final double t = DateUtils.getDifferenceInYears(data.getDate(), time);
         final double s = DateUtils.getDifferenceInYears(data.getDate(), maturity);

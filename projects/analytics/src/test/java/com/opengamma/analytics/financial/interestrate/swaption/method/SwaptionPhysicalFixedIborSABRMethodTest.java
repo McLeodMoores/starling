@@ -168,7 +168,7 @@ public class SwaptionPhysicalFixedIborSABRMethodTest {
     final double volatility = sabrParameter.getVolatility(SWAPTION_LONG_PAYER.getTimeToExpiry(), maturity, RATE, forward);
     final BlackFunctionData data = new BlackFunctionData(forward, pvbp, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(SWAPTION_LONG_PAYER);
-    final double expectedPrice = func.evaluate(data);
+    final double expectedPrice = func.apply(data);
     assertEquals(expectedPrice, priceLongPayer, 1E-2);
     // Long/Short parity
     assertEquals(priceLongPayer, -priceShortPayer, 1E-2);

@@ -44,7 +44,7 @@ public class EmpiricalDistributionConditionalVaRCalculator implements VaRCalcula
     if (excesses.isEmpty()) {
       return new VaRCalculationResult(var, null);
     }
-    return new VaRCalculationResult(-_meanCalculator.evaluate(excesses.toDoubleArray()), null);
+    return new VaRCalculationResult(-_meanCalculator.apply(excesses.toDoubleArray()), null);
   }
 
   @Override

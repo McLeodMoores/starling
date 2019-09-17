@@ -64,13 +64,13 @@ public class ForwardCurveTest {
     final Function1D<Double, Double> f = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return SPOT * (1 + 0.1 * t);
       }
     };
     final ForwardCurve fc = new ForwardCurve(FunctionalDoublesCurve.from(f));
     final double t = 5.67;
-    assertEquals(f.evaluate(t), fc.getForward(t), 1e-9);
+    assertEquals(f.apply(t), fc.getForward(t), 1e-9);
     assertEquals(0.1 / (1 + 0.1 * t), fc.getDrift(t), 1e-9);
   }
 

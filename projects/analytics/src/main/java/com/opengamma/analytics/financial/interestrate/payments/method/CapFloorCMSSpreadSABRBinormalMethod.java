@@ -37,7 +37,7 @@ import com.opengamma.util.tuple.DoublesPair;
 /**
  * Class used to compute the price of a CMS spread cap/floor with the bi-normal approach with correlation by strike. OpenGamma
  * implementation note: Bi-normal with correlation by strike approach to CMS spread pricing, version 1.1, June 2011.
- * 
+ *
  * @deprecated {@link SABRInterestRateDataBundle} is deprecated
  */
 @Deprecated
@@ -72,7 +72,7 @@ public class CapFloorCMSSpreadSABRBinormalMethod implements PricingMethod {
 
   /**
    * Constructor of the CMS spread cap/floor method with the CMS cap and coupon methods.
-   * 
+   *
    * @param correlation
    *          The rates correlation.
    * @param methodCmsCap
@@ -91,7 +91,7 @@ public class CapFloorCMSSpreadSABRBinormalMethod implements PricingMethod {
 
   /**
    * Gets the correlation (rho) as function of the strike.
-   * 
+   *
    * @return The correlation
    */
   public DoubleFunction1D getCorrelation() {
@@ -100,7 +100,7 @@ public class CapFloorCMSSpreadSABRBinormalMethod implements PricingMethod {
 
   /**
    * Compute the present value of a CMS spread cap/floor in the binormal approach.
-   * 
+   *
    * @param cmsSpread
    *          The CMS spread cap/floor.
    * @param sabrData
@@ -123,7 +123,7 @@ public class CapFloorCMSSpreadSABRBinormalMethod implements PricingMethod {
     final double discountFactorPayment = sabrData.getCurve(cmsSpread.getFundingCurveName()).getDiscountFactor(cmsSpread.getPaymentTime());
     final NormalFunctionData dataCap1 = new NormalFunctionData(
         cmsCoupon1Price / (discountFactorPayment * cmsCap1.getNotional() * cmsCap1.getPaymentYearFraction()), discountFactorPayment
-            * cmsCap1.getNotional() * cmsCap1.getPaymentYearFraction(),
+        * cmsCap1.getNotional() * cmsCap1.getPaymentYearFraction(),
         0.0);
     final EuropeanVanillaOption optionCap1 = new EuropeanVanillaOption(forward1, cmsSpread.getFixingTime(), true);
     double cmsCap1ImpliedVolatility = 0;
@@ -134,7 +134,7 @@ public class CapFloorCMSSpreadSABRBinormalMethod implements PricingMethod {
     }
     final NormalFunctionData dataCap2 = new NormalFunctionData(
         cmsCoupon2Price / (discountFactorPayment * cmsCap2.getNotional() * cmsCap2.getPaymentYearFraction()), discountFactorPayment
-            * cmsCap2.getNotional() * cmsCap2.getPaymentYearFraction(),
+        * cmsCap2.getNotional() * cmsCap2.getPaymentYearFraction(),
         cmsCap1ImpliedVolatility);
     final EuropeanVanillaOption optionCap2 = new EuropeanVanillaOption(forward2, cmsSpread.getFixingTime(), true);
     double cmsCap2ImpliedVolatility = 0;
@@ -144,18 +144,18 @@ public class CapFloorCMSSpreadSABRBinormalMethod implements PricingMethod {
       // TODO
     }
     final double cmsSpreadImpliedVolatility = Math.sqrt(
-        cmsCap1ImpliedVolatility * cmsCap1ImpliedVolatility - 2 * _correlation.evaluate(cmsSpread.getStrike()) * cmsCap1ImpliedVolatility
-            * cmsCap2ImpliedVolatility + cmsCap2ImpliedVolatility * cmsCap2ImpliedVolatility);
+        cmsCap1ImpliedVolatility * cmsCap1ImpliedVolatility - 2 * _correlation.apply(cmsSpread.getStrike()) * cmsCap1ImpliedVolatility
+        * cmsCap2ImpliedVolatility + cmsCap2ImpliedVolatility * cmsCap2ImpliedVolatility);
     final NormalFunctionData dataSpread = new NormalFunctionData(
         (cmsCoupon1Price - cmsCoupon2Price)
-            / (discountFactorPayment * Math.abs(cmsSpread.getNotional()) * cmsSpread.getPaymentYearFraction()),
+        / (discountFactorPayment * Math.abs(cmsSpread.getNotional()) * cmsSpread.getPaymentYearFraction()),
         discountFactorPayment * cmsSpread.getNotional()
-            * cmsSpread.getPaymentYearFraction(),
+        * cmsSpread.getPaymentYearFraction(),
         cmsSpreadImpliedVolatility);
     final EuropeanVanillaOption optionSpread = new EuropeanVanillaOption(cmsSpread.getStrike(), cmsSpread.getFixingTime(),
         cmsSpread.isCap());
     final Function1D<NormalFunctionData, Double> normalFunction = NORMAL_PRICE.getPriceFunction(optionSpread);
-    final double cmsSpreadPrice = normalFunction.evaluate(dataSpread);
+    final double cmsSpreadPrice = normalFunction.apply(dataSpread);
     return CurrencyAmount.of(cmsSpread.getCurrency(), cmsSpreadPrice);
   }
 
@@ -168,7 +168,7 @@ public class CapFloorCMSSpreadSABRBinormalMethod implements PricingMethod {
 
   /**
    * Compute the implied correlation for a specific CMS spread cap/floor from the given price. The model correlation structure is not used.
-   * 
+   *
    * @param cmsSpread
    *          The CMS spread cap/floor.
    * @param sabrData
@@ -187,7 +187,7 @@ public class CapFloorCMSSpreadSABRBinormalMethod implements PricingMethod {
   /**
    * Computes the present value curves sensitivity of a CMS spread cap/floor in the bi-normal approach. For the CMS cap/floor volatility
    * calibration, ATM forward strikes are used.
-   * 
+   *
    * @param cmsSpread
    *          The CMS spread cap/floor.
    * @param sabrData
@@ -229,10 +229,10 @@ public class CapFloorCMSSpreadSABRBinormalMethod implements PricingMethod {
     } catch (final Exception e) {
       // TODO
     }
-    final double rho = _correlation.evaluate(cmsSpread.getStrike());
+    final double rho = _correlation.apply(cmsSpread.getStrike());
     final double cmsSpreadImpliedVolatility = Math.sqrt(cmsCap1ImpliedVolatility * cmsCap1ImpliedVolatility
         - 2 * rho * cmsCap1ImpliedVolatility * cmsCap2ImpliedVolatility + cmsCap2ImpliedVolatility
-            * cmsCap2ImpliedVolatility);
+        * cmsCap2ImpliedVolatility);
     final NormalFunctionData dataSpread = new NormalFunctionData(expectation1 - expectation2,
         discountFactorPayment * cmsSpread.getNotional() * cmsSpread.getPaymentYearFraction(),
         cmsSpreadImpliedVolatility);
@@ -260,7 +260,7 @@ public class CapFloorCMSSpreadSABRBinormalMethod implements PricingMethod {
     final double factorBar = -cmsCoupon1Pv / (factor * factor) * expectation1Bar + -cmsCoupon2Pv / (factor * factor) * expectation2Bar
         - cmsCap2Pv / factor / cmsCap2PriceNormalDerivative[1]
             * cmsCap2ImpliedVolatilityBar
-        - cmsCap1Pv / factor / cmsCap1PriceNormalDerivative[1] * cmsCap1ImpliedVolatilityBar; // OK
+            - cmsCap1Pv / factor / cmsCap1PriceNormalDerivative[1] * cmsCap1ImpliedVolatilityBar; // OK
     final double discountFactorPaymentBar = cmsCap1.getNotional() * cmsCap1.getPaymentYearFraction() * factorBar
         + cmsSpreadPv / discountFactorPayment * cmsSpreadPvBar;
     final double cmsCap2PvBar = 1.0 / cmsCap2PriceNormalDerivative[1] * cmsCap2ImpliedVolatilityBar; // OK
@@ -301,7 +301,7 @@ public class CapFloorCMSSpreadSABRBinormalMethod implements PricingMethod {
 
   /**
    * Computes the present value sensitivity to the SABR parameters of a CMS spread cap/floor in the SABR framework.
-   * 
+   *
    * @param cmsSpread
    *          The CMS spread cap/floor.
    * @param sabrData
@@ -343,10 +343,10 @@ public class CapFloorCMSSpreadSABRBinormalMethod implements PricingMethod {
     } catch (final Exception e) {
       // TODO
     }
-    final double rho = _correlation.evaluate(cmsSpread.getStrike());
+    final double rho = _correlation.apply(cmsSpread.getStrike());
     final double cmsSpreadImpliedVolatility = Math.sqrt(cmsCap1ImpliedVolatility * cmsCap1ImpliedVolatility
         - 2 * rho * cmsCap1ImpliedVolatility * cmsCap2ImpliedVolatility + cmsCap2ImpliedVolatility
-            * cmsCap2ImpliedVolatility);
+        * cmsCap2ImpliedVolatility);
     final NormalFunctionData dataSpread = new NormalFunctionData(expectation1 - expectation2,
         discountFactorPayment * cmsSpread.getNotional() * cmsSpread.getPaymentYearFraction(),
         cmsSpreadImpliedVolatility);
@@ -409,7 +409,7 @@ public class CapFloorCMSSpreadSABRBinormalMethod implements PricingMethod {
 
     /**
      * Constructor of the difference function.
-     * 
+     *
      * @param cmsSpread
      *          The CMS spread cap/floor.
      * @param sabrData
@@ -424,7 +424,7 @@ public class CapFloorCMSSpreadSABRBinormalMethod implements PricingMethod {
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       @SuppressWarnings("synthetic-access")
       final CapFloorCMSSpreadSABRBinormalMethod method = new CapFloorCMSSpreadSABRBinormalMethod(
           new RealPolynomialFunction1D(new double[] { x }), _methodCmsCap, _methodCmsCoupon);

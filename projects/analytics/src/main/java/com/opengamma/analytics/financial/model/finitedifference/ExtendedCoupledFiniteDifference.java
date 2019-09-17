@@ -196,7 +196,7 @@ public class ExtendedCoupledFiniteDifference extends CoupledFiniteDifference {
 
       if (first) {
         final DoubleMatrix2D mM = new DoubleMatrix2D(m);
-        decompRes = dcomp.evaluate(mM);
+        decompRes = dcomp.apply(mM);
         // first = false;
       }
       f = decompRes.solve(q);

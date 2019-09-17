@@ -50,9 +50,9 @@ public class TrinomialOptionModel<T extends StandardOptionDataBundle> extends Tr
     }
     _model = model;
     _n = n;
-    _j = RecombiningTrinomialTree.NODES.evaluate(_n);
+    _j = RecombiningTrinomialTree.NODES.apply(_n);
     _maxDepthToSave = maxDepthToSave;
-    _maxWidthToSave = RecombiningTrinomialTree.NODES.evaluate(maxDepthToSave);
+    _maxWidthToSave = RecombiningTrinomialTree.NODES.apply(maxDepthToSave);
   }
 
   @Override
@@ -61,8 +61,8 @@ public class TrinomialOptionModel<T extends StandardOptionDataBundle> extends Tr
     final Function1D<T, Double> function = new Function1D<T, Double>() {
 
       @Override
-      public Double evaluate(final T t) {
-        return treeFunction.evaluate(t).getNode(0, 0).second;
+      public Double apply(final T t) {
+        return treeFunction.apply(t).getNode(0, 0).second;
       }
 
     };
@@ -81,7 +81,7 @@ public class TrinomialOptionModel<T extends StandardOptionDataBundle> extends Tr
 
       @SuppressWarnings({ "unchecked" })
       @Override
-      public RecombiningTrinomialTree<DoublesPair> evaluate(final T data) {
+      public RecombiningTrinomialTree<DoublesPair> apply(final T data) {
         final DoublesPair[][] spotAndOptionPrices = new DoublesPair[_maxDepthToSave + 1][_maxWidthToSave];
         final OptionPayoffFunction<T> payoffFunction = definition.getPayoffFunction();
         final OptionExerciseFunction<T> exerciseFunction = definition.getExerciseFunction();
@@ -105,7 +105,7 @@ public class TrinomialOptionModel<T extends StandardOptionDataBundle> extends Tr
         double optionValue, spotValue;
         T newData;
         for (int i = _n - 1; i >= 0; i--) {
-          for (int j = 1; j <= RecombiningTrinomialTree.NODES.evaluate(i); j++) {
+          for (int j = 1; j <= RecombiningTrinomialTree.NODES.apply(i); j++) {
             optionValue = df * (u * tempResults[j + 1].second + m * tempResults[j].second + d * tempResults[j - 1].second);
             spotValue = df * tempResults[j].first;
             newData = (T) data.withSpot(spotValue);

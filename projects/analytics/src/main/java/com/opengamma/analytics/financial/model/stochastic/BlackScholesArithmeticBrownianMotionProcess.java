@@ -39,7 +39,7 @@ public class BlackScholesArithmeticBrownianMotionProcess<T extends OptionDefinit
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double e) {
+      public Double apply(final Double e) {
         return Math.exp(nu + sigmaDt * e);
       }
     };
@@ -60,7 +60,7 @@ public class BlackScholesArithmeticBrownianMotionProcess<T extends OptionDefinit
     return new Function2D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x1, final Double x2) {
+      public Double apply(final Double x1, final Double x2) {
         return x1 * x2;
       }
 

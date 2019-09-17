@@ -5,8 +5,6 @@
  */
 package com.opengamma.integration.copier.portfolio.rowparser;
 
-import static com.opengamma.lambdava.streams.Lambdava.functional;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -55,7 +53,6 @@ import com.opengamma.financial.security.swap.SwapLeg;
 import com.opengamma.financial.security.swap.SwapSecurity;
 import com.opengamma.financial.security.swap.VarianceSwapLeg;
 import com.opengamma.integration.copier.portfolio.writer.SingleSheetPositionWriter;
-import com.opengamma.lambdava.functions.Function1;
 import com.opengamma.master.position.ManageablePosition;
 import com.opengamma.master.position.ManageableTrade;
 import com.opengamma.master.security.ManageableSecurity;
@@ -74,7 +71,7 @@ public class JodaBeanRowParser extends RowParser {
    * Security properties to ignore when scanning
    */
   private static final String[] IGNORE_METAPROPERTIES = {
-                "securityType", "uniqueid", "objectid", "securitylink", "trades", "gicscode", "parentpositionid", "providerid", "deal", "requiredPermissions" };
+      "securityType", "uniqueid", "objectid", "securitylink", "trades", "gicscode", "parentpositionid", "providerid", "deal", "requiredPermissions" };
 
   /**
    * Column prefixes
@@ -244,12 +241,7 @@ public class JodaBeanRowParser extends RowParser {
     ArgumentChecker.notNull(row, "row");
     ArgumentChecker.notNull(security, "security");
     ArgumentChecker.notNull(position, "position");
-    if (functional(row.keySet()).any(new Function1<String, Boolean>() {
-      @Override
-      public Boolean execute(final String columnName) {
-        return columnName.startsWith("trade:");
-      }
-    })) {
+    if (row.keySet().stream().anyMatch(s -> s.startsWith("trade:"))) {
       if (!row.containsKey("trade:securitylink")) {
         if (row.containsKey("externalidbundle")) {
           row.put("trade:securitylink", row.get("externalidbundle"));

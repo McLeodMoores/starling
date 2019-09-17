@@ -274,7 +274,7 @@ public class CDSPaperExamples extends ISDABaseTest {
     final DoubleMatrix2D jacT = new DoubleMatrix2D(res);
     //  System.out.println(jacT.toString());
     final LUDecompositionCommons decomp = new LUDecompositionCommons();
-    final LUDecompositionResult luRes = decomp.evaluate(jacT);
+    final LUDecompositionResult luRes = decomp.apply(jacT);
 
     out.append("\\begin{tabular}{");
     for (int i = 0; i < nPillars + 1; i++) {
@@ -429,7 +429,7 @@ public class CDSPaperExamples extends ISDABaseTest {
     final double[][] temp = ANAL_SPREAD_SENSE_CAL.bucketedCS01FromCreditCurve(PILLAR_CDSS, coupons, PILLAR_CDSS, YIELD_CURVE, CREDIT_CURVE);
     final DoubleMatrix2D jacT = MA.getTranspose(new DoubleMatrix2D(temp));
     //System.out.println(jac);
-    final LUDecompositionResult decRes = decomp.evaluate(jacT);
+    final LUDecompositionResult decRes = decomp.apply(jacT);
 
     final int nMat = MATURITIES_6M_STEP.length;
 
@@ -545,8 +545,8 @@ public class CDSPaperExamples extends ISDABaseTest {
 
     for (int i = 0; i < 100; i++) {
       final double s = (1 + 25 * i) * ONE_BP;
-      final double a = isdaFunc.evaluate(s);
-      final double a2 = approxFunc.evaluate(s);
+      final double a = isdaFunc.apply(s);
+      final double a2 = approxFunc.apply(s);
 
       final double lambda = adj * s / (1 - RECOVERY_RATE);
       final double a3 = adj * annuity(0.01, lambda, expiry);

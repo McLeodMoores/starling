@@ -61,7 +61,7 @@ public class OptionGreekToPositionGreekConverterFunction extends AbstractFunctio
     }
     final GreekDataBundle dataBundle = new GreekDataBundle(greekResultCollection, null,
         new OptionTradeData(target.getPosition().getQuantity().doubleValue(), 25));
-    final Map<PositionGreek, Double> positionGreeks = _converter.evaluate(dataBundle);
+    final Map<PositionGreek, Double> positionGreeks = _converter.apply(dataBundle);
     final Set<ComputedValue> results = new HashSet<>();
     PositionGreek positionGreek;
     Double positionGreekResult;

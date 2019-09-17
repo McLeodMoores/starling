@@ -33,10 +33,10 @@ public class LognormalPearsonKurtosisFromVolatilityCalculator extends LognormalS
   private static final LognormalFisherKurtosisFromVolatilityCalculator CALCULATOR = new LognormalFisherKurtosisFromVolatilityCalculator();
 
   @Override
-  public Double evaluate(final Double sigma, final Double t) {
+  public Double apply(final Double sigma, final Double t) {
     ArgumentChecker.notNull(sigma, "sigma");
     ArgumentChecker.notNull(t, "t");
-    return CALCULATOR.evaluate(sigma, t) + 3;
+    return CALCULATOR.apply(sigma, t) + 3;
   }
 
   @Override

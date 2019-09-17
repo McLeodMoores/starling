@@ -95,7 +95,7 @@ class VolatilityLMM extends Function1D<Double, Double[]> {
   }
 
   @Override
-  public Double[] evaluate(final Double x) {
+  public Double[] apply(final Double x) {
     final Double[] result = new Double[2];
     result[0] = 0.06 + _shift;
     result[1] = -0.06 + x * 0.006 + _shift;
@@ -124,7 +124,7 @@ class VolatilityLMMAngle extends Function1D<Double, Double[]> {
   }
 
   @Override
-  public Double[] evaluate(final Double x) {
+  public Double[] apply(final Double x) {
     final Double[] result = new Double[2];
     result[0] = 0.06 * Math.cos(x / 20.0 * _angle) + _shift;
     result[1] = 0.06 * Math.sin(x / 20.0 * _angle) + _shift;

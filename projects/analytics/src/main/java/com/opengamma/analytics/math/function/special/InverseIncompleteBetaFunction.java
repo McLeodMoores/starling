@@ -30,7 +30,7 @@ public class InverseIncompleteBetaFunction extends Function1D<Double, Double> {
   }
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     if (!ArgumentChecker.isInRangeInclusive(0, 1, x)) {
       throw new IllegalArgumentException("x must lie in the range 0 to 1");
     }
@@ -61,13 +61,13 @@ public class InverseIncompleteBetaFunction extends Function1D<Double, Double> {
         p = 1 - Math.pow(_b * w * (1 - x), 1. / _b);
       }
     }
-    final double afac = -_lnGamma.evaluate(_a) - _lnGamma.evaluate(_b) + _lnGamma.evaluate(_a + _b);
+    final double afac = -_lnGamma.apply(_a) - _lnGamma.apply(_b) + _lnGamma.apply(_a + _b);
     double error;
     for (int j = 0; j < 10; j++) {
       if (CompareUtils.closeEquals(p, 0, 1e-16) || CompareUtils.closeEquals(p, 1, 1e-16)) {
         throw new MathException("a or b too small for accurate evaluation");
       }
-      error = _beta.evaluate(p) - x;
+      error = _beta.apply(p) - x;
       t = Math.exp(a1 * Math.log(p) + b1 * Math.log(1 - p) + afac);
       u = error / t;
       t = u / (1 - 0.5 * Math.min(1, u * (a1 / p - b1 / (1 - p))));

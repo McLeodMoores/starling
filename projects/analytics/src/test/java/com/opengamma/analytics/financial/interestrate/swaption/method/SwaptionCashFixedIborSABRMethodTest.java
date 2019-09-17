@@ -151,7 +151,7 @@ public class SwaptionCashFixedIborSABRMethodTest {
     final BlackFunctionData data = new BlackFunctionData(forward, 1.0, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(SWAPTION_LONG_PAYER);
     final double df = curves.getCurve(FUNDING_CURVE_NAME).getDiscountFactor(SWAPTION_LONG_PAYER.getSettlementTime());
-    final double expectedPrice = df * pvbp * func.evaluate(data);
+    final double expectedPrice = df * pvbp * func.apply(data);
     assertEquals(expectedPrice, priceLongPayer, 1E-2);
     // Long/Short parity
     assertEquals(priceLongPayer, -priceShortPayer, 1E-2);

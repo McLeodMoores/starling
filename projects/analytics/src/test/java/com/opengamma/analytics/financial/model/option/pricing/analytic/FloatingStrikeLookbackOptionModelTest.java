@@ -52,7 +52,7 @@ public class FloatingStrikeLookbackOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(CALL).evaluate((StandardOptionWithSpotTimeSeriesDataBundle) null);
+    MODEL.getPricingFunction(CALL).apply((StandardOptionWithSpotTimeSeriesDataBundle) null);
   }
 
   @Test
@@ -61,16 +61,16 @@ public class FloatingStrikeLookbackOptionModelTest {
     DoubleTimeSeries<?> shortTS = ImmutableInstantDoubleTimeSeries.of(new long[] {1}, new double[] {strike});
     StandardOptionWithSpotTimeSeriesDataBundle data = DATA.withSpotTimeSeries(shortTS).withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(0)));
     OptionDefinition vanilla = new EuropeanVanillaOptionDefinition(strike, EXPIRY, true);
-    assertEquals(MODEL.getPricingFunction(CALL).evaluate(data), BSM.getPricingFunction(vanilla).evaluate(data), 1e-9);
+    assertEquals(MODEL.getPricingFunction(CALL).apply(data), BSM.getPricingFunction(vanilla).apply(data), 1e-9);
     data = data.withCostOfCarry(0);
-    assertEquals(MODEL.getPricingFunction(CALL).evaluate(data), BSM.getPricingFunction(vanilla).evaluate(data), 1e-9);
+    assertEquals(MODEL.getPricingFunction(CALL).apply(data), BSM.getPricingFunction(vanilla).apply(data), 1e-9);
     strike = 95;
     shortTS = ImmutableInstantDoubleTimeSeries.of(new long[] {1}, new double[] {strike});
     data = DATA.withSpotTimeSeries(shortTS).withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(0)));
     vanilla = new EuropeanVanillaOptionDefinition(strike, EXPIRY, false);
-    assertEquals(MODEL.getPricingFunction(PUT).evaluate(data), BSM.getPricingFunction(vanilla).evaluate(data), 1e-9);
+    assertEquals(MODEL.getPricingFunction(PUT).apply(data), BSM.getPricingFunction(vanilla).apply(data), 1e-9);
     data = data.withCostOfCarry(0);
-    assertEquals(MODEL.getPricingFunction(PUT).evaluate(data), BSM.getPricingFunction(vanilla).evaluate(data), 1e-9);
-    assertEquals(MODEL.getPricingFunction(CALL).evaluate(DATA), 25.3533, 1e-4);
+    assertEquals(MODEL.getPricingFunction(PUT).apply(data), BSM.getPricingFunction(vanilla).apply(data), 1e-9);
+    assertEquals(MODEL.getPricingFunction(CALL).apply(DATA), 25.3533, 1e-4);
   }
 }

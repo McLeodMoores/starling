@@ -34,9 +34,9 @@ public class PearsonSecondSkewnessCoefficientCalculator extends DescriptiveStati
    * @return  the Pearson second skewness coefficient
    */
   @Override
-  public Double evaluate(final double[] x) {
-    return 3 * (DescriptiveStatisticsFactory.of(MeanCalculator.NAME).evaluate(x) - DescriptiveStatisticsFactory.of(MedianCalculator.NAME).evaluate(x))
-        / DescriptiveStatisticsFactory.of(SampleStandardDeviationCalculator.NAME).evaluate(x);
+  public Double apply(final double[] x) {
+    return 3 * (DescriptiveStatisticsFactory.of(MeanCalculator.NAME).apply(x) - DescriptiveStatisticsFactory.of(MedianCalculator.NAME).apply(x))
+        / DescriptiveStatisticsFactory.of(SampleStandardDeviationCalculator.NAME).apply(x);
   }
 
   @Override

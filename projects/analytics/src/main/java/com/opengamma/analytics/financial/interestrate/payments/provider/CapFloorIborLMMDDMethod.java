@@ -85,7 +85,7 @@ public final class CapFloorIborLMMDDMethod {
     final double df = multicurves.getDiscountFactor(ccy, cap.getPaymentTime());
     final BlackFunctionData dataBlack = new BlackFunctionData(forwardDsc + displacement, df, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(option);
-    final double price = beta * func.evaluate(dataBlack) * cap.getNotional() * cap.getPaymentYearFraction();
+    final double price = beta * func.apply(dataBlack) * cap.getNotional() * cap.getPaymentYearFraction();
     return MultipleCurrencyAmount.of(cap.getCurrency(), price);
   }
 

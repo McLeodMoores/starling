@@ -105,7 +105,7 @@ public class ConvectionDiffusionPDESolverTestCase {
     final Function1D<Double, Double> spotZeroPrice = new Function1D<Double, Double>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double tau) {
+      public Double apply(final Double tau) {
         if (ISCALL) {
           return 0.0;
         }
@@ -117,7 +117,7 @@ public class ConvectionDiffusionPDESolverTestCase {
     final Function1D<Double, Double> upper1stDev = new Function1D<Double, Double>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         if (ISCALL) {
           return Math.exp(-RATE * t);
         }
@@ -140,7 +140,7 @@ public class ConvectionDiffusionPDESolverTestCase {
     final Function1D<Double, Double> logSpotZeroPrice = new Function1D<Double, Double>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         if (ISCALL) {
           return 0.0;
         }
@@ -226,7 +226,7 @@ public class ConvectionDiffusionPDESolverTestCase {
         impVol = 0.0;
       }
 
-      final double bsPrice = BS_PRICE.evaluate(standOptData);
+      final double bsPrice = BS_PRICE.apply(standOptData);
       final double bsDelta = greekResults.get(Greek.DELTA);
       final double bsGamma = greekResults.get(Greek.GAMMA);
 
@@ -302,7 +302,7 @@ public class ConvectionDiffusionPDESolverTestCase {
         impVol = 0.0;
       }
 
-      final double bsPrice = BS_PRICE.evaluate(standOptData);
+      final double bsPrice = BS_PRICE.apply(standOptData);
       final double bsDelta = greekResults.get(Greek.DELTA);
       final double bsGamma = greekResults.get(Greek.GAMMA);
 
@@ -352,7 +352,7 @@ public class ConvectionDiffusionPDESolverTestCase {
         impVol = 0.0;
       }
 
-      final double bsPrice = BS_PRICE.evaluate(standOptData);
+      final double bsPrice = BS_PRICE.apply(standOptData);
       final double bsDelta = greekResults.get(Greek.DELTA);
       final double bsGamma = greekResults.get(Greek.GAMMA);
 
@@ -399,7 +399,7 @@ public class ConvectionDiffusionPDESolverTestCase {
         }
 
         final CEVFunctionData cevData = new CEVFunctionData(fwd, df, VOL_BETA, BETA);
-        final double cevPrice = CEV.getPriceFunction(OPTION).evaluate(cevData);
+        final double cevPrice = CEV.getPriceFunction(OPTION).apply(cevData);
         final double cevVol = BLACK_IMPLIED_VOL.getImpliedVolatility(data, OPTION, cevPrice);
 
         if (print) {
@@ -429,7 +429,7 @@ public class ConvectionDiffusionPDESolverTestCase {
       final double gamma = res.getSecondSpatialDerivative(i);
       final double moneyness = spot / OPTION.getStrike();
       final StandardOptionDataBundle dataBundle = new StandardOptionDataBundle(YIELD_CURVE, RATE, VOL_SURFACE, spot, DATE);
-      final Double analyticPrice = pFunc.evaluate(dataBundle);
+      final Double analyticPrice = pFunc.apply(dataBundle);
       if (print) {
         System.out.println(spot + "\t" + analyticPrice + "\t" + price + "\t" + delta + "\t" + gamma);
       } else {

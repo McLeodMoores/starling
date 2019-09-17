@@ -20,9 +20,9 @@ public class ChiSquareDistributionMomentEstimator extends DistributionParameterE
   private final Function1D<double[], Double> _first = new SampleMomentCalculator(1);
 
   @Override
-  public ProbabilityDistribution<Double> evaluate(final double[] x) {
+  public ProbabilityDistribution<Double> apply(final double[] x) {
     Validate.notNull(x, "x");
     ArgumentChecker.notEmpty(x, "x");
-    return new ChiSquareDistribution(_first.evaluate(x));
+    return new ChiSquareDistribution(_first.apply(x));
   }
 }

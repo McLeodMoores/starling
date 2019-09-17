@@ -178,7 +178,7 @@ public class FFTModelGreeks {
   private ComplexNumber[][] getPaddedArrays(final double alpha, final double delta, final int n, final int m,
       final Function1D<ComplexNumber, ComplexNumber[]> ajointFunc, final int halfN) {
     // TODO this is a bit of a fudge
-    final int size = ajointFunc.evaluate(MINUS_I).length;
+    final int size = ajointFunc.apply(MINUS_I).length;
 
     final ComplexNumber[][] z = new ComplexNumber[size][n];
 
@@ -196,7 +196,7 @@ public class FFTModelGreeks {
 
     ComplexNumber u = new ComplexNumber(0.0, -(1 + alpha));
     final int offset = halfN - 1;
-    ComplexNumber[] f = ajointFunc.evaluate(u);
+    ComplexNumber[] f = ajointFunc.apply(u);
     ComplexNumber num = exp(f[0]);
     ComplexNumber denom = multiply(u, subtract(MINUS_I, u));
     ComplexNumber v = divide(num, denom);
@@ -207,7 +207,7 @@ public class FFTModelGreeks {
     }
     for (int i = 1; i < m; i++) {
       u = new ComplexNumber(i * delta, -(1 + alpha));
-      f = ajointFunc.evaluate(u);
+      f = ajointFunc.apply(u);
       num = exp(f[0]);
       denom = multiply(u, subtract(MINUS_I, u));
       v = divide(num, denom);

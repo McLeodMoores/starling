@@ -67,18 +67,18 @@ public class RungeKuttaIntegrator1D extends Integrator1D<Double, Double> {
     final double h = (upper - lower) / _minSteps;
     double f1, f2, f3, x;
     x = lower;
-    f1 = f.evaluate(x);
+    f1 = f.apply(x);
     if (Double.isNaN(f1) || Double.isInfinite(f1)) {
       throw new OpenGammaRuntimeException("function evaluation returned NaN or Inf");
     }
 
     double result = 0.0;
     for (int i = 0; i < _minSteps; i++) {
-      f2 = f.evaluate(x + h / 2.0);
+      f2 = f.apply(x + h / 2.0);
       if (Double.isNaN(f2) || Double.isInfinite(f2)) {
         throw new OpenGammaRuntimeException("function evaluation returned NaN or Inf");
       }
-      f3 = f.evaluate(x + h);
+      f3 = f.apply(x + h);
       if (Double.isNaN(f3) || Double.isInfinite(f3)) {
         throw new OpenGammaRuntimeException("function evaluation returned NaN or Inf");
       }
@@ -98,11 +98,11 @@ public class RungeKuttaIntegrator1D extends Integrator1D<Double, Double> {
     // Double.isNaN(fu) || Double.isInfinite(fu)) {
     // throw new OpenGammaRuntimeException("h was Inf or NaN");
     // }
-    final double f1 = f.evaluate(x + 0.25 * h);
+    final double f1 = f.apply(x + 0.25 * h);
     if (Double.isNaN(f1) || Double.isInfinite(f1)) {
       throw new OpenGammaRuntimeException("f.evaluate returned NaN or Inf");
     }
-    final double f2 = f.evaluate(x + 0.75 * h);
+    final double f2 = f.apply(x + 0.75 * h);
     if (Double.isNaN(f2) || Double.isInfinite(f2)) {
       throw new OpenGammaRuntimeException("f.evaluate returned NaN or Inf");
     }

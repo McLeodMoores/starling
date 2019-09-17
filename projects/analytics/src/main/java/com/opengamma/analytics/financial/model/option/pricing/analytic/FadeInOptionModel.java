@@ -15,7 +15,7 @@ import com.opengamma.analytics.math.statistics.distribution.BivariateNormalDistr
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * 
+ *
  */
 public class FadeInOptionModel extends AnalyticOptionModel<FadeInOptionDefinition, StandardOptionWithSpotTimeSeriesDataBundle> {
   private static final ProbabilityDistribution<double[]> BIVARIATE_NORMAL = new BivariateNormalDistribution();
@@ -27,7 +27,7 @@ public class FadeInOptionModel extends AnalyticOptionModel<FadeInOptionDefinitio
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final StandardOptionWithSpotTimeSeriesDataBundle data) {
+      public Double apply(final StandardOptionWithSpotTimeSeriesDataBundle data) {
         Validate.notNull(data, "data");
         final double s = data.getSpot();
         final double k = definition.getStrike();

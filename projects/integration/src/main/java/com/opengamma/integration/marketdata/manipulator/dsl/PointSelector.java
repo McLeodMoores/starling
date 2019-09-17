@@ -5,8 +5,6 @@
  */
 package com.opengamma.integration.marketdata.manipulator.dsl;
 
-import static com.opengamma.lambdava.streams.Lambdava.functional;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -25,7 +23,6 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ExternalScheme;
 import com.opengamma.id.UniqueId;
-import com.opengamma.lambdava.functions.Function1;
 import com.opengamma.util.ArgumentChecker;
 
 /**
@@ -95,48 +92,25 @@ public class PointSelector implements DistinctMarketDataSelector {
     }
 
     if (_idMatchScheme != null && _idMatchPattern != null) {
-      if (functional(specificationIds).all(new Function1<ExternalId, Boolean>() {
-        @Override
-        public Boolean execute(final ExternalId externalId) {
-          return !_idMatchScheme.equals(externalId.getScheme());
-        }
-      })) {
+      if (specificationIds.stream().allMatch(e -> !_idMatchScheme.equals(e.getScheme()))) {
         return null;
       }
-      if (functional(specificationIds).all(new Function1<ExternalId, Boolean>() {
-        @Override
-        public Boolean execute(final ExternalId externalId) {
-          return !_idMatchPattern.getPattern().matcher(externalId.getValue()).matches();
-        }
-      })) {
+      if (specificationIds.stream().allMatch(e -> !_idMatchPattern.getPattern().matcher(e.getValue()).matches())) {
         return null;
       }
     }
     if (_idLikeScheme != null && _idLikePattern != null) {
-      if (functional(specificationIds).all(new Function1<ExternalId, Boolean>() {
-        @Override
-        public Boolean execute(final ExternalId externalId) {
-          return !_idLikeScheme.equals(externalId.getScheme());
-        }
-      })) {
+      if (specificationIds.stream().allMatch(e -> !_idLikeScheme.equals(e.getScheme()))) {
         return null;
       }
-      if (functional(specificationIds).all(new Function1<ExternalId, Boolean>() {
-        @Override
-        public Boolean execute(final ExternalId externalId) {
-          return !_idLikePattern.getPattern().matcher(externalId.getValue()).matches();
-        }
-      })) {
+      if (specificationIds.stream().allMatch(e -> !_idLikePattern.getPattern().matcher(e.getValue()).matches())) {
         return null;
       }
     }
     if (_securityTypes != null) {
-      if (functional(specificationIds).all(new Function1<ExternalId, Boolean>() {
-        @Override
-        public Boolean execute(final ExternalId externalId) {
-          final Security security = resolver.resolveSecurity(externalId);
-          return !_securityTypes.contains(security.getSecurityType().toLowerCase());
-        }
+      if (specificationIds.stream().allMatch(e -> {
+        final Security security = resolver.resolveSecurity(e);
+        return !_securityTypes.contains(security.getSecurityType().toLowerCase());
       })) {
         return null;
       }

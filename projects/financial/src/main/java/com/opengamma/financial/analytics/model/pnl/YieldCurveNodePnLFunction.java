@@ -395,7 +395,7 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
           nodeTimeSeries = nodeTimeSeries.multiply(fxSeries);
         }
       }
-      nodeTimeSeries = DIFFERENCE.evaluate(nodeTimeSeries);
+      nodeTimeSeries = DIFFERENCE.apply(nodeTimeSeries);
       if (pnlSeries == null) {
         pnlSeries = nodeTimeSeries.multiply(sensitivity);
       } else {
@@ -418,7 +418,7 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
         throw new OpenGammaRuntimeException("Could not identifier / price series pair for " + id);
       }
       DateDoubleTimeSeries<?> nodeTimeSeries = samplingFunction.getSampledTimeSeries(dbNodeTimeSeries.getTimeSeries(), schedule);
-      nodeTimeSeries = DIFFERENCE.evaluate(nodeTimeSeries);
+      nodeTimeSeries = DIFFERENCE.apply(nodeTimeSeries);
       if (pnlSeries == null) {
         pnlSeries = nodeTimeSeries.multiply(values[i]);
       } else {

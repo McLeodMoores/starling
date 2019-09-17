@@ -30,7 +30,7 @@ public class DeltaGammaCovarianceMatrixFisherKurtosisCalculator extends Function
   }
 
   @Override
-  public Double evaluate(final Map<Integer, ParametricVaRDataBundle> data) {
+  public Double apply(final Map<Integer, ParametricVaRDataBundle> data) {
     Validate.notNull(data, "data");
     final ParametricVaRDataBundle firstOrderData = data.get(1);
     Validate.notNull(firstOrderData, "first order data");
@@ -49,7 +49,7 @@ public class DeltaGammaCovarianceMatrixFisherKurtosisCalculator extends Function
       throw new IllegalArgumentException("Gamma matrix and covariance matrix were incompatible sizes");
     }
     final Matrix<?> product = _algebra.multiply(gammaMatrix, deltaCovariance);
-    final double std = _std.evaluate(data);
+    final double std = _std.apply(data);
     final double numerator = _algebra.getTrace(_algebra.getPower(product, 4)) + 12
         * _algebra.getInnerProduct(delta, _algebra.multiply(_algebra.multiply(deltaCovariance, _algebra.getPower(product, 2)), delta)) + 3 * std * std;
     final double denominator = Math

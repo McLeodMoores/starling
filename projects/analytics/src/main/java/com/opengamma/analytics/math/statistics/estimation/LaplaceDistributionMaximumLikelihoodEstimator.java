@@ -20,10 +20,10 @@ public class LaplaceDistributionMaximumLikelihoodEstimator extends DistributionP
   private final Function1D<double[], Double> _median = new MedianCalculator();
 
   @Override
-  public ProbabilityDistribution<Double> evaluate(final double[] x) {
+  public ProbabilityDistribution<Double> apply(final double[] x) {
     Validate.notNull(x, "x");
     ArgumentChecker.notEmpty(x, "x");
-    final double median = _median.evaluate(x);
+    final double median = _median.apply(x);
     final int n = x.length;
     double b = 0;
     for (int i = 0; i < n; i++) {

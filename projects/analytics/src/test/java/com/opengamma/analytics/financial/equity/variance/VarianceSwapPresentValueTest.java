@@ -188,7 +188,7 @@ public class VarianceSwapPresentValueTest {
     final VarianceSwap swapPaysTomorrow = new VarianceSwap(-1., -T_PLUS_ONE, T_PLUS_ONE, VAR_STRIKE, VAR_NOTIONAL, Currency.EUR, ANNUALIZATION, N_OBS - 1, 0, OBS, OBS_WEIGHT);
 
     final double pv = PRICER.presentValue(swapPaysTomorrow, MARKET);
-    final double variance = new RealizedVariance().evaluate(swapPaysTomorrow);
+    final double variance = new RealizedVariance().apply(swapPaysTomorrow);
     final double pvOfHedge = SWAP_STARTS_NOW.getVarNotional() * (variance - SWAP_STARTS_NOW.getVarStrike()) * MARKET.getDiscountCurve().getDiscountFactor(T_PLUS_ONE);
     assertEquals(pvOfHedge, pv, 0.01);
   }

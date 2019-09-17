@@ -141,7 +141,7 @@ public class SwaptionCashFixedIborSABRMethodTest {
     final BlackFunctionData data = new BlackFunctionData(forward, 1.0, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(SWAPTION_LONG_PAYER);
     final double df = MULTICURVES.getDiscountFactor(EUR, SWAPTION_LONG_PAYER.getSettlementTime());
-    final double expectedPrice = df * pvbp * func.evaluate(data);
+    final double expectedPrice = df * pvbp * func.apply(data);
     assertEquals("SwaptionCashFixedIborSABRMethod: presentValue", expectedPrice, priceLongPayer.getAmount(EUR), TOLERANCE_PV);
     // Long/Short parity
     assertEquals("SwaptionCashFixedIborSABRMethod: presentValue", priceLongPayer.getAmount(EUR), -priceShortPayer.getAmount(EUR), TOLERANCE_PV);

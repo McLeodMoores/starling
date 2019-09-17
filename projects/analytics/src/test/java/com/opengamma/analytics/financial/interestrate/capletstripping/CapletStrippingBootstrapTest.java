@@ -87,7 +87,7 @@ public class CapletStrippingBootstrapTest extends CapletStrippingSetup {
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         final int index = Arrays.binarySearch(endTimes, t);
         if (index >= 0) {
           if (index >= (n - 1)) {

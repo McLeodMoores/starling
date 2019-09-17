@@ -37,7 +37,7 @@ public class BlackDermanToyYieldOnlyInterestRateModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    new BlackDermanToyYieldOnlyInterestRateModel(5).getTrees(DateUtils.getUTCDate(2010, 8, 1)).evaluate((StandardDiscountBondModelDataBundle) null);
+    new BlackDermanToyYieldOnlyInterestRateModel(5).getTrees(DateUtils.getUTCDate(2010, 8, 1)).apply((StandardDiscountBondModelDataBundle) null);
   }
 
   @Test
@@ -48,7 +48,7 @@ public class BlackDermanToyYieldOnlyInterestRateModelTest {
     final StandardDiscountBondModelDataBundle data = new StandardDiscountBondModelDataBundle(YieldCurve.from(ConstantDoublesCurve.from(0.05)), new VolatilityCurve(ConstantDoublesCurve.from(0.1)),
         date);
     final BlackDermanToyYieldOnlyInterestRateModel model = new BlackDermanToyYieldOnlyInterestRateModel(steps);
-    final RecombiningBinomialTree<Triple<Double, Double, Double>> tree = model.getTrees(maturity).evaluate(data);
+    final RecombiningBinomialTree<Triple<Double, Double, Double>> tree = model.getTrees(maturity).apply(data);
     final Triple<Double, Double, Double>[][] result = tree.getNodes();
     @SuppressWarnings("unchecked")
     final Triple<Double, Double, Double>[][] expected = new Triple[4][4];

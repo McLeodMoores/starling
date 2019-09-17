@@ -171,7 +171,7 @@ public class DisplacedDiffusionModel {
     // Objective function - hit the two vol targets
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> priceDiffs = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D volShiftPair) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D volShiftPair) {
         final double[] diffs = new double[] { 100, 100 };
         final double vol = TRANSFORM.inverseTransform(volShiftPair.getEntry(0)); // Math.max(1e-9, volShiftPair.getEntry(0));
         final double shift = volShiftPair.getEntry(1);

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
@@ -14,8 +14,8 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * 
- * 
+ *
+ *
  */
 public class GramCharlierModel extends AnalyticOptionModel<OptionDefinition, SkewKurtosisOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
@@ -27,7 +27,7 @@ public class GramCharlierModel extends AnalyticOptionModel<OptionDefinition, Ske
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final SkewKurtosisOptionDataBundle data) {
+      public Double apply(final SkewKurtosisOptionDataBundle data) {
         Validate.notNull(data);
         final double s = data.getSpot();
         final double k = definition.getStrike();

@@ -35,7 +35,7 @@ public class PortfolioSwapAdjustment {
   /**
    * Adjust the hazard rates of the credit curves of the individual single names in a index so that the index is priced exactly. The hazard rates are adjusted
    * on a percentage rather than a absolute bases (e.g. all hazard rates are increased by 1%)
-   * 
+   *
    * @param indexPUF
    *          The clean price of the index for unit current notional (i.e. divide the actual clean price by the current notional)
    * @param indexCDS
@@ -68,7 +68,7 @@ public class PortfolioSwapAdjustment {
    * Adjust the hazard rates of the credit curves of the individual single names in a index so that the index is priced exactly at multiple terms. The hazard
    * rates are multiplied by a piecewise constant adjuster (e.g. all hazard rates between two index terms are increased by the same percentage). When required
    * extra knots are added to the credit curves, so the adjusted curves returned may contain more knots than the original curves.
-   * 
+   *
    * @param indexPUF
    *          The clean prices of the index for unit current notional.
    * @param indexCDS
@@ -175,7 +175,7 @@ public class PortfolioSwapAdjustment {
     final double clean = intrinsicData.getIndexFactor() * indexPUF;
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         final ISDACompliantCreditCurve[] adjCurves = adjustCurves(creditCurves, x);
         return _pricer.indexPV(indexCDS, indexCoupon, yieldCurve, intrinsicData.withCreditCurves(adjCurves)) - clean;
       }
@@ -190,7 +190,7 @@ public class PortfolioSwapAdjustment {
     final double clean = intrinsicData.getIndexFactor() * indexPUF;
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         final ISDACompliantCreditCurve[] adjCurves = adjustCurves(creditCurves, x, firstKnots, lastKnots);
         return _pricer.indexPV(indexCDS, indexCoupon, yieldCurve, intrinsicData.withCreditCurves(adjCurves)) - clean;
       }

@@ -35,7 +35,7 @@ public class NonLinearLeastSquareWithPenalty {
   private static final int MAX_ATTEMPTS = 100000;
   private static final Function1D<DoubleMatrix1D, Boolean> UNCONSTAINED = new Function1D<DoubleMatrix1D, Boolean>() {
     @Override
-    public Boolean evaluate(final DoubleMatrix1D x) {
+    public Boolean apply(final DoubleMatrix1D x) {
       return true;
     }
   };
@@ -179,7 +179,7 @@ public class NonLinearLeastSquareWithPenalty {
     Validate.notNull(startPos, "startPos");
     final int nObs = observedValues.getNumberOfElements();
     Validate.isTrue(nObs == sigma.getNumberOfElements(), "observedValues and sigma must be same length");
-    ArgumentChecker.isTrue(allowedValue.evaluate(startPos),
+    ArgumentChecker.isTrue(allowedValue.apply(startPos),
         "The start position {} is not valid for this model. Please choose a valid start position", startPos);
 
     DoubleMatrix2D alpha;
@@ -211,7 +211,7 @@ public class NonLinearLeastSquareWithPenalty {
 
       DoubleMatrix1D deltaTheta;
       try {
-        decmp = _decomposition.evaluate(alpha);
+        decmp = _decomposition.apply(alpha);
         deltaTheta = decmp.solve(beta);
       } catch (final Exception e) {
         throw new MathException(e);
@@ -220,7 +220,7 @@ public class NonLinearLeastSquareWithPenalty {
       final DoubleMatrix1D trialTheta = (DoubleMatrix1D) _algebra.add(theta, deltaTheta);
 
       // if the new value of theta is not in the model domain keep increasing lambda until an acceptable step is found
-      if (!allowedValue.evaluate(trialTheta)) {
+      if (!allowedValue.apply(trialTheta)) {
         lambda = increaseLambda(lambda);
         continue;
       }
@@ -236,7 +236,7 @@ public class NonLinearLeastSquareWithPenalty {
         final DoubleMatrix2D alpha0 = lambda == 0.0 ? alpha : getModifiedCurvatureMatrix(jacobian, 0.0, penalty);
 
         if (lambda > 0.0) {
-          decmp = _decomposition.evaluate(alpha0);
+          decmp = _decomposition.apply(alpha0);
         }
         return finish(alpha0, decmp, newChiSqr, jacobian, trialTheta, sigma);
       }
@@ -286,13 +286,13 @@ public class NonLinearLeastSquareWithPenalty {
     final DoubleMatrix2D jacobian = getJacobian(jac, sigma, originalSolution);
     final DoubleMatrix2D a = getModifiedCurvatureMatrix(jacobian, 0.0);
     final DoubleMatrix2D bT = getBTranspose(jacobian, sigma);
-    final DecompositionResult decRes = _decomposition.evaluate(a);
+    final DecompositionResult decRes = _decomposition.apply(a);
     return decRes.solve(bT);
   }
 
   private LeastSquareResults finish(final double newChiSqr, final DoubleMatrix2D jacobian, final DoubleMatrix1D newTheta, final DoubleMatrix1D sigma) {
     final DoubleMatrix2D alpha = getModifiedCurvatureMatrix(jacobian, 0.0);
-    final DecompositionResult decmp = _decomposition.evaluate(alpha);
+    final DecompositionResult decmp = _decomposition.apply(alpha);
     return finish(alpha, decmp, newChiSqr, jacobian, newTheta, sigma);
   }
 
@@ -308,7 +308,7 @@ public class NonLinearLeastSquareWithPenalty {
   private DoubleMatrix1D getError(final Function1D<DoubleMatrix1D, DoubleMatrix1D> func, final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma,
       final DoubleMatrix1D theta) {
     final int n = observedValues.getNumberOfElements();
-    final DoubleMatrix1D modelValues = func.evaluate(theta);
+    final DoubleMatrix1D modelValues = func.apply(theta);
     Validate.isTrue(n == modelValues.getNumberOfElements(),
         "Number of data points different between model (" + modelValues.getNumberOfElements() + ") and observed (" + n + ")");
     final double[] res = new double[n];
@@ -334,7 +334,7 @@ public class NonLinearLeastSquareWithPenalty {
   }
 
   private DoubleMatrix2D getJacobian(final Function1D<DoubleMatrix1D, DoubleMatrix2D> jac, final DoubleMatrix1D sigma, final DoubleMatrix1D theta) {
-    final DoubleMatrix2D res = jac.evaluate(theta);
+    final DoubleMatrix2D res = jac.apply(theta);
     final double[][] data = res.getData();
     final int n = res.getNumberOfRows();
     final int m = res.getNumberOfColumns();

@@ -46,7 +46,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
 
     return new Function1D<SABRFormulaData, Double>() {
       @Override
-      public Double evaluate(final SABRFormulaData data) {
+      public Double apply(final SABRFormulaData data) {
         Validate.notNull(data, "data");
         return getVolatility(option, forward, data);
       }
@@ -60,7 +60,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
 
     return new Function1D<SABRFormulaData, double[]>() {
       @Override
-      public double[] evaluate(final SABRFormulaData data) {
+      public double[] apply(final SABRFormulaData data) {
         Validate.notNull(data, "data");
         return getVolatilityAdjoint(option, forward, data);
       }
@@ -79,7 +79,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
 
     return new Function1D<SABRFormulaData, double[]>() {
       @Override
-      public double[] evaluate(final SABRFormulaData data) {
+      public double[] apply(final SABRFormulaData data) {
         Validate.notNull(data, "data");
         return getVolatilityModelAdjoint(option, forward, data);
       }

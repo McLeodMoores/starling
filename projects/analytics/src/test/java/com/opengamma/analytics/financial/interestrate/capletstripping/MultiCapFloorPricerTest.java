@@ -37,7 +37,7 @@ public class MultiCapFloorPricerTest extends CapletStrippingSetup {
 
     final Function1D<Double, Double> vol = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return 0.3 + 0.8 * Math.exp(-0.3 * t);
       }
     };

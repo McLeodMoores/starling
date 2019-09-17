@@ -682,7 +682,7 @@ public class BjerksundStenslandModelTest extends AmericanAnalyticOptionModelTest
             final Function1D<StandardOptionDataBundle, Double> pFunc = bs.getPricingFunction(option);
             final StandardOptionDataBundle dataBundle = new StandardOptionDataBundle(YieldCurve.from(ConstantDoublesCurve.from(r)), b, new VolatilitySurface(ConstantDoublesSurface.from(sigma)), s0,
                 DateUtils.getUTCDate(2011, 7, 1));
-            final double priceFunc = pFunc.evaluate(dataBundle);
+            final double priceFunc = pFunc.apply(dataBundle);
             assertEquals(price, priceFunc, 1e-16);
           }
         }

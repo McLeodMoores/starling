@@ -209,7 +209,7 @@ public class FXForwardCurveNodeReturnSeriesFunction extends AbstractFunction.Non
   }
 
   protected LocalDateDoubleTimeSeries getReturnSeries(final LocalDateDoubleTimeSeries ts, final ValueRequirement desiredValue) {
-    return (LocalDateDoubleTimeSeries) DIFFERENCE.evaluate(ts);
+    return (LocalDateDoubleTimeSeries) DIFFERENCE.apply(ts);
   }
 
   private TenorLabelledLocalDateDoubleTimeSeriesMatrix1D getReturnSeriesVector(final HistoricalTimeSeriesBundle timeSeriesBundle, final Tenor[] tenors,

@@ -53,15 +53,15 @@ public class HullWhiteTwoFactorInterestRateModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getDiscountBondFunction(START, MATURITY).evaluate((HullWhiteTwoFactorDataBundle) null);
+    MODEL.getDiscountBondFunction(START, MATURITY).apply((HullWhiteTwoFactorDataBundle) null);
   }
 
   @Test
   public void test() {
     HullWhiteTwoFactorDataBundle data = new HullWhiteTwoFactorDataBundle(R, new VolatilityCurve(ConstantDoublesCurve.from(0)), VOL2, TODAY, SPEED1, SPEED2, U, YieldCurve.from(ConstantDoublesCurve
         .from(F)), RHO);
-    assertEquals(MODEL.getDiscountBondFunction(START, MATURITY).evaluate(data), 0, EPS);
+    assertEquals(MODEL.getDiscountBondFunction(START, MATURITY).apply(data), 0, EPS);
     data = new HullWhiteTwoFactorDataBundle(R, VOL1, VOL2, TODAY, SPEED1, SPEED2, U, YieldCurve.from(ConstantDoublesCurve.from(F)), RHO);
-    assertEquals(MODEL.getDiscountBondFunction(START, START).evaluate(data), 1, EPS);
+    assertEquals(MODEL.getDiscountBondFunction(START, START).apply(data), 1, EPS);
   }
 }

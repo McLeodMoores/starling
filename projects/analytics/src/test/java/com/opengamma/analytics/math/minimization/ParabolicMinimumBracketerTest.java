@@ -23,7 +23,7 @@ public class ParabolicMinimumBracketerTest extends MinimumBracketerTestCase {
   private static final Function1D<Double, Double> LINEAR = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 2 * x - 4;
     }
 
@@ -31,7 +31,7 @@ public class ParabolicMinimumBracketerTest extends MinimumBracketerTestCase {
   private static final Function1D<Double, Double> QUADRATIC = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return x * x + 7 * x + 12;
     }
 
@@ -39,7 +39,7 @@ public class ParabolicMinimumBracketerTest extends MinimumBracketerTestCase {
   private static final Function1D<Double, Double> MOD_QUADRATIC = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return Math.abs(x * x - 4);
     }
   };
@@ -47,7 +47,7 @@ public class ParabolicMinimumBracketerTest extends MinimumBracketerTestCase {
   private static final Function1D<Double, Double> STRETCHED_QUADRATIC = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return FunctionUtils.square((x - 50) / 50.0);
     }
   };
@@ -88,8 +88,8 @@ public class ParabolicMinimumBracketerTest extends MinimumBracketerTestCase {
     } else {
       assertTrue(result[2] < result[1]);
     }
-    final double f2 = f.evaluate(result[1]);
-    assertTrue(f.evaluate(result[0]) > f2);
-    assertTrue(f.evaluate(result[2]) > f2);
+    final double f2 = f.apply(result[1]);
+    assertTrue(f.apply(result[0]) > f2);
+    assertTrue(f.apply(result[2]) > f2);
   }
 }

@@ -94,7 +94,7 @@ public class TwoStateMarkovChainSABRFitterTest {
     final Function1D<Double, Double> fwd = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return SPOT * Math.exp(t * RATE);
       }
     };
@@ -109,7 +109,7 @@ public class TwoStateMarkovChainSABRFitterTest {
       double d = 0.2;
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         final double atmVol = (a + b * t) * Math.exp(-c * t) + d;
         return atmVol * Math.pow(SPOT, 1 - BETA);
       }
@@ -122,7 +122,7 @@ public class TwoStateMarkovChainSABRFitterTest {
       double d = 0.3;
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return (a + b * t) * Math.exp(-c * t) + d;
       }
     };
@@ -137,8 +137,8 @@ public class TwoStateMarkovChainSABRFitterTest {
         final double k = tk[1];
         final EuropeanVanillaOption option = new EuropeanVanillaOption(k, t, true);
         final Function1D<SABRFormulaData, Double> func = hagan.getVolatilityFunction(option, FORWARD_CURVE.getForward(t));
-        final SABRFormulaData data = new SABRFormulaData(ALPHA.evaluate(t), BETA, RHO, NU.evaluate(t));
-        return func.evaluate(data);
+        final SABRFormulaData data = new SABRFormulaData(ALPHA.apply(t), BETA, RHO, NU.apply(t));
+        return func.apply(data);
       }
     };
 

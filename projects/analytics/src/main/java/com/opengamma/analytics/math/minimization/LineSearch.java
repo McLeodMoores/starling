@@ -52,9 +52,9 @@ public class LineSearch {
     }
 
     @Override
-    public Double evaluate(final Double lambda) {
+    public Double apply(final Double lambda) {
       final DoubleMatrix1D x = (DoubleMatrix1D) OG_ALGEBRA.add(_x0, OG_ALGEBRA.scale(_p, lambda));
-      return _f.evaluate(x);
+      return _f.apply(x);
     }
 
   }

@@ -42,7 +42,7 @@ public class SmileInterpolatorSpline implements GeneralSmileInterpolator {
     ArgumentChecker.notNull(interpolator, "null interpolator");
     _interpolator = interpolator;
     _extrapolatorFailureBehaviour = EXCEPTION; // This follows pattern of OG-Financial's
-                                               // BlackVolatilitySurfacePropertyNamesAndValues.EXCEPTION_SPLINE_EXTRAPOLATOR_FAILURE
+    // BlackVolatilitySurfacePropertyNamesAndValues.EXCEPTION_SPLINE_EXTRAPOLATOR_FAILURE
   }
 
   public SmileInterpolatorSpline(final Interpolator1D interpolator, final String extrapolatorFailureBehaviour) {
@@ -61,7 +61,7 @@ public class SmileInterpolatorSpline implements GeneralSmileInterpolator {
    * <p>
    * "Flat": the target gradient is zero. A trivial solution exists in which extrapolated volatilities equal target volatility.
    * <p>
-   * 
+   *
    * @return the extrapolatorFailureBehaviour
    */
   public final String getExtrapolatorFailureBehaviour() {
@@ -88,7 +88,7 @@ public class SmileInterpolatorSpline implements GeneralSmileInterpolator {
     final Function1D<Double, Double> interpFunc = new Function1D<Double, Double>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double k) {
+      public Double apply(final Double k) {
         final double m = Math.log(k / forward);
         return _interpolator.interpolate(data, m);
       }
@@ -96,7 +96,7 @@ public class SmileInterpolatorSpline implements GeneralSmileInterpolator {
 
     final Function1D<Double, Boolean> domain = new Function1D<Double, Boolean>() {
       @Override
-      public Boolean evaluate(final Double k) {
+      public Boolean apply(final Double k) {
         return k >= kL && k <= kH;
       }
     };
@@ -114,15 +114,15 @@ public class SmileInterpolatorSpline implements GeneralSmileInterpolator {
     if (_extrapolatorFailureBehaviour.equalsIgnoreCase(QUIET)) {
       ArgumentChecker.isTrue(kL <= forward, "Cannot do left tail extrapolation when the lowest strike ({}) is greater than the forward ({})", kL, forward);
       ArgumentChecker.isTrue(kH >= forward, "Cannot do right tail extrapolation when the highest strike ({}) is less than the forward ({})", kH, forward);
-      shiftLnVolHighTail = TAIL_FITTER.fitVolatilityAndGradRecursivelyByReducingSmile(forward, strikes[n - 1], impliedVols[n - 1], dSigmaDx.evaluate(kH),
+      shiftLnVolHighTail = TAIL_FITTER.fitVolatilityAndGradRecursivelyByReducingSmile(forward, strikes[n - 1], impliedVols[n - 1], dSigmaDx.apply(kH),
           expiry);
-      shiftLnVolLowTail = TAIL_FITTER.fitVolatilityAndGradRecursivelyByReducingSmile(forward, kL, impliedVols[0], dSigmaDx.evaluate(kL), expiry);
+      shiftLnVolLowTail = TAIL_FITTER.fitVolatilityAndGradRecursivelyByReducingSmile(forward, kL, impliedVols[0], dSigmaDx.apply(kL), expiry);
       // 'Exception' will throw an exception if it fails to fit to target vol and gradient provided by interpolating function at the boundary
     } else if (_extrapolatorFailureBehaviour.equalsIgnoreCase(EXCEPTION)) {
       ArgumentChecker.isTrue(kL <= forward, "Cannot do left tail extrapolation when the lowest strike ({}) is greater than the forward ({})", kL, forward);
       ArgumentChecker.isTrue(kH >= forward, "Cannot do right tail extrapolation when the highest strike ({}) is less than the forward ({})", kH, forward);
-      shiftLnVolHighTail = TAIL_FITTER.fitVolatilityAndGrad(forward, kH, impliedVols[n - 1], dSigmaDx.evaluate(kH), expiry);
-      shiftLnVolLowTail = TAIL_FITTER.fitVolatilityAndGrad(forward, kL, impliedVols[0], dSigmaDx.evaluate(kL), expiry);
+      shiftLnVolHighTail = TAIL_FITTER.fitVolatilityAndGrad(forward, kH, impliedVols[n - 1], dSigmaDx.apply(kH), expiry);
+      shiftLnVolLowTail = TAIL_FITTER.fitVolatilityAndGrad(forward, kL, impliedVols[0], dSigmaDx.apply(kL), expiry);
       // 'Flat' will simply return the target volatility at the boundary. Thus the target gradient is zero.
     } else if (_extrapolatorFailureBehaviour.equalsIgnoreCase(FLAT)) {
       shiftLnVolHighTail = TAIL_FITTER.fitVolatilityAndGrad(forward, kH, impliedVols[n - 1], 0.0, expiry);
@@ -134,13 +134,13 @@ public class SmileInterpolatorSpline implements GeneralSmileInterpolator {
     // Resulting Functional Vol Surface
     final Function1D<Double, Double> volSmileFunction = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double k) {
+      public Double apply(final Double k) {
         if (k < kL) {
           return ShiftedLogNormalTailExtrapolation.impliedVolatility(forward, k, expiry, shiftLnVolLowTail[0], shiftLnVolLowTail[1]);
         } else if (k > kH) {
           return ShiftedLogNormalTailExtrapolation.impliedVolatility(forward, k, expiry, shiftLnVolHighTail[0], shiftLnVolHighTail[1]);
         } else {
-          return interpFunc.evaluate(k);
+          return interpFunc.apply(k);
         }
       }
     };

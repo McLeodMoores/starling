@@ -20,17 +20,17 @@ public class KroneckerDeltaFunctionTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull1() {
-    F.evaluate(null, 1);
+    F.apply(null, 1);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull2() {
-    F.evaluate(1, null);
+    F.apply(1, null);
   }
 
   @Test
   public void test() {
-    assertEquals(F.evaluate(1, 1).intValue(), 1);
-    assertEquals(F.evaluate(1, 2).intValue(), 0);
+    assertEquals(F.apply(1, 1).intValue(), 1);
+    assertEquals(F.apply(1, 2).intValue(), 0);
   }
 }

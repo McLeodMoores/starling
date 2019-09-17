@@ -30,7 +30,7 @@ public class NonLinearTransformFunctionTest {
 
   private static final Function1D<DoubleMatrix1D, DoubleMatrix1D> FUNCTION = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
     @Override
-    public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+    public DoubleMatrix1D apply(final DoubleMatrix1D x) {
       Validate.isTrue(x.getNumberOfElements() == 2);
       final double x1 = x.getEntry(0);
       final double x2 = x.getEntry(1);
@@ -44,7 +44,7 @@ public class NonLinearTransformFunctionTest {
 
   private static final Function1D<DoubleMatrix1D, DoubleMatrix2D> JACOBIAN = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
     @Override
-    public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+    public DoubleMatrix2D apply(final DoubleMatrix1D x) {
       Validate.isTrue(x.getNumberOfElements() == 2);
       final double x1 = x.getEntry(0);
       final double x2 = x.getEntry(1);
@@ -81,13 +81,13 @@ public class NonLinearTransformFunctionTest {
 
     final DoubleMatrix1D x = new DoubleMatrix1D(new double[] {0.5 });
     final double rootHalf = Math.sqrt(0.5);
-    final DoubleMatrix1D y = func.evaluate(x);
+    final DoubleMatrix1D y = func.apply(x);
     assertEquals(3, y.getNumberOfElements());
     assertEquals(rootHalf * Math.cos(0.5), y.getEntry(0), 1e-9);
     assertEquals(rootHalf * Math.sin(0.5), y.getEntry(1), 1e-9);
     assertEquals(rootHalf, y.getEntry(2), 1e-9);
 
-    final DoubleMatrix2D jac = jacFunc.evaluate(x);
+    final DoubleMatrix2D jac = jacFunc.apply(x);
     assertEquals(3, jac.getNumberOfRows());
     assertEquals(1, jac.getNumberOfColumns());
     assertEquals(-rootHalf * Math.sin(0.5), jac.getEntry(0, 0), 1e-9);
@@ -108,8 +108,8 @@ public class NonLinearTransformFunctionTest {
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacFuncFD = diff.differentiate(func);
 
     final DoubleMatrix1D testPoint = new DoubleMatrix1D(new double[] {4.5, -2.1 });
-    final DoubleMatrix2D jac = jacFunc.evaluate(testPoint);
-    final DoubleMatrix2D jacFD = jacFuncFD.evaluate(testPoint);
+    final DoubleMatrix2D jac = jacFunc.apply(testPoint);
+    final DoubleMatrix2D jacFD = jacFuncFD.apply(testPoint);
     assertEquals(3, jac.getNumberOfRows());
     assertEquals(2, jac.getNumberOfColumns());
 

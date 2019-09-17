@@ -204,7 +204,7 @@ public class CapFloorIborInArrearsReplicationMethodTest {
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final CapFloorIbor capStrike = _capStandard.withStrike(x);
       return _baseMethod.presentValue(capStrike, _sabrData).getAmount(EUR);
     }

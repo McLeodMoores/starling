@@ -251,23 +251,23 @@ public abstract class SmileInterpolator<T extends SmileModelData> implements Gen
     return new Function1D<Double, Double>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double strike) {
+      public Double apply(final Double strike) {
         final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, expiry, true);
         final Function1D<T, Double> volFunc = _model.getVolatilityFunction(option, forward);
         final int index = SurfaceArrayUtils.getLowerBoundIndex(strikes, strike);
         if (index == 0) {
-          return volFunc.evaluate(modelParams.get(0));
+          return volFunc.apply(modelParams.get(0));
         }
         if (index >= n - 2) {
-          return volFunc.evaluate(modelParams.get(n - 3));
+          return volFunc.apply(modelParams.get(n - 3));
         }
         final double w = _weightingFunction.getWeight(strikes, index, strike);
         if (w == 1) {
-          return volFunc.evaluate(modelParams.get(index - 1));
+          return volFunc.apply(modelParams.get(index - 1));
         } else if (w == 0) {
-          return volFunc.evaluate(modelParams.get(index));
+          return volFunc.apply(modelParams.get(index));
         } else {
-          return w * volFunc.evaluate(modelParams.get(index - 1)) + (1 - w) * volFunc.evaluate(modelParams.get(index));
+          return w * volFunc.apply(modelParams.get(index - 1)) + (1 - w) * volFunc.apply(modelParams.get(index));
         }
       }
     };

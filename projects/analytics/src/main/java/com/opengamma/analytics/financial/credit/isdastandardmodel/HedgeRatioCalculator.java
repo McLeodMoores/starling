@@ -166,7 +166,7 @@ public class HedgeRatioCalculator {
     ArgumentChecker.isTrue(nRows == cdsSensitivities.getNumberOfElements(), "Number of matrix rows does not match vector length");
     if (nCols == nRows) {
       final LUDecompositionCommons decomp = new LUDecompositionCommons();
-      final LUDecompositionResult luRes = decomp.evaluate(hedgeCDSSensitivities);
+      final LUDecompositionResult luRes = decomp.apply(hedgeCDSSensitivities);
       return getHedgeRatios(cdsSensitivities, luRes);
     }
     if (nRows < nCols) {
@@ -179,7 +179,7 @@ public class HedgeRatioCalculator {
     final DoubleMatrix2D a = (DoubleMatrix2D) MA.multiply(senseT, hedgeCDSSensitivities);
     final DoubleMatrix1D b = (DoubleMatrix1D) MA.multiply(senseT, cdsSensitivities);
     final LUDecompositionCommons decomp = new LUDecompositionCommons();
-    final LUDecompositionResult luRes = decomp.evaluate(a);
+    final LUDecompositionResult luRes = decomp.apply(a);
     return getHedgeRatios(b, luRes);
   }
 

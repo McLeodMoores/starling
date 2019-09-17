@@ -74,7 +74,7 @@ public final class CapFloorIborBlackSmileShiftMethod {
     final EuropeanVanillaOption option = new EuropeanVanillaOption(cap.getStrike() + shift, cap.getFixingTime(), cap.isCap());
     final BlackFunctionData dataBlack = new BlackFunctionData(forward + shift, df, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(option);
-    final double price = func.evaluate(dataBlack) * cap.getNotional() * cap.getPaymentYearFraction();
+    final double price = func.apply(dataBlack) * cap.getNotional() * cap.getPaymentYearFraction();
     return MultipleCurrencyAmount.of(cap.getCurrency(), price);
   }
 

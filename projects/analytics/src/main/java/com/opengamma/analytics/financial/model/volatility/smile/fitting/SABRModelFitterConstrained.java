@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting;
@@ -17,7 +17,7 @@ import com.opengamma.analytics.math.minimization.ParameterLimitsTransform;
 import com.opengamma.analytics.math.minimization.UncoupledParameterTransforms;
 
 /**
- * 
+ *
  */
 public class SABRModelFitterConstrained extends SmileModelFitter<SABRFormulaData> {
   private static final ParameterLimitsTransform[] DEFAULT_TRANSFORMS;
@@ -56,13 +56,13 @@ public class SABRModelFitterConstrained extends SmileModelFitter<SABRFormulaData
     return new Function1D<DoubleMatrix1D, Boolean>() {
 
       @Override
-      public Boolean evaluate(final DoubleMatrix1D y) {
+      public Boolean apply(final DoubleMatrix1D y) {
         final DoubleMatrix1D x = t.inverseTransform(y);
         final double alpha = x.getEntry(0);
         final double beta = x.getEntry(1);
         final double rho = x.getEntry(2);
         final double nu = x.getEntry(3);
-        return (alpha >= 0 && beta >= 0.0 && rho >= -1.0 && rho <= 1.0 && nu >= 0.0);
+        return alpha >= 0 && beta >= 0.0 && rho >= -1.0 && rho <= 1.0 && nu >= 0.0;
       }
     };
   }

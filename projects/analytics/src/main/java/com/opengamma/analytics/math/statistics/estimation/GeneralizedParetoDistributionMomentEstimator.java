@@ -28,15 +28,15 @@ public class GeneralizedParetoDistributionMomentEstimator extends DistributionPa
   private static final BracketRoot BRACKETER = new BracketRoot();
 
   @Override
-  public ProbabilityDistribution<Double> evaluate(final double[] x) {
+  public ProbabilityDistribution<Double> apply(final double[] x) {
     Validate.notNull(x);
-    final double mean = MEAN.evaluate(x);
-    final double variance = VARIANCE.evaluate(x);
-    final double skewness = SKEWNESS.evaluate(x);
+    final double mean = MEAN.apply(x);
+    final double variance = VARIANCE.apply(x);
+    final double skewness = SKEWNESS.apply(x);
     final Function1D<Double, Double> ksiFunction = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double a) {
+      public Double apply(final Double a) {
         return 2 * (1 + a) * Math.sqrt(1 - 2. * a) / (1 - 3. * a) - skewness;
       }
 

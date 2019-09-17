@@ -62,7 +62,7 @@ public class ConjugateDirectionVectorMinimizer implements Minimizer<Function1D<D
     for (int count = 0; count < _maxIterations; count++) {
       double delta = 0.0;
       int indexDelta = 0;
-      final double startValue = function.evaluate(x0);
+      final double startValue = function.apply(x0);
       double f1 = startValue;
       double f2 = 0;
       double lambda = 0.0;
@@ -72,7 +72,7 @@ public class ConjugateDirectionVectorMinimizer implements Minimizer<Function1D<D
         final DoubleMatrix1D direction = directionSet[i];
         lambda = _lineSearch.minimise(function, direction, x);
         x = (DoubleMatrix1D) OG_ALGEBRA.add(x, OG_ALGEBRA.scale(direction, lambda));
-        f2 = function.evaluate(x);
+        f2 = function.apply(x);
         final double temp = f1 - f2; //TODO LineSearch should return this
         if (temp > delta) {
           delta = temp;
@@ -88,7 +88,7 @@ public class ConjugateDirectionVectorMinimizer implements Minimizer<Function1D<D
       final DoubleMatrix1D deltaX = (DoubleMatrix1D) OG_ALGEBRA.subtract(x, x0);
       final DoubleMatrix1D extrapolatedPoint = (DoubleMatrix1D) OG_ALGEBRA.add(x, deltaX);
 
-      final double extrapValue = function.evaluate(extrapolatedPoint);
+      final double extrapValue = function.apply(extrapolatedPoint);
       // Powell's condition for updating the direction set
       if (extrapValue < startValue
           && 2 * (startValue - 2 * f2 * extrapValue) * square(startValue - f2 - delta) < square(startValue - extrapValue) * delta) {

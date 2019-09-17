@@ -32,7 +32,7 @@ public class SpreadDoublesCurveTest {
   private static final FunctionalDoublesCurve FUNCTIONAL1 = FunctionalDoublesCurve.from(new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return x * 2;
     }
 

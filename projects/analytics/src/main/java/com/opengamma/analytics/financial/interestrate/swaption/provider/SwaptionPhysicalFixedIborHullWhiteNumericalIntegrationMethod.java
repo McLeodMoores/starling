@@ -115,7 +115,7 @@ public final class SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod 
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       double result = 0.0;
       for (int loopcf = 0; loopcf < _discountedCashFlow.length; loopcf++) {
         result += _discountedCashFlow[loopcf] * Math.exp(-(x + _alpha[loopcf]) * (x + _alpha[loopcf]) / 2.0);

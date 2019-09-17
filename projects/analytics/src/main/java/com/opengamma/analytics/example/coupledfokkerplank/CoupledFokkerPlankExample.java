@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.function.Function;
 
 import org.apache.commons.lang.text.StrBuilder;
 
@@ -26,7 +27,6 @@ import com.opengamma.analytics.financial.model.finitedifference.applications.Cou
 import com.opengamma.analytics.financial.model.finitedifference.applications.PDEUtilityTools;
 import com.opengamma.analytics.financial.model.finitedifference.applications.TwoStateMarkovChainDataBundle;
 import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurve;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.interpolation.DoubleQuadraticInterpolator1D;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 
@@ -35,8 +35,8 @@ import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
  */
 @SuppressWarnings({"deprecation", "unused" })
 public class CoupledFokkerPlankExample {
-//CSOFF
-  
+  //CSOFF
+
   public static final CoupledPDEDataBundleProvider PDE_DATA_PROVIDER = new CoupledPDEDataBundleProvider();
   public static final BoundaryCondition LOWER;
   public static final BoundaryCondition UPPER;
@@ -59,28 +59,23 @@ public class CoupledFokkerPlankExample {
   static {
 
     FORWARD = new ForwardCurve(SPOT, RATE);
-    TwoStateMarkovChainDataBundle chainData = new TwoStateMarkovChainDataBundle(VOL1, VOL2, LAMBDA12, LAMBDA21, INITIAL_PROB_STATE1);
-    ExtendedCoupledPDEDataBundle[] pdeData = PDE_DATA_PROVIDER.getCoupledFokkerPlankPair(FORWARD, chainData);
+    final TwoStateMarkovChainDataBundle chainData = new TwoStateMarkovChainDataBundle(VOL1, VOL2, LAMBDA12, LAMBDA21, INITIAL_PROB_STATE1);
+    final ExtendedCoupledPDEDataBundle[] pdeData = PDE_DATA_PROVIDER.getCoupledFokkerPlankPair(FORWARD, chainData);
     DATA1 = pdeData[0];
     DATA2 = pdeData[1];
 
-    final Function1D<Double, Double> upper1stDev = new Function1D<Double, Double>() {
-      @Override
-      public Double evaluate(final Double t) {
-        return Math.exp(-RATE * t);
-      }
-    };
+    final Function<Double, Double> upper1stDev = t -> Math.exp(-RATE * t);
 
     LOWER = new DirichletBoundaryCondition(0.0, 0.0);
     UPPER = new DirichletBoundaryCondition(0.0, 15.0 * SPOT);
 
   }
 
-  public static void main(String[] args) throws Exception {
+  public static void main(final String[] args) throws Exception {
     runCoupledFokkerPlank(System.out);
   }
 
-  public static void runCoupledFokkerPlank(PrintStream out) throws FileNotFoundException, IOException {
+  public static void runCoupledFokkerPlank(final PrintStream out) throws FileNotFoundException, IOException {
     final ExtendedCoupledFiniteDifference solver = new ExtendedCoupledFiniteDifference(0.5);
     final int tNodes = 50;
     final int xNodes = 150;
@@ -90,12 +85,12 @@ public class CoupledFokkerPlankExample {
 
     final double[] timeGrid = new double[tNodes];
     for (int n = 0; n < tNodes; n++) {
-      timeGrid[n] = timeMesh.evaluate(n);
+      timeGrid[n] = timeMesh.apply(n);
     }
 
     final double[] spaceGrid = new double[xNodes];
     for (int i = 0; i < xNodes; i++) {
-      spaceGrid[i] = spaceMesh.evaluate(i);
+      spaceGrid[i] = spaceMesh.apply(i);
     }
     final PDEGrid1D grid = new PDEGrid1D(timeGrid, spaceGrid);
 
@@ -104,22 +99,22 @@ public class CoupledFokkerPlankExample {
     final PDEFullResults1D res2 = (PDEFullResults1D) res[1];
 
     // output in JSON format without using a JSON library to save dependencies
-    StrBuilder buf = new StrBuilder(2048).append('{');
+    final StrBuilder buf = new StrBuilder(2048).append('{');
 
-    ByteArrayOutputStream state_1_stream = new ByteArrayOutputStream();
-    PrintStream state_1_out = new PrintStream(state_1_stream, true);
+    final ByteArrayOutputStream state_1_stream = new ByteArrayOutputStream();
+    final PrintStream state_1_out = new PrintStream(state_1_stream, true);
     PDEUtilityTools.printSurface("State 1 density", res1, state_1_out);
     state_1_out.close();
     buf.append("\"state_1_data\":\"").append(state_1_stream.toString()).append("\",");
 
-    ByteArrayOutputStream state_2_stream = new ByteArrayOutputStream();
-    PrintStream state_2_out = new PrintStream(state_2_stream, true);
+    final ByteArrayOutputStream state_2_stream = new ByteArrayOutputStream();
+    final PrintStream state_2_out = new PrintStream(state_2_stream, true);
     PDEUtilityTools.printSurface("State 2 density", res2, state_2_out);
     state_2_out.close();
     buf.append("\"state_2_data\":\"").append(state_2_stream.toString()).append("\"}");
 
     buf.replaceAll("\t", "\\t").replaceAll("\r\n", "\\r\\n").replaceAll("\n", "\\n");
-    
+
     out.print(buf.toString());
   }
 

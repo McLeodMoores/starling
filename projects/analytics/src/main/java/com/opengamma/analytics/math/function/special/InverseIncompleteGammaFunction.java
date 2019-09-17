@@ -18,7 +18,7 @@ public class InverseIncompleteGammaFunction extends Function2D<Double, Double> {
   private static final double EPS = 1e-8;
 
   @Override
-  public Double evaluate(final Double a, final Double p) {
+  public Double apply(final Double a, final Double p) {
     ArgumentChecker.notNegativeOrZero(a, "a");
     if (!ArgumentChecker.isInRangeExclusive(0, 1, p)) {
       throw new IllegalArgumentException("p must lie between 0 and 1: have " + p);
@@ -30,7 +30,7 @@ public class InverseIncompleteGammaFunction extends Function2D<Double, Double> {
     double pp, lna1 = 0, afac = 0;
     final double a1 = a - 1;
     final Function1D<Double, Double> gammaIncomplete = new IncompleteGammaFunction(a);
-    final double gln = _lnGamma.evaluate(a);
+    final double gln = _lnGamma.apply(a);
     if (a > 1) {
       lna1 = Math.log(a1);
       afac = Math.exp(a1 * (lna1 - 1) - gln);
@@ -53,7 +53,7 @@ public class InverseIncompleteGammaFunction extends Function2D<Double, Double> {
       if (x <= 0) {
         return 0.;
       }
-      err = gammaIncomplete.evaluate(x) - p;
+      err = gammaIncomplete.apply(x) - p;
       if (a > 1) {
         t = afac * Math.exp(-(x - a1) + a1 * (Math.log(x) - lna1));
       } else {

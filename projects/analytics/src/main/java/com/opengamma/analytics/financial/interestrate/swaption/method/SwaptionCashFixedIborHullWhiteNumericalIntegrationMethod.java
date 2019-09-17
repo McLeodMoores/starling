@@ -145,7 +145,7 @@ public class SwaptionCashFixedIborHullWhiteNumericalIntegrationMethod implements
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       @SuppressWarnings("synthetic-access")
       final double swapRate = MODEL.swapRate(x, _discountedCashFlowFixed, _alphaFixed, _discountedCashFlowIbor, _alphaIbor);
       final double annuityCash = 1.0 / swapRate * (1.0 - 1.0 / Math.pow(1 + swapRate / _nbFixedPaymentYear, _nbFixedPeriod));

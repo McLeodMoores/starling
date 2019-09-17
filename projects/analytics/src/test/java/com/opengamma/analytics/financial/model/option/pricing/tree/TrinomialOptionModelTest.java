@@ -67,7 +67,7 @@ public class TrinomialOptionModelTest {
   public void test() {
     final TrinomialOptionModel<StandardOptionDataBundle> model = new TrinomialOptionModel<>(TRINOMIAL, 3);
     final Function1D<StandardOptionDataBundle, RecombiningTrinomialTree<DoublesPair>> f = model.getTreeGeneratingFunction(CALL);
-    final DoublesPair[][] tree = f.evaluate(DATA).getNodes();
+    final DoublesPair[][] tree = f.apply(DATA).getNodes();
     final DoublesPair[][] expected = new DoublesPair[4][7];
     final double df1 = Math.exp(-0.02);
     final double df2 = Math.exp(-0.04);
@@ -89,7 +89,7 @@ public class TrinomialOptionModelTest {
     expected[3][5] = DoublesPair.of(149.18, 49.1825);
     expected[3][6] = DoublesPair.of(182.21, 82.2119);
     for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < RecombiningTrinomialTree.NODES.evaluate(i); j++) {
+      for (int j = 0; j < RecombiningTrinomialTree.NODES.apply(i); j++) {
         assertEquals(tree[i][j].first, expected[i][j].first, 1e-2);
         assertEquals(tree[i][j].second, expected[i][j].second, 1e-4);
       }

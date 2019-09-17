@@ -84,11 +84,11 @@ public class CarrLeeSeasonedSyntheticVolatilitySwapCalculatorTest {
         0.0685704871770906, 0.0689887373127590, 0.0694516448141837, 0.0699592096813638, 0.0705114319142996 };
 
     for (int i = 0; i < nPuts; ++i) {
-      putVols[i] = func.evaluate(putStrikes[i]);
+      putVols[i] = func.apply(putStrikes[i]);
       assertEquals(putVolsExp[i], putVols[i], 1.e-12);
     }
     for (int i = 0; i < nCalls; ++i) {
-      callVols[i] = func.evaluate(callStrikes[i]);
+      callVols[i] = func.apply(callStrikes[i]);
       assertEquals(callVolsExp[i], callVols[i], 1.e-12);
     }
 
@@ -231,10 +231,10 @@ public class CarrLeeSeasonedSyntheticVolatilitySwapCalculatorTest {
     System.arraycopy(strikes, index + 1, callStrikes, 0, nCalls);
 
     for (int i = 0; i < nPuts; ++i) {
-      putVols[i] = func.evaluate(putStrikes[i]);
+      putVols[i] = func.apply(putStrikes[i]);
     }
     for (int i = 0; i < nCalls; ++i) {
-      callVols[i] = func.evaluate(callStrikes[i]);
+      callVols[i] = func.apply(callStrikes[i]);
     }
 
     final double[] putWeightsExp = new double[] {0.0249474493801584, 0.0278727573073654, 0.0336865845443051, 0.0434456985487412, 0.0580049953306695, 0.0776753838333571, 0.101919999499214,

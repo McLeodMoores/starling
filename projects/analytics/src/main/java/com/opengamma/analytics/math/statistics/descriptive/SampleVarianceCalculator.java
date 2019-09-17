@@ -38,10 +38,10 @@ public class SampleVarianceCalculator extends DescriptiveStatisticsCalculator {
    * @return  the sample variance
    */
   @Override
-  public Double evaluate(final double[] x) {
+  public Double apply(final double[] x) {
     ArgumentChecker.notNull(x, "x");
     ArgumentChecker.isTrue(x.length >= 2, "Need at least two points to calculate the sample variance");
-    final Double mean = DescriptiveStatisticsFactory.of(MeanCalculator.NAME).evaluate(x);
+    final Double mean = DescriptiveStatisticsFactory.of(MeanCalculator.NAME).apply(x);
     double sum = 0;
     for (final Double value : x) {
       final double diff = value - mean;

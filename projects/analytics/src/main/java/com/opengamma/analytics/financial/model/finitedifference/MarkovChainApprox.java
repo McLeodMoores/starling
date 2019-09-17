@@ -118,7 +118,7 @@ public class MarkovChainApprox {
 
     for (int i = 0; i < _weights.length; i++) {
       final BlackFunctionData data = new BlackFunctionData(forward, df, _vols[i]);
-      sum += _weights[i] * priceFunc.evaluate(data);
+      sum += _weights[i] * priceFunc.apply(data);
     }
 
     return sum;
@@ -146,7 +146,7 @@ public class MarkovChainApprox {
 
     for (int i = 0; i < _weights.length; i++) {
       final CEVFunctionData data = new CEVFunctionData(forward, df, _vols[i], beta);
-      sum += _weights[i] * priceFunc.evaluate(data);
+      sum += _weights[i] * priceFunc.apply(data);
     }
 
     return sum;

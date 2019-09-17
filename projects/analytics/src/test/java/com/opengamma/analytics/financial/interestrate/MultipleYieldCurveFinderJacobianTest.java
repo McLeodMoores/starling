@@ -132,17 +132,17 @@ public class MultipleYieldCurveFinderJacobianTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullVector() {
-    CASH_ONLY.evaluate((DoubleMatrix1D) null);
+    CASH_ONLY.apply((DoubleMatrix1D) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testWrongNumberOfElements() {
-    CASH_ONLY.evaluate(XN);
+    CASH_ONLY.apply(XN);
   }
 
   @Test
   public void testCashOnly() {
-    final DoubleMatrix2D jacobian = CASH_ONLY.evaluate(XM);
+    final DoubleMatrix2D jacobian = CASH_ONLY.apply(XM);
     assertEquals(M, jacobian.getNumberOfRows());
     assertEquals(M, jacobian.getNumberOfColumns());
     for (int i = 0; i < M; i++) {
@@ -158,7 +158,7 @@ public class MultipleYieldCurveFinderJacobianTest {
 
   @Test
   public void testFRAOnly() {
-    final DoubleMatrix2D jacobian = FRA_ONLY.evaluate(XN);
+    final DoubleMatrix2D jacobian = FRA_ONLY.apply(XN);
     assertEquals(N, jacobian.getNumberOfRows());
     assertEquals(N, jacobian.getNumberOfColumns());
     for (int i = 0; i < N; i++) {
@@ -177,7 +177,7 @@ public class MultipleYieldCurveFinderJacobianTest {
 
   @Test
   public void testMixed() {
-    final DoubleMatrix2D jacobian = MIXED.evaluate(XNM);
+    final DoubleMatrix2D jacobian = MIXED.apply(XNM);
     assertEquals(N + M, jacobian.getNumberOfRows());
     assertEquals(N + M, jacobian.getNumberOfColumns());
     for (int i = 0; i < N; i++) {

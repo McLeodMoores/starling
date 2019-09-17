@@ -25,6 +25,6 @@ public class NonLinearLeastSquareWithConstraints extends NonLinearLeastSquare {
 
   @SuppressWarnings("unused")
   private boolean violatesConstraints(final DoubleMatrix1D x) {
-    return _constaints.evaluate(x);
+    return _constaints.apply(x);
   }
 }

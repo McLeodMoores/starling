@@ -51,7 +51,7 @@ public class MedianAbsoluteDeviationDoubleTimeSeriesFilter extends TimeSeriesFil
 
   //-------------------------------------------------------------------------
   @Override
-  public FilteredTimeSeries evaluate(final LocalDateDoubleTimeSeries ts) {
+  public FilteredTimeSeries apply(final LocalDateDoubleTimeSeries ts) {
     ArgumentChecker.notNull(ts, "ts");
     if (ts.isEmpty()) {
       LOGGER.info("Time series was empty");

@@ -23,16 +23,16 @@ public class LognormalSkewnessFromVolatilityCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullSigma() {
-    F.evaluate(null, T);
+    F.apply(null, T);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullT() {
-    F.evaluate(SIGMA, null);
+    F.apply(SIGMA, null);
   }
 
   @Test
   public void test() {
-    assertEquals(F.evaluate(SIGMA, T), 0.4560, 1e-4);
+    assertEquals(F.apply(SIGMA, T), 0.4560, 1e-4);
   }
 }

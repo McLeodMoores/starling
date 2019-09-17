@@ -33,7 +33,7 @@ public class SABRHaganAlternativeVolatilityFunction extends VolatilityFunctionPr
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final SABRFormulaData data) {
+      public Double apply(final SABRFormulaData data) {
         Validate.notNull(data, "data");
         final double alpha = data.getAlpha();
         final double beta = data.getBeta();

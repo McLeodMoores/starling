@@ -146,11 +146,11 @@ public class EquityVarianceSwapForwardPurePDE {
     final PDETerminalResults1D[] res = new PDETerminalResults1D[nDivsBeforeExpiry + 1];
     grids[0] = new PDEGrid1D(timeMeshes[0], spaceMesh);
     PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> db =
-        new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, initialCond, lower, upper, grids[0]);
+        new PDE1DDataBundle<>(pde, initialCond, lower, upper, grids[0]);
     res[0] = (PDETerminalResults1D) _solver.solve(db);
     for (int i = 1; i <= nDivsBeforeExpiry; i++) {
       grids[i] = new PDEGrid1D(timeMeshes[i], spaceMesh);
-      db = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, res[i - 1].getTerminalResults(), lower, upper, grids[i]);
+      db = new PDE1DDataBundle<>(pde, res[i - 1].getTerminalResults(), lower, upper, grids[i]);
       res[i] = (PDETerminalResults1D) _solver.solve(db);
     }
 
@@ -183,7 +183,7 @@ public class EquityVarianceSwapForwardPurePDE {
     for (int i = 1; i < n - 1; i++) {
       final double pureCallPrice = pdeRes.getFunctionValue(i);
       final double otmPrice = pureCallPrice - (x[i] < 1.0 ? 1 - x[i] : 0);
-      final double w = weightFunc.evaluate(x[i]);
+      final double w = weightFunc.apply(x[i]);
       sum += w * otmPrice * (x[i + 1] - x[i - 1]);
     }
     sum /= 2.0;
@@ -196,7 +196,7 @@ public class EquityVarianceSwapForwardPurePDE {
     final double d = divCurves.getD(expiry);
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return -FunctionUtils.square((f - d) / ((f - d) * x + d));
       }
     };
@@ -213,7 +213,7 @@ public class EquityVarianceSwapForwardPurePDE {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         final double s = (f - d) * x + d;
         final double sPalpha = s + alpha;
         final double ddH = -alpha * (s + sPalpha) / s / s / sPalpha / sPalpha;
@@ -235,7 +235,7 @@ public class EquityVarianceSwapForwardPurePDE {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         final double s = (f - d) * x + d;
         final double sPalpha = s + alpha;
         final double h = Math.log(s * (1 - beta) / sPalpha);

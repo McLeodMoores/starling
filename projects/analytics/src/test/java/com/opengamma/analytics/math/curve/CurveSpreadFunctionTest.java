@@ -33,7 +33,7 @@ public class CurveSpreadFunctionTest {
   private static final Function1D<Double, Double> F1 = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return x * x;
     }
 
@@ -41,7 +41,7 @@ public class CurveSpreadFunctionTest {
   private static final Function1D<Double, Double> F2 = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 3 * x;
     }
 
@@ -123,13 +123,13 @@ public class CurveSpreadFunctionTest {
     final double x = 3.5;
     final Curve<Double, Double>[] curves = new Curve[] {FUNCTIONAL1, FUNCTIONAL2};
     Function<Double, Double> f = ADD.evaluate(curves);
-    assertEquals(f.evaluate(x), F1.evaluate(x) + F2.evaluate(x), 0);
+    assertEquals(f.evaluate(x), F1.apply(x) + F2.apply(x), 0);
     f = DIVIDE.evaluate(curves);
-    assertEquals(f.evaluate(x), F1.evaluate(x) / F2.evaluate(x), 0);
+    assertEquals(f.evaluate(x), F1.apply(x) / F2.apply(x), 0);
     f = MULTIPLY.evaluate(curves);
-    assertEquals(f.evaluate(x), F1.evaluate(x) * F2.evaluate(x), 0);
+    assertEquals(f.evaluate(x), F1.apply(x) * F2.apply(x), 0);
     f = SUBTRACT.evaluate(curves);
-    assertEquals(f.evaluate(x), F1.evaluate(x) - F2.evaluate(x), 0);
+    assertEquals(f.evaluate(x), F1.apply(x) - F2.apply(x), 0);
   }
 
   @SuppressWarnings("unchecked")

@@ -85,7 +85,7 @@ public final class SwaptionCashFixedIborBlackMethod {
     final double discountFactorSettle = curveBlack.getMulticurveProvider().getDiscountFactor(swaption.getCurrency(), swaption.getSettlementTime());
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, discountFactorSettle * pvbp, volatility);
     final Function1D<BlackFunctionData, Double> func = blackFunction.getPriceFunction(swaption);
-    final double price = func.evaluate(dataBlack) * (swaption.isLong() ? 1.0 : -1.0);
+    final double price = func.apply(dataBlack) * (swaption.isLong() ? 1.0 : -1.0);
     return MultipleCurrencyAmount.of(swaption.getCurrency(), price);
   }
 

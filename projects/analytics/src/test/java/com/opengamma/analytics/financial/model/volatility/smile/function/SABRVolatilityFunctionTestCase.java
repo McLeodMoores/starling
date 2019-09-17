@@ -35,27 +35,27 @@ public abstract class SABRVolatilityFunctionTestCase {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    getFunction().getVolatilityFunction(OPTION, FORWARD).evaluate((SABRFormulaData) null);
+    getFunction().getVolatilityFunction(OPTION, FORWARD).apply((SABRFormulaData) null);
   }
 
   @Test
   public void testLogNormalEquivalent() {
-    assertEquals(getFunction().getVolatilityFunction(OPTION, FORWARD).evaluate(LOG_NORMAL_EQUIVALENT), LOG_NORMAL_EQUIVALENT.getAlpha(), 0);
+    assertEquals(getFunction().getVolatilityFunction(OPTION, FORWARD).apply(LOG_NORMAL_EQUIVALENT), LOG_NORMAL_EQUIVALENT.getAlpha(), 0);
   }
 
   @Test
   public void testApproachingLogNormalEquivalent1() {
-    assertEquals(getFunction().getVolatilityFunction(OPTION, FORWARD).evaluate(APPROACHING_LOG_NORMAL_EQUIVALENT1), LOG_NORMAL_EQUIVALENT.getAlpha(), 1e-5);
+    assertEquals(getFunction().getVolatilityFunction(OPTION, FORWARD).apply(APPROACHING_LOG_NORMAL_EQUIVALENT1), LOG_NORMAL_EQUIVALENT.getAlpha(), 1e-5);
   }
 
   @Test
   public void testApproachingLogNormalEquivalent2() {
-    assertEquals(getFunction().getVolatilityFunction(OPTION, FORWARD).evaluate(APPROACHING_LOG_NORMAL_EQUIVALENT2), LOG_NORMAL_EQUIVALENT.getAlpha(), 1e-5);
+    assertEquals(getFunction().getVolatilityFunction(OPTION, FORWARD).apply(APPROACHING_LOG_NORMAL_EQUIVALENT2), LOG_NORMAL_EQUIVALENT.getAlpha(), 1e-5);
   }
 
   @Test
   public void testApproachingLogNormalEquivalent3() {
-    assertEquals(getFunction().getVolatilityFunction(OPTION, FORWARD).evaluate(APPROACHING_LOG_NORMAL_EQUIVALENT3), LOG_NORMAL_EQUIVALENT.getAlpha(), 1e-5);
+    assertEquals(getFunction().getVolatilityFunction(OPTION, FORWARD).apply(APPROACHING_LOG_NORMAL_EQUIVALENT3), LOG_NORMAL_EQUIVALENT.getAlpha(), 1e-5);
   }
 
   //TODO need to fill in tests

@@ -33,8 +33,8 @@ public class DifferenceSignIIDHypothesisTest extends IIDHypothesisTestCase {
   public void test() {
     super.assertNullTS(DIFFERENCE_SIGN);
     super.assertEmptyTS(DIFFERENCE_SIGN);
-    assertTrue(DIFFERENCE_SIGN.evaluate(RANDOM));
-    assertTrue(DIFFERENCE_SIGN.evaluate(SIGNAL));
-    assertFalse(DIFFERENCE_SIGN.evaluate(INCREASING));
+    assertTrue(DIFFERENCE_SIGN.apply(RANDOM));
+    assertTrue(DIFFERENCE_SIGN.apply(SIGNAL));
+    assertFalse(DIFFERENCE_SIGN.apply(INCREASING));
   }
 }

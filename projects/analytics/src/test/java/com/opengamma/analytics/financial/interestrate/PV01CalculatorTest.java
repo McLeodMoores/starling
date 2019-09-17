@@ -237,7 +237,7 @@ public class PV01CalculatorTest {
     }
 
     @Override
-    public Double evaluate(final Double t) {
+    public Double apply(final Double t) {
       return (_a + _b * t) * Math.exp(-_c * t) + _d;
     }
   }

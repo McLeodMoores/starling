@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
@@ -14,9 +14,9 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * 
+ *
  * Pricing model for log options.
- * 
+ *
  */
 public class LogOptionModel extends AnalyticOptionModel<LogOptionDefinition, StandardOptionDataBundle> {
   private final ProbabilityDistribution<Double> _normalProbabilityDistribution = new NormalDistribution(0, 1);
@@ -28,7 +28,7 @@ public class LogOptionModel extends AnalyticOptionModel<LogOptionDefinition, Sta
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final StandardOptionDataBundle data) {
+      public Double apply(final StandardOptionDataBundle data) {
         Validate.notNull(data);
         final double s = data.getSpot();
         final double k = definition.getStrike();

@@ -29,13 +29,13 @@ public abstract class SVDecompositionCalculationTestCase {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullObjectMatrix() {
-    getSVD().evaluate((DoubleMatrix2D) null);
+    getSVD().apply((DoubleMatrix2D) null);
   }
 
   @Test
   public void testRecoverOrginal() {
     final MatrixAlgebra algebra = getAlgebra();
-    final DecompositionResult result = getSVD().evaluate(A);
+    final DecompositionResult result = getSVD().apply(A);
     assertTrue(result instanceof SVDecompositionResult);
     final SVDecompositionResult svd_result = (SVDecompositionResult) result;
     final DoubleMatrix2D u = svd_result.getU();
@@ -49,7 +49,7 @@ public abstract class SVDecompositionCalculationTestCase {
   @Test
   public void testInvert() {
     final MatrixAlgebra algebra = getAlgebra();
-    final SVDecompositionResult result = getSVD().evaluate(A);
+    final SVDecompositionResult result = getSVD().apply(A);
     final DoubleMatrix2D ut = result.getUT();
     final DoubleMatrix2D v = result.getV();
     final double[] sv = result.getSingularValues();

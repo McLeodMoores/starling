@@ -59,7 +59,7 @@ public class FourierPricer {
     final Function1D<Double, Double> func = integrand.getFunction(data, option);
     final double integral = Math.exp(-alpha * Math.log(strike / forward)) * _integrator.integrate(func, 0.0, xMax) / Math.PI;
     if (useVarianceReduction) {
-      final double black = BLACK_PRICE_FUNCTION.getPriceFunction(option).evaluate(data);
+      final double black = BLACK_PRICE_FUNCTION.getPriceFunction(option).apply(data);
       final double diff = discountFactor * forward * integral;
       return diff + black;
     }
@@ -96,7 +96,7 @@ public class FourierPricer {
     final double xMax = LIMIT_CALCULATOR.solve(psi, alpha, limitTolerance);
 
     final double integral = Math.exp(-alpha * Math.log(strike / forward)) * _integrator.integrate(integrand.getFunction(data, option), 0.0, xMax) / Math.PI;
-    final double black = BLACK_PRICE_FUNCTION.getPriceFunction(option).evaluate(data);
+    final double black = BLACK_PRICE_FUNCTION.getPriceFunction(option).apply(data);
     final double diff = discountFactor * forward * integral;
 
     return diff + black;

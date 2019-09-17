@@ -110,7 +110,7 @@ public class ItraxxXoverTest extends ISDABaseTest {
       final int n = STRIKES.length;
       for (int i = 0; i < n; i++) {
         final double exPrice = NOTIONAL * CONVERTER.quotedSpreadToPUF(FWD_CDX, COUPON, fwdYC, STRIKES[i] * ONE_BP);
-        final double exPrice2 = NOTIONAL * (STRIKES[i] * ONE_BP - COUPON) * annuity.evaluate(STRIKES[i] * ONE_BP);
+        final double exPrice2 = NOTIONAL * (STRIKES[i] * ONE_BP - COUPON) * annuity.apply(STRIKES[i] * ONE_BP);
         final double putCall = df * (DEFAULT_ADJ_INDEX - exPrice2);
         final double error = putCall - (CALLPRICE[i] - PUTPRICE[i]);
         // System.out.println(STRIKES[i] + "\t" + exPrice * NOTIONAL + "\t" + (indexPV + defaultSettlePV - exPrice) * NOTIONAL);

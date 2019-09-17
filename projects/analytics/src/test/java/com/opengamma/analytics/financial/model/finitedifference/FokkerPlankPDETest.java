@@ -116,7 +116,7 @@ public class FokkerPlankPDETest {
 
     final BlackFunctionData data = new BlackFunctionData(SPOT / df, df, ATM_VOL);
     final Function1D<BlackFunctionData, Double> pricer = BLACK_FUNCTION.getPriceFunction(OPTION);
-    final double bsPrice = pricer.evaluate(data);
+    final double bsPrice = pricer.apply(data);
     assertEquals("Option price test", bsPrice, price, 2e-2 * bsPrice); //TODO This is not very accurate
 
   }

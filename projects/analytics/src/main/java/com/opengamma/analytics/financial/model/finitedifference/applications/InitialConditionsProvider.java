@@ -22,7 +22,7 @@ public class InitialConditionsProvider {
   // *********************************************************************************************************
   /**
    * The payoff of a standard call or put option.
-   * 
+   *
    * @param strike
    *          The strike
    * @param isCall
@@ -33,7 +33,7 @@ public class InitialConditionsProvider {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         if (isCall) {
           return Math.max(0, x - strike);
         }
@@ -44,7 +44,7 @@ public class InitialConditionsProvider {
 
   /**
    * The payoff of a standard call or put option when the spatial variable is the log-spot.
-   * 
+   *
    * @param strike
    *          The strike
    * @param isCall
@@ -55,7 +55,7 @@ public class InitialConditionsProvider {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         final double s = Math.exp(x);
         if (isCall) {
           return Math.max(0, s - strike);
@@ -67,13 +67,13 @@ public class InitialConditionsProvider {
 
   /**
    * The payoff $\log(S_T)$ where $S_T$ is the price of the underlying at expiry.
-   * 
+   *
    * @return The initial condition for PDE with underlying as spatial variable
    */
   public Function1D<Double, Double> getLogContractPayoff() {
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return Math.log(x);
       }
     };
@@ -81,13 +81,13 @@ public class InitialConditionsProvider {
 
   /**
    * The payoff $\log(S_T)$ where $S_T$ is the price of the underlying at expiry.
-   * 
+   *
    * @return The initial condition for PDE with log-underlying as spatial variable coordinate
    */
   public Function1D<Double, Double> getLogContractPayoffInLogCoordinate() {
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return x;
       }
     };
@@ -98,7 +98,7 @@ public class InitialConditionsProvider {
   // *********************************************************************************************************
   /**
    * The initial condition for the forward PDE for standard call or put option prices.
-   * 
+   *
    * @param spot
    *          The initial level of the underlying
    * @param isCall
@@ -109,7 +109,7 @@ public class InitialConditionsProvider {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double k) {
+      public Double apply(final Double k) {
         if (isCall) {
           return Math.max(0, spot - k);
         }
@@ -120,7 +120,7 @@ public class InitialConditionsProvider {
 
   /**
    * The initial condition for the forward PDE for standard call or put option prices, when the spatial variable is moneyness.
-   * 
+   *
    * @param isCall
    *          true for call
    * @return the initial condition as a function of <b>moneyness</b> (strike/spot)
@@ -129,7 +129,7 @@ public class InitialConditionsProvider {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         if (isCall) {
           return Math.max(0, 1.0 - x);
         }
@@ -146,7 +146,7 @@ public class InitialConditionsProvider {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double s) {
+      public Double apply(final Double s) {
         if (s == 0) {
           return 0.0;
         }
@@ -162,12 +162,9 @@ public class InitialConditionsProvider {
   // ***********
   public Surface<Double, Double, Double> getAmericanEarlyExcise(final double strike, final boolean isCall) {
     final Function1D<Double, Double> payoff = getEuropeanPayoff(strike, isCall);
-    final Function<Double, Double> temp = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        final double s = ts[1];
-        return payoff.evaluate(s);
-      }
+    final Function<Double, Double> temp = ts -> {
+      final double s = ts[1];
+      return payoff.apply(s);
     };
     return FunctionalDoublesSurface.from(temp);
   }

@@ -166,7 +166,7 @@ public final class CapFloorCMSHullWhiteNumericalIntegrationMethod implements Pri
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double swapRate = MODEL.swapRate(x, _discountedCashFlowFixed, _alphaFixed, _discountedCashFlowIbor, _alphaIbor);
       final double dfDensity = Math.exp(-(x + _alphaPayment) * (x + _alphaPayment) / 2.0);
       final double result = dfDensity * Math.max(_omega * (swapRate - _strike), 0.0);

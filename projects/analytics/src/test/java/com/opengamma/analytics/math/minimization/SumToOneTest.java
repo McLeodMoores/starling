@@ -91,7 +91,7 @@ public class SumToOneTest {
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> func = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
 
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D theta) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D theta) {
         return trans.transform(theta);
       }
     };
@@ -130,7 +130,7 @@ public class SumToOneTest {
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> func = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
 
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
         final double a = x.getEntry(0);
         final double theta = x.getEntry(1);
         final double[] temp = new double[2];
@@ -159,14 +159,14 @@ public class SumToOneTest {
     final SumToOne trans = new SumToOne(n);
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> func = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D theta) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D theta) {
         return trans.transform(theta);
       }
     };
 
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacFunc = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D theta) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D theta) {
         return trans.jacobian(theta);
       }
     };
@@ -180,8 +180,8 @@ public class SumToOneTest {
         theta[i] = RANDOM.nextDouble();
       }
       final DoubleMatrix1D vTheta = new DoubleMatrix1D(theta);
-      final DoubleMatrix2D jac = jacFunc.evaluate(vTheta);
-      final DoubleMatrix2D fdJac = fdJacFunc.evaluate(vTheta);
+      final DoubleMatrix2D jac = jacFunc.apply(vTheta);
+      final DoubleMatrix2D fdJac = fdJacFunc.apply(vTheta);
       for (int j = 0; j < n - 1; j++) {
         double sum = 0.0;
         for (int i = 0; i < n; i++) {

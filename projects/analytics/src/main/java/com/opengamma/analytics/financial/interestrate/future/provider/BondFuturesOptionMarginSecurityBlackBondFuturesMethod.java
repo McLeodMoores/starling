@@ -70,7 +70,7 @@ public final class BondFuturesOptionMarginSecurityBlackBondFuturesMethod extends
     final double delay = security.getUnderlyingFuture().getNoticeLastTime() - security.getExpirationTime();
     final double volatility = black.getVolatility(security.getExpirationTime(), delay, strike, price);
     final BlackFunctionData dataBlack = new BlackFunctionData(price, 1.0, volatility);
-    final double priceSecurity = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlack);
+    final double priceSecurity = BLACK_FUNCTION.getPriceFunction(option).apply(dataBlack);
     return priceSecurity;
   }
 

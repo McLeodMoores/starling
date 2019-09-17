@@ -23,10 +23,10 @@ public class NormalDistributionMaximumLikelihoodEstimator extends DistributionPa
   private final Function1D<double[], Double> _std = new PopulationStandardDeviationCalculator();
 
   @Override
-  public ProbabilityDistribution<Double> evaluate(final double[] x) {
+  public ProbabilityDistribution<Double> apply(final double[] x) {
     Validate.notNull(x, "x");
     ArgumentChecker.notEmpty(x, "x");
-    return new NormalDistribution(_mean.evaluate(x), _std.evaluate(x));
+    return new NormalDistribution(_mean.apply(x), _std.apply(x));
   }
 
 }

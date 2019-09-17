@@ -237,7 +237,7 @@ public class LocalVolatilityBackwardsPDEPricer {
 
     if (_useBurnin) {
       final int tBurnNodes = (int) Math.max(2, timeNodes * _burninFrac);
-      final double dt = tMesh.evaluate(1) - tMesh.evaluate(0);
+      final double dt = tMesh.apply(1) - tMesh.apply(0);
       final double tBurn = tBurnNodes * dt * dt;
       final MeshingFunction tBurnMesh = new ExponentialMeshing(0, tBurn, tBurnNodes, 0.0);
       tMesh = new ExponentialMeshing(tBurn, t, timeNodes - tBurnNodes, lambda);
@@ -324,22 +324,19 @@ public class LocalVolatilityBackwardsPDEPricer {
         upper = new NeumannBoundaryCondition(0.0, sMax, false);
       }
 
-      final Function<Double, Double> func = new Function<Double, Double>() {
-        @Override
-        public Double evaluate(final Double... tx) {
-          final double x = tx[1];
-          return payoff.evaluate(x);
-        }
+      final Function<Double, Double> func = tx -> {
+        final double x = tx[1];
+        return payoff.apply(x);
       };
 
       final FunctionalDoublesSurface free = new FunctionalDoublesSurface(func);
 
-      PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, payoff, lower, upper, free,
+      PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<>(coef, payoff, lower, upper, free,
           grid[0]);
       ThetaMethodFiniteDifference solver = new ThetaMethodFiniteDifference(theta[0], false);
       res = solver.solve(data);
       for (int ii = 1; ii < n; ii++) {
-        data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, res.getTerminalResults(), lower, upper, free, grid[ii]);
+        data = new PDE1DDataBundle<>(coef, res.getTerminalResults(), lower, upper, free, grid[ii]);
         solver = new ThetaMethodFiniteDifference(theta[ii], false);
         res = solver.solve(data);
       }
@@ -349,7 +346,7 @@ public class LocalVolatilityBackwardsPDEPricer {
         lower = new NeumannBoundaryCondition(0.0, sMin, true);
         final Function1D<Double, Double> upFunc = new Function1D<Double, Double>() {
           @Override
-          public Double evaluate(final Double tau) {
+          public Double apply(final Double tau) {
             return Math.exp((costOfCarry.getYValue(tau) - riskFreeRate.getYValue(tau)) * tau);
           }
         };
@@ -357,19 +354,19 @@ public class LocalVolatilityBackwardsPDEPricer {
       } else {
         final Function1D<Double, Double> downFunc = new Function1D<Double, Double>() {
           @Override
-          public Double evaluate(final Double tau) {
+          public Double apply(final Double tau) {
             return -Math.exp((costOfCarry.getYValue(tau) - riskFreeRate.getYValue(tau)) * tau);
           }
         };
         lower = new NeumannBoundaryCondition(downFunc, sMin, true);
         upper = new NeumannBoundaryCondition(0.0, sMax, false);
       }
-      PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, payoff, lower, upper,
+      PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<>(coef, payoff, lower, upper,
           grid[0]);
       ThetaMethodFiniteDifference solver = new ThetaMethodFiniteDifference(theta[0], false);
       res = solver.solve(data);
       for (int ii = 1; ii < n; ii++) {
-        data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, res.getTerminalResults(), lower, upper, grid[ii]);
+        data = new PDE1DDataBundle<>(coef, res.getTerminalResults(), lower, upper, grid[ii]);
         solver = new ThetaMethodFiniteDifference(theta[ii], false);
         res = solver.solve(data);
       }

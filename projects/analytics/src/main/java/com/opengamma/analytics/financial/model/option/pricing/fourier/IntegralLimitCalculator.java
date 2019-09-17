@@ -48,12 +48,12 @@ public class IntegralLimitCalculator {
     Validate.isTrue(alpha != 0.0 && alpha != -1.0, "alpha cannot be -1 or 0");
     Validate.isTrue(tol > 0.0, "need tol > 0");
 
-    final double k = Math.log(tol) + Math.log(ComplexMathUtils.mod(psi.evaluate(new ComplexNumber(0.0, -(1 + alpha)))));
+    final double k = Math.log(tol) + Math.log(ComplexMathUtils.mod(psi.apply(new ComplexNumber(0.0, -(1 + alpha)))));
     final Function1D<Double, Double> f = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         final ComplexNumber z = new ComplexNumber(x, -(1 + alpha));
-        return Math.log(ComplexMathUtils.mod(psi.evaluate(z))) - k;
+        return Math.log(ComplexMathUtils.mod(psi.apply(z))) - k;
       }
     };
     double[] range = null;

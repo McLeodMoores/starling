@@ -69,7 +69,7 @@ public class SABRModelFitterTest {
 
     for (int i = 0; i < n; i++) {
       final EuropeanVanillaOption option = new EuropeanVanillaOption(STRIKES[i], T, true);
-      CLEAN_VOLS[i] = SABR.getVolatilityFunction(option, F).evaluate(SABR_DATA);
+      CLEAN_VOLS[i] = SABR.getVolatilityFunction(option, F).apply(SABR_DATA);
       NOISY_VOLS[i] = CLEAN_VOLS[i] + RANDOM.nextRandom() * ERRORS[i];
     }
 

@@ -27,7 +27,7 @@ public abstract class VectorRootFinderTest {
   static final Function1D<DoubleMatrix1D, DoubleMatrix1D> LINEAR = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
 
     @Override
-    public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+    public DoubleMatrix1D apply(final DoubleMatrix1D x) {
       final double[] data = x.getData();
       if (data.length != 2) {
         throw new IllegalArgumentException("This test is for 2-d vector only");
@@ -41,7 +41,7 @@ public abstract class VectorRootFinderTest {
   static final Function1D<DoubleMatrix1D, DoubleMatrix1D> FUNCTION2D = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
 
     @Override
-    public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+    public DoubleMatrix1D apply(final DoubleMatrix1D x) {
       final double[] data = x.getData();
       if (data.length != 2) {
         throw new IllegalArgumentException("This test is for 2-d vector only");
@@ -55,7 +55,7 @@ public abstract class VectorRootFinderTest {
   static final Function1D<DoubleMatrix1D, DoubleMatrix2D> JACOBIAN2D = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
 
     @Override
-    public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+    public DoubleMatrix2D apply(final DoubleMatrix1D x) {
       if (x.getNumberOfElements() != 2) {
         throw new IllegalArgumentException("This test is for 2-d vector only");
       }
@@ -76,7 +76,7 @@ public abstract class VectorRootFinderTest {
   static final Function1D<DoubleMatrix1D, DoubleMatrix1D> FUNCTION3D = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
 
     @Override
-    public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+    public DoubleMatrix1D apply(final DoubleMatrix1D x) {
       if (x.getNumberOfElements() != 3) {
         throw new IllegalArgumentException("This test is for 3-d vector only");
       }
@@ -90,7 +90,7 @@ public abstract class VectorRootFinderTest {
   static final Function1D<DoubleMatrix1D, DoubleMatrix2D> JACOBIAN3D = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
 
     @Override
-    public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+    public DoubleMatrix2D apply(final DoubleMatrix1D x) {
       if (x.getNumberOfElements() != 3) {
         throw new IllegalArgumentException("This test is for 3-d vector only");
       }
@@ -120,7 +120,7 @@ public abstract class VectorRootFinderTest {
     private static final double D = 0.05;
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return Math.exp(-x * ((A + B * x) * Math.exp(-C * x) + D));
     }
   };
@@ -137,14 +137,14 @@ public abstract class VectorRootFinderTest {
       double acc = 0.0;
       double pi;
       for (int i = 0; i < n; i++) {
-        pi = DUMMY_YIELD_CURVE.evaluate(TIME_GRID[i]);
+        pi = DUMMY_YIELD_CURVE.apply(TIME_GRID[i]);
         acc += (TIME_GRID[i] - (i == 0 ? 0.0 : TIME_GRID[i - 1])) * pi;
         _swapRates[i] = (1.0 - pi) / acc;
       }
     }
 
     @Override
-    public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+    public DoubleMatrix1D apply(final DoubleMatrix1D x) {
       calculateSwapRates();
       final double[] yield = x.getData();
       final double[] diff = new double[n];
@@ -215,7 +215,7 @@ public abstract class VectorRootFinderTest {
     final DoubleMatrix1D x0 = new DoubleMatrix1D(flatCurve);
     final DoubleMatrix1D x1 = rootFinder.getRoot(SWAP_RATES, x0);
     for (int i = 0; i < n; i++) {
-      assertEquals(-Math.log(DUMMY_YIELD_CURVE.evaluate(TIME_GRID[i])) / TIME_GRID[i], x1.getData()[i], eps);
+      assertEquals(-Math.log(DUMMY_YIELD_CURVE.apply(TIME_GRID[i])) / TIME_GRID[i], x1.getData()[i], eps);
     }
   }
 

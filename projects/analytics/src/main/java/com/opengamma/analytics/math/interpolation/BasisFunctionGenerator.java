@@ -159,11 +159,11 @@ public class BasisFunctionGenerator {
     return new Function1D<double[], Double>() {
 
       @Override
-      public Double evaluate(final double[] x) {
+      public Double apply(final double[] x) {
         double product = 1.0;
         ArgumentChecker.isTrue(dim == x.length, "length of x {} was not equal to dimension {}", x.length, dim);
         for (int i = 0; i < dim; i++) {
-          product *= funcs.get(i).evaluate(x[i]);
+          product *= funcs.get(i).apply(x[i]);
         }
         return product;
       }
@@ -183,7 +183,7 @@ public class BasisFunctionGenerator {
       return new Function1D<Double, Double>() {
 
         @Override
-        public Double evaluate(final Double x) {
+        public Double apply(final Double x) {
           return x >= knots[j] && x < knots[j + 1] ? 1.0 : 0.0;
         }
       };
@@ -192,11 +192,11 @@ public class BasisFunctionGenerator {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         final Function1D<Double, Double> fa = generate(knots, degree - 1, j);
         final Function1D<Double, Double> fb = generate(knots, degree - 1, j + 1);
-        return (x - knots[j]) / (knots[j + degree] - knots[j]) * fa.evaluate(x)
-            + (knots[j + degree + 1] - x) / (knots[j + degree + 1] - knots[j + 1]) * fb.evaluate(x);
+        return (x - knots[j]) / (knots[j + degree] - knots[j]) * fa.apply(x)
+            + (knots[j + degree + 1] - x) / (knots[j + degree + 1] - knots[j + 1]) * fb.apply(x);
       }
 
     };

@@ -130,7 +130,7 @@ public class ExtendedCoupledPDEDataBundle {
    * @return the initialCondition
    */
   public double getInitialCondition(final double x) {
-    return _initialCondition.evaluate(x);
+    return _initialCondition.apply(x);
   }
 
 }

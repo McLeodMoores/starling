@@ -133,7 +133,7 @@ public class UniformMeshing extends MeshingFunction {
   }
 
   @Override
-  public Double evaluate(final Integer x) {
+  public Double apply(final Integer x) {
     if (x < 0 || x >= getNumberOfPoints()) {
       throw new IllegalArgumentException("index out of range");
     }

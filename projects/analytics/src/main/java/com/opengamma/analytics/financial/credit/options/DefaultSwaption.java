@@ -103,7 +103,7 @@ public class DefaultSwaption {
     final double rpv01 = _pricer.annuity(cds, yieldCurve, creditCurve, PriceType.CLEAN, 0);
     final double protLeg = _pricer.protectionLeg(cds, yieldCurve, creditCurve, 0);
     final double fwdSpread = (protLeg + fep) / rpv01;
-    final double modK = coupon + (strike - coupon) * annuityFunction.evaluate(strike) / rpv01;
+    final double modK = coupon + (strike - coupon) * annuityFunction.apply(strike) / rpv01;
     final double koVal = rpv01 * BlackFormulaRepository.price(fwdSpread, modK, optionExpiry, vol, isPayer);
     return koVal;
   }

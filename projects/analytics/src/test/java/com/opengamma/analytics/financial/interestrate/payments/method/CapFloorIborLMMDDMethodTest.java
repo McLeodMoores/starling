@@ -134,7 +134,7 @@ public class CapFloorIborLMMDDMethodTest {
     final double df = discountingCurve.getDiscountFactor(CAP_LAST.getPaymentTime());
     final BlackFunctionData dataBlack = new BlackFunctionData(forward + displacement, df, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(option);
-    final double pvLastExpected = func.evaluate(dataBlack) * NOTIONAL * CAP_LAST.getPaymentYearFraction();
+    final double pvLastExpected = func.apply(dataBlack) * NOTIONAL * CAP_LAST.getPaymentYearFraction();
     assertEquals("Cap/floor: LMM pricing by explicit formula - 1 curve", pvLastExpected, pvLastExplicit.getAmount(), 1.0E-2);
   }
 
@@ -165,7 +165,7 @@ public class CapFloorIborLMMDDMethodTest {
     final double df = CURVES.getCurve(CURVES_NAME[0]).getDiscountFactor(CAP_LAST.getPaymentTime());
     final BlackFunctionData dataBlack = new BlackFunctionData(forwardDsc + displacement, df, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(option);
-    final double pvLastExpected = beta * func.evaluate(dataBlack) * NOTIONAL * CAP_LAST.getPaymentYearFraction();
+    final double pvLastExpected = beta * func.apply(dataBlack) * NOTIONAL * CAP_LAST.getPaymentYearFraction();
     assertEquals("Cap/floor: LMM pricing by explicit formula - Multi-curves", pvLastExpected, pvLastExplicit.getAmount(), 1.0E-2);
   }
 

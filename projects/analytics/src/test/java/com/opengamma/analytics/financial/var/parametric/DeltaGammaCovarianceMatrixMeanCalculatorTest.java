@@ -37,7 +37,7 @@ public class DeltaGammaCovarianceMatrixMeanCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    F.evaluate((Map<Integer, ParametricVaRDataBundle>) null);
+    F.apply((Map<Integer, ParametricVaRDataBundle>) null);
   }
 
   @Test
@@ -55,10 +55,10 @@ public class DeltaGammaCovarianceMatrixMeanCalculatorTest {
     final ParametricVaRDataBundle gammaData = new ParametricVaRDataBundle(GAMMA_MATRIX, COVARIANCE_MATRIX, 2);
     final Map<Integer, ParametricVaRDataBundle> m = new HashMap<>();
     m.put(1, deltaData);
-    assertEquals(F.evaluate(m), 0, 0);
+    assertEquals(F.apply(m), 0, 0);
     m.put(2, new ParametricVaRDataBundle(new DoubleMatrix2D(new double[0][0]), new DoubleMatrix2D(new double[0][0]), 2));
-    assertEquals(F.evaluate(m), 0, 0);
+    assertEquals(F.apply(m), 0, 0);
     m.put(2, gammaData);
-    assertEquals(F.evaluate(m), 0.1495, 1e-4);
+    assertEquals(F.apply(m), 0.1495, 1e-4);
   }
 }

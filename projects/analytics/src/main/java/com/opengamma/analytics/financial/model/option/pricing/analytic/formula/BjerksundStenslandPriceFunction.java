@@ -25,7 +25,7 @@ public class BjerksundStenslandPriceFunction implements OptionPriceFunction<Blac
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final BlackFunctionData data) {
+      public Double apply(final BlackFunctionData data) {
         ArgumentChecker.notNull(data, "data");
         final double f = data.getForward();
         final double k = option.getStrike();

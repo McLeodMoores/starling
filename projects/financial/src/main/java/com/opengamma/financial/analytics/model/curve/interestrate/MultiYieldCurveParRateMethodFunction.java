@@ -206,7 +206,7 @@ public class MultiYieldCurveParRateMethodFunction extends MultiYieldCurveFunctio
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> curveCalculator = new MultipleYieldCurveFinderFunction(data, PAR_SPREAD_RATE_CALCULATOR);
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator = new MultipleYieldCurveFinderIRSJacobian(data, PAR_SPREAD_RATE_SENSITIVITY_CALCULATOR);
     final double[] fittedYields = rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(initialRatesGuess.toDoubleArray())).getData();
-    final DoubleMatrix2D jacobianMatrix = jacobianCalculator.evaluate(new DoubleMatrix1D(fittedYields));
+    final DoubleMatrix2D jacobianMatrix = jacobianCalculator.apply(new DoubleMatrix1D(fittedYields));
     final ValueProperties properties = getJacobianProperties(curveCalculationConfigName, absoluteToleranceName, relativeToleranceName, iterationsName,
         decompositionName,
         useFiniteDifferenceName);

@@ -93,7 +93,7 @@ public class GeneratorMulticurveProviderForward extends Function1D<DoubleMatrix1
   }
 
   @Override
-  public MulticurveProviderForward evaluate(final DoubleMatrix1D x) {
+  public MulticurveProviderForward apply(final DoubleMatrix1D x) {
     final MulticurveProviderForward bundle = _knownData.copy();
     final Set<String> nameSet = _generatorsMap.keySet();
     int indexParam = 0;

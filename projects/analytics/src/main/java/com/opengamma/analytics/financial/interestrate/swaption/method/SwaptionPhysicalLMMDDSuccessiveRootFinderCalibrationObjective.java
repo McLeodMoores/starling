@@ -126,7 +126,7 @@ public class SwaptionPhysicalLMMDDSuccessiveRootFinderCalibrationObjective exten
   }
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     final int nbVol = _endIndex - _startIndex + 1;
     final double[][] volChanged = new double[nbVol][_lmmParameters.getNbFactor()];
     for (int loopperiod = 0; loopperiod < nbVol; loopperiod++) {

@@ -79,7 +79,7 @@ public class BlackScholesMertonImpliedVolatilitySurfaceModelTest {
       definition = new EuropeanVanillaOptionDefinition(strike, expiry, isCall);
       initialData = new StandardOptionDataBundle(curve, b, null, spot, DATE);
       data = new StandardOptionDataBundle(curve, b, new VolatilitySurface(ConstantDoublesSurface.from(sigma)), spot, DATE);
-      price = BSM.getPricingFunction(definition).evaluate(data);
+      price = BSM.getPricingFunction(definition).apply(data);
       assertEquals(sigma, MODEL.getSurface(Collections.<OptionDefinition, Double> singletonMap(definition, price), initialData).getVolatility(DoublesPair.of(0., 0.)), EPS);
     }
   }

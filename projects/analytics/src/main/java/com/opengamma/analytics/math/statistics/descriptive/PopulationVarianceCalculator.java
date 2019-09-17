@@ -36,8 +36,8 @@ public class PopulationVarianceCalculator extends DescriptiveStatisticsCalculato
    * @return  the population variance
    */
   @Override
-  public Double evaluate(final double[] x) {
-    final double variance = DescriptiveStatisticsFactory.of(SampleVarianceCalculator.NAME).evaluate(x);
+  public Double apply(final double[] x) {
+    final double variance = DescriptiveStatisticsFactory.of(SampleVarianceCalculator.NAME).apply(x);
     final int n = x.length;
     return variance * (n - 1) / n;
   }

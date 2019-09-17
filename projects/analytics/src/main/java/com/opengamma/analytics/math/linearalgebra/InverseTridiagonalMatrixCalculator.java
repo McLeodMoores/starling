@@ -21,7 +21,7 @@ public class InverseTridiagonalMatrixCalculator extends Function1D<TridiagonalMa
    * {@inheritDoc}
    */
   @Override
-  public DoubleMatrix2D evaluate(final TridiagonalMatrix x) {
+  public DoubleMatrix2D apply(final TridiagonalMatrix x) {
     Validate.notNull(x);
     final double[] a = x.getDiagonalData();
     final double[] b = x.getUpperSubDiagonalData();

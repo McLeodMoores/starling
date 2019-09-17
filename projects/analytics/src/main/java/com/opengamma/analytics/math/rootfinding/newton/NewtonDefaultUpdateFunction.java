@@ -22,7 +22,7 @@ public class NewtonDefaultUpdateFunction implements NewtonRootFinderMatrixUpdate
       final DoubleMatrix2D matrix) {
     Validate.notNull(jacobianFunction);
     Validate.notNull(x);
-    return jacobianFunction.evaluate(x);
+    return jacobianFunction.apply(x);
   }
 
 }

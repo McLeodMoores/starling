@@ -46,14 +46,14 @@ public class BensoussanCrouhyGalaiOptionOnOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    BCG.getPricingFunction(OPTION).evaluate((StandardOptionDataBundle) null);
+    BCG.getPricingFunction(OPTION).apply((StandardOptionDataBundle) null);
   }
 
   @Test
   public void test() {
-    assertEquals(BCG.getPricingFunction(OPTION).evaluate(DATA), 19.9147, 1e-4);
+    assertEquals(BCG.getPricingFunction(OPTION).apply(DATA), 19.9147, 1e-4);
     final EuropeanVanillaOptionDefinition underlying = new EuropeanVanillaOptionDefinition(SPOT - 100, UNDERLYING_EXPIRY, true);
     final EuropeanOptionOnEuropeanVanillaOptionDefinition option = new EuropeanOptionOnEuropeanVanillaOptionDefinition(20, EXPIRY, true, underlying);
-    assertEquals(BCG.getPricingFunction(option).evaluate(DATA) / MODEL.getPricingFunction(option).evaluate(DATA), 1, 1e-2);
+    assertEquals(BCG.getPricingFunction(option).apply(DATA) / MODEL.getPricingFunction(option).apply(DATA), 1, 1e-2);
   }
 }

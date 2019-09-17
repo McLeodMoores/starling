@@ -48,22 +48,22 @@ public class AssetOrNothingOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(PUT).evaluate((StandardOptionDataBundle) null);
+    MODEL.getPricingFunction(PUT).apply((StandardOptionDataBundle) null);
   }
 
   @Test
   public void testZeroVol() {
     StandardOptionDataBundle data = DATA.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(0)));
     final double df = Math.exp(T * (B - R));
-    assertEquals(MODEL.getPricingFunction(CALL).evaluate(data), df * SPOT, EPS);
-    assertEquals(MODEL.getPricingFunction(PUT).evaluate(data), 0, 0);
+    assertEquals(MODEL.getPricingFunction(CALL).apply(data), df * SPOT, EPS);
+    assertEquals(MODEL.getPricingFunction(PUT).apply(data), 0, 0);
     data = data.withSpot(60);
-    assertEquals(MODEL.getPricingFunction(CALL).evaluate(data), 0, 0);
-    assertEquals(MODEL.getPricingFunction(PUT).evaluate(data), df * 60, EPS);
+    assertEquals(MODEL.getPricingFunction(CALL).apply(data), 0, 0);
+    assertEquals(MODEL.getPricingFunction(PUT).apply(data), df * 60, EPS);
   }
 
   @Test
   public void test() {
-    assertEquals(MODEL.getPricingFunction(PUT).evaluate(DATA), 20.2069, 1e-4);
+    assertEquals(MODEL.getPricingFunction(PUT).apply(DATA), 20.2069, 1e-4);
   }
 }

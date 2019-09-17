@@ -36,7 +36,7 @@ public class SABRTermStructureModelProvider extends VolatilityModelProvider {
 
   /**
    * General set up for a SABRTermStructureModelProvider.
-   * 
+   *
    * @param knotPoints
    *          Map between parameter curve names ("alpha", "beta", "rho" and "nu") and the positions of the knot points on each of those curves
    * @param interpolators
@@ -90,7 +90,7 @@ public class SABRTermStructureModelProvider extends VolatilityModelProvider {
    * @return a VolatilityModel1D (SABRTermStructureParameters)
    */
   @Override
-  public VolatilityModel1D evaluate(final DoubleMatrix1D x) {
+  public VolatilityModel1D apply(final DoubleMatrix1D x) {
     final LinkedHashMap<String, InterpolatedDoublesCurve> curves = getCurves(x);
     return new SABRTermStructureParameters(curves.get(ALPHA), curves.get(BETA), curves.get(RHO), curves.get(NU));
   }

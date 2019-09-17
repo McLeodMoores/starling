@@ -25,12 +25,12 @@ public class GammaDistributionMomentEstimatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {
-    CALCULATOR.evaluate((double[]) null);
+    CALCULATOR.apply((double[]) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEmpty() {
-    CALCULATOR.evaluate(new double[0]);
+    CALCULATOR.apply(new double[0]);
   }
 
   @Test
@@ -43,7 +43,7 @@ public class GammaDistributionMomentEstimatorTest {
     for (int i = 0; i < n; i++) {
       x[i] = p1.nextRandom();
     }
-    final GammaDistribution p2 = (GammaDistribution) CALCULATOR.evaluate(x);
+    final GammaDistribution p2 = (GammaDistribution) CALCULATOR.apply(x);
     final double eps = 0.025;
     assertEquals(p2.getK(), k, eps);
     assertEquals(p2.getTheta(), theta, eps);

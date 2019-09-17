@@ -62,11 +62,11 @@ public class BlackScholesMertonImpliedVolatilitySurfaceModel implements Volatili
     public StandardOptionDataBundle getRoot(final Function1D<StandardOptionDataBundle, Double> function, final StandardOptionDataBundle... volData) {
       final StandardOptionDataBundle lowVolData = volData[0];
       final StandardOptionDataBundle highVolData = volData[1];
-      final Double lowPrice = function.evaluate(lowVolData) - _price;
+      final Double lowPrice = function.apply(lowVolData) - _price;
       if (Math.abs(lowPrice) < ACCURACY) {
         return lowVolData;
       }
-      Double highPrice = function.evaluate(highVolData) - _price;
+      Double highPrice = function.apply(highVolData) - _price;
       if (Math.abs(highPrice) < ACCURACY) {
         return highVolData;
       }
@@ -85,7 +85,7 @@ public class BlackScholesMertonImpliedVolatilitySurfaceModel implements Volatili
         dVol *= 0.5;
         midVol = rootVol + dVol;
         midVolData = _data.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(midVol)));
-        highPrice = function.evaluate(midVolData) - _price;
+        highPrice = function.apply(midVolData) - _price;
         if (highPrice <= 0) {
           rootVol = midVol;
         }

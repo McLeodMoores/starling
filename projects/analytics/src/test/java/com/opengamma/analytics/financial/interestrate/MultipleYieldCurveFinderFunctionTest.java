@@ -76,12 +76,12 @@ public class MultipleYieldCurveFinderFunctionTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullVector() {
-    FINDER.evaluate((DoubleMatrix1D) null);
+    FINDER.apply((DoubleMatrix1D) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testMismatchingVector() {
-    FINDER.evaluate(new DoubleMatrix1D(new double[] {1, 2, 3, 4, 5, 6, 7, 8}));
+    FINDER.apply(new DoubleMatrix1D(new double[] {1, 2, 3, 4, 5, 6, 7, 8}));
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -94,7 +94,7 @@ public class MultipleYieldCurveFinderFunctionTest {
 
   @Test
   public void test() {
-    final DoubleMatrix1D results = FINDER.evaluate(new DoubleMatrix1D(CONTINUOUS_RATES));
+    final DoubleMatrix1D results = FINDER.apply(new DoubleMatrix1D(CONTINUOUS_RATES));
     for (final double r : results.getData()) {
       assertEquals(0.0, r, 1e-14);
     }

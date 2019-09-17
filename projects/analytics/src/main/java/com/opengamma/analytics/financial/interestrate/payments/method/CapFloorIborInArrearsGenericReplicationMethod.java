@@ -132,7 +132,7 @@ public class CapFloorIborInArrearsGenericReplicationMethod implements PricingMet
     }
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final CapFloorIbor capStrike = _capStandard.withStrike(x);
       return _basePricingMethod.presentValue(capStrike, _sabrData).getAmount();
     }

@@ -47,12 +47,12 @@ public class MedianAbsoluteDeviationDoubleTimeSeriesFilterTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {
-    FILTER.evaluate((LocalDateDoubleTimeSeries) null);
+    FILTER.apply((LocalDateDoubleTimeSeries) null);
   }
 
   @Test
   public void testEmptyTS() {
-    final FilteredTimeSeries filtered = FILTER.evaluate(EMPTY_SERIES);
+    final FilteredTimeSeries filtered = FILTER.apply(EMPTY_SERIES);
     assertEquals(filtered.getFilteredTS(), EMPTY_SERIES);
     assertEquals(filtered.getRejectedTS(), EMPTY_SERIES);
   }
@@ -60,13 +60,13 @@ public class MedianAbsoluteDeviationDoubleTimeSeriesFilterTest {
   @Test
   public void testMasked() {
     final LocalDateDoubleTimeSeries subSeries = TS.subSeries(DATES[0], DATES[11]);
-    final FilteredTimeSeries result = FILTER.evaluate(ImmutableLocalDateDoubleTimeSeries.of(subSeries));
+    final FilteredTimeSeries result = FILTER.apply(ImmutableLocalDateDoubleTimeSeries.of(subSeries));
     assertTimeSeries(result, 9);
   }
 
   @Test
   public void test() {
-    assertTimeSeries(FILTER.evaluate(TS), 498);
+    assertTimeSeries(FILTER.apply(TS), 498);
   }
 
   private void assertTimeSeries(final FilteredTimeSeries result, final int size) {

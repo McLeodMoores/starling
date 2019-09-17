@@ -33,10 +33,10 @@ public class DoubleRampFunctionTest {
 
   @Test
   public void evaluate() {
-    assertEquals("DoubleRampFunction: evaluate", F.evaluate(X1 - 1e-15), Y1, TOLERANCE_EVALUATE);
-    assertEquals("DoubleRampFunction: evaluate", F.evaluate(X2 + 1e-15), Y2, TOLERANCE_EVALUATE);
-    assertEquals("DoubleRampFunction: evaluate", F.evaluate(0.5 * X1 + 0.5 * X2), 0.5 * Y1 + 0.5 * Y2, TOLERANCE_EVALUATE);
-    assertEquals("DoubleRampFunction: evaluate", F.evaluate(0.2 * X1 + 0.8 * X2), 0.2 * Y1 + 0.8 * Y2, TOLERANCE_EVALUATE);
+    assertEquals("DoubleRampFunction: evaluate", F.apply(X1 - 1e-15), Y1, TOLERANCE_EVALUATE);
+    assertEquals("DoubleRampFunction: evaluate", F.apply(X2 + 1e-15), Y2, TOLERANCE_EVALUATE);
+    assertEquals("DoubleRampFunction: evaluate", F.apply(0.5 * X1 + 0.5 * X2), 0.5 * Y1 + 0.5 * Y2, TOLERANCE_EVALUATE);
+    assertEquals("DoubleRampFunction: evaluate", F.apply(0.2 * X1 + 0.8 * X2), 0.2 * Y1 + 0.8 * Y2, TOLERANCE_EVALUATE);
   }
 
 }

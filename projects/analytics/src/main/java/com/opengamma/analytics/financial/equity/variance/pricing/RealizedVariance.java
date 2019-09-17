@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
 public class RealizedVariance extends Function1D<VarianceSwap, Double> {
 
   @Override
-  public Double evaluate(final VarianceSwap swap) {
+  public Double apply(final VarianceSwap swap) {
     ArgumentChecker.notNull(swap, "swap");
     final double[] obs = swap.getObservations();
     final int nObs = obs.length;

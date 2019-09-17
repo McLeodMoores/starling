@@ -235,9 +235,9 @@ public class FFTPricerTest {
     final Function1D<Double, Double> f = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         final ComplexNumber z = new ComplexNumber(x, -1.0 - alpha);
-        final ComplexNumber u = callFunction.evaluate(z);
+        final ComplexNumber u = callFunction.apply(z);
         return u.getReal();
       }
     };
@@ -264,7 +264,7 @@ public class FFTPricerTest {
       final double x = -10.0 + 20.0 * i / 100;
       final ComplexNumber z = new ComplexNumber(x, -1.5);
       @SuppressWarnings("unused")
-      final ComplexNumber u = callFT.evaluate(z);
+      final ComplexNumber u = callFT.apply(z);
       //System.out.println(x + "\t" + u.getReal() + "\t" + u.getImaginary());
     }
 

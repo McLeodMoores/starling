@@ -70,7 +70,7 @@ public class NewtonVectorRootFinder extends VectorRootFinder {
     checkInputs(function, startPosition);
 
     final DataBundle data = new DataBundle();
-    final DoubleMatrix1D y = function.evaluate(startPosition);
+    final DoubleMatrix1D y = function.apply(startPosition);
     data.setX(startPosition);
     data.setY(y);
     data.setG0(_algebra.getInnerProduct(y, y));
@@ -117,7 +117,7 @@ public class NewtonVectorRootFinder extends VectorRootFinder {
 
   private String getErrorMessage(final DataBundle data, final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianFunction) {
     final String msg = "Final position:" + data.getX() + "\nlast deltaX:" + data.getDeltaX() + "\n function value:" + data.getY() + "\nJacobian: \n"
-        + jacobianFunction.evaluate(data.getX());
+        + jacobianFunction.apply(data.getX());
     return msg;
   }
 
@@ -157,7 +157,7 @@ public class NewtonVectorRootFinder extends VectorRootFinder {
     final double lambda0 = data.getLambda0();
     final DoubleMatrix1D deltaX = (DoubleMatrix1D) _algebra.scale(p, -lambda0);
     final DoubleMatrix1D xNew = (DoubleMatrix1D) _algebra.add(data.getX(), deltaX);
-    final DoubleMatrix1D yNew = function.evaluate(xNew);
+    final DoubleMatrix1D yNew = function.apply(xNew);
     data.setDeltaX(deltaX);
     data.setDeltaY((DoubleMatrix1D) _algebra.subtract(yNew, data.getY()));
     data.setG2(data.getG1());

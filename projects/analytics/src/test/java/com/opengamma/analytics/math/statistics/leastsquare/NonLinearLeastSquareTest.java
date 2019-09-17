@@ -50,7 +50,7 @@ public class NonLinearLeastSquareTest {
   private static final Function1D<Double, Double> TARGET = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return Math.sin(x);
     }
   };
@@ -59,7 +59,7 @@ public class NonLinearLeastSquareTest {
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public DoubleMatrix1D evaluate(final DoubleMatrix1D a) {
+    public DoubleMatrix1D apply(final DoubleMatrix1D a) {
       Validate.isTrue(a.getNumberOfElements() == 4, "four parameters");
       final int n = X.getNumberOfElements();
       final double[] res = new double[n];
@@ -99,7 +99,7 @@ public class NonLinearLeastSquareTest {
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public DoubleMatrix2D evaluate(final DoubleMatrix1D a) {
+    public DoubleMatrix2D apply(final DoubleMatrix1D a) {
       final int n = X.getNumberOfElements();
       final int m = a.getNumberOfElements();
       final double[][] res = new double[n][m];
@@ -121,7 +121,7 @@ public class NonLinearLeastSquareTest {
 
     for (int i = 0; i < 20; i++) {
       X.getData()[i] = -Math.PI + i * Math.PI / 10;
-      Y.getData()[i] = TARGET.evaluate(X.getEntry(i));
+      Y.getData()[i] = TARGET.apply(X.getEntry(i));
       SIGMA.getData()[i] = 0.1 * Math.exp(Math.abs(X.getEntry(i)) / Math.PI);
     }
 
@@ -167,7 +167,7 @@ public class NonLinearLeastSquareTest {
     final Function1D<DoubleMatrix1D, Double> f = getChiSqFunction(X, Y, SIGMA, PARAM_FUNCTION);
     final ConjugateGradientVectorMinimizer minimizer = new ConjugateGradientVectorMinimizer(new BrentMinimizer1D());
     final DoubleMatrix1D solution = minimizer.minimize(f, start);
-    assertEquals(0.0, f.evaluate(solution), 1e-8);
+    assertEquals(0.0, f.apply(solution), 1e-8);
     assertEquals(1.0, solution.getEntry(0), 1e-8);
     assertEquals(1.0, solution.getEntry(1), 1e-8);
     assertEquals(0.0, solution.getEntry(2), 1e-8);
@@ -235,7 +235,7 @@ public class NonLinearLeastSquareTest {
     final DoubleMatrix1D delta = (DoubleMatrix1D) ma.subtract(res.getFitParameters(), trueValues);
 
     final LUDecompositionCommons decmp = new LUDecompositionCommons();
-    final LUDecompositionResult decmpRes = decmp.evaluate(res.getCovariance());
+    final LUDecompositionResult decmpRes = decmp.apply(res.getCovariance());
     final DoubleMatrix2D invCovariance = decmpRes.solve(DoubleMatrixUtils.getIdentityMatrix2D(4));
 
     double z = ma.getInnerProduct(delta, ma.multiply(invCovariance, delta));
@@ -298,7 +298,7 @@ public class NonLinearLeastSquareTest {
 
     final Function1D<DoubleMatrix1D, Double> func = new Function1D<DoubleMatrix1D, Double>() {
       @Override
-      public Double evaluate(final DoubleMatrix1D params) {
+      public Double apply(final DoubleMatrix1D params) {
         double sum = 0;
         for (int k = 0; k < n; k++) {
           sum += invSigmaSq[k] * FunctionUtils.square(y.getEntry(k) - paramFunc.evaluate(x.getEntry(k), params));

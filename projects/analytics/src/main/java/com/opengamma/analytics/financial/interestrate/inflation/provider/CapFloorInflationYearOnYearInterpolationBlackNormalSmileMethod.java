@@ -78,7 +78,7 @@ public final class CapFloorInflationYearOnYearInterpolationBlackNormalSmileMetho
     final double volatility = black.getBlackParameters().getVolatility(cap.getReferenceEndTime()[1], cap.getStrike());
     final NormalFunctionData dataBlack = new NormalFunctionData(forward, 1.0, volatility);
     final Function1D<NormalFunctionData, Double> func = NORMAL_FUNCTION.getPriceFunction(option);
-    final double price = func.evaluate(dataBlack) * cap.getNotional() * cap.getPaymentYearFraction();
+    final double price = func.apply(dataBlack) * cap.getNotional() * cap.getPaymentYearFraction();
     return MultipleCurrencyAmount.of(cap.getCurrency(), price);
   }
 

@@ -24,7 +24,7 @@ public class BroydenMatrixUpdateFunctionTest {
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+    public DoubleMatrix2D apply(final DoubleMatrix1D x) {
       return M;
     }
 

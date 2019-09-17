@@ -590,7 +590,7 @@ public class MixedBivariateLogNormalCorrelationFinder {
    * @return Solution to the linear equation, x
    */
   protected double[] decompSol(final double[][] doubMat, final double[] doubVec) {
-    final LUDecompositionResult result = _luObj.evaluate(new DoubleMatrix2D(doubMat));
+    final LUDecompositionResult result = _luObj.apply(new DoubleMatrix2D(doubMat));
 
     final double[][] lMat = result.getL().getData();
     final double[][] uMat = result.getU().getData();

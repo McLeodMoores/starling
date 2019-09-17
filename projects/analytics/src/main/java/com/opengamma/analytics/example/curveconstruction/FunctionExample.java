@@ -28,7 +28,7 @@ public class FunctionExample {
   public static void polyDerivativeDemo(final PrintStream out) {
     final RealPolynomialFunction1D f = getFunction();
 
-    assert f.evaluate(5.0) == 0.0;
+    assert f.apply(5.0) == 0.0;
 
     final RealPolynomialFunction1D d = f.derivative();
     final double[] coefficients = d.getCoefficients();

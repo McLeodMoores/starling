@@ -30,7 +30,7 @@ public class NormalPriceFunction implements OptionPriceFunction<NormalFunctionDa
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final NormalFunctionData data) {
+      public Double apply(final NormalFunctionData data) {
         Validate.notNull(data, "data");
         final double forward = data.getForward();
         final double numeraire = data.getNumeraire();

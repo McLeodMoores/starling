@@ -37,7 +37,7 @@ public class EuropeanOptionOnEuropeanVanillaOptionModel extends AnalyticOptionMo
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final StandardOptionDataBundle data) {
+      public Double apply(final StandardOptionDataBundle data) {
         Validate.notNull(data, "data");
         final double s = data.getSpot();
         final OptionDefinition underlying = definition.getUnderlyingOption();
@@ -48,7 +48,7 @@ public class EuropeanOptionOnEuropeanVanillaOptionModel extends AnalyticOptionMo
         final double t2 = definition.getUnderlyingOption().getTimeToExpiry(date);
         final double deltaT = t2 - t1;
         final double sigma = data.getVolatility(t1, k1); // REVIEW emcleod 20-7-10 This will work with a flat volatility surface but otherwise will give odd
-                                                         // results
+        // results
         final double r = data.getInterestRate(t1);
         final double b = data.getCostOfCarry();
         final double criticalValue = getCriticalValue(
@@ -62,21 +62,21 @@ public class EuropeanOptionOnEuropeanVanillaOptionModel extends AnalyticOptionMo
           if (underlying.isCall()) {
             return s * Math.exp(t2 * (b - r)) * BIVARIATE.getCDF(new double[] { d3, d1, rho })
                 - k2 * Math.exp(-r * t2) * BIVARIATE.getCDF(new double[] { d4, d2, rho }) - k1 * Math.exp(-r * t1)
-                    * NORMAL.getCDF(d2);
+                * NORMAL.getCDF(d2);
           }
           return k2 * Math.exp(-r * t2) * BIVARIATE.getCDF(new double[] { -d4, -d2, rho })
               - s * Math.exp(t2 * (b - r)) * BIVARIATE.getCDF(new double[] { -d3, -d1, rho }) - k1 * Math.exp(-r * t1)
-                  * NORMAL.getCDF(-d2);
+              * NORMAL.getCDF(-d2);
         }
         final double rho = -Math.sqrt(t1 / t2);
         if (underlying.isCall()) {
           return k2 * Math.exp(-r * t2) * BIVARIATE.getCDF(new double[] { d4, -d2, rho })
               - s * Math.exp(t2 * (b - r)) * BIVARIATE.getCDF(new double[] { d3, -d1, rho }) + k1 * Math.exp(-r * t1)
-                  * NORMAL.getCDF(-d2);
+              * NORMAL.getCDF(-d2);
         }
         return s * Math.exp(t2 * (b - r)) * BIVARIATE.getCDF(new double[] { -d3, d1, rho })
             - k2 * Math.exp(-r * t2) * BIVARIATE.getCDF(new double[] { -d4, d2, rho }) + k1 * Math.exp(-r * t1)
-                * NORMAL.getCDF(d2);
+            * NORMAL.getCDF(d2);
       }
 
     };
@@ -87,8 +87,8 @@ public class EuropeanOptionOnEuropeanVanillaOptionModel extends AnalyticOptionMo
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double x) {
-        return k - BSM.getPricingFunction(definition).evaluate(data.withSpot(x));
+      public Double apply(final Double x) {
+        return k - BSM.getPricingFunction(definition).apply(data.withSpot(x));
       }
 
     };

@@ -100,7 +100,7 @@ public class SwaptionPhysicalHullWhiteCalibrationObjective extends SuccessiveRoo
   }
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     _hwBundle.getHullWhiteParameter().setLastVolatility(x);
     return METHOD_HW_SWAPTION.presentValue((SwaptionPhysicalFixedIbor) getInstrument(), _cfe, _hwBundle).getAmount() - getPrice();
   }

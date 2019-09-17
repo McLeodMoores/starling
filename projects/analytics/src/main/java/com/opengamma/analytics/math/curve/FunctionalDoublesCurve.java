@@ -176,12 +176,12 @@ public class FunctionalDoublesCurve extends DoublesCurve {
   @Override
   public Double getYValue(final Double x) {
     Validate.notNull(x, "x");
-    return _function.evaluate(x);
+    return _function.apply(x);
   }
 
   @Override
   public double getDyDx(final double x) {
-    return _derivative.evaluate(x);
+    return _derivative.apply(x);
   }
 
   @Override
@@ -213,7 +213,7 @@ public class FunctionalDoublesCurve extends DoublesCurve {
     final int n = x.length;
     final double[] y = new double[n];
     for (int i = 0; i < n; i++) {
-      y[i] = _function.evaluate(x[i]);
+      y[i] = _function.apply(x[i]);
     }
     return InterpolatedDoublesCurve.from(x, y, interpolator);
   }

@@ -29,8 +29,8 @@ public class PopulationStandardDeviationCalculator extends DescriptiveStatistics
    * @return  the population standard deviation
    */
   @Override
-  public Double evaluate(final double[] x) {
-    return Math.sqrt(DescriptiveStatisticsFactory.of(PopulationVarianceCalculator.NAME).evaluate(x));
+  public Double apply(final double[] x) {
+    return Math.sqrt(DescriptiveStatisticsFactory.of(PopulationVarianceCalculator.NAME).apply(x));
   }
 
   @Override

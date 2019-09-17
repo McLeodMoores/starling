@@ -36,7 +36,7 @@ public class DeltaCovarianceMatrixStandardDeviationCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    F.evaluate((Map<Integer, ParametricVaRDataBundle>) null);
+    F.apply((Map<Integer, ParametricVaRDataBundle>) null);
   }
 
   @Test
@@ -52,6 +52,6 @@ public class DeltaCovarianceMatrixStandardDeviationCalculatorTest {
   public void test() {
     final ParametricVaRDataBundle data = new ParametricVaRDataBundle(VECTOR, MATRIX, 1);
     final Map<Integer, ParametricVaRDataBundle> m = Collections.<Integer, ParametricVaRDataBundle> singletonMap(1, data);
-    assertEquals(F.evaluate(m), Math.sqrt(45), 1e-9);
+    assertEquals(F.apply(m), Math.sqrt(45), 1e-9);
   }
 }

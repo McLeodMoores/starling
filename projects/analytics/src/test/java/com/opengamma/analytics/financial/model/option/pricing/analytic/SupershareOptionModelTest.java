@@ -45,19 +45,19 @@ public class SupershareOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(OPTION).evaluate((StandardOptionDataBundle) null);
+    MODEL.getPricingFunction(OPTION).apply((StandardOptionDataBundle) null);
   }
 
   @Test
   public void testZeroVol() {
     StandardOptionDataBundle data = DATA.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(1e-15))).withSpot(LOWER - 1);
-    assertEquals(MODEL.getPricingFunction(OPTION).evaluate(data), 0, 0);
+    assertEquals(MODEL.getPricingFunction(OPTION).apply(data), 0, 0);
     data = data.withSpot(UPPER + 1);
-    assertEquals(MODEL.getPricingFunction(OPTION).evaluate(data), 0, 0);
+    assertEquals(MODEL.getPricingFunction(OPTION).apply(data), 0, 0);
   }
 
   @Test
   public void test() {
-    assertEquals(MODEL.getPricingFunction(OPTION).evaluate(DATA), 0.7389, 1e-4);
+    assertEquals(MODEL.getPricingFunction(OPTION).apply(DATA), 0.7389, 1e-4);
   }
 }

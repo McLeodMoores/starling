@@ -124,18 +124,6 @@ public class CDSStrikeFixer extends AbstractTool<ToolContext> {
 
           final ConfigSearchRequest<CurveDefinition> curveDefinitionConfigSearchRequest = new ConfigSearchRequest<>(CurveDefinition.class);
           curveDefinitionConfigSearchRequest.setName(curveDefinitionID);
-          final CurveDefinition curveDefinition = getToolContext().getConfigMaster().search(curveDefinitionConfigSearchRequest).getFirstValue().getValue();
-          /*
-           * final CurveDefinition curveDefinition = configSource.getSingle(CurveDefinition.class, curveName, VersionCorrection.LATEST);
-           * 
-           * if (curveDefinition == null) { throw new OpenGammaRuntimeException("No curve definition for " + curveName); }
-           * 
-           * //Map<Tenor, CurveNode> curveNodesByTenors = new HashMap<Tenor, CurveNode>(); //for (CurveNode curveNode : curveDefinition.getNodes()) { //
-           * curveNodesByTenors.put(curveNode.getResolvedMaturity(), curveNode); //} Map<Tenor, CurveNode> curveNodesByTenors =
-           * functional(curveDefinition.getNodes()).groupBy(new Function1<CurveNode, Tenor>() {
-           * 
-           * @Override public Tenor execute(CurveNode curveNode) { return curveNode.getResolvedMaturity(); } });
-           */
 
           final ZonedDateTime start = cds.getStartDate();
           final ZonedDateTime maturity = cds.getMaturityDate();
@@ -154,12 +142,6 @@ public class CDSStrikeFixer extends AbstractTool<ToolContext> {
             } else {
               throw new OpenGammaRuntimeException(format("Double expected for strike but '%s' found instead.", String.valueOf(strikeObj)));
             }
-            // else throw?
-            // snapshot.getGlobalValues().getValue()
-            // cdsArgs.add(timeSeriesId);
-            // loadTimeSeries(newArrayList(timeSeriesId));
-            // LocalDate tradeDate = functional(position.getTrades()).first().getTradeDate();
-            // Double strike = getFixedRate(random, tradeDate, timeSeriesId);
             securityMaster.update(new SecurityDocument(cdsOption));
           } catch (final Exception e) {
             e.printStackTrace(); // To change body of catch statement use File | Settings | File Templates.

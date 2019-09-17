@@ -88,7 +88,7 @@ public class StudentTDistribution implements ProbabilityDistribution<Double> {
   public double getInverseCDF(final Double p) {
     Validate.notNull(p);
     Validate.isTrue(p >= 0 && p <= 1, "Probability must be >= 0 and <= 1");
-    final double x = _beta.evaluate(2 * Math.min(p, 1 - p));
+    final double x = _beta.apply(2 * Math.min(p, 1 - p));
     return Math.signum(p - 0.5) * Math.sqrt(_degFreedom * (1. / x - 1));
   }
 

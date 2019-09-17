@@ -33,7 +33,7 @@ public class CoupledPDEDataBundleProvider {
    * $V_1(0,s) = V_2(0,s) = (s-k)^+$). Real (i.e. calendar) time, $t$, appears in the drift term with $t = T - \tau$ where $T$ is the maturity. The solution at
    * $t=0$ $(\tau=T)$ for $V_1$ and $V_2$ is the option price if the Markov chain started in state 1 or 2. If the initial state of the Markov chain is unknown
    * (but the probability of being in a state is known), then the option price is the probability weighting of the two solutions.
-   * 
+   *
    * @param forward
    *          The forward curve
    * @param maturity
@@ -59,7 +59,7 @@ public class CoupledPDEDataBundleProvider {
    * with $t = T - \tau$ where $T$ is the maturity. The solution at $t = 0$ $(\tau=T)$ for $V_1$ and $V_2$ is the option price if the Markov chain started in
    * state 1 or 2. If the initial state of the Markov chain is unknown (but the probability of being in a state is know), then the option price is the
    * probability weighting of the two solutions.
-   * 
+   *
    * @param forward
    *          The forward curve
    * @param maturity
@@ -92,7 +92,7 @@ public class CoupledPDEDataBundleProvider {
    * \end{eqnarray}$$ The initial condition is $V_1(0,k) = p_1(0)(s_0-k)^+$ and $V_2(0,k) = p_2(0)(s_0-k)^+$ where $p_1(0)$ and $p_2(0)$ are the probabilities
    * of the Markov chain starting in a given state and $s_0$ is the spot. The option value at a particular maturity ($T$) and strike ($k$) is given by $V(T,k) =
    * V_1(T,k) + V_2(T,k)$
-   * 
+   *
    * @param forward
    *          The forward curve
    * @param data
@@ -113,7 +113,7 @@ public class CoupledPDEDataBundleProvider {
    * \frac{\partial V_2}{\partial k} + \lambda_{21}V_2 - \lambda_{12} V_1= 0 \end{eqnarray}$$ The initial condition is $V_1(0,k) = p_1(0)(s_0-k)^+$ and
    * $V_2(0,k) = p_2(0)(s_0-k)^+$ where $p_1(0)$ and $p_2(0)$ are the probabilities of the Markov chain starting in a given state and $s_0$ is the spot. The
    * option value at a particular maturity ($T$) and strike ($k$) is given by $V(T,k) = V_1(T,k) + V_2(T,k)$
-   * 
+   *
    * @param forward
    *          The forward curve
    * @param data
@@ -143,7 +143,7 @@ public class CoupledPDEDataBundleProvider {
    * \rho_1= 0 \end{eqnarray}$$ where $\rho_i(t,s)$ is the probabilty density of being in state $i$ with a value of the underlying $s$ at time $t$. The inital
    * state is $\rho_i(0,s) = p_i(0)\delta(s-s_0)$ where $p_i(0)$ is the probability of the Markov chain starting in state $i$ and $s_0$ is the spot. Since a
    * delta function cannot be used directly it is replaced with a log-normal distrubution (of $s/s_0$) with a standard deviation of 0.01;
-   * 
+   *
    * @param forward
    *          The forward curve
    * @param data
@@ -165,7 +165,7 @@ public class CoupledPDEDataBundleProvider {
    * $i$ with a value of the underlying $s$ at time $t$. The initial state is $\rho_i(0,s) = p_i(0)\delta(s-s_0)$ where $p_i(0)$ is the probability of the
    * Markov chain starting in state $i$ and $s_0$ is the spot. Since a delta function cannot be used directly it is replaced with a log-normal distrubution (of
    * $s/s_0$) with a standard deviation of 0.01;
-   * 
+   *
    * @param forward
    *          The forward curve
    * @param data
@@ -191,37 +191,28 @@ public class CoupledPDEDataBundleProvider {
       final double lambda, final double beta,
       final AbsoluteLocalVolatilitySurface localVol) {
 
-    final Function<Double, Double> a = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double tau = ts[0];
-        final double s = ts[1];
-        final double t = maturity - tau;
-        final double temp = vol * Math.pow(s, beta) * localVol.getVolatility(t, s);
-        return -0.5 * temp * temp;
-      }
+    final Function<Double, Double> a = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double tau = ts[0];
+      final double s = ts[1];
+      final double t = maturity - tau;
+      final double temp = vol * Math.pow(s, beta) * localVol.getVolatility(t, s);
+      return -0.5 * temp * temp;
     };
 
-    final Function<Double, Double> b = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double tau = ts[0];
-        final double s = ts[1];
-        final double t = maturity - tau;
-        return -s * forward.getDrift(t);
-      }
+    final Function<Double, Double> b = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double tau = ts[0];
+      final double s = ts[1];
+      final double t = maturity - tau;
+      return -s * forward.getDrift(t);
     };
 
-    final Function<Double, Double> c = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double tau = ts[0];
-        final double t = maturity - tau;
-        return forward.getDrift(t) + lambda;
-      }
+    final Function<Double, Double> c = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double tau = ts[0];
+      final double t = maturity - tau;
+      return forward.getDrift(t) + lambda;
     };
 
     return new ConvectionDiffusionPDE1DCoupledCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),
@@ -233,32 +224,23 @@ public class CoupledPDEDataBundleProvider {
       final double beta,
       final AbsoluteLocalVolatilitySurface localVol) {
 
-    final Function<Double, Double> a = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... tk) {
-        Validate.isTrue(tk.length == 2);
-        final double t = tk[0];
-        final double k = tk[1];
-        final double temp = vol * Math.pow(k, beta) * localVol.getVolatility(t, k);
-        return -0.5 * temp * temp;
-      }
+    final Function<Double, Double> a = tk -> {
+      Validate.isTrue(tk.length == 2);
+      final double t = tk[0];
+      final double k = tk[1];
+      final double temp = vol * Math.pow(k, beta) * localVol.getVolatility(t, k);
+      return -0.5 * temp * temp;
     };
 
-    final Function<Double, Double> b = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... tk) {
-        Validate.isTrue(tk.length == 2);
-        final double k = tk[1];
-        return k * forward.getDrift(beta);
-      }
+    final Function<Double, Double> b = tk -> {
+      Validate.isTrue(tk.length == 2);
+      final double k = tk[1];
+      return k * forward.getDrift(beta);
     };
 
-    final Function<Double, Double> c = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        return lambda1;
-      }
+    final Function<Double, Double> c = ts -> {
+      Validate.isTrue(ts.length == 2);
+      return lambda1;
     };
 
     return new ConvectionDiffusionPDE1DCoupledCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),
@@ -269,52 +251,37 @@ public class CoupledPDEDataBundleProvider {
       final double initialProb, final double beta,
       final AbsoluteLocalVolatilitySurface localVol) {
 
-    final Function<Double, Double> a = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        return -1.0;
-      }
+    final Function<Double, Double> a = ts -> {
+      Validate.isTrue(ts.length == 2);
+      return -1.0;
     };
 
-    final Function<Double, Double> aStar = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double t = ts[0];
-        final double s = ts[1];
-        final double temp = localVol.getVolatility(t, s) * vol * Math.pow(s, beta);
+    final Function<Double, Double> aStar = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double t = ts[0];
+      final double s = ts[1];
+      final double temp = localVol.getVolatility(t, s) * vol * Math.pow(s, beta);
 
-        return 0.5 * temp * temp;
-      }
+      return 0.5 * temp * temp;
     };
 
-    final Function<Double, Double> b = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double t = ts[0];
-        final double s = ts[1];
-        return s * forward.getDrift(t);
-      }
+    final Function<Double, Double> b = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double t = ts[0];
+      final double s = ts[1];
+      return s * forward.getDrift(t);
     };
 
-    final Function<Double, Double> bStar = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        return 1.0;
-      }
+    final Function<Double, Double> bStar = ts -> {
+      Validate.isTrue(ts.length == 2);
+      return 1.0;
     };
 
-    final Function<Double, Double> c = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double t = ts[0];
+    final Function<Double, Double> c = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double t = ts[0];
 
-        return forward.getDrift(t) + lambda1;
-      }
+      return forward.getDrift(t) + lambda1;
     };
 
     // using a log-normal distribution with a very small Standard deviation as a proxy for a Dirac delta
@@ -322,7 +289,7 @@ public class CoupledPDEDataBundleProvider {
       private final double _volRootTOffset = 0.01;
 
       @Override
-      public Double evaluate(final Double s) {
+      public Double apply(final Double s) {
         if (s == 0) {
           return 0.0;
         }

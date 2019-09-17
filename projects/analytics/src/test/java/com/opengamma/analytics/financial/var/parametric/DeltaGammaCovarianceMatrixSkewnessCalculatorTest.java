@@ -37,7 +37,7 @@ public class DeltaGammaCovarianceMatrixSkewnessCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    F.evaluate((Map<Integer, ParametricVaRDataBundle>) null);
+    F.apply((Map<Integer, ParametricVaRDataBundle>) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -48,7 +48,7 @@ public class DeltaGammaCovarianceMatrixSkewnessCalculatorTest {
     final Map<Integer, ParametricVaRDataBundle> m = new HashMap<>();
     m.put(1, deltaData);
     m.put(2, gammaData);
-    F.evaluate(m);
+    F.apply(m);
   }
 
   @Test
@@ -65,10 +65,10 @@ public class DeltaGammaCovarianceMatrixSkewnessCalculatorTest {
     final ParametricVaRDataBundle deltaData = new ParametricVaRDataBundle(DELTA_VECTOR, COVARIANCE_MATRIX, 1);
     final Map<Integer, ParametricVaRDataBundle> m = new HashMap<>();
     m.put(1, deltaData);
-    assertEquals(F.evaluate(m), 0, 0);
+    assertEquals(F.apply(m), 0, 0);
     final ParametricVaRDataBundle gammaData = new ParametricVaRDataBundle(new DoubleMatrix2D(new double[0][0]), new DoubleMatrix2D(new double[0][0]), 2);
     m.put(2, gammaData);
-    assertEquals(F.evaluate(m), 0, 0);
+    assertEquals(F.apply(m), 0, 0);
   }
 
   @Test
@@ -78,6 +78,6 @@ public class DeltaGammaCovarianceMatrixSkewnessCalculatorTest {
     final Map<Integer, ParametricVaRDataBundle> m = new HashMap<>();
     m.put(1, deltaData);
     m.put(2, gammaData);
-    assertEquals(F.evaluate(m), 1.913, 1e-3);
+    assertEquals(F.apply(m), 1.913, 1e-3);
   }
 }

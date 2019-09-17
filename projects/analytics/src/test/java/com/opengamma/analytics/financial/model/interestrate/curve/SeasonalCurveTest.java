@@ -48,7 +48,7 @@ public class SeasonalCurveTest {
     double[] shift = new double[] {1.0, 2.0, 3.0 }; // Shift in years 
     for (int looptime = 0; looptime < time.length; looptime++) {
       for (int loopshift = 0; loopshift < shift.length; loopshift++) {
-        assertEquals("Values x years appart", SEASONAL_CURVE.getFunction().evaluate(time[looptime]), SEASONAL_CURVE.getFunction().evaluate(time[looptime] + shift[loopshift]), 1.0E-10);
+        assertEquals("Values x years appart", SEASONAL_CURVE.getFunction().apply(time[looptime]), SEASONAL_CURVE.getFunction().apply(time[looptime] + shift[loopshift]), 1.0E-10);
       }
     }
   }
@@ -70,7 +70,7 @@ public class SeasonalCurveTest {
 
     for (int looptime = 0; looptime < 12; looptime++) {
 
-      assertEquals("Values x month appart " + looptime + "-" + 1, SEASONAL_CURVE.getFunction().evaluate(looptime / 12.0),
+      assertEquals("Values x month appart " + looptime + "-" + 1, SEASONAL_CURVE.getFunction().apply(looptime / 12.0),
           cumulativeFactors[looptime], 1.0E-10);
     }
   }
@@ -85,9 +85,9 @@ public class SeasonalCurveTest {
     }
     factors[11] = 1 / product;
     for (int looptime = 0; looptime < STEPS.length - 1; looptime++) {
-      double x = SEASONAL_CURVE.getFunction().evaluate(looptime / 12.0);
-      assertEquals("Values x month appart " + looptime + "-" + 1, SEASONAL_CURVE.getFunction().evaluate(looptime / 12.0) * factors[looptime % 12],
-          SEASONAL_CURVE.getFunction().evaluate((looptime + 1) / 12.0), 1.0E-10);
+      double x = SEASONAL_CURVE.getFunction().apply(looptime / 12.0);
+      assertEquals("Values x month appart " + looptime + "-" + 1, SEASONAL_CURVE.getFunction().apply(looptime / 12.0) * factors[looptime % 12],
+          SEASONAL_CURVE.getFunction().apply((looptime + 1) / 12.0), 1.0E-10);
 
     }
   }

@@ -96,7 +96,7 @@ public class SVINonLinearLeastSquareFitter extends LeastSquareSmileFitter {
         final double sigma = mp.getEntry(3);
         final double m = mp.getEntry(4);
         final SVIFormulaData newData = new SVIFormulaData(a, b, rho, sigma, m);
-        return FORMULA.getVolatilityFunction(new EuropeanVanillaOption(strike, maturity, true), forward).evaluate(newData);
+        return FORMULA.getVolatilityFunction(new EuropeanVanillaOption(strike, maturity, true), forward).apply(newData);
       }
     };
 

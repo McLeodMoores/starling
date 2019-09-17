@@ -31,12 +31,12 @@ public class NegativeValueDoubleTimeSeriesFilterTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullTS() {
-    FILTER.evaluate((LocalDateDoubleTimeSeries) null);
+    FILTER.apply((LocalDateDoubleTimeSeries) null);
   }
 
   @Test
   public void testEmptyTS() {
-    final FilteredTimeSeries filtered = FILTER.evaluate(EMPTY_SERIES);
+    final FilteredTimeSeries filtered = FILTER.apply(EMPTY_SERIES);
     assertEquals(filtered.getFilteredTS(), EMPTY_SERIES);
     assertEquals(filtered.getRejectedTS(), EMPTY_SERIES);
   }
@@ -65,7 +65,7 @@ public class NegativeValueDoubleTimeSeriesFilterTest {
         filteredData[j++] = d;
       }
     }
-    final FilteredTimeSeries result = FILTER.evaluate(ImmutableLocalDateDoubleTimeSeries.of(dates, data));
+    final FilteredTimeSeries result = FILTER.apply(ImmutableLocalDateDoubleTimeSeries.of(dates, data));
     assertEquals(result, new FilteredTimeSeries(ImmutableLocalDateDoubleTimeSeries.of(Arrays.copyOf(filteredDates, j), Arrays.copyOf(filteredData, j)),
                                                 ImmutableLocalDateDoubleTimeSeries.of(Arrays.copyOf(rejectedDates, k), Arrays.copyOf(rejectedData, k))));
   }

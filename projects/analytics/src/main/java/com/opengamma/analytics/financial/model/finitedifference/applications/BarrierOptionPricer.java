@@ -64,7 +64,7 @@ public class BarrierOptionPricer {
 
   /**
    * Computes the price of a barrier option in the Black world.
-   * 
+   *
    * @param option
    *          The underlying European vanilla option.
    * @param barrier
@@ -109,7 +109,7 @@ public class BarrierOptionPricer {
    * If the barrier is above the spot it is assumed to be an up-and-out barrier (otherwise it would expire immediately) otherwise it is a down-and-out barrier
    * As there are exact formulae for this case (see {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction}),
    * this is purely for testing purposes.
-   * 
+   *
    * @param spot
    *          The current (i.e. option price time) of the underlying
    * @param barrierLevel
@@ -151,7 +151,7 @@ public class BarrierOptionPricer {
       } else {
         final Function1D<Double, Double> lowerValue = new Function1D<Double, Double>() {
           @Override
-          public Double evaluate(final Double tau) {
+          public Double apply(final Double tau) {
             return Math.exp(-rate * tau) * strike;
           }
         };
@@ -166,7 +166,7 @@ public class BarrierOptionPricer {
       if (isCall) {
         final Function1D<Double, Double> upperValue = new Function1D<Double, Double>() {
           @Override
-          public Double evaluate(final Double tau) {
+          public Double apply(final Double tau) {
             return Math.exp(-rate * tau) * (spot * Math.exp(carry * tau) - strike);
           }
         };
@@ -179,7 +179,7 @@ public class BarrierOptionPricer {
     final MeshingFunction tMesh = new ExponentialMeshing(0, expiry, _nTNodes, _lambda);
     final MeshingFunction xMesh = new HyperbolicMeshing(sMin, sMax, spot, _nXNodes, _bunching);
     final PDEGrid1D grid = new PDEGrid1D(tMesh, xMesh);
-    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> pdeData = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, intCon, lower, upper,
+    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> pdeData = new PDE1DDataBundle<>(pde, intCon, lower, upper,
         grid);
 
     final PDEResults1D res = SOLVER.solve(pdeData);
@@ -197,7 +197,7 @@ public class BarrierOptionPricer {
    * <p>
    * If the barrier is above the spot it is assumed to be an up-and-in barrier otherwise it is a down-and-in barrier As there are exact formulae for this case
    * (see {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction}), this is purely for testing purposes.
-   * 
+   *
    * @param spot
    *          The current (i.e. option price time) of the underlying
    * @param barrierLevel
@@ -228,7 +228,7 @@ public class BarrierOptionPricer {
   /**
    * Computes the price of a one-touch out barrier option in the Black-Scholes world assuming the rebate is paid at the option expiry. This is NOT the case for
    * a out barrier, but is for an in, and as we must price an in barrier and a European option plus a bond (the rebate) minus an out, we need this special case.
-   * 
+   *
    * @param spot
    *          The current (i.e. option price time) of the underlying
    * @param barrierLevel
@@ -259,7 +259,7 @@ public class BarrierOptionPricer {
 
     final Function1D<Double, Double> rebateValue = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double tau) {
+      public Double apply(final Double tau) {
         return rebate * Math.exp(-rate * tau);
       }
     };
@@ -276,7 +276,7 @@ public class BarrierOptionPricer {
       } else {
         final Function1D<Double, Double> lowerValue = new Function1D<Double, Double>() {
           @Override
-          public Double evaluate(final Double tau) {
+          public Double apply(final Double tau) {
             return Math.exp(-rate * tau) * strike;
           }
         };
@@ -290,7 +290,7 @@ public class BarrierOptionPricer {
       if (isCall) {
         final Function1D<Double, Double> upperValue = new Function1D<Double, Double>() {
           @Override
-          public Double evaluate(final Double tau) {
+          public Double apply(final Double tau) {
             return Math.exp(-rate * tau) * (spot * Math.exp(carry * tau) - strike);
           }
         };
@@ -303,7 +303,7 @@ public class BarrierOptionPricer {
     final MeshingFunction tMesh = new ExponentialMeshing(0, expiry, _nTNodes, _lambda);
     final MeshingFunction xMesh = new HyperbolicMeshing(sMin, sMax, spot, _nXNodes, _bunching);
     final PDEGrid1D grid = new PDEGrid1D(tMesh, xMesh);
-    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> pdeData = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, intCon, lower, upper,
+    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> pdeData = new PDE1DDataBundle<>(pde, intCon, lower, upper,
         grid);
 
     final PDEResults1D res = SOLVER.solve(pdeData);
@@ -328,7 +328,7 @@ public class BarrierOptionPricer {
       lower = new DirichletBoundaryCondition(0.0, sMin);
       final Function1D<Double, Double> upperValue = new Function1D<Double, Double>() {
         @Override
-        public Double evaluate(final Double tau) {
+        public Double apply(final Double tau) {
           return Math.exp(-rate * tau) * (spot * Math.exp(carry * tau) - strike);
         }
       };
@@ -336,7 +336,7 @@ public class BarrierOptionPricer {
     } else {
       final Function1D<Double, Double> lowerValue = new Function1D<Double, Double>() {
         @Override
-        public Double evaluate(final Double tau) {
+        public Double apply(final Double tau) {
           return Math.exp(-rate * tau) * strike;
         }
       };
@@ -347,7 +347,7 @@ public class BarrierOptionPricer {
     final MeshingFunction tMesh = new ExponentialMeshing(0, expiry, _nTNodes, _lambda);
     final MeshingFunction xMesh = new HyperbolicMeshing(sMin, sMax, spot, _nXNodes, _bunching);
     final PDEGrid1D grid = new PDEGrid1D(tMesh, xMesh);
-    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> pdeData = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, intCon, lower, upper,
+    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> pdeData = new PDE1DDataBundle<>(pde, intCon, lower, upper,
         grid);
 
     final PDEResults1D res = SOLVER.solve(pdeData);

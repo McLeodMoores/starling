@@ -24,7 +24,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Pricing method of a CMS coupon in the Hull-White (extended Vasicek) model by numerical integration.
- * 
+ *
  * @deprecated {@link HullWhiteOneFactorPiecewiseConstantDataBundle} is deprecated
  */
 @Deprecated
@@ -37,7 +37,7 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod implements Prici
 
   /**
    * Return the unique instance of the class.
-   * 
+   *
    * @return The instance.
    */
   public static CouponCMSHullWhiteNumericalIntegrationMethod getInstance() {
@@ -65,7 +65,7 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod implements Prici
 
   /**
    * Compute the present value of a CMS coupon with the Hull-White (extended Vasicek) model by numerical integration.
-   * 
+   *
    * @param cmsCoupon
    *          The CMS coupon.
    * @param hwData
@@ -137,7 +137,7 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod implements Prici
 
     /**
      * Constructor to the integrant function.
-     * 
+     *
      * @param discountedCashFlowFixed
      *          The discounted cash flows of the underlying swap fixed leg.
      * @param alphaFixed
@@ -160,7 +160,7 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod implements Prici
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double swapRate = MODEL.swapRate(x, _discountedCashFlowFixed, _alphaFixed, _discountedCashFlowIbor, _alphaIbor);
       final double dfDensity = Math.exp(-(x + _alphaPayment) * (x + _alphaPayment) / 2.0);
       final double result = dfDensity * swapRate;

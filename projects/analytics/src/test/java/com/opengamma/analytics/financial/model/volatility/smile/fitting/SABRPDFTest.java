@@ -75,11 +75,11 @@ public class SABRPDFTest {
       // double k = F * Math.exp(sigmaRootT * z) * 1.2;
       final double k = 0.0 + (i + 1) * step;
       strike[i] = k;
-      impliedVol[i] = SABR.evaluate(k);
-      impliedVol2[i] = SABR_HAGAN.evaluate(k);
-      impliedVol3[i] = SABR_BERESTYCKI.evaluate(k);
-      impliedVol4[i] = SABR_PAULOT.evaluate(k);
-      impliedVol5[i] = SABR_JOHNSON.evaluate(k);
+      impliedVol[i] = SABR.apply(k);
+      impliedVol2[i] = SABR_HAGAN.apply(k);
+      impliedVol3[i] = SABR_BERESTYCKI.apply(k);
+      impliedVol4[i] = SABR_PAULOT.apply(k);
+      impliedVol5[i] = SABR_JOHNSON.apply(k);
       //price[i] = BLACK.callPrice(F, k, 1.0, impliedVol[i], T);
       pdf1[i] = SABR_DIST.getPDF(k);
       pdf2[i] = HAGAN_DIST.getPDF(k);
@@ -100,9 +100,9 @@ public class SABRPDFTest {
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public Double evaluate(final Double k) {
+    public Double apply(final Double k) {
       final EuropeanVanillaOption option = new EuropeanVanillaOption(k, T, true);
-      return _sabr.getVolatilityFunction(option,F).evaluate(DATA);
+      return _sabr.getVolatilityFunction(option,F).apply(DATA);
     }
   }
 }

@@ -37,15 +37,12 @@ public class LocalVolDensity {
    */
   public static ConvectionDiffusionPDE1DCoefficients getStandardCoefficients(final ForwardCurve forward, final LocalVolatilitySurfaceStrike localVol) {
 
-    final Function<Double, Double> a = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double t = ts[0];
-        final double s = ts[1];
-        final double sigma = localVol.getVolatility(t, s) * s;
-        return -0.5 * sigma * sigma;
-      }
+    final Function<Double, Double> a = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double t = ts[0];
+      final double s = ts[1];
+      final double sigma = localVol.getVolatility(t, s) * s;
+      return -0.5 * sigma * sigma;
     };
 
     final Function<Double, Double> b = new Function<Double, Double>() {
@@ -110,52 +107,37 @@ public class LocalVolDensity {
    */
   public static ConvectionDiffusionPDE1DFullCoefficients getFullCoefficients(final ForwardCurve forward, final LocalVolatilitySurfaceStrike localVol) {
 
-    final Function<Double, Double> a = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        return -1.0;
-      }
+    final Function<Double, Double> a = ts -> {
+      Validate.isTrue(ts.length == 2);
+      return -1.0;
     };
 
-    final Function<Double, Double> alpha = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double t = ts[0];
-        final double s = ts[1];
-        final double temp = s * localVol.getVolatility(t, s);
+    final Function<Double, Double> alpha = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double t = ts[0];
+      final double s = ts[1];
+      final double temp = s * localVol.getVolatility(t, s);
 
-        return 0.5 * temp * temp;
-      }
+      return 0.5 * temp * temp;
     };
 
-    final Function<Double, Double> b = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double t = ts[0];
-        final double s = ts[1];
-        return s * forward.getDrift(t);
-      }
+    final Function<Double, Double> b = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double t = ts[0];
+      final double s = ts[1];
+      return s * forward.getDrift(t);
     };
 
-    final Function<Double, Double> beta = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        return 1.0;
-      }
+    final Function<Double, Double> beta = ts -> {
+      Validate.isTrue(ts.length == 2);
+      return 1.0;
     };
 
-    final Function<Double, Double> c = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double t = ts[0];
+    final Function<Double, Double> c = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double t = ts[0];
 
-        return forward.getDrift(t);
-      }
+      return forward.getDrift(t);
     };
 
     return new ConvectionDiffusionPDE1DFullCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),
@@ -167,52 +149,37 @@ public class LocalVolDensity {
       final double lambda1, final double lambda2,
       final double initialProb) {
 
-    final Function<Double, Double> a = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        return -1.0;
-      }
+    final Function<Double, Double> a = ts -> {
+      Validate.isTrue(ts.length == 2);
+      return -1.0;
     };
 
-    final Function<Double, Double> alpha = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double t = ts[0];
-        final double s = ts[1];
-        final double temp = s * localVol.getVolatility(t, s);
+    final Function<Double, Double> alpha = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double t = ts[0];
+      final double s = ts[1];
+      final double temp = s * localVol.getVolatility(t, s);
 
-        return 0.5 * temp * temp;
-      }
+      return 0.5 * temp * temp;
     };
 
-    final Function<Double, Double> b = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double t = ts[0];
-        final double s = ts[1];
-        return s * forward.getDrift(t);
-      }
+    final Function<Double, Double> b = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double t = ts[0];
+      final double s = ts[1];
+      return s * forward.getDrift(t);
     };
 
-    final Function<Double, Double> beta = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        return 1.0;
-      }
+    final Function<Double, Double> beta = ts -> {
+      Validate.isTrue(ts.length == 2);
+      return 1.0;
     };
 
-    final Function<Double, Double> c = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... ts) {
-        Validate.isTrue(ts.length == 2);
-        final double t = ts[0];
+    final Function<Double, Double> c = ts -> {
+      Validate.isTrue(ts.length == 2);
+      final double t = ts[0];
 
-        return forward.getDrift(t) + lambda1;
-      }
+      return forward.getDrift(t) + lambda1;
     };
 
     // using a log-normal distribution with a very small Standard deviation as a proxy for a Dirac delta
@@ -220,7 +187,7 @@ public class LocalVolDensity {
       private final double _volRootTOffset = 0.01;
 
       @Override
-      public Double evaluate(final Double s) {
+      public Double apply(final Double s) {
         if (s == 0) {
           return 0.0;
         }

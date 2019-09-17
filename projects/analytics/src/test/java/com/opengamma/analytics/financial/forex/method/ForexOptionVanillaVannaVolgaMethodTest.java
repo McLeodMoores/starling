@@ -192,9 +192,9 @@ public class ForexOptionVanillaVannaVolgaMethodTest {
       final BlackFunctionData dataBlackATM = new BlackFunctionData(forward, dfDomestic, volVV[1]);
       for (int loopvv = 0; loopvv < 3; loopvv++) {
         final EuropeanVanillaOption optionVV = new EuropeanVanillaOption(strikesVV[loopvv], forexOption[loopstrike].getTimeToExpiry(), true);
-        vega[loopvv] = BLACK_FUNCTION.getVegaFunction(optionVV).evaluate(dataBlackATM);
+        vega[loopvv] = BLACK_FUNCTION.getVegaFunction(optionVV).apply(dataBlackATM);
       }
-      final double vegaFlat = BLACK_FUNCTION.getVegaFunction(forexOption[loopstrike]).evaluate(dataBlackATM);
+      final double vegaFlat = BLACK_FUNCTION.getVegaFunction(forexOption[loopstrike]).apply(dataBlackATM);
       vega[1] = vegaFlat;
       final double lnk21 = Math.log(strikesVV[1] / strikesVV[0]);
       final double lnk31 = Math.log(strikesVV[2] / strikesVV[0]);

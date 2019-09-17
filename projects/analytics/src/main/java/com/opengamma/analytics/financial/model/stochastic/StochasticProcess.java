@@ -25,9 +25,9 @@ public abstract class StochasticProcess<T, U> {
     final Function1D<Double, Double> f1 = getPathGeneratingFunction(t, u, n);
     final Function2D<Double, Double> f2 = getPathAccumulationFunction();
     final double[] path = new double[n];
-    path[0] = f2.evaluate(getInitialValue(t, u), f1.evaluate(random[0]));
+    path[0] = f2.apply(getInitialValue(t, u), f1.apply(random[0]));
     for (int i = 1; i < n; i++) {
-      path[i] = f2.evaluate(path[i - 1], f1.evaluate(random[i]));
+      path[i] = f2.apply(path[i - 1], f1.apply(random[i]));
     }
     return path;
   }

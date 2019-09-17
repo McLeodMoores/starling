@@ -25,7 +25,7 @@ public class FunctionalDoublesCurveTest {
   private static final Function1D<Double, Double> F = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return x * x + 3;
     }
 
@@ -55,7 +55,7 @@ public class FunctionalDoublesCurveTest {
     final Function1D<Double, Double> f = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double x) {
+      public Double apply(final Double x) {
         return x * x * x;
       }
 
@@ -71,7 +71,7 @@ public class FunctionalDoublesCurveTest {
   @Test
   public void testGetters() {
     assertEquals(CURVE.getName(), NAME1);
-    assertEquals(CURVE.getYValue(2.3), F.evaluate(2.3), 0);
+    assertEquals(CURVE.getYValue(2.3), F.apply(2.3), 0);
   }
 
   @Test
@@ -92,6 +92,6 @@ public class FunctionalDoublesCurveTest {
     final LinearInterpolator1D interpolator = new LinearInterpolator1D();
     InterpolatedDoublesCurve other = CURVE.toInterpolatedDoublesCurve(x, interpolator);
     assertArrayEquals(other.getXDataAsPrimitive(), x, eps);
-    assertArrayEquals(other.getYDataAsPrimitive(), new double[] {F.evaluate(x[0]), F.evaluate(x[1]), F.evaluate(x[2])}, eps);
+    assertArrayEquals(other.getYDataAsPrimitive(), new double[] {F.apply(x[0]), F.apply(x[1]), F.apply(x[2])}, eps);
   }
 }

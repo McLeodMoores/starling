@@ -96,7 +96,7 @@ public final class SwaptionPhysicalFixedIborSpreadBlackMethod implements Pricing
     final double volatility = curveBlack.getBlackParameters().getVolatility(swaption.getTimeToExpiry(), maturity);
     final BlackFunctionData dataBlack = new BlackFunctionData(forwardModified, pvbpModified, volatility);
     final Function1D<BlackFunctionData, Double> func = blackFunction.getPriceFunction(option);
-    final double pv = func.evaluate(dataBlack) * (swaption.isLong() ? 1.0 : -1.0);
+    final double pv = func.apply(dataBlack) * (swaption.isLong() ? 1.0 : -1.0);
     return CurrencyAmount.of(swaption.getCurrency(), pv);
   }
 

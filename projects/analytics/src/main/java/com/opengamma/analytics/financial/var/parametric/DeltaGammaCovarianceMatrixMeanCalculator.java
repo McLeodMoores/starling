@@ -27,7 +27,7 @@ public class DeltaGammaCovarianceMatrixMeanCalculator extends Function1D<Map<Int
   }
 
   @Override
-  public Double evaluate(final Map<Integer, ParametricVaRDataBundle> data) {
+  public Double apply(final Map<Integer, ParametricVaRDataBundle> data) {
     Validate.notNull(data, "data");
     final ParametricVaRDataBundle firstOrderData = data.get(1);
     Validate.notNull(firstOrderData, "first order data");

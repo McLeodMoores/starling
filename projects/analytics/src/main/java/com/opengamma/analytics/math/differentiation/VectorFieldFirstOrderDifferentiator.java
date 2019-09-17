@@ -82,9 +82,9 @@ public class VectorFieldFirstOrderDifferentiator implements Differentiator<Doubl
 
           @SuppressWarnings("synthetic-access")
           @Override
-          public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+          public DoubleMatrix2D apply(final DoubleMatrix1D x) {
             Validate.notNull(x, "x");
-            final DoubleMatrix1D y = function.evaluate(x);
+            final DoubleMatrix1D y = function.apply(x);
             final int n = x.getNumberOfElements();
             final int m = y.getNumberOfElements();
             final double[] xData = x.getData();
@@ -95,7 +95,7 @@ public class VectorFieldFirstOrderDifferentiator implements Differentiator<Doubl
             for (j = 0; j < n; j++) {
               oldValue = xData[j];
               xData[j] += _eps;
-              up = function.evaluate(x);
+              up = function.apply(x);
               for (i = 0; i < m; i++) {
                 res[i][j] = (up.getEntry(i) - y.getEntry(i)) / _eps;
               }
@@ -109,9 +109,9 @@ public class VectorFieldFirstOrderDifferentiator implements Differentiator<Doubl
 
           @SuppressWarnings("synthetic-access")
           @Override
-          public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+          public DoubleMatrix2D apply(final DoubleMatrix1D x) {
             Validate.notNull(x, "x");
-            final DoubleMatrix1D y = function.evaluate(x); // need this unused evaluation to get size of y
+            final DoubleMatrix1D y = function.apply(x); // need this unused evaluation to get size of y
             final int n = x.getNumberOfElements();
             final int m = y.getNumberOfElements();
             final double[] xData = x.getData();
@@ -122,9 +122,9 @@ public class VectorFieldFirstOrderDifferentiator implements Differentiator<Doubl
             for (j = 0; j < n; j++) {
               oldValue = xData[j];
               xData[j] += _eps;
-              up = function.evaluate(x);
+              up = function.apply(x);
               xData[j] -= _twoEps;
-              down = function.evaluate(x);
+              down = function.apply(x);
               for (i = 0; i < m; i++) {
                 res[i][j] = (up.getEntry(i) - down.getEntry(i)) / _twoEps;
               }
@@ -138,9 +138,9 @@ public class VectorFieldFirstOrderDifferentiator implements Differentiator<Doubl
 
           @SuppressWarnings("synthetic-access")
           @Override
-          public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+          public DoubleMatrix2D apply(final DoubleMatrix1D x) {
             Validate.notNull(x, "x");
-            final DoubleMatrix1D y = function.evaluate(x);
+            final DoubleMatrix1D y = function.apply(x);
             final int n = x.getNumberOfElements();
             final int m = y.getNumberOfElements();
             final double[] xData = x.getData();
@@ -151,7 +151,7 @@ public class VectorFieldFirstOrderDifferentiator implements Differentiator<Doubl
             for (j = 0; j < n; j++) {
               oldValue = xData[j];
               xData[j] -= _eps;
-              down = function.evaluate(x);
+              down = function.apply(x);
               for (i = 0; i < m; i++) {
                 res[i][j] = (y.getEntry(i) - down.getEntry(i)) / _eps;
               }
@@ -179,11 +179,11 @@ public class VectorFieldFirstOrderDifferentiator implements Differentiator<Doubl
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D x) {
         Validate.notNull(x, "x");
-        ArgumentChecker.isTrue(domain.evaluate(x), "point {} is not in the function domain", x.toString());
+        ArgumentChecker.isTrue(domain.apply(x), "point {} is not in the function domain", x.toString());
 
-        final DoubleMatrix1D mid = function.evaluate(x); // need this unused evaluation to get size of y
+        final DoubleMatrix1D mid = function.apply(x); // need this unused evaluation to get size of y
         final int n = x.getNumberOfElements();
         final int m = mid.getNumberOfElements();
         final double[] xData = x.getData();
@@ -196,29 +196,29 @@ public class VectorFieldFirstOrderDifferentiator implements Differentiator<Doubl
         for (j = 0; j < n; j++) {
           oldValue = xData[j];
           xData[j] += _eps;
-          if (!domain.evaluate(x)) {
+          if (!domain.apply(x)) {
             xData[j] = oldValue - _twoEps;
-            if (!domain.evaluate(x)) {
+            if (!domain.apply(x)) {
               throw new MathException("cannot get derivative at point " + x.toString() + " in direction " + j);
             }
             y[2] = mid;
-            y[0] = function.evaluate(x);
+            y[0] = function.apply(x);
             xData[j] = oldValue - _eps;
-            y[1] = function.evaluate(x);
+            y[1] = function.apply(x);
             w = wBack;
           } else {
-            final DoubleMatrix1D temp = function.evaluate(x);
+            final DoubleMatrix1D temp = function.apply(x);
             xData[j] = oldValue - _eps;
-            if (!domain.evaluate(x)) {
+            if (!domain.apply(x)) {
               y[0] = mid;
               y[1] = temp;
               xData[j] = oldValue + _twoEps;
-              y[2] = function.evaluate(x);
+              y[2] = function.apply(x);
               w = wFwd;
             } else {
               y[2] = temp;
               xData[j] = oldValue - _eps;
-              y[0] = function.evaluate(x);
+              y[0] = function.apply(x);
               y[1] = mid;
               w = wCent;
             }

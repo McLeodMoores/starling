@@ -109,7 +109,7 @@ public class SmileInterpolatorSABRTest extends SmileInterpolatorTestCase {
 
     for (int i = 0; i < 101; i++) {
       final double strike = 0.5 + 1.0 * i / 100.;
-      System.out.println(strike + "\t" + func.evaluate(strike) + "\t" + func2.evaluate(strike) + "\t" + func3.evaluate(strike));
+      System.out.println(strike + "\t" + func.apply(strike) + "\t" + func2.apply(strike) + "\t" + func3.apply(strike));
     }
     System.out.println();
 

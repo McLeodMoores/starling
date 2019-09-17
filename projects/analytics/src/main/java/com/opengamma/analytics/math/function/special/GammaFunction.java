@@ -22,11 +22,11 @@ import com.opengamma.analytics.math.function.Function1D;
 public class GammaFunction extends Function1D<Double, Double> {
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     if (x > 0.0) {
       return Math.exp(Gamma.logGamma(x));
     }
-    return Math.PI / Math.sin(Math.PI * x) / evaluate(1 - x);
+    return Math.PI / Math.sin(Math.PI * x) / apply(1 - x);
   }
 
 }

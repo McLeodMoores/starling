@@ -204,7 +204,7 @@ public class CapFloorCMSSpreadSABRBinormalMethodTest {
     final EuropeanVanillaOption optionSpread = new EuropeanVanillaOption(STRIKE, FIXING_TIME, IS_CAP);
     final NormalFunctionData dataSpread = new NormalFunctionData(expectedRate1 - expectedRate2, 1.0, spreadVol);
     final Function1D<NormalFunctionData, Double> priceFunction = normalPrice.getPriceFunction(optionSpread);
-    final double cmsSpreadPriceExpected = discountFactorPayment * priceFunction.evaluate(dataSpread) * CMS_CAP_SPREAD.getNotional() * CMS_CAP_SPREAD.getPaymentYearFraction();
+    final double cmsSpreadPriceExpected = discountFactorPayment * priceFunction.apply(dataSpread) * CMS_CAP_SPREAD.getNotional() * CMS_CAP_SPREAD.getPaymentYearFraction();
     assertEquals("CMS spread: price with constant correlation", cmsSpreadPriceExpected, cmsSpreadPrice, TOLERANCE_PV);
   }
 

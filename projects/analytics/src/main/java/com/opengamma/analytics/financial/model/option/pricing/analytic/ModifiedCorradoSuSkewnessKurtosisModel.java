@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
@@ -32,7 +32,7 @@ public class ModifiedCorradoSuSkewnessKurtosisModel extends AnalyticOptionModel<
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final SkewKurtosisOptionDataBundle data) {
+      public Double apply(final SkewKurtosisOptionDataBundle data) {
         Validate.notNull(data);
         final double s = data.getSpot();
         final double k = definition.getStrike();
@@ -48,7 +48,7 @@ public class ModifiedCorradoSuSkewnessKurtosisModel extends AnalyticOptionModel<
           callDefinition = new EuropeanVanillaOptionDefinition(callDefinition.getStrike(), callDefinition.getExpiry(), true);
         }
         final Function1D<StandardOptionDataBundle, Double> bsm = BSM.getPricingFunction(callDefinition);
-        final double bsmCall = bsm.evaluate(data);
+        final double bsmCall = bsm.apply(data);
         final double w = getW(sigma, t, skew, kurtosis);
         final double d = getD(s, k, sigma, t, b, w, sigmaT);
         final double call = bsmCall + skew * getQ3(s, d, w, sigmaT) + kurtosis * getQ4(s, d, w, sigmaT);

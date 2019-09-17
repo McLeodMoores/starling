@@ -61,7 +61,7 @@ public class CGMYFourierPricerTest {
       for (int count = 0; count < WARMUP_CYCLES; count++) {
         for (int i = 0; i < 100; i++) {
           final double x = -15. + i * 30. / 200.0;
-          res += function.evaluate(x);
+          res += function.apply(x);
         }
       }
       res *= 2;
@@ -70,7 +70,7 @@ public class CGMYFourierPricerTest {
         for (int count = 0; count < BENCHMARK_CYCLES; count++) {
           for (int i = 0; i < 100; i++) {
             final double x = -15. + i * 30. / 200.0;
-            res += function.evaluate(x);
+            res += function.apply(x);
           }
         }
         timer.finished();

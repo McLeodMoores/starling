@@ -121,8 +121,8 @@ public class TimeVaryingLatticeSpecification extends LatticeSpecification {
    */
   public double getSpaceStep(final double timeToExpiry, final double[] volatility, final int nSteps, final double[] nu) {
     final Function1D<double[], Double> calculator = new MeanCalculator();
-    final double meanNu = calculator.evaluate(nu);
-    final double meanVol = calculator.evaluate(volatility);
+    final double meanNu = calculator.apply(nu);
+    final double meanVol = calculator.apply(volatility);
     final double dt = timeToExpiry / nSteps;
 
     return Math.sqrt(meanVol * meanVol * dt + meanNu * meanNu * dt * dt);
@@ -139,8 +139,8 @@ public class TimeVaryingLatticeSpecification extends LatticeSpecification {
    */
   public double getSpaceStepTrinomial(final double[] volatility, final double[] nu, final double dt) {
     final Function1D<double[], Double> calculator = new MeanCalculator();
-    final double meanNu = calculator.evaluate(nu);
-    final double meanVol = calculator.evaluate(volatility);
+    final double meanNu = calculator.apply(nu);
+    final double meanVol = calculator.apply(volatility);
 
     return Math.sqrt(3. * meanVol * meanVol * dt + meanNu * meanNu * dt * dt);
   }

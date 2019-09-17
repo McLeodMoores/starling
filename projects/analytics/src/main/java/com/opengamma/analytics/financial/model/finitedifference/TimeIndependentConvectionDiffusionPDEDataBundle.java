@@ -47,7 +47,7 @@ public class TimeIndependentConvectionDiffusionPDEDataBundle {
   }
 
   public double getInitialValue(final double x) {
-    return _initialCondition.evaluate(x);
+    return _initialCondition.apply(x);
   }
 
 }

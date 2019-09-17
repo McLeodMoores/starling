@@ -98,7 +98,7 @@ public class SuccessiveRootFinderG2ppCalibrationObjective extends SuccessiveRoot
   }
 
   @Override
-  public Double evaluate(final Double x) {
+  public Double apply(final Double x) {
     _g2Provider.getG2ppParameters().setLastVolatilities(new double[] {x, x / _ratio });
     return _g2Provider.getMulticurveProvider().getFxRates().convert(getInstrument().accept(PVG2C, _g2Provider), _ccyG2).getAmount() - getPrice();
   }

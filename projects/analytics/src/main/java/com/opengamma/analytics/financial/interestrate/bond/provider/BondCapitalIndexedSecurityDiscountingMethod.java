@@ -45,7 +45,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Return the class instance.
-   * 
+   *
    * @return The instance.
    */
   public static BondCapitalIndexedSecurityDiscountingMethod getInstance() {
@@ -72,7 +72,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
   /**
    * Computes the present value of a capital indexed bound by index estimation and discounting. The value is the value of the nominal and the coupons but not
    * the settlement.
-   * 
+   *
    * @param bond
    *          The bond.
    * @param provider
@@ -90,7 +90,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
   /**
    * Computes the security present value from a quoted clean real price. The real accrued are added to the clean real price, the result is multiplied by the
    * inflation index ratio and then discounted from settlement time to 0 with the discounting curve.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param market
@@ -111,7 +111,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
   /**
    * Computes the security present value from a quoted clean real price. The real accrued are added to the clean real price, the result is multiplied by the
    * inflation index ratio and then discounted from settlement time to 0 with the discounting curve.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param market
@@ -133,7 +133,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Calculates the accrued interest for a fixed-coupon bond using the clean price. The accrued interest is defined as dirty price - clean price.
-   * 
+   *
    * @param bond
    *          The bond, not null
    * @param cleanPrice
@@ -147,7 +147,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Calculates the accrued interest for a fixed-coupon bond using the clean price. The accrued interest is defined as dirty price - clean price.
-   * 
+   *
    * @param bond
    *          The bond, not null
    * @param yield
@@ -161,7 +161,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Computes the clean real price of a bond security from a dirty real price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param dirtyPrice
@@ -175,7 +175,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Computes the clean nominal price of a bond security from a dirty real price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param dirtyPrice
@@ -190,7 +190,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Computes the clean price of a bond security from curves.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param issuerMulticurves
@@ -207,7 +207,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Computes the clean price of a bond security from curves.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param issuerMulticurves
@@ -221,7 +221,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Computes the clean real price of a bond security from a dirty real price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param cleanNominalPrice
@@ -238,7 +238,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Compute the dirty price of a bond security from curves.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param issuerMulticurves
@@ -256,7 +256,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Compute the dirty price of a bond security from curves.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param issuerMulticurves
@@ -274,7 +274,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Computes the dirty real price of a bond security from the clean real price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param cleanPrice
@@ -288,7 +288,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * The net amount paid at settlement date for a given clean real price.
-   * 
+   *
    * @param bond
    *          The bond.
    * @param market
@@ -308,7 +308,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Computes the dirty (real or nominal depending of the convention) price from the conventional real yield.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param yield
@@ -382,7 +382,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Computes the clean price (real or nominal depending on the convention) from the conventional real yield.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param yield
@@ -400,7 +400,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Compute the conventional yield from the dirty price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param dirtyPrice
@@ -413,7 +413,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
      */
     final Function1D<Double, Double> priceResidual = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double y) {
+      public Double apply(final Double y) {
         return dirtyPriceFromRealYield(bond, y) - dirtyPrice;
       }
     };
@@ -425,7 +425,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
   /**
    * Computes the present value sensitivity of a capital indexed bound by index estimation and discounting. The sensitivity is the sensitivity of the nominal
    * and the coupons but not the settlement.
-   * 
+   *
    * @param bond
    *          The bond.
    * @param provider
@@ -443,7 +443,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Compute the conventional yield from the clean price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param cleanPrice
@@ -456,7 +456,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
      */
     final Function1D<Double, Double> priceResidual = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double y) {
+      public Double apply(final Double y) {
         return cleanPriceFromYield(bond, y) - cleanPrice;
       }
     };
@@ -467,7 +467,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Calculates the modified duration from a standard yield.
-   * 
+   *
    * @param bond
    *          The bond
    * @param yield
@@ -495,7 +495,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Calculates the modified duration from a standard yield.
-   * 
+   *
    * @param bond
    *          The bond
    * @param yield
@@ -512,7 +512,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Calculates the modified duration from a standard yield.
-   * 
+   *
    * @param bond
    *          The bond
    * @param yield
@@ -530,7 +530,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Computes the bill yield from the curves. The yield is in the bill yield convention.
-   * 
+   *
    * @param bond
    *          The bond.
    * @param provider
@@ -552,7 +552,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Computes the modified duration of a bond from the curves.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param issuerMulticurves
@@ -566,7 +566,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Compute the conventional yield from the clean price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param cleanPrice
@@ -581,7 +581,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Computes the modified duration of a bond from the clean price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param cleanPrice
@@ -595,7 +595,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Calculates the convexity from a standard yield.
-   * 
+   *
    * @param bond
    *          The bond
    * @param yield
@@ -625,7 +625,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Computes the convexity of a bond from the curves.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param issuerMulticurves
@@ -639,7 +639,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
   /**
    * Computes the convexity of a bond from the clean price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param cleanPrice
@@ -654,7 +654,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
   /**
    * Computes the present value of a bond security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bond
    * (Issuer Entity). The parallel shift is done in the curve convention.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param issuerMulticurves
@@ -673,7 +673,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
   /**
    * Computes the present value of a bond security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bond
    * (Issuer Entity). The parallel shift is done in the curve convention.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param issuerMulticurves
@@ -692,7 +692,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
   /**
    * Computes a bond z-spread from the curves and a present value. The z-spread is a parallel shift applied to the discounting curve associated to the bond
    * (Issuer Entity) to match the present value.
-   * 
+   *
    * @param bond
    *          The bond.
    * @param issuerMulticurves
@@ -710,7 +710,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
     ArgumentChecker.notNull(issuerMulticurves, "Issuer and multi-curves provider");
     final Function1D<Double, Double> residual = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double z) {
+      public Double apply(final Double z) {
         final InflationIssuerProviderIssuerDecoratedSpread issuerShifted = new InflationIssuerProviderIssuerDecoratedSpread(issuerMulticurves,
             bond.getIssuerEntity(), z);
         if (bond.getYieldConvention().equals(INDEX_LINKED_FLOAT)) {
@@ -727,7 +727,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
   /**
    * Computes a bond z-spread from the curves and a present value. The z-spread is a parallel shift applied to the discounting curve associated to the bond
    * (Issuer Entity) to match the present value.
-   * 
+   *
    * @param bond
    *          The bond.
    * @param issuerMulticurves
@@ -744,7 +744,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
   /**
    * Computes a bond z-spread from the curves and a present value. The z-spread is a parallel shift applied to the discounting curve associated to the bond
    * (Issuer Entity) to match the present value.
-   * 
+   *
    * @param bond
    *          The bond.
    * @param issuerMulticurves
@@ -761,7 +761,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
   /**
    * Computes a bond z-spread from the curves and a present value. The z-spread is a parallel shift applied to the discounting curve associated to the bond
    * (Issuer Entity) to match the present value.
-   * 
+   *
    * @param bond
    *          The bond.
    * @param issuerMulticurves
@@ -778,7 +778,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
 
     final Function1D<Double, Double> residual = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double z) {
+      public Double apply(final Double z) {
         return presentValueFromZSpread(bond, issuerMulticurves, z).getAmount(ccy) - pv.getAmount(ccy);
       }
     };
@@ -790,7 +790,7 @@ public final class BondCapitalIndexedSecurityDiscountingMethod {
   /**
    * Computes a bond z-spread from the curves and a clean price. The z-spread is a parallel shift applied to the discounting curve associated to the bond
    * (Issuer Entity) to match the CleanPrice present value.
-   * 
+   *
    * @param bond
    *          The bond.
    * @param issuerMulticurves

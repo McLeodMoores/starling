@@ -21,7 +21,7 @@ public class ChebyshevPolynomialOfFirstKindFunctionTest {
   private static final DoubleFunction1D T0 = new DoubleFunction1D() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 1.;
     }
 
@@ -29,7 +29,7 @@ public class ChebyshevPolynomialOfFirstKindFunctionTest {
   private static final DoubleFunction1D T1 = new DoubleFunction1D() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return x;
     }
 
@@ -37,7 +37,7 @@ public class ChebyshevPolynomialOfFirstKindFunctionTest {
   private static final DoubleFunction1D T2 = new DoubleFunction1D() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 2 * x * x - 1;
     }
 
@@ -45,7 +45,7 @@ public class ChebyshevPolynomialOfFirstKindFunctionTest {
   private static final DoubleFunction1D T3 = new DoubleFunction1D() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return x * (4 * x * x - 3);
     }
 
@@ -53,7 +53,7 @@ public class ChebyshevPolynomialOfFirstKindFunctionTest {
   private static final DoubleFunction1D T4 = new DoubleFunction1D() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 8 * x * x * x * x - 8 * x * x + 1;
     }
 
@@ -61,7 +61,7 @@ public class ChebyshevPolynomialOfFirstKindFunctionTest {
   private static final DoubleFunction1D T5 = new DoubleFunction1D() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return x * (16 * x * x * x * x - 20 * x * x + 5);
     }
 
@@ -69,7 +69,7 @@ public class ChebyshevPolynomialOfFirstKindFunctionTest {
   private static final DoubleFunction1D T6 = new DoubleFunction1D() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return 32 * x * x * x * x * x * x - 48 * x * x * x * x + 18 * x * x - 1;
     }
 
@@ -77,7 +77,7 @@ public class ChebyshevPolynomialOfFirstKindFunctionTest {
   private static final DoubleFunction1D T7 = new DoubleFunction1D() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return x * (64 * x * x * x * x * x * x - 112 * x * x * x * x + 56 * x * x - 7);
     }
 
@@ -85,7 +85,7 @@ public class ChebyshevPolynomialOfFirstKindFunctionTest {
   private static final DoubleFunction1D T8 = new DoubleFunction1D() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double xSq = x * x;
       return 128 * xSq * xSq * xSq * xSq - 256 * xSq * xSq * xSq + 160 * xSq * xSq - 32 * xSq + 1;
     }
@@ -94,7 +94,7 @@ public class ChebyshevPolynomialOfFirstKindFunctionTest {
   private static final DoubleFunction1D T9 = new DoubleFunction1D() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double xSq = x * x;
       return x * (256 * xSq * xSq * xSq * xSq - 576 * xSq * xSq * xSq + 432 * xSq * xSq - 120 * xSq + 9);
     }
@@ -119,14 +119,14 @@ public class ChebyshevPolynomialOfFirstKindFunctionTest {
     DoubleFunction1D[] t = CHEBYSHEV.getPolynomials(0);
     assertEquals(t.length, 1);
     final double x = 1.23;
-    assertEquals(t[0].evaluate(x), 1, EPS);
+    assertEquals(t[0].apply(x), 1, EPS);
     t = CHEBYSHEV.getPolynomials(1);
     assertEquals(t.length, 2);
-    assertEquals(t[1].evaluate(x), x, EPS);
+    assertEquals(t[1].apply(x), x, EPS);
     for (int i = 0; i < 10; i++) {
       t = CHEBYSHEV.getPolynomials(i);
       for (int j = 0; j <= i; j++) {
-        assertEquals(T[j].evaluate(x), t[j].evaluate(x), EPS);
+        assertEquals(T[j].apply(x), t[j].apply(x), EPS);
       }
     }
   }

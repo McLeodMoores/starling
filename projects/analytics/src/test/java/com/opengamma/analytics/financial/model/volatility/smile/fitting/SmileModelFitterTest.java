@@ -69,7 +69,7 @@ public abstract class SmileModelFitterTest<T extends SmileModelData> {
     _noisyVols = new double[n];
 
     _errors = new double[n];
-    _cleanVols = model.getVolatilityFunction(F, strikes, TIME_TO_EXPIRY).evaluate(data);
+    _cleanVols = model.getVolatilityFunction(F, strikes, TIME_TO_EXPIRY).apply(data);
     Arrays.fill(_errors, 1e-4);
     for (int i = 0; i < n; i++) {
       _noisyVols[i] = _cleanVols[i] + UNIFORM.nextDouble() * _errors[i];
@@ -229,8 +229,8 @@ public abstract class SmileModelFitterTest<T extends SmileModelData> {
     final VectorFieldFirstOrderDifferentiator differ = new VectorFieldFirstOrderDifferentiator();
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacFuncFD = differ.differentiate(func);
 
-    final DoubleMatrix2D jac = jacFunc.evaluate(x);
-    final DoubleMatrix2D jacFD = jacFuncFD.evaluate(x);
+    final DoubleMatrix2D jac = jacFunc.apply(x);
+    final DoubleMatrix2D jacFD = jacFuncFD.apply(x);
     final int rows = jacFD.getNumberOfRows();
     final int cols = jacFD.getNumberOfColumns();
 

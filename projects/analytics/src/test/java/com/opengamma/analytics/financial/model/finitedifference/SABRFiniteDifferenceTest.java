@@ -80,14 +80,14 @@ public class SABRFiniteDifferenceTest {
     ATM_VOL = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return (0.05 + 0.1 * t) * Math.exp(-0.3 * t) + 0.2;
       }
     };
 
     NU = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return 0.3 * Math.exp(-0.2 * t) + 0.2;
       }
     };
@@ -95,7 +95,7 @@ public class SABRFiniteDifferenceTest {
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return SPOT * Math.exp(t * DRIFT); //* (1 + 0.3 * (1 - Math.exp(-0.3 * t)));
       }
     };
@@ -113,12 +113,12 @@ public class SABRFiniteDifferenceTest {
         final double x = tx[1];
         final double f = FORWARD_CURVE.getForward(t);
         final double k = x * f;
-        final double alpha = ATM_VOL.evaluate(t) * Math.pow(f, 1 - BETA);
-        final double nu = NU.evaluate(t);
+        final double alpha = ATM_VOL.apply(t) * Math.pow(f, 1 - BETA);
+        final double nu = NU.apply(t);
         final SABRFormulaData sabrdata = new SABRFormulaData(alpha, BETA, RHO, nu);
         final EuropeanVanillaOption option = new EuropeanVanillaOption(k, t, true);
         final Function1D<SABRFormulaData, Double> func1 = SABR.getVolatilityFunction(option, f);
-        return func1.evaluate(sabrdata);
+        return func1.apply(sabrdata);
       }
     };
 
@@ -187,7 +187,7 @@ public class SABRFiniteDifferenceTest {
     final BoundaryCondition lower = new DirichletBoundaryCondition(0, 0.0);
     final BoundaryCondition upper = new NeumannBoundaryCondition(new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double tau) {
+      public Double apply(final Double tau) {
         return Math.exp(-tau * (RATE - DRIFT));
       }
     }, 5 * SPOT, false);
@@ -337,7 +337,7 @@ public class SABRFiniteDifferenceTest {
 
     final BoundaryCondition lower = new DirichletBoundaryCondition(new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return SPOT * Math.exp(-t * (RATE - DRIFT));
       }
     }, 0.0);
@@ -407,13 +407,13 @@ public class SABRFiniteDifferenceTest {
     final BoundaryCondition lowerBwd = new DirichletBoundaryCondition(0.0, 0.0);
     final BoundaryCondition lowerUp = new DirichletBoundaryCondition(new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return SPOT * (1 + shift) * Math.exp(-t * (RATE - DRIFT));
       }
     }, 0.0);
     final BoundaryCondition lowerDown = new DirichletBoundaryCondition(new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return SPOT * (1 - shift) * Math.exp(-t * (RATE - DRIFT));
       }
     }, 0.0);
@@ -585,7 +585,7 @@ public class SABRFiniteDifferenceTest {
 
     final double forward = FORWARD_CURVE.getForward(T);
     final double maxMoneyness = 5.0;
-    final SABRFormulaData sabrData = new SABRFormulaData(ATM_VOL.evaluate(T), 1.0, RHO, NU.evaluate(T));
+    final SABRFormulaData sabrData = new SABRFormulaData(ATM_VOL.apply(T), 1.0, RHO, NU.apply(T));
     final LocalVolatilitySurfaceStrike locVol = getSABRLocalVolSurface(1.0, FORWARD_CURVE);
 
     // final ZZConvectionDiffusionPDEDataBundle pdeDataFwd = PDE_DATA_PROVIDER.getForwardLocalVol(locVol, FORWARD_CURVE, true);
@@ -629,8 +629,8 @@ public class SABRFiniteDifferenceTest {
         final double t = x[0];
         final double k = x[1];
         final double fwd = forwardCurve.getForward(t);
-        final double alpha = ATM_VOL.evaluate(T) * Math.pow(fwd, 1 - beta);
-        final double nu = NU.evaluate(t);
+        final double alpha = ATM_VOL.apply(T) * Math.pow(fwd, 1 - beta);
+        final double nu = NU.apply(t);
         final SABRFormulaData data = new SABRFormulaData(alpha, beta, RHO, nu);
         final EuropeanVanillaOption option = new EuropeanVanillaOption(k, t, true);
         return SABR.getVolatility(option, fwd, data);

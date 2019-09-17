@@ -48,42 +48,42 @@ public class BatesGeneralizedJumpDiffusionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(new EuropeanVanillaOptionDefinition(100, EXPIRY1, true)).evaluate((BatesGeneralizedJumpDiffusionModelDataBundle) null);
+    MODEL.getPricingFunction(new EuropeanVanillaOptionDefinition(100, EXPIRY1, true)).apply((BatesGeneralizedJumpDiffusionModelDataBundle) null);
   }
 
   @Test
   public void test() {
     OptionDefinition call = new EuropeanVanillaOptionDefinition(80, EXPIRY1, true);
     BatesGeneralizedJumpDiffusionModelDataBundle data = new BatesGeneralizedJumpDiffusionModelDataBundle(CURVE, B, SURFACE, SPOT, DATE, 0., -0.04, 0.);
-    assertEquals(BSM.getPricingFunction(call).evaluate(data), MODEL.getPricingFunction(call).evaluate(data), EPS2);
+    assertEquals(BSM.getPricingFunction(call).apply(data), MODEL.getPricingFunction(call).apply(data), EPS2);
     call = new EuropeanVanillaOptionDefinition(80, EXPIRY1, true);
     data = data.withLambda(1.).withDelta(0.1);
-    assertEquals(20.67, MODEL.getPricingFunction(call).evaluate(data), EPS1);
+    assertEquals(20.67, MODEL.getPricingFunction(call).apply(data), EPS1);
     call = new EuropeanVanillaOptionDefinition(90, EXPIRY2, true);
     data = data.withLambda(5.);
-    assertEquals(14.13, MODEL.getPricingFunction(call).evaluate(data), EPS1);
+    assertEquals(14.13, MODEL.getPricingFunction(call).apply(data), EPS1);
     call = new EuropeanVanillaOptionDefinition(100, EXPIRY3, true);
     data = data.withLambda(10.);
-    assertEquals(13.62, MODEL.getPricingFunction(call).evaluate(data), EPS1);
+    assertEquals(13.62, MODEL.getPricingFunction(call).apply(data), EPS1);
     data = data.withDelta(0.25);
     data = data.withLambda(1.);
     call = new EuropeanVanillaOptionDefinition(90, EXPIRY1, true);
-    assertEquals(11.57, MODEL.getPricingFunction(call).evaluate(data), EPS1);
+    assertEquals(11.57, MODEL.getPricingFunction(call).apply(data), EPS1);
     call = new EuropeanVanillaOptionDefinition(100, EXPIRY2, true);
     data = data.withLambda(5.);
-    assertEquals(12.25, MODEL.getPricingFunction(call).evaluate(data), EPS1);
+    assertEquals(12.25, MODEL.getPricingFunction(call).apply(data), EPS1);
     call = new EuropeanVanillaOptionDefinition(110, EXPIRY3, true);
     data = data.withLambda(10.);
-    assertEquals(20.43, MODEL.getPricingFunction(call).evaluate(data), EPS1);
+    assertEquals(20.43, MODEL.getPricingFunction(call).apply(data), EPS1);
     data = data.withDelta(0.5);
     data = data.withLambda(1.);
     call = new EuropeanVanillaOptionDefinition(100, EXPIRY1, true);
-    assertEquals(5.18, MODEL.getPricingFunction(call).evaluate(data), EPS1);
+    assertEquals(5.18, MODEL.getPricingFunction(call).apply(data), EPS1);
     call = new EuropeanVanillaOptionDefinition(110, EXPIRY2, true);
     data = data.withLambda(5.);
-    assertEquals(16.52, MODEL.getPricingFunction(call).evaluate(data), EPS1);
+    assertEquals(16.52, MODEL.getPricingFunction(call).apply(data), EPS1);
     call = new EuropeanVanillaOptionDefinition(120, EXPIRY3, true);
     data = data.withLambda(10.);
-    assertEquals(37.03, MODEL.getPricingFunction(call).evaluate(data), EPS1);
+    assertEquals(37.03, MODEL.getPricingFunction(call).apply(data), EPS1);
   }
 }

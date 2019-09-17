@@ -36,7 +36,7 @@ public class EuropeanStandardBarrierOptionModel extends AnalyticOptionModel<Euro
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final StandardOptionDataBundle data) {
+      public Double apply(final StandardOptionDataBundle data) {
         Validate.notNull(data, "data");
         final boolean isCall = definition.isCall();
         final double s = data.getSpot();

@@ -51,32 +51,32 @@ public class SVIVolatilityFunctionTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    VOL.evaluate((SVIFormulaData) null);
+    VOL.apply((SVIFormulaData) null);
   }
 
   @Test
   public void testZeroB() {
-    assertEquals(VOL.evaluate(new SVIFormulaData(A, 0, RHO, SIGMA, M)), Math.sqrt(A), EPS);
+    assertEquals(VOL.apply(new SVIFormulaData(A, 0, RHO, SIGMA, M)), Math.sqrt(A), EPS);
   }
 
   @Test
   public void testMEqualsKappa() {
     final double m = Math.log(STRIKE / FORWARD);
-    assertEquals(VOL.evaluate(new SVIFormulaData(A, B, RHO, SIGMA, m)), Math.sqrt((A + B * SIGMA)), EPS);
+    assertEquals(VOL.apply(new SVIFormulaData(A, B, RHO, SIGMA, m)), Math.sqrt((A + B * SIGMA)), EPS);
   }
 
   @Test
   public void testZeroSigma() {
     final double kappa = Math.log(STRIKE / FORWARD);
-    assertEquals(VOL.evaluate(new SVIFormulaData(A, B, RHO, 0, M)), Math.sqrt((A + B * (RHO * (kappa - M) + Math.abs(kappa - M)))), EPS);
+    assertEquals(VOL.apply(new SVIFormulaData(A, B, RHO, 0, M)), Math.sqrt((A + B * (RHO * (kappa - M) + Math.abs(kappa - M)))), EPS);
   }
 
   @Test
   public void testVolAdjoint() {
     final SVIFormulaData data = new SVIFormulaData(0.05, 0.2, -0.4, 0.2, -0.1);
 
-    final double[] res = VOL_ADJOINT.evaluate(data);
-    final double[] resFD = VOL_ADJOINT_FD.evaluate(data);
+    final double[] res = VOL_ADJOINT.apply(data);
+    final double[] resFD = VOL_ADJOINT_FD.apply(data);
 
     final int n = resFD.length;
     assertEquals(n, res.length);

@@ -28,12 +28,12 @@ public class CholeskyDecompositionCommonsTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullObjectMatrix() {
-    CH.evaluate((DoubleMatrix2D) null);
+    CH.apply((DoubleMatrix2D) null);
   }
 
   @Test
   public void testRecoverOrginal() {
-    final DecompositionResult result = CH.evaluate(A);
+    final DecompositionResult result = CH.apply(A);
     assertTrue(result instanceof CholeskyDecompositionResult);
     final CholeskyDecompositionResult ch = (CholeskyDecompositionResult) result;
     final DoubleMatrix2D a = (DoubleMatrix2D) ALGEBRA.multiply(ch.getL(), ch.getLT());

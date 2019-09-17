@@ -119,7 +119,7 @@ public class DoublesCurveNelsonSiegelTest {
 
     for (int i = 0; i < 50; i++) {
       final double t = 0 + 10.0 * i / 99.;
-      final double fd = grad.evaluate(t);
+      final double fd = grad.apply(t);
       final double anal = CURVE_NS.getDyDx(t);
       assertEquals("t=" + t, fd, anal, 1e-12);
     }

@@ -39,7 +39,7 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod {
 
   /**
    * Return the unique instance of the class.
-   * 
+   *
    * @return The instance.
    */
   public static CouponCMSHullWhiteNumericalIntegrationMethod getInstance() {
@@ -61,7 +61,7 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod {
 
   /**
    * Compute the present value of a CMS coupon with the Hull-White (extended Vasicek) model by numerical integration.
-   * 
+   *
    * @param cms
    *          The CMS coupon.
    * @param hwMulticurves
@@ -125,7 +125,7 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod {
 
     /**
      * Constructor to the integrant function.
-     * 
+     *
      * @param discountedCashFlowFixed
      *          The discounted cash flows of the underlying swap fixed leg.
      * @param alphaFixed
@@ -148,7 +148,7 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod {
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final double swapRate = MODEL.swapRate(x, _discountedCashFlowFixed, _alphaFixed, _discountedCashFlowIbor, _alphaIbor);
       final double dfDensity = Math.exp(-(x + _alphaPayment) * (x + _alphaPayment) / 2.0);
       final double result = dfDensity * swapRate;

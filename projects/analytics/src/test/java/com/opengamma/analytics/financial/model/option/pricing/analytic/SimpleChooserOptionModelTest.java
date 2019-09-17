@@ -48,7 +48,7 @@ public class SimpleChooserOptionModelTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullData() {
-    MODEL.getPricingFunction(DEFINITION).evaluate((StandardOptionDataBundle) null);
+    MODEL.getPricingFunction(DEFINITION).apply((StandardOptionDataBundle) null);
   }
 
   @Test
@@ -57,19 +57,19 @@ public class SimpleChooserOptionModelTest {
     final StandardOptionDataBundle data = DATA.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(0)));
     SimpleChooserOptionDefinition chooser = new SimpleChooserOptionDefinition(new Expiry(DATE), strike, UNDERLYING_EXPIRY);
     OptionDefinition vanilla = new EuropeanVanillaOptionDefinition(strike, UNDERLYING_EXPIRY, true);
-    assertEquals(MODEL.getPricingFunction(chooser).evaluate(DATA), BSM.getPricingFunction(vanilla).evaluate(DATA), 1e-9);
+    assertEquals(MODEL.getPricingFunction(chooser).apply(DATA), BSM.getPricingFunction(vanilla).apply(DATA), 1e-9);
     strike = SPOT / 2;
     chooser = new SimpleChooserOptionDefinition(new Expiry(DATE), strike, UNDERLYING_EXPIRY);
     vanilla = new EuropeanVanillaOptionDefinition(strike, UNDERLYING_EXPIRY, true);
-    assertEquals(MODEL.getPricingFunction(chooser).evaluate(DATA), BSM.getPricingFunction(vanilla).evaluate(DATA), 1e-9);
+    assertEquals(MODEL.getPricingFunction(chooser).apply(DATA), BSM.getPricingFunction(vanilla).apply(DATA), 1e-9);
     chooser = new SimpleChooserOptionDefinition(CHOOSE_DATE, strike, UNDERLYING_EXPIRY);
-    assertEquals(MODEL.getPricingFunction(chooser).evaluate(data), BSM.getPricingFunction(vanilla).evaluate(data), 1e-9);
+    assertEquals(MODEL.getPricingFunction(chooser).apply(data), BSM.getPricingFunction(vanilla).apply(data), 1e-9);
     strike = SPOT * 2;
     chooser = new SimpleChooserOptionDefinition(new Expiry(DATE), strike, UNDERLYING_EXPIRY);
     vanilla = new EuropeanVanillaOptionDefinition(strike, UNDERLYING_EXPIRY, false);
-    assertEquals(MODEL.getPricingFunction(chooser).evaluate(DATA), BSM.getPricingFunction(vanilla).evaluate(DATA), 1e-9);
+    assertEquals(MODEL.getPricingFunction(chooser).apply(DATA), BSM.getPricingFunction(vanilla).apply(DATA), 1e-9);
     chooser = new SimpleChooserOptionDefinition(CHOOSE_DATE, strike, UNDERLYING_EXPIRY);
-    assertEquals(MODEL.getPricingFunction(chooser).evaluate(data), BSM.getPricingFunction(vanilla).evaluate(data), 1e-9);
+    assertEquals(MODEL.getPricingFunction(chooser).apply(data), BSM.getPricingFunction(vanilla).apply(data), 1e-9);
     assertEquals(MODEL.getGreeks(DEFINITION, DATA, Sets.newHashSet(Greek.FAIR_PRICE)).get(Greek.FAIR_PRICE), 6.1071, EPS);
   }
 }

@@ -16,7 +16,7 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.timeseries.DoubleTimeSeries;
 
 /**
- * 
+ *
  */
 public class FixedStrikeLookbackOptionModel extends AnalyticOptionModel<FixedStrikeLookbackOptionDefinition, StandardOptionWithSpotTimeSeriesDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
@@ -28,7 +28,7 @@ public class FixedStrikeLookbackOptionModel extends AnalyticOptionModel<FixedStr
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final StandardOptionWithSpotTimeSeriesDataBundle data) {
+      public Double apply(final StandardOptionWithSpotTimeSeriesDataBundle data) {
         Validate.notNull(data, "data");
         final DoubleTimeSeries<?> ts = data.getSpotTimeSeries();
         final double s = data.getSpot();
@@ -43,7 +43,7 @@ public class FixedStrikeLookbackOptionModel extends AnalyticOptionModel<FixedStr
         final double df1 = Math.exp(t * (b - r));
         final double df2 = Math.exp(-r * t);
         double x = k;
-        if ((isCall && x <= sCritical) || (!isCall && x >= sCritical)) {
+        if (isCall && x <= sCritical || !isCall && x >= sCritical) {
           x = sCritical;
         }
         final int sign = isCall ? 1 : -1;

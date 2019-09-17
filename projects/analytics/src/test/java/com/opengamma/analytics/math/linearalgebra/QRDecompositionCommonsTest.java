@@ -27,12 +27,12 @@ public class QRDecompositionCommonsTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullObjectMatrix() {
-    QR.evaluate((DoubleMatrix2D) null);
+    QR.apply((DoubleMatrix2D) null);
   }
 
   @Test
   public void testRecoverOrginal() {
-    final DecompositionResult result = QR.evaluate(A);
+    final DecompositionResult result = QR.apply(A);
     assertTrue(result instanceof QRDecompositionResult);
     final QRDecompositionResult qr = (QRDecompositionResult) result;
     final DoubleMatrix2D q = qr.getQ();

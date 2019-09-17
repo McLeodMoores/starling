@@ -41,7 +41,7 @@ public class DistributionFromImpliedVolatilityTest {
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return VOL;
     }
   };
@@ -50,10 +50,10 @@ public class DistributionFromImpliedVolatilityTest {
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       final EuropeanVanillaOption option = new EuropeanVanillaOption(x, T, true);
       final NormalFunctionData dataNormal = new NormalFunctionData(F, 1, NORMAL_VOL);
-      final double price = NORMAL_PRICE_FUNCTION.getPriceFunction(option).evaluate(dataNormal);
+      final double price = NORMAL_PRICE_FUNCTION.getPriceFunction(option).apply(dataNormal);
       final BlackFunctionData dataBlack = new BlackFunctionData(F, 1, VOL);
       return BLACK_IMPLIED_VOL.getImpliedVolatility(dataBlack, option, price);
     }

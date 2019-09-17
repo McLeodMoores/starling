@@ -51,12 +51,12 @@ public class IntegratorRepeated2D extends Integrator2D<Double, Double> {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double y) {
+      public Double apply(final Double y) {
 
         final Function1D<Double, Double> fy = new Function1D<Double, Double>() {
           @Override
-          public Double evaluate(final Double x) {
-            return f.evaluate(x, y);
+          public Double apply(final Double x) {
+            return f.apply(x, y);
           }
         };
 

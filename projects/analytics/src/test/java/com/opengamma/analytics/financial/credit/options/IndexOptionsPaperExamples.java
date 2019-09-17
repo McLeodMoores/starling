@@ -116,8 +116,8 @@ public class IndexOptionsPaperExamples extends ISDABaseTest {
     System.out.println("Spread(bps)\t1Y\t10Y");
     for (int i = 0; i < 200; i++) {
       final double s = 0 + 3000. * i / 200;
-      final double a1 = func1.evaluate(s * ONE_BP);
-      final double a2 = func2.evaluate(s * ONE_BP);
+      final double a1 = func1.apply(s * ONE_BP);
+      final double a2 = func2.apply(s * ONE_BP);
       System.out.println(s + "\t" + a1 + "\t" + a2);
     }
   }
@@ -135,9 +135,9 @@ public class IndexOptionsPaperExamples extends ISDABaseTest {
     System.out.println("Spread(bps)\tISDA\tApproximation1\tApproximation2");
     for (int i = 0; i < 200; i++) {
       final double s = 0 + 3000. * i / 200;
-      final double a1 = func1.evaluate(s * ONE_BP);
-      final double a2 = func2.evaluate(s * ONE_BP);
-      final double a3 = func3.evaluate(s * ONE_BP);
+      final double a1 = func1.apply(s * ONE_BP);
+      final double a2 = func2.apply(s * ONE_BP);
+      final double a3 = func3.apply(s * ONE_BP);
       System.out.println(s + "\t" + a1 + "\t" + a2 + "\t" + a3);
     }
   }
@@ -161,13 +161,13 @@ public class IndexOptionsPaperExamples extends ISDABaseTest {
     final double coupon = 0.01;
 
     final AnnuityForSpreadFunction annFunc = new AnnuityForSpreadISDAFunction(fwdCDS, fwdYC);
-    final double excisePrice = (k - coupon) * annFunc.evaluate(k);
+    final double excisePrice = (k - coupon) * annFunc.apply(k);
     final int[] defaults = new int[] {0, 1, 2, 5, 10 };
 
     //payer
     for (int i = 0; i < 200; i++) {
       final double s = 0.00 + 0.02 * i / 200.;
-      final double annuity = annFunc.evaluate(s);
+      final double annuity = annFunc.apply(s);
       final double puf = (s - coupon) * annuity;
       System.out.print(s * TEN_THOUSAND);
       for (int j = 0; j < 5; j++) {
@@ -184,7 +184,7 @@ public class IndexOptionsPaperExamples extends ISDABaseTest {
     //Receiver
     for (int i = 0; i < 200; i++) {
       final double s = 0.00 + 0.02 * i / 200.;
-      final double annuity = annFunc.evaluate(s);
+      final double annuity = annFunc.apply(s);
       final double puf = (s - coupon) * annuity;
       System.out.print(s * TEN_THOUSAND);
       for (int j = 0; j < 5; j++) {

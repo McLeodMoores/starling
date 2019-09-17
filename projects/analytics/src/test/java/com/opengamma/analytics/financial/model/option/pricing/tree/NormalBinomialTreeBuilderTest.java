@@ -162,7 +162,7 @@ public class NormalBinomialTreeBuilderTest {
       optionPriceTree = BUILDER.buildOptionPriceTree(option, data, assetPriceTree);
       final EuropeanVanillaOption o = new EuropeanVanillaOption(strike, T, true);
       final CEVFunctionData cfd = new CEVFunctionData(FORWARD, YIELD_CURVE.getDiscountFactor(T), SIGMA_BETA, BETA);
-      final double cevPrice = CEV_PRICE.getPriceFunction(o).evaluate(cfd);
+      final double cevPrice = CEV_PRICE.getPriceFunction(o).apply(cfd);
       final double cevVol = BLACK_IMPLIED_VOL.getImpliedVolatility(new BlackFunctionData(FORWARD, YIELD_CURVE.getDiscountFactor(T), SIGMA_BETA), o, cevPrice);
       final double impVol = BLACK_IMPLIED_VOL.getImpliedVolatility(new BlackFunctionData(FORWARD, YIELD_CURVE.getDiscountFactor(T), SIGMA_BETA), o, optionPriceTree.getNode(0, 0).getValue());
       //final double cevPrice = CEVFormula.optionPrice(FORWARD, strike, BETA, df, SIGMA_BETA, T, true);

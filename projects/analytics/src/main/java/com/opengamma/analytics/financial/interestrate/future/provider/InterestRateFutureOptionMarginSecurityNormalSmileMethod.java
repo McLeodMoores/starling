@@ -73,7 +73,7 @@ public final class InterestRateFutureOptionMarginSecurityNormalSmileMethod
     final double delay = security.getUnderlyingFuture().getTradingLastTime() - security.getExpirationTime();
     final double volatility = normalData.getVolatility(security.getExpirationTime(), security.getStrike(), delay);
     final NormalFunctionData normalPoint = new NormalFunctionData(priceFuture, 1.0, volatility);
-    final double priceSecurity = NORMAL_FUNCTION.getPriceFunction(option).evaluate(normalPoint);
+    final double priceSecurity = NORMAL_FUNCTION.getPriceFunction(option).apply(normalPoint);
     return priceSecurity;
   }
 

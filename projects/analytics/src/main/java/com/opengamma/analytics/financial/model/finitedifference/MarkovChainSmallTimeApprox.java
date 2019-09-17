@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference;
@@ -15,7 +15,7 @@ import com.opengamma.analytics.math.integration.Integrator1D;
 import com.opengamma.analytics.math.integration.RungeKuttaIntegrator1D;
 
 /**
- * 
+ *
  */
 public class MarkovChainSmallTimeApprox {
 
@@ -49,11 +49,11 @@ public class MarkovChainSmallTimeApprox {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double tau) {
+      public Double apply(final Double tau) {
         double sigma = _vol1 * _vol1 * tau / expiry + _vol2 * _vol2 * (1 - tau / expiry);
         sigma = Math.sqrt(sigma);
         final BlackFunctionData data = new BlackFunctionData(forward, df, sigma);
-        return _lambda12 * priceFunc.evaluate(data) * Math.exp(-_lambda12 * tau);
+        return _lambda12 * priceFunc.apply(data) * Math.exp(-_lambda12 * tau);
       }
     };
 
@@ -61,11 +61,11 @@ public class MarkovChainSmallTimeApprox {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double evaluate(final Double tau) {
+      public Double apply(final Double tau) {
         double sigma = _vol1 * _vol1 * (1 - tau / expiry) + _vol2 * _vol2 * tau / expiry;
         sigma = Math.sqrt(sigma);
         final BlackFunctionData data = new BlackFunctionData(forward, df, sigma);
-        return _lambda21 * priceFunc.evaluate(data) * Math.exp(-_lambda21 * tau);
+        return _lambda21 * priceFunc.apply(data) * Math.exp(-_lambda21 * tau);
       }
     };
 
@@ -74,12 +74,12 @@ public class MarkovChainSmallTimeApprox {
 
     if (_probState1 > 0.0) {
       final BlackFunctionData data = new BlackFunctionData(forward, df, _vol1);
-      p1 = _integrator.integrate(fun1, 0.0, expiry) + priceFunc.evaluate(data) * Math.exp(-_lambda12 * expiry);
+      p1 = _integrator.integrate(fun1, 0.0, expiry) + priceFunc.apply(data) * Math.exp(-_lambda12 * expiry);
     }
 
     if (_probState1 < 1.0) {
       final BlackFunctionData data = new BlackFunctionData(forward, df, _vol2);
-      p2 = _integrator.integrate(fun2, 0.0, expiry) + priceFunc.evaluate(data) * Math.exp(-_lambda21 * expiry);
+      p2 = _integrator.integrate(fun2, 0.0, expiry) + priceFunc.apply(data) * Math.exp(-_lambda21 * expiry);
     }
     return _probState1 * p1 + (1 - _probState1) * p2;
   }

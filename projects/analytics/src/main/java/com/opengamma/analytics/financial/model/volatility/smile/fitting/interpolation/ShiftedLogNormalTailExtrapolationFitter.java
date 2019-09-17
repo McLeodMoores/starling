@@ -78,7 +78,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
     final double sigmaGrad = (vol1 - vol2) / (strikes[0] - strikes[1]);
     final double pGrad = BlackFormulaRepository.dualDelta(forward, kAv, timeToExpiry, sigmaAv, isCall)
         + BlackFormulaRepository.vega(forward, kAv, timeToExpiry, sigmaAv)
-            * sigmaGrad;
+        * sigmaGrad;
 
     // This often fails to converge, thus the model is first fitted using price and grad, which given a point very close to the solution to use as the starting
     // point
@@ -224,9 +224,9 @@ public class ShiftedLogNormalTailExtrapolationFitter {
    * @return double array containing the exponential shift of the forward, $mu$, such that the effective forward is $f \exp(\mu)$ and the volatility, $\sigma$
    */
   public double[] fitVolatilityAndGrad(final double forward, final double strike, final Function1D<Double, Double> smile, final double timeToExpiry) {
-    final double vol = smile.evaluate(strike);
+    final double vol = smile.apply(strike);
     final Function1D<Double, Double> smileGrad = DIFFERENTIATOR.differentiate(smile);
-    final double dVol = smileGrad.evaluate(strike);
+    final double dVol = smileGrad.apply(strike);
     return fitVolatilityAndGrad(forward, strike, vol, dVol, timeToExpiry);
   }
 
@@ -254,7 +254,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
     double[] shiftAndVol;
     final int endIdx = lowTail ? 0 : n - 1;
     try {
-      shiftAndVol = fitVolatilityAndGrad(forward, strikes[endIdx], vols[endIdx], dSigmaDx.evaluate(strikes[endIdx]), expiry);
+      shiftAndVol = fitVolatilityAndGrad(forward, strikes[endIdx], vols[endIdx], dSigmaDx.apply(strikes[endIdx]), expiry);
     } catch (final Exception e) {
       LOG.info("Extrapolation - Expiry = " + expiry + "- failed to fit tail to " + strikes[endIdx] + ". Trying next strike. Caught " + e);
       if (lowTail) {
@@ -265,7 +265,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
           Arrays.copyOfRange(vols, 0, n - 1), dSigmaDx, expiry, lowTail);
     }
     LOG.info("Extrapolating from strike, " + strikes[endIdx] + ", with shifted forward, " + forward * Math.exp(shiftAndVol[0])
-        + ", and vol, " + shiftAndVol[1]);
+    + ", and vol, " + shiftAndVol[1]);
     final ArrayList<Double> listShiftVolStrike = new ArrayList<>();
     listShiftVolStrike.add(0, shiftAndVol[0]); // mu = ln(shiftedForward / originalForward)
     listShiftVolStrike.add(1, shiftAndVol[1]); // theta = new ln volatility to use
@@ -311,7 +311,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
           Arrays.copyOfRange(dSigmaDx, 0, n - 1), expiry, lowTail);
     }
     LOG.info("Extrapolating from strike, " + strikes[endIdx] + ", with shifted forward, " + forward * Math.exp(shiftAndVol[0])
-        + ", and vol, " + shiftAndVol[1]);
+    + ", and vol, " + shiftAndVol[1]);
     final ArrayList<Double> listShiftVolStrike = new ArrayList<>();
     listShiftVolStrike.add(0, shiftAndVol[0]); // mu = ln(shiftedForward / originalForward)
     listShiftVolStrike.add(1, shiftAndVol[1]); // theta = new ln volatility to use
@@ -373,7 +373,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
 
     return new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D y) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D y) {
         final double mu = y.getEntry(0);
         final double theta = y.getEntry(1);
 
@@ -390,7 +390,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
 
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D y) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D y) {
         final double mu = y.getEntry(0);
         final double theta = y.getEntry(1);
         final double fStar = forward * Math.exp(mu);
@@ -410,7 +410,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
 
     return new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D y) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D y) {
         final double mu = y.getEntry(0);
         final double theta = y.getEntry(1);
 
@@ -427,7 +427,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
 
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D y) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D y) {
         final double mu = y.getEntry(0);
         final double theta = y.getEntry(1);
 
@@ -458,7 +458,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
 
     return new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @Override
-      public DoubleMatrix1D evaluate(final DoubleMatrix1D y) {
+      public DoubleMatrix1D apply(final DoubleMatrix1D y) {
         final double mu = y.getEntry(0);
         final double theta = y.getEntry(1);
         final double price = scale1 * ShiftedLogNormalTailExtrapolation.price(forward, strike, expiry, isCall, mu, theta);
@@ -476,7 +476,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
 
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
       @Override
-      public DoubleMatrix2D evaluate(final DoubleMatrix1D y) {
+      public DoubleMatrix2D apply(final DoubleMatrix1D y) {
         final double mu = y.getEntry(0);
         final double theta = y.getEntry(1);
         final double fStar = forward * Math.exp(mu);

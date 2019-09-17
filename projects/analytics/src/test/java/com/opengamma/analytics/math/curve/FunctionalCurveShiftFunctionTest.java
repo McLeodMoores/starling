@@ -20,7 +20,7 @@ public class FunctionalCurveShiftFunctionTest {
   private static final Function1D<Double, Double> F = new Function1D<Double, Double>() {
 
     @Override
-    public Double evaluate(final Double x) {
+    public Double apply(final Double x) {
       return x * x;
     }
 
@@ -64,14 +64,14 @@ public class FunctionalCurveShiftFunctionTest {
     FunctionalDoublesCurve shifted = SHIFT.evaluate(CURVE, shift);
     for (int i = 0; i < 10; i++) {
       final double x = Math.random();
-      assertEquals(shifted.getYValue(x), F.evaluate(x) + shift, 1e-15);
+      assertEquals(shifted.getYValue(x), F.apply(x) + shift, 1e-15);
     }
     assertEquals(shifted.getName(), "PARALLEL_SHIFT_X");
     final String newName = "Y";
     shifted = SHIFT.evaluate(CURVE, shift, newName);
     for (int i = 0; i < 10; i++) {
       final double x = Math.random();
-      assertEquals(shifted.getYValue(x), F.evaluate(x) + shift, 1e-15);
+      assertEquals(shifted.getYValue(x), F.apply(x) + shift, 1e-15);
     }
     assertEquals(shifted.getName(), newName);
   }

@@ -20,15 +20,15 @@ public class DiracDeltaFunctionTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {
-    F.evaluate((Double) null);
+    F.apply((Double) null);
   }
 
   @Test
   public void test() {
-    assertEquals(Double.POSITIVE_INFINITY, F.evaluate(0.), 0);
-    assertEquals(Double.POSITIVE_INFINITY, F.evaluate(1e-20), 0);
-    assertEquals(Double.POSITIVE_INFINITY, F.evaluate(-1e-20), 0);
-    assertEquals(0, F.evaluate(1e-15), 0);
-    assertEquals(0, F.evaluate(-1e-15), 0);
+    assertEquals(Double.POSITIVE_INFINITY, F.apply(0.), 0);
+    assertEquals(Double.POSITIVE_INFINITY, F.apply(1e-20), 0);
+    assertEquals(Double.POSITIVE_INFINITY, F.apply(-1e-20), 0);
+    assertEquals(0, F.apply(1e-15), 0);
+    assertEquals(0, F.apply(-1e-15), 0);
   }
 }

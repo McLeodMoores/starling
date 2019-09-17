@@ -96,7 +96,7 @@ public class CurveBuildingFunction {
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator =
         new MultipleYieldCurveFinderGeneratorJacobian(new ParameterUnderlyingSensitivityCalculator(sensitivityCalculator), data);
     final double[] parameters = _rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(initGuess)).getData();
-    final YieldCurveBundle newCurves = data.getBuildingFunction().evaluate(new DoubleMatrix1D(parameters));
+    final YieldCurveBundle newCurves = data.getBuildingFunction().apply(new DoubleMatrix1D(parameters));
     return Pairs.of(newCurves, ArrayUtils.toObject(parameters));
   }
 
@@ -120,7 +120,7 @@ public class CurveBuildingFunction {
     final MultipleYieldCurveFinderGeneratorDataBundle data = new MultipleYieldCurveFinderGeneratorDataBundle(instruments, knownData, curveGenerators);
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator =
         new MultipleYieldCurveFinderGeneratorJacobian(new ParameterUnderlyingSensitivityCalculator(sensitivityCalculator), data);
-    final DoubleMatrix2D jacobian = jacobianCalculator.evaluate(new DoubleMatrix1D(parameters));
+    final DoubleMatrix2D jacobian = jacobianCalculator.apply(new DoubleMatrix1D(parameters));
     final DoubleMatrix2D inverseJacobian = MATRIX_ALGEBRA.getInverse(jacobian);
     final double[][] matrixTotal = inverseJacobian.getData();
     final DoubleMatrix2D[] result = new DoubleMatrix2D[nbParameters.length];

@@ -16,7 +16,7 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 public abstract class IIDHypothesis extends Function1D<DoubleTimeSeries<?>, Boolean> {
 
   @Override
-  public Boolean evaluate(final DoubleTimeSeries<?> x) {
+  public Boolean apply(final DoubleTimeSeries<?> x) {
     Validate.notNull(x, "x");
     if (x.isEmpty()) {
       throw new IllegalArgumentException("Time series was empty");

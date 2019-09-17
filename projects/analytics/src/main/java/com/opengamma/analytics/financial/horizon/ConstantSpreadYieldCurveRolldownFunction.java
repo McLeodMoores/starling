@@ -45,7 +45,7 @@ public final class ConstantSpreadYieldCurveRolldownFunction implements RolldownF
     final Function1D<Double, Double> shiftedFunction = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(final Double t) {
+      public Double apply(final Double t) {
         return curve.getYValue(t + time);
       }
 
