@@ -5,28 +5,25 @@
  */
 package com.opengamma.analytics.financial.instrument.index.generator;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDeposit;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.money.Currency;
 
 /**
- * Deposit generator with the standard USD conventions.
- * 
- * @deprecated Use {@link UsdDepositGenerator}.
+ * Deposit generator with the standard EUR conventions.
  */
-@Deprecated
-public class USDDeposit extends GeneratorDeposit {
+public class EurDepositGenerator extends GeneratorDeposit {
 
   /**
    * Constructor.
    * 
    * @param calendar
-   *          A USD calendar.
+   *          A EUR calendar.
    */
-  public USDDeposit(final Calendar calendar) {
-    super("USD Deposit", Currency.USD, calendar, 2, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, true);
+  public EurDepositGenerator(final WorkingDayCalendar calendar) {
+    super("EUR Deposit", Currency.EUR, calendar, 2, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, true);
   }
 
 }

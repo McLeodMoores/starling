@@ -10,10 +10,10 @@ import static org.testng.AssertJUnit.assertEquals;
 import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.util.test.TestGroup;
 
@@ -23,7 +23,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class GeneratorSwapFixedONTest {
 
-  private static final Calendar NYC = new MondayToFridayCalendar("NYC");
+  private static final WorkingDayCalendar NYC = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final IndexON INDEX_FEDFUND = IndexONMaster.getInstance().getIndex("FED FUND");
   private static final String USD_NAME = "USD1YFEDFUND";
   private static final Period USD_PERIOD = Period.ofMonths(12);
@@ -32,7 +32,8 @@ public class GeneratorSwapFixedONTest {
   private static final boolean USD_IS_EOM = true;
   private static final int USD_SPOT_LAG = 2;
 
-  private static final GeneratorSwapFixedON USD_GENERATOR_OIS = new GeneratorSwapFixedON(USD_NAME, INDEX_FEDFUND, USD_PERIOD, USD_DAYCOUNT_FIXED, USD_BUSINESS_DAY, USD_IS_EOM, USD_SPOT_LAG, NYC);
+  private static final GeneratorSwapFixedON USD_GENERATOR_OIS = new GeneratorSwapFixedON(USD_NAME, INDEX_FEDFUND, USD_PERIOD,
+      USD_DAYCOUNT_FIXED, USD_BUSINESS_DAY, USD_IS_EOM, USD_SPOT_LAG, NYC);
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullCurrency() {
@@ -59,10 +60,10 @@ public class GeneratorSwapFixedONTest {
     new GeneratorSwapFixedON(USD_NAME, null, USD_PERIOD, USD_DAYCOUNT_FIXED, USD_BUSINESS_DAY, USD_IS_EOM, USD_SPOT_LAG, NYC);
   }
 
-  @Test
   /**
    * Tests the getters.
    */
+  @Test
   public void getter() {
     assertEquals("Generator OIS: getter", USD_NAME, USD_GENERATOR_OIS.getName());
     assertEquals("Generator OIS: getter", USD_PERIOD, USD_GENERATOR_OIS.getLegsPeriod());
@@ -75,10 +76,10 @@ public class GeneratorSwapFixedONTest {
     assertEquals("Generator OIS: getter", USD_SPOT_LAG, USD_GENERATOR_OIS.getSpotLag());
   }
 
-  @Test
   /**
    * Tests the standard USD OIS builders.
    */
+  @Test
   public void usdStandard() {
     final GeneratorSwapFixedON usdStandard = GeneratorSwapFixedONMaster.getInstance().getGenerator("USD1YFEDFUND", NYC);
     assertEquals("Generator OIS: standard", USD_NAME, usdStandard.getName());

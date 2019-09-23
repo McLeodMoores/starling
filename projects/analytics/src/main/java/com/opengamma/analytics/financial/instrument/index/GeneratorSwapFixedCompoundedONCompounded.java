@@ -7,6 +7,8 @@ package com.opengamma.analytics.financial.instrument.index;
 
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedCompoundedONCompoundedDefinition;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -51,7 +53,7 @@ public class GeneratorSwapFixedCompoundedONCompounded extends GeneratorInstrumen
 
   /**
    * Constructor from all details. The stub is short and date constructed from the end.
-   * 
+   *
    * @param name
    *          The generator name.
    * @param index
@@ -85,7 +87,7 @@ public class GeneratorSwapFixedCompoundedONCompounded extends GeneratorInstrumen
 
   /**
    * Constructor from all details. The stub is short and date constructed from the end.
-   * 
+   *
    * @param name
    *          The generator name.
    * @param index
@@ -120,8 +122,78 @@ public class GeneratorSwapFixedCompoundedONCompounded extends GeneratorInstrumen
   }
 
   /**
+   * Constructor from all details. The stub is short and date constructed from the end.
+   *
+   * @param name
+   *          The generator name.
+   * @param index
+   *          The ON index of the floating leg.
+   * @param fixedLegDayCount
+   *          The fixed leg day count.
+   * @param businessDayConvention
+   *          The business day convention for the payments (used for both legs).
+   * @param endOfMonth
+   *          The flag indicating if the end-of-month rule is used (used for both legs).
+   * @param spotLag
+   *          The index spot lag in days between trade and settlement date (usually 2 or 0).
+   * @param calendar
+   *          The calendar associated with the overnight index.
+   */
+  public GeneratorSwapFixedCompoundedONCompounded(final String name, final IndexON index, final DayCount fixedLegDayCount,
+      final BusinessDayConvention businessDayConvention,
+      final boolean endOfMonth, final int spotLag, final WorkingDayCalendar calendar) {
+    super(name);
+    ArgumentChecker.notNull(fixedLegDayCount, "Fixed leg day count");
+    ArgumentChecker.notNull(businessDayConvention, "Business day convention");
+    ArgumentChecker.notNull(index, "Index ON");
+    _index = index;
+    _fixedLegDayCount = fixedLegDayCount;
+    _businessDayConvention = businessDayConvention;
+    _endOfMonth = endOfMonth;
+    _spotLag = spotLag;
+    _paymentLag = spotLag;
+    _calendar = CalendarAdapter.of(calendar);
+  }
+
+  /**
+   * Constructor from all details. The stub is short and date constructed from the end.
+   *
+   * @param name
+   *          The generator name.
+   * @param index
+   *          The ON index of the floating leg.
+   * @param fixedLegDayCount
+   *          The fixed leg day count.
+   * @param businessDayConvention
+   *          The business day convention for the payments (used for both legs).
+   * @param endOfMonth
+   *          The flag indicating if the end-of-month rule is used (used for both legs).
+   * @param spotLag
+   *          The index spot lag in days between trade and settlement date (usually 2 or 0).
+   * @param paymentLag
+   *          The lag in days between the last ON fixing date and the coupon payment.
+   * @param calendar
+   *          The calendar associated with the overnight index.
+   */
+  public GeneratorSwapFixedCompoundedONCompounded(final String name, final IndexON index, final DayCount fixedLegDayCount,
+      final BusinessDayConvention businessDayConvention,
+      final boolean endOfMonth, final int spotLag, final int paymentLag, final WorkingDayCalendar calendar) {
+    super(name);
+    ArgumentChecker.notNull(fixedLegDayCount, "Fixed leg day count");
+    ArgumentChecker.notNull(businessDayConvention, "Business day convention");
+    ArgumentChecker.notNull(index, "Index ON");
+    _index = index;
+    _fixedLegDayCount = fixedLegDayCount;
+    _businessDayConvention = businessDayConvention;
+    _endOfMonth = endOfMonth;
+    _spotLag = spotLag;
+    _paymentLag = paymentLag;
+    _calendar = CalendarAdapter.of(calendar);
+  }
+
+  /**
    * Gets the fixed leg day count.
-   * 
+   *
    * @return The day count.
    */
   public DayCount getFixedLegDayCount() {
@@ -130,7 +202,7 @@ public class GeneratorSwapFixedCompoundedONCompounded extends GeneratorInstrumen
 
   /**
    * Gets The business day convention for the payments (used for both legs).
-   * 
+   *
    * @return The business day convention.
    */
   public BusinessDayConvention getBusinessDayConvention() {
@@ -139,7 +211,7 @@ public class GeneratorSwapFixedCompoundedONCompounded extends GeneratorInstrumen
 
   /**
    * Gets the flag indicating if the end-of-month rule is used (used for both legs).
-   * 
+   *
    * @return The flag indicating if the end-of-month rule is used.
    */
   public boolean isEndOfMonth() {
@@ -148,7 +220,7 @@ public class GeneratorSwapFixedCompoundedONCompounded extends GeneratorInstrumen
 
   /**
    * Gets the ON index of the floating leg.
-   * 
+   *
    * @return The ON index.
    */
   public IndexON getIndex() {
@@ -157,7 +229,7 @@ public class GeneratorSwapFixedCompoundedONCompounded extends GeneratorInstrumen
 
   /**
    * Gets the spot lag in days between trade and settlement date (usually 2 or 0).
-   * 
+   *
    * @return The spot lag.
    */
   public int getSpotLag() {
@@ -166,7 +238,7 @@ public class GeneratorSwapFixedCompoundedONCompounded extends GeneratorInstrumen
 
   /**
    * Gets the lag in days between the last ON fixing date and the coupon payment.
-   * 
+   *
    * @return The payment lag.
    */
   public int getPaymentLag() {
@@ -241,7 +313,7 @@ public class GeneratorSwapFixedCompoundedONCompounded extends GeneratorInstrumen
 
   /**
    * Gets the calendar associated to the OIS index.
-   * 
+   *
    * @return The calendar.
    */
   public Calendar getOvernightCalendar() {
@@ -257,7 +329,8 @@ public class GeneratorSwapFixedCompoundedONCompounded extends GeneratorInstrumen
     ArgumentChecker.notNull(date, "Reference date");
     ArgumentChecker.notNull(attribute, "Attributes");
     final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, _spotLag, _calendar);
-    final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spot, attribute.getStartPeriod(), _businessDayConvention, _calendar, _endOfMonth);
+    final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spot, attribute.getStartPeriod(), _businessDayConvention, _calendar,
+        _endOfMonth);
     return SwapFixedCompoundedONCompoundedDefinition.from(startDate, attribute.getEndPeriod(), notional, this, rate, true);
   }
 

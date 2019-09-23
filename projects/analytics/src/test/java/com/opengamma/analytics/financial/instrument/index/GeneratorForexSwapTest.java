@@ -11,13 +11,13 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.definition.ForexSwapDefinition;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
@@ -30,33 +30,49 @@ public class GeneratorForexSwapTest {
   // USD deposits
   private static final String NAME = "EUR/USD Swap";
   private static final int SETTLEMENT_DAYS = 2;
-  private static final Calendar CALENDAR = new MondayToFridayCalendar("A");
+  private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final BusinessDayConvention BUSINESS_DAY = BusinessDayConventions.MODIFIED_FOLLOWING;
   private static final boolean IS_EOM = true;
   private static final Currency USD = Currency.USD;
   private static final Currency EUR = Currency.EUR;
-  private static final GeneratorForexSwap GENERATOR_FX_EURUSD = new GeneratorForexSwap(NAME, EUR, USD, CALENDAR, SETTLEMENT_DAYS, BUSINESS_DAY, IS_EOM);
+  private static final GeneratorForexSwap GENERATOR_FX_EURUSD = new GeneratorForexSwap(NAME, EUR, USD, CALENDAR, SETTLEMENT_DAYS,
+      BUSINESS_DAY, IS_EOM);
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullCurrency1() {
     new GeneratorForexSwap(NAME, null, USD, CALENDAR, SETTLEMENT_DAYS, BUSINESS_DAY, IS_EOM);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullCurrency2() {
     new GeneratorForexSwap(NAME, EUR, null, CALENDAR, SETTLEMENT_DAYS, BUSINESS_DAY, IS_EOM);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullCalendar() {
-    new GeneratorForexSwap(NAME, EUR, USD, null, SETTLEMENT_DAYS, BUSINESS_DAY, IS_EOM);
+    new GeneratorForexSwap(NAME, EUR, USD, (WorkingDayCalendar) null, SETTLEMENT_DAYS, BUSINESS_DAY, IS_EOM);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullBusinessDay() {
     new GeneratorForexSwap(NAME, EUR, USD, CALENDAR, SETTLEMENT_DAYS, null, IS_EOM);
   }
 
+  /**
+   *
+   */
   @Test
   public void getter() {
     assertEquals("Generator Deposit: getter", NAME, GENERATOR_FX_EURUSD.getName());
@@ -68,6 +84,9 @@ public class GeneratorForexSwapTest {
     assertEquals("Generator Deposit: getter", IS_EOM, GENERATOR_FX_EURUSD.isEndOfMonth());
   }
 
+  /**
+   *
+   */
   @Test
   public void generateInstrument() {
     final ZonedDateTime referenceDate = DateUtils.getUTCDate(2012, 7, 17);

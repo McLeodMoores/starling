@@ -38,7 +38,6 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
 import com.opengamma.analytics.financial.provider.sensitivity.parameter.ParameterSensitivityParameterCalculator;
 import com.opengamma.analytics.financial.util.AssertSensitivityObjects;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
-import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.financial.convention.yield.YieldConvention;
@@ -59,11 +58,11 @@ public class BillTransactionDiscountingMethodE2ETest {
 
   // Data
   private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2014, 1, 22);
-  private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> MULTICURVE_PAIR = StandardDataSetsMulticurveUSD.getCurvesUSDOisL3();
+  private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> MULTICURVE_PAIR = StandardDataSetsMulticurveUSD
+      .getCurvesUSDOisL3();
   private static final MulticurveProviderDiscount MULTICURVE = MULTICURVE_PAIR.getFirst();
   private static final CurveBuildingBlockBundle BLOCK = MULTICURVE_PAIR.getSecond();
   private static final WorkingDayCalendar NYC = TestWorkingDayCalendars.USD_CALENDAR;
-  private static final Calendar NYC_OLD = StandardDataSetsMulticurveUSD.calendarArray()[0];
   private static final Currency USD = Currency.USD;
 
   // Issuer provider with Issuer "" priced from the OIS curve.
@@ -81,14 +80,16 @@ public class BillTransactionDiscountingMethodE2ETest {
   private static final YieldConvention YIELD_CONVENTION_DISCOUNT = YieldConventionFactory.INSTANCE.getYieldConvention("DISCOUNT");
   private static final ZonedDateTime MATURITY_DATE = DateUtils.getUTCDate(2014, 4, 24);
   private static final double NOTIONAL = 1;
-  private static final BillSecurityDefinition B140814_DEFINITION = new BillSecurityDefinition(USD, MATURITY_DATE, NOTIONAL, SETTLEMENT_DAYS, NYC,
+  private static final BillSecurityDefinition B140814_DEFINITION = new BillSecurityDefinition(USD, MATURITY_DATE, NOTIONAL, SETTLEMENT_DAYS,
+      NYC,
       YIELD_CONVENTION_DISCOUNT, ACT360, USGOVT_NAME);
 
   // Trade 1
   private static final ZonedDateTime SETTLE_DATE_1 = DateUtils.getUTCDate(2014, 1, 23);
   private static final double QUANTITY_1 = 10000000;
   private static final double PREMIUM_1 = -9999000;
-  private static final BillTransactionDefinition B140814_TRA_1_DEFINITION = new BillTransactionDefinition(B140814_DEFINITION, QUANTITY_1, SETTLE_DATE_1, PREMIUM_1);
+  private static final BillTransactionDefinition B140814_TRA_1_DEFINITION = new BillTransactionDefinition(B140814_DEFINITION, QUANTITY_1,
+      SETTLE_DATE_1, PREMIUM_1);
   private static final BillTransaction B140814_TRA_1 = B140814_TRA_1_DEFINITION.toDerivative(REFERENCE_DATE);
 
   // Method and calculator
@@ -96,8 +97,10 @@ public class BillTransactionDiscountingMethodE2ETest {
   private static final PresentValueIssuerCalculator PVIC = PresentValueIssuerCalculator.getInstance();
 
   private static final PresentValueCurveSensitivityIssuerCalculator PVCSIC = PresentValueCurveSensitivityIssuerCalculator.getInstance();
-  private static final ParameterSensitivityParameterCalculator<ParameterIssuerProviderInterface> PSC = new ParameterSensitivityParameterCalculator<>(PVCSIC);
-  private static final MarketQuoteSensitivityBlockCalculator<ParameterIssuerProviderInterface> MQSBC = new MarketQuoteSensitivityBlockCalculator<>(PSC);
+  private static final ParameterSensitivityParameterCalculator<ParameterIssuerProviderInterface> PSC = new ParameterSensitivityParameterCalculator<>(
+      PVCSIC);
+  private static final MarketQuoteSensitivityBlockCalculator<ParameterIssuerProviderInterface> MQSBC = new MarketQuoteSensitivityBlockCalculator<>(
+      PSC);
 
   private static final double TOLERANCE_PV = 1.0E-4;
   private static final double TOLERANCE_RATE = 1.0E-8;
@@ -112,7 +115,8 @@ public class BillTransactionDiscountingMethodE2ETest {
     final MultipleCurrencyAmount pvComputed = B140814_TRA_1.accept(PVIC, ISSUER_MULTICURVE);
     final MultipleCurrencyAmount pvExpected = MultipleCurrencyAmount.of(USD, -1368.887395d);
     assertEquals("BillTransactionDiscountingMethodE2E: discounting method - present value", 1, pvComputed.size());
-    assertEquals("BillTransactionDiscountingMethodE2E: discounting method - present value", pvExpected.getAmount(USD), pvComputed.getAmount(USD), TOLERANCE_PV);
+    assertEquals("BillTransactionDiscountingMethodE2E: discounting method - present value", pvExpected.getAmount(USD),
+        pvComputed.getAmount(USD), TOLERANCE_PV);
   }
 
   /**
@@ -122,16 +126,18 @@ public class BillTransactionDiscountingMethodE2ETest {
   public void yieldFromCurvesOIS() {
     final double yieldComputed = METHOD_SECURITY.yieldFromCurves(B140814_TRA_1.getBillStandard(), ISSUER_MULTICURVE);
     final double yieldExpected = 0.0009371446;
-    assertEquals("BillTransactionDiscountingMethodE2E: discounting method - yield from curves", yieldExpected, yieldComputed, TOLERANCE_RATE);
+    assertEquals("BillTransactionDiscountingMethodE2E: discounting method - yield from curves", yieldExpected, yieldComputed,
+        TOLERANCE_RATE);
   }
 
   /**
    * Test different results with a standard set of data against hardcoded values. Can be used for platform testing or regression testing.
    */
   @Test
-  public void BucketedPVOIS() {
+  public void bucketedPVOIS() {
     // Delta
-    final double[] deltaDsc = {3.80024E-4, -2.7771, 0.0000, 0.0000, -249.8815, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000 };
+    final double[] deltaDsc = { 3.80024E-4, -2.7771, 0.0000, 0.0000, -249.8815, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
+        0.0000, 0.0000, 0.0000, 0.0000, 0.0000 };
     final double[] transactionDeltaDsc = new double[deltaDsc.length];
     for (int i = 0; i < deltaDsc.length; i++) {
       transactionDeltaDsc[i] = deltaDsc[i] * QUANTITY_1;
@@ -139,8 +145,10 @@ public class BillTransactionDiscountingMethodE2ETest {
     final LinkedHashMap<Pair<String, Currency>, DoubleMatrix1D> sensitivity = new LinkedHashMap<>();
     sensitivity.put(ObjectsPair.of(MULTICURVE.getName(USD), USD), new DoubleMatrix1D(transactionDeltaDsc));
     final MultipleCurrencyParameterSensitivity pvpsExpected = new MultipleCurrencyParameterSensitivity(sensitivity);
-    final MultipleCurrencyParameterSensitivity pvpsComputed = MQSBC.fromInstrument(B140814_TRA_1, ISSUER_MULTICURVE, BLOCK).multipliedBy(BP1);
-    AssertSensitivityObjects.assertEquals("ForwardRateAgreementDiscountingMethod: bucketed deltas from standard curves", pvpsExpected, pvpsComputed, TOLERANCE_PV_DELTA * QUANTITY_1);
+    final MultipleCurrencyParameterSensitivity pvpsComputed = MQSBC.fromInstrument(B140814_TRA_1, ISSUER_MULTICURVE, BLOCK)
+        .multipliedBy(BP1);
+    AssertSensitivityObjects.assertEquals("ForwardRateAgreementDiscountingMethod: bucketed deltas from standard curves", pvpsExpected,
+        pvpsComputed, TOLERANCE_PV_DELTA * QUANTITY_1);
   }
 
 }

@@ -11,6 +11,9 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.bond.BondFixedSecurityDefinition;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
 import com.opengamma.analytics.financial.interestrate.future.calculator.FuturesPriceHullWhiteIssuerCalculator;
@@ -31,8 +34,6 @@ import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.financial.util.AssertSensitivityObjects;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.financial.convention.yield.YieldConvention;
@@ -54,34 +55,39 @@ public class BondFuturesSecurityHullWhiteMethodTest {
   // 5-Year U.S. Treasury Note Futures: FVU1
   private static final Currency USD = Currency.USD;
   private static final Period PAYMENT_TENOR = Period.ofMonths(6);
-  private static final Calendar CALENDAR = new MondayToFridayCalendar("A");
+  private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final String US_GOVT = ISSUER_NAMES[0];
-  //  private static final Pair<String, Currency> ISSUER_CCY = Pairs.of(US_GOVT, USD);
   private static final DayCount DAY_COUNT = DayCounts.ACT_ACT_ICMA;
   private static final BusinessDayConvention BUSINESS_DAY = BusinessDayConventions.FOLLOWING;
   private static final boolean IS_EOM = false;
   private static final int SETTLEMENT_DAYS = 1;
   private static final YieldConvention YIELD_CONVENTION = YieldConventionFactory.INSTANCE.getYieldConvention("STREET CONVENTION");
   private static final int NB_BOND = 7;
-  private static final Period[] BOND_TENOR = new Period[] {Period.ofYears(5), Period.ofYears(5), Period.ofYears(5), Period.ofYears(8), Period.ofYears(5), Period.ofYears(5), Period.ofYears(5) };
-  private static final ZonedDateTime[] START_ACCRUAL_DATE = new ZonedDateTime[] {DateUtils.getUTCDate(2010, 11, 30), DateUtils.getUTCDate(2010, 12, 31), DateUtils.getUTCDate(2011, 1, 31),
-    DateUtils.getUTCDate(2008, 2, 29), DateUtils.getUTCDate(2011, 3, 31), DateUtils.getUTCDate(2011, 4, 30), DateUtils.getUTCDate(2011, 5, 31) };
-  private static final double[] RATE = new double[] {0.01375, 0.02125, 0.0200, 0.02125, 0.0225, 0.0200, 0.0175 };
-  private static final double[] CONVERSION_FACTOR = new double[] {.8317, .8565, .8493, .8516, .8540, .8417, .8292 };
+  private static final Period[] BOND_TENOR = new Period[] { Period.ofYears(5), Period.ofYears(5), Period.ofYears(5), Period.ofYears(8),
+      Period.ofYears(5), Period.ofYears(5), Period.ofYears(5) };
+  private static final ZonedDateTime[] START_ACCRUAL_DATE = new ZonedDateTime[] { DateUtils.getUTCDate(2010, 11, 30),
+      DateUtils.getUTCDate(2010, 12, 31), DateUtils.getUTCDate(2011, 1, 31),
+      DateUtils.getUTCDate(2008, 2, 29), DateUtils.getUTCDate(2011, 3, 31), DateUtils.getUTCDate(2011, 4, 30),
+      DateUtils.getUTCDate(2011, 5, 31) };
+  private static final double[] RATE = new double[] { 0.01375, 0.02125, 0.0200, 0.02125, 0.0225, 0.0200, 0.0175 };
+  private static final double[] CONVERSION_FACTOR = new double[] { .8317, .8565, .8493, .8516, .8540, .8417, .8292 };
   private static final ZonedDateTime[] MATURITY_DATE = new ZonedDateTime[NB_BOND];
   private static final BondFixedSecurityDefinition[] BASKET_DEFINITION = new BondFixedSecurityDefinition[NB_BOND];
   static {
     for (int loopbasket = 0; loopbasket < NB_BOND; loopbasket++) {
       MATURITY_DATE[loopbasket] = START_ACCRUAL_DATE[loopbasket].plus(BOND_TENOR[loopbasket]);
-      BASKET_DEFINITION[loopbasket] = BondFixedSecurityDefinition.from(USD, MATURITY_DATE[loopbasket], START_ACCRUAL_DATE[loopbasket], PAYMENT_TENOR, RATE[loopbasket], SETTLEMENT_DAYS, CALENDAR,
+      BASKET_DEFINITION[loopbasket] = BondFixedSecurityDefinition.from(USD, MATURITY_DATE[loopbasket], START_ACCRUAL_DATE[loopbasket],
+          PAYMENT_TENOR, RATE[loopbasket], SETTLEMENT_DAYS, CalendarAdapter.of(CALENDAR),
           DAY_COUNT, BUSINESS_DAY, YIELD_CONVENTION, IS_EOM, US_GOVT);
     }
   }
   private static final ZonedDateTime LAST_TRADING_DATE = DateUtils.getUTCDate(2011, 9, 30);
   private static final ZonedDateTime FIRST_NOTICE_DATE = DateUtils.getUTCDate(2011, 8, 31);
   private static final ZonedDateTime LAST_NOTICE_DATE = DateUtils.getUTCDate(2011, 10, 4);
-  private static final ZonedDateTime FIRST_DELIVERY_DATE = ScheduleCalculator.getAdjustedDate(FIRST_NOTICE_DATE, SETTLEMENT_DAYS, CALENDAR);
-  private static final ZonedDateTime LAST_DELIVERY_DATE = ScheduleCalculator.getAdjustedDate(LAST_NOTICE_DATE, SETTLEMENT_DAYS, CALENDAR);
+  private static final ZonedDateTime FIRST_DELIVERY_DATE = ScheduleCalculator.getAdjustedDate(FIRST_NOTICE_DATE, SETTLEMENT_DAYS,
+      CalendarAdapter.of(CALENDAR));
+  private static final ZonedDateTime LAST_DELIVERY_DATE = ScheduleCalculator.getAdjustedDate(LAST_NOTICE_DATE, SETTLEMENT_DAYS,
+      CalendarAdapter.of(CALENDAR));
   private static final double NOTIONAL = 100000;
   private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2011, 6, 20);
   private static final DayCount ACT_ACT = DayCounts.ACT_ACT_ISDA;
@@ -99,36 +105,45 @@ public class BondFuturesSecurityHullWhiteMethodTest {
     }
   }
 
-  private static final BondFuturesSecurity BOND_FUTURE_SEC = new BondFuturesSecurity(LAST_TRADING_TIME, FIRST_NOTICE_TIME, LAST_NOTICE_TIME, FIRST_DELIVERY_TIME, LAST_DELIVERY_TIME, NOTIONAL,
+  private static final BondFuturesSecurity BOND_FUTURE_SEC = new BondFuturesSecurity(LAST_TRADING_TIME, FIRST_NOTICE_TIME, LAST_NOTICE_TIME,
+      FIRST_DELIVERY_TIME, LAST_DELIVERY_TIME, NOTIONAL,
       BASKET_AT_DELIVERY, BASKET_AT_SPOT, CONVERSION_FACTOR);
   private static final HullWhiteOneFactorPiecewiseConstantParameters PARAMETERS_HW = HullWhiteDataSets.createHullWhiteParameters();
-  private static final HullWhiteIssuerProviderDiscount MULTICURVES_HW_ISSUER = new HullWhiteIssuerProviderDiscount(ISSUER_MULTICURVES, PARAMETERS_HW);
+  private static final HullWhiteIssuerProviderDiscount MULTICURVES_HW_ISSUER = new HullWhiteIssuerProviderDiscount(ISSUER_MULTICURVES,
+      PARAMETERS_HW);
 
   private static final MarketQuoteHullWhiteIssuerCalculator MQC = MarketQuoteHullWhiteIssuerCalculator.getInstance();
-  private static final MarketQuoteCurveSensitivityHullWhiteIssuerCalculator MQCSC = MarketQuoteCurveSensitivityHullWhiteIssuerCalculator.getInstance();
+  private static final MarketQuoteCurveSensitivityHullWhiteIssuerCalculator MQCSC = MarketQuoteCurveSensitivityHullWhiteIssuerCalculator
+      .getInstance();
 
-  private static final SimpleParameterSensitivityIssuerCalculator<HullWhiteIssuerProviderInterface> SPS_HW_C = new SimpleParameterSensitivityIssuerCalculator<>(MQCSC);
+  private static final SimpleParameterSensitivityIssuerCalculator<HullWhiteIssuerProviderInterface> SPS_HW_C = new SimpleParameterSensitivityIssuerCalculator<>(
+      MQCSC);
   private static final double SHIFT = 1.0E-7;
-  private static final SimpleParameterSensitivityHullWhiteIssuerDiscountInterpolatedFDCalculator SPS_HW_FDC = new SimpleParameterSensitivityHullWhiteIssuerDiscountInterpolatedFDCalculator(MQC, SHIFT);
+  private static final SimpleParameterSensitivityHullWhiteIssuerDiscountInterpolatedFDCalculator SPS_HW_FDC = new SimpleParameterSensitivityHullWhiteIssuerDiscountInterpolatedFDCalculator(
+      MQC, SHIFT);
 
   private static final BondFuturesSecurityHullWhiteMethod METHOD_FUT_SEC_HW = BondFuturesSecurityHullWhiteMethod.getInstance();
-  private static final BondFuturesSecurityHullWhiteNumericalIntegrationMethod METHOD_FUT_SEC_NI = BondFuturesSecurityHullWhiteNumericalIntegrationMethod.getInstance();
+  private static final BondFuturesSecurityHullWhiteNumericalIntegrationMethod METHOD_FUT_SEC_NI = BondFuturesSecurityHullWhiteNumericalIntegrationMethod
+      .getInstance();
   private static final FuturesPriceHullWhiteIssuerCalculator FPHWIC = FuturesPriceHullWhiteIssuerCalculator.getInstance();
 
   private static final double TOLERANCE_PRICE = 1.0E-8;
   private static final double TOLERANCE_PRICE_NI = 1.0E-6;
   private static final double TOLERANCE_PRICE_DELTA = 1.0E-6;
 
-  @Test
   /**
    * Test price by explicit formula versus a numerical integration.
    */
+  @Test
   public void price() {
     final double priceExplicit = METHOD_FUT_SEC_HW.price(BOND_FUTURE_SEC, MULTICURVES_HW_ISSUER);
     final double priceNumInteg = METHOD_FUT_SEC_NI.price(BOND_FUTURE_SEC, MULTICURVES_HW_ISSUER);
     assertEquals("Bond future security Discounting Method: price from curves", priceExplicit, priceNumInteg, TOLERANCE_PRICE_NI);
   }
 
+  /**
+   *
+   */
   @Test
   public void priceMethodVsCalculator() {
     final double priceMethod = METHOD_FUT_SEC_HW.price(BOND_FUTURE_SEC, MULTICURVES_HW_ISSUER);
@@ -136,44 +151,58 @@ public class BondFuturesSecurityHullWhiteMethodTest {
     assertEquals("Bond future security Discounting Method: price from curves", priceCalculator, priceMethod, TOLERANCE_PRICE);
   }
 
+  /**
+   *
+   */
   @Test
   public void price6() {
-    final HullWhiteIssuerProviderDiscount hwIssuer6 = new HullWhiteIssuerProviderDiscount(IssuerProviderDiscountDataSets.createIssuerProvider6(), PARAMETERS_HW);
+    final HullWhiteIssuerProviderDiscount hwIssuer6 = new HullWhiteIssuerProviderDiscount(
+        IssuerProviderDiscountDataSets.createIssuerProvider6(), PARAMETERS_HW);
     final double priceMethod = METHOD_FUT_SEC_HW.price(BOND_FUTURE_SEC, hwIssuer6);
     final double priceExpected = 1.00; // Rates are at 6%
     assertEquals("Bond future security Discounting Method: price from curves", priceExpected, priceMethod, 5.0E-3);
   }
 
+  /**
+   *
+   */
   @Test
   public void priceCurveSensitivity() {
-    final SimpleParameterSensitivity pcsAD = SPS_HW_C.calculateSensitivity(BOND_FUTURE_SEC, MULTICURVES_HW_ISSUER, MULTICURVES_HW_ISSUER.getIssuerProvider().getAllNames());
+    final SimpleParameterSensitivity pcsAD = SPS_HW_C.calculateSensitivity(BOND_FUTURE_SEC, MULTICURVES_HW_ISSUER,
+        MULTICURVES_HW_ISSUER.getIssuerProvider().getAllNames());
     final SimpleParameterSensitivity pcsFD = SPS_HW_FDC.calculateSensitivity(BOND_FUTURE_SEC, MULTICURVES_HW_ISSUER);
-    AssertSensitivityObjects.assertEquals("Bond future security Discounting Method: price from curves", pcsAD, pcsFD, TOLERANCE_PRICE_DELTA);
+    AssertSensitivityObjects.assertEquals("Bond future security Discounting Method: price from curves", pcsAD, pcsFD,
+        TOLERANCE_PRICE_DELTA);
   }
 
+  /**
+   *
+   */
   @Test
   public void priceCurveSensitivityMethodVsCalculator() {
     final MulticurveSensitivity pcsMethod = METHOD_FUT_SEC_HW.priceCurveSensitivity(BOND_FUTURE_SEC, MULTICURVES_HW_ISSUER);
     final MulticurveSensitivity pcsCalculator = BOND_FUTURE_SEC.accept(MQCSC, MULTICURVES_HW_ISSUER);
-    AssertSensitivityObjects.assertEquals("Bond future security Discounting Method: price from curves", pcsCalculator, pcsMethod, TOLERANCE_PRICE_DELTA);
+    AssertSensitivityObjects.assertEquals("Bond future security Discounting Method: price from curves", pcsCalculator, pcsMethod,
+        TOLERANCE_PRICE_DELTA);
   }
 
-  @Test
   /**
    * Test price and price curve sensitivity as one result using AD.
    */
+  @Test
   public void priceAD() {
     final double price = METHOD_FUT_SEC_HW.price(BOND_FUTURE_SEC, MULTICURVES_HW_ISSUER);
     final MulticurveSensitivity pcs = METHOD_FUT_SEC_HW.priceCurveSensitivity(BOND_FUTURE_SEC, MULTICURVES_HW_ISSUER);
     final Pair<Double, MulticurveSensitivity> priceAD = METHOD_FUT_SEC_HW.priceAD(BOND_FUTURE_SEC, MULTICURVES_HW_ISSUER);
     assertEquals("Bond future security Discounting Method: price from curves", price, priceAD.getFirst(), TOLERANCE_PRICE);
-    AssertSensitivityObjects.assertEquals("Bond future security Discounting Method: price from curves", pcs, priceAD.getSecond(), TOLERANCE_PRICE_DELTA);
+    AssertSensitivityObjects.assertEquals("Bond future security Discounting Method: price from curves", pcs, priceAD.getSecond(),
+        TOLERANCE_PRICE_DELTA);
   }
 
-  @Test(enabled = false)
   /**
    * Tests of performance. "enabled = false" for the standard testing.
    */
+  @Test(enabled = false)
   public void performance() {
     long startTime, endTime;
     final int nbTest = 10000;
@@ -189,7 +218,8 @@ public class BondFuturesSecurityHullWhiteMethodTest {
       priceFuture = METHOD_FUT_SEC_HW.price(BOND_FUTURE_SEC, MULTICURVES_HW_ISSUER);
     }
     endTime = System.currentTimeMillis();
-    System.out.println("BondFuturesSecurityHullWhiteMethodTest: " + nbTest + " price Bond Future Hull-White (Default number of points): " + (endTime - startTime) + " ms");
+    System.out.println("BondFuturesSecurityHullWhiteMethodTest: " + nbTest + " price Bond Future Hull-White (Default number of points): "
+        + (endTime - startTime) + " ms");
     // Performance note: HW price: 30-Dec-13: On Mac Pro 3.2 GHz Quad-Core Intel Xeon: 4100 ms for 10000 futures.
 
     startTime = System.currentTimeMillis();
@@ -197,7 +227,8 @@ public class BondFuturesSecurityHullWhiteMethodTest {
       pcs = METHOD_FUT_SEC_HW.priceCurveSensitivity(BOND_FUTURE_SEC, MULTICURVES_HW_ISSUER);
     }
     endTime = System.currentTimeMillis();
-    System.out.println("BondFuturesSecurityHullWhiteMethodTest: " + nbTest + " price curve sensi Bond Future Hull-White (Default number of points): " + (endTime - startTime) + " ms");
+    System.out.println("BondFuturesSecurityHullWhiteMethodTest: " + nbTest
+        + " price curve sensi Bond Future Hull-White (Default number of points): " + (endTime - startTime) + " ms");
     // Performance note: HW price: 30-Dec-13: On Mac Pro 3.2 GHz Quad-Core Intel Xeon: 4100 ms for 10000 futures.
 
     startTime = System.currentTimeMillis();
@@ -205,19 +236,20 @@ public class BondFuturesSecurityHullWhiteMethodTest {
       priceAD = METHOD_FUT_SEC_HW.priceAD(BOND_FUTURE_SEC, MULTICURVES_HW_ISSUER);
     }
     endTime = System.currentTimeMillis();
-    System.out.println("BondFuturesSecurityHullWhiteMethodTest: " + nbTest + " price and price curve sensi Bond Future Hull-White (Default number of points): " + (endTime - startTime) + " ms");
+    System.out.println("BondFuturesSecurityHullWhiteMethodTest: " + nbTest
+        + " price and price curve sensi Bond Future Hull-White (Default number of points): " + (endTime - startTime) + " ms");
     // Performance note: HW price: 30-Dec-13: On Mac Pro 3.2 GHz Quad-Core Intel Xeon: 4100 ms for 10000 futures.
   }
 
-  @Test(enabled = false)
   /**
    * Tests of performance with different level of precision in the numerical procedure. "enabled = false" for the standard testing.
    */
+  @Test(enabled = false)
   public void performanceNbPts() {
     long startTime, endTime;
     final int nbTest = 1000;
 
-    final int[] nbPoint = new int[] {41, 61, 81, 101, 151, 201, 501 };
+    final int[] nbPoint = new int[] { 41, 61, 81, 101, 151, 201, 501 };
     final int nbRange = nbPoint.length;
     final double[] priceRange = new double[nbRange];
 
@@ -227,7 +259,8 @@ public class BondFuturesSecurityHullWhiteMethodTest {
         priceRange[looprange] = FPHWIC.visitBondFuturesSecurity(BOND_FUTURE_SEC, MULTICURVES_HW_ISSUER, nbPoint[looprange]);
       }
       endTime = System.currentTimeMillis();
-      System.out.println("BondFuturesSecurityHullWhiteMethodTest: " + nbTest + " price Bond Future Hull-White: with " + nbPoint[looprange] + " points: " + (endTime - startTime) + " ms - price: " +
+      System.out.println("BondFuturesSecurityHullWhiteMethodTest: " + nbTest + " price Bond Future Hull-White: with " + nbPoint[looprange]
+          + " points: " + (endTime - startTime) + " ms - price: " +
           priceRange[looprange]);
     }
 

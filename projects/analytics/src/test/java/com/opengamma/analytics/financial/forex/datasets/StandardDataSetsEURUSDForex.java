@@ -12,9 +12,11 @@ import java.util.List;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
-import com.opengamma.analytics.financial.datasets.CalendarTarget;
+import com.opengamma.analytics.financial.datasets.TargetCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
@@ -48,8 +50,6 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
@@ -71,8 +71,8 @@ public class StandardDataSetsEURUSDForex {
   private static final double TOLERANCE_ROOT = 1.0E-10;
   private static final int STEP_MAX = 100;
 
-  private static final Calendar TARGET = new CalendarTarget("TARGET");
-  private static final Calendar NYC = new MondayToFridayCalendar("NYC");
+  private static final WorkingDayCalendar TARGET = TargetCalendar.INSTANCE;
+  private static final WorkingDayCalendar NYC = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final Currency EUR = Currency.EUR;
   private static final Currency USD = Currency.USD;
   private static final double FX_EURUSD = 1.38775;
@@ -294,7 +294,7 @@ public class StandardDataSetsEURUSDForex {
 
   /**
    * Returns the array of overnight index used in the curve data set.
-   * 
+   *
    * @return The array: USDFEDFUND, EUREOINIA
    */
   public static IndexON[] indexONArray() {
@@ -303,11 +303,11 @@ public class StandardDataSetsEURUSDForex {
 
   /**
    * Returns the array of calendars used in the curve data set.
-   * 
+   *
    * @return The array: NYC, TARGET
    */
-  public static Calendar[] calendarArray() {
-    return new Calendar[] { NYC, TARGET };
+  public static WorkingDayCalendar[] calendarArray() {
+    return new WorkingDayCalendar[] { NYC, TARGET };
   }
 
   @SuppressWarnings("unchecked")

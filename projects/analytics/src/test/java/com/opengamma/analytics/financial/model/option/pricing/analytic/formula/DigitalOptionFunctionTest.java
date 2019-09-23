@@ -11,20 +11,21 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.definition.ForexDefinition;
 import com.opengamma.analytics.financial.forex.definition.ForexOptionDigitalDefinition;
 import com.opengamma.analytics.financial.forex.derivative.ForexOptionDigital;
-import com.opengamma.analytics.financial.forex.method.TestsDataSetsForex;
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
+import com.opengamma.analytics.financial.forex.provider.ForexSmileProviderDataSets;
+import com.opengamma.analytics.financial.forex.provider.MulticurveProviderDiscountForexDataSets;
 import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTermStructureParametersStrikeInterpolation;
+import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
@@ -38,21 +39,21 @@ import com.opengamma.util.tuple.Triple;
 public class DigitalOptionFunctionTest {
 
   private static final double SPOT = 105.;
-  private static final double[] STRIKES = new double[] {97., 105., 105.1, 114. };
+  private static final double[] STRIKES = new double[] { 97., 105., 105.1, 114. };
   private static final double TIME = 4.2;
-  private static final double[] INTERESTS = new double[] {-0.01, 0.017, 0.05, 0.1 };
-  private static final double[] VOLS = new double[] {0.05, 0.1, 0.5 };
-  private static final double[] DIVIDENDS = new double[] {0.005, 0.024, 0.05 };
+  private static final double[] INTERESTS = new double[] { -0.01, 0.017, 0.05, 0.1 };
+  private static final double[] VOLS = new double[] { 0.05, 0.1, 0.5 };
+  private static final double[] DIVIDENDS = new double[] { 0.005, 0.024, 0.05 };
 
   private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2011, 6, 13);
-  private static final Calendar CALENDAR = new MondayToFridayCalendar("A");
+  private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final BusinessDayConvention BUSINESS_DAY = BusinessDayConventions.MODIFIED_FOLLOWING;
   private static final int SETTLEMENT_DAYS = 2;
   private static final Currency EUR = Currency.EUR;
   private static final Currency USD = Currency.USD;
-  private static final YieldCurveBundle CURVES = TestsDataSetsForex.createCurvesForex();
-  private static final String[] CURVES_NAME = TestsDataSetsForex.curveNames();
-  private static final SmileDeltaTermStructureParametersStrikeInterpolation SMILE_TERM = TestsDataSetsForex.smile5points(REFERENCE_DATE);
+  private static final MulticurveProviderDiscount CURVES = MulticurveProviderDiscountForexDataSets.createMulticurvesEURUSD();
+  private static final SmileDeltaTermStructureParametersStrikeInterpolation SMILE_TERM = ForexSmileProviderDataSets
+      .smile5points(REFERENCE_DATE);
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
 
   /**
@@ -68,21 +69,24 @@ public class DigitalOptionFunctionTest {
     final ZonedDateTime expDate = ScheduleCalculator.getAdjustedDate(payDate, -SETTLEMENT_DAYS, CALENDAR);
     final double timeToExpiry = TimeCalculator.getTimeBetween(REFERENCE_DATE, expDate);
     final ForexDefinition forexUnderlyingDefinition = new ForexDefinition(EUR, USD, payDate, notional, strike);
-    final ForexOptionDigitalDefinition forexOptionDefinition = new ForexOptionDigitalDefinition(forexUnderlyingDefinition, expDate, isCall, isLong);
-    final ForexOptionDigital forexOption = forexOptionDefinition.toDerivative(REFERENCE_DATE, CURVES_NAME);
-    final double dfDomestic = CURVES.getCurve(CURVES_NAME[1]).getDiscountFactor(forexOption.getUnderlyingForex().getPaymentTime());
-    final double dfForeign = CURVES.getCurve(CURVES_NAME[0]).getDiscountFactor(forexOption.getUnderlyingForex().getPaymentTime());
-    final double rDomestic = CURVES.getCurve(CURVES_NAME[1]).getInterestRate(forexOption.getUnderlyingForex().getPaymentTime());
-    final double rForeign = CURVES.getCurve(CURVES_NAME[0]).getInterestRate(forexOption.getUnderlyingForex().getPaymentTime());
+    final ForexOptionDigitalDefinition forexOptionDefinition = new ForexOptionDigitalDefinition(forexUnderlyingDefinition, expDate, isCall,
+        isLong);
+    final ForexOptionDigital forexOption = forexOptionDefinition.toDerivative(REFERENCE_DATE);
+    final double dfDomestic = CURVES.getDiscountFactor(EUR, forexOption.getUnderlyingForex().getPaymentTime());
+    final double dfForeign = CURVES.getDiscountFactor(USD, forexOption.getUnderlyingForex().getPaymentTime());
+    final double rDomestic = CURVES.getCurve(EUR).getInterestRate(forexOption.getUnderlyingForex().getPaymentTime());
+    final double rForeign = CURVES.getCurve(USD).getInterestRate(forexOption.getUnderlyingForex().getPaymentTime());
     final double forward = SPOT * dfForeign / dfDomestic;
-    final double volatility = SMILE_TERM.getVolatility(new Triple<>(timeToExpiry, forward, forward));
+    final double volatility = SMILE_TERM.getVolatility(Triple.of(timeToExpiry, forward, forward));
     final double sigmaRootT = volatility * Math.sqrt(forexOption.getExpirationTime());
     final double dM = Math.log(forward / strike) / sigmaRootT - 0.5 * sigmaRootT;
     final int omega = isCall ? 1 : -1;
 
-    final double pvExpected = Math.abs(forexOption.getUnderlyingForex().getPaymentCurrency1().getAmount()) * dfDomestic * NORMAL.getCDF(omega * dM) * (isLong ? 1.0 : -1.0);
+    final double pvExpected = Math.abs(forexOption.getUnderlyingForex().getPaymentCurrency1().getAmount()) * dfDomestic
+        * NORMAL.getCDF(omega * dM) * (isLong ? 1.0 : -1.0);
     final double price = Math.abs(forexOption.getUnderlyingForex().getPaymentCurrency1().getAmount()) *
-        DigitalOptionFunction.price(SPOT, strike, forexOption.getUnderlyingForex().getPaymentTime(), volatility, rDomestic, rDomestic - rForeign, isCall);
+        DigitalOptionFunction.price(SPOT, strike, forexOption.getUnderlyingForex().getPaymentTime(), volatility, rDomestic,
+            rDomestic - rForeign, isCall);
     assertEquals(price, pvExpected, pvExpected * 1.e-14);
   }
 
@@ -91,7 +95,7 @@ public class DigitalOptionFunctionTest {
    */
   @Test
   public void greeksTest() {
-    final boolean[] tfSet = new boolean[] {true, false };
+    final boolean[] tfSet = new boolean[] { true, false };
     final double eps = 1.e-6;
     for (final boolean isCall : tfSet) {
       for (final double strike : STRIKES) {
@@ -105,7 +109,8 @@ public class DigitalOptionFunctionTest {
               final double upSpot = DigitalOptionFunction.price(SPOT + eps, strike, TIME, vol, interest, interest - dividend, isCall);
               final double downSpot = DigitalOptionFunction.price(SPOT - eps, strike, TIME, vol, interest, interest - dividend, isCall);
               final double upSpotDelta = DigitalOptionFunction.delta(SPOT + eps, strike, TIME, vol, interest, interest - dividend, isCall);
-              final double downSpotDelta = DigitalOptionFunction.delta(SPOT - eps, strike, TIME, vol, interest, interest - dividend, isCall);
+              final double downSpotDelta = DigitalOptionFunction.delta(SPOT - eps, strike, TIME, vol, interest, interest - dividend,
+                  isCall);
               final double upTime = DigitalOptionFunction.price(SPOT, strike, TIME + eps, vol, interest, interest - dividend, isCall);
               final double downTime = DigitalOptionFunction.price(SPOT, strike, TIME - eps, vol, interest, interest - dividend, isCall);
               final double upVol = DigitalOptionFunction.price(SPOT, strike, TIME, vol + eps, interest, interest - dividend, isCall);

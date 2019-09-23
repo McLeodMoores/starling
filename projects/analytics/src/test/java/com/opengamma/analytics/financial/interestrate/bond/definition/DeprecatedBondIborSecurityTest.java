@@ -52,19 +52,22 @@ public class DeprecatedBondIborSecurityTest {
   private static final int IBOR_SPOT_LAG = 2;
   private static final BusinessDayConvention IBOR_BUSINESS_DAY = BusinessDayConventions.MODIFIED_FOLLOWING;
   private static final boolean IBOR_IS_EOM = false;
-  private static final IborIndex IBOR_INDEX = new IborIndex(CUR, IBOR_TENOR, IBOR_SPOT_LAG, IBOR_DAY_COUNT, IBOR_BUSINESS_DAY, IBOR_IS_EOM, "Ibor");
+  private static final IborIndex IBOR_INDEX = new IborIndex(CUR, IBOR_TENOR, IBOR_SPOT_LAG, IBOR_DAY_COUNT, IBOR_BUSINESS_DAY, IBOR_IS_EOM,
+      "Ibor");
   private static final Period BOND_TENOR = Period.ofYears(2);
   private static final int SETTLEMENT_DAYS = 3; // Standard for euro-bonds.
   private static final ZonedDateTime START_ACCRUAL_DATE = DateUtils.getUTCDate(2011, 7, 13);
   private static final ZonedDateTime MATURITY_DATE = START_ACCRUAL_DATE.plus(BOND_TENOR);
-  private static final AnnuityCouponIborDefinition COUPON_DEFINITION = AnnuityCouponIborDefinition.fromAccrualUnadjusted(START_ACCRUAL_DATE, MATURITY_DATE, 1.0,
+  private static final AnnuityCouponIborDefinition COUPON_DEFINITION = AnnuityCouponIborDefinition.fromAccrualUnadjusted(START_ACCRUAL_DATE,
+      MATURITY_DATE, 1.0,
       IBOR_INDEX, false, CALENDAR);
   private static final AnnuityPaymentFixedDefinition NOMINAL_DEFINITION = new AnnuityPaymentFixedDefinition(
       new PaymentFixedDefinition[] { new PaymentFixedDefinition(CUR, BUSINESS_DAY.adjustDate(CALENDAR, MATURITY_DATE), 1.0) }, CALENDAR);
   // to derivatives
   private static final DayCount ACT_ACT = DayCounts.ACT_ACT_ISDA;
   private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2011, 8, 18);
-  private static final ZonedDateTime STANDARD_SETTLEMENT_DATE = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, SETTLEMENT_DAYS, CALENDAR);
+  private static final ZonedDateTime STANDARD_SETTLEMENT_DATE = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, SETTLEMENT_DAYS,
+      CALENDAR);
   private static final double STANDARD_SETTLEMENT_TIME = ACT_ACT.getDayCountFraction(REFERENCE_DATE, STANDARD_SETTLEMENT_DATE);
   private static final double FIRST_FIXING = 0.02;
   private static final String CREDIT_CURVE_NAME = "Credit";
@@ -103,7 +106,7 @@ public class DeprecatedBondIborSecurityTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullDiscounting() {
-    new BondIborSecurity(NOMINAL, COUPON, STANDARD_SETTLEMENT_TIME, null);
+    new BondIborSecurity(NOMINAL, COUPON, STANDARD_SETTLEMENT_TIME, (String) null);
   }
 
   @Test
@@ -118,10 +121,12 @@ public class DeprecatedBondIborSecurityTest {
     BondIborSecurity other = new BondIborSecurity(NOMINAL, COUPON, STANDARD_SETTLEMENT_TIME, DISCOUNTING_CURVE_NAME);
     assertEquals(bond, other);
     assertEquals(bond.hashCode(), other.hashCode());
-    other = new BondIborSecurity(NOMINAL_DEFINITION.toDerivative(REFERENCE_DATE.minusDays(1), CURVES_NAME), COUPON, STANDARD_SETTLEMENT_TIME,
+    other = new BondIborSecurity(NOMINAL_DEFINITION.toDerivative(REFERENCE_DATE.minusDays(1), CURVES_NAME), COUPON,
+        STANDARD_SETTLEMENT_TIME,
         DISCOUNTING_CURVE_NAME);
     assertFalse(other.equals(bond));
-    other = new BondIborSecurity(NOMINAL, (Annuity<Coupon>) COUPON_DEFINITION.toDerivative(REFERENCE_DATE.minusDays(1), FIXING_TS, CURVES_NAME),
+    other = new BondIborSecurity(NOMINAL,
+        (Annuity<Coupon>) COUPON_DEFINITION.toDerivative(REFERENCE_DATE.minusDays(1), FIXING_TS, CURVES_NAME),
         STANDARD_SETTLEMENT_TIME, DISCOUNTING_CURVE_NAME);
     assertFalse(other.equals(bond));
   }

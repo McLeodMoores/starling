@@ -19,7 +19,7 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  * Describes a generic single currency bond issue.
- * 
+ *
  * @param <N>
  *          The notional type (usually FixedPayment or CouponInflationZeroCoupon).
  * @param <C>
@@ -31,7 +31,8 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
    */
   private final Annuity<N> _nominal;
   /**
-   * The bond coupons. The coupons notional should be in line with the bond nominal. The discounting curve should be the same for the nominal and the coupons.
+   * The bond coupons. The coupons notional should be in line with the bond nominal. The discounting curve should be the same for the
+   * nominal and the coupons.
    */
   private final Annuity<C> _coupon;
   /**
@@ -53,7 +54,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Bond constructor from the bond nominal and coupon.
-   * 
+   *
    * @param nominal
    *          The notional payments.
    * @param coupon
@@ -67,13 +68,14 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
    * @deprecated Use the constructor that does not take a curve name
    */
   @Deprecated
-  public BondSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final String discountingCurveName, final String issuer) {
+  public BondSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final String discountingCurveName,
+      final String issuer) {
     this(nominal, coupon, settlementTime, discountingCurveName, new LegalEntity(null, issuer, null, null, null));
   }
 
   /**
    * Bond constructor from the bond nominal and coupon.
-   * 
+   *
    * @param nominal
    *          The notional payments.
    * @param coupon
@@ -103,7 +105,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Bond constructor from the bond nominal and coupon.
-   * 
+   *
    * @param nominal
    *          The notional payments.
    * @param coupon
@@ -112,14 +114,16 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
    *          The time (in years) to settlement date.
    * @param issuer
    *          The bond issuer name.
+   * @deprecated The issuer should be provided. Use {@link #BondSecurity(Annuity, Annuity, double, String, LegalEntity)}.
    */
+  @Deprecated
   public BondSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final String issuer) {
     this(nominal, coupon, settlementTime, new LegalEntity(null, issuer, null, null, null));
   }
 
   /**
    * Bond constructor from the bond nominal and coupon.
-   * 
+   *
    * @param nominal
    *          The notional payments.
    * @param coupon
@@ -143,7 +147,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the nominal payments.
-   * 
+   *
    * @return The nominal payments.
    */
   public Annuity<N> getNominal() {
@@ -152,7 +156,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the coupons.
-   * 
+   *
    * @return The coupons.
    */
   public Annuity<C> getCoupon() {
@@ -161,7 +165,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the settlement time.
-   * 
+   *
    * @return The settlement time.
    */
   public double getSettlementTime() {
@@ -170,7 +174,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the bond currency.
-   * 
+   *
    * @return The bond currency.
    */
   public Currency getCurrency() {
@@ -193,7 +197,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the issuer name.
-   * 
+   *
    * @return The issuer name.
    */
   public String getIssuer() {
@@ -202,7 +206,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the issuer.
-   * 
+   *
    * @return The issuer
    */
   public LegalEntity getIssuerEntity() {
@@ -211,7 +215,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the bond issuer name and currency.
-   * 
+   *
    * @return The name/currency.
    * @deprecated This information is no longer used in the curve providers.
    */

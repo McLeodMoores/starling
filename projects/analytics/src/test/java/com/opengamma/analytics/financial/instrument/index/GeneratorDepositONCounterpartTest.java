@@ -11,10 +11,10 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.cash.DepositCounterpartDefinition;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.money.Currency;
@@ -28,37 +28,56 @@ import com.opengamma.util.time.DateUtils;
 public class GeneratorDepositONCounterpartTest {
 
   private static final String NAME_GENERATOR = "US Govt Deposit ON";
-  private static final Calendar CALENDAR = new MondayToFridayCalendar("A");
+  private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final DayCount DAY_COUNT = DayCounts.ACT_360;
   private static final Currency CUR = Currency.EUR;
   private static final String NAME_COUNTERPART = "US GOVT";
-  private static final GeneratorDepositONCounterpart GENERATOR_DEPOSIT_ON_USD = new GeneratorDepositONCounterpart(NAME_GENERATOR, CUR, CALENDAR, DAY_COUNT, NAME_COUNTERPART);
+  private static final GeneratorDepositONCounterpart GENERATOR_DEPOSIT_ON_USD = new GeneratorDepositONCounterpart(NAME_GENERATOR, CUR,
+      CALENDAR, DAY_COUNT, NAME_COUNTERPART);
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullGenName() {
     new GeneratorDepositONCounterpart(null, CUR, CALENDAR, DAY_COUNT, NAME_COUNTERPART);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullCurrency() {
     new GeneratorDepositONCounterpart(NAME_GENERATOR, null, CALENDAR, DAY_COUNT, NAME_COUNTERPART);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullCalendar() {
-    new GeneratorDepositONCounterpart(NAME_GENERATOR, CUR, null, DAY_COUNT, NAME_COUNTERPART);
+    new GeneratorDepositONCounterpart(NAME_GENERATOR, CUR, (WorkingDayCalendar) null, DAY_COUNT, NAME_COUNTERPART);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullDayCount() {
     new GeneratorDepositONCounterpart(NAME_GENERATOR, CUR, CALENDAR, null, NAME_COUNTERPART);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullCounterpartName() {
     new GeneratorDepositONCounterpart(NAME_GENERATOR, CUR, CALENDAR, DAY_COUNT, null);
   }
 
+  /**
+   *
+   */
   @Test
   public void getter() {
     assertEquals("Generator Deposit Counterpart: getter", NAME_GENERATOR, GENERATOR_DEPOSIT_ON_USD.getName());
@@ -68,6 +87,9 @@ public class GeneratorDepositONCounterpartTest {
     assertEquals("Generator Deposit Counterpart: getter", NAME_COUNTERPART, GENERATOR_DEPOSIT_ON_USD.getNameCounterpart());
   }
 
+  /**
+   *
+   */
   @Test
   public void generateInstrument() {
     final ZonedDateTime referenceDate = DateUtils.getUTCDate(2012, 7, 17);
@@ -79,7 +101,8 @@ public class GeneratorDepositONCounterpartTest {
     final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(referenceDate, tenor, CALENDAR);
     final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, 1, CALENDAR);
     final double accrualFactor = DAY_COUNT.getDayCountFraction(startDate, endDate);
-    final DepositCounterpartDefinition insExpected = new DepositCounterpartDefinition(CUR, startDate, endDate, notional, rate, accrualFactor, NAME_COUNTERPART);
+    final DepositCounterpartDefinition insExpected = new DepositCounterpartDefinition(CUR, startDate, endDate, notional, rate,
+        accrualFactor, NAME_COUNTERPART);
     assertEquals("Generator Deposit Counterpart: generate instrument", insExpected, insGenerated);
   }
 

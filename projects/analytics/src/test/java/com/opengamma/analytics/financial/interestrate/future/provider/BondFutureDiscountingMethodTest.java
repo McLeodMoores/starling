@@ -12,6 +12,9 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.bond.BondFixedSecurityDefinition;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
 import com.opengamma.analytics.financial.interestrate.bond.provider.BondSecurityDiscountingMethod;
@@ -25,8 +28,6 @@ import com.opengamma.analytics.financial.util.AssertSensitivityObjects;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.financial.convention.yield.YieldConvention;
@@ -48,7 +49,7 @@ public class BondFutureDiscountingMethodTest {
   // 5-Year U.S. Treasury Note Futures: FVU1
   private static final Currency USD = Currency.USD;
   private static final Period PAYMENT_TENOR = Period.ofMonths(6);
-  private static final Calendar CALENDAR = new MondayToFridayCalendar("A");
+  private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final String US_GOVT = ISSUER_NAMES[0];
   private static final DayCount DAY_COUNT = DayCounts.ACT_ACT_ICMA;
   private static final BusinessDayConvention BUSINESS_DAY = BusinessDayConventions.FOLLOWING;
@@ -56,17 +57,21 @@ public class BondFutureDiscountingMethodTest {
   private static final int SETTLEMENT_DAYS = 1;
   private static final YieldConvention YIELD_CONVENTION = YieldConventionFactory.INSTANCE.getYieldConvention("STREET CONVENTION");
   private static final int NB_BOND = 7;
-  private static final Period[] BOND_TENOR = new Period[] {Period.ofYears(5), Period.ofYears(5), Period.ofYears(5), Period.ofYears(8), Period.ofYears(5), Period.ofYears(5), Period.ofYears(5)};
-  private static final ZonedDateTime[] START_ACCRUAL_DATE = new ZonedDateTime[] {DateUtils.getUTCDate(2010, 11, 30), DateUtils.getUTCDate(2010, 12, 31), DateUtils.getUTCDate(2011, 1, 31),
-    DateUtils.getUTCDate(2008, 2, 29), DateUtils.getUTCDate(2011, 3, 31), DateUtils.getUTCDate(2011, 4, 30), DateUtils.getUTCDate(2011, 5, 31)};
-  private static final double[] RATE = new double[] {0.01375, 0.02125, 0.0200, 0.02125, 0.0225, 0.0200, 0.0175};
-  private static final double[] CONVERSION_FACTOR = new double[] {.8317, .8565, .8493, .8516, .8540, .8417, .8292};
+  private static final Period[] BOND_TENOR = new Period[] { Period.ofYears(5), Period.ofYears(5), Period.ofYears(5), Period.ofYears(8),
+      Period.ofYears(5), Period.ofYears(5), Period.ofYears(5) };
+  private static final ZonedDateTime[] START_ACCRUAL_DATE = new ZonedDateTime[] { DateUtils.getUTCDate(2010, 11, 30),
+      DateUtils.getUTCDate(2010, 12, 31), DateUtils.getUTCDate(2011, 1, 31),
+      DateUtils.getUTCDate(2008, 2, 29), DateUtils.getUTCDate(2011, 3, 31), DateUtils.getUTCDate(2011, 4, 30),
+      DateUtils.getUTCDate(2011, 5, 31) };
+  private static final double[] RATE = new double[] { 0.01375, 0.02125, 0.0200, 0.02125, 0.0225, 0.0200, 0.0175 };
+  private static final double[] CONVERSION_FACTOR = new double[] { .8317, .8565, .8493, .8516, .8540, .8417, .8292 };
   private static final ZonedDateTime[] MATURITY_DATE = new ZonedDateTime[NB_BOND];
   private static final BondFixedSecurityDefinition[] BASKET_DEFINITION = new BondFixedSecurityDefinition[NB_BOND];
   static {
-    for (int loopbasket = 0; loopbasket < NB_BOND; loopbasket++) {
-      MATURITY_DATE[loopbasket] = START_ACCRUAL_DATE[loopbasket].plus(BOND_TENOR[loopbasket]);
-      BASKET_DEFINITION[loopbasket] = BondFixedSecurityDefinition.from(USD, MATURITY_DATE[loopbasket], START_ACCRUAL_DATE[loopbasket], PAYMENT_TENOR, RATE[loopbasket], SETTLEMENT_DAYS, CALENDAR,
+    for (int i = 0; i < NB_BOND; i++) {
+      MATURITY_DATE[i] = START_ACCRUAL_DATE[i].plus(BOND_TENOR[i]);
+      BASKET_DEFINITION[i] = BondFixedSecurityDefinition.from(USD, MATURITY_DATE[i], START_ACCRUAL_DATE[i],
+          PAYMENT_TENOR, RATE[i], SETTLEMENT_DAYS, CalendarAdapter.of(CALENDAR),
           DAY_COUNT, BUSINESS_DAY, YIELD_CONVENTION, IS_EOM, US_GOVT);
     }
   }
@@ -91,8 +96,8 @@ public class BondFutureDiscountingMethodTest {
       STANDARD[loopbasket] = BASKET_DEFINITION[loopbasket].toDerivative(REFERENCE_DATE);
     }
   }
-  private static final BondFuture BOND_FUTURE = new BondFuture(LAST_TRADING_TIME, FIRST_NOTICE_TIME, LAST_NOTICE_TIME, FIRST_DELIVERY_TIME, LAST_DELIVERY_TIME, NOTIONAL, BASKET, CONVERSION_FACTOR,
-      REF_PRICE);
+  private static final BondFuture BOND_FUTURE = new BondFuture(LAST_TRADING_TIME, FIRST_NOTICE_TIME, LAST_NOTICE_TIME, FIRST_DELIVERY_TIME,
+      LAST_DELIVERY_TIME, NOTIONAL, BASKET, CONVERSION_FACTOR, REF_PRICE);
   private static final BondFutureDiscountingMethod METHOD_FUT_DSC = BondFutureDiscountingMethod.getInstance();
   private static final BondSecurityDiscountingMethod METHOD_BOND = BondSecurityDiscountingMethod.getInstance();
 
@@ -128,7 +133,8 @@ public class BondFutureDiscountingMethodTest {
     int minIndex = 0;
     for (int loopbasket = 0; loopbasket < NB_BOND; loopbasket++) {
       bondForwardPrice[loopbasket] = METHOD_BOND.dirtyPriceFromCurves(BASKET[loopbasket], ISSUER_MULTICURVES);
-      bondFuturePrice[loopbasket] = (bondForwardPrice[loopbasket] - BASKET[loopbasket].getAccruedInterest()) / CONVERSION_FACTOR[loopbasket];
+      bondFuturePrice[loopbasket] = (bondForwardPrice[loopbasket] - BASKET[loopbasket].getAccruedInterest())
+          / CONVERSION_FACTOR[loopbasket];
       if (bondFuturePrice[loopbasket] < minPrice) {
         minPrice = (bondForwardPrice[loopbasket] - BASKET[loopbasket].getAccruedInterest()) / CONVERSION_FACTOR[loopbasket];
         minIndex = loopbasket;
@@ -138,42 +144,45 @@ public class BondFutureDiscountingMethodTest {
     sensiBond = sensiBond.multipliedBy(1.0 / CONVERSION_FACTOR[minIndex]);
     sensiFuture = sensiFuture.cleaned();
     sensiBond = sensiBond.cleaned();
-    AssertSensitivityObjects.assertEquals("BondFutureSecurityDiscountingMethod: priceCurveSensitivity", sensiBond, sensiFuture, TOLERANCE_PRICE_DELTA);
+    AssertSensitivityObjects.assertEquals("BondFutureSecurityDiscountingMethod: priceCurveSensitivity", sensiBond, sensiFuture,
+        TOLERANCE_PRICE_DELTA);
   }
 
-  //    @Test
-  //    /**
-  //     * Tests the computation of the price curve sensitivity.
-  //     */
-  //    public void priceCurveSensitivityMethodVsCalculator() {
-  //      final MulticurveSensitivity sensiMethod = METHOD_FUT_DSC.priceCurveSensitivity(BOND_FUTURE, ISSUER_MULTICURVES);
-  //      final InterestRateCurveSensitivity sensiCalculator = PRICE_SENSI_CALCULATOR.visit(BOND_FUTURE, ISSUER_MULTICURVES);
-  //      assertEquals("Bond future security Discounting Method: curve sensitivity Method versus Calculator", sensiMethod, sensiCalculator);
-  //    }
+  // @Test
+  // /**
+  // * Tests the computation of the price curve sensitivity.
+  // */
+  // public void priceCurveSensitivityMethodVsCalculator() {
+  // final MulticurveSensitivity sensiMethod = METHOD_FUT_DSC.priceCurveSensitivity(BOND_FUTURE, ISSUER_MULTICURVES);
+  // final InterestRateCurveSensitivity sensiCalculator = PRICE_SENSI_CALCULATOR.visit(BOND_FUTURE, ISSUER_MULTICURVES);
+  // assertEquals("Bond future security Discounting Method: curve sensitivity Method versus Calculator", sensiMethod, sensiCalculator);
+  // }
 
-  //    @Test
-  //    /**
-  //     * Tests the method versus the calculator for the price.
-  //     */
-  //    public void priceMethodVsCalculator() {
-  //      final double priceMethod = METHOD_FUT_DSC.price(BOND_FUTURE, ISSUER_MULTICURVES);
-  //      final double priceCalculator = PRICE_CALCULATOR.visit(BOND_FUTURE, ISSUER_MULTICURVES);
-  //      assertEquals("Bond future security Discounting: Method vs calculator", priceMethod, priceCalculator, 1.0E-10);
-  //    }
+  // @Test
+  // /**
+  // * Tests the method versus the calculator for the price.
+  // */
+  // public void priceMethodVsCalculator() {
+  // final double priceMethod = METHOD_FUT_DSC.price(BOND_FUTURE, ISSUER_MULTICURVES);
+  // final double priceCalculator = PRICE_CALCULATOR.visit(BOND_FUTURE, ISSUER_MULTICURVES);
+  // assertEquals("Bond future security Discounting: Method vs calculator", priceMethod, priceCalculator, 1.0E-10);
+  // }
 
   /**
    * Tests the net basis of all bonds computed from the curves.
    */
   @Test
   public void netBasisAllBonds() {
-    //final double priceFuture = 1.0320;
+    // final double priceFuture = 1.0320;
     final double priceFuture = METHOD_FUT_DSC.price(BOND_FUTURE, ISSUER_MULTICURVES);
     final double[] netBasisComputed = METHOD_FUT_DSC.netBasisAllBonds(BOND_FUTURE, ISSUER_MULTICURVES, priceFuture);
     final double[] netBasisExpected = new double[NB_BOND];
     for (int loopbasket = 0; loopbasket < NB_BOND; loopbasket++) {
       final double bondPriceForward = METHOD_BOND.dirtyPriceFromCurves(BOND_FUTURE.getDeliveryBasket()[loopbasket], ISSUER_MULTICURVES);
-      netBasisExpected[loopbasket] = bondPriceForward - (priceFuture * CONVERSION_FACTOR[loopbasket] + BOND_FUTURE.getDeliveryBasket()[loopbasket].getAccruedInterest());
-      assertEquals("Bond future security Discounting Method: netBasis", netBasisExpected[loopbasket], netBasisComputed[loopbasket], 1.0E-10);
+      netBasisExpected[loopbasket] = bondPriceForward
+          - (priceFuture * CONVERSION_FACTOR[loopbasket] + BOND_FUTURE.getDeliveryBasket()[loopbasket].getAccruedInterest());
+      assertEquals("Bond future security Discounting Method: netBasis", netBasisExpected[loopbasket], netBasisComputed[loopbasket],
+          1.0E-10);
     }
     final Min minFunction = new Min();
     final double netBasisMin = minFunction.evaluate(netBasisComputed);
@@ -190,7 +199,8 @@ public class BondFutureDiscountingMethodTest {
     final double priceFuture = METHOD_FUT_DSC.price(BOND_FUTURE, ISSUER_MULTICURVES) + netBasisInput;
     final double netBasisCheapest = METHOD_FUT_DSC.netBasisCheapest(BOND_FUTURE, ISSUER_MULTICURVES, priceFuture);
     final double[] netBasisAll = METHOD_FUT_DSC.netBasisAllBonds(BOND_FUTURE, ISSUER_MULTICURVES, priceFuture);
-    assertEquals("Bond future security Discounting Method: netBasis", MIN_FUNCTION.evaluate(netBasisAll), netBasisCheapest, TOLERANCE_PRICE);
+    assertEquals("Bond future security Discounting Method: netBasis", MIN_FUNCTION.evaluate(netBasisAll), netBasisCheapest,
+        TOLERANCE_PRICE);
   }
 
   /**
@@ -224,7 +234,7 @@ public class BondFutureDiscountingMethodTest {
   @Test
   public void grossBasis() {
     final double futurePriceTest = 1.19984375;
-    final double[] pricesTest = new double[] {0.86, 0.885, 0.88, 0.8825, 0.885, 0.8725, 0.86};
+    final double[] pricesTest = new double[] { 0.86, 0.885, 0.88, 0.8825, 0.885, 0.8725, 0.86 };
     final double[] pricesCurves = new double[NB_BOND];
     for (int loopbasket = 0; loopbasket < NB_BOND; loopbasket++) {
       pricesCurves[loopbasket] = METHOD_BOND.cleanPriceFromCurves(BOND_FUTURE.getDeliveryBasket()[loopbasket], ISSUER_MULTICURVES);
@@ -234,8 +244,8 @@ public class BondFutureDiscountingMethodTest {
     final double[] basisExpectedTest = new double[NB_BOND];
     final double[] basisExpectedCurves = new double[NB_BOND];
     for (int loopbasket = 0; loopbasket < NB_BOND; loopbasket++) {
-      basisExpectedTest[loopbasket] = (pricesTest[loopbasket] - futurePriceTest * CONVERSION_FACTOR[loopbasket]);
-      basisExpectedCurves[loopbasket] = (pricesCurves[loopbasket] - futurePriceTest * CONVERSION_FACTOR[loopbasket]);
+      basisExpectedTest[loopbasket] = pricesTest[loopbasket] - futurePriceTest * CONVERSION_FACTOR[loopbasket];
+      basisExpectedCurves[loopbasket] = pricesCurves[loopbasket] - futurePriceTest * CONVERSION_FACTOR[loopbasket];
       assertEquals("Gross basis from prices", basisExpectedTest[loopbasket], basisComputedTest[loopbasket], 1.0E-10);
       assertEquals("Gross basis from curves", basisExpectedCurves[loopbasket], basisComputedCurves[loopbasket], 1.0E-10);
     }
@@ -249,9 +259,9 @@ public class BondFutureDiscountingMethodTest {
     final double quotedPrice = 1.05;
     final MultipleCurrencyAmount presentValueMethod = METHOD_FUT_DSC.presentValueFromPrice(BOND_FUTURE, quotedPrice);
     assertEquals("Bond future Method: present value from price", (quotedPrice - REF_PRICE) * NOTIONAL, presentValueMethod.getAmount(USD));
-    //    final PresentValueFromFuturePriceCalculator calculator = PresentValueFromFuturePriceCalculator.getInstance();
-    //    final double presentValueCalculator = calculator.visit(BOND_FUTURE, quotedPrice);
-    //    assertEquals("Bond future Method: present value from price", presentValueMethod.getAmount(), presentValueCalculator);
+    // final PresentValueFromFuturePriceCalculator calculator = PresentValueFromFuturePriceCalculator.getInstance();
+    // final double presentValueCalculator = calculator.visit(BOND_FUTURE, quotedPrice);
+    // assertEquals("Bond future Method: present value from price", presentValueMethod.getAmount(), presentValueCalculator);
   }
 
   /**
@@ -263,18 +273,22 @@ public class BondFutureDiscountingMethodTest {
     final MultipleCurrencyAmount pvComputed = METHOD_FUT_DSC.presentValueFromNetBasis(BOND_FUTURE, ISSUER_MULTICURVES, netBasisInput);
     final double priceComputed = METHOD_FUT_DSC.priceFromNetBasis(BOND_FUTURE, ISSUER_MULTICURVES, netBasisInput);
     final MultipleCurrencyAmount pvExpected = METHOD_FUT_DSC.presentValueFromPrice(BOND_FUTURE, priceComputed);
-    assertEquals("Bond future Discounting Method: present value from net basis", pvExpected.getAmount(USD), pvComputed.getAmount(USD), TOLERANCE_PV);
+    assertEquals("Bond future Discounting Method: present value from net basis", pvExpected.getAmount(USD), pvComputed.getAmount(USD),
+        TOLERANCE_PV);
   }
 
   /**
-   * Tests the present value  curve sensitivity method for bond futures.
+   * Tests the present value curve sensitivity method for bond futures.
    */
   @Test
   public void presentValueCurveSensitivity() {
-    final MultipleCurrencyMulticurveSensitivity pvcsComputed = METHOD_FUT_DSC.presentValueCurveSensitivity(BOND_FUTURE, ISSUER_MULTICURVES).cleaned();
+    final MultipleCurrencyMulticurveSensitivity pvcsComputed = METHOD_FUT_DSC.presentValueCurveSensitivity(BOND_FUTURE, ISSUER_MULTICURVES)
+        .cleaned();
     final MulticurveSensitivity pcs = METHOD_FUT_DSC.priceCurveSensitivity(BOND_FUTURE, ISSUER_MULTICURVES);
-    final MultipleCurrencyMulticurveSensitivity pvcsExpected = MultipleCurrencyMulticurveSensitivity.of(USD, pcs.multipliedBy(NOTIONAL).cleaned());
-    AssertSensitivityObjects.assertEquals("Bond future Discounting Method: pv curve sensitivity", pvcsComputed, pvcsExpected, TOLERANCE_PV_DELTA);
+    final MultipleCurrencyMulticurveSensitivity pvcsExpected = MultipleCurrencyMulticurveSensitivity.of(USD,
+        pcs.multipliedBy(NOTIONAL).cleaned());
+    AssertSensitivityObjects.assertEquals("Bond future Discounting Method: pv curve sensitivity", pvcsComputed, pvcsExpected,
+        TOLERANCE_PV_DELTA);
   }
 
 }

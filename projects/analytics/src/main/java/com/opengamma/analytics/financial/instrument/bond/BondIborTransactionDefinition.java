@@ -29,7 +29,8 @@ import com.opengamma.util.ArgumentChecker;
  * Describes a transaction on a Ibor coupon bond issue.
  */
 public class BondIborTransactionDefinition extends BondTransactionDefinition<PaymentFixedDefinition, CouponIborDefinition>
-    implements InstrumentDefinitionWithData<BondTransaction<? extends BondSecurity<? extends Payment, ? extends Coupon>>, DoubleTimeSeries<ZonedDateTime>> {
+    implements
+    InstrumentDefinitionWithData<BondTransaction<? extends BondSecurity<? extends Payment, ? extends Coupon>>, DoubleTimeSeries<ZonedDateTime>> {
 
   /**
    * Constructor of a Ibor coupon bond transaction from all the transaction details.
@@ -43,7 +44,8 @@ public class BondIborTransactionDefinition extends BondTransactionDefinition<Pay
    * @param price
    *          The (dirty) price of the transaction in relative term (i.e. 0.90 if the dirty price is 90% of nominal).
    */
-  public BondIborTransactionDefinition(final BondIborSecurityDefinition underlyingBond, final double quantity, final ZonedDateTime settlementDate,
+  public BondIborTransactionDefinition(final BondIborSecurityDefinition underlyingBond, final double quantity,
+      final ZonedDateTime settlementDate,
       final double price) {
     super(underlyingBond, quantity, settlementDate, price);
   }
@@ -57,7 +59,8 @@ public class BondIborTransactionDefinition extends BondTransactionDefinition<Pay
   @Deprecated
   @Override
   public BondIborTransaction toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
-    // Implementation note: First yield curve used for coupon and notional (credit), the second for discounting and the third for forward (Ibor).
+    // Implementation note: First yield curve used for coupon and notional (credit), the second for discounting and the third for forward
+    // (Ibor).
     // TODO: review this implementation using the Security toDerivative.
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");
@@ -67,7 +70,8 @@ public class BondIborTransactionDefinition extends BondTransactionDefinition<Pay
     final String iborCurveName = yieldCurveNames[2];
     final String[] couponCurveName = new String[] { creditCurveName, iborCurveName };
     final DayCount actAct = DayCounts.ACT_ACT_ISDA;
-    final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, getUnderlyingBond().getSettlementDays(), getUnderlyingBond().getCalendar());
+    final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, getUnderlyingBond().getSettlementDays(),
+        getUnderlyingBond().getCalendar());
     final double spotTime = actAct.getDayCountFraction(date, spot, getUnderlyingBond().getCalendar());
     final double settlementTime;
     if (getSettlementDate().isBefore(date)) {
@@ -104,8 +108,10 @@ public class BondIborTransactionDefinition extends BondTransactionDefinition<Pay
   @SuppressWarnings("unchecked")
   @Deprecated
   @Override
-  public BondIborTransaction toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> indexFixingTS, final String... yieldCurveNames) {
-    // Implementation note: First yield curve used for coupon and notional (credit), the second for discounting and the third for forward (Ibor).
+  public BondIborTransaction toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> indexFixingTS,
+      final String... yieldCurveNames) {
+    // Implementation note: First yield curve used for coupon and notional (credit), the second for discounting and the third for forward
+    // (Ibor).
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(indexFixingTS, "index fixing time series");
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");
@@ -115,7 +121,8 @@ public class BondIborTransactionDefinition extends BondTransactionDefinition<Pay
     final String iborCurveName = yieldCurveNames[2];
     final String[] couponCurveName = new String[] { creditCurveName, iborCurveName };
     final DayCount actAct = DayCounts.ACT_ACT_ISDA;
-    final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, getUnderlyingBond().getSettlementDays(), getUnderlyingBond().getCalendar());
+    final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, getUnderlyingBond().getSettlementDays(),
+        getUnderlyingBond().getCalendar());
     final double spotTime = actAct.getDayCountFraction(date, spot, getUnderlyingBond().getCalendar());
     final double settlementTime;
     if (getSettlementDate().isBefore(date)) {
@@ -150,7 +157,8 @@ public class BondIborTransactionDefinition extends BondTransactionDefinition<Pay
     // TODO: review this implementation using the Security toDerivative.
     ArgumentChecker.notNull(date, "date");
     final DayCount actAct = DayCounts.ACT_ACT_ISDA;
-    final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, getUnderlyingBond().getSettlementDays(), getUnderlyingBond().getCalendar());
+    final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, getUnderlyingBond().getSettlementDays(),
+        getUnderlyingBond().getCalendar());
     final double spotTime = actAct.getDayCountFraction(date, spot, getUnderlyingBond().getCalendar());
     final double settlementTime;
     if (getSettlementDate().isBefore(date)) {
@@ -164,13 +172,15 @@ public class BondIborTransactionDefinition extends BondTransactionDefinition<Pay
     final Annuity<Coupon> couponPurchase = coupon.trimBefore(settlementTime);
     final AnnuityPaymentFixed nominalStandard = nominal.trimBefore(spotTime);
     final Annuity<Coupon> couponStandard = coupon.trimBefore(spotTime);
-    final BondIborSecurity bondPurchase = new BondIborSecurity(nominalPurchase, couponPurchase, settlementTime);
-    final BondIborSecurity bondStandard = new BondIborSecurity(nominalStandard, couponStandard, spotTime);
+    final BondIborSecurity bondPurchase = new BondIborSecurity(nominalPurchase, couponPurchase, settlementTime,
+        getUnderlyingBond().getIssuerEntity());
+    final BondIborSecurity bondStandard = new BondIborSecurity(nominalStandard, couponStandard, spotTime,
+        getUnderlyingBond().getIssuerEntity());
     final int nbCoupon = getUnderlyingBond().getCoupons().getNumberOfPayments();
     int couponIndex = 0; // The index of the coupon of the spot date.
-    for (int loopcpn = 0; loopcpn < nbCoupon; loopcpn++) {
-      if (getUnderlyingBond().getCoupons().getNthPayment(loopcpn).getAccrualEndDate().isAfter(spot)) {
-        couponIndex = loopcpn;
+    for (int i = 0; i < nbCoupon; i++) {
+      if (getUnderlyingBond().getCoupons().getNthPayment(i).getAccrualEndDate().isAfter(spot)) {
+        couponIndex = i;
         break;
       }
     }
@@ -185,7 +195,8 @@ public class BondIborTransactionDefinition extends BondTransactionDefinition<Pay
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(indexFixingTS, "index fixing time series");
     final DayCount actAct = DayCounts.ACT_ACT_ISDA;
-    final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, getUnderlyingBond().getSettlementDays(), getUnderlyingBond().getCalendar());
+    final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, getUnderlyingBond().getSettlementDays(),
+        getUnderlyingBond().getCalendar());
     final double spotTime = actAct.getDayCountFraction(date, spot, getUnderlyingBond().getCalendar());
     final double settlementTime;
     if (getSettlementDate().isBefore(date)) {
@@ -199,8 +210,10 @@ public class BondIborTransactionDefinition extends BondTransactionDefinition<Pay
     final Annuity<Coupon> couponPurchase = coupon.trimBefore(settlementTime);
     final AnnuityPaymentFixed nominalStandard = nominal.trimBefore(spotTime);
     final Annuity<Coupon> couponStandard = coupon.trimBefore(spotTime);
-    final BondIborSecurity bondPurchase = new BondIborSecurity(nominalPurchase, couponPurchase, settlementTime);
-    final BondIborSecurity bondStandard = new BondIborSecurity(nominalStandard, couponStandard, spotTime);
+    final BondIborSecurity bondPurchase = new BondIborSecurity(nominalPurchase, couponPurchase, settlementTime,
+        getUnderlyingBond().getIssuerEntity());
+    final BondIborSecurity bondStandard = new BondIborSecurity(nominalStandard, couponStandard, spotTime,
+        getUnderlyingBond().getIssuerEntity());
     final int nbCoupon = getUnderlyingBond().getCoupons().getNumberOfPayments();
     int couponIndex = 0; // The index of the coupon of the spot date.
     for (int loopcpn = 0; loopcpn < nbCoupon; loopcpn++) {

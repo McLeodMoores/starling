@@ -9,6 +9,8 @@ import org.apache.commons.lang.ObjectUtils;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.fra.ForwardRateAgreementDefinition;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
@@ -30,7 +32,7 @@ public class GeneratorFRA extends GeneratorInstrument<GeneratorAttributeIR> {
 
   /**
    * Constructor from the details. The business day conventions, end-of-month and spot lag are from the Ibor index.
-   * 
+   *
    * @param name
    *          The generator name. Not null.
    * @param iborIndex
@@ -47,8 +49,26 @@ public class GeneratorFRA extends GeneratorInstrument<GeneratorAttributeIR> {
   }
 
   /**
+   * Constructor from the details. The business day conventions, end-of-month and spot lag are from the Ibor index.
+   *
+   * @param name
+   *          The generator name. Not null.
+   * @param iborIndex
+   *          The Ibor index of the floating leg.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
+   */
+  public GeneratorFRA(final String name, final IborIndex iborIndex, final WorkingDayCalendar calendar) {
+    super(name);
+    ArgumentChecker.notNull(iborIndex, "ibor index");
+    ArgumentChecker.notNull(calendar, "calendar");
+    _iborIndex = iborIndex;
+    _calendar = CalendarAdapter.of(calendar);
+  }
+
+  /**
    * Gets the _iborIndex field.
-   * 
+   *
    * @return the _iborIndex
    */
   public IborIndex getIborIndex() {
@@ -57,7 +77,7 @@ public class GeneratorFRA extends GeneratorInstrument<GeneratorAttributeIR> {
 
   /**
    * Gets the generator currency.
-   * 
+   *
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -66,7 +86,7 @@ public class GeneratorFRA extends GeneratorInstrument<GeneratorAttributeIR> {
 
   /**
    * Gets the generator calendar.
-   * 
+   *
    * @return The calendar.
    */
   public Calendar getCalendar() {

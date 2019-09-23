@@ -29,13 +29,14 @@ public class ExampleCurveAndSurfaceDefinitionLoader extends AbstractTool<ToolCon
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     new ExampleCurveAndSurfaceDefinitionLoader().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
     final ConfigMaster configMaster = getToolContext().getConfigMaster();
@@ -53,7 +54,6 @@ public class ExampleCurveAndSurfaceDefinitionLoader extends AbstractTool<ToolCon
     FXOptionVolatilitySurfaceConfigPopulator.populateVolatilitySurfaceConfigMaster(configMaster, fxSurfaces);
     SwaptionVolatilitySurfaceConfigPopulator.populateVolatilitySurfaceConfigMaster(configMaster, swaptionSurfaces);
     FXForwardCurveConfigPopulator.populateFXForwardCurveConfigMaster(configMaster, fxForward);
-    new ExampleFXImpliedMultiCurveCalculationConfigPopulator(configMaster);
   }
 
 }

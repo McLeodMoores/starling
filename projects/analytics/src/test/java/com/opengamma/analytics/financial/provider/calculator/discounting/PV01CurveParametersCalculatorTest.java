@@ -14,6 +14,8 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.ShiftType;
 import com.opengamma.analytics.financial.instrument.annuity.AnnuityCouponIborSpreadDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedIbor;
@@ -31,7 +33,6 @@ import com.opengamma.analytics.financial.provider.description.MulticurveProvider
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.util.amount.ReferenceAmount;
-import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.test.TestGroup;
@@ -54,7 +55,7 @@ public class PV01CurveParametersCalculatorTest {
   /** The 6m USD Libor index */
   private static final IborIndex USDLIBOR6M = INDEX_LIST[3];
   /** NYC calendar */
-  private static final Calendar NYC = MulticurveProviderDiscountDataSets.getUSDCalendar();
+  private static final WorkingDayCalendar NYC = MulticurveProviderDiscountDataSets.getUSDCalendar();
   /** Generates fixed / ibor swaps */
   private static final GeneratorSwapFixedIborMaster GENERATOR_SWAP_MASTER = GeneratorSwapFixedIborMaster.getInstance();
   /** Generates standard USD swaps */
@@ -70,16 +71,22 @@ public class PV01CurveParametersCalculatorTest {
   /** The fixed rate */
   private static final double FIXED_RATE = 0.025;
   /** A fixed / Libor swap */
-  private static final Swap<?, ?> SWAP_FIXED_IBOR = SwapFixedIborDefinition.from(SETTLEMENT_DATE, SWAP_TENOR, USD6MLIBOR3M, NOTIONAL, FIXED_RATE, true).toDerivative(REFERENCE_DATE);
+  private static final Swap<?, ?> SWAP_FIXED_IBOR = SwapFixedIborDefinition
+      .from(SETTLEMENT_DATE, SWAP_TENOR, USD6MLIBOR3M, NOTIONAL, FIXED_RATE, true).toDerivative(REFERENCE_DATE);
   /** A 3m Libor / 6m Libor swap */
-  private static final Swap<?, ?> SWAP_IBORSPREAD_IBORSPREAD_DEFINITION = new SwapIborIborDefinition(AnnuityCouponIborSpreadDefinition.from(SETTLEMENT_DATE, SWAP_TENOR, NOTIONAL,
-      USDLIBOR3M, 0.001, true, NYC), AnnuityCouponIborSpreadDefinition.from(SETTLEMENT_DATE, SWAP_TENOR, NOTIONAL, USDLIBOR6M, 0.001, false, NYC)).toDerivative(REFERENCE_DATE);
+  private static final Swap<?, ?> SWAP_IBORSPREAD_IBORSPREAD_DEFINITION = new SwapIborIborDefinition(
+      AnnuityCouponIborSpreadDefinition.from(SETTLEMENT_DATE, SWAP_TENOR, NOTIONAL, USDLIBOR3M, 0.001, true, CalendarAdapter.of(NYC)),
+      AnnuityCouponIborSpreadDefinition.from(SETTLEMENT_DATE, SWAP_TENOR, NOTIONAL, USDLIBOR6M, 0.001, false, CalendarAdapter.of(NYC)))
+          .toDerivative(REFERENCE_DATE);
   /** The PV calculator */
-  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, MultipleCurrencyAmount> PV = PresentValueDiscountingCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, MultipleCurrencyAmount> PV = PresentValueDiscountingCalculator
+      .getInstance();
   /** The PV01 calculator */
-  private static final PV01CurveParametersCalculator<MulticurveProviderInterface> PV01 = new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityDiscountingCalculator.getInstance());
+  private static final PV01CurveParametersCalculator<MulticurveProviderInterface> PV01 = new PV01CurveParametersCalculator<>(
+      PresentValueCurveSensitivityDiscountingCalculator.getInstance());
   /** The gamma PV01 calculator */
-  private static final GammaPV01CurveParametersCalculator<MulticurveProviderInterface> GAMMA_PV01 = new GammaPV01CurveParametersCalculator<>(PresentValueCurveSensitivityDiscountingCalculator.getInstance());
+  private static final GammaPV01CurveParametersCalculator<MulticurveProviderInterface> GAMMA_PV01 = new GammaPV01CurveParametersCalculator<>(
+      PresentValueCurveSensitivityDiscountingCalculator.getInstance());
   /** One basis point */
   private static final double BP = 0.0001;
   /** Relative accuracy for calculations */
@@ -166,8 +173,8 @@ public class PV01CurveParametersCalculatorTest {
   }
 
   /**
-   * Tests that total PV01 (i.e. PV01 and gamma PV01) for swaps is a good approximation to the
-   * change in PV when all curves to which the instruments are sensitive are shifted by +1bp
+   * Tests that total PV01 (i.e. PV01 and gamma PV01) for swaps is a good approximation to the change in PV when all curves to which the
+   * instruments are sensitive are shifted by +1bp
    */
   @Test
   public void testApproximation() {
