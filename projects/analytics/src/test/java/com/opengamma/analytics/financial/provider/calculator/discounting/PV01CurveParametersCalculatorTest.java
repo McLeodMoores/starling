@@ -24,7 +24,16 @@ import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedIborDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapIborIborDefinition;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
+import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityCouponFixed;
+import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityPaymentFixed;
+import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
+import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedTransaction;
+import com.opengamma.analytics.financial.interestrate.cash.derivative.Cash;
+import com.opengamma.analytics.financial.interestrate.fra.derivative.ForwardRateAgreement;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponFixed;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.PaymentFixed;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.Swap;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
@@ -33,6 +42,9 @@ import com.opengamma.analytics.financial.provider.description.MulticurveProvider
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.util.amount.ReferenceAmount;
+import com.opengamma.financial.convention.businessday.BusinessDayConventions;
+import com.opengamma.financial.convention.daycount.DayCounts;
+import com.opengamma.financial.convention.yield.SimpleYieldConvention;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.test.TestGroup;
@@ -177,49 +189,85 @@ public class PV01CurveParametersCalculatorTest {
    * instruments are sensitive are shifted by +1bp
    */
   @Test
-  public void testApproximation() {
-    ReferenceAmount<Pair<String, Currency>> pv01s = SWAP_FIXED_IBOR.accept(PV01, MULTICURVES);
+  public void testSwaps() {
+    testApproximation(SWAP_FIXED_IBOR);
+    testApproximation(SWAP_IBORSPREAD_IBORSPREAD_DEFINITION);
+  }
+
+  /**
+   * Tests PV01s for a cash instrument.
+   */
+  @Test
+  public void testCash() {
+    final double t = 7 / 365.;
+    final double r = -Math.log(MULTICURVES.getDiscountFactor(Currency.USD, t)) / t;
+    final Cash cash = new Cash(Currency.USD, 0, t, 1, r, t);
+    testApproximation(cash);
+  }
+
+  /**
+   * Tests PV01s for a FRA.
+   */
+  @Test
+  public void testFra() {
+    final double paymentTime = 0.5;
+    final double paymentYearFraction = 30. / 360;
+    final double fixingTime = paymentTime - 2. / 365;
+    final double fixingPeriodStart = paymentTime;
+    final double fixingPeriodEnd = 7. / 12;
+    final double fixingYearFraction = 31. / 365;
+    final double rate = 0.15;
+    final IborIndex index = new IborIndex(Currency.USD, Period.ofMonths(1), 2, DayCounts.ACT_365, BusinessDayConventions.FOLLOWING,
+        true, "1M");
+    final ForwardRateAgreement fra = new ForwardRateAgreement(Currency.USD, paymentTime, paymentYearFraction, 1, index, fixingTime,
+        fixingPeriodStart, fixingPeriodEnd, fixingYearFraction,
+        rate);
+    testApproximation(fra);
+  }
+
+  /**
+   * Tests PV01s for a bond.
+   */
+  @Test
+  public void testBond() {
+    final int n = 20;
+    final double tau = 0.5;
+    final double yearFrac = 180 / 365.0;
+    final double initialCoupon = 0.015;
+    final double ramp = 0.0025;
+    final CouponFixed[] coupons = new CouponFixed[n];
+    for (int i = 0; i < n; i++) {
+      coupons[i] = new CouponFixed(Currency.USD, tau * (i + 1), yearFrac, initialCoupon + i * ramp);
+    }
+    final AnnuityPaymentFixed nominal = new AnnuityPaymentFixed(new PaymentFixed[] { new PaymentFixed(Currency.USD, tau * n, 1) });
+    final BondFixedSecurity bond = new BondFixedSecurity(nominal, new AnnuityCouponFixed(coupons), 0, 0, 0.5, SimpleYieldConvention.TRUE, 2,
+        "S");
+    testApproximation(bond);
+    final BondFixedTransaction trade = new BondFixedTransaction(bond, 100, 100, bond, 90);
+    testApproximation(trade);
+  }
+
+  private static void testApproximation(final InstrumentDerivative instrument) {
+    final ReferenceAmount<Pair<String, Currency>> pv01s = instrument.accept(PV01, MULTICURVES);
     double pv01 = 0;
     for (final Map.Entry<Pair<String, Currency>, Double> entry : pv01s.getMap().entrySet()) {
       if (entry.getKey().getSecond().equals(Currency.USD)) {
         pv01 += entry.getValue();
       }
     }
-    ReferenceAmount<Pair<String, Currency>> pv01Ups = SWAP_FIXED_IBOR.accept(PV01, SHIFTED);
+    final ReferenceAmount<Pair<String, Currency>> pv01Ups = instrument.accept(PV01, SHIFTED);
     double pv01Up = 0;
     for (final Map.Entry<Pair<String, Currency>, Double> entry : pv01Ups.getMap().entrySet()) {
       if (entry.getKey().getSecond().equals(Currency.USD)) {
         pv01Up += entry.getValue();
       }
     }
-    double gammaPV01 = SWAP_FIXED_IBOR.accept(GAMMA_PV01, MULTICURVES);
-    MultipleCurrencyAmount pv = SWAP_FIXED_IBOR.accept(PV, MULTICURVES);
-    MultipleCurrencyAmount pvUp = SWAP_FIXED_IBOR.accept(PV, SHIFTED);
-    double expectedPV01 = pvUp.getAmount(Currency.USD) - pv.getAmount(Currency.USD);
+    final double gammaPV01 = instrument.accept(GAMMA_PV01, MULTICURVES);
+    final MultipleCurrencyAmount pv = instrument.accept(PV, MULTICURVES);
+    final MultipleCurrencyAmount pvUp = instrument.accept(PV, SHIFTED);
+    final double expectedPV01 = pvUp.getAmount(Currency.USD) - pv.getAmount(Currency.USD);
     assertEquals(0, (expectedPV01 - pv01) / expectedPV01, EPS_FIRST);
-    double expectedGammaPV01 = (pv01Up - pv01) / BP;
-    assertEquals(0, (expectedGammaPV01 - gammaPV01) / expectedGammaPV01, EPS_FIRST);
-
-    pv01s = SWAP_IBORSPREAD_IBORSPREAD_DEFINITION.accept(PV01, MULTICURVES);
-    pv01 = 0;
-    for (final Map.Entry<Pair<String, Currency>, Double> entry : pv01s.getMap().entrySet()) {
-      if (entry.getKey().getSecond().equals(Currency.USD)) {
-        pv01 += entry.getValue();
-      }
-    }
-    pv01Ups = SWAP_IBORSPREAD_IBORSPREAD_DEFINITION.accept(PV01, SHIFTED);
-    pv01Up = 0;
-    for (final Map.Entry<Pair<String, Currency>, Double> entry : pv01Ups.getMap().entrySet()) {
-      if (entry.getKey().getSecond().equals(Currency.USD)) {
-        pv01Up += entry.getValue();
-      }
-    }
-    gammaPV01 = SWAP_IBORSPREAD_IBORSPREAD_DEFINITION.accept(GAMMA_PV01, MULTICURVES);
-    pv = SWAP_IBORSPREAD_IBORSPREAD_DEFINITION.accept(PV, MULTICURVES);
-    pvUp = SWAP_IBORSPREAD_IBORSPREAD_DEFINITION.accept(PV, SHIFTED);
-    expectedPV01 = pvUp.getAmount(Currency.USD) - pv.getAmount(Currency.USD);
-    assertEquals(0, (expectedPV01 - pv01) / expectedPV01, EPS_FIRST);
-    expectedGammaPV01 = (pv01Up - pv01) / BP;
+    final double expectedGammaPV01 = (pv01Up - pv01) / BP;
     assertEquals(0, (expectedGammaPV01 - gammaPV01) / expectedGammaPV01, EPS_FIRST);
   }
 }

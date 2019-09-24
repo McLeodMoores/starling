@@ -59,6 +59,17 @@ public final class CouponIborCompoundingDiscountingMethod {
     return presentValue(coupon, multicurve, IborForwardRateProvider.getInstance());
   }
 
+  /**
+   * Calculates the present value.
+   *
+   * @param coupon
+   *          the coupon, not null
+   * @param multicurve
+   *          the market data, not null
+   * @param forwardRateProvider
+   *          gets the forward rate from the market data, not null
+   * @return the present value
+   */
   public MultipleCurrencyAmount presentValue(
       final CouponIborCompounding coupon,
       final MulticurveProviderInterface multicurve,
@@ -91,7 +102,8 @@ public final class CouponIborCompoundingDiscountingMethod {
    *          The multi-curve provider.
    * @return The present value sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponIborCompounding coupon, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponIborCompounding coupon,
+      final MulticurveProviderInterface multicurve) {
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(multicurve, "Multi-curves provider");
     final int nbSubPeriod = coupon.getFixingTimes().length;
@@ -99,7 +111,8 @@ public final class CouponIborCompoundingDiscountingMethod {
     final double[] forward = new double[nbSubPeriod];
     final double[] ratioForward = new double[nbSubPeriod];
     for (int i = 0; i < nbSubPeriod; i++) {
-      forward[i] = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTimes()[i], coupon.getFixingPeriodEndTimes()[i],
+      forward[i] = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTimes()[i],
+          coupon.getFixingPeriodEndTimes()[i],
           coupon.getFixingPeriodAccrualFactors()[i]);
       ratioForward[i] = 1.0 + coupon.getPaymentAccrualFactors()[i] * forward[i];
       notionalAccrued *= ratioForward[i];

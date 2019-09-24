@@ -16,6 +16,7 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
+import com.opengamma.analytics.util.amount.StringAmount;
 import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
@@ -32,6 +33,7 @@ public final class CouponFixedDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static CouponFixedDiscountingMethod getInstance() {
@@ -46,8 +48,11 @@ public final class CouponFixedDiscountingMethod {
 
   /**
    * Compute the present value of a Fixed coupon by discounting.
-   * @param coupon The coupon.
-   * @param multicurves The multi-curve provider.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param multicurves
+   *          The multi-curve provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponFixed coupon, final MulticurveProviderInterface multicurves) {
@@ -60,8 +65,11 @@ public final class CouponFixedDiscountingMethod {
 
   /**
    * Computes the present value of the fixed coupon with positive notional (abs(notional) is used) by discounting.
-   * @param coupon The coupon.
-   * @param multicurves The multi-curve provider.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param multicurves
+   *          The multi-curve provider.
    * @return The present value.
    */
   public CurrencyAmount presentValuePositiveNotional(final CouponFixed coupon, final MulticurveProviderInterface multicurves) {
@@ -74,11 +82,15 @@ public final class CouponFixedDiscountingMethod {
 
   /**
    * Computes the present value curve sensitivity of a fixed coupon by discounting.
-   * @param cpn The coupon.
-   * @param multicurve The multi-curve provider.
+   *
+   * @param cpn
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponFixed cpn, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponFixed cpn,
+      final MulticurveProviderInterface multicurve) {
     final double time = cpn.getPaymentTime();
     final Map<String, List<DoublesPair>> mapDsc = new HashMap<>();
     final DoublesPair s = DoublesPair.of(time, -time * cpn.getAmount() * multicurve.getDiscountFactor(cpn.getCurrency(), time));
@@ -88,6 +100,21 @@ public final class CouponFixedDiscountingMethod {
     MultipleCurrencyMulticurveSensitivity result = new MultipleCurrencyMulticurveSensitivity();
     result = result.plus(cpn.getCurrency(), MulticurveSensitivity.ofYieldDiscounting(mapDsc));
     return result;
+  }
+
+  /**
+   * Compute the the present value curve sensitivity of a fixed coupon by discounting to a parallel curve movement.
+   *
+   * @param cpn
+   *          The coupon.
+   * @param curves
+   *          The curve bundle.
+   * @return The sensitivity.
+   */
+  public StringAmount presentValueParallelCurveSensitivity(final CouponFixed cpn, final MulticurveProviderInterface curves) {
+    final double time = cpn.getPaymentTime();
+    final double sensitivity = -time * cpn.getAmount() * curves.getDiscountFactor(cpn.getCurrency(), time);
+    return StringAmount.from(curves.getName(cpn.getCurrency()), sensitivity);
   }
 
 }

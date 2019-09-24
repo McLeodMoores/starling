@@ -16,6 +16,7 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
+import com.opengamma.analytics.util.amount.StringAmount;
 import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
@@ -71,10 +72,12 @@ public final class CouponFixedAccruedCompoundingDiscountingMethod {
    *          The multi-curve provider.
    * @return The present value.
    */
-  public CurrencyAmount presentValuePositiveNotional(final CouponFixedAccruedCompounding coupon, final MulticurveProviderInterface multicurves) {
+  public CurrencyAmount presentValuePositiveNotional(final CouponFixedAccruedCompounding coupon,
+      final MulticurveProviderInterface multicurves) {
     Validate.notNull(coupon, "Coupon");
     Validate.notNull(multicurves, "multicurve");
-    return CurrencyAmount.of(coupon.getCurrency(), Math.signum(coupon.getNotional()) * presentValue(coupon, multicurves).getAmount(coupon.getCurrency()));
+    return CurrencyAmount.of(coupon.getCurrency(),
+        Math.signum(coupon.getNotional()) * presentValue(coupon, multicurves).getAmount(coupon.getCurrency()));
   }
 
   /**
@@ -97,6 +100,22 @@ public final class CouponFixedAccruedCompoundingDiscountingMethod {
     MultipleCurrencyMulticurveSensitivity result = new MultipleCurrencyMulticurveSensitivity();
     result = result.plus(cpn.getCurrency(), MulticurveSensitivity.ofYieldDiscounting(mapDsc));
     return result;
+  }
+
+  /**
+   * Compute the the present value curve sensitivity of a fixed coupon by discounting to a parallel curve movement.
+   * 
+   * @param cpn
+   *          The coupon.
+   * @param curves
+   *          The curve bundle.
+   * @return The sensitivity.
+   */
+  public StringAmount presentValueParallelCurveSensitivity(final CouponFixedAccruedCompounding cpn,
+      final MulticurveProviderInterface curves) {
+    final double time = cpn.getPaymentTime();
+    final double sensitivity = -time * cpn.getAmount() * curves.getDiscountFactor(cpn.getCurrency(), time);
+    return StringAmount.from(curves.getName(cpn.getCurrency()), sensitivity);
   }
 
 }

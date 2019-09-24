@@ -5,7 +5,7 @@
  */
 package com.opengamma.analytics.financial.interestrate.future.provider;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.Period;
@@ -128,7 +128,7 @@ public class BondFuturesTransactionDiscountingMethodTest {
     final double quotedPrice = 1.05;
     final MultipleCurrencyAmount pvComputed = METHOD_FUT_TRA_DSC.presentValueFromPrice(BOND_FUTURES_TRA, quotedPrice);
     final double pvExpected = (quotedPrice - PRICE_REFERENCE) * NOTIONAL * QUANTITY;
-    assertEquals("Bond future Method: present value from price", pvExpected, pvComputed.getAmount(USD), TOLERANCE_PV);
+    assertEquals(pvExpected, pvComputed.getAmount(USD), TOLERANCE_PV);
   }
 
   /**
@@ -139,9 +139,9 @@ public class BondFuturesTransactionDiscountingMethodTest {
     final MultipleCurrencyAmount pvComputed = METHOD_FUT_TRA_DSC.presentValue(BOND_FUTURES_TRA, ISSUER_MULTICURVES);
     final double priceFuture = METHOD_FUT_SEC_DSC.price(BOND_FUTURES_SEC, ISSUER_MULTICURVES);
     final double pvExpected = (priceFuture - PRICE_REFERENCE) * NOTIONAL * QUANTITY;
-    assertEquals("Bond future Discounting Method: present value amount", pvExpected, pvComputed.getAmount(USD), TOLERANCE_PV);
+    assertEquals(pvExpected, pvComputed.getAmount(USD), TOLERANCE_PV);
     final MultipleCurrencyAmount presentValueCalculator = BOND_FUTURES_TRA.accept(PVIC, ISSUER_MULTICURVES);
-    assertEquals("Bond future Discounting Method: present value from price", pvComputed.getAmount(USD),
+    assertEquals(pvComputed.getAmount(USD),
         presentValueCalculator.getAmount(USD), TOLERANCE_PV);
   }
 
@@ -155,7 +155,7 @@ public class BondFuturesTransactionDiscountingMethodTest {
         netBasisInput);
     final double priceComputed = METHOD_FUT_SEC_DSC.priceFromNetBasis(BOND_FUTURES_SEC, ISSUER_MULTICURVES, netBasisInput);
     final MultipleCurrencyAmount pvExpected = METHOD_FUT_TRA_DSC.presentValueFromPrice(BOND_FUTURES_TRA, priceComputed);
-    assertEquals("Bond future Discounting Method: present value from net basis", pvExpected.getAmount(USD), pvComputed.getAmount(USD),
+    assertEquals(pvExpected.getAmount(USD), pvComputed.getAmount(USD),
         TOLERANCE_PV);
   }
 
@@ -167,7 +167,7 @@ public class BondFuturesTransactionDiscountingMethodTest {
     final MultipleCurrencyParameterSensitivity pvpsDepositExact = PSC.calculateSensitivity(BOND_FUTURES_TRA, ISSUER_MULTICURVES,
         ISSUER_MULTICURVES.getAllNames());
     final MultipleCurrencyParameterSensitivity pvpsDepositFD = PSC_DSC_FD.calculateSensitivity(BOND_FUTURES_TRA, ISSUER_MULTICURVES);
-    AssertSensitivityObjects.assertEquals("CashDiscountingProviderMethod: presentValueCurveSensitivity ", pvpsDepositExact, pvpsDepositFD,
+    AssertSensitivityObjects.assertEquals(pvpsDepositExact, pvpsDepositFD,
         TOLERANCE_PV_DELTA);
   }
 
@@ -181,7 +181,7 @@ public class BondFuturesTransactionDiscountingMethodTest {
     final MulticurveSensitivity pcs = METHOD_FUT_SEC_DSC.priceCurveSensitivity(BOND_FUTURES_SEC, ISSUER_MULTICURVES);
     final MultipleCurrencyMulticurveSensitivity pvcsExpected = MultipleCurrencyMulticurveSensitivity.of(USD,
         pcs.multipliedBy(NOTIONAL * QUANTITY).cleaned());
-    AssertSensitivityObjects.assertEquals("Bond future Discounting Method: pv curve sensitivity", pvcsComputed, pvcsExpected,
+    AssertSensitivityObjects.assertEquals("", pvcsComputed, pvcsExpected,
         TOLERANCE_PV_DELTA);
   }
 
@@ -193,7 +193,7 @@ public class BondFuturesTransactionDiscountingMethodTest {
     final MultipleCurrencyMulticurveSensitivity pvcsMethod = METHOD_FUT_TRA_DSC.presentValueCurveSensitivity(BOND_FUTURES_TRA,
         ISSUER_MULTICURVES);
     final MultipleCurrencyMulticurveSensitivity pvcsCalculator = BOND_FUTURES_TRA.accept(PVCSIC, ISSUER_MULTICURVES);
-    AssertSensitivityObjects.assertEquals("CouponFixedDiscountingMarketMethod: presentValueMarketSensitivity", pvcsMethod, pvcsCalculator,
+    AssertSensitivityObjects.assertEquals("", pvcsMethod, pvcsCalculator,
         TOLERANCE_PV_DELTA);
   }
 

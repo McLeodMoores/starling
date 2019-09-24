@@ -20,7 +20,9 @@ public abstract class FuturesTransactionMethod {
 
   /**
    * Constructor.
-   * @param securityMethod The method used to price the underlying futures security.
+   *
+   * @param securityMethod
+   *          The method used to price the underlying futures security.
    */
   public FuturesTransactionMethod(final FuturesSecurityMethod securityMethod) {
     super();
@@ -29,6 +31,7 @@ public abstract class FuturesTransactionMethod {
 
   /**
    * Gets the securityMethod.
+   *
    * @return the securityMethod
    */
   public FuturesSecurityMethod getSecurityMethod() {
@@ -37,8 +40,11 @@ public abstract class FuturesTransactionMethod {
 
   /**
    * Compute the present value of a future transaction from a quoted price.
-   * @param futures The futures.
-   * @param quotedPrice The quoted price.
+   *
+   * @param futures
+   *          The futures.
+   * @param quotedPrice
+   *          The quoted price.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValueFromPrice(final FuturesTransaction<?> futures, final double quotedPrice) {

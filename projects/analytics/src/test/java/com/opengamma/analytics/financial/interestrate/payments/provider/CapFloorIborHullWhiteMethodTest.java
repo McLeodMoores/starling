@@ -10,8 +10,8 @@ import static org.testng.AssertJUnit.assertEquals;
 import org.testng.annotations.Test;
 import org.threeten.bp.ZonedDateTime;
 
-import cern.jet.random.engine.MersenneTwister;
-
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.payment.CapFloorIborDefinition;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CapFloorIbor;
@@ -32,11 +32,12 @@ import com.opengamma.analytics.financial.util.AssertSensitivityObjects;
 import com.opengamma.analytics.math.random.NormalRandomNumberGenerator;
 import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
-import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
+
+import cern.jet.random.engine.MersenneTwister;
 
 /**
  * Tests on the Hull-White one factor method to price Cap/Floor on Ibor.
@@ -48,17 +49,21 @@ public class CapFloorIborHullWhiteMethodTest {
   private static final HullWhiteOneFactorPiecewiseConstantParameters HW_PARAMETERS = HullWhiteDataSets.createHullWhiteParameters();
   private static final IborIndex EURIBOR3M = MulticurveProviderDiscountDataSets.getIndexesIborMulticurveEurUsd()[0];
   private static final Currency EUR = EURIBOR3M.getCurrency();
-  private static final Calendar CALENDAR = MulticurveProviderDiscountDataSets.getEURCalendar();
+  private static final WorkingDayCalendar CALENDAR = MulticurveProviderDiscountDataSets.getEURCalendar();
 
-  private static final HullWhiteOneFactorProviderDiscount HW_MULTICURVES = new HullWhiteOneFactorProviderDiscount(MULTICURVES, HW_PARAMETERS, EUR);
+  private static final HullWhiteOneFactorProviderDiscount HW_MULTICURVES = new HullWhiteOneFactorProviderDiscount(MULTICURVES,
+      HW_PARAMETERS, EUR);
   // Cap/floor description
   private static final ZonedDateTime FIXING_DATE = DateUtils.getUTCDate(2011, 1, 3);
-  private static final double NOTIONAL = 100000000; //100m
+  private static final double NOTIONAL = 100000000; // 100m
   private static final double STRIKE = 0.02;
   private static final boolean IS_CAP = true;
-  private static final CapFloorIborDefinition CAP_LONG_DEFINITION = CapFloorIborDefinition.from(NOTIONAL, FIXING_DATE, EURIBOR3M, STRIKE, IS_CAP, CALENDAR);
-  private static final CapFloorIborDefinition CAP_SHORT_DEFINITION = CapFloorIborDefinition.from(-NOTIONAL, FIXING_DATE, EURIBOR3M, STRIKE, IS_CAP, CALENDAR);
-  private static final CapFloorIborDefinition PUT_LONG_DEFINITION = CapFloorIborDefinition.from(NOTIONAL, FIXING_DATE, EURIBOR3M, STRIKE, !IS_CAP, CALENDAR);
+  private static final CapFloorIborDefinition CAP_LONG_DEFINITION = CapFloorIborDefinition.from(NOTIONAL, FIXING_DATE, EURIBOR3M, STRIKE,
+      IS_CAP, CalendarAdapter.of(CALENDAR));
+  private static final CapFloorIborDefinition CAP_SHORT_DEFINITION = CapFloorIborDefinition.from(-NOTIONAL, FIXING_DATE, EURIBOR3M, STRIKE,
+      IS_CAP, CalendarAdapter.of(CALENDAR));
+  private static final CapFloorIborDefinition PUT_LONG_DEFINITION = CapFloorIborDefinition.from(NOTIONAL, FIXING_DATE, EURIBOR3M, STRIKE,
+      !IS_CAP, CalendarAdapter.of(CALENDAR));
   // To derivative
   private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2008, 8, 18);
   private static final CapFloorIbor CAP_LONG = (CapFloorIbor) CAP_LONG_DEFINITION.toDerivative(REFERENCE_DATE);
@@ -69,17 +74,23 @@ public class CapFloorIborHullWhiteMethodTest {
   private static final HullWhiteOneFactorPiecewiseConstantInterestRateModel MODEL = new HullWhiteOneFactorPiecewiseConstantInterestRateModel();
 
   private static final PresentValueHullWhiteCalculator PVHWC = PresentValueHullWhiteCalculator.getInstance();
-  private static final PresentValueCurveSensitivityHullWhiteCalculator PVCSHWC = PresentValueCurveSensitivityHullWhiteCalculator.getInstance();
+  private static final PresentValueCurveSensitivityHullWhiteCalculator PVCSHWC = PresentValueCurveSensitivityHullWhiteCalculator
+      .getInstance();
 
   private static final double SHIFT = 1.0E-6;
 
-  private static final ParameterSensitivityParameterCalculator<HullWhiteOneFactorProviderInterface> PS_HW_C = new ParameterSensitivityParameterCalculator<>(PVCSHWC);
-  private static final ParameterSensitivityHullWhiteDiscountInterpolatedFDCalculator PS_HW_FDC = new ParameterSensitivityHullWhiteDiscountInterpolatedFDCalculator(PVHWC, SHIFT);
+  private static final ParameterSensitivityParameterCalculator<HullWhiteOneFactorProviderInterface> PS_HW_C = new ParameterSensitivityParameterCalculator<>(
+      PVCSHWC);
+  private static final ParameterSensitivityHullWhiteDiscountInterpolatedFDCalculator PS_HW_FDC = new ParameterSensitivityHullWhiteDiscountInterpolatedFDCalculator(
+      PVHWC, SHIFT);
 
   private static final int NB_PATH = 12500;
   private static final double TOLERANCE_PV = 1.0E-2;
   private static final double TOLERANCE_PV_DELTA = 1.0E+0; // 0.01 currency unit for 1bp
 
+  /**
+   *
+   */
   @Test
   public void presentValueStandard() {
     final double tp = CAP_LONG.getPaymentTime();
@@ -96,15 +107,19 @@ public class CapFloorIborHullWhiteMethodTest {
     kappa += -(alpha1 * alpha1 - alpha0 * alpha0) / 2.0;
     kappa /= alpha1 - alpha0;
     final ProbabilityDistribution<Double> normal = new NormalDistribution(0, 1);
-    double priceExpected = (1.0 + deltaF * forward) * normal.getCDF(-kappa - alpha0) - (1.0 + deltaF * STRIKE) * normal.getCDF(-kappa - alpha1);
+    double priceExpected = (1.0 + deltaF * forward) * normal.getCDF(-kappa - alpha0)
+        - (1.0 + deltaF * STRIKE) * normal.getCDF(-kappa - alpha1);
     priceExpected *= deltaP / deltaF * ptp;
     priceExpected *= NOTIONAL;
     final MultipleCurrencyAmount priceMethod = METHOD_HW.presentValue(CAP_LONG, HW_MULTICURVES);
     assertEquals("Cap/floor: Hull-White pricing", priceExpected, priceMethod.getAmount(EUR), TOLERANCE_PV);
   }
 
-  //TODO: present value in arrears
+  // TODO: present value in arrears
 
+  /**
+   *
+   */
   @Test
   public void presentValueLongShort() {
     final MultipleCurrencyAmount priceLong = METHOD_HW.presentValue(CAP_LONG, HW_MULTICURVES);
@@ -112,20 +127,22 @@ public class CapFloorIborHullWhiteMethodTest {
     assertEquals("Cap/floor: Hull-White pricing", priceLong.getAmount(EUR), -priceShort.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests present value curve sensitivity when the valuation date is on trade date.
    */
+  @Test
   public void presentValueCurveSensitivity() {
-    final MultipleCurrencyParameterSensitivity pvpsExact = PS_HW_C.calculateSensitivity(CAP_LONG, HW_MULTICURVES, HW_MULTICURVES.getMulticurveProvider().getAllNames());
+    final MultipleCurrencyParameterSensitivity pvpsExact = PS_HW_C.calculateSensitivity(CAP_LONG, HW_MULTICURVES,
+        HW_MULTICURVES.getMulticurveProvider().getAllNames());
     final MultipleCurrencyParameterSensitivity pvpsFD = PS_HW_FDC.calculateSensitivity(CAP_LONG, HW_MULTICURVES);
-    AssertSensitivityObjects.assertEquals("SwaptionPhysicalFixedIborSABRMethod: presentValueCurveSensitivity ", pvpsExact, pvpsFD, TOLERANCE_PV_DELTA);
+    AssertSensitivityObjects.assertEquals("SwaptionPhysicalFixedIborSABRMethod: presentValueCurveSensitivity ", pvpsExact, pvpsFD,
+        TOLERANCE_PV_DELTA);
   }
 
-  @Test
   /**
    * Tests the Hull-White parameters sensitivity.
    */
+  @Test
   public void presentValueHullWhiteSensitivity() {
     presentValueHullWhiteSensitivityInstrument(CAP_LONG);
     presentValueHullWhiteSensitivityInstrument(CAP_SHORT);
@@ -142,7 +159,8 @@ public class CapFloorIborHullWhiteMethodTest {
     System.arraycopy(HW_PARAMETERS.getVolatilityTime(), 1, volatilityTime, 0, nbVolatility - 1);
     final double[] pvBumpedPlus = new double[nbVolatility];
     final double[] pvBumpedMinus = new double[nbVolatility];
-    final HullWhiteOneFactorPiecewiseConstantParameters parametersBumped = new HullWhiteOneFactorPiecewiseConstantParameters(HW_PARAMETERS.getMeanReversion(), volatilityBumped, volatilityTime);
+    final HullWhiteOneFactorPiecewiseConstantParameters parametersBumped = new HullWhiteOneFactorPiecewiseConstantParameters(
+        HW_PARAMETERS.getMeanReversion(), volatilityBumped, volatilityTime);
     final HullWhiteOneFactorProviderDiscount bundleBumped = new HullWhiteOneFactorProviderDiscount(MULTICURVES, parametersBumped, EUR);
     final double[] hwSensitivityExpected = new double[hwSensitivity.length];
     for (int loopvol = 0; loopvol < nbVolatility; loopvol++) {
@@ -153,16 +171,18 @@ public class CapFloorIborHullWhiteMethodTest {
       parametersBumped.setVolatility(volatilityBumped);
       pvBumpedMinus[loopvol] = METHOD_HW.presentValue(instrument, bundleBumped).getAmount(EUR);
       hwSensitivityExpected[loopvol] = (pvBumpedPlus[loopvol] - pvBumpedMinus[loopvol]) / (2 * shiftVol);
-      assertEquals("Cap/floor Ibor - Hull-White sensitivity adjoint: derivative " + loopvol + " - difference:" + (hwSensitivityExpected[loopvol] - hwSensitivity[loopvol]),
+      assertEquals(
+          "Cap/floor Ibor - Hull-White sensitivity adjoint: derivative " + loopvol + " - difference:"
+              + (hwSensitivityExpected[loopvol] - hwSensitivity[loopvol]),
           hwSensitivityExpected[loopvol], hwSensitivity[loopvol], 1.0E-0);
       volatilityBumped[loopvol] = HW_PARAMETERS.getVolatility()[loopvol];
     }
   }
 
-  @Test(enabled = true)
   /**
    * Compare explicit formula with Monte-Carlo and long/short and payer/receiver parities.
    */
+  @Test(enabled = true)
   public void monteCarlo() {
     HullWhiteMonteCarloMethod methodMC;
     methodMC = new HullWhiteMonteCarloMethod(new NormalRandomNumberGenerator(0.0, 1.0, new MersenneTwister()), 10 * NB_PATH);
@@ -177,10 +197,10 @@ public class CapFloorIborHullWhiteMethodTest {
     assertEquals("Swaption physical - Hull-White - Monte Carlo", -pvMC.getAmount(EUR), pvShortMC.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test(enabled = false)
   /**
    * Performance for a high number of paths.
    */
+  @Test(enabled = false)
   public void performance() {
     long startTime, endTime;
     final MultipleCurrencyAmount pvExplicit = METHOD_HW.presentValue(CAP_LONG, HW_MULTICURVES);
@@ -197,7 +217,8 @@ public class CapFloorIborHullWhiteMethodTest {
       pvDiff[looptest] = pv[looptest] - pvExplicit.getAmount(EUR);
     }
     endTime = System.currentTimeMillis();
-    System.out.println(nbTest + " pv cap/floor Hull-White MC method (" + nbPath + " paths): " + (endTime - startTime) + " ms. Error: " + pvDiff[0]);
+    System.out.println(
+        nbTest + " pv cap/floor Hull-White MC method (" + nbPath + " paths): " + (endTime - startTime) + " ms. Error: " + pvDiff[0]);
     // Performance note: price: 12-Jun-12: On Mac Pro 3.2 GHz Quad-Core Intel Xeon: 2400 ms for 10 cap with 1,000,000 paths.
   }
 

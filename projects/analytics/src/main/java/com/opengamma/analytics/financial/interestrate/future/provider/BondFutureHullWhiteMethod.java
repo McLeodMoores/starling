@@ -31,6 +31,7 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
@@ -39,11 +40,11 @@ import com.opengamma.util.tuple.DoublesPair;
  * <P>
  * Reference: Henrard, M. Bonds futures and their options: more than the cheapest-to-deliver; quality option and margining. Journal of Fixed
  * Income, 2006, 16, 62-75
- * 
+ *
  * @deprecated Use the {@link BondFuturesTransactionHullWhiteMethod}.
  */
 @Deprecated
-public final class BondFutureHullWhiteMethod extends BondFutureMethod {
+public final class BondFutureHullWhiteMethod {
 
   /**
    * Creates the method unique instance.
@@ -58,7 +59,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
 
   /**
    * Return the method unique instance.
-   * 
+   *
    * @return The instance.
    */
   public static BondFutureHullWhiteMethod getInstance() {
@@ -83,8 +84,22 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
   private static final HullWhiteOneFactorPiecewiseConstantInterestRateModel MODEL = new HullWhiteOneFactorPiecewiseConstantInterestRateModel();
 
   /**
+   * Compute the present value of a future transaction from a quoted price.
+   *
+   * @param future
+   *          The future.
+   * @param price
+   *          The quoted price.
+   * @return The present value.
+   */
+  public CurrencyAmount presentValueFromPrice(final BondFuture future, final double price) {
+    final double pv = (price - future.getReferencePrice()) * future.getNotional();
+    return CurrencyAmount.of(future.getCurrency(), pv);
+  }
+
+  /**
    * Computes the future price from the curves used to price the underlying bonds and a Hull-White one factor model.
-   * 
+   *
    * @param future
    *          The future security.
    * @param data
@@ -223,7 +238,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
   /**
    * Computes the future price from the curves used to price the underlying bonds and a Hull-White one factor model. The default number of
    * points is used for the numerical search.
-   * 
+   *
    * @param future
    *          The future security.
    * @param data
@@ -236,7 +251,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
 
   /**
    * Computes the present value of future from the curves using the cheapest-to-deliver and computing the value as a forward.
-   * 
+   *
    * @param future
    *          The future.
    * @param data
@@ -245,12 +260,12 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
    */
   public MultipleCurrencyAmount presentValue(final BondFuture future, final HullWhiteIssuerProviderInterface data) {
     final double futurePrice = price(future, data);
-    return presentValueFromPrice(future, futurePrice);
+    return MultipleCurrencyAmount.of(presentValueFromPrice(future, futurePrice));
   }
 
   /**
    * Computes the future price curve sensitivity.
-   * 
+   *
    * @param future
    *          The future security.
    * @param data
@@ -417,7 +432,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
 
   /**
    * Computes the future price curve sensitivity. The default number of points is used for the numerical search.
-   * 
+   *
    * @param future
    *          The future derivative.
    * @param data
@@ -430,7 +445,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
 
   /**
    * Compute the present value sensitivity to rates of a bond future by discounting.
-   * 
+   *
    * @param future
    *          The future.
    * @param data

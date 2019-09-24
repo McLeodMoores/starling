@@ -5,7 +5,7 @@
  */
 package com.opengamma.analytics.financial.interestrate.future.provider;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.Period;
@@ -137,7 +137,7 @@ public class BondFuturesTransactionHullWhiteMethodTest {
     final double quotedPrice = 1.05;
     final MultipleCurrencyAmount pvComputed = METHOD_FUT_TRA_HW.presentValueFromPrice(BOND_FUTURES_TRA, quotedPrice);
     final double pvExpected = (quotedPrice - PRICE_REFERENCE) * NOTIONAL * QUANTITY;
-    assertEquals("Bond future Method: present value from price", pvExpected, pvComputed.getAmount(USD), TOLERANCE_PV);
+    assertEquals(pvExpected, pvComputed.getAmount(USD), TOLERANCE_PV);
   }
 
   /**
@@ -148,9 +148,9 @@ public class BondFuturesTransactionHullWhiteMethodTest {
     final MultipleCurrencyAmount pvComputed = METHOD_FUT_TRA_HW.presentValue(BOND_FUTURES_TRA, MULTICURVES_HW_ISSUER);
     final double priceFuture = METHOD_FUT_SEC_HW.price(BOND_FUTURES_SEC, MULTICURVES_HW_ISSUER);
     final double pvExpected = (priceFuture - PRICE_REFERENCE) * NOTIONAL * QUANTITY;
-    assertEquals("Bond future Discounting Method: present value amount", pvExpected, pvComputed.getAmount(USD), TOLERANCE_PV);
+    assertEquals(pvExpected, pvComputed.getAmount(USD), TOLERANCE_PV);
     final MultipleCurrencyAmount presentValueCalculator = BOND_FUTURES_TRA.accept(PVHWIC, MULTICURVES_HW_ISSUER);
-    assertEquals("Bond future Discounting Method: present value from price", pvComputed.getAmount(USD),
+    assertEquals(pvComputed.getAmount(USD),
         presentValueCalculator.getAmount(USD), TOLERANCE_PV);
   }
 
@@ -162,7 +162,7 @@ public class BondFuturesTransactionHullWhiteMethodTest {
     final MultipleCurrencyParameterSensitivity pvpsDepositExact = PSC.calculateSensitivity(BOND_FUTURES_TRA, MULTICURVES_HW_ISSUER,
         ISSUER_MULTICURVES.getAllNames());
     final MultipleCurrencyParameterSensitivity pvpsDepositFD = PSC_DSC_FD.calculateSensitivity(BOND_FUTURES_TRA, MULTICURVES_HW_ISSUER);
-    AssertSensitivityObjects.assertEquals("CashDiscountingProviderMethod: presentValueCurveSensitivity ", pvpsDepositExact, pvpsDepositFD,
+    AssertSensitivityObjects.assertEquals(pvpsDepositExact, pvpsDepositFD,
         TOLERANCE_PV_DELTA);
   }
 
@@ -176,7 +176,7 @@ public class BondFuturesTransactionHullWhiteMethodTest {
     final MulticurveSensitivity pcs = METHOD_FUT_SEC_HW.priceCurveSensitivity(BOND_FUTURES_SEC, MULTICURVES_HW_ISSUER);
     final MultipleCurrencyMulticurveSensitivity pvcsExpected = MultipleCurrencyMulticurveSensitivity.of(USD,
         pcs.multipliedBy(NOTIONAL * QUANTITY).cleaned());
-    AssertSensitivityObjects.assertEquals("Bond future Discounting Method: pv curve sensitivity", pvcsComputed, pvcsExpected,
+    AssertSensitivityObjects.assertEquals("", pvcsComputed, pvcsExpected,
         TOLERANCE_PV_DELTA);
   }
 
@@ -188,7 +188,7 @@ public class BondFuturesTransactionHullWhiteMethodTest {
     final MultipleCurrencyMulticurveSensitivity pvcsMethod = METHOD_FUT_TRA_HW.presentValueCurveSensitivity(BOND_FUTURES_TRA,
         MULTICURVES_HW_ISSUER);
     final MultipleCurrencyMulticurveSensitivity pvcsCalculator = BOND_FUTURES_TRA.accept(PVCSHWIC, MULTICURVES_HW_ISSUER);
-    AssertSensitivityObjects.assertEquals("CouponFixedDiscountingMarketMethod: presentValueMarketSensitivity", pvcsMethod, pvcsCalculator,
+    AssertSensitivityObjects.assertEquals("", pvcsMethod, pvcsCalculator,
         TOLERANCE_PV_DELTA);
   }
 

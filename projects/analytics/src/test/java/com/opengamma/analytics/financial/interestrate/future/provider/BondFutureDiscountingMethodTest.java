@@ -33,6 +33,7 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.financial.convention.yield.YieldConvention;
 import com.opengamma.financial.convention.yield.YieldConventionFactory;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
@@ -257,8 +258,8 @@ public class BondFutureDiscountingMethodTest {
   @Test
   public void presentValueFromPrice() {
     final double quotedPrice = 1.05;
-    final MultipleCurrencyAmount presentValueMethod = METHOD_FUT_DSC.presentValueFromPrice(BOND_FUTURE, quotedPrice);
-    assertEquals("Bond future Method: present value from price", (quotedPrice - REF_PRICE) * NOTIONAL, presentValueMethod.getAmount(USD));
+    final CurrencyAmount presentValueMethod = METHOD_FUT_DSC.presentValueFromPrice(BOND_FUTURE, quotedPrice);
+    assertEquals("Bond future Method: present value from price", (quotedPrice - REF_PRICE) * NOTIONAL, presentValueMethod.getAmount());
     // final PresentValueFromFuturePriceCalculator calculator = PresentValueFromFuturePriceCalculator.getInstance();
     // final double presentValueCalculator = calculator.visit(BOND_FUTURE, quotedPrice);
     // assertEquals("Bond future Method: present value from price", presentValueMethod.getAmount(), presentValueCalculator);
@@ -272,8 +273,8 @@ public class BondFutureDiscountingMethodTest {
     final double netBasisInput = 0.0001;
     final MultipleCurrencyAmount pvComputed = METHOD_FUT_DSC.presentValueFromNetBasis(BOND_FUTURE, ISSUER_MULTICURVES, netBasisInput);
     final double priceComputed = METHOD_FUT_DSC.priceFromNetBasis(BOND_FUTURE, ISSUER_MULTICURVES, netBasisInput);
-    final MultipleCurrencyAmount pvExpected = METHOD_FUT_DSC.presentValueFromPrice(BOND_FUTURE, priceComputed);
-    assertEquals("Bond future Discounting Method: present value from net basis", pvExpected.getAmount(USD), pvComputed.getAmount(USD),
+    final CurrencyAmount pvExpected = METHOD_FUT_DSC.presentValueFromPrice(BOND_FUTURE, priceComputed);
+    assertEquals("Bond future Discounting Method: present value from net basis", pvExpected.getAmount(), pvComputed.getAmount(USD),
         TOLERANCE_PV);
   }
 

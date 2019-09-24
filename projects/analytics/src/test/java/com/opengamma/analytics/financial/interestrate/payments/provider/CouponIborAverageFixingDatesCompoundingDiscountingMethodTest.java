@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments.provider;
@@ -15,6 +15,9 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.payment.CouponIborAverageFixingDatesCompoundingDefinition;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompounding;
@@ -30,8 +33,6 @@ import com.opengamma.analytics.financial.provider.sensitivity.parameter.Paramete
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.financial.util.AssertSensitivityObjects;
 import com.opengamma.analytics.util.time.TimeCalculator;
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.money.Currency;
@@ -46,7 +47,7 @@ public class CouponIborAverageFixingDatesCompoundingDiscountingMethodTest {
   private static final MulticurveProviderDiscount MULTICURVES = MulticurveProviderDiscountDataSets.createMulticurveEurUsd();
   private static final IborIndex[] IBOR_INDEXES = MulticurveProviderDiscountDataSets.getIndexesIborMulticurveEurUsd();
 
-  private static final Calendar CALENDAR = new MondayToFridayCalendar("A");
+  private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final IborIndex INDEX1 = IBOR_INDEXES[0]; // EURIBOR3M
   private static final IborIndex INDEX2 = IBOR_INDEXES[3]; // LIBOR6M
   private static final Currency CUR1 = Currency.EUR;
@@ -107,11 +108,11 @@ public class CouponIborAverageFixingDatesCompoundingDiscountingMethodTest {
   private static final double[][] FIXING_TIMES1 = new double[NUM_PRDS][NUM_OBS];
   private static final double[][] FIXING_PERIOD_START_TIMES1 = new double[NUM_PRDS][NUM_OBS];
   private static final double[][] FIXING_PERIOD_END_TIMES1 = new double[NUM_PRDS][NUM_OBS];
-  private static double[][] FIX_ACC_FACTORS1 = new double[NUM_PRDS][NUM_OBS];
+  private static final double[][] FIX_ACC_FACTORS1 = new double[NUM_PRDS][NUM_OBS];
   private static final double[][] FIXING_TIMES2 = new double[NUM_PRDS][NUM_OBS];
   private static final double[][] FIXING_PERIOD_START_TIMES2 = new double[NUM_PRDS][NUM_OBS];
   private static final double[][] FIXING_PERIOD_END_TIMES2 = new double[NUM_PRDS][NUM_OBS];
-  private static double[][] FIX_ACC_FACTORS2 = new double[NUM_PRDS][NUM_OBS];
+  private static final double[][] FIX_ACC_FACTORS2 = new double[NUM_PRDS][NUM_OBS];
   static {
     for (int i = 0; i < NUM_PRDS; ++i) {
       FIXING_TIMES1[i] = TimeCalculator.getTimeBetween(REFERENCE_DATE1, FIXING_DATES[i]);
@@ -123,8 +124,10 @@ public class CouponIborAverageFixingDatesCompoundingDiscountingMethodTest {
     }
     for (int i = 0; i < NUM_OBS; ++i) {
       for (int j = 0; j < NUM_PRDS; ++j) {
-        FIX_ACC_FACTORS1[j][i] = INDEX1.getDayCount().getDayCountFraction(EXP_START_DATES1[j][i], EXP_END_DATES1[j][i], CALENDAR);
-        FIX_ACC_FACTORS2[j][i] = INDEX2.getDayCount().getDayCountFraction(EXP_START_DATES2[j][i], EXP_END_DATES2[j][i], CALENDAR);
+        FIX_ACC_FACTORS1[j][i] = INDEX1.getDayCount().getDayCountFraction(EXP_START_DATES1[j][i], EXP_END_DATES1[j][i],
+            CalendarAdapter.of(CALENDAR));
+        FIX_ACC_FACTORS2[j][i] = INDEX2.getDayCount().getDayCountFraction(EXP_START_DATES2[j][i], EXP_END_DATES2[j][i],
+            CalendarAdapter.of(CALENDAR));
       }
     }
   }
@@ -152,7 +155,7 @@ public class CouponIborAverageFixingDatesCompoundingDiscountingMethodTest {
   private static final double AMOUNT_ACC = 0.005;
   private static final double RATE_FIXED = 1.02;
 
-  //Examples 1 & 2: same numbers of fixing 
+  // Examples 1 & 2: same numbers of fixing
   private static final CouponIborAverageFixingDatesCompounding DER1 = new CouponIborAverageFixingDatesCompounding(CUR1,
       PAYMENT_TIME1, ACCRUAL_FACTOR, NOTIONAL, ACCRUAL_FACTORS, INDEX1, FIXING_TIMES1, WEIGHTS1,
       FIXING_PERIOD_START_TIMES1, FIXING_PERIOD_END_TIMES1, FIX_ACC_FACTORS1, AMOUNT_ACC, RATE_FIXED);
@@ -168,10 +171,11 @@ public class CouponIborAverageFixingDatesCompoundingDiscountingMethodTest {
   private static final double[] ACCRUAL_FACTORS_3 = new double[NB_SUBPERIODS];
   static {
     for (int loopsub = 0; loopsub <= NB_SUBPERIODS; loopsub++) {
-      ACCRUAL_START_DATE_SUB_3[loopsub] = ScheduleCalculator.getAdjustedDate(ACCRUAL_START_DATE, Period.ofMonths(loopsub), INDEX1, CALENDAR);
+      ACCRUAL_START_DATE_SUB_3[loopsub] = ScheduleCalculator.getAdjustedDate(ACCRUAL_START_DATE, Period.ofMonths(loopsub), INDEX1,
+          CALENDAR);
     }
     for (int loopsub = 0; loopsub < NB_SUBPERIODS; loopsub++) {
-      List<ZonedDateTime> listDates = new ArrayList<>();
+      final List<ZonedDateTime> listDates = new ArrayList<>();
       ZonedDateTime startFixPeriod = ACCRUAL_START_DATE_SUB_3[loopsub];
       listDates.add(ScheduleCalculator.getAdjustedDate(startFixPeriod, -INDEX1.getSpotLag(), CALENDAR));
       startFixPeriod = ScheduleCalculator.getAdjustedDate(startFixPeriod, 1, CALENDAR);
@@ -181,22 +185,29 @@ public class CouponIborAverageFixingDatesCompoundingDiscountingMethodTest {
       }
       FIXING_DATES_3[loopsub] = listDates.toArray(new ZonedDateTime[0]);
       WEIGHTS_3[loopsub] = new double[FIXING_DATES_3[loopsub].length];
-      ACCRUAL_FACTORS_3[loopsub] = DAY_COUNT_INDEX.getDayCountFraction(ACCRUAL_START_DATE_SUB_3[loopsub], ACCRUAL_START_DATE_SUB_3[loopsub + 1]);
+      ACCRUAL_FACTORS_3[loopsub] = DAY_COUNT_INDEX.getDayCountFraction(ACCRUAL_START_DATE_SUB_3[loopsub],
+          ACCRUAL_START_DATE_SUB_3[loopsub + 1]);
       for (int loopf = 0; loopf < FIXING_DATES_3[loopsub].length; loopf++) {
         WEIGHTS_3[loopsub][loopf] = 1.0d / FIXING_DATES_3[loopsub].length;
       }
     }
   }
-  private static final CouponIborAverageFixingDatesCompoundingDefinition DFN3 = new CouponIborAverageFixingDatesCompoundingDefinition(CUR1, ACCRUAL_START_DATE_SUB_3[3],
-      ACCRUAL_START_DATE_SUB_3[0], ACCRUAL_START_DATE_SUB_3[3], ACCRUAL_FACTOR, NOTIONAL, ACCRUAL_FACTORS_3, INDEX1, FIXING_DATES_3, WEIGHTS_3, CALENDAR);
+  private static final CouponIborAverageFixingDatesCompoundingDefinition DFN3 = new CouponIborAverageFixingDatesCompoundingDefinition(CUR1,
+      ACCRUAL_START_DATE_SUB_3[3],
+      ACCRUAL_START_DATE_SUB_3[0], ACCRUAL_START_DATE_SUB_3[3], ACCRUAL_FACTOR, NOTIONAL, ACCRUAL_FACTORS_3, INDEX1, FIXING_DATES_3,
+      WEIGHTS_3, CalendarAdapter.of(CALENDAR));
   private static final CouponIborAverageFixingDatesCompounding DER3 = DFN3.toDerivative(FIXING_DATES_3[0][0].minusDays(1));
 
-  private static final CouponIborAverageFixingDatesCompoundingDiscountingMethod METHOD = CouponIborAverageFixingDatesCompoundingDiscountingMethod.getInstance();
+  private static final CouponIborAverageFixingDatesCompoundingDiscountingMethod METHOD = CouponIborAverageFixingDatesCompoundingDiscountingMethod
+      .getInstance();
   private static final PresentValueDiscountingCalculator PVDC = PresentValueDiscountingCalculator.getInstance();
-  private static final PresentValueCurveSensitivityDiscountingCalculator PVCSDC = PresentValueCurveSensitivityDiscountingCalculator.getInstance();
-  private static final ParameterSensitivityParameterCalculator<MulticurveProviderInterface> PSC = new ParameterSensitivityParameterCalculator<>(PVCSDC);
+  private static final PresentValueCurveSensitivityDiscountingCalculator PVCSDC = PresentValueCurveSensitivityDiscountingCalculator
+      .getInstance();
+  private static final ParameterSensitivityParameterCalculator<MulticurveProviderInterface> PSC = new ParameterSensitivityParameterCalculator<>(
+      PVCSDC);
   private static final double SHIFT = 1.0E-7;
-  private static final ParameterSensitivityMulticurveDiscountInterpolatedFDCalculator PSC_DSC_FD = new ParameterSensitivityMulticurveDiscountInterpolatedFDCalculator(PVDC, SHIFT);
+  private static final ParameterSensitivityMulticurveDiscountInterpolatedFDCalculator PSC_DSC_FD = new ParameterSensitivityMulticurveDiscountInterpolatedFDCalculator(
+      PVDC, SHIFT);
 
   private static final double EPS = 1.0e-10;
   private static final double TOLERANCE_PV = 1.0E-2;
@@ -210,19 +221,23 @@ public class CouponIborAverageFixingDatesCompoundingDiscountingMethodTest {
     final MultipleCurrencyAmount pvComputed = METHOD.presentValue(DER1, MULTICURVES);
     double fwd = AMOUNT_ACC;
     for (int j = 0; j < NUM_OBS_INI; ++j) {
-      fwd += WEIGHTS1[0][j] * MULTICURVES.getSimplyCompoundForwardRate(INDEX1, FIXING_PERIOD_START_TIMES1[0][j], FIXING_PERIOD_END_TIMES1[0][j], FIX_ACC_FACTORS1[0][j]);
+      fwd += WEIGHTS1[0][j] * MULTICURVES.getSimplyCompoundForwardRate(INDEX1, FIXING_PERIOD_START_TIMES1[0][j],
+          FIXING_PERIOD_END_TIMES1[0][j], FIX_ACC_FACTORS1[0][j]);
     }
     double invFactor = RATE_FIXED;
-    invFactor *= (1.0 + fwd * DER1.getPaymentAccrualFactors()[0]);
+    invFactor *= 1.0 + fwd * DER1.getPaymentAccrualFactors()[0];
     for (int i = 1; i < NUM_PRDS; ++i) {
       double forward = 0.0;
       for (int j = 0; j < NUM_OBS; ++j) {
-        forward += WEIGHTS1[i][j] * MULTICURVES.getSimplyCompoundForwardRate(INDEX1, FIXING_PERIOD_START_TIMES1[i][j], FIXING_PERIOD_END_TIMES1[i][j], FIX_ACC_FACTORS1[i][j]);
+        forward += WEIGHTS1[i][j] * MULTICURVES.getSimplyCompoundForwardRate(INDEX1, FIXING_PERIOD_START_TIMES1[i][j],
+            FIXING_PERIOD_END_TIMES1[i][j], FIX_ACC_FACTORS1[i][j]);
       }
-      invFactor *= (1.0 + forward * DER1.getPaymentAccrualFactors()[i]);
+      invFactor *= 1.0 + forward * DER1.getPaymentAccrualFactors()[i];
     }
-    final double pvExpected = DER1.getNotional() * MULTICURVES.getDiscountFactor(DER1.getCurrency(), DER1.getPaymentTime()) * (invFactor - 1.0);
-    assertEquals("CouponIborAverageCompoundingDiscountingMethod: present value", pvExpected, pvComputed.getAmount(DER1.getCurrency()), TOLERANCE_PV);
+    final double pvExpected = DER1.getNotional() * MULTICURVES.getDiscountFactor(DER1.getCurrency(), DER1.getPaymentTime())
+        * (invFactor - 1.0);
+    assertEquals("CouponIborAverageCompoundingDiscountingMethod: present value", pvExpected, pvComputed.getAmount(DER1.getCurrency()),
+        TOLERANCE_PV);
     final MultipleCurrencyAmount pvWithCalc = PVDC.visitCouponIborAverageCompounding(DER1, MULTICURVES);
     assertEquals("CouponIborAverageCompoundingDiscountingMethod: present value", pvWithCalc.getAmount(DER1.getCurrency()),
         pvComputed.getAmount(DER1.getCurrency()), TOLERANCE_PV);
@@ -238,11 +253,13 @@ public class CouponIborAverageFixingDatesCompoundingDiscountingMethodTest {
     for (int i = 0; i < NUM_PRDS; ++i) {
       double forward = 0.0;
       for (int j = 0; j < NUM_OBS; ++j) {
-        forward += WEIGHTS2[i][j] * MULTICURVES.getSimplyCompoundForwardRate(INDEX2, FIXING_PERIOD_START_TIMES2[i][j], FIXING_PERIOD_END_TIMES2[i][j], FIX_ACC_FACTORS2[i][j]);
+        forward += WEIGHTS2[i][j] * MULTICURVES.getSimplyCompoundForwardRate(INDEX2, FIXING_PERIOD_START_TIMES2[i][j],
+            FIXING_PERIOD_END_TIMES2[i][j], FIX_ACC_FACTORS2[i][j]);
       }
-      invFactor *= (1.0 + forward * DER2.getPaymentAccrualFactors()[i]);
+      invFactor *= 1.0 + forward * DER2.getPaymentAccrualFactors()[i];
     }
-    final double pvExpected = DER2.getNotional() * MULTICURVES.getDiscountFactor(DER2.getCurrency(), DER2.getPaymentTime()) * (invFactor - 1.0);
+    final double pvExpected = DER2.getNotional() * MULTICURVES.getDiscountFactor(DER2.getCurrency(), DER2.getPaymentTime())
+        * (invFactor - 1.0);
     assertEquals(pvExpected, pvComputed.getAmount(DER2.getCurrency()), TOLERANCE_PV);
     final MultipleCurrencyAmount pvWithCalc = PVDC.visitCouponIborAverageCompounding(DER2, MULTICURVES);
     assertEquals(pvWithCalc.getAmount(DER2.getCurrency()), pvComputed.getAmount(DER2.getCurrency()), EPS * Math.abs(pvExpected));
@@ -260,21 +277,26 @@ public class CouponIborAverageFixingDatesCompoundingDiscountingMethodTest {
       fwd += WEIGHTS_3[0][j] * MULTICURVES.getSimplyCompoundForwardRate(INDEX1, DER3.getFixingPeriodStartTime()[0][j],
           DER3.getFixingPeriodEndTime()[0][j], DER3.getFixingPeriodAccrualFactor()[0][j]);
     }
-    invFactor *= (1.0 + fwd * DER3.getPaymentAccrualFactors()[0]);
+    invFactor *= 1.0 + fwd * DER3.getPaymentAccrualFactors()[0];
     for (int i = 1; i < DER3.getFixingPeriodAccrualFactor().length; ++i) {
       double forward = 0.0;
       for (int j = 0; j < DER3.getFixingPeriodAccrualFactor()[i].length; ++j) {
         forward += WEIGHTS_3[i][j] *
-            MULTICURVES.getSimplyCompoundForwardRate(INDEX1, DER3.getFixingPeriodStartTime()[i][j], DER3.getFixingPeriodEndTime()[i][j], DER3.getFixingPeriodAccrualFactor()[i][j]);
+            MULTICURVES.getSimplyCompoundForwardRate(INDEX1, DER3.getFixingPeriodStartTime()[i][j], DER3.getFixingPeriodEndTime()[i][j],
+                DER3.getFixingPeriodAccrualFactor()[i][j]);
       }
-      invFactor *= (1.0 + forward * DER3.getPaymentAccrualFactors()[i]);
+      invFactor *= 1.0 + forward * DER3.getPaymentAccrualFactors()[i];
     }
-    final double pvExpected = DER3.getNotional() * MULTICURVES.getDiscountFactor(DER3.getCurrency(), DER3.getPaymentTime()) * (invFactor - 1.0);
+    final double pvExpected = DER3.getNotional() * MULTICURVES.getDiscountFactor(DER3.getCurrency(), DER3.getPaymentTime())
+        * (invFactor - 1.0);
     assertEquals(pvExpected, pvComputed.getAmount(DER3.getCurrency()), EPS * Math.abs(pvExpected));
     final MultipleCurrencyAmount pvWithCalc = PVDC.visitCouponIborAverageCompounding(DER3, MULTICURVES);
     assertEquals(pvWithCalc.getAmount(DER3.getCurrency()), pvComputed.getAmount(DER3.getCurrency()), EPS * Math.abs(pvExpected));
   }
 
+  /**
+   *
+   */
   @Test
   public void presentValueCurveSensitivityFiniteDifference() {
     final MultipleCurrencyParameterSensitivity senseCalc1 = PSC.calculateSensitivity(DER1, MULTICURVES, MULTICURVES.getAllNames());
@@ -285,6 +307,9 @@ public class CouponIborAverageFixingDatesCompoundingDiscountingMethodTest {
     AssertSensitivityObjects.assertEquals("CouponIborAverageCompoundingDiscountingMethod", senseCalc2, senseFd2, TOLERANCE_PV_DELTA);
   }
 
+  /**
+   *
+   */
   @Test
   public void presentValueCurveSensitivityMethodVsCalculator() {
     final MultipleCurrencyMulticurveSensitivity pvcsMethod1 = METHOD.presentValueCurveSensitivity(DER1, MULTICURVES);

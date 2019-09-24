@@ -34,6 +34,7 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.financial.convention.yield.YieldConvention;
 import com.opengamma.financial.convention.yield.YieldConventionFactory;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
@@ -175,12 +176,12 @@ public class BondFutureHullWhiteMethodTest {
   @Test(enabled = true)
   public void presentValueFromPrice() {
     final double quotedPrice = 1.05;
-    final MultipleCurrencyAmount presentValueMethod = METHOD_HW.presentValueFromPrice(BOND_FUTURE_DERIV, quotedPrice);
+    final CurrencyAmount presentValueMethod = METHOD_HW.presentValueFromPrice(BOND_FUTURE_DERIV, quotedPrice);
     assertEquals("Bond future transaction Method: present value from price", (quotedPrice - REF_PRICE) * NOTIONAL,
-        presentValueMethod.getAmount(USD));
+        presentValueMethod.getAmount());
     final PresentValueFromFuturePriceCalculator calculator = PresentValueFromFuturePriceCalculator.getInstance();
     final double presentValueCalculator = BOND_FUTURE_DERIV.accept(calculator, quotedPrice);
-    assertEquals("Bond future transaction Method: present value from price", presentValueMethod.getAmount(USD), presentValueCalculator);
+    assertEquals("Bond future transaction Method: present value from price", presentValueMethod.getAmount(), presentValueCalculator);
   }
 
   // @Test

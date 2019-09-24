@@ -12,12 +12,12 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Method for the pricing of interest rate future options with up-front premium. The pricing is done with a SABR approach on the future rate (1.0-price). The
- * SABR parameters are represented by (expiration-delay) surfaces. The "delay" is the time between option expiration and future last trading date, i.e. 0 for
- * normal options and x for x-year mid-curve options.
+ * Method for the pricing of interest rate future options with daily margining. The pricing is done with a SABR approach on the future rate
+ * (1.0-price). The SABR parameters are represented by (expiration-delay) surfaces. The "delay" is the time between option expiration and
+ * future last trading date, i.e. 0 for normal options and x for x-year mid-curve options.
  */
 public final class InterestRateFutureOptionMarginTransactionSABRMethod
-extends InterestRateFutureOptionMarginTransactionGenericMethod<SABRSTIRFuturesProviderInterface> {
+    extends InterestRateFutureOptionMarginTransactionGenericMethod<SABRSTIRFuturesProviderInterface> {
 
   /**
    * Creates the method unique instance.
@@ -81,9 +81,11 @@ extends InterestRateFutureOptionMarginTransactionGenericMethod<SABRSTIRFuturesPr
    */
   public PresentValueSABRSensitivityDataBundle presentValueSABRSensitivity(final InterestRateFutureOptionMarginTransaction transaction,
       final SABRSTIRFuturesProviderInterface sabrData) {
-    PresentValueSABRSensitivityDataBundle securitySensitivity = getSecurityMethod().priceSABRSensitivity(transaction.getUnderlyingSecurity(), sabrData);
-    securitySensitivity = securitySensitivity.multiplyBy(transaction.getQuantity() * transaction.getUnderlyingSecurity().getUnderlyingFuture().getNotional()
-        * transaction.getUnderlyingSecurity().getUnderlyingFuture().getPaymentAccrualFactor());
+    PresentValueSABRSensitivityDataBundle securitySensitivity = getSecurityMethod()
+        .priceSABRSensitivity(transaction.getUnderlyingSecurity(), sabrData);
+    securitySensitivity = securitySensitivity
+        .multiplyBy(transaction.getQuantity() * transaction.getUnderlyingSecurity().getUnderlyingFuture().getNotional()
+            * transaction.getUnderlyingSecurity().getUnderlyingFuture().getPaymentAccrualFactor());
     return securitySensitivity;
   }
 
