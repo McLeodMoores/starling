@@ -6,7 +6,6 @@
 package com.opengamma.master;
 
 import static com.google.common.collect.Maps.newHashMap;
-import static com.opengamma.lambdava.streams.Lambdava.functional;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -36,37 +35,37 @@ import com.opengamma.util.ArgumentChecker;
  * <p>
  * This master does not support versioning nor corrections.
  * <p>
- * This implementation does not copy stored elements, making it thread-hostile.
- * As such, this implementation is currently most useful for testing scenarios.
+ * This implementation does not copy stored elements, making it thread-hostile. As such, this implementation is currently most useful for testing scenarios.
  *
- * @param <D>  the type of the document
+ * @param <D>
+ *          the type of the document
  */
 public abstract class SimpleAbstractInMemoryMaster<D extends AbstractDocument>
-implements AbstractMaster<D>, ChangeProvider {
+    implements AbstractMaster<D>, ChangeProvider {
 
   /**
    * A cache of documents by identifier.
    */
-  protected final ConcurrentMap<ObjectId, D> _store = new ConcurrentHashMap<>();  // CSIGNORE
+  protected final ConcurrentMap<ObjectId, D> _store = new ConcurrentHashMap<>(); // CSIGNORE
   /**
    * The supplied of identifiers.
    */
-  protected final Supplier<ObjectId> _objectIdSupplier;  // CSIGNORE
+  protected final Supplier<ObjectId> _objectIdSupplier; // CSIGNORE
   /**
    * The change manager.
    */
-  protected final ChangeManager _changeManager;  // CSIGNORE
+  protected final ChangeManager _changeManager; // CSIGNORE
 
   /**
    * Whether all documents should be cloned on return. True by default.
    */
   private boolean _cloneResults = true;
 
-
   /**
    * Creates an instance.
    *
-   * @param defaultOidScheme  the default object identifier scheme, not null
+   * @param defaultOidScheme
+   *          the default object identifier scheme, not null
    */
   public SimpleAbstractInMemoryMaster(final String defaultOidScheme) {
     this(new ObjectIdSupplier(defaultOidScheme));
@@ -75,8 +74,10 @@ implements AbstractMaster<D>, ChangeProvider {
   /**
    * Creates an instance specifying the change manager.
    *
-   * @param defaultOidScheme  the default object identifier scheme, not null
-   * @param changeManager  the change manager, not null
+   * @param defaultOidScheme
+   *          the default object identifier scheme, not null
+   * @param changeManager
+   *          the change manager, not null
    */
   public SimpleAbstractInMemoryMaster(final String defaultOidScheme, final ChangeManager changeManager) {
     this(new ObjectIdSupplier(defaultOidScheme), changeManager);
@@ -85,7 +86,8 @@ implements AbstractMaster<D>, ChangeProvider {
   /**
    * Creates an instance specifying the supplier of object identifiers.
    *
-   * @param objectIdSupplier  the supplier of object identifiers, not null
+   * @param objectIdSupplier
+   *          the supplier of object identifiers, not null
    */
   public SimpleAbstractInMemoryMaster(final Supplier<ObjectId> objectIdSupplier) {
     this(objectIdSupplier, new BasicChangeManager());
@@ -94,8 +96,10 @@ implements AbstractMaster<D>, ChangeProvider {
   /**
    * Creates an instance specifying the supplier of object identifiers and change manager.
    *
-   * @param objectIdSupplier  the supplier of object identifiers, not null
-   * @param changeManager  the change manager, not null
+   * @param objectIdSupplier
+   *          the supplier of object identifiers, not null
+   * @param changeManager
+   *          the change manager, not null
    */
   public SimpleAbstractInMemoryMaster(final Supplier<ObjectId> objectIdSupplier, final ChangeManager changeManager) {
     ArgumentChecker.notNull(objectIdSupplier, "objectIdSupplier");
@@ -116,17 +120,19 @@ implements AbstractMaster<D>, ChangeProvider {
   /**
    * Specify whether to clone all results when searching. True by default.
    *
-   * @param cloneResults whether to clone results when searching.
+   * @param cloneResults
+   *          whether to clone results when searching.
    */
   public void setCloneResults(final boolean cloneResults) {
     _cloneResults = cloneResults;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Validates the specified document.
    *
-   * @param document  the document to validate, null to be validated
+   * @param document
+   *          the document to validate, null to be validated
    */
   protected abstract void validateDocument(D document);
 
@@ -135,7 +141,7 @@ implements AbstractMaster<D>, ChangeProvider {
     return _changeManager;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public final List<UniqueId> replaceVersions(final ObjectIdentifiable objectIdentifiable, final List<D> replacementDocuments) {
     return replaceAllVersions(objectIdentifiable.getObjectId(), replacementDocuments);
@@ -185,9 +191,10 @@ implements AbstractMaster<D>, ChangeProvider {
     if (!_store.replace(objectId.getObjectId(), storedDocument, lastReplacementDocument)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
-
-    final Instant versionFromInstant = functional(orderedReplacementDocuments).first().getVersionFromInstant();
-    final Instant versionToInstant = functional(orderedReplacementDocuments).last().getVersionToInstant();
+    final D firstDocument = orderedReplacementDocuments.stream().findFirst().get(); // we know the list isn't empty
+    final D lastDocument = orderedReplacementDocuments.stream().reduce((d1, d2) -> d2).get();
+    final Instant versionFromInstant = firstDocument.getVersionFromInstant();
+    final Instant versionToInstant = lastDocument.getVersionToInstant();
     changeManager().entityChanged(ChangeType.CHANGED, objectId.getObjectId(), versionFromInstant, versionToInstant, now);
 
     updateCaches(objectId, lastReplacementDocument);
@@ -198,13 +205,15 @@ implements AbstractMaster<D>, ChangeProvider {
   /**
    * Subclasses that support additional caching should override this method.
    *
-   * @param replacedObject The version removed (possibly null)
-   * @param updatedDocument  The version added (possibly null)
+   * @param replacedObject
+   *          The version removed (possibly null)
+   * @param updatedDocument
+   *          The version added (possibly null)
    */
   protected void updateCaches(final ObjectIdentifiable replacedObject, final D updatedDocument) {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public final UniqueId addVersion(final ObjectIdentifiable objectId, final D documentToAdd) {
     final List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
@@ -216,7 +225,7 @@ implements AbstractMaster<D>, ChangeProvider {
 
   @Override
   public final void removeVersion(final UniqueId uniqueId) {
-    replaceVersion(uniqueId, Collections.<D>emptyList());
+    replaceVersion(uniqueId, Collections.<D> emptyList());
   }
 
   @Override
@@ -228,7 +237,7 @@ implements AbstractMaster<D>, ChangeProvider {
     return result.get(0);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Map<UniqueId, D> get(final Collection<UniqueId> uniqueIds) {
     final Map<UniqueId, D> resultMap = newHashMap();

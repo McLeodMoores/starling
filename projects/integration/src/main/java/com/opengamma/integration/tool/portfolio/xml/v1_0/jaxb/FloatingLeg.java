@@ -43,7 +43,7 @@ public class FloatingLeg extends SwapLeg {
   @XmlElement(name = "calendar")
   private Set<Calendar> _fixingCalendars;
 
-  private FixingIndex _fixingIndex;
+  private FixingIndex fixingIndex;
 
   @XmlElement(name = "spread")
   private BigDecimal _spread;
@@ -51,20 +51,12 @@ public class FloatingLeg extends SwapLeg {
   @XmlElement(name = "gearing")
   private BigDecimal _gearing;
 
-/*  <resetFrequency></resetFrequency>
-  <!-- not supported at the moment as frequencies must match -->
-  <compoundingMethod></compoundingMethod>
-  <!-- we're assuming that resetLag == settlementLag at the moment -->
-  <resetLag></resetLag>
-  <!-- In Advance or In Arrears.  Only support In advance at the mo -->
-  <resetType>InAdvance</resetType>
-  <!-- same as payment calendar at the moment -->
-  <fixingCalendar></fixingCalendar>
-  <fixingIndex>
-  <id scheme="BLOOMBERG_TICKER">US0003M Curncy</id>
-  <!-- OIS|CMS|IBOR -->
-  <rateType>IBOR</rateType>
-  </fixingIndex>*/
+  /*
+   * <resetFrequency></resetFrequency> <!-- not supported at the moment as frequencies must match --> <compoundingMethod></compoundingMethod> <!-- we're
+   * assuming that resetLag == settlementLag at the moment --> <resetLag></resetLag> <!-- In Advance or In Arrears. Only support In advance at the mo -->
+   * <resetType>InAdvance</resetType> <!-- same as payment calendar at the moment --> <fixingCalendar></fixingCalendar> <fixingIndex> <id
+   * scheme="BLOOMBERG_TICKER">US0003M Curncy</id> <!-- OIS|CMS|IBOR --> <rateType>IBOR</rateType> </fixingIndex>
+   */
 
   public String getResetFrequency() {
     return _resetFrequency;
@@ -115,11 +107,11 @@ public class FloatingLeg extends SwapLeg {
   }
 
   public FixingIndex getFixingIndex() {
-    return _fixingIndex;
+    return fixingIndex;
   }
 
   public void setFixingIndex(final FixingIndex fixingIndex) {
-    this._fixingIndex = fixingIndex;
+    this.fixingIndex = fixingIndex;
   }
 
   public BigDecimal getSpread() {

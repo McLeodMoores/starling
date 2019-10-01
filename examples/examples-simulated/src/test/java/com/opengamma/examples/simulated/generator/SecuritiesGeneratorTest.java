@@ -75,9 +75,10 @@ public class SecuritiesGeneratorTest {
     private int _count;
 
     /**
-     * @param maxSecurities The maximum number of securities
+     * @param maxSecurities
+     *          The maximum number of securities
      */
-    public MySecurityGenerator(final int maxSecurities) {
+    MySecurityGenerator(final int maxSecurities) {
       _maxSecurities = maxSecurities;
     }
 

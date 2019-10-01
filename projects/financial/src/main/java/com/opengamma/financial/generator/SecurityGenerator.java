@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,7 +141,7 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
   private String _currencyCurveName;
   private final Map<Currency, String> _curveCalculationConfig = new HashMap<>();
   private ExternalScheme _preferredScheme;
-  private Function2<Currency, Currency, ExternalId> _spotRateIdentifier;
+  private BiFunction<Currency, Currency, ExternalId> _spotRateIdentifier;
   private ConventionSource _conventionSource;
 
   private Currency[] _currencies;
@@ -300,11 +301,41 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
     return config;
   }
 
+  /**
+   * Gets a spot rate identifier function.
+   *
+   * @return the function
+   * @deprecated use {@link #getSpotRateIdentifierFunction()}
+   */
+  @Deprecated
   public Function2<Currency, Currency, ExternalId> getSpotRateIdentifier() {
+    return new Function2<Currency, Currency, ExternalId>() {
+      @Override
+      public ExternalId execute(final Currency ccy1, final Currency ccy2) {
+        return _spotRateIdentifier.apply(ccy1, ccy2);
+      }
+    };
+  }
+
+  public BiFunction<Currency, Currency, ExternalId> getSpotRateIdentifierFunction() {
     return _spotRateIdentifier;
   }
 
+  /**
+   * @param spotRateIdentifier
+   *          identifies spot rates
+   * @deprecated use {@link #setSpotRateIdentifier(BiFunction)}
+   */
+  @Deprecated
   public void setSpotRateIdentifier(final Function2<Currency, Currency, ExternalId> spotRateIdentifier) {
+    _spotRateIdentifier = (ccy1, ccy2) -> spotRateIdentifier.execute(ccy1, ccy2);
+  }
+
+  /**
+   * @param spotRateIdentifier
+   *          identifies spot rates
+   */
+  public void setSpotRateIdentifier(final BiFunction<Currency, Currency, ExternalId> spotRateIdentifier) {
     _spotRateIdentifier = spotRateIdentifier;
   }
 
@@ -410,7 +441,7 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
       payCurrency = currencies.getSecond();
       receiveCurrency = currencies.getFirst();
     }
-    final ExternalId spotRateIdentifier = getSpotRateIdentifier().execute(payCurrency, receiveCurrency);
+    final ExternalId spotRateIdentifier = getSpotRateIdentifierFunction().apply(payCurrency, receiveCurrency);
     final Pair<LocalDate, Double> spotRate = getHistoricalSource().getLatestDataPoint(MarketDataRequirementNames.MARKET_VALUE, spotRateIdentifier.toBundle(),
         null);
     if (spotRate == null) {

@@ -6,6 +6,7 @@ package com.mcleodmoores.examples.simulated.function;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,6 @@ import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.financial.analytics.model.equity.option.EquityOptionFunctions;
 import com.opengamma.financial.currency.CurrencyMatrixConfigPopulator;
 import com.opengamma.financial.currency.CurrencyMatrixLookupFunction;
-import com.opengamma.lambdava.functions.Function1;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
@@ -53,7 +53,8 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   private final ConfigMaster _configMaster;
 
   /**
-   *
+   * @param configMaster
+   *          a config master
    */
   public ExamplesFunctionConfiguration(final ConfigMaster configMaster) {
     _configMaster = configMaster;
@@ -603,13 +604,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
    *          The object containing the default values
    */
   protected void setEquityOptionForwardCurveDefaults(final EquityOptionFunctions.EquityForwardDefaults defaults) {
-    defaults.setPerEquityInfo(getEquityInfo(new Function1<EquityInfo, EquityOptionFunctions.EquityInfo>() {
-      @Override
-      public EquityOptionFunctions.EquityInfo execute(final EquityInfo i) {
-        final EquityOptionFunctions.EquityInfo d = new EquityOptionFunctions.EquityInfo();
-        setEquityOptionForwardCurveDefaults(i, d);
-        return d;
-      }
+    defaults.setPerEquityInfo(getEquityInfo(i -> {
+      final EquityOptionFunctions.EquityInfo d = new EquityOptionFunctions.EquityInfo();
+      setEquityOptionForwardCurveDefaults(i, d);
+      return d;
     }));
   }
 
@@ -620,13 +618,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
    *          The object containing the default values
    */
   protected void setEquityOptionSurfaceDefaults(final EquityOptionFunctions.EquityOptionDefaults defaults) {
-    defaults.setPerEquityInfo(getEquityInfo(new Function1<EquityInfo, EquityOptionFunctions.EquityInfo>() {
-      @Override
-      public EquityOptionFunctions.EquityInfo execute(final EquityInfo i) {
-        final EquityOptionFunctions.EquityInfo d = new EquityOptionFunctions.EquityInfo();
-        setEquityOptionSurfaceDefaults(i, d);
-        return d;
-      }
+    defaults.setPerEquityInfo(getEquityInfo(i -> {
+      final EquityOptionFunctions.EquityInfo d = new EquityOptionFunctions.EquityInfo();
+      setEquityOptionSurfaceDefaults(i, d);
+      return d;
     }));
   }
 
@@ -691,15 +686,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   }
 
   protected void setVanillaFxOptionDefaults(final FxBlackMethodFunctions.FxOptionDefaults defaults) {
-    defaults.setCurrencyPairInfo(getVanillaFxOptionInfo(new Function1<FxOptionInfo, FxBlackMethodFunctions.FxOptionDefaults.CurrencyPairInfo>() {
-
-      @Override
-      public FxBlackMethodFunctions.FxOptionDefaults.CurrencyPairInfo execute(final FxOptionInfo i) {
-        final FxBlackMethodFunctions.FxOptionDefaults.CurrencyPairInfo d = new FxBlackMethodFunctions.FxOptionDefaults.CurrencyPairInfo();
-        setVanillaFxOptionDefaults(i, d);
-        return d;
-      }
-
+    defaults.setCurrencyPairInfo(getVanillaFxOptionInfo(i -> {
+      final FxBlackMethodFunctions.FxOptionDefaults.CurrencyPairInfo d = new FxBlackMethodFunctions.FxOptionDefaults.CurrencyPairInfo();
+      setVanillaFxOptionDefaults(i, d);
+      return d;
     }));
   }
 
@@ -712,14 +702,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   }
 
   protected void setCdsIsdaDefaults(final IsdaFunctions.CdsDefaults defaults) {
-    defaults.setCurrencyInfo(getCdsPerCurrencyInfo(new Function1<CdsInfo, IsdaFunctions.CdsDefaults.CurrencyInfo>() {
-
-      @Override
-      public IsdaFunctions.CdsDefaults.CurrencyInfo execute(final CdsInfo i) {
-        final IsdaFunctions.CdsDefaults.CurrencyInfo d = new IsdaFunctions.CdsDefaults.CurrencyInfo();
-        setCdsPerCurrencyDefaults(i, d);
-        return d;
-      }
+    defaults.setCurrencyInfo(getCdsPerCurrencyInfo(i -> {
+      final IsdaFunctions.CdsDefaults.CurrencyInfo d = new IsdaFunctions.CdsDefaults.CurrencyInfo();
+      setCdsPerCurrencyDefaults(i, d);
+      return d;
     }));
   }
 
@@ -728,14 +714,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   }
 
   protected void setFxForwardDefaults(final FxDiscountingMethodFunctions.FxForwardDefaults defaults) {
-    defaults.setCurrencyPairInfo(getFxForwardInfo(new Function1<FxForwardInfo, FxDiscountingMethodFunctions.FxForwardDefaults.CurrencyPairInfo>() {
-
-      @Override
-      public FxDiscountingMethodFunctions.FxForwardDefaults.CurrencyPairInfo execute(final FxForwardInfo i) {
-        final FxDiscountingMethodFunctions.FxForwardDefaults.CurrencyPairInfo d = new FxDiscountingMethodFunctions.FxForwardDefaults.CurrencyPairInfo();
-        setFxForwardDefaults(i, d);
-        return d;
-      }
+    defaults.setCurrencyPairInfo(getFxForwardInfo(i -> {
+      final FxDiscountingMethodFunctions.FxForwardDefaults.CurrencyPairInfo d = new FxDiscountingMethodFunctions.FxForwardDefaults.CurrencyPairInfo();
+      setFxForwardDefaults(i, d);
+      return d;
     }));
   }
 
@@ -744,14 +726,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   }
 
   protected void setLinearRatesDefaults(final RatesDiscountingMethodFunctions.LinearRatesDefaults defaults) {
-    defaults.setCurrencyInfo(getLinearRatesInfo(new Function1<LinearRatesInfo, RatesDiscountingMethodFunctions.LinearRatesDefaults.CurrencyInfo>() {
-
-      @Override
-      public RatesDiscountingMethodFunctions.LinearRatesDefaults.CurrencyInfo execute(final LinearRatesInfo i) {
-        final RatesDiscountingMethodFunctions.LinearRatesDefaults.CurrencyInfo d = new RatesDiscountingMethodFunctions.LinearRatesDefaults.CurrencyInfo();
-        setLinearRatesDefaults(i, d);
-        return d;
-      }
+    defaults.setCurrencyInfo(getLinearRatesInfo(i -> {
+      final RatesDiscountingMethodFunctions.LinearRatesDefaults.CurrencyInfo d = new RatesDiscountingMethodFunctions.LinearRatesDefaults.CurrencyInfo();
+      setLinearRatesDefaults(i, d);
+      return d;
     }));
   }
 
@@ -760,14 +738,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   }
 
   protected void setGovernmentBondDefaults(final BondDiscountingMethodFunctions.BondDefaults defaults) {
-    defaults.setCountryInfo(getGovernmentBondPerCountryInfo(new Function1<BondInfo, BondDiscountingMethodFunctions.BondDefaults.CountryInfo>() {
-
-      @Override
-      public BondDiscountingMethodFunctions.BondDefaults.CountryInfo execute(final BondInfo i) {
-        final BondDiscountingMethodFunctions.BondDefaults.CountryInfo d = new BondDiscountingMethodFunctions.BondDefaults.CountryInfo();
-        setGovernmentBondPerCountryDefaults(i, d);
-        return d;
-      }
+    defaults.setCountryInfo(getGovernmentBondPerCountryInfo(i -> {
+      final BondDiscountingMethodFunctions.BondDefaults.CountryInfo d = new BondDiscountingMethodFunctions.BondDefaults.CountryInfo();
+      setGovernmentBondPerCountryDefaults(i, d);
+      return d;
     }));
   }
 
@@ -777,14 +751,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   }
 
   protected void setCorporateBondDefaults(final BondDiscountingMethodFunctions.BondDefaults defaults) {
-    defaults.setCountryInfo(getCorporateBondPerCountryInfo(new Function1<BondInfo, BondDiscountingMethodFunctions.BondDefaults.CountryInfo>() {
-
-      @Override
-      public BondDiscountingMethodFunctions.BondDefaults.CountryInfo execute(final BondInfo i) {
-        final BondDiscountingMethodFunctions.BondDefaults.CountryInfo d = new BondDiscountingMethodFunctions.BondDefaults.CountryInfo();
-        setCorporateBondPerCountryDefaults(i, d);
-        return d;
-      }
+    defaults.setCountryInfo(getCorporateBondPerCountryInfo(i -> {
+      final BondDiscountingMethodFunctions.BondDefaults.CountryInfo d = new BondDiscountingMethodFunctions.BondDefaults.CountryInfo();
+      setCorporateBondPerCountryDefaults(i, d);
+      return d;
     }));
   }
 
@@ -815,8 +785,7 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   protected FunctionConfigurationSource curveFunctions() {
     final Providers providers = new CurveFunctions.Providers();
     setCurveTypeInformation(providers);
-    final com.opengamma.financial.analytics.model.curve.CurveFunctions.Defaults defaults =
-        new com.opengamma.financial.analytics.model.curve.CurveFunctions.Defaults();
+    final com.opengamma.financial.analytics.model.curve.CurveFunctions.Defaults defaults = new com.opengamma.financial.analytics.model.curve.CurveFunctions.Defaults();
     setCurveDefaults(defaults);
     return CombiningFunctionConfigurationSource.of(getRepository(defaults));
   }
@@ -833,10 +802,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     return CombiningFunctionConfigurationSource.of(getRepository(vanillaDefaults));
   }
 
-  protected <T> Map<UnorderedCurrencyPair, T> getVanillaFxOptionInfo(final Function1<FxOptionInfo, T> filter) {
+  protected <T> Map<UnorderedCurrencyPair, T> getVanillaFxOptionInfo(final Function<FxOptionInfo, T> filter) {
     final Map<UnorderedCurrencyPair, T> result = new HashMap<>();
     for (final Map.Entry<UnorderedCurrencyPair, FxOptionInfo> e : getVanillaFxOptionInfo().entrySet()) {
-      final T entry = filter.execute(e.getValue());
+      final T entry = filter.apply(e.getValue());
       if (entry instanceof InitializingBean) {
         try {
           ((InitializingBean) entry).afterPropertiesSet();
@@ -902,10 +871,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
 
   }
 
-  protected <T> Map<UnorderedCurrencyPair, T> getFxForwardInfo(final Function1<FxForwardInfo, T> filter) {
+  protected <T> Map<UnorderedCurrencyPair, T> getFxForwardInfo(final Function<FxForwardInfo, T> filter) {
     final Map<UnorderedCurrencyPair, T> result = new HashMap<>();
     for (final Map.Entry<UnorderedCurrencyPair, FxForwardInfo> e : getFxForwardInfo().entrySet()) {
-      final T entry = filter.execute(e.getValue());
+      final T entry = filter.apply(e.getValue());
       if (entry instanceof InitializingBean) {
         try {
           ((InitializingBean) entry).afterPropertiesSet();
@@ -935,10 +904,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
 
   }
 
-  protected <T> Map<Currency, T> getLinearRatesInfo(final Function1<LinearRatesInfo, T> filter) {
+  protected <T> Map<Currency, T> getLinearRatesInfo(final Function<LinearRatesInfo, T> filter) {
     final Map<Currency, T> result = new HashMap<>();
     for (final Map.Entry<Currency, LinearRatesInfo> e : getLinearRatesInfo().entrySet()) {
-      final T entry = filter.execute(e.getValue());
+      final T entry = filter.apply(e.getValue());
       if (entry instanceof InitializingBean) {
         try {
           ((InitializingBean) entry).afterPropertiesSet();
@@ -970,10 +939,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     }
   }
 
-  protected <T> Map<Currency, T> getGovernmentBondPerCurrencyInfo(final Function1<BondInfo, T> filter) {
+  protected <T> Map<Currency, T> getGovernmentBondPerCurrencyInfo(final Function<BondInfo, T> filter) {
     final Map<Currency, T> result = new HashMap<>();
     for (final Map.Entry<Currency, BondInfo> e : getGovernmentBondPerCurrencyInfo().entrySet()) {
-      final T entry = filter.execute(e.getValue());
+      final T entry = filter.apply(e.getValue());
       if (entry instanceof InitializingBean) {
         try {
           ((InitializingBean) entry).afterPropertiesSet();
@@ -990,10 +959,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     return result;
   }
 
-  protected <T> Map<Currency, T> getCorporateBondPerCurrencyInfo(final Function1<BondInfo, T> filter) {
+  protected <T> Map<Currency, T> getCorporateBondPerCurrencyInfo(final Function<BondInfo, T> filter) {
     final Map<Currency, T> result = new HashMap<>();
     for (final Map.Entry<Currency, BondInfo> e : getCorporateBondPerCurrencyInfo().entrySet()) {
-      final T entry = filter.execute(e.getValue());
+      final T entry = filter.apply(e.getValue());
       if (entry instanceof InitializingBean) {
         try {
           ((InitializingBean) entry).afterPropertiesSet();
@@ -1010,10 +979,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     return result;
   }
 
-  protected <T> Map<Country, T> getGovernmentBondPerCountryInfo(final Function1<BondInfo, T> filter) {
+  protected <T> Map<Country, T> getGovernmentBondPerCountryInfo(final Function<BondInfo, T> filter) {
     final Map<Country, T> result = new HashMap<>();
     for (final Map.Entry<Country, BondInfo> e : getGovernmentBondPerCountryInfo().entrySet()) {
-      final T entry = filter.execute(e.getValue());
+      final T entry = filter.apply(e.getValue());
       if (entry instanceof InitializingBean) {
         try {
           ((InitializingBean) entry).afterPropertiesSet();
@@ -1030,10 +999,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     return result;
   }
 
-  protected <T> Map<Country, T> getCorporateBondPerCountryInfo(final Function1<BondInfo, T> filter) {
+  protected <T> Map<Country, T> getCorporateBondPerCountryInfo(final Function<BondInfo, T> filter) {
     final Map<Country, T> result = new HashMap<>();
     for (final Map.Entry<Country, BondInfo> e : getCorporateBondPerCountryInfo().entrySet()) {
-      final T entry = filter.execute(e.getValue());
+      final T entry = filter.apply(e.getValue());
       if (entry instanceof InitializingBean) {
         try {
           ((InitializingBean) entry).afterPropertiesSet();
@@ -1071,10 +1040,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     }
   }
 
-  protected <T> Map<Currency, T> getCdsPerCurrencyInfo(final Function1<CdsInfo, T> filter) {
+  protected <T> Map<Currency, T> getCdsPerCurrencyInfo(final Function<CdsInfo, T> filter) {
     final Map<Currency, T> result = new HashMap<>();
     for (final Map.Entry<Currency, CdsInfo> e : getCdsPerCurrencyInfo().entrySet()) {
-      final T entry = filter.execute(e.getValue());
+      final T entry = filter.apply(e.getValue());
       if (entry instanceof InitializingBean) {
         try {
           ((InitializingBean) entry).afterPropertiesSet();
@@ -1112,10 +1081,10 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
    *          The filter
    * @return T The object that contains default values for an equity ticker
    */
-  protected <T> Map<String, T> getEquityInfo(final Function1<EquityInfo, T> filter) {
+  protected <T> Map<String, T> getEquityInfo(final Function<EquityInfo, T> filter) {
     final Map<String, T> result = new HashMap<>();
     for (final Map.Entry<String, EquityInfo> e : getPerEquityInfo().entrySet()) {
-      final T entry = filter.execute(e.getValue());
+      final T entry = filter.apply(e.getValue());
       if (entry instanceof InitializingBean) {
         try {
           ((InitializingBean) entry).afterPropertiesSet();

@@ -7,7 +7,6 @@ package com.opengamma.masterdb;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
-import static com.opengamma.lambdava.streams.Lambdava.functional;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -801,8 +800,10 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
           replacementDocument.setUniqueId(objectId.getObjectId().atLatestVersion());
           insert(replacementDocument);
         }
-        final Instant versionFromInstant = functional(orderedReplacementDocuments).first().getVersionFromInstant();
-        final Instant versionToInstant = functional(orderedReplacementDocuments).last().getVersionToInstant();
+        final D firstDocument = orderedReplacementDocuments.stream().findFirst().get();
+        final D lastDocument = orderedReplacementDocuments.stream().reduce((d1, d2) -> d2).get();
+        final Instant versionFromInstant = firstDocument.getVersionFromInstant();
+        final Instant versionToInstant = lastDocument.getVersionToInstant();
         changeManager().entityChanged(ChangeType.CHANGED, objectId.getObjectId(), versionFromInstant, versionToInstant, now);
         return MasterUtils.mapToUniqueIDs(orderedReplacementDocuments);
       });
@@ -873,8 +874,10 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
             replacementDocument.setUniqueId(objectId.getObjectId().atLatestVersion());
             insert(replacementDocument);
           }
-          final Instant versionFromInstant = functional(orderedReplacementDocuments).first().getVersionFromInstant();
-          final Instant versionToInstant = functional(orderedReplacementDocuments).last().getVersionToInstant();
+          final D firstDocument = orderedReplacementDocuments.stream().findFirst().get();
+          final D lastDocument = orderedReplacementDocuments.stream().reduce((d1, d2) -> d2).get();
+          final Instant versionFromInstant = firstDocument.getVersionFromInstant();
+          final Instant versionToInstant = lastDocument.getVersionToInstant();
           changeManager().entityChanged(ChangeType.CHANGED, objectId.getObjectId(), versionFromInstant, versionToInstant, now);
           return MasterUtils.mapToUniqueIDs(orderedReplacementDocuments);
 

@@ -20,7 +20,7 @@ import com.opengamma.lambdava.functions.Function2;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests the {@link ComputationTargetTypeMap} class
+ * Tests the {@link ComputationTargetTypeMap} class.
  */
 @Test(groups = TestGroup.UNIT)
 public class ComputationTargetTypeMapTest {
@@ -112,14 +112,14 @@ public class ComputationTargetTypeMapTest {
     assertEquals(map.get(ComputationTargetType.of(c)), "MOCK");
   }
 
-  @Test(expectedExceptions = {IllegalStateException.class })
+  @Test(expectedExceptions = { IllegalStateException.class })
   public void testCollision_direct() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), "Pos|Trade");
     map.put(ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.POSITION), "Pos");
   }
 
-  @Test(expectedExceptions = {IllegalStateException.class })
+  @Test(expectedExceptions = { IllegalStateException.class })
   public void testCollision_cache() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.SECURITY, "Sec");
@@ -145,11 +145,11 @@ public class ComputationTargetTypeMapTest {
     map.put(ComputationTargetType.SECURITY, "A");
     map.put(ComputationTargetType.POSITION.containing(
         ComputationTargetType.TRADE.or(ComputationTargetType.of(MockSecurity.class))), "B", new Function2<String, String, String>() {
-      @Override
-      public String execute(final String a, final String b) {
-        return a + b;
-      }
-    });
+          @Override
+          public String execute(final String a, final String b) {
+            return a + b;
+          }
+        });
     assertEquals(map.get(ComputationTargetType.SECURITY), "A");
     assertEquals(map.get(ComputationTargetType.TRADE), "B");
     assertEquals(map.get(ComputationTargetType.of(MockSecurity.class)), "AB");

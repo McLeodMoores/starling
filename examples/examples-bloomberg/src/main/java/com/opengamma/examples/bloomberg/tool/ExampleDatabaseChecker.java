@@ -41,18 +41,19 @@ public class ExampleDatabaseChecker {
   /** Catalog. */
   private static final String CATALOG = "og-financial";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Main method to run the tool. No arguments are needed.
    * <p>
-   * If the command line is empty, the "development" configuration file is started. This file is intended for use with an IDE and
-   * a checked out source code tree.
-   * It relies on the <code>web</code> directory being relative to <code>examples-bloomberg</code> in the file system as per a standard checkout of Starling.
+   * If the command line is empty, the "development" configuration file is started. This file is intended for use with an IDE and a checked out source code
+   * tree. It relies on the <code>web</code> directory being relative to <code>examples-bloomberg</code> in the file system as per a standard checkout of
+   * Starling.
    *
-   * @param args the arguments, unused
+   * @param args
+   *          the arguments, unused
    */
-  public static void main(final String[] args) throws Exception {
+  public static void main(final String[] args) {
     try {
       ExampleDatabaseChecker.run(args);
       System.exit(0);
@@ -68,7 +69,7 @@ public class ExampleDatabaseChecker {
       // if no command line arguments, then use default arguments suitable for development in an IDE
       // the first argument is for verbose startup, to aid understanding
       // the second argument defines the start of a chain of properties files providing the configuration
-      args = new String[] {"classpath:/toolcontext/toolcontext-examplesbloomberg.properties" };
+      args = new String[] { "classpath:/toolcontext/toolcontext-examplesbloomberg.properties" };
     }
     return ExampleDatabaseChecker.run(args[0]);
   }

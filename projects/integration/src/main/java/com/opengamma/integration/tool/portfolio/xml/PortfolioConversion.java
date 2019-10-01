@@ -20,9 +20,7 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Defines the schema-insensitive interface for converting a portfolio
- * document. The schema version is parsed and if available used to
- * parse the XML document.
+ * Defines the schema-insensitive interface for converting a portfolio document. The schema version is parsed and if available used to parse the XML document.
  */
 public abstract class PortfolioConversion {
 
@@ -49,8 +47,7 @@ public abstract class PortfolioConversion {
   /**
    * The XML locator for the schema.
    */
-  private static final FilesystemPortfolioSchemaLocator SCHEMA_LOCATOR =
-      new FilesystemPortfolioSchemaLocator(SCHEMA_DIRECTORY);
+  private static final FilesystemPortfolioSchemaLocator SCHEMA_LOCATOR = new FilesystemPortfolioSchemaLocator(SCHEMA_DIRECTORY);
 
   private final Class<?> _portfolioDocumentClass;
   private final PortfolioDocumentConverter<Object> _portfolioConverter;
@@ -61,16 +58,20 @@ public abstract class PortfolioConversion {
   /**
    * Creates an instance.
    *
-   * @param schemaVersion  the schema version, not null
-   * @param portfolioDocumentClass  the portfolio class, not null
-   * @param converter  the converter, not null
-   * @param idRefResolverFactory  the resolver, not null
+   * @param schemaVersion
+   *          the schema version, not null
+   * @param portfolioDocumentClass
+   *          the portfolio class, not null
+   * @param converter
+   *          the converter, not null
+   * @param idRefResolverFactory
+   *          the resolver, not null
    */
   @SuppressWarnings("unchecked")
   public PortfolioConversion(final SchemaVersion schemaVersion,
-                             final Class<?> portfolioDocumentClass,
-                             final PortfolioDocumentConverter<?> converter,
-                             final IdRefResolverFactory idRefResolverFactory) {
+      final Class<?> portfolioDocumentClass,
+      final PortfolioDocumentConverter<?> converter,
+      final IdRefResolverFactory idRefResolverFactory) {
 
     _portfolioDocumentClass = portfolioDocumentClass;
     _portfolioConverter = (PortfolioDocumentConverter<Object>) converter;
@@ -80,11 +81,12 @@ public abstract class PortfolioConversion {
     ArgumentChecker.notNull(_schema, "schema");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Converts the portfolio.
    *
-   * @param inputStream  the inputStream to read, not null
+   * @param inputStream
+   *          the inputStream to read, not null
    * @return the converted file, not null
    */
   public Iterable<VersionedPortfolioHandler> convertPortfolio(final InputStream inputStream) {
@@ -92,7 +94,7 @@ public abstract class PortfolioConversion {
       final Unmarshaller unmarshaller = createUnmarshaller();
       return _portfolioConverter.convert(unmarshaller.unmarshal(inputStream));
     } catch (final JAXBException e) {
-      throw new OpenGammaRuntimeException("Error parsing XML content", e);
+      throw new OpenGammaRuntimeException("Error parsing XML content: " + e.getMessage(), e);
     }
   }
 
@@ -109,7 +111,7 @@ public abstract class PortfolioConversion {
     // that have the same id. With this a trade and position can both have
     // id = 1 in the xml file, yet be resolved correctly based on context.
     // TODO can this be done without using a sun.internal class?
-    //unmarshaller.setProperty(IDResolver.class.getName(), _idRefResolverFactory.create());
+    // unmarshaller.setProperty(IDResolver.class.getName(), _idRefResolverFactory.create());
     return unmarshaller;
   }
 

@@ -6,13 +6,13 @@
 package com.opengamma.batch.domain;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static com.opengamma.lambdava.streams.Lambdava.functional;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import org.joda.beans.Bean;
@@ -68,7 +68,7 @@ public class RiskValueProperties extends DirectBean {
       if (ValueProperties.all() == requirement) {
         json.put("infinity", true).toString();
       } else if (ValueProperties.isNearInfiniteProperties(requirement)) {
-        //ValueProperties.NearlyInfinitePropertiesImpl nearlyInifite = (ValueProperties.NearlyInfinitePropertiesImpl) requirement;
+        // ValueProperties.NearlyInfinitePropertiesImpl nearlyInifite = (ValueProperties.NearlyInfinitePropertiesImpl) requirement;
         final List<String> nearlyInfinite = new ArrayList<>(ValueProperties.all().getUnsatisfied(requirement));
         Collections.sort(nearlyInfinite);
         final JSONArray without = new JSONArray();
@@ -79,16 +79,15 @@ public class RiskValueProperties extends DirectBean {
       } else {
         final JSONArray properties = new JSONArray();
         if (requirement.getProperties() != null) {
-          for (final String property : functional(requirement.getProperties()).sort()) {
+          for (final String property : new TreeSet<>(requirement.getProperties())) {
             final JSONObject propertyJson = new JSONObject();
-
             propertyJson.put("name", property);
             if (requirement.isOptional(property)) {
               propertyJson.put("optional", true);
             }
 
             final JSONArray values = new JSONArray();
-            for (final String value : functional(requirement.getValues(property)).sort()) {
+            for (final String value : new TreeSet<>(requirement.getValues(property))) {
               values.put(escape(ESCAPE_PATTERN, value));
             }
             propertyJson.put("values", values);

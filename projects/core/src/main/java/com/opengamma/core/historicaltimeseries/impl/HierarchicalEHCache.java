@@ -22,8 +22,10 @@ import net.sf.ehcache.Element;
 /**
  * Abstract cache.
  *
- * @param <A>  the first type
- * @param <B>  the second type
+ * @param <A>
+ *          the first type
+ * @param <B>
+ *          the second type
  */
 public abstract class HierarchicalEHCache<A, B> {
 
@@ -184,8 +186,7 @@ public abstract class HierarchicalEHCache<A, B> {
       final Element bElement = _bCache.get(bKey);
       if (bElement != null) {
         @SuppressWarnings("unchecked")
-        final
-        Map<Object, B> map = (Map<Object, B>) bElement.getObjectValue();
+        final Map<Object, B> map = (Map<Object, B>) bElement.getObjectValue();
         final B value = map.get(aKey);
         if (value == null) {
           return deepInsertAndMarkMissed(aKey, closure);
@@ -208,8 +209,7 @@ public abstract class HierarchicalEHCache<A, B> {
       final Element bElement = _bCache.get(bKey);
       if (bElement != null) {
         @SuppressWarnings("unchecked")
-        final
-        Map<Object, B> map = (Map<Object, B>) bElement.getObjectValue();
+        final Map<Object, B> map = (Map<Object, B>) bElement.getObjectValue();
         final B value = map.get(aKey);
         if (value == null) {
           return deepInsertAndMarkMissed(aKey, closure);
@@ -228,8 +228,7 @@ public abstract class HierarchicalEHCache<A, B> {
     final Element bElement = _bCache.get(bKey);
     if (bElement != null) {
       @SuppressWarnings("unchecked")
-      final
-      Map<Object, B> map = (Map<Object, B>) bElement.getObjectValue();
+      final Map<Object, B> map = (Map<Object, B>) bElement.getObjectValue();
       final B value = map.get(bKey);
       if (value == null) {
         return shallowInsertAndMarkMissed(bKey, closure);
@@ -248,8 +247,7 @@ public abstract class HierarchicalEHCache<A, B> {
     final Element bElement = _bCache.get(bKey);
     if (bElement != null) {
       @SuppressWarnings("unchecked")
-      final
-      Map<Object, B> map = (Map<Object, B>) bElement.getObjectValue();
+      final Map<Object, B> map = (Map<Object, B>) bElement.getObjectValue();
       final B value = map.get(bKey);
       if (value == null) {
         return shallowInsertAndMarkMissed(bKey, closure);

@@ -6,11 +6,12 @@
 package com.opengamma.financial.analytics;
 
 import java.util.Arrays;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.financial.analytics.QuickSorter.ArrayQuickSorter;
-import com.opengamma.lambdava.functions.Function3;
 
 /**
  *
@@ -88,7 +89,7 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
    * label and value are attached to the end of the matrix. This method ignores the label - if there is a key already present but the labels do not match, then
    * the new label is the original. For example, if there is an entry (3, "3", 0.1) and an entry (3, "THREE", 0.5) in the new matrix, the result will be (3,
    * "3", 0.6)
-   * 
+   *
    * @param other
    *          Another labelled matrix
    * @return The sum of the matrices
@@ -104,7 +105,7 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
    * label and value are attached to the end of the matrix. This method ignores the label - if there is a key already present but the labels do not match, then
    * the new label is the original. For example, if there is an entry (3, "3", 0.1) and an entry (3, "THREE", 0.5) in the new matrix, the result will be (3,
    * "3", 0.6).
-   * 
+   *
    * @param other
    *          Another labelled matrix
    * @param tolerance
@@ -121,7 +122,7 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
    * Each key in the new matrix is checked to see if it is in the original; if so, the value for that key is added. If the key is not present, the new key,
    * label and value are attached to the end of the matrix. This method does not ignores the label - if there is a key already present but the labels do not
    * match, then an exception is thrown.
-   * 
+   *
    * @param other
    *          Another labelled matrix, not null
    * @return The sum of the matrices
@@ -136,7 +137,7 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
    * Each key in the new matrix is checked to see if it is in the original; if so, the value for that key is added. If the key is not present, the new key,
    * label and value are attached to the end of the matrix. This method does not ignores the label - if there is a key already present but the labels do not
    * match, then an exception is thrown.
-   * 
+   *
    * @param other
    *          Another labelled matrix, not null
    * @param tolerance
@@ -154,7 +155,7 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
    * label and value are attached to the end of the matrix. This method ignores the label - if there is a key already present but the labels do not match, then
    * the new label is the original. For example, if there is an entry (3, "3", 0.1) and an entry (3, "THREE", 0.5) in the new matrix, the result will be (3,
    * "3", 0.6)
-   * 
+   *
    * @param key
    *          The key to which a value is to be added
    * @param label
@@ -174,7 +175,7 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
    * label and value are attached to the end of the matrix. This method ignores the label - if there is a key already present but the labels do not match, then
    * the new label is the original. For example, if there is an entry (3, "3", 0.1) and an entry (3, "THREE", 0.5) in the new matrix, the result will be (3,
    * "3", 0.6)
-   * 
+   *
    * @param key
    *          The key to which a value is to be added
    * @param label
@@ -195,7 +196,7 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
    * The key is checked to see if it is in the original; if so, the value for that key is added. If the key is not present, the new key, label and value are
    * attached to the end of the matrix. This method does not ignores the label - if there is a key already present but the labels do not match, then an
    * exception is thrown.
-   * 
+   *
    * @param key
    *          The key to which a value is to be added
    * @param label
@@ -214,7 +215,7 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
    * The key is checked to see if it is in the original; if so, the value for that key is added. If the key is not present, the new key, label and value are
    * attached to the end of the matrix. This method does not ignores the label - if there is a key already present but the labels do not match, then an
    * exception is thrown.
-   * 
+   *
    * @param key
    *          The key to which a value is to be added
    * @param label
@@ -415,13 +416,13 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
     return true;
   }
 
-  public LabelledMatrix1D<S, T> mapValues(final Function3<S, Double, Object, Double> mapper) {
+  public LabelledMatrix1D<S, T> mapValues(final Function<S, BiFunction<Double, Object, Double>> mapper) {
     final double[] values = new double[_values.length];
     for (int i = 0; i < _keys.length; i++) {
       final S key = _keys[i];
       final double value = _values[i];
       final Object label = _labels[i];
-      values[i] = mapper.execute(key, value, label);
+      values[i] = mapper.apply(key).apply(value, label);
     }
     return getMatrix(_keys, _labels, values);
   }

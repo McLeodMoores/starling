@@ -6,7 +6,6 @@
 package com.opengamma.examples.bloomberg.loader;
 
 import static com.google.common.collect.Sets.newHashSet;
-import static com.opengamma.lambdava.streams.Lambdava.functional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,7 +34,6 @@ import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.VersionCorrection;
-import com.opengamma.lambdava.functions.Function1;
 import com.opengamma.master.config.ConfigDocument;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.ConfigSearchRequest;

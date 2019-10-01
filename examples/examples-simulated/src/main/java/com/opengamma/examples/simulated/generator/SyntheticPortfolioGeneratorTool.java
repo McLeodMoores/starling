@@ -14,7 +14,6 @@ import com.opengamma.financial.generator.AbstractPortfolioGeneratorTool;
 import com.opengamma.financial.generator.SecurityGenerator;
 import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.id.ExternalId;
-import com.opengamma.lambdava.functions.Function2;
 import com.opengamma.util.money.Currency;
 
 /**
@@ -32,28 +31,26 @@ public class SyntheticPortfolioGeneratorTool extends AbstractPortfolioGeneratorT
     securityGenerator.setCurveCalculationConfig(Currency.JPY, "DefaultTwoCurveJPYConfig");
     securityGenerator.setCurveCalculationConfig(Currency.USD, "DefaultTwoCurveUSDConfig");
     securityGenerator.setPreferredScheme(ExternalSchemes.OG_SYNTHETIC_TICKER);
-    securityGenerator.setSpotRateIdentifier(new Function2<Currency, Currency, ExternalId>() {
-      @Override
-      public ExternalId execute(final Currency a, final Currency b) {
-        return ExternalId.of(ExternalSchemes.OG_SYNTHETIC_TICKER, a.getCode() + b.getCode());
-      }
-    });
+    securityGenerator.setSpotRateIdentifier((ccy1, ccy2) -> ExternalId.of(ExternalSchemes.OG_SYNTHETIC_TICKER, ccy1.getCode() + ccy2.getCode()));
   }
 
   public static void main(final String[] args) { // CSIGNORE
     final AbstractTool<ToolContext> tool = new AbstractTool<ToolContext>() {
       private final SyntheticPortfolioGeneratorTool _instance = new SyntheticPortfolioGeneratorTool();
+
       @Override
       protected Options createOptions(final boolean mandatoryConfigArg) {
         final Options options = super.createOptions(mandatoryConfigArg);
         _instance.createOptions(options);
         return options;
       }
+
       @Override
       protected void doRun() throws Exception {
         final CommandLine commandLine = getCommandLine();
         _instance.run(getToolContext(), commandLine);
       }
+
       @Override
       protected Class<?> getEntryPointClass() {
         return SyntheticPortfolioGeneratorTool.class;

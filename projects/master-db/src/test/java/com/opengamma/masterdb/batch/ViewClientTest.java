@@ -6,7 +6,6 @@
 package com.opengamma.masterdb.batch;
 
 import static com.google.common.collect.Sets.newHashSet;
-import static com.opengamma.lambdava.streams.Lambdava.functional;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -101,7 +100,7 @@ public class ViewClientTest {
 
       assertEquals("boo~far", argument.getValue().getViewDefinitionId().toString());
       assertEquals(1, argument.getValue().getAllCalculationConfigurationNames().size());
-      assertEquals("Test Calc Config", functional(argument.getValue().getAllCalculationConfigurationNames()).first());
+      assertEquals("Test Calc Config", argument.getValue().getAllCalculationConfigurationNames().stream().findFirst().get());
 
       final ArgumentCaptor<ViewComputationResultModel> fullFragment = ArgumentCaptor.forClass(ViewComputationResultModel.class);
       final ArgumentCaptor<ViewDeltaResultModel> deltaFragment = ArgumentCaptor.forClass(ViewDeltaResultModel.class);

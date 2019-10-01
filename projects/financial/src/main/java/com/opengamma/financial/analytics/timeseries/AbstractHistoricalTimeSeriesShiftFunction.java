@@ -30,8 +30,6 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.id.ExternalIdBundle;
-import com.opengamma.lambdava.functions.Function3;
-import com.opengamma.timeseries.DoubleTimeSeriesOperators.UnaryOperator;
 
 /**
  * Base class for functions to shift historical market data values, implemented using properties and constraints.
@@ -95,12 +93,7 @@ public abstract class AbstractHistoricalTimeSeriesShiftFunction<T> extends Abstr
       final HistoricalTimeSeries value) {
     final ValueRequirement requirement = createRequirement(field, identifiers);
     LOGGER.debug("Synthetic requirement {} on {}", requirement, value);
-    return new SimpleHistoricalTimeSeries(value.getUniqueId(), value.getTimeSeries().operate(new UnaryOperator() {
-      @Override
-      public double operate(final double a) {
-        return (Double) operation.apply(requirement, a);
-      }
-    }));
+    return new SimpleHistoricalTimeSeries(value.getUniqueId(), value.getTimeSeries().operate(a -> (Double) operation.apply(requirement, a)));
   }
 
   protected Double applyOverride(final FunctionExecutionContext context, final OverrideOperation operation, final String field,
@@ -112,12 +105,7 @@ public abstract class AbstractHistoricalTimeSeriesShiftFunction<T> extends Abstr
 
   protected HistoricalTimeSeriesBundle applyOverride(final FunctionExecutionContext context, final OverrideOperation operation,
       final HistoricalTimeSeriesBundle value) {
-    return value.apply(new Function3<String, ExternalIdBundle, HistoricalTimeSeries, HistoricalTimeSeries>() {
-      @Override
-      public HistoricalTimeSeries execute(final String fieldName, final ExternalIdBundle ids, final HistoricalTimeSeries timeSeries) {
-        return applyOverride(context, operation, fieldName, ids, timeSeries);
-      }
-    });
+    return value.apply(fieldName -> (ids, timeSeries) -> applyOverride(context, operation, fieldName, ids, timeSeries));
   }
 
   protected abstract T apply(FunctionExecutionContext context, OverrideOperation operation, T value, ValueSpecification valueSpec);

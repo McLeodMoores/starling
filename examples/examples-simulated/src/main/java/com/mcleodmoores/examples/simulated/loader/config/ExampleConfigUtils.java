@@ -132,6 +132,8 @@ public final class ExampleConfigUtils {
    * @param name
    *          the name
    * @return the item
+   * @param <T>
+   *          the type of the config item
    */
   public static <T> ConfigItem<T> makeConfig(final T config, final String name) {
     final ConfigItem<T> item = ConfigItem.of(config);

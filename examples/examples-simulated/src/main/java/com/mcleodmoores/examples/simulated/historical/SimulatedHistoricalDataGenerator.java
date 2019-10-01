@@ -23,7 +23,6 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.master.historicaltimeseries.ManageableHistoricalTimeSeriesInfo;
 import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSeries;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
-import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeriesBuilder;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Pair;
@@ -120,7 +119,7 @@ public class SimulatedHistoricalDataGenerator extends SimulatedHistoricalData {
       }
       currentValue = currentValue + deltas[i] - trend * random.nextDouble();
       dates[i] = currentDate;
-      values[i] = currentValue;      
+      values[i] = currentValue;
     }
     return ImmutableLocalDateDoubleTimeSeries.of(dates, values);
   }

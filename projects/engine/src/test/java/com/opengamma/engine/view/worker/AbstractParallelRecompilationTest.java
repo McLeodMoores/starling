@@ -5,44 +5,36 @@
  */
 package com.opengamma.engine.view.worker;
 
+import java.util.function.BiFunction;
+
 import com.opengamma.engine.view.execution.ViewExecutionOptions;
-import com.opengamma.lambdava.functions.Function2;
 
 /**
  * Base class for testing the {@link ParallelRecompilationViewProcessWorker} inner classes.
  */
 /* package */abstract class AbstractParallelRecompilationTest {
 
-  protected abstract void testImpl(Function2<ParallelRecompilationViewProcessWorker, ViewExecutionOptions, Void> callback)
+  protected abstract void testImpl(BiFunction<ParallelRecompilationViewProcessWorker, ViewExecutionOptions, Void> callback)
       throws InterruptedException;
 
   public void testParallel() throws InterruptedException {
-    testImpl(new Function2<ParallelRecompilationViewProcessWorker, ViewExecutionOptions, Void>() {
-      @Override
-      public Void execute(final ParallelRecompilationViewProcessWorker a, final ViewExecutionOptions b) {
-        a.startParallel(b);
-        return null;
-      }
+    testImpl((a, b) -> {
+      a.startParallel(b);
+      return null;
     });
   }
 
   public void testImmediate() throws InterruptedException {
-    testImpl(new Function2<ParallelRecompilationViewProcessWorker, ViewExecutionOptions, Void>() {
-      @Override
-      public Void execute(final ParallelRecompilationViewProcessWorker a, final ViewExecutionOptions b) {
-        a.startImmediate(b);
-        return null;
-      }
+    testImpl((a, b) -> {
+      a.startImmediate(b);
+      return null;
     });
   }
 
   public void testDeferred() throws InterruptedException {
-    testImpl(new Function2<ParallelRecompilationViewProcessWorker, ViewExecutionOptions, Void>() {
-      @Override
-      public Void execute(final ParallelRecompilationViewProcessWorker a, final ViewExecutionOptions b) {
-        a.startDeferred(b);
-        return null;
-      }
+    testImpl((a, b) -> {
+      a.startDeferred(b);
+      return null;
     });
   }
 

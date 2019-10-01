@@ -9,7 +9,6 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newConcurrentMap;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
-import static com.opengamma.lambdava.streams.Lambdava.newArray;
 import static com.opengamma.util.db.HibernateDbUtils.eqOrIsNull;
 import static org.apache.commons.lang.StringUtils.defaultString;
 
@@ -26,9 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.joda.beans.Bean;
@@ -39,9 +36,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 import org.threeten.bp.Instant;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -158,24 +153,18 @@ public class DbBatchWriter extends AbstractDbMaster {
   }
 
   public RiskRun getRiskRunById(final Long id) {
-    return getHibernateTemplate().execute(new HibernateCallback<RiskRun>() {
-      @Override
-      public RiskRun doInHibernate(final Session session) throws HibernateException {
-        final Query query = session.getNamedQuery("RiskRun.one.byId");
-        query.setLong("id", id);
-        return (RiskRun) query.uniqueResult();
-      }
+    return getHibernateTemplate().execute(session -> {
+      final Query query = session.getNamedQuery("RiskRun.one.byId");
+      query.setLong("id", id);
+      return (RiskRun) query.uniqueResult();
     });
   }
 
   protected ComputeHost getOrCreateComputeHost(final String hostName) {
-    ComputeHost computeHost = getHibernateTemplate().execute(new HibernateCallback<ComputeHost>() {
-      @Override
-      public ComputeHost doInHibernate(final Session session) throws HibernateException {
-        final Query query = session.getNamedQuery("ComputeHost.one.byHostName");
-        query.setString("hostName", hostName);
-        return (ComputeHost) query.uniqueResult();
-      }
+    ComputeHost computeHost = getHibernateTemplate().execute(session -> {
+      final Query query = session.getNamedQuery("ComputeHost.one.byHostName");
+      query.setString("hostName", hostName);
+      return (ComputeHost) query.uniqueResult();
     });
     if (computeHost == null) {
       computeHost = new ComputeHost();
@@ -196,13 +185,10 @@ public class DbBatchWriter extends AbstractDbMaster {
     }
     final ComputeHost host = getOrCreateComputeHost(hostName);
 
-    ComputeNode node = getHibernateTemplate().execute(new HibernateCallback<ComputeNode>() {
-      @Override
-      public ComputeNode doInHibernate(final Session session) throws HibernateException {
-        final Query query = session.getNamedQuery("ComputeNode.one.byNodeName");
-        query.setString("nodeName", nodeId);
-        return (ComputeNode) query.uniqueResult();
-      }
+    ComputeNode node = getHibernateTemplate().execute(session -> {
+      final Query query = session.getNamedQuery("ComputeNode.one.byNodeName");
+      query.setString("nodeName", nodeId);
+      return (ComputeNode) query.uniqueResult();
     });
     if (node == null) {
       node = new ComputeNode();
@@ -216,12 +202,9 @@ public class DbBatchWriter extends AbstractDbMaster {
 
   protected MarketData getMarketDataInTransaction(final ObjectId snapshotId) {
 
-    final MarketData liveDataValues = getHibernateTemplate().execute(new HibernateCallback<MarketData>() {
-      @Override
-      public MarketData doInHibernate(final Session session) throws HibernateException {
-        final Long id = extractOid(snapshotId);
-        return session.get(MarketData.class, id);
-      }
+    final MarketData liveDataValues = getHibernateTemplate().execute(session -> {
+      final Long id = extractOid(snapshotId);
+      return session.get(MarketData.class, id);
     });
 
     if (liveDataValues == null) {
@@ -231,13 +214,10 @@ public class DbBatchWriter extends AbstractDbMaster {
   }
 
   protected LiveDataField getLiveDataField(final String fieldName) {
-    LiveDataField field = getHibernateTemplate().execute(new HibernateCallback<LiveDataField>() {
-      @Override
-      public LiveDataField doInHibernate(final Session session) throws HibernateException {
-        final Query query = session.getNamedQuery("LiveDataField.one.byName");
-        query.setString("name", fieldName);
-        return (LiveDataField) query.uniqueResult();
-      }
+    LiveDataField field = getHibernateTemplate().execute(session -> {
+      final Query query = session.getNamedQuery("LiveDataField.one.byName");
+      query.setString("name", fieldName);
+      return (LiveDataField) query.uniqueResult();
     });
     if (field == null) {
       field = new LiveDataField();
@@ -249,28 +229,20 @@ public class DbBatchWriter extends AbstractDbMaster {
   }
 
   public HbComputationTargetSpecification getComputationTarget(final ComputationTargetSpecification spec) {
-    return getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<HbComputationTargetSpecification>() {
-      @Override
-      public HbComputationTargetSpecification doInTransaction(final TransactionStatus status) {
-        return getComputationTargetIntransaction(spec);
-      }
-    });
+    return getTransactionTemplateRetrying(getMaxRetries()).execute(status -> getComputationTargetIntransaction(spec));
   }
 
   protected HbComputationTargetSpecification getComputationTargetIntransaction(final ComputationTargetSpecification spec) {
-    return getHibernateTemplate().execute(new HibernateCallback<HbComputationTargetSpecification>() {
-      @Override
-      public HbComputationTargetSpecification doInHibernate(final Session session) throws HibernateException {
-        final Query query = session.getNamedQuery("ComputationTargetSpecification.one.byTypeAndUid");
+    return getHibernateTemplate().execute(session -> {
+      final Query query = session.getNamedQuery("ComputationTargetSpecification.one.byTypeAndUid");
 
-        query.setString("uidScheme", spec.getUniqueId().getScheme());
-        query.setString("uidValue", spec.getUniqueId().getValue());
-        query.setString("uidVersion", spec.getUniqueId().getVersion());
+      query.setString("uidScheme", spec.getUniqueId().getScheme());
+      query.setString("uidValue", spec.getUniqueId().getValue());
+      query.setString("uidVersion", spec.getUniqueId().getVersion());
 
-        query.setParameter("type", spec.getType());
+      query.setParameter("type", spec.getType());
 
-        return (HbComputationTargetSpecification) query.uniqueResult();
-      }
+      return (HbComputationTargetSpecification) query.uniqueResult();
     });
   }
 
@@ -287,13 +259,10 @@ public class DbBatchWriter extends AbstractDbMaster {
   }
 
   protected CalculationConfiguration getCalculationConfiguration(final String name) {
-    CalculationConfiguration calcConfig = getHibernateTemplate().execute(new HibernateCallback<CalculationConfiguration>() {
-      @Override
-      public CalculationConfiguration doInHibernate(final Session session) throws HibernateException {
-        final Query query = session.getNamedQuery("CalculationConfiguration.one.byName");
-        query.setString("name", name);
-        return (CalculationConfiguration) query.uniqueResult();
-      }
+    CalculationConfiguration calcConfig = getHibernateTemplate().execute(session -> {
+      final Query query = session.getNamedQuery("CalculationConfiguration.one.byName");
+      query.setString("name", name);
+      return (CalculationConfiguration) query.uniqueResult();
     });
     if (calcConfig == null) {
       calcConfig = new CalculationConfiguration();
@@ -306,13 +275,10 @@ public class DbBatchWriter extends AbstractDbMaster {
 
   protected RiskValueRequirement getRiskValueRequirement(final ValueProperties requirement) {
     final String synthesizedForm = RiskValueProperties.synthesize(requirement);
-    RiskValueRequirement riskValueRequirement = getHibernateTemplate().execute(new HibernateCallback<RiskValueRequirement>() {
-      @Override
-      public RiskValueRequirement doInHibernate(final Session session) throws HibernateException {
-        final Query query = session.getNamedQuery("RiskValueRequirement.one.bySynthesizedForm");
-        query.setString("requirement", synthesizedForm);
-        return (RiskValueRequirement) query.uniqueResult();
-      }
+    RiskValueRequirement riskValueRequirement = getHibernateTemplate().execute(session -> {
+      final Query query = session.getNamedQuery("RiskValueRequirement.one.bySynthesizedForm");
+      query.setString("requirement", synthesizedForm);
+      return (RiskValueRequirement) query.uniqueResult();
     });
     if (riskValueRequirement == null) {
       riskValueRequirement = new RiskValueRequirement(requirement);
@@ -324,13 +290,10 @@ public class DbBatchWriter extends AbstractDbMaster {
 
   protected RiskValueSpecification getRiskValueSpecification(final ValueProperties specification) {
     final String synthesizedForm = RiskValueProperties.synthesize(specification);
-    RiskValueSpecification riskValueSpecification = getHibernateTemplate().execute(new HibernateCallback<RiskValueSpecification>() {
-      @Override
-      public RiskValueSpecification doInHibernate(final Session session) throws HibernateException {
-        final Query query = session.getNamedQuery("RiskValueSpecification.one.bySynthesizedForm");
-        query.setString("specification", synthesizedForm);
-        return (RiskValueSpecification) query.uniqueResult();
-      }
+    RiskValueSpecification riskValueSpecification = getHibernateTemplate().execute(session -> {
+      final Query query = session.getNamedQuery("RiskValueSpecification.one.bySynthesizedForm");
+      query.setString("specification", synthesizedForm);
+      return (RiskValueSpecification) query.uniqueResult();
     });
     if (riskValueSpecification == null) {
       riskValueSpecification = new RiskValueSpecification(specification);
@@ -341,13 +304,10 @@ public class DbBatchWriter extends AbstractDbMaster {
   }
 
   protected FunctionUniqueId getFunctionUniqueIdInTransaction(final String uniqueId) {
-    FunctionUniqueId functionUniqueId = getHibernateTemplate().execute(new HibernateCallback<FunctionUniqueId>() {
-      @Override
-      public FunctionUniqueId doInHibernate(final Session session) throws HibernateException {
-        final Query query = session.getNamedQuery("FunctionUniqueId.one.byUniqueId");
-        query.setString("uniqueId", uniqueId);
-        return (FunctionUniqueId) query.uniqueResult();
-      }
+    FunctionUniqueId functionUniqueId = getHibernateTemplate().execute(session -> {
+      final Query query = session.getNamedQuery("FunctionUniqueId.one.byUniqueId");
+      query.setString("uniqueId", uniqueId);
+      return (FunctionUniqueId) query.uniqueResult();
     });
     if (functionUniqueId == null) {
       functionUniqueId = new FunctionUniqueId();
@@ -614,23 +574,20 @@ public class DbBatchWriter extends AbstractDbMaster {
       final VersionCorrection versionCorrection,
       final UniqueId viewDefinitionUid,
       final UniqueId marketDataBaseUid) {
-    return getHibernateTemplate().execute(new HibernateCallback<RiskRun>() {
-      @Override
-      public RiskRun doInHibernate(final Session session) throws HibernateException {
-        final Criteria criteria = session.createCriteria(RiskRun.class);
-        criteria.add(Restrictions.eq("valuationTime", valuationTime));
-        criteria.add(Restrictions.eq("versionCorrection", versionCorrection));
-        criteria.add(Restrictions.eq("viewDefinitionUidScheme", viewDefinitionUid.getScheme()));
-        criteria.add(Restrictions.eq("viewDefinitionUidValue", viewDefinitionUid.getValue()));
-        criteria.add(eqOrIsNull("viewDefinitionUidVersion", viewDefinitionUid.getVersion()));
+    return getHibernateTemplate().execute(session -> {
+      final Criteria criteria = session.createCriteria(RiskRun.class);
+      criteria.add(Restrictions.eq("valuationTime", valuationTime));
+      criteria.add(Restrictions.eq("versionCorrection", versionCorrection));
+      criteria.add(Restrictions.eq("viewDefinitionUidScheme", viewDefinitionUid.getScheme()));
+      criteria.add(Restrictions.eq("viewDefinitionUidValue", viewDefinitionUid.getValue()));
+      criteria.add(eqOrIsNull("viewDefinitionUidVersion", viewDefinitionUid.getVersion()));
 
-        criteria.createCriteria("marketData")
-            .add(Restrictions.eq("baseUidScheme", marketDataBaseUid.getScheme()))
-            .add(Restrictions.eq("baseUidValue", marketDataBaseUid.getValue()))
-            .add(eqOrIsNull("baseUidVersion", marketDataBaseUid.getVersion()));
+      criteria.createCriteria("marketData")
+          .add(Restrictions.eq("baseUidScheme", marketDataBaseUid.getScheme()))
+          .add(Restrictions.eq("baseUidValue", marketDataBaseUid.getValue()))
+          .add(eqOrIsNull("baseUidVersion", marketDataBaseUid.getVersion()));
 
-        return (RiskRun) criteria.uniqueResult();
-      }
+      return (RiskRun) criteria.uniqueResult();
     });
   }
 
@@ -639,12 +596,8 @@ public class DbBatchWriter extends AbstractDbMaster {
       final VersionCorrection versionCorrection,
       final UniqueId viewDefinitionUid,
       final UniqueId marketDataBaseUid) {
-    return getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<RiskRun>() {
-      @Override
-      public RiskRun doInTransaction(final TransactionStatus status) {
-        return findRiskRunInDbInTransaction(valuationTime, versionCorrection, viewDefinitionUid, marketDataBaseUid);
-      }
-    });
+    return getTransactionTemplateRetrying(getMaxRetries())
+        .execute(status -> findRiskRunInDbInTransaction(valuationTime, versionCorrection, viewDefinitionUid, marketDataBaseUid));
   }
 
   private RiskRun findRiskRunInDb(final ObjectId uniqueId) {
@@ -778,23 +731,19 @@ public class DbBatchWriter extends AbstractDbMaster {
 
   public MarketData createOrGetMarketDataInTransaction(final UniqueId baseUid) {
     LOGGER.info("Creating Market Data {} ", baseUid);
-    MarketData marketData = getHibernateTemplate().execute(new HibernateCallback<MarketData>() {
-      @Override
-      public MarketData doInHibernate(final Session session) throws HibernateException {
+    MarketData marketData = getHibernateTemplate().execute(session -> {
 
-        final DetachedCriteria criteria = DetachedCriteria.forClass(MarketData.class);
-        criteria.add(Restrictions.eq("baseUidScheme", baseUid.getScheme()))
-            .add(Restrictions.eq("baseUidValue", baseUid.getValue()))
-            .add(eqOrIsNull("baseUidVersion", baseUid.getVersion()));
+      final DetachedCriteria criteria = DetachedCriteria.forClass(MarketData.class);
+      criteria.add(Restrictions.eq("baseUidScheme", baseUid.getScheme()))
+          .add(Restrictions.eq("baseUidValue", baseUid.getValue()))
+          .add(eqOrIsNull("baseUidVersion", baseUid.getVersion()));
 
-        @SuppressWarnings("unchecked")
-        final List<MarketData> datas = (List<MarketData>) getHibernateTemplate().findByCriteria(criteria, 0, 1);
-        if (datas.size() > 0) {
-          return datas.get(0);
-        }
-        return null;
+      @SuppressWarnings("unchecked")
+      final List<MarketData> datas = (List<MarketData>) getHibernateTemplate().findByCriteria(criteria, 0, 1);
+      if (datas.size() > 0) {
+        return datas.get(0);
       }
-
+      return null;
     });
     if (marketData != null) {
       LOGGER.info("Snapshot " + baseUid + " already exists. No need to create.");
@@ -821,7 +770,7 @@ public class DbBatchWriter extends AbstractDbMaster {
       }
       final ResultConverter<Object> resultConverter;
       try {
-        resultConverter = (ResultConverter<Object>) _resultConverterCache.getConverter(value.getValue());
+        resultConverter = _resultConverterCache.getConverter(value.getValue());
       } catch (final IllegalArgumentException e) {
         LOGGER.error("No converter for market data value of type " + value.getValue().getClass() + " for " + value.getSpecification());
         continue;
@@ -928,7 +877,7 @@ public class DbBatchWriter extends AbstractDbMaster {
           ResultConverter<Object> resultConverter = null;
           if (!(computedValue.getValue() instanceof MissingValue)) {
             try {
-              resultConverter = (ResultConverter<Object>) _resultConverterCache.getConverter(computedValue.getValue());
+              resultConverter = _resultConverterCache.getConverter(computedValue.getValue());
             } catch (final IllegalArgumentException e) {
               LOGGER.info("No converter for value of type " + computedValue.getValue().getClass() + " for " + computedValue.getSpecification());
             }
@@ -955,7 +904,7 @@ public class DbBatchWriter extends AbstractDbMaster {
             }
           } else {
             LOGGER.info("Writing failure for {} with invocation result {}, {} ",
-                newArray(computedValue.getSpecification(), computedValue.getInvocationResult(), computedValue.getAggregatedExecutionLog()));
+                computedValue.getSpecification(), computedValue.getInvocationResult(), computedValue.getAggregatedExecutionLog());
             specFailures = true;
 
             final long failureId = nextId(RSK_SEQUENCE_NAME);

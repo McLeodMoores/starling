@@ -9,7 +9,6 @@ import static org.testng.AssertJUnit.assertEquals;
 
 import org.testng.annotations.Test;
 
-import com.opengamma.examples.simulated.function.ExampleEquityOptionVolatilitySurfaceDataFunction;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -22,7 +21,7 @@ public class ExampleEquityOptionVolatilitySurfaceDataFunctionTest {
 
   @Test
   public void test_basics() {
-    ExampleEquityOptionVolatilitySurfaceDataFunction test = new ExampleEquityOptionVolatilitySurfaceDataFunction("A", "B", "C");
+    final ExampleEquityOptionVolatilitySurfaceDataFunction test = new ExampleEquityOptionVolatilitySurfaceDataFunction("A", "B", "C");
     assertEquals("A", test.getDefinitionName());
     assertEquals("C", test.getSpecificationName());
   }

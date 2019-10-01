@@ -10,10 +10,11 @@ import static com.opengamma.engine.function.dsl.Function.function;
 import static com.opengamma.engine.function.dsl.Function.output;
 import static com.opengamma.engine.function.dsl.TargetSpecificationReference.originalTarget;
 import static com.opengamma.engine.value.ValueRequirementNames.BLOOMBERG_TICKER;
-import static com.opengamma.lambdava.streams.Lambdava.functional;
 
+import java.util.Optional;
 import java.util.Set;
 
+import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.security.Security;
 import com.opengamma.engine.ComputationTarget;
@@ -52,7 +53,11 @@ public class BloombergTickerFunction extends BaseNonCompiledInvoker {
       final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
 
-    final ValueRequirement desiredValue = functional(desiredValues).first();
+    final Optional<ValueRequirement> desiredValueOpt = desiredValues.stream().findFirst();
+    if (!desiredValueOpt.isPresent()) {
+      throw new OpenGammaRuntimeException("Could not find desired value");
+    }
+    final ValueRequirement desiredValue = desiredValueOpt.get();
     final ValueSpecification valueSpecification = ValueSpecification.of(desiredValue.getValueName(),
         target.toSpecification(),
         desiredValue.getConstraints());

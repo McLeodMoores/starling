@@ -16,6 +16,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiFunction;
 
 import org.mockito.Mockito;
 import org.slf4j.Logger;
@@ -52,7 +53,6 @@ import com.opengamma.engine.view.impl.ViewProcessContext;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
-import com.opengamma.lambdava.functions.Function2;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -159,7 +159,7 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
   }
 
   @Override
-  protected void testImpl(final Function2<ParallelRecompilationViewProcessWorker, ViewExecutionOptions, Void> callback) throws InterruptedException {
+  protected void testImpl(final BiFunction<ParallelRecompilationViewProcessWorker, ViewExecutionOptions, Void> callback) throws InterruptedException {
     final ExecutorService executor = Executors.newCachedThreadPool();
     try {
       final Map<ComputationTargetReference, UniqueId> resolutions = new HashMap<>();
@@ -178,7 +178,7 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
       final ViewDefinition viewDefinition = Mockito.mock(ViewDefinition.class);
       final ParallelRecompilationViewProcessWorker worker = new ParallelRecompilationViewProcessWorker(workerFactory(executor, resolutions), context, options,
           viewDefinition);
-      callback.execute(worker, options);
+      callback.apply(worker, options);
       LOGGER.debug("Waiting for initial compilation");
       assertEquals(context.event(), "view definition compiled"); // From primary worker
       for (int j = 0; j < 5; j++) {

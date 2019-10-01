@@ -13,7 +13,6 @@ import static com.opengamma.engine.function.dsl.TargetSpecificationReference.ori
 import static com.opengamma.engine.function.dsl.properties.RecordingValueProperties.copyFrom;
 import static com.opengamma.engine.value.ValueRequirementNames.BUCKETED_PV01;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES;
-import static com.opengamma.lambdava.streams.Lambdava.functional;
 
 import java.util.Set;
 
@@ -27,7 +26,6 @@ import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
-import com.opengamma.lambdava.functions.Function3;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
@@ -46,13 +44,11 @@ public class BucketedPV01Function extends BaseNonCompiledInvoker {
                 .targetSpec(originalTarget())
                 .properties(copyFrom(YIELD_CURVE_NODE_SENSITIVITIES)
                     .withOptional(ValuePropertyNames.SCALING_FACTOR)
-                    .withReplacement(ValuePropertyNames.FUNCTION, getUniqueId()))
-        )
+                    .withReplacement(ValuePropertyNames.FUNCTION, getUniqueId())))
         .inputs(
             input(YIELD_CURVE_NODE_SENSITIVITIES)
                 .properties(copyFrom(BUCKETED_PV01).withoutAny(ValuePropertyNames.SCALING_FACTOR))
-                .targetSpec(originalTarget())
-        );
+                .targetSpec(originalTarget()));
   }
 
   @Override
@@ -63,7 +59,7 @@ public class BucketedPV01Function extends BaseNonCompiledInvoker {
 
     final DoubleLabelledMatrix1D matrix = (DoubleLabelledMatrix1D) inputs.getComputedValue(YIELD_CURVE_NODE_SENSITIVITIES).getValue();
 
-    final ValueRequirement desiredValue = functional(desiredValues).first();
+    final ValueRequirement desiredValue = desiredValues.stream().findFirst().orElse(null);
 
     final double rescaleFactor;
     if (desiredValue.getConstraints().getSingleValue(ValuePropertyNames.SCALING_FACTOR) != null) {
@@ -72,12 +68,7 @@ public class BucketedPV01Function extends BaseNonCompiledInvoker {
     } else {
       rescaleFactor = RESCALE_FACTOR;
     }
-    final LabelledMatrix1D<Double, Double> matrixDividedBy10k = matrix.mapValues(new Function3<Double, Double, Object, Double>() {
-      @Override
-      public Double execute(final Double notUsed, final Double value, final Object notUsed2) {
-        return value / rescaleFactor;
-      }
-    });
+    final LabelledMatrix1D<Double, Double> matrixDividedBy10k = matrix.mapValues(d1 -> (d2, o1) -> d2 / rescaleFactor);
 
     final ValueSpecification valueSpecification = ValueSpecification.of(desiredValue.getValueName(),
         target.toSpecification(),

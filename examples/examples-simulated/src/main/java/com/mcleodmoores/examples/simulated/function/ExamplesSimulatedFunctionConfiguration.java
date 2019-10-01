@@ -29,6 +29,8 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
 public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConfiguration {
 
   /**
+   * @param configMaster
+   *          a config master
    * @return the configuration source
    */
   public static FunctionConfigurationSource instance(final ConfigMaster configMaster) {
@@ -37,6 +39,9 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
 
   /**
    * Default constructor.
+   * 
+   * @param configMaster
+   *          a config master
    */
   public ExamplesSimulatedFunctionConfiguration(final ConfigMaster configMaster) {
     super(configMaster);

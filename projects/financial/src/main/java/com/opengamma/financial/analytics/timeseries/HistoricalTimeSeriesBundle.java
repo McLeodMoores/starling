@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.fudgemsg.FudgeField;
 import org.fudgemsg.FudgeMsg;
@@ -25,11 +27,9 @@ import com.opengamma.lambdava.functions.Function3;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A collection of historical time-series objects. The time-series are keyed by the originally requested data field
- * name and the external ids associated with them. The original field is not generally necessary but is to allow
- * override operations to identify the nature of the data points in the time series they are being applied to. The
- * time-series are maintained in the order in which they were added, for example tenor order, and are iterable in this
- * order.
+ * A collection of historical time-series objects. The time-series are keyed by the originally requested data field name and the external ids associated with
+ * them. The original field is not generally necessary but is to allow override operations to identify the nature of the data points in the time series they are
+ * being applied to. The time-series are maintained in the order in which they were added, for example tenor order, and are iterable in this order.
  */
 public final class HistoricalTimeSeriesBundle {
 
@@ -178,10 +178,10 @@ public final class HistoricalTimeSeriesBundle {
   }
 
   /**
-   * Gets an iterator for the time-series stored under the given field name. This iterates over the time-series in the
-   * same order as they were added.
+   * Gets an iterator for the time-series stored under the given field name. This iterates over the time-series in the same order as they were added.
    *
-   * @param field  the data field, not null
+   * @param field
+   *          the data field, not null
    * @return an iterator, not null
    */
   public Iterator<HistoricalTimeSeries> iterator(final String field) {
@@ -193,12 +193,31 @@ public final class HistoricalTimeSeriesBundle {
     return e.iterator();
   }
 
+  /**
+   * @param function
+   *          the function
+   * @return a bundle
+   * @deprecated use {@link #apply(Function)}
+   */
+  @Deprecated
   protected HistoricalTimeSeriesBundle apply(final Function3<String, ExternalIdBundle, HistoricalTimeSeries, HistoricalTimeSeries> function) {
     final HistoricalTimeSeriesBundle result = new HistoricalTimeSeriesBundle();
     for (final Map.Entry<String, Entry> fieldTimeSeries : _data.entrySet()) {
       final Entry newEntry = new Entry();
       for (final Map.Entry<ExternalIdBundle, HistoricalTimeSeries> timeSeries : fieldTimeSeries.getValue()._timeSeries.entrySet()) {
         newEntry._timeSeries.put(timeSeries.getKey(), function.execute(fieldTimeSeries.getKey(), timeSeries.getKey(), timeSeries.getValue()));
+      }
+      result._data.put(fieldTimeSeries.getKey(), newEntry);
+    }
+    return result;
+  }
+
+  protected HistoricalTimeSeriesBundle apply(final Function<String, BiFunction<ExternalIdBundle, HistoricalTimeSeries, HistoricalTimeSeries>> function) {
+    final HistoricalTimeSeriesBundle result = new HistoricalTimeSeriesBundle();
+    for (final Map.Entry<String, Entry> fieldTimeSeries : _data.entrySet()) {
+      final Entry newEntry = new Entry();
+      for (final Map.Entry<ExternalIdBundle, HistoricalTimeSeries> timeSeries : fieldTimeSeries.getValue()._timeSeries.entrySet()) {
+        newEntry._timeSeries.put(timeSeries.getKey(), function.apply(fieldTimeSeries.getKey()).apply(timeSeries.getKey(), timeSeries.getValue()));
       }
       result._data.put(fieldTimeSeries.getKey(), newEntry);
     }

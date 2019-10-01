@@ -16,7 +16,6 @@ import com.opengamma.financial.analytics.model.option.AnalyticOptionDefaultCurve
 import com.opengamma.financial.analytics.model.pnl.PNLFunctions;
 import com.opengamma.financial.currency.CurrencyMatrixConfigPopulator;
 import com.opengamma.financial.currency.CurrencyMatrixLookupFunction;
-import com.opengamma.lambdava.functions.Function1;
 import com.opengamma.web.spring.StandardFunctionConfiguration;
 
 /**
@@ -25,7 +24,7 @@ import com.opengamma.web.spring.StandardFunctionConfiguration;
 public class ExampleStandardFunctionConfiguration extends StandardFunctionConfiguration {
   /**
    * Gets an instance of the example function configuration.
-   * 
+   *
    * @return Gets the instance
    */
   public static FunctionConfigurationSource instance() {
@@ -212,41 +211,29 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
   }
 
   protected void setForexOptionDefaults(final FXOptionPropertiesFunctions defaults) {
-    defaults.setPerCurrencyInfo(getCurrencyInfo(new Function1<CurrencyInfo, FXOptionPropertiesFunctions.CurrencyInfo>() {
-      @Override
-      public FXOptionPropertiesFunctions.CurrencyInfo execute(final CurrencyInfo i) {
-        final FXOptionPropertiesFunctions.CurrencyInfo d = new FXOptionPropertiesFunctions.CurrencyInfo();
-        setForexOptionDefaults(i, d);
-        return d;
-      }
+    defaults.setPerCurrencyInfo(getCurrencyInfo(i -> {
+      final FXOptionPropertiesFunctions.CurrencyInfo d = new FXOptionPropertiesFunctions.CurrencyInfo();
+      setForexOptionDefaults(i, d);
+      return d;
     }));
-    defaults.setPerCurrencyPairInfo(getCurrencyPairInfo(new Function1<CurrencyPairInfo, FXOptionPropertiesFunctions.CurrencyPairInfo>() {
-      @Override
-      public FXOptionPropertiesFunctions.CurrencyPairInfo execute(final CurrencyPairInfo i) {
-        final FXOptionPropertiesFunctions.CurrencyPairInfo d = new FXOptionPropertiesFunctions.CurrencyPairInfo();
-        setForexOptionDefaults(i, d);
-        return d;
-      }
+    defaults.setPerCurrencyPairInfo(getCurrencyPairInfo(i -> {
+      final FXOptionPropertiesFunctions.CurrencyPairInfo d = new FXOptionPropertiesFunctions.CurrencyPairInfo();
+      setForexOptionDefaults(i, d);
+      return d;
     }));
 
   }
 
   protected void setForexForwardDefaults(final FXForwardPropertiesFunctions defaults) {
-    defaults.setPerCurrencyInfo(getCurrencyInfo(new Function1<CurrencyInfo, FXForwardPropertiesFunctions.CurrencyInfo>() {
-      @Override
-      public FXForwardPropertiesFunctions.CurrencyInfo execute(final CurrencyInfo i) {
-        final FXForwardPropertiesFunctions.CurrencyInfo d = new FXForwardPropertiesFunctions.CurrencyInfo();
-        setForexForwardDefaults(i, d);
-        return d;
-      }
+    defaults.setPerCurrencyInfo(getCurrencyInfo(i -> {
+      final FXForwardPropertiesFunctions.CurrencyInfo d = new FXForwardPropertiesFunctions.CurrencyInfo();
+      setForexForwardDefaults(i, d);
+      return d;
     }));
-    defaults.setPerCurrencyPairInfo(getCurrencyPairInfo(new Function1<CurrencyPairInfo, FXForwardPropertiesFunctions.CurrencyPairInfo>() {
-      @Override
-      public FXForwardPropertiesFunctions.CurrencyPairInfo execute(final CurrencyPairInfo i) {
-        final FXForwardPropertiesFunctions.CurrencyPairInfo d = new FXForwardPropertiesFunctions.CurrencyPairInfo();
-        setForexForwardDefaults(i, d);
-        return d;
-      }
+    defaults.setPerCurrencyPairInfo(getCurrencyPairInfo(i -> {
+      final FXForwardPropertiesFunctions.CurrencyPairInfo d = new FXForwardPropertiesFunctions.CurrencyPairInfo();
+      setForexForwardDefaults(i, d);
+      return d;
     }));
 
   }
