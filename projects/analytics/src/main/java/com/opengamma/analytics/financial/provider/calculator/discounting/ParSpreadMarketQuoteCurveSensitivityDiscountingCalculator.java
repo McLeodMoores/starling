@@ -36,7 +36,7 @@ import com.opengamma.util.money.Currency;
  * value of the instrument is zero. The notion of "spread" will depend of each instrument.
  */
 public final class ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator
-extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, MulticurveSensitivity> {
+    extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, MulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -64,8 +64,8 @@ extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Multicur
   private static final PresentValueDiscountingCalculator PVDC = PresentValueDiscountingCalculator.getInstance();
   private static final PresentValueCurveSensitivityDiscountingCalculator PVCSDC = PresentValueCurveSensitivityDiscountingCalculator.getInstance();
   private static final PresentValueMarketQuoteSensitivityDiscountingCalculator PVMQSMC = PresentValueMarketQuoteSensitivityDiscountingCalculator.getInstance();
-  private static final PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator PVMQSCSMC =
-      PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator.getInstance();
+  private static final PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator PVMQSCSMC = PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator
+      .getInstance();
   private static final CashDiscountingMethod METHOD_DEPOSIT = CashDiscountingMethod.getInstance();
   private static final DepositIborDiscountingMethod METHOD_DEPOSIT_IBOR = DepositIborDiscountingMethod.getInstance();
   private static final ForwardRateAgreementDiscountingProviderMethod METHOD_FRA = ForwardRateAgreementDiscountingProviderMethod.getInstance();
@@ -109,8 +109,8 @@ extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Multicur
     ArgumentChecker.notNull(multicurves, "multicurve");
     ArgumentChecker.notNull(swap, "Swap");
     // if the swap is an On compounded (ie Brazilian like), the parspread formula is not the same.
-    if (swap.getSecondLeg().getNthPayment(0) instanceof CouponONCompounded && swap.getFirstLeg().getNthPayment(0) instanceof CouponFixedAccruedCompounding &&
-        swap.getFirstLeg().getNumberOfPayments() == 1) {
+    if (swap.getSecondLeg().getNthPayment(0) instanceof CouponONCompounded && swap.getFirstLeg().getNthPayment(0) instanceof CouponFixedAccruedCompounding
+        && swap.getFirstLeg().getNumberOfPayments() == 1) {
       // Implementation note: check if the swap is a Brazilian swap.
 
       final MulticurveSensitivity pvcsFirstLeg = swap.getFirstLeg().accept(PVCSDC, multicurves).getSensitivity(swap.getFirstLeg().getCurrency());

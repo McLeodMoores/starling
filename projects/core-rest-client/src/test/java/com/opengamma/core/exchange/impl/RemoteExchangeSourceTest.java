@@ -376,12 +376,12 @@ public class RemoteExchangeSourceTest {
   private static class DummyRemoteSource<TYPE> extends RemoteExchangeSource {
     private final DummyWebResource<TYPE> _resource;
 
-    public DummyRemoteSource(final URI baseUri, final DummyWebResource<TYPE> resource) {
+    DummyRemoteSource(final URI baseUri, final DummyWebResource<TYPE> resource) {
       super(baseUri);
       _resource = resource;
     }
 
-    public DummyRemoteSource(final URI baseUri, final ChangeManager changeManager, final DummyWebResource<TYPE> resource) {
+    DummyRemoteSource(final URI baseUri, final ChangeManager changeManager, final DummyWebResource<TYPE> resource) {
       super(baseUri, changeManager);
       _resource = resource;
     }
@@ -473,7 +473,7 @@ public class RemoteExchangeSourceTest {
     private final UniqueId _uid;
     private final String _name;
 
-    public TestExchange(final UniqueId uid, final String name) {
+    TestExchange(final UniqueId uid, final String name) {
       _uid = uid;
       _name = name;
     }

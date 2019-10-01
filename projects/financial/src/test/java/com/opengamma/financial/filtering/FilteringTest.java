@@ -113,7 +113,7 @@ public class FilteringTest {
 
     });
     final Portfolio portfolio = filter.filter(samplePortfolio());
-    //print(portfolio.getRootNode(), "TestNoFilter");
+    // print(portfolio.getRootNode(), "TestNoFilter");
     assertShape(
         portfolio.getRootNode(),
         new Object[] {
@@ -122,22 +122,22 @@ public class FilteringTest {
                 2, 2,
                 new Object[] {
                     2, 2,
-                    new Object[] {0, 2 },
-                    new Object[] {0, 2 } },
+                    new Object[] { 0, 2 },
+                    new Object[] { 0, 2 } },
                 new Object[] {
                     2, 2,
-                    new Object[] {0, 2 },
-                    new Object[] {0, 2 } } },
+                    new Object[] { 0, 2 },
+                    new Object[] { 0, 2 } } },
             new Object[] {
                 2, 2,
                 new Object[] {
                     2, 2,
-                    new Object[] {0, 2 },
-                    new Object[] {0, 2 } },
+                    new Object[] { 0, 2 },
+                    new Object[] { 0, 2 } },
                 new Object[] {
                     2, 2,
-                    new Object[] {0, 2 },
-                    new Object[] {0, 2 } } } });
+                    new Object[] { 0, 2 },
+                    new Object[] { 0, 2 } } } });
   }
 
   @Test
@@ -146,8 +146,8 @@ public class FilteringTest {
       // The default portfolio node filter will remove empty nodes
       @Override
       public boolean acceptPosition(final Position position) {
-        for (final Trade trade : position.getTrades ()) {
-          final int attrib = Integer.parseInt(trade.getAttributes ().get ("Foo"));
+        for (final Trade trade : position.getTrades()) {
+          final int attrib = Integer.parseInt(trade.getAttributes().get("Foo"));
           if (attrib <= 6 || attrib >= 33) {
             return false;
           }
@@ -156,7 +156,7 @@ public class FilteringTest {
       }
     });
     final Portfolio portfolio = filter.filter(samplePortfolio());
-    //print(portfolio.getRootNode(), "TestPositionFilter");
+    // print(portfolio.getRootNode(), "TestPositionFilter");
     assertShape(
         portfolio.getRootNode(),
         new Object[] {
@@ -165,17 +165,17 @@ public class FilteringTest {
                 2, 2,
                 new Object[] {
                     1, 2,
-                    new Object[] {0, 1 } },
+                    new Object[] { 0, 1 } },
                 new Object[] {
                     2, 2,
-                    new Object[] {0, 2 },
-                    new Object[] {0, 2 } } },
+                    new Object[] { 0, 2 },
+                    new Object[] { 0, 2 } } },
             new Object[] {
                 1, 0,
                 new Object[] {
                     2, 2,
-                    new Object[] {0, 2 },
-                    new Object[] {0, 2 } } } });
+                    new Object[] { 0, 2 },
+                    new Object[] { 0, 2 } } } });
   }
 
 }

@@ -131,21 +131,24 @@ public abstract class AbstractWebPositionResourceTestCase {
 
   protected List<ManageableTrade> getTrades() {
     final List<ManageableTrade> trades = Lists.newArrayList();
-    final ManageableTrade trade1 = new ManageableTrade(BigDecimal.valueOf(50), SEC_ID, LocalDate.parse("2011-12-07"), OffsetTime.of(LocalTime.of(15, 4), ZONE_OFFSET), COUNTER_PARTY);
+    final ManageableTrade trade1 = new ManageableTrade(BigDecimal.valueOf(50), SEC_ID, LocalDate.parse("2011-12-07"),
+        OffsetTime.of(LocalTime.of(15, 4), ZONE_OFFSET), COUNTER_PARTY);
     trade1.setPremium(10.0);
     trade1.setPremiumCurrency(Currency.USD);
     trade1.setPremiumDate(LocalDate.parse("2011-12-08"));
     trade1.setPremiumTime(OffsetTime.of(LocalTime.of(15, 4), ZONE_OFFSET));
     trades.add(trade1);
 
-    final ManageableTrade trade2 = new ManageableTrade(BigDecimal.valueOf(60), SEC_ID, LocalDate.parse("2011-12-08"), OffsetTime.of(LocalTime.of(16, 4), ZONE_OFFSET), COUNTER_PARTY);
+    final ManageableTrade trade2 = new ManageableTrade(BigDecimal.valueOf(60), SEC_ID, LocalDate.parse("2011-12-08"),
+        OffsetTime.of(LocalTime.of(16, 4), ZONE_OFFSET), COUNTER_PARTY);
     trade2.setPremium(20.0);
     trade2.setPremiumCurrency(Currency.USD);
     trade2.setPremiumDate(LocalDate.parse("2011-12-09"));
     trade2.setPremiumTime(OffsetTime.of(LocalTime.of(16, 4), ZONE_OFFSET));
     trades.add(trade2);
 
-    final ManageableTrade trade3 = new ManageableTrade(BigDecimal.valueOf(70), SEC_ID, LocalDate.parse("2011-12-09"), OffsetTime.of(LocalTime.of(17, 4), ZONE_OFFSET), COUNTER_PARTY);
+    final ManageableTrade trade3 = new ManageableTrade(BigDecimal.valueOf(70), SEC_ID, LocalDate.parse("2011-12-09"),
+        OffsetTime.of(LocalTime.of(17, 4), ZONE_OFFSET), COUNTER_PARTY);
     trade3.setPremium(30.0);
     trade3.setPremiumCurrency(Currency.USD);
     trade3.setPremiumDate(LocalDate.parse("2011-12-10"));
@@ -208,7 +211,8 @@ public abstract class AbstractWebPositionResourceTestCase {
   }
 
   protected UniqueId addPosition() {
-    final ManageableTrade origTrade = new ManageableTrade(BigDecimal.valueOf(50), SEC_ID, LocalDate.parse("2011-12-07"), OffsetTime.of(LocalTime.of(15, 4), ZONE_OFFSET), COUNTER_PARTY);
+    final ManageableTrade origTrade = new ManageableTrade(BigDecimal.valueOf(50), SEC_ID, LocalDate.parse("2011-12-07"),
+        OffsetTime.of(LocalTime.of(15, 4), ZONE_OFFSET), COUNTER_PARTY);
     origTrade.setPremium(10.0);
     origTrade.setPremiumCurrency(Currency.USD);
     origTrade.setPremiumDate(LocalDate.parse("2011-12-08"));

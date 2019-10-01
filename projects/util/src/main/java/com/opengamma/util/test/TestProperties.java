@@ -10,8 +10,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Properties;
 
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -60,7 +58,7 @@ public class TestProperties {
     return s_props;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static String selectFileName(final String overridePropsFileName) {
     String propsFileName = DEFAULT_PROPS_FILE_NAME;
     if (overridePropsFileName != null) {
@@ -131,7 +129,7 @@ public class TestProperties {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets a bean suitable for use in a Spring XML file to reference the test properties.
    *

@@ -18,8 +18,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
@@ -71,47 +69,37 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
     final DependencyGraph graph = new TestDependencyGraphBuilder("Default").buildGraph();
     final Portfolio portfolio = Mockito.mock(Portfolio.class);
     return new CompiledViewDefinitionWithGraphsImpl(versionCorrection, "view-id", viewDefinition, Collections.singleton(graph), new HashMap<>(resolutions),
-        portfolio, 0, Collections.<CompiledViewCalculationConfiguration>singleton(CompiledViewCalculationConfigurationImpl.of(graph)), null, null);
+        portfolio, 0, Collections.<CompiledViewCalculationConfiguration> singleton(CompiledViewCalculationConfigurationImpl.of(graph)), null, null);
   }
 
   private ViewProcessWorkerFactory workerFactory(final ExecutorService executor, final Map<ComputationTargetReference, UniqueId> resolutions) {
     final Random rand = new Random();
-    return new ViewProcessWorkerFactory() {
-      @Override
-      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
-          final ViewDefinition viewDefinition) {
-        final ViewProcessWorker worker = Mockito.mock(ViewProcessWorker.class);
-        final AtomicBoolean terminated = new AtomicBoolean();
-        Mockito.doAnswer(new Answer<Void>() {
-          @Override
-          public Void answer(final InvocationOnMock invocation) throws Throwable {
-            terminated.set(true);
-            return null;
+    return (context, executionOptions, viewDefinition) -> {
+      final ViewProcessWorker worker = Mockito.mock(ViewProcessWorker.class);
+      final AtomicBoolean terminated = new AtomicBoolean();
+      Mockito.doAnswer(invocation -> {
+        terminated.set(true);
+        return null;
+      }).when(worker).terminate();
+      executor.submit(() -> {
+        try {
+          Thread.sleep(rand.nextInt(500) + 350);
+          context.viewDefinitionCompiled(Mockito.mock(ViewExecutionDataProvider.class), compiledViewDefinition(viewDefinition, resolutions));
+          while (!terminated.get()) {
+            context.cycleStarted(Mockito.mock(ViewCycleMetadata.class));
+            Thread.sleep(rand.nextInt(300) + 50);
+            context.cycleFragmentCompleted(Mockito.mock(ViewComputationResultModel.class), viewDefinition);
+            Thread.sleep(rand.nextInt(300) + 50);
+            context.cycleCompleted(Mockito.mock(ViewCycle.class));
+            Thread.sleep(rand.nextInt(300) + 50);
           }
-        }).when(worker).terminate();
-        executor.submit(new Runnable() {
-          @Override
-          public void run() {
-            try {
-              Thread.sleep(rand.nextInt(500) + 350);
-              context.viewDefinitionCompiled(Mockito.mock(ViewExecutionDataProvider.class), compiledViewDefinition(viewDefinition, resolutions));
-              while (!terminated.get()) {
-                context.cycleStarted(Mockito.mock(ViewCycleMetadata.class));
-                Thread.sleep(rand.nextInt(300) + 50);
-                context.cycleFragmentCompleted(Mockito.mock(ViewComputationResultModel.class), viewDefinition);
-                Thread.sleep(rand.nextInt(300) + 50);
-                context.cycleCompleted(Mockito.mock(ViewCycle.class));
-                Thread.sleep(rand.nextInt(300) + 50);
-              }
-            } catch (final InterruptedException e) {
-              LOGGER.debug("Interrupted", e);
-            } catch (final RuntimeException e) {
-              LOGGER.error("Caught exception", e);
-            }
-          }
-        });
-        return worker;
-      }
+        } catch (final InterruptedException e1) {
+          LOGGER.debug("Interrupted", e1);
+        } catch (final RuntimeException e2) {
+          LOGGER.error("Caught exception", e2);
+        }
+      });
+      return worker;
     };
   }
 
@@ -120,7 +108,7 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
     private final ViewProcessContext _context;
     private final LinkedBlockingQueue<String> _events = new LinkedBlockingQueue<>();
 
-    public MockContext(final ViewProcessContext context) {
+    MockContext(final ViewProcessContext context) {
       _context = context;
     }
 
@@ -188,8 +176,8 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
       final MockContext context = new MockContext(vpContext);
       final ViewExecutionOptions options = ExecutionOptions.infinite(MarketData.live(), ExecutionFlags.none().ignoreCompilationValidity().get());
       final ViewDefinition viewDefinition = Mockito.mock(ViewDefinition.class);
-      final ParallelRecompilationViewProcessWorker worker =
-          new ParallelRecompilationViewProcessWorker(workerFactory(executor, resolutions), context, options, viewDefinition);
+      final ParallelRecompilationViewProcessWorker worker = new ParallelRecompilationViewProcessWorker(workerFactory(executor, resolutions), context, options,
+          viewDefinition);
       callback.execute(worker, options);
       LOGGER.debug("Waiting for initial compilation");
       assertEquals(context.event(), "view definition compiled"); // From primary worker

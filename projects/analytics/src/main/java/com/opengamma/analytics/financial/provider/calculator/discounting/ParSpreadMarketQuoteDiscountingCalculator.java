@@ -41,7 +41,7 @@ public final class ParSpreadMarketQuoteDiscountingCalculator extends InstrumentD
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static ParSpreadMarketQuoteDiscountingCalculator getInstance() {
@@ -92,7 +92,7 @@ public final class ParSpreadMarketQuoteDiscountingCalculator extends InstrumentD
    * For swaps the ParSpread is the spread to be added on each coupon of the first leg to obtain a present value of zero. It is computed as the opposite of the
    * present value of the swap in currency of the first leg divided by the present value of a basis point of the first leg (as computed by the
    * PresentValueMarketQuoteSensitivityDiscountingCalculator).
-   * 
+   *
    * @param swap
    *          The swap.
    * @param multicurves
@@ -105,8 +105,8 @@ public final class ParSpreadMarketQuoteDiscountingCalculator extends InstrumentD
     ArgumentChecker.notNull(swap, "Swap");
 
     // Implementation note: if the swap is an On compounded (ie Brazilian like), the parspread formula is not the same.
-    if (swap.getSecondLeg().getNthPayment(0) instanceof CouponONCompounded && swap.getFirstLeg().getNthPayment(0) instanceof CouponFixedAccruedCompounding &&
-        swap.getFirstLeg().getNumberOfPayments() == 1) {
+    if (swap.getSecondLeg().getNthPayment(0) instanceof CouponONCompounded && swap.getFirstLeg().getNthPayment(0) instanceof CouponFixedAccruedCompounding
+        && swap.getFirstLeg().getNumberOfPayments() == 1) {
       // Implementation note: check if the swap is a Brazilian swap.
       final CouponFixedAccruedCompounding cpnFixed = (CouponFixedAccruedCompounding) swap.getFirstLeg().getNthPayment(0);
       final double pvONLeg = swap.getSecondLeg().accept(PVDC, multicurves).getAmount(swap.getSecondLeg().getCurrency());
@@ -128,7 +128,7 @@ public final class ParSpreadMarketQuoteDiscountingCalculator extends InstrumentD
    * For multiple legs swaps the ParSpread is the spread to be added on each coupon of the first leg to obtain a present value of zero. It is computed as the
    * opposite of the present value of the swap in currency of the first leg divided by the present value of a basis point of the first leg (as computed by the
    * PresentValueMarketQuoteSensitivityDiscountingCalculator).
-   * 
+   *
    * @param swap
    *          The swap with multiple legs.
    * @param multicurves

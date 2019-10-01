@@ -107,23 +107,29 @@ public class ViewClientTest {
       final ArgumentCaptor<ViewDeltaResultModel> deltaFragment = ArgumentCaptor.forClass(ViewDeltaResultModel.class);
       verify(viewResultListenerMock, times(2)).cycleFragmentCompleted(fullFragment.capture(), deltaFragment.capture());
 
-      ViewComputationResultModel resultModel = fullFragment.getAllValues().get(0);
+      final ViewComputationResultModel resultModel = fullFragment.getAllValues().get(0);
       assertEquals(UniqueId.of("ViewProcess", client.getUniqueId().getValue()), resultModel.getViewProcessId());
       assertEquals(UniqueId.of("ViewCycle", client.getUniqueId().getValue(), "1"), resultModel.getViewCycleId());
 
       assertEquals(
           newHashSet(
-              new ComputedValueResult(new ValueSpecification("Value2", ComputationTargetSpecification.of(UniqueId.of("Scheme", "PrimitiveValue")), ValueProperties.with("Function",
-                  newHashSet("MarketDataSourcingFunction")).get()), (byte) 2, AggregatedExecutionLog.EMPTY), new ComputedValueResult(new ValueSpecification("Value1",
-                  ComputationTargetSpecification.of(UniqueId.of("Scheme", "PrimitiveValue")), ValueProperties.with("Function", newHashSet("MarketDataSourcingFunction")).get()), (byte) 1,
-                  AggregatedExecutionLog.EMPTY)), resultModel.getAllMarketData());
+              new ComputedValueResult(new ValueSpecification("Value2", ComputationTargetSpecification.of(UniqueId.of("Scheme", "PrimitiveValue")),
+                  ValueProperties.with("Function",
+                      newHashSet("MarketDataSourcingFunction")).get()),
+                  (byte) 2, AggregatedExecutionLog.EMPTY),
+              new ComputedValueResult(new ValueSpecification("Value1",
+                  ComputationTargetSpecification.of(UniqueId.of("Scheme", "PrimitiveValue")),
+                  ValueProperties.with("Function", newHashSet("MarketDataSourcingFunction")).get()), (byte) 1,
+                  AggregatedExecutionLog.EMPTY)),
+          resultModel.getAllMarketData());
     } finally {
       TestLifecycle.end();
     }
   }
 
   /**
-   * Avoids the ConcurrentHashMap-based implementation of InMemoryLKVSnapshotProvider, where the LKV map can appear to lag behind if accessed from a different thread immediately after a change.
+   * Avoids the ConcurrentHashMap-based implementation of InMemoryLKVSnapshotProvider, where the LKV map can appear to lag behind if accessed from a different
+   * thread immediately after a change.
    */
   private static class SynchronousInMemoryLKVSnapshotProvider extends InMemoryLKVMarketDataProvider {
 

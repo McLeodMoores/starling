@@ -18,8 +18,8 @@ import com.opengamma.util.OpenGammaClock;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * This test was set up to check Bloomberg's logic of ticker construction for IR Futures.
- * It will begin to fail by design, to clean this up to nail down the logic of the switch over.
+ * This test was set up to check Bloomberg's logic of ticker construction for IR Futures. It will begin to fail by design, to clean this up to nail down the
+ * logic of the switch over.
  */
 @Test(groups = TestGroup.UNIT)
 public class BloombergIRFuturePriceCurveInstrumentProviderTest {
@@ -29,15 +29,17 @@ public class BloombergIRFuturePriceCurveInstrumentProviderTest {
   private static final LocalDate SNAPSHOT_DATE = LocalDate.of(2010, 6, 14); // Last Trading Date of ERM10 Comdty
   private static final String FIELD_NAME = MarketDataRequirementNames.MARKET_VALUE;
 
-  private static final BloombergIRFuturePriceCurveInstrumentProvider PROVIDER_EUR = new BloombergIRFuturePriceCurveInstrumentProvider(PREFIX_EUR, POSTFIX, FIELD_NAME);
+  private static final BloombergIRFuturePriceCurveInstrumentProvider PROVIDER_EUR = new BloombergIRFuturePriceCurveInstrumentProvider(PREFIX_EUR, POSTFIX,
+      FIELD_NAME);
 
   private static final int N_FUTURES = 9;
-  private static final String[] RESULTS_EUR = new String[] {"ERM10 Comdty", "ERU10 Comdty", "ERZ10 Comdty", "ERH11 Comdty", "ERM11 Comdty", "ERU11 Comdty", "ERZ11 Comdty", "ERH2 Comdty", "ERM2 Comdty" };
+  private static final String[] RESULTS_EUR = new String[] { "ERM10 Comdty", "ERU10 Comdty", "ERZ10 Comdty", "ERH11 Comdty", "ERM11 Comdty", "ERU11 Comdty",
+      "ERZ11 Comdty", "ERH2 Comdty", "ERM2 Comdty" };
 
   /**
-   *  The first test will begin to fail in February, on the 18thth or 20th. Good, but not quite good enough.
-   *  If all goes according to plan, testEur and whenThisBeginsToFailCheckIfERH2IsValid will begin to fail on the same day. 
-   *  If they do, change ERH2 to ERH12 above, remove the final entry and this will never fail again.
+   * The first test will begin to fail in February, on the 18thth or 20th. Good, but not quite good enough. If all goes according to plan, testEur and
+   * whenThisBeginsToFailCheckIfERH2IsValid will begin to fail on the same day. If they do, change ERH2 to ERH12 above, remove the final entry and this will
+   * never fail again.
    */
   @Test(enabled = false)
   // Disabled so that the v1.2.x branch builds cleanly

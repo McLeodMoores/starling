@@ -11,14 +11,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import javax.management.AttributeNotFoundException;
-import javax.management.InstanceNotFoundException;
-import javax.management.MBeanException;
 import javax.management.MBeanServer;
 import javax.management.MXBean;
-import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
-import javax.management.ReflectionException;
 import javax.management.openmbean.CompositeData;
 import javax.servlet.ServletContext;
 
@@ -101,10 +96,12 @@ public class ComponentRepositoryTest {
       public void start() {
         order.add("Simple1");
       }
+
       @Override
       public void stop() {
         order.add("Simple1");
       }
+
       @Override
       public boolean isRunning() {
         return false;
@@ -115,10 +112,12 @@ public class ComponentRepositoryTest {
       public void start() {
         order.add("Simple2");
       }
+
       @Override
       public void stop() {
         order.add("Simple2");
       }
+
       @Override
       public boolean isRunning() {
         return false;
@@ -129,14 +128,17 @@ public class ComponentRepositoryTest {
       public void start() {
         order.add("-1");
       }
+
       @Override
       public void stop() {
         order.add("-1");
       }
+
       @Override
       public boolean isRunning() {
         return false;
       }
+
       @Override
       public int getPhase() {
         return -1;
@@ -147,14 +149,17 @@ public class ComponentRepositoryTest {
       public void start() {
         order.add("1");
       }
+
       @Override
       public void stop() {
         order.add("1");
       }
+
       @Override
       public boolean isRunning() {
         return false;
       }
+
       @Override
       public int getPhase() {
         return 1;
@@ -243,14 +248,11 @@ public class ComponentRepositoryTest {
   /**
    * Test that we can register MBeans on the server and access their attributes.
    *
-   * @throws MalformedObjectNameException
-   * @throws AttributeNotFoundException
-   * @throws MBeanException
-   * @throws ReflectionException
-   * @throws InstanceNotFoundException
+   * @throws Exception
+   *           if there is a problem
    */
   @Test
-  public void test_registerMBean() throws MalformedObjectNameException, AttributeNotFoundException, MBeanException, ReflectionException, InstanceNotFoundException {
+  public void testRegisterMBean() throws Exception {
 
     final MBeanServer server = createMBeanServer();
 
@@ -265,17 +267,13 @@ public class ComponentRepositoryTest {
   }
 
   /**
-   * Test that we can register MX Beans on the server and access their
-   * attributes. MX Bean attributes should be converted to composite data types.
+   * Test that we can register MX Beans on the server and access their attributes. MX Bean attributes should be converted to composite data types.
    *
-   * @throws MalformedObjectNameException
-   * @throws AttributeNotFoundException
-   * @throws MBeanException
-   * @throws ReflectionException
-   * @throws InstanceNotFoundException
+   * @throws Exception
+   *           if there is a problem
    */
   @Test
-  public void test_registerMXBean() throws MalformedObjectNameException, AttributeNotFoundException, MBeanException, ReflectionException, InstanceNotFoundException {
+  public void testRegisterMXBean() throws Exception {
 
     final MBeanServer server = createMBeanServer();
 
@@ -332,7 +330,7 @@ public class ComponentRepositoryTest {
 
   @MXBean
   public interface TestMXInterface {
-    public ComplexAttribute getAnswer();
+    ComplexAttribute getAnswer();
   }
 
   // Standard MBean can't handle this without having the defintion on the
@@ -342,12 +340,13 @@ public class ComponentRepositoryTest {
     public String getStringy() {
       return "forty-two";
     }
+
     public int getInty() {
       return 42;
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   static class MockSimple {
   }
 
@@ -356,22 +355,27 @@ public class ComponentRepositoryTest {
     int stops;
     int servletContexts;
     int inits;
+
     @Override
     public void start() {
       starts++;
     }
+
     @Override
     public void stop() {
       stops++;
     }
+
     @Override
     public boolean isRunning() {
       return false;
     }
+
     @Override
     public void setServletContext(final ServletContext servletContext) {
       servletContexts++;
     }
+
     @Override
     public void afterPropertiesSet() throws Exception {
       inits++;
@@ -383,23 +387,28 @@ public class ComponentRepositoryTest {
     int stops;
     int inits;
     MockInterfaces created = new MockInterfaces();
+
     @Override
     public void start() {
       starts++;
     }
+
     @Override
     public void stop() {
       stops++;
     }
+
     @Override
     public boolean isRunning() {
       return false;
     }
+
     @Override
     public void afterPropertiesSet() {
       inits++;
       super.afterPropertiesSet();
     }
+
     @Override
     protected MockInterfaces createObject() {
       return created;

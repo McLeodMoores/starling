@@ -68,20 +68,23 @@ public class CurveSpecificationBuildersTest extends AnalyticsTestBase {
   }
 
   /**
-   * Tests cycling of constant curve specifications
+   * Tests cycling of constant curve specifications.
    */
   @Test
   public void testConstantCurveSpecification() {
-    ConstantCurveSpecification specification = new ConstantCurveSpecification(LocalDate.of(2013, 1, 1), "NAME", ExternalSchemes.activFeedTickerSecurityId("A"), MarketDataRequirementNames.ALL);
+    ConstantCurveSpecification specification = new ConstantCurveSpecification(LocalDate.of(2013, 1, 1), "NAME", ExternalSchemes.activFeedTickerSecurityId("A"),
+        MarketDataRequirementNames.ALL);
     assertEquals(specification, cycleObject(ConstantCurveSpecification.class, specification));
-    specification = new ConstantCurveSpecification(LocalDate.of(2013, 1, 1), "NAME", ExternalSchemes.activFeedTickerSecurityId("A"), MarketDataRequirementNames.MARKET_VALUE);
+    specification = new ConstantCurveSpecification(LocalDate.of(2013, 1, 1), "NAME", ExternalSchemes.activFeedTickerSecurityId("A"),
+        MarketDataRequirementNames.MARKET_VALUE);
     assertEquals(specification, cycleObject(ConstantCurveSpecification.class, specification));
-    final ConstantCurveSpecification other = new ConstantCurveSpecification(LocalDate.of(2013, 1, 1), "NAME", ExternalSchemes.activFeedTickerSecurityId("A"), null);
+    final ConstantCurveSpecification other = new ConstantCurveSpecification(LocalDate.of(2013, 1, 1), "NAME", ExternalSchemes.activFeedTickerSecurityId("A"),
+        null);
     assertEquals(specification, cycleObject(ConstantCurveSpecification.class, other));
   }
 
   /**
-   * Tests cycling of spread curve specifications
+   * Tests cycling of spread curve specifications.
    */
   @Test
   public void testSpreadCurveSpecification() {

@@ -17,10 +17,10 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
 public class FXForwardCurveSpecification {
   /** The type of the FX forward quote. */
   public enum QuoteType {
-    /** Outright. */
-    Outright,
-    /** Points. */
-    Points
+  /** Outright. */
+  Outright,
+  /** Points. */
+  Points
   }
 
   private final FXForwardCurveInstrumentProvider _curveInstrumentProvider;
@@ -85,11 +85,8 @@ public class FXForwardCurveSpecification {
       return false;
     }
     final FXForwardCurveSpecification other = (FXForwardCurveSpecification) obj;
-    return getName().equals(other.getName()) &&
-        getTarget().equals(other.getTarget()) &&
-        getCurveInstrumentProvider().equals(other.getCurveInstrumentProvider()) &&
-        getQuoteType().equals(other.getQuoteType()) &&
-        isMarketQuoteConvention() == other.isMarketQuoteConvention();
+    return getName().equals(other.getName()) && getTarget().equals(other.getTarget()) && getCurveInstrumentProvider().equals(other.getCurveInstrumentProvider())
+        && getQuoteType().equals(other.getQuoteType()) && isMarketQuoteConvention() == other.isMarketQuoteConvention();
   }
 
 }

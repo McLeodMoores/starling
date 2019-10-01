@@ -52,7 +52,7 @@ public class ModifyPositionDbPositionMasterWorkerUpdatePositionTest extends Abst
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_nullDocument() {
     _posMaster.update(null);
@@ -109,7 +109,7 @@ public class ModifyPositionDbPositionMasterWorkerUpdatePositionTest extends Abst
     final PositionDocument old = _posMaster.get(UniqueId.of("DbPos", "121", "0"));
     assertEquals(base.getUniqueId(), old.getUniqueId());
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
-    assertEquals(now, old.getVersionToInstant());  // old version ended
+    assertEquals(now, old.getVersionToInstant()); // old version ended
     assertEquals(base.getCorrectionFromInstant(), old.getCorrectionFromInstant());
     assertEquals(base.getCorrectionToInstant(), old.getCorrectionToInstant());
     assertEquals(base.getPosition(), old.getPosition());
@@ -120,8 +120,8 @@ public class ModifyPositionDbPositionMasterWorkerUpdatePositionTest extends Abst
     final PositionDocument old3 = _posMaster.get(ObjectId.of("DbPos", "121"), VersionCorrection.of(_version2Instant, now));
     assertEquals(base.getUniqueId(), old3.getUniqueId());
 
-//    PositionDocument old4 = _posMaster.get(ObjectId.of("DbPos", "121"), VersionCorrection.of(now, _version2Instant));
-//    assertEquals(base.getUniqueId(), old4.getUniqueId());
+    // PositionDocument old4 = _posMaster.get(ObjectId.of("DbPos", "121"), VersionCorrection.of(now, _version2Instant));
+    // assertEquals(base.getUniqueId(), old4.getUniqueId());
 
     final PositionHistoryRequest search = new PositionHistoryRequest(base.getUniqueId(), null, now);
     final PositionHistoryResult searchResult = _posMaster.history(search);
@@ -135,7 +135,8 @@ public class ModifyPositionDbPositionMasterWorkerUpdatePositionTest extends Abst
     final PositionDocument base = _posMaster.get(UniqueId.of("DbPos", "121", "0"));
     final ManageablePosition pos = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
     pos.setUniqueId(UniqueId.of("DbPos", "121", "0"));
-    pos.addTrade(new ManageableTrade(BigDecimal.TEN, ExternalId.of("C", "D"), _now.toLocalDate(), _now.toOffsetTime().minusSeconds(500), ExternalId.of("CPS2", "CPV2")));
+    pos.addTrade(
+        new ManageableTrade(BigDecimal.TEN, ExternalId.of("C", "D"), _now.toLocalDate(), _now.toOffsetTime().minusSeconds(500), ExternalId.of("CPS2", "CPV2")));
     final PositionDocument input = new PositionDocument(pos);
 
     final PositionDocument updated = _posMaster.update(input);
@@ -149,7 +150,7 @@ public class ModifyPositionDbPositionMasterWorkerUpdatePositionTest extends Abst
     final PositionDocument old = _posMaster.get(UniqueId.of("DbPos", "121", "0"));
     assertEquals(base.getUniqueId(), old.getUniqueId());
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
-    assertEquals(now, old.getVersionToInstant());  // old version ended
+    assertEquals(now, old.getVersionToInstant()); // old version ended
     assertEquals(base.getCorrectionFromInstant(), old.getCorrectionFromInstant());
     assertEquals(base.getCorrectionToInstant(), old.getCorrectionToInstant());
     assertEquals(base.getPosition(), old.getPosition());
@@ -201,7 +202,7 @@ public class ModifyPositionDbPositionMasterWorkerUpdatePositionTest extends Abst
     assertNotNull(tradeC.getUniqueId());
     assertEquals(version2.getPosition(), _posMaster.get(version2.getUniqueId()).getPosition());
 
-    //reload version1
+    // reload version1
     version1 = _posMaster.get(version1.getUniqueId());
 
     final PositionHistoryResult historyResult = _posMaster.history(new PositionHistoryRequest(version1.getUniqueId(), null,
@@ -254,7 +255,7 @@ public class ModifyPositionDbPositionMasterWorkerUpdatePositionTest extends Abst
     assertNotNull(tradeC.getUniqueId());
     assertEquals(version2.getPosition(), _posMaster.get(version2.getUniqueId()).getPosition());
 
-    //reload version1
+    // reload version1
     version1 = _posMaster.get(version1.getUniqueId());
 
     final PositionHistoryResult historyResult = _posMaster.history(new PositionHistoryRequest(version1.getUniqueId(), null,

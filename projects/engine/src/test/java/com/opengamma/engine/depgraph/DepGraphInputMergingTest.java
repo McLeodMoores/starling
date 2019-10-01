@@ -41,15 +41,15 @@ public class DepGraphInputMergingTest extends AbstractDependencyGraphBuilderTest
     private final ValueRequirement _req1;
     private final ValueRequirement _req2;
 
-    public VariantInputFunction(final DepGraphTestHelper helper, final String in, final String out) {
+    VariantInputFunction(final DepGraphTestHelper helper, final String in, final String out) {
       _spec1 = new ValueSpecification(helper.getSpec1().getValueName(), helper.getSpec1().getTargetSpecification(),
           helper.getSpec1().getProperties().copy().with("AUX", "X", "Y")
-          .with("TEST", out).get());
+              .with("TEST", out).get());
       _req1 = new ValueRequirement(helper.getRequirement1().getValueName(), helper.getRequirement1().getTargetReference(),
           ValueProperties.with("TEST", in).get());
       _spec2 = new ValueSpecification(helper.getSpec2().getValueName(), helper.getSpec2().getTargetSpecification(),
           helper.getSpec2().getProperties().copy().with("AUX", "X", "Y")
-          .with("TEST", out).get());
+              .with("TEST", out).get());
       _req2 = new ValueRequirement(helper.getRequirement2().getValueName(), helper.getRequirement2().getTargetReference(),
           ValueProperties.with("TEST", in).get());
     }

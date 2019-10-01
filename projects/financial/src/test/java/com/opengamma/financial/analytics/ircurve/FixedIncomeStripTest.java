@@ -73,7 +73,7 @@ public class FixedIncomeStripTest {
     FixedIncomeStrip strip7 = new FixedIncomeStrip(StripInstrumentType.SWAP_3M, Tenor.of(Period.ofYears(2)), "Test");
     FixedIncomeStrip strip8 = new FixedIncomeStrip(StripInstrumentType.SWAP_3M, Tenor.of(Period.ofYears(4)), "Test");
     FixedIncomeStrip strip9 = new FixedIncomeStrip(StripInstrumentType.SWAP_3M, Tenor.of(Period.ofYears(7)), "Test");
-    FixedIncomeStrip[] array = new FixedIncomeStrip[] {strip1, strip2, strip3, strip4, strip5, strip6, strip7, strip8, strip9 };
+    FixedIncomeStrip[] array = new FixedIncomeStrip[] { strip1, strip2, strip3, strip4, strip5, strip6, strip7, strip8, strip9 };
     Set<FixedIncomeStrip> set = new TreeSet<>();
     set.add(strip1);
     set.add(strip9);
@@ -99,7 +99,7 @@ public class FixedIncomeStripTest {
     strip7 = new FixedIncomeStrip(StripInstrumentType.SWAP_3M, Tenor.of(Period.ofYears(2)), "Test");
     strip8 = new FixedIncomeStrip(StripInstrumentType.SWAP_3M, Tenor.of(Period.ofYears(6)), "Test");
     strip9 = new FixedIncomeStrip(StripInstrumentType.SWAP_3M, Tenor.of(Period.ofYears(7)), "Test");
-    array = new FixedIncomeStrip[] {strip1, strip2, strip3, strip4, strip5, strip6, strip7, strip8, strip9 };
+    array = new FixedIncomeStrip[] { strip1, strip2, strip3, strip4, strip5, strip6, strip7, strip8, strip9 };
     set = new TreeSet<>();
     set.add(strip1);
     set.add(strip9);
@@ -115,16 +115,20 @@ public class FixedIncomeStripTest {
       AssertJUnit.assertTrue(set.contains(strip));
       AssertJUnit.assertEquals(iter.next(), strip);
     }
-    strip1 = new FixedIncomeStrip(StripInstrumentType.BASIS_SWAP, Tenor.SIX_MONTHS, Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, IndexType.Libor, IndexType.Libor, "Test");
-    strip2 = new FixedIncomeStrip(StripInstrumentType.BASIS_SWAP, Tenor.SEVEN_MONTHS, Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, IndexType.Libor, IndexType.Libor, "Test");
-    strip3 = new FixedIncomeStrip(StripInstrumentType.BASIS_SWAP, Tenor.SEVEN_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS, IndexType.Libor, IndexType.Libor, "Test");
-    strip4 = new FixedIncomeStrip(StripInstrumentType.BASIS_SWAP, Tenor.SEVEN_MONTHS, Tenor.SIX_MONTHS, Tenor.THREE_MONTHS, IndexType.Libor, IndexType.Libor, "Test");
+    strip1 = new FixedIncomeStrip(StripInstrumentType.BASIS_SWAP, Tenor.SIX_MONTHS, Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, IndexType.Libor, IndexType.Libor,
+        "Test");
+    strip2 = new FixedIncomeStrip(StripInstrumentType.BASIS_SWAP, Tenor.SEVEN_MONTHS, Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, IndexType.Libor, IndexType.Libor,
+        "Test");
+    strip3 = new FixedIncomeStrip(StripInstrumentType.BASIS_SWAP, Tenor.SEVEN_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS, IndexType.Libor, IndexType.Libor,
+        "Test");
+    strip4 = new FixedIncomeStrip(StripInstrumentType.BASIS_SWAP, Tenor.SEVEN_MONTHS, Tenor.SIX_MONTHS, Tenor.THREE_MONTHS, IndexType.Libor, IndexType.Libor,
+        "Test");
     strip5 = new FixedIncomeStrip(StripInstrumentType.SWAP_3M, Tenor.of(Period.ofYears(1)), "Test");
     strip6 = new FixedIncomeStrip(StripInstrumentType.FUTURE, Tenor.of(Period.ofYears(1)), 1, "Test");
     strip7 = new FixedIncomeStrip(StripInstrumentType.FUTURE, Tenor.of(Period.ofYears(2)), 2, "Test");
     strip8 = new FixedIncomeStrip(StripInstrumentType.SWAP_3M, Tenor.of(Period.ofYears(6)), "Test");
     strip9 = new FixedIncomeStrip(StripInstrumentType.SWAP_3M, Tenor.of(Period.ofYears(7)), "Test");
-    array = new FixedIncomeStrip[] {strip1, strip2, strip3, strip4, strip5, strip6, strip7, strip8, strip9 };
+    array = new FixedIncomeStrip[] { strip1, strip2, strip3, strip4, strip5, strip6, strip7, strip8, strip9 };
     set = new TreeSet<>();
     set.add(strip1);
     set.add(strip2);

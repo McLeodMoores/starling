@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.web.json.convention.DepositConventionJsonBuilder;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.convention.DepositConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;

@@ -27,11 +27,14 @@ public class CurrencySeriesConversionFunctionTest {
   @Test
   public void testConvertLabelledMatrix() throws Exception {
     final double conversionFactor = 0.5;
-    final Tenor[] tenors = new Tenor[] {Tenor.ONE_DAY, Tenor.TWO_DAYS, Tenor.THREE_DAYS};
-    final LocalDateDoubleTimeSeries[] dateArray = new LocalDateDoubleTimeSeries[] { ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] {LocalDate.now()}, new double[] { 2.0 }),
-        ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] {LocalDate.now()}, new double[] { 3.0 }), ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] {LocalDate.now()}, new double[] { 4.0 })};
+    final Tenor[] tenors = new Tenor[] { Tenor.ONE_DAY, Tenor.TWO_DAYS, Tenor.THREE_DAYS };
+    final LocalDateDoubleTimeSeries[] dateArray = new LocalDateDoubleTimeSeries[] {
+        ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] { LocalDate.now() }, new double[] { 2.0 }),
+        ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] { LocalDate.now() }, new double[] { 3.0 }),
+        ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] { LocalDate.now() }, new double[] { 4.0 }) };
     final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D instance = new TenorLabelledLocalDateDoubleTimeSeriesMatrix1D(tenors, dateArray);
-    final DoubleTimeSeries<LocalDate> conversionRates = ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] {LocalDate.now()}, new double[] {conversionFactor} );
+    final DoubleTimeSeries<LocalDate> conversionRates = ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] { LocalDate.now() },
+        new double[] { conversionFactor });
 
     final CurrencySeriesConversionFunction function = new CurrencySeriesConversionFunction("Blah");
     final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D result = function.convertLabelledMatrix(instance, conversionRates);

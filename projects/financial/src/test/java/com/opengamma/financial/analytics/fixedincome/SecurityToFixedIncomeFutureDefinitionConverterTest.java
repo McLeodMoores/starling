@@ -39,7 +39,7 @@ public class SecurityToFixedIncomeFutureDefinitionConverterTest {
 
   @Test
   public void test() {
-    //TODO
+    // TODO
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -49,7 +49,8 @@ public class SecurityToFixedIncomeFutureDefinitionConverterTest {
     final ExchangeSource source = Mockito.mock(ExchangeSource.class);
     Mockito.when(source.get(Matchers.any(UniqueId.class))).thenReturn(exchange);
     Mockito.when(source.get(Matchers.any(ObjectId.class), Matchers.any(VersionCorrection.class))).thenReturn(exchange);
-    ((OngoingStubbing) Mockito.when(source.get(Matchers.any(ExternalIdBundle.class), Matchers.any(VersionCorrection.class)))).thenReturn(Collections.singleton(exchange));
+    ((OngoingStubbing) Mockito.when(source.get(Matchers.any(ExternalIdBundle.class), Matchers.any(VersionCorrection.class))))
+        .thenReturn(Collections.singleton(exchange));
     Mockito.when(source.getSingle(Matchers.any(ExternalId.class))).thenReturn(exchange);
     Mockito.when(source.getSingle(Matchers.any(ExternalIdBundle.class))).thenReturn(exchange);
     return source;

@@ -90,7 +90,7 @@ public class BondFutureOptionExpiryCalculatorTest {
     private static final LocalDate HOLIDAY3 = LocalDate.of(2013, 2, 2);
     private static final LocalDate HOLIDAY4 = LocalDate.of(2013, 4, 29);
 
-    public MyCalendar() {
+    MyCalendar() {
     }
 
     @Override

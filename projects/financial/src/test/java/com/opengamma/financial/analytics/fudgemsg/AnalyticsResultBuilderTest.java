@@ -43,7 +43,8 @@ public class AnalyticsResultBuilderTest extends AnalyticsTestBase {
     final Map<String, List<DoublesPair>> eurData = new HashMap<>();
     eurData.put("C", Lists.newArrayList(DoublesPair.of(11d, 12d), DoublesPair.of(13d, 14d), DoublesPair.of(15d, 16d)));
     eurData.put("D", Lists.newArrayList(DoublesPair.of(110d, 120d), DoublesPair.of(130d, 140d), DoublesPair.of(150d, 160d)));
-    final MultipleCurrencyInterestRateCurveSensitivity sensitivity = MultipleCurrencyInterestRateCurveSensitivity.of(Currency.USD, new InterestRateCurveSensitivity(usdData));
+    final MultipleCurrencyInterestRateCurveSensitivity sensitivity = MultipleCurrencyInterestRateCurveSensitivity.of(Currency.USD,
+        new InterestRateCurveSensitivity(usdData));
     sensitivity.plus(Currency.EUR, new InterestRateCurveSensitivity(eurData));
     assertEquals(sensitivity, cycleObject(MultipleCurrencyInterestRateCurveSensitivity.class, sensitivity));
   }

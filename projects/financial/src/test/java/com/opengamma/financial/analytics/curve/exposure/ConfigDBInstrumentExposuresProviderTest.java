@@ -50,50 +50,52 @@ public class ConfigDBInstrumentExposuresProviderTest {
 
   @Test
   public void testEmptyCurveConfigs() {
-    ConfigMaster configMaster = new InMemoryConfigMaster();
-    ConfigSource configSource = new MasterConfigSource(configMaster);
-    SecuritySource securitySource = new MasterSecuritySource(new InMemorySecurityMaster());
+    final ConfigMaster configMaster = new InMemoryConfigMaster();
+    final ConfigSource configSource = new MasterConfigSource(configMaster);
+    final SecuritySource securitySource = new MasterSecuritySource(new InMemorySecurityMaster());
 
-    String name = "test";
-    List<String> exposureFunctions = Lists.newArrayList(CurrencyExposureFunction.NAME);
-    Map<ExternalId, String> idsToNames = Maps.newHashMap();
-    ExposureFunctions exposures = new ExposureFunctions(name, exposureFunctions, idsToNames);
+    final String name = "test";
+    final List<String> exposureFunctions = Lists.newArrayList(CurrencyExposureFunction.NAME);
+    final Map<ExternalId, String> idsToNames = Maps.newHashMap();
+    final ExposureFunctions exposures = new ExposureFunctions(name, exposureFunctions, idsToNames);
     ConfigMasterUtils.storeByName(configMaster, ConfigItem.of(exposures));
 
-    ConfigDBInstrumentExposuresProvider provider = new ConfigDBInstrumentExposuresProvider(configSource, securitySource, VersionCorrection.LATEST);
+    final ConfigDBInstrumentExposuresProvider provider = new ConfigDBInstrumentExposuresProvider(configSource, securitySource, VersionCorrection.LATEST);
 
-    FRASecurity security = ExposureFunctionTestHelper.getFRASecurity();
-    Trade trade = new SimpleTrade(security, BigDecimal.ONE, new SimpleCounterparty(ExternalId.of(Counterparty.DEFAULT_SCHEME, "TEST")), LocalDate.now(), OffsetTime.now());
+    final FRASecurity security = ExposureFunctionTestHelper.getFRASecurity();
+    final Trade trade = new SimpleTrade(security, BigDecimal.ONE, new SimpleCounterparty(ExternalId.of(Counterparty.DEFAULT_SCHEME, "TEST")), LocalDate.now(),
+        OffsetTime.now());
     try {
       provider.getCurveConstructionConfigurationsForConfig(name, trade);
       fail("Expected exception for empty curve configs");
-    } catch (OpenGammaRuntimeException e) {
+    } catch (final OpenGammaRuntimeException e) {
       // test has passed
     }
   }
 
   @Test
   public void testMultipleCurveConfigs() {
-    ConfigMaster configMaster = new InMemoryConfigMaster();
-    ConfigSource configSource = new MasterConfigSource(configMaster);
-    SecuritySource securitySource = new MasterSecuritySource(new InMemorySecurityMaster());
+    final ConfigMaster configMaster = new InMemoryConfigMaster();
+    final ConfigSource configSource = new MasterConfigSource(configMaster);
+    final SecuritySource securitySource = new MasterSecuritySource(new InMemorySecurityMaster());
 
-    FRASecurity security = ExposureFunctionTestHelper.getFRASecurity();
-    
-    String name = "test";
-    List<String> exposureFunctions = Lists.newArrayList(SecurityTypeExposureFunction.NAME, CurrencyExposureFunction.NAME);
-    Map<ExternalId, String> idsToNames = new HashMap<>();
-    String securityTypeCurveConfig = "SecurityTypeConfig";
+    final FRASecurity security = ExposureFunctionTestHelper.getFRASecurity();
+
+    final String name = "test";
+    final List<String> exposureFunctions = Lists.newArrayList(SecurityTypeExposureFunction.NAME, CurrencyExposureFunction.NAME);
+    final Map<ExternalId, String> idsToNames = new HashMap<>();
+    final String securityTypeCurveConfig = "SecurityTypeConfig";
     idsToNames.put(ExternalId.of(ExposureFunction.SECURITY_IDENTIFIER, security.getSecurityType()), securityTypeCurveConfig);
-    String currencyCurveConfig = "CurrencyConfig";
+    final String currencyCurveConfig = "CurrencyConfig";
     idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, security.getCurrency().getCode()), currencyCurveConfig);
-    ExposureFunctions exposures = new ExposureFunctions(name, exposureFunctions, idsToNames);
+    final ExposureFunctions exposures = new ExposureFunctions(name, exposureFunctions, idsToNames);
     ConfigMasterUtils.storeByName(configMaster, ConfigItem.of(exposures));
-    
-    ConfigDBInstrumentExposuresProvider provider = new ConfigDBInstrumentExposuresProvider(configSource, securitySource, VersionCorrection.LATEST);
-    
-    Trade trade = new SimpleTrade(security, BigDecimal.ONE, new SimpleCounterparty(ExternalId.of(Counterparty.DEFAULT_SCHEME, "TEST")), LocalDate.now(), OffsetTime.now());
-    Set<String> curveConfigs = provider.getCurveConstructionConfigurationsForConfig(name, trade);
+
+    final ConfigDBInstrumentExposuresProvider provider = new ConfigDBInstrumentExposuresProvider(configSource, securitySource, VersionCorrection.LATEST);
+
+    final Trade trade = new SimpleTrade(security, BigDecimal.ONE, new SimpleCounterparty(ExternalId.of(Counterparty.DEFAULT_SCHEME, "TEST")), LocalDate.now(),
+        OffsetTime.now());
+    final Set<String> curveConfigs = provider.getCurveConstructionConfigurationsForConfig(name, trade);
     assertEquals("Expected single curve config", 1, curveConfigs.size());
     assertTrue("Expected configs to contain security type config", curveConfigs.contains(securityTypeCurveConfig));
     assertFalse("Expected configs to not contain currency config", curveConfigs.contains(currencyCurveConfig));

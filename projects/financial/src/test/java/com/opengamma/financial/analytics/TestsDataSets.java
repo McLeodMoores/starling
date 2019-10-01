@@ -34,29 +34,48 @@ public class TestsDataSets {
   private static final LinearInterpolator1D LINEAR = new LinearInterpolator1D();
 
   /**
-   * Create a set of SABR parameter surface (linearly interpolated) with a given SABR function. Expiry is between 0 and 10 years, maturity between 0 and 10 years.
-   * Beta is 0.5.  Alpha 0.05 at 1Y and 0.06 at 10Y. Rho 0.50 at 1Y and 0.30 at 10Y. Nu -0.25 at 1Y and 0.00 at 10Y.
-   * @param sabrFunction The SABR function.
+   * Create a set of SABR parameter surface (linearly interpolated) with a given SABR function. Expiry is between 0 and 10 years, maturity between 0 and 10
+   * years. Beta is 0.5. Alpha 0.05 at 1Y and 0.06 at 10Y. Rho 0.50 at 1Y and 0.30 at 10Y. Nu -0.25 at 1Y and 0.00 at 10Y.
+   *
+   * @param sabrFunction
+   *          The SABR function.
    * @return The SABR parameters parameters.
    */
   public static SABRInterestRateParameters createSABR1(final VolatilityFunctionProvider<SABRFormulaData> sabrFunction) {
-    final InterpolatedDoublesSurface alphaSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2,
-        5, 10, 100}, new double[] {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100, 100}, new double[] {0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05,
-        0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06}, new GridInterpolator2D(LINEAR, LINEAR));
-    final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5,
-        10, 100}, new double[] {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100, 100}, new double[] {0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
-        0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}, new GridInterpolator2D(LINEAR, LINEAR));
-    final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5,
-        10, 100}, new double[] {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100, 100}, new double[] {-0.25, -0.25, -0.25, -0.25, -0.25, -0.25,
-        -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00}, new GridInterpolator2D(LINEAR, LINEAR));
-    final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5,
-        10, 100}, new double[] {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100, 100}, new double[] {0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50,
-        0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30}, new GridInterpolator2D(LINEAR, LINEAR));
+    final InterpolatedDoublesSurface alphaSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2,
+            5, 10, 100 },
+        new double[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100, 100 },
+        new double[] { 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05,
+            0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06 },
+        new GridInterpolator2D(LINEAR, LINEAR));
+    final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5,
+            10, 100 },
+        new double[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100, 100 },
+        new double[] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
+            0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 },
+        new GridInterpolator2D(LINEAR, LINEAR));
+    final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5,
+            10, 100 },
+        new double[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100, 100 },
+        new double[] { -0.25, -0.25, -0.25, -0.25, -0.25, -0.25,
+            -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00 },
+        new GridInterpolator2D(LINEAR, LINEAR));
+    final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5,
+            10, 100 },
+        new double[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100, 100 },
+        new double[] { 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50,
+            0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30 },
+        new GridInterpolator2D(LINEAR, LINEAR));
     return new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, sabrFunction);
   }
 
   /**
    * Create a set of SABR parameter surface (linearly interpolated) with Hagan volatility function.
+   *
    * @return The SABR parameters parameters.
    */
   public static SABRInterestRateParameters createSABR1() {
@@ -65,32 +84,46 @@ public class TestsDataSets {
 
   /**
    * Create a set of SABR parameter surface (linearly interpolated) with a given SABR function. Alpha data is bumped by a given shift with respect to SABR1.
-   * @param sabrFunction The SABR function.
-   * @param shift The shift.
+   *
+   * @param sabrFunction
+   *          The SABR function.
+   * @param shift
+   *          The shift.
    * @return The SABR parameters parameters.
    */
   public static SABRInterestRateParameters createSABR1AlphaBumped(final VolatilityFunctionProvider<SABRFormulaData> sabrFunction, final double shift) {
-    final InterpolatedDoublesSurface alphaSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
-        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift,
-        0.05 + shift, 0.05 + shift, 0.05 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift}, new GridInterpolator2D(LINEAR, LINEAR));
-    //    final VolatilitySurface alphaVolatility = new VolatilitySurface(alphaSurface);
-    final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
-        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}, new GridInterpolator2D(LINEAR, LINEAR));
-    //    final VolatilitySurface betaVolatility = new VolatilitySurface(betaSurface);
-    final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
-        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {-0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00},
+    final InterpolatedDoublesSurface alphaSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0,
+            1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
+        new double[] { 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift,
+            0.05 + shift, 0.05 + shift, 0.05 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift },
         new GridInterpolator2D(LINEAR, LINEAR));
-    //    final VolatilitySurface rhoVolatility = new VolatilitySurface(rhoSurface);
-    final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0, 1,
-        1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30}, new GridInterpolator2D(
+    // final VolatilitySurface alphaVolatility = new VolatilitySurface(alphaSurface);
+    final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0,
+            1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
+        new double[] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 }, new GridInterpolator2D(LINEAR, LINEAR));
+    // final VolatilitySurface betaVolatility = new VolatilitySurface(betaSurface);
+    final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0,
+            1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
+        new double[] { -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00 },
+        new GridInterpolator2D(LINEAR, LINEAR));
+    // final VolatilitySurface rhoVolatility = new VolatilitySurface(rhoSurface);
+    final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
+        new double[] { 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30 }, new GridInterpolator2D(
             LINEAR, LINEAR));
-    //    final VolatilitySurface nuVolatility = new VolatilitySurface(nuSurface);
+    // final VolatilitySurface nuVolatility = new VolatilitySurface(nuSurface);
     return new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, sabrFunction);
   }
 
   /**
    * Create a set of SABR parameter surface (linearly interpolated) with a given SABR function. Alpha data is bumped by 0.0001 with respect to SABR1.
-   * @param sabrFunction The SABR function.
+   *
+   * @param sabrFunction
+   *          The SABR function.
    * @return The SABR parameters parameters.
    */
   public static SABRInterestRateParameters createSABR1AlphaBumped(final VolatilityFunctionProvider<SABRFormulaData> sabrFunction) {
@@ -100,7 +133,9 @@ public class TestsDataSets {
 
   /**
    * Create a set of SABR parameter surface (linearly interpolated) with Hagan volatility function. Alpha data is bumped by a given shift with respect to SABR1.
-   * @param shift The shift.
+   *
+   * @param shift
+   *          The shift.
    * @return The SABR parameters parameters.
    */
   public static SABRInterestRateParameters createSABR1AlphaBumped(final double shift) {
@@ -109,6 +144,7 @@ public class TestsDataSets {
 
   /**
    * Create a set of SABR parameter surface (linearly interpolated) with Hagan volatility function. Alpha data is bumped by 0.0001 with respect to SABR1.
+   *
    * @return The SABR parameters parameters.
    */
   public static SABRInterestRateParameters createSABR1AlphaBumped() {
@@ -117,30 +153,46 @@ public class TestsDataSets {
 
   /**
    * Create a set of SABR parameter surface (linearly interpolated) with a given SABR function. Rho data is bumped by the shift with respect to SABR1.
+   *
+   * @param sabrFunction
+   *          the function
+   * @param shift
+   *          the shift
    * @return The SABR parameters parameters.
    */
   public static SABRInterestRateParameters createSABR1RhoBumped(final VolatilityFunctionProvider<SABRFormulaData> sabrFunction, final double shift) {
-    final InterpolatedDoublesSurface alphaSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
-        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06}, new GridInterpolator2D(
+    final InterpolatedDoublesSurface alphaSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0,
+            1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
+        new double[] { 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06 }, new GridInterpolator2D(
             LINEAR, LINEAR));
-    //    final VolatilitySurface alphaVolatility = new VolatilitySurface(alphaSurface);
-    final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
-        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}, new GridInterpolator2D(LINEAR, LINEAR));
-    //    final VolatilitySurface betaVolatility = new VolatilitySurface(betaSurface);
-    final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
-        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {-0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift,
-        -0.25 + shift, -0.25 + shift, -0.25 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift}, new GridInterpolator2D(LINEAR, LINEAR));
-    //    final VolatilitySurface rhoVolatility = new VolatilitySurface(rhoSurface);
-    final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0, 1,
-        1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30}, new GridInterpolator2D(
+    // final VolatilitySurface alphaVolatility = new VolatilitySurface(alphaSurface);
+    final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0,
+            1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
+        new double[] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 }, new GridInterpolator2D(LINEAR, LINEAR));
+    // final VolatilitySurface betaVolatility = new VolatilitySurface(betaSurface);
+    final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0,
+            1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
+        new double[] { -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift,
+            -0.25 + shift, -0.25 + shift, -0.25 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift },
+        new GridInterpolator2D(LINEAR, LINEAR));
+    // final VolatilitySurface rhoVolatility = new VolatilitySurface(rhoSurface);
+    final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
+        new double[] { 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30 }, new GridInterpolator2D(
             LINEAR, LINEAR));
-    //    final VolatilitySurface nuVolatility = new VolatilitySurface(nuSurface);
+    // final VolatilitySurface nuVolatility = new VolatilitySurface(nuSurface);
     return new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, sabrFunction);
   }
 
   /**
    * Create a set of SABR parameter surface (linearly interpolated) with a given SABR function. Rho data is bumped by 0.0001 with respect to SABR1.
-   * @param sabrFunction The SABR function.
+   *
+   * @param sabrFunction
+   *          The SABR function.
    * @return The SABR parameters parameters.
    */
   public static SABRInterestRateParameters createSABR1RhoBumped(final VolatilityFunctionProvider<SABRFormulaData> sabrFunction) {
@@ -150,7 +202,9 @@ public class TestsDataSets {
 
   /**
    * Create a set of SABR parameter surface (linearly interpolated) with Hagan volatility function. Alpha data is bumped by a given shift with respect to SABR1.
-   * @param shift The shift.
+   *
+   * @param shift
+   *          The shift.
    * @return The SABR parameters parameters.
    */
   public static SABRInterestRateParameters createSABR1RhoBumped(final double shift) {
@@ -159,6 +213,7 @@ public class TestsDataSets {
 
   /**
    * Create a set of SABR parameter surface (linearly interpolated) with Hagan volatility function. Alpha data is bumped by 0.0001 with respect to SABR1.
+   *
    * @return The SABR parameters parameters.
    */
   public static SABRInterestRateParameters createSABR1RhoBumped() {
@@ -168,30 +223,46 @@ public class TestsDataSets {
 
   /**
    * Create a set of SABR parameter surface (linearly interpolated) with a given SABR function. Nu data is bumped by 0.0001 with respect to SABR1.
+   * 
+   * @param sabrFunction
+   *          the function
+   * @param shift
+   *          the shift
    * @return The SABR parameters parameters.
    */
   public static SABRInterestRateParameters createSABR1NuBumped(final VolatilityFunctionProvider<SABRFormulaData> sabrFunction, final double shift) {
-    final InterpolatedDoublesSurface alphaSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
-        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06}, new GridInterpolator2D(
+    final InterpolatedDoublesSurface alphaSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0,
+            1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
+        new double[] { 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06 }, new GridInterpolator2D(
             LINEAR, LINEAR));
-    //    final VolatilitySurface alphaVolatility = new VolatilitySurface(alphaSurface);
-    final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
-        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}, new GridInterpolator2D(LINEAR, LINEAR));
-    //    final VolatilitySurface betaVolatility = new VolatilitySurface(betaSurface);
-    final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
-        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {-0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00},
+    // final VolatilitySurface alphaVolatility = new VolatilitySurface(alphaSurface);
+    final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0,
+            1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
+        new double[] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 }, new GridInterpolator2D(LINEAR, LINEAR));
+    // final VolatilitySurface betaVolatility = new VolatilitySurface(betaSurface);
+    final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0,
+            1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
+        new double[] { -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00 },
         new GridInterpolator2D(LINEAR, LINEAR));
-    //    final VolatilitySurface rhoVolatility = new VolatilitySurface(rhoSurface);
-    final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0, 1,
-        1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift,
-        0.50 + shift, 0.50 + shift, 0.50 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift}, new GridInterpolator2D(LINEAR, LINEAR));
-    //    final VolatilitySurface nuVolatility = new VolatilitySurface(nuSurface);
+    // final VolatilitySurface rhoVolatility = new VolatilitySurface(rhoSurface);
+    final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(
+        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
+        new double[] { 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift,
+            0.50 + shift, 0.50 + shift, 0.50 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift },
+        new GridInterpolator2D(LINEAR, LINEAR));
+    // final VolatilitySurface nuVolatility = new VolatilitySurface(nuSurface);
     return new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, sabrFunction);
   }
 
   /**
    * Create a set of SABR parameter surface (linearly interpolated) with a given SABR function. Nu data is bumped by 0.0001 with respect to SABR1.
-   * @param sabrFunction The SABR function.
+   *
+   * @param sabrFunction
+   *          The SABR function.
    * @return The SABR parameters parameters.
    */
   public static SABRInterestRateParameters createSABR1NuBumped(final VolatilityFunctionProvider<SABRFormulaData> sabrFunction) {
@@ -201,7 +272,9 @@ public class TestsDataSets {
 
   /**
    * Create a set of SABR parameter surface (linearly interpolated) with Hagan volatility function. Nu data is bumped by a given shift with respect to SABR1.
-   * @param shift The shift.
+   *
+   * @param shift
+   *          The shift.
    * @return The SABR parameters parameters.
    */
   public static SABRInterestRateParameters createSABR1NuBumped(final double shift) {
@@ -210,6 +283,7 @@ public class TestsDataSets {
 
   /**
    * Create a set of SABR parameter surface (linearly interpolated) with Hagan volatility function. Nu data is bumped by 0.0001 with respect to SABR1.
+   *
    * @return The SABR parameters parameters.
    */
   public static SABRInterestRateParameters createSABR1NuBumped() {
@@ -219,6 +293,7 @@ public class TestsDataSets {
 
   /**
    * Create a yield curve bundle with two curves. One called "Funding" with a constant rate of 5% and one called "Forward" with a constant rate of 4%;
+   *
    * @return The yield curve bundle.
    */
   public static YieldCurveBundle createCurves1() {
@@ -233,8 +308,9 @@ public class TestsDataSets {
   }
 
   /**
-   * Create a yield curve bundle with three curves. One called "Credit" with a constant rate of 5%, one called "Discounting" with a constant rate of 4%,
-   * and one called "Forward" with a constant rate of 4.5%.
+   * Create a yield curve bundle with three curves. One called "Credit" with a constant rate of 5%, one called "Discounting" with a constant rate of 4%, and one
+   * called "Forward" with a constant rate of 4.5%.
+   *
    * @return The yield curve bundle.
    */
   public static YieldCurveBundle createCurvesBond1() {
@@ -252,8 +328,9 @@ public class TestsDataSets {
   }
 
   /**
-   * Create a yield curve bundle with three curves. One called "Credit" with a constant rate of 6%, one called "Discounting" with a constant rate of 5%,
-   * and one called "Forward" with a constant rate of 5.5%.
+   * Create a yield curve bundle with three curves. One called "Credit" with a constant rate of 6%, one called "Discounting" with a constant rate of 5%, and one
+   * called "Forward" with a constant rate of 5.5%.
+   *
    * @return The yield curve bundle.
    */
   public static YieldCurveBundle createCurvesBond2() {

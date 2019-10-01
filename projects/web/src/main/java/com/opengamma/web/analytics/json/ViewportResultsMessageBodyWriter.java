@@ -22,7 +22,6 @@ import com.opengamma.util.rest.RestUtils;
 import com.opengamma.web.analytics.ViewportResults;
 import com.opengamma.web.analytics.ViewportResultsJsonCsvWriter;
 
-
 /**
  * Writes an instance of {@link ViewportResults} to an HTTP response as JSON and CSV.
  */
@@ -44,27 +43,26 @@ public class ViewportResultsMessageBodyWriter implements MessageBodyWriter<Viewp
 
   @Override
   public long getSize(final ViewportResults results,
-                      final Class<?> type,
-                      final Type genericType,
-                      final Annotation[] annotations,
-                      final MediaType mediaType) {
+      final Class<?> type,
+      final Type genericType,
+      final Annotation[] annotations,
+      final MediaType mediaType) {
     return -1;
   }
 
   @Override
   public void writeTo(final ViewportResults results,
-                      final Class<?> type,
-                      final Type genericType,
-                      final Annotation[] annotations,
-                      final MediaType mediaType,
-                      final MultivaluedMap<String, Object> httpHeaders,
-                      final OutputStream entityStream) throws IOException, WebApplicationException {
-    if (mediaType.getType().equals(MediaType.APPLICATION_JSON_TYPE.getType()) &&
-        mediaType.getSubtype().equalsIgnoreCase(MediaType.APPLICATION_JSON_TYPE.getSubtype())) {
+      final Class<?> type,
+      final Type genericType,
+      final Annotation[] annotations,
+      final MediaType mediaType,
+      final MultivaluedMap<String, Object> httpHeaders,
+      final OutputStream entityStream) throws IOException, WebApplicationException {
+    if (mediaType.getType().equals(MediaType.APPLICATION_JSON_TYPE.getType())
+        && mediaType.getSubtype().equalsIgnoreCase(MediaType.APPLICATION_JSON_TYPE.getSubtype())) {
       entityStream.write(_resultWriter.getJson(results).getBytes());
     }
-    if (mediaType.getType().equals(RestUtils.TEXT_CSV_TYPE.getType()) &&
-        mediaType.getSubtype().equalsIgnoreCase(RestUtils.TEXT_CSV_TYPE.getSubtype())) {
+    if (mediaType.getType().equals(RestUtils.TEXT_CSV_TYPE.getType()) && mediaType.getSubtype().equalsIgnoreCase(RestUtils.TEXT_CSV_TYPE.getSubtype())) {
       entityStream.write(_resultWriter.getCsv(results).getBytes());
     }
   }

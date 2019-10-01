@@ -39,7 +39,7 @@ public class FunctionBlacklistRuleListenerSlowTest {
 
     private int _modificationCount;
 
-    public MockBlacklist() {
+    MockBlacklist() {
       add(RULE_1);
     }
 
@@ -95,7 +95,7 @@ public class FunctionBlacklistRuleListenerSlowTest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public void testAdd_badSequence() throws Exception {
     final ExecutorService executor = Executors.newSingleThreadExecutor();
     try {
@@ -109,12 +109,7 @@ public class FunctionBlacklistRuleListenerSlowTest {
       blacklist._modificationCount = 5;
       blacklist.add(RULE_2);
       listener.ruleAdded(5, RULE_2, executor);
-      executor.submit(new Runnable() {
-        @Override
-        public void run() {
-          latch.countDown();
-        }
-      });
+      executor.submit(() -> latch.countDown());
       latch.await(Timeout.standardTimeoutMillis(), TimeUnit.MILLISECONDS);
       assertEquals(listener._replaceRules, 2);
       assertEquals(listener._addRule, 0);
@@ -138,12 +133,7 @@ public class FunctionBlacklistRuleListenerSlowTest {
       blacklist.add(RULE_2);
       blacklist.add(RULE_3);
       listener.rulesAdded(5, Arrays.asList(RULE_2, RULE_3), executor);
-      executor.submit(new Runnable() {
-        @Override
-        public void run() {
-          latch.countDown();
-        }
-      });
+      executor.submit(() -> latch.countDown());
       latch.await(Timeout.standardTimeoutMillis(), TimeUnit.MILLISECONDS);
       assertEquals(listener._replaceRules, 2);
       assertEquals(listener._addRule, 0);
@@ -165,12 +155,7 @@ public class FunctionBlacklistRuleListenerSlowTest {
       final CountDownLatch latch = new CountDownLatch(2);
       blacklist._modificationCount = 5;
       listener.ruleRemoved(5, RULE_2, executor);
-      executor.submit(new Runnable() {
-        @Override
-        public void run() {
-          latch.countDown();
-        }
-      });
+      executor.submit(() -> latch.countDown());
       latch.await(Timeout.standardTimeoutMillis(), TimeUnit.MILLISECONDS);
       assertEquals(listener._replaceRules, 2);
       assertEquals(listener._addRule, 0);
@@ -192,12 +177,7 @@ public class FunctionBlacklistRuleListenerSlowTest {
       final CountDownLatch latch = new CountDownLatch(2);
       blacklist._modificationCount = 5;
       listener.rulesRemoved(5, Arrays.asList(RULE_2, RULE_3), executor);
-      executor.submit(new Runnable() {
-        @Override
-        public void run() {
-          latch.countDown();
-        }
-      });
+      executor.submit(() -> latch.countDown());
       latch.await(Timeout.standardTimeoutMillis(), TimeUnit.MILLISECONDS);
       assertEquals(listener._replaceRules, 2);
       assertEquals(listener._addRule, 0);

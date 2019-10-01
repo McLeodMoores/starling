@@ -50,7 +50,7 @@ public class MarketDataELCompilerTest {
 
   @BeforeMethod
   public void setUp() throws Exception {
-    _fooEquity =  new EquitySecurity("exchange", "exchangeCode", "Foo", Currency.USD);
+    _fooEquity = new EquitySecurity("exchange", "exchangeCode", "Foo", Currency.USD);
     _fooEquity.addExternalId(ExternalId.of("Test", "FooEquity"));
     _fooEquity.setName("Foo");
     _barEquity = new EquitySecurity("exchange", "exchangeCode", "Bar", Currency.USD);
@@ -62,7 +62,7 @@ public class MarketDataELCompilerTest {
     _swap.addExternalId(ExternalId.of("Test", "Swap"));
   }
 
-  @Test(expectedExceptions = {IllegalArgumentException.class })
+  @Test(expectedExceptions = { IllegalArgumentException.class })
   public void testInvalidExpression() {
     final MarketDataELCompiler compiler = new MarketDataELCompiler();
     compiler.compile("Not a valid expression", new DefaultComputationTargetResolver().atVersionCorrection(VersionCorrection.LATEST));
@@ -91,12 +91,13 @@ public class MarketDataELCompilerTest {
     securities.addSecurity(_fooEquity);
     securities.addSecurity(_swap);
     final MarketDataELCompiler compiler = new MarketDataELCompiler();
-    final OverrideOperation operation = compiler.compile("if (security.type == \"EQUITY\") x * 0.9", new DefaultComputationTargetResolver(securities).atVersionCorrection(VersionCorrection.LATEST));
+    final OverrideOperation operation = compiler.compile("if (security.type == \"EQUITY\") x * 0.9",
+        new DefaultComputationTargetResolver(securities).atVersionCorrection(VersionCorrection.LATEST));
     assertNotNull(operation);
     Object result = operation.apply(new ValueRequirement("Foo", ComputationTargetSpecification.of(_fooEquity)), 42d);
-    assertEquals (result, 42d * 0.9);
+    assertEquals(result, 42d * 0.9);
     result = operation.apply(new ValueRequirement("Foo", ComputationTargetSpecification.of(_swap)), 42d);
-    assertEquals (result, 42d);
+    assertEquals(result, 42d);
   }
 
   public void testMultipleConditionalExpression() {
@@ -106,12 +107,13 @@ public class MarketDataELCompilerTest {
     securities.addSecurity(_swap);
     final MarketDataELCompiler compiler = new MarketDataELCompiler();
     final OverrideOperation operation = compiler.compile(
-        "if (security.type == \"EQUITY\" && security.name == \"Foo\") x * 0.9; if (security.type == \"EQUITY\") x * 1.1; if (security.cow == 42) x * 0", new DefaultComputationTargetResolver(
+        "if (security.type == \"EQUITY\" && security.name == \"Foo\") x * 0.9; if (security.type == \"EQUITY\") x * 1.1; if (security.cow == 42) x * 0",
+        new DefaultComputationTargetResolver(
             securities).atVersionCorrection(VersionCorrection.LATEST));
     assertNotNull(operation);
     // First rule should match
     Object result = operation.apply(new ValueRequirement("Foo", ComputationTargetSpecification.of(_fooEquity)), 42d);
-    assertEquals (result, 42d * 0.9);
+    assertEquals(result, 42d * 0.9);
     // Second rule should match
     result = operation.apply(new ValueRequirement("Foo", ComputationTargetSpecification.of(_barEquity)), 42d);
     assertEquals(result, 42d * 1.1);
@@ -127,23 +129,25 @@ public class MarketDataELCompilerTest {
     assertEquals(result, "Foo");
   }
 
-  public void testUnderlyingExpression () {
+  public void testUnderlyingExpression() {
     final InMemorySecuritySource securities = new InMemorySecuritySource();
     securities.addSecurity(_fooEquity);
-    final EquityOptionSecurity fooOption = new EquityOptionSecurity (OptionType.PUT, 10d, Currency.USD, ExternalId.of("Test", "FooEquity"),
+    final EquityOptionSecurity fooOption = new EquityOptionSecurity(OptionType.PUT, 10d, Currency.USD, ExternalId.of("Test", "FooEquity"),
         new AmericanExerciseType(), new Expiry(zdt(2020, 11, 25, 12, 0, 0, 0, ZoneOffset.UTC)), 42d, "EXCH");
     fooOption.addExternalId(ExternalId.of("Test", "FooOption"));
     securities.addSecurity(fooOption);
     final MarketDataELCompiler compiler = new MarketDataELCompiler();
-    Object result = compiler.compile("security.underlyingId", new DefaultComputationTargetResolver(securities).atVersionCorrection(VersionCorrection.LATEST)).apply(
-        new ValueRequirement("Foo", ComputationTargetSpecification.of(fooOption)), null);
+    Object result = compiler.compile("security.underlyingId", new DefaultComputationTargetResolver(securities).atVersionCorrection(VersionCorrection.LATEST))
+        .apply(
+            new ValueRequirement("Foo", ComputationTargetSpecification.of(fooOption)), null);
     assertEquals(result, ExternalId.of("Test", "FooEquity"));
-    result = compiler.compile("Security:get(security.underlyingId)", new DefaultComputationTargetResolver(securities).atVersionCorrection(VersionCorrection.LATEST)).apply(
-        new ValueRequirement("Foo", ComputationTargetSpecification.of(fooOption)), null);
+    result = compiler
+        .compile("Security:get(security.underlyingId)", new DefaultComputationTargetResolver(securities).atVersionCorrection(VersionCorrection.LATEST)).apply(
+            new ValueRequirement("Foo", ComputationTargetSpecification.of(fooOption)), null);
     assertEquals(result, _fooEquity);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static ZonedDateTime zdt(final int y, final int m, final int d, final int hr, final int min, final int sec, final int nanos, final ZoneId zone) {
     return LocalDateTime.of(y, m, d, hr, min, sec, nanos).atZone(zone);
   }

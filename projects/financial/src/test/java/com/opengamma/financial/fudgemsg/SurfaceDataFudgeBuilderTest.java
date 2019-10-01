@@ -39,7 +39,8 @@ public class SurfaceDataFudgeBuilderTest extends FinancialTestBase {
     }
     final VolatilitySurfaceData<Tenor, Tenor> data = new VolatilitySurfaceData<>("US", "US", Currency.USD, oneToTenYears, oneToTenYears, values);
     assertEquals(data, cycleObject(VolatilitySurfaceData.class, data));
-    final VolatilitySurfaceData<Tenor, Tenor> dataWithName = new VolatilitySurfaceData<>("US", "US", Currency.USD, oneToTenYears, "time", oneToTenYears, "strike", values);
+    final VolatilitySurfaceData<Tenor, Tenor> dataWithName = new VolatilitySurfaceData<>("US", "US", Currency.USD, oneToTenYears, "time", oneToTenYears,
+        "strike", values);
     assertEquals(dataWithName, cycleObject(VolatilitySurfaceData.class, dataWithName));
   }
 

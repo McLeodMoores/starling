@@ -20,8 +20,6 @@ import javax.ws.rs.core.Response;
 
 import org.fudgemsg.FudgeMsg;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.testng.annotations.Test;
 
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
@@ -34,41 +32,36 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterface;
 
 /**
- * Tests the {@link RemoteManageableFunctionBlacklistProvider}, {@RemoteManageableFunctionBlacklist}, {@link DataManageableFunctionBlacklistProviderResource}, and
- * {@link DataManageableFunctionBlacklistResource} classes.
+ * Tests the {@link RemoteManageableFunctionBlacklistProvider}, {@RemoteManageableFunctionBlacklist}, {@link DataManageableFunctionBlacklistProviderResource},
+ * and {@link DataManageableFunctionBlacklistResource} classes.
  */
 @Test(groups = TestGroup.INTEGRATION)
 public class RemoteManageableFunctionBlacklistProviderTest {
 
-  private ManageableFunctionBlacklistProvider createClient(final ExecutorService executor, final JmsConnector jmsConnector, final DataManageableFunctionBlacklistProviderResource server) {
+  private ManageableFunctionBlacklistProvider createClient(final ExecutorService executor, final JmsConnector jmsConnector,
+      final DataManageableFunctionBlacklistProviderResource server) {
     final ManageableFunctionBlacklistProvider client = new RemoteManageableFunctionBlacklistProvider(URI.create("http://localhost/"), executor, jmsConnector) {
       @Override
       protected UniformInterface accessRemote(final URI uri) {
         final UniformInterface builder = Mockito.mock(UniformInterface.class);
         assertTrue(uri.getPath().startsWith("/name/"));
         final String[] s = uri.getPath().split("/");
-        Mockito.when(builder.get(FudgeMsg.class)).thenAnswer(new Answer<Object>() {
-          @Override
-          public Object answer(final InvocationOnMock invocation) throws Throwable {
-            try {
-              return answerGet(server, s).getEntity();
-            } catch (final WebApplicationException e) {
-              assertEquals(e.getResponse().getStatus(), 404);
-              throw new UniformInterfaceException404NotFound(new ClientResponse(404, null, null, null), false);
-            }
+        Mockito.when(builder.get(FudgeMsg.class)).thenAnswer(invocation -> {
+          try {
+            return answerGet(server, s).getEntity();
+          } catch (final WebApplicationException e) {
+            assertEquals(e.getResponse().getStatus(), 404);
+            throw new UniformInterfaceException404NotFound(new ClientResponse(404, null, null, null), false);
           }
         });
-        Mockito.doAnswer(new Answer<Object>() {
-          @Override
-          public Object answer(final InvocationOnMock invocation) throws Throwable {
-            try {
-              return answerPost(server, invocation.getArguments()[0], s).getEntity();
-            } catch (final WebApplicationException e) {
-              assertEquals(e.getResponse().getStatus(), 404);
-              throw new UniformInterfaceException404NotFound(new ClientResponse(404, null, null, null), false);
-            }
+        Mockito.doAnswer(invocation -> {
+          try {
+            return answerPost(server, invocation.getArguments()[0], s).getEntity();
+          } catch (final WebApplicationException e) {
+            assertEquals(e.getResponse().getStatus(), 404);
+            throw new UniformInterfaceException404NotFound(new ClientResponse(404, null, null, null), false);
           }
-        }).when(builder).post(Mockito.<UniformInterface>any());
+        }).when(builder).post(Mockito.<UniformInterface> any());
         return builder;
       }
     };
@@ -102,7 +95,8 @@ public class RemoteManageableFunctionBlacklistProviderTest {
     final JmsConnector jmsConnector = ActiveMQTestUtils.createTestJmsConnector("RemoteManageableFunctionBlacklistProviderTest.testGetBlacklist");
     try {
       final InMemoryFunctionBlacklistProvider underlying = new InMemoryFunctionBlacklistProvider(executor);
-      final DataManageableFunctionBlacklistProviderResource server = new DataManageableFunctionBlacklistProviderResource(underlying, OpenGammaFudgeContext.getInstance(), jmsConnector);
+      final DataManageableFunctionBlacklistProviderResource server = new DataManageableFunctionBlacklistProviderResource(underlying,
+          OpenGammaFudgeContext.getInstance(), jmsConnector);
       final ManageableFunctionBlacklistProvider client = createClient(executor, jmsConnector, server);
       final ManageableFunctionBlacklist foo = client.getBlacklist("Foo");
       assertNotNull(foo);
@@ -132,7 +126,8 @@ public class RemoteManageableFunctionBlacklistProviderTest {
     final JmsConnector jmsConnector = ActiveMQTestUtils.createTestJmsConnector("RemoteManageableFunctionBlacklistProviderTest.testReceiveUpdates");
     try {
       final InMemoryFunctionBlacklistProvider underlying = new InMemoryFunctionBlacklistProvider(executor);
-      final DataManageableFunctionBlacklistProviderResource server = new DataManageableFunctionBlacklistProviderResource(underlying, OpenGammaFudgeContext.getInstance(), jmsConnector);
+      final DataManageableFunctionBlacklistProviderResource server = new DataManageableFunctionBlacklistProviderResource(underlying,
+          OpenGammaFudgeContext.getInstance(), jmsConnector);
       final ManageableFunctionBlacklistProvider client = createClient(executor, jmsConnector, server);
       final FunctionBlacklist clientBlacklist = client.getBlacklist("Test");
       final ManageableFunctionBlacklist serverBlacklist = underlying.getBlacklist("Test");
@@ -148,7 +143,8 @@ public class RemoteManageableFunctionBlacklistProviderTest {
     final JmsConnector jmsConnector = ActiveMQTestUtils.createTestJmsConnector("RemoteManageableFunctionBlacklistProviderTest.testPostUpdates");
     try {
       final InMemoryFunctionBlacklistProvider underlying = new InMemoryFunctionBlacklistProvider(executor);
-      final DataManageableFunctionBlacklistProviderResource server = new DataManageableFunctionBlacklistProviderResource(underlying, OpenGammaFudgeContext.getInstance(), jmsConnector);
+      final DataManageableFunctionBlacklistProviderResource server = new DataManageableFunctionBlacklistProviderResource(underlying,
+          OpenGammaFudgeContext.getInstance(), jmsConnector);
       final ManageableFunctionBlacklistProvider client = createClient(executor, jmsConnector, server);
       final ManageableFunctionBlacklist clientBlacklist = client.getBlacklist("Test");
       final FunctionBlacklist serverBlacklist = underlying.getBlacklist("Test");

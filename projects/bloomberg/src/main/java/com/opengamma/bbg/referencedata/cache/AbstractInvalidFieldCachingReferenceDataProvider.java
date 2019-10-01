@@ -182,8 +182,7 @@ public abstract class AbstractInvalidFieldCachingReferenceDataProvider extends A
    * @return true if error is permanent
    */
   protected boolean isPermanent(final ReferenceDataError error) {
-    return error.isFieldBased() && "BAD_FLD".equals(error.getCategory()) &&
-        "NOT_APPLICABLE_TO_REF_DATA".equals(error.getSubcategory());
+    return error.isFieldBased() && "BAD_FLD".equals(error.getCategory()) && "NOT_APPLICABLE_TO_REF_DATA".equals(error.getSubcategory());
   }
 
 }

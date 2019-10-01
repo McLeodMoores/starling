@@ -54,43 +54,57 @@ public class CurrencyMatrixLookupFunctionTest {
 
   @Test
   public void testGetRequirements() {
-    ComputationTarget target = new ComputationTarget(CurrencyPair.TYPE, CurrencyPair.parse("GBP/USD"));
-    Set<ValueRequirement> requirements = _function.getRequirements(_functionCompilationContext, target, new ValueRequirement(ValueRequirementNames.SPOT_RATE, target.toSpecification()));
+    final ComputationTarget target = new ComputationTarget(CurrencyPair.TYPE, CurrencyPair.parse("GBP/USD"));
+    Set<ValueRequirement> requirements = _function.getRequirements(_functionCompilationContext, target,
+        new ValueRequirement(ValueRequirementNames.SPOT_RATE, target.toSpecification()));
     assertEquals(Iterables.getOnlyElement(requirements),
-        new ValueRequirement(ValueRequirementNames.SPOT_RATE, new ComputationTargetRequirement(CurrencyMatrixResolver.TYPE, ExternalId.of(CurrencyMatrixResolver.IDENTIFIER_SCHEME, "Foo")),
-            ValueProperties.with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "USD").with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "GBP").get()));
+        new ValueRequirement(ValueRequirementNames.SPOT_RATE,
+            new ComputationTargetRequirement(CurrencyMatrixResolver.TYPE, ExternalId.of(CurrencyMatrixResolver.IDENTIFIER_SCHEME, "Foo")),
+            ValueProperties.with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "USD")
+                .with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "GBP").get()));
     requirements = _function.getRequirements(_functionCompilationContext, target,
-        new ValueRequirement(ValueRequirementNames.SPOT_RATE, target.toSpecification(), ValueProperties.with(CurrencyMatrixLookupFunction.CURRENCY_MATRIX_NAME_PROPERTY, "Bar").get()));
+        new ValueRequirement(ValueRequirementNames.SPOT_RATE, target.toSpecification(),
+            ValueProperties.with(CurrencyMatrixLookupFunction.CURRENCY_MATRIX_NAME_PROPERTY, "Bar").get()));
     assertEquals(Iterables.getOnlyElement(requirements),
-        new ValueRequirement(ValueRequirementNames.SPOT_RATE, new ComputationTargetRequirement(CurrencyMatrixResolver.TYPE, ExternalId.of(CurrencyMatrixResolver.IDENTIFIER_SCHEME, "Bar")),
-            ValueProperties.with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "USD").with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "GBP").get()));
+        new ValueRequirement(ValueRequirementNames.SPOT_RATE,
+            new ComputationTargetRequirement(CurrencyMatrixResolver.TYPE, ExternalId.of(CurrencyMatrixResolver.IDENTIFIER_SCHEME, "Bar")),
+            ValueProperties.with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "USD")
+                .with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "GBP").get()));
     requirements = _function.getRequirements(_functionCompilationContext, target,
-        new ValueRequirement(ValueRequirementNames.SPOT_RATE, target.toSpecification(), ValueProperties.with(CurrencyMatrixLookupFunction.CURRENCY_MATRIX_NAME_PROPERTY, "Bar", "Foo").get()));
+        new ValueRequirement(ValueRequirementNames.SPOT_RATE, target.toSpecification(),
+            ValueProperties.with(CurrencyMatrixLookupFunction.CURRENCY_MATRIX_NAME_PROPERTY, "Bar", "Foo").get()));
     assertEquals(
         Iterables.getOnlyElement(requirements),
         new ValueRequirement(ValueRequirementNames.SPOT_RATE, new ComputationTargetRequirement(CurrencyMatrixResolver.TYPE, ExternalIdBundle.of(
             ExternalId.of(CurrencyMatrixResolver.IDENTIFIER_SCHEME, "Foo"), ExternalId.of(CurrencyMatrixResolver.IDENTIFIER_SCHEME, "Bar"))),
-            ValueProperties.with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "USD").with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "GBP").get()));
+            ValueProperties.with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "USD")
+                .with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "GBP").get()));
     requirements = _function.getRequirements(_functionCompilationContext, target,
-        new ValueRequirement(ValueRequirementNames.SPOT_RATE, target.toSpecification(), ValueProperties.withAny(CurrencyMatrixLookupFunction.CURRENCY_MATRIX_NAME_PROPERTY).get()));
+        new ValueRequirement(ValueRequirementNames.SPOT_RATE, target.toSpecification(),
+            ValueProperties.withAny(CurrencyMatrixLookupFunction.CURRENCY_MATRIX_NAME_PROPERTY).get()));
     assertEquals(Iterables.getOnlyElement(requirements),
-        new ValueRequirement(ValueRequirementNames.SPOT_RATE, new ComputationTargetRequirement(CurrencyMatrixResolver.TYPE, ExternalId.of(CurrencyMatrixResolver.IDENTIFIER_SCHEME, "Foo")),
-            ValueProperties.with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "USD").with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "GBP").get()));
+        new ValueRequirement(ValueRequirementNames.SPOT_RATE,
+            new ComputationTargetRequirement(CurrencyMatrixResolver.TYPE, ExternalId.of(CurrencyMatrixResolver.IDENTIFIER_SCHEME, "Foo")),
+            ValueProperties.with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "USD")
+                .with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "GBP").get()));
   }
 
   @Test
   public void testGetResults2() {
-    ComputationTarget target = new ComputationTarget(CurrencyPair.TYPE, CurrencyPair.parse("GBP/USD"));
-    Set<ValueSpecification> results = _function.getResults(
+    final ComputationTarget target = new ComputationTarget(CurrencyPair.TYPE, CurrencyPair.parse("GBP/USD"));
+    final Set<ValueSpecification> results = _function.getResults(
         _functionCompilationContext,
         target,
         ImmutableMap.of(
-            new ValueSpecification(ValueRequirementNames.SPOT_RATE, new ComputationTargetSpecification(CurrencyMatrixResolver.TYPE, UniqueId.of("Matrix", "0")), ValueProperties.with(
-                ValuePropertyNames.FUNCTION, "Test").get()),
-            new ValueRequirement(ValueRequirementNames.SPOT_RATE, new ComputationTargetRequirement(CurrencyMatrixResolver.TYPE, ExternalId.of(CurrencyMatrixResolver.IDENTIFIER_SCHEME, "Foo")))));
+            new ValueSpecification(ValueRequirementNames.SPOT_RATE, new ComputationTargetSpecification(CurrencyMatrixResolver.TYPE, UniqueId.of("Matrix", "0")),
+                ValueProperties.with(
+                    ValuePropertyNames.FUNCTION, "Test").get()),
+            new ValueRequirement(ValueRequirementNames.SPOT_RATE,
+                new ComputationTargetRequirement(CurrencyMatrixResolver.TYPE, ExternalId.of(CurrencyMatrixResolver.IDENTIFIER_SCHEME, "Foo")))));
     assertEquals(
         Iterables.getOnlyElement(results),
-        new ValueSpecification(ValueRequirementNames.SPOT_RATE, target.toSpecification(), ValueProperties.with(ValuePropertyNames.FUNCTION, "currencyMatrixLookup")
-            .with(CurrencyMatrixLookupFunction.CURRENCY_MATRIX_NAME_PROPERTY, "Foo").get()));
+        new ValueSpecification(ValueRequirementNames.SPOT_RATE, target.toSpecification(),
+            ValueProperties.with(ValuePropertyNames.FUNCTION, "currencyMatrixLookup")
+                .with(CurrencyMatrixLookupFunction.CURRENCY_MATRIX_NAME_PROPERTY, "Foo").get()));
   }
 }

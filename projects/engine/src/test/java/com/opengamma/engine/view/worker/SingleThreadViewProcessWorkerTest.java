@@ -142,8 +142,8 @@ public class SingleThreadViewProcessWorkerTest {
       final ViewClient client = vp.createViewClient(ViewProcessorTestEnvironment.TEST_USER);
       final TestViewResultListener resultListener = new TestViewResultListener();
       client.setResultListener(resultListener);
-      final ViewCycleExecutionOptions cycleExecutionOptions =
-          ViewCycleExecutionOptions.builder().setValuationTime(Instant.now()).setMarketDataSpecification(MarketData.live()).create();
+      final ViewCycleExecutionOptions cycleExecutionOptions = ViewCycleExecutionOptions.builder().setValuationTime(Instant.now())
+          .setMarketDataSpecification(MarketData.live()).create();
       final EnumSet<ViewExecutionFlags> flags = ExecutionFlags.none().awaitMarketData().get();
       final ViewExecutionOptions executionOptions = ExecutionOptions.of(ArbitraryViewCycleExecutionSequence.single(cycleExecutionOptions), flags);
       client.attachToViewProcess(env.getViewDefinition().getUniqueId(), executionOptions);
@@ -270,8 +270,8 @@ public class SingleThreadViewProcessWorkerTest {
       final ViewClient client = vp.createViewClient(ViewProcessorTestEnvironment.TEST_USER);
       final TestViewResultListener resultListener = new TestViewResultListener();
       client.setResultListener(resultListener);
-      final ViewCycleExecutionOptions cycleExecutionOptions =
-          ViewCycleExecutionOptions.builder().setValuationTime(Instant.now()).setMarketDataSpecification(MarketData.live()).create();
+      final ViewCycleExecutionOptions cycleExecutionOptions = ViewCycleExecutionOptions.builder().setValuationTime(Instant.now())
+          .setMarketDataSpecification(MarketData.live()).create();
       final EnumSet<ViewExecutionFlags> flags = ExecutionFlags.none().get();
       final ViewExecutionOptions executionOptions = ExecutionOptions.of(ArbitraryViewCycleExecutionSequence.single(cycleExecutionOptions), flags);
       client.attachToViewProcess(env.getViewDefinition().getUniqueId(), executionOptions);
@@ -422,7 +422,7 @@ public class SingleThreadViewProcessWorkerTest {
     private final InMemoryLKVMarketDataProvider _underlyingProvider;
     private final MarketDataAvailabilityProvider _availability;
 
-    public TestLiveMarketDataProvider(final String sourceName, final InMemoryLKVMarketDataProvider underlyingProvider) {
+    TestLiveMarketDataProvider(final String sourceName, final InMemoryLKVMarketDataProvider underlyingProvider) {
       this(sourceName, underlyingProvider, defaultAvailability());
     }
 
@@ -433,7 +433,7 @@ public class SingleThreadViewProcessWorkerTest {
       return availability;
     }
 
-    public TestLiveMarketDataProvider(final String sourceName, final InMemoryLKVMarketDataProvider underlyingProvider,
+    TestLiveMarketDataProvider(final String sourceName, final InMemoryLKVMarketDataProvider underlyingProvider,
         final MarketDataAvailabilityProvider availability) {
       ArgumentChecker.notNull(sourceName, "sourceName");
       _sourceName = sourceName;
@@ -511,7 +511,7 @@ public class SingleThreadViewProcessWorkerTest {
 
     private final Map<String, MarketDataProvider> _providers;
 
-    public MockMarketDataProviderResolver(final String provider1SourceName, final MarketDataProvider provider1, final String provider2SourceName,
+    MockMarketDataProviderResolver(final String provider1SourceName, final MarketDataProvider provider1, final String provider2SourceName,
         final MarketDataProvider provider2, final String provider3SourceName, final MarketDataProvider provider3) {
       _providers = ImmutableMap.of(provider1SourceName, provider1, provider2SourceName, provider2, provider3SourceName, provider3);
     }

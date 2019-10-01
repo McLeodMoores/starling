@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.fudgemsg;
@@ -36,15 +36,15 @@ public class CurrencyMatrixTest extends FinancialTestBase {
     final Collection<Currency> actualSourceCurrencies = actual.getSourceCurrencies();
     final Collection<Currency> actualTargetCurrencies = actual.getTargetCurrencies();
     assertEquals(expectedSourceCurrencies.size(), actualSourceCurrencies.size());
-    for (Currency source : actualSourceCurrencies) {
+    for (final Currency source : actualSourceCurrencies) {
       assertEquals(true, expectedSourceCurrencies.contains(source));
     }
     assertEquals(expectedTargetCurrencies.size(), actualTargetCurrencies.size());
-    for (Currency target : actualTargetCurrencies) {
+    for (final Currency target : actualTargetCurrencies) {
       assertEquals(true, expectedTargetCurrencies.contains(target));
     }
-    for (Currency source : expectedSourceCurrencies) {
-      for (Currency target : expectedTargetCurrencies) {
+    for (final Currency source : expectedSourceCurrencies) {
+      for (final Currency target : expectedTargetCurrencies) {
         assertEquals(expected.getConversion(source, target), actual.getConversion(source, target));
       }
     }
@@ -52,7 +52,7 @@ public class CurrencyMatrixTest extends FinancialTestBase {
 
   @Test
   public void testEmptyMatrix() {
-    final SimpleCurrencyMatrix empty = new SimpleCurrencyMatrix ();
+    final SimpleCurrencyMatrix empty = new SimpleCurrencyMatrix();
     assertMatrixEqual(empty, cycleGenericObject(CurrencyMatrix.class, empty));
   }
 
@@ -60,7 +60,8 @@ public class CurrencyMatrixTest extends FinancialTestBase {
   public void testSymmetricalMatrix() {
     final SimpleCurrencyMatrix simple = new SimpleCurrencyMatrix();
     simple.setLiveData(Currency.USD, Currency.GBP,
-        new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER.getName(), "GBP Curncy")));
+        new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE,
+            ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER.getName(), "GBP Curncy")));
     simple.setFixedConversion(Currency.GBP, Currency.EUR, 0.9);
     simple.setCrossConversion(Currency.USD, Currency.EUR, Currency.GBP);
     simple.setFixedConversion(Currency.EUR, Currency.CHF, 10.0);
@@ -74,14 +75,15 @@ public class CurrencyMatrixTest extends FinancialTestBase {
         case 1:
           return CurrencyMatrixValue.of(r.nextDouble());
         case 2:
-          return CurrencyMatrixValue.of(Currency.of("AA" + (char) ('A' + r.nextInt(('Z' - 'A') + 1))));
+          return CurrencyMatrixValue.of(Currency.of("AA" + (char) ('A' + r.nextInt('Z' - 'A' + 1))));
         case 3:
-          return CurrencyMatrixValue.of(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, ExternalId.of("Test", "" + r.nextLong())));
+          return CurrencyMatrixValue
+              .of(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, ExternalId.of("Test", "" + r.nextLong())));
       }
       return null;
     }
 
-    public RandomMatrix() {
+    RandomMatrix() {
       final Random r = new Random();
       for (char source = 'A'; source < 'Z'; source++) {
         final Currency sourceCurrency = Currency.of("AA" + source);

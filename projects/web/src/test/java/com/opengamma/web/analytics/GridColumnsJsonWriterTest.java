@@ -34,13 +34,12 @@ public class GridColumnsJsonWriterTest {
     final ImmutableList<GridColumnGroup> groups = ImmutableList.of(group1, group2);
     final GridColumnsJsonWriter writer = new GridColumnsJsonWriter(new ResultsFormatter());
     final String json = writer.getJson(groups);
-    final String expectedJson =
-        "[{\"name\":\"group1\",\"dependencyGraphsAvailable\":true,\"columns\":[" +
-            "{\"header\":\"col1\",\"description\":\"col1 desc\",\"type\":\"DOUBLE\"}," +
-            "{\"header\":\"col2\",\"description\":\"col2 desc\",\"type\":\"STRING\"}]}," +
-        "{\"name\":\"group2\",\"dependencyGraphsAvailable\":false,\"columns\":[" +
-            "{\"header\":\"col3\",\"description\":\"col3 desc\",\"type\":\"DOUBLE\"}," +
-            "{\"header\":\"col4\",\"description\":\"col4 desc\",\"type\":\"STRING\"}]}]";
+    final String expectedJson = "[{\"name\":\"group1\",\"dependencyGraphsAvailable\":true,\"columns\":["
+        + "{\"header\":\"col1\",\"description\":\"col1 desc\",\"type\":\"DOUBLE\"},"
+        + "{\"header\":\"col2\",\"description\":\"col2 desc\",\"type\":\"STRING\"}]},"
+        + "{\"name\":\"group2\",\"dependencyGraphsAvailable\":false,\"columns\":["
+        + "{\"header\":\"col3\",\"description\":\"col3 desc\",\"type\":\"DOUBLE\"},"
+        + "{\"header\":\"col4\",\"description\":\"col4 desc\",\"type\":\"STRING\"}]}]";
     assertTrue(JsonTestUtils.equal(new JSONArray(expectedJson), new JSONArray(json)));
   }
 
@@ -48,10 +47,10 @@ public class GridColumnsJsonWriterTest {
 
     @Override
     public ResultsCell getResults(final int rowIndex,
-                                  final TypeFormatter.Format format,
-                                  final ResultsCache cache,
-                                  final Class<?> columnType,
-                                  final Object inlineKey) {
+        final TypeFormatter.Format format,
+        final ResultsCache cache,
+        final Class<?> columnType,
+        final Object inlineKey) {
       return null;
     }
   }

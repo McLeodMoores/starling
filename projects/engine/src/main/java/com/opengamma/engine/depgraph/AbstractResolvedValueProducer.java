@@ -187,7 +187,7 @@ import com.opengamma.engine.value.ValueSpecification;
 
   private final ValueRequirement _valueRequirement;
   private final int _objectId = NEXT_OBJECT_ID.getAndIncrement();
-  //private final InstanceCount _instanceCount = new InstanceCount(this);
+  // private final InstanceCount _instanceCount = new InstanceCount(this);
   private Set<ValueSpecification> _resolvedValues;
   private Set<Callback> _pumped = new HashSet<>();
   private int _pumping; // 0 = not, 1 = pumpImpl about to be called, 3 = next result ready, 7 = last result ready
@@ -296,10 +296,13 @@ import com.opengamma.engine.value.ValueSpecification;
   /**
    * Stores the result in the producer, publishing to any active subscribers that are currently waiting for a value.
    *
-   * @param context the graph building context
-   * @param value the value to store
-   * @param lastResult last result indicator - if this is definitely the last result, the subscribers won't receive a "pump"
-   * handle allowing possible garbage collection of this producer
+   * @param context
+   *          the graph building context
+   * @param value
+   *          the value to store
+   * @param lastResult
+   *          last result indicator - if this is definitely the last result, the subscribers won't receive a "pump" handle allowing possible garbage collection
+   *          of this producer
    * @return true if a value was pushed to the subscribers, false if no value was generated and pushResult or finished must still be called
    */
   protected boolean pushResult(final GraphBuildingContext context, final ResolvedValue value, final boolean lastResult) {
@@ -371,7 +374,7 @@ import com.opengamma.engine.value.ValueSpecification;
         newResults[l] = value;
         _results = newResults;
       } else {
-        _results = new ResolvedValue[] {value };
+        _results = new ResolvedValue[] { value };
       }
       if (_failure != null) {
         // Don't hold onto any failure state if there is a result
@@ -407,13 +410,17 @@ import com.opengamma.engine.value.ValueSpecification;
   /**
    * Triggers either a future (or immediate) call to either one or more {@link #pushResult} or a single {@link #finished}.
    *
-   * @param context building context
+   * @param context
+   *          building context
    */
   protected abstract void pumpImpl(GraphBuildingContext context);
 
   /**
-   * Call when there are no more values that can be pushed. Any callbacks that have had pump called on them will receive a
-   * failure notification. This must only be called once.
+   * Call when there are no more values that can be pushed. Any callbacks that have had pump called on them will receive a failure notification. This must only
+   * be called once.
+   *
+   * @param context
+   *          the context
    */
   protected void finished(final GraphBuildingContext context) {
     assert !_finished;
@@ -460,8 +467,8 @@ import com.opengamma.engine.value.ValueSpecification;
   }
 
   /**
-   * Returns the current results in the order they were produced. If the producer is not in a "finished" state, the results are
-   * the current intermediate values. The caller must not modify the content of the array.
+   * Returns the current results in the order they were produced. If the producer is not in a "finished" state, the results are the current intermediate values.
+   * The caller must not modify the content of the array.
    *
    * @return the current results
    */

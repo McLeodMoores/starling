@@ -149,7 +149,8 @@ import com.opengamma.util.time.Expiry;
         if (!basket.isEmpty()) {
           final Map<String, String> underlyingBond = Maps.newHashMap();
           for (final BondFutureDeliverable bondFutureDeliverable : basket) {
-            underlyingBond.put(ExternalSchemes.BLOOMBERG_TICKER.getName() + "-" + bondFutureDeliverable.getIdentifiers().getValue(ExternalSchemes.BLOOMBERG_TICKER),
+            underlyingBond.put(
+                ExternalSchemes.BLOOMBERG_TICKER.getName() + "-" + bondFutureDeliverable.getIdentifiers().getValue(ExternalSchemes.BLOOMBERG_TICKER),
                 String.valueOf(bondFutureDeliverable.getConversionFactor()));
           }
           templateData.put("underlyingBond", underlyingBond);
@@ -173,10 +174,12 @@ import com.opengamma.util.time.Expiry;
     final Map<String, String> identifiers = Maps.newHashMap();
     final ExternalIdBundle externalIdBundle = security.getExternalIdBundle();
     if (externalIdBundle.getExternalId(ExternalSchemes.BLOOMBERG_BUID) != null) {
-      identifiers.put(ExternalSchemes.BLOOMBERG_BUID.getName(), ExternalSchemes.BLOOMBERG_BUID.getName() + "-" + externalIdBundle.getValue(ExternalSchemes.BLOOMBERG_BUID));
+      identifiers.put(ExternalSchemes.BLOOMBERG_BUID.getName(),
+          ExternalSchemes.BLOOMBERG_BUID.getName() + "-" + externalIdBundle.getValue(ExternalSchemes.BLOOMBERG_BUID));
     }
     if (externalIdBundle.getExternalId(ExternalSchemes.BLOOMBERG_TICKER) != null) {
-      identifiers.put(ExternalSchemes.BLOOMBERG_TICKER.getName(), ExternalSchemes.BLOOMBERG_TICKER.getName() + "-" + externalIdBundle.getValue(ExternalSchemes.BLOOMBERG_TICKER));
+      identifiers.put(ExternalSchemes.BLOOMBERG_TICKER.getName(),
+          ExternalSchemes.BLOOMBERG_TICKER.getName() + "-" + externalIdBundle.getValue(ExternalSchemes.BLOOMBERG_TICKER));
     }
     if (externalIdBundle.getExternalId(ExternalSchemes.CUSIP) != null) {
       identifiers.put(ExternalSchemes.CUSIP.getName(), ExternalSchemes.CUSIP.getName() + "-" + externalIdBundle.getValue(ExternalSchemes.CUSIP));
@@ -197,7 +200,8 @@ import com.opengamma.util.time.Expiry;
     if (StringUtils.isNotBlank(security.getSecurityType())) {
       templateData.put("securityType", security.getSecurityType());
     }
-    if (security.getUniqueId() != null && security.getUniqueId().getObjectId() != null && StringUtils.isNotBlank(security.getUniqueId().getObjectId().toString())) {
+    if (security.getUniqueId() != null && security.getUniqueId().getObjectId() != null
+        && StringUtils.isNotBlank(security.getUniqueId().getObjectId().toString())) {
       templateData.put("object_id", security.getUniqueId().getObjectId().toString());
     }
     if (security.getUniqueId() != null && StringUtils.isNotBlank(security.getUniqueId().getVersion())) {

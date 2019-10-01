@@ -398,8 +398,8 @@ public class JodaBeanRowParser extends RowParser {
               } else {
                 LOGGER.info("Skipping empty or null value for " + prefix + metaProperty.name());
               }
-            } else if (List.class.isAssignableFrom(metaProperty.propertyType()) &&
-                isConvertible(JodaBeanUtils.collectionType(metaProperty, metaProperty.propertyType()))) {
+            } else if (List.class.isAssignableFrom(metaProperty.propertyType())
+                && isConvertible(JodaBeanUtils.collectionType(metaProperty, metaProperty.propertyType()))) {
               builder.set(metaProperty.name(), stringToList(rawValue, JodaBeanUtils.collectionType(metaProperty, metaProperty.propertyType())));
             } else if (Map.class.isAssignableFrom(metaProperty.propertyType()) && metaProperty.name().equalsIgnoreCase("attributes")) {
 
@@ -455,8 +455,8 @@ public class JodaBeanRowParser extends RowParser {
             if (isConvertible(metaProperty.propertyType())) {
               result.put(prefix + metaProperty.name(), metaProperty.getString(bean));
               // Is list, needs to be decomposed
-            } else if (List.class.isAssignableFrom(metaProperty.propertyType()) &&
-                isConvertible(JodaBeanUtils.collectionType(metaProperty, metaProperty.propertyType()))) {
+            } else if (List.class.isAssignableFrom(metaProperty.propertyType())
+                && isConvertible(JodaBeanUtils.collectionType(metaProperty, metaProperty.propertyType()))) {
               result.put(prefix + metaProperty.name(), listToString((List<?>) metaProperty.get(bean)));
             } else if (Map.class.isAssignableFrom(metaProperty.propertyType()) && metaProperty.name().equalsIgnoreCase("attributes")) {
               @SuppressWarnings("unchecked")

@@ -36,8 +36,7 @@ import com.opengamma.master.security.impl.InMemorySecurityMaster;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test the portfolio loader tool behaves as expected. Data should be read from a file and
- * inserted into the correct database masters.
+ * Test the portfolio loader tool behaves as expected. Data should be read from a file and inserted into the correct database masters.
  */
 @Test(groups = TestGroup.UNIT)
 public class XmlPortfolioLoaderToolTest {
@@ -108,9 +107,8 @@ public class XmlPortfolioLoaderToolTest {
     final File file = new File(fileLocation);
     try {
       new PortfolioLoader(_toolContext, "guff", null, file.getAbsolutePath(), true, false, false, false, true,
-                          true, null).execute();
-    }
-    catch (final OpenGammaRuntimeException e) {
+          true, null).execute();
+    } catch (final OpenGammaRuntimeException e) {
 
       // Parse failed so no data should have been added to masters
       assertEquals(_portfolioMaster.search(new PortfolioSearchRequest()).getPortfolios().size(), 0);
@@ -131,7 +129,7 @@ public class XmlPortfolioLoaderToolTest {
 
   @Test
   public void testNoPortfolioMultiplePositionNoTradesCreatesDefaultPortfolio() {
-     // to be added
+    // to be added
   }
 
   @Test
@@ -171,7 +169,6 @@ public class XmlPortfolioLoaderToolTest {
     assertEquals(_securityMaster.search(new SecuritySearchRequest()).getSecurities().size(), 1);
   }
 
-
   @Test
   public void testSinglePortfolioSinglePositionSingleFxOption() {
 
@@ -197,22 +194,18 @@ public class XmlPortfolioLoaderToolTest {
     assertEquals(_securityMaster.search(new SecuritySearchRequest()).getSecurities().size(), 1);
   }
 
-
   /*
-  Removed until ready to fully implement
-  @Test
-  public void testSinglePortfolioNoPositionSingleEquityVarianceSwap() {
-
-    // We should get a position automatically generated for the trade
-    String fileLocation = "src/test/resources/xml_portfolios/single_equity_variance_swap_no_position.xml";
-    File file = new File(fileLocation);
-    new PortfolioLoader(_toolContext, "guff", null, file.getAbsolutePath(), true, true, false, false, false, true).execute();
-
-    assertEquals(_portfolioMaster.search(new PortfolioSearchRequest()).getPortfolios().size(), 1);
-    assertEquals(_positionMaster.search(new PositionSearchRequest()).getPositions().size(), 1);
-    assertEquals(_securityMaster.search(new SecuritySearchRequest()).getSecurities().size(), 1);
-  }
-  */
+   * Removed until ready to fully implement
+   * 
+   * @Test public void testSinglePortfolioNoPositionSingleEquityVarianceSwap() {
+   * 
+   * // We should get a position automatically generated for the trade String fileLocation =
+   * "src/test/resources/xml_portfolios/single_equity_variance_swap_no_position.xml"; File file = new File(fileLocation); new PortfolioLoader(_toolContext,
+   * "guff", null, file.getAbsolutePath(), true, true, false, false, false, true).execute();
+   * 
+   * assertEquals(_portfolioMaster.search(new PortfolioSearchRequest()).getPortfolios().size(), 1); assertEquals(_positionMaster.search(new
+   * PositionSearchRequest()).getPositions().size(), 1); assertEquals(_securityMaster.search(new SecuritySearchRequest()).getSecurities().size(), 1); }
+   */
 
   @Test
   public void testSinglePortfolioNoPositionSingleFxDigitalOption() {
@@ -315,7 +308,8 @@ public class XmlPortfolioLoaderToolTest {
     final List<ManageableSecurity> securities = _securityMaster.search(new SecuritySearchRequest()).getSecurities();
     assertEquals(securities.size(), 1);
     assertEquals(securities.get(0).getAttributes().get("sec-attr1"), "sec-attr1-value");
-    assertEquals(securities.get(0).getAttributes().get("sec-attr2"), "sec-attr2-value"); }
+    assertEquals(securities.get(0).getAttributes().get("sec-attr2"), "sec-attr2-value");
+  }
 
   @Test
   public void testSinglePortfolioNoPositionListedEquityIndexFutureOption() {

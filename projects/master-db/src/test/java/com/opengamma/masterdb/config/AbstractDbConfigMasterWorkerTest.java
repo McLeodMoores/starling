@@ -63,7 +63,7 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doSetUp() {
     init();
@@ -79,7 +79,7 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
     _cfgMaster = null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   protected ObjectId setupTestData(final Instant now) {
     final Clock origClock = _cfgMaster.getClock();
     try {
@@ -134,7 +134,8 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
         102, 102, toSqlTimestamp(_version1bInstant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1bInstant), MAX_SQL_TIMESTAMP, "TestConfig102", cls,
         new SqlParameterValue(Types.BLOB, new SqlLobValue(bytes, lobHandler)));
     template.update("INSERT INTO cfg_config VALUES (?,?,?,?,?, ?,?,?,?)",
-        201, 201, toSqlTimestamp(_version1cInstant), toSqlTimestamp(_version2Instant), toSqlTimestamp(_version1cInstant), MAX_SQL_TIMESTAMP, "TestConfig201", cls,
+        201, 201, toSqlTimestamp(_version1cInstant), toSqlTimestamp(_version2Instant), toSqlTimestamp(_version1cInstant), MAX_SQL_TIMESTAMP, "TestConfig201",
+        cls,
         new SqlParameterValue(Types.BLOB, new SqlLobValue(bytes, lobHandler)));
     template.update("INSERT INTO cfg_config VALUES (?,?,?,?,?, ?,?,?,?)",
         202, 201, toSqlTimestamp(_version2Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version2Instant), MAX_SQL_TIMESTAMP, "TestConfig202", cls,
@@ -155,7 +156,8 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
         302, 302, toSqlTimestamp(_version1bInstant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1bInstant), MAX_SQL_TIMESTAMP, "TestConfig302", cls,
         new SqlParameterValue(Types.BLOB, new SqlLobValue(bytes, lobHandler)));
     template.update("INSERT INTO cfg_config VALUES (?,?,?,?,?, ?,?,?,?)",
-        401, 401, toSqlTimestamp(_version1cInstant), toSqlTimestamp(_version2Instant), toSqlTimestamp(_version1cInstant), MAX_SQL_TIMESTAMP, "TestConfig401", cls,
+        401, 401, toSqlTimestamp(_version1cInstant), toSqlTimestamp(_version2Instant), toSqlTimestamp(_version1cInstant), MAX_SQL_TIMESTAMP, "TestConfig401",
+        cls,
         new SqlParameterValue(Types.BLOB, new SqlLobValue(bytes, lobHandler)));
     template.update("INSERT INTO cfg_config VALUES (?,?,?,?,?, ?,?,?,?)",
         402, 401, toSqlTimestamp(_version2Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version2Instant), MAX_SQL_TIMESTAMP, "TestConfig402", cls,
@@ -163,7 +165,7 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
     _totalBundles = 3;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   protected void assert101(final ConfigDocument test) {
     final UniqueId uniqueId = UniqueId.of("DbCfg", "101", "0");
     assertNotNull(test);

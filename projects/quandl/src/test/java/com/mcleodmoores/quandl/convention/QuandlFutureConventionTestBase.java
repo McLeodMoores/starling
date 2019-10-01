@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.convention;
 
@@ -9,7 +9,6 @@ import static org.testng.Assert.assertNull;
 import org.testng.annotations.Test;
 
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.convention.QuandlFutureConvention;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
@@ -18,71 +17,79 @@ import com.opengamma.id.ExternalIdBundle;
  */
 public abstract class QuandlFutureConventionTestBase {
 
-  //TODO use data providers
+  // TODO use data providers
   /**
    * Gets the name of the convention.
+   *
    * @return The name
    */
   protected abstract String getName();
 
   /**
    * Gets the ids of the convention.
+   *
    * @return The ids
    */
   protected abstract ExternalIdBundle getIds();
 
   /**
    * Gets the last trade time of the future.
+   *
    * @return The last trade time
    */
   protected abstract String getTradeTime();
 
   /**
    * Gets the trading time zone of the future.
+   *
    * @return The trading time zone
    */
   protected abstract String getTimeZone();
 
   /**
    * Gets the unit amount of the future.
+   *
    * @return The unit amount
    */
   protected abstract double getUnitAmount();
 
   /**
    * Gets the id of the underlying.
+   *
    * @return The id of the underlying
    */
   protected abstract ExternalId getUnderlyingId();
 
   /**
    * Gets the trading exchange.
+   *
    * @return The trading exchange
    */
   protected abstract String getTradingExchange();
 
   /**
    * Gets the settlement exchange.
+   *
    * @return The settlement exchange
    */
   protected abstract String getSettlementExchange();
 
   /**
    * Gets an empty instance of the convention to be tested.
+   *
    * @return An empty instance
-   * @param <T> The type of the convention
+   * @param <T>
+   *          The type of the convention
    */
   protected abstract <T extends QuandlFutureConvention> T getEmptyInstance();
 
   /**
-   * Tests the behaviour when a null convention name is supplied to the constructor that does not
-   * take trading and settlement exchange names.
+   * Tests the behaviour when a null convention name is supplied to the constructor that does not take trading and settlement exchange names.
    */
   public abstract void testConstructorNullName1();
 
   /**
-   * Tests the behaviour when a null convention name is supplied to the constructor that takes trading
-   * and settlement exchange names.
+   * Tests the behaviour when a null convention name is supplied to the constructor that takes trading and settlement exchange names.
    */
   public abstract void testConstructorNullName2();
 
@@ -95,15 +102,13 @@ public abstract class QuandlFutureConventionTestBase {
   }
 
   /**
-   * Tests the behaviour when a null external id bundle is supplied to the constructor that does not
-   * take trading and settlement exchange names.
+   * Tests the behaviour when a null external id bundle is supplied to the constructor that does not take trading and settlement exchange names.
    */
   @Test
   public abstract void testConstructorNullExternalIdBundle1();
 
   /**
-   * Tests the behaviour when a null external id bundle is supplied to the constructor that takes trading
-   * and settlement exchange names.
+   * Tests the behaviour when a null external id bundle is supplied to the constructor that takes trading and settlement exchange names.
    */
   @Test
   public abstract void testConstructorNullExternalIdBundle2();
@@ -117,15 +122,13 @@ public abstract class QuandlFutureConventionTestBase {
   }
 
   /**
-   * Tests the behaviour when a null trade time is supplied to the constructor that does not
-   * take trading and settlement exchange names.
+   * Tests the behaviour when a null trade time is supplied to the constructor that does not take trading and settlement exchange names.
    */
   @Test
   public abstract void testConstructorNullTradeTime1();
 
   /**
-   * Tests the behaviour when a null trade time is supplied to the constructor that takes trading
-   * and settlement exchange names.
+   * Tests the behaviour when a null trade time is supplied to the constructor that takes trading and settlement exchange names.
    */
   @Test
   public abstract void testConstructorNullTradeTime2();

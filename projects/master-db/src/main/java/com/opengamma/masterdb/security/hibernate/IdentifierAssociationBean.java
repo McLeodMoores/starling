@@ -80,7 +80,7 @@ public class IdentifierAssociationBean {
     return result;
   }
 
-  //note this will match objects with different id's as long as the domain and identifier are the same.
+  // note this will match objects with different id's as long as the domain and identifier are the same.
   @Override
   public boolean equals(final Object other) {
     if (!(other instanceof IdentifierAssociationBean)) {
@@ -90,10 +90,8 @@ public class IdentifierAssociationBean {
     if (ObjectUtils.equals(otherBean.getId(), getId())) {
       return true;
     }
-    if (ObjectUtils.equals(otherBean.getSecurity(), getSecurity()) &&
-        ObjectUtils.equals(otherBean.getIdentifier(), getIdentifier()) &&
-        ObjectUtils.equals(otherBean.getValidStartDate(), getValidStartDate()) &&
-        ObjectUtils.equals(otherBean.getValidEndDate(), getValidEndDate())) {
+    if (ObjectUtils.equals(otherBean.getSecurity(), getSecurity()) && ObjectUtils.equals(otherBean.getIdentifier(), getIdentifier())
+        && ObjectUtils.equals(otherBean.getValidStartDate(), getValidStartDate()) && ObjectUtils.equals(otherBean.getValidEndDate(), getValidEndDate())) {
       return true;
     }
     return false;

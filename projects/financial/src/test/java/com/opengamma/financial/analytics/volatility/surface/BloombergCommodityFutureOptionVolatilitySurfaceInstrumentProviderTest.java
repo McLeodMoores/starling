@@ -35,20 +35,20 @@ public class BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProviderTe
   private static final String PREFIX = "S ";
   private static final double CENTRE_STRIKE = 1400.0;
   private static final String EXCHANGE_ID = "CBT";
-  private static final BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider PROVIDER =
-    new BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider(PREFIX, POSTFIX, DATA_FIELD_NAME, CENTRE_STRIKE, EXCHANGE_ID);
+  private static final BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider PROVIDER = new BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider(
+      PREFIX, POSTFIX, DATA_FIELD_NAME, CENTRE_STRIKE, EXCHANGE_ID);
 
   private static final LocalDate DATE = LocalDate.of(2012, 11, 21);
   static final Calendar WEEKEND_CALENDAR = new MondayToFridayCalendar("a");
 
-  private static final Short[] EXPIRY_OFFSETS = new Short[] {1, 2, 8, 10};
-  private static final Double[] STRIKES = new Double[] {1350.0, 1400.0, 1450.0};
+  private static final Short[] EXPIRY_OFFSETS = new Short[] { 1, 2, 8, 10 };
+  private static final Double[] STRIKES = new Double[] { 1350.0, 1400.0, 1450.0 };
 
   private static final String[][] RESULTS = new String[][] {
-    new String[] {"S Z2P 1350.0 Comdty", "S Z2P 1400.0 Comdty", "S Z2C 1450.0 Comdty"},
-    new String[] {"S F3P 1350.0 Comdty", "S F3P 1400.0 Comdty", "S F3C 1450.0 Comdty"},
-    new String[] {"S U3P 1350.0 Comdty", "S U3P 1400.0 Comdty", "S U3C 1450.0 Comdty"},
-    new String[] {"S F4P 1350.0 Comdty", "S F4P 1400.0 Comdty", "S F4C 1450.0 Comdty"}};
+      new String[] { "S Z2P 1350.0 Comdty", "S Z2P 1400.0 Comdty", "S Z2C 1450.0 Comdty" },
+      new String[] { "S F3P 1350.0 Comdty", "S F3P 1400.0 Comdty", "S F3C 1450.0 Comdty" },
+      new String[] { "S U3P 1350.0 Comdty", "S U3P 1400.0 Comdty", "S U3C 1450.0 Comdty" },
+      new String[] { "S F4P 1350.0 Comdty", "S F4P 1400.0 Comdty", "S F4C 1450.0 Comdty" } };
 
   @Test
   public void testSoybeanFutureOptionExpiryCalculator_getExpiryMonth() {
@@ -90,7 +90,8 @@ public class BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProviderTe
 
   @Test
   public void testCycle() {
-    BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider provider = new BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider(FUTURE_OPTION_PREFIX, POSTFIX,
+    BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider provider = new BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider(
+        FUTURE_OPTION_PREFIX, POSTFIX,
         DATA_FIELD_NAME, CALL_ABOVE_STRIKE, EXCHANGE);
     assertEquals(provider, cycleObject(BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider.class, provider));
     provider = new BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider(FUTURE_OPTION_PREFIX, POSTFIX,

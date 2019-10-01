@@ -87,7 +87,7 @@ public class EHCachingTempTargetRepositoryTest {
 
     private final Lifecycle _lifecycle;
 
-    public LifecycleTempTargetRepository(final Lifecycle lifecycle) {
+    LifecycleTempTargetRepository(final Lifecycle lifecycle) {
       _lifecycle = lifecycle;
     }
 

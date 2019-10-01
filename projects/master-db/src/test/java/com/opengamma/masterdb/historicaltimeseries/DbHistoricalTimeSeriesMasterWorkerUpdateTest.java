@@ -50,7 +50,7 @@ public class DbHistoricalTimeSeriesMasterWorkerUpdateTest extends AbstractDbHist
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_nullDocument() {
     _htsMaster.update(null);
@@ -138,7 +138,7 @@ public class DbHistoricalTimeSeriesMasterWorkerUpdateTest extends AbstractDbHist
     final HistoricalTimeSeriesInfoDocument old = _htsMaster.get(UniqueId.of("DbHts", "101", "0"));
     assertEquals(base.getUniqueId(), old.getUniqueId());
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
-    assertEquals(now, old.getVersionToInstant());  // old version ended
+    assertEquals(now, old.getVersionToInstant()); // old version ended
     assertEquals(base.getCorrectionFromInstant(), old.getCorrectionFromInstant());
     assertEquals(base.getCorrectionToInstant(), old.getCorrectionToInstant());
     assertEquals(base.getInfo(), old.getInfo());
@@ -201,7 +201,8 @@ public class DbHistoricalTimeSeriesMasterWorkerUpdateTest extends AbstractDbHist
 
     assertEquals(updated, _htsMaster.get(updated.getUniqueId()));
 
-    final HistoricalTimeSeriesInfoHistoryRequest search = new HistoricalTimeSeriesInfoHistoryRequest(baseDoc.getUniqueId(), null, Instant.now(_htsMaster.getClock()));
+    final HistoricalTimeSeriesInfoHistoryRequest search = new HistoricalTimeSeriesInfoHistoryRequest(baseDoc.getUniqueId(), null,
+        Instant.now(_htsMaster.getClock()));
     final HistoricalTimeSeriesInfoHistoryResult searchResult = _htsMaster.history(search);
     assertEquals(3, searchResult.getDocuments().size());
   }
@@ -233,7 +234,7 @@ public class DbHistoricalTimeSeriesMasterWorkerUpdateTest extends AbstractDbHist
     assertEquals(base, test);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void test_toString() {
     assertEquals(_htsMaster.getClass().getSimpleName() + "[DbHts]", _htsMaster.toString());

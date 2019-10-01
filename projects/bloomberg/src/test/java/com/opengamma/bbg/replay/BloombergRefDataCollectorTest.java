@@ -52,8 +52,8 @@ public class BloombergRefDataCollectorTest {
     final File watchListFile = new File(BloombergRefDataCollectorTest.class.getResource(WATCH_LIST_FILE).toURI());
     final File fieldListFile = new File(BloombergRefDataCollectorTest.class.getResource(FIELD_LIST_FILE).toURI());
 
-    final String outfileName = getClass().getSimpleName() + "-" + Thread.currentThread().getName() +
-        "-" + OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'"));
+    final String outfileName = getClass().getSimpleName() + "-" + Thread.currentThread().getName() + "-"
+        + OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'"));
 
     _outputFile = File.createTempFile(outfileName, null);
     _outputFile.deleteOnExit();
@@ -64,11 +64,11 @@ public class BloombergRefDataCollectorTest {
 
   @AfterMethod
   public void tearDown() throws Exception {
-    //clean up
+    // clean up
     _refDataCollector.stop();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void test() {
     final LoggedReferenceDataProvider loggedRefDataProvider = new LoggedReferenceDataProvider(FUDGE_CONTEXT, _outputFile);

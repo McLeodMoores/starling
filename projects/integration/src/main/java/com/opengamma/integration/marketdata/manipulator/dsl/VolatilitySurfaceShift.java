@@ -41,8 +41,11 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
 
   /**
    * @param x
+   *          the x value
    * @param y
+   *          the y value
    * @param shift
+   *          the shift
    */
   @ImmutableConstructor
   /* package */ VolatilitySurfaceShift(final Object x, final Object y, final Number shift) {

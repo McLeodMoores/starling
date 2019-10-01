@@ -36,7 +36,7 @@ import net.sf.ehcache.CacheManager;
 /**
  * Test.
  */
-@Test(groups = {TestGroup.UNIT, "ehcache"})
+@Test(groups = { TestGroup.UNIT, "ehcache" })
 public class ReleaseCacheMessageTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ReleaseCacheMessageTest.class);
@@ -59,7 +59,7 @@ public class ReleaseCacheMessageTest {
     EHCacheUtils.clear(_cacheManager);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static class ReportingBinaryDataStoreFactory implements BinaryDataStoreFactory {
 
     private final Set<ViewComputationCacheKey> _cachesCreated = new HashSet<>();
@@ -67,7 +67,7 @@ public class ReleaseCacheMessageTest {
 
     private final String _name;
 
-    public ReportingBinaryDataStoreFactory(final String name) {
+    ReportingBinaryDataStoreFactory(final String name) {
       _name = name;
     }
 
@@ -88,7 +88,7 @@ public class ReleaseCacheMessageTest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void putStuffIntoCache(final ViewComputationCache cache) {
     final ComputationTargetSpecification target = ComputationTargetSpecification.of(Currency.USD);
     final ValueSpecification valueSpec = new ValueSpecification("Value", target, ValueProperties.with(ValuePropertyNames.FUNCTION, "function ID").get());
@@ -96,7 +96,7 @@ public class ReleaseCacheMessageTest {
     cache.putSharedValue(new ComputedValue(valueSpec, "Bar"));
   }
 
-  private void pause () {
+  private void pause() {
     try {
       Thread.sleep(100);
     } catch (final InterruptedException e) {
@@ -110,7 +110,7 @@ public class ReleaseCacheMessageTest {
       } else if (expectedSize < set.size()) {
         break;
       }
-      pause ();
+      pause();
     }
     Assert.fail("expected=" + expectedSize + ", was=" + set.size());
   }
@@ -121,7 +121,8 @@ public class ReleaseCacheMessageTest {
     final ReportingBinaryDataStoreFactory sharedStore = new ReportingBinaryDataStoreFactory("server shared");
     final DefaultViewComputationCacheSource cacheSource = new DefaultViewComputationCacheSource(
         new InMemoryIdentifierMap(), FUDGE_CONTEXT, new DefaultFudgeMessageStoreFactory(privateServerStore,
-            FUDGE_CONTEXT), new DefaultFudgeMessageStoreFactory(sharedStore, FUDGE_CONTEXT));
+            FUDGE_CONTEXT),
+        new DefaultFudgeMessageStoreFactory(sharedStore, FUDGE_CONTEXT));
     LOGGER.info("Creating server local caches");
     final UniqueId viewCycle1Id = UniqueId.of("Test", "ViewCycle", "1");
     final UniqueId viewCycle2Id = UniqueId.of("Test", "ViewCycle", "2");
@@ -169,7 +170,7 @@ public class ReleaseCacheMessageTest {
     assertEquals(8, sharedStore._cachesDestroyed.size());
     for (int i = 0; i < 5; i++) {
       assertEquals(1, privateClientStore._cachesDestroyed.size());
-      pause ();
+      pause();
     }
     LOGGER.info("Using new cache at remote client");
     final UniqueId viewCycle5Id = UniqueId.of("Test", "ViewCycle", "5");

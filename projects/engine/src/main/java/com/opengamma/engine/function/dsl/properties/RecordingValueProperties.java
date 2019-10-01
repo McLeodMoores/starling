@@ -7,12 +7,12 @@ package com.opengamma.engine.function.dsl.properties;
 
 import com.opengamma.lambdava.streams.Stream;
 import com.opengamma.lambdava.streams.StreamI;
+import com.opengamma.util.ArgumentChecker;
 
 /**
- * Properties.
+ * Records the value properties from a value requirement.
  */
 public final class RecordingValueProperties {
-
   private StreamI<ValuePropertiesModifier> _recordedValueProperties = Stream.empty();
   private final String _copiedFrom;
 
@@ -20,54 +20,107 @@ public final class RecordingValueProperties {
     _copiedFrom = copiedFrom;
   }
 
+  /**
+   * Records the requirement name from which value properties should be copied.
+   *
+   * @param copiedFrom
+   *          the requirement name, not null
+   * @return recording value properties
+   */
   public static RecordingValueProperties copyFrom(final String copiedFrom) {
-    return new RecordingValueProperties(copiedFrom);
+    return new RecordingValueProperties(ArgumentChecker.notNull(copiedFrom, "copiedFrom"));
   }
 
+  /**
+   * Gets empty properties.
+   *
+   * @return recording value properties
+   */
   public static RecordingValueProperties desiredValue() {
     return new RecordingValueProperties(null);
   }
 
+  /**
+   * Gets the value requirement name from which the properties are copied.
+   *
+   * @return the name
+   */
   public String getCopiedFrom() {
     return _copiedFrom;
   }
 
+  /**
+   * Returns a stream of recorded value properties.
+   *
+   * @return the value properties
+   */
   public StreamI<ValuePropertiesModifier> getRecordedValueProperties() {
     return _recordedValueProperties;
   }
 
+  /**
+   * Removes a property and records which property was removed.
+   *
+   * @param propertyName
+   *          the property name, not null
+   * @return the value properties
+   */
   public RecordingValueProperties withoutAny(final String propertyName) {
-    _recordedValueProperties = _recordedValueProperties.cons(new WithoutAny(propertyName));
+    _recordedValueProperties = _recordedValueProperties.append(new WithoutAny(propertyName));
     return this;
   }
 
+  /**
+   * Adds a property and records which property was added.
+   *
+   * @param propertyName
+   *          the property name, not null
+   * @param propertyValue
+   *          the property value, not null
+   * @return the value properties
+   */
   public RecordingValueProperties with(final String propertyName, final String... propertyValue) {
-    for (final String s : propertyValue) {
-      if (s == null) {
-        throw new IllegalArgumentException("propertyValues cannot contain null");
-      }
-    }
-    _recordedValueProperties = _recordedValueProperties.cons(new With(propertyName, propertyValue));
+    ArgumentChecker.noNulls(propertyValue, "propertyValue");
+    _recordedValueProperties = _recordedValueProperties.append(new With(propertyName, propertyValue));
     return this;
   }
 
+  /**
+   * Replaces a property and records which property was replaced.
+   *
+   * @param propertyName
+   *          the property name, not null
+   * @param propertyValue
+   *          the property value, not null
+   * @return the value properties
+   */
   public RecordingValueProperties withReplacement(final String propertyName, final String... propertyValue) {
-    for (final String s : propertyValue) {
-      if (s == null) {
-        throw new IllegalArgumentException("propertyValues cannot contain null");
-      }
-    }
-    _recordedValueProperties = _recordedValueProperties.cons(new WithReplacement(propertyName, propertyValue));
+    ArgumentChecker.noNulls(propertyValue, "propertyValue");
+    _recordedValueProperties = _recordedValueProperties.append(new WithReplacement(propertyName, propertyValue));
     return this;
   }
 
+  /**
+   * Adds a property and records which property was added.
+   *
+   * @param propertyName
+   *          the property name, not null
+   * @return the value properties
+   */
   public RecordingValueProperties withAny(final String propertyName) {
-    _recordedValueProperties = _recordedValueProperties.cons(new WithAny(propertyName));
+    _recordedValueProperties = _recordedValueProperties.append(new WithAny(propertyName));
     return this;
   }
 
+  /**
+   * Adds a property and records which property was added.
+   *
+   * @param propertyName
+   *          the property name, not null
+   * @return the value properties
+   */
   public RecordingValueProperties withOptional(final String propertyName) {
-    _recordedValueProperties = _recordedValueProperties.cons(new WithOptional(propertyName));
+    _recordedValueProperties = _recordedValueProperties.append(new WithOptional(propertyName));
     return this;
   }
 

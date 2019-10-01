@@ -92,7 +92,8 @@ public class InMemoryInterpolatedYieldCurveDefinitionMasterTest {
     VersionCorrection vc = VersionCorrection.ofVersionAsOf(Instant.now());
     sleep();
     _master.add(new YieldCurveDefinitionDocument(new YieldCurveDefinition(Currency.GBP, null, "3", "E", "L", "R", true)));
-    _master.update(new YieldCurveDefinitionDocument(UniqueId.of(_master.getUniqueIdScheme(), "1_GBP"), new YieldCurveDefinition(Currency.GBP, null, "1", "E", "L", "R", false)));
+    _master.update(new YieldCurveDefinitionDocument(UniqueId.of(_master.getUniqueIdScheme(), "1_GBP"),
+        new YieldCurveDefinition(Currency.GBP, null, "1", "E", "L", "R", false)));
     // Expect original data
     YieldCurveDefinition yc = _master.getDefinition(Currency.GBP, "3", vc);
     assertNull(yc);
@@ -187,7 +188,8 @@ public class InMemoryInterpolatedYieldCurveDefinitionMasterTest {
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testUpdate_missing() {
-    _master.update(new YieldCurveDefinitionDocument(UniqueId.of(_master.getUniqueIdScheme(), "3_USD"), new YieldCurveDefinition(Currency.USD, null, "3", "E", "L1", "R1", true)));
+    _master.update(new YieldCurveDefinitionDocument(UniqueId.of(_master.getUniqueIdScheme(), "3_USD"),
+        new YieldCurveDefinition(Currency.USD, null, "3", "E", "L1", "R1", true)));
   }
 
 }

@@ -30,7 +30,8 @@ public class DefaultDistributionSpecificationResolverTest {
   private static final NormalizationRuleResolver NORMALIZATION_RESOLVER = new StandardRuleResolver(
       Arrays.asList(new NormalizationRuleSet("rule1"), new NormalizationRuleSet("rule2")));
   private static final JmsTopicNameResolver REQUEST = IdentityJmsNameResolver.INSTANCE;
-  private static final DefaultDistributionSpecificationResolver RESOLVER = new DefaultDistributionSpecificationResolver(ID_RESOLVER, NORMALIZATION_RESOLVER, REQUEST);
+  private static final DefaultDistributionSpecificationResolver RESOLVER = new DefaultDistributionSpecificationResolver(ID_RESOLVER, NORMALIZATION_RESOLVER,
+      REQUEST);
   private static final List<LiveDataSpecification> SPECS = Arrays.asList(
       new LiveDataSpecification("rule1", Arrays.asList(ExternalId.of("eid", "1"))),
       new LiveDataSpecification("rule2", Arrays.asList(ExternalId.of("eid", "2"))),

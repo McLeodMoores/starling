@@ -26,19 +26,14 @@ import com.opengamma.util.test.TestGroup;
 public class BundleParserTest {
 
   public void testParser() throws Exception {
-    try (final InputStream xmlStream = getClass().getResourceAsStream("uiResourceConfig.xml")) {
+    try (InputStream xmlStream = getClass().getResourceAsStream("uiResourceConfig.xml")) {
 
-      final UriProvider uriProvider = new UriProvider() {
-
-        @Override
-        public URI getUri(final String resourceReference) {
-          try {
-            return new URI(resourceReference);
-          } catch (final URISyntaxException ex) {
-            throw new OpenGammaRuntimeException("Invalid URI for resource " + resourceReference);
-          }
+      final UriProvider uriProvider = resourceReference -> {
+        try {
+          return new URI(resourceReference);
+        } catch (final URISyntaxException ex) {
+          throw new OpenGammaRuntimeException("Invalid URI for resource " + resourceReference);
         }
-
       };
       final BundleParser bundleParser = new BundleParser(uriProvider, "");
       final BundleManager bundleManager = bundleParser.parse(xmlStream);

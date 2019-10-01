@@ -20,6 +20,12 @@ class SimpleFunctionSignature implements FunctionSignature {
   private final ComputationTargetType _computationTargetType;
   private Class<?> _computationTargetClass;
 
+  /**
+   * @param name
+   *          the name of the function, not null
+   * @param computationTargetType
+   *          the computation target type, not null
+   */
   SimpleFunctionSignature(final String name, final ComputationTargetType computationTargetType) {
     _name = name;
     _computationTargetType = computationTargetType;

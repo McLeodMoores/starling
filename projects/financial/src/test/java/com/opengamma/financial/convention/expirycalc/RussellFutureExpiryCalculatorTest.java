@@ -80,7 +80,7 @@ public class RussellFutureExpiryCalculatorTest {
     private static final LocalDate HOLIDAY3 = LocalDate.of(2013, 2, 2);
     private static final LocalDate HOLIDAY4 = LocalDate.of(2013, 3, 15);
 
-    public MyCalendar() {
+    MyCalendar() {
     }
 
     @Override

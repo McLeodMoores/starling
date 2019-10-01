@@ -66,22 +66,21 @@ public class TimeSeriesLoaderTest {
   private static final ExternalId NEW_HTSINFO_EXTERNALID = ExternalId.of(ID_SCHEME, "def");
 
   /**
-   * Tests the time series readers in isolation through the use of a mock sheet reader and a mock time series writer.
-   * A time series is constructed, converted to a sheet (list of rows) and fed through the mock sheet reader into the
-   * time series reader, which should then reconstruct the time series and write it to the mock time series writer.
-   * We verify whether this actually happens for the particular test case.
-   * NOTE: this tests SingleSheetMultiTimeSeriesReader alone, the only reader in use at the moment
+   * Tests the time series readers in isolation through the use of a mock sheet reader and a mock time series writer. A time series is constructed, converted to
+   * a sheet (list of rows) and fed through the mock sheet reader into the time series reader, which should then reconstruct the time series and write it to the
+   * mock time series writer. We verify whether this actually happens for the particular test case. NOTE: this tests SingleSheetMultiTimeSeriesReader alone, the
+   * only reader in use at the moment
    */
   @Test
   public void testTimeSeriesReaders() {
 
     // Build a mock sheet reader with some rows
-    final LocalDate[] dates = {LocalDate.of(2010, 1, 1), LocalDate.of(2011, 1, 1)};
-    final double[] times = {1.0, 2.0};
+    final LocalDate[] dates = { LocalDate.of(2010, 1, 1), LocalDate.of(2011, 1, 1) };
+    final double[] times = { 1.0, 2.0 };
     final LocalDateDoubleTimeSeries lddts = ImmutableLocalDateDoubleTimeSeries.of(dates, times);
     final SheetReader mockSheetReader = buildMockSheetReader(lddts);
     final TimeSeriesReader reader = new SingleSheetMultiTimeSeriesReader(
-            mockSheetReader, DATA_SOURCE, DATA_PROVIDER, DATA_FIELD, OBSERVATION_TIME, ID_SCHEME, DATE_FORMAT);
+        mockSheetReader, DATA_SOURCE, DATA_PROVIDER, DATA_FIELD, OBSERVATION_TIME, ID_SCHEME, DATE_FORMAT);
 
     // Write
     final TimeSeriesWriter mockTimeSeriesWriter = mock(TimeSeriesWriter.class);
@@ -95,23 +94,21 @@ public class TimeSeriesLoaderTest {
   }
 
   /**
-   * Tests the time series writers in isolation through the use of  a mock tool context that
-   * references a specially-created and populated InMemoryHistoricalTimeSeriesMaster. The time series writer
-   * to be tested is supplied with a time series to write, which already exists in the master, with some data points.
-   * We then attempt to retrieve the supposedly updated time series from the in-memory master and assert that this is
-   * the same as the one passed to the writer merged with its original data points.
-   * NOTE: this tests MasterTimeSeriesWriter alone, the only writer in use at the moment
+   * Tests the time series writers in isolation through the use of a mock tool context that references a specially-created and populated
+   * InMemoryHistoricalTimeSeriesMaster. The time series writer to be tested is supplied with a time series to write, which already exists in the master, with
+   * some data points. We then attempt to retrieve the supposedly updated time series from the in-memory master and assert that this is the same as the one
+   * passed to the writer merged with its original data points. NOTE: this tests MasterTimeSeriesWriter alone, the only writer in use at the moment
    */
   @Test
   public void testTimeSeriesWritersExistingHts() {
 
     // Build a mock master with an existing hts
-    final LocalDate[] existingDates = {LocalDate.of(2010, 1, 1), LocalDate.of(2011, 1, 1)};
-    final double[] existingValues = {1.0, 2.0};
+    final LocalDate[] existingDates = { LocalDate.of(2010, 1, 1), LocalDate.of(2011, 1, 1) };
+    final double[] existingValues = { 1.0, 2.0 };
     final LocalDateDoubleTimeSeries existingDataPoints = ImmutableLocalDateDoubleTimeSeries.of(existingDates, existingValues);
 
-    final LocalDate[] newDates = {LocalDate.of(2010, 2, 1), LocalDate.of(2011, 2, 1)};
-    final double[] newValues = {1.5, 2.5};
+    final LocalDate[] newDates = { LocalDate.of(2010, 2, 1), LocalDate.of(2011, 2, 1) };
+    final double[] newValues = { 1.5, 2.5 };
     final LocalDateDoubleTimeSeries newDataPoints = ImmutableLocalDateDoubleTimeSeries.of(newDates, newValues);
     final HistoricalTimeSeriesMaster htsMaster = buildHistoricalTimeSeriesMaster(existingDataPoints);
 
@@ -131,27 +128,24 @@ public class TimeSeriesLoaderTest {
     }
 
     // Assert that the retrieved contents is as expected (combined existing and new dates/values)
-    final LocalDate[] combinedDates = {LocalDate.of(2010, 1, 1), LocalDate.of(2010, 2, 1), LocalDate.of(2011, 1, 1), LocalDate.of(2011, 2, 1)};
-    final double[] combinedValues = {1.0, 1.5, 2.0, 2.5};
+    final LocalDate[] combinedDates = { LocalDate.of(2010, 1, 1), LocalDate.of(2010, 2, 1), LocalDate.of(2011, 1, 1), LocalDate.of(2011, 2, 1) };
+    final double[] combinedValues = { 1.0, 1.5, 2.0, 2.5 };
     final LocalDateDoubleTimeSeries combinedDataPoints = ImmutableLocalDateDoubleTimeSeries.of(combinedDates, combinedValues);
     assert combinedDataPoints.equals(retrievedDataPoints);
   }
 
-
   /**
-   * Tests the time series writers in isolation through the use of  a mock tool context that
-   * references a specially-created and populated InMemoryHistoricalTimeSeriesMaster. The time series writer
-   * to be tested is supplied with a time series to write, which doesn't already exist in the master.
-   * We then attempt to retrieve the new time series from the in-memory master and assert that this is
-   * the same as the one passed to the writer.
-   * NOTE: this tests MasterTimeSeriesWriter alone, the only writer in use at the moment
+   * Tests the time series writers in isolation through the use of a mock tool context that references a specially-created and populated
+   * InMemoryHistoricalTimeSeriesMaster. The time series writer to be tested is supplied with a time series to write, which doesn't already exist in the master.
+   * We then attempt to retrieve the new time series from the in-memory master and assert that this is the same as the one passed to the writer. NOTE: this
+   * tests MasterTimeSeriesWriter alone, the only writer in use at the moment
    */
   @Test
   public void testTimeSeriesWritersNewHts() {
 
     // Build a mock master with an existing hts
-    final LocalDate[] dates = {LocalDate.of(2010, 1, 1), LocalDate.of(2011, 1, 1)};
-    final double[] values = {1.0, 2.0};
+    final LocalDate[] dates = { LocalDate.of(2010, 1, 1), LocalDate.of(2011, 1, 1) };
+    final double[] values = { 1.0, 2.0 };
     final LocalDateDoubleTimeSeries dataPoints = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
     final HistoricalTimeSeriesMaster htsMaster = buildHistoricalTimeSeriesMaster(dataPoints);
     // Write the new data points to an existing hts
@@ -172,15 +166,18 @@ public class TimeSeriesLoaderTest {
   }
 
   /**
-   * Tests the entire time series import pipeline, sending data points all the way from a test input file to
-   * an in-memory master and ensuring that the same points are retrieved.
+   * Tests the entire time series import pipeline, sending data points all the way from a test input file to an in-memory master and ensuring that the same
+   * points are retrieved.
+   *
+   * @throws FileNotFoundException
+   *           if the test input file cannot be found
    */
   @Test
   public void testTimeSeriesLoaderTool() throws FileNotFoundException {
 
     // Build a mock master with an existing hts
-    final LocalDate[] existingDates = {LocalDate.of(2010, 1, 1), LocalDate.of(2011, 1, 1)};
-    final double[] existingValues = {1.0, 2.0};
+    final LocalDate[] existingDates = { LocalDate.of(2010, 1, 1), LocalDate.of(2011, 1, 1) };
+    final double[] existingValues = { 1.0, 2.0 };
     final LocalDateDoubleTimeSeries existingDataPoints = ImmutableLocalDateDoubleTimeSeries.of(existingDates, existingValues);
 
     // Read in the time series directly from the file and construct a time series to compare with
@@ -230,8 +227,6 @@ public class TimeSeriesLoaderTest {
 
     assert compareDataPoints.equals(retrievedDataPoints);
   }
-
-
 
   private SheetReader buildMockSheetReader(final LocalDateDoubleTimeSeries lddts) {
 

@@ -51,7 +51,7 @@ public class BloombergIdentifierProviderTest {
     _idProvider = null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void equityOption() {
     final Set<ExternalIdWithDates> ids = new HashSet<>();
@@ -70,11 +70,13 @@ public class BloombergIdentifierProviderTest {
   public void bondFuture() {
     final Set<ExternalIdWithDates> ids = new HashSet<>();
     ids.add(ExternalIdWithDates.of(ExternalSchemes.bloombergBuidSecurityId("IX1562358-0"), null, null));
-    ids.add(ExternalIdWithDates.of(ExternalSchemes.bloombergTickerSecurityId("USH02 Comdty"), LocalDate.of(2000, Month.DECEMBER, 20), LocalDate.of(2002, Month.MARCH, 19)));
+    ids.add(ExternalIdWithDates.of(ExternalSchemes.bloombergTickerSecurityId("USH02 Comdty"), LocalDate.of(2000, Month.DECEMBER, 20),
+        LocalDate.of(2002, Month.MARCH, 19)));
     ids.add(ExternalIdWithDates.of(ExternalSchemes.cusipSecurityId("USH02"), LocalDate.of(2000, Month.DECEMBER, 20), LocalDate.of(2002, Month.MARCH, 19)));
     final ExternalIdBundleWithDates expectedIds = new ExternalIdBundleWithDates(ids);
 
-    final Collection<ExternalIdBundleWithDates> bbgIds = _idProvider.getExternalIds(Collections.singleton(ExternalSchemes.bloombergTickerSecurityId("USH02 Comdty"))).values();
+    final Collection<ExternalIdBundleWithDates> bbgIds = _idProvider
+        .getExternalIds(Collections.singleton(ExternalSchemes.bloombergTickerSecurityId("USH02 Comdty"))).values();
     assertFalse(bbgIds.isEmpty());
     assertEquals(expectedIds, bbgIds.iterator().next());
   }

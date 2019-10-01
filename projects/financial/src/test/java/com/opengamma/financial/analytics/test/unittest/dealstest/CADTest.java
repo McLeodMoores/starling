@@ -23,6 +23,7 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for CAD cme deals
+ * 
  * @deprecated Deprecated
  */
 @Deprecated
@@ -35,11 +36,11 @@ public class CADTest {
   private static final String ON_NAME = "CAD_BA_3M_ERS";
   private static final String THREE_MONTH_NAME = "CAD_BA_3M_ERS";
   private static final String SIX_MONTH_NAME = "CAD_BA_3M_ERS";
-  final static String DISCOUNTING_CURVE_NAME = "Discounting";
-  final static String FORWARD_3M_CURVE_NAME = "Forward 3M";
-  final static String FORWARD_6M_CURVE_NAME = "Forward 6M";
+  private static final String DISCOUNTING_CURVE_NAME = "Discounting";
+  private static final String FORWARD_3M_CURVE_NAME = "Forward 3M";
+  private static final String FORWARD_6M_CURVE_NAME = "Forward 6M";
 
-  final static Currency CCY = Currency.CAD;
+  private static final Currency CCY = Currency.CAD;
 
   private static final String PAY_CURRENCY = "LEG1_CCY";
 
@@ -87,7 +88,7 @@ public class CADTest {
     }
 
     // Convert the swap security into a swap definition
-    //TODO
+    // TODO
     LOGGER.warn("Got {} trades", trades.size());
   }
 

@@ -26,7 +26,7 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit test for InMemoryConventionBundleMaster.
- * 
+ *
  * @deprecated Deprecated
  */
 @Deprecated
@@ -55,13 +55,13 @@ public class InMemoryConventionBundleMasterTest {
     AssertJUnit.assertEquals("USD LIBOR 3m", conventions2.getName());
     AssertJUnit.assertEquals("US0003M Index", conventions2.getIdentifiers().getValue(ExternalSchemes.BLOOMBERG_TICKER));
     AssertJUnit.assertEquals("USD LIBOR 3m", conventions2.getIdentifiers().getValue(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME));
-    final UniqueId uid3M = conventions2.getUniqueId ();
-    AssertJUnit.assertEquals(InMemoryConventionBundleMaster.IN_MEMORY_UNIQUE_SCHEME.getName(), uid3M.getScheme ());
+    final UniqueId uid3M = conventions2.getUniqueId();
+    AssertJUnit.assertEquals(InMemoryConventionBundleMaster.IN_MEMORY_UNIQUE_SCHEME.getName(), uid3M.getScheme());
     AssertJUnit.assertEquals(actact, conventions2.getDayCount());
     AssertJUnit.assertEquals(modified, conventions2.getBusinessDayConvention());
     AssertJUnit.assertEquals(2, (int) conventions2.getSettlementDays());
 
-    assertFalse(uidON.equals (uid3M));
+    assertFalse(uidON.equals(uid3M));
 
   }
 

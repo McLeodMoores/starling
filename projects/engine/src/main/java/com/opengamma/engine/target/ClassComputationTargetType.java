@@ -30,11 +30,15 @@ import com.opengamma.id.UniqueIdentifiable;
   /**
    * Creates a new instance.
    *
-   * @param target the target class
-   * @param name the preferred display name for the type, this must not contain {@code ()/|} characters
+   * @param target
+   *          the target class
+   * @param name
+   *          the preferred display name for the type, this must not contain {@code ()/|} characters
+   * @param nameWellKnown
+   *          true if display name is to be used as the formal string
    */
   ClassComputationTargetType(final Class<? extends UniqueIdentifiable> target, final String name, final boolean nameWellKnown) {
-    //ok to use concrete class rather than getClass() since this class is final
+    // ok to use concrete class rather than getClass() since this class is final
     super(ClassComputationTargetType.class.getName().hashCode() * 31 + target.getName().hashCode());
     _target = target;
     _name = name;
@@ -64,8 +68,7 @@ import com.opengamma.id.UniqueIdentifiable;
     return getTarget().isAssignableFrom(clazz);
   }
 
-  private static final ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean> IS_COMPATIBLE =
-      new ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean> IS_COMPATIBLE = new ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final ClassComputationTargetType self) {
@@ -99,8 +102,7 @@ import com.opengamma.id.UniqueIdentifiable;
     return type.accept(IS_COMPATIBLE, this);
   }
 
-  private static final ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean> IS_TARGET_TYPE =
-      new ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean> IS_TARGET_TYPE = new ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final ClassComputationTargetType self) {
@@ -159,8 +161,7 @@ import com.opengamma.id.UniqueIdentifiable;
     sb.append(getName());
   }
 
-  private static final ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean> EQUALS =
-      new ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean> EQUALS = new ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final ClassComputationTargetType self) {

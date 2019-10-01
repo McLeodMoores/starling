@@ -20,7 +20,7 @@ import com.opengamma.analytics.math.surface.Surface;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.UNIT)
 public class MathSurfaceTest extends AnalyticsTestBase {
@@ -39,24 +39,18 @@ public class MathSurfaceTest extends AnalyticsTestBase {
   public void testInterpolatedSurface() {
     final LinearInterpolator1D linear = new LinearInterpolator1D();
     final GridInterpolator2D interpolator = new GridInterpolator2D(linear, linear);
-    Surface<Double, Double, Double> s1 = InterpolatedDoublesSurface.from(new double[] {1, 2, 3, 4 }, new double[] {4, 5, 6, 7 }, new double[] {8, 9, 10, 11 }, interpolator);
+    Surface<Double, Double, Double> s1 = InterpolatedDoublesSurface.from(new double[] { 1, 2, 3, 4 }, new double[] { 4, 5, 6, 7 },
+        new double[] { 8, 9, 10, 11 }, interpolator);
     Surface<Double, Double, Double> s2 = cycleObject(Surface.class, s1);
     assertEquals(s1, s2);
-    s1 = InterpolatedDoublesSurface.from(new double[] {1, 2, 3, 4 }, new double[] {4, 5, 6, 7 }, new double[] {8, 9, 10, 11 }, interpolator, "NAME");
+    s1 = InterpolatedDoublesSurface.from(new double[] { 1, 2, 3, 4 }, new double[] { 4, 5, 6, 7 }, new double[] { 8, 9, 10, 11 }, interpolator, "NAME");
     s2 = cycleObject(Surface.class, s1);
     assertEquals(s1, s2);
   }
 
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testFunctionalSurfaceUnserialized() {
-    final Function<Double, Double> f = new Function<Double, Double>() {
-
-      @Override
-      public Double evaluate(final Double... x) {
-        return 9.;
-      }
-
-    };
+    final Function<Double, Double> f = x -> 9.;
     final Surface<Double, Double, Double> s = FunctionalDoublesSurface.from(f);
     cycleObject(Surface.class, s);
   }

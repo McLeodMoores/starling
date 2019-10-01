@@ -151,13 +151,10 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
       return false;
     }
     final VolatilitySurfaceSelector other = (VolatilitySurfaceSelector) obj;
-    return Objects.equals(this._calcConfigNames, other._calcConfigNames) &&
-        Objects.equals(this._names, other._names) &&
-        Objects.equals(this._nameMatchPattern, other._nameMatchPattern) &&
-        Objects.equals(this._nameLikePattern, other._nameLikePattern) &&
-        Objects.equals(this._instrumentTypes, other._instrumentTypes) &&
-        Objects.equals(this._quoteTypes, other._quoteTypes) &&
-        Objects.equals(this._quoteUnits, other._quoteUnits);
+    return Objects.equals(this._calcConfigNames, other._calcConfigNames) && Objects.equals(this._names, other._names)
+        && Objects.equals(this._nameMatchPattern, other._nameMatchPattern) && Objects.equals(this._nameLikePattern, other._nameLikePattern)
+        && Objects.equals(this._instrumentTypes, other._instrumentTypes) && Objects.equals(this._quoteTypes, other._quoteTypes)
+        && Objects.equals(this._quoteUnits, other._quoteUnits);
   }
 
   @Override

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode.stats;
@@ -13,9 +13,6 @@ import static org.testng.AssertJUnit.assertSame;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.opengamma.engine.calcnode.stats.FunctionCosts;
-import com.opengamma.engine.calcnode.stats.FunctionInvocationStatistics;
-import com.opengamma.engine.calcnode.stats.InMemoryFunctionCostsMaster;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -34,7 +31,7 @@ public class FunctionCostsTest {
   }
 
   public void testBasicBehaviour() {
-    FunctionInvocationStatistics stats = _costs.getStatistics("Default", "Foo");
+    final FunctionInvocationStatistics stats = _costs.getStatistics("Default", "Foo");
     assertNotNull(stats);
     // Initial values
     assertEquals(1.0, stats.getInvocationCost(), 1e-5);
@@ -84,7 +81,7 @@ public class FunctionCostsTest {
     writer.run();
     assertEquals(2, _master.size());
     // Create a new repository and check the values were preserved
-    FunctionCosts costs = new FunctionCosts(_master);
+    final FunctionCosts costs = new FunctionCosts(_master);
     stats = costs.getStatistics("Default", "Foo");
     assertEquals(5.0, stats.getInvocationCost(), 0.05);
     assertEquals(6.0, stats.getDataInputCost(), 0.05);
@@ -110,7 +107,7 @@ public class FunctionCostsTest {
     assertEquals(1.7, stats.getDataInputCost(), 0.05);
     assertEquals(2.0, stats.getDataOutputCost(), 0.05);
     // Create a new repository and check the average was preserved
-    FunctionCosts costs = new FunctionCosts(_master);
+    final FunctionCosts costs = new FunctionCosts(_master);
     stats = costs.getStatistics("Default", "Man");
     assertEquals(1.3, stats.getInvocationCost(), 0.05);
     assertEquals(1.7, stats.getDataInputCost(), 0.05);

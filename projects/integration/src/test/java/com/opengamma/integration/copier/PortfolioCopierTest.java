@@ -48,10 +48,10 @@ import au.com.bytecode.opencsv.CSVReader;
 @Test(groups = TestGroup.UNIT)
 public class PortfolioCopierTest {
 
-// TODO Improve portfolio copier test coverage:
-// MasterPositionReader, SingleSheetSimplePositionReader, ZippedPositionReader
-// MasterPositionWriter, SingleSheetSimplePositionWriter, SingleSheetMultiParserPositionWriter, ZippedPositionWriter
-// SimplePortfolioCopier, ResolvingPortfolioCopier
+  // TODO Improve portfolio copier test coverage:
+  // MasterPositionReader, SingleSheetSimplePositionReader, ZippedPositionReader
+  // MasterPositionWriter, SingleSheetSimplePositionWriter, SingleSheetMultiParserPositionWriter, ZippedPositionWriter
+  // SimplePortfolioCopier, ResolvingPortfolioCopier
 
   private static final String PORTFOLIO_NAME = "test";
   private static final String PORTFOLIO_FILE = "src/test/java/com/opengamma/integration/copier/TestPortfolio.csv";
@@ -80,10 +80,8 @@ public class PortfolioCopierTest {
     when(portfolioMaster.add(any(PortfolioDocument.class))).thenReturn(portfolioDocument);
 
     // file to masters
-    PositionReader positionReader =
-        new SingleSheetSimplePositionReader(PORTFOLIO_FILE, SECURITY_TYPE);
-    PositionWriter positionWriter =
-        new MasterPositionWriter(PORTFOLIO_NAME, portfolioMaster, positionMaster, securityMaster, false, false, false);
+    PositionReader positionReader = new SingleSheetSimplePositionReader(PORTFOLIO_FILE, SECURITY_TYPE);
+    PositionWriter positionWriter = new MasterPositionWriter(PORTFOLIO_NAME, portfolioMaster, positionMaster, securityMaster, false, false, false);
     portfolioCopier.copy(positionReader, positionWriter);
     positionReader.close();
     positionWriter.close();
@@ -117,9 +115,7 @@ public class PortfolioCopierTest {
           }
           assert sourceRow != null && destRow != null;
           assertEquals(sourceRow.length, destRow.length,
-                  "Row lengths do not match (source has " +
-                  sourceRow.length + " columns while destination has " +
-                  destRow.length + " columns)");
+              "Row lengths do not match (source has " + sourceRow.length + " columns while destination has " + destRow.length + " columns)");
           for (int i = 0; i < sourceRow.length; i++) {
             assertEquals(sourceRow[i], destRow[i], "Differing contents in line " + j + ", column " + i);
           }

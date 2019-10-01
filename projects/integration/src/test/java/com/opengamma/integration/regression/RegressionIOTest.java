@@ -30,7 +30,7 @@ public class RegressionIOTest {
 
   private static class TestInstance extends RegressionIO {
 
-    public TestInstance(final File baseFile, final Format format) {
+    TestInstance(final File baseFile, final Format format) {
       super(baseFile, format);
     }
 
@@ -62,11 +62,11 @@ public class RegressionIOTest {
       }
     };
     instance.beginWrite();
-    instance.write("tests", ImmutableMap.<String, Object>of("Foo", "Foo instance", "Bar", "Bar instance"));
+    instance.write("tests", ImmutableMap.<String, Object> of("Foo", "Foo instance", "Bar", "Bar instance"));
     instance.endWrite();
     Mockito.verify(format).openWrite(null);
     Mockito.verify(format).closeWrite(null);
-    assertEquals(objects, ImmutableMap.<String, Object>of("Foo", "Foo instance", "Bar", "Bar instance"));
+    assertEquals(objects, ImmutableMap.<String, Object> of("Foo", "Foo instance", "Bar", "Bar instance"));
   }
 
   public void testBulkRead() throws IOException {
@@ -90,7 +90,7 @@ public class RegressionIOTest {
     instance.endRead();
     Mockito.verify(format).openRead(null);
     Mockito.verify(format).closeRead(null);
-    assertEquals(objects, ImmutableMap.<String, Object>of("Foo", "Foo instance", "Bar", "Bar instance"));
+    assertEquals(objects, ImmutableMap.<String, Object> of("Foo", "Foo instance", "Bar", "Bar instance"));
   }
 
 }

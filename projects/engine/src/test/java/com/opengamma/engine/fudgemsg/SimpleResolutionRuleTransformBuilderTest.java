@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -25,8 +25,8 @@ public class SimpleResolutionRuleTransformBuilderTest extends AbstractFudgeBuild
     assertEncodeDecodeCycle(ResolutionRuleTransform.class, transform);
   }
 
-  public void testPopulated () {
-    final SimpleResolutionRuleTransform transform = new SimpleResolutionRuleTransform ();
+  public void testPopulated() {
+    final SimpleResolutionRuleTransform transform = new SimpleResolutionRuleTransform();
     transform.suppressRule("Foo");
     transform.adjustRule("Bar", new EmptyFunctionParameters(), null, null);
     transform.adjustRule("Bar", null, ApplyToAllTargets.INSTANCE, null);

@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.web.json.convention.FxSpotConventionJsonBuilder;
 import com.opengamma.financial.convention.FXSpotConvention;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.test.TestGroup;

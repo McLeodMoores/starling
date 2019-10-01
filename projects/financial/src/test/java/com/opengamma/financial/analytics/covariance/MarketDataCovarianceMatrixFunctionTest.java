@@ -40,10 +40,13 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class MarketDataCovarianceMatrixFunctionTest {
 
-  private final MarketDataCovarianceMatrixFunction FUNCTION = new MarketDataCovarianceMatrixFunction();
-  private final ValueProperties PROPERTIES = ValueProperties.with(ValuePropertyNames.FUNCTION, "Test").get();
-  private final ValueSpecification INPUT_VALUE = new ValueSpecification(ValueRequirementNames.HISTORICAL_TIME_SERIES, ComputationTargetSpecification.NULL, PROPERTIES);
-  private final ValueRequirement DESIRED_VALUE = new ValueRequirement(ValueRequirementNames.COVARIANCE_MATRIX, ComputationTargetSpecification.NULL, PROPERTIES);
+  private static final MarketDataCovarianceMatrixFunction FUNCTION = new MarketDataCovarianceMatrixFunction();
+  private static final ValueProperties PROPERTIES = ValueProperties.with(ValuePropertyNames.FUNCTION, "Test").get();
+  private static final ValueSpecification INPUT_VALUE = new ValueSpecification(ValueRequirementNames.HISTORICAL_TIME_SERIES,
+      ComputationTargetSpecification.NULL,
+      PROPERTIES);
+  private static final ValueRequirement DESIRED_VALUE = new ValueRequirement(ValueRequirementNames.COVARIANCE_MATRIX, ComputationTargetSpecification.NULL,
+      PROPERTIES);
 
   private ValueSpecification timeSeriesSpecification(final int index) {
     return new ValueSpecification(ValueRequirementNames.VALUE, new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE,

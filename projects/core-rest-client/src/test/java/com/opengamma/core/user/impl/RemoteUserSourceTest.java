@@ -96,12 +96,12 @@ public class RemoteUserSourceTest {
   private static class DummyRemoteSource<TYPE> extends RemoteUserSource {
     private final DummyWebResource<TYPE> _resource;
 
-    public DummyRemoteSource(final URI baseUri, final DummyWebResource<TYPE> resource) {
+    DummyRemoteSource(final URI baseUri, final DummyWebResource<TYPE> resource) {
       super(baseUri);
       _resource = resource;
     }
 
-    public DummyRemoteSource(final URI baseUri, final ChangeManager changeManager, final DummyWebResource<TYPE> resource) {
+    DummyRemoteSource(final URI baseUri, final ChangeManager changeManager, final DummyWebResource<TYPE> resource) {
       super(baseUri, changeManager);
       _resource = resource;
     }

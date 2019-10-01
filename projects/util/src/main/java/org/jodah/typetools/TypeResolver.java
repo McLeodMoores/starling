@@ -44,7 +44,8 @@ public final class TypeResolver {
   }
 
   /** Cache of type variable/argument pairs */
-  private static final Map<Class<?>, Reference<Map<TypeVariable<?>, Type>>> typeVariableCache = Collections.synchronizedMap(new WeakHashMap<Class<?>, Reference<Map<TypeVariable<?>, Type>>>());
+  private static final Map<Class<?>, Reference<Map<TypeVariable<?>, Type>>> typeVariableCache = Collections
+      .synchronizedMap(new WeakHashMap<Class<?>, Reference<Map<TypeVariable<?>, Type>>>());
   private static boolean cacheEnabled = true;
 
   /**
@@ -63,32 +64,32 @@ public final class TypeResolver {
   }
 
   /**
-   * Returns the raw class representing the type argument for the {@code targetType} resolved
-   * upwards from the {@code initialType}. If no arguments can be resolved then
-   * {@code Unknown.class} is returned.
+   * Returns the raw class representing the type argument for the {@code targetType} resolved upwards from the {@code initialType}. If no arguments can be
+   * resolved then {@code Unknown.class} is returned.
    *
-   * @param initialType to resolve upwards from
-   * @param targetType to resolve arguments for
-   * @return type argument for {@code initialType} else {@code null} if no type arguments are
-   *         declared
-   * @throws IllegalArgumentException if more or less than one type argument is resolved for the
-   *           give types
+   * @param initialType
+   *          to resolve upwards from
+   * @param targetType
+   *          to resolve arguments for
+   * @return type argument for {@code initialType} else {@code null} if no type arguments are declared
+   * @throws IllegalArgumentException
+   *           if more or less than one type argument is resolved for the give types
    */
   public static <T, I extends T> Class<?> resolveArgument(final Class<I> initialType, final Class<T> targetType) {
     return resolveArgument(resolveGenericType(initialType, targetType), initialType);
   }
 
   /**
-   * Resolves the type argument for the {@code genericType} using type variable information from the
-   * {@code sourceType}. If {@code genericType} is an instance of class, then {@code genericType} is
-   * returned. If no arguments can be resolved then {@code Unknown.class} is returned.
+   * Resolves the type argument for the {@code genericType} using type variable information from the {@code sourceType}. If {@code genericType} is an instance
+   * of class, then {@code genericType} is returned. If no arguments can be resolved then {@code Unknown.class} is returned.
    *
-   * @param genericType to resolve upwards from
-   * @param targetType to resolve arguments for
-   * @return type argument for {@code initialType} else {@code null} if no type arguments are
-   *         declared
-   * @throws IllegalArgumentException if more or less than one type argument is resolved for the
-   *           give types
+   * @param genericType
+   *          to resolve upwards from
+   * @param targetType
+   *          to resolve arguments for
+   * @return type argument for {@code initialType} else {@code null} if no type arguments are declared
+   * @throws IllegalArgumentException
+   *           if more or less than one type argument is resolved for the give types
    */
   public static Class<?> resolveArgument(final Type genericType, final Class<?> targetType) {
     final Class<?>[] arguments = resolveArguments(genericType, targetType);
@@ -105,15 +106,14 @@ public final class TypeResolver {
   }
 
   /**
-   * Returns an array of raw classes representing type arguments for the {@code targetType} resolved
-   * upwards from the {@code initialType}. Arguments for {@code targetType} that cannot be resolved
-   * to a Class are returned as {@code Unknown.class}. If no arguments can be resolved then
-   * {@code null} is returned.
+   * Returns an array of raw classes representing type arguments for the {@code targetType} resolved upwards from the {@code initialType}. Arguments for
+   * {@code targetType} that cannot be resolved to a Class are returned as {@code Unknown.class}. If no arguments can be resolved then {@code null} is returned.
    *
-   * @param initialType to resolve upwards from
-   * @param targetType to resolve arguments for
-   * @return array of raw classes representing type arguments for {@code initialType} else
-   *         {@code null} if no type arguments are declared
+   * @param initialType
+   *          to resolve upwards from
+   * @param targetType
+   *          to resolve arguments for
+   * @return array of raw classes representing type arguments for {@code initialType} else {@code null} if no type arguments are declared
    */
   public static <T, I extends T> Class<?>[] resolveArguments(final Class<I> initialType,
       final Class<T> targetType) {
@@ -121,9 +121,8 @@ public final class TypeResolver {
   }
 
   /**
-   * Resolves the arguments for the {@code genericType} using the type variable information for the
-   * {@code targetType}. Returns {@code null} if {@code genericType} is not parameterized or if
-   * arguments cannot be resolved.
+   * Resolves the arguments for the {@code genericType} using the type variable information for the {@code targetType}. Returns {@code null} if
+   * {@code genericType} is not parameterized or if arguments cannot be resolved.
    */
   public static Class<?>[] resolveArguments(final Type genericType, final Class<?> targetType) {
     Class<?>[] result = null;
@@ -144,8 +143,7 @@ public final class TypeResolver {
   }
 
   /**
-   * Resolves the generic Type for the {@code targetType} by walking the type hierarchy upwards from
-   * the {@code initialType}.
+   * Resolves the generic Type for the {@code targetType} by walking the type hierarchy upwards from the {@code initialType}.
    */
   public static Type resolveGenericType(final Type initialType, final Class<?> targetType) {
     Class<?> rawType;
@@ -181,8 +179,7 @@ public final class TypeResolver {
   }
 
   /**
-   * Resolves the raw class for the given {@code genericType}, using the type variable information
-   * from the {@code targetType}.
+   * Resolves the raw class for the given {@code genericType}, using the type variable information from the {@code targetType}.
    */
   public static Class<?> resolveClass(Type genericType, final Class<?> targetType) {
     if (genericType instanceof Class) {
@@ -196,8 +193,9 @@ public final class TypeResolver {
     } else if (genericType instanceof TypeVariable) {
       final TypeVariable<?> variable = (TypeVariable<?>) genericType;
       genericType = getTypeVariableMap(targetType).get(variable);
-      genericType = genericType == null ? resolveBound(variable) : resolveClass(genericType,
-          targetType);
+      genericType = genericType == null ? resolveBound(variable)
+          : resolveClass(genericType,
+              targetType);
     }
 
     return genericType instanceof Class ? (Class<?>) genericType : Unknown.class;
@@ -262,8 +260,7 @@ public final class TypeResolver {
   }
 
   /**
-   * Populates the {@code typeVariableMap} with type arguments and parameters for the given
-   * {@code type}.
+   * Populates the {@code typeVariableMap} with type arguments and parameters for the given {@code type}.
    */
   private static void buildTypeVariableMap(final ParameterizedType type,
       final Map<TypeVariable<?>, Type> typeVariableMap) {
@@ -294,8 +291,7 @@ public final class TypeResolver {
   }
 
   /**
-   * Resolves the first bound for the {@code typeVariable}, returning {@code Unknown.class} if none
-   * can be resolved.
+   * Resolves the first bound for the {@code typeVariable}, returning {@code Unknown.class} if none can be resolved.
    */
   public static Type resolveBound(final TypeVariable<?> typeVariable) {
     final Type[] bounds = typeVariable.getBounds();

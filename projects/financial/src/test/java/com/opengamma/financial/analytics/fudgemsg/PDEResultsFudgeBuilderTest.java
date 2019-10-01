@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.fudgemsg;
@@ -16,35 +16,34 @@ import com.opengamma.analytics.financial.model.finitedifference.PDEFullResults1D
 import com.opengamma.analytics.financial.model.finitedifference.PDEGrid1D;
 import com.opengamma.util.test.TestGroup;
 
-
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.UNIT)
 public class PDEResultsFudgeBuilderTest extends AnalyticsTestBase {
 
   private static final PDEGrid1D GRID = new PDEGrid1D(3, 4, 400, 0, 10);
-  private static final double[][] DATA = new double[][] {new double[] {1, 2, 3, 4}, new double[] {5, 6, 7, 8}, new double[] {9, 10, 11, 12}};
+  private static final double[][] DATA = new double[][] { new double[] { 1, 2, 3, 4 }, new double[] { 5, 6, 7, 8 }, new double[] { 9, 10, 11, 12 } };
   private static final PDEFullResults1D RESULTS = new PDEFullResults1D(GRID, DATA);
-  private static final double[] STRIKES = new double[] {1, 2, 3, 4};
-  private static final double[] BD = new double[] {0.5, 0.6, 0.7, 0.8};
-  private static final double[] BDD = new double[] {0.51, 0.61, 0.71, 0.81};
-  private static final double[] BG = new double[] {0.52, 0.62, 0.72, 0.82};
-  private static final double[] BDG = new double[] {0.53, 0.63, 0.73, 0.83};
-  private static final double[] BVE = new double[] {0.54, 0.64, 0.74, 0.84};
-  private static final double[] BVA = new double[] {0.55, 0.65, 0.75, 0.85};
-  private static final double[] BVO = new double[] {0.56, 0.66, 0.76, 0.86};
-  private static final double[] D = new double[] {0.15, 0.16, 0.17, 0.8};
-  private static final double[] DD = new double[] {0.151, 0.161, 0.171, 0.181};
-  private static final double[] G = new double[] {0.152, 0.162, 0.172, 0.182};
-  private static final double[] DG = new double[] {0.153, 0.163, 0.173, 0.183};
-  private static final double[] VE = new double[] {0.154, 0.164, 0.174, 0.184};
-  private static final double[] VA = new double[] {0.155, 0.165, 0.175, 0.185};
-  private static final double[] VO = new double[] {0.156, 0.166, 0.176, 0.186};
+  private static final double[] STRIKES = new double[] { 1, 2, 3, 4 };
+  private static final double[] BD = new double[] { 0.5, 0.6, 0.7, 0.8 };
+  private static final double[] BDD = new double[] { 0.51, 0.61, 0.71, 0.81 };
+  private static final double[] BG = new double[] { 0.52, 0.62, 0.72, 0.82 };
+  private static final double[] BDG = new double[] { 0.53, 0.63, 0.73, 0.83 };
+  private static final double[] BVE = new double[] { 0.54, 0.64, 0.74, 0.84 };
+  private static final double[] BVA = new double[] { 0.55, 0.65, 0.75, 0.85 };
+  private static final double[] BVO = new double[] { 0.56, 0.66, 0.76, 0.86 };
+  private static final double[] D = new double[] { 0.15, 0.16, 0.17, 0.8 };
+  private static final double[] DD = new double[] { 0.151, 0.161, 0.171, 0.181 };
+  private static final double[] G = new double[] { 0.152, 0.162, 0.172, 0.182 };
+  private static final double[] DG = new double[] { 0.153, 0.163, 0.173, 0.183 };
+  private static final double[] VE = new double[] { 0.154, 0.164, 0.174, 0.184 };
+  private static final double[] VA = new double[] { 0.155, 0.165, 0.175, 0.185 };
+  private static final double[] VO = new double[] { 0.156, 0.166, 0.176, 0.186 };
   private static final PDEResultCollection PDE_GREEKS = new PDEResultCollection(STRIKES);
-  private static final double[] EXPIRIES = new double[] {1, 5, 10};
-  private static final double[][] STRIKE_GRID = new double[][] {new double[] {1, 2, 3}, new double[] {4, 5, 6}, new double[] {7, 8, 9}};
-  private static final double[][] BUCKETED_VEGA = new double[][] {new double[] {11, 12, 13}, new double[] {14, 15, 16}, new double[] {17, 18, 19}};
+  private static final double[] EXPIRIES = new double[] { 1, 5, 10 };
+  private static final double[][] STRIKE_GRID = new double[][] { new double[] { 1, 2, 3 }, new double[] { 4, 5, 6 }, new double[] { 7, 8, 9 } };
+  private static final double[][] BUCKETED_VEGA = new double[][] { new double[] { 11, 12, 13 }, new double[] { 14, 15, 16 }, new double[] { 17, 18, 19 } };
   private static final BucketedGreekResultCollection BUCKETED_GREEKS = new BucketedGreekResultCollection(EXPIRIES, STRIKE_GRID);
 
   static {
@@ -90,9 +89,11 @@ public class PDEResultsFudgeBuilderTest extends AnalyticsTestBase {
   public void testPDEGreeks() {
     final PDEResultCollection pdeGreeks = cycleObject(PDEResultCollection.class, PDE_GREEKS);
     assertArrayEquals(PDE_GREEKS.getGridGreeks(PDEResultCollection.GRID_BLACK_DELTA), pdeGreeks.getGridGreeks(PDEResultCollection.GRID_BLACK_DELTA), 1e-9);
-    assertArrayEquals(PDE_GREEKS.getGridGreeks(PDEResultCollection.GRID_BLACK_DUAL_DELTA), pdeGreeks.getGridGreeks(PDEResultCollection.GRID_BLACK_DUAL_DELTA), 1e-9);
+    assertArrayEquals(PDE_GREEKS.getGridGreeks(PDEResultCollection.GRID_BLACK_DUAL_DELTA), pdeGreeks.getGridGreeks(PDEResultCollection.GRID_BLACK_DUAL_DELTA),
+        1e-9);
     assertArrayEquals(PDE_GREEKS.getGridGreeks(PDEResultCollection.GRID_BLACK_GAMMA), pdeGreeks.getGridGreeks(PDEResultCollection.GRID_BLACK_GAMMA), 1e-9);
-    assertArrayEquals(PDE_GREEKS.getGridGreeks(PDEResultCollection.GRID_BLACK_DUAL_GAMMA), pdeGreeks.getGridGreeks(PDEResultCollection.GRID_BLACK_DUAL_GAMMA), 1e-9);
+    assertArrayEquals(PDE_GREEKS.getGridGreeks(PDEResultCollection.GRID_BLACK_DUAL_GAMMA), pdeGreeks.getGridGreeks(PDEResultCollection.GRID_BLACK_DUAL_GAMMA),
+        1e-9);
     assertArrayEquals(PDE_GREEKS.getGridGreeks(PDEResultCollection.GRID_BLACK_VEGA), pdeGreeks.getGridGreeks(PDEResultCollection.GRID_BLACK_VEGA), 1e-9);
     assertArrayEquals(PDE_GREEKS.getGridGreeks(PDEResultCollection.GRID_BLACK_VANNA), pdeGreeks.getGridGreeks(PDEResultCollection.GRID_BLACK_VANNA), 1e-9);
     assertArrayEquals(PDE_GREEKS.getGridGreeks(PDEResultCollection.GRID_BLACK_VOMMA), pdeGreeks.getGridGreeks(PDEResultCollection.GRID_BLACK_VOMMA), 1e-9);

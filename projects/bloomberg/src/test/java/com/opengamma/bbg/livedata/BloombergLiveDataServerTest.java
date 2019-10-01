@@ -41,7 +41,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class BloombergLiveDataServerTest {
 
-  private final static UserPrincipal TEST_USER = UserPrincipal.getTestUser();
+  private static final UserPrincipal TEST_USER = UserPrincipal.getTestUser();
 
   private BloombergLiveDataServer _server;
   private JmsLiveDataClient _liveDataClient;
@@ -58,7 +58,7 @@ public class BloombergLiveDataServerTest {
     _liveDataClient.stop();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void testSnapshot() {
     final LiveDataSubscriptionResponse snapshotResponse = snapshot("AAPL US Equity");
@@ -68,14 +68,14 @@ public class BloombergLiveDataServerTest {
     StandardRulesUtils.validateOpenGammaMsg(snapshotResponse.getSnapshot().getFields());
   }
 
-  @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
+  @Test(groups = { "bbgSubscriptionTests" }, enabled = false)
   public void testSnapshotNotPresent() {
     final LiveDataSubscriptionResponse snapshotResponse = snapshot("AAPL.O");
     assertNotNull(snapshotResponse);
     assertEquals(LiveDataSubscriptionResult.NOT_PRESENT, snapshotResponse.getSubscriptionResult());
   }
 
-  @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
+  @Test(groups = { "bbgSubscriptionTests" }, enabled = false)
   public void testSubscribeLimit() throws Exception {
     _server.setSubscriptionLimit(0);
     final CollectingLiveDataListener listener = new CollectingLiveDataListener(1, 0);
@@ -88,7 +88,7 @@ public class BloombergLiveDataServerTest {
     }
   }
 
-  @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
+  @Test(groups = { "bbgSubscriptionTests" }, enabled = false)
   public void testSubscribe() throws Exception {
     final CollectingLiveDataListener listener = new CollectingLiveDataListener(5, 5);
 
@@ -121,13 +121,13 @@ public class BloombergLiveDataServerTest {
     return _liveDataClient.snapshot(TEST_USER, requestedSpecification, 3000);
   }
 
-  @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
+  @Test(groups = { "bbgSubscriptionTests" }, enabled = false)
   public void testPersistentServer() {
     // just check the Spring config's OK
     new ClassPathXmlApplicationContext("/com/opengamma/bbg/livedata/bbg-livedata-context.xml");
   }
 
-  @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
+  @Test(groups = { "bbgSubscriptionTests" }, enabled = false)
   public void swapStripSubscriptions() throws Exception {
     final CollectingLiveDataListener oneWeekListener = new CollectingLiveDataListener();
     final CollectingLiveDataListener twoWeekListener = new CollectingLiveDataListener();
@@ -137,7 +137,7 @@ public class BloombergLiveDataServerTest {
     subscribe(_liveDataClient, twoWeekListener, "US0002W Index");
     subscribe(_liveDataClient, threeMonthListener, "US0003M Index");
 
-    Thread.sleep(5000l);
+    Thread.sleep(5000L);
 
     assertSwapCollectionValid("US0001W Index", oneWeekListener);
     assertSwapCollectionValid("US0002W Index", twoWeekListener);
@@ -165,7 +165,7 @@ public class BloombergLiveDataServerTest {
     }
   }
 
-  @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
+  @Test(groups = { "bbgSubscriptionTests" }, enabled = false)
   public void optionSnapshot() {
     final String option = BloombergTestUtils.getSampleEquityOptionTicker();
     final LiveDataSubscriptionResponse snapshotResponse = snapshot(option);

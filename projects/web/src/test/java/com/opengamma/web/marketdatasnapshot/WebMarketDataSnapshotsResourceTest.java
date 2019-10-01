@@ -112,6 +112,7 @@ public class WebMarketDataSnapshotsResourceTest {
     final ViewDefinition viewDefinition = new ViewDefinition(VIEW_DEFINITION_NAME, "");
     CONFIG_MASTER.add(new ConfigDocument(ConfigItem.of(viewDefinition)));
   }
+
   /**
    * Sets up an empty master and the web resource.
    */
@@ -146,8 +147,7 @@ public class WebMarketDataSnapshotsResourceTest {
   }
 
   /**
-   * Tests the HTML POST response. This always fails because the mock view
-   * processor implementation cannot create a snapshot.
+   * Tests the HTML POST response. This always fails because the mock view processor implementation cannot create a snapshot.
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testHtmlPostFails() {
@@ -315,32 +315,26 @@ public class WebMarketDataSnapshotsResourceTest {
     private boolean _running;
     private boolean _suspended;
 
-    public MockViewProcessor() {
+    MockViewProcessor() {
       final FunctionConfigurationSource functions = new SimpleFunctionConfigurationSource(new FunctionConfigurationBundle());
       _compiledFunctionService = new CompiledFunctionService(functions, new CachingFunctionRepositoryCompiler(), new FunctionCompilationContext());
     }
 
     @Override
     public Future<Runnable> suspend(final ExecutorService executorService) {
-      return executorService.submit(new Runnable() {
-        @Override
-        public void run() {
-          synchronized (MockViewProcessor.this) {
-            assertTrue(_running);
-            assertFalse(_suspended);
-            _suspended = true;
-            _suspendState.add(Boolean.TRUE);
-          }
+      return executorService.submit(() -> {
+        synchronized (MockViewProcessor.this) {
+          assertTrue(_running);
+          assertFalse(_suspended);
+          _suspended = true;
+          _suspendState.add(Boolean.TRUE);
         }
-      }, (Runnable) new Runnable() {
-        @Override
-        public void run() {
-          synchronized (MockViewProcessor.this) {
-            assertTrue(_running);
-            assertTrue(_suspended);
-            _suspended = false;
-            _suspendState.add(Boolean.FALSE);
-          }
+      }, (Runnable) () -> {
+        synchronized (MockViewProcessor.this) {
+          assertTrue(_running);
+          assertTrue(_suspended);
+          _suspended = false;
+          _suspendState.add(Boolean.FALSE);
         }
       });
     }

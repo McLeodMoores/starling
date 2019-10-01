@@ -290,7 +290,7 @@ import com.opengamma.engine.view.ExecutionLogMode;
 
   /**
    * Tests whether {@link #prependFragment} would produce a fragment within the maximum limits.
-   * 
+   *
    * @param fragment
    *          the fragment
    * @param maxItems
@@ -330,6 +330,11 @@ import com.opengamma.engine.view.ExecutionLogMode;
   /**
    * Prepends a fragment. A fragment can be prepended if it produces values needed by this. If output from one doesn't feed into the other, use the cheaper
    * append operation.
+   * 
+   * @param context
+   *          the context
+   * @param fragment
+   *          the fragment
    */
   public void prependFragment(final GraphFragmentContext context, final GraphFragment fragment) {
     final Iterator<DependencyNode> nodeIterator = fragment.getNodes().descendingIterator();

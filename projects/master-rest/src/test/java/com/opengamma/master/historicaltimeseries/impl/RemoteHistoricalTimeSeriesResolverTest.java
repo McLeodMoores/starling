@@ -19,8 +19,6 @@ import javax.ws.rs.WebApplicationException;
 
 import org.fudgemsg.FudgeMsg;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
@@ -130,41 +128,38 @@ public class RemoteHistoricalTimeSeriesResolverTest {
       protected UniformInterface accessRemote(final URI uri) {
         assertTrue(uri.getPath().startsWith("/resolve/"));
         final UniformInterface builder = Mockito.mock(UniformInterface.class);
-        Mockito.when(builder.get(FudgeMsg.class)).thenAnswer(new Answer<FudgeMsg>() {
-          @Override
-          public FudgeMsg answer(final InvocationOnMock invocation) throws Throwable {
-            try {
-              final String[] str = uri.getPath().substring(9).split("/");
-              DataHistoricalTimeSeriesResolverResource.Resolve resolve = server.resolve();
-              for (int i = 0; i < str.length; i++) {
-                if ("adjustment".equals(str[i])) {
-                  final String[] params = uri.getQuery().split("&");
-                  final List<String> ids = new ArrayList<>(params.length);
-                  for (final String param : params) {
-                    ids.add(param.substring(3));
-                  }
-                  return (FudgeMsg) resolve.adjustment(ids).getEntity();
-                } else if ("dataField".equals(str[i])) {
-                  resolve = resolve.dataField(str[++i]);
-                } else if ("dataProvider".equals(str[i])) {
-                  resolve = resolve.dataProvider(str[++i]);
-                } else if ("dataSource".equals(str[i])) {
-                  resolve = resolve.dataSource(str[++i]);
-                } else if ("id".equals(str[i])) {
-                  resolve = resolve.id(str[++i]);
-                } else if ("identifierValidityDate".equals(str[i])) {
-                  resolve = resolve.identifierValidityDate(str[++i]);
-                } else if ("resolutionKey".equals(str[i])) {
-                  resolve = resolve.resolutionKey(str[++i]);
-                } else {
-                  fail(uri + " - " + str[i]);
+        Mockito.when(builder.get(FudgeMsg.class)).thenAnswer(invocation -> {
+          try {
+            final String[] str = uri.getPath().substring(9).split("/");
+            DataHistoricalTimeSeriesResolverResource.Resolve resolve = server.resolve();
+            for (int i = 0; i < str.length; i++) {
+              if ("adjustment".equals(str[i])) {
+                final String[] params = uri.getQuery().split("&");
+                final List<String> ids = new ArrayList<>(params.length);
+                for (final String param : params) {
+                  ids.add(param.substring(3));
                 }
+                return (FudgeMsg) resolve.adjustment(ids).getEntity();
+              } else if ("dataField".equals(str[i])) {
+                resolve = resolve.dataField(str[++i]);
+              } else if ("dataProvider".equals(str[i])) {
+                resolve = resolve.dataProvider(str[++i]);
+              } else if ("dataSource".equals(str[i])) {
+                resolve = resolve.dataSource(str[++i]);
+              } else if ("id".equals(str[i])) {
+                resolve = resolve.id(str[++i]);
+              } else if ("identifierValidityDate".equals(str[i])) {
+                resolve = resolve.identifierValidityDate(str[++i]);
+              } else if ("resolutionKey".equals(str[i])) {
+                resolve = resolve.resolutionKey(str[++i]);
+              } else {
+                fail(uri + " - " + str[i]);
               }
-              return (FudgeMsg) resolve.get().getEntity();
-            } catch (final WebApplicationException e) {
-              assertEquals(e.getResponse().getStatus(), 404);
-              throw new UniformInterfaceException404NotFound(new ClientResponse(404, null, null, null), false);
             }
+            return (FudgeMsg) resolve.get().getEntity();
+          } catch (final WebApplicationException e) {
+            assertEquals(e.getResponse().getStatus(), 404);
+            throw new UniformInterfaceException404NotFound(new ClientResponse(404, null, null, null), false);
           }
         });
         return builder;
@@ -223,11 +218,13 @@ public class RemoteHistoricalTimeSeriesResolverTest {
     adjuster.setIdentifierBundle(ExternalIdBundle.of(ExternalId.of("Test1", "Foo"), ExternalId.of("Test2", "Foo")));
     adjuster.setResult(new HistoricalTimeSeriesAdjustment.DivideBy(100d));
     resolver.setResult(new HistoricalTimeSeriesResolutionResult(new ManageableHistoricalTimeSeriesInfo(), adjuster));
-    final HistoricalTimeSeriesResolutionResult result = client.resolve(ExternalIdBundle.of(ExternalId.of("Test1", "Foo"), ExternalId.of("Test2", "Foo")), null, null, null, "PX_LAST", null);
+    final HistoricalTimeSeriesResolutionResult result = client.resolve(ExternalIdBundle.of(ExternalId.of("Test1", "Foo"), ExternalId.of("Test2", "Foo")), null,
+        null, null, "PX_LAST", null);
     assertNotNull(result);
     adjuster.setIdentifierBundle(ExternalIdBundle.of(ExternalId.of("Test1", "Foo")));
     adjuster.setResult(HistoricalTimeSeriesAdjustment.NoOp.INSTANCE);
-    HistoricalTimeSeriesAdjustment adjustment = result.getAdjuster().getAdjustment(ExternalIdBundle.of(ExternalId.of("Test1", "Foo"), ExternalId.of("Test2", "Foo")));
+    HistoricalTimeSeriesAdjustment adjustment = result.getAdjuster()
+        .getAdjustment(ExternalIdBundle.of(ExternalId.of("Test1", "Foo"), ExternalId.of("Test2", "Foo")));
     assertEquals(adjustment.toString(), "100.0 /");
     adjustment = result.getAdjuster().getAdjustment(ExternalIdBundle.of(ExternalId.of("Test1", "Foo")));
     assertEquals(adjustment.toString(), "");

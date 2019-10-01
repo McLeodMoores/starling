@@ -37,12 +37,16 @@ public class PortfolioReaderTest {
   public void testListedSecurityLoad() {
 
     // An EquityIndexFutureOption
-    final String data = "\"currency\",\"exchange\",\"exerciseType\",\"expiry\",\"externalIdBundle\",\"underlyingId\",\"optionType\",\"position:quantity\",\"securityType\",\"trade:counterpartyExternalId\",\"trade:deal\",\"trade:premium\",\"trade:premiumCurrency\",\"trade:premiumDate\",\"trade:premiumTime\",\"trade:quantity\",\"trade:tradeDate\",\"trade:tradeTime\"\n" +
-        "\"USD\",\"NEW YORK STOCK EXCHANGE INC.\",\"European\",\"2050-01-01T00:00:00+00:00[Europe/London]\",\"EIFO_ID~EIFO1234\",\"UNDERLYING_ID~ul9999\",\"PUT\",\"1264\",\"EQUITY_INDEX_FUTURE_OPTION\",\"CPID~123\",,,,,,1000,\"2014-01-01\",\n";
+    final String data = "\"currency\",\"exchange\",\"exerciseType\",\"expiry\",\"externalIdBundle\","
+        + "\"underlyingId\",\"optionType\",\"position:quantity\",\"securityType\","
+        + "\"trade:counterpartyExternalId\",\"trade:deal\",\"trade:premium\","
+        + "\"trade:premiumCurrency\",\"trade:premiumDate\",\"trade:premiumTime\",\"trade:quantity\",\"trade:tradeDate\",\"trade:tradeTime\"\n"
+        +
+        "\"USD\",\"NEW YORK STOCK EXCHANGE INC.\",\"European\",\"2050-01-01T00:00:00+00:00[Europe/London]\","
+        + "\"EIFO_ID~EIFO1234\",\"UNDERLYING_ID~ul9999\",\"PUT\",\"1264\",\"EQUITY_INDEX_FUTURE_OPTION\",\"CPID~123\",,,,,,1000,\"2014-01-01\",\n";
     populateFileWithData(data);
     final PortfolioReader portfolioReader = new PortfolioReader(new SingleSheetSimplePositionReader(_tempFile.getAbsolutePath(), "EquityIndexFutureOption"),
-                                                             "EquityIndexFutureOption Portfolio"
-    );
+        "EquityIndexFutureOption Portfolio");
 
     final Pair<Portfolio, Set<ManageableSecurity>> pair = portfolioReader.createPortfolio();
     final Portfolio portfolio = pair.getFirst();
@@ -63,12 +67,21 @@ public class PortfolioReaderTest {
 
   @Test
   public void testOtcSecurityLoad() {
-    final String data = "adjustCashSettlementDate,adjustEffectiveDate,adjustMaturityDate,businessDayConvention,buy,cashSettlementDate,coupon,couponFrequency,dayCount,debtSeniority,effectiveDate,immAdjustMaturityDate,includeAccruedPremium,maturityDate,name,notional,position:quantity,protectionBuyer,protectionSeller,protectionStart,quotedSpread,recoveryRate,referenceEntity,regionId,restructuringClause,startDate,stubType,trade:counterpartyExternalId,trade:premium,trade:premiumCurrency,trade:premiumDate,trade:premiumTime,trade:quantity,trade:tradeDate,trade:tradeTime,upfrontAmount\n" +
-        "FALSE,FALSE,FALSE,Following,TRUE,2013-03-24T00:00:00.0Z,100,Semi-annual,ACT/360,SNRFOR,2013-03-21T00:00:00.0Z,FALSE,TRUE,2020-03-20T00:00:00.0Z,STEM GBP 100 7Y,GBP 1000000,1,EXTERNAL_CODE~ProtBuyer_1,EXTERNAL_CODE~ProtSeller_1,TRUE,100,0.4,MARKIT_RED_CODE~5AB67W,FINANCIAL_REGION~CARIBBEAN,MR,2013-03-20T00:00:00.0Z,SHORT_START,EXTERNAL_CODE~ProtSeller_1,,,,,1,2013-03-22,,GBP 50000";
+    final String data = "adjustCashSettlementDate,adjustEffectiveDate,adjustMaturityDate,"
+        + "businessDayConvention,buy,cashSettlementDate,coupon,couponFrequency,dayCount,debtSeniority,"
+        + "effectiveDate,immAdjustMaturityDate,includeAccruedPremium,maturityDate,name,notional,"
+        + "position:quantity,protectionBuyer,protectionSeller,protectionStart,quotedSpread,"
+        + "recoveryRate,referenceEntity,regionId,restructuringClause,startDate,stubType,"
+        + "trade:counterpartyExternalId,trade:premium,trade:premiumCurrency,trade:premiumDate,"
+        + "trade:premiumTime,trade:quantity,trade:tradeDate,trade:tradeTime,upfrontAmount\n"
+        + "FALSE,FALSE,FALSE,Following,TRUE,2013-03-24T00:00:00.0Z,100,Semi-annual,ACT/360,"
+        + "SNRFOR,2013-03-21T00:00:00.0Z,FALSE,TRUE,2020-03-20T00:00:00.0Z,STEM GBP 100 7Y,GBP 1000000,"
+        + "1,EXTERNAL_CODE~ProtBuyer_1,EXTERNAL_CODE~ProtSeller_1,TRUE,100,0.4,MARKIT_RED_CODE~5AB67W,"
+        + "FINANCIAL_REGION~CARIBBEAN,MR,2013-03-20T00:00:00.0Z,SHORT_START,EXTERNAL_CODE~ProtSeller_1,,,,,1,2013-03-22,,GBP 50000";
     populateFileWithData(data);
 
     final PortfolioReader portfolioReader = new PortfolioReader(new SingleSheetSimplePositionReader(_tempFile.getAbsolutePath(), "StandardVanillaCDS"),
-                                                             "CDS Portfolio");
+        "CDS Portfolio");
 
     final Pair<Portfolio, Set<ManageableSecurity>> pair = portfolioReader.createPortfolio();
     final Portfolio portfolio = pair.getFirst();
@@ -87,7 +100,6 @@ public class PortfolioReaderTest {
     // Check trade has security id on too
     assertThat(positions.get(0).getTrades().iterator().next().getSecurityLink().getExternalId(), is(idBundle));
   }
-
 
   @BeforeMethod
   public void doSetUp() throws Exception {

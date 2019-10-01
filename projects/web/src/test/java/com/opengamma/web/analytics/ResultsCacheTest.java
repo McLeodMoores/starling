@@ -43,8 +43,10 @@ public class ResultsCacheTest {
   private final ComputationTargetSpecification _target2 = ComputationTargetSpecification.of(UniqueId.of("fake", "id2"));
   private final ValueRequirement _req1 = new ValueRequirement("req1", _target1);
   private final ValueRequirement _req2 = new ValueRequirement("req2", _target2);
-  private final ValueSpecification _spec1 = new ValueSpecification(_req1.getValueName(), _target1, ValueProperties.builder().with(ValuePropertyNames.FUNCTION, "fn1").get());
-  private final ValueSpecification _spec2 = new ValueSpecification(_req2.getValueName(), _target2, ValueProperties.builder().with(ValuePropertyNames.FUNCTION, "fn2").get());
+  private final ValueSpecification _spec1 = new ValueSpecification(_req1.getValueName(), _target1,
+      ValueProperties.builder().with(ValuePropertyNames.FUNCTION, "fn1").get());
+  private final ValueSpecification _spec2 = new ValueSpecification(_req2.getValueName(), _target2,
+      ValueProperties.builder().with(ValuePropertyNames.FUNCTION, "fn2").get());
 
   @Test
   public void putResultsNoHistory() {

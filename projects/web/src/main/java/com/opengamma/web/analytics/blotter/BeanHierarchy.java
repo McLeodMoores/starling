@@ -70,14 +70,12 @@ import com.google.common.collect.Sets;
   }
 
   /**
-   * @param type A type
-   * @return true if type is a concrete subclass of {@link Bean} whose {@link MetaBean} was in the set passed to
-   * the constructor.
+   * @param type
+   *          A type
+   * @return true if type is a concrete subclass of {@link Bean} whose {@link MetaBean} was in the set passed to the constructor.
    */
   private boolean isConcreteBeanWithMetaBean(final Class<?> type) {
-    return Bean.class.isAssignableFrom(type) &&
-        (type.getModifiers() & Modifier.ABSTRACT) != Modifier.ABSTRACT &&
-        _classesWithMetaBean.contains(type);
+    return Bean.class.isAssignableFrom(type) && (type.getModifiers() & Modifier.ABSTRACT) != Modifier.ABSTRACT && _classesWithMetaBean.contains(type);
   }
 
   private static final class Node {

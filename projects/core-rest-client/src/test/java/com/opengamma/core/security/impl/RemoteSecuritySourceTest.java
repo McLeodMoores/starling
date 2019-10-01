@@ -353,12 +353,12 @@ public class RemoteSecuritySourceTest {
   private static class DummyRemoteSource<TYPE> extends RemoteSecuritySource {
     private final DummyWebResource<TYPE> _resource;
 
-    public DummyRemoteSource(final URI baseUri, final DummyWebResource<TYPE> resource) {
+    DummyRemoteSource(final URI baseUri, final DummyWebResource<TYPE> resource) {
       super(baseUri);
       _resource = resource;
     }
 
-    public DummyRemoteSource(final URI baseUri, final ChangeManager changeManager, final DummyWebResource<TYPE> resource) {
+    DummyRemoteSource(final URI baseUri, final ChangeManager changeManager, final DummyWebResource<TYPE> resource) {
       super(baseUri, changeManager);
       _resource = resource;
     }
@@ -450,7 +450,7 @@ public class RemoteSecuritySourceTest {
     private final UniqueId _uid;
     private final String _name;
 
-    public TestSecurity(final UniqueId uid, final String name) {
+    TestSecurity(final UniqueId uid, final String name) {
       _uid = uid;
       _name = name;
     }

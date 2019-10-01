@@ -127,24 +127,18 @@ public class BaseNonCompiledInvokerTest {
   class DV01TestFun extends BaseNonCompiledInvoker {
     @Override
     protected FunctionSignature functionSignature() {
-
       return function("DV01Function", ComputationTargetType.POSITION)
-
           .outputs(
-
               output(DV01)
-              .targetSpec(originalTarget())  //takes  ComputationTargetSpecification or TargetSpecificationReference
-              .properties(copyFrom(PV01)
-                  .withReplacement(ValuePropertyNames.FUNCTION, getUniqueId())
-                  .withAny(ValuePropertyNames.SHIFT))
-              )
+                  .targetSpec(originalTarget()) // takes ComputationTargetSpecification or TargetSpecificationReference
+                  .properties(copyFrom(PV01)
+                      .withReplacement(ValuePropertyNames.FUNCTION, getUniqueId())
+                      .withAny(ValuePropertyNames.SHIFT)))
           .inputs(
               input(PV01)
-              .targetSpec(originalTarget())
-              .properties(desiredValue()
-                  .withoutAny(ValuePropertyNames.SHIFT)
-                  )
-              );
+                  .targetSpec(originalTarget())
+                  .properties(desiredValue()
+                      .withoutAny(ValuePropertyNames.SHIFT)));
     }
 
     @Override

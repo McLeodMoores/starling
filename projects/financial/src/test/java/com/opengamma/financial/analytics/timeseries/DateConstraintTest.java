@@ -54,8 +54,10 @@ public class DateConstraintTest {
     testConstructionParseAndEval(DateConstraint.VALUATION_TIME.nextWeekDay().nextWeekDay(), "NextWeekDay(NextWeekDay)", nowDate.plusDays(2));
     testConstructionParseAndEval(DateConstraint.VALUATION_TIME.minus(Period.ofMonths(1)), "-P1M", nowDate.minusMonths(1));
     testConstructionParseAndEval(DateConstraint.VALUATION_TIME.plus(Period.ofMonths(1)), "+P1M", nowDate.plusMonths(1));
-    testConstructionParseAndEval(DateConstraint.VALUATION_TIME.minus(Period.ofMonths(1)).previousWeekDay(), "PreviousWeekDay(-P1M)", nowDate.minusMonths(1).minusDays(1));
-    testConstructionParseAndEval(DateConstraint.VALUATION_TIME.minus(Period.ofMonths(1)).previousWeekDay().plus(Period.ofDays(7)), "PreviousWeekDay(-P1M)+P7D", nowDate.minusMonths(1).plusDays(6));
+    testConstructionParseAndEval(DateConstraint.VALUATION_TIME.minus(Period.ofMonths(1)).previousWeekDay(), "PreviousWeekDay(-P1M)",
+        nowDate.minusMonths(1).minusDays(1));
+    testConstructionParseAndEval(DateConstraint.VALUATION_TIME.minus(Period.ofMonths(1)).previousWeekDay().plus(Period.ofDays(7)), "PreviousWeekDay(-P1M)+P7D",
+        nowDate.minusMonths(1).plusDays(6));
     testConstructionParseAndEval(DateConstraint.VALUATION_TIME.minus(Period.ofMonths(1)).nextWeekDay().plus(Period.ofDays(7)).nextWeekDay(),
         "NextWeekDay(NextWeekDay(-P1M)+P7D)", nowDate.minusMonths(1).plusDays(9));
   }

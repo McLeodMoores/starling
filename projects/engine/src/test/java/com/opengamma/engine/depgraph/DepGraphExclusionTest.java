@@ -19,7 +19,6 @@ import com.opengamma.engine.function.FunctionDefinition;
 import com.opengamma.engine.function.exclusion.AbstractFunctionExclusionGroups;
 import com.opengamma.engine.function.exclusion.FunctionExclusionGroup;
 import com.opengamma.engine.function.exclusion.FunctionExclusionGroups;
-import com.opengamma.engine.function.resolver.FunctionPriority;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.TestLifecycle;
 
@@ -29,7 +28,7 @@ import com.opengamma.util.test.TestLifecycle;
 @Test(groups = TestGroup.UNIT)
 public class DepGraphExclusionTest extends AbstractDependencyGraphBuilderTest {
 
-  private static abstract class Group extends AbstractFunctionExclusionGroups {
+  private abstract static class Group extends AbstractFunctionExclusionGroups {
 
     protected abstract String getKey(int functionId);
 
@@ -52,12 +51,7 @@ public class DepGraphExclusionTest extends AbstractDependencyGraphBuilderTest {
       priority.put(helper.addFunctionProducing(helper.getValue1Bar()), 1); // 4
       priority.put(helper.addFunctionProducing(helper.getValue2Bar()), 1); // 5
       priority.put(helper.addFunctionProducing(helper.getValue2Foo()), 1); // 6
-      final DependencyGraphBuilder builder = helper.createBuilder(new FunctionPriority() {
-        @Override
-        public int getPriority(final CompiledFunctionDefinition function) {
-          return priority.get(function);
-        }
-      });
+      final DependencyGraphBuilder builder = helper.createBuilder(function -> priority.get(function));
       builder.setFunctionExclusionGroups(exclusions);
       builder.addTarget(helper.getRequirement1Foo());
       return builder.getDependencyGraph();

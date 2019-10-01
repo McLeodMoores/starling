@@ -48,11 +48,10 @@ public class StandAloneScenarioScriptTest {
 
   @Test
   public void view() {
-    final String scriptText =
-        "view {\n" +
-        "  name 'an example view'\n" +
-        "  server 'svr:8080'\n" +
-        "}";
+    final String scriptText = "view {\n"
+        + "  name 'an example view'\n"
+        + "  server 'svr:8080'\n"
+        + "}";
     final StandAloneScenarioScript script = createScript(scriptText);
     final ViewDelegate viewDelegate = script.getViewDelegate();
     assertEquals("an example view", viewDelegate.getName());
@@ -61,36 +60,33 @@ public class StandAloneScenarioScriptTest {
 
   @Test
   public void marketData() {
-    final String scriptText =
-        "view {\n" +
-        "  marketData {\n" +
-        "    live 'Bloomberg'\n" +
-        "    live 'Activ'\n" +
-        "    snapshot 'the snapshot name'\n" +
-        "    fixedHistorical '2011-03-08 11:30'\n" +
-        "    latestHistorical\n" +
-        "    fixedHistorical '2012-03-10 12:30'\n" +
-        "  }\n" +
-        "}";
+    final String scriptText = "view {\n"
+        + "  marketData {\n"
+        + "    live 'Bloomberg'\n"
+        + "    live 'Activ'\n"
+        + "    snapshot 'the snapshot name'\n"
+        + "    fixedHistorical '2011-03-08 11:30'\n"
+        + "    latestHistorical\n"
+        + "    fixedHistorical '2012-03-10 12:30'\n"
+        + "  }\n"
+        + "}";
     final StandAloneScenarioScript script = createScript(scriptText);
-    final ImmutableList<MarketDataDelegate.MarketDataSpec> expectedSpecs =
-        ImmutableList.of(spec(LIVE, "Bloomberg"),
-                         spec(LIVE, "Activ"),
-                         spec(SNAPSHOT, "the snapshot name"),
-                         spec(FIXED_HISTORICAL, "2011-03-08 11:30"),
-                         spec(LATEST_HISTORICAL, null),
-                         spec(FIXED_HISTORICAL, "2012-03-10 12:30"));
+    final ImmutableList<MarketDataDelegate.MarketDataSpec> expectedSpecs = ImmutableList.of(spec(LIVE, "Bloomberg"),
+        spec(LIVE, "Activ"),
+        spec(SNAPSHOT, "the snapshot name"),
+        spec(FIXED_HISTORICAL, "2011-03-08 11:30"),
+        spec(LATEST_HISTORICAL, null),
+        spec(FIXED_HISTORICAL, "2012-03-10 12:30"));
     final MarketDataDelegate marketDataDelegate = script.getViewDelegate().getMarketDataDelegate();
     assertEquals(expectedSpecs, marketDataDelegate.getSpecifications());
   }
 
   @Test
   public void shockList() {
-    final String scriptText =
-        "shockList {\n" +
-        "  foo = [1, 2, 3]\n" +
-        "  bar = ['a', 'b', 'c']\n" +
-        "}";
+    final String scriptText = "shockList {\n"
+        + "  foo = [1, 2, 3]\n"
+        + "  bar = ['a', 'b', 'c']\n"
+        + "}";
     final StandAloneScenarioScript script = createScript(scriptText);
     final List<Map<String, Object>> params = script.getScenarioParameterList();
     assertEquals(3, params.size());
@@ -107,11 +103,10 @@ public class StandAloneScenarioScriptTest {
 
   @Test
   public void shockGrid() {
-    final String scriptText =
-        "shockGrid {\n" +
-        "  foo = [1, 2]\n" +
-        "  bar = ['a', 'b']\n" +
-        "}";
+    final String scriptText = "shockGrid {\n"
+        + "  foo = [1, 2]\n"
+        + "  bar = ['a', 'b']\n"
+        + "}";
     final StandAloneScenarioScript script = createScript(scriptText);
     final List<Map<String, Object>> params = script.getScenarioParameterList();
     assertEquals(4, params.size());
@@ -131,21 +126,20 @@ public class StandAloneScenarioScriptTest {
 
   @Test
   public void scenarioList() {
-    final String scriptText =
-        "shockList {\n" +
-        "  foo = [1, 2]\n" +
-        "  bar = ['a', 'b']\n" +
-        "  valTime = ['2014-01-14 12:03', '2014-02-14 12:03']\n" +
-        "}\n" +
-        "scenarios {\n" +
-        "  valuationTime valTime\n" +
-        "  marketData {\n" +
-        "    id 'SCHEME', bar\n" +
-        "    apply {\n" +
-        "      shift Absolute, foo\n" +
-        "    }\n" +
-        "  }\n" +
-        "}";
+    final String scriptText = "shockList {\n"
+        + "  foo = [1, 2]\n"
+        + "  bar = ['a', 'b']\n"
+        + "  valTime = ['2014-01-14 12:03', '2014-02-14 12:03']\n"
+        + "}\n"
+        + "scenarios {\n"
+        + "  valuationTime valTime\n"
+        + "  marketData {\n"
+        + "    id 'SCHEME', bar\n"
+        + "    apply {\n"
+        + "      shift Absolute, foo\n"
+        + "    }\n"
+        + "  }\n"
+        + "}";
     final StandAloneScenarioScript script = createScript(scriptText);
 
     final Simulation simulation = script.getSimulation();
@@ -158,19 +152,18 @@ public class StandAloneScenarioScriptTest {
 
   @Test
   public void scenarioGrid() {
-    final String scriptText =
-        "shockGrid {\n" +
-        "  foo = [1, 2]\n" +
-        "  bar = ['a', 'b']\n" +
-        "}\n" +
-        "scenarios {\n" +
-        "  marketData {\n" +
-        "    id 'SCHEME', bar\n" +
-        "    apply {\n" +
-        "      shift Absolute, foo\n" +
-        "    }\n" +
-        "  }\n" +
-        "}";
+    final String scriptText = "shockGrid {\n"
+        + "  foo = [1, 2]\n"
+        + "  bar = ['a', 'b']\n"
+        + "}\n"
+        + "scenarios {\n"
+        + "  marketData {\n"
+        + "    id 'SCHEME', bar\n"
+        + "    apply {\n"
+        + "      shift Absolute, foo\n"
+        + "    }\n"
+        + "  }\n"
+        + "}";
     final StandAloneScenarioScript script = createScript(scriptText);
 
     final Simulation simulation = script.getSimulation();
@@ -184,10 +177,9 @@ public class StandAloneScenarioScriptTest {
 
   @Test
   public void initialize() {
-    final String scriptText =
-        "shockList {\n" +
-        "  foo = [100.bp, 20.pc, 1.y]\n" +
-        "}";
+    final String scriptText = "shockList {\n"
+        + "  foo = [100.bp, 20.pc, 1.y]\n"
+        + "}";
     final StandAloneScenarioScript script = createScript(scriptText);
     final List<Map<String, Object>> params = script.getScenarioParameterList();
     assertEquals(3, params.size());
@@ -216,11 +208,10 @@ public class StandAloneScenarioScriptTest {
     }
     assertEquals(valuationInstant, scenario.getValuationTime());
     final Map<DistinctMarketDataSelector, FunctionParameters> definitionMap = definition.getDefinitionMap();
-    final PointSelector selector =
-        new PointSelector(null, ImmutableSet.of(ExternalId.of("SCHEME", id)), null, null, null, null, null);
+    final PointSelector selector = new PointSelector(null, ImmutableSet.of(ExternalId.of("SCHEME", id)), null, null, null, null, null);
     final FunctionParameters parameters = definitionMap.get(selector);
-    final CompositeStructureManipulator<?> compositeManipulator =
-        ((SimpleFunctionParameters) parameters).getValue(StructureManipulationFunction.EXPECTED_PARAMETER_NAME);
+    final CompositeStructureManipulator<?> compositeManipulator = ((SimpleFunctionParameters) parameters)
+        .getValue(StructureManipulationFunction.EXPECTED_PARAMETER_NAME);
     final MarketDataShift shift = (MarketDataShift) compositeManipulator.getManipulators().get(0);
     assertEquals(1 + shiftAmount, shift.execute(1.0, null, null));
   }

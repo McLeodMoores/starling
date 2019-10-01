@@ -27,22 +27,23 @@ public class BloombergIRFutureOptionVolatilitySurfaceInstrumentProviderTest {
   private static final String PREFIX = "ED";
   private static final String POSTFIX = "Comdty";
   private static final LocalDate DATE = LocalDate.of(2011, 7, 1);
-  private static final Short[] NUMBERS = new Short[] {1, 7, 10};
-  private static final Double[] STRIKES = new Double[] {96., 97.25, 98.5, 99.75};
+  private static final Short[] NUMBERS = new Short[] { 1, 7, 10 };
+  private static final Double[] STRIKES = new Double[] { 96., 97.25, 98.5, 99.75 };
   private static final String DATA_FIELD_NAME = "OPT_IMPLIED_VOLATILITY_MID";
-  private static final String[][] RESULTS = new String[][] {new String[] {"EDN1P 96.000 Comdty", "EDN1P 97.250 Comdty", "EDN1C 98.500 Comdty", "EDN1C 99.750 Comdty"},
-    new String[] {"EDH2P 96.000 Comdty", "EDH2P 97.250 Comdty", "EDH2C 98.500 Comdty", "EDH2C 99.750 Comdty"},
-    new String[] {"EDZ2P 96.000 Comdty", "EDZ2P 97.250 Comdty", "EDZ2C 98.500 Comdty", "EDZ2C 99.750 Comdty"}};
+  private static final String[][] RESULTS = new String[][] {
+      new String[] { "EDN1P 96.000 Comdty", "EDN1P 97.250 Comdty", "EDN1C 98.500 Comdty", "EDN1C 99.750 Comdty" },
+      new String[] { "EDH2P 96.000 Comdty", "EDH2P 97.250 Comdty", "EDH2C 98.500 Comdty", "EDH2C 99.750 Comdty" },
+      new String[] { "EDZ2P 96.000 Comdty", "EDZ2P 97.250 Comdty", "EDZ2C 98.500 Comdty", "EDZ2C 99.750 Comdty" } };
   private static final String EXCHANGE = "EUX";
 
-  private static final FutureOptionExpiries UTILS =  FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.WEDNESDAY));
+  private static final FutureOptionExpiries UTILS = FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.WEDNESDAY));
   private static final LocalDate[] EXPIRY_DATES = new LocalDate[] {
-    UTILS.getQuarterlyExpiry(1, LocalDate.of(2011, Month.SEPTEMBER, 1)),
-    UTILS.getQuarterlyExpiry(1, LocalDate.of(2013, Month.MARCH, 1)),
-    UTILS.getQuarterlyExpiry(1, LocalDate.of(2013, Month.DECEMBER, 1)) };
+      UTILS.getQuarterlyExpiry(1, LocalDate.of(2011, Month.SEPTEMBER, 1)),
+      UTILS.getQuarterlyExpiry(1, LocalDate.of(2013, Month.MARCH, 1)),
+      UTILS.getQuarterlyExpiry(1, LocalDate.of(2013, Month.DECEMBER, 1)) };
 
-  private static final BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider PROVIDER =
-      new BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider(PREFIX, POSTFIX, DATA_FIELD_NAME, 97.625, EXCHANGE);
+  private static final BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider PROVIDER = new BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider(
+      PREFIX, POSTFIX, DATA_FIELD_NAME, 97.625, EXCHANGE);
 
   @Test
   public void test() {

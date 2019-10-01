@@ -25,14 +25,16 @@ import au.com.bytecode.opencsv.CSVReader;
 public class QuandlStirFutureConventionsLoaderTest {
 
   /**
-   * This tests that the expected csv file exists, that there is a header and that the expected number
-   * of conventions are created. Individual conventions are not tested as this file could change.
-   * @throws Exception  if there is a problem reading the file
+   * This tests that the expected csv file exists, that there is a header and that the expected number of conventions are created. Individual conventions are
+   * not tested as this file could change.
+   * 
+   * @throws Exception
+   *           if there is a problem reading the file
    */
   @Test
   public void test() throws Exception {
     final QuandlStirFutureConventionsLoader loader = QuandlStirFutureConventionsLoader.INSTANCE;
-    try (final InputStream resource = getClass().getResourceAsStream("stir-future-conventions.csv")) {
+    try (InputStream resource = getClass().getResourceAsStream("stir-future-conventions.csv")) {
       if (resource == null) {
         fail("Could not open stir-future-conventions.csv");
       }

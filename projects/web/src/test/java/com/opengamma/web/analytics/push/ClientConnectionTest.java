@@ -23,10 +23,9 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.web.analytics.rest.MasterType;
 
 /**
- * Test the subscription mechanism of {@link ClientConnection}.  Subscriptions are added for REST URLs.  When any
- * event fires for a particular URL the URL is considered dirty and the client should re-request it.  Therefore there
- * is no need to fire any more events for that URL until the client resubscribes.  So when any event fires for
- * a URL all other subscriptions for that URL should be cleared.
+ * Test the subscription mechanism of {@link ClientConnection}. Subscriptions are added for REST URLs. When any event fires for a particular URL the URL is
+ * considered dirty and the client should re-request it. Therefore there is no need to fire any more events for that URL until the client resubscribes. So when
+ * any event fires for a URL all other subscriptions for that URL should be cleared.
  */
 @Test(groups = TestGroup.UNIT)
 public class ClientConnectionTest {
@@ -120,8 +119,8 @@ public class ClientConnectionTest {
   }
 
   /**
-   * A particular URL should only have one event delivered no matter how many subscriptions it has.  After the
-   * first event no more should be triggered until a new subscription is set up.
+   * A particular URL should only have one event delivered no matter how many subscriptions it has. After the first event no more should be triggered until a
+   * new subscription is set up.
    */
   @Test
   public void multipeEntitySubscriptionsForSameUrl() {
@@ -140,8 +139,8 @@ public class ClientConnectionTest {
   }
 
   /**
-   * A particular URL should only have one event delivered no matter how many subscriptions it has.  After the
-   * first event no more should be triggered until a new subscription is set up.
+   * A particular URL should only have one event delivered no matter how many subscriptions it has. After the first event no more should be triggered until a
+   * new subscription is set up.
    */
   @Test
   public void multipeMasterSubscriptionsForSameUrl() {
@@ -157,8 +156,7 @@ public class ClientConnectionTest {
   }
 
   /**
-   * If there is an entity and master subscription for the same URL then only one event should fire even
-   * if both the entity and master are changed.
+   * If there is an entity and master subscription for the same URL then only one event should fire even if both the entity and master are changed.
    */
   @Test
   public void masterAndEntitySubscriptionForSameUrlMasterChangesFirst() {
@@ -171,8 +169,7 @@ public class ClientConnectionTest {
   }
 
   /**
-   * If there is an entity and master subscription for the same URL then only one event should fire even
-   * if both the entity and master are changed.
+   * If there is an entity and master subscription for the same URL then only one event should fire even if both the entity and master are changed.
    */
   @Test
   public void masterAndEntitySubscriptionForSameUrlEntityChangesFirst() {
@@ -206,19 +203,21 @@ public class ClientConnectionTest {
 }
 
 /**
- * <p>Matcher for checking an argument to a mock is a collection containing all of the specified items and nothing else.
- * The order of the elements isn't important.</p>
-
+ * <p>
+ * Matcher for checking an argument to a mock is a collection containing all of the specified items and nothing else. The order of the elements isn't important.
+ * </p>
+ * 
  * <em>I'm surprised this isn't already available in Mockito, although maybe it's there and I just can't find it.</em>
-
- * @param <T> The type of items in the collection
+ * 
+ * @param <T>
+ *          The type of items in the collection
  */
 @SuppressWarnings("unchecked")
 class CollectionMatcher<T> extends ArgumentMatcher<Collection<T>> {
 
   private final Collection<T> _expected;
 
-  public CollectionMatcher(final T... expectedItems) {
+  CollectionMatcher(final T... expectedItems) {
     _expected = Lists.newArrayList(expectedItems);
   }
 

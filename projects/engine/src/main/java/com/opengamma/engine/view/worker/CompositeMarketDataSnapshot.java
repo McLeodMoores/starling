@@ -30,9 +30,12 @@ import com.opengamma.util.tuple.Pair;
   private final SnapshottingViewExecutionDataProvider.ValueSpecificationProvider _valueMap;
 
   /**
-   * @param snapshots The underlying snapshots
+   * @param snapshots
+   *          The underlying snapshots
+   * @param valueMap
+   *          the map of value specifications to/from an underlying provider
    */
-  /* package */CompositeMarketDataSnapshot(final List<MarketDataSnapshot> snapshots,
+  /* package */ CompositeMarketDataSnapshot(final List<MarketDataSnapshot> snapshots,
       final SnapshottingViewExecutionDataProvider.ValueSpecificationProvider valueMap) {
     ArgumentChecker.notEmpty(snapshots, "snapshots");
     ArgumentChecker.notNull(valueMap, "valueMap");
@@ -48,7 +51,8 @@ import com.opengamma.util.tuple.Pair;
 
   /**
    * @return The first non-null indication of snapshot time from the underlying snapshots
-   * @throws IllegalStateException If none of the underlying snapshots return a value
+   * @throws IllegalStateException
+   *           If none of the underlying snapshots return a value
    */
   @Override
   public Instant getSnapshotTimeIndication() {
@@ -74,9 +78,12 @@ import com.opengamma.util.tuple.Pair;
   /**
    * Initializes the underlying snapshots.
    *
-   * @param values the values required in the snapshot, not null
-   * @param timeout the maximum time to wait for the required values
-   * @param unit the timeout unit, not null
+   * @param values
+   *          the values required in the snapshot, not null
+   * @param timeout
+   *          the maximum time to wait for the required values
+   * @param unit
+   *          the timeout unit, not null
    */
   @Override
   public void init(final Set<ValueSpecification> values, final long timeout, final TimeUnit unit) {
@@ -121,7 +128,8 @@ import com.opengamma.util.tuple.Pair;
 
   /**
    * @return The first non-null snapshot time from the underlying snapshots
-   * @throws IllegalStateException If none of the underlying snapshots return a value
+   * @throws IllegalStateException
+   *           If none of the underlying snapshots return a value
    */
   @Override
   public Instant getSnapshotTime() {
@@ -137,7 +145,8 @@ import com.opengamma.util.tuple.Pair;
   /**
    * Returns the value from one of the underlying snapshots or null if it isn't available in any of them.
    *
-   * @param value the value required, not null
+   * @param value
+   *          the value required, not null
    * @return The value from one of the underlying snapshots or null if it isn't available in any of them
    */
   @Override
@@ -153,7 +162,8 @@ import com.opengamma.util.tuple.Pair;
   /**
    * Returns the values from the underlying snapshots if they are available.
    *
-   * @param values the values required, not null
+   * @param values
+   *          the values required, not null
    * @return The values from the underlying snapshots if they are available, values that aren't available will be missing from the results map
    */
   @Override

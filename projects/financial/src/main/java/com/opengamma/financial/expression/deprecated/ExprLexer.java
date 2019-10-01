@@ -1237,7 +1237,8 @@ public class ExprLexer extends Lexer {
 
     @Override
     public String getDescription() {
-      return "1:1: Tokens : ( LT | LTE | GT | GTE | EQ | NEQ | T__21 | T__22 | AND | NOT | OR | TRUE | FALSE | IDENTIFIER | STRING | STRING_IDENTIFIER | WHITESPACE | INTEGER | FLOAT );";
+      return "1:1: Tokens : ( LT | LTE | GT | GTE | EQ | NEQ | T__21 | T__22 | AND | NOT | OR | TRUE "
+          + "| FALSE | IDENTIFIER | STRING | STRING_IDENTIFIER | WHITESPACE | INTEGER | FLOAT );";
     }
   }
 

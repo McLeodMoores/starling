@@ -117,7 +117,7 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected Class<?> dbConnectorScope() {
     return BloombergSecurityLoaderTest.class;
@@ -125,17 +125,17 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
 
   @Override
   protected void initDbConnectorFactory(final DbConnectorFactoryBean factory) {
-    factory.setHibernateMappingFiles(new HibernateMappingFiles[] {new HibernateSecurityMasterFiles() });
+    factory.setHibernateMappingFiles(new HibernateMappingFiles[] { new HibernateSecurityMasterFiles() });
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doSetUpClass() {
     _bbgProvider = BloombergTestUtils.getBloombergReferenceDataProvider();
     _bbgProvider.start();
     final ReferenceDataProvider cachingProvider = BloombergTestUtils.getMongoCachingReferenceDataProvider(_bbgProvider);
     final ExchangeDataProvider exchangeProvider = DefaultExchangeDataProvider.getInstance();
-    final BloombergSecurityProvider secProvider = new BloombergSecurityProvider(cachingProvider, exchangeProvider );
+    final BloombergSecurityProvider secProvider = new BloombergSecurityProvider(cachingProvider, exchangeProvider);
     _securityMaster = new DbSecurityMaster(getDbConnector());
     _securityMaster.setDetailProvider(new HibernateSecurityMasterDetailProvider());
     _securityLoader = new DefaultSecurityLoader(_securityMaster, secProvider);
@@ -150,9 +150,9 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
     _securityMaster = null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void assertLoadAndSaveSecurity(final FinancialSecurity expected) {
-    //test we can load security from bloomberg
+    // test we can load security from bloomberg
     final ExternalIdBundle identifierBundle = expected.getExternalIdBundle();
 
     final Map<ExternalIdBundle, UniqueId> loadedSecurities = _securityLoader.loadSecurities(Collections.singleton(identifierBundle));
@@ -161,7 +161,7 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
     final UniqueId uid = loadedSecurities.get(identifierBundle);
     assertNotNull(uid);
 
-    //test we can add and read from secmaster
+    // test we can add and read from secmaster
     final SecurityDocument securityDocument = _securityMaster.get(uid);
     assertNotNull(securityDocument);
 
@@ -307,7 +307,7 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
             assertEquals(security.getUnitAmount(), actual.getUnitAmount());
             assertNotNull(actual.getUniqueId());
 
-            //test underlying is loaded as well
+            // test underlying is loaded as well
             for (final BondFutureDeliverable deliverable : security.getBasket()) {
               final ExternalIdBundle identifiers = deliverable.getIdentifiers();
               assertUnderlyingIsLoaded(identifiers);
@@ -423,7 +423,7 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
         assertEquals(security.getUnderlyingId(), actual.getUnderlyingId());
         assertNotNull(actual.getUniqueId());
 
-        //test underlying is loaded as well
+        // test underlying is loaded as well
         final ExternalId underlyingIdentifier = security.getUnderlyingId();
         assertUnderlyingIsLoaded(underlyingIdentifier);
         return null;
@@ -474,7 +474,7 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
         assertEquals(security.getSecurityType(), actual.getSecurityType());
         assertNotNull(actual.getUniqueId());
 
-        //test underlying is loaded as well
+        // test underlying is loaded as well
         final ExternalId underlyingIdentifier = security.getUnderlyingId();
         assertUnderlyingIsLoaded(underlyingIdentifier);
         return null;
@@ -501,7 +501,7 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
         assertEquals(security.getSecurityType(), actual.getSecurityType());
         assertNotNull(actual.getUniqueId());
 
-        //test underlying is loaded as well
+        // test underlying is loaded as well
         final ExternalId underlyingIdentifier = security.getUnderlyingId();
         assertUnderlyingIsLoaded(underlyingIdentifier);
         return null;
@@ -528,7 +528,7 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
         assertEquals(security.getSecurityType(), actual.getSecurityType());
         assertNotNull(actual.getUniqueId());
 
-        //test underlying is loaded as well
+        // test underlying is loaded as well
         final ExternalId underlyingIdentifier = security.getUnderlyingId();
         assertUnderlyingIsLoaded(underlyingIdentifier);
         return null;
@@ -556,7 +556,7 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
         assertEquals(security.getSecurityType(), actual.getSecurityType());
         assertNotNull(actual.getUniqueId());
 
-        //test underlying is loaded as well
+        // test underlying is loaded as well
         final ExternalId underlyingIdentifier = security.getUnderlyingId();
         assertUnderlyingIsLoaded(underlyingIdentifier);
         return null;
@@ -584,7 +584,7 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
         assertEquals(security.getSecurityType(), actual.getSecurityType());
         assertNotNull(actual.getUniqueId());
 
-        //test underlying is loaded as well
+        // test underlying is loaded as well
         final ExternalId underlyingIdentifier = security.getUnderlyingId();
         assertUnderlyingIsLoaded(underlyingIdentifier);
         return null;
@@ -596,7 +596,7 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
         return null;
       }
 
-       @Override
+      @Override
       public Void visitFXForwardSecurity(final FXForwardSecurity security) {
         assertSecurity();
         return null;
@@ -607,7 +607,6 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
         assertSecurity();
         return null;
       }
-
 
       @Override
       public Void visitCapFloorSecurity(final CapFloorSecurity security) {

@@ -155,19 +155,20 @@ public class BondAnalytic {
    * @return the nPayments
    * @deprecated Use {@link #getNPayments()}.
    */
+  @Deprecated
   public int getnPayments() {
     return getNPayments();
   }
 
   /**
    * Gets the number of payments.
-   * 
+   *
    * @return the number of payments.
    */
   public int getNPayments() {
     return _nPayments;
   }
-  
+
   /**
    * Gets the recovery rate.
    *
@@ -183,17 +184,17 @@ public class BondAnalytic {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_accruedInterest);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _nPayments;
     result = prime * result + Arrays.hashCode(_paymentAmounts);
     result = prime * result + Arrays.hashCode(_paymentTimes);
     temp = Double.doubleToLongBits(_recoveryRate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -219,6 +220,7 @@ public class BondAnalytic {
     return true;
   }
 
+  @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder("BondAnalytic[");
     sb.append("accruedInterest=");

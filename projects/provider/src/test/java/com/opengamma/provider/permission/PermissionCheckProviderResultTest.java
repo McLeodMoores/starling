@@ -19,7 +19,6 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.opengamma.provider.AbstractBeanTestCase;
-import com.opengamma.provider.permission.PermissionCheckProviderResult;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -41,7 +40,7 @@ public class PermissionCheckProviderResultTest extends AbstractBeanTestCase {
     assertFalse(result.isPermittedAll(ImmutableList.of("Data:12345", "Data:67890")));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Tests unauthenticated requests.
    */
@@ -69,7 +68,7 @@ public class PermissionCheckProviderResultTest extends AbstractBeanTestCase {
     result.checkErrors();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Tests unauthorized requests.
    */
@@ -99,8 +98,7 @@ public class PermissionCheckProviderResultTest extends AbstractBeanTestCase {
 
   // -------------------------------------------------------------------------
   /**
-   * Tests that an exception is thrown if there is no entry for a requested
-   * permission.
+   * Tests that an exception is thrown if there is no entry for a requested permission.
    */
   @Test(expectedExceptions = AuthorizationException.class)
   public void checkPermittedNullPermission() {
@@ -109,8 +107,7 @@ public class PermissionCheckProviderResultTest extends AbstractBeanTestCase {
   }
 
   /**
-   * Tests that an exception is thrown if there is no entry for a requested
-   * permission.
+   * Tests that an exception is thrown if there is no entry for a requested permission.
    */
   @Test(expectedExceptions = AuthorizationException.class)
   public void checkPermittedFalsePermission() {

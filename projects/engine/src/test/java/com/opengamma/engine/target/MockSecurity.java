@@ -22,7 +22,7 @@ import com.opengamma.id.UniqueId;
   private final String _name;
   private final ExternalIdBundle _identifiers;
 
-  public MockSecurity(final int id) {
+  MockSecurity(final int id) {
     _uid = UniqueId.of("Security", Integer.toString(id));
     _name = "Security " + id;
     _identifiers = ExternalIdBundle.of(ExternalId.of("Ticker", Integer.toString(id)));

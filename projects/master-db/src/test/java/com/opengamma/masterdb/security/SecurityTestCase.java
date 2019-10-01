@@ -186,7 +186,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter {
     }
   }
 
-  private final static class DefaultCollection<T, C extends Collection<T>> implements TestDataProvider<C> {
+  private static final class DefaultCollection<T, C extends Collection<T>> implements TestDataProvider<C> {
     private final Class<C> _collection;
     private final Class<T> _clazz;
 
@@ -279,14 +279,11 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter {
     LOGGER.info("Random seed = {}", seed);
     s_random.setSeed(seed);
     TestDataProvider<?> provider;
-    s_dataProviders.put(String.class, new TestDataProvider<String>() {
-      @Override
-      public void getValues(final Collection<String> values) {
-        values.add("");
-        values.add(RandomStringUtils.randomAlphabetic(16));
-        values.add(RandomStringUtils.randomNumeric(16));
-        values.add(RandomStringUtils.randomAlphanumeric(16));
-      }
+    s_dataProviders.put(String.class, values -> {
+      values.add("");
+      values.add(RandomStringUtils.randomAlphabetic(16));
+      values.add(RandomStringUtils.randomNumeric(16));
+      values.add(RandomStringUtils.randomAlphanumeric(16));
     });
     s_dataProviders.put(Map.class, new TestDataProvider<Map<?, ?>>() {
       private Map<?, ?> generateRandomMap(int count) {
@@ -342,76 +339,50 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter {
         values.add(new TreeMap<Tenor, ExternalId>());
       }
     });
-    s_dataProviders.put(Set.class, new TestDataProvider<Set<String>>() {
-
-      @Override
-      public void getValues(final Collection<Set<String>> values) {
-        values.add(Sets.newHashSet(getRandomPermissions()));
-        values.add(Sets.newHashSet(getRandomPermissions()));
-        values.add(Sets.newHashSet(getRandomPermissions()));
-      }
+    s_dataProviders.put(Set.class, values -> {
+      values.add(Sets.newHashSet(getRandomPermissions()));
+      values.add(Sets.newHashSet(getRandomPermissions()));
+      values.add(Sets.newHashSet(getRandomPermissions()));
     });
-    s_dataProviders.put(Double.class, provider = new TestDataProvider<Double>() {
-      @Override
-      public void getValues(final Collection<Double> values) {
-        values.add(0.0);
-        double d;
-        do {
-          d = s_random.nextDouble();
-        } while (d == 0);
-        values.add(d * 100.0);
-        values.add(d * -100.0);
-      }
+    s_dataProviders.put(Double.class, provider = values -> {
+      values.add(0.0);
+      double d;
+      do {
+        d = s_random.nextDouble();
+      } while (d == 0);
+      values.add(d * 100.0);
+      values.add(d * -100.0);
     });
     s_dataProviders.put(Double.TYPE, provider);
-    s_dataProviders.put(UniqueId.class, new TestDataProvider<UniqueId>() {
-      @Override
-      public void getValues(final Collection<UniqueId> values) {
-        values.add(UniqueId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16)));
-      }
+    s_dataProviders.put(UniqueId.class, values -> values.add(UniqueId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16))));
+    s_dataProviders.put(ExternalId.class, values -> {
+      values.add(ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16)));
+      values.add(ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16)));
+      values.add(ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16)));
     });
-    s_dataProviders.put(ExternalId.class, new TestDataProvider<ExternalId>() {
-      @Override
-      public void getValues(final Collection<ExternalId> values) {
-        values.add(ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16)));
-        values.add(ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16)));
-        values.add(ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16)));
-      }
+    s_dataProviders.put(ExternalIdBundle.class, values -> {
+      values.add(
+          ExternalIdBundle.of(
+              ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16))));
+      values.add(
+          ExternalIdBundle.of(
+              ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16)),
+              ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16))));
+      values.add(
+          ExternalIdBundle.of(
+              ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16)),
+              ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16)),
+              ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16))));
     });
-    s_dataProviders.put(ExternalIdBundle.class, new TestDataProvider<ExternalIdBundle>() {
-      @Override
-      public void getValues(final Collection<ExternalIdBundle> values) {
-        values.add(
-            ExternalIdBundle.of(
-                ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16))));
-        values.add(
-            ExternalIdBundle.of(
-                ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16)),
-                ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16))));
-        values.add(
-            ExternalIdBundle.of(
-                ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16)),
-                ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16)),
-                ExternalId.of(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(16))));
-      }
-    });
-    s_dataProviders.put(Currency.class, new TestDataProvider<Currency>() {
-      @Override
-      public void getValues(final Collection<Currency> values) {
-        values.add(Currency.of(RandomStringUtils.randomAlphabetic(3).toUpperCase(Locale.ENGLISH)));
-      }
-    });
-    s_dataProviders.put(YieldConvention.class, new TestDataProvider<YieldConvention>() {
-      @Override
-      public void getValues(final Collection<YieldConvention> values) {
-        values.add(SimpleYieldConvention.US_STREET);
-        values.add(SimpleYieldConvention.US_TREASURY_EQUIVALANT);
-        values.add(SimpleYieldConvention.TRUE);
-      }
+    s_dataProviders.put(Currency.class, values -> values.add(Currency.of(RandomStringUtils.randomAlphabetic(3).toUpperCase(Locale.ENGLISH))));
+    s_dataProviders.put(YieldConvention.class, values -> {
+      values.add(SimpleYieldConvention.US_STREET);
+      values.add(SimpleYieldConvention.US_TREASURY_EQUIVALANT);
+      values.add(SimpleYieldConvention.TRUE);
     });
     s_dataProviders.put(Expiry.class, DefaultObjectPermute.of(Expiry.class));
     s_dataProviders.put(ZonedDateTime.class, new TestDataProvider<ZonedDateTime>() {
-      private final ZoneId[] _timezones = new ZoneId[] {ZoneOffset.UTC, ZoneId.of("UTC-01:00"), ZoneId.of("UTC+01:00") };
+      private final ZoneId[] _timezones = new ZoneId[] { ZoneOffset.UTC, ZoneId.of("UTC-01:00"), ZoneId.of("UTC+01:00") };
 
       @Override
       public void getValues(final Collection<ZonedDateTime> values) {
@@ -422,152 +393,92 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter {
         }
       }
     });
-    s_dataProviders.put(LocalDate.class, new TestDataProvider<LocalDate>() {
-      @Override
-      public void getValues(final Collection<LocalDate> values) {
-        values.add(LocalDate.now());
-        // TODO: random date in the past
-        // TODO: random date in the future
-      }
-    });
-    s_dataProviders.put(LocalTime.class, new TestDataProvider<LocalTime>() {
-      @Override
-      public void getValues(final Collection<LocalTime> values) {
-        values.add(LocalTime.now().withNano(0));
-        // TODO: random time in the past
-        // TODO: random time in the future
-      }
-    });
-    s_dataProviders.put(LocalDateTime.class, new TestDataProvider<LocalDateTime>() {
-      @Override
-      public void getValues(final Collection<LocalDateTime> values) {
-        final Collection<LocalDate> dates = getTestObjects(LocalDate.class, null);
-        final Collection<LocalTime> times = getTestObjects(LocalTime.class, null);
-        for (final LocalDate date : dates) {
-          for (final LocalTime time : times) {
-            values.add(LocalDateTime.of(date, time));
-          }
+    s_dataProviders.put(LocalDate.class, values -> values.add(LocalDate.now()));
+    s_dataProviders.put(LocalTime.class, values -> values.add(LocalTime.now().withNano(0)));
+    s_dataProviders.put(LocalDateTime.class, values -> {
+      final Collection<LocalDate> dates = getTestObjects(LocalDate.class, null);
+      final Collection<LocalTime> times = getTestObjects(LocalTime.class, null);
+      for (final LocalDate date : dates) {
+        for (final LocalTime time : times) {
+          values.add(LocalDateTime.of(date, time));
         }
       }
     });
-    s_dataProviders.put(Frequency.class, new TestDataProvider<Frequency>() {
-      @Override
-      public void getValues(final Collection<Frequency> values) {
-        values.add(SimpleFrequency.ANNUAL);
-        values.add(SimpleFrequency.SEMI_ANNUAL);
-        values.add(SimpleFrequency.CONTINUOUS);
-      }
+    s_dataProviders.put(Frequency.class, values -> {
+      values.add(SimpleFrequency.ANNUAL);
+      values.add(SimpleFrequency.SEMI_ANNUAL);
+      values.add(SimpleFrequency.CONTINUOUS);
     });
-    s_dataProviders.put(Tenor.class, new TestDataProvider<Tenor>() {
-      @Override
-      public void getValues(final Collection<Tenor> values) {
-        values.add(Tenor.ONE_DAY);
-        values.add(Tenor.ONE_WEEK);
-        values.add(Tenor.ONE_MONTH);
-        values.add(Tenor.ONE_YEAR);
-      }
+    s_dataProviders.put(Tenor.class, values -> {
+      values.add(Tenor.ONE_DAY);
+      values.add(Tenor.ONE_WEEK);
+      values.add(Tenor.ONE_MONTH);
+      values.add(Tenor.ONE_YEAR);
     });
-    s_dataProviders.put(DayCount.class, new TestDataProvider<DayCount>() {
-      @Override
-      public void getValues(final Collection<DayCount> values) {
-        values.add(DayCounts.ACT_ACT_ISDA);
-        values.add(DayCountFactory.of("1/1"));
-        values.add(DayCountFactory.of("Bond Basis"));
-      }
+    s_dataProviders.put(DayCount.class, values -> {
+      values.add(DayCounts.ACT_ACT_ISDA);
+      values.add(DayCountFactory.of("1/1"));
+      values.add(DayCountFactory.of("Bond Basis"));
     });
-    s_dataProviders.put(BusinessDayConvention.class, new TestDataProvider<BusinessDayConvention>() {
-      @Override
-      public void getValues(final Collection<BusinessDayConvention> values) {
-        values.add(BusinessDayConventions.FOLLOWING);
-        values.add(BusinessDayConventions.MODIFIED_FOLLOWING);
-        values.add(BusinessDayConventions.PRECEDING);
-      }
+    s_dataProviders.put(BusinessDayConvention.class, values -> {
+      values.add(BusinessDayConventions.FOLLOWING);
+      values.add(BusinessDayConventions.MODIFIED_FOLLOWING);
+      values.add(BusinessDayConventions.PRECEDING);
     });
-    s_dataProviders.put(GICSCode.class, new TestDataProvider<GICSCode>() {
-      @Override
-      public void getValues(final Collection<GICSCode> values) {
-        final int code = (((s_random.nextInt(90) + 10) * 100 + s_random.nextInt(90) + 10) * 100 + s_random.nextInt(90) + 10) * 100 + s_random.nextInt(90) + 10;
-        values.add(GICSCode.of(Integer.toString(code)));
-      }
+    s_dataProviders.put(GICSCode.class, values -> {
+      final int code = (((s_random.nextInt(90) + 10) * 100 + s_random.nextInt(90) + 10) * 100 + s_random.nextInt(90) + 10) * 100 + s_random.nextInt(90) + 10;
+      values.add(GICSCode.of(Integer.toString(code)));
     });
     s_dataProviders.put(Pairs.of(BondFutureSecurity.class, Collection.class), DefaultCollection.of(ArrayList.class, BondFutureDeliverable.class));
     s_dataProviders.put(Pairs.of(BondFutureSecurity.class, List.class), DefaultList.of(ArrayList.class, BondFutureDeliverable.class));
-    s_dataProviders.put(ExerciseType.class, new TestDataProvider<ExerciseType>() {
-      @Override
-      public void getValues(final Collection<ExerciseType> values) {
-        values.add(new AmericanExerciseType());
-        values.add(new AsianExerciseType());
-        values.add(new BermudanExerciseType());
-        values.add(new EuropeanExerciseType());
-      }
+    s_dataProviders.put(ExerciseType.class, values -> {
+      values.add(new AmericanExerciseType());
+      values.add(new AsianExerciseType());
+      values.add(new BermudanExerciseType());
+      values.add(new EuropeanExerciseType());
     });
-    s_dataProviders.put(PayoffStyle.class, new TestDataProvider<PayoffStyle>() {
-      @Override
-      public void getValues(final Collection<PayoffStyle> values) {
-        values.add(new AssetOrNothingPayoffStyle());
-        values.add(new AsymmetricPoweredPayoffStyle(s_random.nextDouble()));
-        values.add(new BarrierPayoffStyle());
-        values.add(new CappedPoweredPayoffStyle(s_random.nextDouble(), s_random.nextDouble()));
-        values.add(new CashOrNothingPayoffStyle(s_random.nextDouble()));
-        values.add(new FadeInPayoffStyle(s_random.nextDouble(), s_random.nextDouble()));
-        values.add(new FixedStrikeLookbackPayoffStyle());
-        values.add(new FloatingStrikeLookbackPayoffStyle());
-        values.add(new GapPayoffStyle(s_random.nextDouble()));
-        values.add(new PoweredPayoffStyle(s_random.nextDouble()));
-        values.add(new SupersharePayoffStyle(s_random.nextDouble(), s_random.nextDouble()));
-        values.add(new VanillaPayoffStyle());
-        values.add(new ExtremeSpreadPayoffStyle(ZonedDateTime.now().withNano(0), s_random.nextBoolean()));
-        values.add(new SimpleChooserPayoffStyle(ZonedDateTime.now().withNano(0), s_random.nextDouble(),
-            new Expiry(ZonedDateTime.now(Clock.systemDefaultZone()), ExpiryAccuracy.MONTH_YEAR)));
-      }
+    s_dataProviders.put(PayoffStyle.class, values -> {
+      values.add(new AssetOrNothingPayoffStyle());
+      values.add(new AsymmetricPoweredPayoffStyle(s_random.nextDouble()));
+      values.add(new BarrierPayoffStyle());
+      values.add(new CappedPoweredPayoffStyle(s_random.nextDouble(), s_random.nextDouble()));
+      values.add(new CashOrNothingPayoffStyle(s_random.nextDouble()));
+      values.add(new FadeInPayoffStyle(s_random.nextDouble(), s_random.nextDouble()));
+      values.add(new FixedStrikeLookbackPayoffStyle());
+      values.add(new FloatingStrikeLookbackPayoffStyle());
+      values.add(new GapPayoffStyle(s_random.nextDouble()));
+      values.add(new PoweredPayoffStyle(s_random.nextDouble()));
+      values.add(new SupersharePayoffStyle(s_random.nextDouble(), s_random.nextDouble()));
+      values.add(new VanillaPayoffStyle());
+      values.add(new ExtremeSpreadPayoffStyle(ZonedDateTime.now().withNano(0), s_random.nextBoolean()));
+      values.add(new SimpleChooserPayoffStyle(ZonedDateTime.now().withNano(0), s_random.nextDouble(),
+          new Expiry(ZonedDateTime.now(Clock.systemDefaultZone()), ExpiryAccuracy.MONTH_YEAR)));
     });
-    s_dataProviders.put(Boolean.class, provider = new TestDataProvider<Boolean>() {
-      @Override
-      public void getValues(final Collection<Boolean> values) {
-        values.add(true);
-        values.add(false);
-      }
+    s_dataProviders.put(Boolean.class, provider = values -> {
+      values.add(true);
+      values.add(false);
     });
     s_dataProviders.put(Boolean.TYPE, provider);
-    s_dataProviders.put(SwapLeg.class, new TestDataProvider<SwapLeg>() {
-      @Override
-      public void getValues(final Collection<SwapLeg> values) {
-        values.addAll(permuteTestObjects(FloatingSpreadIRLeg.class));
-        values.addAll(permuteTestObjects(FloatingGearingIRLeg.class));
-        values.addAll(permuteTestObjects(FixedInterestRateLeg.class));
-        values.addAll(permuteTestObjects(FloatingInterestRateLeg.class));
-        values.addAll(permuteTestObjects(FixedVarianceSwapLeg.class));
-        values.addAll(permuteTestObjects(FloatingVarianceSwapLeg.class));
-      }
+    s_dataProviders.put(SwapLeg.class, values -> {
+      values.addAll(permuteTestObjects(FloatingSpreadIRLeg.class));
+      values.addAll(permuteTestObjects(FloatingGearingIRLeg.class));
+      values.addAll(permuteTestObjects(FixedInterestRateLeg.class));
+      values.addAll(permuteTestObjects(FloatingInterestRateLeg.class));
+      values.addAll(permuteTestObjects(FixedVarianceSwapLeg.class));
+      values.addAll(permuteTestObjects(FloatingVarianceSwapLeg.class));
     });
-    s_dataProviders.put(Region.class, new TestDataProvider<Region>() {
-      @Override
-      public void getValues(final Collection<Region> values) {
-        values.add(getRegionSource().getHighestLevelRegion(ExternalSchemes.countryRegionId(Country.US)));
-        values.add(getRegionSource().getHighestLevelRegion(ExternalSchemes.countryRegionId(Country.GB)));
-      }
+    s_dataProviders.put(Region.class, values -> {
+      values.add(getRegionSource().getHighestLevelRegion(ExternalSchemes.countryRegionId(Country.US)));
+      values.add(getRegionSource().getHighestLevelRegion(ExternalSchemes.countryRegionId(Country.GB)));
     });
-    s_dataProviders.put(Notional.class, new TestDataProvider<Notional>() {
-      @Override
-      public void getValues(final Collection<Notional> values) {
-        values.add(new CommodityNotional());
-        values.addAll(permuteTestObjects(InterestRateNotional.class));
-        values.addAll(permuteTestObjects(SecurityNotional.class));
-      }
+    s_dataProviders.put(Notional.class, values -> {
+      values.add(new CommodityNotional());
+      values.addAll(permuteTestObjects(InterestRateNotional.class));
+      values.addAll(permuteTestObjects(SecurityNotional.class));
     });
-    s_dataProviders.put(BigDecimal.class, new TestDataProvider<BigDecimal>() {
-      @Override
-      public void getValues(final Collection<BigDecimal> values) {
-        values.add(BigDecimal.ONE);
-      }
-    });
+    s_dataProviders.put(BigDecimal.class, values -> values.add(BigDecimal.ONE));
 
-    s_dataProviders.put(InterestRateNotional.class, new TestDataProvider<Notional>() {
-      @Override
-      public void getValues(final Collection<Notional> values) {
-        values.addAll(permuteTestObjects(InterestRateNotional.class));
-      }
-    });
+    s_dataProviders.put(InterestRateNotional.class, values -> values.addAll(permuteTestObjects(InterestRateNotional.class)));
     s_dataProviders.put(byte[].class, new TestDataProvider<byte[]>() {
       @Override
       public void getValues(final Collection<byte[]> values) {
@@ -581,45 +492,30 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter {
         return randomBytes;
       }
     });
-    s_dataProviders.put(int.class, new TestDataProvider<Integer>() {
-      @Override
-      public void getValues(final Collection<Integer> values) {
-        values.add(0);
-        int i;
-        do {
-          i = s_random.nextInt();
-        } while (i == 0);
-        values.add(i * 100);
-        values.add(i * -100);
-      }
+    s_dataProviders.put(int.class, values -> {
+      values.add(0);
+      int i;
+      do {
+        i = s_random.nextInt();
+      } while (i == 0);
+      values.add(i * 100);
+      values.add(i * -100);
     });
-    s_dataProviders.put(CDSIndexTerms.class, new TestDataProvider<CDSIndexTerms>() {
-      @Override
-      public void getValues(final Collection<CDSIndexTerms> values) {
-        values.add(CDSIndexTerms.EMPTY);
-        final List<Tenor> tenors = getTestObjects(Tenor.class, null);
-        if (!tenors.isEmpty()) {
-          values.add(CDSIndexTerms.of(tenors.iterator().next()));
-        }
-        values.add(CDSIndexTerms.of(getTestObjects(Tenor.class, null)));
+    s_dataProviders.put(CDSIndexTerms.class, values -> {
+      values.add(CDSIndexTerms.EMPTY);
+      final List<Tenor> tenors = getTestObjects(Tenor.class, null);
+      if (!tenors.isEmpty()) {
+        values.add(CDSIndexTerms.of(tenors.iterator().next()));
       }
+      values.add(CDSIndexTerms.of(getTestObjects(Tenor.class, null)));
     });
-    s_dataProviders.put(CreditDefaultSwapIndexComponent.class, new TestDataProvider<CreditDefaultSwapIndexComponent>() {
-      @Override
-      public void getValues(final Collection<CreditDefaultSwapIndexComponent> values) {
-        values.add(new CreditDefaultSwapIndexComponent(null, null, null, null));
+    s_dataProviders.put(CreditDefaultSwapIndexComponent.class, values -> values.add(new CreditDefaultSwapIndexComponent(null, null, null, null)));
+    s_dataProviders.put(CDSIndexComponentBundle.class, values -> {
+      final Collection<CreditDefaultSwapIndexComponent> components = permuteTestObjects(CreditDefaultSwapIndexComponent.class);
+      if (!components.isEmpty()) {
+        values.add(CDSIndexComponentBundle.of(components.iterator().next()));
       }
-
-    });
-    s_dataProviders.put(CDSIndexComponentBundle.class, new TestDataProvider<CDSIndexComponentBundle>() {
-      @Override
-      public void getValues(final Collection<CDSIndexComponentBundle> values) {
-        final Collection<CreditDefaultSwapIndexComponent> components = permuteTestObjects(CreditDefaultSwapIndexComponent.class);
-        if (!components.isEmpty()) {
-          values.add(CDSIndexComponentBundle.of(components.iterator().next()));
-        }
-        values.add(CDSIndexComponentBundle.of(permuteTestObjects(CreditDefaultSwapIndexComponent.class)));
-      }
+      values.add(CDSIndexComponentBundle.of(permuteTestObjects(CreditDefaultSwapIndexComponent.class)));
     });
     s_dataProviders.put(Pairs.of(BondIndex.class, Collection.class), DefaultCollection.of(ArrayList.class, BondIndexComponent.class));
     s_dataProviders.put(Pairs.of(BondIndex.class, List.class), DefaultList.of(ArrayList.class, BondIndexComponent.class));
@@ -752,7 +648,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter {
           final Object value = parameterValues[j].get(parameterIndex[j]);
           parameterIndex[j] = (parameterIndex[j] + 1) % parameterValues[j].size();
           final MetaProperty<?> metaProperty = mps.get(j);
-          if (metaProperty.style().isSerializable() && metaProperty.name().equals("securityType") == false) {
+          if (metaProperty.style().isSerializable() && !metaProperty.name().equals("securityType")) {
             builder.set(metaProperty.name(), value);
           }
         }
@@ -799,7 +695,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter {
     return defaultConstructor;
   }
 
-  protected abstract <T extends ManageableSecurity> void assertSecurity(final Class<T> securityClass, final T security);
+  protected abstract <T extends ManageableSecurity> void assertSecurity(Class<T> securityClass, T security);
 
   protected <T extends ManageableSecurity> void assertSecurities(final Class<T> securityClass, final Collection<T> securities) {
     String securityType = null;

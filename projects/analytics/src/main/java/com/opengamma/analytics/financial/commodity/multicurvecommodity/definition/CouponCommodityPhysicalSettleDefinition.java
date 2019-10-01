@@ -7,14 +7,11 @@ package com.opengamma.analytics.financial.commodity.multicurvecommodity.definiti
 
 import org.threeten.bp.ZonedDateTime;
 
-import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.commodity.multicurvecommodity.derivative.CouponCommodity;
-import com.opengamma.analytics.financial.commodity.multicurvecommodity.derivative.CouponCommodityCashSettle;
 import com.opengamma.analytics.financial.commodity.multicurvecommodity.derivative.CouponCommodityPhysicalSettle;
 import com.opengamma.analytics.financial.commodity.multicurvecommodity.underlying.CommodityUnderlying;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.Payment;
-import com.opengamma.analytics.financial.interestrate.payments.derivative.PaymentFixed;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.timeseries.DoubleTimeSeries;
@@ -26,42 +23,49 @@ import com.opengamma.util.ArgumentChecker;
 public class CouponCommodityPhysicalSettleDefinition extends CouponCommodityDefinition {
 
   /**
-   * The first notice date.
-   * Some future contracts have no notice date. The seller of the future have to notice the delivery but without an explicit notice date.
+   * The first notice date. Some future contracts have no notice date. The seller of the future have to notice the delivery but without an explicit notice date.
    * In this case the notice date can be null
    */
   private final ZonedDateTime _noticeFirstDate;
   /**
-   * The last notice date.
-   * Some future contracts have no notice date. The seller of the future have to notice the delivery but without an explicit notice date.
+   * The last notice date. Some future contracts have no notice date. The seller of the future have to notice the delivery but without an explicit notice date.
    * In this case the notice date can be null
    */
   private final ZonedDateTime _noticeLastDate;
 
   /**
-   * Date of first delivery -  for PHYSICAL settlement only
-   * The first delivery date is the first business day of this month.
+   * Date of first delivery - for PHYSICAL settlement only The first delivery date is the first business day of this month.
    */
   private final ZonedDateTime _firstDeliveryDate;
 
   /**
-   * Date of last delivery - for PHYSICAL settlement only
-   * The delivery is done during a month, the first delivery date is the first business day of this month.
+   * Date of last delivery - for PHYSICAL settlement only The delivery is done during a month, the first delivery date is the first business day of this month.
    */
   private final ZonedDateTime _lastDeliveryDate;
 
   /**
    * Constructor with all details.
-   * @param paymentYearFraction The last trading date, not null
-   * @param underlying The commodity underlying, not null
-   * @param unitName name of the unit of the commodity delivered, not null
-   * @param notional notional
-   * @param settlementDate The settlement date, not null
-   * @param calendar The holiday calendar, not null
-   * @param noticeFirstDate  The notice first date, can be null
-   * @param noticeLastDate  The notice last date, can be null
-   * @param firstDeliveryDate The first delivery date, not null for physical contract
-   * @param lastDeliveryDate The last delivery date, not null for physical contract
+   * 
+   * @param paymentYearFraction
+   *          The last trading date, not null
+   * @param underlying
+   *          The commodity underlying, not null
+   * @param unitName
+   *          name of the unit of the commodity delivered, not null
+   * @param notional
+   *          notional
+   * @param settlementDate
+   *          The settlement date, not null
+   * @param calendar
+   *          The holiday calendar, not null
+   * @param noticeFirstDate
+   *          The notice first date, can be null
+   * @param noticeLastDate
+   *          The notice last date, can be null
+   * @param firstDeliveryDate
+   *          The first delivery date, not null for physical contract
+   * @param lastDeliveryDate
+   *          The last delivery date, not null for physical contract
    */
   public CouponCommodityPhysicalSettleDefinition(final double paymentYearFraction, final CommodityUnderlying underlying, final String unitName,
       final double notional, final ZonedDateTime settlementDate, final Calendar calendar, final ZonedDateTime noticeFirstDate,
@@ -146,7 +150,9 @@ public class CouponCommodityPhysicalSettleDefinition extends CouponCommodityDefi
     return visitor.visitCouponCommodityPhysicalSettleDefinition(this);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see java.lang.Object#hashCode()
    */
   @Override
@@ -160,7 +166,9 @@ public class CouponCommodityPhysicalSettleDefinition extends CouponCommodityDefi
     return result;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override

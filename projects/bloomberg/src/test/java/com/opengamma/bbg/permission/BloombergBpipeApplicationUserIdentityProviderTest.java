@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.permission;
@@ -20,18 +20,19 @@ import com.opengamma.bbg.test.BloombergTestUtils;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.INTEGRATION, enabled = false)
 public class BloombergBpipeApplicationUserIdentityProviderTest {
 
   public void authorizedIdentity() {
-    BloombergConnector connector = BloombergTestUtils.getBloombergBipeConnector();
-    SessionProvider sessionProvider = new SessionProvider(connector, Lists.newArrayList(BloombergConstants.AUTH_SVC_NAME, BloombergConstants.MKT_DATA_SVC_NAME, BloombergConstants.REF_DATA_SVC_NAME));
+    final BloombergConnector connector = BloombergTestUtils.getBloombergBipeConnector();
+    final SessionProvider sessionProvider = new SessionProvider(connector,
+        Lists.newArrayList(BloombergConstants.AUTH_SVC_NAME, BloombergConstants.MKT_DATA_SVC_NAME, BloombergConstants.REF_DATA_SVC_NAME));
     sessionProvider.start();
-    BloombergBpipeApplicationUserIdentityProvider provider = new BloombergBpipeApplicationUserIdentityProvider(sessionProvider);
+    final BloombergBpipeApplicationUserIdentityProvider provider = new BloombergBpipeApplicationUserIdentityProvider(sessionProvider);
 
-    Identity identity = provider.getIdentity();
+    final Identity identity = provider.getIdentity();
     assertNotNull(identity);
     assertTrue(identity.isAuthorized(sessionProvider.getService(BloombergConstants.MKT_DATA_SVC_NAME)));
     assertTrue(identity.isAuthorized(sessionProvider.getService(BloombergConstants.REF_DATA_SVC_NAME)));
@@ -43,11 +44,12 @@ public class BloombergBpipeApplicationUserIdentityProviderTest {
   public void unauthorizedIdentity() {
     SessionProvider sessionProvider = null;
     try {
-      BloombergConnector connector = BloombergTestUtils.getBloombergBipeConnector();
+      final BloombergConnector connector = BloombergTestUtils.getBloombergBipeConnector();
       connector.getSessionOptions().setAuthenticationOptions(BloombergConstants.AUTH_APP_PREFIX + "UnknownAppName");
-      sessionProvider = new SessionProvider(connector, Lists.newArrayList(BloombergConstants.AUTH_SVC_NAME, BloombergConstants.MKT_DATA_SVC_NAME, BloombergConstants.REF_DATA_SVC_NAME));
+      sessionProvider = new SessionProvider(connector,
+          Lists.newArrayList(BloombergConstants.AUTH_SVC_NAME, BloombergConstants.MKT_DATA_SVC_NAME, BloombergConstants.REF_DATA_SVC_NAME));
       sessionProvider.start();
-      BloombergBpipeApplicationUserIdentityProvider provider = new BloombergBpipeApplicationUserIdentityProvider(sessionProvider);
+      final BloombergBpipeApplicationUserIdentityProvider provider = new BloombergBpipeApplicationUserIdentityProvider(sessionProvider);
 
       provider.getIdentity();
     } finally {

@@ -69,7 +69,7 @@ public class ComputationTargetResultsTest {
     private final String _requirementValue;
     private final ValueProperties _requirementConstraints;
 
-    public MockFunction(final ComputationTargetType type, final String resultValue, final ValueProperties resultProperties, final String requirementValue,
+    MockFunction(final ComputationTargetType type, final String resultValue, final ValueProperties resultProperties, final String requirementValue,
         final ValueProperties requirementConstraints) {
       setUniqueId(String.valueOf(s_identifier++));
       _type = type;
@@ -115,7 +115,7 @@ public class ComputationTargetResultsTest {
 
   private static class MockFunction2 extends MockFunction {
 
-    public MockFunction2(final ComputationTargetType type, final String resultValue, final ValueProperties resultProperties, final String requirementValue,
+    MockFunction2(final ComputationTargetType type, final String resultValue, final ValueProperties resultProperties, final String requirementValue,
         final ValueProperties requirementConstraints) {
       super(type, resultValue, resultProperties, requirementValue, requirementConstraints);
     }

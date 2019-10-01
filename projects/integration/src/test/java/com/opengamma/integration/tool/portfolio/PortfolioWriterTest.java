@@ -18,8 +18,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.mockito.Matchers;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
@@ -66,7 +64,7 @@ public class PortfolioWriterTest {
   public void testNewPortfolioInsertsSecurityPositionPortfolio() {
 
     final PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
-                                                          mockSecurityMaster());
+        mockSecurityMaster());
 
     final String portfolioName = "TestPortfolio";
     final SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
@@ -93,7 +91,7 @@ public class PortfolioWriterTest {
   public void testCannotInsertSecurityWithoutIdBundle() {
 
     final PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
-                                                    mockSecurityMaster());
+        mockSecurityMaster());
 
     final String portfolioName = "TestPortfolio";
     final SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
@@ -112,7 +110,7 @@ public class PortfolioWriterTest {
   public void testCannotInsertPositionWithEmptySecurityIdBundle() {
 
     final PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
-                                                    mockSecurityMaster());
+        mockSecurityMaster());
 
     final String portfolioName = "TestPortfolio";
     final SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
@@ -134,7 +132,7 @@ public class PortfolioWriterTest {
   public void testCannotInsertTradeWithEmptySecurityIdBundle() {
 
     final PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
-                                                    mockSecurityMaster());
+        mockSecurityMaster());
 
     final String portfolioName = "TestPortfolio";
     final SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
@@ -147,8 +145,8 @@ public class PortfolioWriterTest {
     // Create position with empty Id bundle
     final SimplePosition position = new SimplePosition(BigDecimal.valueOf(1000), securityKey);
     position.addTrade(new SimpleTrade(new SimpleSecurityLink(ExternalIdBundle.EMPTY), BigDecimal.valueOf(1000),
-                                      new SimpleCounterparty(ExternalId.of("CP", "123")), LocalDate.of(2014, 5, 1),
-                                      OffsetTime.MAX));
+        new SimpleCounterparty(ExternalId.of("CP", "123")), LocalDate.of(2014, 5, 1),
+        OffsetTime.MAX));
 
     root.addPosition(position);
 
@@ -161,7 +159,7 @@ public class PortfolioWriterTest {
   public void testCannotInsertPositionWithNullSecurityIdBundle() {
 
     final PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
-                                                    mockSecurityMaster());
+        mockSecurityMaster());
 
     final String portfolioName = "TestPortfolio";
     final SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
@@ -191,7 +189,7 @@ public class PortfolioWriterTest {
     security.setExternalIdBundle(securityKey);
 
     final PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
-                                                          mockSecurityMaster(security));
+        mockSecurityMaster(security));
 
     final String portfolioName = "TestPortfolio";
     final SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
@@ -217,7 +215,7 @@ public class PortfolioWriterTest {
     final ManageablePortfolio existing = new ManageablePortfolio(portfolioName);
 
     final PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(existing), mockPositionMaster(),
-                                                          mockSecurityMaster());
+        mockSecurityMaster());
 
     final SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
     final ExternalIdBundle securityKey = ExternalIdBundle.of("TEST", "1234");
@@ -242,14 +240,11 @@ public class PortfolioWriterTest {
   private PositionMaster mockPositionMaster() {
     final PositionMaster mock = mock(PositionMaster.class);
 
-    when(mock.add(Matchers.<PositionDocument>any())).thenAnswer(new Answer<Object>() {
-      @Override
-      public Object answer(final InvocationOnMock invocation) throws Throwable {
-        final ManageablePosition position = new ManageablePosition();
-        position.setUniqueId(UniqueId.of("POSN", "1"));
-        _recorder.recordPosition(((PositionDocument) invocation.getArguments()[0]).getPosition());
-        return new PositionDocument(position);
-      }
+    when(mock.add(Matchers.<PositionDocument> any())).thenAnswer(invocation -> {
+      final ManageablePosition position = new ManageablePosition();
+      position.setUniqueId(UniqueId.of("POSN", "1"));
+      _recorder.recordPosition(((PositionDocument) invocation.getArguments()[0]).getPosition());
+      return new PositionDocument(position);
     });
     return mock;
   }
@@ -264,23 +259,17 @@ public class PortfolioWriterTest {
     }
 
     final SecurityMaster mock = mock(SecurityMaster.class);
-    when(mock.search(Matchers.<SecuritySearchRequest>any())).thenAnswer(new Answer<SecuritySearchResult>() {
-      @Override
-      public SecuritySearchResult answer(final InvocationOnMock invocation) throws Throwable {
-        final SecuritySearchRequest request = (SecuritySearchRequest) invocation.getArguments()[0];
+    when(mock.search(Matchers.<SecuritySearchRequest> any())).thenAnswer(invocation -> {
+      final SecuritySearchRequest request = (SecuritySearchRequest) invocation.getArguments()[0];
 
-        final ExternalIdBundle idBundle = ExternalIdBundle.of(request.getExternalIdSearch());
-        return existing.containsKey(idBundle) ?
-            new SecuritySearchResult(ImmutableList.of(new SecurityDocument(existing.get(idBundle)))) :
-            new SecuritySearchResult();
-      }
+      final ExternalIdBundle idBundle = ExternalIdBundle.of(request.getExternalIdSearch());
+      return existing.containsKey(idBundle)
+          ? new SecuritySearchResult(ImmutableList.of(new SecurityDocument(existing.get(idBundle))))
+          : new SecuritySearchResult();
     });
-    when(mock.add(Matchers.<SecurityDocument>any())).thenAnswer(new Answer<Object>() {
-      @Override
-      public Object answer(final InvocationOnMock invocation) throws Throwable {
-        _recorder.recordSecurity(((SecurityDocument) invocation.getArguments()[0]).getSecurity());
-        return new SecurityDocument(new ManageableSecurity());
-      }
+    when(mock.add(Matchers.<SecurityDocument> any())).thenAnswer(invocation -> {
+      _recorder.recordSecurity(((SecurityDocument) invocation.getArguments()[0]).getSecurity());
+      return new SecurityDocument(new ManageableSecurity());
     });
     return mock;
   }
@@ -292,21 +281,14 @@ public class PortfolioWriterTest {
       existing.put(pf.getName(), pf);
     }
     final PortfolioMaster mock = mock(PortfolioMaster.class);
-    when(mock.search(Matchers.<PortfolioSearchRequest>any())).thenAnswer(new Answer<PortfolioSearchResult>() {
-      @Override
-      public PortfolioSearchResult answer(final InvocationOnMock invocation) throws Throwable {
-        final PortfolioSearchRequest request = (PortfolioSearchRequest) invocation.getArguments()[0];
-        return existing.containsKey(request.getName()) ?
-            new PortfolioSearchResult(ImmutableList.of(new PortfolioDocument(existing.get(request.getName())))) :
-            new PortfolioSearchResult();
-      }
+    when(mock.search(Matchers.<PortfolioSearchRequest> any())).thenAnswer(invocation -> {
+      final PortfolioSearchRequest request = (PortfolioSearchRequest) invocation.getArguments()[0];
+      return existing.containsKey(request.getName()) ? new PortfolioSearchResult(ImmutableList.of(new PortfolioDocument(existing.get(request.getName()))))
+          : new PortfolioSearchResult();
     });
-    when(mock.add(Matchers.<PortfolioDocument>any())).thenAnswer(new Answer<Object>() {
-      @Override
-      public Object answer(final InvocationOnMock invocation) throws Throwable {
-        _recorder.recordPortfolio((PortfolioDocument) invocation.getArguments()[0]);
-        return new PortfolioDocument(new ManageablePortfolio());
-      }
+    when(mock.add(Matchers.<PortfolioDocument> any())).thenAnswer(invocation -> {
+      _recorder.recordPortfolio((PortfolioDocument) invocation.getArguments()[0]);
+      return new PortfolioDocument(new ManageablePortfolio());
     });
     return mock;
   }
@@ -320,9 +302,11 @@ public class PortfolioWriterTest {
     public void recordSecurity(final ManageableSecurity security) {
       _securities.add(security);
     }
+
     public void recordPosition(final ManageablePosition position) {
       _positions.add(position);
     }
+
     public void recordPortfolio(final PortfolioDocument portfolio) {
       _portfolios.add(portfolio);
     }
@@ -341,9 +325,6 @@ public class PortfolioWriterTest {
       return _portfolios.size() - countPortfolioUpdates();
     }
 
-
   }
-
-
 
 }

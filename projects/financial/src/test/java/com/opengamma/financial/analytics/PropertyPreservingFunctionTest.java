@@ -40,7 +40,8 @@ import com.opengamma.util.test.TestGroup;
 public class PropertyPreservingFunctionTest {
 
   private MockPropertyPreservingFunction getFunction() {
-    final MockPropertyPreservingFunction func = new MockPropertyPreservingFunction(Lists.newArrayList("Prop", "A", "B", "C", "D", "E", "F"), new ArrayList<String>());
+    final MockPropertyPreservingFunction func = new MockPropertyPreservingFunction(Lists.newArrayList("Prop", "A", "B", "C", "D", "E", "F"),
+        new ArrayList<String>());
     return func;
   }
 
@@ -55,7 +56,8 @@ public class PropertyPreservingFunctionTest {
   @Test
   public void SingleMatchingProperty() {
     final MockPropertyPreservingFunction func = getFunction();
-    assertEqual(ValueProperties.builder().with("A", "V").get(), func, ValueProperties.builder().with("A", "V").get(), ValueProperties.builder().with("A", "V").get());
+    assertEqual(ValueProperties.builder().with("A", "V").get(), func, ValueProperties.builder().with("A", "V").get(),
+        ValueProperties.builder().with("A", "V").get());
   }
 
   @Test
@@ -87,15 +89,15 @@ public class PropertyPreservingFunctionTest {
 
   private void assertEqual(final ValueProperties expected, final MockPropertyPreservingFunction func, final ValueProperties... inputs) {
     final List<ValueSpecification> specses = getSpecs(inputs);
-    //Check even empty sets
+    // Check even empty sets
     assertEqualOrdered(expected, func, specses);
-    //Try and check a few permutations
-    //TODO: check non rotation permutations
+    // Try and check a few permutations
+    // TODO: check non rotation permutations
     for (int i = 0; i < specses.size(); i++) {
       assertEqualOrdered(expected, func, specses);
       Collections.rotate(specses, 1);
     }
-    //Check repeats, since there are 2 code branches
+    // Check repeats, since there are 2 code branches
     final List<ValueSpecification> doubled = new ArrayList<>(inputs.length * 2);
     doubled.addAll(specses);
     doubled.addAll(specses);
@@ -136,7 +138,7 @@ public class PropertyPreservingFunctionTest {
     private final Collection<String> _preservedProperties;
     private final Collection<String> _optionalPreservedProperties;
 
-    public MockPropertyPreservingFunction(final Collection<String> preservedProperties, final Collection<String> optionalPreservedProperties) {
+    MockPropertyPreservingFunction(final Collection<String> preservedProperties, final Collection<String> optionalPreservedProperties) {
       super();
       _preservedProperties = preservedProperties;
       _optionalPreservedProperties = optionalPreservedProperties;

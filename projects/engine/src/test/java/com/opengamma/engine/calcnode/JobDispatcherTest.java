@@ -67,7 +67,7 @@ public class JobDispatcherTest {
     private JobInvokerRegister _callback;
     private boolean _disabled;
 
-    public TestJobInvoker(final String nodeId) {
+    TestJobInvoker(final String nodeId) {
       super(nodeId);
     }
 
@@ -76,12 +76,7 @@ public class JobDispatcherTest {
       if (_disabled) {
         return false;
       }
-      _executorService.execute(new Runnable() {
-        @Override
-        public void run() {
-          receiver.jobCompleted(createTestJobResult(job.getSpecification(), 0, getInvokerId()));
-        }
-      });
+      _executorService.execute(() -> receiver.jobCompleted(createTestJobResult(job.getSpecification(), 0, getInvokerId())));
       return true;
     }
 
@@ -175,26 +170,23 @@ public class JobDispatcherTest {
             if (_busy) {
               return false;
             }
-            _executorService.execute(new Runnable() {
-              @Override
-              public void run() {
-                try {
-                  Thread.sleep(_rnd.nextInt(50));
-                } catch (final InterruptedException e) {
-                  LOGGER.warn("invoker {} interrupted", getInvokerId());
-                }
-                LOGGER.debug("invoker {} completed job {}", getInvokerId(), job.getSpecification());
-                receiver.jobCompleted(createTestJobResult(job.getSpecification(), 0L, instance.toString()));
-                synchronized (instance) {
-                  _busy = false;
-                  if (_callback != null) {
-                    LOGGER.debug("re-registering invoker {} with dispatcher", getInvokerId());
-                    final JobInvokerRegister callback = _callback;
-                    _callback = null;
-                    callback.registerJobInvoker(instance);
-                  } else {
-                    LOGGER.debug("invoker {} completed job without notify", getInvokerId());
-                  }
+            _executorService.execute(() -> {
+              try {
+                Thread.sleep(_rnd.nextInt(50));
+              } catch (final InterruptedException e) {
+                LOGGER.warn("invoker {} interrupted", getInvokerId());
+              }
+              LOGGER.debug("invoker {} completed job {}", getInvokerId(), job.getSpecification());
+              receiver.jobCompleted(createTestJobResult(job.getSpecification(), 0L, instance.toString()));
+              synchronized (instance) {
+                _busy = false;
+                if (_callback != null) {
+                  LOGGER.debug("re-registering invoker {} with dispatcher", getInvokerId());
+                  final JobInvokerRegister callback = _callback;
+                  _callback = null;
+                  callback.registerJobInvoker(instance);
+                } else {
+                  LOGGER.debug("invoker {} completed job without notify", getInvokerId());
                 }
               }
             });
@@ -241,19 +233,16 @@ public class JobDispatcherTest {
 
     private int _failureCount;
 
-    public FailingJobInvoker() {
+    FailingJobInvoker() {
       super("Failing");
     }
 
     @Override
     public boolean invoke(final CalculationJob job, final JobInvocationReceiver receiver) {
-      _executorService.execute(new Runnable() {
-        @Override
-        public void run() {
-          LOGGER.debug("Failing job {}", job.getSpecification());
-          _failureCount++;
-          receiver.jobFailed(FailingJobInvoker.this, "Fail", null);
-        }
+      _executorService.execute(() -> {
+        LOGGER.debug("Failing job {}", job.getSpecification());
+        _failureCount++;
+        receiver.jobFailed(FailingJobInvoker.this, "Fail", null);
       });
       return true;
     }
@@ -318,15 +307,12 @@ public class JobDispatcherTest {
 
     @Override
     public boolean invoke(final CalculationJob job, final JobInvocationReceiver receiver) {
-      _executorService.execute(new Runnable() {
-        @Override
-        public void run() {
-          try {
-            Thread.sleep(_waitFor);
-          } catch (final InterruptedException e) {
-          }
-          receiver.jobCompleted(createTestJobResult(job.getSpecification(), 0, getInvokerId()));
+      _executorService.execute(() -> {
+        try {
+          Thread.sleep(_waitFor);
+        } catch (final InterruptedException e) {
         }
+        receiver.jobCompleted(createTestJobResult(job.getSpecification(), 0, getInvokerId()));
       });
       return true;
     }

@@ -132,8 +132,7 @@ public class MarketDataProviderHistoricalTimeSeriesSourceTest {
   }
 
   /**
-   * Tests that getting by external identifiers and validity date is not
-   * supported.
+   * Tests that getting by external identifiers and validity date is not supported.
    */
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testGetByExternalIdBundleValidityDate() {
@@ -141,8 +140,7 @@ public class MarketDataProviderHistoricalTimeSeriesSourceTest {
   }
 
   /**
-   * Tests that getting by external identifiers and validity date is not
-   * supported.
+   * Tests that getting by external identifiers and validity date is not supported.
    */
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testGetByExternalIdBundleValidityDateDates() {
@@ -151,8 +149,7 @@ public class MarketDataProviderHistoricalTimeSeriesSourceTest {
   }
 
   /**
-   * Tests that getting by external identifiers and validity date is not
-   * supported.
+   * Tests that getting by external identifiers and validity date is not supported.
    */
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testGetByExternalIdBundleValidityDateDatesMaxPoints() {
@@ -161,8 +158,7 @@ public class MarketDataProviderHistoricalTimeSeriesSourceTest {
   }
 
   /**
-   * Tests that getting by external identifiers and validity date is not
-   * supported.
+   * Tests that getting by external identifiers and validity date is not supported.
    */
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testGetLatestByExternalIdBundleValidityDate() {
@@ -170,8 +166,7 @@ public class MarketDataProviderHistoricalTimeSeriesSourceTest {
   }
 
   /**
-   * Tests that getting by external identifiers and validity date is not
-   * supported.
+   * Tests that getting by external identifiers and validity date is not supported.
    */
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testGetLatestByExternalIdBundleValidityDateDates() {
@@ -310,7 +305,7 @@ public class MarketDataProviderHistoricalTimeSeriesSourceTest {
 
   private static class NoImpl extends MarketDataProviderHistoricalTimeSeriesSource {
 
-    public NoImpl(final String providerName, final UniqueIdSupplier uniqueIdSupplier,
+    NoImpl(final String providerName, final UniqueIdSupplier uniqueIdSupplier,
         final HistoricalTimeSeriesProvider provider) {
       super(providerName, uniqueIdSupplier, provider);
     }
@@ -319,7 +314,7 @@ public class MarketDataProviderHistoricalTimeSeriesSourceTest {
   private static class TestHistoricalTimeSeriesProvider implements HistoricalTimeSeriesProvider {
     private final Map<String, LocalDateDoubleTimeSeries> _schemeToTs;
 
-    public TestHistoricalTimeSeriesProvider(final Map<String, LocalDateDoubleTimeSeries> schemeToTs) {
+    TestHistoricalTimeSeriesProvider(final Map<String, LocalDateDoubleTimeSeries> schemeToTs) {
       _schemeToTs = new HashMap<>(schemeToTs);
     }
 

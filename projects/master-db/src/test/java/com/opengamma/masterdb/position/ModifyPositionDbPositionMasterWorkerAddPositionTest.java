@@ -45,7 +45,7 @@ public class ModifyPositionDbPositionMasterWorkerAddPositionTest extends Abstrac
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_nullDocument() {
     _posMaster.add(null);
@@ -214,8 +214,10 @@ public class ModifyPositionDbPositionMasterWorkerAddPositionTest extends Abstrac
     final OffsetDateTime offsetDateTime = OffsetDateTime.now();
 
     final ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
-    position.getTrades().add(new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "C"), offsetDateTime.toLocalDate(), offsetDateTime.minusSeconds(600).toOffsetTime(), ExternalId.of("CPS", "CPV")));
-    position.getTrades().add(new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "D"), offsetDateTime.toLocalDate(), offsetDateTime.minusSeconds(500).toOffsetTime(), ExternalId.of("CPS", "CPV")));
+    position.getTrades().add(new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "C"), offsetDateTime.toLocalDate(),
+        offsetDateTime.minusSeconds(600).toOffsetTime(), ExternalId.of("CPS", "CPV")));
+    position.getTrades().add(new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "D"), offsetDateTime.toLocalDate(),
+        offsetDateTime.minusSeconds(500).toOffsetTime(), ExternalId.of("CPS", "CPV")));
 
     final PositionDocument doc = new PositionDocument();
     doc.setPosition(position);
@@ -332,8 +334,10 @@ public class ModifyPositionDbPositionMasterWorkerAddPositionTest extends Abstrac
 
     final OffsetDateTime offsetDateTime = OffsetDateTime.now();
 
-    position.getTrades().add(new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), offsetDateTime.toLocalDate(), offsetDateTime.minusSeconds(600).toOffsetTime(), ExternalId.of("CPS", "CPV")));
-    position.getTrades().add(new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "C"), offsetDateTime.toLocalDate(), offsetDateTime.minusSeconds(500).toOffsetTime(), ExternalId.of("CPS", "CPV")));
+    position.getTrades().add(new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), offsetDateTime.toLocalDate(),
+        offsetDateTime.minusSeconds(600).toOffsetTime(), ExternalId.of("CPS", "CPV")));
+    position.getTrades().add(new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "C"), offsetDateTime.toLocalDate(),
+        offsetDateTime.minusSeconds(500).toOffsetTime(), ExternalId.of("CPS", "CPV")));
 
     final PositionDocument doc = new PositionDocument();
     doc.setPosition(position);
@@ -404,7 +408,7 @@ public class ModifyPositionDbPositionMasterWorkerAddPositionTest extends Abstrac
     final ManageableTrade trade = new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV"));
     trade.addAttribute("TA1", "C");
     trade.addAttribute("TA2", "D");
-//    trade.setDeal(new MockDeal("propOne", "propTwo"));  // TODO: test deal persistence
+    // trade.setDeal(new MockDeal("propOne", "propTwo")); // TODO: test deal persistence
     position.getTrades().add(trade);
 
     final PositionDocument doc = new PositionDocument();

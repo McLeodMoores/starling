@@ -56,7 +56,7 @@ public class DelegatingHistoricalTimeSeriesProviderTest {
     if (PROVIDER.toString().contains("source1, ")) {
       assertEquals(PROVIDER.toString(), "DelegatingHistoricalTimeSeriesProvider[source1, source2]");
     } else {
-      assertEquals(PROVIDER.toString(), "DelegatingHistoricalTimeSeriesProvider[source2, source1]");      
+      assertEquals(PROVIDER.toString(), "DelegatingHistoricalTimeSeriesProvider[source2, source1]");
     }
   }
 
@@ -85,7 +85,7 @@ public class DelegatingHistoricalTimeSeriesProviderTest {
     private final String _dataSource;
     private final LocalDateDoubleTimeSeries _ts;
 
-    public TestHistoricalTimeSeriesProvider(final String dataSource, final LocalDateDoubleTimeSeries ts) {
+    TestHistoricalTimeSeriesProvider(final String dataSource, final LocalDateDoubleTimeSeries ts) {
       _dataSource = dataSource;
       _ts = ts;
     }

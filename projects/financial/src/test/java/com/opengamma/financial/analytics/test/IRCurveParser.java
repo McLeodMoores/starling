@@ -24,7 +24,6 @@ public class IRCurveParser {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IRSwapTradeParser.class);
 
-
   private static final String CURVE_NAME = "Curve Name";
   private static final String THREE_MONTHS = "3M";
   private static final String SIX_MONTHS = "6M";
@@ -49,15 +48,13 @@ public class IRCurveParser {
   private static final String THIRTY_YEARS = "30Y";
   private static final String FORTY_YEARS = "40Y";
   private static final String FIFTY_YEARS = "50Y";
-  private static final String[] DATES = new String[]{ THREE_MONTHS, SIX_MONTHS, NINE_MONTHS, ONE_YEAR, FIFTEEN_MONTHS, HEIGHTEEN_MONTHS, TWENTY_ONE_MONTHS,
+  private static final String[] DATES = new String[] { THREE_MONTHS, SIX_MONTHS, NINE_MONTHS, ONE_YEAR, FIFTEEN_MONTHS, HEIGHTEEN_MONTHS, TWENTY_ONE_MONTHS,
       TWO_YEARS, THREE_YEARS, FOUR_YEARS, FIVE_YEARS, SIX_YEARS, SEVEN_YEARS, HEIGHT_YEARS, NINE_YEARS, TEN_YEARS,
-      TWELVE_YEARS, FIFTEEN_YEARS, TWENTY_YEARS, TWENTY_FIVE_YEARS, THIRTY_YEARS, FORTY_YEARS, FIFTY_YEARS};
-  public static final LogNaturalCubicMonotonicityPreservingInterpolator1D LOG_NATURAL_CUBIC_MONOTONE_INSTANCE =
-      new LogNaturalCubicMonotonicityPreservingInterpolator1D();
-  private static final double[] TIMES = {0.249144422, 0.501026694, 0.750171116, 0.999315537, 1.25119781, 1.500342231,
+      TWELVE_YEARS, FIFTEEN_YEARS, TWENTY_YEARS, TWENTY_FIVE_YEARS, THIRTY_YEARS, FORTY_YEARS, FIFTY_YEARS };
+  public static final LogNaturalCubicMonotonicityPreservingInterpolator1D LOG_NATURAL_CUBIC_MONOTONE_INSTANCE = new LogNaturalCubicMonotonicityPreservingInterpolator1D();
+  private static final double[] TIMES = { 0.249144422, 0.501026694, 0.750171116, 0.999315537, 1.25119781, 1.500342231,
       1.749486653, 2.001368925, 3.000684463, 4, 4.999315537, 6.001368925, 7.000684463, 8, 8.999315537, 10.00136893,
-      12, 15.00068446, 20, 24.99931554, 30.00136893, 40, 50.00136893};
-
+      12, 15.00068446, 20, 24.99931554, 30.00136893, 40, 50.00136893 };
 
   public List<InterpolatedDoublesCurve> parseCSVFile(final URL fileUrl) {
     ArgumentChecker.notNull(fileUrl, "fileUrl");
@@ -69,7 +66,7 @@ public class IRCurveParser {
     final List<FudgeMsg> rowsWithError = Lists.newArrayList();
     for (final FudgeMsg row : csvDocumentReader) {
       try {
-        curves.add( createCurve(row));
+        curves.add(createCurve(row));
       } catch (final Exception ex) {
         ex.printStackTrace();
         rowsWithError.add(row);
@@ -83,9 +80,8 @@ public class IRCurveParser {
     return curves;
   }
 
-
   private static InterpolatedDoublesCurve createCurve(final FudgeMsg row) {
-    final double[] discountFactors = new double [DATES.length];
+    final double[] discountFactors = new double[DATES.length];
     for (int i = 0; i < DATES.length; i++) {
       discountFactors[i] = row.getDouble(DATES[i]);
     }

@@ -44,7 +44,7 @@ public class BloombergEQVanillaOptionChainTest {
 
   // ---- TEST ON EMPTY INPUT ----
   @Test
-  public void testEmpty () {
+  public void testEmpty() {
     final BloombergEQVanillaOptionChain empty = new BloombergEQVanillaOptionChain(new ArrayList<ExternalId>());
     BloombergEQVanillaOptionChain chain = empty.narrowByOptionType(OptionType.CALL);
     assertCount(0, chain);
@@ -58,18 +58,18 @@ public class BloombergEQVanillaOptionChainTest {
 
   // ---- OPTION TYPE ----
   @Test(dependsOnMethods = "preTest")
-  public void testOptionType_1 () {
+  public void testOptionType_1() {
     final BloombergEQVanillaOptionChain callChain = s_chain.narrowByOptionType(OptionType.CALL);
-    final BloombergEQVanillaOptionChain putChain  = s_chain.narrowByOptionType(OptionType.PUT);
-    assertCount (512, callChain);
-    assertOptionType (OptionType.CALL, callChain);
-    assertCount (512, putChain);
-    assertOptionType (OptionType.PUT, putChain);
+    final BloombergEQVanillaOptionChain putChain = s_chain.narrowByOptionType(OptionType.PUT);
+    assertCount(512, callChain);
+    assertOptionType(OptionType.CALL, callChain);
+    assertCount(512, putChain);
+    assertOptionType(OptionType.PUT, putChain);
   }
 
   // ---- STRIKE ----
   @Test(dependsOnMethods = "preTest")
-  public void testStrike_0_On () {
+  public void testStrike_0_On() {
     final double referencePrice = 140;
     final int offset = 0;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByStrike(referencePrice, offset);
@@ -78,7 +78,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testStrike_Plus_1 () {
+  public void testStrike_Plus_1() {
     final double referencePrice = 141;
     final int offset = 1;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByStrike(referencePrice, offset);
@@ -87,7 +87,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testStrike_Plus_2 () {
+  public void testStrike_Plus_2() {
     final double referencePrice = 141;
     final int offset = 2;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByStrike(referencePrice, offset);
@@ -96,7 +96,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testStrike_Plus_5 () {
+  public void testStrike_Plus_5() {
     final double referencePrice = 141;
     final int offset = 5;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByStrike(referencePrice, offset);
@@ -105,7 +105,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testStrike_Plus_100 () {
+  public void testStrike_Plus_100() {
     final double referencePrice = 141;
     final int offset = 100;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByStrike(referencePrice, offset);
@@ -114,11 +114,11 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testStrike_Plus_1_Interval () {
+  public void testStrike_Plus_1_Interval() {
     final int offset = 1;
 
     double referencePrice = 530;
-    for (int i = 1 ; i <= 4 ; i++) {
+    for (int i = 1; i <= 4; i++) {
       referencePrice = referencePrice + 1.0;
       final BloombergEQVanillaOptionChain chain = s_chain.narrowByStrike(referencePrice, offset);
       assertCount(4, referencePrice, offset, chain);
@@ -127,7 +127,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testStrike_Minus_1 () {
+  public void testStrike_Minus_1() {
     final double referencePrice = 141;
     final int offset = -1;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByStrike(referencePrice, offset);
@@ -136,7 +136,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testStrike_Minus_2 () {
+  public void testStrike_Minus_2() {
     final double referencePrice = 141;
     final int offset = -2;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByStrike(referencePrice, offset);
@@ -145,7 +145,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testStrike_Minus_5 () {
+  public void testStrike_Minus_5() {
     final double referencePrice = 141;
     final int offset = -5;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByStrike(referencePrice, offset);
@@ -154,7 +154,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testStrike_Minus_100 () {
+  public void testStrike_Minus_100() {
     final double referencePrice = 141;
     final int offset = -100;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByStrike(referencePrice, offset);
@@ -163,11 +163,11 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testStrike_Minus_1_Interval () {
+  public void testStrike_Minus_1_Interval() {
     final int offset = -1;
 
     double referencePrice = 531;
-    for (int i = 1 ; i <= 4 ; i++) {
+    for (int i = 1; i <= 4; i++) {
       referencePrice = referencePrice + 1.0;
       final BloombergEQVanillaOptionChain chain = s_chain.narrowByStrike(referencePrice, offset);
       assertCount(12, referencePrice, offset, chain);
@@ -176,12 +176,12 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testStrike_Comprehensive () {
+  public void testStrike_Comprehensive() {
     testStrike_Comprehensive_Impl(190, 0, 190);
     testStrike_Comprehensive_Impl(190, 1, 195);
     testStrike_Comprehensive_Impl(190, -1, 185);
 
-    //testStrike_Comprehensive_Impl(191,0,190);
+    // testStrike_Comprehensive_Impl(191,0,190);
     testStrike_Comprehensive_Impl(191, 1, 195);
     testStrike_Comprehensive_Impl(191, -1, 190);
 
@@ -197,7 +197,7 @@ public class BloombergEQVanillaOptionChainTest {
 
   // ---- EXPIRY ----
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Plus_0_Pre () {
+  public void testExpiry_Plus_0_Pre() {
     final LocalDate refDate = s_referenceDatePreExpiration;
     final int months = 0;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -206,7 +206,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Plus_0_Post () {
+  public void testExpiry_Plus_0_Post() {
     final LocalDate refDate = s_referenceDatePostExpiration;
     final int months = 0;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -215,7 +215,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Plus_1_Pre () {
+  public void testExpiry_Plus_1_Pre() {
     final LocalDate refDate = s_referenceDatePreExpiration;
     final int months = 1;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -224,7 +224,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Plus_1_Post () {
+  public void testExpiry_Plus_1_Post() {
     final LocalDate refDate = s_referenceDatePostExpiration;
     final int months = 1;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -233,7 +233,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Plus_2_Pre () {
+  public void testExpiry_Plus_2_Pre() {
     final LocalDate refDate = s_referenceDatePreExpiration;
     final int months = 2;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -242,7 +242,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Plus_2_Post () {
+  public void testExpiry_Plus_2_Post() {
     final LocalDate refDate = s_referenceDatePostExpiration;
     final int months = 2;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -251,7 +251,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Plus_3_Pre () {
+  public void testExpiry_Plus_3_Pre() {
     final LocalDate refDate = s_referenceDatePreExpiration;
     final int months = 3;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -260,7 +260,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Plus_3_Post () {
+  public void testExpiry_Plus_3_Post() {
     final LocalDate refDate = s_referenceDatePostExpiration;
     final int months = 3;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -269,7 +269,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Plus_4_Pre () {
+  public void testExpiry_Plus_4_Pre() {
     final LocalDate refDate = s_referenceDatePreExpiration;
     final int months = 4;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -278,7 +278,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Plus_4_Post () {
+  public void testExpiry_Plus_4_Post() {
     final LocalDate refDate = s_referenceDatePostExpiration;
     final int months = 4;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -287,7 +287,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Plus_5_Pre () {
+  public void testExpiry_Plus_5_Pre() {
     final LocalDate refDate = s_referenceDatePreExpiration;
     final int months = 5;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -296,7 +296,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Plus_5_Post () {
+  public void testExpiry_Plus_5_Post() {
     final LocalDate refDate = s_referenceDatePostExpiration;
     final int months = 5;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -305,7 +305,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Plus_6_Pre () {
+  public void testExpiry_Plus_6_Pre() {
     final LocalDate refDate = s_referenceDatePreExpiration;
     final int months = 6;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -314,7 +314,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Plus_6_Post () {
+  public void testExpiry_Plus_6_Post() {
     final LocalDate refDate = s_referenceDatePostExpiration;
     final int months = 6;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -323,7 +323,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Plus_100 () {
+  public void testExpiry_Plus_100() {
     final LocalDate refDate = s_referenceDatePreExpiration;
     final int months = 100;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -332,7 +332,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Forward_0 () {
+  public void testExpiry_Forward_0() {
     final LocalDate refDate = LocalDate.of(2012, Month.NOVEMBER, 11);
     final int months = 0;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -341,7 +341,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Minus_0 () {
+  public void testExpiry_Minus_0() {
     final LocalDate refDate = s_referenceDateForTestingMinus;
     final int months = 0;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -350,7 +350,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Minus_1 () {
+  public void testExpiry_Minus_1() {
     final LocalDate refDate = s_referenceDateForTestingMinus;
     final int months = -1;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -359,7 +359,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Minus_2 () {
+  public void testExpiry_Minus_2() {
     final LocalDate refDate = s_referenceDateForTestingMinus;
     final int months = -2;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -368,7 +368,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Minus_3 () {
+  public void testExpiry_Minus_3() {
     final LocalDate refDate = s_referenceDateForTestingMinus;
     final int months = -3;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -377,7 +377,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Minus_4 () {
+  public void testExpiry_Minus_4() {
     final LocalDate refDate = s_referenceDateForTestingMinus;
     final int months = -4;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -386,7 +386,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Minus_5 () {
+  public void testExpiry_Minus_5() {
     final LocalDate refDate = s_referenceDateForTestingMinus;
     final int months = -5;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -395,7 +395,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Minus_6 () {
+  public void testExpiry_Minus_6() {
     final LocalDate refDate = s_referenceDateForTestingMinus;
     final int months = -6;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -404,7 +404,7 @@ public class BloombergEQVanillaOptionChainTest {
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testExpiry_Minus_100 () {
+  public void testExpiry_Minus_100() {
     final LocalDate refDate = s_referenceDateForTestingMinus;
     final int months = -100;
     final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months);
@@ -412,44 +412,42 @@ public class BloombergEQVanillaOptionChainTest {
     assertExpiry(Month.APRIL, 16, 2011, refDate, months, chain);
   }
 
-
   // ---- COMBINATIONS ----
   @Test(dependsOnMethods = "preTest")
-  public void testCombo_1 () {
+  public void testCombo_1() {
     final LocalDate refDate = s_referenceDatePreExpiration;
     final double refPrice = 162.3;
     final int strikeOffset = 1;
     final int months = 2;
-    final BloombergEQVanillaOptionChain chain =
-      s_chain.narrowByExpiry(refDate, months).narrowByStrike(refPrice, strikeOffset).narrowByOptionType(OptionType.CALL);
+    final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months).narrowByStrike(refPrice, strikeOffset)
+        .narrowByOptionType(OptionType.CALL);
     assertCount(1, chain);
     assertExpiry(Month.JUNE, 18, 2011, refDate, months, chain);
     assertStrike(170, refPrice, strikeOffset, chain);
   }
 
   @Test(dependsOnMethods = "preTest")
-  public void testCombo_2 () {
+  public void testCombo_2() {
     final LocalDate refDate = s_referenceDatePreExpiration;
     final double refPrice = 162.3;
     final int strikeOffset = 1;
     final int months = 2;
-    final BloombergEQVanillaOptionChain chain =
-      s_chain.narrowByExpiry(refDate, months).narrowByStrike(refPrice, strikeOffset).narrowByOptionType(OptionType.PUT);
+    final BloombergEQVanillaOptionChain chain = s_chain.narrowByExpiry(refDate, months).narrowByStrike(refPrice, strikeOffset)
+        .narrowByOptionType(OptionType.PUT);
     assertCount(1, chain);
     assertExpiry(Month.JUNE, 18, 2011, refDate, months, chain);
     assertStrike(170, refPrice, strikeOffset, chain);
   }
-
 
   // -------- TEST SUBROUTINES --------
   private void assertCount(final int expectedCount, final BloombergEQVanillaOptionChain chain) {
-    assertEquals (expectedCount, chain.getIdentifiers().size());
+    assertEquals(expectedCount, chain.getIdentifiers().size());
   }
 
   private void assertCount(final int expected, final double referencePrice, final int offset, final BloombergEQVanillaOptionChain chain) {
     final StringBuilder sb = new StringBuilder();
-    sb.append ("[ FAIL : referencePrice = ").append(referencePrice)
-      .append (" | offset = ").append(offset);
+    sb.append("[ FAIL : referencePrice = ").append(referencePrice)
+        .append(" | offset = ").append(offset);
 
     final StringBuilder sb2 = new StringBuilder(sb).append(" | Chain is empty ]");
     assertTrue(sb2.toString(), chain.getIdentifiers().size() > 0);
@@ -457,13 +455,13 @@ public class BloombergEQVanillaOptionChainTest {
     final StringBuilder sb3 = new StringBuilder(sb).append(" | expected count = ").append(expected);
     final int actual = chain.getIdentifiers().size();
     sb3.append(" | actual count = ").append(actual).append(" ]");
-    assertEquals (sb3.toString(), expected, actual);
+    assertEquals(sb3.toString(), expected, actual);
   }
 
-  private void assertCount (final int expected, final LocalDate referenceDate, final int monthsFromReferenceDate, final BloombergEQVanillaOptionChain chain) {
+  private void assertCount(final int expected, final LocalDate referenceDate, final int monthsFromReferenceDate, final BloombergEQVanillaOptionChain chain) {
     final StringBuilder sb = new StringBuilder();
-    sb.append ("[ FAIL : referenceDate = ").append(referenceDate)
-      .append (" | months = ").append(monthsFromReferenceDate);
+    sb.append("[ FAIL : referenceDate = ").append(referenceDate)
+        .append(" | months = ").append(monthsFromReferenceDate);
 
     final StringBuilder sb2 = new StringBuilder(sb).append(" | Chain is empty ]");
     assertTrue(sb2.toString(), chain.getIdentifiers().size() > 0);
@@ -471,20 +469,20 @@ public class BloombergEQVanillaOptionChainTest {
     final StringBuilder sb3 = new StringBuilder(sb).append(" | expected count = ").append(expected);
     final int actual = chain.getIdentifiers().size();
     sb3.append(" | actual count = ").append(actual).append(" ]");
-    assertEquals (sb3.toString(), expected, actual);
+    assertEquals(sb3.toString(), expected, actual);
   }
 
-  private void assertOptionType (final OptionType expected, final BloombergEQVanillaOptionChain chain) {
+  private void assertOptionType(final OptionType expected, final BloombergEQVanillaOptionChain chain) {
     for (final ExternalId identifier : chain.getIdentifiers()) {
       final BloombergTickerParserEQVanillaOption parser = new BloombergTickerParserEQVanillaOption(identifier);
-      assertEquals (expected, parser.getOptionType());
+      assertEquals(expected, parser.getOptionType());
     }
   }
 
-  private void assertStrike (final double expected, final double referencePrice, final int offset, final BloombergEQVanillaOptionChain chain) {
+  private void assertStrike(final double expected, final double referencePrice, final int offset, final BloombergEQVanillaOptionChain chain) {
     final StringBuilder sb = new StringBuilder();
-    sb.append ("[ FAIL : referencePrice = ").append(referencePrice)
-      .append (" | offset = ").append(offset);
+    sb.append("[ FAIL : referencePrice = ").append(referencePrice)
+        .append(" | offset = ").append(offset);
 
     final StringBuilder sb2 = new StringBuilder(sb).append(" | Chain is empty ]");
     assertTrue(sb2.toString(), chain.getIdentifiers().size() > 0);
@@ -494,18 +492,18 @@ public class BloombergEQVanillaOptionChainTest {
       final BloombergTickerParserEQVanillaOption parser = new BloombergTickerParserEQVanillaOption(identifier);
       final double actual = parser.getStrike();
       sb3.append(" | actual strike = ").append(actual).append(" ]");
-      assertEquals (sb3.toString(), expected, actual);
+      assertEquals(sb3.toString(), expected, actual);
     }
   }
 
-  private void assertExpiry (final Month expected, final int expectedDay, final int expectedYear,
-                             final LocalDate referenceDate, final int monthsFromReferenceDate,
-                             final BloombergEQVanillaOptionChain chain) {
+  private void assertExpiry(final Month expected, final int expectedDay, final int expectedYear,
+      final LocalDate referenceDate, final int monthsFromReferenceDate,
+      final BloombergEQVanillaOptionChain chain) {
     final LocalDate expectedValue = LocalDate.of(expectedYear, expected, expectedDay);
 
     final StringBuilder sb = new StringBuilder();
-    sb.append ("[ FAIL : referenceDate = ").append(referenceDate)
-      .append (" | months = ").append(monthsFromReferenceDate);
+    sb.append("[ FAIL : referenceDate = ").append(referenceDate)
+        .append(" | months = ").append(monthsFromReferenceDate);
 
     final StringBuilder sb2 = new StringBuilder(sb).append(" | Chain is empty ]");
     assertTrue(sb2.toString(), chain.getIdentifiers().size() > 0);
@@ -515,14 +513,13 @@ public class BloombergEQVanillaOptionChainTest {
       final BloombergTickerParserEQVanillaOption parser = new BloombergTickerParserEQVanillaOption(identifier);
       final LocalDate actual = parser.getExpiry();
       sb3.append(" | actual expiry = ").append(actual).append(" ]");
-      assertEquals (sb3.toString(), expectedValue, actual);
+      assertEquals(sb3.toString(), expectedValue, actual);
     }
   }
 
-
   // -------- SETUP --------
   @BeforeClass
-  public static void initTestData () {
+  public static void initTestData() {
     s_referenceDatePreExpiration = LocalDate.of(2011, Month.APRIL, 11);
     s_referenceDatePostExpiration = LocalDate.of(2011, Month.APRIL, 18);
     s_referenceDateForTestingMinus = LocalDate.of(2011, Month.NOVEMBER, 11);

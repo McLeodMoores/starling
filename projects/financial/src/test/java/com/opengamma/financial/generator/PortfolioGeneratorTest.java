@@ -40,11 +40,13 @@ public class PortfolioGeneratorTest {
       }
 
       @Override
-      public ManageableTrade createSecurityTrade(final QuantityGenerator quantityGenerator, final SecurityPersister securityPersister, final NameGenerator counterPartyGenerator) {
+      public ManageableTrade createSecurityTrade(final QuantityGenerator quantityGenerator, final SecurityPersister securityPersister,
+          final NameGenerator counterPartyGenerator) {
         ManageableTrade trade = null;
         final RawSecurity security = createSecurity();
         final ZonedDateTime tradeDate = ZonedDateTime.now();
-        trade = new ManageableTrade(quantityGenerator.createQuantity(), securityPersister.storeSecurity(security), tradeDate.toLocalDate(), tradeDate.toOffsetDateTime().toOffsetTime(),
+        trade = new ManageableTrade(quantityGenerator.createQuantity(), securityPersister.storeSecurity(security), tradeDate.toLocalDate(),
+            tradeDate.toOffsetDateTime().toOffsetTime(),
             ExternalId.of(Counterparty.DEFAULT_SCHEME, counterPartyGenerator.createName()));
         return trade;
       }
@@ -65,8 +67,9 @@ public class PortfolioGeneratorTest {
 
   public void testSinglePosition() {
     final InMemorySecuritySource source = new InMemorySecuritySource();
-    final PortfolioGenerator generator = new PortfolioGenerator(new LeafPortfolioNodeGenerator(new StaticNameGenerator("NODE"), createSimplePositionGenerator(source), 1), new StaticNameGenerator(
-        "PORTFOLIO"));
+    final PortfolioGenerator generator = new PortfolioGenerator(
+        new LeafPortfolioNodeGenerator(new StaticNameGenerator("NODE"), createSimplePositionGenerator(source), 1), new StaticNameGenerator(
+            "PORTFOLIO"));
     final Portfolio portfolio = generator.createPortfolio();
     assertEquals(portfolio.getRootNode().getChildNodes().size(), 0);
     assertEquals(portfolio.getRootNode().getPositions().size(), 1);
@@ -77,8 +80,9 @@ public class PortfolioGeneratorTest {
 
   public void testMultiplePosition() {
     final InMemorySecuritySource source = new InMemorySecuritySource();
-    final PortfolioGenerator generator = new PortfolioGenerator(new LeafPortfolioNodeGenerator(new StaticNameGenerator("NODE"), createSimplePositionGenerator(source), 20), new StaticNameGenerator(
-        "PORTFOLIO"));
+    final PortfolioGenerator generator = new PortfolioGenerator(
+        new LeafPortfolioNodeGenerator(new StaticNameGenerator("NODE"), createSimplePositionGenerator(source), 20), new StaticNameGenerator(
+            "PORTFOLIO"));
     final Portfolio portfolio = generator.createPortfolio();
     assertEquals(portfolio.getRootNode().getChildNodes().size(), 0);
     assertEquals(portfolio.getRootNode().getPositions().size(), 20);

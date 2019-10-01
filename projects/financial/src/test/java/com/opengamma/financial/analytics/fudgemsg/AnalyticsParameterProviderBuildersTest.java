@@ -77,7 +77,8 @@ public class AnalyticsParameterProviderBuildersTest extends AnalyticsTestBase {
   @Test
   public void testFXMatrix() {
     final Map<Currency, Integer> map = new LinkedHashMap<>();
-    final Currency[] currencies = new Currency[] {Currency.AUD, Currency.CAD, Currency.CHF, Currency.FRF, Currency.DEM, Currency.USD, Currency.GBP, Currency.EUR, Currency.HKD, Currency.DKK};
+    final Currency[] currencies = new Currency[] { Currency.AUD, Currency.CAD, Currency.CHF, Currency.FRF, Currency.DEM, Currency.USD, Currency.GBP,
+        Currency.EUR, Currency.HKD, Currency.DKK };
     final double[][] fxRates = new double[10][10];
     for (int i = 0; i < 10; i++) {
       map.put(currencies[i], i);
@@ -92,7 +93,8 @@ public class AnalyticsParameterProviderBuildersTest extends AnalyticsTestBase {
   @Test
   public void testMulticurveProviderDiscount() {
     final Map<Currency, Integer> map = new LinkedHashMap<>();
-    final Currency[] currencies = new Currency[] {Currency.AUD, Currency.CAD, Currency.CHF, Currency.FRF, Currency.DEM, Currency.USD, Currency.GBP, Currency.EUR, Currency.HKD, Currency.DKK};
+    final Currency[] currencies = new Currency[] { Currency.AUD, Currency.CAD, Currency.CHF, Currency.FRF, Currency.DEM, Currency.USD, Currency.GBP,
+        Currency.EUR, Currency.HKD, Currency.DKK };
     final double[][] fxRates = new double[10][10];
     for (int i = 0; i < 10; i++) {
       map.put(currencies[i], i);
@@ -121,7 +123,8 @@ public class AnalyticsParameterProviderBuildersTest extends AnalyticsTestBase {
   @Test
   public void testMulticurveProviderForward() {
     final Map<Currency, Integer> map = new LinkedHashMap<>();
-    final Currency[] currencies = new Currency[] {Currency.AUD, Currency.CAD, Currency.CHF, Currency.FRF, Currency.DEM, Currency.USD, Currency.GBP, Currency.EUR, Currency.HKD, Currency.DKK};
+    final Currency[] currencies = new Currency[] { Currency.AUD, Currency.CAD, Currency.CHF, Currency.FRF, Currency.DEM, Currency.USD, Currency.GBP,
+        Currency.EUR, Currency.HKD, Currency.DKK };
     final double[][] fxRates = new double[10][10];
     for (int i = 0; i < 10; i++) {
       map.put(currencies[i], i);
@@ -150,7 +153,8 @@ public class AnalyticsParameterProviderBuildersTest extends AnalyticsTestBase {
   @Test
   public void testInflationProviderDiscount() {
     final Map<Currency, Integer> map = new LinkedHashMap<>();
-    final Currency[] currencies = new Currency[] {Currency.AUD, Currency.CAD, Currency.CHF, Currency.FRF, Currency.DEM, Currency.USD, Currency.GBP, Currency.EUR, Currency.HKD, Currency.DKK};
+    final Currency[] currencies = new Currency[] { Currency.AUD, Currency.CAD, Currency.CHF, Currency.FRF, Currency.DEM, Currency.USD, Currency.GBP,
+        Currency.EUR, Currency.HKD, Currency.DKK };
     final double[][] fxRates = new double[10][10];
     for (int i = 0; i < 10; i++) {
       map.put(currencies[i], i);
@@ -183,7 +187,8 @@ public class AnalyticsParameterProviderBuildersTest extends AnalyticsTestBase {
   @Test
   public void testIssuerProviderDiscount() {
     final Map<Currency, Integer> map = new LinkedHashMap<>();
-    final Currency[] currencies = new Currency[] {Currency.AUD, Currency.CAD, Currency.CHF, Currency.FRF, Currency.DEM, Currency.USD, Currency.GBP, Currency.EUR, Currency.HKD, Currency.DKK};
+    final Currency[] currencies = new Currency[] { Currency.AUD, Currency.CAD, Currency.CHF, Currency.FRF, Currency.DEM, Currency.USD, Currency.GBP,
+        Currency.EUR, Currency.HKD, Currency.DKK };
     final double[][] fxRates = new double[10][10];
     for (int i = 0; i < 10; i++) {
       map.put(currencies[i], i);
@@ -207,11 +212,15 @@ public class AnalyticsParameterProviderBuildersTest extends AnalyticsTestBase {
     overnight.put(new IndexON("NAME2", Currency.EUR, DayCounts.ACT_360, 0), new YieldCurve("F", ConstantDoublesCurve.from(0.006, "f")));
     final MulticurveProviderDiscount provider = new MulticurveProviderDiscount(discounting, ibor, overnight, matrix);
     final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> curves = new HashMap<>();
-    curves.put(Pairs.<Object, LegalEntityFilter<LegalEntity>>of(Collections.singleton(Currency.USD), new LegalEntityRegion(true, false, Collections.<Country>emptySet(), true, Collections.singleton(Currency.USD))), new YieldCurve("L", ConstantDoublesCurve.from(0.1234, "l")));
+    curves.put(
+        Pairs.<Object, LegalEntityFilter<LegalEntity>> of(Collections.singleton(Currency.USD),
+            new LegalEntityRegion(true, false, Collections.<Country> emptySet(), true, Collections.singleton(Currency.USD))),
+        new YieldCurve("L", ConstantDoublesCurve.from(0.1234, "l")));
     final Set<String> classifications = new HashSet<>();
     classifications.add("C");
     classifications.add("E");
-    curves.put(Pairs.<Object, LegalEntityFilter<LegalEntity>>of("A", new LegalEntitySector(true, false, classifications)), new YieldCurve("P", ConstantDoublesCurve.from(0.1234, "p")));
+    curves.put(Pairs.<Object, LegalEntityFilter<LegalEntity>> of("A", new LegalEntitySector(true, false, classifications)),
+        new YieldCurve("P", ConstantDoublesCurve.from(0.1234, "p")));
     final IssuerProviderDiscount issuer = new IssuerProviderDiscount(provider, curves);
     assertEquals(issuer, cycleObject(IssuerProviderDiscount.class, issuer));
   }
@@ -244,9 +253,9 @@ public class AnalyticsParameterProviderBuildersTest extends AnalyticsTestBase {
     data3.put("C", Pairs.of(Integer.valueOf(234), Integer.valueOf(2536)));
     final CurveBuildingBlock block3 = new CurveBuildingBlock(data3);
     final LinkedHashMap<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> data = new LinkedHashMap<>();
-    data.put("Q", Pairs.of(block1, new DoubleMatrix2D(new double[][] {new double[] {2, 4}, new double[] {5, 6}})));
-    data.put("W", Pairs.of(block2, new DoubleMatrix2D(new double[][] {new double[] {12, 14}, new double[] {15, 16}})));
-    data.put("E", Pairs.of(block3, new DoubleMatrix2D(new double[][] {new double[] {22, 24}, new double[] {25, 26}})));
+    data.put("Q", Pairs.of(block1, new DoubleMatrix2D(new double[][] { new double[] { 2, 4 }, new double[] { 5, 6 } })));
+    data.put("W", Pairs.of(block2, new DoubleMatrix2D(new double[][] { new double[] { 12, 14 }, new double[] { 15, 16 } })));
+    data.put("E", Pairs.of(block3, new DoubleMatrix2D(new double[][] { new double[] { 22, 24 }, new double[] { 25, 26 } })));
     final CurveBuildingBlockBundle bundle = new CurveBuildingBlockBundle(data);
     assertEquals(bundle, cycleObject(CurveBuildingBlockBundle.class, bundle));
   }
@@ -254,20 +263,22 @@ public class AnalyticsParameterProviderBuildersTest extends AnalyticsTestBase {
   @Test
   public void testHullWhiteParameters() {
     final HullWhiteOneFactorPiecewiseConstantParameters parameters = new HullWhiteOneFactorPiecewiseConstantParameters(0.04,
-        new double[] {0.1, 0.2, 0.3, 0.4, 0.5}, new double[] {1, 2, 3, 4, 5});
+        new double[] { 0.1, 0.2, 0.3, 0.4, 0.5 }, new double[] { 1, 2, 3, 4, 5 });
     assertEquals(parameters, cycleObject(HullWhiteOneFactorPiecewiseConstantParameters.class, parameters));
   }
 
   @Test
   public void testG2ppParameters() {
-    final G2ppPiecewiseConstantParameters parameters = new G2ppPiecewiseConstantParameters(new double[] {0.02, 0.01},
-        new double[][] {new double[] {0.03, 0.04, 0.05}, new double[] {0.06, 0.07, 0.08}}, new double[] {1, 2}, 0.9);
+    final G2ppPiecewiseConstantParameters parameters = new G2ppPiecewiseConstantParameters(new double[] { 0.02, 0.01 },
+        new double[][] { new double[] { 0.03, 0.04, 0.05 }, new double[] { 0.06, 0.07, 0.08 } }, new double[] { 1, 2 }, 0.9);
     assertEquals(parameters, cycleObject(G2ppPiecewiseConstantParameters.class, parameters));
   }
+
   @Test
   public void testHullWhiteOneFactorProviderDiscount() {
     final Map<Currency, Integer> map = new LinkedHashMap<>();
-    final Currency[] currencies = new Currency[] {Currency.AUD, Currency.CAD, Currency.CHF, Currency.FRF, Currency.DEM, Currency.USD, Currency.GBP, Currency.EUR, Currency.HKD, Currency.DKK};
+    final Currency[] currencies = new Currency[] { Currency.AUD, Currency.CAD, Currency.CHF, Currency.FRF, Currency.DEM, Currency.USD, Currency.GBP,
+        Currency.EUR, Currency.HKD, Currency.DKK };
     final double[][] fxRates = new double[10][10];
     for (int i = 0; i < 10; i++) {
       map.put(currencies[i], i);
@@ -290,7 +301,8 @@ public class AnalyticsParameterProviderBuildersTest extends AnalyticsTestBase {
     overnight.put(new IndexON("NAME1", Currency.USD, DayCounts.ACT_360, 1), new YieldCurve("E", ConstantDoublesCurve.from(0.003, "e")));
     overnight.put(new IndexON("NAME2", Currency.EUR, DayCounts.ACT_360, 0), new YieldCurve("F", ConstantDoublesCurve.from(0.006, "f")));
     final MulticurveProviderDiscount multicurve = new MulticurveProviderDiscount(discounting, ibor, overnight, matrix);
-    final HullWhiteOneFactorPiecewiseConstantParameters parameters = new HullWhiteOneFactorPiecewiseConstantParameters(0.04, new double[] {0.1, 0.2, 0.3, 0.4, 0.5}, new double[] {1, 2, 3, 4, 5});
+    final HullWhiteOneFactorPiecewiseConstantParameters parameters = new HullWhiteOneFactorPiecewiseConstantParameters(0.04,
+        new double[] { 0.1, 0.2, 0.3, 0.4, 0.5 }, new double[] { 1, 2, 3, 4, 5 });
     final HullWhiteOneFactorProviderDiscount provider = new HullWhiteOneFactorProviderDiscount(multicurve, parameters, Currency.USD);
     assertEquals(provider, cycleObject(HullWhiteOneFactorProviderDiscount.class, provider));
   }

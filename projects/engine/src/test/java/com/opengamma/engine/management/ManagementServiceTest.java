@@ -46,7 +46,8 @@ public class ManagementServiceTest {
   private ViewProcessorTestEnvironment _env;
 
   /**
-   * @throws java.lang.Exception
+   * @throws Exception
+   *           if there is a problem during setup
    */
   @BeforeMethod
   public void setUp() throws Exception {
@@ -58,14 +59,15 @@ public class ManagementServiceTest {
   }
 
   /**
-   * @throws java.lang.Exception
+   * @throws Exception
+   *           if there is a problem during teardown.
    */
   @AfterMethod
   public void tearDown() throws Exception {
     try {
       final ViewProcessorImpl viewProcessor = _env.getViewProcessor();
       viewProcessor.stop();
-      //Ensure the ViewProcessor stop clears all mbeans from the MBeanServer
+      // Ensure the ViewProcessor stop clears all mbeans from the MBeanServer
       assertMBeanCount(0);
     } finally {
       TestLifecycle.end();

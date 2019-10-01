@@ -24,10 +24,10 @@ import com.opengamma.financial.analytics.ircurve.strips.DataFieldType;
 import com.opengamma.financial.analytics.ircurve.strips.DiscountFactorNode;
 import com.opengamma.financial.analytics.ircurve.strips.FRANode;
 import com.opengamma.financial.analytics.ircurve.strips.FXForwardNode;
-import com.opengamma.financial.analytics.ircurve.strips.RollDateFRANode;
-import com.opengamma.financial.analytics.ircurve.strips.RollDateSwapNode;
 import com.opengamma.financial.analytics.ircurve.strips.InflationNodeType;
 import com.opengamma.financial.analytics.ircurve.strips.RateFutureNode;
+import com.opengamma.financial.analytics.ircurve.strips.RollDateFRANode;
+import com.opengamma.financial.analytics.ircurve.strips.RollDateSwapNode;
 import com.opengamma.financial.analytics.ircurve.strips.SwapNode;
 import com.opengamma.financial.analytics.ircurve.strips.ZeroCouponInflationNode;
 import com.opengamma.id.ExternalId;
@@ -96,7 +96,8 @@ public class CurveNodeWithIdentifierBuilderTest {
   @Test
   public void testCreditSpread() {
     final CreditSpreadNode creditSpread = new CreditSpreadNode("Test", Tenor.TWO_MONTHS);
-    assertEquals(new CurveNodeWithIdentifier(creditSpread, ExternalId.of("Test", "Credit spread"), "Credit Data", DataFieldType.OUTRIGHT), creditSpread.accept(BUILDER));
+    assertEquals(new CurveNodeWithIdentifier(creditSpread, ExternalId.of("Test", "Credit spread"), "Credit Data", DataFieldType.OUTRIGHT),
+        creditSpread.accept(BUILDER));
   }
 
   @Test
@@ -114,7 +115,8 @@ public class CurveNodeWithIdentifierBuilderTest {
   @Test
   public void testFXForward() {
     final FXForwardNode fxForward = new FXForwardNode(Tenor.ONE_DAY, Tenor.TWO_MONTHS, ExternalId.of("Test1", "Test1"), Currency.USD, Currency.JPY, "Test");
-    assertEquals(new CurveNodeWithIdentifier(fxForward, ExternalId.of("Test", "FX Forward"), "FX Forward Data", DataFieldType.POINTS), fxForward.accept(BUILDER));
+    assertEquals(new CurveNodeWithIdentifier(fxForward, ExternalId.of("Test", "FX Forward"), "FX Forward Data", DataFieldType.POINTS),
+        fxForward.accept(BUILDER));
   }
 
   @Test
@@ -144,7 +146,8 @@ public class CurveNodeWithIdentifierBuilderTest {
 
   @Test
   public void testZeroCouponInflation() {
-    final ZeroCouponInflationNode node = new ZeroCouponInflationNode(Tenor.TWO_MONTHS, ExternalId.of("Test", "Test"), ExternalId.of("Test", "Test"), InflationNodeType.MONTHLY, "Test");
+    final ZeroCouponInflationNode node = new ZeroCouponInflationNode(Tenor.TWO_MONTHS, ExternalId.of("Test", "Test"), ExternalId.of("Test", "Test"),
+        InflationNodeType.MONTHLY, "Test");
     assertEquals(new CurveNodeWithIdentifier(node, ExternalId.of("Test", "ZCI"), "ZC Data", DataFieldType.OUTRIGHT), node.accept(BUILDER));
   }
 
@@ -153,7 +156,7 @@ public class CurveNodeWithIdentifierBuilderTest {
     private final String _dataField;
     private final DataFieldType _fieldType;
 
-    public TestCurveInstrumentProvider(final ExternalId id, final String dataField, final DataFieldType fieldType) {
+    TestCurveInstrumentProvider(final ExternalId id, final String dataField, final DataFieldType fieldType) {
       _id = id;
       _dataField = dataField;
       _fieldType = fieldType;
@@ -193,7 +196,8 @@ public class CurveNodeWithIdentifierBuilderTest {
 
     @Override
     @Deprecated
-    public ExternalId getInstrument(final LocalDate curveDate, final Tenor tenor, final Tenor payTenor, final Tenor receiveTenor, final IndexType payIndexType, final IndexType receiveIndexType) {
+    public ExternalId getInstrument(final LocalDate curveDate, final Tenor tenor, final Tenor payTenor, final Tenor receiveTenor, final IndexType payIndexType,
+        final IndexType receiveIndexType) {
       return null;
     }
 

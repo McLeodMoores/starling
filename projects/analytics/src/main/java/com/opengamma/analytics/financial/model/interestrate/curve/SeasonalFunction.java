@@ -177,8 +177,7 @@ class SeasonalFunction extends Function1D<Double, Double> implements Bean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       final SeasonalFunction other = (SeasonalFunction) obj;
-      return JodaBeanUtils.equal(getMonthlyCumulativeFactors(), other.getMonthlyCumulativeFactors()) &&
-          JodaBeanUtils.equal(getSteps(), other.getSteps());
+      return JodaBeanUtils.equal(getMonthlyCumulativeFactors(), other.getMonthlyCumulativeFactors()) && JodaBeanUtils.equal(getSteps(), other.getSteps());
     }
     return false;
   }

@@ -49,10 +49,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ScenarioResultsWriterTest {
 
-  private static final ValueSpecification VALUE_SPEC =
-      new ValueSpecification("foo",
-                             ComputationTargetSpecification.NULL,
-                             ValueProperties.with(ValuePropertyNames.FUNCTION, "bar").get());
+  private static final ValueSpecification VALUE_SPEC = new ValueSpecification("foo",
+      ComputationTargetSpecification.NULL,
+      ValueProperties.with(ValuePropertyNames.FUNCTION, "bar").get());
 
   private final String _scenario1Name = "scenario1Name";
   private final String _scenario2Name = "scenario2Name";
@@ -71,19 +70,19 @@ public class ScenarioResultsWriterTest {
 
   @Test
   public void shortFormat() throws IOException {
-    final List<String> expectedList =
-        ImmutableList.of(
-            // header -----
-            row("ScenarioName", "ValuationTime", "Type", "Description", "PositionId", "ParamName1", "ParamValue1", "ParamName2", "ParamValue2", _res1Name, _res2Name),
-            // scenario 1 trade 1 -----
-            row(_scenario1Name, _valuationTime1, "FXForward", "An FX Forward", _id1, _param1Name, _param1Value1, _param2Name, _param2Value1, 1, 2),
-            // scenario 1 trade 2 -----
-            row(_scenario1Name, _valuationTime1, "FRA", "A FRA", _id2, _param1Name, _param1Value1, _param2Name, _param2Value1, 3, 4),
-            // scenario 2 trade 1 -----
-            row(_scenario2Name, _valuationTime2, "FXForward", "An FX Forward", _id1, _param1Name, _param1Value2, _param2Name, _param2Value2, 5, 6),
-            // scenario 2 trade 2 -----
-            row(_scenario2Name, _valuationTime2, "FRA", "A FRA", _id2, _param1Name, _param1Value2, _param2Name, _param2Value2, 7, 8));
-        final String expected = StringUtils.join(expectedList, "\n") + "\n";
+    final List<String> expectedList = ImmutableList.of(
+        // header -----
+        row("ScenarioName", "ValuationTime", "Type", "Description", "PositionId", "ParamName1", "ParamValue1", "ParamName2", "ParamValue2", _res1Name,
+            _res2Name),
+        // scenario 1 trade 1 -----
+        row(_scenario1Name, _valuationTime1, "FXForward", "An FX Forward", _id1, _param1Name, _param1Value1, _param2Name, _param2Value1, 1, 2),
+        // scenario 1 trade 2 -----
+        row(_scenario1Name, _valuationTime1, "FRA", "A FRA", _id2, _param1Name, _param1Value1, _param2Name, _param2Value1, 3, 4),
+        // scenario 2 trade 1 -----
+        row(_scenario2Name, _valuationTime2, "FXForward", "An FX Forward", _id1, _param1Name, _param1Value2, _param2Name, _param2Value2, 5, 6),
+        // scenario 2 trade 2 -----
+        row(_scenario2Name, _valuationTime2, "FRA", "A FRA", _id2, _param1Name, _param1Value2, _param2Name, _param2Value2, 7, 8));
+    final String expected = StringUtils.join(expectedList, "\n") + "\n";
 
     final StringBuilder builder = new StringBuilder();
     ScenarioResultsWriter.writeShortFormat(scenarioResults(), builder);
@@ -92,26 +91,26 @@ public class ScenarioResultsWriterTest {
 
   @Test
   public void longFormat() throws IOException {
-    final List<String> expectedList =
-        ImmutableList.of(
-            // header -----
-            row("ScenarioName", "ValuationTime", "Type", "Description", "PositionId", "ParamName1", "ParamValue1", "ParamName2", "ParamValue2", "ResultName", "ResultValue"),
-            // scenario 1 trade 1 result 1-----
-            row(_scenario1Name, _valuationTime1, "FXForward", "An FX Forward", _id1, _param1Name, _param1Value1, _param2Name, _param2Value1, _res1Name, 1),
-            // scenario 1 trade 1 result 2 -----
-            row(_scenario1Name, _valuationTime1, "FXForward", "An FX Forward", _id1, _param1Name, _param1Value1, _param2Name, _param2Value1, _res2Name, 2),
-            // scenario 1 trade 2 result 1 -----
-            row(_scenario1Name, _valuationTime1, "FRA", "A FRA", _id2, _param1Name, _param1Value1, _param2Name, _param2Value1, _res1Name, 3),
-            // scenario 1 trade 2 result 2 -----
-            row(_scenario1Name, _valuationTime1, "FRA", "A FRA", _id2, _param1Name, _param1Value1, _param2Name, _param2Value1, _res2Name, 4),
-            // scenario 2 trade 1 result 1 -----
-            row(_scenario2Name, _valuationTime2, "FXForward", "An FX Forward", _id1, _param1Name, _param1Value2, _param2Name, _param2Value2, _res1Name, 5),
-            // scenario 2 trade 1 result 2-----
-            row(_scenario2Name, _valuationTime2, "FXForward", "An FX Forward", _id1, _param1Name, _param1Value2, _param2Name, _param2Value2, _res2Name, 6),
-            // scenario 2 trade 2 result 1 -----
-            row(_scenario2Name, _valuationTime2, "FRA", "A FRA", _id2, _param1Name, _param1Value2, _param2Name, _param2Value2, _res1Name, 7),
-            // scenario 2 trade 2 result 2 -----
-            row(_scenario2Name, _valuationTime2, "FRA", "A FRA", _id2, _param1Name, _param1Value2, _param2Name, _param2Value2, _res2Name, 8));
+    final List<String> expectedList = ImmutableList.of(
+        // header -----
+        row("ScenarioName", "ValuationTime", "Type", "Description", "PositionId", "ParamName1", "ParamValue1", "ParamName2", "ParamValue2", "ResultName",
+            "ResultValue"),
+        // scenario 1 trade 1 result 1-----
+        row(_scenario1Name, _valuationTime1, "FXForward", "An FX Forward", _id1, _param1Name, _param1Value1, _param2Name, _param2Value1, _res1Name, 1),
+        // scenario 1 trade 1 result 2 -----
+        row(_scenario1Name, _valuationTime1, "FXForward", "An FX Forward", _id1, _param1Name, _param1Value1, _param2Name, _param2Value1, _res2Name, 2),
+        // scenario 1 trade 2 result 1 -----
+        row(_scenario1Name, _valuationTime1, "FRA", "A FRA", _id2, _param1Name, _param1Value1, _param2Name, _param2Value1, _res1Name, 3),
+        // scenario 1 trade 2 result 2 -----
+        row(_scenario1Name, _valuationTime1, "FRA", "A FRA", _id2, _param1Name, _param1Value1, _param2Name, _param2Value1, _res2Name, 4),
+        // scenario 2 trade 1 result 1 -----
+        row(_scenario2Name, _valuationTime2, "FXForward", "An FX Forward", _id1, _param1Name, _param1Value2, _param2Name, _param2Value2, _res1Name, 5),
+        // scenario 2 trade 1 result 2-----
+        row(_scenario2Name, _valuationTime2, "FXForward", "An FX Forward", _id1, _param1Name, _param1Value2, _param2Name, _param2Value2, _res2Name, 6),
+        // scenario 2 trade 2 result 1 -----
+        row(_scenario2Name, _valuationTime2, "FRA", "A FRA", _id2, _param1Name, _param1Value2, _param2Name, _param2Value2, _res1Name, 7),
+        // scenario 2 trade 2 result 2 -----
+        row(_scenario2Name, _valuationTime2, "FRA", "A FRA", _id2, _param1Name, _param1Value2, _param2Name, _param2Value2, _res2Name, 8));
     final String expected = StringUtils.join(expectedList, "\n") + "\n";
 
     final StringBuilder builder = new StringBuilder();
@@ -139,14 +138,13 @@ public class ScenarioResultsWriterTest {
     table1.put(3, 1, compuatedValue(4));
     table1.put(4, 0, compuatedValue(3));
     table1.put(4, 1, compuatedValue(4));
-    final ViewCycleExecutionOptions executionOptions1 =
-        ViewCycleExecutionOptions.builder()
-            .setValuationTime(Instant.parse(_valuationTime1))
-            .setName(_scenario1Name)
-            .create();
+    final ViewCycleExecutionOptions executionOptions1 = ViewCycleExecutionOptions.builder()
+        .setValuationTime(Instant.parse(_valuationTime1))
+        .setName(_scenario1Name)
+        .create();
     final SimpleResultModel simpleResultModel1 = new SimpleResultModel(targets, columnNames, table1, executionOptions1);
-    final Map<String, Object> scenarioParams1 = ImmutableMap.<String, Object>of(_param1Name, _param1Value1,
-                                                                          _param2Name, _param2Value1);
+    final Map<String, Object> scenarioParams1 = ImmutableMap.<String, Object> of(_param1Name, _param1Value1,
+        _param2Name, _param2Value1);
     final ScenarioResultModel scenarioResultModel1 = new ScenarioResultModel(simpleResultModel1, scenarioParams1);
 
     final Table<Integer, Integer, Object> table2 = TreeBasedTable.create();
@@ -160,14 +158,13 @@ public class ScenarioResultsWriterTest {
     table2.put(3, 1, compuatedValue(8));
     table2.put(4, 0, compuatedValue(7));
     table2.put(4, 1, compuatedValue(8));
-    final ViewCycleExecutionOptions executionOptions2 =
-        ViewCycleExecutionOptions.builder()
-            .setValuationTime(Instant.parse(_valuationTime2))
-            .setName(_scenario2Name)
-            .create();
+    final ViewCycleExecutionOptions executionOptions2 = ViewCycleExecutionOptions.builder()
+        .setValuationTime(Instant.parse(_valuationTime2))
+        .setName(_scenario2Name)
+        .create();
     final SimpleResultModel simpleResultModel2 = new SimpleResultModel(targets, columnNames, table2, executionOptions2);
-    final Map<String, Object> scenarioParams2 = ImmutableMap.<String, Object>of(_param1Name, _param1Value2,
-                                                                          _param2Name, _param2Value2);
+    final Map<String, Object> scenarioParams2 = ImmutableMap.<String, Object> of(_param1Name, _param1Value2,
+        _param2Name, _param2Value2);
     final ScenarioResultModel scenarioResultModel2 = new ScenarioResultModel(simpleResultModel2, scenarioParams2);
 
     return ImmutableList.of(scenarioResultModel1, scenarioResultModel2);

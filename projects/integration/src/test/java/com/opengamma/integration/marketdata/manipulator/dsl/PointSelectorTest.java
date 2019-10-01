@@ -49,11 +49,10 @@ public class PointSelectorTest {
   }
 
   private ValueSpecification valueSpec(final ExternalId id) {
-    final ValueProperties properties =
-        ValueProperties
-            .with("Id", id.toString())
-            .with(ValuePropertyNames.FUNCTION, "foo")
-            .get();
+    final ValueProperties properties = ValueProperties
+        .with("Id", id.toString())
+        .with(ValuePropertyNames.FUNCTION, "foo")
+        .get();
     return new ValueSpecification(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetSpecification.NULL, properties);
   }
 
@@ -88,22 +87,22 @@ public class PointSelectorTest {
         "default",
         _noOpResolver));
     assertNotNull(builder().idMatches("scheme-A", "[a-z\\-]+\\d").getSelector().findMatchingSelector(valueSpec,
-                                                                                                  "default",
-                                                                                                  _noOpResolver));
+        "default",
+        _noOpResolver));
     assertNotNull(builder().idMatches("scheme-B", "[a-z\\-]+\\d").getSelector().findMatchingSelector(valueSpec,
-                                                                                                  "default",
-                                                                                                  _noOpResolver));
+        "default",
+        _noOpResolver));
     assertNull(builder().idMatches("Scheme-A", "value-\\d").getSelector().findMatchingSelector(valueSpec,
         "default",
         _noOpResolver));
 
     assertNull(builder().idMatches("scheme-C", "value-\\d").getSelector().findMatchingSelector(valueSpec,
-                                                                                               "default",
-                                                                                               _noOpResolver));
+        "default",
+        _noOpResolver));
 
     assertNull(builder().idMatches("scheme-A", "nn-\\d").getSelector().findMatchingSelector(valueSpec,
-                                                                                               "default",
-                                                                                               _noOpResolver));
+        "default",
+        _noOpResolver));
   }
 
   @Test
@@ -111,24 +110,24 @@ public class PointSelectorTest {
     final UniqueId uid = PrimitiveResolver.resolveExternalId(ExternalIdBundle.of(ExternalId.of("scheme-A", "value-1"), ExternalId.of("scheme-B", "value-2")));
 
     final ValueSpecification valueSpec = new ValueSpecification(MarketDataRequirementNames.MARKET_VALUE,
-                                                          new ComputationTargetSpecification(ComputationTargetType.ANYTHING, uid), ValueProperties.with(ValuePropertyNames.FUNCTION, "foo").get());
+        new ComputationTargetSpecification(ComputationTargetType.ANYTHING, uid), ValueProperties.with(ValuePropertyNames.FUNCTION, "foo").get());
     assertNotNull(builder().id("scheme-A", "value-1").getSelector().findMatchingSelector(valueSpec,
-                                                                                                  "default",
-                                                                                                  _noOpResolver));
+        "default",
+        _noOpResolver));
     assertNotNull(builder().id("scheme-B", "value-2").getSelector().findMatchingSelector(valueSpec,
-                                                                                                  "default",
-                                                                                                  _noOpResolver));
+        "default",
+        _noOpResolver));
     assertNull(builder().id("Scheme-A", "value-1").getSelector().findMatchingSelector(valueSpec,
-                                                                                               "default",
-                                                                                               _noOpResolver));
+        "default",
+        _noOpResolver));
 
     assertNull(builder().id("scheme-C", "value-0").getSelector().findMatchingSelector(valueSpec,
-                                                                                               "default",
-                                                                                               _noOpResolver));
+        "default",
+        _noOpResolver));
 
     assertNull(builder().id("scheme-A", "nn-2").getSelector().findMatchingSelector(valueSpec,
-                                                                                            "default",
-                                                                                            _noOpResolver));
+        "default",
+        _noOpResolver));
   }
 
   @Test

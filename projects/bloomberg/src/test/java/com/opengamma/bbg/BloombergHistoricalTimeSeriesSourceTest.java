@@ -65,10 +65,10 @@ public class BloombergHistoricalTimeSeriesSourceTest {
     _provider = null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void getHistoricalWithInvalidDates() throws Exception {
-    //endDate before startDate
+    // endDate before startDate
     final LocalDate startDate = LocalDate.of(2009, 11, 04);
     final LocalDate endDate = LocalDate.of(2009, 10, 29);
     _source.getHistoricalTimeSeries(_secDes, DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, true, endDate, true);
@@ -78,7 +78,8 @@ public class BloombergHistoricalTimeSeriesSourceTest {
   public void getHistoricalWithSameDate() throws Exception {
     final LocalDate startDate = LocalDate.of(2009, 11, 04);
     final LocalDate endDate = LocalDate.of(2009, 11, 04);
-    final HistoricalTimeSeries hts = _source.getHistoricalTimeSeries(_secDes, DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, true, endDate, true);
+    final HistoricalTimeSeries hts = _source.getHistoricalTimeSeries(_secDes, DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, true, endDate,
+        true);
     assertNotNull(hts);
     assertNotNull(hts.getTimeSeries());
     assertEquals(1, hts.getTimeSeries().size());
@@ -88,7 +89,8 @@ public class BloombergHistoricalTimeSeriesSourceTest {
   public void getSeriesMap() throws Exception {
     final LocalDate startDate = LocalDate.of(2009, 10, 04);
     final LocalDate endDate = LocalDate.of(2009, 11, 29);
-    final Map<ExternalIdBundle, HistoricalTimeSeries> result = _source.getHistoricalTimeSeries(Collections.singleton(getTestBundle()), "BLOOMBERG", "CMPL", "PX_LAST", startDate, true, endDate, true);
+    final Map<ExternalIdBundle, HistoricalTimeSeries> result = _source.getHistoricalTimeSeries(Collections.singleton(getTestBundle()), "BLOOMBERG", "CMPL",
+        "PX_LAST", startDate, true, endDate, true);
     assertNotNull(result);
     final HistoricalTimeSeries hts = result.get(getTestBundle());
     assertNotNull(hts);
@@ -106,9 +108,11 @@ public class BloombergHistoricalTimeSeriesSourceTest {
     final LocalDate endDate = LocalDate.of(2012, 03, 07);
     final LocalDate startDate = endDate.minusMonths(1);
 
-    final HistoricalTimeSeries reference = _source.getHistoricalTimeSeries(_secDes,  DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, true, endDate, true);
-    for (final int maxPoints : new int[] {-4, -1}) {
-      final HistoricalTimeSeries hts = _source.getHistoricalTimeSeries(_secDes,  DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, true, endDate, true, maxPoints);
+    final HistoricalTimeSeries reference = _source.getHistoricalTimeSeries(_secDes, DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, true,
+        endDate, true);
+    for (final int maxPoints : new int[] { -4, -1 }) {
+      final HistoricalTimeSeries hts = _source.getHistoricalTimeSeries(_secDes, DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, true, endDate,
+          true, maxPoints);
 
       // do we have a time-series?
       assertNotNull(hts.getTimeSeries());
@@ -119,10 +123,10 @@ public class BloombergHistoricalTimeSeriesSourceTest {
       // does it contain the expected data points?
       assertEquals(
           Math.abs(maxPoints) > reference.getTimeSeries().size()
-            ? reference.getTimeSeries()
-            : maxPoints >= 0
-              ? reference.getTimeSeries().head(maxPoints)
-              : reference.getTimeSeries().tail(-maxPoints),
+              ? reference.getTimeSeries()
+              : maxPoints >= 0
+                  ? reference.getTimeSeries().head(maxPoints)
+                  : reference.getTimeSeries().tail(-maxPoints),
           hts.getTimeSeries());
     }
   }
@@ -132,8 +136,10 @@ public class BloombergHistoricalTimeSeriesSourceTest {
     final LocalDate endDate = LocalDate.of(2012, 03, 07);
     final LocalDate startDate = endDate.minusMonths(1);
 
-    final HistoricalTimeSeries reference = _source.getHistoricalTimeSeries(_secDes,  DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, true, endDate, true);
-    final HistoricalTimeSeries hts = _source.getHistoricalTimeSeries(_secDes,  DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, true, endDate, true, 0);
+    final HistoricalTimeSeries reference = _source.getHistoricalTimeSeries(_secDes, DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, true,
+        endDate, true);
+    final HistoricalTimeSeries hts = _source.getHistoricalTimeSeries(_secDes, DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, true, endDate,
+        true, 0);
 
     // do we have a time-series?
     assertNotNull(hts.getTimeSeries());
@@ -149,8 +155,8 @@ public class BloombergHistoricalTimeSeriesSourceTest {
   public void getHistoricalTimeSeriesWithDates() throws Exception {
     final LocalDate startDate = LocalDate.of(2009, 10, 29);
     final LocalDate endDate = LocalDate.of(2009, 11, 04);
-    final HistoricalTimeSeries hts =
-        _source.getHistoricalTimeSeries(_secDes,  DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, true, endDate, true);
+    final HistoricalTimeSeries hts = _source.getHistoricalTimeSeries(_secDes, DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, true, endDate,
+        true);
     assertNotNull(hts);
     final LocalDateDoubleTimeSeries timeSeriesExpected = hts.getTimeSeries();
     assertNotNull(timeSeriesExpected);
@@ -169,7 +175,7 @@ public class BloombergHistoricalTimeSeriesSourceTest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private class BHDPgetHistoricalTimeSeriesWithDates implements Callable<LocalDateDoubleTimeSeries> {
     private final ExternalIdBundle _secDes;
     private final String _dataSource;
@@ -178,7 +184,8 @@ public class BloombergHistoricalTimeSeriesSourceTest {
     private final LocalDate _startDate;
     private final LocalDate _endDate;
 
-    public BHDPgetHistoricalTimeSeriesWithDates(final ExternalIdBundle secDes, final String dataSource, final String dataProvider, final String field, final LocalDate startDate, final LocalDate endDate) {
+    BHDPgetHistoricalTimeSeriesWithDates(final ExternalIdBundle secDes, final String dataSource, final String dataProvider, final String field,
+        final LocalDate startDate, final LocalDate endDate) {
       assertNotNull(secDes);
       assertNotNull(startDate);
       assertNotNull(endDate);

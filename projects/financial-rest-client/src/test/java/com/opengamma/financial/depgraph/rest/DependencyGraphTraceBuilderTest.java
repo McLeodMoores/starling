@@ -76,13 +76,15 @@ public class DependencyGraphTraceBuilderTest {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         throw new OpenGammaRuntimeException("test");
       }
 
       @Override
       public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-        return Collections.singleton(new ValueSpecification(ValueRequirementNames.FAIR_VALUE, target.toSpecification(), ValueProperties.with(ValuePropertyNames.FUNCTION, "Test").get()));
+        return Collections.singleton(new ValueSpecification(ValueRequirementNames.FAIR_VALUE, target.toSpecification(),
+            ValueProperties.with(ValuePropertyNames.FUNCTION, "Test").get()));
       }
 
       @Override
@@ -178,14 +180,14 @@ public class DependencyGraphTraceBuilderTest {
   public void testBuild_ok() {
     TestLifecycle.begin();
     try {
-      DependencyGraphTraceBuilder builder = createBuilder();
-      ComputationTargetRequirement ct1 = new ComputationTargetRequirement(ComputationTargetType.parse("PRIMITIVE"), ExternalId.parse("Foo~1"));
-      ValueRequirement req1 = parseValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ct1);
-      ComputationTargetRequirement ct2 = new ComputationTargetRequirement(ComputationTargetType.parse("PRIMITIVE"), ExternalId.parse("Foo~2"));
-      ValueRequirement req2 = parseValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ct2);
+      final DependencyGraphTraceBuilder builder = createBuilder();
+      final ComputationTargetRequirement ct1 = new ComputationTargetRequirement(ComputationTargetType.parse("PRIMITIVE"), ExternalId.parse("Foo~1"));
+      final ValueRequirement req1 = parseValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ct1);
+      final ComputationTargetRequirement ct2 = new ComputationTargetRequirement(ComputationTargetType.parse("PRIMITIVE"), ExternalId.parse("Foo~2"));
+      final ValueRequirement req2 = parseValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ct2);
       DependencyGraphTraceBuilderProperties properties = new DependencyGraphTraceBuilderProperties();
       properties = properties.addRequirement(req1).addRequirement(req2);
-      DependencyGraphBuildTrace obj = builder.build(properties);
+      final DependencyGraphBuildTrace obj = builder.build(properties);
       assertNotNull(obj.getDependencyGraph());
       assertTrue(obj.getExceptionsWithCounts().isEmpty());
       assertTrue(obj.getFailures().isEmpty());
@@ -197,14 +199,14 @@ public class DependencyGraphTraceBuilderTest {
   public void testBuild_exceptions() {
     TestLifecycle.begin();
     try {
-      DependencyGraphTraceBuilder builder = createBuilder();
-      ComputationTargetRequirement ct1 = new ComputationTargetRequirement(ComputationTargetType.parse("PRIMITIVE"), ExternalId.parse("Foo~1"));
-      ValueRequirement req1 = parseValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ct1);
-      ComputationTargetSpecification ct2 = new ComputationTargetSpecification(ComputationTargetType.parse("PRIMITIVE"), UniqueId.parse("Foo~Bar"));
-      ValueRequirement req2 = parseValueRequirement(ValueRequirementNames.FAIR_VALUE, ct2);
+      final DependencyGraphTraceBuilder builder = createBuilder();
+      final ComputationTargetRequirement ct1 = new ComputationTargetRequirement(ComputationTargetType.parse("PRIMITIVE"), ExternalId.parse("Foo~1"));
+      final ValueRequirement req1 = parseValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ct1);
+      final ComputationTargetSpecification ct2 = new ComputationTargetSpecification(ComputationTargetType.parse("PRIMITIVE"), UniqueId.parse("Foo~Bar"));
+      final ValueRequirement req2 = parseValueRequirement(ValueRequirementNames.FAIR_VALUE, ct2);
       DependencyGraphTraceBuilderProperties properties = new DependencyGraphTraceBuilderProperties();
       properties = properties.addRequirement(req1).addRequirement(req2);
-      DependencyGraphBuildTrace obj = builder.build(properties);
+      final DependencyGraphBuildTrace obj = builder.build(properties);
       assertNotNull(obj.getDependencyGraph());
       assertEquals(2, obj.getExceptionsWithCounts().size());
       assertEquals(1, obj.getFailures().size());
@@ -216,14 +218,14 @@ public class DependencyGraphTraceBuilderTest {
   public void testBuild_failures() {
     TestLifecycle.begin();
     try {
-      DependencyGraphTraceBuilder builder = createBuilder();
-      ComputationTargetRequirement ct1 = new ComputationTargetRequirement(ComputationTargetType.parse("PRIMITIVE"), ExternalId.parse("Bar~1"));
-      ValueRequirement req1 = parseValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ct1);
-      ComputationTargetSpecification ct2 = new ComputationTargetSpecification(ComputationTargetType.parse("PRIMITIVE"), UniqueId.parse("Bar~2"));
-      ValueRequirement req2 = parseValueRequirement(ValueRequirementNames.PRESENT_VALUE, ct2);
+      final DependencyGraphTraceBuilder builder = createBuilder();
+      final ComputationTargetRequirement ct1 = new ComputationTargetRequirement(ComputationTargetType.parse("PRIMITIVE"), ExternalId.parse("Bar~1"));
+      final ValueRequirement req1 = parseValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ct1);
+      final ComputationTargetSpecification ct2 = new ComputationTargetSpecification(ComputationTargetType.parse("PRIMITIVE"), UniqueId.parse("Bar~2"));
+      final ValueRequirement req2 = parseValueRequirement(ValueRequirementNames.PRESENT_VALUE, ct2);
       DependencyGraphTraceBuilderProperties properties = new DependencyGraphTraceBuilderProperties();
       properties = properties.addRequirement(req1).addRequirement(req2);
-      DependencyGraphBuildTrace obj = builder.build(properties);
+      final DependencyGraphBuildTrace obj = builder.build(properties);
       assertNotNull(obj.getDependencyGraph());
       assertEquals(2, obj.getExceptionsWithCounts().size());
       assertEquals(2, obj.getFailures().size());
@@ -236,7 +238,7 @@ public class DependencyGraphTraceBuilderTest {
     final String name;
     final ValueProperties constraints;
     final int i = valueName.indexOf('{');
-    if ((i > 0) && (valueName.charAt(valueName.length() - 1) == '}')) {
+    if (i > 0 && valueName.charAt(valueName.length() - 1) == '}') {
       name = valueName.substring(0, i);
       constraints = ValueProperties.parse(valueName.substring(i));
     } else {

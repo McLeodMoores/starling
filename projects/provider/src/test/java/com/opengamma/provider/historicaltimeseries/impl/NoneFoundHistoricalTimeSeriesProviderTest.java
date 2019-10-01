@@ -50,7 +50,8 @@ public class NoneFoundHistoricalTimeSeriesProviderTest {
   @Test
   public void testGetRequest() {
     final NoneFoundHistoricalTimeSeriesProvider test = new NoneFoundHistoricalTimeSeriesProvider();
-    final HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGet(ExternalIdBundle.of("A", "B"), "FOO", "BAR", "BAZ", LocalDateRange.ALL);
+    final HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGet(ExternalIdBundle.of("A", "B"), "FOO", "BAR", "BAZ",
+        LocalDateRange.ALL);
     final HistoricalTimeSeriesProviderGetResult expected = new HistoricalTimeSeriesProviderGetResult();
     assertEquals(expected, test.getHistoricalTimeSeries(request));
   }

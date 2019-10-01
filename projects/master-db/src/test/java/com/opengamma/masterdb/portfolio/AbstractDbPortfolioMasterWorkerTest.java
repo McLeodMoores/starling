@@ -50,7 +50,7 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doSetUp() {
     _includePositions = true;
@@ -67,7 +67,7 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
     _prtMaster = null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void init() {
     _prtMaster = new DbPortfolioMaster(getDbConnector());
 
@@ -83,7 +83,8 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
     template.update("INSERT INTO prt_portfolio VALUES (?,?,?,?,?, ?,?,?)",
         102, 102, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "TestPortfolio102", 25);
     template.update("INSERT INTO prt_portfolio VALUES (?,?,?,?,?, ?,?,?)",
-        201, 201, toSqlTimestamp(_version1Instant), toSqlTimestamp(_version2Instant), toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "TestPortfolio201", 25);
+        201, 201, toSqlTimestamp(_version1Instant), toSqlTimestamp(_version2Instant), toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "TestPortfolio201",
+        25);
     template.update("INSERT INTO prt_portfolio VALUES (?,?,?,?,?, ?,?,?)",
         202, 201, toSqlTimestamp(_version2Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version2Instant), MAX_SQL_TIMESTAMP, "TestPortfolio202", 25);
     template.update("INSERT INTO prt_portfolio VALUES (?,?,?,?,?, ?,?,?)",
@@ -124,14 +125,14 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
     template.update("INSERT INTO prt_portfolio_attribute VALUES (?,?,?,?,?)",
         11, 101, 101, "K101b", "V101b");
     template.update("INSERT INTO prt_portfolio_attribute VALUES (?,?,?,?,?)",
-        12, 102, 102,  "K102a", "V102a");
+        12, 102, 102, "K102a", "V102a");
     template.update("INSERT INTO prt_portfolio_attribute VALUES (?,?,?,?,?)",
         13, 102, 102, "K102b", "V102b");
 
     _totalPositions = 6;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   protected void assert101(final PortfolioDocument test, final int depth) {
     final UniqueId uniqueId = UniqueId.of("DbPrt", "101", "0");
     assertNotNull(test);

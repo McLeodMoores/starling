@@ -38,7 +38,7 @@ public class DbPortfolioMasterTest extends AbstractDbTest {
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doSetUp() {
     _prtMaster = new DbPortfolioMaster(getDbConnector());
@@ -49,7 +49,7 @@ public class DbPortfolioMasterTest extends AbstractDbTest {
     _prtMaster = null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void test_basics() throws Exception {
     assertNotNull(_prtMaster);
@@ -61,11 +61,11 @@ public class DbPortfolioMasterTest extends AbstractDbTest {
   @Test(description = "[PLAT-1723]")
   public void test_duplicate_names() throws Exception {
     final PortfolioDocument a = new PortfolioDocument();
-    a.setPortfolio( new ManageablePortfolio("Name"));
+    a.setPortfolio(new ManageablePortfolio("Name"));
     _prtMaster.add(a);
 
     final PortfolioDocument b = new PortfolioDocument();
-    b.setPortfolio( new ManageablePortfolio("Name"));
+    b.setPortfolio(new ManageablePortfolio("Name"));
     _prtMaster.add(b);
 
     final PortfolioSearchResult search = _prtMaster.search(new PortfolioSearchRequest());
@@ -75,7 +75,7 @@ public class DbPortfolioMasterTest extends AbstractDbTest {
   @Test(description = "[PLAT-1723]")
   public void test_duplicate_names_complex() throws Exception {
 
-    //Try to make the table big enough that database looses presumed order guarantees
+    // Try to make the table big enough that database looses presumed order guarantees
     for (int i = 0; i < 10; i++) {
       final String portfolioName = "Portfolio";
       final PortfolioDocument a = new PortfolioDocument();
@@ -116,8 +116,7 @@ public class DbPortfolioMasterTest extends AbstractDbTest {
     }
   }
 
-
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void test_toString() {
     assertEquals("DbPortfolioMaster[DbPrt]", _prtMaster.toString());

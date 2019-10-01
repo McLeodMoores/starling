@@ -76,7 +76,8 @@ import com.opengamma.util.time.Expiry;
     return trade;
   }
 
-  protected Position createPosition(final String uid, final int quantity, final Security security, final String attr1Value, final String attr2Value, final Trade trade1, final Trade trade2) {
+  protected Position createPosition(final String uid, final int quantity, final Security security, final String attr1Value, final String attr2Value,
+      final Trade trade1, final Trade trade2) {
     final SimplePosition position = new SimplePosition(new BigDecimal(quantity), security.getExternalIdBundle());
     position.setSecurityLink(SimpleSecurityLink.of(security));
     if (attr1Value != null) {
@@ -134,7 +135,7 @@ import com.opengamma.util.time.Expiry;
     return security;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static ZonedDateTime zdt(final int y, final int m, final int d, final int hr, final int min, final int sec, final int nanos, final ZoneId zone) {
     return LocalDateTime.of(y, m, d, hr, min, sec, nanos).atZone(zone);
   }

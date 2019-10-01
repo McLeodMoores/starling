@@ -39,7 +39,8 @@ public class RestEntitySubscriptionTest {
 
   @BeforeClass
   public void createServer() throws Exception {
-    final Pair<Server, WebApplicationContext> serverAndContext = _webPushTestUtils.createJettyServer("classpath:/com/opengamma/web/analytics/push/rest-subscription-test.xml");
+    final Pair<Server, WebApplicationContext> serverAndContext = _webPushTestUtils
+        .createJettyServer("classpath:/com/opengamma/web/analytics/push/rest-subscription-test.xml");
     _server = serverAndContext.getFirst();
     final WebApplicationContext context = serverAndContext.getSecond();
     _changeManager = context.getBean("changeManager", TestChangeManager.class);
@@ -115,7 +116,7 @@ public class RestEntitySubscriptionTest {
 
   // TODO confirm the correct behaviour - presumably the REST request would fail so maybe the filter should look at the response status
   // what is the response status in that case?
-  /*@Test
-  public void invalidUniqueId() {
-  }*/
+  /*
+   * @Test public void invalidUniqueId() { }
+   */
 }

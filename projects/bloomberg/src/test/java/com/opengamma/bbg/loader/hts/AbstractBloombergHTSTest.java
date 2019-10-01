@@ -58,9 +58,9 @@ public abstract class AbstractBloombergHTSTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBloombergHTSTest.class);
 
-  protected static final String[] DATA_FIELDS = new String[] {"PX_LAST", "VOLUME"};
-  protected static final String[] DATA_PROVIDERS = new String[] {"UNKNOWN", "CMPL", "CMPT", "DEFAULT"};
-  protected static final String[] DATA_SOURCES = new String[] {BLOOMBERG_DATA_SOURCE_NAME, "REUTERS", "JPM"};
+  protected static final String[] DATA_FIELDS = new String[] { "PX_LAST", "VOLUME" };
+  protected static final String[] DATA_PROVIDERS = new String[] { "UNKNOWN", "CMPL", "CMPT", "DEFAULT" };
+  protected static final String[] DATA_SOURCES = new String[] { BLOOMBERG_DATA_SOURCE_NAME, "REUTERS", "JPM" };
   protected static final int TS_DATASET_SIZE = 2;
   protected static final Map<String, String> PROVIDER_TO_OBSERVATION_TIME = ImmutableMap.of("UNKNOWN", "UNKNOWN",
       "CMPL", "LONDON_CLOSE",
@@ -79,7 +79,7 @@ public abstract class AbstractBloombergHTSTest {
     super();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @BeforeMethod(alwaysRun = true)
   protected void doSetUp() {
     _htsMaster = new InMemoryHistoricalTimeSeriesMaster();
@@ -94,9 +94,9 @@ public abstract class AbstractBloombergHTSTest {
     _htsMaster = null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static class UnitTestHistoricalTimeSeriesProvider extends AbstractHistoricalTimeSeriesProvider {
-    //keep track of start date to use the same for reloading
+    // keep track of start date to use the same for reloading
     Map<ExternalIdBundle, LocalDate> _startDateMap = new HashMap<>();
 
     @Override
@@ -165,7 +165,8 @@ public abstract class AbstractBloombergHTSTest {
             assertNotNull(added.getUniqueId());
 
             final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> resultMap = _historicalTimeSeriesProvider.getHistoricalTimeSeries(
-                Collections.singleton(bundleWithDates.toBundle()), BloombergConstants.BLOOMBERG_DATA_SOURCE_NAME, dataProvider, dataField, LocalDateRange.of(start, end, true));
+                Collections.singleton(bundleWithDates.toBundle()), BloombergConstants.BLOOMBERG_DATA_SOURCE_NAME, dataProvider, dataField,
+                LocalDateRange.of(start, end, true));
             final LocalDateDoubleTimeSeries timeSeries = resultMap.get(bundleWithDates.toBundle());
             final UniqueId tsUid = _htsMaster.updateTimeSeriesDataPoints(added.getInfo().getTimeSeriesObjectId(), timeSeries);
 
@@ -182,6 +183,7 @@ public abstract class AbstractBloombergHTSTest {
 
   /**
    * Gets the htsMasterUpdater.
+   * 
    * @return the htsMasterUpdater
    */
   protected BloombergHTSMasterUpdater getHtsMasterUpdater() {
@@ -190,6 +192,7 @@ public abstract class AbstractBloombergHTSTest {
 
   /**
    * Gets the loader.
+   * 
    * @return the loader
    */
   protected BloombergHistoricalTimeSeriesLoader getLoader() {
@@ -198,6 +201,7 @@ public abstract class AbstractBloombergHTSTest {
 
   /**
    * Gets the htsMaster.
+   * 
    * @return the htsMaster
    */
   protected HistoricalTimeSeriesMaster getHtsMaster() {

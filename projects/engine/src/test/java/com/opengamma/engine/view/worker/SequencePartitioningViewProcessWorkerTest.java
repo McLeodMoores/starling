@@ -48,7 +48,7 @@ public class SequencePartitioningViewProcessWorkerTest {
     private volatile ViewDefinition _viewDefinition;
     private volatile boolean _terminated;
 
-    public ViewProcessWorkerMock(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition,
+    ViewProcessWorkerMock(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition,
         final int delay) {
       _context = context;
       _options = executionOptions;
@@ -140,7 +140,7 @@ public class SequencePartitioningViewProcessWorkerTest {
 
     private final int _delay;
 
-    public ViewProcessWorkerFactoryMock(final int delay) {
+    ViewProcessWorkerFactoryMock(final int delay) {
       _delay = delay;
     }
 
@@ -162,8 +162,8 @@ public class SequencePartitioningViewProcessWorkerTest {
     final ViewCycleExecutionSequence sequence = new ArbitraryViewCycleExecutionSequence(cycles);
     final ViewExecutionOptions options = ExecutionOptions.of(sequence, EnumSet.of(ViewExecutionFlags.RUN_AS_FAST_AS_POSSIBLE));
     final ViewProcessWorkerContext context = Mockito.mock(ViewProcessWorkerContext.class);
-    final SequencePartitioningViewProcessWorker worker =
-        new SequencePartitioningViewProcessWorker(underlying, context, options, Mockito.mock(ViewDefinition.class), 10, 2);
+    final SequencePartitioningViewProcessWorker worker = new SequencePartitioningViewProcessWorker(underlying, context, options,
+        Mockito.mock(ViewDefinition.class), 10, 2);
     assertTrue(worker.join(4 * Timeout.standardTimeoutMillis()));
     assertTrue(worker.isTerminated());
     Mockito.verify(context, Mockito.times(cycles.size())).cycleStarted(Matchers.any(ViewCycleMetadata.class));
@@ -183,15 +183,15 @@ public class SequencePartitioningViewProcessWorkerTest {
     final ViewProcessWorkerFactoryMock underlying = new ViewProcessWorkerFactoryMock((int) (Timeout.standardTimeoutMillis() / 32));
     final ViewExecutionOptions options = ExecutionOptions.of(new InfiniteViewCycleExecutionSequence(), EnumSet.of(ViewExecutionFlags.RUN_AS_FAST_AS_POSSIBLE));
     final ViewProcessWorkerContext context = Mockito.mock(ViewProcessWorkerContext.class);
-    final SequencePartitioningViewProcessWorker worker =
-        new SequencePartitioningViewProcessWorker(underlying, context, options, Mockito.mock(ViewDefinition.class), 10, 2);
+    final SequencePartitioningViewProcessWorker worker = new SequencePartitioningViewProcessWorker(underlying, context, options,
+        Mockito.mock(ViewDefinition.class), 10, 2);
     assertFalse(worker.join(Timeout.standardTimeoutMillis()));
     assertFalse(worker.isTerminated());
     worker.terminate();
     assertTrue(worker.join(4 * Timeout.standardTimeoutMillis()));
     assertTrue(worker.isTerminated());
     Mockito.verify(context, Mockito.atLeast(2))
-          .viewDefinitionCompiled(Matchers.any(ViewExecutionDataProvider.class), Matchers.any(CompiledViewDefinitionWithGraphs.class));
+        .viewDefinitionCompiled(Matchers.any(ViewExecutionDataProvider.class), Matchers.any(CompiledViewDefinitionWithGraphs.class));
   }
 
 }

@@ -43,8 +43,8 @@ public class AbstractReferenceDataProviderTest {
     result.addReferenceData(new ReferenceData(ID1, values));
 
     final ReferenceDataProvider mock = new Mock(request, result);
-//    ReferenceDataProvider mock = mock(AbstractReferenceDataProvider.class);
-//    when(mock.getReferenceData(request)).thenReturn(result);
+    // ReferenceDataProvider mock = mock(AbstractReferenceDataProvider.class);
+    // when(mock.getReferenceData(request)).thenReturn(result);
 
     final String test = mock.getReferenceDataValue(ID1, FIELD1);
     assertEquals(VALUE1, test);
@@ -92,7 +92,7 @@ public class AbstractReferenceDataProviderTest {
     values.add(FIELD1, VALUE1);
     final ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
     final ReferenceData rd = new ReferenceData(ID1, values);
-    rd.addError(new ReferenceDataError(FIELD1, -1, "A", "B", "C"));  // error overrides value
+    rd.addError(new ReferenceDataError(FIELD1, -1, "A", "B", "C")); // error overrides value
     result.addReferenceData(rd);
 
     final ReferenceDataProvider mock = new Mock(request, result);
@@ -100,7 +100,7 @@ public class AbstractReferenceDataProviderTest {
     assertEquals(null, test);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void singleIdMultipleFields_dataReturned() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ID1, ImmutableSet.of(FIELD1, FIELD2), true);
@@ -124,7 +124,7 @@ public class AbstractReferenceDataProviderTest {
     values.add(FIELD1, VALUE1);
     final ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
     final ReferenceData rd = new ReferenceData(ID1, values);
-    rd.addError(new ReferenceDataError(null, -1, "A", "B", "C"));  // overrides all fields
+    rd.addError(new ReferenceDataError(null, -1, "A", "B", "C")); // overrides all fields
     result.addReferenceData(rd);
 
     final ReferenceDataProvider mock = new Mock(request, result);
@@ -148,7 +148,7 @@ public class AbstractReferenceDataProviderTest {
     assertEquals(VALUE2, test.get(FIELD2));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void multipleIdsSingleField_dataReturned() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ImmutableSet.of(ID1, ID2), ImmutableSet.of(FIELD1), true);
@@ -169,13 +169,13 @@ public class AbstractReferenceDataProviderTest {
 
   @Test
   public void multipleIdsSingleField_idError() {
-  final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ImmutableSet.of(ID1, ID2), ImmutableSet.of(FIELD1), true);
+    final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ImmutableSet.of(ID1, ID2), ImmutableSet.of(FIELD1), true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     values.add(FIELD1, VALUE1);
     final ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
     result.addReferenceData(new ReferenceData(ID1, values));
     final ReferenceData rd = new ReferenceData(ID2);
-    rd.addError(new ReferenceDataError(null, -1, "A", "B", "C"));  // overrides all fields
+    rd.addError(new ReferenceDataError(null, -1, "A", "B", "C")); // overrides all fields
     result.addReferenceData(rd);
 
     final ReferenceDataProvider mock = new Mock(request, result);
@@ -184,7 +184,7 @@ public class AbstractReferenceDataProviderTest {
     assertEquals(VALUE1, test.get(ID1));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void multipleIdsMultipleFields_dataReturned() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ImmutableSet.of(ID1, ID2), ImmutableSet.of(FIELD1, FIELD2), true);
@@ -205,13 +205,13 @@ public class AbstractReferenceDataProviderTest {
 
   @Test
   public void multipleIdsMultipleFields_idError() {
-  final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ImmutableSet.of(ID1, ID2), ImmutableSet.of(FIELD1, FIELD2), true);
+    final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ImmutableSet.of(ID1, ID2), ImmutableSet.of(FIELD1, FIELD2), true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     values.add(FIELD1, VALUE1);
     final ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
     result.addReferenceData(new ReferenceData(ID1, values));
     final ReferenceData rd = new ReferenceData(ID2);
-    rd.addError(new ReferenceDataError(null, -1, "A", "B", "C"));  // overrides all fields
+    rd.addError(new ReferenceDataError(null, -1, "A", "B", "C")); // overrides all fields
     result.addReferenceData(rd);
 
     final ReferenceDataProvider mock = new Mock(request, result);
@@ -220,12 +220,12 @@ public class AbstractReferenceDataProviderTest {
     assertEquals(values, test.get(ID1));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   class Mock extends AbstractReferenceDataProvider {
     ReferenceDataProviderGetRequest _request;
     ReferenceDataProviderGetResult _result;
 
-    public Mock(final ReferenceDataProviderGetRequest request, final ReferenceDataProviderGetResult result) {
+    Mock(final ReferenceDataProviderGetRequest request, final ReferenceDataProviderGetResult result) {
       _request = request;
       _result = result;
     }

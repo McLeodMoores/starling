@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.position;
@@ -38,7 +38,8 @@ public class WebPositionResourceTest extends AbstractWebPositionResourceTestCase
 
   @Test
   public void testGetPositionWithTrades() throws Exception {
-    final ManageableTrade trade = new ManageableTrade(BigDecimal.valueOf(50), SEC_ID, LocalDate.parse("2011-12-07"), OffsetTime.of(LocalTime.of(15, 4, 0), ZONE_OFFSET), COUNTER_PARTY);
+    final ManageableTrade trade = new ManageableTrade(BigDecimal.valueOf(50), SEC_ID, LocalDate.parse("2011-12-07"),
+        OffsetTime.of(LocalTime.of(15, 4, 0), ZONE_OFFSET), COUNTER_PARTY);
     trade.setPremium(10.0);
     trade.setPremiumCurrency(Currency.USD);
     trade.setPremiumDate(LocalDate.parse("2011-12-08"));

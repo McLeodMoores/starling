@@ -37,7 +37,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class BloombergBpipeLiveDataServerTest {
 
-  private final static UserPrincipal TEST_USER = UserPrincipal.getTestUser();
+  private static final UserPrincipal TEST_USER = UserPrincipal.getTestUser();
 
   private BloombergLiveDataServer _server;
   private BloombergReferenceDataProvider _refernceDataProvider;
@@ -69,7 +69,7 @@ public class BloombergBpipeLiveDataServerTest {
 
     server.start();
     _server = server;
-    if (StandardLiveDataServer.ConnectionStatus.NOT_CONNECTED.equals(_server.getConnectionStatus()) == true) {
+    if (StandardLiveDataServer.ConnectionStatus.NOT_CONNECTED.equals(_server.getConnectionStatus())) {
       Thread.sleep(1000);
     }
     _liveDataClient = LiveDataClientTestUtils.getJmsClient(_server);
@@ -87,7 +87,7 @@ public class BloombergBpipeLiveDataServerTest {
 
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void testSnapshot() {
     final LiveDataSubscriptionResponse snapshotResponse = snapshot("IBM US Equity");

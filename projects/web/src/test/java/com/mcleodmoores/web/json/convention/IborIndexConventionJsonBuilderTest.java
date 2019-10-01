@@ -12,7 +12,6 @@ import java.util.Map;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalTime;
 
-import com.mcleodmoores.web.json.convention.IborIndexConventionJsonBuilder;
 import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCounts;

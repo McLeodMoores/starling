@@ -20,63 +20,72 @@ public class ExposureFunctionFactoryTest {
 
   @Test
   public void testContractCategoryExposureFunction() {
-    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null), ContractCategoryExposureFunction.NAME);
+    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null),
+        ContractCategoryExposureFunction.NAME);
     assertNotNull("Null exposure function", function);
     assertTrue("Expected ContractCategoryExposureFunction", function instanceof ContractCategoryExposureFunction);
   }
 
   @Test
   public void testCounterpartyExposureFunction() {
-    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null), CounterpartyExposureFunction.NAME);
+    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null),
+        CounterpartyExposureFunction.NAME);
     assertNotNull("Null exposure function", function);
     assertTrue("Expected CounterpartyExposureFunction", function instanceof CounterpartyExposureFunction);
   }
 
   @Test
   public void testCurrencyExposureFunction() {
-    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null), CurrencyExposureFunction.NAME);
+    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null),
+        CurrencyExposureFunction.NAME);
     assertNotNull("Null exposure function", function);
     assertTrue("Expected CurrencyExposureFunction", function instanceof CurrencyExposureFunction);
   }
 
   @Test
   public void testRegionExposureFunction() {
-    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null), RegionExposureFunction.NAME);
+    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null),
+        RegionExposureFunction.NAME);
     assertNotNull("Null exposure function", function);
     assertTrue("Expected RegionExposureFunction", function instanceof RegionExposureFunction);
   }
 
   @Test
   public void testSecurityAndCurrencyExposureFunction() {
-    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null), SecurityAndCurrencyExposureFunction.NAME);
+    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null),
+        SecurityAndCurrencyExposureFunction.NAME);
     assertNotNull("Null exposure function", function);
     assertTrue("Expected SecurityAndCurrencyExposureFunction", function instanceof SecurityAndCurrencyExposureFunction);
   }
 
   @Test
   public void testSecurityAndRegionExposureFunction() {
-    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null), SecurityAndRegionExposureFunction.NAME);
+    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null),
+        SecurityAndRegionExposureFunction.NAME);
     assertNotNull("Null exposure function", function);
     assertTrue("Expected SecurityAndRegionExposureFunction", function instanceof SecurityAndRegionExposureFunction);
   }
 
   @Test
   public void testSecurityAndSettlementExchangeExposureFunction() {
-    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null), SecurityAndSettlementExchangeExposureFunction.NAME);
+    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null),
+        SecurityAndSettlementExchangeExposureFunction.NAME);
     assertNotNull("Null exposure function", function);
     assertTrue("Expected SecurityAndSettlementExchangeExposureFunction", function instanceof SecurityAndSettlementExchangeExposureFunction);
   }
 
   @Test
   public void testSecurityAndTradingExchangeExposureFunction() {
-    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null), SecurityAndTradingExchangeExposureFunction.NAME);
+    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null),
+        SecurityAndTradingExchangeExposureFunction.NAME);
     assertNotNull("Null exposure function", function);
     assertTrue("Expected SecurityAndTradingExchangeExposureFunction", function instanceof SecurityAndTradingExchangeExposureFunction);
   }
 
   @Test
   public void testSecurityExposureFunction() {
-    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null), SecurityExposureFunction.NAME);
+    final ExposureFunction function = ExposureFunctionFactory.getExposureFunction(ExposureFunctionTestHelper.getSecuritySource(null),
+        SecurityExposureFunction.NAME);
     assertNotNull("Null exposure function", function);
     assertTrue("Expected SecurityExposureFunction", function instanceof SecurityExposureFunction);
   }

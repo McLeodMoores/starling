@@ -21,8 +21,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 import org.threeten.bp.Instant;
 
 import com.codahale.metrics.MetricRegistry;
@@ -219,12 +217,7 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
     LOGGER.debug("add {}", user);
 
     try (Timer.Context context = _addTimer.time()) {
-      final Pair<UniqueId, Instant> added = getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<Pair<UniqueId, Instant>>() {
-        @Override
-        public Pair<UniqueId, Instant> doInTransaction(final TransactionStatus status) {
-          return doAddInTransaction(user);
-        }
-      });
+      final Pair<UniqueId, Instant> added = getTransactionTemplateRetrying(getMaxRetries()).execute(status -> doAddInTransaction(user));
       changeManager().entityChanged(ChangeType.ADDED, added.getFirst().getObjectId(), added.getSecond(), null, added.getSecond());
       return added.getFirst();
     }
@@ -248,12 +241,7 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
     LOGGER.debug("update {}", user);
 
     try (Timer.Context context = _updateTimer.time()) {
-      final Pair<UniqueId, Instant> updated = getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<Pair<UniqueId, Instant>>() {
-        @Override
-        public Pair<UniqueId, Instant> doInTransaction(final TransactionStatus status) {
-          return doUpdateInTransaction(user);
-        }
-      });
+      final Pair<UniqueId, Instant> updated = getTransactionTemplateRetrying(getMaxRetries()).execute(status -> doUpdateInTransaction(user));
       if (updated.getSecond() != null) {
         changeManager().entityChanged(ChangeType.CHANGED, updated.getFirst().getObjectId(), updated.getSecond(), null, updated.getSecond());
       }
@@ -297,12 +285,7 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
 
     try (Timer.Context context = _removeByIdTimer.time()) {
       if (idExists(objectId)) {
-        final Instant removedInstant = getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<Instant>() {
-          @Override
-          public Instant doInTransaction(final TransactionStatus status) {
-            return doRemoveInTransaction(objectId);
-          }
-        });
+        final Instant removedInstant = getTransactionTemplateRetrying(getMaxRetries()).execute(status -> doRemoveInTransaction(objectId));
         changeManager().entityChanged(ChangeType.REMOVED, objectId, removedInstant, null, removedInstant);
       }
     }
@@ -381,6 +364,8 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
    *          the type character, not null
    * @param values
    *          the enum values, not null
+   * @param <E>
+   *          the type of the values
    * @return the enum, not null
    */
   <E extends Enum<E>> E extractEnum(final String typeStr, final E[] values) {

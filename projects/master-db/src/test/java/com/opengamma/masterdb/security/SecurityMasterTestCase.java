@@ -11,7 +11,6 @@ import static org.testng.AssertJUnit.assertNotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,8 +32,7 @@ import com.opengamma.master.security.SecuritySearchRequest;
 import com.opengamma.master.security.SecuritySearchResult;
 
 /**
- * Generic TestCase for a SecurityMaster implementation. Either inherit from it, or
- * delegate through the SecurityMasterTestCaseMethods interface.
+ * Generic TestCase for a SecurityMaster implementation. Either inherit from it, or delegate through the SecurityMasterTestCaseMethods interface.
  */
 public class SecurityMasterTestCase extends SecurityTestCase {
 
@@ -46,13 +44,14 @@ public class SecurityMasterTestCase extends SecurityTestCase {
    * TestNG constructor.
    */
   public SecurityMasterTestCase() {
-    _secMaster = null;  // handle TestNG
+    _secMaster = null; // handle TestNG
   }
 
   /**
    * Normal constructor.
    *
-   * @param secMaster  the security master
+   * @param secMaster
+   *          the security master
    */
   public SecurityMasterTestCase(final SecurityMaster secMaster) {
     _secMaster = secMaster;
@@ -60,10 +59,10 @@ public class SecurityMasterTestCase extends SecurityTestCase {
 
   @Override
   protected boolean isInitialized() {
-    return _secMaster != null;  // handle TestNG
+    return _secMaster != null; // handle TestNG
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private UniqueId putSecurity(final ManageableSecurity security) {
     LOGGER.debug("putting security = {}", security);
     SecurityDocument document = new SecurityDocument();
@@ -113,23 +112,17 @@ public class SecurityMasterTestCase extends SecurityTestCase {
 
   private void normalizeBondFutureSecurity(final BondFutureSecurity security) {
     final List<BondFutureDeliverable> basket = new ArrayList<>(security.getBasket());
-    Collections.sort(basket, new Comparator<BondFutureDeliverable>() {
-      @Override
-      public int compare(final BondFutureDeliverable o1, final BondFutureDeliverable o2) {
-        return o1.getIdentifiers().compareTo(o2.getIdentifiers());
-      }
-    });
+    Collections.sort(basket, (o1, o2) -> o1.getIdentifiers().compareTo(o2.getIdentifiers()));
     security.setBasket(basket);
   }
 
   /**
-   * Shuffles things around so that the equality comparison is valid. E.g. sorts stuff that might (correctly) be in an
-   * arbitrary order.
+   * Shuffles things around so that the equality comparison is valid. E.g. sorts stuff that might (correctly) be in an arbitrary order.
    */
-  private void normalizeSecurity (final Security security) {
+  private void normalizeSecurity(final Security security) {
     assertNotNull(security);
     if (security instanceof BondFutureSecurity) {
-      normalizeBondFutureSecurity ((BondFutureSecurity) security);
+      normalizeBondFutureSecurity((BondFutureSecurity) security);
     }
   }
 
@@ -164,10 +157,10 @@ public class SecurityMasterTestCase extends SecurityTestCase {
       normalizeSecurity(sec);
       assertEquals(security, sec);
     }
-    final String originalName = security.getName ();
+    final String originalName = security.getName();
     final String newName = "UPDATED " + originalName;
     security.setName(newName);
-    final UniqueId newUniqueId = updateSecurity (security);
+    final UniqueId newUniqueId = updateSecurity(security);
     assertNotNull(newUniqueId);
     LOGGER.debug("New UID = {}", newUniqueId);
     assertEquals(false, uniqueId.equals(newUniqueId));

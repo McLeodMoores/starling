@@ -28,6 +28,9 @@ public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurity
 
   /**
    * @param databaseType
+   *          the database type
+   * @param databaseVersion
+   *          the database version
    */
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public DbSecurityMasterDetailProviderRandomTest(final String databaseType, final String databaseVersion) {
@@ -35,7 +38,7 @@ public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurity
     LOGGER.info("running test for database={}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doSetUp() {
     final DbSecurityMaster secMaster = new DbSecurityMaster(getDbConnector());
@@ -44,7 +47,7 @@ public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurity
     _testCase = new SecurityMasterTestCase(secMaster);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // SecurityMasterTestCaseMethods
 
   @Override
@@ -76,7 +79,6 @@ public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurity
   public void testEquityOptionSecurity() {
     _testCase.testEquityOptionSecurity();
   }
-
 
   @Override
   public void testEquityBarrierOptionSecurity() {
@@ -302,7 +304,5 @@ public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurity
   public void testIndexFamily() {
     _testCase.testIndexFamily();
   }
-
-
 
 }

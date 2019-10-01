@@ -55,7 +55,7 @@ public class InterpolatedCurveSpecification extends CurveSpecification {
 
   /**
    * Gets the interpolator name.
-   * 
+   *
    * @return The interpolator name
    */
   public String getInterpolatorName() {
@@ -64,7 +64,7 @@ public class InterpolatedCurveSpecification extends CurveSpecification {
 
   /**
    * Gets the right extrapolator name.
-   * 
+   *
    * @return The right extrapolator name
    */
   public String getRightExtrapolatorName() {
@@ -73,7 +73,7 @@ public class InterpolatedCurveSpecification extends CurveSpecification {
 
   /**
    * Gets the left extrapolator name.
-   * 
+   *
    * @return The left extrapolator name
    */
   public String getLeftExtrapolatorName() {
@@ -102,9 +102,8 @@ public class InterpolatedCurveSpecification extends CurveSpecification {
       return false;
     }
     final InterpolatedCurveSpecification other = (InterpolatedCurveSpecification) obj;
-    return Objects.equals(_interpolatorName, other._interpolatorName) &&
-        Objects.equals(_rightExtrapolatorName, other._rightExtrapolatorName) &&
-        Objects.equals(_leftExtrapolatorName, other._leftExtrapolatorName);
+    return Objects.equals(_interpolatorName, other._interpolatorName) && Objects.equals(_rightExtrapolatorName, other._rightExtrapolatorName)
+        && Objects.equals(_leftExtrapolatorName, other._leftExtrapolatorName);
   }
 
   @Override

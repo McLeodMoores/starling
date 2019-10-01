@@ -29,7 +29,8 @@ public class BloombergIRFutureOptionVolatilitySurfaceInstrumentProviderBuilderFu
 
   @Test
   public void testCycle() {
-    BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider provider = new BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider(FUTURE_OPTION_PREFIX, POSTFIX,
+    BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider provider = new BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider(FUTURE_OPTION_PREFIX,
+        POSTFIX,
         DATA_FIELD_NAME, CALL_ABOVE_STRIKE, EXCHANGE);
     assertEquals(provider, cycleObject(BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider.class, provider));
     provider = new BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider(FUTURE_OPTION_PREFIX, POSTFIX,

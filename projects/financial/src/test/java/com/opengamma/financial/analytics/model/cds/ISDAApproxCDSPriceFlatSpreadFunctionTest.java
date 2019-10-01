@@ -39,9 +39,10 @@ public class ISDAApproxCDSPriceFlatSpreadFunctionTest {
 
   private static MockSecuritySource securitySource;
   private static FunctionCompilationContext functionCompilationContext;
-  private static final CDSSecurity CDS_SECURITY = new CDSSecurity(1.0, 0.6, 0.0025, Currency.GBP, zdt(2020, 12, 20, 0, 0, 0, 0, ZoneOffset.UTC), ZonedDateTime.now(), SimpleFrequency.ANNUAL,
-    DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, StubType.SHORT_START, 3,
-    "US Treasury", Currency.USD, "Senior", "No Restructuring");
+  private static final CDSSecurity CDS_SECURITY = new CDSSecurity(1.0, 0.6, 0.0025, Currency.GBP, zdt(2020, 12, 20, 0, 0, 0, 0, ZoneOffset.UTC),
+      ZonedDateTime.now(), SimpleFrequency.ANNUAL,
+      DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, StubType.SHORT_START, 3,
+      "US Treasury", Currency.USD, "Senior", "No Restructuring");
   private ISDAApproxCDSPriceFlatSpreadFunction testItem;
 
   @BeforeClass
@@ -62,7 +63,7 @@ public class ISDAApproxCDSPriceFlatSpreadFunctionTest {
 
   @Test
   public void execute() {
-    //TODO
+    // TODO
   }
 
   @Test
@@ -70,13 +71,14 @@ public class ISDAApproxCDSPriceFlatSpreadFunctionTest {
 
     final ValueRequirement requirement = new ValueRequirement(ValueRequirementNames.CLEAN_PRICE, ComputationTargetType.SECURITY, CDS_SECURITY.getUniqueId(),
         ValueProperties
-          .with(ValuePropertyNames.CURRENCY, Currency.USD.getCode())
-          .with(ValuePropertyNames.CALCULATION_METHOD, ISDAFunctionConstants.ISDA_METHOD_NAME)
-          .with(ISDAFunctionConstants.ISDA_IMPLEMENTATION, ISDAFunctionConstants.ISDA_IMPLEMENTATION_APPROX)
-          .with(ISDAFunctionConstants.ISDA_HAZARD_RATE_STRUCTURE, ISDAFunctionConstants.ISDA_HAZARD_RATE_FLAT)
-          .get());
+            .with(ValuePropertyNames.CURRENCY, Currency.USD.getCode())
+            .with(ValuePropertyNames.CALCULATION_METHOD, ISDAFunctionConstants.ISDA_METHOD_NAME)
+            .with(ISDAFunctionConstants.ISDA_IMPLEMENTATION, ISDAFunctionConstants.ISDA_IMPLEMENTATION_APPROX)
+            .with(ISDAFunctionConstants.ISDA_HAZARD_RATE_STRUCTURE, ISDAFunctionConstants.ISDA_HAZARD_RATE_FLAT)
+            .get());
 
-    final Set<ValueRequirement> result = testItem.getRequirements(functionCompilationContext, new ComputationTarget(ComputationTargetType.SECURITY, CDS_SECURITY), requirement);
+    final Set<ValueRequirement> result = testItem.getRequirements(functionCompilationContext,
+        new ComputationTarget(ComputationTargetType.SECURITY, CDS_SECURITY), requirement);
 
     Assert.assertNotNull(result);
     Assert.assertEquals(result.size(), 2);
@@ -87,9 +89,10 @@ public class ISDAApproxCDSPriceFlatSpreadFunctionTest {
     }
 
     Assert
-      .assertEquals(
-        r.toString(),
-            "[ValueReq[SpotRate, CTSpec[SECURITY, dummy_scheme~dummy_value], EMPTY], ValueReq[YieldCurve, CTSpec[CURRENCY, CurrencyISO~GBP], {CalculationMethod=[ISDA]}]]");
+        .assertEquals(
+            r.toString(),
+            "[ValueReq[SpotRate, CTSpec[SECURITY, dummy_scheme~dummy_value], EMPTY], "
+                + "ValueReq[YieldCurve, CTSpec[CURRENCY, CurrencyISO~GBP], {CalculationMethod=[ISDA]}]]");
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -99,7 +102,7 @@ public class ISDAApproxCDSPriceFlatSpreadFunctionTest {
 
   @Test
   public void getResults2() {
-    //TODO
+    // TODO
   }
 
   @Test
@@ -107,7 +110,7 @@ public class ISDAApproxCDSPriceFlatSpreadFunctionTest {
     Assert.assertEquals(testItem.getTargetType(), FinancialSecurityTypes.CDS_SECURITY);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static ZonedDateTime zdt(final int y, final int m, final int d, final int hr, final int min, final int sec, final int nanos, final ZoneId zone) {
     return LocalDateTime.of(y, m, d, hr, min, sec, nanos).atZone(zone);
   }

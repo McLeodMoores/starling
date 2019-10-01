@@ -53,9 +53,9 @@ public class BloombergDataUtilsTest {
       "BLOOMBERG_TICKER~TICKER 1234",
       "CUSIP~CUSIP 1234",
       "SEDOL1~SEDOL1 1234",
-      "BLOOMBERG_TCM~BLOOMBERG_TCM 1234"};
+      "BLOOMBERG_TCM~BLOOMBERG_TCM 1234" };
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void optionChain() throws Exception {
     final MockReferenceDataProvider rdp = new MockReferenceDataProvider();
@@ -161,11 +161,13 @@ public class BloombergDataUtilsTest {
     final ZonedDateTime now = LocalDateTime.of(2012, 8, 25, 14, 32, 00, 00).atZone(ZoneId.of("Europe/London"));
     final ExternalId testInput1 = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "EDZ2 Comdty");
     final ExternalId expectedOutput1 = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "ED2 Comdty");
-    final ExternalId actualOutput1 = BloombergDataUtils.futureBundleToGenericFutureTicker(testInput1.toBundle(), now, LocalTime.of(15, 00).atOffset(ZoneOffset.ofHours(1)), ZoneId.of("Europe/London"));
+    final ExternalId actualOutput1 = BloombergDataUtils.futureBundleToGenericFutureTicker(testInput1.toBundle(), now,
+        LocalTime.of(15, 00).atOffset(ZoneOffset.ofHours(1)), ZoneId.of("Europe/London"));
     assertEquals(expectedOutput1, actualOutput1);
     final ExternalId testInput2 = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "EDZ1 Comdty");
     final ExternalId expectedOutput2 = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "ED37 Comdty");
-    final ExternalId actualOutput2 = BloombergDataUtils.futureBundleToGenericFutureTicker(testInput2.toBundle(), now, LocalTime.of(15, 00).atOffset(ZoneOffset.ofHours(1)), ZoneId.of("Europe/London"));
+    final ExternalId actualOutput2 = BloombergDataUtils.futureBundleToGenericFutureTicker(testInput2.toBundle(), now,
+        LocalTime.of(15, 00).atOffset(ZoneOffset.ofHours(1)), ZoneId.of("Europe/London"));
     assertEquals(expectedOutput2, actualOutput2);
   }
 

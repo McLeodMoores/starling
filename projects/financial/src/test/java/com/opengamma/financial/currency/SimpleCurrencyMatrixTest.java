@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.currency;
@@ -25,24 +25,24 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class SimpleCurrencyMatrixTest {
-  
-  private final Currency currencyUSD = Currency.of ("USD");
-  private final Currency currencyGBP = Currency.of ("GBP");
-  private final Currency currencyEUR = Currency.of ("EUR");
-  private final Currency currencyCHF = Currency.of ("CHF");
-  
+
+  private final Currency currencyUSD = Currency.of("USD");
+  private final Currency currencyGBP = Currency.of("GBP");
+  private final Currency currencyEUR = Currency.of("EUR");
+  private final Currency currencyCHF = Currency.of("CHF");
+
   @Test
-  public void testFixedConversion () {
-    final SimpleCurrencyMatrix matrix = new SimpleCurrencyMatrix ();
-    matrix.setFixedConversion (currencyUSD, currencyGBP, 1.6);
-    assertEquals (CurrencyMatrixValue.of (1.6), matrix.getConversion(currencyUSD, currencyGBP));
+  public void testFixedConversion() {
+    final SimpleCurrencyMatrix matrix = new SimpleCurrencyMatrix();
+    matrix.setFixedConversion(currencyUSD, currencyGBP, 1.6);
+    assertEquals(CurrencyMatrixValue.of(1.6), matrix.getConversion(currencyUSD, currencyGBP));
     assertEquals(CurrencyMatrixValue.of(1.0 / 1.6), matrix.getConversion(currencyGBP, currencyUSD));
     assertNull(matrix.getConversion(currencyUSD, currencyEUR));
     assertNull(matrix.getConversion(currencyEUR, currencyUSD));
     assertEquals(2, matrix.getSourceCurrencies().size());
     assertEquals(2, matrix.getTargetCurrencies().size());
   }
-  
+
   @Test
   public void testIdentityInsert() {
     final SimpleCurrencyMatrix matrix = new SimpleCurrencyMatrix();
@@ -89,9 +89,10 @@ public class SimpleCurrencyMatrixTest {
   }
 
   @Test
-  public void testLiveData () {
-    final SimpleCurrencyMatrix matrix = new SimpleCurrencyMatrix ();
-    matrix.setLiveData(currencyUSD, currencyGBP, new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, ExternalId.of("Test", "USD_GBP")));
+  public void testLiveData() {
+    final SimpleCurrencyMatrix matrix = new SimpleCurrencyMatrix();
+    matrix.setLiveData(currencyUSD, currencyGBP,
+        new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, ExternalId.of("Test", "USD_GBP")));
     CurrencyMatrixValue val = matrix.getConversion(currencyUSD, currencyGBP);
     assertTrue(val instanceof CurrencyMatrixValueRequirement);
     assertFalse(((CurrencyMatrixValueRequirement) val).isReciprocal());

@@ -38,7 +38,7 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbSecurityMasterWorkerTest.class);
 
-  private static ConcurrentMap<String, DbConnector> _dbConnectors = new ConcurrentHashMap<>();  // local cache for Hibernate reasons, closed in DbTest
+  private static ConcurrentMap<String, DbConnector> _dbConnectors = new ConcurrentHashMap<>(); // local cache for Hibernate reasons, closed in DbTest
   protected DbSecurityMaster _secMaster;
   protected Instant _version1Instant;
   protected Instant _version2Instant;
@@ -49,7 +49,7 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doSetUp() {
     init();
@@ -66,7 +66,7 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
     _dbConnectors.clear();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void init() {
     DbConnector dbConnector = _dbConnectors.get(getDatabaseType());
     if (dbConnector == null) {
@@ -76,14 +76,14 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
     _secMaster = new DbSecurityMaster(dbConnector);
     _secMaster.setDetailProvider(new HibernateSecurityMasterDetailProvider());
 
-//    id bigint not null,
-//    oid bigint not null,
-//    ver_from_instant timestamp not null,
-//    ver_to_instant timestamp not null,
-//    corr_from_instant timestamp not null,
-//    corr_to_instant timestamp not null,
-//    name varchar(255) not null,
-//    sec_type varchar(255) not null,
+    // id bigint not null,
+    // oid bigint not null,
+    // ver_from_instant timestamp not null,
+    // ver_to_instant timestamp not null,
+    // corr_from_instant timestamp not null,
+    // corr_to_instant timestamp not null,
+    // name varchar(255) not null,
+    // sec_type varchar(255) not null,
     final Instant now = Instant.now();
     _secMaster.setClock(Clock.fixed(now, ZoneOffset.UTC));
     _version1Instant = now.minusSeconds(100);
@@ -96,13 +96,14 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
     template.update("INSERT INTO sec_security VALUES (?,?,?,?,?, ?,?,?,?)",
         102, 102, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "TestSecurity102", "EQUITY", "D");
     template.update("INSERT INTO sec_security VALUES (?,?,?,?,?, ?,?,?,?)",
-        201, 201, toSqlTimestamp(_version1Instant), toSqlTimestamp(_version2Instant), toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "TestSecurity201", "EQUITY", "D");
+        201, 201, toSqlTimestamp(_version1Instant), toSqlTimestamp(_version2Instant), toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "TestSecurity201",
+        "EQUITY", "D");
     template.update("INSERT INTO sec_security VALUES (?,?,?,?,?, ?,?,?,?)",
         202, 201, toSqlTimestamp(_version2Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version2Instant), MAX_SQL_TIMESTAMP, "TestSecurity202", "EQUITY", "D");
     _totalSecurities = 3;
-//  id bigint not null,
-//  key_scheme varchar(255) not null,
-//  key_value varchar(255) not null,
+    // id bigint not null,
+    // key_scheme varchar(255) not null,
+    // key_value varchar(255) not null,
     template.update("INSERT INTO sec_idkey VALUES (?,?,?)",
         1, "A", "B");
     template.update("INSERT INTO sec_idkey VALUES (?,?,?)",
@@ -111,8 +112,8 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
         3, "E", "F");
     template.update("INSERT INTO sec_idkey VALUES (?,?,?)",
         4, "GH", "HI");
-//  security_id bigint not null,
-//  idkey_id bigint not null,
+    // security_id bigint not null,
+    // idkey_id bigint not null,
     template.update("INSERT INTO sec_security2idkey VALUES (?,?)",
         101, 1);
     template.update("INSERT INTO sec_security2idkey VALUES (?,?)",
@@ -135,7 +136,7 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
         202, 3);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   protected void assert101(final SecurityDocument test) {
     final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
     assertNotNull(test);

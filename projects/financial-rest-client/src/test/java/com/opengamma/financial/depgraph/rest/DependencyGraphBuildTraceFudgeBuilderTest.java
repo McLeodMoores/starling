@@ -40,13 +40,13 @@ public class DependencyGraphBuildTraceFudgeBuilderTest extends AbstractFudgeBuil
 
   @Test
   public void cycleObjectTest() {
-    DependencyGraphBuildTrace object = createDependencyGraphBuildTrace();
-    DependencyGraphBuildTrace cycleObject = cycleObject(DependencyGraphBuildTrace.class, object);
+    final DependencyGraphBuildTrace object = createDependencyGraphBuildTrace();
+    final DependencyGraphBuildTrace cycleObject = cycleObject(DependencyGraphBuildTrace.class, object);
     System.out.println(object.getDependencyGraph());
     System.out.println();
     System.out.println(cycleObject.getDependencyGraph());
-    DependencyGraph objectDepGraph = object.getDependencyGraph();
-    DependencyGraph cycleObjectDepGraph = cycleObject.getDependencyGraph();
+    final DependencyGraph objectDepGraph = object.getDependencyGraph();
+    final DependencyGraph cycleObjectDepGraph = cycleObject.getDependencyGraph();
     assertEquals(objectDepGraph, cycleObjectDepGraph);
     assertEquals(object.getExceptionsWithCounts(), cycleObject.getExceptionsWithCounts());
     assertEquals(object.getFailures(), cycleObject.getFailures());
@@ -57,16 +57,17 @@ public class DependencyGraphBuildTraceFudgeBuilderTest extends AbstractFudgeBuil
    * @return a basic dep graph build trace object
    */
   private DependencyGraphBuildTrace createDependencyGraphBuildTrace() {
-    DependencyGraph dependencyGraph = createGraph();
-    Map<Throwable, Integer> exceptions = new HashMap<>();
-    //somewhat contrived...
+    final DependencyGraph dependencyGraph = createGraph();
+    final Map<Throwable, Integer> exceptions = new HashMap<>();
+    // somewhat contrived...
     exceptions.put(new ThrowableWithClass("a null pointer", ThrowableWithClass.class), 1);
     exceptions.put(new ThrowableWithClass("out of memory error", ThrowableWithClass.class), 4);
-    ValueRequirement valueRequirement = new ValueRequirement(ValueRequirementNames.FAIR_VALUE, ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Fair Value Scheme", "Fair Value Id"));
-    List<ResolutionFailure> failures = new ArrayList<>();
+    final ValueRequirement valueRequirement = new ValueRequirement(ValueRequirementNames.FAIR_VALUE, ComputationTargetType.PORTFOLIO_NODE,
+        UniqueId.of("Fair Value Scheme", "Fair Value Id"));
+    final List<ResolutionFailure> failures = new ArrayList<>();
     failures.add(ResolutionFailureObjectFactory.unsatisfiedResolutionFailure(valueRequirement));
-    Map<ValueRequirement, ValueSpecification> mappings = new HashMap<>();
-    ValueSpecification valueSpecification = ValueSpecification.of("Foo", ComputationTargetType.PRIMITIVE, UniqueId.of("Scheme", "Value2"),
+    final Map<ValueRequirement, ValueSpecification> mappings = new HashMap<>();
+    final ValueSpecification valueSpecification = ValueSpecification.of("Foo", ComputationTargetType.PRIMITIVE, UniqueId.of("Scheme", "Value2"),
         ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
     mappings.put(valueRequirement, valueSpecification);
     return DependencyGraphBuildTrace.of(dependencyGraph, exceptions, failures, mappings);
@@ -74,14 +75,15 @@ public class DependencyGraphBuildTraceFudgeBuilderTest extends AbstractFudgeBuil
 
   /**
    * A very simple graph. Testing of (de)serializing more complicated graphs done in {@link DependencyGraphTraceBuilderTest}.
-   * 
+   *
    * @return
    */
   private DependencyGraph createGraph() {
     final TestDependencyGraphBuilder gb = new TestDependencyGraphBuilder("testGraph");
     final ComputationTargetSpecification targetSpecification = new ComputationTargetSpecification(ComputationTargetType.CURRENCY, Currency.GBP.getUniqueId());
     final NodeBuilder yieldCurveNode = gb.addNode("MockYieldCurve", targetSpecification);
-    yieldCurveNode.addOutput(new ValueSpecification("YieldCurveMarketData", targetSpecification, ValueProperties.builder().with("Curve", "Forward3M").with("Function", "someFunction").get()));
+    yieldCurveNode.addOutput(new ValueSpecification("YieldCurveMarketData", targetSpecification,
+        ValueProperties.builder().with("Curve", "Forward3M").with("Function", "someFunction").get()));
     return gb.buildGraph();
   }
 

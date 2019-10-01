@@ -29,6 +29,7 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for USD deals
+ *
  * @deprecated Deprecated
  */
 @Deprecated
@@ -41,15 +42,14 @@ public class USDTest extends AbstractMockSourcesTest {
   private static final String ONE_MONTH_NAME = "USD_LIBOR_1M_ERS";
   private static final String THREE_MONTH_NAME = "USD_LIBOR_3M_ERS";
   private static final String SIX_MONTH_NAME = "USD_LIBOR_6M_ERS";
-  final static String DISCOUNTING_CURVE_NAME = "Discounting";
-  final static String FORWARD_1M_CURVE_NAME = "Forward 1M";
-  final static String FORWARD_3M_CURVE_NAME = "Forward 3M";
-  final static String FORWARD_6M_CURVE_NAME = "Forward 6M";
+  private static final String DISCOUNTING_CURVE_NAME = "Discounting";
+  private static final String FORWARD_1M_CURVE_NAME = "Forward 1M";
+  private static final String FORWARD_3M_CURVE_NAME = "Forward 3M";
+  private static final String FORWARD_6M_CURVE_NAME = "Forward 6M";
 
-  final static Currency CCY = Currency.USD;
+  private static final Currency CCY = Currency.USD;
 
   private static final String PAY_CURRENCY = "LEG1_CCY";
-
 
   public void test() throws Exception {
     final IRSwapTradeParser tradeParser = new IRSwapTradeParser();
@@ -100,48 +100,39 @@ public class USDTest extends AbstractMockSourcesTest {
     final List<SwapDefinition> swapsDefinition = Lists.newArrayList();
     final List<ForwardRateAgreementDefinition> frasDefinition = Lists.newArrayList();
     final List<DepositZeroDefinition> zcsDefinition = Lists.newArrayList();
-    /*for (IRSwapSecurity irSwapSecurity : tradesClean) {
-      switch (irSwapSecurity.getRawInput().getString("PRODUCT_TYPE")) {
-        case "SWAP":
-          swapsDefinition.add((SwapDefinition) swapConverter.visitSwapSecurity(irSwapSecurity.getSwapSecurity()));
-
-          // we don't treat the fra case at the moment
-          case "FRA":
-            frasDefinition.add((ForwardRateAgreementDefinition) fraConverter.visitSwapSecurity(irSwapSecurity.getSwapSecurity()));
-          case "OIS":
-            swapsDefinition.add((SwapDefinition) swapConverter.visitSwapSecurity(irSwapSecurity.getSwapSecurity()));
-
-          // we don't treat the fra case at the moment
-           case "ZCS":
-             zcsDefinition.add((DepositZeroDefinition) ZeroCouponConverter.visitSwapSecurity(irSwapSecurity.getSwapSecurity()));
-      }
-    }
-    */
+    /*
+     * for (IRSwapSecurity irSwapSecurity : tradesClean) { switch (irSwapSecurity.getRawInput().getString("PRODUCT_TYPE")) { case "SWAP":
+     * swapsDefinition.add((SwapDefinition) swapConverter.visitSwapSecurity(irSwapSecurity.getSwapSecurity()));
+     *
+     * // we don't treat the fra case at the moment case "FRA": frasDefinition.add((ForwardRateAgreementDefinition)
+     * fraConverter.visitSwapSecurity(irSwapSecurity.getSwapSecurity())); case "OIS": swapsDefinition.add((SwapDefinition)
+     * swapConverter.visitSwapSecurity(irSwapSecurity.getSwapSecurity()));
+     *
+     * // we don't treat the fra case at the moment case "ZCS": zcsDefinition.add((DepositZeroDefinition)
+     * ZeroCouponConverter.visitSwapSecurity(irSwapSecurity.getSwapSecurity())); } }
+     */
     // Load the historical time series from a csv file
 
-    /* NonVersionedRedisHistoricalTimeSeriesSource source = new NonVersionedRedisHistoricalTimeSeriesSource(getJedisPool(), getRedisPrefix());
-     CMECurveFixingTSLoader loader = new CMECurveFixingTSLoader(source);*/
-    /*  loader.loadCurveFixingCSVFile("/vols/ogdev/CME/curve-fixing/sample-cme-curve-fixing.csv");
-
-      HistoricalTimeSeries historicalTimeSeries = source.getHistoricalTimeSeries(UniqueId.of(ExternalSchemes.ISDA.getName(), "CHF-LIBOR-BBA-6M"));
-      assertNotNull(historicalTimeSeries);
-      LocalDateDoubleTimeSeries timeSeries = historicalTimeSeries.getTimeSeries();
-      assertNotNull(timeSeries);
-      assertEquals(5996, timeSeries.size());*/
+    /*
+     * NonVersionedRedisHistoricalTimeSeriesSource source = new NonVersionedRedisHistoricalTimeSeriesSource(getJedisPool(), getRedisPrefix());
+     * CMECurveFixingTSLoader loader = new CMECurveFixingTSLoader(source);
+     */
+    /*
+     * loader.loadCurveFixingCSVFile("/vols/ogdev/CME/curve-fixing/sample-cme-curve-fixing.csv");
+     *
+     * HistoricalTimeSeries historicalTimeSeries = source.getHistoricalTimeSeries(UniqueId.of(ExternalSchemes.ISDA.getName(), "CHF-LIBOR-BBA-6M"));
+     * assertNotNull(historicalTimeSeries); LocalDateDoubleTimeSeries timeSeries = historicalTimeSeries.getTimeSeries(); assertNotNull(timeSeries);
+     * assertEquals(5996, timeSeries.size());
+     */
 
     // convert the definition into a derivative
-    /*   List<Swap> swapDerivatives = Lists.newArrayList();
-       for (SwapDefinition swapDefinition : swapsDefinition) {
-         swapDerivatives.add(swapDefinition.toDerivative(TODAY, data, curvesClean));
-       }
-       List<Swap> frasDerivatives = Lists.newArrayList();
-       for (ForwardRateAgreementDefinition fraDefinition : frasDefinition) {
-         frasDerivatives.add(fraDefinition.toDerivative(TODAY, data, curvesClean));
-       }
-       List<Swap> zcsDerivatives = Lists.newArrayList();
-       for (DepositZeroDefinition zcDefinition : zcsDefinition) {
-         zcsDerivatives.add(zcDefinition.toDerivative(TODAY, data, curvesClean));
-       }*/
+    /*
+     * List<Swap> swapDerivatives = Lists.newArrayList(); for (SwapDefinition swapDefinition : swapsDefinition) {
+     * swapDerivatives.add(swapDefinition.toDerivative(TODAY, data, curvesClean)); } List<Swap> frasDerivatives = Lists.newArrayList(); for
+     * (ForwardRateAgreementDefinition fraDefinition : frasDefinition) { frasDerivatives.add(fraDefinition.toDerivative(TODAY, data, curvesClean)); } List<Swap>
+     * zcsDerivatives = Lists.newArrayList(); for (DepositZeroDefinition zcDefinition : zcsDefinition) { zcsDerivatives.add(zcDefinition.toDerivative(TODAY,
+     * data, curvesClean)); }
+     */
 
     // Check the npv
 

@@ -51,14 +51,14 @@ import com.opengamma.util.test.Timeout;
 @Test(groups = TestGroup.INTEGRATION)
 public class ViewProcessorManagerTest {
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static class MockViewProcessor implements ViewProcessorInternal {
     private final CompiledFunctionService _compiledFunctionService;
     private final LinkedBlockingQueue<Boolean> _suspendState = new LinkedBlockingQueue<>();
     private boolean _running;
     private boolean _suspended;
 
-    public MockViewProcessor() {
+    MockViewProcessor() {
       final InMemoryFunctionRepository functions = new InMemoryFunctionRepository();
       _compiledFunctionService = new CompiledFunctionService(functions, new CachingFunctionRepositoryCompiler(), new FunctionCompilationContext());
       functions.addFunction(new MockFunction("mock", ComputationTarget.NULL) {
@@ -73,25 +73,19 @@ public class ViewProcessorManagerTest {
 
     @Override
     public Future<Runnable> suspend(final ExecutorService executorService) {
-      return executorService.submit(new Runnable() {
-        @Override
-        public void run() {
-          synchronized (MockViewProcessor.this) {
-            assertTrue(_running);
-            assertFalse(_suspended);
-            _suspended = true;
-            _suspendState.add(Boolean.TRUE);
-          }
+      return executorService.submit(() -> {
+        synchronized (MockViewProcessor.this) {
+          assertTrue(_running);
+          assertFalse(_suspended);
+          _suspended = true;
+          _suspendState.add(Boolean.TRUE);
         }
-      }, (Runnable) new Runnable() {
-        @Override
-        public void run() {
-          synchronized (MockViewProcessor.this) {
-            assertTrue(_running);
-            assertTrue(_suspended);
-            _suspended = false;
-            _suspendState.add(Boolean.FALSE);
-          }
+      }, (Runnable) () -> {
+        synchronized (MockViewProcessor.this) {
+          assertTrue(_running);
+          assertTrue(_suspended);
+          _suspended = false;
+          _suspendState.add(Boolean.FALSE);
         }
       });
     }
@@ -174,7 +168,7 @@ public class ViewProcessorManagerTest {
 
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static final class MockChangeManager implements ChangeManager {
     private ChangeListener _listener;
 
@@ -207,7 +201,7 @@ public class ViewProcessorManagerTest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static class MockNotifyingMaster implements ChangeProvider {
     private final ChangeManager _changeManager = new MockChangeManager();
 
@@ -217,7 +211,7 @@ public class ViewProcessorManagerTest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void testBasicOperation() throws InterruptedException {
     final ViewProcessorManager vpm = new ViewProcessorManager();

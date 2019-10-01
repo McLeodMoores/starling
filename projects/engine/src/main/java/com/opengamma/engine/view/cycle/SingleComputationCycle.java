@@ -585,8 +585,8 @@ public class SingleComputationCycle implements ViewCycle, EngineResource {
           // Nothing to reuse
           continue;
         }
-        if (getLogModeSource().getLogMode(calcConfig, unchangedNode.getOutputValue(0)) == ExecutionLogMode.FULL &&
-            previousExecutionResult.getJobResultItem().getExecutionLog().getEvents() == null) {
+        if (getLogModeSource().getLogMode(calcConfig, unchangedNode.getOutputValue(0)) == ExecutionLogMode.FULL
+            && previousExecutionResult.getJobResultItem().getExecutionLog().getEvents() == null) {
           // Need to rerun calculation to collect logs, so cannot reuse
           continue;
         }

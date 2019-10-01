@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.web.json.convention.OvernightIndexConventionJsonBuilder;
 import com.opengamma.financial.convention.OvernightIndexConvention;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.id.ExternalId;

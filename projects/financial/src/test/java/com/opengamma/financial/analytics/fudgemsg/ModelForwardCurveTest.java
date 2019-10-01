@@ -33,11 +33,10 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ModelForwardCurveTest extends AnalyticsTestBase {
 
-  private static final double[] EXPIRIES = new double[] {1, 2, 3, 4, 5};
-  private static final double[] FORWARD = new double[] {100, 101, 102, 103, 104};
+  private static final double[] EXPIRIES = new double[] { 1, 2, 3, 4, 5 };
+  private static final double[] FORWARD = new double[] { 100, 101, 102, 103, 104 };
   private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
   private static final double EPS = 1e-12;
-
 
   @Test
   public void testCurve1() {
@@ -88,7 +87,8 @@ public class ModelForwardCurveTest extends AnalyticsTestBase {
 
   @Test
   public void testCurve5() {
-    final ForwardCurve curve1 = new ForwardCurve(InterpolatedDoublesCurve.from(EXPIRIES, FORWARD, INTERPOLATOR), InterpolatedDoublesCurve.from(FORWARD, EXPIRIES, INTERPOLATOR));
+    final ForwardCurve curve1 = new ForwardCurve(InterpolatedDoublesCurve.from(EXPIRIES, FORWARD, INTERPOLATOR),
+        InterpolatedDoublesCurve.from(FORWARD, EXPIRIES, INTERPOLATOR));
     final ForwardCurve curve2 = cycleObject(ForwardCurve.class, curve1);
     assertEquals(curve1.getSpot(), curve2.getSpot(), EPS);
     assertTrue(curve2.getForwardCurve() instanceof InterpolatedDoublesCurve);
@@ -121,13 +121,14 @@ public class ModelForwardCurveTest extends AnalyticsTestBase {
     assertCurveEquals(curve1.getForwardCurve(), curve2.getForwardCurve());
     assertCurveEquals(curve1.getDriftCurve(), curve2.getDriftCurve());
   }
+
   @Test
   public void testForwardCurveAffineDividends() {
     final double spot = 100.0;
     final YieldAndDiscountCurve riskFreeCurve = YieldCurve.from(ConstantDoublesCurve.from(0.0));
-    final double[] tau = new double[] {0.25, 0.5, 0.75, 1, 2, 3, 4};
-    final double[] alpha = new double[] {0.23, 0.24, 0.25, 0.26, 0, 0, 0};
-    final double[] beta = new double[] {0, 0, 0, 0, 0.15, 0.2, 0.3};
+    final double[] tau = new double[] { 0.25, 0.5, 0.75, 1, 2, 3, 4 };
+    final double[] alpha = new double[] { 0.23, 0.24, 0.25, 0.26, 0, 0, 0 };
+    final double[] beta = new double[] { 0, 0, 0, 0, 0.15, 0.2, 0.3 };
     final AffineDividends dividends = new AffineDividends(tau, alpha, beta);
     final ForwardCurveAffineDividends curve1 = new ForwardCurveAffineDividends(spot, riskFreeCurve, dividends);
     final ForwardCurveAffineDividends curve2 = cycleObject(ForwardCurveAffineDividends.class, curve1);

@@ -18,16 +18,16 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.UNIT)
 public class LabelledMatrix1DBuilderTest extends AnalyticsTestBase {
 
   @Test
   public void testDouble() {
-    final Double[] keys = new Double[] {1., 2., 3., 4., 5.};
-    final Object[] labels = new Object[] {"1y", "2y", "3y", "4y", "5y"};
-    final double[] values = new double[] {0.1, 0.2, 0.3, 0.4, 0.5};
+    final Double[] keys = new Double[] { 1., 2., 3., 4., 5. };
+    final Object[] labels = new Object[] { "1y", "2y", "3y", "4y", "5y" };
+    final double[] values = new double[] { 0.1, 0.2, 0.3, 0.4, 0.5 };
     final DoubleLabelledMatrix1D m1 = new DoubleLabelledMatrix1D(keys, labels, values);
     final DoubleLabelledMatrix1D m2 = cycleObject(DoubleLabelledMatrix1D.class, m1);
     assertEquals(m1, m2);
@@ -44,9 +44,10 @@ public class LabelledMatrix1DBuilderTest extends AnalyticsTestBase {
 
   @Test
   public void testLocalDate() {
-    final LocalDate[] keys = new LocalDate[] {LocalDate.of(2012, 1, 1), LocalDate.of(2013, 1, 1), LocalDate.of(2014, 1, 1), LocalDate.of(2015, 1, 1), LocalDate.of(2016, 1, 1)};
-    final Object[] labels = new Object[] {"1y", "2y", "3y", "4y", "5y"};
-    final double[] values = new double[] {0.1, 0.2, 0.3, 0.4, 0.5};
+    final LocalDate[] keys = new LocalDate[] { LocalDate.of(2012, 1, 1), LocalDate.of(2013, 1, 1), LocalDate.of(2014, 1, 1), LocalDate.of(2015, 1, 1),
+        LocalDate.of(2016, 1, 1) };
+    final Object[] labels = new Object[] { "1y", "2y", "3y", "4y", "5y" };
+    final double[] values = new double[] { 0.1, 0.2, 0.3, 0.4, 0.5 };
     final LocalDateLabelledMatrix1D m1 = new LocalDateLabelledMatrix1D(keys, labels, values);
     final LocalDateLabelledMatrix1D m2 = cycleObject(LocalDateLabelledMatrix1D.class, m1);
     assertEquals(m1, m2);
@@ -63,8 +64,8 @@ public class LabelledMatrix1DBuilderTest extends AnalyticsTestBase {
 
   @Test
   public void testString() {
-    final String[] keys = new String[] {"A", "B", "C", "D", "E"};
-    final double[] values = new double[] {0.1, 0.2, 0.3, 0.4, 0.5};
+    final String[] keys = new String[] { "A", "B", "C", "D", "E" };
+    final double[] values = new double[] { 0.1, 0.2, 0.3, 0.4, 0.5 };
     final StringLabelledMatrix1D m1 = new StringLabelledMatrix1D(keys, values);
     final StringLabelledMatrix1D m2 = cycleObject(StringLabelledMatrix1D.class, m1);
     assertEquals(m1, m2);
@@ -75,9 +76,9 @@ public class LabelledMatrix1DBuilderTest extends AnalyticsTestBase {
 
   @Test
   public void testTenor() {
-    final Tenor[] tenors = new Tenor[] {Tenor.ONE_DAY, Tenor.ONE_WEEK, Tenor.ONE_MONTH, Tenor.ONE_YEAR};
-    final Object[] labels = new Object[] {"P1D", "P7D", "P1M", "P1Y"};
-    final double[] values = new double[] {1, 2, 3, 4};
+    final Tenor[] tenors = new Tenor[] { Tenor.ONE_DAY, Tenor.ONE_WEEK, Tenor.ONE_MONTH, Tenor.ONE_YEAR };
+    final Object[] labels = new Object[] { "P1D", "P7D", "P1M", "P1Y" };
+    final double[] values = new double[] { 1, 2, 3, 4 };
     TenorLabelledMatrix1D matrix = new TenorLabelledMatrix1D(tenors, labels, values);
     assertEquals(matrix, cycleObject(TenorLabelledMatrix1D.class, matrix));
     matrix = new TenorLabelledMatrix1D(tenors, values);

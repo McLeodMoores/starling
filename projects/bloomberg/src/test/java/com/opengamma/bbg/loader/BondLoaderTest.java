@@ -25,7 +25,8 @@ import com.opengamma.master.security.ManageableSecurity;
 public class BondLoaderTest {
 
   public void test() {
-    final ReferenceDataProvider referenceDataProvider = new RemoteReferenceDataProvider(URI.create("http://marketdataserver-lx-1:8090/jax/components/ReferenceDataProvider/bloomberg"));
+    final ReferenceDataProvider referenceDataProvider = new RemoteReferenceDataProvider(
+        URI.create("http://marketdataserver-lx-1:8090/jax/components/ReferenceDataProvider/bloomberg"));
     final BondLoader bondLoader = new BondLoader(referenceDataProvider);
     final Map<String, ManageableSecurity> loadSecurities = bondLoader.loadSecurities(Sets.newHashSet("/ticker/NGGLN 2.983 07/08/18 Corp"));
     System.err.println(loadSecurities.get("/ticker/NGGLN 2.983 07/08/18 Corp").getAttributes());

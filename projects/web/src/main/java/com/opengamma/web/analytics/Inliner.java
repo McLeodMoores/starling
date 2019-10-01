@@ -34,11 +34,9 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
       ValueRequirementNames.YIELD_CURVE_RETURN_SERIES);
 
   public static boolean isDisplayableInline(final Class<?> type, final ColumnSpecification spec) {
-    return type != null &&
-        (LocalDateLabelledMatrix1D.class.isAssignableFrom(type) &&
-            LOCAL_DATE_LABELLED_MATRIX_1D_VALUE_NAMES.contains(spec.getValueName())
-            || TenorLabelledLocalDateDoubleTimeSeriesMatrix1D.class.isAssignableFrom(type) &&
-                TENOR_LABELLED_TIME_SERIES_MATRIX_1D_VALUE_NAMES.contains(spec.getValueName()));
+    return type != null && (LocalDateLabelledMatrix1D.class.isAssignableFrom(type) && LOCAL_DATE_LABELLED_MATRIX_1D_VALUE_NAMES.contains(spec.getValueName())
+        || TenorLabelledLocalDateDoubleTimeSeriesMatrix1D.class.isAssignableFrom(type)
+            && TENOR_LABELLED_TIME_SERIES_MATRIX_1D_VALUE_NAMES.contains(spec.getValueName()));
   }
 
   public static List<ColumnMeta> columnMeta(final Object value) {

@@ -82,7 +82,7 @@ public class IMMFutureAndFutureOptionMonthlyExpiryCalculatorTest {
   private static class MyCalendar implements WorkingDayCalendar {
     private static final LocalDate BANK_HOLIDAY = LocalDate.of(2012, 12, 17);
 
-    public MyCalendar() {
+    MyCalendar() {
     }
 
     @Override

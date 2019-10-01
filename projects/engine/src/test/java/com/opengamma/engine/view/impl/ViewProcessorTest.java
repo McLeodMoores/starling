@@ -127,13 +127,10 @@ public class ViewProcessorTest {
       assertNotNull(resume);
       final CountDownLatch latch = new CountDownLatch(1);
       final ViewClient client2 = vp.createViewClient(ViewProcessorTestEnvironment.TEST_USER);
-      executor.submit(new Runnable() {
-        @Override
-        public void run() {
-          client2.attachToViewProcess(env.getViewDefinition().getUniqueId(), ExecutionOptions.infinite(MarketData.live()));
-          client2.shutdown();
-          latch.countDown();
-        }
+      executor.submit(() -> {
+        client2.attachToViewProcess(env.getViewDefinition().getUniqueId(), ExecutionOptions.infinite(MarketData.live()));
+        client2.shutdown();
+        latch.countDown();
       });
       assertFalse(latch.await(Timeout.standardTimeoutMillis(), TimeUnit.MILLISECONDS));
       resume.run();
@@ -158,13 +155,10 @@ public class ViewProcessorTest {
       assertNotNull(resume);
       final ViewClient client2 = vp.createViewClient(ViewProcessorTestEnvironment.TEST_USER);
       final CountDownLatch latch = new CountDownLatch(1);
-      executor.submit(new Runnable() {
-        @Override
-        public void run() {
-          client2.attachToViewProcess(env.getViewDefinition().getUniqueId(), ExecutionOptions.infinite(MarketData.live()));
-          client2.shutdown();
-          latch.countDown();
-        }
+      executor.submit(() -> {
+        client2.attachToViewProcess(env.getViewDefinition().getUniqueId(), ExecutionOptions.infinite(MarketData.live()));
+        client2.shutdown();
+        latch.countDown();
       });
       assertFalse(latch.await(Timeout.standardTimeoutMillis(), TimeUnit.MILLISECONDS));
       resume.run();
@@ -216,9 +210,9 @@ public class ViewProcessorTest {
       vp.start();
 
       final ViewClient client = vp.createViewClient(ViewProcessorTestEnvironment.TEST_USER);
-      final ViewExecutionOptions executionOptions =
-          ExecutionOptions.batch(generateExecutionSequence(10), ViewCycleExecutionOptions.builder().setMarketDataSpecification(MarketData.live())
-          .create());
+      final ViewExecutionOptions executionOptions = ExecutionOptions.batch(generateExecutionSequence(10),
+          ViewCycleExecutionOptions.builder().setMarketDataSpecification(MarketData.live())
+              .create());
       client.attachToViewProcess(env.getViewDefinition().getUniqueId(), executionOptions);
       waitForCompletionAndShutdown(vp, client, env);
       assertEquals(0, vp.getViewCycleManager().getResourceCount());
@@ -257,9 +251,9 @@ public class ViewProcessorTest {
 
       };
       client.setResultListener(resultListener);
-      final ViewExecutionOptions executionOptions =
-          ExecutionOptions.batch(generateExecutionSequence(10), ViewCycleExecutionOptions.builder().setMarketDataSpecification(MarketData.live())
-          .create());
+      final ViewExecutionOptions executionOptions = ExecutionOptions.batch(generateExecutionSequence(10),
+          ViewCycleExecutionOptions.builder().setMarketDataSpecification(MarketData.live())
+              .create());
       client.attachToViewProcess(env.getViewDefinition().getUniqueId(), executionOptions);
 
       final ViewProcessImpl viewProcess = env.getViewProcess(vp, client.getUniqueId());
@@ -298,7 +292,7 @@ public class ViewProcessorTest {
 
     private final CountDownLatch _cycleLatch;
 
-    public CycleCountingViewResultListener(final int requiredCycleCount) {
+    CycleCountingViewResultListener(final int requiredCycleCount) {
       _cycleLatch = new CountDownLatch(requiredCycleCount);
     }
 

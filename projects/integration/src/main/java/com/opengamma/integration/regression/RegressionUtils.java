@@ -66,6 +66,15 @@ public final class RegressionUtils {
    * Creates an empty database by running {@link EmptyDatabaseCreator} in an external process. {@code EmptyDatabaseCreator} relies on {@code DbTool} which scans
    * the classpath to locate the schema files. This means it has to run with the classpath of the server version being tested so it can find the correct schema
    * files.
+   * 
+   * @param configFile
+   *          the config file
+   * @param workingDirName
+   *          the working directory name
+   * @param classpath
+   *          the classpath
+   * @param logbackConfig
+   *          the logging config
    */
   /* package */static void createEmptyDatabase(final String configFile, final String workingDirName, final String classpath, final String logbackConfig) {
     // TODO load the config and check the DB URL is overridden. ensure we NEVER use the URL from the real server config

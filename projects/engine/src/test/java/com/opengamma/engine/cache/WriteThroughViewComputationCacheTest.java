@@ -89,7 +89,7 @@ public class WriteThroughViewComputationCacheTest {
 
     private boolean _block;
 
-    public MockWriteThrough(final ViewComputationCache underlying) {
+    MockWriteThrough(final ViewComputationCache underlying) {
       super(underlying);
     }
 
@@ -140,12 +140,7 @@ public class WriteThroughViewComputationCacheTest {
       underlying.block();
       final BlockingQueue<Object> values = new LinkedBlockingQueue<>();
       for (int i = 0; i < 2; i++) {
-        spawn.submit(new Runnable() {
-          @Override
-          public void run() {
-            values.add(cache.getValue(_value3));
-          }
-        });
+        spawn.submit(() -> values.add(cache.getValue(_value3)));
       }
       Thread.sleep(Timeout.standardTimeoutMillis());
       underlying.unblock();
@@ -156,12 +151,7 @@ public class WriteThroughViewComputationCacheTest {
       underlying.block();
       cache.block();
       for (int i = 0; i < 2; i++) {
-        spawn.submit(new Runnable() {
-          @Override
-          public void run() {
-            values.add(cache.getValue(_value4));
-          }
-        });
+        spawn.submit(() -> values.add(cache.getValue(_value4)));
       }
       Thread.sleep(Timeout.standardTimeoutMillis());
       underlying.unblock();
@@ -193,12 +183,7 @@ public class WriteThroughViewComputationCacheTest {
       underlying.block();
       final BlockingQueue<Object> values = new LinkedBlockingQueue<>();
       for (int i = 0; i < 2; i++) {
-        spawn.submit(new Runnable() {
-          @Override
-          public void run() {
-            values.add(cache.getValue(_value3, CacheSelectHint.allPrivate()));
-          }
-        });
+        spawn.submit(() -> values.add(cache.getValue(_value3, CacheSelectHint.allPrivate())));
       }
       Thread.sleep(Timeout.standardTimeoutMillis());
       underlying.unblock();
@@ -209,12 +194,7 @@ public class WriteThroughViewComputationCacheTest {
       underlying.block();
       cache.block();
       for (int i = 0; i < 2; i++) {
-        spawn.submit(new Runnable() {
-          @Override
-          public void run() {
-            values.add(cache.getValue(_value4, CacheSelectHint.allPrivate()));
-          }
-        });
+        spawn.submit(() -> values.add(cache.getValue(_value4, CacheSelectHint.allPrivate())));
       }
       Thread.sleep(Timeout.standardTimeoutMillis());
       underlying.unblock();
@@ -252,12 +232,7 @@ public class WriteThroughViewComputationCacheTest {
       underlying.block();
       final BlockingQueue<Pair<ValueSpecification, Object>> values = new LinkedBlockingQueue<>();
       for (int i = 0; i < 2; i++) {
-        spawn.submit(new Runnable() {
-          @Override
-          public void run() {
-            values.addAll(cache.getValues(Collections.singleton(_value3)));
-          }
-        });
+        spawn.submit(() -> values.addAll(cache.getValues(Collections.singleton(_value3))));
       }
       Thread.sleep(Timeout.standardTimeoutMillis());
       underlying.unblock();
@@ -268,12 +243,7 @@ public class WriteThroughViewComputationCacheTest {
       underlying.block();
       cache.block();
       for (int i = 0; i < 2; i++) {
-        spawn.submit(new Runnable() {
-          @Override
-          public void run() {
-            values.addAll(cache.getValues(Collections.singleton(_value4)));
-          }
-        });
+        spawn.submit(() -> values.addAll(cache.getValues(Collections.singleton(_value4))));
       }
       Thread.sleep(Timeout.standardTimeoutMillis());
       underlying.unblock();
@@ -311,12 +281,7 @@ public class WriteThroughViewComputationCacheTest {
       underlying.block();
       final BlockingQueue<Pair<ValueSpecification, Object>> values = new LinkedBlockingQueue<>();
       for (int i = 0; i < 2; i++) {
-        spawn.submit(new Runnable() {
-          @Override
-          public void run() {
-            values.addAll(cache.getValues(Collections.singleton(_value3), CacheSelectHint.allShared()));
-          }
-        });
+        spawn.submit(() -> values.addAll(cache.getValues(Collections.singleton(_value3), CacheSelectHint.allShared())));
       }
       Thread.sleep(Timeout.standardTimeoutMillis());
       underlying.unblock();
@@ -327,12 +292,7 @@ public class WriteThroughViewComputationCacheTest {
       underlying.block();
       cache.block();
       for (int i = 0; i < 2; i++) {
-        spawn.submit(new Runnable() {
-          @Override
-          public void run() {
-            values.addAll(cache.getValues(Collections.singleton(_value4), CacheSelectHint.allShared()));
-          }
-        });
+        spawn.submit(() -> values.addAll(cache.getValues(Collections.singleton(_value4), CacheSelectHint.allShared())));
       }
       Thread.sleep(Timeout.standardTimeoutMillis());
       underlying.unblock();

@@ -181,7 +181,7 @@ public class ListeningViewAutoStartManagerTest {
 
   private AutoStartViewDefinition createAutoStartViewDefinition(final String id) {
     return new AutoStartViewDefinition(UniqueId.of("VD", id), ExecutionOptions.of(new InfiniteViewCycleExecutionSequence(),
-                                       EnumSet.of(ViewExecutionFlags.RUN_AS_FAST_AS_POSSIBLE)));
+        EnumSet.of(ViewExecutionFlags.RUN_AS_FAST_AS_POSSIBLE)));
   }
 
   private static class TestConfigSource implements ConfigSource {
@@ -189,9 +189,9 @@ public class ListeningViewAutoStartManagerTest {
     private final BasicChangeManager _changeManager = new BasicChangeManager();
     private final Map<ObjectId, ConfigItem<AutoStartViewDefinition>> _views = new HashMap<>();
 
-    public TestConfigSource(final List<ConfigItem<AutoStartViewDefinition>> configItems) {
+    TestConfigSource(final List<ConfigItem<AutoStartViewDefinition>> configItems) {
       for (final ConfigItem<AutoStartViewDefinition> item : configItems) {
-       addItem(item);
+        addItem(item);
       }
     }
 
@@ -288,4 +288,3 @@ public class ListeningViewAutoStartManagerTest {
     }
   }
 }
-

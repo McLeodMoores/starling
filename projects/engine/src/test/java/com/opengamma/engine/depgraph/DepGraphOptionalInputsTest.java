@@ -39,7 +39,7 @@ public class DepGraphOptionalInputsTest extends AbstractDependencyGraphBuilderTe
     private final ValueRequirement _req1;
     private final ValueRequirement _req2;
 
-    public OptionalInputsFunction(final DepGraphTestHelper helper, final boolean expect1, final boolean expect2) {
+    OptionalInputsFunction(final DepGraphTestHelper helper, final boolean expect1, final boolean expect2) {
       _expect1 = expect1;
       _expect2 = expect2;
       _req1 = helper.getRequirement2();

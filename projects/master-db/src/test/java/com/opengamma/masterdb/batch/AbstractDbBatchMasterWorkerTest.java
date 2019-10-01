@@ -38,7 +38,7 @@ public abstract class AbstractDbBatchMasterWorkerTest extends AbstractDbBatchTes
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doSetUp() {
     _batchMaster = new DbBatchMaster(getDbConnector(), new DefaultComputationTargetResolver());
@@ -50,10 +50,13 @@ public abstract class AbstractDbBatchMasterWorkerTest extends AbstractDbBatchTes
     template.update("INSERT INTO rsk_compute_node (id, compute_host_id, node_name) VALUES (?,?,?)", 1, 1, "compute node");
     template.update("INSERT INTO rsk_computation_target (id, type, id_scheme, id_value, id_version) VALUES (?,?,?,?,?)", 1, "SECURITY", "DbSec", "APPL", null);
     template.update("INSERT INTO rsk_function_unique_id (id, unique_id) VALUES (?,?)", 1, "FV");
-    template.update("INSERT INTO rsk_live_data_snapshot (id, base_uid_scheme, base_uid_value, base_uid_version) VALUES (?,?,?,?)", 1, _marketDataSnapshotUid.getScheme(), _marketDataSnapshotUid.getValue(), _marketDataSnapshotUid.getVersion());
+    template.update("INSERT INTO rsk_live_data_snapshot (id, base_uid_scheme, base_uid_value, base_uid_version) VALUES (?,?,?,?)", 1,
+        _marketDataSnapshotUid.getScheme(), _marketDataSnapshotUid.getValue(), _marketDataSnapshotUid.getVersion());
     template.update("INSERT INTO rsk_live_data_snapshot_entry (id, snapshot_id, computation_target_id, name, value) VALUES (?,?,?,?,?)", 1, 1, 1, "FV", 999.99);
-    template.update("INSERT INTO rsk_run (id, version_correction, viewdef_scheme, viewdef_value, viewdef_version, live_data_snapshot_id, create_instant, start_instant, end_instant, valuation_time, num_restarts, complete) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
-      1, _versionCorrection.toString(), _viewDefinitionUid.getScheme(), _viewDefinitionUid.getValue(), _viewDefinitionUid.getVersion(), 1, now, now,
+    template.update(
+        "INSERT INTO rsk_run (id, version_correction, viewdef_scheme, viewdef_value, viewdef_version, live_data_snapshot_id, create_instant, "
+            + "start_instant, end_instant, valuation_time, num_restarts, complete) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+        1, _versionCorrection.toString(), _viewDefinitionUid.getScheme(), _viewDefinitionUid.getValue(), _viewDefinitionUid.getVersion(), 1, now, now,
         new SqlParameterValue(Types.TIMESTAMP, null), toSqlTimestamp(_valuationTime), 0, false);
   }
 

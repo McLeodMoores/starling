@@ -1,18 +1,13 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
 package com.opengamma.engine.calcnode;
 
-import com.opengamma.engine.calcnode.CalculationJobResult;
-import com.opengamma.engine.calcnode.JobInvocationReceiver;
-import com.opengamma.engine.calcnode.JobInvoker;
-
 /**
- * Simple JobInvocationReceiver for use in the unit tests. Stores the result and allows the caller
- * to block until a result is written.
+ * Simple JobInvocationReceiver for use in the unit tests. Stores the result and allows the caller to block until a result is written.
  */
 public class TestJobInvocationReceiver implements JobInvocationReceiver {
 
@@ -34,27 +29,27 @@ public class TestJobInvocationReceiver implements JobInvocationReceiver {
   public CalculationJobResult getCompletionResult() {
     return _completionResult;
   }
-  
-  public Exception getFailureResult () {
+
+  public Exception getFailureResult() {
     return _failureResult;
   }
-  
-  private synchronized void waitForResult (final long timeoutMillis) {
-    if ((_completionResult == null) && (_failureResult == null)) {
+
+  private synchronized void waitForResult(final long timeoutMillis) {
+    if (_completionResult == null && _failureResult == null) {
       try {
         wait(timeoutMillis);
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
       }
     }
   }
 
   public CalculationJobResult waitForCompletionResult(final long timeoutMillis) {
-    waitForResult (timeoutMillis);
+    waitForResult(timeoutMillis);
     return _completionResult;
   }
-  
-  public Exception waitForFailureResult (final long timeoutMillis) {
-    waitForResult (timeoutMillis);
+
+  public Exception waitForFailureResult(final long timeoutMillis) {
+    waitForResult(timeoutMillis);
     return _failureResult;
   }
 

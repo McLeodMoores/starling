@@ -40,7 +40,7 @@ public class TestFilterFactory implements ResourceFilterFactory {
 
     private final AbstractMethod _method;
 
-    public TestFilter(final AbstractMethod method) {
+    TestFilter(final AbstractMethod method) {
       _method = method;
     }
 

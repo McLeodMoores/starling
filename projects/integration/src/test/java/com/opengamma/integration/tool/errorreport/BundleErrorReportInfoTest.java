@@ -47,7 +47,7 @@ public class BundleErrorReportInfoTest {
   }
 
   private static void writeTestProperties(final String basePath, final String path) throws IOException {
-    try (final PrintStream ps = new PrintStream(new FileOutputStream(path))) {
+    try (PrintStream ps = new PrintStream(new FileOutputStream(path))) {
       ps.println("# Example configuration file");
       ps.println("");
       ps.println("Invalid line=ignored");
@@ -60,7 +60,7 @@ public class BundleErrorReportInfoTest {
     System.out.println("Writing " + path);
     final File file = new File(path);
     file.getParentFile().mkdirs();
-    try (final OutputStream out = new FileOutputStream(file)) {
+    try (OutputStream out = new FileOutputStream(file)) {
       final byte[] buffer = new byte[1000];
       for (int i = 0; i < chunks; i++) {
         out.write(buffer);
@@ -75,7 +75,7 @@ public class BundleErrorReportInfoTest {
       BundleErrorReportInfo.setUserHome(file.getAbsolutePath());
       final String props = file.getAbsolutePath() + File.separator + "Test.properties";
       writeTestProperties(file.getAbsolutePath(), props);
-      assertEquals(BundleErrorReportInfo.mainImpl(new String[] {props }), 0);
+      assertEquals(BundleErrorReportInfo.mainImpl(new String[] { props }), 0);
       for (final String zip : file.list()) {
         if (zip.endsWith(".zip")) {
           final File zipFile = new File(file, zip);
@@ -104,7 +104,8 @@ public class BundleErrorReportInfoTest {
       final AtomicInteger count = new AtomicInteger();
       final BundleErrorReportInfo beri = new BundleErrorReportInfo(new GUIFeedback("Test"), new String[] {
           "AttachFiles=" + file.getAbsolutePath() + File.separator + File.separator + "Foo?" + File.separator + "*.log",
-          "AttachFiles=" + file.getAbsolutePath() + File.separator + "test*.log", "AttachFiles=" + File.separatorChar + "path" + File.separatorChar + "doesnt" + File.separatorChar + "exist" }) {
+          "AttachFiles=" + file.getAbsolutePath() + File.separator + "test*.log",
+          "AttachFiles=" + File.separatorChar + "path" + File.separatorChar + "doesnt" + File.separatorChar + "exist" }) {
 
         @Override
         protected String openReportOutput() {
@@ -151,8 +152,10 @@ public class BundleErrorReportInfoTest {
   public void testInvalidArgs() {
     assertEquals(BundleErrorReportInfo.mainImpl(new String[0]), 1);
     assertEquals(
-        BundleErrorReportInfo.mainImpl(new String[] {File.separatorChar + "this" + File.separatorChar + "path" + File.separatorChar + "does" + File.separatorChar + "not" + File.separatorChar +
-        "exist" }), 1);
+        BundleErrorReportInfo.mainImpl(new String[] {
+            File.separatorChar + "this" + File.separatorChar + "path" + File.separatorChar + "does" + File.separatorChar + "not" + File.separatorChar
+                + "exist" }),
+        1);
   }
 
 }

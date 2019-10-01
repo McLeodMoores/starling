@@ -19,8 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.IncorrectUpdateSemanticsDataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 import org.threeten.bp.Instant;
 
 import com.codahale.metrics.MetricRegistry;
@@ -405,12 +403,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
 
     final Timer.Context context = _addTimer.time();
     try {
-      final D added = getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<D>() {
-        @Override
-        public D doInTransaction(final TransactionStatus status) {
-          return doAddInTransaction(document);
-        }
-      });
+      final D added = getTransactionTemplateRetrying(getMaxRetries()).execute(status -> doAddInTransaction(document));
       changeManager().entityChanged(ChangeType.ADDED, added.getObjectId(), added.getVersionFromInstant(), added.getVersionToInstant(), now());
       return added;
     } finally {
@@ -449,12 +442,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     try {
       final UniqueId beforeId = document.getUniqueId();
       ArgumentChecker.isTrue(beforeId.isVersioned(), "UniqueId must be versioned");
-      final D updated = getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<D>() {
-        @Override
-        public D doInTransaction(final TransactionStatus status) {
-          return doUpdateInTransaction(beforeId, document);
-        }
-      });
+      final D updated = getTransactionTemplateRetrying(getMaxRetries()).execute(status -> doUpdateInTransaction(beforeId, document));
       changeManager().entityChanged(ChangeType.CHANGED, updated.getObjectId(), updated.getVersionFromInstant(), updated.getVersionToInstant(), now());
       return updated;
     } finally {
@@ -499,12 +487,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
 
     final Timer.Context context = _removeTimer.time();
     try {
-      final D removed = getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<D>() {
-        @Override
-        public D doInTransaction(final TransactionStatus status) {
-          return doRemoveInTransaction(objectIdentifiable);
-        }
-      });
+      final D removed = getTransactionTemplateRetrying(getMaxRetries()).execute(status -> doRemoveInTransaction(objectIdentifiable));
       changeManager().entityChanged(ChangeType.REMOVED, removed.getObjectId(), removed.getVersionToInstant(), null, removed.getVersionToInstant());
     } finally {
       context.stop();
@@ -544,12 +527,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     try {
       final UniqueId beforeId = document.getUniqueId();
       ArgumentChecker.isTrue(beforeId.isVersioned(), "UniqueId must be versioned");
-      final D corrected = getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<D>() {
-        @Override
-        public D doInTransaction(final TransactionStatus status) {
-          return doCorrectInTransaction(beforeId, document);
-        }
-      });
+      final D corrected = getTransactionTemplateRetrying(getMaxRetries()).execute(status -> doCorrectInTransaction(beforeId, document));
       changeManager().entityChanged(ChangeType.CHANGED, corrected.getObjectId(), corrected.getVersionFromInstant(), corrected.getVersionToInstant(), now());
       return corrected;
     } finally {
@@ -596,57 +574,54 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
 
     final Timer.Context context = _replaceVersionTimer.time();
     try {
-      return getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<List<UniqueId>>() {
-        @Override
-        public List<UniqueId> doInTransaction(final TransactionStatus status) {
-          final D storedDocument = get(uniqueId);
-          if (storedDocument == null) {
-            throw new DataNotFoundException("Document not found: " + uniqueId.getObjectId());
-          }
-          ArgumentChecker.isTrue(storedDocument.getCorrectionToInstant() == null,
-              "we can replace only current document. The " + storedDocument.getUniqueId() + " is not current.");
-
-          final Instant storedVersionFrom = storedDocument.getVersionFromInstant();
-          final Instant storedVersionTo = storedDocument.getVersionToInstant();
-
-          ArgumentChecker.isTrue(
-              MasterUtils.checkVersionInstantsWithinRange(storedVersionFrom, storedVersionFrom, storedVersionTo, replacementDocuments, true),
-              "The versions must exactly match the version range of the original version being replaced.");
-
-          // we terminate the stored docuemnt (correction)
-          storedDocument.setCorrectionToInstant(now);
-          updateCorrectionToInstant(storedDocument);
-
-          final List<D> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, storedVersionFrom, storedVersionTo, replacementDocuments);
-          final List<D> newVersions = newArrayList();
-          if (orderedReplacementDocuments.isEmpty()) {
-            // since we don't have replacement documents we rather act as versionRemove than versionReplace
-            final D previousDocument = getPreviousDocument(uniqueId.getObjectId(), now, storedVersionFrom);
-            if (previousDocument != null) {
-              // we terminate the previous docuemnt (correction)
-              previousDocument.setCorrectionToInstant(now);
-              updateCorrectionToInstant(previousDocument);
-              // and create new copy of it extending versionTo instant to storedDocument's versionFrom instant
-              previousDocument.setCorrectionFromInstant(now);
-              previousDocument.setCorrectionToInstant(null);
-              previousDocument.setVersionToInstant(storedVersionFrom);
-              previousDocument.setUniqueId(uniqueId.getUniqueId().toLatest());
-              insert(previousDocument);
-              newVersions.add(previousDocument);
-              changeManager().entityChanged(ChangeType.CHANGED, storedDocument.getObjectId(), storedVersionFrom, storedVersionTo, now);
-            } else {
-              changeManager().entityChanged(ChangeType.REMOVED, storedDocument.getObjectId(), null, null, now);
-            }
-          } else {
-            for (final D replacementDocument : orderedReplacementDocuments) {
-              replacementDocument.setUniqueId(uniqueId.getUniqueId().toLatest());
-              insert(replacementDocument);
-              newVersions.add(replacementDocument);
-            }
-            changeManager().entityChanged(ChangeType.CHANGED, storedDocument.getObjectId(), storedVersionFrom, storedVersionTo, now);
-          }
-          return MasterUtils.mapToUniqueIDs(newVersions);
+      return getTransactionTemplateRetrying(getMaxRetries()).execute(status -> {
+        final D storedDocument = get(uniqueId);
+        if (storedDocument == null) {
+          throw new DataNotFoundException("Document not found: " + uniqueId.getObjectId());
         }
+        ArgumentChecker.isTrue(storedDocument.getCorrectionToInstant() == null,
+            "we can replace only current document. The " + storedDocument.getUniqueId() + " is not current.");
+
+        final Instant storedVersionFrom = storedDocument.getVersionFromInstant();
+        final Instant storedVersionTo = storedDocument.getVersionToInstant();
+
+        ArgumentChecker.isTrue(
+            MasterUtils.checkVersionInstantsWithinRange(storedVersionFrom, storedVersionFrom, storedVersionTo, replacementDocuments, true),
+            "The versions must exactly match the version range of the original version being replaced.");
+
+        // we terminate the stored docuemnt (correction)
+        storedDocument.setCorrectionToInstant(now);
+        updateCorrectionToInstant(storedDocument);
+
+        final List<D> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, storedVersionFrom, storedVersionTo, replacementDocuments);
+        final List<D> newVersions = newArrayList();
+        if (orderedReplacementDocuments.isEmpty()) {
+          // since we don't have replacement documents we rather act as versionRemove than versionReplace
+          final D previousDocument = getPreviousDocument(uniqueId.getObjectId(), now, storedVersionFrom);
+          if (previousDocument != null) {
+            // we terminate the previous docuemnt (correction)
+            previousDocument.setCorrectionToInstant(now);
+            updateCorrectionToInstant(previousDocument);
+            // and create new copy of it extending versionTo instant to storedDocument's versionFrom instant
+            previousDocument.setCorrectionFromInstant(now);
+            previousDocument.setCorrectionToInstant(null);
+            previousDocument.setVersionToInstant(storedVersionFrom);
+            previousDocument.setUniqueId(uniqueId.getUniqueId().toLatest());
+            insert(previousDocument);
+            newVersions.add(previousDocument);
+            changeManager().entityChanged(ChangeType.CHANGED, storedDocument.getObjectId(), storedVersionFrom, storedVersionTo, now);
+          } else {
+            changeManager().entityChanged(ChangeType.REMOVED, storedDocument.getObjectId(), null, null, now);
+          }
+        } else {
+          for (final D replacementDocument : orderedReplacementDocuments) {
+            replacementDocument.setUniqueId(uniqueId.getUniqueId().toLatest());
+            insert(replacementDocument);
+            newVersions.add(replacementDocument);
+          }
+          changeManager().entityChanged(ChangeType.CHANGED, storedDocument.getObjectId(), storedVersionFrom, storedVersionTo, now);
+        }
+        return MasterUtils.mapToUniqueIDs(newVersions);
       });
     } finally {
       context.stop();
@@ -800,39 +775,36 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
 
     final Timer.Context context = _replaceAllVersionsTimer.time();
     try {
-      return getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<List<UniqueId>>() {
-        @Override
-        public List<UniqueId> doInTransaction(final TransactionStatus status) {
+      return getTransactionTemplateRetrying(getMaxRetries()).execute(status -> {
 
-          boolean terminatedAny = false;
+        boolean terminatedAny = false;
 
-          final List<D> storedDocuments = getAllCurrentDocuments(objectId.getObjectId(), now);
+        final List<D> storedDocuments = getAllCurrentDocuments(objectId.getObjectId(), now);
 
-          for (final D storedDocument : storedDocuments) {
-            ArgumentChecker.isTrue(storedDocument.getCorrectionToInstant() == null,
-                "we can replace only current documents. The " + storedDocument.getUniqueId() + " is not current.");
-          }
-          // terminating all current documents
-          for (final D storedDocument : storedDocuments) {
-            storedDocument.setCorrectionToInstant(now);
-            updateCorrectionToInstant(storedDocument);
-            terminatedAny = true;
-          }
-
-          if (terminatedAny && replacementDocuments.isEmpty()) {
-            changeManager().entityChanged(ChangeType.REMOVED, objectId.getObjectId(), null, null, now);
-            return Collections.emptyList();
-          }
-          final List<D> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, null, null, replacementDocuments);
-          for (final D replacementDocument : orderedReplacementDocuments) {
-            replacementDocument.setUniqueId(objectId.getObjectId().atLatestVersion());
-            insert(replacementDocument);
-          }
-          final Instant versionFromInstant = functional(orderedReplacementDocuments).first().getVersionFromInstant();
-          final Instant versionToInstant = functional(orderedReplacementDocuments).last().getVersionToInstant();
-          changeManager().entityChanged(ChangeType.CHANGED, objectId.getObjectId(), versionFromInstant, versionToInstant, now);
-          return MasterUtils.mapToUniqueIDs(orderedReplacementDocuments);
+        for (final D storedDocument1 : storedDocuments) {
+          ArgumentChecker.isTrue(storedDocument1.getCorrectionToInstant() == null,
+              "we can replace only current documents. The " + storedDocument1.getUniqueId() + " is not current.");
         }
+        // terminating all current documents
+        for (final D storedDocument2 : storedDocuments) {
+          storedDocument2.setCorrectionToInstant(now);
+          updateCorrectionToInstant(storedDocument2);
+          terminatedAny = true;
+        }
+
+        if (terminatedAny && replacementDocuments.isEmpty()) {
+          changeManager().entityChanged(ChangeType.REMOVED, objectId.getObjectId(), null, null, now);
+          return Collections.emptyList();
+        }
+        final List<D> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, null, null, replacementDocuments);
+        for (final D replacementDocument : orderedReplacementDocuments) {
+          replacementDocument.setUniqueId(objectId.getObjectId().atLatestVersion());
+          insert(replacementDocument);
+        }
+        final Instant versionFromInstant = functional(orderedReplacementDocuments).first().getVersionFromInstant();
+        final Instant versionToInstant = functional(orderedReplacementDocuments).last().getVersionToInstant();
+        changeManager().entityChanged(ChangeType.CHANGED, objectId.getObjectId(), versionFromInstant, versionToInstant, now);
+        return MasterUtils.mapToUniqueIDs(orderedReplacementDocuments);
       });
     } finally {
       context.stop();
@@ -855,60 +827,57 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
 
       final Timer.Context context = _replaceVersionsTimer.time();
       try {
-        return getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<List<UniqueId>>() {
-          @Override
-          public List<UniqueId> doInTransaction(final TransactionStatus status) {
-            boolean terminatedAny = false;
-            final List<D> storedDocuments = getCurrentDocumentsInRange(objectId.getObjectId(), now, lowestVersionFrom, highestVersionTo);
+        return getTransactionTemplateRetrying(getMaxRetries()).execute(status -> {
+          boolean terminatedAny = false;
+          final List<D> storedDocuments = getCurrentDocumentsInRange(objectId.getObjectId(), now, lowestVersionFrom, highestVersionTo);
 
-            if (!storedDocuments.isEmpty()) {
-              for (final D storedDocument : storedDocuments) {
-                ArgumentChecker.isTrue(storedDocument.getCorrectionToInstant() == null,
-                    "we can replace only current documents. The " + storedDocument.getUniqueId() + " is not current.");
-              }
-
-              final D earliestStoredDocument = storedDocuments.get(storedDocuments.size() - 1);
-              final D latestStoredDocument = storedDocuments.get(0);
-
-              // terminating all current documents
-              for (final D storedDocument : storedDocuments) {
-                storedDocument.setCorrectionToInstant(now);
-                updateCorrectionToInstant(storedDocument);
-                terminatedAny = true;
-              }
-
-              if (earliestStoredDocument != null && earliestStoredDocument.getVersionFromInstant().isBefore(lowestVersionFrom)) {
-                // we need to make copy of the earliestStoredDocument
-                earliestStoredDocument.setVersionToInstant(lowestVersionFrom);
-                earliestStoredDocument.setCorrectionFromInstant(now);
-                earliestStoredDocument.setCorrectionToInstant(null);
-                earliestStoredDocument.setUniqueId(objectId.getObjectId().atLatestVersion());
-                insert(earliestStoredDocument);
-              }
-              if (latestStoredDocument != null && latestStoredDocument.getVersionToInstant() != null &&
-                  highestVersionTo != null && latestStoredDocument.getVersionToInstant().isAfter(highestVersionTo)) {
-                // we need to make copy of the latestStoredDocument
-                latestStoredDocument.setVersionFromInstant(highestVersionTo);
-                latestStoredDocument.setCorrectionFromInstant(now);
-                latestStoredDocument.setCorrectionToInstant(null);
-                latestStoredDocument.setUniqueId(objectId.getObjectId().atLatestVersion());
-                insert(latestStoredDocument);
-              }
+          if (!storedDocuments.isEmpty()) {
+            for (final D storedDocument1 : storedDocuments) {
+              ArgumentChecker.isTrue(storedDocument1.getCorrectionToInstant() == null,
+                  "we can replace only current documents. The " + storedDocument1.getUniqueId() + " is not current.");
             }
-            if (terminatedAny && replacementDocuments.isEmpty()) {
-              changeManager().entityChanged(ChangeType.REMOVED, objectId.getObjectId(), null, null, now);
-              return Collections.emptyList();
-            }
-            for (final D replacementDocument : orderedReplacementDocuments) {
-              replacementDocument.setUniqueId(objectId.getObjectId().atLatestVersion());
-              insert(replacementDocument);
-            }
-            final Instant versionFromInstant = functional(orderedReplacementDocuments).first().getVersionFromInstant();
-            final Instant versionToInstant = functional(orderedReplacementDocuments).last().getVersionToInstant();
-            changeManager().entityChanged(ChangeType.CHANGED, objectId.getObjectId(), versionFromInstant, versionToInstant, now);
-            return MasterUtils.mapToUniqueIDs(orderedReplacementDocuments);
 
+            final D earliestStoredDocument = storedDocuments.get(storedDocuments.size() - 1);
+            final D latestStoredDocument = storedDocuments.get(0);
+
+            // terminating all current documents
+            for (final D storedDocument2 : storedDocuments) {
+              storedDocument2.setCorrectionToInstant(now);
+              updateCorrectionToInstant(storedDocument2);
+              terminatedAny = true;
+            }
+
+            if (earliestStoredDocument != null && earliestStoredDocument.getVersionFromInstant().isBefore(lowestVersionFrom)) {
+              // we need to make copy of the earliestStoredDocument
+              earliestStoredDocument.setVersionToInstant(lowestVersionFrom);
+              earliestStoredDocument.setCorrectionFromInstant(now);
+              earliestStoredDocument.setCorrectionToInstant(null);
+              earliestStoredDocument.setUniqueId(objectId.getObjectId().atLatestVersion());
+              insert(earliestStoredDocument);
+            }
+            if (latestStoredDocument != null && latestStoredDocument.getVersionToInstant() != null
+                && highestVersionTo != null && latestStoredDocument.getVersionToInstant().isAfter(highestVersionTo)) {
+              // we need to make copy of the latestStoredDocument
+              latestStoredDocument.setVersionFromInstant(highestVersionTo);
+              latestStoredDocument.setCorrectionFromInstant(now);
+              latestStoredDocument.setCorrectionToInstant(null);
+              latestStoredDocument.setUniqueId(objectId.getObjectId().atLatestVersion());
+              insert(latestStoredDocument);
+            }
           }
+          if (terminatedAny && replacementDocuments.isEmpty()) {
+            changeManager().entityChanged(ChangeType.REMOVED, objectId.getObjectId(), null, null, now);
+            return Collections.emptyList();
+          }
+          for (final D replacementDocument : orderedReplacementDocuments) {
+            replacementDocument.setUniqueId(objectId.getObjectId().atLatestVersion());
+            insert(replacementDocument);
+          }
+          final Instant versionFromInstant = functional(orderedReplacementDocuments).first().getVersionFromInstant();
+          final Instant versionToInstant = functional(orderedReplacementDocuments).last().getVersionToInstant();
+          changeManager().entityChanged(ChangeType.CHANGED, objectId.getObjectId(), versionFromInstant, versionToInstant, now);
+          return MasterUtils.mapToUniqueIDs(orderedReplacementDocuments);
+
         });
 
       } finally {

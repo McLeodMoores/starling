@@ -13,6 +13,11 @@ public final class TargetSpecificationReference {
   private TargetSpecificationReference() {
   }
 
+  /**
+   * Gets an empty reference.
+   * 
+   * @return the reference
+   */
   public static TargetSpecificationReference originalTarget() {
     return new TargetSpecificationReference();
   }

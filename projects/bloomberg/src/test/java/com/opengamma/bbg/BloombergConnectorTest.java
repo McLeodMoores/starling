@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg;
@@ -16,7 +16,7 @@ import com.opengamma.bbg.referencedata.statistics.NullBloombergReferenceDataStat
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests {@link BloombergConnector}
+ * Tests {@link BloombergConnector}.
  */
 @Test(groups = TestGroup.UNIT)
 public class BloombergConnectorTest {
@@ -46,10 +46,10 @@ public class BloombergConnectorTest {
   }
 
   public void getNullApplicationName() {
-    SessionOptions sessionOptions = new SessionOptions();
+    final SessionOptions sessionOptions = new SessionOptions();
     final BloombergConnector connector = new BloombergConnector("Test", sessionOptions);
     try {
-      String applicationName = connector.getApplicationName();
+      final String applicationName = connector.getApplicationName();
       assertNull(applicationName);
     } finally {
       connector.close();
@@ -57,8 +57,8 @@ public class BloombergConnectorTest {
   }
 
   public void getApplicationName() {
-    BloombergConnectorFactoryBean factoryBean = new BloombergConnectorFactoryBean("Test", "127.0.0.1", 8417, "TestAppName");
-    BloombergConnector connector = factoryBean.createObject();
+    final BloombergConnectorFactoryBean factoryBean = new BloombergConnectorFactoryBean("Test", "127.0.0.1", 8417, "TestAppName");
+    final BloombergConnector connector = factoryBean.createObject();
     try {
       assertEquals("TestAppName", connector.getApplicationName());
     } finally {

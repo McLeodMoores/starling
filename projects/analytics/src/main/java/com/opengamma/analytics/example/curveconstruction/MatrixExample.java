@@ -17,31 +17,31 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
  */
 // @export "classDefinition"
 public class MatrixExample {
-// CSOFF
+  // CSOFF
 
   // @export "initMatrixDemo"
-  static double[] ARRAY_1D = {4.0, 5.0, 10.0 };
-  public static double[][] ARRAY_2D = { {1.0, 2.0, 3.0 }, {4.0, 5.0, 6.0 } };
+  static double[] ARRAY_1D = { 4.0, 5.0, 10.0 };
+  public static double[][] ARRAY_2D = { { 1.0, 2.0, 3.0 }, { 4.0, 5.0, 6.0 } };
 
-  public static void initMatrixDemo(PrintStream out) {
-    DoubleMatrix1D matrix_1d = new DoubleMatrix1D(ARRAY_1D);
+  public static void initMatrixDemo(final PrintStream out) {
+    final DoubleMatrix1D matrix_1d = new DoubleMatrix1D(ARRAY_1D);
     out.println(matrix_1d);
 
-    DoubleMatrix2D matrix_2d = new DoubleMatrix2D(ARRAY_2D);
+    final DoubleMatrix2D matrix_2d = new DoubleMatrix2D(ARRAY_2D);
     out.println(matrix_2d);
   }
 
   // @export "matrixAlgebraDemo"
-  public static void matrixAlgebraDemo(PrintStream out) {
-    ColtMatrixAlgebra colt = new ColtMatrixAlgebra();
-    DoubleMatrix1D v = new DoubleMatrix1D(ARRAY_1D);
-    DoubleMatrix2D m = new DoubleMatrix2D(ARRAY_2D);
+  public static void matrixAlgebraDemo(final PrintStream out) {
+    final ColtMatrixAlgebra colt = new ColtMatrixAlgebra();
+    final DoubleMatrix1D v = new DoubleMatrix1D(ARRAY_1D);
+    final DoubleMatrix2D m = new DoubleMatrix2D(ARRAY_2D);
 
     out.println(colt.getTranspose(m));
     out.println(colt.multiply(m, v));
   }
 
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
     initMatrixDemo(System.out);
     matrixAlgebraDemo(System.out);
   }

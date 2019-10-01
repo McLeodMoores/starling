@@ -83,7 +83,7 @@ public class SingleComputationCycleTest {
 
     private final BlockingDependencyGraphExecutor _instance;
 
-    public BlockingDependencyGraphExecutorFactory(final long timeoutMillis) {
+    BlockingDependencyGraphExecutorFactory(final long timeoutMillis) {
       _instance = new BlockingDependencyGraphExecutor(timeoutMillis);
     }
 
@@ -104,7 +104,7 @@ public class SingleComputationCycleTest {
     private final CountDownLatch _firstRunLatch = new CountDownLatch(1);
     private final AtomicBoolean _wasInterrupted = new AtomicBoolean();
 
-    public BlockingDependencyGraphExecutor(final long timeoutMillis) {
+    BlockingDependencyGraphExecutor(final long timeoutMillis) {
       _timeout = timeoutMillis;
     }
 
@@ -119,15 +119,12 @@ public class SingleComputationCycleTest {
     @Override
     public DependencyGraphExecutionFuture execute(final DependencyGraph graph, final Set<ValueSpecification> sharedValues,
         final Map<ValueSpecification, FunctionParameters> parameters) {
-      final FutureTask<String> future = new FutureTask<>(new Runnable() {
-        @Override
-        public void run() {
-          _firstRunLatch.countDown();
-          try {
-            Thread.sleep(_timeout);
-          } catch (final InterruptedException e) {
-            _wasInterrupted.set(true);
-          }
+      final FutureTask<String> future = new FutureTask<>(() -> {
+        _firstRunLatch.countDown();
+        try {
+          Thread.sleep(_timeout);
+        } catch (final InterruptedException e) {
+          _wasInterrupted.set(true);
         }
       }, graph.getCalculationConfigurationName());
       // Cheat a bit - don't give the job to the dispatcher, etc, just run it.

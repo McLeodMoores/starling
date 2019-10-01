@@ -46,7 +46,7 @@ public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTes
     private final ValueRequirement _req1;
     private final ValueRequirement _req2;
 
-    public MergeableFunction(final ValueRequirement req1, final ValueRequirement req2) {
+    MergeableFunction(final ValueRequirement req1, final ValueRequirement req2) {
       _req1 = req1;
       _req2 = req2;
     }
@@ -144,7 +144,7 @@ public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTes
       @Override
       public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a,
           final ComputationTargetSpecification b) {
-        LOGGER.debug("Collapse {} on {} + {}", new Object[] {function, a, b });
+        LOGGER.debug("Collapse {} on {} + {}", new Object[] { function, a, b });
         if (function instanceof MergeableFunction && a.getUniqueId().getValue().charAt(0) == b.getUniqueId().getValue().charAt(0)) {
           final Set<String> idSet = new HashSet<>();
           add(idSet, a);

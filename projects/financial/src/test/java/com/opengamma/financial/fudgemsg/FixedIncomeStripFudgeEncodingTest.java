@@ -45,7 +45,8 @@ public class FixedIncomeStripFudgeEncodingTest extends FinancialTestBase {
     assertEquals(strip, cycleObject(FixedIncomeStrip.class, strip));
     strip = new FixedIncomeStrip(StripInstrumentType.TENOR_SWAP, Tenor.THREE_YEARS, "DEFAULT");
     assertEquals(strip, cycleObject(FixedIncomeStrip.class, strip));
-    strip = new FixedIncomeStrip(StripInstrumentType.BASIS_SWAP, Tenor.THREE_YEARS, Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, IndexType.Libor, IndexType.Libor, "DEFAULT");
+    strip = new FixedIncomeStrip(StripInstrumentType.BASIS_SWAP, Tenor.THREE_YEARS, Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, IndexType.Libor, IndexType.Libor,
+        "DEFAULT");
     assertEquals(strip, cycleObject(FixedIncomeStrip.class, strip));
     strip = new FixedIncomeStrip(StripInstrumentType.OIS_SWAP, Tenor.THREE_YEARS, "DEFAULT");
     assertEquals(strip, cycleObject(FixedIncomeStrip.class, strip));

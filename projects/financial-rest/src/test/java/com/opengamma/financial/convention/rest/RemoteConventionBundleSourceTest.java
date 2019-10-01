@@ -17,8 +17,6 @@ import javax.ws.rs.WebApplicationException;
 
 import org.fudgemsg.FudgeMsg;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.testng.annotations.Test;
 
 import com.opengamma.financial.convention.ConventionBundle;
@@ -33,9 +31,8 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterface;
 
 /**
- * Tests the {@link RemoteConventionBundleSource} and
- * {@link DataConventionBundleSourceResource} classes
- * 
+ * Tests the {@link RemoteConventionBundleSource} and {@link DataConventionBundleSourceResource} classes
+ *
  * @deprecated Deprecated
  */
 @Deprecated
@@ -59,15 +56,13 @@ public class RemoteConventionBundleSourceTest {
       protected UniformInterface accessRemote(final URI uri) {
         assertTrue(uri.getPath().startsWith("/identifier/"));
         final UniformInterface builder = Mockito.mock(UniformInterface.class);
-        Mockito.when(builder.get(ConventionBundle.class)).thenAnswer(new Answer<ConventionBundle>() {
-          @Override
-          public ConventionBundle answer(final InvocationOnMock invocation) throws Throwable {
-            try {
-              return OpenGammaFudgeContext.getInstance().fromFudgeMsg(ConventionBundle.class, (FudgeMsg) server.getByIdentifier(uri.getPath().substring(12)).getEntity());
-            } catch (final WebApplicationException e) {
-              assertEquals(e.getResponse().getStatus(), 404);
-              throw new UniformInterfaceException404NotFound(new ClientResponse(404, null, null, null), false);
-            }
+        Mockito.when(builder.get(ConventionBundle.class)).thenAnswer(invocation -> {
+          try {
+            return OpenGammaFudgeContext.getInstance().fromFudgeMsg(ConventionBundle.class,
+                (FudgeMsg) server.getByIdentifier(uri.getPath().substring(12)).getEntity());
+          } catch (final WebApplicationException e) {
+            assertEquals(e.getResponse().getStatus(), 404);
+            throw new UniformInterfaceException404NotFound(new ClientResponse(404, null, null, null), false);
           }
         });
         return builder;
@@ -92,15 +87,13 @@ public class RemoteConventionBundleSourceTest {
         assertTrue(uri.getPath().startsWith("/bundle"));
         assertTrue(uri.getQuery().startsWith("id="));
         final UniformInterface builder = Mockito.mock(UniformInterface.class);
-        Mockito.when(builder.get(ConventionBundle.class)).thenAnswer(new Answer<ConventionBundle>() {
-          @Override
-          public ConventionBundle answer(final InvocationOnMock invocation) throws Throwable {
-            try {
-              return OpenGammaFudgeContext.getInstance().fromFudgeMsg(ConventionBundle.class, (FudgeMsg) server.getByBundle(Arrays.asList(uri.getQuery().substring(3))).getEntity());
-            } catch (final WebApplicationException e) {
-              assertEquals(e.getResponse().getStatus(), 404);
-              throw new UniformInterfaceException404NotFound(new ClientResponse(404, null, null, null), false);
-            }
+        Mockito.when(builder.get(ConventionBundle.class)).thenAnswer(invocation -> {
+          try {
+            return OpenGammaFudgeContext.getInstance().fromFudgeMsg(ConventionBundle.class,
+                (FudgeMsg) server.getByBundle(Arrays.asList(uri.getQuery().substring(3))).getEntity());
+          } catch (final WebApplicationException e) {
+            assertEquals(e.getResponse().getStatus(), 404);
+            throw new UniformInterfaceException404NotFound(new ClientResponse(404, null, null, null), false);
           }
         });
         return builder;
@@ -124,15 +117,13 @@ public class RemoteConventionBundleSourceTest {
       protected UniformInterface accessRemote(final URI uri) {
         assertTrue(uri.getPath().startsWith("/unique/"));
         final UniformInterface builder = Mockito.mock(UniformInterface.class);
-        Mockito.when(builder.get(ConventionBundle.class)).thenAnswer(new Answer<ConventionBundle>() {
-          @Override
-          public ConventionBundle answer(final InvocationOnMock invocation) throws Throwable {
-            try {
-              return OpenGammaFudgeContext.getInstance().fromFudgeMsg(ConventionBundle.class, (FudgeMsg) server.getByUniqueId(uri.getPath().substring(8)).getEntity());
-            } catch (final WebApplicationException e) {
-              assertEquals(e.getResponse().getStatus(), 404);
-              throw new UniformInterfaceException404NotFound(new ClientResponse(404, null, null, null), false);
-            }
+        Mockito.when(builder.get(ConventionBundle.class)).thenAnswer(invocation -> {
+          try {
+            return OpenGammaFudgeContext.getInstance().fromFudgeMsg(ConventionBundle.class,
+                (FudgeMsg) server.getByUniqueId(uri.getPath().substring(8)).getEntity());
+          } catch (final WebApplicationException e) {
+            assertEquals(e.getResponse().getStatus(), 404);
+            throw new UniformInterfaceException404NotFound(new ClientResponse(404, null, null, null), false);
           }
         });
         return builder;

@@ -278,6 +278,7 @@ public class WebPositionsResourceTest extends AbstractWebPositionResourceTestCas
   public void testAddPositionUnsupportedTypeHtml() {
     _webPositionsResource.postHTML("10", SEC_ID.getScheme().getName(), SEC_ID.getValue(), "json", null, null);
   }
+
   /**
    * Tests adding a position using JSON.
    *
@@ -352,10 +353,11 @@ public class WebPositionsResourceTest extends AbstractWebPositionResourceTestCas
     queryParameters.putSingle("identifier", StringUtils.EMPTY);
     queryParameters.putSingle("minquantity", StringUtils.EMPTY);
     queryParameters.putSingle("maxquantity", StringUtils.EMPTY);
-    queryParameters.put("tradeId", Collections.<String>emptyList());
-    queryParameters.put("positionId", Collections.<String>emptyList());
+    queryParameters.put("tradeId", Collections.<String> emptyList());
+    queryParameters.put("positionId", Collections.<String> emptyList());
 
-    final String allPositions = _webPositionsResource.getJSON(null, null, null, null, null, null, queryParameters.get("positionId"), queryParameters.get("tradeId"), null);
+    final String allPositions = _webPositionsResource.getJSON(null, null, null, null, null, null, queryParameters.get("positionId"),
+        queryParameters.get("tradeId"), null);
     assertNotNull(allPositions);
     assertJSONObjectEquals(loadJson("com/opengamma/web/position/allPositionsJson.txt"), new JSONObject(allPositions));
   }

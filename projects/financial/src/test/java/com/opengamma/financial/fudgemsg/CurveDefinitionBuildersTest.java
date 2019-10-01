@@ -61,9 +61,12 @@ public class CurveDefinitionBuildersTest extends AnalyticsTestBase {
     final CashNode cash1m = new CashNode(Tenor.ONE_DAY, Tenor.ONE_MONTH, ExternalId.of("Test", "1m Cash"), curveNodeIdMapperName);
     final CashNode cash6m = new CashNode(Tenor.ONE_DAY, Tenor.SIX_MONTHS, ExternalId.of("Test", "6m Cash"), curveNodeIdMapperName);
     final CashNode cash12m = new CashNode(Tenor.ONE_DAY, Tenor.TWELVE_MONTHS, ExternalId.of("Test", "12m Cash"), curveNodeIdMapperName);
-    final SwapNode swap2y = new SwapNode(Tenor.ONE_DAY, Tenor.TWO_YEARS, ExternalId.of("Test", "Pay leg 2y"), ExternalId.of("Test", "Receive leg 2y"), curveNodeIdMapperName);
-    final SwapNode swap5y = new SwapNode(Tenor.ONE_DAY, Tenor.FIVE_YEARS, ExternalId.of("Test", "Pay leg 5y"), ExternalId.of("Test", "Receive leg 5y"), curveNodeIdMapperName);
-    final SwapNode swap10y = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, ExternalId.of("Test", "Pay leg 10y"), ExternalId.of("Test", "Receive leg 10y"), curveNodeIdMapperName);
+    final SwapNode swap2y = new SwapNode(Tenor.ONE_DAY, Tenor.TWO_YEARS, ExternalId.of("Test", "Pay leg 2y"), ExternalId.of("Test", "Receive leg 2y"),
+        curveNodeIdMapperName);
+    final SwapNode swap5y = new SwapNode(Tenor.ONE_DAY, Tenor.FIVE_YEARS, ExternalId.of("Test", "Pay leg 5y"), ExternalId.of("Test", "Receive leg 5y"),
+        curveNodeIdMapperName);
+    final SwapNode swap10y = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, ExternalId.of("Test", "Pay leg 10y"), ExternalId.of("Test", "Receive leg 10y"),
+        curveNodeIdMapperName);
     nodes.add(cash1w);
     nodes.add(cash1m);
     nodes.add(cash6m);

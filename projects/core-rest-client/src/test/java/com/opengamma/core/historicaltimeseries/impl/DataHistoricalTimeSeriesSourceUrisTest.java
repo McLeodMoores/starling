@@ -264,7 +264,8 @@ public class DataHistoricalTimeSeriesSourceUrisTest {
     final URI uri = uriSearchSingle(_baseUri, EIDS, DATA_SOURCE, DATA_PROVIDER, DATA_FIELD, START, INCLUDE_START, END, INCLUDE_END, null);
     assertEquals(uri.getPath(), "path/to/htsSearches/single");
     assertEquals(uri.getQuery(),
-        "id=eid1~1&id=eid2~%1&dataSource=dataSource&dataProvider=dataProvider&dataField=dataField&start=2018-01-01&includeStart=true&end=2020-01-01&includeEnd=false");
+        "id=eid1~1&id=eid2~%1&dataSource=dataSource&dataProvider=dataProvider&dataField=dataField&"
+            + "start=2018-01-01&includeStart=true&end=2020-01-01&includeEnd=false");
   }
 
   /**
@@ -274,7 +275,8 @@ public class DataHistoricalTimeSeriesSourceUrisTest {
     final URI uri = uriSearchSingle(_baseUri, EIDS, DATA_SOURCE, DATA_PROVIDER, DATA_FIELD, START, INCLUDE_START, END, INCLUDE_END, MAX_POINTS);
     assertEquals(uri.getPath(), "path/to/htsSearches/single");
     assertEquals(uri.getQuery(),
-        "id=eid1~1&id=eid2~%1&dataSource=dataSource&dataProvider=dataProvider&dataField=dataField&start=2018-01-01&includeStart=true&end=2020-01-01&includeEnd=false&maxPoints=100");
+        "id=eid1~1&id=eid2~%1&dataSource=dataSource&dataProvider=dataProvider&dataField=dataField&"
+            + "start=2018-01-01&includeStart=true&end=2020-01-01&includeEnd=false&maxPoints=100");
   }
 
   /**
@@ -345,7 +347,8 @@ public class DataHistoricalTimeSeriesSourceUrisTest {
     final URI uri = uriSearchSingle(_baseUri, EIDS, IDENTIFIER_VALIDITY_DATE, DATA_SOURCE, DATA_PROVIDER, DATA_FIELD, START, INCLUDE_START, null, true, null);
     assertEquals(uri.getPath(), "path/to/htsSearches/single");
     assertEquals(uri.getQuery(),
-        "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01&dataSource=dataSource&dataProvider=dataProvider&dataField=dataField&start=2018-01-01&includeStart=true");
+        "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01&dataSource=dataSource&dataProvider=dataProvider"
+            + "&dataField=dataField&start=2018-01-01&includeStart=true");
   }
 
   /**
@@ -356,7 +359,8 @@ public class DataHistoricalTimeSeriesSourceUrisTest {
         null);
     assertEquals(uri.getPath(), "path/to/htsSearches/single");
     assertEquals(uri.getQuery(),
-        "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01&dataSource=dataSource&dataProvider=dataProvider&dataField=dataField&start=2018-01-01&includeStart=true&end=2020-01-01&includeEnd=false");
+        "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01&dataSource=dataSource&dataProvider=dataProvider"
+            + "&dataField=dataField&start=2018-01-01&includeStart=true&end=2020-01-01&includeEnd=false");
   }
 
   /**
@@ -367,7 +371,8 @@ public class DataHistoricalTimeSeriesSourceUrisTest {
         MAX_POINTS);
     assertEquals(uri.getPath(), "path/to/htsSearches/single");
     assertEquals(uri.getQuery(),
-        "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01&dataSource=dataSource&dataProvider=dataProvider&dataField=dataField&start=2018-01-01&includeStart=true&end=2020-01-01&includeEnd=false&maxPoints=100");
+        "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01&dataSource=dataSource&dataProvider=dataProvider"
+            + "&dataField=dataField&start=2018-01-01&includeStart=true&end=2020-01-01&includeEnd=false&maxPoints=100");
   }
 
   /**
@@ -439,7 +444,8 @@ public class DataHistoricalTimeSeriesSourceUrisTest {
     final URI uri = uriSearchResolve(_baseUri, EIDS, DATA_FIELD, RESOLUTION_KEY, START, INCLUDE_END, END, INCLUDE_END, MAX_POINTS);
     assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
     assertEquals(uri.getQuery(),
-        "id=eid1~1&id=eid2~%1&dataField=dataField&resolutionKey=resolutionKey&start=2018-01-01&includeStart=false&end=2020-01-01&includeEnd=false&maxPoints=100");
+        "id=eid1~1&id=eid2~%1&dataField=dataField&resolutionKey=resolutionKey&start=2018-01-01"
+            + "&includeStart=false&end=2020-01-01&includeEnd=false&maxPoints=100");
   }
 
   /**
@@ -495,7 +501,8 @@ public class DataHistoricalTimeSeriesSourceUrisTest {
     final URI uri = uriSearchResolve(_baseUri, EIDS, IDENTIFIER_VALIDITY_DATE, DATA_FIELD, RESOLUTION_KEY, START, INCLUDE_END, END, INCLUDE_END, null);
     assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
     assertEquals(uri.getQuery(),
-        "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01&dataField=dataField&resolutionKey=resolutionKey&start=2018-01-01&includeStart=false&end=2020-01-01&includeEnd=false");
+        "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01&dataField=dataField&resolutionKey=resolutionKey"
+            + "&start=2018-01-01&includeStart=false&end=2020-01-01&includeEnd=false");
   }
 
   /**
@@ -505,7 +512,8 @@ public class DataHistoricalTimeSeriesSourceUrisTest {
     final URI uri = uriSearchResolve(_baseUri, EIDS, IDENTIFIER_VALIDITY_DATE, DATA_FIELD, RESOLUTION_KEY, START, INCLUDE_END, END, INCLUDE_END, MAX_POINTS);
     assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
     assertEquals(uri.getQuery(),
-        "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01&dataField=dataField&resolutionKey=resolutionKey&start=2018-01-01&includeStart=false&end=2020-01-01&includeEnd=false&maxPoints=100");
+        "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01&dataField=dataField&resolutionKey=resolutionKey"
+            + "&start=2018-01-01&includeStart=false&end=2020-01-01&includeEnd=false&maxPoints=100");
   }
 
   /**

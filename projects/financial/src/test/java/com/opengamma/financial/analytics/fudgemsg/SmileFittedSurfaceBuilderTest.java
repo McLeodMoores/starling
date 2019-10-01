@@ -40,8 +40,8 @@ public class SmileFittedSurfaceBuilderTest extends AnalyticsTestBase {
     final InterpolatedDoublesSurface nuSurface = sabrResults.getNuSurface();
     final InterpolatedDoublesSurface rhoSurface = sabrResults.getRhoSurface();
     final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<>();
-    inverseJacobians.put(DoublesPair.of(0d, 1d), new DoubleMatrix2D(new double[][] { {1, 2 }, {3, 4 } }));
-    inverseJacobians.put(DoublesPair.of(2d, 1d), new DoubleMatrix2D(new double[][] { {10, 20 }, {30, 40 } }));
+    inverseJacobians.put(DoublesPair.of(0d, 1d), new DoubleMatrix2D(new double[][] { { 1, 2 }, { 3, 4 } }));
+    inverseJacobians.put(DoublesPair.of(2d, 1d), new DoubleMatrix2D(new double[][] { { 10, 20 }, { 30, 40 } }));
     final SABRFittedSurfaces fits = new SABRFittedSurfaces(alphaSurface, betaSurface, nuSurface, rhoSurface, inverseJacobians);
     assertEquals(fits, cycleObject(SABRFittedSurfaces.class, fits));
   }
@@ -56,8 +56,8 @@ public class SmileFittedSurfaceBuilderTest extends AnalyticsTestBase {
     final InterpolatedDoublesSurface rhoSurface = TestsDataSets.createSABR1AlphaBumped().getRhoSurface();
     final Currency currency = Currency.AUD;
     final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<>();
-    inverseJacobians.put(DoublesPair.of(0d, 1d), new DoubleMatrix2D(new double[][] { {1, 2 }, {3, 4 } }));
-    inverseJacobians.put(DoublesPair.of(2d, 1d), new DoubleMatrix2D(new double[][] { {10, 20 }, {30, 40 } }));
+    inverseJacobians.put(DoublesPair.of(0d, 1d), new DoubleMatrix2D(new double[][] { { 1, 2 }, { 3, 4 } }));
+    inverseJacobians.put(DoublesPair.of(2d, 1d), new DoubleMatrix2D(new double[][] { { 10, 20 }, { 30, 40 } }));
     final HestonFittedSurfaces fits = new HestonFittedSurfaces(kappaSurface, thetaSurface, vol0Surface, omegaSurface, rhoSurface, inverseJacobians, currency);
     assertEquals(fits, cycleObject(HestonFittedSurfaces.class, fits));
   }
@@ -67,19 +67,23 @@ public class SmileFittedSurfaceBuilderTest extends AnalyticsTestBase {
     final Map<Pair<Tenor, Tenor>, ExternalId[]> externalIds = new HashMap<>();
     final Map<Pair<Tenor, Tenor>, Double[]> relativeStrikes = new HashMap<>();
     externalIds.put(Pairs.of(Tenor.ONE_YEAR, Tenor.ONE_YEAR),
-        new ExternalId[] {ExternalId.of("TEST", "USSV0101A"), ExternalId.of("TEST", "USSV0101B"), ExternalId.of("TEST", "USSV0101C"), ExternalId.of("TEST", "USSV0101D") });
-    relativeStrikes.put(Pairs.of(Tenor.ONE_YEAR, Tenor.ONE_YEAR), new Double[] {-100., -50., 0., 50. });
+        new ExternalId[] { ExternalId.of("TEST", "USSV0101A"), ExternalId.of("TEST", "USSV0101B"), ExternalId.of("TEST", "USSV0101C"),
+            ExternalId.of("TEST", "USSV0101D") });
+    relativeStrikes.put(Pairs.of(Tenor.ONE_YEAR, Tenor.ONE_YEAR), new Double[] { -100., -50., 0., 50. });
     externalIds.put(Pairs.of(Tenor.ONE_YEAR, Tenor.ofYears(5)),
-        new ExternalId[] {ExternalId.of("TEST", "USSV0105A"), ExternalId.of("TEST", "USSV0105B"), ExternalId.of("TEST", "USSV0105C"), ExternalId.of("TEST", "USSV0105D") });
-    relativeStrikes.put(Pairs.of(Tenor.ONE_YEAR, Tenor.ofYears(5)), new Double[] {-50., 0., 50., 100. });
+        new ExternalId[] { ExternalId.of("TEST", "USSV0105A"), ExternalId.of("TEST", "USSV0105B"), ExternalId.of("TEST", "USSV0105C"),
+            ExternalId.of("TEST", "USSV0105D") });
+    relativeStrikes.put(Pairs.of(Tenor.ONE_YEAR, Tenor.ofYears(5)), new Double[] { -50., 0., 50., 100. });
     externalIds.put(Pairs.of(Tenor.ofYears(5), Tenor.ONE_YEAR),
-        new ExternalId[] {ExternalId.of("TEST", "USSV0501A"), ExternalId.of("TEST", "USSV0501B"), ExternalId.of("TEST", "USSV0501C"), ExternalId.of("TEST", "USSV0501D") });
-    relativeStrikes.put(Pairs.of(Tenor.ofYears(5), Tenor.ONE_YEAR), new Double[] {-50., 0., 50., 100. });
-    externalIds.put(Pairs.of(Tenor.ofYears(7), Tenor.ofYears(3)), new ExternalId[] {ExternalId.of("TEST", "USSV0703A"), ExternalId.of("TEST", "USSV0703B"), ExternalId.of("TEST", "USSV0703C"),
-        ExternalId.of("TEST", "USSV0703D") });
-    relativeStrikes.put(Pairs.of(Tenor.ofYears(7), Tenor.ofYears(3)), new Double[] {-100., 0., 50., 100. });
+        new ExternalId[] { ExternalId.of("TEST", "USSV0501A"), ExternalId.of("TEST", "USSV0501B"), ExternalId.of("TEST", "USSV0501C"),
+            ExternalId.of("TEST", "USSV0501D") });
+    relativeStrikes.put(Pairs.of(Tenor.ofYears(5), Tenor.ONE_YEAR), new Double[] { -50., 0., 50., 100. });
+    externalIds.put(Pairs.of(Tenor.ofYears(7), Tenor.ofYears(3)),
+        new ExternalId[] { ExternalId.of("TEST", "USSV0703A"), ExternalId.of("TEST", "USSV0703B"), ExternalId.of("TEST", "USSV0703C"),
+            ExternalId.of("TEST", "USSV0703D") });
+    relativeStrikes.put(Pairs.of(Tenor.ofYears(7), Tenor.ofYears(3)), new Double[] { -100., 0., 50., 100. });
 
-    //final FittedSmileDataPoints object = new FittedSmileDataPoints(externalIds, relativeStrikes);
-    //assertEquals(object, cycleObject(FittedSmileDataPoints.class, object));
+    // final FittedSmileDataPoints object = new FittedSmileDataPoints(externalIds, relativeStrikes);
+    // assertEquals(object, cycleObject(FittedSmileDataPoints.class, object));
   }
 }

@@ -36,7 +36,7 @@ public class FunctionBlacklistRuleListenerTest {
 
     private int _modificationCount;
 
-    public MockBlacklist() {
+    MockBlacklist() {
       add(RULE_1);
     }
 
@@ -92,7 +92,7 @@ public class FunctionBlacklistRuleListenerTest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public void testAdd() {
     final ExecutorService executor = Executors.newSingleThreadExecutor();
     try {

@@ -46,7 +46,7 @@ public class RemoteCacheRequestResponseTest {
   private static final Logger LOGGER = LoggerFactory.getLogger(RemoteCacheRequestResponseTest.class);
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
-  @Test(timeOut = 10000l)
+  @Test(timeOut = 10000L)
   public void singleThreadSpecLookupDifferentIdentifierValues() {
     final InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(FUDGE_CONTEXT);
     final ViewComputationCacheServer server = new ViewComputationCacheServer(cache);
@@ -82,7 +82,7 @@ public class RemoteCacheRequestResponseTest {
     LOGGER.debug("End bulk lookup");
   }
 
-  @Test(timeOut = 10000l)
+  @Test(timeOut = 10000L)
   public void singleThreadLookupDifferentIdentifierValuesRepeated() {
     final InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(FUDGE_CONTEXT);
     final ViewComputationCacheServer server = new ViewComputationCacheServer(cache);
@@ -125,25 +125,22 @@ public class RemoteCacheRequestResponseTest {
     final AtomicBoolean failed = new AtomicBoolean(false);
     final List<Thread> threads = new ArrayList<>();
     for (int i = 0; i < 10; i++) {
-      final Thread t = new Thread(new Runnable() {
-        @Override
-        public void run() {
-          try {
-            for (int j = 0; j < 1000; j++) {
-              final int randomValue = rand.nextInt(100);
-              final String valueName = "Value" + randomValue;
-              final ValueSpecification valueSpec = new ValueSpecification("Test Value",
-                  ComputationTargetSpecification.of(UniqueId.of("Kirk", valueName)), ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
-              final long id = identifierMap.getIdentifier(valueSpec);
-              final Long previousValue = idsByValueName.putIfAbsent(valueName, id);
-              if (previousValue != null) {
-                assertEquals(previousValue, new Long(id));
-              }
+      final Thread t = new Thread(() -> {
+        try {
+          for (int j = 0; j < 1000; j++) {
+            final int randomValue = rand.nextInt(100);
+            final String valueName = "Value" + randomValue;
+            final ValueSpecification valueSpec = new ValueSpecification("Test Value",
+                ComputationTargetSpecification.of(UniqueId.of("Kirk", valueName)), ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
+            final long id = identifierMap.getIdentifier(valueSpec);
+            final Long previousValue = idsByValueName.putIfAbsent(valueName, id);
+            if (previousValue != null) {
+              assertEquals(previousValue, new Long(id));
             }
-          } catch (final Exception e) {
-            LOGGER.error("Failed", e);
-            failed.set(true);
           }
+        } catch (final Exception e) {
+          LOGGER.error("Failed", e);
+          failed.set(true);
         }
       });
       threads.add(t);
@@ -157,7 +154,7 @@ public class RemoteCacheRequestResponseTest {
     assertFalse("One thread failed. Check logs.", failed.get());
   }
 
-  @Test(timeOut = 30000l)
+  @Test(timeOut = 30000L)
   public void multiThreadLookupDifferentIdentifierValuesRepeatedDifferentClient() throws InterruptedException {
     final InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(FUDGE_CONTEXT);
     final ViewComputationCacheServer server = new ViewComputationCacheServer(cache);
@@ -169,27 +166,24 @@ public class RemoteCacheRequestResponseTest {
     for (int i = 0; i < 10; i++) {
       final DirectFudgeConnection conduit = new DirectFudgeConnection(cache.getFudgeContext());
       conduit.connectEnd2(server);
-      final Thread t = new Thread(new Runnable() {
-        @Override
-        public void run() {
-          final RemoteCacheClient client = new RemoteCacheClient(conduit.getEnd1());
-          final IdentifierMap identifierMap = new RemoteIdentifierMap(client);
-          try {
-            for (int j = 0; j < 1000; j++) {
-              final int randomValue = rand.nextInt(100);
-              final String valueName = "Value" + randomValue;
-              final ValueSpecification valueSpec = new ValueSpecification("Test Value",
-                  ComputationTargetSpecification.of(UniqueId.of("Kirk", valueName)), ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
-              final long id = identifierMap.getIdentifier(valueSpec);
-              final Long previousValue = idsByValueName.putIfAbsent(valueName, id);
-              if (previousValue != null) {
-                assertEquals(previousValue, new Long(id));
-              }
+      final Thread t = new Thread(() -> {
+        final RemoteCacheClient client = new RemoteCacheClient(conduit.getEnd1());
+        final IdentifierMap identifierMap = new RemoteIdentifierMap(client);
+        try {
+          for (int j = 0; j < 1000; j++) {
+            final int randomValue = rand.nextInt(100);
+            final String valueName = "Value" + randomValue;
+            final ValueSpecification valueSpec = new ValueSpecification("Test Value",
+                ComputationTargetSpecification.of(UniqueId.of("Kirk", valueName)), ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
+            final long id = identifierMap.getIdentifier(valueSpec);
+            final Long previousValue = idsByValueName.putIfAbsent(valueName, id);
+            if (previousValue != null) {
+              assertEquals(previousValue, new Long(id));
             }
-          } catch (final Exception e) {
-            LOGGER.error("Failed", e);
-            failed.set(true);
           }
+        } catch (final Exception e) {
+          LOGGER.error("Failed", e);
+          failed.set(true);
         }
       });
       threads.add(t);
@@ -250,7 +244,7 @@ public class RemoteCacheRequestResponseTest {
     assertEquals(inputValue2.getAllFields(), outputMap.get(identifier2).getAllFields());
   }
 
-  @Test(timeOut = 10000l)
+  @Test(timeOut = 10000L)
   public void singleThreadPutLoadPurgeLoad() throws InterruptedException {
     final InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(FUDGE_CONTEXT);
     final ViewComputationCacheServer server = new ViewComputationCacheServer(cache);

@@ -80,7 +80,7 @@ public class EntitySubscriptionFilter implements ResourceFilter {
    */
   private class ResponseFilter implements ContainerResponseFilter {
 
-    private final List<String> uidParamNames; // CSIGNORE
+    private final List<String> _uidParamName;
 
     /**
      * @param uidParamNames
@@ -88,13 +88,13 @@ public class EntitySubscriptionFilter implements ResourceFilter {
      *          also annotated with {@link Subscribe}.
      */
     ResponseFilter(final List<String> uidParamNames) {
-      this.uidParamNames = uidParamNames;
+      this._uidParamName = uidParamNames;
     }
 
     /**
      * Extracts the client ID from the query parameter named {@link LongPollingServlet#CLIENT_ID} and subscribes for updates for {@link UniqueId}s in the
-     * parameters named {@link #uidParamNames}.
-     * 
+     * parameters named {@link #_uidParamName}.
+     *
      * @param request
      *          The request
      * @param response
@@ -116,7 +116,7 @@ public class EntitySubscriptionFilter implements ResourceFilter {
     }
 
     private void subscribe(final String userId, final String clientId, final String url, final MultivaluedMap<String, String> pathParameters) {
-      for (final String paramName : uidParamNames) {
+      for (final String paramName : _uidParamName) {
         final List<String> uidStrs = pathParameters.get(paramName);
         LOGGER.debug(paramName + ": " + uidStrs);
         for (final String uidStr : uidStrs) {

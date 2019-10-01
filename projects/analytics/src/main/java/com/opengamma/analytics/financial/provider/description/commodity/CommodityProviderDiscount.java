@@ -20,7 +20,6 @@ import com.opengamma.analytics.financial.commodity.multicurvecommodity.underlyin
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
-import com.opengamma.analytics.financial.instrument.index.IndexPrice;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.ForwardSensitivity;
@@ -59,7 +58,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
 
   /**
    * Constructor with empty maps for discounting, forward and price index.
-   * 
+   *
    * @param fxMatrix
    *          The FXMatrix.
    */
@@ -71,7 +70,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
 
   /**
    * Constructor from an existing market. The given market maps are used for the new market (the same maps are used, not copied).
-   * 
+   *
    * @param discountingCurves
    *          A map with one (discounting) curve by currency.
    * @param forwardIborCurves
@@ -95,7 +94,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
   /**
    * Constructor from exiting multicurveProvider and inflation map. The given provider and map are used for the new provider (the same maps are used, not
    * copied).
-   * 
+   *
    * @param multicurve
    *          The multi-curves provider.
    * @param commodityForwardCurves
@@ -146,7 +145,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
 
   /**
    * Gets the commodity curve associated with a given underlying in the market.
-   * 
+   *
    * @param underlying
    *          The underlying commodity
    * @return The curve.
@@ -165,7 +164,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
 
   /**
    * Sets the price index curve for a price index.
-   * 
+   *
    * @param commodityUnderlying
    *          The price index.
    * @param curve
@@ -245,7 +244,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
 
   /**
    * Gets the discounting curve associated in a given currency in the market.
-   * 
+   *
    * @param ccy
    *          The currency.
    * @return The curve.
@@ -256,7 +255,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
 
   /**
    * Gets the forward curve associated to a given Ibor index in the market.
-   * 
+   *
    * @param index
    *          The Ibor index.
    * @return The curve.
@@ -267,7 +266,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
 
   /**
    * Gets the forward curve associated to a given ON index in the market.
-   * 
+   *
    * @param index
    *          The ON index.
    * @return The curve.
@@ -283,7 +282,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
 
   /**
    * Sets the discounting curve for a given currency.
-   * 
+   *
    * @param ccy
    *          The currency.
    * @param curve
@@ -295,7 +294,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
 
   /**
    * Sets the curve associated to an Ibor index.
-   * 
+   *
    * @param index
    *          The index.
    * @param curve
@@ -307,7 +306,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
 
   /**
    * Sets the curve associated to an ON index.
-   * 
+   *
    * @param index
    *          The index.
    * @param curve
@@ -319,7 +318,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
 
   /**
    * Set all the curves contains in another bundle. If a currency or index is already present in the map, the associated curve is changed.
-   * 
+   *
    * @param other
    *          The other bundle.
    */
@@ -331,7 +330,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
 
   /**
    * Replaces the discounting curve for a given currency.
-   * 
+   *
    * @param ccy
    *          The currency.
    * @param curve
@@ -345,7 +344,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
 
   /**
    * Replaces the forward curve for a given index.
-   * 
+   *
    * @param index
    *          The index.
    * @param curve
@@ -359,7 +358,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
 
   /**
    * Replaces the discounting curve for a price index.
-   * 
+   *
    * @param commodityUnderlying
    *          The price index.
    * @param curve
@@ -383,7 +382,7 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
 
   /**
    * Gets the underlying FXMatrix containing the exchange rates.
-   * 
+   *
    * @return The matrix.
    */
   @Override

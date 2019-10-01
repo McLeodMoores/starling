@@ -67,9 +67,9 @@ public class MarketDataSnapshotListResourceTest {
     final String json = resource.getMarketDataSnapshotList();
     final JSONArray jsonArray = new JSONArray(json);
 
-    final String expected =
-        "[{\"basisViewName\": \"basisView1\", \"snapshots\": [{\"id\": \"Tst~1\", \"name\": \"snap1\"}, {\"id\": \"Tst~2\", \"name\": \"snap2\"}]}, " +
-        " {\"basisViewName\": \"basisView2\", \"snapshots\": [{\"id\": \"Tst~3\", \"name\": \"snap3\"}]}]";
+    final String expected = "[{\"basisViewName\": \"basisView1\", \"snapshots\": [{\"id\": \"Tst~1\", "
+        + "\"name\": \"snap1\"}, {\"id\": \"Tst~2\", \"name\": \"snap2\"}]}, "
+        + " {\"basisViewName\": \"basisView2\", \"snapshots\": [{\"id\": \"Tst~3\", \"name\": \"snap3\"}]}]";
     final JSONArray expectedArray = new JSONArray(expected);
     assertEquals(expectedArray.toString(), jsonArray.toString());
   }
@@ -105,8 +105,8 @@ public class MarketDataSnapshotListResourceTest {
   @Test
   public void getJsonOverHttp() throws Exception {
     final WebPushTestUtils webPushTestUtils = new WebPushTestUtils();
-    final Pair<Server, WebApplicationContext> serverAndContext =
-        webPushTestUtils.createJettyServer("classpath:/com/opengamma/web/analytics/push/marketdatasnapshotlist-test.xml");
+    final Pair<Server, WebApplicationContext> serverAndContext = webPushTestUtils
+        .createJettyServer("classpath:/com/opengamma/web/analytics/push/marketdatasnapshotlist-test.xml");
     final Server server = serverAndContext.getFirst();
     final WebApplicationContext context = serverAndContext.getSecond();
     final InMemorySnapshotMaster snapshotMaster = context.getBean(InMemorySnapshotMaster.class);

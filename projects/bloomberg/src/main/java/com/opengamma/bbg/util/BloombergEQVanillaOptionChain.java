@@ -18,7 +18,6 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.opengamma.financial.convention.daycount.ActualActualISDA;
 import com.opengamma.financial.security.option.OptionType;
@@ -135,12 +134,8 @@ public class BloombergEQVanillaOptionChain {
    */
   public BloombergEQVanillaOptionChain narrowByOptionType(final OptionType optionType) {
     // Simple O(n) filtering on optiontype
-    final List<ExternalId> result = new ArrayList<>(Collections2.filter(_identifiers, new Predicate<ExternalId>() {
-      @Override
-      public boolean apply(final ExternalId identifier) {
-        return new BloombergTickerParserEQVanillaOption(identifier).getOptionType().equals(optionType);
-      }
-    }));
+    final List<ExternalId> result = new ArrayList<>(
+        Collections2.filter(_identifiers, identifier -> new BloombergTickerParserEQVanillaOption(identifier).getOptionType().equals(optionType)));
     return new BloombergEQVanillaOptionChain(result);
   }
 

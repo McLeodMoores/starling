@@ -15,12 +15,9 @@ import javax.ws.rs.WebApplicationException;
 
 import org.fudgemsg.FudgeMsg;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.testng.annotations.Test;
 
 import com.opengamma.financial.temptarget.InMemoryTempTargetRepository;
-import com.opengamma.financial.temptarget.rest.MockTempTarget;
 import com.opengamma.financial.temptarget.TempTargetRepository;
 import com.opengamma.id.UniqueId;
 import com.opengamma.util.rest.UniformInterfaceException404NotFound;
@@ -44,15 +41,12 @@ public class RemoteTempTargetRepositoryTest {
       protected UniformInterface accessRemote(final URI uri) {
         assertTrue(uri.getPath().startsWith("/target/"));
         final UniformInterface builder = Mockito.mock(UniformInterface.class);
-        Mockito.when(builder.get(FudgeMsg.class)).thenAnswer(new Answer<FudgeMsg>() {
-          @Override
-          public FudgeMsg answer(final InvocationOnMock invocation) throws Throwable {
-            try {
-              return (FudgeMsg) server.get(uri.getPath().substring(8)).getEntity();
-            } catch (final WebApplicationException e) {
-              assertEquals(e.getResponse().getStatus(), 404);
-              throw new UniformInterfaceException404NotFound(new ClientResponse(404, null, null, null), false);
-            }
+        Mockito.when(builder.get(FudgeMsg.class)).thenAnswer(invocation -> {
+          try {
+            return (FudgeMsg) server.get(uri.getPath().substring(8)).getEntity();
+          } catch (final WebApplicationException e) {
+            assertEquals(e.getResponse().getStatus(), 404);
+            throw new UniformInterfaceException404NotFound(new ClientResponse(404, null, null, null), false);
           }
         });
         return builder;
@@ -71,12 +65,8 @@ public class RemoteTempTargetRepositoryTest {
       protected UniformInterface accessRemote(final URI uri) {
         assertTrue(uri.getPath().equals("/target"));
         final UniformInterface builder = Mockito.mock(UniformInterface.class);
-        Mockito.doAnswer(new Answer<FudgeMsg>() {
-          @Override
-          public FudgeMsg answer(final InvocationOnMock invocation) throws Throwable {
-            return (FudgeMsg) server.locateOrStore((FudgeMsg) invocation.getArguments()[1]).getEntity();
-          }
-        }).when(builder).post(Mockito.any(Class.class), Mockito.anyObject());
+        Mockito.doAnswer(invocation -> (FudgeMsg) server.locateOrStore((FudgeMsg) invocation.getArguments()[1]).getEntity()).when(builder)
+            .post(Mockito.any(Class.class), Mockito.anyObject());
         return builder;
       }
     };

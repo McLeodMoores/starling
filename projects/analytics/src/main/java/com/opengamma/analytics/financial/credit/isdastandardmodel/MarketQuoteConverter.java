@@ -35,7 +35,7 @@ public class MarketQuoteConverter {
   // **************************************************************************************************************
 
   /**
-   * The clean price as a fraction of notional (it is often expressed as a percentage of notional)
+   * The clean price as a fraction of notional (it is often expressed as a percentage of notional).
    *
    * @param fractionalPUF
    *          The points up-front (as a fraction)
@@ -46,7 +46,7 @@ public class MarketQuoteConverter {
   }
 
   /**
-   * The clean price as a fraction of notional (it is often expressed as a percentage of notional) - this requires that a credit curve is bootstrapped first
+   * The clean price as a fraction of notional (it is often expressed as a percentage of notional) - this requires that a credit curve is bootstrapped first.
    *
    * @param cds
    *          The CDS to be traded
@@ -64,7 +64,7 @@ public class MarketQuoteConverter {
   }
 
   /**
-   * The principal - this is the clean present value
+   * The principal - this is the clean present value.
    *
    * @param notional
    *          The notional of the trade

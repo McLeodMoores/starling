@@ -57,9 +57,10 @@ public class CurrencyMatrixSpotSourcingFunctionTest {
   public void setupContexts() {
     _functionExecutionContext = new FunctionExecutionContext();
     _functionCompilationContext = new FunctionCompilationContext();
-    SimpleCurrencyMatrix matrix = new SimpleCurrencyMatrix();
+    final SimpleCurrencyMatrix matrix = new SimpleCurrencyMatrix();
     matrix.setUniqueId(UniqueId.of("Matrix", "Test"));
-    matrix.setLiveData(_currencyUSD, _currencyGBP, new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, ExternalId.of("LiveData", "USD_GBP")));
+    matrix.setLiveData(_currencyUSD, _currencyGBP,
+        new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, ExternalId.of("LiveData", "USD_GBP")));
     matrix.setFixedConversion(_currencyEUR, _currencyGBP, _rateEUR_GBP);
     matrix.setCrossConversion(_currencyEUR, _currencyUSD, _currencyGBP);
     _matrixTarget = new ComputationTarget(CurrencyMatrixResolver.TYPE, matrix);
@@ -82,18 +83,23 @@ public class CurrencyMatrixSpotSourcingFunctionTest {
     // Require value the "right" way up
     // [PLAT-2290] Execute should be taking a ValueSpecification, getRequirements should be taking a ValueRequirement
     ValueRequirement outRequirement = new ValueRequirement(ValueRequirementNames.SPOT_RATE, _matrixTarget.toSpecification(), ValueProperties
-        .with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "USD").with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "GBP")
+        .with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "USD")
+        .with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "GBP")
         .with(ValuePropertyNames.FUNCTION, "CMSF").get());
     Set<ValueRequirement> inRequirements = _function.getRequirements(_functionCompilationContext, _matrixTarget, outRequirement);
     assertEquals(1, inRequirements.size());
-    final ComputationTargetRequirement inRequirementTarget = new ComputationTargetRequirement(ComputationTargetType.PRIMITIVE, ExternalId.of("LiveData", "USD_GBP"));
-    for (ValueRequirement requirement : inRequirements) {
+    final ComputationTargetRequirement inRequirementTarget = new ComputationTargetRequirement(ComputationTargetType.PRIMITIVE,
+        ExternalId.of("LiveData", "USD_GBP"));
+    for (final ValueRequirement requirement : inRequirements) {
       assertEquals(requirement.getValueName(), MarketDataRequirementNames.MARKET_VALUE);
       assertEquals(requirement.getTargetReference(), inRequirementTarget);
       assertTrue(requirement.getConstraints().isSatisfiedBy(ValueProperties.none()));
     }
-    Set<ComputedValue> outputs = _function.execute(_functionExecutionContext, new FunctionInputsImpl(resolver.atVersionCorrection(VersionCorrection.LATEST), new ComputedValue(new ValueSpecification(
-        MarketDataRequirementNames.MARKET_VALUE, ComputationTargetSpecification.of(UniqueId.of("ExternalId-LiveData", "USD_GBP")), properties), _rateUSD_GBP)), _matrixTarget,
+    Set<ComputedValue> outputs = _function.execute(_functionExecutionContext,
+        new FunctionInputsImpl(resolver.atVersionCorrection(VersionCorrection.LATEST), new ComputedValue(new ValueSpecification(
+            MarketDataRequirementNames.MARKET_VALUE, ComputationTargetSpecification.of(UniqueId.of("ExternalId-LiveData", "USD_GBP")), properties),
+            _rateUSD_GBP)),
+        _matrixTarget,
         Collections.singleton(outRequirement));
     assertEquals(1, outputs.size());
     ComputedValue output = outputs.iterator().next();
@@ -103,18 +109,21 @@ public class CurrencyMatrixSpotSourcingFunctionTest {
     // Require value the "wrong" way up
     // [PLAT-2290] Execute should be taking a ValueSpecification, getRequirements should be taking a ValueRequirement
     outRequirement = new ValueRequirement(ValueRequirementNames.SPOT_RATE, _matrixTarget.toSpecification(), ValueProperties
-        .with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "GBP").with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "USD")
+        .with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "GBP")
+        .with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "USD")
         .with(ValuePropertyNames.FUNCTION, "CMSF").get());
     inRequirements = _function.getRequirements(_functionCompilationContext, _matrixTarget, outRequirement);
     assertEquals(1, inRequirements.size());
-    for (ValueRequirement requirement : inRequirements) {
+    for (final ValueRequirement requirement : inRequirements) {
       assertEquals(requirement.getValueName(), MarketDataRequirementNames.MARKET_VALUE);
       assertEquals(requirement.getTargetReference(), inRequirementTarget);
       assertTrue(requirement.getConstraints().isSatisfiedBy(ValueProperties.none()));
     }
     outputs = _function.execute(_functionExecutionContext,
-        new FunctionInputsImpl(resolver.atVersionCorrection(VersionCorrection.LATEST), new ComputedValue(new ValueSpecification(MarketDataRequirementNames.MARKET_VALUE,
-            ComputationTargetSpecification.of(UniqueId.of("ExternalId-LiveData", "USD_GBP")), properties), _rateUSD_GBP)), _matrixTarget, Collections.singleton(outRequirement));
+        new FunctionInputsImpl(resolver.atVersionCorrection(VersionCorrection.LATEST),
+            new ComputedValue(new ValueSpecification(MarketDataRequirementNames.MARKET_VALUE,
+                ComputationTargetSpecification.of(UniqueId.of("ExternalId-LiveData", "USD_GBP")), properties), _rateUSD_GBP)),
+        _matrixTarget, Collections.singleton(outRequirement));
     assertEquals(1, outputs.size());
     output = outputs.iterator().next();
     assertTrue(output.getValue() instanceof Double);
@@ -123,7 +132,8 @@ public class CurrencyMatrixSpotSourcingFunctionTest {
     // Require no additional live data
     // [PLAT-2290] Execute should be taking a ValueSpecification, getRequirements should be taking a ValueRequirement
     outRequirement = new ValueRequirement(ValueRequirementNames.SPOT_RATE, _matrixTarget.toSpecification(), ValueProperties
-        .with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "GBP").with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "EUR")
+        .with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "GBP")
+        .with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "EUR")
         .with(ValuePropertyNames.FUNCTION, "CMSF").get());
     inRequirements = _function.getRequirements(_functionCompilationContext, _matrixTarget, outRequirement);
     assertEquals(0, inRequirements.size());
@@ -136,18 +146,21 @@ public class CurrencyMatrixSpotSourcingFunctionTest {
     // Require intermediate value
     // [PLAT-2290] Execute should be taking a ValueSpecification, getRequirements should be taking a ValueRequirement
     outRequirement = new ValueRequirement(ValueRequirementNames.SPOT_RATE, _matrixTarget.toSpecification(), ValueProperties
-        .with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "EUR").with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "USD")
+        .with(AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY, "EUR")
+        .with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, "USD")
         .with(ValuePropertyNames.FUNCTION, "CMSF").get());
     inRequirements = _function.getRequirements(_functionCompilationContext, _matrixTarget, outRequirement);
     assertEquals(1, inRequirements.size());
-    for (ValueRequirement requirement : inRequirements) {
+    for (final ValueRequirement requirement : inRequirements) {
       assertEquals(requirement.getValueName(), MarketDataRequirementNames.MARKET_VALUE);
       assertEquals(requirement.getTargetReference(), inRequirementTarget);
       assertTrue(requirement.getConstraints().isSatisfiedBy(ValueProperties.none()));
     }
     outputs = _function.execute(_functionExecutionContext,
-        new FunctionInputsImpl(resolver.atVersionCorrection(VersionCorrection.LATEST), new ComputedValue(new ValueSpecification(MarketDataRequirementNames.MARKET_VALUE,
-            ComputationTargetSpecification.of(UniqueId.of("ExternalId-LiveData", "USD_GBP")), properties), _rateUSD_GBP)), _matrixTarget, Collections.singleton(outRequirement));
+        new FunctionInputsImpl(resolver.atVersionCorrection(VersionCorrection.LATEST),
+            new ComputedValue(new ValueSpecification(MarketDataRequirementNames.MARKET_VALUE,
+                ComputationTargetSpecification.of(UniqueId.of("ExternalId-LiveData", "USD_GBP")), properties), _rateUSD_GBP)),
+        _matrixTarget, Collections.singleton(outRequirement));
     assertEquals(1, outputs.size());
     output = outputs.iterator().next();
     assertTrue(output.getValue() instanceof Double);

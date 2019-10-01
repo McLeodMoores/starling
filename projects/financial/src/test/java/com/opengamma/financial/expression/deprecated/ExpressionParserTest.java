@@ -33,12 +33,12 @@ public class ExpressionParserTest {
     assertEquals(expr.toString(), expected);
   }
 
-  @Test(expectedExceptions = {IllegalArgumentException.class })
+  @Test(expectedExceptions = { IllegalArgumentException.class })
   public void testEmptyString() {
     new ExpressionParser().parse("");
   }
 
-  @Test(expectedExceptions = {IllegalArgumentException.class })
+  @Test(expectedExceptions = { IllegalArgumentException.class })
   public void testIllegalString() {
     new ExpressionParser().parse("Foo less \"Bar\"");
   }
@@ -70,18 +70,21 @@ public class ExpressionParserTest {
 
   @Test
   public void testAnd() {
-    parse("Foo=\"Bar\" AND Bar=\"Foo\" AND Cow=\"Foo\"", "`AND (`EQ (`IDENTIFIER Foo) (`LITERAL Bar)) (`AND (`EQ (`IDENTIFIER Bar) (`LITERAL Foo)) (`EQ (`IDENTIFIER Cow) (`LITERAL Foo)))");
+    parse("Foo=\"Bar\" AND Bar=\"Foo\" AND Cow=\"Foo\"", "`AND (`EQ (`IDENTIFIER Foo) (`LITERAL Bar)) "
+        + "(`AND (`EQ (`IDENTIFIER Bar) (`LITERAL Foo)) (`EQ (`IDENTIFIER Cow) (`LITERAL Foo)))");
   }
 
   @Test
   public void testOr() {
-    parse("Foo=\"Bar\" OR Foo=\"Cow\" OR Bar=\"Cow\"", "`OR (`EQ (`IDENTIFIER Foo) (`LITERAL Bar)) (`OR (`EQ (`IDENTIFIER Foo) (`LITERAL Cow)) (`EQ (`IDENTIFIER Bar) (`LITERAL Cow)))");
+    parse("Foo=\"Bar\" OR Foo=\"Cow\" OR Bar=\"Cow\"", "`OR (`EQ (`IDENTIFIER Foo) (`LITERAL Bar)) "
+        + "(`OR (`EQ (`IDENTIFIER Foo) (`LITERAL Cow)) (`EQ (`IDENTIFIER Bar) (`LITERAL Cow)))");
   }
 
   @Test
   public void testBrackets() {
     parse("(((Foo=\"Bar\") AND (Bar=\"Foo\")) OR ((Foo=\"Bar\") AND (Bar=\"Cow\")))",
-        "`OR (`AND (`EQ (`IDENTIFIER Foo) (`LITERAL Bar)) (`EQ (`IDENTIFIER Bar) (`LITERAL Foo))) (`AND (`EQ (`IDENTIFIER Foo) (`LITERAL Bar)) (`EQ (`IDENTIFIER Bar) (`LITERAL Cow)))");
+        "`OR (`AND (`EQ (`IDENTIFIER Foo) (`LITERAL Bar)) (`EQ (`IDENTIFIER Bar) (`LITERAL Foo))) "
+            + "(`AND (`EQ (`IDENTIFIER Foo) (`LITERAL Bar)) (`EQ (`IDENTIFIER Bar) (`LITERAL Cow)))");
   }
 
 }

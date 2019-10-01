@@ -47,13 +47,16 @@ public class InterpolatedYieldCurveSpecificationWithSecuritiesFudgeEncodingTest 
     cash.setUniqueId(UniqueId.of("TEST", "TEST"));
     cash.setName("1m deposit rate");
     cash.setExternalIdBundle(bundle);
-    final FixedIncomeStripWithSecurity cashStrip = new FixedIncomeStripWithSecurity(new FixedIncomeStrip(StripInstrumentType.CASH, Tenor.ONE_MONTH, "DEFAULT"), Tenor.ONE_MONTH, maturity, dummyId, cash);
+    final FixedIncomeStripWithSecurity cashStrip = new FixedIncomeStripWithSecurity(new FixedIncomeStrip(StripInstrumentType.CASH, Tenor.ONE_MONTH, "DEFAULT"),
+        Tenor.ONE_MONTH, maturity, dummyId, cash);
 
     dummyId = ExternalSchemes.bloombergTickerSecurityId("EDZ2 Comdty");
     bundle = ExternalIdBundle.of(dummyId);
     final FutureSecurity future = new InterestRateFutureSecurity(new Expiry(ZonedDateTime.now()), "XCSE", "XCSE", Currency.USD, 0, dummyId, "Interest Rate");
     future.setExternalIdBundle(bundle);
-    final FixedIncomeStripWithSecurity futureStrip = new FixedIncomeStripWithSecurity(new FixedIncomeStrip(StripInstrumentType.FUTURE, Tenor.THREE_MONTHS, 2, "DEFAULT"), Tenor.THREE_MONTHS, DateUtils.getUTCDate(2011, 12, 1), dummyId, future);
+    final FixedIncomeStripWithSecurity futureStrip = new FixedIncomeStripWithSecurity(
+        new FixedIncomeStrip(StripInstrumentType.FUTURE, Tenor.THREE_MONTHS, 2, "DEFAULT"), Tenor.THREE_MONTHS, DateUtils.getUTCDate(2011, 12, 1), dummyId,
+        future);
 
     dummyId = ExternalSchemes.bloombergTickerSecurityId("USFR0BE Curncy");
     bundle = ExternalIdBundle.of(dummyId);
@@ -61,9 +64,11 @@ public class InterpolatedYieldCurveSpecificationWithSecuritiesFudgeEncodingTest 
     final ZonedDateTime endDate = DateUtils.getUTCDate(2012, 2, 1);
     final ExternalId underlyingIdentifier = ExternalSchemes.bloombergTickerSecurityId("US0003M Index");
     final ZonedDateTime fixingDate = startDate.minusDays(2);
-    final FRASecurity fra = new FRASecurity(Currency.USD, ExternalSchemes.financialRegionId("US"), startDate, endDate, 0.05, 1, underlyingIdentifier, fixingDate);
+    final FRASecurity fra = new FRASecurity(Currency.USD, ExternalSchemes.financialRegionId("US"), startDate, endDate, 0.05, 1, underlyingIdentifier,
+        fixingDate);
     fra.setExternalIdBundle(bundle);
-    final FixedIncomeStripWithSecurity fraStrip = new FixedIncomeStripWithSecurity(new FixedIncomeStrip(StripInstrumentType.FRA_3M, Tenor.FIVE_MONTHS, "DEFAULT"), Tenor.FIVE_MONTHS, endDate, dummyId, fra);
+    final FixedIncomeStripWithSecurity fraStrip = new FixedIncomeStripWithSecurity(
+        new FixedIncomeStrip(StripInstrumentType.FRA_3M, Tenor.FIVE_MONTHS, "DEFAULT"), Tenor.FIVE_MONTHS, endDate, dummyId, fra);
 
     final Collection<FixedIncomeStripWithSecurity> strips = new ArrayList<>();
     strips.add(cashStrip);

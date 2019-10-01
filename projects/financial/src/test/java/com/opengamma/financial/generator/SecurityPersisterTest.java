@@ -29,7 +29,7 @@ import com.opengamma.util.time.Expiry;
  */
 @Test(groups = TestGroup.UNIT)
 public class SecurityPersisterTest {
-  
+
   private static class Impl extends SecurityPersister {
 
     private ManageableSecurity _security;
@@ -44,13 +44,11 @@ public class SecurityPersisterTest {
 
   public void testDuplicateSecurities() {
     final Impl impl = new Impl();
-    ZonedDateTime now = ZonedDateTime.now();
-    final EquityOptionSecurity security1 =
-        new EquityOptionSecurity(OptionType.CALL, 1.0, Currency.USD, ExternalId.of("S", "V"),
-                                 new AmericanExerciseType(), new Expiry(now), 1.0, "EXCH");
-    final EquityOptionSecurity security2 =
-        new EquityOptionSecurity(OptionType.CALL, 1.0, Currency.USD, ExternalId.of("S", "V"),
-                                 new AmericanExerciseType(), new Expiry(now), 1.0, "EXCH");
+    final ZonedDateTime now = ZonedDateTime.now();
+    final EquityOptionSecurity security1 = new EquityOptionSecurity(OptionType.CALL, 1.0, Currency.USD, ExternalId.of("S", "V"),
+        new AmericanExerciseType(), new Expiry(now), 1.0, "EXCH");
+    final EquityOptionSecurity security2 = new EquityOptionSecurity(OptionType.CALL, 1.0, Currency.USD, ExternalId.of("S", "V"),
+        new AmericanExerciseType(), new Expiry(now), 1.0, "EXCH");
     final ExternalIdBundle identifiers1 = impl.storeSecurity(security1);
     assertSame(impl._security, security1);
     assertEquals(security1.getExternalIdBundle(), identifiers1);
@@ -62,9 +60,11 @@ public class SecurityPersisterTest {
 
   public void testDifferentSecurities() {
     final Impl impl = new Impl();
-    final EquityOptionSecurity security1 = new EquityOptionSecurity(OptionType.CALL, 1.0, Currency.USD, ExternalId.of("S", "V1"), new AmericanExerciseType(), new Expiry(ZonedDateTime.now()), 1.0,
+    final EquityOptionSecurity security1 = new EquityOptionSecurity(OptionType.CALL, 1.0, Currency.USD, ExternalId.of("S", "V1"), new AmericanExerciseType(),
+        new Expiry(ZonedDateTime.now()), 1.0,
         "EXCH");
-    final EquityOptionSecurity security2 = new EquityOptionSecurity(OptionType.CALL, 1.0, Currency.USD, ExternalId.of("S", "V2"), new AmericanExerciseType(), new Expiry(ZonedDateTime.now()), 1.0,
+    final EquityOptionSecurity security2 = new EquityOptionSecurity(OptionType.CALL, 1.0, Currency.USD, ExternalId.of("S", "V2"), new AmericanExerciseType(),
+        new Expiry(ZonedDateTime.now()), 1.0,
         "EXCH");
     final ExternalIdBundle identifiers1 = impl.storeSecurity(security1);
     assertSame(impl._security, security1);
@@ -75,5 +75,5 @@ public class SecurityPersisterTest {
     assertEquals(security2.getExternalIdBundle(), identifiers2);
     assertFalse(identifiers1.equals(identifiers2));
   }
-  
+
 }

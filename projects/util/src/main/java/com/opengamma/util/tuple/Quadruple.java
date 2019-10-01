@@ -29,16 +29,19 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
  * <p>
  * This implementation refers to the elements as 'first', 'second', 'third' and 'fourth'.
  * <p>
- * Although the implementation is immutable, there is no restriction on the objects
- * that may be stored. If mutable objects are stored in the quadruple, then the quadruple
- * itself effectively becomes mutable.
+ * Although the implementation is immutable, there is no restriction on the objects that may be stored. If mutable objects are stored in the quadruple, then the
+ * quadruple itself effectively becomes mutable.
  * <p>
  * This class is immutable and thread-safe if the stored objects are immutable.
  *
- * @param <A> the first element type
- * @param <B> the second element type
- * @param <C> the third element type
- * @param <D> the fourth element type
+ * @param <A>
+ *          the first element type
+ * @param <B>
+ *          the second element type
+ * @param <C>
+ *          the third element type
+ * @param <D>
+ *          the fourth element type
  */
 public final class Quadruple<A, B, C, D>
     implements ImmutableBean, Comparable<Quadruple<A, B, C, D>>, Serializable {
@@ -59,14 +62,22 @@ public final class Quadruple<A, B, C, D>
   /**
    * Factory method creating a quadruple inferring the types.
    *
-   * @param <A> the first element type
-   * @param <B> the second element type
-   * @param <C> the third element type
-   * @param <D> the fourth element type
-   * @param first  the first element, may be null
-   * @param second  the second element, may be null
-   * @param third  the third element, may be null
-   * @param fourth the fourth element, may be null
+   * @param <A>
+   *          the first element type
+   * @param <B>
+   *          the second element type
+   * @param <C>
+   *          the third element type
+   * @param <D>
+   *          the fourth element type
+   * @param first
+   *          the first element, may be null
+   * @param second
+   *          the second element, may be null
+   * @param third
+   *          the third element, may be null
+   * @param fourth
+   *          the fourth element, may be null
    * @return a quadruple formed from the three parameters, not null
    */
   public static <A, B, C, D> Quadruple<A, B, C, D> of(final A first, final B second, final C third, final D fourth) {
@@ -76,10 +87,14 @@ public final class Quadruple<A, B, C, D>
   /**
    * Constructs a quadruple.
    *
-   * @param first  the first element, may be null
-   * @param second  the second element, may be null
-   * @param third  the third element, may be null
-   * @param fourth the fourth element, may be null
+   * @param first
+   *          the first element, may be null
+   * @param second
+   *          the second element, may be null
+   * @param third
+   *          the third element, may be null
+   * @param fourth
+   *          the fourth element, may be null
    */
   private Quadruple(final A first, final B second, final C third, final D fourth) {
     _first = first;
@@ -88,7 +103,7 @@ public final class Quadruple<A, B, C, D>
     _fourth = fourth;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the first element from this pair.
    *
@@ -125,14 +140,14 @@ public final class Quadruple<A, B, C, D>
     return _fourth;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the elements from this quadruple as a list.
    * <p>
-   * This method supports auto-casting as they is no way in generics to provide
-   * a more specific type.
+   * This method supports auto-casting as they is no way in generics to provide a more specific type.
    *
-   * @param <T> an auto-cast list type
+   * @param <T>
+   *          an auto-cast list type
    * @return the elements as a list, not null
    */
   @SuppressWarnings("unchecked")
@@ -145,14 +160,14 @@ public final class Quadruple<A, B, C, D>
     return (List<T>) list;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Compares the quadruple based on the first element followed by the second
-   * element followed by the third element followed by the fourth element.
+   * Compares the quadruple based on the first element followed by the second element followed by the third element followed by the fourth element.
    * <p>
    * The element types must be {@code Comparable}.
    *
-   * @param other  the other pair, not null
+   * @param other
+   *          the other pair, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
   @Override
@@ -173,10 +188,8 @@ public final class Quadruple<A, B, C, D>
     }
     if (obj instanceof Quadruple<?, ?, ?, ?>) {
       final Quadruple<?, ?, ?, ?> other = (Quadruple<?, ?, ?, ?>) obj;
-      return ObjectUtils.equals(getFirst(), other.getFirst()) &&
-          ObjectUtils.equals(getSecond(), other.getSecond()) &&
-          ObjectUtils.equals(getThird(), other.getThird()) &&
-          ObjectUtils.equals(getFourth(), other.getFourth());
+      return ObjectUtils.equals(getFirst(), other.getFirst()) && ObjectUtils.equals(getSecond(), other.getSecond())
+          && ObjectUtils.equals(getThird(), other.getThird()) && ObjectUtils.equals(getFourth(), other.getFourth());
     }
     return false;
   }
@@ -206,9 +219,10 @@ public final class Quadruple<A, B, C, D>
         .append("]").toString();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * The meta-bean for {@code Triple}.
+   * 
    * @return the meta-bean, not null
    */
   @SuppressWarnings("rawtypes")
@@ -227,7 +241,7 @@ public final class Quadruple<A, B, C, D>
 
   @Override
   public <R> Property<R> property(final String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
+    return metaBean().<R> metaProperty(propertyName).createProperty(this);
   }
 
   @Override
@@ -240,7 +254,7 @@ public final class Quadruple<A, B, C, D>
     return this;
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * The meta-bean for {@code Triple}.
    */
@@ -318,9 +332,10 @@ public final class Quadruple<A, B, C, D>
       return _metaPropertyMap$;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * The meta-property for the {@code first} property.
+     * 
      * @return the meta-property, not null
      */
     public MetaProperty<Object> first() {
@@ -329,6 +344,7 @@ public final class Quadruple<A, B, C, D>
 
     /**
      * The meta-property for the {@code second} property.
+     * 
      * @return the meta-property, not null
      */
     public MetaProperty<Object> second() {
@@ -337,6 +353,7 @@ public final class Quadruple<A, B, C, D>
 
     /**
      * The meta-property for the {@code third} property.
+     * 
      * @return the meta-property, not null
      */
     public MetaProperty<Object> third() {
@@ -345,13 +362,14 @@ public final class Quadruple<A, B, C, D>
 
     /**
      * The meta-property for the {@code fourth} property.
+     * 
      * @return the meta-property, not null
      */
     public MetaProperty<Object> fourth() {
       return _fourth;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     @SuppressWarnings("rawtypes")
     protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
@@ -379,11 +397,11 @@ public final class Quadruple<A, B, C, D>
 
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * The bean-builder for {@code Triple}.
    */
-  @SuppressWarnings({"unchecked", "rawtypes" })
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   private static final class Builder extends BasicImmutableBeanBuilder<Quadruple> {
 
     /** The first element. */
@@ -402,7 +420,7 @@ public final class Quadruple<A, B, C, D>
       super(Quadruple.Meta.INSTANCE);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     public Builder set(final String propertyName, final Object newValue) {
       switch (propertyName) {

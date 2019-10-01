@@ -73,7 +73,7 @@ public class BloombergBpipeHistoricalTimeSeriesProviderTest {
     _provider = null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_getHistoricalTimeSeries_single_wrongDataSource() {
     final LocalDateRange range = LocalDateRange.of(LocalDate.of(2009, 11, 4), LocalDate.of(2009, 11, 4), true);
@@ -102,7 +102,8 @@ public class BloombergBpipeHistoricalTimeSeriesProviderTest {
     final LocalDate startDate = endDate.minusMonths(1);
 
     final LocalDateRange dateRange = LocalDateRange.of(startDate, endDate, true);
-    final HistoricalTimeSeriesProviderGetRequest realRequest = HistoricalTimeSeriesProviderGetRequest.createGet(SIMPLE_BUNDLE, BBG_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, dateRange);
+    final HistoricalTimeSeriesProviderGetRequest realRequest = HistoricalTimeSeriesProviderGetRequest.createGet(SIMPLE_BUNDLE, BBG_DATA_SOURCE,
+        DEFAULT_DATA_PROVIDER, PX_LAST, dateRange);
     realRequest.setMaxPoints(0);
     final LocalDateDoubleTimeSeries realHts = _provider.getHistoricalTimeSeries(realRequest).getResultMap().get(SIMPLE_BUNDLE);
 
@@ -116,9 +117,11 @@ public class BloombergBpipeHistoricalTimeSeriesProviderTest {
     final LocalDate startDate = endDate.minusMonths(1);
 
     final LocalDateRange dateRange = LocalDateRange.of(startDate, endDate, true);
-    final HistoricalTimeSeriesProviderGetRequest referenceRequest = HistoricalTimeSeriesProviderGetRequest.createGet(SIMPLE_BUNDLE, BBG_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, dateRange);
+    final HistoricalTimeSeriesProviderGetRequest referenceRequest = HistoricalTimeSeriesProviderGetRequest.createGet(SIMPLE_BUNDLE, BBG_DATA_SOURCE,
+        DEFAULT_DATA_PROVIDER, PX_LAST, dateRange);
     final LocalDateDoubleTimeSeries reference = _provider.getHistoricalTimeSeries(referenceRequest).getResultMap().get(SIMPLE_BUNDLE);
-    final HistoricalTimeSeriesProviderGetRequest realRequest = HistoricalTimeSeriesProviderGetRequest.createGet(SIMPLE_BUNDLE, BBG_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, dateRange);
+    final HistoricalTimeSeriesProviderGetRequest realRequest = HistoricalTimeSeriesProviderGetRequest.createGet(SIMPLE_BUNDLE, BBG_DATA_SOURCE,
+        DEFAULT_DATA_PROVIDER, PX_LAST, dateRange);
     realRequest.setMaxPoints(-9999);
     final LocalDateDoubleTimeSeries realHts = _provider.getHistoricalTimeSeries(realRequest).getResultMap().get(SIMPLE_BUNDLE);
 
@@ -133,9 +136,11 @@ public class BloombergBpipeHistoricalTimeSeriesProviderTest {
     final LocalDate startDate = endDate.minusMonths(1);
 
     final LocalDateRange dateRange = LocalDateRange.of(startDate, endDate, true);
-    final HistoricalTimeSeriesProviderGetRequest referenceRequest = HistoricalTimeSeriesProviderGetRequest.createGet(SIMPLE_BUNDLE, BBG_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, dateRange);
+    final HistoricalTimeSeriesProviderGetRequest referenceRequest = HistoricalTimeSeriesProviderGetRequest.createGet(SIMPLE_BUNDLE, BBG_DATA_SOURCE,
+        DEFAULT_DATA_PROVIDER, PX_LAST, dateRange);
     final LocalDateDoubleTimeSeries reference = _provider.getHistoricalTimeSeries(referenceRequest).getResultMap().get(SIMPLE_BUNDLE);
-    final HistoricalTimeSeriesProviderGetRequest realRequest = HistoricalTimeSeriesProviderGetRequest.createGet(SIMPLE_BUNDLE, BBG_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, dateRange);
+    final HistoricalTimeSeriesProviderGetRequest realRequest = HistoricalTimeSeriesProviderGetRequest.createGet(SIMPLE_BUNDLE, BBG_DATA_SOURCE,
+        DEFAULT_DATA_PROVIDER, PX_LAST, dateRange);
     realRequest.setMaxPoints(-2);
     final LocalDateDoubleTimeSeries realHts = _provider.getHistoricalTimeSeries(realRequest).getResultMap().get(SIMPLE_BUNDLE);
 
@@ -149,13 +154,15 @@ public class BloombergBpipeHistoricalTimeSeriesProviderTest {
     final LocalDate startDate = LocalDate.of(2009, 10, 29);
     final LocalDate endDate = LocalDate.of(2009, 11, 4);
     final LocalDateRange range = LocalDateRange.of(startDate, endDate, true);
-    final LocalDateDoubleTimeSeries timeSeriesExpected = _provider.getHistoricalTimeSeries(SIMPLE_BUNDLE,  BBG_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, range);
+    final LocalDateDoubleTimeSeries timeSeriesExpected = _provider.getHistoricalTimeSeries(SIMPLE_BUNDLE, BBG_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST,
+        range);
     assertNotNull(timeSeriesExpected);
 
     final ExecutorService threadPool = Executors.newFixedThreadPool(4);
     final List<Future<LocalDateDoubleTimeSeries>> results = new ArrayList<>();
     for (int i = 0; i < 20; i++) {
-      results.add(threadPool.submit(new BHDPgetHistoricalTimeSeriesWithDates(SIMPLE_BUNDLE, BBG_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, endDate)));
+      results
+          .add(threadPool.submit(new BHDPgetHistoricalTimeSeriesWithDates(SIMPLE_BUNDLE, BBG_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, endDate)));
     }
 
     for (final Future<LocalDateDoubleTimeSeries> future : results) {
@@ -165,7 +172,7 @@ public class BloombergBpipeHistoricalTimeSeriesProviderTest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_getHistoricalTimeSeries_Map_wrongDataSource() {
     final LocalDateRange range = LocalDateRange.of(LocalDate.of(2009, 11, 4), LocalDate.of(2009, 11, 4), true);
@@ -184,7 +191,7 @@ public class BloombergBpipeHistoricalTimeSeriesProviderTest {
     assertFalse(series.isEmpty());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private class BHDPgetHistoricalTimeSeriesWithDates implements Callable<LocalDateDoubleTimeSeries> {
     private final ExternalIdBundle _secDes;
     private final String _dataSource;
@@ -193,7 +200,8 @@ public class BloombergBpipeHistoricalTimeSeriesProviderTest {
     private final LocalDate _startDate;
     private final LocalDate _endDate;
 
-    public BHDPgetHistoricalTimeSeriesWithDates(final ExternalIdBundle secDes, final String dataSource, final String dataProvider, final String field, final LocalDate startDate, final LocalDate endDate) {
+    BHDPgetHistoricalTimeSeriesWithDates(final ExternalIdBundle secDes, final String dataSource, final String dataProvider, final String field,
+        final LocalDate startDate, final LocalDate endDate) {
       assertNotNull(secDes);
       assertNotNull(startDate);
       assertNotNull(endDate);
@@ -214,7 +222,8 @@ public class BloombergBpipeHistoricalTimeSeriesProviderTest {
 
   @Test
   public void test_getAllAvailiableSeries() {
-    final LocalDateDoubleTimeSeries hts = _provider.getHistoricalTimeSeries(ExternalIdBundle.of(ExternalSchemes.bloombergTickerSecurityId("JPY3M Curncy")), BBG_DATA_SOURCE, "CMPL", PX_LAST);
+    final LocalDateDoubleTimeSeries hts = _provider.getHistoricalTimeSeries(ExternalIdBundle.of(ExternalSchemes.bloombergTickerSecurityId("JPY3M Curncy")),
+        BBG_DATA_SOURCE, "CMPL", PX_LAST);
     assertNotNull(hts);
     assertEquals(getLatestWeekDay(), hts.getLatestTime());
   }

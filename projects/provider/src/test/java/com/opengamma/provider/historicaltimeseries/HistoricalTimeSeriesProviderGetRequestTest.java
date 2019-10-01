@@ -18,7 +18,6 @@ import org.threeten.bp.LocalDate;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.provider.AbstractBeanTestCase;
-import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProviderGetRequest;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.LocalDateRange;
 

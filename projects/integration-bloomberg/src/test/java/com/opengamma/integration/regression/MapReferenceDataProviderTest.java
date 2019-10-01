@@ -29,8 +29,10 @@ public class MapReferenceDataProviderTest {
   private static final MapReferenceDataProvider PROVIDER;
 
   static {
-    REFERENCE_DATA.put("EDZ5", ImmutableSetMultimap.<String, String>builder().put("Name", "Eurodollar future").put("Security type", "IR future").put("Expiry", "2015-12-16").build());
-    REFERENCE_DATA.put("EDH6", ImmutableSetMultimap.<String, String>builder().put("Name", "Eurodollar future").put("Security type", "IR future").put("Expiry", "2016-03-16").build());
+    REFERENCE_DATA.put("EDZ5",
+        ImmutableSetMultimap.<String, String> builder().put("Name", "Eurodollar future").put("Security type", "IR future").put("Expiry", "2015-12-16").build());
+    REFERENCE_DATA.put("EDH6",
+        ImmutableSetMultimap.<String, String> builder().put("Name", "Eurodollar future").put("Security type", "IR future").put("Expiry", "2016-03-16").build());
     PROVIDER = new MapReferenceDataProvider(REFERENCE_DATA);
   }
 
@@ -65,7 +67,8 @@ public class MapReferenceDataProviderTest {
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoFieldsAvailableForId() {
     final Map<String, Multimap<String, String>> referenceData = new HashMap<>();
-    referenceData.put("EDZ5", ImmutableSetMultimap.<String, String>builder().put("Name", "Eurodollar future").put("Security type", "IR future").put("Expiry", "2015-12-16").putAll("Zone", Collections.<String>emptySet()).build());
+    referenceData.put("EDZ5", ImmutableSetMultimap.<String, String> builder().put("Name", "Eurodollar future").put("Security type", "IR future")
+        .put("Expiry", "2015-12-16").putAll("Zone", Collections.<String> emptySet()).build());
     final MapReferenceDataProvider provider = new MapReferenceDataProvider(referenceData);
     // no data available for that field
     ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet("EDZ5", "Issuer", false);

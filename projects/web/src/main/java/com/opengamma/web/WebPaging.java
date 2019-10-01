@@ -31,8 +31,11 @@ public class WebPaging {
 
   /**
    * Creates an instance.
-   * @param paging  the paging to display, not null
-   * @param uriInfo  the URI, not null
+   * 
+   * @param paging
+   *          the paging to display, not null
+   * @param uriInfo
+   *          the URI, not null
    */
   public WebPaging(final Paging paging, final UriInfo uriInfo) {
     ArgumentChecker.notNull(paging, "Paging must not be null");
@@ -41,7 +44,7 @@ public class WebPaging {
     _uriInfo = uriInfo;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the first item, using a zero-based index.
    *
@@ -71,7 +74,7 @@ public class WebPaging {
     return _paging.getTotalItems();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the first item, using a one-based index.
    *
@@ -99,12 +102,11 @@ public class WebPaging {
     return _paging.getLastItemOneBased();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the current page number, one-based, when viewed as traditional paging.
    * <p>
-   * If the request was for index-based paging rather than traditional paging
-   * then the result of this method will be the effective page of the first item.
+   * If the request was for index-based paging rather than traditional paging then the result of this method will be the effective page of the first item.
    *
    * @return the current page, one or greater
    */
@@ -116,13 +118,14 @@ public class WebPaging {
    * Gets the total number of pages, one-based, when viewed as traditional paging.
    *
    * @return the number of pages, one or greater
-   * @throws ArithmeticException if a paging request of NONE was used
+   * @throws ArithmeticException
+   *           if a paging request of NONE was used
    */
   public int getTotalPages() {
     return _paging.getTotalPages();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if there is a previous page.
    *
@@ -251,7 +254,7 @@ public class WebPaging {
     return list;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * A page within the paging.
    */
@@ -263,6 +266,9 @@ public class WebPaging {
 
     /**
      * Creates an instance.
+     * 
+     * @param page
+     *          the page
      */
     WebPagingPage(final int page) {
       _page = page;

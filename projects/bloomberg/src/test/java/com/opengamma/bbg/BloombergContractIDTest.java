@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg;
@@ -14,19 +14,19 @@ import com.opengamma.financial.security.option.OptionType;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests {@link BloombergContractID} 
+ * Tests {@link BloombergContractID}.
  */
 @Test(groups = TestGroup.UNIT)
 public class BloombergContractIDTest {
-  
-  private static final Integer[] YEARS = {1, 11, 2011};
-  
+
+  private static final Integer[] YEARS = { 1, 11, 2011 };
+
   private static final BloombergContractID BBG_CONTRACT = new BloombergContractID("ED", "comdty");
-  
-  private static final OptionType[] OPTION_TYPES = {OptionType.CALL, OptionType.PUT};
-  
+
+  private static final OptionType[] OPTION_TYPES = { OptionType.CALL, OptionType.PUT };
+
   public void toFutureExternalId() {
-    for (Integer year : YEARS) {
+    for (final Integer year : YEARS) {
       assertEquals(ExternalSchemes.bloombergTickerSecurityId("EDF1 COMDTY"), BBG_CONTRACT.toFutureExternalId(1, year));
       assertEquals(ExternalSchemes.bloombergTickerSecurityId("EDG1 COMDTY"), BBG_CONTRACT.toFutureExternalId(2, year));
       assertEquals(ExternalSchemes.bloombergTickerSecurityId("EDH1 COMDTY"), BBG_CONTRACT.toFutureExternalId(3, year));
@@ -41,9 +41,9 @@ public class BloombergContractIDTest {
       assertEquals(ExternalSchemes.bloombergTickerSecurityId("EDZ1 COMDTY"), BBG_CONTRACT.toFutureExternalId(12, year));
     }
   }
-  
+
   public void toOptionExternalId() {
-    for (OptionType optionType : OPTION_TYPES) {
+    for (final OptionType optionType : OPTION_TYPES) {
       if (optionType == OptionType.CALL) {
         assertEquals(ExternalSchemes.bloombergTickerSecurityId("ED 01/2011 C1.234 COMDTY"), BBG_CONTRACT.toOptionExternalId(1, 2011, 1.234, optionType));
         assertEquals(ExternalSchemes.bloombergTickerSecurityId("ED 02/2011 C1.234 COMDTY"), BBG_CONTRACT.toOptionExternalId(2, 2011, 1.234, optionType));
@@ -73,10 +73,10 @@ public class BloombergContractIDTest {
       }
     }
   }
-  
+
   public void toFutureOptionExternalId() {
-    for (Integer year : YEARS) {
-      for (OptionType optionType : OPTION_TYPES) {
+    for (final Integer year : YEARS) {
+      for (final OptionType optionType : OPTION_TYPES) {
         if (optionType == OptionType.CALL) {
           assertEquals(ExternalSchemes.bloombergTickerSecurityId("EDF1C 1.234 COMDTY"), BBG_CONTRACT.toFutureOptionExternalId(1, year, 1.234, optionType));
           assertEquals(ExternalSchemes.bloombergTickerSecurityId("EDG1C 1.234 COMDTY"), BBG_CONTRACT.toFutureOptionExternalId(2, year, 1.234, optionType));
@@ -107,7 +107,7 @@ public class BloombergContractIDTest {
       }
     }
   }
-  
+
   public void padding() {
     final BloombergContractID id = new BloombergContractID("S", "Comdty");
     assertEquals(id.getContractCode(), "S ");

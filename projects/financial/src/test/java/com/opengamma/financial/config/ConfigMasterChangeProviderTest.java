@@ -59,20 +59,20 @@ public class ConfigMasterChangeProviderTest {
     final ConfigMasterChangeProvider cp = new ConfigMasterChangeProvider(underlying);
     final ChangeListener l1 = Mockito.mock(ChangeListener.class);
     final ChangeListener l2 = Mockito.mock(ChangeListener.class);
-    Mockito.verify(cm, Mockito.never()).addChangeListener(Matchers.<ChangeListener>any());
-    Mockito.verify(cm, Mockito.never()).removeChangeListener(Matchers.<ChangeListener>any());
+    Mockito.verify(cm, Mockito.never()).addChangeListener(Matchers.<ChangeListener> any());
+    Mockito.verify(cm, Mockito.never()).removeChangeListener(Matchers.<ChangeListener> any());
     cp.changeManager().addChangeListener(l1);
-    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Matchers.<ChangeListener>any());
-    Mockito.verify(cm, Mockito.never()).removeChangeListener(Matchers.<ChangeListener>any());
+    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Matchers.<ChangeListener> any());
+    Mockito.verify(cm, Mockito.never()).removeChangeListener(Matchers.<ChangeListener> any());
     cp.changeManager().addChangeListener(l2);
-    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Matchers.<ChangeListener>any());
-    Mockito.verify(cm, Mockito.never()).removeChangeListener(Matchers.<ChangeListener>any());
+    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Matchers.<ChangeListener> any());
+    Mockito.verify(cm, Mockito.never()).removeChangeListener(Matchers.<ChangeListener> any());
     cp.changeManager().removeChangeListener(l1);
-    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Matchers.<ChangeListener>any());
-    Mockito.verify(cm, Mockito.never()).removeChangeListener(Matchers.<ChangeListener>any());
+    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Matchers.<ChangeListener> any());
+    Mockito.verify(cm, Mockito.never()).removeChangeListener(Matchers.<ChangeListener> any());
     cp.changeManager().removeChangeListener(l2);
-    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Matchers.<ChangeListener>any());
-    Mockito.verify(cm, Mockito.times(1)).removeChangeListener(Matchers.<ChangeListener>any());
+    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Matchers.<ChangeListener> any());
+    Mockito.verify(cm, Mockito.times(1)).removeChangeListener(Matchers.<ChangeListener> any());
     Mockito.verifyNoMoreInteractions(cm);
   }
 
@@ -80,7 +80,7 @@ public class ConfigMasterChangeProviderTest {
 
     private final Collection<ChangeEvent> _events;
 
-    public GatheringChangeListener(final Collection<ChangeEvent> events) {
+    GatheringChangeListener(final Collection<ChangeEvent> events) {
       _events = events;
     }
 

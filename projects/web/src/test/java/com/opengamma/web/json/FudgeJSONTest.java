@@ -15,7 +15,6 @@
  */
 package com.opengamma.web.json;
 
-
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -41,10 +40,9 @@ public class FudgeJSONTest {
   private final FudgeContext _fudgeContext;
 
   private static FudgeTaxonomy getTaxonomy() {
-    return new MapFudgeTaxonomy (
+    return new MapFudgeTaxonomy(
         new int[] { 1, 2, 3, 4, 5, 6 },
-        new String[] { "boolean", "byte", "int", "string", "float", "double" }
-        );
+        new String[] { "boolean", "byte", "int", "string", "float", "double" });
   }
 
   /**
@@ -70,47 +68,47 @@ public class FudgeJSONTest {
    */
   @Test
   public void cycleJSONMessages_noTaxonomy() {
-//    System.out.println("cycleJSONMessages:");
+    // System.out.println("cycleJSONMessages:");
 
     final FudgeMsg[] messages = createMessages();
     for (final FudgeMsg message2 : messages) {
       final StringWriter sw = new StringWriter();
-      try (final FudgeMsgJSONWriter fmw = new FudgeMsgJSONWriter(_fudgeContext, sw)) {
-        fmw.writeMessage (message2, 0);
-//        System.out.println(messages[i]);
-//        System.out.println(sw.toString());
+      try (FudgeMsgJSONWriter fmw = new FudgeMsgJSONWriter(_fudgeContext, sw)) {
+        fmw.writeMessage(message2, 0);
+        // System.out.println(messages[i]);
+        // System.out.println(sw.toString());
         final StringReader sr = new StringReader(sw.toString());
         final FudgeMsgJSONReader fmr = new FudgeMsgJSONReader(_fudgeContext, sr);
         final FudgeMsg message = fmr.readMessage();
         AssertJUnit.assertNotNull(message);
-//        System.out.println (message);
+        // System.out.println (message);
         FudgeUtils.assertAllFieldsMatch(message2, message, false);
       }
     }
   }
 
-//  /**
-//   *
-//   */
-//  @Test
-//  public void cycleJSONMessages_withTaxonomy() {
-//    System.out.println("cycleJSONMessages:");
-//
-//    final FudgeMsg[] messages = createMessages();
-//    for (int i = 0; i < messages.length; i++) {
-//
-//      final StringWriter sw = new StringWriter();
-//      final FudgeMsgJSONWriter fmw = new FudgeMsgJSONWriter(_fudgeContext, sw);
-//      fmw.writeMessage (messages[i], 1);
-//      System.out.println(messages[i]);
-//      System.out.println(sw.toString());
-//      final StringReader sr = new StringReader(sw.toString());
-//      final FudgeMsgJSONReader fmr = new FudgeMsgJSONReader(_fudgeContext, sr);
-//      FudgeMsg message = fmr.readMessage();
-//      AssertJUnit.assertNotNull(message);
-//      System.out.println (message);
-//      FudgeUtils.assertAllFieldsMatch(messages[i], message, false);
-//    }
-//  }
+  // /**
+  // *
+  // */
+  // @Test
+  // public void cycleJSONMessages_withTaxonomy() {
+  // System.out.println("cycleJSONMessages:");
+  //
+  // final FudgeMsg[] messages = createMessages();
+  // for (int i = 0; i < messages.length; i++) {
+  //
+  // final StringWriter sw = new StringWriter();
+  // final FudgeMsgJSONWriter fmw = new FudgeMsgJSONWriter(_fudgeContext, sw);
+  // fmw.writeMessage (messages[i], 1);
+  // System.out.println(messages[i]);
+  // System.out.println(sw.toString());
+  // final StringReader sr = new StringReader(sw.toString());
+  // final FudgeMsgJSONReader fmr = new FudgeMsgJSONReader(_fudgeContext, sr);
+  // FudgeMsg message = fmr.readMessage();
+  // AssertJUnit.assertNotNull(message);
+  // System.out.println (message);
+  // FudgeUtils.assertAllFieldsMatch(messages[i], message, false);
+  // }
+  // }
 
 }

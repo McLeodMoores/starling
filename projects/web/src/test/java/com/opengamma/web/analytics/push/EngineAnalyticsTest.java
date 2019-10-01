@@ -5,27 +5,27 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * Tests live updating of analytics from a real engine.  Requires an engine running on {@code localhost}.
+ * Tests live updating of analytics from a real engine. Requires an engine running on {@code localhost}.
  */
 public class EngineAnalyticsTest {
 
   public static void main(final String[] args) throws Exception {
     final WebPushTestUtils webPushTestUtils = new WebPushTestUtils();
     final String clientId = webPushTestUtils.handshake();
-    final String viewDefJson = "{" +
-        "\"viewDefinitionName\": \"Single Swap Test View\", " +
-        //"\"snapshotId\": \"Tst~123\", " + // use live data
-        "\"portfolioViewport\": {" +
-        "\"rowIds\": [0, 1, 2, 3], " +
-        "\"lastTimestamps\": [null, null, null, null], " +
-        "\"dependencyGraphCells\": [[0, 0], [1, 1]]" +
-        "}" +
-        "}";
+    final String viewDefJson = "{"
+        + "\"viewDefinitionName\": \"Single Swap Test View\", "
+        // "\"snapshotId\": \"Tst~123\", " + // use live data
+        + "\"portfolioViewport\": {"
+        + "\"rowIds\": [0, 1, 2, 3], "
+        + "\"lastTimestamps\": [null, null, null, null], "
+        + "\"dependencyGraphCells\": [[0, 0], [1, 1]]"
+        + "}"
+        + "}";
     final String viewportUrl = webPushTestUtils.createViewport(clientId, viewDefJson);
     // need to request data to activate the subscription
     final String firstResults = webPushTestUtils.readFromPath(viewportUrl + "/data", clientId);
     System.out.println("first results: " + firstResults);
-    //noinspection InfiniteLoopStatement
+    // noinspection InfiniteLoopStatement
     while (true) {
       final String urlJson = webPushTestUtils.readFromPath("/updates/" + clientId);
       System.out.println("updates: " + urlJson);

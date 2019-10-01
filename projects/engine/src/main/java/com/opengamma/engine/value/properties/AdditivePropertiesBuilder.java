@@ -17,7 +17,7 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Implementation of the {@link ValueProperties.Builder} for additive composition of properties.
+ * Implementation of the {@link com.opengamma.engine.value.ValueProperties.Builder} for additive composition of properties.
  */
 public class AdditivePropertiesBuilder extends ValueProperties.Builder {
 
@@ -48,11 +48,11 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
   /**
    * Creates an instance as a deep copy of another.
    * <p>
-   * A full copy is performed rather than taking an unowned reference. The latter approach works when referencing the
-   * immutable content of an existing value property set, but not when the owner is a builder as that may continue to
-   * modify the structure.
+   * A full copy is performed rather than taking an unowned reference. The latter approach works when referencing the immutable content of an existing value
+   * property set, but not when the owner is a builder as that may continue to modify the structure.
    *
-   * @param copyFrom the builder to copy from
+   * @param copyFrom
+   *          the builder to copy from
    */
   private AdditivePropertiesBuilder(final AdditivePropertiesBuilder copyFrom) {
     if (copyFrom._properties != null) {
@@ -75,7 +75,8 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
   /**
    * Creates an instance with default properties owned by something else.
    *
-   * @param properties the properties to populate with, not null. The array (and its contents) will not be modified - a copy will be taken when needed
+   * @param properties
+   *          the properties to populate with, not null. The array (and its contents) will not be modified - a copy will be taken when needed
    */
   public AdditivePropertiesBuilder(final AbstractValueProperty[] properties) {
     _properties = properties;
@@ -133,7 +134,8 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
   /**
    * Adds a value to the builder, taking the union with any existing values.
    *
-   * @param value the value to add or take the union with.
+   * @param value
+   *          the value to add or take the union with.
    */
   public void union(final AbstractValueProperty value) {
     final int hc = value.getKey().hashCode() & 0x7FFFFFFF;
@@ -185,7 +187,8 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
   /**
    * Finds a matching entry and takes the value intersection. If there is no intersection the entry is removed.
    *
-   * @param value the value to compose against if matched
+   * @param value
+   *          the value to compose against if matched
    */
   public void compose(final AbstractValueProperty value) {
     if (_properties == null) {
@@ -255,8 +258,8 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
     ArgumentChecker.notNull(propertyValue, "propertyValue");
     propertyName = ValueRequirement.getInterned(propertyName);
     if (_properties == null) {
-      _properties = new AbstractValueProperty[] {new SingletonValueProperty(propertyName, false, propertyValue, null) };
-      _copies = new boolean[] {true };
+      _properties = new AbstractValueProperty[] { new SingletonValueProperty(propertyName, false, propertyValue, null) };
+      _copies = new boolean[] { true };
       _numEntries = 1;
     } else {
       localCopy();
@@ -306,8 +309,8 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
     }
     propertyName = ValueRequirement.getInterned(propertyName);
     if (_properties == null) {
-      _properties = new AbstractValueProperty[] {createValueProperty(propertyName, propertyValues, null) };
-      _copies = new boolean[] {true };
+      _properties = new AbstractValueProperty[] { createValueProperty(propertyName, propertyValues, null) };
+      _copies = new boolean[] { true };
       _numEntries = 1;
     } else {
       localCopy();
@@ -356,8 +359,8 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
     }
     propertyName = ValueRequirement.getInterned(propertyName);
     if (_properties == null) {
-      _properties = new AbstractValueProperty[] {createValueProperty(propertyName, propertyValues, null) };
-      _copies = new boolean[] {true };
+      _properties = new AbstractValueProperty[] { createValueProperty(propertyName, propertyValues, null) };
+      _copies = new boolean[] { true };
       _numEntries = 1;
     } else {
       localCopy();
@@ -399,8 +402,8 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
     ArgumentChecker.notNull(propertyName, "propertyName");
     propertyName = ValueRequirement.getInterned(propertyName);
     if (_properties == null) {
-      _properties = new AbstractValueProperty[] {new WildcardValueProperty(propertyName, false, null) };
-      _copies = new boolean[] {true };
+      _properties = new AbstractValueProperty[] { new WildcardValueProperty(propertyName, false, null) };
+      _copies = new boolean[] { true };
       _numEntries = 1;
     } else {
       localCopy();
@@ -442,8 +445,8 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
     ArgumentChecker.notNull(propertyName, "propertyName");
     propertyName = ValueRequirement.getInterned(propertyName);
     if (_properties == null) {
-      _properties = new AbstractValueProperty[] {new TentativeWildcardValueProperty(propertyName, null) };
-      _copies = new boolean[] {true };
+      _properties = new AbstractValueProperty[] { new TentativeWildcardValueProperty(propertyName, null) };
+      _copies = new boolean[] { true };
       _numEntries = 1;
     } else {
       localCopy();

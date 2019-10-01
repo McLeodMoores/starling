@@ -55,7 +55,7 @@ public abstract class AbstractDbPositionMasterWorkerTest extends AbstractDbTest 
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doSetUp() {
     init();
@@ -71,7 +71,7 @@ public abstract class AbstractDbPositionMasterWorkerTest extends AbstractDbTest 
     _posMaster = null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void init() {
     _posMaster = new DbPositionMaster(getDbConnector());
 
@@ -83,19 +83,26 @@ public abstract class AbstractDbPositionMasterWorkerTest extends AbstractDbTest 
     LOGGER.debug("test data later: {}", _version2Instant);
     final JdbcOperations template = _posMaster.getDbConnector().getJdbcOperations();
     template.update("INSERT INTO pos_position VALUES (?,?,?,?,?, ?,?,?,?)",
-        100, 100, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "A", "100", BigDecimal.valueOf(100.987));
+        100, 100, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "A", "100",
+        BigDecimal.valueOf(100.987));
     template.update("INSERT INTO pos_position VALUES (?,?,?,?,?, ?,?,?,?)",
-        120, 120, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "A", "120", BigDecimal.valueOf(120.987));
+        120, 120, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "A", "120",
+        BigDecimal.valueOf(120.987));
     template.update("INSERT INTO pos_position VALUES (?,?,?,?,?, ?,?,?,?)",
-        121, 121, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "A", "121", BigDecimal.valueOf(121.987));
+        121, 121, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "A", "121",
+        BigDecimal.valueOf(121.987));
     template.update("INSERT INTO pos_position VALUES (?,?,?,?,?, ?,?,?,?)",
-        122, 122, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "A", "122", BigDecimal.valueOf(122.987));
+        122, 122, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "A", "122",
+        BigDecimal.valueOf(122.987));
     template.update("INSERT INTO pos_position VALUES (?,?,?,?,?, ?,?,?,?)",
-        123, 123, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "A", "123", BigDecimal.valueOf(123.987));
+        123, 123, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "A", "123",
+        BigDecimal.valueOf(123.987));
     template.update("INSERT INTO pos_position VALUES (?,?,?,?,?, ?,?,?,?)",
-        221, 221, toSqlTimestamp(_version1Instant), toSqlTimestamp(_version2Instant), toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "A", "221", BigDecimal.valueOf(221.987));
+        221, 221, toSqlTimestamp(_version1Instant), toSqlTimestamp(_version2Instant), toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "A", "221",
+        BigDecimal.valueOf(221.987));
     template.update("INSERT INTO pos_position VALUES (?,?,?,?,?, ?,?,?,?)",
-        222, 221, toSqlTimestamp(_version2Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version2Instant), MAX_SQL_TIMESTAMP, "A", "222", BigDecimal.valueOf(222.987));
+        222, 221, toSqlTimestamp(_version2Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version2Instant), MAX_SQL_TIMESTAMP, "A", "222",
+        BigDecimal.valueOf(222.987));
     _totalPositions = 6;
 
     template.update("INSERT INTO pos_idkey VALUES (?,?,?)",
@@ -129,41 +136,77 @@ public abstract class AbstractDbPositionMasterWorkerTest extends AbstractDbTest 
     template.update("INSERT INTO pos_position2idkey VALUES (?,?)", 222, 508);
 
     OffsetTime tradeTime = _now.toOffsetTime().minusSeconds(400);
-    template.update("INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, zone_offset, cparty_scheme, cparty_value, provider_scheme, provider_value) " +
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
-        400, 400, 120, 120, BigDecimal.valueOf(120.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()), tradeTime.getOffset().getTotalSeconds(), "CPARTY", "C100", "B", "400");
+    template.update(
+        "INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, "
+            + "zone_offset, cparty_scheme, cparty_value, provider_scheme, provider_value) "
+            +
+            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+        400, 400, 120, 120, BigDecimal.valueOf(120.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()),
+        tradeTime.getOffset().getTotalSeconds(), "CPARTY", "C100", "B", "400");
     tradeTime = _now.toOffsetTime().minusSeconds(401);
-    template.update("INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, zone_offset, cparty_scheme, cparty_value, provider_scheme, provider_value) " +
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
-        401, 401, 121, 121, BigDecimal.valueOf(121.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()), tradeTime.getOffset().getTotalSeconds(), "CPARTY", "C101", "B", "401");
+    template.update(
+        "INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, "
+            + "zone_offset, cparty_scheme, cparty_value, provider_scheme, provider_value) "
+            +
+            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+        401, 401, 121, 121, BigDecimal.valueOf(121.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()),
+        tradeTime.getOffset().getTotalSeconds(), "CPARTY", "C101", "B", "401");
     tradeTime = _now.toOffsetTime().minusSeconds(402);
-    template.update("INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, zone_offset, cparty_scheme, cparty_value, provider_scheme, provider_value) " +
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
-        402, 402, 122, 122, BigDecimal.valueOf(100.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()), tradeTime.getOffset().getTotalSeconds(), "CPARTY", "JMP", "B", "402");
+    template.update(
+        "INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, "
+            + "zone_offset, cparty_scheme, cparty_value, provider_scheme, provider_value) "
+            +
+            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+        402, 402, 122, 122, BigDecimal.valueOf(100.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()),
+        tradeTime.getOffset().getTotalSeconds(), "CPARTY", "JMP", "B", "402");
     tradeTime = _now.toOffsetTime().minusSeconds(403);
-    template.update("INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, zone_offset, cparty_scheme, cparty_value, provider_scheme, provider_value) " +
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
-        403, 403, 122, 122, BigDecimal.valueOf(22.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()), tradeTime.getOffset().getTotalSeconds(), "CPARTY", "CISC", "B", "403");
+    template.update(
+        "INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, "
+            + "zone_offset, cparty_scheme, cparty_value, provider_scheme, provider_value) "
+            +
+            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+        403, 403, 122, 122, BigDecimal.valueOf(22.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()),
+        tradeTime.getOffset().getTotalSeconds(), "CPARTY", "CISC", "B", "403");
     tradeTime = _now.toOffsetTime().minusSeconds(404);
-    template.update("INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, zone_offset, cparty_scheme, cparty_value, provider_scheme, provider_value) " +
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
-        404, 404, 123, 123, BigDecimal.valueOf(100.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()), tradeTime.getOffset().getTotalSeconds(), "CPARTY", "C104", "B", "404");
+    template.update(
+        "INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, "
+            + "zone_offset, cparty_scheme, cparty_value, provider_scheme, provider_value) "
+            +
+            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+        404, 404, 123, 123, BigDecimal.valueOf(100.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()),
+        tradeTime.getOffset().getTotalSeconds(), "CPARTY", "C104", "B", "404");
     tradeTime = _now.toOffsetTime().minusSeconds(405);
-    template.update("INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, zone_offset, cparty_scheme, cparty_value, provider_scheme, provider_value) " +
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
-        405, 405, 123, 123, BigDecimal.valueOf(200.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()), tradeTime.getOffset().getTotalSeconds(), "CPARTY", "C105", "B", "405");
+    template.update(
+        "INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, "
+            + "zone_offset, cparty_scheme, cparty_value, provider_scheme, provider_value) "
+            +
+            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+        405, 405, 123, 123, BigDecimal.valueOf(200.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()),
+        tradeTime.getOffset().getTotalSeconds(), "CPARTY", "C105", "B", "405");
     tradeTime = _now.toOffsetTime().minusSeconds(406);
-    template.update("INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, zone_offset, cparty_scheme, cparty_value, provider_scheme, provider_value) " +
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
-        406, 406, 123, 123, BigDecimal.valueOf(300.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()), tradeTime.getOffset().getTotalSeconds(), "CPARTY", "C106", "B", "406");
+    template.update(
+        "INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, zone_offset, "
+            + "cparty_scheme, cparty_value, provider_scheme, provider_value) "
+            +
+            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+        406, 406, 123, 123, BigDecimal.valueOf(300.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()),
+        tradeTime.getOffset().getTotalSeconds(), "CPARTY", "C106", "B", "406");
     tradeTime = _now.toOffsetTime().minusSeconds(407);
-    template.update("INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, zone_offset, cparty_scheme, cparty_value, provider_scheme, provider_value) " +
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
-        407, 407, 221, 221, BigDecimal.valueOf(221.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()), tradeTime.getOffset().getTotalSeconds(), "CPARTY", "C221", "B", "407");
+    template.update(
+        "INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, zone_offset, "
+            + "cparty_scheme, cparty_value, provider_scheme, provider_value) "
+            +
+            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+        407, 407, 221, 221, BigDecimal.valueOf(221.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()),
+        tradeTime.getOffset().getTotalSeconds(), "CPARTY", "C221", "B", "407");
     tradeTime = _now.toOffsetTime().minusSeconds(408);
-    template.update("INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, zone_offset, cparty_scheme, cparty_value, provider_scheme, provider_value) " +
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
-        408, 407, 222, 221, BigDecimal.valueOf(222.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()), tradeTime.getOffset().getTotalSeconds(), "CPARTY", "C222", "B", "408");
+    template.update(
+        "INSERT INTO pos_trade (id, oid, position_id, position_oid, quantity, trade_date, trade_time, zone_offset, "
+            + "cparty_scheme, cparty_value, provider_scheme, provider_value) "
+            +
+            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+        408, 407, 222, 221, BigDecimal.valueOf(222.987), toSqlDate(_now.toLocalDate()), toSqlTimestamp(tradeTime.toLocalTime()),
+        tradeTime.getOffset().getTotalSeconds(), "CPARTY", "C222", "B", "408");
 
     template.update("INSERT INTO pos_trade2idkey VALUES (?,?)", 400, 501);
     template.update("INSERT INTO pos_trade2idkey VALUES (?,?)", 401, 502);
@@ -180,7 +223,7 @@ public abstract class AbstractDbPositionMasterWorkerTest extends AbstractDbTest 
     template.update("INSERT INTO pos_trade2idkey VALUES (?,?)", 408, 507);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   protected void assert100(final PositionDocument test) {
     final UniqueId uniqueId = UniqueId.of("DbPos", "100", "0");
     assertNotNull(test);
@@ -350,7 +393,8 @@ public abstract class AbstractDbPositionMasterWorkerTest extends AbstractDbTest 
 
     final List<ManageableTrade> trades = position.getTrades();
     assertEquals(1, trades.size());
-    final ManageableTrade expected = new ManageableTrade(BigDecimal.valueOf(221.987), secKey, _now.toLocalDate(), _now.toOffsetTime().minusSeconds(407), ExternalId.of("CPARTY", "C221"));
+    final ManageableTrade expected = new ManageableTrade(BigDecimal.valueOf(221.987), secKey, _now.toLocalDate(), _now.toOffsetTime().minusSeconds(407),
+        ExternalId.of("CPARTY", "C221"));
     expected.setUniqueId(UniqueId.of("DbPos", "407", "0"));
     expected.setProviderId(ExternalId.of("B", "407"));
     expected.setParentPositionId(uniqueId);
@@ -377,7 +421,8 @@ public abstract class AbstractDbPositionMasterWorkerTest extends AbstractDbTest 
 
     final List<ManageableTrade> trades = position.getTrades();
     assertEquals(1, trades.size());
-    final ManageableTrade expected = new ManageableTrade(BigDecimal.valueOf(222.987), secKey, _now.toLocalDate(), _now.toOffsetTime().minusSeconds(408), ExternalId.of("CPARTY", "C222"));
+    final ManageableTrade expected = new ManageableTrade(BigDecimal.valueOf(222.987), secKey, _now.toLocalDate(), _now.toOffsetTime().minusSeconds(408),
+        ExternalId.of("CPARTY", "C222"));
     expected.setUniqueId(UniqueId.of("DbPos", "407", "1"));
     expected.setProviderId(ExternalId.of("B", "408"));
     expected.setParentPositionId(uniqueId);

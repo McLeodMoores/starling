@@ -28,8 +28,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.test.AbstractFudgeBuilderTestCase;
 
 /**
- * An abstract base test case for Joda beans that tests Object methods (equals,
- * hashCode) and Fudge encoding.
+ * An abstract base test case for Joda beans that tests Object methods (equals, hashCode) and Fudge encoding.
  */
 public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase {
 
@@ -39,8 +38,7 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
    * <li>The type to be tested</li>
    * <li>The property names to be set</li>
    * <li>The property values</li>
-   * <li>Alternative property values to produce a different bean (e.g. to test
-   * equality).
+   * <li>Alternative property values to produce a different bean (e.g. to test equality).
    * </ul>
    *
    * @return an array of bean properties
@@ -77,6 +75,8 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
    *
    * @param properties
    *          information about the properties to be tested
+   * @param <TYPE>
+   *          the type of the bean
    */
   @Test(dataProvider = "propertyValues")
   protected <TYPE extends Bean> void testObject(final JodaBeanProperties<TYPE> properties) {
@@ -117,6 +117,8 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
    *
    * @param properties
    *          information about the properties to be tested
+   * @param <TYPE>
+   *          the type of the bean
    */
   @Test(dataProvider = "propertyValues")
   protected <TYPE extends Bean> void testNotEquals(final JodaBeanProperties<TYPE> properties) {
@@ -140,6 +142,8 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
    *
    * @param properties
    *          information about the properties to be tested
+   * @param <TYPE>
+   *          the type of the bean
    */
   @Test(dataProvider = "propertyValues")
   protected <TYPE extends Bean> void testCycle(final JodaBeanProperties<TYPE> properties) {
@@ -153,6 +157,8 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
    * @param properties
    *          the property information
    * @return a bean builder
+   * @param <TYPE>
+   *          the type of the bean
    */
   @SuppressWarnings("unchecked")
   protected static <TYPE extends Bean> BeanBuilder<TYPE> constructAndPopulateBeanBuilder(final JodaBeanProperties<TYPE> properties) {
@@ -203,9 +209,9 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
    * <li>The type to be tested</li>
    * <li>The property names to be set</li>
    * <li>The property values</li>
-   * <li>Alternative property values to produce a different bean (e.g. to test
-   * equality).
+   * <li>Alternative property values to produce a different bean (e.g. to test equality).
    * </ul>
+   *
    * @param <T>
    *          the type of the bean
    */
@@ -248,7 +254,7 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
           "Must have one property value for each name: have " + propertyNames.size() + " property names and " + propertyValues.size() + " property values");
       ArgumentChecker.isTrue(propertyNames.size() == otherPropertyValues.size(),
           "Must have one property value for each name: have " + propertyNames.size() + " property names and " + otherPropertyValues.size()
-          + " property values");
+              + " property values");
       _type = beanType;
       _propertyNames = propertyNames;
       _propertyValues = propertyValues;
