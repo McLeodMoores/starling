@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.BiFunction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,6 @@ import com.opengamma.engine.target.ComputationTargetTypeVisitor;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.id.UniqueIdentifiable;
-import com.opengamma.lambdava.functions.Function2;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
@@ -279,20 +279,18 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
 
   }
 
-  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> FOLD_RULES = new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
-    @Override
-    public Iterable<Collection<ResolutionRule>> execute(final Iterable<Collection<ResolutionRule>> a, final Iterable<Collection<ResolutionRule>> b) {
-      if (a instanceof ChainedRuleBundle) {
-        if (b instanceof ChainedRuleBundle) {
-          return FoldedChainedRuleBundle.of((ChainedRuleBundle) a, (ChainedRuleBundle) b);
-        }
-        throw new IllegalStateException("Rules have been partially compiled");
-      }
+  private static final BiFunction<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> FOLD_RULES = (
+      a, b) -> {
+    if (a instanceof ChainedRuleBundle) {
       if (b instanceof ChainedRuleBundle) {
-        throw new IllegalStateException("Rules have been partially compiled");
+        return FoldedChainedRuleBundle.of((ChainedRuleBundle) a, (ChainedRuleBundle) b);
       }
-      return new FoldedCompiledRuleBundle(a, b);
+      throw new IllegalStateException("Rules have been partially compiled");
     }
+    if (b instanceof ChainedRuleBundle) {
+      throw new IllegalStateException("Rules have been partially compiled");
+    }
+    return new FoldedCompiledRuleBundle(a, b);
   };
 
   /**
@@ -348,15 +346,13 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     addRules(resolutionRules);
   }
 
-  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> COMBINE_CHAIN_RULE_BUNDLE = new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
-    @Override
-    public Iterable<Collection<ResolutionRule>> execute(final Iterable<Collection<ResolutionRule>> a, final Iterable<Collection<ResolutionRule>> b) {
-      if (!(a instanceof ChainedRuleBundle)) {
-        throw new IllegalStateException("Rules have already been compiled - can't add new ones");
-      }
-      ((ChainedRuleBundle) a).addListener((ChainedRuleBundle) b);
-      return b;
+  private static final BiFunction<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> COMBINE_CHAIN_RULE_BUNDLE = (
+      a, b) -> {
+    if (!(a instanceof ChainedRuleBundle)) {
+      throw new IllegalStateException("Rules have already been compiled - can't add new ones");
     }
+    ((ChainedRuleBundle) a).addListener((ChainedRuleBundle) b);
+    return b;
   };
 
   private static final ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void> CREATE_CHANGED_RULE_BUNDLE = new ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void>() {

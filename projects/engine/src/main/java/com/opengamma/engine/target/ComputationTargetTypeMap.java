@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.BiFunction;
 
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.lambdava.functions.Function2;
@@ -33,13 +34,26 @@ public class ComputationTargetTypeMap<V> {
 
   private volatile V _nullTypeValue;
 
-  private final Function2<V, V, V> _fold;
+  private final BiFunction<V, V, V> _fold;
 
   /**
    * Creates a new instance.
    */
   public ComputationTargetTypeMap() {
-    this(null);
+    this((BiFunction<V, V, V>) null);
+  }
+
+  /**
+   * Creates a new instance with a folding operation to handle union types in the map giving multiple matches on {@link #get} or {@link #put}. If there is no
+   * folding operation then the value returned by {@link #get} is an arbitrary choice and {@link #put} will fail if multiple matches occur.
+   *
+   * @param fold
+   *          the folding operation, null for none
+   * @deprecated use {@link #ComputationTargetTypeMap(BiFunction)}
+   */
+  @Deprecated
+  public ComputationTargetTypeMap(final Function2<V, V, V> fold) {
+    this((v1, v2) -> fold.execute(v1, v2));
   }
 
   /**
@@ -49,7 +63,7 @@ public class ComputationTargetTypeMap<V> {
    * @param fold
    *          the folding operation, null for none
    */
-  public ComputationTargetTypeMap(final Function2<V, V, V> fold) {
+  public ComputationTargetTypeMap(final BiFunction<V, V, V> fold) {
     _fold = fold;
   }
 
@@ -57,7 +71,30 @@ public class ComputationTargetTypeMap<V> {
     return _underlying;
   }
 
+  /**
+   * Gets the fold function.
+   *
+   * @return the function
+   * @deprecated use {@link #getFold}
+   */
+  @Deprecated
   public Function2<V, V, V> getFoldFunction() {
+    return new Function2<V, V, V>() {
+
+      @Override
+      public V execute(final V a, final V b) {
+        return _fold.apply(a, b);
+      }
+
+    };
+  }
+
+  /**
+   * Gets the fold function.
+   *
+   * @return the function
+   */
+  public BiFunction<V, V, V> getFold() {
     return _fold;
   }
 
@@ -92,7 +129,7 @@ public class ComputationTargetTypeMap<V> {
         if (newValue != null) {
           if (value == null) {
             value = newValue;
-            if (getFoldFunction() == null) {
+            if (getFold() == null) {
               final V previous = getUnderlying().putIfAbsent(queryType, value);
               if (previous != null) {
                 value = previous;
@@ -100,7 +137,7 @@ public class ComputationTargetTypeMap<V> {
               return value;
             }
           } else {
-            value = getFoldFunction().execute(value, newValue);
+            value = getFold().apply(value, newValue);
           }
         }
       }
@@ -113,7 +150,7 @@ public class ComputationTargetTypeMap<V> {
           value = newValue;
         } else {
           if (newValue != NULL) {
-            value = getFoldFunction().execute(value, newValue);
+            value = getFold().apply(value, newValue);
           }
         }
       }
@@ -144,13 +181,13 @@ public class ComputationTargetTypeMap<V> {
         final Object v = type.accept(this, data);
         if (v != null) {
           if (result == null) {
-            if (data.getFoldFunction() == null) {
+            if (data.getFold() == null) {
               // No folding operation, so return the first match found
               return v;
             }
             result = v;
           } else {
-            result = data.getFoldFunction().execute(result, v);
+            result = data.getFold().apply(result, v);
           }
         }
       }
@@ -212,13 +249,13 @@ public class ComputationTargetTypeMap<V> {
         final Object v = type.accept(this, data);
         if (v != null) {
           if (result == null) {
-            if (data.getFoldFunction() == null) {
+            if (data.getFold() == null) {
               // No folding operation, so return the first match found
               return v;
             }
             result = v;
           } else {
-            result = data.getFoldFunction().execute(result, v);
+            result = data.getFold().apply(result, v);
           }
         }
       }
@@ -292,8 +329,8 @@ public class ComputationTargetTypeMap<V> {
           }
           throw new ConcurrentModificationException();
         }
-        if (getFoldFunction() != null) {
-          final V newValue = getFoldFunction().execute(nullValue, value);
+        if (getFold() != null) {
+          final V newValue = getFold().apply(nullValue, value);
           if (replaceNullValue(nullValue, newValue)) {
             return null;
           }
@@ -316,8 +353,8 @@ public class ComputationTargetTypeMap<V> {
           }
           throw new ConcurrentModificationException();
         }
-        if (getFoldFunction() != null) {
-          newValue = getFoldFunction().execute(previous, value);
+        if (getFold() != null) {
+          newValue = getFold().apply(previous, value);
           if (newValue == null) {
             newValue = (V) NULL;
           }
@@ -343,8 +380,26 @@ public class ComputationTargetTypeMap<V> {
    *          the value to store, not null
    * @param replace
    *          the callback function to handle values that are already present or null to just use the new value
+   * @deprecated Use {@link #put(ComputationTargetType, Object, BiFunction)}
    */
+  @Deprecated
   public void put(final ComputationTargetType key, final V value, final Function2<V, V, V> replace) {
+    put(key, value, (t, u) -> replace.execute(t, u));
+  }
+
+  /**
+   * Stores a value in the map. If the map already contains a value for a super-class entry the replacement callback function will be used to compose the two
+   * values. The first parameter to the callback will be the existing value, the second parameter will be the new value to be added, the returned value will be
+   * used.
+   *
+   * @param key
+   *          the target type key, not null
+   * @param value
+   *          the value to store, not null
+   * @param replace
+   *          the callback function to handle values that are already present or null to just use the new value
+   */
+  public void put(final ComputationTargetType key, final V value, final BiFunction<V, V, V> replace) {
     key.accept(new ComputationTargetTypeVisitor<Void, Void>() {
 
       @Override
@@ -363,7 +418,7 @@ public class ComputationTargetTypeMap<V> {
       @Override
       public Void visitNullComputationTargetType(final Void data) {
         final V oldValue = getNullValue();
-        final V newValue = replace != null && oldValue != null ? replace.execute(oldValue, value) : value;
+        final V newValue = replace != null && oldValue != null ? replace.apply(oldValue, value) : value;
         if (replaceNullValue(oldValue, newValue)) {
           return null;
         }
@@ -374,7 +429,7 @@ public class ComputationTargetTypeMap<V> {
       @Override
       public Void visitClassComputationTargetType(final Class<? extends UniqueIdentifiable> type, final Void data) {
         final V oldValue = getImpl(type);
-        V newValue = replace != null && oldValue != NULL ? replace.execute(oldValue, value) : value;
+        V newValue = replace != null && oldValue != NULL ? replace.apply(oldValue, value) : value;
         if (newValue == null) {
           newValue = (V) NULL;
         }

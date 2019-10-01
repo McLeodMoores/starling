@@ -29,7 +29,7 @@ public class ChainedResolverTest {
   public void testFirst() {
     final ObjectResolver<Currency> first = Mockito.mock(ObjectResolver.class);
     final ObjectResolver<Currency> second = Mockito.mock(ObjectResolver.class);
-    final ObjectResolver<?> chained = ChainedResolver.CREATE.execute(second, first);
+    final ObjectResolver<?> chained = ChainedResolver.CREATE_RESOLVER.apply(second, first);
     Mockito.when(first.resolveObject(UniqueId.of("Foo", "1"), VersionCorrection.LATEST)).thenReturn(Currency.USD);
     Mockito.when(second.resolveObject(UniqueId.of("Foo", "1"), VersionCorrection.LATEST)).thenReturn(Currency.GBP);
     assertEquals(chained.resolveObject(UniqueId.of("Foo", "1"), VersionCorrection.LATEST), Currency.USD);
@@ -39,7 +39,7 @@ public class ChainedResolverTest {
   public void testSecond() {
     final ObjectResolver<Currency> first = Mockito.mock(ObjectResolver.class);
     final ObjectResolver<Currency> second = Mockito.mock(ObjectResolver.class);
-    final ObjectResolver<?> chained = ChainedResolver.CREATE.execute(second, first);
+    final ObjectResolver<?> chained = ChainedResolver.CREATE_RESOLVER.apply(second, first);
     Mockito.when(first.resolveObject(UniqueId.of("Foo", "1"), VersionCorrection.LATEST)).thenReturn(null);
     Mockito.when(second.resolveObject(UniqueId.of("Foo", "1"), VersionCorrection.LATEST)).thenReturn(Currency.GBP);
     assertEquals(chained.resolveObject(UniqueId.of("Foo", "1"), VersionCorrection.LATEST), Currency.GBP);
@@ -51,7 +51,7 @@ public class ChainedResolverTest {
     final ObjectResolver<?> second = Mockito.mock(ObjectResolver.class);
     Mockito.when(first.deepResolver()).thenReturn(deepFirst);
     Mockito.when(second.deepResolver()).thenReturn(null);
-    final ObjectResolver<?> chained = ChainedResolver.CREATE.execute(second, first);
+    final ObjectResolver<?> chained = ChainedResolver.CREATE_RESOLVER.apply(second, first);
     assertSame(chained.deepResolver(), deepFirst);
   }
 
@@ -61,7 +61,7 @@ public class ChainedResolverTest {
     final DeepResolver deepSecond = Mockito.mock(DeepResolver.class);
     Mockito.when(first.deepResolver()).thenReturn(null);
     Mockito.when(second.deepResolver()).thenReturn(deepSecond);
-    final ObjectResolver<?> chained = ChainedResolver.CREATE.execute(second, first);
+    final ObjectResolver<?> chained = ChainedResolver.CREATE_RESOLVER.apply(second, first);
     assertSame(chained.deepResolver(), deepSecond);
   }
 
@@ -70,7 +70,7 @@ public class ChainedResolverTest {
     final ObjectResolver<?> second = Mockito.mock(ObjectResolver.class);
     Mockito.when(first.deepResolver()).thenReturn(null);
     Mockito.when(second.deepResolver()).thenReturn(null);
-    final ObjectResolver<?> chained = ChainedResolver.CREATE.execute(second, first);
+    final ObjectResolver<?> chained = ChainedResolver.CREATE_RESOLVER.apply(second, first);
     assertNull(chained.deepResolver());
   }
 
@@ -81,7 +81,7 @@ public class ChainedResolverTest {
     final DeepResolver deepSecond = Mockito.mock(DeepResolver.class);
     Mockito.when(first.deepResolver()).thenReturn(deepFirst);
     Mockito.when(second.deepResolver()).thenReturn(deepSecond);
-    final ObjectResolver<?> chained = ChainedResolver.CREATE.execute(second, first);
+    final ObjectResolver<?> chained = ChainedResolver.CREATE_RESOLVER.apply(second, first);
     final DeepResolver deep = chained.deepResolver();
     final ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);
     assertNotNull(deep);

@@ -9,7 +9,6 @@ import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.function.CompiledFunctionDefinition;
 import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.target.ComputationTargetTypeMap;
-import com.opengamma.lambdava.functions.Function2;
 import com.opengamma.util.ArgumentChecker;
 
 /**
@@ -45,12 +44,7 @@ public class DefaultComputationTargetCollapser implements ComputationTargetColla
   }
 
   private final ComputationTargetTypeMap<ComputationTargetCollapser> _collapsers = new ComputationTargetTypeMap<>(
-      new Function2<ComputationTargetCollapser, ComputationTargetCollapser, ComputationTargetCollapser>() {
-        @Override
-        public ComputationTargetCollapser execute(final ComputationTargetCollapser a, final ComputationTargetCollapser b) {
-          return new ChainedCollapser(a, b);
-        }
-      });
+      (a, b) -> new ChainedCollapser(a, b));
 
   /**
    * Creates a new instance with no underlying collapsers. Unless one or more collapser instances are added to it by {@link #addCollapser}, {@link #canApplyTo}

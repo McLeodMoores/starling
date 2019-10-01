@@ -64,7 +64,7 @@ public class DefaultComputationTargetResolver implements ComputationTargetResolv
   /**
    * The per-type resolvers.
    */
-  private final ComputationTargetTypeMap<ObjectResolver<?>> _resolvers = new ComputationTargetTypeMap<>(ChainedResolver.CREATE);
+  private final ComputationTargetTypeMap<ObjectResolver<?>> _resolvers = new ComputationTargetTypeMap<>(ChainedResolver.CREATE_RESOLVER);
 
   /**
    * The type-reductions used.
@@ -85,7 +85,8 @@ public class DefaultComputationTargetResolver implements ComputationTargetResolv
   /**
    * Creates a resolver using a security source only. This will not be able to resolve POSITION and PORTFOLIO_NODE computation target types.
    *
-   * @param securitySource the security source, null prevents some targets from resolving
+   * @param securitySource
+   *          the security source, null prevents some targets from resolving
    */
   public DefaultComputationTargetResolver(final SecuritySource securitySource) {
     this(securitySource, null);
@@ -94,8 +95,10 @@ public class DefaultComputationTargetResolver implements ComputationTargetResolv
   /**
    * Creates a resolver using a security and position source This will be able to resolve any type of computation target.
    *
-   * @param securitySource the security source, null prevents some targets from resolving
-   * @param positionSource the position source, null prevents some targets from resolving
+   * @param securitySource
+   *          the security source, null prevents some targets from resolving
+   * @param positionSource
+   *          the position source, null prevents some targets from resolving
    */
   public DefaultComputationTargetResolver(final SecuritySource securitySource, final PositionSource positionSource) {
     _securitySource = securitySource;
@@ -118,15 +121,18 @@ public class DefaultComputationTargetResolver implements ComputationTargetResolv
   }
 
   /**
-   * Adds a resolver for use with targets of the given type. If the resolver also implements the {@link IdentifierResolver}
-   * interface then it will be registered for target specification resolution as well as object resolution.
+   * Adds a resolver for use with targets of the given type. If the resolver also implements the {@link IdentifierResolver} interface then it will be registered
+   * for target specification resolution as well as object resolution.
    *
-   * @param <T> the target type
-   * @param type the type(s) to use this resolver for, never null
-   * @param resolver the resolver to use, not null
+   * @param <T>
+   *          the target type
+   * @param type
+   *          the type(s) to use this resolver for, never null
+   * @param resolver
+   *          the resolver to use, not null
    */
   public <T extends UniqueIdentifiable> void addResolver(final ComputationTargetType type, final ObjectResolver<T> resolver) {
-    _resolvers.put(type, resolver, _resolvers.getFoldFunction());
+    _resolvers.put(type, resolver, _resolvers.getFold());
     _baseTypes.put(type, type);
     if (resolver instanceof IdentifierResolver) {
       _specificationResolver.addResolver(type, (IdentifierResolver) resolver);
@@ -134,10 +140,11 @@ public class DefaultComputationTargetResolver implements ComputationTargetResolv
   }
 
   /**
-   * Registers a primitive type with the resolver using the primitive type's default resolution strategy to convert
-   * {@link UniqueId} instances to the target object.
+   * Registers a primitive type with the resolver using the primitive type's default resolution strategy to convert {@link UniqueId} instances to the target
+   * object.
    *
-   * @param type the primitive type to resolve, never null
+   * @param type
+   *          the primitive type to resolve, never null
    */
   public void addResolver(final PrimitiveComputationTargetType<?> type) {
     addResolver(type, type);
@@ -178,8 +185,10 @@ public class DefaultComputationTargetResolver implements ComputationTargetResolv
    * <p>
    * The key method of this class, implementing {@code ComputationTargetResolver}. It examines the specification and resolves the most appropriate target.
    *
-   * @param specification the specification to resolve, not null
-   * @param versionCorrection the version/correction timestamp to use for the resolution, not null
+   * @param specification
+   *          the specification to resolve, not null
+   * @param versionCorrection
+   *          the version/correction timestamp to use for the resolution, not null
    * @return the resolved target, null if not found
    */
   @Override
@@ -209,68 +218,67 @@ public class DefaultComputationTargetResolver implements ComputationTargetResolv
     return _resolvers.get(type);
   }
 
-  private static final ComputationTargetTypeVisitor<ComputationTargetTypeMap<ComputationTargetType>, ComputationTargetType> SIMPLIFY_TYPE =
-      new ComputationTargetTypeVisitor<ComputationTargetTypeMap<ComputationTargetType>, ComputationTargetType>() {
+  private static final ComputationTargetTypeVisitor<ComputationTargetTypeMap<ComputationTargetType>, ComputationTargetType> SIMPLIFY_TYPE = new ComputationTargetTypeVisitor<ComputationTargetTypeMap<ComputationTargetType>, ComputationTargetType>() {
 
-        @Override
-        public ComputationTargetType visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types,
-            final ComputationTargetTypeMap<ComputationTargetType> data) {
-          final ComputationTargetType[] result = new ComputationTargetType[types.size()];
-          int i = 0;
-          boolean changed = false;
-          for (final ComputationTargetType type : types) {
-            final ComputationTargetType newType = type.accept(this, data);
-            if (newType != null && newType != type) {
-              result[i++] = newType;
-              changed = true;
-            } else {
-              result[i++] = type;
+    @Override
+    public ComputationTargetType visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types,
+        final ComputationTargetTypeMap<ComputationTargetType> data) {
+      final ComputationTargetType[] result = new ComputationTargetType[types.size()];
+      int i = 0;
+      boolean changed = false;
+      for (final ComputationTargetType type : types) {
+        final ComputationTargetType newType = type.accept(this, data);
+        if (newType != null && newType != type) {
+          result[i++] = newType;
+          changed = true;
+        } else {
+          result[i++] = type;
+        }
+      }
+      return changed ? ComputationTargetType.multiple(result) : null;
+    }
+
+    @Override
+    public ComputationTargetType visitNestedComputationTargetTypes(final List<ComputationTargetType> types,
+        final ComputationTargetTypeMap<ComputationTargetType> data) {
+      final int length = types.size();
+      for (int i = 0; i < length; i++) {
+        ComputationTargetType type = types.get(i);
+        ComputationTargetType newType = type.accept(this, data);
+        if (newType != null && newType != type) {
+          ComputationTargetType result;
+          if (i > 0) {
+            result = types.get(0);
+            for (int j = 1; j < i; j++) {
+              result = result.containing(types.get(j));
             }
+            result = result.containing(newType);
+          } else {
+            result = newType;
           }
-          return changed ? ComputationTargetType.multiple(result) : null;
-        }
-
-        @Override
-        public ComputationTargetType visitNestedComputationTargetTypes(final List<ComputationTargetType> types,
-            final ComputationTargetTypeMap<ComputationTargetType> data) {
-          final int length = types.size();
-          for (int i = 0; i < length; i++) {
-            ComputationTargetType type = types.get(i);
-            ComputationTargetType newType = type.accept(this, data);
-            if (newType != null && newType != type) {
-              ComputationTargetType result;
-              if (i > 0) {
-                result = types.get(0);
-                for (int j = 1; j < i; j++) {
-                  result = result.containing(types.get(j));
-                }
-                result = result.containing(newType);
-              } else {
-                result = newType;
-              }
-              for (int j = i + 1; j < length; j++) {
-                type = types.get(j);
-                newType = type.accept(this, data);
-                result = result.containing(newType == null ? type : newType);
-              }
-              return result;
-            }
+          for (int j = i + 1; j < length; j++) {
+            type = types.get(j);
+            newType = type.accept(this, data);
+            result = result.containing(newType == null ? type : newType);
           }
-          return null;
+          return result;
         }
+      }
+      return null;
+    }
 
-        @Override
-        public ComputationTargetType visitNullComputationTargetType(final ComputationTargetTypeMap<ComputationTargetType> data) {
-          return null;
-        }
+    @Override
+    public ComputationTargetType visitNullComputationTargetType(final ComputationTargetTypeMap<ComputationTargetType> data) {
+      return null;
+    }
 
-        @Override
-        public ComputationTargetType visitClassComputationTargetType(final Class<? extends UniqueIdentifiable> type,
-            final ComputationTargetTypeMap<ComputationTargetType> data) {
-          return data.get(type);
-        }
+    @Override
+    public ComputationTargetType visitClassComputationTargetType(final Class<? extends UniqueIdentifiable> type,
+        final ComputationTargetTypeMap<ComputationTargetType> data) {
+      return data.get(type);
+    }
 
-      };
+  };
 
   @Override
   public ComputationTargetType simplifyType(final ComputationTargetType type) {

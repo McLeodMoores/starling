@@ -5,8 +5,6 @@
  */
 package com.opengamma.engine.target.resolver;
 
-import static com.opengamma.lambdava.streams.Lambdava.functional;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -128,7 +126,7 @@ public class PrimitiveResolver extends AbstractIdentifierResolver implements Res
 
   /**
    * Utility function for resolving external ids from unique identifier.
-   * 
+   *
    * @param uniqueId
    *          unique identifier
    * @param schemePrefix
@@ -163,7 +161,7 @@ public class PrimitiveResolver extends AbstractIdentifierResolver implements Res
     if (scheme.startsWith(SCHEME_PREFIX)) {
       final ExternalIdBundle externalIdBundle = resolveExternalIds(uniqueId, SCHEME_PREFIX);
       if (externalIdBundle.size() == 1) {
-        return new ExternalIdentifiablePrimitive(uniqueId, functional(externalIdBundle.getExternalIds()).first());
+        return new ExternalIdentifiablePrimitive(uniqueId, externalIdBundle.getExternalIds().first());
       }
       return new ExternalBundleIdentifiablePrimitive(uniqueId, externalIdBundle);
     }

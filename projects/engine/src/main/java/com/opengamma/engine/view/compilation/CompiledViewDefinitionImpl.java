@@ -5,8 +5,6 @@
  */
 package com.opengamma.engine.view.compilation;
 
-import static com.opengamma.lambdava.streams.Lambdava.merge;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -126,7 +124,7 @@ public class CompiledViewDefinitionImpl implements CompiledViewDefinition {
   public Map<ValueSpecification, Set<ValueRequirement>> getTerminalValuesRequirements() {
     final Map<ValueSpecification, Set<ValueRequirement>> allRequirements = new HashMap<>();
     for (final CompiledViewCalculationConfiguration compiledCalcConfig : getCompiledCalculationConfigurations()) {
-      merge(allRequirements, compiledCalcConfig.getTerminalOutputSpecifications());
+      allRequirements.putAll(compiledCalcConfig.getTerminalOutputSpecifications());
     }
     return Collections.unmodifiableMap(allRequirements);
   }
@@ -151,11 +149,13 @@ public class CompiledViewDefinitionImpl implements CompiledViewDefinition {
   }
 
   /**
-   * Checks whether the compilation results encapsulated in an instance are valid for a specific cycle. Note that this does
-   * not ensure that the view definition used for compilation is still up-to-date.
+   * Checks whether the compilation results encapsulated in an instance are valid for a specific cycle. Note that this does not ensure that the view definition
+   * used for compilation is still up-to-date.
    *
-   * @param viewDefinition the compiled view definition instance, not null
-   * @param valuationTime the valuation time, not null
+   * @param viewDefinition
+   *          the compiled view definition instance, not null
+   * @param valuationTime
+   *          the valuation time, not null
    * @return true if the compilation results are valid for the valuation time
    */
   public static boolean isValidFor(final CompiledViewDefinition viewDefinition, final Instant valuationTime) {
@@ -167,7 +167,7 @@ public class CompiledViewDefinitionImpl implements CompiledViewDefinition {
     return validTo == null || !valuationTime.isAfter(validTo);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public String toString() {
     return "CompiledViewDefinition[" + getViewDefinition().getName() + ", " + getValidityString() + "]";

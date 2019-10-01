@@ -25,6 +25,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ComputationTargetTypeMapTest {
 
+  /**
+   *
+   */
   public void testEmpty() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     assertNull(map.getDirect(ComputationTargetType.NULL));
@@ -35,6 +38,9 @@ public class ComputationTargetTypeMapTest {
     assertNull(map.get(ComputationTargetType.SECURITY));
   }
 
+  /**
+   *
+   */
   public void testSimple() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.POSITION, "Pos");
@@ -54,6 +60,9 @@ public class ComputationTargetTypeMapTest {
     assertEquals(map.getDirect(ComputationTargetType.of(MockSecurity.class)), "Sec");
   }
 
+  /**
+   *
+   */
   public void testNull() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.NULL, "NULL");
@@ -62,6 +71,9 @@ public class ComputationTargetTypeMapTest {
     assertEquals(map.get(ComputationTargetType.NULL), "NULL");
   }
 
+  /**
+   *
+   */
   public void testNested() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.POSITION.containing(ComputationTargetType.SECURITY), "Sec");
@@ -82,6 +94,9 @@ public class ComputationTargetTypeMapTest {
     assertEquals(map.getDirect(ComputationTargetType.of(MockSecurity.class)), "Sec");
   }
 
+  /**
+   *
+   */
   public void testMultiple() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), "Pos|Trade");
@@ -101,6 +116,9 @@ public class ComputationTargetTypeMapTest {
     assertNull(map.get(ComputationTargetType.of(MockSecurity.class)));
   }
 
+  /**
+   *
+   */
   public void testHierarchy() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.SECURITY, "SEC");
@@ -112,22 +130,32 @@ public class ComputationTargetTypeMapTest {
     assertEquals(map.get(ComputationTargetType.of(c)), "MOCK");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = { IllegalStateException.class })
-  public void testCollision_direct() {
+  public void testCollisionDirect() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), "Pos|Trade");
     map.put(ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.POSITION), "Pos");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = { IllegalStateException.class })
-  public void testCollision_cache() {
+  public void testCollisionCache() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.SECURITY, "Sec");
     assertNotNull(map.get(ComputationTargetType.of(MockSecurity.class)));
     map.put(ComputationTargetType.of(MockSecurity.class), "MSec");
   }
 
-  public void testCollision_folding() {
+  /**
+   *
+   */
+  @SuppressWarnings("deprecation")
+  public void testCollisionFoldingDeprecated() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>(new Function2<String, String, String>() {
       @Override
       public String execute(final String a, final String b) {
@@ -140,7 +168,22 @@ public class ComputationTargetTypeMapTest {
     assertEquals(map.get(ComputationTargetType.POSITION), "AB");
   }
 
-  public void testChained() {
+  /**
+   *
+   */
+  public void testCollisionFolding() {
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>((a, b) -> a + b);
+    map.put(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), "A");
+    map.put(ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.POSITION), "B");
+    assertEquals(map.get(ComputationTargetType.TRADE), "A");
+    assertEquals(map.get(ComputationTargetType.POSITION), "AB");
+  }
+
+  /**
+   *
+   */
+  @SuppressWarnings("deprecation")
+  public void testChainedDeprecated() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.SECURITY, "A");
     map.put(ComputationTargetType.POSITION.containing(
@@ -155,7 +198,23 @@ public class ComputationTargetTypeMapTest {
     assertEquals(map.get(ComputationTargetType.of(MockSecurity.class)), "AB");
   }
 
-  public void testValues_noNull() {
+  /**
+   *
+   */
+  public void testChained() {
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
+    map.put(ComputationTargetType.SECURITY, "A");
+    map.put(ComputationTargetType.POSITION.containing(
+        ComputationTargetType.TRADE.or(ComputationTargetType.of(MockSecurity.class))), "B", (a, b) -> a + b);
+    assertEquals(map.get(ComputationTargetType.SECURITY), "A");
+    assertEquals(map.get(ComputationTargetType.TRADE), "B");
+    assertEquals(map.get(ComputationTargetType.of(MockSecurity.class)), "AB");
+  }
+
+  /**
+   *
+   */
+  public void testValuesNoNull() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.POSITION, "Pos");
     map.put(ComputationTargetType.SECURITY, "Sec");
@@ -174,7 +233,10 @@ public class ComputationTargetTypeMapTest {
     assertEquals(flags, 3);
   }
 
-  public void testValues_withNull() {
+  /**
+   *
+   */
+  public void testValuesWithNull() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.NULL, "Null");
     map.put(ComputationTargetType.POSITION, "Pos");
@@ -193,7 +255,10 @@ public class ComputationTargetTypeMapTest {
     assertEquals(flags, 3);
   }
 
-  public void testValues_withRemove() {
+  /**
+   *
+   */
+  public void testValuesWithRemove() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.NULL, "Null");
     map.put(ComputationTargetType.SECURITY, "Sec");
@@ -212,7 +277,10 @@ public class ComputationTargetTypeMapTest {
     assertEquals(map.get(ComputationTargetType.SECURITY), null);
   }
 
-  public void testEntries_noNull() {
+  /**
+   *
+   */
+  public void testEntriesNoNull() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.POSITION, "Pos");
     map.put(ComputationTargetType.SECURITY, "Sec");
@@ -236,7 +304,10 @@ public class ComputationTargetTypeMapTest {
     assertEquals(map.get(ComputationTargetType.SECURITY), "Bar");
   }
 
-  public void testEntries_withNull() {
+  /**
+   *
+   */
+  public void testEntriesWithNull() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.NULL, "Null");
     map.put(ComputationTargetType.POSITION, "Pos");
@@ -261,7 +332,10 @@ public class ComputationTargetTypeMapTest {
     assertEquals(map.get(ComputationTargetType.POSITION), "Foo");
   }
 
-  public void testEntries_withRemove() {
+  /**
+   *
+   */
+  public void testEntriesWithRemove() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.NULL, "Null");
     map.put(ComputationTargetType.SECURITY, "Sec");

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 
 import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
@@ -23,7 +24,6 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
-import com.opengamma.lambdava.functions.Function2;
 import com.opengamma.util.PoolExecutor;
 
 /**
@@ -184,12 +184,7 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
 
   }
 
-  private static final Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver> FOLD = new Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver>() {
-    @Override
-    public SpecificationResolver execute(final SpecificationResolver a, final SpecificationResolver b) {
-      return new FoldedSpecificationResolver(a, b);
-    }
-  };
+  private static final BiFunction<SpecificationResolver, SpecificationResolver, SpecificationResolver> FOLD = (a, b) -> new FoldedSpecificationResolver(a, b);
 
   private final ComputationTargetTypeMap<SpecificationResolver> _resolve = new ComputationTargetTypeMap<>(FOLD);
 
