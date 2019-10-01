@@ -184,8 +184,7 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
 
   }
 
-  private static final Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver> FOLD =
-      new Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver>() {
+  private static final Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver> FOLD = new Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver>() {
     @Override
     public SpecificationResolver execute(final SpecificationResolver a, final SpecificationResolver b) {
       return new FoldedSpecificationResolver(a, b);
@@ -221,8 +220,7 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
         return null;
       }
 
-      private final ComputationTargetReferenceVisitor<ComputationTargetSpecification> _getTargetSpecification =
-          new ComputationTargetReferenceVisitor<ComputationTargetSpecification>() {
+      private final ComputationTargetReferenceVisitor<ComputationTargetSpecification> _getTargetSpecification = new ComputationTargetReferenceVisitor<ComputationTargetSpecification>() {
 
         @Override
         public ComputationTargetSpecification visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {
@@ -329,15 +327,12 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
             case 1: {
               // Single item
               if (jobs != null) {
-                jobs.execute(new Runnable() {
-                  @Override
-                  public void run() {
-                    final ComputationTargetRequirement requirement = entry.getValue().iterator().next();
-                    final ComputationTargetSpecification specification = _resolve.get(entry.getKey()).resolveRequirement(requirement, versionCorrection);
-                    if (specification != null) {
-                      synchronized (result) {
-                        result.put(requirement, specification);
-                      }
+                jobs.execute(() -> {
+                  final ComputationTargetRequirement requirement = entry.getValue().iterator().next();
+                  final ComputationTargetSpecification specification = _resolve.get(entry.getKey()).resolveRequirement(requirement, versionCorrection);
+                  if (specification != null) {
+                    synchronized (result) {
+                      result.put(requirement, specification);
                     }
                   }
                 });
@@ -353,12 +348,7 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
             default: {
               // Bulk lookup
               if (jobs != null) {
-                jobs.execute(new Runnable() {
-                  @Override
-                  public void run() {
-                    _resolve.get(entry.getKey()).resolveRequirements(entry.getValue(), versionCorrection, result);
-                  }
-                });
+                jobs.execute(() -> _resolve.get(entry.getKey()).resolveRequirements(entry.getValue(), versionCorrection, result));
               } else {
                 _resolve.get(entry.getKey()).resolveRequirements(entry.getValue(), versionCorrection, result);
               }
@@ -374,16 +364,13 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
             case 1: {
               // Single item
               if (jobs != null) {
-                jobs.execute(new Runnable() {
-                  @Override
-                  public void run() {
-                    final ComputationTargetSpecification specification = entry.getValue().iterator().next();
-                    final ComputationTargetSpecification resolved = _resolve.get(entry.getKey()).resolveObjectId(specification.getParent(),
-                        specification.getUniqueId().getObjectId(),
-                        versionCorrection);
-                    if (resolved != null) {
-                      result.put(specification, resolved);
-                    }
+                jobs.execute(() -> {
+                  final ComputationTargetSpecification specification = entry.getValue().iterator().next();
+                  final ComputationTargetSpecification resolved = _resolve.get(entry.getKey()).resolveObjectId(specification.getParent(),
+                      specification.getUniqueId().getObjectId(),
+                      versionCorrection);
+                  if (resolved != null) {
+                    result.put(specification, resolved);
                   }
                 });
               } else {
@@ -399,12 +386,7 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
             default: {
               // Bulk lookup
               if (jobs != null) {
-                jobs.execute(new Runnable() {
-                  @Override
-                  public void run() {
-                    _resolve.get(entry.getKey()).resolveSpecifications(entry.getValue(), versionCorrection, result);
-                  }
-                });
+                jobs.execute(() -> _resolve.get(entry.getKey()).resolveSpecifications(entry.getValue(), versionCorrection, result));
               } else {
                 _resolve.get(entry.getKey()).resolveSpecifications(entry.getValue(), versionCorrection, result);
               }

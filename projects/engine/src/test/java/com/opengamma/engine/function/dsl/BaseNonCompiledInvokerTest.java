@@ -48,6 +48,34 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class BaseNonCompiledInvokerTest {
 
+  // public void temp() {
+  // FunctionSignature sfs = new SimpleFunctionSignature("name", ComputationTargetType.CURRENCY);
+  // sfs = sfs.addInput(new FunctionInput("i1").properties(ValueProperties.builder().with("p1", "v1")));
+  // sfs = sfs.addInput(new FunctionInput("i2").properties(ValueProperties.builder().with("p2", "v2")));
+  // sfs = sfs.addInput(new FunctionInput("i3").properties(ValueProperties.builder().with("p3", "v3")));
+  // sfs = sfs.addInput(new FunctionInput("i4").properties(ValueProperties.builder().with("p4", "v4")));
+  // sfs = sfs.addInput(new FunctionInput("i1").properties(ValueProperties.builder().with("p5", "v5")));
+  // sfs = sfs.addInput(new FunctionInput("i2").properties(ValueProperties.builder().with("p6", "v6")));
+  // sfs = sfs.addInput(new FunctionInput("i3").properties(ValueProperties.builder().withAny("p7")));
+  // sfs.getInputs().collect(Collectors.groupingBy(FunctionInput::getName)).entrySet().forEach(System.out::println);
+  // System.out.println("----------------------------------------------------------");
+  // FunctionSignature sfs1 = new SimpleFunctionSignature("name", ComputationTargetType.CURRENCY);
+  // sfs1 = sfs1.addInput(new FunctionInput("i1").properties(ValueProperties.builder().with("p1", "v1")));
+  // sfs1 = sfs1.addInput(new FunctionInput("i2").properties(ValueProperties.builder().with("p2", "v2")));
+  // sfs1 = sfs1.addInput(new FunctionInput("i3").properties(ValueProperties.builder().with("p3", "v3")));
+  // sfs1 = sfs1.addInput(new FunctionInput("i4").properties(ValueProperties.builder().with("p4", "v4")));
+  // sfs1 = sfs1.addInput(new FunctionInput("i1").properties(ValueProperties.builder().with("p5", "v5")));
+  // sfs1 = sfs1.addInput(new FunctionInput("i2").properties(ValueProperties.builder().with("p6", "v6")));
+  // sfs1 = sfs1.addInput(new FunctionInput("i3").properties(ValueProperties.builder().withAny("p7")));
+  // final Map<String, List<FunctionInput>> temp = BaseNonCompiledInvoker.inputsByName(sfs1).getFirst();
+  // for (final Map.Entry<String, Stream<FunctionInput>> entry : temp.entrySet()) {
+  // System.out.println(entry.getKey() + " " + entry.getValue().collect(Collectors.toList()));
+  // }
+  // }
+
+  /**
+   * Tests getResults().
+   */
   public void getResultsTest1() {
     final FunctionCompilationContext fcctx = mock(FunctionCompilationContext.class);
     final DV01TestFun dv01 = new DV01TestFun();
@@ -71,6 +99,9 @@ public class BaseNonCompiledInvokerTest {
     assertEquals(spec.getValueName(), "DV01");
   }
 
+  /**
+   * Tests getRequirements().
+   */
   public void getRequirements() {
     final FunctionCompilationContext fcctx = mock(FunctionCompilationContext.class);
     final DV01TestFun dv01 = new DV01TestFun();
@@ -95,6 +126,9 @@ public class BaseNonCompiledInvokerTest {
     assertEquals(requirement.getValueName(), "PV01");
   }
 
+  /**
+   * Tests getResults().
+   */
   public void getResultsTest2() {
     final FunctionCompilationContext fcctx = mock(FunctionCompilationContext.class);
     final DV01TestFun dv01 = new DV01TestFun();
@@ -124,6 +158,9 @@ public class BaseNonCompiledInvokerTest {
     assertEquals(spec.getValueName(), "DV01");
   }
 
+  /**
+   * A test function.
+   */
   class DV01TestFun extends BaseNonCompiledInvoker {
     @Override
     protected FunctionSignature functionSignature() {

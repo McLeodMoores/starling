@@ -18,12 +18,12 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.lambdava.functions.Function2;
 
 /**
- * A map of {@link ComputationTargetType} instances to other values based on the target class (or classes). Instances are thread-safe for
- * multiple readers, but only one may update the map at any one time. Due to the caching behavior of class lookups, it is best not to read
- * from the map until all of the required class entries have been written. Not doing so can give a collision between a cached
- * class entry and one that is intended to be added.
+ * A map of {@link ComputationTargetType} instances to other values based on the target class (or classes). Instances are thread-safe for multiple readers, but
+ * only one may update the map at any one time. Due to the caching behavior of class lookups, it is best not to read from the map until all of the required
+ * class entries have been written. Not doing so can give a collision between a cached class entry and one that is intended to be added.
  *
- * @param <V> the value type
+ * @param <V>
+ *          the value type
  */
 public class ComputationTargetTypeMap<V> {
 
@@ -43,10 +43,11 @@ public class ComputationTargetTypeMap<V> {
   }
 
   /**
-   * Creates a new instance with a folding operation to handle union types in the map giving multiple matches on {@link #get} or {@link #put}.
-   * If there is no folding operation then the value returned by {@link #get} is an arbitrary choice and {@link #put} will fail if multiple matches occur.
+   * Creates a new instance with a folding operation to handle union types in the map giving multiple matches on {@link #get} or {@link #put}. If there is no
+   * folding operation then the value returned by {@link #get} is an arbitrary choice and {@link #put} will fail if multiple matches occur.
    *
-   * @param fold the folding operation, null for none
+   * @param fold
+   *          the folding operation, null for none
    */
   public ComputationTargetTypeMap(final Function2<V, V, V> fold) {
     _fold = fold;
@@ -75,7 +76,8 @@ public class ComputationTargetTypeMap<V> {
   /**
    * Performs the target class lookup. Subclasses may override this to hook into the lookup operation and return a specific value.
    *
-   * @param queryType the tail class to query, not null
+   * @param queryType
+   *          the tail class to query, not null
    * @return the value, or null for none
    */
   @SuppressWarnings("unchecked")
@@ -173,10 +175,11 @@ public class ComputationTargetTypeMap<V> {
   };
 
   /**
-   * Queries a value based on the supplied target type, matching the closest superclass found. This operation can update the map as
-   * lookups based on the class hierarchy are cached.
+   * Queries a value based on the supplied target type, matching the closest superclass found. This operation can update the map as lookups based on the class
+   * hierarchy are cached.
    *
-   * @param key the target type to query, not null
+   * @param key
+   *          the target type to query, not null
    * @return the value, or null if there is no match
    */
   public V get(final ComputationTargetType key) {
@@ -184,11 +187,11 @@ public class ComputationTargetTypeMap<V> {
   }
 
   /**
-   * Queries a value based on the supplied target type, matching the closest superclass found. This operation can update the map
-   * as lookups based on the class hierarchy are cached. This is the same as calling {@link #get(ComputationTargetType)} with
-   * {@code ComputationTargetType.of(key)}.
+   * Queries a value based on the supplied target type, matching the closest superclass found. This operation can update the map as lookups based on the class
+   * hierarchy are cached. This is the same as calling {@link #get(ComputationTargetType)} with {@code ComputationTargetType.of(key)}.
    *
-   * @param key the class to query, not null
+   * @param key
+   *          the class to query, not null
    * @return the value, or null if there is no match
    */
   public V get(final Class<? extends UniqueIdentifiable> key) {
@@ -244,10 +247,11 @@ public class ComputationTargetTypeMap<V> {
   };
 
   /**
-   * Queries a value based on the supplied target type, matching the leaf class exactly. Unlike {@link #get} This operation will
-   * not update the map and will not return any matches based on superclasses.
+   * Queries a value based on the supplied target type, matching the leaf class exactly. Unlike {@link #get} This operation will not update the map and will not
+   * return any matches based on superclasses.
    *
-   * @param key the target type to query, not null
+   * @param key
+   *          the target type to query, not null
    * @return the value, or null if there is no match
    */
   public V getDirect(final ComputationTargetType key) {
@@ -255,11 +259,13 @@ public class ComputationTargetTypeMap<V> {
   }
 
   /**
-   * Stores a value in the map. If the map already contains an entry for the value the folding operation (if specified) will be used.
-   * This can occur if a lookup has been performed and the result was cached, or union types have been added to the map.
+   * Stores a value in the map. If the map already contains an entry for the value the folding operation (if specified) will be used. This can occur if a lookup
+   * has been performed and the result was cached, or union types have been added to the map.
    *
-   * @param key the target type key, not null
-   * @param value the value to store, not null
+   * @param key
+   *          the target type key, not null
+   * @param value
+   *          the value to store, not null
    */
   public void put(final ComputationTargetType key, final V value) {
     key.accept(new ComputationTargetTypeVisitor<Void, Void>() {
@@ -327,13 +333,16 @@ public class ComputationTargetTypeMap<V> {
   }
 
   /**
-   * Stores a value in the map. If the map already contains a value for a super-class entry the replacement callback function
-   * will be used to compose the two values. The first parameter to the callback will be the existing value, the second
-   * parameter will be the new value to be added, the returned value will be used.
+   * Stores a value in the map. If the map already contains a value for a super-class entry the replacement callback function will be used to compose the two
+   * values. The first parameter to the callback will be the existing value, the second parameter will be the new value to be added, the returned value will be
+   * used.
    *
-   * @param key the target type key, not null
-   * @param value the value to store, not null
-   * @param replace the callback function to handle values that are already present or null to just use the new value
+   * @param key
+   *          the target type key, not null
+   * @param value
+   *          the value to store, not null
+   * @param replace
+   *          the callback function to handle values that are already present or null to just use the new value
    */
   public void put(final ComputationTargetType key, final V value, final Function2<V, V, V> replace) {
     key.accept(new ComputationTargetTypeVisitor<Void, Void>() {

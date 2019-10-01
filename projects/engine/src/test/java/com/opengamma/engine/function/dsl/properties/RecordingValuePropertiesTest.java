@@ -5,14 +5,15 @@ package com.opengamma.engine.function.dsl.properties;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.testng.annotations.Test;
 
 import com.opengamma.engine.value.ValueProperties;
-import com.opengamma.lambdava.streams.Stream;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -107,7 +108,7 @@ public class RecordingValuePropertiesTest {
   public void testEmptyProperties() {
     final RecordingValueProperties empty = RecordingValueProperties.desiredValue();
     assertNull(empty.getCopiedFrom());
-    assertEquals(empty.getRecordedValueProperties(), Stream.of());
+    assertTrue(empty.getRecordedValueProperties().collect(Collectors.toList()).isEmpty());
   }
 
   /**
@@ -239,7 +240,7 @@ public class RecordingValuePropertiesTest {
 
   private static void assertProperties(final ValueProperties expectedInitial, final RecordingValueProperties properties) {
     final ValueProperties.Builder builder = ValueProperties.builder();
-    final List<ValuePropertiesModifier> stream = properties.getRecordedValueProperties().asList();
+    final List<ValuePropertiesModifier> stream = properties.getRecordedValueProperties().collect(Collectors.toList());
     for (final ValuePropertiesModifier vpm : stream) {
       vpm.modify(builder);
     }

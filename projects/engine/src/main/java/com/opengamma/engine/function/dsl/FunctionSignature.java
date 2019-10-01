@@ -5,8 +5,9 @@
  */
 package com.opengamma.engine.function.dsl;
 
+import java.util.stream.Stream;
+
 import com.opengamma.engine.target.ComputationTargetType;
-import com.opengamma.lambdava.streams.Functional;
 
 /**
  * DSL function signature.
@@ -36,14 +37,14 @@ public interface FunctionSignature {
    *
    * @return the outputs
    */
-  Functional<FunctionOutput> getOutputs();
+  Stream<FunctionOutput> getOutputs();
 
   /**
    * Gets the inputs.
    *
    * @return the inputs
    */
-  Functional<FunctionInput> getInputs();
+  Stream<FunctionInput> getInputs();
 
   /**
    * Gets the function name.
@@ -86,7 +87,7 @@ public interface FunctionSignature {
 
   /**
    * Sets the class of the computation target.
-   * 
+   *
    * @param clazz
    *          the class
    * @return the signature

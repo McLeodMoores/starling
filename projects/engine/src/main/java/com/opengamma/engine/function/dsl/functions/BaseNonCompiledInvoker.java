@@ -5,11 +5,13 @@
  */
 package com.opengamma.engine.function.dsl.functions;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
@@ -25,53 +27,10 @@ import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
-import com.opengamma.lambdava.functions.Function2;
-import com.opengamma.lambdava.streams.Stream;
-import com.opengamma.lambdava.streams.StreamI;
-import com.opengamma.util.tuple.Pair;
-import com.opengamma.util.tuple.Pairs;
 
 public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompiledInvoker {
 
   private FunctionSignature _functionSignature;
-
-  private static Pair<Map<String, StreamI<FunctionInput>>, Map<String, StreamI<FunctionOutput>>> ioputsByName(final FunctionSignature signature) {
-    final Map<String, StreamI<FunctionInput>> inputsByName = signature.getInputs().reduce(new HashMap<String, StreamI<FunctionInput>>(),
-        new Function2<HashMap<String, StreamI<FunctionInput>>, FunctionInput, HashMap<String, StreamI<FunctionInput>>>() {
-      @Override
-      public HashMap<String, StreamI<FunctionInput>> execute(final HashMap<String, StreamI<FunctionInput>> acc, final FunctionInput functionInput) {
-        final String name = functionInput.getName();
-        if (name == null) {
-          throw new IllegalArgumentException("Input's name must be provided");
-        }
-        StreamI<FunctionInput> inputs = acc.get(name);
-        if (inputs == null) {
-          inputs = Stream.empty();
-          acc.put(name, inputs);
-        }
-        acc.put(name, inputs.cons(functionInput));
-        return acc;
-      }
-    });
-
-    final Map<String, StreamI<FunctionOutput>> outputsByName = signature.getOutputs().reduce(new HashMap<String, StreamI<FunctionOutput>>(),
-        new Function2<HashMap<String, StreamI<FunctionOutput>>, FunctionOutput, HashMap<String, StreamI<FunctionOutput>>>() {
-      @Override
-      public HashMap<String, StreamI<FunctionOutput>> execute(final HashMap<String, StreamI<FunctionOutput>> acc, final FunctionOutput functionOutput) {
-        final String name = functionOutput.getName();
-        if (name == null) {
-          throw new IllegalArgumentException("Output's name must be provided");
-        }
-        StreamI<FunctionOutput> outputs = acc.get(name);
-        if (outputs == null) {
-          outputs = Stream.empty();
-        }
-        acc.put(name, outputs.cons(functionOutput));
-        return acc;
-      }
-    });
-    return Pairs.of(inputsByName, outputsByName);
-  }
 
   protected abstract FunctionSignature functionSignature();
 
@@ -89,16 +48,13 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-
     final FunctionSignature signature = getFunctionSignature();
-    final Pair<Map<String, StreamI<FunctionInput>>, Map<String, StreamI<FunctionOutput>>> ioputsByName = ioputsByName(signature);
-
-    final Map<String, StreamI<FunctionOutput>> outputsByName = ioputsByName.getSecond();
+    final Map<String, List<FunctionOutput>> outputsByName = signature.getOutputs().collect(Collectors.groupingBy(FunctionOutput::getName));
 
     final Set<ValueSpecification> valueSpecifications = new HashSet<>();
 
     for (final String name : outputsByName.keySet()) {
-      final StreamI<FunctionOutput> functionOutputs = outputsByName.get(name);
+      final List<FunctionOutput> functionOutputs = outputsByName.get(name);
       for (final FunctionOutput functionOutput : functionOutputs) {
         final TargetSpecificationReference tsr = functionOutput.getTargetSpecificationReference();
         final ComputationTargetSpecification cts = functionOutput.getComputationTargetSpecification();
@@ -133,14 +89,13 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final FunctionSignature signature = getFunctionSignature();
-    final Pair<Map<String, StreamI<FunctionInput>>, Map<String, StreamI<FunctionOutput>>> ioputsByName = ioputsByName(signature);
 
-    final Map<String, StreamI<FunctionInput>> inputsByName = ioputsByName.getFirst();
+    final Map<String, List<FunctionInput>> inputsByName = signature.getInputs().collect(Collectors.groupingBy(FunctionInput::getName));
 
     final Set<ValueRequirement> valueRequirements = new HashSet<>();
 
     for (final String name : inputsByName.keySet()) {
-      final StreamI<FunctionInput> functionInputs = inputsByName.get(name);
+      final List<FunctionInput> functionInputs = inputsByName.get(name);
       for (final FunctionInput functionInput : functionInputs) {
         final TargetSpecificationReference tsr = functionInput.getTargetSpecificationReference();
         final ComputationTargetSpecification cts = functionInput.getComputationTargetSpecification();
@@ -164,14 +119,11 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
           valueProperties = vps;
         } else {
           final ValueProperties.Builder copiedValueProperties = desiredValue.getConstraints().copy();
-          final StreamI<ValuePropertiesModifier> recorderValueProperties = rvps.getRecordedValueProperties();
-          final ValueProperties.Builder valuePropertiesBuilder = recorderValueProperties.reduce(copiedValueProperties,
-              new Function2<ValueProperties.Builder, ValuePropertiesModifier, ValueProperties.Builder>() {
-            @Override
-            public ValueProperties.Builder execute(final ValueProperties.Builder builder, final ValuePropertiesModifier modifier) {
-              return modifier.modify(builder);
-            }
-          });
+          final Stream<ValuePropertiesModifier> recorderValueProperties = rvps.getRecordedValueProperties();
+          final ValueProperties.Builder valuePropertiesBuilder = recorderValueProperties.reduce(
+              copiedValueProperties,
+              (builder, modifier) -> modifier.modify(builder),
+              (t, u) -> t.get().union(u.get()).copy());
           valueProperties = valuePropertiesBuilder.get();
         }
         final ValueRequirement valueRequirement = new ValueRequirement(name, computationTargetSpecification, valueProperties);
@@ -186,14 +138,12 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
       final Map<ValueSpecification, ValueRequirement> inputSpecificationsMap) {
     final FunctionSignature signature = getFunctionSignature();
-    final Pair<Map<String, StreamI<FunctionInput>>, Map<String, StreamI<FunctionOutput>>> ioputsByName = ioputsByName(signature);
-
-    final Map<String, StreamI<FunctionOutput>> outputsByName = ioputsByName.getSecond();
+    final Map<String, List<FunctionOutput>> outputsByName = signature.getOutputs().collect(Collectors.groupingBy(FunctionOutput::getName));
 
     final Set<ValueSpecification> valueSpecifications = new HashSet<>();
 
     for (final String name : outputsByName.keySet()) {
-      final StreamI<FunctionOutput> functionOutputs = outputsByName.get(name);
+      final List<FunctionOutput> functionOutputs = outputsByName.get(name);
       for (final FunctionOutput functionOutput : functionOutputs) {
         final TargetSpecificationReference tsr = functionOutput.getTargetSpecificationReference();
         final ComputationTargetSpecification cts = functionOutput.getComputationTargetSpecification();
@@ -216,18 +166,15 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
         if (vps != null) {
           valueProperties = vps;
         } else {
-          //Find the appropriate valueSpecifications
-          final Optional<ValueSpecification> copyFrom =
-              inputSpecificationsMap.keySet().stream().filter(v -> v.getValueName().equals(rvps.getCopiedFrom())).findFirst();
+          // Find the appropriate valueSpecifications
+          final Optional<ValueSpecification> copyFrom = inputSpecificationsMap.keySet().stream().filter(v -> v.getValueName().equals(rvps.getCopiedFrom()))
+              .findFirst();
           final ValueProperties.Builder builder = copyFrom.isPresent() ? copyFrom.get().getProperties().copy() : ValueProperties.all().copy();
-          final StreamI<ValuePropertiesModifier> recorderValueProperties = rvps.getRecordedValueProperties();
-          final ValueProperties.Builder valuePropertiesBuilder = recorderValueProperties.reduce(builder,
-              new Function2<ValueProperties.Builder, ValuePropertiesModifier, ValueProperties.Builder>() {
-            @Override
-            public ValueProperties.Builder execute(final ValueProperties.Builder builder, final ValuePropertiesModifier modifier) {
-              return modifier.modify(builder);
-            }
-          });
+          final Stream<ValuePropertiesModifier> recorderValueProperties = rvps.getRecordedValueProperties();
+          final ValueProperties.Builder valuePropertiesBuilder = recorderValueProperties.reduce(
+              builder,
+              (builder1, modifier) -> modifier.modify(builder1),
+              (t, u) -> t.get().union(u.get()).copy());
           valueProperties = valuePropertiesBuilder.get();
         }
         final ValueSpecification valueSpecification = new ValueSpecification(name, computationTargetSpecification, valueProperties);

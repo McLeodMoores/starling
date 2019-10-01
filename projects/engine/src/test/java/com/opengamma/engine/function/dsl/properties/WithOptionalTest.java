@@ -82,10 +82,7 @@ public class WithOptionalTest {
     assertTrue(builder.get().isOptional(PROPERTY_NAME));
     assertValuesEqual(builder.get().getProperties(), new String[] { PROPERTY_NAME });
     assertEquals(builder.get().getProperties().size(), 1);
-    final String[] expectedValues = new String[PROPERTY_VALUES.length + 1];
-    System.arraycopy(PROPERTY_VALUES, 0, expectedValues, 0, PROPERTY_VALUES.length);
-    expectedValues[PROPERTY_VALUES.length] = "othervalue";
-    assertValuesEqual(builder.get().getValues(PROPERTY_NAME), new String[0]);
+    assertValuesEqual(builder.get().getValues(PROPERTY_NAME), new String[] { "othervalue" });
   }
 
   /**

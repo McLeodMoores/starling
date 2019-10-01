@@ -5,9 +5,9 @@
  */
 package com.opengamma.engine.function.dsl;
 
+import java.util.stream.Stream;
+
 import com.opengamma.engine.target.ComputationTargetType;
-import com.opengamma.lambdava.streams.Functional;
-import com.opengamma.lambdava.streams.Stream;
 
 /**
  * A simple function signature.
@@ -15,8 +15,8 @@ import com.opengamma.lambdava.streams.Stream;
 class SimpleFunctionSignature implements FunctionSignature {
 
   private final String _name;
-  private Functional<FunctionOutput> _outputs = Stream.empty();
-  private Functional<FunctionInput> _inputs = Stream.empty();
+  private Stream<FunctionOutput> _outputs = Stream.empty();
+  private Stream<FunctionInput> _inputs = Stream.empty();
   private final ComputationTargetType _computationTargetType;
   private Class<?> _computationTargetClass;
 
@@ -49,14 +49,14 @@ class SimpleFunctionSignature implements FunctionSignature {
   @Override
   public FunctionSignature addInput(final FunctionInput input) {
     final SimpleFunctionSignature signature = new SimpleFunctionSignature(_name, _computationTargetType);
-    signature.setInputs(_inputs.cons(input));
+    signature.setInputs(Stream.concat(Stream.of(input), _inputs));
     return signature;
   }
 
   @Override
   public FunctionSignature addOutput(final FunctionOutput output) {
     final SimpleFunctionSignature signature = new SimpleFunctionSignature(_name, _computationTargetType);
-    signature.setOutputs(_outputs.cons(output));
+    signature.setOutputs(Stream.concat(Stream.of(output), _outputs));
     return signature;
   }
 
@@ -79,20 +79,20 @@ class SimpleFunctionSignature implements FunctionSignature {
   }
 
   @Override
-  public Functional<FunctionOutput> getOutputs() {
+  public Stream<FunctionOutput> getOutputs() {
     return _outputs;
   }
 
-  private void setOutputs(final Functional<FunctionOutput> outputs) {
+  private void setOutputs(final Stream<FunctionOutput> outputs) {
     _outputs = outputs;
   }
 
   @Override
-  public Functional<FunctionInput> getInputs() {
+  public Stream<FunctionInput> getInputs() {
     return _inputs;
   }
 
-  private void setInputs(final Functional<FunctionInput> inputs) {
+  private void setInputs(final Stream<FunctionInput> inputs) {
     _inputs = inputs;
   }
 }

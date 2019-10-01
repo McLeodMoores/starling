@@ -5,15 +5,15 @@
  */
 package com.opengamma.engine.function.dsl.properties;
 
-import com.opengamma.lambdava.streams.Stream;
-import com.opengamma.lambdava.streams.StreamI;
+import java.util.stream.Stream;
+
 import com.opengamma.util.ArgumentChecker;
 
 /**
  * Records the value properties from a value requirement.
  */
 public final class RecordingValueProperties {
-  private StreamI<ValuePropertiesModifier> _recordedValueProperties = Stream.empty();
+  private Stream<ValuePropertiesModifier> _recordedValueProperties = Stream.empty();
   private final String _copiedFrom;
 
   private RecordingValueProperties(final String copiedFrom) {
@@ -54,7 +54,7 @@ public final class RecordingValueProperties {
    *
    * @return the value properties
    */
-  public StreamI<ValuePropertiesModifier> getRecordedValueProperties() {
+  public Stream<ValuePropertiesModifier> getRecordedValueProperties() {
     return _recordedValueProperties;
   }
 
@@ -66,7 +66,7 @@ public final class RecordingValueProperties {
    * @return the value properties
    */
   public RecordingValueProperties withoutAny(final String propertyName) {
-    _recordedValueProperties = _recordedValueProperties.append(new WithoutAny(propertyName));
+    _recordedValueProperties = Stream.concat(_recordedValueProperties, Stream.of(new WithoutAny(propertyName)));
     return this;
   }
 
@@ -81,7 +81,7 @@ public final class RecordingValueProperties {
    */
   public RecordingValueProperties with(final String propertyName, final String... propertyValue) {
     ArgumentChecker.noNulls(propertyValue, "propertyValue");
-    _recordedValueProperties = _recordedValueProperties.append(new With(propertyName, propertyValue));
+    _recordedValueProperties = Stream.concat(_recordedValueProperties, Stream.of(new With(propertyName, propertyValue)));
     return this;
   }
 
@@ -96,7 +96,7 @@ public final class RecordingValueProperties {
    */
   public RecordingValueProperties withReplacement(final String propertyName, final String... propertyValue) {
     ArgumentChecker.noNulls(propertyValue, "propertyValue");
-    _recordedValueProperties = _recordedValueProperties.append(new WithReplacement(propertyName, propertyValue));
+    _recordedValueProperties = Stream.concat(_recordedValueProperties, Stream.of(new WithReplacement(propertyName, propertyValue)));
     return this;
   }
 
@@ -108,7 +108,7 @@ public final class RecordingValueProperties {
    * @return the value properties
    */
   public RecordingValueProperties withAny(final String propertyName) {
-    _recordedValueProperties = _recordedValueProperties.append(new WithAny(propertyName));
+    _recordedValueProperties = Stream.concat(_recordedValueProperties, Stream.of(new WithAny(propertyName)));
     return this;
   }
 
@@ -120,7 +120,7 @@ public final class RecordingValueProperties {
    * @return the value properties
    */
   public RecordingValueProperties withOptional(final String propertyName) {
-    _recordedValueProperties = _recordedValueProperties.append(new WithOptional(propertyName));
+    _recordedValueProperties = Stream.concat(_recordedValueProperties, Stream.of(new WithOptional(propertyName)));
     return this;
   }
 

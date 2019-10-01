@@ -61,21 +61,18 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
   /**
    * Comparator to give a fixed ordering of functions at the same priority so that we at least have deterministic behavior between runs.
    */
-  private static final Comparator<ResolutionRule> RULE_COMPARATOR = new Comparator<ResolutionRule>() {
-    @Override
-    public int compare(final ResolutionRule o1, final ResolutionRule o2) {
-      int c = o1.getParameterizedFunction().getFunction().getFunctionDefinition().getUniqueId().compareTo(
-          o2.getParameterizedFunction().getFunction().getFunctionDefinition().getUniqueId());
-      if (c != 0) {
-        return c;
-      }
-      // Have the same function, can try and order the "FunctionParameters" as we know it implements a hash code
-      c = o1.getParameterizedFunction().getParameters().hashCode() - o2.getParameterizedFunction().getParameters().hashCode();
-      if (c != 0) {
-        return c;
-      }
-      throw new OpenGammaRuntimeException("Rule priority conflict - cannot order " + o1 + " against " + o2);
+  private static final Comparator<ResolutionRule> RULE_COMPARATOR = (o1, o2) -> {
+    int c = o1.getParameterizedFunction().getFunction().getFunctionDefinition().getUniqueId().compareTo(
+        o2.getParameterizedFunction().getFunction().getFunctionDefinition().getUniqueId());
+    if (c != 0) {
+      return c;
     }
+    // Have the same function, can try and order the "FunctionParameters" as we know it implements a hash code
+    c = o1.getParameterizedFunction().getParameters().hashCode() - o2.getParameterizedFunction().getParameters().hashCode();
+    if (c != 0) {
+      return c;
+    }
+    throw new OpenGammaRuntimeException("Rule priority conflict - cannot order " + o1 + " against " + o2);
   };
 
   /**
@@ -282,8 +279,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
 
   }
 
-  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> FOLD_RULES =
-      new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
+  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> FOLD_RULES = new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
     @Override
     public Iterable<Collection<ResolutionRule>> execute(final Iterable<Collection<ResolutionRule>> a, final Iterable<Collection<ResolutionRule>> b) {
       if (a instanceof ChainedRuleBundle) {
@@ -352,9 +348,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     addRules(resolutionRules);
   }
 
-  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>
-  COMBINE_CHAIN_RULE_BUNDLE =
-  new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
+  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> COMBINE_CHAIN_RULE_BUNDLE = new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
     @Override
     public Iterable<Collection<ResolutionRule>> execute(final Iterable<Collection<ResolutionRule>> a, final Iterable<Collection<ResolutionRule>> b) {
       if (!(a instanceof ChainedRuleBundle)) {
@@ -365,8 +359,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     }
   };
 
-  private static final ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void> CREATE_CHANGED_RULE_BUNDLE =
-      new ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void>() {
+  private static final ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void> CREATE_CHANGED_RULE_BUNDLE = new ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void>() {
 
     @Override
     public Void visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final DefaultCompiledFunctionResolver self) {
