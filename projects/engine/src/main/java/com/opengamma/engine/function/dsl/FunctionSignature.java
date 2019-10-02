@@ -5,7 +5,7 @@
  */
 package com.opengamma.engine.function.dsl;
 
-import java.util.stream.Stream;
+import java.util.List;
 
 import com.opengamma.engine.target.ComputationTargetType;
 
@@ -37,14 +37,14 @@ public interface FunctionSignature {
    *
    * @return the outputs
    */
-  Stream<FunctionOutput> getOutputs();
+  List<FunctionOutput> getOutputs();
 
   /**
    * Gets the inputs.
    *
    * @return the inputs
    */
-  Stream<FunctionInput> getInputs();
+  List<FunctionInput> getInputs();
 
   /**
    * Gets the function name.

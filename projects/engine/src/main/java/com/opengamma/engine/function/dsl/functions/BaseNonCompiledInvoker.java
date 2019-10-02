@@ -49,7 +49,7 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final FunctionSignature signature = getFunctionSignature();
-    final Map<String, List<FunctionOutput>> outputsByName = signature.getOutputs().collect(Collectors.groupingBy(FunctionOutput::getName));
+    final Map<String, List<FunctionOutput>> outputsByName = signature.getOutputs().stream().collect(Collectors.groupingBy(FunctionOutput::getName));
 
     final Set<ValueSpecification> valueSpecifications = new HashSet<>();
 
@@ -90,7 +90,7 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final FunctionSignature signature = getFunctionSignature();
 
-    final Map<String, List<FunctionInput>> inputsByName = signature.getInputs().collect(Collectors.groupingBy(FunctionInput::getName));
+    final Map<String, List<FunctionInput>> inputsByName = signature.getInputs().stream().collect(Collectors.groupingBy(FunctionInput::getName));
 
     final Set<ValueRequirement> valueRequirements = new HashSet<>();
 
@@ -138,7 +138,7 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
       final Map<ValueSpecification, ValueRequirement> inputSpecificationsMap) {
     final FunctionSignature signature = getFunctionSignature();
-    final Map<String, List<FunctionOutput>> outputsByName = signature.getOutputs().collect(Collectors.groupingBy(FunctionOutput::getName));
+    final Map<String, List<FunctionOutput>> outputsByName = signature.getOutputs().stream().collect(Collectors.groupingBy(FunctionOutput::getName));
 
     final Set<ValueSpecification> valueSpecifications = new HashSet<>();
 

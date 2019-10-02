@@ -1143,7 +1143,7 @@ public class DbBatchWriter extends AbstractDbMaster {
 
     }
 
-    LOGGER.info("Inserting {} and updating {} {} status entries", (Object[]) newArray(inserts.size(), updates.size(), status));
+    LOGGER.info("Inserting {} and updating {} {} status entries", inserts.size(), updates.size(), status);
 
     SqlParameterSource[] batchArgsArray = inserts.toArray(new DbMapSqlParameterSource[inserts.size()]);
     int[] counts = getJdbcTemplate().batchUpdate(getElSqlBundle().getSql("InsertFromRunStatus"), batchArgsArray);
@@ -1153,7 +1153,7 @@ public class DbBatchWriter extends AbstractDbMaster {
     counts = getJdbcTemplate().batchUpdate(getElSqlBundle().getSql("UpdateFromRunStatus"), batchArgsArray);
     checkCount(status + " update", batchArgsArray, counts);
 
-    LOGGER.info("Inserted {} and updated {} {} status entries", (Object[]) newArray(inserts.size(), updates.size(), status));
+    LOGGER.info("Inserted {} and updated {} {} status entries", inserts.size(), updates.size(), status);
   }
 
   private int checkCount(final String rowType, final SqlParameterSource[] batchArgsArray, final int[] counts) {

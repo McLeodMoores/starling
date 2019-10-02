@@ -46,9 +46,9 @@ public class SimpleFunctionSignatureTest {
     final SimpleFunctionSignature sfs = new SimpleFunctionSignature(NAME, TYPE);
     assertNull(sfs.getComputationTargetClass());
     assertEquals(sfs.getComputationTargetType(), TYPE);
-    assertTrue(sfs.getInputs().collect(Collectors.toList()).isEmpty());
+    assertTrue(sfs.getInputs().stream().collect(Collectors.toList()).isEmpty());
     assertEquals(sfs.getName(), NAME);
-    assertTrue(sfs.getOutputs().collect(Collectors.toList()).isEmpty());
+    assertTrue(sfs.getOutputs().stream().collect(Collectors.toList()).isEmpty());
   }
 
   /**
@@ -72,7 +72,7 @@ public class SimpleFunctionSignatureTest {
     final FunctionSignature sfs1 = new SimpleFunctionSignature(NAME, TYPE);
     final FunctionSignature sfs2 = sfs1.inputs(INPUTS);
     assertSame(sfs1, sfs2);
-    assertEquals(sfs2.getInputs().collect(Collectors.toList()), Arrays.asList(INPUTS));
+    assertEquals(sfs2.getInputs().stream().collect(Collectors.toList()), Arrays.asList(INPUTS));
   }
 
   /**
@@ -83,7 +83,7 @@ public class SimpleFunctionSignatureTest {
     final FunctionSignature sfs1 = new SimpleFunctionSignature(NAME, TYPE);
     final FunctionSignature sfs2 = sfs1.outputs(OUTPUTS);
     assertSame(sfs1, sfs2);
-    assertEquals(sfs2.getOutputs().collect(Collectors.toList()), Arrays.asList(OUTPUTS));
+    assertEquals(sfs2.getOutputs().stream().collect(Collectors.toList()), Arrays.asList(OUTPUTS));
   }
 
   /**
@@ -100,7 +100,7 @@ public class SimpleFunctionSignatureTest {
     final List<FunctionInput> expected = new ArrayList<>(Arrays.asList(INPUTS));
     expected.add(0, NEW_INPUT_1);
     expected.add(0, NEW_INPUT_2);
-    assertEquals(sfs3.getInputs().collect(Collectors.toList()), expected);
+    assertEquals(sfs3.getInputs().stream().collect(Collectors.toList()), expected);
   }
 
   /**
@@ -114,6 +114,6 @@ public class SimpleFunctionSignatureTest {
     assertNotSame(sfs1, sfs2);
     final List<FunctionOutput> expected = new ArrayList<>(Arrays.asList(OUTPUTS));
     expected.add(0, NEW_OUTPUT);
-    assertEquals(sfs2.getOutputs().collect(Collectors.toList()), expected);
+    assertEquals(sfs2.getOutputs().stream().collect(Collectors.toList()), expected);
   }
 }

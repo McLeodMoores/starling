@@ -5,7 +5,9 @@
  */
 package com.opengamma.engine.function.dsl;
 
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import com.opengamma.engine.target.ComputationTargetType;
 
@@ -15,8 +17,8 @@ import com.opengamma.engine.target.ComputationTargetType;
 class SimpleFunctionSignature implements FunctionSignature {
 
   private final String _name;
-  private Stream<FunctionOutput> _outputs = Stream.empty();
-  private Stream<FunctionInput> _inputs = Stream.empty();
+  private List<FunctionOutput> _outputs = new ArrayList<>();
+  private List<FunctionInput> _inputs = new ArrayList<>();
   private final ComputationTargetType _computationTargetType;
   private Class<?> _computationTargetClass;
 
@@ -49,26 +51,30 @@ class SimpleFunctionSignature implements FunctionSignature {
   @Override
   public FunctionSignature addInput(final FunctionInput input) {
     final SimpleFunctionSignature signature = new SimpleFunctionSignature(_name, _computationTargetType);
-    signature.setInputs(Stream.concat(Stream.of(input), _inputs));
+    final List<FunctionInput> inputs = new ArrayList<>(_inputs);
+    inputs.add(0, input);
+    signature.inputs(inputs.toArray(new FunctionInput[0]));
     return signature;
   }
 
   @Override
   public FunctionSignature addOutput(final FunctionOutput output) {
     final SimpleFunctionSignature signature = new SimpleFunctionSignature(_name, _computationTargetType);
-    signature.setOutputs(Stream.concat(Stream.of(output), _outputs));
+    final List<FunctionOutput> outputs = new ArrayList<>(_outputs);
+    outputs.add(0, output);
+    signature.outputs(outputs.toArray(new FunctionOutput[0]));
     return signature;
   }
 
   @Override
   public FunctionSignature outputs(final FunctionOutput... outputs) {
-    _outputs = Stream.of(outputs);
+    _outputs = new ArrayList<>(Arrays.asList(outputs));
     return this;
   }
 
   @Override
   public FunctionSignature inputs(final FunctionInput... inputs) {
-    _inputs = Stream.of(inputs);
+    _inputs = new ArrayList<>(Arrays.asList(inputs));
     return this;
   }
 
@@ -79,20 +85,13 @@ class SimpleFunctionSignature implements FunctionSignature {
   }
 
   @Override
-  public Stream<FunctionOutput> getOutputs() {
+  public List<FunctionOutput> getOutputs() {
     return _outputs;
   }
 
-  private void setOutputs(final Stream<FunctionOutput> outputs) {
-    _outputs = outputs;
-  }
-
   @Override
-  public Stream<FunctionInput> getInputs() {
+  public List<FunctionInput> getInputs() {
     return _inputs;
   }
 
-  private void setInputs(final Stream<FunctionInput> inputs) {
-    _inputs = inputs;
-  }
 }
