@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 - present by McLeod Moores Software Limited
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  * Derived from Apache 2 code Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
@@ -35,8 +35,7 @@ import net.sf.ehcache.CacheManager;
 public class QuandlHistoricalTimeSeriesProviderComponentFactory extends HistoricalTimeSeriesProviderComponentFactory {
 
   /**
-   * The optional cache manager.
-   * Caching will be added if this field is set.
+   * The optional cache manager. Caching will be added if this field is set.
    */
   @PropertyDefinition
   private CacheManager _cacheManager;
@@ -47,7 +46,7 @@ public class QuandlHistoricalTimeSeriesProviderComponentFactory extends Historic
   @PropertyDefinition
   private String _authToken;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected HistoricalTimeSeriesProvider initHistoricalTimeSeriesProvider(final ComponentRepository repo) {
     final QuandlHistoricalTimeSeriesProvider provider = new QuandlHistoricalTimeSeriesProvider(getAuthToken());
@@ -84,8 +83,7 @@ public class QuandlHistoricalTimeSeriesProviderComponentFactory extends Historic
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the optional cache manager.
-   * Caching will be added if this field is set.
+   * Gets the optional cache manager. Caching will be added if this field is set.
    * @return the value of the property
    */
   public CacheManager getCacheManager() {
@@ -93,8 +91,7 @@ public class QuandlHistoricalTimeSeriesProviderComponentFactory extends Historic
   }
 
   /**
-   * Sets the optional cache manager.
-   * Caching will be added if this field is set.
+   * Sets the optional cache manager. Caching will be added if this field is set.
    * @param cacheManager  the new value of the property
    */
   public void setCacheManager(CacheManager cacheManager) {
@@ -103,7 +100,6 @@ public class QuandlHistoricalTimeSeriesProviderComponentFactory extends Historic
 
   /**
    * Gets the the {@code cacheManager} property.
-   * Caching will be added if this field is set.
    * @return the property, not null
    */
   public final Property<CacheManager> cacheManager() {

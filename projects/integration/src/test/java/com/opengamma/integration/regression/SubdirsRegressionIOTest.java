@@ -17,6 +17,7 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.HashSet;
 
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.testng.annotations.Test;
 
@@ -26,7 +27,7 @@ import com.opengamma.integration.regression.RegressionIO.Format;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests the {@link SubdirsRegressionIO} class
+ * Tests the {@link SubdirsRegressionIO} class.
  */
 @Test(groups = TestGroup.UNIT)
 public class SubdirsRegressionIOTest {
@@ -51,6 +52,10 @@ public class SubdirsRegressionIOTest {
     file.delete();
   }
 
+  /**
+   * @throws IOException
+   *           if there is an unexpected problem
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNotDirectory() throws IOException {
     final File file = new File(tmpdir(), name());
@@ -62,6 +67,9 @@ public class SubdirsRegressionIOTest {
     }
   }
 
+  /**
+   *
+   */
   public void testConstructorDirectoryExists() {
     final File file = new File(tmpdir(), name());
     try {
@@ -72,6 +80,9 @@ public class SubdirsRegressionIOTest {
     }
   }
 
+  /**
+   *
+   */
   public void testConstructorNotExistsNoCreate() {
     final File file = new File(tmpdir(), name());
     try {
@@ -83,6 +94,9 @@ public class SubdirsRegressionIOTest {
     }
   }
 
+  /**
+   *
+   */
   public void testConstructorNotExistsCreate() {
     final File file = new File(tmpdir(), name());
     try {
@@ -95,6 +109,9 @@ public class SubdirsRegressionIOTest {
     }
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testConstructorNotExistsCreateFail() {
     @SuppressWarnings("serial")
@@ -112,6 +129,10 @@ public class SubdirsRegressionIOTest {
     }
   }
 
+  /**
+   * @throws IOException
+   *           if there is an unexpected problem
+   */
   public void testWrite() throws IOException {
     final File file = new File(tmpdir(), name());
     try {
@@ -121,20 +142,24 @@ public class SubdirsRegressionIOTest {
       instance.beginWrite();
       instance.write("foo", "Foo instance", "0");
       instance.endWrite();
-      Mockito.verify(format).write(Mockito.<Object>any(), Mockito.eq("Foo instance"), Mockito.<OutputStream>any());
+      Mockito.verify(format).write(Matchers.<Object> any(), Matchers.eq("Foo instance"), Matchers.<OutputStream> any());
       assertTrue(new File(new File(file, "foo"), "0.obj").exists());
     } finally {
       delete(file);
     }
   }
 
+  /**
+   * @throws IOException
+   *           if there is an unexpected problem
+   */
   public void testRead() throws IOException {
     final File file = new File(tmpdir(), name());
     try {
       final Format format = Mockito.mock(Format.class);
       new File(file, "foo").mkdirs();
       new File(new File(file, "foo"), "0").createNewFile();
-      Mockito.when(format.read(Mockito.<Object>any(), Mockito.<InputStream>any())).thenReturn("Foo instance");
+      Mockito.when(format.read(Matchers.<Object> any(), Matchers.<InputStream> any())).thenReturn("Foo instance");
       final RegressionIO instance = new SubdirsRegressionIO(file, format, true);
       instance.beginRead();
       assertEquals(instance.read("foo", "0"), "Foo instance");
@@ -144,6 +169,10 @@ public class SubdirsRegressionIOTest {
     }
   }
 
+  /**
+   * @throws IOException
+   *           if there is an unexpected problem
+   */
   @Test(expectedExceptions = FileNotFoundException.class)
   public void testReadFileNotFound() throws IOException {
     final File file = new File(tmpdir(), name());
@@ -158,6 +187,10 @@ public class SubdirsRegressionIOTest {
     }
   }
 
+  /**
+   * @throws IOException
+   *           if there is an unexpected problem
+   */
   @Test(expectedExceptions = FileNotFoundException.class)
   public void testReadDirectoryNotFound() throws IOException {
     final File file = new File(tmpdir(), name());
@@ -171,6 +204,10 @@ public class SubdirsRegressionIOTest {
     }
   }
 
+  /**
+   * @throws IOException
+   *           if there is an unexpected problem
+   */
   public void testEnumObjectsNotExist() throws IOException {
     final File file = new File(tmpdir(), name());
     try {
@@ -184,6 +221,10 @@ public class SubdirsRegressionIOTest {
     }
   }
 
+  /**
+   * @throws IOException
+   *           if there is an unexpected problem
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testEnumObjectsNotDirectory() throws IOException {
     final File file = new File(tmpdir(), name());
@@ -198,6 +239,10 @@ public class SubdirsRegressionIOTest {
     }
   }
 
+  /**
+   * @throws IOException
+   *           if there is an unexpected problem
+   */
   public void testEnumObjectsEmpty() throws IOException {
     final File file = new File(tmpdir(), name());
     try {
@@ -212,6 +257,10 @@ public class SubdirsRegressionIOTest {
     }
   }
 
+  /**
+   * @throws IOException
+   *           if there is an unexpected problem
+   */
   public void testEnumObjectsNoExt() throws IOException {
     final File file = new File(tmpdir(), name());
     try {
@@ -228,6 +277,10 @@ public class SubdirsRegressionIOTest {
     }
   }
 
+  /**
+   * @throws IOException
+   *           if there is an unexpected problem
+   */
   public void testEnumObjectsExt() throws IOException {
     final File file = new File(tmpdir(), name());
     try {

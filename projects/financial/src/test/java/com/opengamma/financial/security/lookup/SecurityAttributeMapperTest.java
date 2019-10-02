@@ -35,7 +35,7 @@ import com.opengamma.util.test.TestGroup;
 public class SecurityAttributeMapperTest {
 
   private static final CurrencyPairs CURRENCY_PAIRS = CurrencyPairs.of(ImmutableSet.of(CurrencyPair.of(Currency.GBP,
-                                                                                                        Currency.USD)));
+      Currency.USD)));
   private static final SecurityAttributeMapper DEFAULT_MAPPINGS = DefaultSecurityAttributeMappings.create(CURRENCY_PAIRS);
 
   /**
@@ -55,7 +55,7 @@ public class SecurityAttributeMapperTest {
   }
 
   /**
-   * Custom providers for values derived from multiple security properties
+   * Custom providers for values derived from multiple security properties.
    */
   @Test
   public void fxForward() {
@@ -66,16 +66,16 @@ public class SecurityAttributeMapperTest {
     assertEquals("GBP/USD", DEFAULT_MAPPINGS.valueFor(PRODUCT, security));
     assertEquals(forwardDate, DEFAULT_MAPPINGS.valueFor(MATURITY, security));
     final FXAmounts expected = FXAmounts.forForward(security.getPayCurrency(),
-                                              security.getReceiveCurrency(),
-                                              security.getPayAmount(),
-                                              security.getReceiveAmount(),
-                                              CURRENCY_PAIRS);
+        security.getReceiveCurrency(),
+        security.getPayAmount(),
+        security.getReceiveAmount(),
+        CURRENCY_PAIRS);
     assertEquals(expected, DEFAULT_MAPPINGS.valueFor(QUANTITY, security));
     assertEquals(1.5d, DEFAULT_MAPPINGS.valueFor(RATE, security));
   }
 
   /**
-   * if no columns are mapped for a class then it should inherit mappings set up for its superclasses
+   * if no columns are mapped for a class then it should inherit mappings set up for its superclasses.
    */
   @Test
   public void inheritSuperclassMappings() {
@@ -113,7 +113,7 @@ public class SecurityAttributeMapperTest {
     assertEquals(cType, mapper.valueFor(TYPE, c));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static ZonedDateTime zdt(final int y, final int m, final int d, final int hr, final int min, final int sec, final int nanos, final ZoneId zone) {
     return LocalDateTime.of(y, m, d, hr, min, sec, nanos).atZone(zone);
   }

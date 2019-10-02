@@ -22,7 +22,11 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class DevBundleBuilderTest {
 
-  public void test_builder() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testBuilder() throws Exception {
     final BundleManager bundleManager = new BundleManager();
 
     final Bundle testBundle = new Bundle("A.css");

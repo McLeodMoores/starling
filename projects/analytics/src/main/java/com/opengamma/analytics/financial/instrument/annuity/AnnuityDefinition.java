@@ -194,9 +194,9 @@ public class AnnuityDefinition<P extends PaymentDefinition>
   public Annuity<? extends Payment> toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
     ArgumentChecker.notNull(date, "date");
     final List<Payment> resultList = new ArrayList<>();
-    for (final P _payment : _payments) {
-      if (!date.isAfter(_payment.getPaymentDate())) {
-        resultList.add(_payment.toDerivative(date, yieldCurveNames));
+    for (final P payment : _payments) {
+      if (!date.isAfter(payment.getPaymentDate())) {
+        resultList.add(payment.toDerivative(date, yieldCurveNames));
       }
     }
     return new Annuity<>(resultList.toArray(new Payment[resultList.size()]));
@@ -234,9 +234,9 @@ public class AnnuityDefinition<P extends PaymentDefinition>
   public Annuity<? extends Payment> toDerivative(final ZonedDateTime date) {
     ArgumentChecker.notNull(date, "date");
     final List<Payment> resultList = new ArrayList<>();
-    for (final P _payment : _payments) {
-      if (!date.isAfter(_payment.getPaymentDate())) {
-        resultList.add(_payment.toDerivative(date));
+    for (final P payment : _payments) {
+      if (!date.isAfter(payment.getPaymentDate())) {
+        resultList.add(payment.toDerivative(date));
       }
     }
     return new Annuity<>(resultList.toArray(new Payment[resultList.size()]));

@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.financial.analytics.test.unittest;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -20,13 +25,13 @@ import com.opengamma.util.test.TestGroup;
 public class CurveFixingTSLoaderTest extends AbstractRedisTestCase {
 
   public void testOperation() {
-    NonVersionedRedisHistoricalTimeSeriesSource source = new NonVersionedRedisHistoricalTimeSeriesSource(getJedisPool(), getRedisPrefix());
-    CurveFixingTSLoader loader = new CurveFixingTSLoader(source);
+    final NonVersionedRedisHistoricalTimeSeriesSource source = new NonVersionedRedisHistoricalTimeSeriesSource(getJedisPool(), getRedisPrefix());
+    final CurveFixingTSLoader loader = new CurveFixingTSLoader(source);
     loader.loadCurveFixingCSVFile("classpath:com/opengamma/financial/analytics/test/Base_Curves_20131014_Clean.csv");
 
-    HistoricalTimeSeries historicalTimeSeries = source.getHistoricalTimeSeries(UniqueId.of(ExternalSchemes.ISDA.getName(), "CHF-LIBOR-BBA-6M"));
+    final HistoricalTimeSeries historicalTimeSeries = source.getHistoricalTimeSeries(UniqueId.of(ExternalSchemes.ISDA.getName(), "CHF-LIBOR-BBA-6M"));
     assertNotNull(historicalTimeSeries);
-    LocalDateDoubleTimeSeries timeSeries = historicalTimeSeries.getTimeSeries();
+    final LocalDateDoubleTimeSeries timeSeries = historicalTimeSeries.getTimeSeries();
     assertNotNull(timeSeries);
     assertEquals(5996, timeSeries.size());
   }

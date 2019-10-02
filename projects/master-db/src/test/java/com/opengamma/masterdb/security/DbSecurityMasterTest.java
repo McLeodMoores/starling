@@ -48,13 +48,19 @@ public class DbSecurityMasterTest extends AbstractDbSecurityTest {
 
   private DbSecurityMaster _secMaster;
 
+  /**
+   * @param databaseType
+   *          the database type
+   * @param databaseVersion
+   *          the database version
+   */
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public DbSecurityMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doSetUp() {
     _secMaster = new DbSecurityMaster(getDbConnector());
@@ -66,18 +72,26 @@ public class DbSecurityMasterTest extends AbstractDbSecurityTest {
     _secMaster = null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_basics() throws Exception {
+  public void testBasics() throws Exception {
     assertNotNull(_secMaster);
     assertEquals(true, _secMaster.getUniqueIdScheme().equals("DbSec"));
     assertNotNull(_secMaster.getDbConnector());
     assertNotNull(_secMaster.getClock());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_equity() throws Exception {
+  public void testEquity() throws Exception {
     final EquitySecurity sec = new EquitySecurity("London", "LON", "OpenGamma Ltd", Currency.GBP);
     sec.setName("OpenGamma");
     sec.setGicsCode(GICSCode.of("20102010"));
@@ -90,8 +104,12 @@ public class DbSecurityMasterTest extends AbstractDbSecurityTest {
     assertEquals(added, loaded);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_equity_withAttribute() throws Exception {
+  public void testEquityWithAttribute() throws Exception {
     final EquitySecurity sec = new EquitySecurity("London", "LON", "OpenGamma Ltd", Currency.GBP);
     sec.setName("OpenGamma");
     sec.setGicsCode(GICSCode.of("20102010"));
@@ -105,8 +123,12 @@ public class DbSecurityMasterTest extends AbstractDbSecurityTest {
     assertEquals(added, loaded);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_equity_with_attribute_permission() throws Exception {
+  public void testEquityWithAttributePermission() throws Exception {
     final EquitySecurity sec = new EquitySecurity("London", "LON", "OpenGamma Ltd", Currency.GBP);
     sec.setName("OpenGamma");
     sec.setGicsCode(GICSCode.of("20102010"));
@@ -135,9 +157,13 @@ public class DbSecurityMasterTest extends AbstractDbSecurityTest {
     assertEquals(added, loaded);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_bond_withSearchByIssuer() throws Exception {
+  public void testBondWithSearchByIssuer() throws Exception {
     final ZonedDateTime zdt = ZonedDateTime.parse("2011-01-31T12:00Z[Europe/London]");
     final GovernmentBondSecurity sec1 = new GovernmentBondSecurity("US TREASURY N/B", "issuerType", "issuerDomicile", "market",
         Currency.GBP, SimpleYieldConvention.US_TREASURY_EQUIVALANT, new Expiry(zdt),
@@ -165,18 +191,18 @@ public class DbSecurityMasterTest extends AbstractDbSecurityTest {
     assertEquals(loaded1, result.getFirstDocument());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(enabled = false)
-  public void test_concurrentModification() {
+  public void testConcurrentModification() {
     final AtomicReference<Throwable> exceptionOccurred = new AtomicReference<>();
-    final Runnable task = new Runnable() {
-      @Override
-      public void run() {
-        try {
-          test_equity();
-        } catch (final Throwable th) {
-          exceptionOccurred.compareAndSet(null, th);
-        }
+    final Runnable task = () -> {
+      try {
+        testEquity();
+      } catch (final Throwable th) {
+        exceptionOccurred.compareAndSet(null, th);
       }
     };
 
@@ -201,9 +227,12 @@ public class DbSecurityMasterTest extends AbstractDbSecurityTest {
     assertEquals(null, exceptionOccurred.get());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test
-  public void test_toString() {
+  public void testToString() {
     assertEquals("DbSecurityMaster[DbSec]", _secMaster.toString());
   }
 

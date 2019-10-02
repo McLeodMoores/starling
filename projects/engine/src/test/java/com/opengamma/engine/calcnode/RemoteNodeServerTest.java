@@ -51,17 +51,23 @@ import com.opengamma.util.test.TestGroup;
 public class RemoteNodeServerTest {
 
   private static final CalculationJobItem JOB_ITEM = new CalculationJobItem("1", new EmptyFunctionParameters(), ComputationTargetSpecification.NULL,
-      Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification>emptySet(), ExecutionLogMode.INDICATORS);
+      Collections.<ValueSpecification> emptySet(), Collections.<ValueSpecification> emptySet(), ExecutionLogMode.INDICATORS);
 
   // Blacklisting subclasses
 
+  /**
+   *
+   */
   public void testStaticFunctionBlacklistMaintainerProvider() {
     final FunctionBlacklistMaintainer maintainer = Mockito.mock(FunctionBlacklistMaintainer.class);
     final StaticFunctionBlacklistMaintainerProvider provider = new StaticFunctionBlacklistMaintainerProvider(maintainer);
     assertSame(provider.getUpdate("Foo"), maintainer);
   }
 
-  public void testFunctionBlacklistMaintainerProviderBean_emptyPolicy() {
+  /**
+   *
+   */
+  public void testFunctionBlacklistMaintainerProviderBeanEmptyPolicy() {
     final FunctionBlacklistMaintainerProviderBean bean = new FunctionBlacklistMaintainerProviderBean();
     bean.setBlacklistProvider(Mockito.mock(ManageableFunctionBlacklistProvider.class));
     bean.setBlacklistPrefix("BL_");
@@ -69,7 +75,10 @@ public class RemoteNodeServerTest {
     assertNull(bean.getUpdate("Foo"));
   }
 
-  public void testFunctionBlacklistMaintainerProviderBean_livePolicy() {
+  /**
+   *
+   */
+  public void testFunctionBlacklistMaintainerProviderBeanLivePolicy() {
     final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     try {
       final FunctionBlacklistMaintainerProviderBean bean = new FunctionBlacklistMaintainerProviderBean();
@@ -87,31 +96,43 @@ public class RemoteNodeServerTest {
     }
   }
 
-  public void testMultipleFunctionBlacklistMaintainerProvider_empty() {
+  /**
+   *
+   */
+  public void testMultipleFunctionBlacklistMaintainerProviderEmpty() {
     final MultipleFunctionBlacklistMaintainerProvider provider = new MultipleFunctionBlacklistMaintainerProvider(
-        Arrays.<FunctionBlacklistMaintainerProvider>asList(new StaticFunctionBlacklistMaintainerProvider(null)));
+        Arrays.<FunctionBlacklistMaintainerProvider> asList(new StaticFunctionBlacklistMaintainerProvider(null)));
     assertNull(provider.getUpdate("Foo"));
   }
 
-  public void testMultipleFunctionBlacklistMaintainerProvider_full() {
+  /**
+   *
+   */
+  public void testMultipleFunctionBlacklistMaintainerProviderFull() {
     final FunctionBlacklistMaintainer a = Mockito.mock(FunctionBlacklistMaintainer.class);
     final FunctionBlacklistMaintainer b = Mockito.mock(FunctionBlacklistMaintainer.class);
-    final MultipleFunctionBlacklistMaintainerProvider provider =
-        new MultipleFunctionBlacklistMaintainerProvider(Arrays.<FunctionBlacklistMaintainerProvider>asList(
-        new StaticFunctionBlacklistMaintainerProvider(null), new StaticFunctionBlacklistMaintainerProvider(a),
-        new StaticFunctionBlacklistMaintainerProvider(b)));
+    final MultipleFunctionBlacklistMaintainerProvider provider = new MultipleFunctionBlacklistMaintainerProvider(
+        Arrays.<FunctionBlacklistMaintainerProvider> asList(
+            new StaticFunctionBlacklistMaintainerProvider(null), new StaticFunctionBlacklistMaintainerProvider(a),
+            new StaticFunctionBlacklistMaintainerProvider(b)));
     final FunctionBlacklistMaintainer m = provider.getUpdate("Foo");
     m.failedJobItem(JOB_ITEM);
     Mockito.verify(a).failedJobItem(JOB_ITEM);
     Mockito.verify(b).failedJobItem(JOB_ITEM);
   }
 
+  /**
+   *
+   */
   public void testStaticFunctionBlacklistQueryProvider() {
     final FunctionBlacklistQuery query = Mockito.mock(FunctionBlacklistQuery.class);
     final StaticFunctionBlacklistQueryProvider provider = new StaticFunctionBlacklistQueryProvider(query);
     assertSame(provider.getQuery("Foo"), query);
   }
 
+  /**
+   *
+   */
   public void testFunctionBlacklistQueryProviderBean() {
     final FunctionBlacklistProvider provider = Mockito.mock(FunctionBlacklistProvider.class);
     final FunctionBlacklist blacklist = new EmptyFunctionBlacklist();
@@ -123,16 +144,22 @@ public class RemoteNodeServerTest {
     assertTrue(query.isEmpty());
   }
 
-  public void testMultipleFunctionBlacklistQueryProvider_empty() {
+  /**
+   *
+   */
+  public void testMultipleFunctionBlacklistQueryProviderEmpty() {
     final MultipleFunctionBlacklistQueryProvider provider = new MultipleFunctionBlacklistQueryProvider(
-        Arrays.<FunctionBlacklistQueryProvider>asList(new StaticFunctionBlacklistQueryProvider(null)));
+        Arrays.<FunctionBlacklistQueryProvider> asList(new StaticFunctionBlacklistQueryProvider(null)));
     assertNull(provider.getQuery("Foo"));
   }
 
-  public void testMultipleFunctionBlacklistQueryProvider_full() {
+  /**
+   *
+   */
+  public void testMultipleFunctionBlacklistQueryProviderFull() {
     final FunctionBlacklistQuery a = Mockito.mock(FunctionBlacklistQuery.class);
     final FunctionBlacklistQuery b = Mockito.mock(FunctionBlacklistQuery.class);
-    final MultipleFunctionBlacklistQueryProvider provider = new MultipleFunctionBlacklistQueryProvider(Arrays.<FunctionBlacklistQueryProvider>asList(
+    final MultipleFunctionBlacklistQueryProvider provider = new MultipleFunctionBlacklistQueryProvider(Arrays.<FunctionBlacklistQueryProvider> asList(
         new StaticFunctionBlacklistQueryProvider(null), new StaticFunctionBlacklistQueryProvider(a), new StaticFunctionBlacklistQueryProvider(b)));
     final FunctionBlacklistQuery q = provider.getQuery("Foo");
     Mockito.when(a.isBlacklisted(JOB_ITEM)).thenReturn(Boolean.FALSE);

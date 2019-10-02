@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve;
 
@@ -37,31 +37,27 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Unit tests for {@link FXForwardNodeConverter}. This class tests both the original OpenGamma implementation and
- * the version that follows the FX market conventions in detail: the converter is backwards compatible.
+ * Unit tests for {@link FXForwardNodeConverter}. This class tests both the original OpenGamma implementation and the version that follows the FX market
+ * conventions in detail: the converter is backwards compatible.
  * <p>
  * The original behaviour of the converter is as follows:
  * <ul>
- *  <li> No special consideration of US holidays
- *  <li> T+n settlement to calculate the spot date
- *  <li> Add the maturity tenor and use the business day convention and settlement calendar from the convention
- *  <li> Only the settlement region holidays are considered
- *  <li> The business day convention that is used to find the settlement date is taken from the forward convention,
- *  rather than using modified following for all cases
- *  <li> Weekends are hard-coded to Saturday and Sunday (this behaviour comes from the holiday source rather than
- *  the converter)
- *  <li> South American currencies that should take US holidays on intermediate days into consideration when calculating
- *  the settlement date do not.
+ * <li>No special consideration of US holidays
+ * <li>T+n settlement to calculate the spot date
+ * <li>Add the maturity tenor and use the business day convention and settlement calendar from the convention
+ * <li>Only the settlement region holidays are considered
+ * <li>The business day convention that is used to find the settlement date is taken from the forward convention, rather than using modified following for all
+ * cases
+ * <li>Weekends are hard-coded to Saturday and Sunday (this behaviour comes from the holiday source rather than the converter)
+ * <li>South American currencies that should take US holidays on intermediate days into consideration when calculating the settlement date do not.
  * </ul>
  * The newer implementation of the code uses the following rules to calculate the delivery date:
  * <ul>
- *  <li> The tenor of the node is added to the valuation time.
- *  <li> T+n settlement must include n good business days, where good business days are defined as dates that are neither
- *  holidays nor weekends in either of the currencies in the pair, unless one of those currencies is USD, in which case
- *  USD holidays are ignored, unless one of the currencies is a special Latin American currency, in which case USD holidays
- *  are considered.
- *  <li> The delivery date cannot be a holiday in either of the currencies or USD. The date is moved forwards until this
- *  is true.
+ * <li>The tenor of the node is added to the valuation time.
+ * <li>T+n settlement must include n good business days, where good business days are defined as dates that are neither holidays nor weekends in either of the
+ * currencies in the pair, unless one of those currencies is USD, in which case USD holidays are ignored, unless one of the currencies is a special Latin
+ * American currency, in which case USD holidays are considered.
+ * <li>The delivery date cannot be a holiday in either of the currencies or USD. The date is moved forwards until this is true.
  * </ul>
  */
 @SuppressWarnings("deprecation")
@@ -273,8 +269,8 @@ public class FxForwardNodeConverterTest {
   }
 
   /**
-   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. There are no holidays between the maturity and
-   * settlement dates and so the payment date is expected to be 13/5/2015.
+   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. There are no holidays between the maturity and settlement dates and so the
+   * payment date is expected to be 13/5/2015.
    */
   @Test
   public void testLegacyNoHolidays20150504() {
@@ -296,8 +292,8 @@ public class FxForwardNodeConverterTest {
   }
 
   /**
-   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. There are no holidays on the
-   * settlement date and so the payment date is expected to be 13/5/2015.
+   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. There are no holidays on the settlement date and so the payment date is expected
+   * to be 13/5/2015.
    */
   @Test
   public void testNoHolidays20150504() {
@@ -314,8 +310,8 @@ public class FxForwardNodeConverterTest {
   }
 
   /**
-   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 1/5/2015. The settlement date is a weekend
-   * and so the payment date is expected to be 12/5/2015.
+   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 1/5/2015. The settlement date is a weekend and so the payment date is expected to be
+   * 12/5/2015.
    */
   @Test
   public void testLegacyNoHolidays20150501() {
@@ -331,8 +327,8 @@ public class FxForwardNodeConverterTest {
   }
 
   /**
-   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 1/5/2015. The settlement date is a weekend
-   * and so the payment date is expected to be 12/5/2015.
+   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 1/5/2015. The settlement date is a weekend and so the payment date is expected to be
+   * 12/5/2015.
    */
   @Test
   public void testNoHolidays20150501() {
@@ -349,8 +345,8 @@ public class FxForwardNodeConverterTest {
   }
 
   /**
-   * Tests conversion of a 1M pay EUR, receive GBP FX forward node on 31/1/2015. The business day convention is taken from the
-   * forward convention (following in this case) and so the payment date is expected to be 4/3/2015.
+   * Tests conversion of a 1M pay EUR, receive GBP FX forward node on 31/1/2015. The business day convention is taken from the forward convention (following in
+   * this case) and so the payment date is expected to be 4/3/2015.
    */
   @Test
   public void testLegacyBusinessDayConvention20150131() {
@@ -366,8 +362,8 @@ public class FxForwardNodeConverterTest {
   }
 
   /**
-   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. The settlement date falls on a EU holiday and so the
-   * payment date is expected to be 14/5/2015.
+   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. The settlement date falls on a EU holiday and so the payment date is expected to
+   * be 14/5/2015.
    */
   @Test
   public void testLegacyEuHoliday20150504() {
@@ -385,8 +381,8 @@ public class FxForwardNodeConverterTest {
   }
 
   /**
-   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. The settlement date falls on a EU holiday and so the
-   * payment date is expected to be 14/5/2015.
+   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. The settlement date falls on a EU holiday and so the payment date is expected to
+   * be 14/5/2015.
    */
   @Test
   public void testEuHoliday20150504() {
@@ -406,8 +402,8 @@ public class FxForwardNodeConverterTest {
   }
 
   /**
-   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 1/5/2015. The settlement date falls on a EU holiday and so the
-   * payment date is expected to be 13/5/2015.
+   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 1/5/2015. The settlement date falls on a EU holiday and so the payment date is expected to
+   * be 13/5/2015.
    */
   @Test
   public void testLegacyEuHoliday20150501() {
@@ -425,8 +421,8 @@ public class FxForwardNodeConverterTest {
   }
 
   /**
-   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 1/5/2015. The settlement date falls on a EU holiday and so the
-   * payment date is expected to be 13/5/2015.
+   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 1/5/2015. The settlement date falls on a EU holiday and so the payment date is expected to
+   * be 13/5/2015.
    */
   @Test
   public void testEuHoliday20150501() {
@@ -447,8 +443,8 @@ public class FxForwardNodeConverterTest {
   }
 
   /**
-   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. The settlement date falls on a GB holiday, which will be
-   * ignored because only the settlement currency holidays are considered, and so the payment date is expected to be 13/5/2015.
+   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. The settlement date falls on a GB holiday, which will be ignored because only
+   * the settlement currency holidays are considered, and so the payment date is expected to be 13/5/2015.
    */
   @Test
   public void testLegacyGbHoliday20150504() {
@@ -466,8 +462,8 @@ public class FxForwardNodeConverterTest {
   }
 
   /**
-   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. The settlement date falls on a GB holiday and so the
-   * payment date is expected to be 14/5/2015.
+   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. The settlement date falls on a GB holiday and so the payment date is expected to
+   * be 14/5/2015.
    */
   @Test
   public void testGbHoliday20150504() {
@@ -487,8 +483,8 @@ public class FxForwardNodeConverterTest {
   }
 
   /**
-   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. The settlement date falls on a US holiday but this is ignored
-   * and so the payment date is expected to be 13/5/2015.
+   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. The settlement date falls on a US holiday but this is ignored and so the payment
+   * date is expected to be 13/5/2015.
    */
   @Test
   public void testLegacyUsHolidays20150504() {
@@ -508,8 +504,8 @@ public class FxForwardNodeConverterTest {
   }
 
   /**
-   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. The settlement date falls on a US holiday
-   * and so the payment date is expected to be 14/5/2015.
+   * Tests conversion of a 7D pay EUR, receive GBP FX forward node on 4/5/2015. The settlement date falls on a US holiday and so the payment date is expected to
+   * be 14/5/2015.
    */
   @Test
   public void testUsHolidays20150504() {
@@ -529,8 +525,8 @@ public class FxForwardNodeConverterTest {
   }
 
   /**
-   * Tests conversion of a 7D pay USD, receive SAR FX forward node on 13/5/2015. The settlement date falls on a SA weekend but this is ignored
-   * and so the payment date is expected to be 22/5/2015.
+   * Tests conversion of a 7D pay USD, receive SAR FX forward node on 13/5/2015. The settlement date falls on a SA weekend but this is ignored and so the
+   * payment date is expected to be 22/5/2015.
    */
   @Test
   public void testLegacySaWeekend() {
@@ -549,8 +545,8 @@ public class FxForwardNodeConverterTest {
   }
 
   /**
-   * Tests conversion of a 7D pay USD, receive MXN FX forward node on 13/5/2015. The day before settlement date is a US holiday but this is ignored
-   * and so the payment date is expected to be 22/5/2015.
+   * Tests conversion of a 7D pay USD, receive MXN FX forward node on 13/5/2015. The day before settlement date is a US holiday but this is ignored and so the
+   * payment date is expected to be 22/5/2015.
    */
   @Test
   public void testLegacyMxWithIntermediateUsHoliday() {
@@ -566,7 +562,6 @@ public class FxForwardNodeConverterTest {
     final ForexDefinition definition = (ForexDefinition) node.accept(converter);
     assertEquals(definition.getExchangeDate(), expectedPaymentDate);
   }
-
 
   /**
    * Tests conversion of a 7D pay GBP, receive EUR FX forward node on 13/5/2015. The day before settlement date is a US holiday but the convention indicates
@@ -588,10 +583,9 @@ public class FxForwardNodeConverterTest {
     assertEquals(definition.getExchangeDate(), expectedPaymentDate);
   }
 
-
   /**
-   * Tests conversion of a 7D pay USD, receive MXN FX forward node on 13/5/2015. The day before settlement date is a US holiday
-   * and so the payment date is expected to be 25/5/2015.
+   * Tests conversion of a 7D pay USD, receive MXN FX forward node on 13/5/2015. The day before settlement date is a US holiday and so the payment date is
+   * expected to be 25/5/2015.
    */
   @Test
   public void testMxWithIntermediateUsHoliday() {

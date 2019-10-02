@@ -22,46 +22,73 @@ import com.opengamma.util.time.Tenor;
 @Test(groups = TestGroup.UNIT)
 public class FixedIncomeStripTest {
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor1_nullType() {
+  public void testConstructor1NullType() {
     new FixedIncomeStrip(null, Tenor.of(Period.ofYears(5)), "Test");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor2_nullType() {
+  public void testConstructor2NullType() {
     new FixedIncomeStrip(null, Tenor.of(Period.ofYears(5)), 1, "Test");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor1_nullTenor() {
+  public void testConstructor1NullTenor() {
     new FixedIncomeStrip(StripInstrumentType.FRA_3M, null, "Test");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor2_nullTenor() {
+  public void testConstructor2NullTenor() {
     new FixedIncomeStrip(StripInstrumentType.FRA_3M, null, 3, "Test");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor1_nullName() {
+  public void testConstructor1NullName() {
     new FixedIncomeStrip(StripInstrumentType.FRA_3M, Tenor.of(Period.ofYears(5)), null);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor2_nullName() {
+  public void testConstructor2NullName() {
     new FixedIncomeStrip(StripInstrumentType.FRA_3M, Tenor.of(Period.ofYears(5)), 4, null);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor1_future() {
+  public void testConstructor1Future() {
     new FixedIncomeStrip(StripInstrumentType.FUTURE, Tenor.of(Period.ofYears(5)), "Test");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testSwapNumberOfFutures() {
     new FixedIncomeStrip(StripInstrumentType.SWAP, Tenor.of(Period.ofYears(5)), "Test").getNumberOfFuturesAfterTenor();
   }
 
+  /**
+   *
+   */
   @Test
   public void testComparator() {
     FixedIncomeStrip strip1 = new FixedIncomeStrip(StripInstrumentType.CASH, Tenor.of(Period.ofDays(1)), "Test");

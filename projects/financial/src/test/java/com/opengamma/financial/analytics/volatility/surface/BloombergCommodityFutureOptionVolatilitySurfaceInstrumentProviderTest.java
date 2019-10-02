@@ -50,8 +50,11 @@ public class BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProviderTe
       new String[] { "S U3P 1350.0 Comdty", "S U3P 1400.0 Comdty", "S U3C 1450.0 Comdty" },
       new String[] { "S F4P 1350.0 Comdty", "S F4P 1400.0 Comdty", "S F4C 1450.0 Comdty" } };
 
+  /**
+   *
+   */
   @Test
-  public void testSoybeanFutureOptionExpiryCalculator_getExpiryMonth() {
+  public void testSoybeanFutureOptionExpiryCalculatorGetExpiryMonth() {
     assertEquals(DATE.plusMonths(1), EXPIRY_CALC.getExpiryMonth(1, DATE));
     assertEquals(DATE.plusMonths(2), EXPIRY_CALC.getExpiryMonth(2, DATE));
     assertEquals(DATE.plusMonths(6), EXPIRY_CALC.getExpiryMonth(5, DATE));
@@ -61,8 +64,11 @@ public class BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProviderTe
     assertEquals(DATE.plusMonths(16), EXPIRY_CALC.getExpiryMonth(11, DATE));
   }
 
+  /**
+   *
+   */
   @Test
-  public void testSoybeanFutureOptionExpiryCalculator_getExpiryDate() {
+  public void testSoybeanFutureOptionExpiryCalculatorGetExpiryDate() {
     assertEquals(LocalDate.of(2012, 11, 23), EXPIRY_CALC.getExpiryDate(1, DATE, WEEKEND_CALENDAR));
     assertEquals(LocalDate.of(2012, 12, 21), EXPIRY_CALC.getExpiryDate(2, DATE, WEEKEND_CALENDAR));
     assertEquals(LocalDate.of(2013, 1, 25), EXPIRY_CALC.getExpiryDate(3, DATE, WEEKEND_CALENDAR));
@@ -76,6 +82,9 @@ public class BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProviderTe
     assertEquals(LocalDate.of(2014, 2, 21), EXPIRY_CALC.getExpiryDate(11, DATE, WEEKEND_CALENDAR));
   }
 
+  /**
+   *
+   */
   @Test
   public void testSurfaceInstrumentProvider() {
     for (int i = 0; i < EXPIRY_OFFSETS.length; i++) {
@@ -88,6 +97,9 @@ public class BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProviderTe
     }
   }
 
+  /**
+   *
+   */
   @Test
   public void testCycle() {
     BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider provider = new BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider(

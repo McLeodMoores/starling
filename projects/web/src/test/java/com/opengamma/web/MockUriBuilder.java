@@ -20,7 +20,7 @@ import javax.ws.rs.core.UriBuilderException;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * MockUriBuilder intended for testing in memory web resources
+ * MockUriBuilder intended for testing in memory web resources.
  */
 public class MockUriBuilder extends UriBuilder {
 

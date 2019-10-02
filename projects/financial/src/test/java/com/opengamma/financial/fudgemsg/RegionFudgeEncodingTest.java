@@ -22,12 +22,15 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class RegionFudgeEncodingTest extends FinancialTestBase {
 
-  private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+  private static final Logger LOGGER = LoggerFactory.getLogger(RegionFudgeEncodingTest.class);
 
   private Region getRef() {
     return getRegionSource().getHighestLevelRegion(ExternalSchemes.countryRegionId(Country.GB));
   }
 
+  /**
+   *
+   */
   public void testCycle() {
     final Region ref = getRef();
     final Region cycledRef = cycleObject(Region.class, ref);

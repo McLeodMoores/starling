@@ -288,7 +288,7 @@ public final class Quadruple<A, B, C, D>
     /**
      * The meta-properties.
      */
-    private final Map<String, MetaProperty<?>> _metaPropertyMap$ = new DirectMetaPropertyMap(
+    private final Map<String, MetaProperty<?>> _metaPropertyMap = new DirectMetaPropertyMap(
         this, null,
         "first",
         "second",
@@ -329,7 +329,7 @@ public final class Quadruple<A, B, C, D>
 
     @Override
     public Map<String, MetaProperty<?>> metaPropertyMap() {
-      return _metaPropertyMap$;
+      return _metaPropertyMap;
     }
 
     // -----------------------------------------------------------------------

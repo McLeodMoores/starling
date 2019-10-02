@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve;
 
@@ -102,8 +102,7 @@ public class RateFutureNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests the behaviour when the convention is an interest rate future convention but the underlying
-   * convention and security are not available.
+   * Tests the behaviour when the convention is an interest rate future convention but the underlying convention and security are not available.
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoUnderlyingsAvailableForStirConvention() {
@@ -114,8 +113,7 @@ public class RateFutureNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests the behaviour when the convention is a Fed funds future convention but the underlying convention
-   * and security are not available.
+   * Tests the behaviour when the convention is a Fed funds future convention but the underlying convention and security are not available.
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoUnderlyingsAvailableForFedFundsConvention() {
@@ -126,8 +124,7 @@ public class RateFutureNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests the behaviour for an interest rate future convention where the underlying convention from the
-   * future convention is available.
+   * Tests the behaviour for an interest rate future convention where the underlying convention from the future convention is available.
    */
   @Test
   public void testUnderlyingsConventionAvailableForStirConvention() {
@@ -139,8 +136,7 @@ public class RateFutureNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests the behaviour for a Fed funds future convention where the underlying convention from the future
-   * convention is available.
+   * Tests the behaviour for a Fed funds future convention where the underlying convention from the future convention is available.
    */
   @Test
   public void testUnderlyingsConventionAvailableForFedFundsConvention() {
@@ -152,8 +148,7 @@ public class RateFutureNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests the behaviour for an interest rate future convention where the underlying convention is
-   * unavailable and the underlying security is not an ibor index.
+   * Tests the behaviour for an interest rate future convention where the underlying convention is unavailable and the underlying security is not an ibor index.
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testWrongSecurityTypeForStirConvention() {
@@ -168,8 +163,7 @@ public class RateFutureNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests the behaviour for a Fed funds future convention where the underlying convention is
-   * unavailable and the underlying security is not an overnight index.
+   * Tests the behaviour for a Fed funds future convention where the underlying convention is unavailable and the underlying security is not an overnight index.
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testWrongSecurityTypeForFedFundsConvention() {
@@ -184,8 +178,8 @@ public class RateFutureNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests the behaviour for an interest rate future convention where the underlying convention is
-   * unavailable but the convention referenced in the index security is.
+   * Tests the behaviour for an interest rate future convention where the underlying convention is unavailable but the convention referenced in the index
+   * security is.
    */
   @Test
   public void testUnderlyingConventionAvailableFromSecurityForStirConvention() {
@@ -202,8 +196,8 @@ public class RateFutureNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests the behaviour for a Fed funds future convention where the underlying convention is
-   * unavailable but the convention referenced in the index security is.
+   * Tests the behaviour for a Fed funds future convention where the underlying convention is unavailable but the convention referenced in the index security
+   * is.
    */
   @Test
   public void testUnderlyingConventionAvailableFromSecurityForFedFundConvention() {
@@ -220,8 +214,8 @@ public class RateFutureNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests the behaviour for an interest rate future convention where the underlying convention is
-   * unavailable and the convention from the security is not an ibor index convention.
+   * Tests the behaviour for an interest rate future convention where the underlying convention is unavailable and the convention from the security is not an
+   * ibor index convention.
    */
   @Test(expectedExceptions = ClassCastException.class)
   public void testWrongConventionTypeFromSecurityForStirConvention() {
@@ -239,8 +233,8 @@ public class RateFutureNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests the behaviour for a Fed funds future convention where the underlying convention is
-   * unavailable and the convention from the security is not an overnight index convention.
+   * Tests the behaviour for a Fed funds future convention where the underlying convention is unavailable and the convention from the security is not an
+   * overnight index convention.
    */
   @Test(expectedExceptions = ClassCastException.class)
   public void testWrongConventionTypeFromSecurityForFedFundsConvention() {

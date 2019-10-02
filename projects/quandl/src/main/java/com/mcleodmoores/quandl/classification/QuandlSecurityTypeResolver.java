@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 - present by McLeod Moores Software Limited
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Please see distribution for license.
  */
@@ -36,9 +36,11 @@ public class QuandlSecurityTypeResolver {
   }
 
   /**
-   * Gets the security type from an id bundle. If the bundles do not contain a {@link QuandlConstants#QUANDL_CODE}, or
-   * the code cannot be classified, returns an empty map.
-   * @param idBundles The id bundles, not null
+   * Gets the security type from an id bundle. If the bundles do not contain a {@link QuandlConstants#QUANDL_CODE}, or the code cannot be classified, returns an
+   * empty map.
+   * 
+   * @param idBundles
+   *          The id bundles, not null
    * @return A map from id bundle to security type.
    */
   public Map<ExternalIdBundle, QuandlSecurityType> getSecurityType(final Collection<ExternalIdBundle> idBundles) {
@@ -65,9 +67,13 @@ public class QuandlSecurityTypeResolver {
 
   /**
    * Creates valid type mappings.
-   * @param types The types
-   * @param validNamePattern The valid name pattern
-   * @param securityType The security type
+   * 
+   * @param types
+   *          The types
+   * @param validNamePattern
+   *          The valid name pattern
+   * @param securityType
+   *          The security type
    */
   private static void addValidTypes(final Map<Pattern, QuandlSecurityType> types, final Set<Pattern> validNamePattern,
       final QuandlSecurityType securityType) {

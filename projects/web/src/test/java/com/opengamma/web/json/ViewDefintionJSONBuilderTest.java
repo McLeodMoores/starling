@@ -19,19 +19,19 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class ViewDefintionJSONBuilderTest {
-  
+
   private final ViewDefinitionJSONBuilder _jsonBuilder = ViewDefinitionJSONBuilder.INSTANCE;
-  
+
   @Test
-  public void test_encode_decode_cycle() {
-    ViewDefinition testViewDefinition = TestViewDefinitionProvider.getTestViewDefinition();
-    
-    String json = _jsonBuilder.toJSON(testViewDefinition);
-    assertNotNull(json);    
-    ViewDefinition fromJSON = _jsonBuilder.fromJSON(json);
+  public void testEncodeDecodeCycle() {
+    final ViewDefinition testViewDefinition = TestViewDefinitionProvider.getTestViewDefinition();
+
+    final String json = _jsonBuilder.toJSON(testViewDefinition);
+    assertNotNull(json);
+    final ViewDefinition fromJSON = _jsonBuilder.fromJSON(json);
     assertNotNull(fromJSON);
-    
-    assertEquals(testViewDefinition, fromJSON);    
+
+    assertEquals(testViewDefinition, fromJSON);
   }
 
 }

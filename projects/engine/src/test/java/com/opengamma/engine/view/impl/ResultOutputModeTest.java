@@ -22,7 +22,7 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.TestLifecycle;
 
 /**
- * Tests ResultOutputMode
+ * Tests ResultOutputMode.
  */
 @Test(groups = TestGroup.UNIT)
 public class ResultOutputModeTest {
@@ -30,9 +30,9 @@ public class ResultOutputModeTest {
   public void testOutputModes() {
     TestLifecycle.begin();
     try {
-      DepGraphTestHelper helper = new DepGraphTestHelper();
+      final DepGraphTestHelper helper = new DepGraphTestHelper();
       helper.addFunctionProducing1and2();
-      DependencyGraphBuilder builder = helper.createBuilder(null);
+      final DependencyGraphBuilder builder = helper.createBuilder(null);
       builder.addTarget(Collections.singleton(helper.getRequirement1()));
       DependencyGraph graph = builder.getDependencyGraph();
       graph = DependencyGraphImpl.removeUnnecessaryValues(graph);

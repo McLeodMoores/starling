@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.classification;
 
@@ -26,8 +26,8 @@ import net.sf.ehcache.CacheManager;
 @Test(groups = TestGroup.UNIT)
 public class QuandlHistoricalTimeSeriesFieldAdjustmentMapTest {
   /** Field adjustment map */
-  private static final QuandlHistoricalTimeSeriesFieldAdjustmentMap FIELD_ADJUSTMENTS =
-      new QuandlHistoricalTimeSeriesFieldAdjustmentMap(QUANDL_DATA_SOURCE_NAME);
+  private static final QuandlHistoricalTimeSeriesFieldAdjustmentMap FIELD_ADJUSTMENTS = new QuandlHistoricalTimeSeriesFieldAdjustmentMap(
+      QUANDL_DATA_SOURCE_NAME);
 
   static {
     final QuandlNormalizer normalizer = new QuandlNormalizer(new QuandlCodeClassifier(CacheManager.newInstance()));

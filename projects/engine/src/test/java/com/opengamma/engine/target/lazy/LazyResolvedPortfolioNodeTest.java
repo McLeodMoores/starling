@@ -30,34 +30,46 @@ import com.opengamma.util.test.TestGroup;
 import net.sf.ehcache.CacheManager;
 
 /**
- * Tests the {@link LazyResolvedPortfolioNode} class
+ * Tests the {@link LazyResolvedPortfolioNode} class.
  */
-@Test(groups = {TestGroup.UNIT, "ehcache" })
+@Test(groups = { TestGroup.UNIT, "ehcache" })
 public class LazyResolvedPortfolioNodeTest {
 
   private CacheManager _cacheManager;
 
+  /**
+   *
+   */
   @BeforeClass
   public void setUpClass() {
     _cacheManager = EHCacheUtils.createTestCacheManager(getClass());
   }
 
+  /**
+   *
+   */
   @AfterClass
   public void tearDownClass() {
     EHCacheUtils.shutdownQuiet(_cacheManager);
   }
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
     EHCacheUtils.clear(_cacheManager);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   public void testBasicMethods() {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final PortfolioNode underlying = resolver.getPositionSource().getPortfolioNode(UniqueId.of("Node", "0"), VersionCorrection.LATEST);
-    final PortfolioNode node =
-        new LazyResolvedPortfolioNode(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
+    final PortfolioNode node = new LazyResolvedPortfolioNode(
+        new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
     assertEquals(node.getName(), underlying.getName());
     assertEquals(node.getParentNodeId(), underlying.getParentNodeId());
     assertEquals(node.getUniqueId(), underlying.getUniqueId());
@@ -65,11 +77,15 @@ public class LazyResolvedPortfolioNodeTest {
     assertEquals(node.getPositions().size(), underlying.getPositions().size());
   }
 
-  public void testSerialization_full() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testSerializationFull() throws Exception {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final PortfolioNode underlying = resolver.getPositionSource().getPortfolioNode(UniqueId.of("Node", "0"), VersionCorrection.LATEST);
-    PortfolioNode node =
-        new LazyResolvedPortfolioNode(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
+    PortfolioNode node = new LazyResolvedPortfolioNode(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST),
+        underlying);
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     new ObjectOutputStream(baos).writeObject(node);
     final Object resultObject = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray())).readObject();
@@ -80,12 +96,17 @@ public class LazyResolvedPortfolioNodeTest {
     assertEquals(node.getPositions().size(), underlying.getPositions().size());
   }
 
-  public void testSerialization_targetResolver() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testSerializationTargetResolver() throws Exception {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final PortfolioNode underlying = resolver.getPositionSource().getPortfolioNode(UniqueId.of("Node", "0"), VersionCorrection.LATEST);
-    PortfolioNode node =
-        new LazyResolvedPortfolioNode(new LazyResolveContext(resolver.getSecuritySource(), new DefaultCachingComputationTargetResolver(resolver,
-        _cacheManager)).atVersionCorrection(VersionCorrection.LATEST), underlying);
+    PortfolioNode node = new LazyResolvedPortfolioNode(
+        new LazyResolveContext(resolver.getSecuritySource(), new DefaultCachingComputationTargetResolver(resolver,
+            _cacheManager)).atVersionCorrection(VersionCorrection.LATEST),
+        underlying);
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     new ObjectOutputStream(baos).writeObject(node);
     final Object resultObject = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray())).readObject();

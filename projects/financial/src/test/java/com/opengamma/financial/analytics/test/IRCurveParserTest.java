@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.financial.analytics.test;
 
 import java.util.List;
@@ -31,14 +36,13 @@ public class IRCurveParserTest {
     final List<InterpolatedDoublesCurve> curves = curveParser.parseCSVFile(resource.getURL());
     for (final InterpolatedDoublesCurve interpolatedDoublesCurve : curves) {
 
-
     }
     LOGGER.info("Got {} trades", curves.size());
   }
 
   @Test
   public void testInterpolation() {
-    final double[] x = { 0.249144422, 0.501026694, 0.750171116, 0.999315537, 1.25119781, 1.500342231, 1.749486653};
+    final double[] x = { 0.249144422, 0.501026694, 0.750171116, 0.999315537, 1.25119781, 1.500342231, 1.749486653 };
     final double[] y = { 0.999297948, 0.998546826, 0.997720761, 0.996770227, 0.995642429, 0.994330655, 0.992795137 };
 
     final Interpolator1D interpolator = NamedInterpolator1dFactory.of(

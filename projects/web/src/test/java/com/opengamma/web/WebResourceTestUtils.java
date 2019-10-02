@@ -43,7 +43,7 @@ import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
 
 /**
- * Utility class used by WebResource testcases
+ * Utility class used by WebResource testcases.
  */
 public final class WebResourceTestUtils {
 
@@ -66,7 +66,7 @@ public final class WebResourceTestUtils {
   }
 
   /**
-   * Returns AAPL equity security for testing
+   * Returns AAPL equity security for testing.
    *
    * @return the equity security
    */
@@ -84,7 +84,7 @@ public final class WebResourceTestUtils {
   }
 
   /**
-   * Get US bond future security for testing
+   * Get US bond future security for testing.
    *
    * @return the bond future security
    */

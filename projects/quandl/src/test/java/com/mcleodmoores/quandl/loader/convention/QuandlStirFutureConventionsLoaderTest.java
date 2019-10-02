@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.convention;
 
@@ -27,7 +27,7 @@ public class QuandlStirFutureConventionsLoaderTest {
   /**
    * This tests that the expected csv file exists, that there is a header and that the expected number of conventions are created. Individual conventions are
    * not tested as this file could change.
-   * 
+   *
    * @throws Exception
    *           if there is a problem reading the file
    */

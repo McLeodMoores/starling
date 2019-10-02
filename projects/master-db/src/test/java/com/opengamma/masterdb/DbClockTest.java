@@ -32,33 +32,35 @@ public class DbClockTest extends AbstractDbTest {
     super(databaseType, databaseVersion);
   }
 
-  //-------------------------------------------------------------------------
-//  public void test_clock_threaded() {
-//    for (int i = 0; i < 10; i++) {
-//      final int ii = i;
-//      Runnable r = new Runnable() {
-//        @Override
-//        public void run() {
-//          while (true) {
-//            System.out.println(ii + " " + _connector.now());
-//            try {
-//              Thread.sleep(200);
-//            } catch (InterruptedException ex) {
-//              ex.printStackTrace();
-//            }
-//          }
-//        }
-//      };
-//      new Thread(r).start();
-//    }
-//  }
+  // -------------------------------------------------------------------------
+  // public void test_clock_threaded() {
+  // for (int i = 0; i < 10; i++) {
+  // final int ii = i;
+  // Runnable r = new Runnable() {
+  // @Override
+  // public void run() {
+  // while (true) {
+  // System.out.println(ii + " " + _connector.now());
+  // try {
+  // Thread.sleep(200);
+  // } catch (InterruptedException ex) {
+  // ex.printStackTrace();
+  // }
+  // }
+  // }
+  // };
+  // new Thread(r).start();
+  // }
+  // }
 
-  //-------------------------------------------------------------------------
-  public void test_clock() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testClock() {
     final DbConnector dbConnector = getDbConnector();
     final List<Instant> instants1 = Lists.newArrayList();
-    final int[] times = new int[50000];
-    for (final int time : times) {
+    for (int i = 0; i < 50000; i++) {
       instants1.add(dbConnector.now());
     }
     final List<Instant> instants2 = new ArrayList<>(instants1);

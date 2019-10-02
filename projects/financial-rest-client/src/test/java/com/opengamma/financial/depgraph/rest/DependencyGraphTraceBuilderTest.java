@@ -177,7 +177,10 @@ public class DependencyGraphTraceBuilderTest {
     return new DependencyGraphTraceBuilder(createContextBean());
   }
 
-  public void testBuild_ok() {
+  /**
+   *
+   */
+  public void testBuildOk() {
     TestLifecycle.begin();
     try {
       final DependencyGraphTraceBuilder builder = createBuilder();
@@ -196,7 +199,10 @@ public class DependencyGraphTraceBuilderTest {
     }
   }
 
-  public void testBuild_exceptions() {
+  /**
+   *
+   */
+  public void testBuildExceptions() {
     TestLifecycle.begin();
     try {
       final DependencyGraphTraceBuilder builder = createBuilder();
@@ -215,7 +221,10 @@ public class DependencyGraphTraceBuilderTest {
     }
   }
 
-  public void testBuild_failures() {
+  /**
+   *
+   */
+  public void testBuildFailures() {
     TestLifecycle.begin();
     try {
       final DependencyGraphTraceBuilder builder = createBuilder();

@@ -19,13 +19,16 @@ import com.opengamma.financial.depgraph.rest.DependencyGraphTraceBuilderProperti
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test for {@link LocalDependencyGraphTraceProvider}
+ * Test for {@link LocalDependencyGraphTraceProvider}.
  */
 @Test(groups = TestGroup.UNIT)
 public class LocalDependencyGraphTraceProviderTest {
 
+  /**
+   *
+   */
   @Test
-  public void LocalDependencyGraphTraceProvider() {
+  public void localDependencyGraphTraceProvider() {
     assertEquals(_builder, _provider.getTraceBuilder());
   }
 
@@ -33,6 +36,9 @@ public class LocalDependencyGraphTraceProviderTest {
   private LocalDependencyGraphTraceProvider _provider;
   private DependencyGraphBuildTrace _sampleResult;
 
+  /**
+   *
+   */
   @BeforeMethod
   public void beforeTest() {
     _builder = mock(DependencyGraphTraceBuilder.class);
@@ -40,12 +46,15 @@ public class LocalDependencyGraphTraceProviderTest {
     _sampleResult = DependencyGraphBuildTrace.of(null, null, null, null);
   }
 
+  /**
+   *
+   */
   @Test
   public void getTrace() {
-    DependencyGraphTraceBuilderProperties properties = new DependencyGraphTraceBuilderProperties();
+    final DependencyGraphTraceBuilderProperties properties = new DependencyGraphTraceBuilderProperties();
     when(_builder.build(properties)).thenReturn(_sampleResult);
 
-    DependencyGraphBuildTrace result = _provider.getTrace(properties);
+    final DependencyGraphBuildTrace result = _provider.getTrace(properties);
 
     verify(_builder).build(properties);
     assertEquals(_sampleResult, result);

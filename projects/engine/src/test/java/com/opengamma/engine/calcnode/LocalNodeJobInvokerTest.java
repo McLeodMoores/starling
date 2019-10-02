@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -20,7 +20,7 @@ import com.opengamma.util.test.TestLifecycle;
 import com.opengamma.util.test.Timeout;
 
 /**
- * Tests the LocalNodeJobInvoker class
+ * Tests the LocalNodeJobInvoker class.
  */
 @Test(groups = TestGroup.UNIT)
 public class LocalNodeJobInvokerTest {

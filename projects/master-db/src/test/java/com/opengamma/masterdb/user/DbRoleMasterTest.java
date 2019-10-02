@@ -42,13 +42,19 @@ public class DbRoleMasterTest extends AbstractDbTest {
 
   private DbRoleMaster _roleMaster;
 
+  /**
+   * @param databaseType
+   *          the type
+   * @param databaseVersion
+   *          the version
+   */
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public DbRoleMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doSetUp() {
     _roleMaster = new DbRoleMaster(getDbConnector());
@@ -59,18 +65,26 @@ public class DbRoleMasterTest extends AbstractDbTest {
     _roleMaster = null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_basics() throws Exception {
+  public void testBasics() throws Exception {
     assertNotNull(_roleMaster);
     assertEquals(true, _roleMaster.getUniqueIdScheme().equals("DbUsrRole"));
     assertNotNull(_roleMaster.getDbConnector());
     assertNotNull(_roleMaster.getClock());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_example() throws Exception {
+  public void testExample() throws Exception {
     final ManageableRole role = createRole();
     assertEquals(false, _roleMaster.nameExists(role.getRoleName()));
     final UniqueId uid = _roleMaster.add(role);
@@ -80,18 +94,27 @@ public class DbRoleMasterTest extends AbstractDbTest {
     assertEquals(role, loaded);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_no_users() throws Exception {
+  public void testNoUsers() throws Exception {
     final ManageableRole role = createRole();
-    role.getAssociatedUsers().clear();;
+    role.getAssociatedUsers().clear();
+    ;
     final UniqueId uid = _roleMaster.add(role);
     role.setUniqueId(uid);
     final ManageableRole loaded = _roleMaster.getById(uid.getObjectId());
     assertEquals(role, loaded);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_no_permissions() throws Exception {
+  public void testNoPermissions() throws Exception {
     final ManageableRole role = createRole();
     role.getAssociatedPermissions().clear();
     final UniqueId uid = _roleMaster.add(role);
@@ -100,8 +123,12 @@ public class DbRoleMasterTest extends AbstractDbTest {
     assertEquals(role, loaded);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_no_roles() throws Exception {
+  public void testNoRoles() throws Exception {
     final ManageableRole role = createRole();
     role.getAssociatedRoles().clear();
     final UniqueId uid = _roleMaster.add(role);
@@ -110,8 +137,12 @@ public class DbRoleMasterTest extends AbstractDbTest {
     assertEquals(role, loaded);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_no_subTables() throws Exception {
+  public void testNoSubTables() throws Exception {
     final ManageableRole role = createRole();
     role.getAssociatedUsers().clear();
     role.getAssociatedPermissions().clear();
@@ -122,9 +153,13 @@ public class DbRoleMasterTest extends AbstractDbTest {
     assertEquals(role, loaded);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_addNameExists() throws Exception {
+  public void testAddNameExists() throws Exception {
     final ManageableRole role = createRole();
     _roleMaster.add(role);
     assertNotNull(_roleMaster.getByName(TEST_ROLE));
@@ -137,9 +172,13 @@ public class DbRoleMasterTest extends AbstractDbTest {
     assertNotNull(_roleMaster.getByName(TEST_ROLE));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_removeByName() throws Exception {
+  public void testRemoveByName() throws Exception {
     final ManageableRole role = createRole();
     final UniqueId uid = _roleMaster.add(role);
     assertNotNull(_roleMaster.getById(uid.getObjectId()));
@@ -157,8 +196,8 @@ public class DbRoleMasterTest extends AbstractDbTest {
     } catch (final DataNotFoundException ex) {
       // expected
     }
-    _roleMaster.removeByName(TEST_ROLE);  // idempotent
-    _roleMaster.removeById(uid.getObjectId());  // idempotent
+    _roleMaster.removeByName(TEST_ROLE); // idempotent
+    _roleMaster.removeById(uid.getObjectId()); // idempotent
 
     final RoleEventHistoryResult events = _roleMaster.eventHistory(new RoleEventHistoryRequest(TEST_ROLE));
     assertEquals(2, events.getEvents().size());
@@ -168,9 +207,13 @@ public class DbRoleMasterTest extends AbstractDbTest {
     assertEquals(0, events.getEvents().get(1).getChanges().size());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_removeById() throws Exception {
+  public void testRemoveById() throws Exception {
     final ManageableRole role = createRole();
     final UniqueId uid = _roleMaster.add(role);
     assertNotNull(_roleMaster.getById(uid.getObjectId()));
@@ -188,8 +231,8 @@ public class DbRoleMasterTest extends AbstractDbTest {
     } catch (final DataNotFoundException ex) {
       // expected
     }
-    _roleMaster.removeById(uid.getObjectId());  // idempotent
-    _roleMaster.removeByName(TEST_ROLE);  // idempotent
+    _roleMaster.removeById(uid.getObjectId()); // idempotent
+    _roleMaster.removeByName(TEST_ROLE); // idempotent
 
     final RoleEventHistoryResult events = _roleMaster.eventHistory(new RoleEventHistoryRequest(uid.getObjectId()));
     assertEquals(2, events.getEvents().size());
@@ -199,9 +242,13 @@ public class DbRoleMasterTest extends AbstractDbTest {
     assertEquals(0, events.getEvents().get(1).getChanges().size());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_update_main() throws Exception {
+  public void testUpdateMain() throws Exception {
     ManageableRole role = createRole();
     final UniqueId uid1 = _roleMaster.add(role);
     role = _roleMaster.getById(uid1.getObjectId());
@@ -212,8 +259,12 @@ public class DbRoleMasterTest extends AbstractDbTest {
     assertEquals(role, loaded);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_update_linked() throws Exception {
+  public void testUpdateLinked() throws Exception {
     ManageableRole role = createRole();
     final UniqueId uid1 = _roleMaster.add(role);
     role = _roleMaster.getById(uid1.getObjectId());
@@ -235,8 +286,12 @@ public class DbRoleMasterTest extends AbstractDbTest {
     assertEquals(5, events.getEvents().get(1).getChanges().size());
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_update_rename_succeed() throws Exception {
+  public void testUpdateRenameSucceed() throws Exception {
     ManageableRole role = createRole();
     final UniqueId uid1 = _roleMaster.add(role);
     role = _roleMaster.getById(uid1.getObjectId());
@@ -250,8 +305,12 @@ public class DbRoleMasterTest extends AbstractDbTest {
     assertEquals(role, _roleMaster.getByName("three"));
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_update_rename_fail() throws Exception {
+  public void testUpdateRenameFail() throws Exception {
     ManageableRole role1 = createRole();
     final UniqueId uid1 = _roleMaster.add(role1);
     role1 = _roleMaster.getById(uid1.getObjectId());
@@ -268,9 +327,13 @@ public class DbRoleMasterTest extends AbstractDbTest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_search() throws Exception {
+  public void testSearch() throws Exception {
     ManageableRole role1 = createRole();
     final UniqueId uid1 = _roleMaster.add(role1);
     role1 = _roleMaster.getById(uid1.getObjectId());
@@ -284,20 +347,28 @@ public class DbRoleMasterTest extends AbstractDbTest {
     assertEquals(role2, result.getRoles().get(1));
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_search_noObjectIds() throws Exception {
+  public void testSearchNoObjectIds() throws Exception {
     ManageableRole role = createRole();
     final UniqueId uid1 = _roleMaster.add(role);
     role = _roleMaster.getById(uid1.getObjectId());
 
     final RoleSearchRequest request = new RoleSearchRequest();
-    request.setObjectIds(ImmutableList.<ObjectId>of());
+    request.setObjectIds(ImmutableList.<ObjectId> of());
     final RoleSearchResult result = _roleMaster.search(request);
     assertEquals(0, result.getRoles().size());
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_search_objectIdNotFound() throws Exception {
+  public void testSearchOjectIdNotFound() throws Exception {
     ManageableRole role = createRole();
     final UniqueId uid1 = _roleMaster.add(role);
     role = _roleMaster.getById(uid1.getObjectId());
@@ -308,9 +379,13 @@ public class DbRoleMasterTest extends AbstractDbTest {
     assertEquals(0, result.getRoles().size());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_resolveAccount() throws Exception {
+  public void testResolveAccount() throws Exception {
     final ManageableRole roleA = new ManageableRole("A");
     roleA.getAssociatedUsers().add("adam");
     roleA.getAssociatedPermissions().add("PERMISSION-1");
@@ -387,13 +462,16 @@ public class DbRoleMasterTest extends AbstractDbTest {
     assertEquals(true, resolved2.getPermissions().contains("PERMISSION-6"));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test
-  public void test_toString() {
+  public void testToString() {
     assertEquals("DbRoleMaster[DbUsrRole]", _roleMaster.toString());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private ManageableRole createRole() {
     final ManageableRole role = new ManageableRole(TEST_ROLE);
     role.setDescription("foobar");

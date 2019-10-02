@@ -23,6 +23,9 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 
+/**
+ *
+ */
 @Test(groups = TestGroup.UNIT)
 public class YieldCurveSelectorTest {
 
@@ -32,28 +35,24 @@ public class YieldCurveSelectorTest {
   private static final String CALC_CONFIG_NAME = "calcConfigName";
 
   private static ValueSpecification valueSpec(final String curveName) {
-    final ValueProperties properties =
-        ValueProperties
-            .with(ValuePropertyNames.CURVE, curveName)
-            .with(ValuePropertyNames.FUNCTION, "foo")
-            .get();
-    final ComputationTargetSpecification targetSpec =
-        new ComputationTargetSpecification(CurrencyPair.TYPE, UniqueId.of(Currency.OBJECT_SCHEME, "GBP"));
+    final ValueProperties properties = ValueProperties
+        .with(ValuePropertyNames.CURVE, curveName)
+        .with(ValuePropertyNames.FUNCTION, "foo")
+        .get();
+    final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(CurrencyPair.TYPE, UniqueId.of(Currency.OBJECT_SCHEME, "GBP"));
     return new ValueSpecification(ValueRequirementNames.YIELD_CURVE, targetSpec, properties);
   }
 
   private static ValueSpecification valueSpec(final Currency currency, final String curveName) {
-    final ValueProperties properties =
-        ValueProperties
-            .with(ValuePropertyNames.CURVE, curveName)
-            .with(ValuePropertyNames.FUNCTION, "foo")
-            .get();
-    final ComputationTargetSpecification targetSpec =
-        new ComputationTargetSpecification(CurrencyPair.TYPE, currency.getUniqueId());
+    final ValueProperties properties = ValueProperties
+        .with(ValuePropertyNames.CURVE, curveName)
+        .with(ValuePropertyNames.FUNCTION, "foo")
+        .get();
+    final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(CurrencyPair.TYPE, currency.getUniqueId());
     return new ValueSpecification(ValueRequirementNames.YIELD_CURVE, targetSpec, properties);
   }
 
-  /** if no criteria are specified the selector should match any curve */
+  /** if no criteria are specified the selector should match any curve. */
   @Test
   public void noCriteria() {
     final YieldCurveSelector.Builder curve = new YieldCurveSelector.Builder(SCENARIO);
@@ -62,7 +61,7 @@ public class YieldCurveSelectorTest {
     assertEquals(selector, selector.findMatchingSelector(valueSpec("curveName2"), CALC_CONFIG_NAME, _resolver));
   }
 
-  /** match a single name and fail any other names */
+  /** match a single name and fail any other names. */
   @Test
   public void singleName() {
     final String curveName = "curveName";
@@ -74,7 +73,7 @@ public class YieldCurveSelectorTest {
     assertNull(selector.findMatchingSelector(valueSpec("otherName"), calcConfigName, _resolver));
   }
 
-  /** match any one of multiple curve names, fail other names */
+  /** match any one of multiple curve names, fail other names. */
   @Test
   public void multipleNames() {
     final String curveName1 = "curveName1";
@@ -87,7 +86,7 @@ public class YieldCurveSelectorTest {
     assertNull(selector.findMatchingSelector(valueSpec("otherName"), CALC_CONFIG_NAME, _resolver));
   }
 
-  /** don't match if the calc config name doesn't match */
+  /** don't match if the calc config name doesn't match. */
   @Test
   public void calcConfigName() {
     final YieldCurveSelector.Builder curve = new YieldCurveSelector.Builder(new Scenario("foo").calculationConfigurations(CALC_CONFIG_NAME));
@@ -95,7 +94,7 @@ public class YieldCurveSelectorTest {
     assertNull(selector.findMatchingSelector(valueSpec("curveName"), "otherCalcConfigName", _resolver));
   }
 
-  /** match if the curve name matches a regular expression */
+  /** match if the curve name matches a regular expression. */
   @Test
   public void nameMatches() {
     final String curve3M = "curve3M";
@@ -107,7 +106,7 @@ public class YieldCurveSelectorTest {
     assertNull(selector.findMatchingSelector(valueSpec(curve6M), CALC_CONFIG_NAME, _resolver));
   }
 
-  /** match if the curve name matches a glob */
+  /** match if the curve name matches a glob. */
   @Test
   public void nameLike() {
     final String curve3M = "curve3M";
@@ -126,7 +125,7 @@ public class YieldCurveSelectorTest {
     assertEquals(selector2, selector2.findMatchingSelector(valueSpec(curve6M), CALC_CONFIG_NAME, _resolver));
   }
 
-  /** match if the curve currency is specified */
+  /** match if the curve currency is specified. */
   @Test
   public void singleCurrency() {
     final YieldCurveSelector.Builder curve = new YieldCurveSelector.Builder(SCENARIO);
@@ -137,7 +136,7 @@ public class YieldCurveSelectorTest {
     assertNull(selector.findMatchingSelector(valueSpec(Currency.USD, curveName), CALC_CONFIG_NAME, _resolver));
   }
 
-  /** match if the curve currency matches any of the specified currency codes */
+  /** match if the curve currency matches any of the specified currency codes. */
   @Test
   public void multipleCurrencies() {
     final YieldCurveSelector.Builder curve = new YieldCurveSelector.Builder(SCENARIO);
@@ -149,7 +148,7 @@ public class YieldCurveSelectorTest {
     assertNull(selector.findMatchingSelector(valueSpec(Currency.AUD, curveName), CALC_CONFIG_NAME, _resolver));
   }
 
-  /** match if the curve satisfies all criteria, fail if it fails any of them */
+  /** match if the curve satisfies all criteria, fail if it fails any of them. */
   @Test
   public void multipleCriteria() {
     final YieldCurveSelector.Builder curve = new YieldCurveSelector.Builder(SCENARIO);

@@ -58,7 +58,7 @@ import com.opengamma.util.test.TestLifecycle;
 import com.opengamma.util.test.Timeout;
 
 /**
- * Tests {@link SingleThreadViewProcessWorker}
+ * Tests {@link SingleThreadViewProcessWorker}.
  */
 @Test(groups = TestGroup.UNIT)
 public class SingleThreadViewProcessWorkerTest {

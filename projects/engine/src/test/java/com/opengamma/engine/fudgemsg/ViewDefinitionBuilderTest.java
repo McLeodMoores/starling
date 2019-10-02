@@ -13,21 +13,21 @@ import com.opengamma.util.test.AbstractFudgeBuilderTestCase;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests ViewDefinitionBuilder
+ * Tests ViewDefinitionBuilder.
  */
 @Test(groups = TestGroup.UNIT)
 public class ViewDefinitionBuilderTest extends AbstractFudgeBuilderTestCase {
-  
+
   @Test
-  public void test_viewDefinition_NoUniqueId() {
-    ViewDefinition testViewDefinition = TestViewDefinitionProvider.getTestViewDefinition();
+  public void testViewDefinitionNoUniqueId() {
+    final ViewDefinition testViewDefinition = TestViewDefinitionProvider.getTestViewDefinition();
     testViewDefinition.setUniqueId(null);
     assertEncodeDecodeCycle(ViewDefinition.class, TestViewDefinitionProvider.getTestViewDefinition());
   }
-  
+
   @Test
-  public void test_viewDefinition_UniqueId() {
-    ViewDefinition testViewDefinition = TestViewDefinitionProvider.getTestViewDefinition();
+  public void testViewDefinitionUniqueId() {
+    final ViewDefinition testViewDefinition = TestViewDefinitionProvider.getTestViewDefinition();
     assertEncodeDecodeCycle(ViewDefinition.class, testViewDefinition);
   }
 

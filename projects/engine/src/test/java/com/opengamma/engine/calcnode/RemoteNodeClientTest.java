@@ -45,7 +45,7 @@ import com.opengamma.util.test.TestLifecycle;
 import com.opengamma.util.test.Timeout;
 
 /**
- * Tests RemoteNodeClient
+ * Tests RemoteNodeClient.
  */
 @Test(groups = TestGroup.UNIT)
 public class RemoteNodeClientTest {
@@ -65,8 +65,8 @@ public class RemoteNodeClientTest {
       final DirectFudgeConnection conduit = new DirectFudgeConnection(FUDGE_CONTEXT);
       final CollectingFudgeMessageReceiver messages = new CollectingFudgeMessageReceiver();
       conduit.getEnd2().setFudgeMessageReceiver(messages);
-      final CompiledFunctionService cfs =
-          new CompiledFunctionService(new InMemoryFunctionRepository(), new CachingFunctionRepositoryCompiler(), new FunctionCompilationContext());
+      final CompiledFunctionService cfs = new CompiledFunctionService(new InMemoryFunctionRepository(), new CachingFunctionRepositoryCompiler(),
+          new FunctionCompilationContext());
       TestLifecycle.register(cfs);
       final RemoteNodeClient client = new RemoteNodeClient(conduit.getEnd1(), cfs, new InMemoryIdentifierMap(), new FunctionInvocationStatisticsSender());
       final TestCalculationNode node = new TestCalculationNode();
@@ -109,8 +109,8 @@ public class RemoteNodeClientTest {
       final DirectFudgeConnection conduit = new DirectFudgeConnection(FUDGE_CONTEXT);
       final CollectingFudgeMessageReceiver messages = new CollectingFudgeMessageReceiver();
       conduit.getEnd2().setFudgeMessageReceiver(messages);
-      final CompiledFunctionService cfs =
-          new CompiledFunctionService(new InMemoryFunctionRepository(), new CachingFunctionRepositoryCompiler(), new FunctionCompilationContext());
+      final CompiledFunctionService cfs = new CompiledFunctionService(new InMemoryFunctionRepository(), new CachingFunctionRepositoryCompiler(),
+          new FunctionCompilationContext());
       TestLifecycle.register(cfs);
       final RemoteNodeClient client = new RemoteNodeClient(conduit.getEnd1(), cfs, new InMemoryIdentifierMap(), new FunctionInvocationStatisticsSender());
       client.start();
@@ -155,8 +155,8 @@ public class RemoteNodeClientTest {
       final DirectFudgeConnection conduit = new DirectFudgeConnection(FUDGE_CONTEXT);
       final CollectingFudgeMessageReceiver messages = new CollectingFudgeMessageReceiver();
       conduit.getEnd2().setFudgeMessageReceiver(messages);
-      final CompiledFunctionService cfs =
-          new CompiledFunctionService(new InMemoryFunctionRepository(), new CachingFunctionRepositoryCompiler(), new FunctionCompilationContext());
+      final CompiledFunctionService cfs = new CompiledFunctionService(new InMemoryFunctionRepository(), new CachingFunctionRepositoryCompiler(),
+          new FunctionCompilationContext());
       TestLifecycle.register(cfs);
       final RemoteNodeClient client = new RemoteNodeClient(conduit.getEnd1(), cfs, new InMemoryIdentifierMap(), new FunctionInvocationStatisticsSender());
       final TestCalculationNode failingNode = new TestCalculationNode() {

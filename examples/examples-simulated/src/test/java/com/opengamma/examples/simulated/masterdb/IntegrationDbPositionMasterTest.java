@@ -16,8 +16,11 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class IntegrationDbPositionMasterTest extends AbstractIntegrationDbPositionMasterTest {
 
+  /**
+   *
+   */
   @Test
-  public void test_querySampleEntry() {
+  public void testQuerySampleEntry() {
     // TODO:
   }
 

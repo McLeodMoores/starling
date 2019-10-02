@@ -66,14 +66,20 @@ public class InMemoryInterpolatedYieldCurveDefinitionMasterTest {
     assertTrue(yc.isInterpolateYields());
   }
 
+  /**
+   *
+   */
   @Test
-  public void testGetDefinition_missing() {
+  public void testGetDefinitionMissing() {
     assertNull(_master.getDefinition(Currency.USD, "3"));
     assertNull(_master.getDefinition(Currency.CHF, "1"));
   }
 
+  /**
+   *
+   */
   @Test
-  public void testGetDefinition_instant() {
+  public void testGetDefinitionInstant() {
     assertNotNull(_master.getDefinition(Currency.USD, "1", VersionCorrection.ofVersionAsOf(Instant.now())));
   }
 
@@ -87,8 +93,11 @@ public class InMemoryInterpolatedYieldCurveDefinitionMasterTest {
     }
   }
 
+  /**
+   *
+   */
   @Test
-  public void testGetDefinition_versioned() {
+  public void testGetDefinitionVersioned() {
     VersionCorrection vc = VersionCorrection.ofVersionAsOf(Instant.now());
     sleep();
     _master.add(new YieldCurveDefinitionDocument(new YieldCurveDefinition(Currency.GBP, null, "3", "E", "L", "R", true)));
@@ -126,20 +135,29 @@ public class InMemoryInterpolatedYieldCurveDefinitionMasterTest {
     assertEquals("E", yc.getInterpolatorName());
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testAdd_duplicate() {
+  public void testAddDuplicate() {
     _master.add(new YieldCurveDefinitionDocument(new YieldCurveDefinition(Currency.USD, null, "1", "E", "L1", "R1", true)));
   }
 
+  /**
+   *
+   */
   @Test
-  public void testAddOrUpdate_add() {
+  public void testAddOrUpdateAdd() {
     assertNull(_master.getDefinition(Currency.USD, "3"));
     _master.addOrUpdate(new YieldCurveDefinitionDocument(new YieldCurveDefinition(Currency.USD, null, "3", "E", "L1", "R1", true)));
     assertNotNull(_master.getDefinition(Currency.USD, "3"));
   }
 
+  /**
+   *
+   */
   @Test
-  public void testAddOrUpdate_update() {
+  public void testAddOrUpdateUpdate() {
     YieldCurveDefinition yc = _master.getDefinition(Currency.USD, "1");
     assertNotNull(yc);
     assertEquals("A", yc.getInterpolatorName());
@@ -149,11 +167,17 @@ public class InMemoryInterpolatedYieldCurveDefinitionMasterTest {
     assertEquals("E", yc.getInterpolatorName());
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testCorrect() {
     _master.correct(null);
   }
 
+  /**
+   *
+   */
   @Test
   public void testGet() {
     final YieldCurveDefinitionDocument ycdoc = _master.get(UniqueId.of(_master.getUniqueIdScheme(), "1_USD"));
@@ -163,17 +187,26 @@ public class InMemoryInterpolatedYieldCurveDefinitionMasterTest {
     assertEquals("A", yc.getInterpolatorName());
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void testGet_missing() {
+  public void testGetMissing() {
     _master.get(UniqueId.of(_master.getUniqueIdScheme(), "GBP_3"));
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void testGet_deleted() {
+  public void testGetDeleted() {
     _master.remove(UniqueId.of(_master.getUniqueIdScheme(), "USD_1"));
     _master.get(UniqueId.of(_master.getUniqueIdScheme(), "USD_1"));
   }
 
+  /**
+   *
+   */
   @Test
   public void testRemove() {
     assertNotNull(_master.getDefinition(Currency.USD, "1"));
@@ -181,13 +214,19 @@ public class InMemoryInterpolatedYieldCurveDefinitionMasterTest {
     assertNull(_master.getDefinition(Currency.USD, "1"));
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void testRemove_missing() {
+  public void testRemoveMissing() {
     _master.remove(UniqueId.of(_master.getUniqueIdScheme(), "3_USD"));
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void testUpdate_missing() {
+  public void testUpdateMissing() {
     _master.update(new YieldCurveDefinitionDocument(UniqueId.of(_master.getUniqueIdScheme(), "3_USD"),
         new YieldCurveDefinition(Currency.USD, null, "3", "E", "L1", "R1", true)));
   }

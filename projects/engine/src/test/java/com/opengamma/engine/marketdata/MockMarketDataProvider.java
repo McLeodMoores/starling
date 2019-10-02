@@ -16,7 +16,7 @@ import com.opengamma.engine.marketdata.spec.MarketDataSpecification;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Mock {@link MarketDataProvider}
+ * Mock {@link MarketDataProvider}.
  */
 public class MockMarketDataProvider extends AbstractMarketDataProvider {
 
@@ -33,7 +33,7 @@ public class MockMarketDataProvider extends AbstractMarketDataProvider {
     _responseLatch = new CountDownLatch(subscriptionCount);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void subscribe(final ValueSpecification valueSpecification) {
     subscribe(Collections.singleton(valueSpecification));
@@ -41,16 +41,13 @@ public class MockMarketDataProvider extends AbstractMarketDataProvider {
 
   @Override
   public void subscribe(final Set<ValueSpecification> valueSpecifications) {
-    final Thread t = new Thread(new Runnable() {
-      @Override
-      public void run() {
-        if (_subscriptionsSucceed) {
-          subscriptionsSucceeded(valueSpecifications);
-        } else {
-          subscriptionFailed(valueSpecifications, _name);
-        }
-        _responseLatch.countDown();
+    final Thread t = new Thread(() -> {
+      if (_subscriptionsSucceed) {
+        subscriptionsSucceeded(valueSpecifications);
+      } else {
+        subscriptionFailed(valueSpecifications, _name);
       }
+      _responseLatch.countDown();
     });
     t.start();
   }
@@ -84,7 +81,7 @@ public class MockMarketDataProvider extends AbstractMarketDataProvider {
     return new MockMarketDataSnapshot(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public void awaitSubscriptionResponses() throws InterruptedException {
     _responseLatch.await();
   }
@@ -93,11 +90,11 @@ public class MockMarketDataProvider extends AbstractMarketDataProvider {
     _values.put(specification, value);
   }
 
-  /*package*/void incrementQueryCount() {
+  /* package */void incrementQueryCount() {
     _queryCount++;
   }
 
-  /*package*/Object getValue(final ValueSpecification specification) {
+  /* package */Object getValue(final ValueSpecification specification) {
     return _values.get(specification);
   }
 

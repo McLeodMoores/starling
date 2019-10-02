@@ -28,15 +28,15 @@ public class BundleTest {
   static final String CSS_UTIL_CSS = "cssUtil.css";
   static final String OG_COMMON_CSS = "ogCommon.css";
 
-  //cssBundleCommon fragments
+  // cssBundleCommon fragments
   static final Fragment BUTTON_CSS = new Fragment(createUri("styles/common/og.common.buttons.css"), "/styles/common/og.common.buttons.css");
   static final Fragment CORE_CSS = new Fragment(createUri("styles/common/og.common.core.css"), "/styles/common/og.common.core.css");
 
-  //cssUtil fragments
+  // cssUtil fragments
   static final Fragment RESET_CSS = new Fragment(createUri("styles/common/util/og.common.reset.css"), "/styles/common/util/og.common.reset.css");
   static final Fragment LINKS_CSS = new Fragment(createUri("styles/common/util/og.common.links.css"), "/styles/common/util/og.common.links.css");
 
-  //jsBundleCommon fragments
+  // jsBundleCommon fragments
   static final Fragment CORE_JS = new Fragment(createUri("scripts/og/common/og.common.core.js"), "/scripts/og/common/og.common.core.js");
   static final Fragment INIT_JS = new Fragment(createUri("scripts/og/common/og.common.init.js"), "/scripts/og/common/og.common.init.js");
   static final Fragment JQUERY_JS = new Fragment(createUri("scripts/og/common/og.common.jquery.rest.js"), "/scripts/og/common/og.common.jquery.rest.js");
@@ -54,7 +54,11 @@ public class BundleTest {
     }
   }
 
-  public void test_fragments_only() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testFragmentsOnly() throws Exception {
     final Bundle cssBundleCommon = makeCssBundleCommon();
     final List<Fragment> allFragment = cssBundleCommon.getAllFragments();
     assertNotNull(allFragment);
@@ -64,7 +68,11 @@ public class BundleTest {
     assertEquals(CORE_CSS, allFragment.get(2));
   }
 
-  public void test_bundles_only() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testBundlesOnly() throws Exception {
     final Bundle test = new Bundle();
     test.addChildNode(makeCssBundleCommon());
     test.addChildNode(makeCssUtil());
@@ -78,19 +86,23 @@ public class BundleTest {
     assertEquals(LINKS_CSS, allFragment.get(4));
   }
 
-  public void test_fragments_bundle() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testFragmentsBundle() throws Exception {
     final Bundle test = new Bundle();
-    //add fragment
+    // add fragment
     test.addChildNode(FRAG_B);
     final Bundle cssBundleCommon = makeCssBundleCommon();
-    //add fragment to bundle
+    // add fragment to bundle
     cssBundleCommon.addChildNode(FRAG_C);
 
-    //add bundle
+    // add bundle
     test.addChildNode(cssBundleCommon);
-    //add bundle
+    // add bundle
     test.addChildNode(makeCssUtil());
-    //add fragment
+    // add fragment
     test.addChildNode(FRAG_D);
 
     final List<Fragment> allFragment = test.getAllFragments();
@@ -106,6 +118,9 @@ public class BundleTest {
     assertEquals(FRAG_D, allFragment.get(7));
   }
 
+  /**
+   * @return a CSS bundle
+   */
   static Bundle makeCssBundleCommon() {
     final Bundle cssBundleCommon = new Bundle(OG_COMMON_CSS);
     cssBundleCommon.addChildNode(FRAG_A);
@@ -114,6 +129,9 @@ public class BundleTest {
     return cssBundleCommon;
   }
 
+  /**
+   * @return a CSS utility
+   */
   static Bundle makeCssUtil() {
     final Bundle cssUtil = new Bundle(CSS_UTIL_CSS);
     cssUtil.addChildNode(RESET_CSS);
@@ -121,6 +139,9 @@ public class BundleTest {
     return cssUtil;
   }
 
+  /**
+   * @return a JavaScript bundle
+   */
   static Bundle makejsBundleCommon() {
     final Bundle jsBundleCommon = new Bundle(JS_BUNDLE_COMMON_JS);
     jsBundleCommon.addChildNode(CORE_JS);

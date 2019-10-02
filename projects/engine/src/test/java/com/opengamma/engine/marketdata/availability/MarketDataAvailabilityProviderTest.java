@@ -33,6 +33,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class MarketDataAvailabilityProviderTest {
 
+  /**
+   *
+   */
   private static class Impl extends AbstractMarketDataAvailabilityProvider {
 
     @Override
@@ -70,11 +73,17 @@ public class MarketDataAvailabilityProviderTest {
 
   }
 
+  /**
+   * @return the provider
+   */
   protected MarketDataAvailabilityProvider create() {
     return new Impl();
   }
 
-  public void testGetAvailability_uniqueId() {
+  /**
+   *
+   */
+  public void testGetAvailabilityUniqueId() {
     final MarketDataAvailabilityProvider availability = create();
     final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Security", "Foo"));
     final Object target = new Primitive(UniqueId.of("Security", "Foo"));
@@ -82,7 +91,10 @@ public class MarketDataAvailabilityProviderTest {
     assertEquals(availability.getAvailability(targetSpec, target, desiredValue).getProperty(ValuePropertyNames.FUNCTION), "uniqueId");
   }
 
-  public void testGetAvailability_externalId() {
+  /**
+   *
+   */
+  public void testGetAvailabilityExternalId() {
     final MarketDataAvailabilityProvider availability = create();
     final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Security", "Foo"));
     final Object target = new ExternalIdentifiablePrimitive(UniqueId.of("Security", "Foo"), ExternalId.of("Ticker", "Foo"));
@@ -90,7 +102,10 @@ public class MarketDataAvailabilityProviderTest {
     assertEquals(availability.getAvailability(targetSpec, target, desiredValue).getProperty(ValuePropertyNames.FUNCTION), "externalId");
   }
 
-  public void testGetAvailability_externalIdBundle() {
+  /**
+   *
+   */
+  public void testGetAvailabilityExternalIdBundle() {
     final MarketDataAvailabilityProvider availability = create();
     final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Security", "Foo"));
     final Object target = new ExternalBundleIdentifiablePrimitive(UniqueId.of("Security", "Foo"), ExternalIdBundle.of("Ticker", "Foo"));
@@ -98,18 +113,27 @@ public class MarketDataAvailabilityProviderTest {
     assertEquals(availability.getAvailability(targetSpec, target, desiredValue).getProperty(ValuePropertyNames.FUNCTION), "externalIdBundle");
   }
 
-  public void testGetAvailability_null() {
+  /**
+   *
+   */
+  public void testGetAvailabilityNull() {
     final MarketDataAvailabilityProvider availability = create();
     final ValueRequirement desiredValue = new ValueRequirement("Bar", ComputationTargetSpecification.NULL);
     assertEquals(availability.getAvailability(ComputationTargetSpecification.NULL, null, desiredValue).getProperty(ValuePropertyNames.FUNCTION), "null");
   }
 
-  public void testOf_same() {
+  /**
+   *
+   */
+  public void testOfSame() {
     final MarketDataAvailabilityProvider availability = create();
     assertSame(AbstractMarketDataAvailabilityProvider.of(availability), availability);
   }
 
-  public void testOf_wrapped() {
+  /**
+   *
+   */
+  public void testOfWrapped() {
     final MarketDataAvailabilityFilter filter = Mockito.mock(MarketDataAvailabilityFilter.class);
     final MarketDataAvailabilityProvider provider = new MarketDataAvailabilityProvider() {
 
@@ -137,8 +161,8 @@ public class MarketDataAvailabilityProviderTest {
         (ExternalId) null, desiredValue).getProperty(ValuePropertyNames.FUNCTION), "Mock");
     assertEquals(availability.getAvailability(ComputationTargetSpecification.NULL,
         (ExternalIdBundle) null, desiredValue).getProperty(ValuePropertyNames.FUNCTION), "Mock");
-    assertEquals(availability.getAvailability(ComputationTargetSpecification.NULL, (
-        UniqueId) null, desiredValue).getProperty(ValuePropertyNames.FUNCTION), "Mock");
+    assertEquals(availability.getAvailability(ComputationTargetSpecification.NULL, (UniqueId) null, desiredValue).getProperty(ValuePropertyNames.FUNCTION),
+        "Mock");
     assertEquals(availability.getAvailability(ComputationTargetSpecification.NULL, desiredValue).getProperty(ValuePropertyNames.FUNCTION), "Mock");
   }
 

@@ -33,7 +33,7 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.TestLifecycle;
 
 /**
- * Tests the exposed MBeans and ManagementServiceTest can register MBeans
+ * Tests the exposed MBeans and ManagementServiceTest can register MBeans.
  */
 @Test(groups = TestGroup.INTEGRATION)
 public class ManagementServiceTest {

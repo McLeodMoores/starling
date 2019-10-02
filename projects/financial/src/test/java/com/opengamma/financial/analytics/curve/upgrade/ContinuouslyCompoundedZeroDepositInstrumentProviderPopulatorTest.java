@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -36,8 +36,8 @@ import com.opengamma.util.result.Function2;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Tests the class that adds continuously-compounded zero deposit instrument providers to a {@link CurveNodeIdMapper} from
- * a {@link CurveSpecificationBuilderConfiguration}.
+ * Tests the class that adds continuously-compounded zero deposit instrument providers to a {@link CurveNodeIdMapper} from a
+ * {@link CurveSpecificationBuilderConfiguration}.
  *
  */
 public class ContinuouslyCompoundedZeroDepositInstrumentProviderPopulatorTest {
@@ -54,14 +54,7 @@ public class ContinuouslyCompoundedZeroDepositInstrumentProviderPopulatorTest {
     EMPTY_MAPPER = CurveNodeIdMapper.builder()
         .name(NAME)
         .build();
-    final Function2<String, String, String> renamingFunction = new Function2<String, String, String>() {
-
-      @Override
-      public String apply(final String name, final String currency) {
-        return name + " " + currency + " test";
-      }
-
-    };
+    final Function2<String, String, String> renamingFunction = (name, currency) -> name + " " + currency + " test";
     RENAMING_PROVIDER = new ContinuouslyCompoundedRateInstrumentProviderPopulator(renamingFunction);
   }
 
@@ -95,8 +88,8 @@ public class ContinuouslyCompoundedZeroDepositInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the continuous rate instrument provider is unpopulated if a curve specification builder that has no continuous zero deposit instrument
-   * providers is supplied.
+   * Tests that the continuous rate instrument provider is unpopulated if a curve specification builder that has no continuous zero deposit instrument providers
+   * is supplied.
    */
   public void testNoContinuousZeroDeposits() {
     final CurveSpecificationBuilderConfiguration csbc = new CurveSpecificationBuilderConfiguration(USD_DEPOSIT_INSTRUMENTS,
@@ -117,8 +110,8 @@ public class ContinuouslyCompoundedZeroDepositInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the continuous zero deposit instruments,
-   * and that the original mapper is unchanged.
+   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the continuous zero deposit instruments, and that the
+   * original mapper is unchanged.
    */
   @Test
   public void testBuilderCreation() {

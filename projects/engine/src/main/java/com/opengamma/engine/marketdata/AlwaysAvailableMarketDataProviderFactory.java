@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.engine.marketdata;
 

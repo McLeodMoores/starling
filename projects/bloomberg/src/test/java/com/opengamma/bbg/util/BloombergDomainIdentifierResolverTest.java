@@ -21,18 +21,29 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class BloombergDomainIdentifierResolverTest {
 
+  /**
+   * @return the resolved data
+   */
   @DataProvider(name = "resolver")
-  Object[][] data_resolver() {
+  Object[][] dataResolver() {
     return new Object[][] {
-        {ExternalSchemes.bloombergTickerSecurityId("AAPL US Equity"), "CMPL", "AAPL US Equity"},
-        {ExternalSchemes.bloombergTickerSecurityId("ADSW5Q Curncy"), "CMPL", "ADSW5Q Curncy"},
-        {ExternalSchemes.bloombergTickerSecurityId("DJX Index"), "CMPL", "DJX Index"},
-        {ExternalSchemes.bloombergBuidSecurityId("EO10169520130101C8800001"), "CMPL", "/buid/EO10169520130101C8800001"},
-        {ExternalSchemes.isinSecurityId("US0378331005"), "CMPL", "/isin/US0378331005"},
-        {ExternalSchemes.cusipSecurityId("037833100"), "CMPL", "/cusip/037833100"},
+        { ExternalSchemes.bloombergTickerSecurityId("AAPL US Equity"), "CMPL", "AAPL US Equity" },
+        { ExternalSchemes.bloombergTickerSecurityId("ADSW5Q Curncy"), "CMPL", "ADSW5Q Curncy" },
+        { ExternalSchemes.bloombergTickerSecurityId("DJX Index"), "CMPL", "DJX Index" },
+        { ExternalSchemes.bloombergBuidSecurityId("EO10169520130101C8800001"), "CMPL", "/buid/EO10169520130101C8800001" },
+        { ExternalSchemes.isinSecurityId("US0378331005"), "CMPL", "/isin/US0378331005" },
+        { ExternalSchemes.cusipSecurityId("037833100"), "CMPL", "/cusip/037833100" },
     };
   }
 
+  /**
+   * @param externalId
+   *          an identifier
+   * @param ignoredDataProvider
+   *          the data provider, not used
+   * @param expectedBbgKey
+   *          the expected key
+   */
   @Test(dataProvider = "resolver")
   public void toBloombergKey(final ExternalId externalId, final String ignoredDataProvider, final String expectedBbgKey) {
     final String bbgKey = BloombergDomainIdentifierResolver.toBloombergKey(externalId);
@@ -40,18 +51,29 @@ public class BloombergDomainIdentifierResolverTest {
     assertEquals(expectedBbgKey, bbgKey);
   }
 
+  /**
+   * @return the resolved data
+   */
   @DataProvider(name = "resolverWithProvider")
-  Object[][] data_resolverWithProvider() {
+  Object[][] dataResolverWithProvider() {
     return new Object[][] {
-        {ExternalSchemes.bloombergTickerSecurityId("AAPL US Equity"), "CMPL", "AAPL US EQUITY"},
-        {ExternalSchemes.bloombergTickerSecurityId("ADSW5Q Curncy"), "CMPL", "ADSW5Q CMPL CURNCY"},
-        {ExternalSchemes.bloombergTickerSecurityId("DJX Index"), "CMPL", "DJX CMPL INDEX"},
-        {ExternalSchemes.bloombergBuidSecurityId("EO10169520130101C8800001"), "CMPL", "/buid/EO10169520130101C8800001@CMPL"},
-        {ExternalSchemes.isinSecurityId("US0378331005"), "CMPL", "/isin/US0378331005@CMPL"},
-        {ExternalSchemes.cusipSecurityId("037833100"), "CMPL", "/cusip/037833100@CMPL"},
+        { ExternalSchemes.bloombergTickerSecurityId("AAPL US Equity"), "CMPL", "AAPL US EQUITY" },
+        { ExternalSchemes.bloombergTickerSecurityId("ADSW5Q Curncy"), "CMPL", "ADSW5Q CMPL CURNCY" },
+        { ExternalSchemes.bloombergTickerSecurityId("DJX Index"), "CMPL", "DJX CMPL INDEX" },
+        { ExternalSchemes.bloombergBuidSecurityId("EO10169520130101C8800001"), "CMPL", "/buid/EO10169520130101C8800001@CMPL" },
+        { ExternalSchemes.isinSecurityId("US0378331005"), "CMPL", "/isin/US0378331005@CMPL" },
+        { ExternalSchemes.cusipSecurityId("037833100"), "CMPL", "/cusip/037833100@CMPL" },
     };
   }
 
+  /**
+   * @param externalId
+   *          an identifier
+   * @param dataProvider
+   *          the data provider
+   * @param expectedBbgKey
+   *          the expected key
+   */
   @Test(dataProvider = "resolverWithProvider")
   public void toBloombergKeyWithDataProvider(final ExternalId externalId, final String dataProvider, final String expectedBbgKey) {
     final String bbgKey = BloombergDomainIdentifierResolver.toBloombergKeyWithDataProvider(externalId, dataProvider);

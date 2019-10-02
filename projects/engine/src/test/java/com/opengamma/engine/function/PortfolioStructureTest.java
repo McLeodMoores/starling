@@ -41,6 +41,9 @@ public class PortfolioStructureTest {
   private SimplePosition _position2;
   private SimplePosition _badPosition;
 
+  /**
+   *
+   */
   @BeforeMethod
   public void createPortfolio() {
     final UniqueIdSupplier uid = new UniqueIdSupplier("Test");
@@ -71,22 +74,31 @@ public class PortfolioStructureTest {
     return _context.getPortfolioStructure();
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getParentNode_portfolioNode() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetParentNodePortfolioNode() {
     final PortfolioStructure resolver = getPortfolioStructure();
     assertEquals(_child1, resolver.getParentNode(_child2));
     assertEquals(_root, resolver.getParentNode(_child1));
     assertEquals(null, resolver.getParentNode(_root));
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_getParentNode_portfolioNode_badChild() {
+  public void testGetParentNodePortfolioNodeBadChild() {
     final PortfolioStructure resolver = getPortfolioStructure();
     resolver.getParentNode(_badChild);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getParentNode_position() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetParentNodePosition() {
     final PortfolioStructure resolver = getPortfolioStructure();
     assertNotNull(resolver);
     assertEquals(_child2,
@@ -97,22 +109,31 @@ public class PortfolioStructureTest {
             ComputationTargetType.PORTFOLIO_NODE, _child2.getUniqueId()).containing(ComputationTargetType.POSITION, _position2.getUniqueId()), _position2)));
   }
 
-  @Test(expectedExceptions = {IllegalArgumentException.class })
-  public void test_getParentNode_position_badTarget() {
+  /**
+   *
+   */
+  @Test(expectedExceptions = { IllegalArgumentException.class })
+  public void testGetParentNodePositionBadTarget() {
     final PortfolioStructure resolver = getPortfolioStructure();
     assertNotNull(resolver);
     resolver.getParentNode(new ComputationTarget(ComputationTargetType.POSITION, _position1));
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_getParentNode_position_badChild() {
+  public void testGetParentNodePositionBadChild() {
     final PortfolioStructure resolver = getPortfolioStructure();
     resolver.getParentNode(new ComputationTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
         UniqueId.of("Invalid", "0")).containing(ComputationTargetType.POSITION, _badPosition.getUniqueId()), _badPosition));
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getRootPortfolioNode_portfolioNode() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetRootPortfolioNodePortfolioNode() {
     final PortfolioStructure resolver = getPortfolioStructure();
     assertNotNull(resolver);
     assertEquals(_root, resolver.getRootPortfolioNode(_child1));
@@ -120,14 +141,20 @@ public class PortfolioStructureTest {
     assertEquals(_root, resolver.getRootPortfolioNode(_root));
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_getRootPortfolioNode_portfolioNode_badChild() {
+  public void testGetRootPortfolioNodePortfolioNodeBadChild() {
     final PortfolioStructure resolver = getPortfolioStructure();
     resolver.getRootPortfolioNode(_badChild);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getRootPortfolioNode_position() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetRootPortfolioNodePosition() {
     final PortfolioStructure resolver = getPortfolioStructure();
     assertNotNull(resolver);
     assertEquals(_root,
@@ -137,21 +164,29 @@ public class PortfolioStructureTest {
         _root,
         resolver.getRootPortfolioNode(new ComputationTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
             _root.getUniqueId()).containing(ComputationTargetType.PORTFOLIO_NODE, _child2.getUniqueId()).containing(
-            ComputationTargetType.POSITION, _position2.getUniqueId()), _position2)));
+                ComputationTargetType.POSITION, _position2.getUniqueId()),
+            _position2)));
   }
 
-  @Test(expectedExceptions = {IllegalArgumentException.class })
-  public void test_getRootPortfolioNode_position_badTarget() {
+  /**
+   *
+   */
+  @Test(expectedExceptions = { IllegalArgumentException.class })
+  public void testGetRootPortfolioNodePositionBadTarget() {
     final PortfolioStructure resolver = getPortfolioStructure();
     resolver.getRootPortfolioNode(new ComputationTarget(ComputationTargetType.POSITION, _position1));
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_getRootPortfolioNode_position_badChild() {
+  public void testGetRootPortfolioNodePositionBadChild() {
     final PortfolioStructure resolver = getPortfolioStructure();
     resolver.getRootPortfolioNode(new ComputationTarget(
-          new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Invalid", "0")).containing(
-        ComputationTargetType.POSITION, _badPosition.getUniqueId()), _badPosition));
+        new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Invalid", "0")).containing(
+            ComputationTargetType.POSITION, _badPosition.getUniqueId()),
+        _badPosition));
   }
 
 }

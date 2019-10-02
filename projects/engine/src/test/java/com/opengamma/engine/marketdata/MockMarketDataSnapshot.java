@@ -11,7 +11,7 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.id.UniqueId;
 
 /**
- * Mock {@link MarketDataSnapshot}
+ * Mock {@link MarketDataSnapshot}.
  */
 public class MockMarketDataSnapshot extends AbstractMarketDataSnapshot {
 
@@ -36,7 +36,7 @@ public class MockMarketDataSnapshot extends AbstractMarketDataSnapshot {
   public boolean isEmpty() {
     return false;
   }
-  
+
   @Override
   public Instant getSnapshotTimeIndication() {
     return _snapshotTime;

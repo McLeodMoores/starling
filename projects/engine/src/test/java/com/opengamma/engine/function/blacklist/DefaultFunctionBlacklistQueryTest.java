@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -42,6 +42,9 @@ public class DefaultFunctionBlacklistQueryTest {
   private final Set<ValueSpecification> _outputs1;
   private final Set<ValueSpecification> _outputs2;
 
+  /**
+   *
+   */
   public DefaultFunctionBlacklistQueryTest() {
     _function1 = new ParameterizedFunction(new MockFunction("F1", null), new EmptyFunctionParameters());
     _function2 = new ParameterizedFunction(new MockFunction("F2", null), new EmptyFunctionParameters());
@@ -55,6 +58,9 @@ public class DefaultFunctionBlacklistQueryTest {
     _outputs2 = Collections.singleton(new ValueSpecification("Bar", _target2, ValueProperties.with(ValuePropertyNames.FUNCTION, "Y").get()));
   }
 
+  /**
+   *
+   */
   public void testEmpty() {
     final DefaultFunctionBlacklistQuery bl = new DefaultFunctionBlacklistQuery(new EmptyFunctionBlacklist());
     assertTrue(bl.isEmpty());
@@ -64,7 +70,10 @@ public class DefaultFunctionBlacklistQueryTest {
     assertFalse(bl.isBlacklisted(_function1, _target1, _inputs1, _outputs1));
   }
 
-  public void testSingleEntry_wildcard() {
+  /**
+   *
+   */
+  public void testSingleEntryWildcard() {
     final DefaultFunctionBlacklistQuery bl = new DefaultFunctionBlacklistQuery(new EmptyFunctionBlacklist());
     bl.addRule(new FunctionBlacklistRule());
     assertFalse(bl.isEmpty());
@@ -74,7 +83,10 @@ public class DefaultFunctionBlacklistQueryTest {
     assertTrue(bl.isBlacklisted(_function1, _target1, _inputs1, _outputs1));
   }
 
-  public void testSingleEntry_function() {
+  /**
+   *
+   */
+  public void testSingleEntryFunction() {
     final DefaultFunctionBlacklistQuery bl = new DefaultFunctionBlacklistQuery(new EmptyFunctionBlacklist());
     bl.addRule(new FunctionBlacklistRule(_function1));
     assertFalse(bl.isEmpty());
@@ -89,7 +101,10 @@ public class DefaultFunctionBlacklistQueryTest {
     assertFalse(bl.isBlacklisted(_function2, _target1, _inputs1, _outputs1));
   }
 
-  public void testSingleEntry_functionIdentifier() {
+  /**
+   *
+   */
+  public void testSingleEntryFunctionIdentifier() {
     final DefaultFunctionBlacklistQuery bl = new DefaultFunctionBlacklistQuery(new EmptyFunctionBlacklist());
     final FunctionBlacklistRule rule = new FunctionBlacklistRule();
     rule.setFunctionIdentifier("F1");
@@ -110,7 +125,10 @@ public class DefaultFunctionBlacklistQueryTest {
     assertFalse(bl.isBlacklisted(_function4, _target1, _inputs1, _outputs1));
   }
 
-  public void testSingleEntry_functionParameters() {
+  /**
+   *
+   */
+  public void testSingleEntryFunctionParameters() {
     final DefaultFunctionBlacklistQuery bl = new DefaultFunctionBlacklistQuery(new EmptyFunctionBlacklist());
     final FunctionBlacklistRule rule = new FunctionBlacklistRule();
     rule.setFunctionParameters(new EmptyFunctionParameters());
@@ -131,7 +149,10 @@ public class DefaultFunctionBlacklistQueryTest {
     assertFalse(bl.isBlacklisted(_function4, _target1, _inputs1, _outputs1));
   }
 
-  public void testSingleEntry_target() {
+  /**
+   *
+   */
+  public void testSingleEntryTarget() {
     final DefaultFunctionBlacklistQuery bl = new DefaultFunctionBlacklistQuery(new EmptyFunctionBlacklist());
     bl.addRule(new FunctionBlacklistRule(_target1));
     assertFalse(bl.isEmpty());
@@ -144,7 +165,10 @@ public class DefaultFunctionBlacklistQueryTest {
     assertFalse(bl.isBlacklisted(_function1, _target2, _inputs1, _outputs1));
   }
 
-  public void testSingleEntry_functionTarget() {
+  /**
+   *
+   */
+  public void testSingleEntryFunctionTarget() {
     final DefaultFunctionBlacklistQuery bl = new DefaultFunctionBlacklistQuery(new EmptyFunctionBlacklist());
     bl.addRule(new FunctionBlacklistRule(_function1, _target1));
     assertFalse(bl.isEmpty());
@@ -162,7 +186,10 @@ public class DefaultFunctionBlacklistQueryTest {
     assertFalse(bl.isBlacklisted(_function2, _target2, _inputs1, _outputs1));
   }
 
-  public void testSingleEntry_inputs() {
+  /**
+   *
+   */
+  public void testSingleEntryInputs() {
     final DefaultFunctionBlacklistQuery bl = new DefaultFunctionBlacklistQuery(new EmptyFunctionBlacklist());
     final FunctionBlacklistRule rule = new FunctionBlacklistRule();
     rule.setInputs(_inputs1);
@@ -175,7 +202,10 @@ public class DefaultFunctionBlacklistQueryTest {
     assertFalse(bl.isBlacklisted(_function1, _target1, _inputs2, _outputs1));
   }
 
-  public void testSingleEntry_outputs() {
+  /**
+   *
+   */
+  public void testSingleEntryOutputs() {
     final DefaultFunctionBlacklistQuery bl = new DefaultFunctionBlacklistQuery(new EmptyFunctionBlacklist());
     final FunctionBlacklistRule rule = new FunctionBlacklistRule();
     rule.setOutputs(_outputs1);
@@ -188,7 +218,10 @@ public class DefaultFunctionBlacklistQueryTest {
     assertFalse(bl.isBlacklisted(_function1, _target1, _inputs1, _outputs2));
   }
 
-  public void testSingleEntry_full() {
+  /**
+   *
+   */
+  public void testSingleEntryFull() {
     final DefaultFunctionBlacklistQuery bl = new DefaultFunctionBlacklistQuery(new EmptyFunctionBlacklist());
     bl.addRule(new FunctionBlacklistRule(_function1, _target1, _inputs1, _outputs1));
     assertFalse(bl.isEmpty());
@@ -202,6 +235,9 @@ public class DefaultFunctionBlacklistQueryTest {
     assertFalse(bl.isBlacklisted(_function1, _target1, _inputs1, _outputs2));
   }
 
+  /**
+   *
+   */
   public void testMultipleEntries() {
     final DefaultFunctionBlacklistQuery bl = new DefaultFunctionBlacklistQuery(new EmptyFunctionBlacklist());
     bl.addRules(Arrays.asList(
@@ -231,6 +267,9 @@ public class DefaultFunctionBlacklistQueryTest {
     assertFalse(bl.isBlacklisted(_function3, _target2, _inputs2, _outputs2));
   }
 
+  /**
+   *
+   */
   public void testRemoveRule() {
     final DefaultFunctionBlacklistQuery bl = new DefaultFunctionBlacklistQuery(new EmptyFunctionBlacklist());
     bl.addRule(new FunctionBlacklistRule(_function1));

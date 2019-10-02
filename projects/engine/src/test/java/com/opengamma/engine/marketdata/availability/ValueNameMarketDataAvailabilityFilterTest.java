@@ -26,10 +26,16 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ValueNameMarketDataAvailabilityFilterTest {
 
+  /**
+   * @return the filter
+   */
   protected MarketDataAvailabilityFilter create() {
     return new ValueNameMarketDataAvailabilityFilter(ImmutableSet.of("Foo", "Bar"));
   }
 
+  /**
+   *
+   */
   public void testMissing() {
     final MarketDataAvailabilityFilter availability = create();
     final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Security", "Foo"));
@@ -38,7 +44,10 @@ public class ValueNameMarketDataAvailabilityFilterTest {
     assertFalse(availability.isAvailable(targetSpec, target, desiredValue));
   }
 
-  public void testPresent_uniqueId() {
+  /**
+   *
+   */
+  public void testPresentUniqueId() {
     final MarketDataAvailabilityFilter availability = create();
     final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Security", "Foo"));
     final Object target = new Primitive(UniqueId.of("Security", "Foo"));
@@ -46,7 +55,10 @@ public class ValueNameMarketDataAvailabilityFilterTest {
     assertTrue(availability.isAvailable(targetSpec, target, desiredValue));
   }
 
-  public void testPresent_externalId() {
+  /**
+   *
+   */
+  public void testPresentExternalId() {
     final MarketDataAvailabilityFilter availability = create();
     final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Security", "Foo"));
     final Object target = new ExternalIdentifiablePrimitive(UniqueId.of("Security", "Foo"), ExternalId.of("Ticker", "Foo"));

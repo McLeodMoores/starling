@@ -19,7 +19,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * This test will begin late in 2012 as historical data on options on the Sep2011 Eurodollar future will cease to be provided
+ * This test will begin late in 2012 as historical data on options on the Sep2011 Eurodollar future will cease to be provided.
  */
 @Test(groups = TestGroup.UNIT)
 public class BloombergIRFutureOptionVolatilitySurfaceInstrumentProviderTest {

@@ -56,6 +56,10 @@ public class BloombergDataUtilsTest {
       "BLOOMBERG_TCM~BLOOMBERG_TCM 1234" };
 
   // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected exception
+   */
   @Test
   public void optionChain() throws Exception {
     final MockReferenceDataProvider rdp = new MockReferenceDataProvider();
@@ -69,6 +73,10 @@ public class BloombergDataUtilsTest {
     assertTrue(optionChain.contains(ExternalSchemes.bloombergTickerSecurityId("THIRD US Equity")));
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected exception
+   */
   @Test
   public void addTwoDigitYearCode() throws Exception {
     Set<ExternalIdWithDates> identifiers = Sets.newHashSet(
@@ -99,6 +107,10 @@ public class BloombergDataUtilsTest {
         LocalDate.of(1999, Month.SEPTEMBER, 14), LocalDate.of(2009, Month.SEPTEMBER, 14))));
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected exception
+   */
   @Test
   public void parseIdentifiers() throws Exception {
     final Set<ExternalIdWithDates> identifiers = Sets.newHashSet(
@@ -120,6 +132,10 @@ public class BloombergDataUtilsTest {
     assertEquals(expected, actual);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected exception
+   */
   @Test
   public void identifierLoader() throws Exception {
     final Set<ExternalId> identifiers = BloombergDataUtils.identifierLoader(new StringReader(multiStringLine(IDENTIFIERS)));
@@ -133,6 +149,10 @@ public class BloombergDataUtilsTest {
     assertTrue(identifiers.contains(ExternalId.of("BLOOMBERG_TCM", "BLOOMBERG_TCM 1234")));
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected exception
+   */
   @Test
   public void getBUID() throws Exception {
     final MockReferenceDataProvider rdp = new MockReferenceDataProvider();
@@ -156,6 +176,9 @@ public class BloombergDataUtilsTest {
     return buf.toString();
   }
 
+  /**
+   *
+   */
   @Test
   public void testFutureBundleToGenericFutureTicker() {
     final ZonedDateTime now = LocalDateTime.of(2012, 8, 25, 14, 32, 00, 00).atZone(ZoneId.of("Europe/London"));
@@ -171,7 +194,10 @@ public class BloombergDataUtilsTest {
     assertEquals(expectedOutput2, actualOutput2);
   }
 
-  public void test_resolveObservationTime() {
+  /**
+   *
+   */
+  public void testResolveObservationTime() {
     assertEquals(HistoricalTimeSeriesConstants.DEFAULT_OBSERVATION_TIME, BloombergDataUtils.resolveObservationTime(null));
     assertEquals(HistoricalTimeSeriesConstants.DEFAULT_OBSERVATION_TIME, BloombergDataUtils.resolveObservationTime("UNKNOWN"));
     assertNull(BloombergDataUtils.resolveObservationTime("FOO"));
@@ -180,6 +206,9 @@ public class BloombergDataUtilsTest {
     assertEquals(HistoricalTimeSeriesConstants.TOKYO_CLOSE, BloombergDataUtils.resolveObservationTime("CMPT"));
   }
 
+  /**
+   *
+   */
   @Test
   public void testBloombergDateTime() {
     final LocalDate localDate = LocalDate.of(99999999, 12, 13);

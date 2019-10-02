@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Please see distribution for license.
  */
@@ -24,10 +24,15 @@ public abstract class AbstractMinimalWebPortfolioResource extends AbstractWebPor
 
   /**
    * Creates the resource.
-   * @param portfolioMaster  the portfolio master, not null
-   * @param positionMaster  the position master, not null
-   * @param securitySource  the security source, not null
-   * @param executor  the executor service, not null
+   * 
+   * @param portfolioMaster
+   *          the portfolio master, not null
+   * @param positionMaster
+   *          the position master, not null
+   * @param securitySource
+   *          the security source, not null
+   * @param executor
+   *          the executor service, not null
    */
   protected AbstractMinimalWebPortfolioResource(final PortfolioMaster portfolioMaster, final PositionMaster positionMaster, final SecuritySource securitySource,
       final ExecutorService executor) {
@@ -36,16 +41,19 @@ public abstract class AbstractMinimalWebPortfolioResource extends AbstractWebPor
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   protected AbstractMinimalWebPortfolioResource(final AbstractMinimalWebPortfolioResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * @return  the output root data, not null
+   * 
+   * @return the output root data, not null
    */
   @Override
   protected FlexiBean createRootData() {

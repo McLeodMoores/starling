@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.financial.analytics.isda.credit;
 
 import java.util.SortedMap;
@@ -15,36 +20,36 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Tests the custom constructor
+ * Tests the custom constructor.
  */
 public class YieldCurveDataTest {
-  
+
   private Builder _builder;
 
   @BeforeMethod
   public void beforeMethod() {
     _builder = YieldCurveData.builder()
-      .calendar(new MondayToFridayCalendar("test"))
-      .cashDayCount(DayCounts.ACT_360)
-      .currency(Currency.USD)
-      .curveBusinessDayConvention(BusinessDayConventions.MODIFIED_FOLLOWING)
-      .curveDayCount(DayCounts.ACT_365)
-      .spotDate(LocalDate.of(2014, 1, 1))
-      .swapDayCount(DayCounts.THIRTY_360)
-      .swapFixedLegInterval(Tenor.ONE_YEAR);
+        .calendar(new MondayToFridayCalendar("test"))
+        .cashDayCount(DayCounts.ACT_360)
+        .currency(Currency.USD)
+        .curveBusinessDayConvention(BusinessDayConventions.MODIFIED_FOLLOWING)
+        .curveDayCount(DayCounts.ACT_365)
+        .spotDate(LocalDate.of(2014, 1, 1))
+        .swapDayCount(DayCounts.THIRTY_360)
+        .swapFixedLegInterval(Tenor.ONE_YEAR);
 
   }
-  
-  @Test(expectedExceptions = {IllegalArgumentException.class})
-  public void testTenorCollision() {
-    SortedMap<Tenor, Double> cashData = ImmutableSortedMap.of(Tenor.ONE_MONTH, 0.00445);
 
-    SortedMap<Tenor, Double> swapData = ImmutableSortedMap.of(Tenor.ONE_MONTH, 0.01652);
-    
+  @Test(expectedExceptions = { IllegalArgumentException.class })
+  public void testTenorCollision() {
+    final SortedMap<Tenor, Double> cashData = ImmutableSortedMap.of(Tenor.ONE_MONTH, 0.00445);
+
+    final SortedMap<Tenor, Double> swapData = ImmutableSortedMap.of(Tenor.ONE_MONTH, 0.01652);
+
     _builder.cashData(cashData).swapData(swapData);
-    
+
     _builder.build();
 
   }
-  
+
 }

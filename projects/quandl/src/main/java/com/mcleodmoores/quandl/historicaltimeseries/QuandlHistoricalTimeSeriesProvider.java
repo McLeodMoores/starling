@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 - present by McLeod Moores Software Limited
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Please see distribution for license.
  */
@@ -59,7 +59,9 @@ public class QuandlHistoricalTimeSeriesProvider extends AbstractHistoricalTimeSe
 
   /**
    * Creates an instance.
-   * @param authToken The authorisation token, not null
+   * 
+   * @param authToken
+   *          The authorisation token, not null
    */
   public QuandlHistoricalTimeSeriesProvider(final String authToken) {
     ArgumentChecker.notNull(authToken, "authToken");

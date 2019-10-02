@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.exposure.factory;
 
@@ -163,7 +163,6 @@ public class SecurityCurrencyAndRegionExposureFunctionTest {
     assertEquals(EXPOSURE_FUNCTION.getIds(trade, COMPILATION_CONTEXT), expected);
     assertEquals(EXPOSURE_FUNCTION.getIds(trade, EXECUTION_CONTEXT), expected);
   }
-
 
   /**
    * Tests the ids returned for a vanilla ibor swap security.

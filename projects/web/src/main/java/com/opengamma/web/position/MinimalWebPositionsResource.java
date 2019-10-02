@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Please see distribution for license.
  */
@@ -55,6 +55,7 @@ import com.opengamma.web.WebPaging;
 import com.opengamma.web.analytics.rest.MasterType;
 import com.opengamma.web.analytics.rest.Subscribe;
 import com.opengamma.web.analytics.rest.SubscribeMaster;
+
 /**
  * RESTful resource for all positions.
  * <p>
@@ -65,9 +66,13 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
 
   /**
    * Creates the resource.
-   * @param positionMaster  the position master, not null
-   * @param securitySource  the security source, not null
-   * @param externalSchemes the map of external schemes, with {@link ExternalScheme} as key and description as value
+   * 
+   * @param positionMaster
+   *          the position master, not null
+   * @param securitySource
+   *          the security source, not null
+   * @param externalSchemes
+   *          the map of external schemes, with {@link ExternalScheme} as key and description as value
    */
   public MinimalWebPositionsResource(final PositionMaster positionMaster, final SecuritySource securitySource,
       final Map<ExternalScheme, String> externalSchemes) {
@@ -76,18 +81,24 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
 
   /**
    * Creates the resource.
-   * @param positionMaster  the position master, not null
-   * @param securityLoader  the security loader, not null
-   * @param securitySource  the security source, not null
-   * @param htsSource  the historical time series source, not null
-   * @param externalSchemes the map of external schemes, with {@link ExternalScheme} as key and description as value
+   * 
+   * @param positionMaster
+   *          the position master, not null
+   * @param securityLoader
+   *          the security loader, not null
+   * @param securitySource
+   *          the security source, not null
+   * @param htsSource
+   *          the historical time series source, not null
+   * @param externalSchemes
+   *          the map of external schemes, with {@link ExternalScheme} as key and description as value
    */
   public MinimalWebPositionsResource(final PositionMaster positionMaster, final SecurityLoader securityLoader, final SecuritySource securitySource,
       final HistoricalTimeSeriesSource htsSource, final Map<ExternalScheme, String> externalSchemes) {
     super(positionMaster, securityLoader, securitySource, htsSource, externalSchemes);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   @SubscribeMaster(MasterType.POSITION)
@@ -156,7 +167,7 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
@@ -264,7 +275,7 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
         if (trimmedTradesJson != null) {
           trades = parseTrades(trimmedTradesJson);
         } else {
-          trades = Collections.<ManageableTrade>emptyList();
+          trades = Collections.<ManageableTrade> emptyList();
         }
         uri = addPosition(quantity, secUid, trades, trimmedUniqueIdScheme);
         break;
@@ -300,7 +311,7 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
   }
 
   private URI addPosition(final BigDecimal quantity, final UniqueId secUid, final String uniqueIdScheme) {
-    return addPosition(quantity, secUid, Collections.<ManageableTrade>emptyList(), uniqueIdScheme);
+    return addPosition(quantity, secUid, Collections.<ManageableTrade> emptyList(), uniqueIdScheme);
   }
 
   private URI addPosition(final BigDecimal quantity, final UniqueId secUid, final Collection<ManageableTrade> trades, final String uniqueIdScheme) {
@@ -319,7 +330,7 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
     return MinimalWebPositionResource.uri(data());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{positionId}")
   public MinimalWebPositionResource findPosition(@Subscribe @PathParam("positionId") final String idStr) {
     data().setUriPositionId(idStr);
@@ -339,9 +350,10 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
     return new MinimalWebPositionResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -357,10 +369,12 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for positions.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebPositionsData data) {

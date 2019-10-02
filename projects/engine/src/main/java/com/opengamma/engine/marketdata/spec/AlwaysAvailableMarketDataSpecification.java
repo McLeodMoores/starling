@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  *
  * Please see distribution for license.
  */
@@ -19,8 +19,7 @@ import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
- * A market data specification for a source that will always state that market data is available, even if
- * this is not the case.
+ * A market data specification for a source that will always state that market data is available, even if this is not the case.
  */
 @BeanDefinition(hierarchy = "immutable")
 public class AlwaysAvailableMarketDataSpecification implements MarketDataSpecification, ImmutableBean {

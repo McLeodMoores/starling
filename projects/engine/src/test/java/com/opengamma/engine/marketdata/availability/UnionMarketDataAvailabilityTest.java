@@ -35,6 +35,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class UnionMarketDataAvailabilityTest {
 
+  /**
+   *
+   */
   private static class BlockingDataProvider implements MarketDataAvailabilityProvider {
 
     @Override
@@ -78,6 +81,9 @@ public class UnionMarketDataAvailabilityTest {
 
   }
 
+  /**
+   * @return the filter
+   */
   protected MarketDataAvailabilityProvider createProvider1() {
     final FixedMarketDataAvailabilityProvider a = new FixedMarketDataAvailabilityProvider();
     final FixedMarketDataAvailabilityProvider b = new FixedMarketDataAvailabilityProvider();
@@ -94,10 +100,16 @@ public class UnionMarketDataAvailabilityTest {
     return new UnionMarketDataAvailability.Provider(Arrays.asList(c, a, b));
   }
 
+  /**
+   * @return the filter
+   */
   protected MarketDataAvailabilityFilter createFilter1() {
     return createProvider1().getAvailabilityFilter();
   }
 
+  /**
+   * @return the filter
+   */
   protected MarketDataAvailabilityProvider createProvider2() {
     final MarketDataAvailabilityFilter filter = createFilter1();
     return filter.withProvider(new MarketDataAvailabilityProvider() {
@@ -121,22 +133,35 @@ public class UnionMarketDataAvailabilityTest {
     });
   }
 
+  /**
+   * @return the filter
+   */
   protected MarketDataAvailabilityFilter createFilter2() {
     return createProvider2().getAvailabilityFilter();
   }
 
+  /**
+   * @return the providers
+   */
   @DataProvider
   public Object[][] providers() {
-    return new Object[][] {new Object[] {createProvider1() }, new Object[] {createProvider2() } };
+    return new Object[][] { new Object[] { createProvider1() }, new Object[] { createProvider2() } };
   }
 
+  /**
+   * @return the filters
+   */
   @DataProvider
   public Object[][] filters() {
-    return new Object[][] {new Object[] {createFilter1() }, new Object[] {createFilter2() } };
+    return new Object[][] { new Object[] { createFilter1() }, new Object[] { createFilter2() } };
   }
 
+  /**
+   * @param availability
+   *          the filter
+   */
   @Test(dataProvider = "providers")
-  public void testGetAvailability_available(final MarketDataAvailabilityProvider availability) {
+  public void testGetAvailabilityAvailable(final MarketDataAvailabilityProvider availability) {
     try {
       BlockingOperation.off();
       final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE, UniqueId.of("X", "0"));
@@ -160,8 +185,12 @@ public class UnionMarketDataAvailabilityTest {
     }
   }
 
+  /**
+   * @param availability
+   *          the filter
+   */
   @Test(dataProvider = "filters")
-  public void testIsAvailable_available(final MarketDataAvailabilityFilter availability) {
+  public void testIsAvailableAvailable(final MarketDataAvailabilityFilter availability) {
     try {
       BlockingOperation.off();
       final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE, UniqueId.of("X", "0"));
@@ -185,8 +214,12 @@ public class UnionMarketDataAvailabilityTest {
     }
   }
 
+  /**
+   * @param availability
+   *          the filter
+   */
   @Test(dataProvider = "providers")
-  public void testGetAvailability_absent(final MarketDataAvailabilityProvider availability) {
+  public void testGetAvailabilityAbsent(final MarketDataAvailabilityProvider availability) {
     final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE, UniqueId.of("X", "0"));
     final ValueRequirement desiredValue = new ValueRequirement("Foo", targetSpec);
     assertNull(availability.getAvailability(targetSpec, ExternalId.of("A", "Absent"), desiredValue));
@@ -194,8 +227,12 @@ public class UnionMarketDataAvailabilityTest {
     assertNull(availability.getAvailability(targetSpec, ExternalId.of("C", "Absent"), desiredValue));
   }
 
+  /**
+   * @param availability
+   *          the filter
+   */
   @Test(dataProvider = "filters")
-  public void testIsAvailable_absent(final MarketDataAvailabilityFilter availability) {
+  public void testIsAvailableAbsent(final MarketDataAvailabilityFilter availability) {
     final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE, UniqueId.of("X", "0"));
     final ValueRequirement desiredValue = new ValueRequirement("Foo", targetSpec);
     assertFalse(availability.isAvailable(targetSpec, ExternalId.of("A", "Absent"), desiredValue));
@@ -203,48 +240,76 @@ public class UnionMarketDataAvailabilityTest {
     assertFalse(availability.isAvailable(targetSpec, ExternalId.of("C", "Absent"), desiredValue));
   }
 
+  /**
+   * @param availability
+   *          the filter
+   */
   @Test(dataProvider = "providers")
-  public void testGetAvailability_missing_a(final MarketDataAvailabilityProvider availability) {
+  public void testGetAvailabilityMissingA(final MarketDataAvailabilityProvider availability) {
     final ValueRequirement desiredValue = new ValueRequirement("Foo", ComputationTargetSpecification.NULL);
     assertNotNull(availability.getAvailability(ComputationTargetSpecification.NULL, ExternalId.of("A", "Missing"), desiredValue));
   }
 
+  /**
+   * @param availability
+   *          the filter
+   */
   @Test(dataProvider = "filters")
-  public void testIsAvailable_missing_a(final MarketDataAvailabilityFilter availability) {
+  public void testIsAvailableMissingA(final MarketDataAvailabilityFilter availability) {
     final ValueRequirement desiredValue = new ValueRequirement("Foo", ComputationTargetSpecification.NULL);
     assertTrue(availability.isAvailable(ComputationTargetSpecification.NULL, ExternalId.of("A", "Missing"), desiredValue));
   }
 
+  /**
+   * @param availability
+   *          the filter
+   */
   @Test(dataProvider = "providers")
-  public void testGetAvailability_missing_b(final MarketDataAvailabilityProvider availability) {
+  public void testGetAvailabilityMissingB(final MarketDataAvailabilityProvider availability) {
     final ValueRequirement desiredValue = new ValueRequirement("Foo", ComputationTargetSpecification.NULL);
     assertNotNull(availability.getAvailability(ComputationTargetSpecification.NULL, ExternalIdBundle.of(ExternalId.of("A", "Missing"),
         ExternalId.of("B", "Missing")), desiredValue));
   }
 
+  /**
+   * @param availability
+   *          the filter
+   */
   @Test(dataProvider = "filters")
-  public void testIsAvailable_missing_b(final MarketDataAvailabilityFilter availability) {
+  public void testIsAvailableMissingB(final MarketDataAvailabilityFilter availability) {
     final ValueRequirement desiredValue = new ValueRequirement("Foo", ComputationTargetSpecification.NULL);
     assertTrue(availability.isAvailable(ComputationTargetSpecification.NULL, ExternalIdBundle.of(ExternalId.of("A", "Missing"),
         ExternalId.of("B", "Missing")), desiredValue));
   }
 
+  /**
+   * @param availability
+   *          the filter
+   */
   @Test(dataProvider = "providers")
-  public void testGetAvailability_missing_c(final MarketDataAvailabilityProvider availability) {
+  public void testGetAvailabilityMissingC(final MarketDataAvailabilityProvider availability) {
     final ValueRequirement desiredValue = new ValueRequirement("Foo", ComputationTargetSpecification.NULL);
     assertNotNull(availability.getAvailability(ComputationTargetSpecification.NULL, ExternalIdBundle.of(ExternalId.of("A", "Absent"),
         ExternalId.of("B", "Missing")), desiredValue));
   }
 
+  /**
+   * @param availability
+   *          the filter
+   */
   @Test(dataProvider = "filters")
-  public void testIsAvailable_missing_c(final MarketDataAvailabilityFilter availability) {
+  public void testIsAvailableMissingC(final MarketDataAvailabilityFilter availability) {
     final ValueRequirement desiredValue = new ValueRequirement("Foo", ComputationTargetSpecification.NULL);
     assertTrue(availability.isAvailable(ComputationTargetSpecification.NULL, ExternalIdBundle.of(ExternalId.of("A", "Absent"),
         ExternalId.of("B", "Missing")), desiredValue));
   }
 
-  @Test(expectedExceptions = {BlockingOperation.class }, dataProvider = "providers")
-  public void testGetAvailability_noneAvailableBlockingOperation_a(final MarketDataAvailabilityProvider availability) {
+  /**
+   * @param availability
+   *          the filter
+   */
+  @Test(expectedExceptions = { BlockingOperation.class }, dataProvider = "providers")
+  public void testGetAvailabilityNoneAvailableBlockingOperationA(final MarketDataAvailabilityProvider availability) {
     try {
       BlockingOperation.off();
       final ValueRequirement desiredValue = new ValueRequirement("Foo", ComputationTargetSpecification.NULL);
@@ -254,8 +319,12 @@ public class UnionMarketDataAvailabilityTest {
     }
   }
 
-  @Test(expectedExceptions = {BlockingOperation.class }, dataProvider = "filters")
-  public void testIsAvailable_noneAvailableBlockingOperation_a(final MarketDataAvailabilityFilter availability) {
+  /**
+   * @param availability
+   *          the filter
+   */
+  @Test(expectedExceptions = { BlockingOperation.class }, dataProvider = "filters")
+  public void testIsAvailableNoneAvailableBlockingOperationA(final MarketDataAvailabilityFilter availability) {
     try {
       BlockingOperation.off();
       final ValueRequirement desiredValue = new ValueRequirement("Foo", ComputationTargetSpecification.NULL);
@@ -265,8 +334,12 @@ public class UnionMarketDataAvailabilityTest {
     }
   }
 
-  @Test(expectedExceptions = {BlockingOperation.class }, dataProvider = "providers")
-  public void testGetAvailability_noneAvailableBlockingOperation_b(final MarketDataAvailabilityProvider availability) {
+  /**
+   * @param availability
+   *          the filter
+   */
+  @Test(expectedExceptions = { BlockingOperation.class }, dataProvider = "providers")
+  public void testGetAvailabilityNoneAvailableBlockingOperationB(final MarketDataAvailabilityProvider availability) {
     try {
       BlockingOperation.off();
       final ValueRequirement desiredValue = new ValueRequirement("Foo", ComputationTargetSpecification.NULL);
@@ -277,8 +350,12 @@ public class UnionMarketDataAvailabilityTest {
     }
   }
 
-  @Test(expectedExceptions = {BlockingOperation.class }, dataProvider = "filters")
-  public void testIsAvailable_noneAvailableBlockingOperation_b(final MarketDataAvailabilityFilter availability) {
+  /**
+   * @param availability
+   *          the filter
+   */
+  @Test(expectedExceptions = { BlockingOperation.class }, dataProvider = "filters")
+  public void testIsAvailableNoneAvailableBlockingOperationB(final MarketDataAvailabilityFilter availability) {
     try {
       BlockingOperation.off();
       final ValueRequirement desiredValue = new ValueRequirement("Foo", ComputationTargetSpecification.NULL);

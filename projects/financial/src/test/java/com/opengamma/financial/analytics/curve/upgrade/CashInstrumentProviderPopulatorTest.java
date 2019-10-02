@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -36,10 +36,8 @@ import com.opengamma.financial.analytics.ircurve.StripInstrumentType;
 import com.opengamma.util.result.Function2;
 import com.opengamma.util.tuple.Pair;
 
-
 /**
- * Tests the class that adds cash instrument providers to a {@link CurveNodeIdMapper}
- * from a {@link CurveSpecificationBuilderConfiguration}.
+ * Tests the class that adds cash instrument providers to a {@link CurveNodeIdMapper} from a {@link CurveSpecificationBuilderConfiguration}.
  *
  */
 public class CashInstrumentProviderPopulatorTest {
@@ -76,14 +74,7 @@ public class CashInstrumentProviderPopulatorTest {
     EMPTY_MAPPER = CurveNodeIdMapper.builder()
         .name(NAME)
         .build();
-    final Function2<String, String, String> renamingFunction = new Function2<String, String, String>() {
-
-      @Override
-      public String apply(final String name, final String currency) {
-        return name + " test";
-      }
-
-    };
+    final Function2<String, String, String> renamingFunction = (name, currency) -> name + " test";
     CASH_RENAMING_PROVIDER = new CashInstrumentProviderPopulator(StripInstrumentType.CASH, renamingFunction);
     CDOR_RENAMING_PROVIDER = new CashInstrumentProviderPopulator(StripInstrumentType.CDOR, renamingFunction);
     CIBOR_RENAMING_PROVIDER = new CashInstrumentProviderPopulator(StripInstrumentType.CIBOR, renamingFunction);
@@ -150,8 +141,7 @@ public class CashInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the cash instrument provider is unpopulated if a curve specification builder that has no cash instrument providers
-   * is supplied.
+   * Tests that the cash instrument provider is unpopulated if a curve specification builder that has no cash instrument providers is supplied.
    */
   public void testNoCash() {
     final CurveSpecificationBuilderConfiguration csbc = new CurveSpecificationBuilderConfiguration(null,
@@ -167,8 +157,8 @@ public class CashInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the cash instrument provider is populated using the deposit instrument providers from the curve specification builder
-   * configuration for a cash strip instrument converter.
+   * Tests that the cash instrument provider is populated using the deposit instrument providers from the curve specification builder configuration for a cash
+   * strip instrument converter.
    */
   @Test
   public void testCashStrips() {
@@ -176,8 +166,8 @@ public class CashInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the cash instrument provider is populated using the CDOR instrument providers from the curve specification builder
-   * configuration for a CDOR strip instrument converter.
+   * Tests that the cash instrument provider is populated using the CDOR instrument providers from the curve specification builder configuration for a CDOR
+   * strip instrument converter.
    */
   @Test
   public void testCdorStrips() {
@@ -185,8 +175,8 @@ public class CashInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the cash instrument provider is populated using the Cibor instrument providers from the curve specification builder
-   * configuration for a CDOR strip instrument converter.
+   * Tests that the cash instrument provider is populated using the Cibor instrument providers from the curve specification builder configuration for a CDOR
+   * strip instrument converter.
    */
   @Test
   public void testCiborStrips() {
@@ -194,8 +184,8 @@ public class CashInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the cash instrument provider is populated using the Euribor instrument providers from the curve specification builder
-   * configuration for a Euribor strip instrument converter.
+   * Tests that the cash instrument provider is populated using the Euribor instrument providers from the curve specification builder configuration for a
+   * Euribor strip instrument converter.
    */
   @Test
   public void testEuriborStrips() {
@@ -203,8 +193,8 @@ public class CashInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the cash instrument provider is populated using the Libor instrument providers from the curve specification builder
-   * configuration for a Libor strip instrument converter.
+   * Tests that the cash instrument provider is populated using the Libor instrument providers from the curve specification builder configuration for a Libor
+   * strip instrument converter.
    */
   @Test
   public void testLiborStrips() {
@@ -212,8 +202,8 @@ public class CashInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the cash instrument provider is populated using the Stibor instrument providers from the curve specification builder
-   * configuration for a Stibor strip instrument converter.
+   * Tests that the cash instrument provider is populated using the Stibor instrument providers from the curve specification builder configuration for a Stibor
+   * strip instrument converter.
    */
   @Test
   public void testStiborStrips() {
@@ -221,8 +211,8 @@ public class CashInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the deposit instruments,
-   * and that the original mapper is unchanged.
+   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the deposit instruments, and that the original mapper is
+   * unchanged.
    */
   @Test
   public void testBuilderCreationForDeposit() {
@@ -248,8 +238,8 @@ public class CashInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the CDOR instruments,
-   * and that the original mapper is unchanged.
+   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the CDOR instruments, and that the original mapper is
+   * unchanged.
    */
   @Test
   public void testBuilderCreationForCdor() {
@@ -275,8 +265,8 @@ public class CashInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the Cibor instruments,
-   * and that the original mapper is unchanged.
+   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the Cibor instruments, and that the original mapper is
+   * unchanged.
    */
   @Test
   public void testBuilderCreationForCibor() {
@@ -302,8 +292,8 @@ public class CashInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the Euribor instruments,
-   * and that the original mapper is unchanged.
+   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the Euribor instruments, and that the original mapper is
+   * unchanged.
    */
   @Test
   public void testBuilderCreationForEuribor() {
@@ -329,8 +319,8 @@ public class CashInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the Libor instruments,
-   * and that the original mapper is unchanged.
+   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the Libor instruments, and that the original mapper is
+   * unchanged.
    */
   @Test
   public void testBuilderCreationForLibor() {
@@ -356,8 +346,8 @@ public class CashInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the Stibor instruments,
-   * and that the original mapper is unchanged.
+   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the Stibor instruments, and that the original mapper is
+   * unchanged.
    */
   @Test
   public void testBuilderCreationForStibor() {

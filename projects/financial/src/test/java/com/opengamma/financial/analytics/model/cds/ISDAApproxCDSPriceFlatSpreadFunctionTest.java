@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.financial.analytics.model.cds;
 
 import java.util.Set;
@@ -37,28 +42,28 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ISDAApproxCDSPriceFlatSpreadFunctionTest {
 
-  private static MockSecuritySource securitySource;
-  private static FunctionCompilationContext functionCompilationContext;
+  private static MockSecuritySource s_securitySource;
+  private static FunctionCompilationContext s_functionCompilationContext;
   private static final CDSSecurity CDS_SECURITY = new CDSSecurity(1.0, 0.6, 0.0025, Currency.GBP, zdt(2020, 12, 20, 0, 0, 0, 0, ZoneOffset.UTC),
       ZonedDateTime.now(), SimpleFrequency.ANNUAL,
       DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, StubType.SHORT_START, 3,
       "US Treasury", Currency.USD, "Senior", "No Restructuring");
-  private ISDAApproxCDSPriceFlatSpreadFunction testItem;
+  private ISDAApproxCDSPriceFlatSpreadFunction _testItem;
 
   @BeforeClass
   public static void initBeforeClass() {
-    securitySource = new MockSecuritySource();
-    functionCompilationContext = new FunctionCompilationContext();
-    functionCompilationContext.setFunctionInitId(123);
-    functionCompilationContext.setSecuritySource(securitySource);
+    s_securitySource = new MockSecuritySource();
+    s_functionCompilationContext = new FunctionCompilationContext();
+    s_functionCompilationContext.setFunctionInitId(123);
+    s_functionCompilationContext.setSecuritySource(s_securitySource);
     final MapComputationTargetResolver targetResolver = new MapComputationTargetResolver();
-    functionCompilationContext.setRawComputationTargetResolver(targetResolver);
+    s_functionCompilationContext.setRawComputationTargetResolver(targetResolver);
     CDS_SECURITY.setUniqueId(UniqueId.of("dummy_scheme", "dummy_value"));
   }
 
   @BeforeMethod
   public void beforeEachMethod() {
-    testItem = new ISDAApproxCDSPriceFlatSpreadFunction();
+    _testItem = new ISDAApproxCDSPriceFlatSpreadFunction();
   }
 
   @Test
@@ -77,7 +82,7 @@ public class ISDAApproxCDSPriceFlatSpreadFunctionTest {
             .with(ISDAFunctionConstants.ISDA_HAZARD_RATE_STRUCTURE, ISDAFunctionConstants.ISDA_HAZARD_RATE_FLAT)
             .get());
 
-    final Set<ValueRequirement> result = testItem.getRequirements(functionCompilationContext,
+    final Set<ValueRequirement> result = _testItem.getRequirements(s_functionCompilationContext,
         new ComputationTarget(ComputationTargetType.SECURITY, CDS_SECURITY), requirement);
 
     Assert.assertNotNull(result);
@@ -97,7 +102,7 @@ public class ISDAApproxCDSPriceFlatSpreadFunctionTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void getResults1() {
-    testItem.getResults(null, new ComputationTarget(ComputationTargetType.SECURITY, CDS_SECURITY));
+    _testItem.getResults(null, new ComputationTarget(ComputationTargetType.SECURITY, CDS_SECURITY));
   }
 
   @Test
@@ -107,7 +112,7 @@ public class ISDAApproxCDSPriceFlatSpreadFunctionTest {
 
   @Test
   public void getTargetType() {
-    Assert.assertEquals(testItem.getTargetType(), FinancialSecurityTypes.CDS_SECURITY);
+    Assert.assertEquals(_testItem.getTargetType(), FinancialSecurityTypes.CDS_SECURITY);
   }
 
   // -------------------------------------------------------------------------

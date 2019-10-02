@@ -22,8 +22,7 @@ public class DividendYieldCalculatorTest {
   private static final DividendYieldCalculator CALCULATOR = new DividendYieldCalculator();
 
   /**
-   * Tests that the original message is returned if there is no annual dividend
-   * data in either the live data or last known value.
+   * Tests that the original message is returned if there is no annual dividend data in either the live data or last known value.
    */
   public void testReturnSameIfNoAnnualDividend() {
     final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
@@ -33,8 +32,7 @@ public class DividendYieldCalculatorTest {
   }
 
   /**
-   * Tests that the annual dividend and market value from the live data are used
-   * first.
+   * Tests that the annual dividend and market value from the live data are used first.
    */
   public void testUseLiveFirst() {
     final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
@@ -53,8 +51,7 @@ public class DividendYieldCalculatorTest {
   }
 
   /**
-   * Tests that the annual dividend and market value from the last known value
-   * store is used if there are no live values.
+   * Tests that the annual dividend and market value from the last known value store is used if there are no live values.
    */
   public void testUseLkvNoLive() {
     final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
@@ -69,8 +66,7 @@ public class DividendYieldCalculatorTest {
   }
 
   /**
-   * Tests that the message is returned unchanged if there is no market value
-   * and no historical dividend yield value
+   * Tests that the message is returned unchanged if there is no market value and no historical dividend yield value.
    */
   public void testReturnSameNoMarketValueNoDividendYield() {
     final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
@@ -83,8 +79,7 @@ public class DividendYieldCalculatorTest {
   }
 
   /**
-   * Tests that the last known dividend yield is used if there is no market
-   * value.
+   * Tests that the last known dividend yield is used if there is no market value.
    */
   public void testUseLkvDividendYieldNoMarketValue() {
     final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
@@ -100,8 +95,7 @@ public class DividendYieldCalculatorTest {
   }
 
   /**
-   * Tests that the last known dividend yield is used if the market value is
-   * zero.
+   * Tests that the last known dividend yield is used if the market value is zero.
    */
   public void testUseLkvDividendYieldZeroMarketValue() {
     final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();

@@ -57,20 +57,26 @@ public class CombiningBloombergLiveDataServerTest {
   private BloombergReferenceDataProvider _underlying;
   private UnitTestingReferenceDataProvider _unitTestingProvider;
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUpClass() {
     _underlying = BloombergLiveDataServerUtils.getUnderlyingProvider();
     _unitTestingProvider = new UnitTestingReferenceDataProvider(_underlying);
     _server = BloombergLiveDataServerUtils.startTestServer(
-      CombiningBloombergLiveDataServerTest.class,
-      new UnionFakeSubscriptionSelector(
-        new BySchemeFakeSubscriptionSelector(ExternalSchemes.BLOOMBERG_BUID_WEAK, ExternalSchemes.BLOOMBERG_TICKER_WEAK),
-        new ByTypeFakeSubscriptionSelector("SWAPTION VOLATILITY")),
-      _unitTestingProvider);
+        CombiningBloombergLiveDataServerTest.class,
+        new UnionFakeSubscriptionSelector(
+            new BySchemeFakeSubscriptionSelector(ExternalSchemes.BLOOMBERG_BUID_WEAK, ExternalSchemes.BLOOMBERG_TICKER_WEAK),
+            new ByTypeFakeSubscriptionSelector("SWAPTION VOLATILITY")),
+        _unitTestingProvider);
     _liveDataClient = LiveDataClientTestUtils.getJmsClient(_server);
     _unitTestingProvider.reset();
   }
 
+  /**
+   *
+   */
   @AfterMethod
   public void tearDownClass() {
     BloombergLiveDataServerUtils.stopTestServer(_server);
@@ -78,7 +84,11 @@ public class CombiningBloombergLiveDataServerTest {
     _underlying.stop();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected exception
+   */
   @Test
   public void testFakeSubscribe() throws Exception {
     final ExternalId broken = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "CZPFGQFC Curncy");
@@ -119,8 +129,12 @@ public class CombiningBloombergLiveDataServerTest {
     assertFalse(_unitTestingProvider.hadToRejectRequests()); // Necessary, since exceptions are expected from the live data service
   }
 
-  //-------------------------------------------------------------------------
-  @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected exception
+   */
+  @Test(groups = { "bbgSubscriptionTests" }, enabled = false)
   public void testRealSubscribe() throws Exception {
     final ExternalId strong = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "GBP Curncy");
 
@@ -141,7 +155,11 @@ public class CombiningBloombergLiveDataServerTest {
     assertEquals(allUpdates, stronUpdates);
   }
 
-  @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
+  /**
+   * @throws Exception
+   *           if there is an unexpected exception
+   */
+  @Test(groups = { "bbgSubscriptionTests" }, enabled = false)
   public void testMixedSubscribe() throws Exception {
     final ExternalId strong = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "GBP Curncy");
     final ExternalId weak = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK, "GBP Curncy");
@@ -176,9 +194,13 @@ public class CombiningBloombergLiveDataServerTest {
     assertEquals(allUpdates.size(), weakUpdates.size() + stronUpdates.size());
   }
 
-  @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
+  /**
+   * @throws Exception
+   *           if there is an unexpected exception
+   */
+  @Test(groups = { "bbgSubscriptionTests" }, enabled = false)
   public void testBrokenSubscribe() throws Exception {
-    final ExternalId broken = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "USSV15F Curncy"); //Broken
+    final ExternalId broken = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "USSV15F Curncy"); // Broken
     final ExternalId working = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "GBP Curncy");
 
     final List<ExternalId> instruments = Lists.newArrayList(broken, working);
@@ -211,6 +233,10 @@ public class CombiningBloombergLiveDataServerTest {
     assertEquals(allUpdates.size(), brokenUpdates.size() + workingUpdates.size());
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected exception
+   */
   @Test
   public void testExpiration() throws Exception {
     final int period = 15000;
@@ -251,13 +277,14 @@ public class CombiningBloombergLiveDataServerTest {
     assertEquals(0, realSubs.get());
   }
 
-  private AtomicInteger countSubscriptions(final StandardLiveDataServer server) {
+  private static AtomicInteger countSubscriptions(final StandardLiveDataServer server) {
     final AtomicInteger fakeSubs = new AtomicInteger(0);
     server.addSubscriptionListener(new SubscriptionListener() {
       @Override
       public void unsubscribed(final Subscription subscription) {
         fakeSubs.decrementAndGet();
       }
+
       @Override
       public void subscribed(final Subscription subscription) {
         fakeSubs.incrementAndGet();
@@ -285,15 +312,19 @@ public class CombiningBloombergLiveDataServerTest {
     return specs;
   }
 
-  private LiveDataSpecification getLiveDataSpec(final LiveDataClient liveDataClient, final ExternalId id) {
+  private static LiveDataSpecification getLiveDataSpec(final LiveDataClient liveDataClient, final ExternalId id) {
     final LiveDataSpecification requestedSpecification = new LiveDataSpecification(
         liveDataClient.getDefaultNormalizationRuleSetId(), id);
     return requestedSpecification;
   }
 
-  @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
-  public void testRepeatedSubscriptions_BBG_80() throws Exception {
-    final ExternalId broken = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "USSV15F Curncy"); //Broken
+  /**
+   * @throws Exception
+   *           if there is an unexpected exception
+   */
+  @Test(groups = { "bbgSubscriptionTests" }, enabled = false)
+  public void testRepeatedSubscriptionsBBG80() throws Exception {
+    final ExternalId broken = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "USSV15F Curncy"); // Broken
     final ExternalId working = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "GBP Curncy");
     final ExternalId workingWeak = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK, "USPFJD5W Curncy");
     final ExternalId workingStrong = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "USPFJD5W Curncy");
@@ -310,25 +341,41 @@ public class CombiningBloombergLiveDataServerTest {
     assertFalse(_unitTestingProvider.hadToRejectRequests());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   public static class UnitTestingReferenceDataProvider extends AbstractReferenceDataProvider {
     private final ReferenceDataProvider _underlying;
     private final java.util.concurrent.atomic.AtomicBoolean _locked = new java.util.concurrent.atomic.AtomicBoolean();
     private final java.util.concurrent.atomic.AtomicBoolean _broken = new java.util.concurrent.atomic.AtomicBoolean();
 
+    /**
+     * @param underlying
+     *          the underlying data provider
+     */
     public UnitTestingReferenceDataProvider(final ReferenceDataProvider underlying) {
       _underlying = underlying;
     }
 
+    /**
+     *
+     */
     public void reset() {
       _locked.set(false);
       _broken.set(false);
     }
 
+    /**
+     *
+     */
     public void rejectAllfurtherRequests() {
       _locked.set(true);
     }
 
+    /**
+     * @return true if any requests were rejected
+     */
     public boolean hadToRejectRequests() {
       return _broken.get();
     }

@@ -24,10 +24,10 @@ import com.opengamma.master.position.Deal;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Mock deal for testing purpose
+ * Mock deal for testing purpose.
  */
 @BeanDefinition
-/*package*/class MockDeal extends DirectBean implements Deal {
+/* package */class MockDeal extends DirectBean implements Deal {
 
   @PropertyDefinition
   private String _propertyOne;

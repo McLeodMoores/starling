@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.fudgemsg;
@@ -18,7 +18,7 @@ import com.opengamma.financial.analytics.fxforwardcurve.BloombergFXForwardCurveI
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test the Fudge builder for {@link BloombergFXForwardCurveInstrumentProviderFudgeBuilder}
+ * Test the Fudge builder for {@link BloombergFXForwardCurveInstrumentProviderFudgeBuilder}.
  */
 @Test(groups = TestGroup.UNIT)
 public class BloombergFXForwardCurveInstrumentProviderFudgeBuilderTest extends FinancialTestBase {
@@ -37,13 +37,13 @@ public class BloombergFXForwardCurveInstrumentProviderFudgeBuilderTest extends F
     MutableFudgeMsg message = fudgeSerializationContext.newMessage();
     fudgeSerializationContext.addToMessageWithClassHeaders(message, "test", null, provider, BloombergFXForwardCurveInstrumentProvider.class);
     assertEquals(provider, cycleObject(BloombergFXForwardCurveInstrumentProvider.class, provider));
-    FudgeMsg submessage = (FudgeMsg) (message.getByName("test").getValue());
+    FudgeMsg submessage = (FudgeMsg) message.getByName("test").getValue();
     assertFalse(submessage.getBoolean("useSpotRateFromGraph"));
     provider = new BloombergFXForwardCurveInstrumentProvider(spotPrefix, postfix, dataFieldName);
     message = fudgeSerializationContext.newMessage();
     fudgeSerializationContext.addToMessageWithClassHeaders(message, "test", null, provider, BloombergFXForwardCurveInstrumentProvider.class);
     assertEquals(provider, cycleObject(BloombergFXForwardCurveInstrumentProvider.class, provider));
-    submessage = (FudgeMsg) (message.getByName("test").getValue());
+    submessage = (FudgeMsg) message.getByName("test").getValue();
     assertTrue(submessage.getBoolean("useSpotRateFromGraph"));
   }
 }

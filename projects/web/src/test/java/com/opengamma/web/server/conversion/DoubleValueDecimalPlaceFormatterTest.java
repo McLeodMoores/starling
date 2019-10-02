@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests {@link DoubleValueDecimalPlaceFormatter}
+ * Tests {@link DoubleValueDecimalPlaceFormatter}.
  */
 @Test(groups = TestGroup.UNIT)
 public class DoubleValueDecimalPlaceFormatterTest {

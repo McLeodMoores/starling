@@ -27,6 +27,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class FixedMarketDataAvailabilityProviderTest {
 
+  /**
+   *
+   */
   public void testEmpty() {
     final FixedMarketDataAvailabilityProvider available = new FixedMarketDataAvailabilityProvider();
     final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE, UniqueId.of("X", "1"));
@@ -36,7 +39,10 @@ public class FixedMarketDataAvailabilityProviderTest {
     assertNull(available.getAvailability(targetSpec, UniqueId.of("X", "1"), new ValueRequirement("Foo", targetSpec)));
   }
 
-  public void testAddAvailable_byExternalId() {
+  /**
+   *
+   */
+  public void testAddAvailableByExternalId() {
     final FixedMarketDataAvailabilityProvider available = new FixedMarketDataAvailabilityProvider();
     final ValueProperties properties = ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get();
     final ValueSpecification fooSpec = new ValueSpecification("Foo", ComputationTargetSpecification.NULL, properties);
@@ -46,7 +52,10 @@ public class FixedMarketDataAvailabilityProviderTest {
         new ValueRequirement("Foo", ComputationTargetSpecification.NULL)), fooSpec);
   }
 
-  public void testAddAvailable_byExternalIdBundle() {
+  /**
+   *
+   */
+  public void testAddAvailableByExternalIdBundle() {
     final FixedMarketDataAvailabilityProvider available = new FixedMarketDataAvailabilityProvider();
     final ValueProperties properties = ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get();
     final ValueSpecification fooSpec = new ValueSpecification("Foo", ComputationTargetSpecification.NULL, properties);
@@ -57,7 +66,10 @@ public class FixedMarketDataAvailabilityProviderTest {
         new ValueRequirement("Foo", ComputationTargetSpecification.NULL)), fooSpec);
   }
 
-  public void testAddAvailable_byUniqueId() {
+  /**
+   *
+   */
+  public void testAddAvailableByUniqueId() {
     final FixedMarketDataAvailabilityProvider available = new FixedMarketDataAvailabilityProvider();
     final ValueProperties properties = ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get();
     final ValueSpecification fooSpec = new ValueSpecification("Foo", ComputationTargetSpecification.of(UniqueId.of("X", "1")), properties);

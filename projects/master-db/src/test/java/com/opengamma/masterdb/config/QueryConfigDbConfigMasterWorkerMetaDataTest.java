@@ -22,7 +22,7 @@ import com.opengamma.util.test.DbTest;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test metaData() in DbConfigMaster
+ * Test metaData() in DbConfigMaster.
  */
 @Test(groups = TestGroup.UNIT_DB)
 public class QueryConfigDbConfigMasterWorkerMetaDataTest extends AbstractDbConfigMasterWorkerTest {

@@ -67,7 +67,7 @@ public class FudgeJSONTest {
    *
    */
   @Test
-  public void cycleJSONMessages_noTaxonomy() {
+  public void cycleJSONMessagesNoTaxonomy() {
     // System.out.println("cycleJSONMessages:");
 
     final FudgeMsg[] messages = createMessages();

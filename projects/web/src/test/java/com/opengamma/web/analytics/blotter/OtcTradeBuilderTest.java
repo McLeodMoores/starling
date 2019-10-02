@@ -89,7 +89,7 @@ public class OtcTradeBuilderTest {
         "premiumCurrency", "GBP",
         "premiumDate", "2012-12-25",
         "premiumTime", "13:00",
-        "attributes", ATTRIBUTES};
+        "attributes", ATTRIBUTES };
     final Object[] tradeData = ArrayUtils.addAll(basicData, valuePairs);
     return BlotterTestUtils.beanData(tradeData);
   }
@@ -100,10 +100,10 @@ public class OtcTradeBuilderTest {
     _positionMaster = new InMemoryPositionMaster();
     _portfolioMaster = new InMemoryPortfolioMaster();
     _builder = new OtcTradeBuilder(_positionMaster,
-                                   _portfolioMaster,
-                                   _securityMaster,
-                                   BlotterUtils.getMetaBeans(),
-                                   BlotterUtils.getStringConvert());
+        _portfolioMaster,
+        _securityMaster,
+        BlotterUtils.getMetaBeans(),
+        BlotterUtils.getStringConvert());
     final ManageablePortfolio portfolio = new ManageablePortfolio();
     final ManageablePortfolioNode root = new ManageablePortfolioNode();
     final ManageablePortfolioNode node = new ManageablePortfolioNode();
@@ -122,7 +122,7 @@ public class OtcTradeBuilderTest {
     assertEquals(BigDecimal.ONE, trade.getQuantity());
     assertEquals(BigDecimal.ONE, position.getQuantity());
     final ManageableSecurity security = _securityMaster.get(trade.getSecurityLink().getObjectId(),
-                                                      VersionCorrection.LATEST).getSecurity();
+        VersionCorrection.LATEST).getSecurity();
     assertNotNull(security);
     security.setUniqueId(null); // so it can be tested for equality against the unsaved version
     assertEquals(BlotterTestUtils.FX_FORWARD, security);
@@ -146,12 +146,12 @@ public class OtcTradeBuilderTest {
   public void existingSecurityWithNoUnderlying() {
     final UniqueId tradeId = _builder.addTrade(createTradeData(), BlotterTestUtils.FX_FORWARD_DATA_SOURCE, null, _nodeId);
     final BeanDataSource updatedTradeData = createTradeData("uniqueId", tradeId.toString(),
-                                                      "counterparty", "updatedCounterparty",
-                                                      "tradeDate", "2012-12-22",
-                                                      "premium", "4321");
+        "counterparty", "updatedCounterparty",
+        "tradeDate", "2012-12-22",
+        "premium", "4321");
     final BeanDataSource updatedSecurityData = BlotterTestUtils.overrideBeanData(BlotterTestUtils.FX_FORWARD_DATA_SOURCE,
-                                                                           "payCurrency", "AUD",
-                                                                           "payAmount", "200");
+        "payCurrency", "AUD",
+        "payAmount", "200");
 
     final UniqueId updatedTradeId = _builder.updateTrade(updatedTradeData, updatedSecurityData, null);
     final ManageableTrade updatedTrade = _positionMaster.getTrade(updatedTradeId);
@@ -162,7 +162,7 @@ public class OtcTradeBuilderTest {
     final ManageablePosition updatedPosition = positionDocument.getPosition();
     assertEquals(updatedTrade, updatedPosition.getTrade(updatedTradeId));
     final FXForwardSecurity updatedSecurity = (FXForwardSecurity) _securityMaster.get(updatedTrade.getSecurityLink().getObjectId(),
-                                                                                VersionCorrection.LATEST).getSecurity();
+        VersionCorrection.LATEST).getSecurity();
     assertEquals(Currency.AUD, updatedSecurity.getPayCurrency());
     assertEquals(200d, updatedSecurity.getPayAmount());
   }
@@ -170,16 +170,16 @@ public class OtcTradeBuilderTest {
   @Test
   public void newSecurityWithOtcUnderlying() {
     final UniqueId tradeId = _builder.addTrade(createTradeData(),
-                                         BlotterTestUtils.SWAPTION_DATA_SOURCE,
-                                         BlotterTestUtils.SWAP_DATA_SOURCE,
-                                         _nodeId);
+        BlotterTestUtils.SWAPTION_DATA_SOURCE,
+        BlotterTestUtils.SWAP_DATA_SOURCE,
+        _nodeId);
     final ManageableTrade trade = _positionMaster.getTrade(tradeId);
     final UniqueId positionId = trade.getParentPositionId();
     final ManageablePosition position = _positionMaster.get(positionId).getPosition();
     assertEquals(BigDecimal.ONE, trade.getQuantity());
     assertEquals(BigDecimal.ONE, position.getQuantity());
     final SwaptionSecurity security = (SwaptionSecurity) _securityMaster.get(trade.getSecurityLink().getObjectId(),
-                                                                       VersionCorrection.LATEST).getSecurity();
+        VersionCorrection.LATEST).getSecurity();
     assertNotNull(security);
     // check this later
     final ExternalId underlyingId = security.getUnderlyingId();
@@ -217,20 +217,20 @@ public class OtcTradeBuilderTest {
   @Test
   public void existingSecurityWithOtcUnderlying() {
     final UniqueId tradeId = _builder.addTrade(createTradeData(),
-                                         BlotterTestUtils.SWAPTION_DATA_SOURCE,
-                                         BlotterTestUtils.SWAP_DATA_SOURCE,
-                                         _nodeId);
+        BlotterTestUtils.SWAPTION_DATA_SOURCE,
+        BlotterTestUtils.SWAP_DATA_SOURCE,
+        _nodeId);
     final BeanDataSource updatedTradeData = createTradeData("uniqueId", tradeId.toString(),
-                                                      "counterparty", "updatedCounterparty",
-                                                      "tradeDate", "2012-12-22",
-                                                      "premium", "4321");
+        "counterparty", "updatedCounterparty",
+        "tradeDate", "2012-12-22",
+        "premium", "4321");
     final BeanDataSource updatedSecurityData = BlotterTestUtils.overrideBeanData(BlotterTestUtils.SWAPTION_DATA_SOURCE,
-                                                                           "payer", "false",
-                                                                           "longShort", "Long",
-                                                                           "currency", "CAD");
+        "payer", "false",
+        "longShort", "Long",
+        "currency", "CAD");
     final BeanDataSource updatedUnderlyingData = BlotterTestUtils.overrideBeanData(BlotterTestUtils.SWAP_DATA_SOURCE,
-                                                                             "tradeDate", "2013-01-01",
-                                                                             "eom", "false");
+        "tradeDate", "2013-01-01",
+        "eom", "false");
 
     final UniqueId updatedTradeId = _builder.updateTrade(updatedTradeData, updatedSecurityData, updatedUnderlyingData);
     final ManageableTrade updatedTrade = _positionMaster.getTrade(updatedTradeId);
@@ -241,7 +241,7 @@ public class OtcTradeBuilderTest {
     final ManageablePosition updatedPosition = positionDocument.getPosition();
     assertEquals(updatedTrade, updatedPosition.getTrade(updatedTradeId));
     final SwaptionSecurity updatedSecurity = (SwaptionSecurity) _securityMaster.get(updatedTrade.getSecurityLink().getObjectId(),
-                                                                              VersionCorrection.LATEST).getSecurity();
+        VersionCorrection.LATEST).getSecurity();
     assertFalse(updatedSecurity.isPayer());
     assertEquals(LongShort.LONG, updatedSecurity.getLongShort());
     assertEquals(Currency.CAD, updatedSecurity.getCurrency());
@@ -256,7 +256,7 @@ public class OtcTradeBuilderTest {
   }
 
   /**
-   * directly update a position that has no trades
+   * directly update a position that has no trades.
    */
   @Test
   @SuppressWarnings("deprecation")
@@ -268,11 +268,11 @@ public class OtcTradeBuilderTest {
     final ManageablePosition savedPosition = _positionMaster.add(new PositionDocument(position)).getPosition();
 
     final BeanDataSource updatedTradeData = createTradeData("counterparty", "updatedCounterparty",
-                                                      "tradeDate", "2012-12-22",
-                                                      "premium", "4321");
+        "tradeDate", "2012-12-22",
+        "premium", "4321");
     final BeanDataSource updatedSecurityData = BlotterTestUtils.overrideBeanData(BlotterTestUtils.FX_FORWARD_DATA_SOURCE,
-                                                                           "payCurrency", "AUD",
-                                                                           "payAmount", "200");
+        "payCurrency", "AUD",
+        "payAmount", "200");
 
     _builder.updatePosition(savedPosition.getUniqueId(), updatedTradeData, updatedSecurityData, null);
     final ManageablePosition loadedPosition = _positionMaster.get(savedPosition.getUniqueId()).getPosition();
@@ -282,7 +282,7 @@ public class OtcTradeBuilderTest {
     assertEquals(LocalDate.of(2012, 12, 22), trade.getTradeDate());
     assertEquals(4321d, trade.getPremium());
     final FXForwardSecurity updatedSecurity = (FXForwardSecurity) _securityMaster.get(trade.getSecurityLink().getObjectId(),
-                                                                                VersionCorrection.LATEST).getSecurity();
+        VersionCorrection.LATEST).getSecurity();
     assertEquals(Currency.AUD, updatedSecurity.getPayCurrency());
     assertEquals(200d, updatedSecurity.getPayAmount());
   }

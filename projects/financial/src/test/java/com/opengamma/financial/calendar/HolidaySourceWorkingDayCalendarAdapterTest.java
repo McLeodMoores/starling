@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.calendar;
 
@@ -133,8 +133,7 @@ public class HolidaySourceWorkingDayCalendarAdapterTest {
   }
 
   /**
-   * Tests that the correct holidays are retrieved when the reference is a region and
-   * default weekend days (Saturday and Sunday) are used.
+   * Tests that the correct holidays are retrieved when the reference is a region and default weekend days (Saturday and Sunday) are used.
    */
   @Test
   public void testRegionHolidayDefaultWeekends() {
@@ -159,8 +158,7 @@ public class HolidaySourceWorkingDayCalendarAdapterTest {
   }
 
   /**
-   * Tests that the correct holidays are retrieved when the reference is a region and
-   * explicit weekend days are used.
+   * Tests that the correct holidays are retrieved when the reference is a region and explicit weekend days are used.
    */
   @Test
   public void testRegionHolidayWithWeekends() {
@@ -185,8 +183,7 @@ public class HolidaySourceWorkingDayCalendarAdapterTest {
   }
 
   /**
-   * Tests that the correct holidays are retrieved when the reference is a currency and
-   * default weekend days (Saturday and Sunday) are used.
+   * Tests that the correct holidays are retrieved when the reference is a currency and default weekend days (Saturday and Sunday) are used.
    */
   @Test
   public void testCurrencyHolidayDefaultWeekends() {
@@ -211,8 +208,7 @@ public class HolidaySourceWorkingDayCalendarAdapterTest {
   }
 
   /**
-   * Tests that the correct holidays are retrieved when the reference is a currency and
-   * explicit weekend days are used.
+   * Tests that the correct holidays are retrieved when the reference is a currency and explicit weekend days are used.
    */
   @Test
   public void testCurrencyHolidayWithWeekends() {

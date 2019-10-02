@@ -29,7 +29,7 @@ import com.opengamma.util.test.TestGroup;
 public class ResultsFormatterTest {
 
   /**
-   * For a specific bug
+   * For a specific bug.
    */
   @Test
   public void formatHistoryForValueNameWithUnknownType() {

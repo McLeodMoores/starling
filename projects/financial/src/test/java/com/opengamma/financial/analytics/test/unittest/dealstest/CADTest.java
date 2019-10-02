@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.financial.analytics.test.unittest.dealstest;
 
 import java.util.HashMap;
@@ -22,8 +27,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Unit tests for CAD cme deals
- * 
+ * Unit tests for CAD cme deals.
+ *
  * @deprecated Deprecated
  */
 @Deprecated

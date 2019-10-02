@@ -29,7 +29,7 @@ import com.opengamma.util.test.AbstractFudgeBuilderTestCase;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests {@link DependencyGraphFudgeBuilder}
+ * Tests {@link DependencyGraphFudgeBuilder}.
  */
 @Test(groups = TestGroup.UNIT)
 public class DependencyGraphFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
@@ -37,9 +37,9 @@ public class DependencyGraphFudgeBuilderTest extends AbstractFudgeBuilderTestCas
   ///
   // Creates a test graph:
   //
-  //    N0 N1  N4
-  //      \ | /  |
-  //       N2   N3
+  // N0 N1 N4
+  // \ | / |
+  // N2 N3
   //
   private DependencyGraph createGraph() {
     final TestDependencyGraphBuilder builder = new TestDependencyGraphBuilder("Test");
@@ -47,7 +47,8 @@ public class DependencyGraphFudgeBuilderTest extends AbstractFudgeBuilderTestCas
     for (int i = 0; i < nodes.length; i++) {
       final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(UniqueId.of("Test", Integer.toString(i)));
       nodes[i] = builder.addNode(DependencyNodeFunctionImpl.of("Function" + i % 2, i == 3
-          ? new SimpleFunctionParameters(ImmutableMap.of("Foo", "Bar")) : EmptyFunctionParameters.INSTANCE), targetSpec);
+          ? new SimpleFunctionParameters(ImmutableMap.of("Foo", "Bar"))
+          : EmptyFunctionParameters.INSTANCE), targetSpec);
     }
     nodes[0].addTerminalOutput("0x");
     nodes[1].addTerminalOutput("1x");

@@ -38,7 +38,7 @@ import com.opengamma.util.test.TestLifecycle;
 import com.opengamma.util.test.Timeout;
 
 /**
- * Tests SingleComputationCycle
+ * Tests SingleComputationCycle.
  */
 @Test(groups = TestGroup.UNIT)
 public class SingleComputationCycleTest {

@@ -19,27 +19,36 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class OpenGammaComponentServerTest extends AbstractFudgeBuilderTestCase {
 
+  /**
+   * @return the name
+   */
   @DataProvider(name = "extractName")
-  public Object[][] data_extractName() {
-      return new Object[][] {
-        {"classpath:/toolcontext/toolcontext-dev.properties", "toolcontext-dev"},
-        {"classpath:/foobar/toolcontext-dev.properties", "foobar-toolcontext-dev"},
+  public Object[][] dataExtractName() {
+    return new Object[][] {
+        { "classpath:/toolcontext/toolcontext-dev.properties", "toolcontext-dev" },
+        { "classpath:/foobar/toolcontext-dev.properties", "foobar-toolcontext-dev" },
 
-        {"classpath:/foobar/toolcontext-dev.properties", "foobar-toolcontext-dev"},
-        {"classpath:/foobar/toolcontext.properties", "foobar-toolcontext"},
-        {"classpath:/foobar/toolcontext-dev-bar-foo.properties", "foobar-toolcontext-dev-bar-foo"},
+        { "classpath:/foobar/toolcontext-dev.properties", "foobar-toolcontext-dev" },
+        { "classpath:/foobar/toolcontext.properties", "foobar-toolcontext" },
+        { "classpath:/foobar/toolcontext-dev-bar-foo.properties", "foobar-toolcontext-dev-bar-foo" },
 
-        {"classpath:/toolcontext/toolcontext-dev.ini", "toolcontext-dev"},
-        {"classpath:/foobar/toolcontext-dev.ini", "foobar-toolcontext-dev"},
+        { "classpath:/toolcontext/toolcontext-dev.ini", "toolcontext-dev" },
+        { "classpath:/foobar/toolcontext-dev.ini", "foobar-toolcontext-dev" },
 
-        {"classpath:/toolcontext-dev.ini", "toolcontext-dev"},
+        { "classpath:/toolcontext-dev.ini", "toolcontext-dev" },
 
-        {"file:toolcontext-dev.ini", "toolcontext-dev"},
-      };
+        { "file:toolcontext-dev.ini", "toolcontext-dev" },
+    };
   }
 
+  /**
+   * @param input
+   *          the input
+   * @param expected
+   *          the expected
+   */
   @Test(dataProvider = "extractName")
-  public void test_dash_properties(final String input, final String expected) {
+  public void testDashProperties(final String input, final String expected) {
     final OpenGammaComponentServer test = new OpenGammaComponentServer();
     assertEquals(expected, test.extractServerName(input));
   }

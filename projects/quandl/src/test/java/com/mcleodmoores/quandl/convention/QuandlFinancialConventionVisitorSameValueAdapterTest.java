@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.convention;
 
@@ -29,10 +29,9 @@ public class QuandlFinancialConventionVisitorSameValueAdapterTest {
   private static final FinancialConventionVisitor<Integer> VISITOR = new QuandlFinancialConventionVisitorSameValueAdapter<>(RESULT);
 
   /**
-   * Tests that the result is returned for all methods. Reflection is used to ensure that every financial
-   * convention type is tested. This test method is intended to find the case where methods have been automatically
-   * created but not implemented. There is also a cross-check that there is one convention of each type in the
-   * instances set from {@link ConventionTestInstances}.
+   * Tests that the result is returned for all methods. Reflection is used to ensure that every financial convention type is tested. This test method is
+   * intended to find the case where methods have been automatically created but not implemented. There is also a cross-check that there is one convention of
+   * each type in the instances set from {@link ConventionTestInstances}.
    */
   @SuppressWarnings("unchecked")
   @Test

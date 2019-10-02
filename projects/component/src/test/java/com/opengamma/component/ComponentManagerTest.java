@@ -20,9 +20,12 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ComponentManagerTest {
 
+  /**
+   *
+   */
   @Test
-  public void test_loadInit_properties() {
-    ComponentManager mgr = new ComponentManager("testserver");
+  public void testLoadInitProperties() {
+    final ComponentManager mgr = new ComponentManager("testserver");
     mgr.load("classpath:com/opengamma/component/test-success.properties");
     mgr.init();
     assertEquals("testserver", mgr.getServerName());
@@ -33,9 +36,12 @@ public class ComponentManagerTest {
     assertEquals("one", mgr.getConfigIni().getGroup("one").getValue("alpha"));
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_loadInit_ini() {
-    ComponentManager mgr = new ComponentManager("testserver");
+  public void testLoadInitIni() {
+    final ComponentManager mgr = new ComponentManager("testserver");
     mgr.load("classpath:com/opengamma/component/test-success.ini");
     mgr.init();
     assertEquals("testserver", mgr.getServerName());
@@ -44,41 +50,50 @@ public class ComponentManagerTest {
     assertEquals(3, mgr.getConfigIni().getGroup("one").size());
     assertEquals(5, mgr.getConfigIni().getGroup("two").size());
     assertEquals("two", mgr.getConfigIni().getGroup("one").getValue("alpha"));
-    List<?> list = mgr.getRepository().getInstance(List.class, "two");
+    final List<?> list = mgr.getRepository().getInstance(List.class, "two");
     assertEquals(3, list.size());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = ComponentConfigException.class)
-  public void test_load_badFileType() {
-    ComponentManager mgr = new ComponentManager("testserver");
+  public void testLoadBadFileType() {
+    final ComponentManager mgr = new ComponentManager("testserver");
     try {
       mgr.load("classpath:com/opengamma/component/test-badfiletype.txt");
-    } catch (ComponentConfigException ex) {
+    } catch (final ComponentConfigException ex) {
       assertTrue(ex.getMessage().contains("Unknown file format"));
       throw ex;
     }
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = ComponentConfigException.class)
-  public void test_load_properties_noManagerNext() {
-    ComponentManager mgr = new ComponentManager("testserver");
+  public void testLoadPropertiesNoManagerNext() {
+    final ComponentManager mgr = new ComponentManager("testserver");
     try {
       mgr.load("classpath:com/opengamma/component/test-nomanagernext.properties");
-    } catch (ComponentConfigException ex) {
+    } catch (final ComponentConfigException ex) {
       assertTrue(ex.getMessage().contains("The properties file must contain the key 'MANAGER.NEXT.FILE' to specify the next file to load"));
       throw ex;
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = ComponentConfigException.class)
-  public void test_loadInit_missingComponent() {
-    ComponentManager mgr = new ComponentManager("testserver");
+  public void testLoadInitMissingComponent() {
+    final ComponentManager mgr = new ComponentManager("testserver");
     mgr.load("classpath:com/opengamma/component/test-missingcomponentref.ini");
     try {
       mgr.init();
-    } catch (ComponentConfigException ex) {
+    } catch (final ComponentConfigException ex) {
       assertTrue(ex.getCause().getMessage().contains("Unable to find component reference"));
       assertTrue(ex.getCause().getMessage().contains("three"));
       assertTrue(ex.getCause().getMessage().contains("epsilon"));
@@ -86,38 +101,47 @@ public class ComponentManagerTest {
     }
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = ComponentConfigException.class)
-  public void test_loadInit_duplicateGroup() {
-    ComponentManager mgr = new ComponentManager("testserver");
+  public void testLoadInitDuplicateGroup() {
+    final ComponentManager mgr = new ComponentManager("testserver");
     mgr.load("classpath:com/opengamma/component/test-duplicategroup.ini");
     try {
       mgr.init();
-    } catch (ComponentConfigException ex) {
+    } catch (final ComponentConfigException ex) {
       assertTrue(ex.getMessage().contains("one"));
       throw ex;
     }
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = ComponentConfigException.class)
-  public void test_loadInit_duplicateProperty() {
-    ComponentManager mgr = new ComponentManager("testserver");
+  public void testLoadInitDuplicateProperty() {
+    final ComponentManager mgr = new ComponentManager("testserver");
     mgr.load("classpath:com/opengamma/component/test-duplicateproperty.ini");
     try {
       mgr.init();
-    } catch (ComponentConfigException ex) {
+    } catch (final ComponentConfigException ex) {
       assertTrue(ex.getMessage().contains("two"));
       assertTrue(ex.getMessage().contains("delta"));
       throw ex;
     }
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = ComponentConfigException.class)
-  public void test_loadInit_unusedProperty() {
-    ComponentManager mgr = new ComponentManager("testserver");
+  public void testLoadInitUnusedProperty() {
+    final ComponentManager mgr = new ComponentManager("testserver");
     mgr.load("classpath:com/opengamma/component/test-unused.ini");
     try {
       mgr.init();
-    } catch (ComponentConfigException ex) {
+    } catch (final ComponentConfigException ex) {
       assertTrue(ex.getCause().getMessage().contains("Configuration was specified but not used"));
       assertTrue(ex.getCause().getMessage().contains("foobar"));
       throw ex;

@@ -223,7 +223,7 @@ public class TestsDataSets {
 
   /**
    * Create a set of SABR parameter surface (linearly interpolated) with a given SABR function. Nu data is bumped by 0.0001 with respect to SABR1.
-   * 
+   *
    * @param sabrFunction
    *          the function
    * @param shift

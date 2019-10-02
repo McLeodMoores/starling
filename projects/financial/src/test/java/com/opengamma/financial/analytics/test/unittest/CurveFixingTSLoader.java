@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.financial.analytics.test.unittest;
 
 import java.io.BufferedInputStream;
@@ -39,6 +44,7 @@ public class CurveFixingTSLoader {
 
   /**
    * Gets the timeSeriesSource.
+   * 
    * @return the timeSeriesSource
    */
   protected NonVersionedRedisHistoricalTimeSeriesSource getTimeSeriesSource() {
@@ -63,7 +69,7 @@ public class CurveFixingTSLoader {
     // The calling code is responsible for closing the underlying stream.
     @SuppressWarnings("resource")
     final
-    //assume first line is the header
+    // assume first line is the header
     CSVReader csvReader = new CSVReader(new InputStreamReader(stream), CSVParser.DEFAULT_SEPARATOR,
         CSVParser.DEFAULT_QUOTE_CHARACTER, CSVParser.DEFAULT_ESCAPE_CHARACTER, 1);
 

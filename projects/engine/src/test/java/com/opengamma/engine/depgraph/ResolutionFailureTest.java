@@ -26,7 +26,7 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests the support classes for {@link ResolutionFailure}
+ * Tests the support classes for {@link ResolutionFailure}.
  */
 @Test(groups = TestGroup.UNIT)
 public class ResolutionFailureTest {
@@ -158,7 +158,7 @@ public class ResolutionFailureTest {
     assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).requirement(req3, null),
         "failedFunction=" + req1 + ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "},[unsatisfied=" + req3 + "]");
     assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2))
-            .getAdditionalRequirementsFailed(),
+        .getAdditionalRequirementsFailed(),
         "getAdditionalRequirementsFailed=" + req1 + ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "}");
     assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).getResultsFailed(),
         "getResultsFailed=" + req1 + ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "}");
@@ -167,7 +167,7 @@ public class ResolutionFailureTest {
     assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).lateResolutionFailure(),
         "lateResolutionFailure=" + req1 + ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "}");
     assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2))
-            .additionalRequirement(req3, null),
+        .additionalRequirement(req3, null),
         "failedFunction=" + req1 + ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "},[unsatisfied=" + req3 + "]");
     assertEquals(
         ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2))

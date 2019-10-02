@@ -34,8 +34,11 @@ public class AbstractReferenceDataProviderTest {
   private static final String VALUE1 = "VALUE1";
   private static final String VALUE2 = "VALUE2";
 
+  /**
+   *
+   */
   @Test
-  public void singleIdSingleField_dataReturned() {
+  public void singleIdSingleFieldDataReturned() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ID1, FIELD1, true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     values.add(FIELD1, VALUE1);
@@ -50,8 +53,11 @@ public class AbstractReferenceDataProviderTest {
     assertEquals(VALUE1, test);
   }
 
+  /**
+   *
+   */
   @Test
-  public void singleIdSingleField_noValue() {
+  public void singleIdSingleFieldNoValue() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ID1, FIELD1, true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     values.add(FIELD1, null);
@@ -63,8 +69,11 @@ public class AbstractReferenceDataProviderTest {
     assertEquals(null, test);
   }
 
+  /**
+   *
+   */
   @Test
-  public void singleIdSingleField_noField() {
+  public void singleIdSingleFieldNoField() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ID1, FIELD1, true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     final ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
@@ -75,8 +84,11 @@ public class AbstractReferenceDataProviderTest {
     assertEquals(null, test);
   }
 
+  /**
+   *
+   */
   @Test
-  public void singleIdSingleField_noId() {
+  public void singleIdSingleFieldNoId() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ID1, FIELD1, true);
     final ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
 
@@ -85,8 +97,11 @@ public class AbstractReferenceDataProviderTest {
     assertEquals(null, test);
   }
 
+  /**
+   *
+   */
   @Test
-  public void singleIdSingleField_fieldError() {
+  public void singleIdSingleFieldFieldError() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ID1, FIELD1, true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     values.add(FIELD1, VALUE1);
@@ -101,8 +116,11 @@ public class AbstractReferenceDataProviderTest {
   }
 
   // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test
-  public void singleIdMultipleFields_dataReturned() {
+  public void singleIdMultipleFieldsDataReturned() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ID1, ImmutableSet.of(FIELD1, FIELD2), true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     values.add(FIELD1, VALUE1);
@@ -117,8 +135,11 @@ public class AbstractReferenceDataProviderTest {
     assertEquals(VALUE2, test.get(FIELD2));
   }
 
+  /**
+   *
+   */
   @Test
-  public void singleIdMultipleFields_idError() {
+  public void singleIdMultipleFieldsIdError() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ID1, ImmutableSet.of(FIELD1, FIELD2), true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     values.add(FIELD1, VALUE1);
@@ -132,8 +153,11 @@ public class AbstractReferenceDataProviderTest {
     assertEquals(0, test.size());
   }
 
+  /**
+   *
+   */
   @Test
-  public void singleIdMultipleFields_oneFieldError() {
+  public void singleIdMultipleFieldsOneFieldError() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ID1, ImmutableSet.of(FIELD1, FIELD2), true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     values.add(FIELD2, VALUE2);
@@ -149,8 +173,11 @@ public class AbstractReferenceDataProviderTest {
   }
 
   // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test
-  public void multipleIdsSingleField_dataReturned() {
+  public void multipleIdsSingleFieldDataReturned() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ImmutableSet.of(ID1, ID2), ImmutableSet.of(FIELD1), true);
     final MutableFudgeMsg values1 = FUDGE_CONTEXT.newMessage();
     values1.add(FIELD1, VALUE1);
@@ -167,8 +194,11 @@ public class AbstractReferenceDataProviderTest {
     assertEquals(VALUE2, test.get(ID2));
   }
 
+  /**
+   *
+   */
   @Test
-  public void multipleIdsSingleField_idError() {
+  public void multipleIdsSingleFieldIdError() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ImmutableSet.of(ID1, ID2), ImmutableSet.of(FIELD1), true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     values.add(FIELD1, VALUE1);
@@ -185,8 +215,11 @@ public class AbstractReferenceDataProviderTest {
   }
 
   // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test
-  public void multipleIdsMultipleFields_dataReturned() {
+  public void multipleIdsMultipleFieldsDataReturned() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ImmutableSet.of(ID1, ID2), ImmutableSet.of(FIELD1, FIELD2), true);
     final MutableFudgeMsg values1 = FUDGE_CONTEXT.newMessage();
     values1.add(FIELD1, VALUE1);
@@ -203,8 +236,11 @@ public class AbstractReferenceDataProviderTest {
     assertEquals(values2, test.get(ID2));
   }
 
+  /**
+   *
+   */
   @Test
-  public void multipleIdsMultipleFields_idError() {
+  public void multipleIdsMultipleFieldsIdError() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ImmutableSet.of(ID1, ID2), ImmutableSet.of(FIELD1, FIELD2), true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     values.add(FIELD1, VALUE1);
@@ -221,10 +257,19 @@ public class AbstractReferenceDataProviderTest {
   }
 
   // -------------------------------------------------------------------------
+  /**
+   *
+   */
   class Mock extends AbstractReferenceDataProvider {
-    ReferenceDataProviderGetRequest _request;
-    ReferenceDataProviderGetResult _result;
+    private final ReferenceDataProviderGetRequest _request;
+    private final ReferenceDataProviderGetResult _result;
 
+    /**
+     * @param request
+     *          the request
+     * @param result
+     *          the result
+     */
     Mock(final ReferenceDataProviderGetRequest request, final ReferenceDataProviderGetResult result) {
       _request = request;
       _result = result;

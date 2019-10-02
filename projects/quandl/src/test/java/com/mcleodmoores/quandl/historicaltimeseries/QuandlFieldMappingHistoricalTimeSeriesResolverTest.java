@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.historicaltimeseries;
 
@@ -55,8 +55,8 @@ public class QuandlFieldMappingHistoricalTimeSeriesResolverTest {
   /** A dummy data source name */
   private static final String DUMMY_DATA_SOURCE_NAME = "Dummy";
   /** Quandl field adjustments */
-  private static final QuandlHistoricalTimeSeriesFieldAdjustmentMap FIELD_ADJUSTMENTS1 =
-      new QuandlHistoricalTimeSeriesFieldAdjustmentMap(QUANDL_DATA_SOURCE_NAME);
+  private static final QuandlHistoricalTimeSeriesFieldAdjustmentMap FIELD_ADJUSTMENTS1 = new QuandlHistoricalTimeSeriesFieldAdjustmentMap(
+      QUANDL_DATA_SOURCE_NAME);
   /** Dummy field adjustments */
   private static final HistoricalTimeSeriesFieldAdjustmentMap FIELD_ADJUSTMENTS2 = new HistoricalTimeSeriesFieldAdjustmentMap(DUMMY_DATA_SOURCE_NAME);
   /** The field maps */
@@ -286,8 +286,8 @@ public class QuandlFieldMappingHistoricalTimeSeriesResolverTest {
   public void testFromQuandlDataUtils() {
     final Collection<HistoricalTimeSeriesFieldAdjustmentMap> fieldAdjustmentMaps = QuandlDataUtils.createFieldAdjustmentMap(CacheManager.newInstance());
     final HistoricalTimeSeriesSelector selector = new DefaultHistoricalTimeSeriesSelector(CONFIG_SOURCE);
-    final QuandlFieldMappingHistoricalTimeSeriesResolver resolver =
-        new QuandlFieldMappingHistoricalTimeSeriesResolver(fieldAdjustmentMaps, selector, HTS_MASTER);
+    final QuandlFieldMappingHistoricalTimeSeriesResolver resolver = new QuandlFieldMappingHistoricalTimeSeriesResolver(fieldAdjustmentMaps, selector,
+        HTS_MASTER);
     final Collection<HistoricalTimeSeriesFieldAdjustmentMap> fieldMaps = resolver.getFieldMaps();
     assertEquals(fieldMaps.size(), 1);
     final HistoricalTimeSeriesFieldAdjustmentMap fieldMap = Iterables.getOnlyElement(fieldMaps);

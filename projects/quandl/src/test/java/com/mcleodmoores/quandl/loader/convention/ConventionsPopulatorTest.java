@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.convention;
 
@@ -60,7 +60,7 @@ public class ConventionsPopulatorTest {
   /** An overnight index convention with multiple Quandl ids */
   private static final OvernightIndexConvention C3 = new OvernightIndexConvention("3",
       ExternalIdBundle.of(ExternalId.of("CONVENTION", "ABC3"), QuandlConstants.ofCode("ABC3"), QuandlConstants.ofCode("DEF3")),
-          DayCounts.ACT_360, 2, Currency.USD, ExternalSchemes.countryRegionId(Country.US));
+      DayCounts.ACT_360, 2, Currency.USD, ExternalSchemes.countryRegionId(Country.US));
   /** An ibor index convention with no Quandl id */
   private static final IborIndexConvention C4 = new IborIndexConvention("4", ExternalIdBundle.of("CONVENTION", "ABC4"),
       DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 2, true, Currency.USD, LocalTime.of(11, 0), "US", ExternalSchemes.countryRegionId(Country.US),
@@ -116,7 +116,7 @@ public class ConventionsPopulatorTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullConventionMaster() {
-    new ConventionsPopulator(Collections.<ManageableConvention>emptySet()).init(null, new InMemorySecurityMaster());
+    new ConventionsPopulator(Collections.<ManageableConvention> emptySet()).init(null, new InMemorySecurityMaster());
   }
 
   /**
@@ -126,7 +126,7 @@ public class ConventionsPopulatorTest {
   public void testOvernightIndexNoQuandlCode() {
     final ConventionMaster conventionMaster = new InMemoryConventionMaster();
     final SecurityMaster securityMaster = new InMemorySecurityMaster();
-    final ConventionsPopulator populator = new ConventionsPopulator(Collections.<ManageableConvention>singleton(C1));
+    final ConventionsPopulator populator = new ConventionsPopulator(Collections.<ManageableConvention> singleton(C1));
     populator.init(conventionMaster, securityMaster);
     // test the convention is added
     final ConventionSearchRequest conventionRequest = new ConventionSearchRequest();
@@ -139,18 +139,17 @@ public class ConventionsPopulatorTest {
     securityRequest.setSecurityType(OvernightIndex.INDEX_TYPE);
     final SecuritySearchResult securityResult = securityMaster.search(securityRequest);
     final List<ManageableSecurity> securities = securityResult.getSecurities();
-    assertSecuritiesEquals(securities, Collections.<ManageableSecurity>emptyList());
+    assertSecuritiesEquals(securities, Collections.<ManageableSecurity> emptyList());
   }
 
   /**
-   * Tests that an overnight convention with a single Quandl id is stored in the master and that the appropriate
-   * security is created.
+   * Tests that an overnight convention with a single Quandl id is stored in the master and that the appropriate security is created.
    */
   @Test
   public void testOvernightIndexSingleQuandlCode() {
     final ConventionMaster conventionMaster = new InMemoryConventionMaster();
     final SecurityMaster securityMaster = new InMemorySecurityMaster();
-    final ConventionsPopulator populator = new ConventionsPopulator(Collections.<ManageableConvention>singleton(C2));
+    final ConventionsPopulator populator = new ConventionsPopulator(Collections.<ManageableConvention> singleton(C2));
     populator.init(conventionMaster, securityMaster);
     // test convention is added
     final ConventionSearchRequest conventionRequest = new ConventionSearchRequest();
@@ -163,7 +162,7 @@ public class ConventionsPopulatorTest {
     securityRequest.setSecurityType(OvernightIndex.INDEX_TYPE);
     final SecuritySearchResult securityResult = securityMaster.search(securityRequest);
     final List<ManageableSecurity> securities = securityResult.getSecurities();
-    assertSecuritiesEquals(securities, Collections.<ManageableSecurity>singletonList(OVERNIGHT_INDEX));
+    assertSecuritiesEquals(securities, Collections.<ManageableSecurity> singletonList(OVERNIGHT_INDEX));
   }
 
   /**
@@ -173,7 +172,7 @@ public class ConventionsPopulatorTest {
   public void testOvernightIndexMultplieQuandlCodes() {
     final ConventionMaster conventionMaster = new InMemoryConventionMaster();
     final SecurityMaster securityMaster = new InMemorySecurityMaster();
-    final ConventionsPopulator populator = new ConventionsPopulator(Collections.<ManageableConvention>singleton(C3));
+    final ConventionsPopulator populator = new ConventionsPopulator(Collections.<ManageableConvention> singleton(C3));
     populator.init(conventionMaster, securityMaster);
     // test convention is added
     final ConventionSearchRequest conventionRequest = new ConventionSearchRequest();
@@ -186,18 +185,17 @@ public class ConventionsPopulatorTest {
     securityRequest.setSecurityType(OvernightIndex.INDEX_TYPE);
     final SecuritySearchResult securityResult = securityMaster.search(securityRequest);
     final List<ManageableSecurity> securities = securityResult.getSecurities();
-    assertSecuritiesEquals(securities, Collections.<ManageableSecurity>emptyList());
+    assertSecuritiesEquals(securities, Collections.<ManageableSecurity> emptyList());
   }
 
   /**
-   * Tests that a vanilla ibor leg convention with an underlying convention without Quandl ids is stored in
-   * the master but no security is created.
+   * Tests that a vanilla ibor leg convention with an underlying convention without Quandl ids is stored in the master but no security is created.
    */
   @Test
   public void testVanillaSwapLegIborIndexNoQuandlCode() {
     final ConventionMaster conventionMaster = new InMemoryConventionMaster();
     final SecurityMaster securityMaster = new InMemorySecurityMaster();
-    final ConventionsPopulator populator = new ConventionsPopulator(Sets.<ManageableConvention>newHashSet(C4, C7));
+    final ConventionsPopulator populator = new ConventionsPopulator(Sets.<ManageableConvention> newHashSet(C4, C7));
     populator.init(conventionMaster, securityMaster);
     // test the ibor leg is added
     final ConventionSearchRequest conventionRequest = new ConventionSearchRequest();
@@ -210,18 +208,18 @@ public class ConventionsPopulatorTest {
     securityRequest.setSecurityType(IborIndex.INDEX_TYPE);
     final SecuritySearchResult securityResult = securityMaster.search(securityRequest);
     final List<ManageableSecurity> securities = securityResult.getSecurities();
-    assertSecuritiesEquals(securities, Collections.<ManageableSecurity>emptyList());
+    assertSecuritiesEquals(securities, Collections.<ManageableSecurity> emptyList());
   }
 
   /**
-   * Tests that a vanilla ibor leg convention with an underlying convention with a single Quandl id is stored in the master and that the appropriate
-   * security is created.
+   * Tests that a vanilla ibor leg convention with an underlying convention with a single Quandl id is stored in the master and that the appropriate security is
+   * created.
    */
   @Test
   public void testVanillaSwapLegIborIndexSingleQuandlCode() {
     final ConventionMaster conventionMaster = new InMemoryConventionMaster();
     final SecurityMaster securityMaster = new InMemorySecurityMaster();
-    final ConventionsPopulator populator = new ConventionsPopulator(Sets.<ManageableConvention>newHashSet(C5, C8));
+    final ConventionsPopulator populator = new ConventionsPopulator(Sets.<ManageableConvention> newHashSet(C5, C8));
     populator.init(conventionMaster, securityMaster);
     // test the ibor leg is added
     final ConventionSearchRequest conventionRequest = new ConventionSearchRequest();
@@ -234,18 +232,17 @@ public class ConventionsPopulatorTest {
     securityRequest.setSecurityType(IborIndex.INDEX_TYPE);
     final SecuritySearchResult securityResult = securityMaster.search(securityRequest);
     final List<ManageableSecurity> securities = securityResult.getSecurities();
-    assertSecuritiesEquals(securities, Collections.<ManageableSecurity>singletonList(IBOR_INDEX));
+    assertSecuritiesEquals(securities, Collections.<ManageableSecurity> singletonList(IBOR_INDEX));
   }
 
   /**
-   * Tests that a vanilla ibor leg convention with an underlying convention with multiple Quandl ids is stored in the master but
-   * no security is created.
+   * Tests that a vanilla ibor leg convention with an underlying convention with multiple Quandl ids is stored in the master but no security is created.
    */
   @Test
   public void testVanillaSwapLegIborIndexMultipleQuandlCode() {
     final ConventionMaster conventionMaster = new InMemoryConventionMaster();
     final SecurityMaster securityMaster = new InMemorySecurityMaster();
-    final ConventionsPopulator populator = new ConventionsPopulator(Sets.<ManageableConvention>newHashSet(C6, C9));
+    final ConventionsPopulator populator = new ConventionsPopulator(Sets.<ManageableConvention> newHashSet(C6, C9));
     populator.init(conventionMaster, securityMaster);
     // test the ibor leg is added
     final ConventionSearchRequest conventionRequest = new ConventionSearchRequest();
@@ -258,18 +255,17 @@ public class ConventionsPopulatorTest {
     securityRequest.setSecurityType(IborIndex.INDEX_TYPE);
     final SecuritySearchResult securityResult = securityMaster.search(securityRequest);
     final List<ManageableSecurity> securities = securityResult.getSecurities();
-    assertSecuritiesEquals(securities, Collections.<ManageableSecurity>emptyList());
+    assertSecuritiesEquals(securities, Collections.<ManageableSecurity> emptyList());
   }
 
   /**
-   * Tests that a STIR future convention with an underlying convention without Quandl ids is stored in
-   * the master but no security is created.
+   * Tests that a STIR future convention with an underlying convention without Quandl ids is stored in the master but no security is created.
    */
   @Test
   public void testStirFutureIborIndexNoQuandlCode() {
     final ConventionMaster conventionMaster = new InMemoryConventionMaster();
     final SecurityMaster securityMaster = new InMemorySecurityMaster();
-    final ConventionsPopulator populator = new ConventionsPopulator(Sets.<ManageableConvention>newHashSet(C4, C10));
+    final ConventionsPopulator populator = new ConventionsPopulator(Sets.<ManageableConvention> newHashSet(C4, C10));
     populator.init(conventionMaster, securityMaster);
     // test the ibor leg is added
     final ConventionSearchRequest conventionRequest = new ConventionSearchRequest();
@@ -282,18 +278,18 @@ public class ConventionsPopulatorTest {
     securityRequest.setSecurityType(IborIndex.INDEX_TYPE);
     final SecuritySearchResult securityResult = securityMaster.search(securityRequest);
     final List<ManageableSecurity> securities = securityResult.getSecurities();
-    assertSecuritiesEquals(securities, Collections.<ManageableSecurity>emptyList());
+    assertSecuritiesEquals(securities, Collections.<ManageableSecurity> emptyList());
   }
 
   /**
-   * Tests that a STIR future convention with an underlying convention with a single Quandl id is stored in the master and that the appropriate
-   * security is created.
+   * Tests that a STIR future convention with an underlying convention with a single Quandl id is stored in the master and that the appropriate security is
+   * created.
    */
   @Test
   public void testStirFutureIborIndexSingleQuandlCode() {
     final ConventionMaster conventionMaster = new InMemoryConventionMaster();
     final SecurityMaster securityMaster = new InMemorySecurityMaster();
-    final ConventionsPopulator populator = new ConventionsPopulator(Sets.<ManageableConvention>newHashSet(C5, C11));
+    final ConventionsPopulator populator = new ConventionsPopulator(Sets.<ManageableConvention> newHashSet(C5, C11));
     populator.init(conventionMaster, securityMaster);
     // test the ibor leg is added
     final ConventionSearchRequest conventionRequest = new ConventionSearchRequest();
@@ -306,18 +302,17 @@ public class ConventionsPopulatorTest {
     securityRequest.setSecurityType(IborIndex.INDEX_TYPE);
     final SecuritySearchResult securityResult = securityMaster.search(securityRequest);
     final List<ManageableSecurity> securities = securityResult.getSecurities();
-    assertSecuritiesEquals(securities, Collections.<ManageableSecurity>singletonList(IBOR_INDEX));
+    assertSecuritiesEquals(securities, Collections.<ManageableSecurity> singletonList(IBOR_INDEX));
   }
 
   /**
-   * Tests that a STIR future convention convention with an underlying convention with multiple Quandl ids is stored in the master but
-   * no security is created.
+   * Tests that a STIR future convention convention with an underlying convention with multiple Quandl ids is stored in the master but no security is created.
    */
   @Test
   public void testStirFutureIborIndexMultipleQuandlCode() {
     final ConventionMaster conventionMaster = new InMemoryConventionMaster();
     final SecurityMaster securityMaster = new InMemorySecurityMaster();
-    final ConventionsPopulator populator = new ConventionsPopulator(Sets.<ManageableConvention>newHashSet(C6, C12));
+    final ConventionsPopulator populator = new ConventionsPopulator(Sets.<ManageableConvention> newHashSet(C6, C12));
     populator.init(conventionMaster, securityMaster);
     // test the ibor leg is added
     final ConventionSearchRequest conventionRequest = new ConventionSearchRequest();
@@ -330,14 +325,17 @@ public class ConventionsPopulatorTest {
     securityRequest.setSecurityType(IborIndex.INDEX_TYPE);
     final SecuritySearchResult securityResult = securityMaster.search(securityRequest);
     final List<ManageableSecurity> securities = securityResult.getSecurities();
-    assertSecuritiesEquals(securities, Collections.<ManageableSecurity>emptyList());
+    assertSecuritiesEquals(securities, Collections.<ManageableSecurity> emptyList());
   }
 
   /**
-   * Method that tests that two lists of conventions are equal. The expected conventions have not been stored in the master and so
-   * the unique ids will not be set.
-   * @param actual  the actual conventions
-   * @param expected  the expected conventions
+   * Method that tests that two lists of conventions are equal. The expected conventions have not been stored in the master and so the unique ids will not be
+   * set.
+   * 
+   * @param actual
+   *          the actual conventions
+   * @param expected
+   *          the expected conventions
    */
   private static void assertConventionEquals(final List<? extends ManageableConvention> actual, final List<? extends ManageableConvention> expected) {
     if (expected == null) {
@@ -357,10 +355,12 @@ public class ConventionsPopulatorTest {
   }
 
   /**
-   * Method that tests that two securities are equal. The expected securities have not been stored in the master and so
-   * the unique ids will not be set.
-   * @param actual  the actual securities
-   * @param expected  the expected securities
+   * Method that tests that two securities are equal. The expected securities have not been stored in the master and so the unique ids will not be set.
+   * 
+   * @param actual
+   *          the actual securities
+   * @param expected
+   *          the expected securities
    */
   private static void assertSecuritiesEquals(final List<? extends ManageableSecurity> actual, final List<? extends ManageableSecurity> expected) {
     if (expected == null) {

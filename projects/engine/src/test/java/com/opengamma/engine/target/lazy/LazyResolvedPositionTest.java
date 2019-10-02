@@ -30,45 +30,61 @@ import com.opengamma.util.test.TestGroup;
 import net.sf.ehcache.CacheManager;
 
 /**
- * Tests the {@link LazyResolvedPosition} class
+ * Tests the {@link LazyResolvedPosition} class.
  */
-@Test(groups = {TestGroup.UNIT, "ehcache" })
+@Test(groups = { TestGroup.UNIT, "ehcache" })
 public class LazyResolvedPositionTest {
 
   private CacheManager _cacheManager;
 
+  /**
+   *
+   */
   @BeforeClass
   public void setUpClass() {
     _cacheManager = EHCacheUtils.createTestCacheManager(getClass());
   }
 
+  /**
+   *
+   */
   @AfterClass
   public void tearDownClass() {
     EHCacheUtils.shutdownQuiet(_cacheManager);
   }
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
     EHCacheUtils.clear(_cacheManager);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   public void testBasicMethods() {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final Position underlying = resolver.getPositionSource().getPosition(UniqueId.of("Position", "0"));
-    final Position position =
-        new LazyResolvedPosition(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
+    final Position position = new LazyResolvedPosition(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST),
+        underlying);
     assertEquals(position.getAttributes(), underlying.getAttributes());
     assertEquals(position.getQuantity(), underlying.getQuantity());
     assertEquals(position.getTrades().size(), underlying.getTrades().size());
     assertEquals(position.getUniqueId(), underlying.getUniqueId());
   }
 
-  public void testSerialization_full() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testSerializationFull() throws Exception {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final Position underlying = resolver.getPositionSource().getPosition(UniqueId.of("Position", "0"));
-    Position position =
-        new LazyResolvedPosition(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
+    Position position = new LazyResolvedPosition(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST),
+        underlying);
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     new ObjectOutputStream(baos).writeObject(position);
     final Object resultObject = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray())).readObject();
@@ -80,7 +96,11 @@ public class LazyResolvedPositionTest {
     assertEquals(position.getUniqueId(), underlying.getUniqueId());
   }
 
-  public void testSerialization_targetResolver() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testSerializationTargetResolver() throws Exception {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final Position underlying = resolver.getPositionSource().getPosition(UniqueId.of("Position", "0"));
     Position position = new LazyResolvedPosition(new LazyResolveContext(resolver.getSecuritySource(), new DefaultCachingComputationTargetResolver(resolver,

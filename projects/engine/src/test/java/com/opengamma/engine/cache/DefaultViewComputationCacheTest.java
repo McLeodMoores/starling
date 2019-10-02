@@ -26,11 +26,17 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.tuple.Pair;
 
+/**
+ *
+ */
 @Test(groups = TestGroup.UNIT)
 public class DefaultViewComputationCacheTest {
 
   private DefaultViewComputationCache _viewComputationCache;
 
+  /**
+   *
+   */
   @BeforeMethod
   public void createCache() {
     final IdentifierMap identifierSource = new InMemoryIdentifierMap();
@@ -41,6 +47,9 @@ public class DefaultViewComputationCacheTest {
     _viewComputationCache = new DefaultViewComputationCache(identifierSource, privateDataStore, sharedDataStore, FudgeContext.GLOBAL_DEFAULT);
   }
 
+  /**
+   *
+   */
   @Test
   public void testMissingValueSpec() {
     final ValueSpecification valueSpec = new ValueSpecification("missing", ComputationTargetSpecification.NULL,
@@ -65,22 +74,34 @@ public class DefaultViewComputationCacheTest {
     assertEquals((Integer) fudgeSize, _viewComputationCache.estimateValueSize(value));
   }
 
+  /**
+   *
+   */
   @Test
-  public void testPutGetCycle_primInt() {
+  public void testPutGetCyclePrimInt() {
     assertPutGetCycle(Integer.MAX_VALUE, 4 + 4, CacheSelectHint.allPrivate());
   }
 
+  /**
+   *
+   */
   @Test
-  public void testPutGetCycle_primString() {
+  public void testPutGetCyclePrimString() {
     final String testString = "Hello World";
     assertPutGetCycle(testString, 4 + 1 + testString.length(), CacheSelectHint.allShared());
   }
 
+  /**
+   *
+   */
   @Test
-  public void testPutGetCycle_primDouble() {
+  public void testPutGetCyclePrimDouble() {
     assertPutGetCycle(3.14, 4 + 8, CacheSelectHint.allPrivate());
   }
 
+  /**
+   *
+   */
   public static final class Bean {
     private double _foo;
     private double _bar;
@@ -119,16 +140,22 @@ public class DefaultViewComputationCacheTest {
     }
   }
 
+  /**
+   *
+   */
   @Test
-  public void testPutGetCycle_bean() {
+  public void testPutGetCycleBean() {
     final Bean bean = new Bean();
     bean.setFoo(42.0);
     bean.setBar(-1.0);
     assertPutGetCycle(bean, 96, CacheSelectHint.allShared());
   }
 
+  /**
+   *
+   */
   @Test
-  public void testPutGetCycle_beanList() {
+  public void testPutGetCycleBeanList() {
     final List<Bean> list = new ArrayList<>();
     final Bean bean = new Bean();
     bean.setFoo(42.0);
@@ -138,10 +165,10 @@ public class DefaultViewComputationCacheTest {
   }
 
   private void assertPutValues(final int type, final CacheSelectHint correctHint, final CacheSelectHint incorrectHint) {
-    final ValueSpecification valueSpecFoo =
-        new ValueSpecification("foo", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
-    final ValueSpecification valueSpecBar =
-        new ValueSpecification("bar", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
+    final ValueSpecification valueSpecFoo = new ValueSpecification("foo", ComputationTargetSpecification.NULL,
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
+    final ValueSpecification valueSpecBar = new ValueSpecification("bar", ComputationTargetSpecification.NULL,
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
     final ComputedValue valueFoo = new ComputedValue(valueSpecFoo, "Foo");
     final ComputedValue valueBar = new ComputedValue(valueSpecBar, "Bar");
     switch (type) {
@@ -201,27 +228,39 @@ public class DefaultViewComputationCacheTest {
     assertEquals(3, mask);
   }
 
+  /**
+   *
+   */
   @Test
   public void testPutValuesPrivate() {
     assertPutValues(0, CacheSelectHint.allPrivate(), CacheSelectHint.allShared());
   }
 
+  /**
+   *
+   */
   @Test
   public void testPutValuesShared() {
     assertPutValues(1, CacheSelectHint.allShared(), CacheSelectHint.allPrivate());
   }
 
+  /**
+   *
+   */
   @Test
   public void testPutValuesMixedPrivate() {
-    final ValueSpecification valueSpecFoo =
-        new ValueSpecification("foo", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
+    final ValueSpecification valueSpecFoo = new ValueSpecification("foo", ComputationTargetSpecification.NULL,
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
     assertPutValues(2, CacheSelectHint.privateValues(Arrays.asList(valueSpecFoo)), CacheSelectHint.sharedValues(Arrays.asList(valueSpecFoo)));
   }
 
+  /**
+   *
+   */
   @Test
   public void testPutValuesMixedShared() {
-    final ValueSpecification valueSpecFoo =
-        new ValueSpecification("foo", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
+    final ValueSpecification valueSpecFoo = new ValueSpecification("foo", ComputationTargetSpecification.NULL,
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
     assertPutValues(2, CacheSelectHint.sharedValues(Arrays.asList(valueSpecFoo)), CacheSelectHint.privateValues(Arrays.asList(valueSpecFoo)));
   }
 

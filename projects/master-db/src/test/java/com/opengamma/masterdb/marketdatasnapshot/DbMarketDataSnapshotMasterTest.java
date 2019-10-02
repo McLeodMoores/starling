@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.masterdb.marketdatasnapshot;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -58,7 +63,7 @@ public class DbMarketDataSnapshotMasterTest extends AbstractDbTest {
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doSetUp() {
     _snpMaster = new DbMarketDataSnapshotMaster(getDbConnector());
@@ -69,7 +74,7 @@ public class DbMarketDataSnapshotMasterTest extends AbstractDbTest {
     _snpMaster = null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void test_basics() throws Exception {
     assertNotNull(_snpMaster);
@@ -78,7 +83,7 @@ public class DbMarketDataSnapshotMasterTest extends AbstractDbTest {
     assertNotNull(_snpMaster.getClock());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void test_example() throws Exception {
     final ManageableMarketDataSnapshot marketDataSnapshot = new ManageableMarketDataSnapshot();
@@ -97,7 +102,7 @@ public class DbMarketDataSnapshotMasterTest extends AbstractDbTest {
     assertEquivalent(added, loaded);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void test_complex_example() throws Exception {
     final ManageableMarketDataSnapshot snapshot1 = new ManageableMarketDataSnapshot();
@@ -127,8 +132,8 @@ public class DbMarketDataSnapshotMasterTest extends AbstractDbTest {
     final HashMap<VolatilityCubeKey, VolatilityCubeSnapshot> volCubes = new HashMap<>();
     final ManageableVolatilityCubeSnapshot volCube = new ManageableVolatilityCubeSnapshot();
 
-    volCube.setValues(Maps.<Triple<Object, Object, Object>, ValueSnapshot>newHashMap());
-    volCube.getValues().put(Triple.<Object, Object, Object>of(Tenor.DAY, Tenor.YEAR, -1.0), ValueSnapshot.of(null, null));
+    volCube.setValues(Maps.<Triple<Object, Object, Object>, ValueSnapshot> newHashMap());
+    volCube.getValues().put(Triple.<Object, Object, Object> of(Tenor.DAY, Tenor.YEAR, -1.0), ValueSnapshot.of(null, null));
 
     volCubes.put(VolatilityCubeKey.of("Default", "Default", "DUMMY_QUOTE_TYPE", "DUMMY_QUOTE_UNITS"), volCube);
     snapshot1.setVolatilityCubes(volCubes);
@@ -136,8 +141,8 @@ public class DbMarketDataSnapshotMasterTest extends AbstractDbTest {
     final HashMap<SurfaceKey, SurfaceSnapshot> surfaces = new HashMap<>();
     final ManageableSurfaceSnapshot surface = new ManageableSurfaceSnapshot();
 
-    surface.setValues(Maps.<Pair<Object, Object>, ValueSnapshot>newHashMap());
-    surface.getValues().put(Pairs.<Object, Object>of(Tenor.DAY, -1.0), ValueSnapshot.of(null, null));
+    surface.setValues(Maps.<Pair<Object, Object>, ValueSnapshot> newHashMap());
+    surface.getValues().put(Pairs.<Object, Object> of(Tenor.DAY, -1.0), ValueSnapshot.of(null, null));
 
     surfaces.put(SurfaceKey.of("Surface"), surface);
     snapshot1.setSurfaces(surfaces);

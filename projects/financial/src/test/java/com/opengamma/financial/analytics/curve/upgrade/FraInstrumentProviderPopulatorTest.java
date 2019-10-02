@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -37,8 +37,7 @@ import com.opengamma.util.result.Function2;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Tests the class that adds FRA instrument providers to a {@link CurveNodeIdMapper}
- * from a {@link CurveSpecificationBuilderConfiguration}.
+ * Tests the class that adds FRA instrument providers to a {@link CurveNodeIdMapper} from a {@link CurveSpecificationBuilderConfiguration}.
  *
  */
 public class FraInstrumentProviderPopulatorTest {
@@ -59,14 +58,7 @@ public class FraInstrumentProviderPopulatorTest {
     EMPTY_MAPPER = CurveNodeIdMapper.builder()
         .name(NAME)
         .build();
-    final Function2<String, String, String> renamingFunction = new Function2<String, String, String>() {
-
-      @Override
-      public String apply(final String name, final String currency) {
-        return name + " test";
-      }
-
-    };
+    final Function2<String, String, String> renamingFunction = (name, currency) -> name + " test";
     FRA_3M_RENAMING_PROVIDER = new FraInstrumentProviderPopulator(StripInstrumentType.FRA_3M, renamingFunction);
     FRA_6M_RENAMING_PROVIDER = new FraInstrumentProviderPopulator(StripInstrumentType.FRA_6M, renamingFunction);
   }
@@ -128,8 +120,7 @@ public class FraInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the FRA instrument provider is unpopulated if a curve specification builder that has no FRA instrument providers
-   * is supplied.
+   * Tests that the FRA instrument provider is unpopulated if a curve specification builder that has no FRA instrument providers is supplied.
    */
   public void testNoFras() {
     final CurveSpecificationBuilderConfiguration csbc = new CurveSpecificationBuilderConfiguration(USD_DEPOSIT_INSTRUMENTS,
@@ -142,8 +133,7 @@ public class FraInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the FRA instrument provider is populated using the 3m FRA instrument providers from the curve specification builder
-   * configuration.
+   * Tests that the FRA instrument provider is populated using the 3m FRA instrument providers from the curve specification builder configuration.
    */
   @Test
   public void testFra3mStrips() {
@@ -151,8 +141,7 @@ public class FraInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the FRA instrument provider is populated using the 6m FRA instrument providers from the curve specification builder
-   * configuration.
+   * Tests that the FRA instrument provider is populated using the 6m FRA instrument providers from the curve specification builder configuration.
    */
   @Test
   public void testFra6mStrips() {
@@ -160,8 +149,8 @@ public class FraInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the 3m FRA instruments,
-   * and that the original mapper is unchanged.
+   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the 3m FRA instruments, and that the original mapper is
+   * unchanged.
    */
   @Test
   public void testBuilderCreationForFra3m() {
@@ -186,8 +175,8 @@ public class FraInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the 6m FRA instruments,
-   * and that the original mapper is unchanged.
+   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the 6m FRA instruments, and that the original mapper is
+   * unchanged.
    */
   @Test
   public void testBuilderCreationForFra6m() {
@@ -212,8 +201,8 @@ public class FraInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an existing FRA mapper is over-written with values from the 3m FRA provider in the curve specification builder configuration
-   * when the 3m FRA converter is used.
+   * Tests that an existing FRA mapper is over-written with values from the 3m FRA provider in the curve specification builder configuration when the 3m FRA
+   * converter is used.
    */
   @Test
   public void testOverwriteWithFra3m() {
@@ -233,8 +222,8 @@ public class FraInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an existing FRA mapper is over-written with values from the 6m FRA provider in the curve specification builder configuration
-   * when the 6m FRA converter is used.
+   * Tests that an existing FRA mapper is over-written with values from the 6m FRA provider in the curve specification builder configuration when the 6m FRA
+   * converter is used.
    */
   @Test
   public void testOverwriteWithFra6m() {

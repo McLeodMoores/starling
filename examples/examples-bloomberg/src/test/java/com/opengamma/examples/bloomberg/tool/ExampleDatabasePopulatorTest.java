@@ -21,22 +21,22 @@ import com.opengamma.master.portfolio.PortfolioSearchResult;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test example database population
+ * Test example database population.
  */
 @Test(groups = TestGroup.INTEGRATION)
 public class ExampleDatabasePopulatorTest {
 
   private static final String CONFIG_RESOURCE_LOCATION = "classpath:/toolcontext/toolcontext-examplesbloomberg.properties";
 
-//  @BeforeMethod
-//  public void setUp() throws IOException {
-//    DBTestUtils.createHsqlDB(CONFIG_RESOURCE_LOCATION);
-//  }
-//
-//  @AfterMethod
-//  public void runAfter() throws IOException {
-//    DBTestUtils.cleanUp(CONFIG_RESOURCE_LOCATION);
-//  }
+  // @BeforeMethod
+  // public void setUp() throws IOException {
+  // DBTestUtils.createHsqlDB(CONFIG_RESOURCE_LOCATION);
+  // }
+  //
+  // @AfterMethod
+  // public void runAfter() throws IOException {
+  // DBTestUtils.cleanUp(CONFIG_RESOURCE_LOCATION);
+  // }
 
   @Test
   public void testPortfolioAndDataLoaded() throws Exception {

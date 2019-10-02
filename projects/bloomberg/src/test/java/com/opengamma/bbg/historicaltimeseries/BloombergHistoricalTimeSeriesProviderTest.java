@@ -52,6 +52,10 @@ public class BloombergHistoricalTimeSeriesProviderTest {
 
   private BloombergHistoricalTimeSeriesProvider _provider;
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected exception
+   */
   @BeforeMethod
   public void setUp() throws Exception {
     final BloombergConnector connector = BloombergTestUtils.getBloombergConnector();
@@ -61,6 +65,10 @@ public class BloombergHistoricalTimeSeriesProviderTest {
     _provider = provider;
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected exception
+   */
   @AfterMethod
   public void tearDown() throws Exception {
     if (_provider != null) {
@@ -70,22 +78,31 @@ public class BloombergHistoricalTimeSeriesProviderTest {
   }
 
   // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_getHistoricalTimeSeries_single_wrongDataSource() {
+  public void testGetHistoricalTimeSeriesSingleWrongDataSource() {
     final LocalDateRange range = LocalDateRange.of(LocalDate.of(2009, 11, 4), LocalDate.of(2009, 11, 4), true);
     _provider.getHistoricalTimeSeries(SIMPLE_BUNDLE, "RUBBISH", DEFAULT_DATA_PROVIDER, PX_LAST, range);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_getHistoricalTimeSeries_single_sameDate() {
+  public void testGetHistoricalTimeSeriesSingleSameDate() {
     final LocalDateRange range = LocalDateRange.of(LocalDate.of(2009, 11, 4), LocalDate.of(2009, 11, 4), true);
     final LocalDateDoubleTimeSeries test = _provider.getHistoricalTimeSeries(SIMPLE_BUNDLE, BBG_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, range);
     assertNotNull(test);
     assertEquals(1, test.size());
   }
 
+  /**
+   *
+   */
   @Test
-  public void getHistoricalTimeSeriesWithZeroMaxPoints() throws Exception {
+  public void getHistoricalTimeSeriesWithZeroMaxPoints() {
     final LocalDate endDate = LocalDate.of(2012, 03, 07);
     final LocalDate startDate = endDate.minusMonths(1);
 
@@ -99,8 +116,11 @@ public class BloombergHistoricalTimeSeriesProviderTest {
     assertEquals(0, realHts.size());
   }
 
+  /**
+   *
+   */
   @Test
-  public void getHistoricalTimeSeriesWithAllMaxPoints() throws Exception {
+  public void getHistoricalTimeSeriesWithAllMaxPoints() {
     final LocalDate endDate = LocalDate.of(2012, 03, 07);
     final LocalDate startDate = endDate.minusMonths(1);
 
@@ -118,8 +138,11 @@ public class BloombergHistoricalTimeSeriesProviderTest {
     assertEquals(reference, realHts);
   }
 
+  /**
+   *
+   */
   @Test
-  public void getHistoricalTimeSeriesWithTwoMaxPoints() throws Exception {
+  public void getHistoricalTimeSeriesWithTwoMaxPoints() {
     final LocalDate endDate = LocalDate.of(2012, 03, 07);
     final LocalDate startDate = endDate.minusMonths(1);
 
@@ -137,8 +160,12 @@ public class BloombergHistoricalTimeSeriesProviderTest {
     assertEquals(reference.tail(2), realHts);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected exception
+   */
   @Test
-  public void test_getHistoricalTimeSeries_single_dates() throws Exception {
+  public void testGetHistoricalTimeSeriesSingleDates() throws Exception {
     final LocalDate startDate = LocalDate.of(2009, 10, 29);
     final LocalDate endDate = LocalDate.of(2009, 11, 4);
     final LocalDateRange range = LocalDateRange.of(startDate, endDate, true);
@@ -161,14 +188,20 @@ public class BloombergHistoricalTimeSeriesProviderTest {
   }
 
   // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_getHistoricalTimeSeries_Map_wrongDataSource() {
+  public void testGetHistoricalTimeSeriesMapWrongDataSource() {
     final LocalDateRange range = LocalDateRange.of(LocalDate.of(2009, 11, 4), LocalDate.of(2009, 11, 4), true);
     _provider.getHistoricalTimeSeries(COMPLEX_BUNDLE, "RUBBISH", DEFAULT_DATA_PROVIDER, PX_LAST, range);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_getHistoricalTimeSeries_Map() {
+  public void testGetHistoricalTimeSeriesMap() {
     final LocalDateRange range = LocalDateRange.of(LocalDate.of(2009, 10, 4), LocalDate.of(2009, 11, 29), true);
     final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> test = _provider.getHistoricalTimeSeries(
         Collections.singleton(COMPLEX_BUNDLE), BBG_DATA_SOURCE, "CMPL", "PX_LAST", range);
@@ -180,6 +213,9 @@ public class BloombergHistoricalTimeSeriesProviderTest {
   }
 
   // -------------------------------------------------------------------------
+  /**
+   *
+   */
   private class BHDPgetHistoricalTimeSeriesWithDates implements Callable<LocalDateDoubleTimeSeries> {
     private final ExternalIdBundle _secDes;
     private final String _dataSource;
@@ -208,6 +244,9 @@ public class BloombergHistoricalTimeSeriesProviderTest {
     }
   }
 
+  /**
+   *
+   */
   @Test
   public void testGetAllAvailiableSeries() {
     final LocalDateDoubleTimeSeries hts = _provider.getHistoricalTimeSeries(ExternalIdBundle.of(ExternalSchemes.bloombergTickerSecurityId("JPY3M Curncy")),
@@ -216,7 +255,7 @@ public class BloombergHistoricalTimeSeriesProviderTest {
     assertEquals(getLatestWeekDay(), hts.getLatestTime());
   }
 
-  private LocalDate getLatestWeekDay() {
+  private static LocalDate getLatestWeekDay() {
     final Clock clock = Clock.systemUTC();
     return DateUtils.previousWeekDay(LocalDate.now(clock).plusDays(1));
   }

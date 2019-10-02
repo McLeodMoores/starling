@@ -45,49 +45,67 @@ public class PropertyPreservingFunctionTest {
     return func;
   }
 
+  /**
+   *
+   */
   @Test
-  public void EmptyProperties() {
+  public void emptyProperties() {
     final MockPropertyPreservingFunction func = getFunction();
     final ValueProperties props = ValueProperties.none();
     final ValueProperties expected = ValueProperties.none();
     assertEqual(expected, func, props);
   }
 
+  /**
+   *
+   */
   @Test
-  public void SingleMatchingProperty() {
+  public void singleMatchingProperty() {
     final MockPropertyPreservingFunction func = getFunction();
     assertEqual(ValueProperties.builder().with("A", "V").get(), func, ValueProperties.builder().with("A", "V").get(),
         ValueProperties.builder().with("A", "V").get());
   }
 
+  /**
+   *
+   */
   @Test
-  public void SingleNonMatchingProperty() {
+  public void singleNonMatchingProperty() {
     final MockPropertyPreservingFunction func = getFunction();
     final List<ValueSpecification> specses = getSpecs(ValueProperties.builder().with("A", "V").get(), ValueProperties.builder().with("A", "X").get());
     assertNull(func.getResultProperties(specses));
   }
 
+  /**
+   *
+   */
   @Test
-  public void SingleNonMatchingOtherProperty() {
+  public void singleNonMatchingOtherProperty() {
     final MockPropertyPreservingFunction func = getFunction();
     assertEqual(ValueProperties.none(), func, ValueProperties.builder().with("Z", "A").get(), ValueProperties.builder().with("Z", "B").get());
   }
 
+  /**
+   *
+   */
   @Test
-  public void SingleMatchingOtherProperty() {
+  public void singleMatchingOtherProperty() {
     final MockPropertyPreservingFunction func = getFunction();
     assertEqual(ValueProperties.none(), func, ValueProperties.builder().with("Z", "A").get(), ValueProperties.builder().with("Z", "A").get());
   }
 
+  /**
+   *
+   */
   @Test
-  public void OptionalProperty() {
+  public void optionalProperty() {
     final MockPropertyPreservingFunction func = getFunction();
 
     final ValueProperties p = ValueProperties.builder().withOptional("C").withAny("C").with("D", "X").withOptional("D").get();
     assertEqual(p, func, p, p);
   }
 
-  private void assertEqual(final ValueProperties expected, final MockPropertyPreservingFunction func, final ValueProperties... inputs) {
+  private static void assertEqual(final ValueProperties expected, final MockPropertyPreservingFunction func, final ValueProperties... inputs) {
     final List<ValueSpecification> specses = getSpecs(inputs);
     // Check even empty sets
     assertEqualOrdered(expected, func, specses);

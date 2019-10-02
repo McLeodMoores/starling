@@ -1,6 +1,6 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.region.impl;

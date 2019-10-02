@@ -484,7 +484,7 @@ public class MarketQuoteConverter {
   }
 
   /**
-   * Convert from par spreads to quoted spreads
+   * Convert from par spreads to quoted spreads.
    *
    * @param cds
    *          collection of CDSs

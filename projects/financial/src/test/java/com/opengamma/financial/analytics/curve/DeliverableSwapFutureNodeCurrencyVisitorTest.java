@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve;
 
@@ -53,9 +53,9 @@ public class DeliverableSwapFutureNodeCurrencyVisitorTest {
   /** The id of the underlying LIBOR convention */
   private static final ExternalId LIBOR_CONVENTION_ID = ExternalId.of(SCHEME, "USD LIBOR");
   /** The deliverable swap future convention */
-  private static final DeliverablePriceQuotedSwapFutureConvention DSF_CONVENTION =
-      new DeliverablePriceQuotedSwapFutureConvention("USD DSF", DSF_CONVENTION_ID.toBundle(), ExternalId.of(SCHEME, "IMM"),
-          US, SWAP_CONVENTION_ID, 100000);
+  private static final DeliverablePriceQuotedSwapFutureConvention DSF_CONVENTION = new DeliverablePriceQuotedSwapFutureConvention("USD DSF",
+      DSF_CONVENTION_ID.toBundle(), ExternalId.of(SCHEME, "IMM"),
+      US, SWAP_CONVENTION_ID, 100000);
   /** The swap convention */
   private static final SwapConvention SWAP_CONVENTION = new SwapConvention("USD Calendar Swap", SWAP_CONVENTION_ID.toBundle(),
       PAY_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION_ID);

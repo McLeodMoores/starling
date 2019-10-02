@@ -47,13 +47,19 @@ public class DbUserMasterTest extends AbstractDbTest {
 
   private DbUserMaster _userMaster;
 
+  /**
+   * @param databaseType
+   *          the database type
+   * @param databaseVersion
+   *          the database version
+   */
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public DbUserMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doSetUp() {
     _userMaster = new DbUserMaster(getDbConnector());
@@ -64,18 +70,26 @@ public class DbUserMasterTest extends AbstractDbTest {
     _userMaster = null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_basics() throws Exception {
+  public void testBasics() throws Exception {
     assertNotNull(_userMaster);
     assertEquals(true, _userMaster.getUniqueIdScheme().equals("DbUsr"));
     assertNotNull(_userMaster.getDbConnector());
     assertNotNull(_userMaster.getClock());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_example() throws Exception {
+  public void testExample() throws Exception {
     final ManageableUser user = createUser();
     assertEquals(false, _userMaster.nameExists(user.getUserName()));
     final UniqueId uid = _userMaster.add(user);
@@ -85,8 +99,12 @@ public class DbUserMasterTest extends AbstractDbTest {
     assertEquals(user, loaded);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_no_alternateId() throws Exception {
+  public void testNoAlternateId() throws Exception {
     final ManageableUser user = createUser();
     user.setAlternateIds(ExternalIdBundle.EMPTY);
     final UniqueId uid = _userMaster.add(user);
@@ -95,8 +113,12 @@ public class DbUserMasterTest extends AbstractDbTest {
     assertEquals(user, loaded);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_no_permissions() throws Exception {
+  public void testNoPermissions() throws Exception {
     final ManageableUser user = createUser();
     user.getAssociatedPermissions().clear();
     final UniqueId uid = _userMaster.add(user);
@@ -105,8 +127,12 @@ public class DbUserMasterTest extends AbstractDbTest {
     assertEquals(user, loaded);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_no_extensions() throws Exception {
+  public void testNoExtensions() throws Exception {
     final ManageableUser user = createUser();
     user.getProfile().getExtensions().clear();
     final UniqueId uid = _userMaster.add(user);
@@ -115,8 +141,12 @@ public class DbUserMasterTest extends AbstractDbTest {
     assertEquals(user, loaded);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_no_subTables() throws Exception {
+  public void testNoSubTables() throws Exception {
     final ManageableUser user = createUser();
     user.setAlternateIds(ExternalIdBundle.EMPTY);
     user.getAssociatedPermissions().clear();
@@ -127,9 +157,13 @@ public class DbUserMasterTest extends AbstractDbTest {
     assertEquals(user, loaded);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_addNameExists() throws Exception {
+  public void testAddNameExists() throws Exception {
     final ManageableUser user = createUser();
     _userMaster.add(user);
     assertNotNull(_userMaster.getByName(TEST_USER));
@@ -142,9 +176,13 @@ public class DbUserMasterTest extends AbstractDbTest {
     assertNotNull(_userMaster.getByName(TEST_USER));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_removeByName() throws Exception {
+  public void testRemoveByName() throws Exception {
     final ManageableUser user = createUser();
     final UniqueId uid = _userMaster.add(user);
     assertNotNull(_userMaster.getById(uid.getObjectId()));
@@ -162,8 +200,8 @@ public class DbUserMasterTest extends AbstractDbTest {
     } catch (final DataNotFoundException ex) {
       // expected
     }
-    _userMaster.removeByName(TEST_USER);  // idempotent
-    _userMaster.removeById(uid.getObjectId());  // idempotent
+    _userMaster.removeByName(TEST_USER); // idempotent
+    _userMaster.removeById(uid.getObjectId()); // idempotent
 
     final UserEventHistoryResult events = _userMaster.eventHistory(new UserEventHistoryRequest(TEST_USER));
     assertEquals(2, events.getEvents().size());
@@ -173,9 +211,13 @@ public class DbUserMasterTest extends AbstractDbTest {
     assertEquals(0, events.getEvents().get(1).getChanges().size());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_removeById() throws Exception {
+  public void testRemoveById() throws Exception {
     final ManageableUser user = createUser();
     final UniqueId uid = _userMaster.add(user);
     assertNotNull(_userMaster.getById(uid.getObjectId()));
@@ -193,8 +235,8 @@ public class DbUserMasterTest extends AbstractDbTest {
     } catch (final DataNotFoundException ex) {
       // expected
     }
-    _userMaster.removeById(uid.getObjectId());  // idempotent
-    _userMaster.removeByName(TEST_USER);  // idempotent
+    _userMaster.removeById(uid.getObjectId()); // idempotent
+    _userMaster.removeByName(TEST_USER); // idempotent
 
     final UserEventHistoryResult events = _userMaster.eventHistory(new UserEventHistoryRequest(uid.getObjectId()));
     assertEquals(2, events.getEvents().size());
@@ -204,9 +246,13 @@ public class DbUserMasterTest extends AbstractDbTest {
     assertEquals(0, events.getEvents().get(1).getChanges().size());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_update_main() throws Exception {
+  public void testUpdateMain() throws Exception {
     ManageableUser user = createUser();
     final UniqueId uid1 = _userMaster.add(user);
     user = _userMaster.getById(uid1.getObjectId());
@@ -217,8 +263,12 @@ public class DbUserMasterTest extends AbstractDbTest {
     assertEquals(user, loaded);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_update_linked() throws Exception {
+  public void testUpdateLinked() throws Exception {
     ManageableUser user = createUser();
     final UniqueId uid1 = _userMaster.add(user);
     user = _userMaster.getById(uid1.getObjectId());
@@ -240,8 +290,12 @@ public class DbUserMasterTest extends AbstractDbTest {
     assertEquals(5, events.getEvents().get(1).getChanges().size());
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_update_rename_succeed() throws Exception {
+  public void testUpdateRenameSucceed() throws Exception {
     ManageableUser user = createUser();
     final UniqueId uid1 = _userMaster.add(user);
     user = _userMaster.getById(uid1.getObjectId());
@@ -255,8 +309,12 @@ public class DbUserMasterTest extends AbstractDbTest {
     assertEquals(user, _userMaster.getByName("bobjones"));
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_update_rename_fail() throws Exception {
+  public void testUpdateRenameFail() throws Exception {
     ManageableUser user1 = createUser();
     final UniqueId uid1 = _userMaster.add(user1);
     user1 = _userMaster.getById(uid1.getObjectId());
@@ -273,9 +331,13 @@ public class DbUserMasterTest extends AbstractDbTest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_search() throws Exception {
+  public void testSearch() throws Exception {
     ManageableUser user1 = createUser();
     final UniqueId uid1 = _userMaster.add(user1);
     user1 = _userMaster.getById(uid1.getObjectId());
@@ -289,20 +351,28 @@ public class DbUserMasterTest extends AbstractDbTest {
     assertEquals(user2, result.getUsers().get(1));
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_search_noObjectIds() throws Exception {
+  public void testSearchNoObjectIds() throws Exception {
     ManageableUser user = createUser();
     final UniqueId uid1 = _userMaster.add(user);
     user = _userMaster.getById(uid1.getObjectId());
 
     final UserSearchRequest request = new UserSearchRequest();
-    request.setObjectIds(ImmutableList.<ObjectId>of());
+    request.setObjectIds(ImmutableList.<ObjectId> of());
     final UserSearchResult result = _userMaster.search(request);
     assertEquals(0, result.getUsers().size());
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_search_objectIdNotFound() throws Exception {
+  public void testSearchObjectIdNotFound() throws Exception {
     ManageableUser user = createUser();
     final UniqueId uid1 = _userMaster.add(user);
     user = _userMaster.getById(uid1.getObjectId());
@@ -313,13 +383,16 @@ public class DbUserMasterTest extends AbstractDbTest {
     assertEquals(0, result.getUsers().size());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test
-  public void test_toString() {
+  public void testToString() {
     assertEquals("DbUserMaster[DbUsr]", _userMaster.toString());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private ManageableUser createUser() {
     final ManageableUser user = new ManageableUser(TEST_USER);
     user.setAlternateIds(ExternalIdBundle.of(ExternalId.of("A", "B"), ExternalId.of("C", "D")));

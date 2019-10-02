@@ -9,9 +9,8 @@ import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertNull;
 
-import org.threeten.bp.ZoneId;
-
 import org.testng.annotations.Test;
+import org.threeten.bp.ZoneId;
 
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.integration.masterdb.AbstractIntegrationDbExchangeMasterTest;
@@ -27,8 +26,11 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class IntegrationDbExchangeMasterTest extends AbstractIntegrationDbExchangeMasterTest {
 
+  /**
+   * @throws Exception
+   */
   @Test
-  public void test_querySampleEntry() throws Exception {
+  public void testQuerySampleEntry() throws Exception {
     final ExchangeSearchRequest request = new ExchangeSearchRequest();
     request.setName("London Stock Exchange");
     final ExchangeSearchResult result = getExchangeMaster().search(request);

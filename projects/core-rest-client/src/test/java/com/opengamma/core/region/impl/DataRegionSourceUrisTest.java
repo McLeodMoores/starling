@@ -32,7 +32,7 @@ public class DataRegionSourceUrisTest {
   private URI _baseUri;
 
   /**
-   * Sets up the URI
+   * Sets up the URI.
    *
    * @throws URISyntaxException
    *           if the path is wrong
@@ -59,8 +59,7 @@ public class DataRegionSourceUrisTest {
   }
 
   /**
-   * Tests the URI that is built when the version correction is null (i.e.
-   * LATEST is required).
+   * Tests the URI that is built when the version correction is null (i.e. LATEST is required).
    */
   public void testBuildUriOidLatest() {
     final URI uri = DataRegionSourceUris.uriGet(_baseUri, OID, null);
@@ -129,8 +128,7 @@ public class DataRegionSourceUrisTest {
   }
 
   /**
-   * Tests the URI that is built when the version correction is null (i.e.
-   * LATEST is required).
+   * Tests the URI that is built when the version correction is null (i.e. LATEST is required).
    */
   public void testSearchLatest() {
     final URI uri = DataRegionSourceUris.uriSearch(_baseUri, null, EIDS);

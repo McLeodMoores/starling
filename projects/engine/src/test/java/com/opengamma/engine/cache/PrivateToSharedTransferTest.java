@@ -42,27 +42,40 @@ import com.opengamma.util.tuple.Pairs;
 
 import net.sf.ehcache.CacheManager;
 
-@Test(groups = {TestGroup.INTEGRATION, "ehcache"})
+/**
+ * @author emcleod
+ *
+ */
+@Test(groups = { TestGroup.INTEGRATION, "ehcache" })
 public class PrivateToSharedTransferTest {
 
   private CacheManager _cacheManager;
 
+  /**
+   *
+   */
   @BeforeClass
   public void setUpClass() {
     _cacheManager = EHCacheUtils.createTestCacheManager(getClass());
   }
 
+  /**
+   *
+   */
   @AfterClass
   public void tearDownClass() {
     EHCacheUtils.shutdownQuiet(_cacheManager);
   }
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
     EHCacheUtils.clear(_cacheManager);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static ValueSpecification[] createValueSpecifications(final int count) {
     final ValueSpecification[] specs = new ValueSpecification[count];
     final ComputationTargetSpecification target = ComputationTargetSpecification.of(Currency.USD);
@@ -76,8 +89,11 @@ public class PrivateToSharedTransferTest {
     return new DefaultFudgeMessageStoreFactory(new InMemoryBinaryDataStoreFactory(), fudgeContext);
   }
 
+  /**
+   *
+   */
   @Test
-  public void testMissingValueLoader_noCallback() {
+  public void testMissingValueLoaderNoCallback() {
     final IdentifierMap identifiers = new InMemoryIdentifierMap();
     final DefaultViewComputationCacheSource source = new DefaultViewComputationCacheSource(identifiers,
         FudgeContext.GLOBAL_DEFAULT, createInMemoryFudgeMessageStoreFactory(FudgeContext.GLOBAL_DEFAULT));
@@ -96,8 +112,11 @@ public class PrivateToSharedTransferTest {
     assertTrue(values.isEmpty());
   }
 
+  /**
+   *
+   */
   @Test
-  public void testMissingValueLoader_withCallback() {
+  public void testMissingValueLoaderWithCallback() {
     final IdentifierMap identifiers = new InMemoryIdentifierMap();
     final Set<Integer> missing = new HashSet<>();
     final DefaultViewComputationCacheSource source = new DefaultViewComputationCacheSource(identifiers,
@@ -166,6 +185,10 @@ public class PrivateToSharedTransferTest {
     assertTrue(missing.contains(2));
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is an unexpected problem
+   */
   @Test
   public void testFindMessage() throws InterruptedException {
     // Create the test infrastructure

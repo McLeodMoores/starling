@@ -46,7 +46,6 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class FungibleTradeBuilderTest {
 
-
   private static final ExternalIdBundle APPLE_BUNDLE;
   private static final ExternalIdBundle INTEL_BUNDLE;
   private static final EquitySecurity APPLE_SECURITY;
@@ -89,7 +88,7 @@ public class FungibleTradeBuilderTest {
     root.addChildNode(node);
     final ManageablePortfolio portfolio = new ManageablePortfolio("portfolio", root);
     _savedPortfolio = _portfolioMaster.add(new PortfolioDocument(portfolio)).getPortfolio();
-    final Set<MetaBean> metaBeans = Sets.<MetaBean>newHashSet(ManageableTrade.meta());
+    final Set<MetaBean> metaBeans = Sets.<MetaBean> newHashSet(ManageableTrade.meta());
     _tradeBuilder = new FungibleTradeBuilder(_positionMaster,
         _portfolioMaster,
         securityMaster,
@@ -115,8 +114,8 @@ public class FungibleTradeBuilderTest {
   }
 
   /**
-   * add a trade to a portfolio node that doesn't have an existing position in the trade's security.
-   * node has a position in a different security of the same type
+   * add a trade to a portfolio node that doesn't have an existing position in the trade's security. node has a position in a different security of the same
+   * type
    */
   @Test
   public void addTradeNoExistingPosition() {
@@ -147,7 +146,7 @@ public class FungibleTradeBuilderTest {
   }
 
   /**
-   * add a trade to a portfolio node that already has a position in the trade's security
+   * add a trade to a portfolio node that already has a position in the trade's security.
    */
   @Test
   public void addTradeToExistingPosition() {
@@ -177,7 +176,7 @@ public class FungibleTradeBuilderTest {
   }
 
   /**
-   * update a trade - the position's quantity should also be adjusted
+   * update a trade - the position's quantity should also be adjusted.
    */
   @Test
   public void updateTrade() {
@@ -226,7 +225,7 @@ public class FungibleTradeBuilderTest {
   }
 
   /**
-   * update the trade and change the security - this should fail
+   * update the trade and change the security - this should fail.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void updateTradeChangeSecurity() {

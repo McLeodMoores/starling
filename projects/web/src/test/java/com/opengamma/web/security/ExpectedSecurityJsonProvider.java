@@ -33,7 +33,7 @@ import com.opengamma.util.JodaBeanSerialization;
 import com.opengamma.util.time.Expiry;
 
 /**
- * Gets expected Json document for different security types
+ * Gets expected Json document for different security types.
  */
 /* package */ class ExpectedSecurityJsonProvider extends FinancialSecurityVisitorSameValueAdapter<JSONObject> {
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.index;
 
@@ -48,7 +48,7 @@ public class QuandlIndexGeneratorTest {
    */
   @Test
   public void testBadInputs() {
-    assertNull(LOADER.createSecurity(new String[] {"FRED/USD1MTD156N"}));
+    assertNull(LOADER.createSecurity(new String[] { "FRED/USD1MTD156N" }));
   }
 
   /**
@@ -56,7 +56,7 @@ public class QuandlIndexGeneratorTest {
    */
   @Test
   public void testBadIborIndexInputs() {
-    assertNull(LOADER.createSecurity(new String[] {"FRED/USD1MTD156N", "IBOR INDEX", "NAME"}));
+    assertNull(LOADER.createSecurity(new String[] { "FRED/USD1MTD156N", "IBOR INDEX", "NAME" }));
   }
 
   /**
@@ -64,7 +64,7 @@ public class QuandlIndexGeneratorTest {
    */
   @Test
   public void testBadSwapIndexInputs() {
-    assertNull(LOADER.createSecurity(new String[] {"FRED/DSWP1", "SWAP INDEX", "NAME"}));
+    assertNull(LOADER.createSecurity(new String[] { "FRED/DSWP1", "SWAP INDEX", "NAME" }));
   }
 
   /**
@@ -72,7 +72,7 @@ public class QuandlIndexGeneratorTest {
    */
   @Test
   public void testBadTenorStringForIborIndex() {
-    assertNull(LOADER.createSecurity(new String[] {"FRED/USD1MTD156N", "IBOR INDEX", "NAME", "3M"}));
+    assertNull(LOADER.createSecurity(new String[] { "FRED/USD1MTD156N", "IBOR INDEX", "NAME", "3M" }));
   }
 
   /**
@@ -80,7 +80,7 @@ public class QuandlIndexGeneratorTest {
    */
   @Test
   public void testBadTenorStringForSwapIndex() {
-    assertNull(LOADER.createSecurity(new String[] {"FRED/DSWP8", "SWAP INDEX", "NAME", "8Y"}));
+    assertNull(LOADER.createSecurity(new String[] { "FRED/DSWP8", "SWAP INDEX", "NAME", "8Y" }));
   }
 
   /**
@@ -88,12 +88,14 @@ public class QuandlIndexGeneratorTest {
    */
   @Test
   public void testBadCategory() {
-    assertNull(LOADER.createSecurity(new String[] {"FRED/USD1MTD156N", "TEST", "NAME"}));
+    assertNull(LOADER.createSecurity(new String[] { "FRED/USD1MTD156N", "TEST", "NAME" }));
   }
 
   /**
    * Tests the creation of ibor indices from a file.
-   * @throws IOException If the test data file could not be opened
+   * 
+   * @throws IOException
+   *           If the test data file could not be opened
    */
   @Test
   public void testLoadIborIndexFromFile() throws IOException {
@@ -133,7 +135,9 @@ public class QuandlIndexGeneratorTest {
 
   /**
    * Tests the creation of overnight indices from a file.
-   * @throws IOException If the test data file could not be opened
+   * 
+   * @throws IOException
+   *           If the test data file could not be opened
    */
   @Test
   public void testLoadOvernightIndexFromFile() throws IOException {
@@ -173,7 +177,9 @@ public class QuandlIndexGeneratorTest {
 
   /**
    * Tests the creation of swap indices from a file.
-   * @throws IOException If the test data file could not be opened
+   * 
+   * @throws IOException
+   *           If the test data file could not be opened
    */
   @Test
   public void testLoadSwapIndexFromFile() throws IOException {

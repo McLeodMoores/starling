@@ -64,6 +64,7 @@ public class WebPushTestUtils {
   /* package */ public String readFromPath(final String path) throws IOException {
     return readFromPath(path, null);
   }
+
   /* package */ public String readFromPath(final String path, final String clientId) throws IOException {
     return readFromPath(path, clientId, "GET");
   }
@@ -140,8 +141,7 @@ public class WebPushTestUtils {
   }
 
   /**
-   * Creates and starts a Jetty server using {@code web-push/WEB-INF/web.xml}
-   * and configured using Spring
+   * Creates and starts a Jetty server using {@code web-push/WEB-INF/web.xml} and configured using Spring.
    *
    * @return The server and the Spring context
    * @param springXml
@@ -179,8 +179,7 @@ public class WebPushTestUtils {
   }
 
   /**
-   * Asserts that {@code json} represents a JSON object with a field called
-   * {@code updates} whose value is an array of the expected values.
+   * Asserts that {@code json} represents a JSON object with a field called {@code updates} whose value is an array of the expected values.
    *
    * @param json
    *          {@code {updates: [url1, url2, ...]}}

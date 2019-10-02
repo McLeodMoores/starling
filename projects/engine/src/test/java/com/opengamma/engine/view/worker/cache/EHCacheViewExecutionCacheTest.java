@@ -61,11 +61,17 @@ public class EHCacheViewExecutionCacheTest {
   private final Instant _now = Instant.now();
   private CacheManager _cacheManager;
 
+  /**
+   *
+   */
   @BeforeClass
   public void setUpClass() {
     _cacheManager = EHCacheUtils.createTestCacheManager(EHCacheViewExecutionCache.class);
   }
 
+  /**
+   *
+   */
   @AfterClass
   public void tearDownClass() {
     EHCacheUtils.shutdownQuiet(_cacheManager);
@@ -99,10 +105,10 @@ public class EHCacheViewExecutionCacheTest {
     viewDefinition.addViewCalculationConfiguration(calcConfig);
     final DependencyGraph graph = createDependencyGraph();
     final Collection<DependencyGraph> graphs = Collections.singleton(graph);
-    final Collection<CompiledViewCalculationConfiguration> calcConfigs =
-        Collections.<CompiledViewCalculationConfiguration>singleton(CompiledViewCalculationConfigurationImpl.of(graph));
-    final Map<ComputationTargetReference, UniqueId> resolutions =
-        ImmutableMap.<ComputationTargetReference, UniqueId>of(new ComputationTargetRequirement(ComputationTargetType.SECURITY,
+    final Collection<CompiledViewCalculationConfiguration> calcConfigs = Collections
+        .<CompiledViewCalculationConfiguration> singleton(CompiledViewCalculationConfigurationImpl.of(graph));
+    final Map<ComputationTargetReference, UniqueId> resolutions = ImmutableMap
+        .<ComputationTargetReference, UniqueId> of(new ComputationTargetRequirement(ComputationTargetType.SECURITY,
             ExternalId.of("Security", "Foo")), UniqueId.of("Sec", "0"));
     return new CompiledViewDefinitionWithGraphsImpl(VersionCorrection.of(_now, _now), "", viewDefinition, graphs, resolutions,
         portfolio, 0, calcConfigs, null, null);
@@ -121,7 +127,11 @@ public class EHCacheViewExecutionCacheTest {
     return new EHCacheViewExecutionCache(_cacheManager, targetResolver);
   }
 
-  public void testCompiledViewDefinitionWithGraphs_serialization() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testCompiledViewDefinitionWithGraphsSerialization() throws Exception {
     final EHCacheViewExecutionCache cache = createCache();
     final CompiledViewDefinitionWithGraphs object = createCompiledViewDefinitionWithGraphs();
     final CompiledViewDefinitionWithGraphsHolder holder = cache.new CompiledViewDefinitionWithGraphsHolder(object);
@@ -143,7 +153,10 @@ public class EHCacheViewExecutionCacheTest {
     assertEquals(newObject.getResolverVersionCorrection(), object.getResolverVersionCorrection());
   }
 
-  public void testCompiledViewDefinitionWithGraphs_caching() {
+  /**
+   *
+   */
+  public void testCompiledViewDefinitionWithGraphsCaching() {
     final EHCacheViewExecutionCache cache = createCache();
     final CompiledViewDefinitionWithGraphs object = createCompiledViewDefinitionWithGraphs();
     final ViewExecutionCacheKey key = new ViewExecutionCacheKey(UniqueId.of("Key", "1"), "Foo", "No-op");

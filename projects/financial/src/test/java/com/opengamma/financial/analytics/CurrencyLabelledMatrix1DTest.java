@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics;
 
@@ -14,9 +14,9 @@ import com.opengamma.util.money.Currency;
  */
 public class CurrencyLabelledMatrix1DTest {
   /** The currencies */
-  private static final Currency[] CURRENCIES = { Currency.AUD, Currency.BRL, Currency.CAD};
+  private static final Currency[] CURRENCIES = { Currency.AUD, Currency.BRL, Currency.CAD };
   /** The values */
-  private static final double[] VALUES = {100, 1000, 10000};
+  private static final double[] VALUES = { 100, 1000, 10000 };
   /** The matrix */
   private static final CurrencyLabelledMatrix1D MATRIX = new CurrencyLabelledMatrix1D(CURRENCIES, VALUES);
 

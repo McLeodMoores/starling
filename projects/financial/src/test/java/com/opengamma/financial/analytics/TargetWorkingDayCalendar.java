@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics;
 
@@ -16,8 +16,8 @@ import com.opengamma.core.holiday.impl.SimpleHoliday;
 import com.opengamma.core.holiday.impl.SimpleHolidayWithWeekend;
 
 /**
- * Utility class that contains a {@link WorkingDayCalendar} and {@link SimpleHolidayWithWeekend}
- * that returns TARGET holiday dates for tests. Based on {@link CalendarTarget}.
+ * Utility class that contains a {@link WorkingDayCalendar} and {@link SimpleHolidayWithWeekend} that returns TARGET holiday dates for tests. Based on
+ * {@link CalendarTarget}.
  */
 public final class TargetWorkingDayCalendar {
   /** Holiday dates */
@@ -33,7 +33,7 @@ public final class TargetWorkingDayCalendar {
       DATES.add(LocalDate.of(loopy, 12, 25));
       DATES.add(LocalDate.of(loopy, 12, 26));
     }
-    final LocalDate[] easter = new LocalDate[] {LocalDate.of(2013, 3, 31), LocalDate.of(2014, 4, 20), LocalDate.of(2015, 4, 5),
+    final LocalDate[] easter = new LocalDate[] { LocalDate.of(2013, 3, 31), LocalDate.of(2014, 4, 20), LocalDate.of(2015, 4, 5),
         LocalDate.of(2016, 3, 27), LocalDate.of(2017, 4, 16), LocalDate.of(2018, 4, 1), LocalDate.of(2019, 4, 21), LocalDate.of(2020, 4, 12),
         LocalDate.of(2021, 4, 4), LocalDate.of(2022, 4, 17), LocalDate.of(2023, 4, 9), LocalDate.of(2024, 3, 31), LocalDate.of(2025, 4, 20),
         LocalDate.of(2026, 4, 5), LocalDate.of(2027, 3, 28), LocalDate.of(2028, 4, 16), LocalDate.of(2029, 4, 1), LocalDate.of(2030, 4, 21),
@@ -54,6 +54,7 @@ public final class TargetWorkingDayCalendar {
    * TARGET holidays.
    */
   public static final SimpleHoliday TARGET_HOLIDAY = new SimpleHolidayWithWeekend(DATES, WeekendType.SATURDAY_SUNDAY);
+
   /**
    * Restricted constructor.
    */

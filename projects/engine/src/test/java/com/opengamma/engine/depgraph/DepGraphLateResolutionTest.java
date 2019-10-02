@@ -18,9 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 import com.opengamma.engine.ComputationTarget;
-import com.opengamma.engine.function.CompiledFunctionDefinition;
 import com.opengamma.engine.function.FunctionCompilationContext;
-import com.opengamma.engine.function.resolver.FunctionPriority;
 import com.opengamma.engine.test.MockFunction;
 import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
@@ -29,7 +27,7 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.TestLifecycle;
 
 /**
- * Tests the dependency graph building under late resolution conditions
+ * Tests the dependency graph building under late resolution conditions.
  */
 @Test(groups = TestGroup.UNIT)
 public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTest {
@@ -66,17 +64,14 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
       };
       fnConv.addRequirement(helper.getRequirement2Any());
       helper.getFunctionRepository().addFunction(fnConv);
-      final DependencyGraphBuilder builder = helper.createBuilder(new FunctionPriority() {
-        @Override
-        public int getPriority(final CompiledFunctionDefinition function) {
-          if (function == fnConv) {
-            return 1;
-          }
-          if (function == fn2Bar) {
-            return -1;
-          }
-          return 0;
+      final DependencyGraphBuilder builder = helper.createBuilder(function -> {
+        if (function == fnConv) {
+          return 1;
         }
+        if (function == fn2Bar) {
+          return -1;
+        }
+        return 0;
       });
       builder.addTarget(helper.getRequirement1Bar());
       final DependencyGraph graph = builder.getDependencyGraph();
@@ -108,9 +103,9 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
           assertEquals(1, inputs.size());
           assertTrue(inputs.contains(helper.getSpec2Bar()));
           assertEquals(1, outputs.size());
-          //final ValueSpecification expected = _result.compose(helper.getRequirement1Bar());
-          //LOGGER.debug("Outputs={}, expected={}", outputs, expected);
-          //assertTrue(outputs.contains(expected));
+          // final ValueSpecification expected = _result.compose(helper.getRequirement1Bar());
+          // LOGGER.debug("Outputs={}, expected={}", outputs, expected);
+          // assertTrue(outputs.contains(expected));
           return Collections.singleton(helper.getRequirement1Foo());
         }
 
@@ -155,14 +150,11 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
       };
       fnConv.addRequirement(helper.getRequirement2Any());
       helper.getFunctionRepository().addFunction(fnConv);
-      final DependencyGraphBuilder builder = helper.createBuilder(new FunctionPriority() {
-        @Override
-        public int getPriority(final CompiledFunctionDefinition function) {
-          if (function == fn2Foo) {
-            return 1;
-          }
-          return 0;
+      final DependencyGraphBuilder builder = helper.createBuilder(function -> {
+        if (function == fn2Foo) {
+          return 1;
         }
+        return 0;
       });
       builder.addTarget(helper.getRequirement1Bar());
       final DependencyGraph graph = builder.getDependencyGraph();

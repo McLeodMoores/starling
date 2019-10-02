@@ -31,6 +31,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class DefaultComputationTargetSpecificationResolverTest {
 
+  /**
+   *
+   */
   private static class Foo implements UniqueIdentifiable {
 
     @Override
@@ -40,6 +43,9 @@ public class DefaultComputationTargetSpecificationResolverTest {
 
   }
 
+  /**
+   *
+   */
   private static class Bar implements UniqueIdentifiable {
 
     @Override
@@ -49,46 +55,45 @@ public class DefaultComputationTargetSpecificationResolverTest {
 
   }
 
-  private static final VersionCorrection VC =
-      VersionCorrection.of(Instant.now(), Instant.now());
-  private static final DefaultComputationTargetSpecificationResolver RESOLVER =
-      new DefaultComputationTargetSpecificationResolver();
-  private static final ComputationTargetSpecification SPECIFICATION_NULL =
-      ComputationTargetSpecification.NULL;
-  private static final ComputationTargetSpecification SPECIFICATION_PRIMITIVE_VERSIONED =
-      ComputationTargetSpecification.of(UniqueId.of("ExternalId-Test", "X", "V"));
-  private static final ComputationTargetSpecification SPECIFICATION_PRIMITIVE_LATEST =
-      ComputationTargetSpecification.of(UniqueId.of("ExternalId-Test", "X"));
-  private static final ComputationTargetSpecification SPECIFICATION_FOO_VERSIONED =
-      new ComputationTargetSpecification(ComputationTargetType.of(Foo.class), UniqueId.of("Foo", "Bar", "V"));
-  private static final ComputationTargetSpecification SPECIFICATION_FOO_LATEST =
-      new ComputationTargetSpecification(ComputationTargetType.of(Foo.class), UniqueId.of("Foo", "Bar"));
-  private static final ComputationTargetSpecification SPECIFICATION_BAR_LATEST =
-      new ComputationTargetSpecification(ComputationTargetType.of(Bar.class), UniqueId.of("Bar", "Foo"));
-  private static final ComputationTargetSpecification SPECIFICATION_FOO_BAD =
-      new ComputationTargetSpecification(ComputationTargetType.of(Foo.class), UniqueId.of("Foo", "Cow"));
-  private static final ComputationTargetSpecification SPECIFICATION_FOO_OR_BAR =
-      new ComputationTargetSpecification(ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)), UniqueId.of(
-      "Foo", "Bar"));
-  private static final ComputationTargetSpecification SPECIFICATION_FOO_OR_BAR_BAD =
-      new ComputationTargetSpecification(ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)),
-      UniqueId.of("Foo", "Cow"));
-  private static final ComputationTargetSpecification SPECIFICATION_FOO_OR_BAR_VERSIONED =
-      new ComputationTargetSpecification(ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)),
+  private static final VersionCorrection VC = VersionCorrection.of(Instant.now(), Instant.now());
+  private static final DefaultComputationTargetSpecificationResolver RESOLVER = new DefaultComputationTargetSpecificationResolver();
+  private static final ComputationTargetSpecification SPECIFICATION_NULL = ComputationTargetSpecification.NULL;
+  private static final ComputationTargetSpecification SPECIFICATION_PRIMITIVE_VERSIONED = ComputationTargetSpecification
+      .of(UniqueId.of("ExternalId-Test", "X", "V"));
+  private static final ComputationTargetSpecification SPECIFICATION_PRIMITIVE_LATEST = ComputationTargetSpecification.of(UniqueId.of("ExternalId-Test", "X"));
+  private static final ComputationTargetSpecification SPECIFICATION_FOO_VERSIONED = new ComputationTargetSpecification(ComputationTargetType.of(Foo.class),
       UniqueId.of("Foo", "Bar", "V"));
-  private static final ComputationTargetRequirement REQUIREMENT_PRIMITIVE =
-      new ComputationTargetRequirement(ComputationTargetType.PRIMITIVE, ExternalIdBundle.of(ExternalId.of("Test", "X")));
-  private static final ComputationTargetRequirement REQUIREMENT_FOO_VALID =
-      new ComputationTargetRequirement(ComputationTargetType.of(Foo.class), ExternalIdBundle.of(ExternalId.of("Test", "B")));
-  private static final ComputationTargetRequirement REQUIREMENT_FOO_INVALID =
-      new ComputationTargetRequirement(ComputationTargetType.of(Foo.class), ExternalIdBundle.of(ExternalId.of("Test", "C")));
-  private static final ComputationTargetRequirement REQUIREMENT_FOO_OR_BAR =
-      new ComputationTargetRequirement(ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)), ExternalId.of(
-      "Test", "B"));
-  private static final ComputationTargetRequirement REQUIREMENT_FOO_OR_BAR_BAD =
-      new ComputationTargetRequirement(ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)), ExternalId.of(
-      "Test", "C"));
+  private static final ComputationTargetSpecification SPECIFICATION_FOO_LATEST = new ComputationTargetSpecification(ComputationTargetType.of(Foo.class),
+      UniqueId.of("Foo", "Bar"));
+  private static final ComputationTargetSpecification SPECIFICATION_BAR_LATEST = new ComputationTargetSpecification(ComputationTargetType.of(Bar.class),
+      UniqueId.of("Bar", "Foo"));
+  private static final ComputationTargetSpecification SPECIFICATION_FOO_BAD = new ComputationTargetSpecification(ComputationTargetType.of(Foo.class),
+      UniqueId.of("Foo", "Cow"));
+  private static final ComputationTargetSpecification SPECIFICATION_FOO_OR_BAR = new ComputationTargetSpecification(
+      ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)), UniqueId.of(
+          "Foo", "Bar"));
+  private static final ComputationTargetSpecification SPECIFICATION_FOO_OR_BAR_BAD = new ComputationTargetSpecification(
+      ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)),
+      UniqueId.of("Foo", "Cow"));
+  private static final ComputationTargetSpecification SPECIFICATION_FOO_OR_BAR_VERSIONED = new ComputationTargetSpecification(
+      ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)),
+      UniqueId.of("Foo", "Bar", "V"));
+  private static final ComputationTargetRequirement REQUIREMENT_PRIMITIVE = new ComputationTargetRequirement(ComputationTargetType.PRIMITIVE,
+      ExternalIdBundle.of(ExternalId.of("Test", "X")));
+  private static final ComputationTargetRequirement REQUIREMENT_FOO_VALID = new ComputationTargetRequirement(ComputationTargetType.of(Foo.class),
+      ExternalIdBundle.of(ExternalId.of("Test", "B")));
+  private static final ComputationTargetRequirement REQUIREMENT_FOO_INVALID = new ComputationTargetRequirement(ComputationTargetType.of(Foo.class),
+      ExternalIdBundle.of(ExternalId.of("Test", "C")));
+  private static final ComputationTargetRequirement REQUIREMENT_FOO_OR_BAR = new ComputationTargetRequirement(
+      ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)), ExternalId.of(
+          "Test", "B"));
+  private static final ComputationTargetRequirement REQUIREMENT_FOO_OR_BAR_BAD = new ComputationTargetRequirement(
+      ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)), ExternalId.of(
+          "Test", "C"));
 
+  /**
+   *
+   */
   public DefaultComputationTargetSpecificationResolverTest() {
     RESOLVER.addResolver(ComputationTargetType.of(Foo.class), new AbstractIdentifierResolver() {
 
@@ -114,60 +119,102 @@ public class DefaultComputationTargetSpecificationResolverTest {
     RESOLVER.addResolver(ComputationTargetType.PRIMITIVE, new PrimitiveResolver());
   }
 
-  public void testSpecification_null() {
+  /**
+   *
+   */
+  public void testSpecificationNull() {
     assertEquals(RESOLVER.getTargetSpecification(SPECIFICATION_NULL, VC), SPECIFICATION_NULL);
   }
 
-  public void testSpecification_versioned() {
+  /**
+   *
+   */
+  public void testSpecificationVersioned() {
     assertEquals(RESOLVER.getTargetSpecification(SPECIFICATION_PRIMITIVE_VERSIONED, VC), SPECIFICATION_PRIMITIVE_VERSIONED);
   }
 
-  public void testSpecification_latestNoResolver() {
+  /**
+   *
+   */
+  public void testSpecificationLatestNoResolver() {
     assertEquals(RESOLVER.getTargetSpecification(SPECIFICATION_BAR_LATEST, VC), SPECIFICATION_BAR_LATEST);
   }
 
-  public void testSpecification_latestResolved() {
+  /**
+   *
+   */
+  public void testSpecificationLatestResolved() {
     assertEquals(RESOLVER.getTargetSpecification(SPECIFICATION_FOO_LATEST, VC), SPECIFICATION_FOO_VERSIONED);
     assertEquals(RESOLVER.getTargetSpecification(SPECIFICATION_PRIMITIVE_LATEST, VC), SPECIFICATION_PRIMITIVE_LATEST);
   }
 
-  public void testSpecification_latestUnresolved() {
+  /**
+   *
+   */
+  public void testSpecificationLatestUnresolved() {
     assertEquals(RESOLVER.getTargetSpecification(SPECIFICATION_FOO_BAD, VC), null);
   }
 
-  public void testSpecification_unionType() {
+  /**
+   *
+   */
+  public void testSpecificationUnionType() {
     assertEquals(RESOLVER.getTargetSpecification(SPECIFICATION_FOO_OR_BAR, VC), SPECIFICATION_FOO_VERSIONED);
   }
 
-  public void testSpecification_unionTypeUnresolved() {
+  /**
+   *
+   */
+  public void testSpecificationUnionTypeUnresolved() {
     assertEquals(RESOLVER.getTargetSpecification(SPECIFICATION_FOO_OR_BAR_BAD, VC), null);
   }
 
-  public void testSpecification_unionTypeVersioned() {
-    //assertEquals(RESOLVER.getTargetSpecification(SPECIFICATION_FOO_OR_BAR_VERSIONED, VC), SPECIFICATION_FOO_VERSIONED);
+  /**
+   *
+   */
+  public void testSpecificationUnionTypeVersioned() {
+    // assertEquals(RESOLVER.getTargetSpecification(SPECIFICATION_FOO_OR_BAR_VERSIONED, VC), SPECIFICATION_FOO_VERSIONED);
     assertEquals(RESOLVER.getTargetSpecification(SPECIFICATION_FOO_OR_BAR_VERSIONED, VC), SPECIFICATION_FOO_OR_BAR_VERSIONED);
   }
 
-  public void testRequirement_noResolver() {
+  /**
+   *
+   */
+  public void testRequirementNoResolver() {
     assertEquals(RESOLVER.getTargetSpecification(REQUIREMENT_PRIMITIVE, VC), SPECIFICATION_PRIMITIVE_LATEST);
   }
 
-  public void testRequirement_resolved() {
+  /**
+   *
+   */
+  public void testRequirementResolved() {
     assertEquals(RESOLVER.getTargetSpecification(REQUIREMENT_FOO_VALID, VC), SPECIFICATION_FOO_VERSIONED);
   }
 
-  public void testRequirement_unresolved() {
+  /**
+   *
+   */
+  public void testRequirementUnresolved() {
     assertEquals(RESOLVER.getTargetSpecification(REQUIREMENT_FOO_INVALID, VC), null);
   }
 
-  public void testRequirement_unionType() {
+  /**
+   *
+   */
+  public void testRequirementUnionType() {
     assertEquals(RESOLVER.getTargetSpecification(REQUIREMENT_FOO_OR_BAR, VC), SPECIFICATION_FOO_VERSIONED);
   }
 
-  public void testRequirement_unionTypeUnresolved() {
+  /**
+   *
+   */
+  public void testRequirementUnionTypeUnresolved() {
     assertEquals(RESOLVER.getTargetSpecification(REQUIREMENT_FOO_OR_BAR_BAD, VC), null);
   }
 
+  /**
+   *
+   */
   public void testAll() {
     final Set<ComputationTargetReference> request = new HashSet<>();
     request.add(SPECIFICATION_NULL);
@@ -193,7 +240,7 @@ public class DefaultComputationTargetSpecificationResolverTest {
     assertEquals(result.get(SPECIFICATION_FOO_BAD), null);
     assertEquals(result.get(SPECIFICATION_FOO_OR_BAR), SPECIFICATION_FOO_VERSIONED);
     assertEquals(result.get(SPECIFICATION_FOO_OR_BAR_BAD), null);
-    //assertEquals(result.get(SPECIFICATION_FOO_OR_BAR_VERSIONED), SPECIFICATION_FOO_VERSIONED);
+    // assertEquals(result.get(SPECIFICATION_FOO_OR_BAR_VERSIONED), SPECIFICATION_FOO_VERSIONED);
     assertEquals(result.get(SPECIFICATION_FOO_OR_BAR_VERSIONED), SPECIFICATION_FOO_OR_BAR_VERSIONED);
     assertEquals(result.get(REQUIREMENT_PRIMITIVE), SPECIFICATION_PRIMITIVE_LATEST);
     assertEquals(result.get(REQUIREMENT_FOO_VALID), SPECIFICATION_FOO_VERSIONED);

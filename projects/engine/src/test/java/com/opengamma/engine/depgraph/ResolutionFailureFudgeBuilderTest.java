@@ -22,7 +22,7 @@ import com.opengamma.util.test.AbstractFudgeBuilderTestCase;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests the Fudge builder for {@link ResolutionFailure}
+ * Tests the Fudge builder for {@link ResolutionFailure}.
  */
 @Test(groups = TestGroup.UNIT)
 public class ResolutionFailureFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
@@ -67,7 +67,7 @@ public class ResolutionFailureFudgeBuilderTest extends AbstractFudgeBuilderTestC
             .requirement(req3, ResolutionFailureImpl.unsatisfied(req3)));
     assertEncodeDecodeCycle(ResolutionFailure.class,
         ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2))
-        .getAdditionalRequirementsFailed());
+            .getAdditionalRequirementsFailed());
     assertEncodeDecodeCycle(ResolutionFailure.class,
         ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).getResultsFailed());
     assertEncodeDecodeCycle(ResolutionFailure.class,
@@ -78,8 +78,8 @@ public class ResolutionFailureFudgeBuilderTest extends AbstractFudgeBuilderTestC
         ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2))
             .additionalRequirement(req3, ResolutionFailureImpl.unsatisfied(req3)));
     assertEncodeDecodeCycle(ResolutionFailure.class, ResolutionFailureImpl.functionApplication(req1, function, spec1)
-            .requirements(Collections.singletonMap(spec2, req2))
-            .additionalRequirement(req3, ResolutionFailureImpl.recursiveRequirement(req3)));
+        .requirements(Collections.singletonMap(spec2, req2))
+        .additionalRequirement(req3, ResolutionFailureImpl.recursiveRequirement(req3)));
   }
 
   public void testNoFunctions() {

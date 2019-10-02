@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Please see distribution for license.
  */
@@ -33,7 +33,9 @@ public class MinimalWebPortfolioNodePositionsResource extends AbstractMinimalWeb
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public MinimalWebPortfolioNodePositionsResource(final AbstractMinimalWebPortfolioResource parent) {
     super(parent);
@@ -41,8 +43,10 @@ public class MinimalWebPortfolioNodePositionsResource extends AbstractMinimalWeb
 
   /**
    * Adds a position to the latest version of a portfolio.
-   * @param positionUrlStr  the position URL
-   * @return  a response
+   * 
+   * @param positionUrlStr
+   *          the position URL
+   * @return a response
    */
   @POST
   @Produces(MediaType.TEXT_HTML)
@@ -65,7 +69,7 @@ public class MinimalWebPortfolioNodePositionsResource extends AbstractMinimalWeb
       String uniqueIdStr = StringUtils.substringAfterLast(trimmedPositionUrlStr, "/positions/");
       uniqueIdStr = StringUtils.substringBefore(uniqueIdStr, "/");
       positionId = UniqueId.parse(uniqueIdStr);
-      data().getPositionMaster().get(positionId);  // validate position exists
+      data().getPositionMaster().get(positionId); // validate position exists
     } catch (final Exception ex) {
       final FlexiBean out = createRootData();
       out.put("err_positionUrlInvalid", true);
@@ -78,8 +82,10 @@ public class MinimalWebPortfolioNodePositionsResource extends AbstractMinimalWeb
 
   /**
    * Adds a position to the latest version of a portfolio.
-   * @param uniqueIdStr  the position unique id
-   * @return  a response
+   * 
+   * @param uniqueIdStr
+   *          the position unique id
+   * @return a response
    */
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -96,7 +102,7 @@ public class MinimalWebPortfolioNodePositionsResource extends AbstractMinimalWeb
     UniqueId positionId = null;
     try {
       positionId = UniqueId.parse(trimmedUniqueIdStr);
-      data().getPositionMaster().get(positionId);  // validate position exists
+      data().getPositionMaster().get(positionId); // validate position exists
     } catch (final Exception ex) {
       return Response.status(Status.BAD_REQUEST).build();
     }
@@ -106,14 +112,17 @@ public class MinimalWebPortfolioNodePositionsResource extends AbstractMinimalWeb
 
   /**
    * Adds a position to the portfolio.
-   * @param doc  the portfolio
-   * @param positionId  the position id
-   * @return  the URI of the portfolio node
+   * 
+   * @param doc
+   *          the portfolio
+   * @param positionId
+   *          the position id
+   * @return the URI of the portfolio node
    */
   private URI addPosition(final PortfolioDocument doc, final UniqueId positionId) {
     final ManageablePortfolioNode node = data().getNode();
     final ObjectId objectId = positionId.getObjectId();
-    final URI uri = MinimalWebPortfolioNodeResource.uri(data());  // lock URI before updating data()
+    final URI uri = MinimalWebPortfolioNodeResource.uri(data()); // lock URI before updating data()
     if (!node.getPositionIds().contains(objectId)) {
       node.addPosition(positionId);
       data().setPortfolio(data().getPortfolioMaster().update(doc));
@@ -123,8 +132,10 @@ public class MinimalWebPortfolioNodePositionsResource extends AbstractMinimalWeb
 
   /**
    * Finds the node for a position.
-   * @param idStr  the position id
-   * @return  a web resource for all positions in a node
+   * 
+   * @param idStr
+   *          the position id
+   * @return a web resource for all positions in a node
    */
   @Path("{positionId}")
   public MinimalWebPortfolioNodePositionResource findNode(@PathParam("positionId") final String idStr) {
@@ -134,6 +145,7 @@ public class MinimalWebPortfolioNodePositionsResource extends AbstractMinimalWeb
 
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -152,8 +164,10 @@ public class MinimalWebPortfolioNodePositionsResource extends AbstractMinimalWeb
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @return  the URI, not null
+   * 
+   * @param data
+   *          the data, not null
+   * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data) {
     return uri(data, null);
@@ -161,9 +175,12 @@ public class MinimalWebPortfolioNodePositionsResource extends AbstractMinimalWeb
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideNodeId  the override node id, null uses information from data
-   * @return  the URI, not null
+   * 
+   * @param data
+   *          the data, not null
+   * @param overrideNodeId
+   *          the override node id, null uses information from data
+   * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data, final UniqueId overrideNodeId) {
     final String portfolioId = data.getBestPortfolioUriId(null);

@@ -15,7 +15,8 @@ import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test for {@code YieldCurveBundleBuilder}
+ * Test for {@code YieldCurveBundleBuilder}.
+ * 
  * @deprecated Deprecated
  */
 @Deprecated

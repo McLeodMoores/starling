@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.web.analytics;
 
 import java.util.Iterator;
@@ -17,15 +22,13 @@ public final class JsonTestUtils {
   }
 
   /**
-   * Checks all elements of two JSON arrays for equality. Individual elements
-   * are checked using {@link #equal(Object, Object)}.
-   * 
+   * Checks all elements of two JSON arrays for equality. Individual elements are checked using {@link #equal(Object, Object)}.
+   *
    * @param array1
    *          A JSON array
    * @param array2
    *          Another JSON array
-   * @return {@code true} if the arrays are the same size and every
-   *         corresponding element is equal
+   * @return {@code true} if the arrays are the same size and every corresponding element is equal
    * @throws JSONException
    *           Never
    */
@@ -44,15 +47,13 @@ public final class JsonTestUtils {
   }
 
   /**
-   * Checks all values of two JSON objects for equality. Individual elements are
-   * checked using {@link #equal(Object, Object)}.
+   * Checks all values of two JSON objects for equality. Individual elements are checked using {@link #equal(Object, Object)}.
    *
    * @param object1
    *          A JSON object
    * @param object2
    *          A JSON object
-   * @return {@code true} if the objects contains the same mappings and every
-   *         corresponding value is equal.
+   * @return {@code true} if the objects contains the same mappings and every corresponding value is equal.
    * @throws JSONException
    *           Never
    */
@@ -72,11 +73,9 @@ public final class JsonTestUtils {
   }
 
   /**
-   * Checks two objects for equality. If they are instances of
-   * {@link JSONObject} or {@link JSONArray} they are checked recursively using
-   * {@link #equal(JSONObject, JSONObject)} and
-   * {@link #equal(JSONArray, JSONArray)}. Values of other types are checked
-   * using {@link Objects#equal(Object, Object)}.
+   * Checks two objects for equality. If they are instances of {@link JSONObject} or {@link JSONArray} they are checked recursively using
+   * {@link #equal(JSONObject, JSONObject)} and {@link #equal(JSONArray, JSONArray)}. Values of other types are checked using
+   * {@link Objects#equal(Object, Object)}.
    *
    * @param value1
    *          the first value

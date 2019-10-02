@@ -32,34 +32,46 @@ import com.opengamma.util.test.TestGroup;
 import net.sf.ehcache.CacheManager;
 
 /**
- * Tests the {@link LazyResolvedPortfolio} class
+ * Tests the {@link LazyResolvedPortfolio} class.
  */
-@Test(groups = {TestGroup.UNIT, "ehcache" })
+@Test(groups = { TestGroup.UNIT, "ehcache" })
 public class LazyResolvedPortfolioTest {
 
   private CacheManager _cacheManager;
 
+  /**
+   *
+   */
   @BeforeClass
   public void setUpClass() {
     _cacheManager = EHCacheUtils.createTestCacheManager(getClass());
   }
 
+  /**
+   *
+   */
   @AfterClass
   public void tearDownClass() {
     EHCacheUtils.shutdownQuiet(_cacheManager);
   }
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
     EHCacheUtils.clear(_cacheManager);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   public void testBasicMethods() {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final Portfolio underlying = resolver.getPositionSource().getPortfolio(UniqueId.of("Portfolio", "0"), VersionCorrection.LATEST);
-    final Portfolio portfolio =
-        new LazyResolvedPortfolio(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
+    final Portfolio portfolio = new LazyResolvedPortfolio(
+        new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
     assertEquals(portfolio.getAttributes(), underlying.getAttributes());
     portfolio.setAttributes(ImmutableMap.of("K1", "V1", "K2", "V2"));
     assertEquals(portfolio.getAttributes(), underlying.getAttributes());
@@ -71,11 +83,15 @@ public class LazyResolvedPortfolioTest {
     assertEquals(portfolio.getRootNode().getUniqueId(), underlying.getRootNode().getUniqueId());
   }
 
-  public void testSerialization_full() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testSerializationFull() throws Exception {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final Portfolio underlying = resolver.getPositionSource().getPortfolio(UniqueId.of("Portfolio", "0"), VersionCorrection.LATEST);
-    Portfolio portfolio =
-        new LazyResolvedPortfolio(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
+    Portfolio portfolio = new LazyResolvedPortfolio(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST),
+        underlying);
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     new ObjectOutputStream(baos).writeObject(portfolio);
     final Object resultObject = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray())).readObject();
@@ -93,12 +109,17 @@ public class LazyResolvedPortfolioTest {
     assertEquals(portfolio.getRootNode().getChildNodes().size(), underlying.getRootNode().getChildNodes().size());
   }
 
-  public void testSerialization_targetResolver() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testSerializationTargetResolver() throws Exception {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final Portfolio underlying = resolver.getPositionSource().getPortfolio(UniqueId.of("Portfolio", "0"), VersionCorrection.LATEST);
     Portfolio portfolio = new LazyResolvedPortfolio(
         new LazyResolveContext(resolver.getSecuritySource(), new DefaultCachingComputationTargetResolver(resolver, _cacheManager))
-          .atVersionCorrection(VersionCorrection.LATEST), underlying);
+            .atVersionCorrection(VersionCorrection.LATEST),
+        underlying);
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     new ObjectOutputStream(baos).writeObject(portfolio);
     final Object resultObject = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray())).readObject();

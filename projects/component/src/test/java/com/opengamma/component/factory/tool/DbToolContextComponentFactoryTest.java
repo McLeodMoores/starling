@@ -35,41 +35,61 @@ public class DbToolContextComponentFactoryTest {
 
   private static final String COMPLETE_GARBAGE = "abcdefgh";
 
-
+  /**
+   *
+   */
   @Test
-  public void test_RecognizeMSSQL() {
+  public void testRecognizeMSSQL() {
     Validate.isTrue(getMSSQLCatalog(MSSQL_URL_1).equals(MSSQL_DB), "url1 did not work");
     Validate.isTrue(getMSSQLCatalog(MSSQL_URL_2).equals(MSSQL_DB), "url2 did not work");
     Validate.isTrue(getMSSQLCatalog(MSSQL_URL_3).equals(MSSQL_DB), "url3 did not work");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void test_noInvalidSlash() {
+  public void testNoInvalidSlash() {
     getMSSQLCatalog(MSSQL_BAD_INVALID_SLASH);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void test_noDbName() {
+  public void testNoDbName() {
     getMSSQLCatalog(MSSQL_BAD_NO_DB_NAME);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void test_noDbAtAll() {
+  public void testNoDbAtAll() {
     getMSSQLCatalog(MSSQL_BAD_NO_DB_ATALL);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_RecognizeHSQL() {
+  public void testRecognizeHSQL() {
     Validate.isTrue(getStandardCatalog(HSQL_URL).equals(HSQL_DB), "url did not work");
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_RecognizePostgres() {
+  public void testRecognizePostgres() {
     Validate.isTrue(getStandardCatalog(POSTGRES_URL).equals(POSTGRES_DB), "url did not work");
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_All() {
+  public void testAll() {
     Validate.isTrue(getCatalog(MSSQL_URL_1).equals(MSSQL_DB), "url1 did not work");
     Validate.isTrue(getCatalog(MSSQL_URL_2).equals(MSSQL_DB), "url2 did not work");
     Validate.isTrue(getCatalog(MSSQL_URL_3).equals(MSSQL_DB), "url3 did not work");
@@ -77,13 +97,19 @@ public class DbToolContextComponentFactoryTest {
     Validate.isTrue(getCatalog(POSTGRES_URL).equals(POSTGRES_DB), "url did not work");
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_handleNull() {
+  public void testHandleNull() {
     Validate.isTrue(getCatalog(null) == null, "null did not work");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void test_completeGarbage() {
+  public void testCompleteGarbage() {
     getCatalog(COMPLETE_GARBAGE);
   }
 

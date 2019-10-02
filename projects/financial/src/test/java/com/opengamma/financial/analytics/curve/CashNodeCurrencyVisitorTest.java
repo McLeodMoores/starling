@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve;
 
@@ -107,8 +107,8 @@ public class CashNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests that the convention referenced in the ibor index security is used if the convention in the node
-   * is not present in the convention source and that the correct currency is returned.
+   * Tests that the convention referenced in the ibor index security is used if the convention in the node is not present in the convention source and that the
+   * correct currency is returned.
    */
   @Test
   public void testLiborFromSecurityAndConvention() {
@@ -123,8 +123,7 @@ public class CashNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests that the correct currency is returned if the ibor index convention is present in the convention source
-   * and that the security is not required.
+   * Tests that the correct currency is returned if the ibor index convention is present in the convention source and that the security is not required.
    */
   @Test
   public void testLiborFromConventionOnly() {
@@ -137,8 +136,8 @@ public class CashNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests that the convention referenced in the overnight index security is used if the convention in the node
-   * is not present in the convention source and that the correct currency is returned.
+   * Tests that the convention referenced in the overnight index security is used if the convention in the node is not present in the convention source and that
+   * the correct currency is returned.
    */
   @Test
   public void testOvernightFromSecurityAndConvention() {
@@ -153,8 +152,7 @@ public class CashNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests that the correct currency is returned if the overnight index convention is present in the convention source
-   * and that the security is not required.
+   * Tests that the correct currency is returned if the overnight index convention is present in the convention source and that the security is not required.
    */
   @Test
   public void testOvernightFromConventionOnly() {

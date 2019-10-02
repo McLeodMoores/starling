@@ -315,7 +315,7 @@ public final class DoublesPair
     /**
      * The meta-properties.
      */
-    private final Map<String, MetaProperty<?>> _metaPropertyMap$ = new DirectMetaPropertyMap(
+    private final Map<String, MetaProperty<?>> _metaPropertyMap = new DirectMetaPropertyMap(
         this, null,
         "first",
         "second");
@@ -349,7 +349,7 @@ public final class DoublesPair
 
     @Override
     public Map<String, MetaProperty<?>> metaPropertyMap() {
-      return _metaPropertyMap$;
+      return _metaPropertyMap;
     }
 
     //-----------------------------------------------------------------------

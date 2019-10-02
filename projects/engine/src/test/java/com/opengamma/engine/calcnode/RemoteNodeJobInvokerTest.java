@@ -13,7 +13,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.fudgemsg.FudgeContext;
-import org.fudgemsg.FudgeMsgEnvelope;
 import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
 import org.slf4j.Logger;
@@ -30,13 +29,12 @@ import com.opengamma.engine.function.blacklist.DummyFunctionBlacklistMaintainer;
 import com.opengamma.engine.function.blacklist.DummyFunctionBlacklistQuery;
 import com.opengamma.transport.DirectFudgeConnection;
 import com.opengamma.transport.FudgeConnection;
-import com.opengamma.transport.FudgeMessageReceiver;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.Timeout;
 
 /**
- * Tests the RemoteNodeJobInvoker
+ * Tests the RemoteNodeJobInvoker.
  */
 @Test(groups = TestGroup.UNIT)
 public class RemoteNodeJobInvokerTest {
@@ -51,27 +49,24 @@ public class RemoteNodeJobInvokerTest {
       final JobDispatcher jobDispatcher = new JobDispatcher();
       final Ready initialMessage = new Ready(1, "Test");
       final DirectFudgeConnection conduit = new DirectFudgeConnection(FUDGE_CONTEXT);
-      final RemoteNodeJobInvoker jobInvoker =
-          new RemoteNodeJobInvoker(executor, initialMessage, conduit.getEnd1(), new InMemoryIdentifierMap(), new FunctionCosts(),
+      final RemoteNodeJobInvoker jobInvoker = new RemoteNodeJobInvoker(executor, initialMessage, conduit.getEnd1(), new InMemoryIdentifierMap(),
+          new FunctionCosts(),
           new DummyFunctionBlacklistQuery(), new DummyFunctionBlacklistMaintainer());
       jobDispatcher.registerJobInvoker(jobInvoker);
       final TestJobResultReceiver resultReceiver = new TestJobResultReceiver();
       final FudgeConnection remoteNode = conduit.getEnd2();
-      remoteNode.setFudgeMessageReceiver(new FudgeMessageReceiver() {
-        @Override
-        public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
-          final FudgeDeserializer dcontext = new FudgeDeserializer(fudgeContext);
-          LOGGER.debug("message = {}", msgEnvelope.getMessage());
-          final RemoteCalcNodeMessage message = dcontext.fudgeMsgToObject(RemoteCalcNodeMessage.class, msgEnvelope.getMessage());
-          assertNotNull(message);
-          LOGGER.debug("request = {}", message);
-          assertTrue(message instanceof Execute);
-          final Execute job = (Execute) message;
-          final Result result = new Result(JobDispatcherTest.createTestJobResult(job.getJob().getSpecification(), 0, "Test"));
-          final FudgeSerializer scontext = new FudgeSerializer(fudgeContext);
-          remoteNode.getFudgeMessageSender().send(FudgeSerializer.addClassHeader(scontext.objectToFudgeMsg(result),
-              result.getClass(), RemoteCalcNodeMessage.class));
-        }
+      remoteNode.setFudgeMessageReceiver((fudgeContext, msgEnvelope) -> {
+        final FudgeDeserializer dcontext = new FudgeDeserializer(fudgeContext);
+        LOGGER.debug("message = {}", msgEnvelope.getMessage());
+        final RemoteCalcNodeMessage message = dcontext.fudgeMsgToObject(RemoteCalcNodeMessage.class, msgEnvelope.getMessage());
+        assertNotNull(message);
+        LOGGER.debug("request = {}", message);
+        assertTrue(message instanceof Execute);
+        final Execute job = (Execute) message;
+        final Result result = new Result(JobDispatcherTest.createTestJobResult(job.getJob().getSpecification(), 0, "Test"));
+        final FudgeSerializer scontext = new FudgeSerializer(fudgeContext);
+        remoteNode.getFudgeMessageSender().send(FudgeSerializer.addClassHeader(scontext.objectToFudgeMsg(result),
+            result.getClass(), RemoteCalcNodeMessage.class));
       });
       jobDispatcher.dispatchJob(JobDispatcherTest.createTestJob(), resultReceiver);
       assertNotNull(resultReceiver.waitForResult(TIMEOUT));
@@ -91,23 +86,20 @@ public class RemoteNodeJobInvokerTest {
       jobDispatcher.registerJobInvoker(jobInvoker);
       final FudgeConnection remoteNode = conduit.getEnd2();
       final Random rnd = new Random();
-      remoteNode.setFudgeMessageReceiver(new FudgeMessageReceiver() {
-        @Override
-        public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
-          final FudgeDeserializer dcontext = new FudgeDeserializer(fudgeContext);
-          final RemoteCalcNodeMessage message = dcontext.fudgeMsgToObject(RemoteCalcNodeMessage.class, msgEnvelope.getMessage());
-          assertNotNull(message);
-          assertTrue(message instanceof Execute);
-          final Execute job = (Execute) message;
-          try {
-            Thread.sleep(rnd.nextInt(30));
-          } catch (final InterruptedException e) {
-          }
-          final Result result = new Result(JobDispatcherTest.createTestJobResult(job.getJob().getSpecification(), 0, "Test"));
-          final FudgeSerializer scontext = new FudgeSerializer(fudgeContext);
-          remoteNode.getFudgeMessageSender().send(FudgeSerializer.addClassHeader(scontext.objectToFudgeMsg(result), result.getClass(),
-              RemoteCalcNodeMessage.class));
+      remoteNode.setFudgeMessageReceiver((fudgeContext, msgEnvelope) -> {
+        final FudgeDeserializer dcontext = new FudgeDeserializer(fudgeContext);
+        final RemoteCalcNodeMessage message = dcontext.fudgeMsgToObject(RemoteCalcNodeMessage.class, msgEnvelope.getMessage());
+        assertNotNull(message);
+        assertTrue(message instanceof Execute);
+        final Execute job = (Execute) message;
+        try {
+          Thread.sleep(rnd.nextInt(30));
+        } catch (final InterruptedException e) {
         }
+        final Result result = new Result(JobDispatcherTest.createTestJobResult(job.getJob().getSpecification(), 0, "Test"));
+        final FudgeSerializer scontext = new FudgeSerializer(fudgeContext);
+        remoteNode.getFudgeMessageSender().send(FudgeSerializer.addClassHeader(scontext.objectToFudgeMsg(result), result.getClass(),
+            RemoteCalcNodeMessage.class));
       });
       final TestJobResultReceiver[] resultReceivers = new TestJobResultReceiver[100];
       for (int i = 0; i < resultReceivers.length; i++) {

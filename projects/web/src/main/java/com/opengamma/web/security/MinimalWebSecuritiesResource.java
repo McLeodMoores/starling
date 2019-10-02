@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Please see distribution for license.
  */
@@ -75,7 +75,9 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
 
   /**
    * Creates the resource.
-   * @param securityMaster  the security master, not null
+   * 
+   * @param securityMaster
+   *          the security master, not null
    */
   public MinimalWebSecuritiesResource(final SecurityMaster securityMaster) {
     super(securityMaster);
@@ -83,8 +85,11 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
 
   /**
    * Creates the resource.
-   * @param securityMaster  the security master, not null
-   * @param securityLoader  the security loader, not null
+   * 
+   * @param securityMaster
+   *          the security master, not null
+   * @param securityLoader
+   *          the security loader, not null
    */
   public MinimalWebSecuritiesResource(final SecurityMaster securityMaster, final SecurityLoader securityLoader) {
     super(securityMaster, securityLoader);
@@ -92,17 +97,22 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
 
   /**
    * Creates the resource.
-   * @param securityMaster  the security master, not null
-   * @param securityLoader  the security loader, not null
-   * @param htsMaster  the historical time series master, not null
-   * @param legalEntityMaster the organization master, not null
+   * 
+   * @param securityMaster
+   *          the security master, not null
+   * @param securityLoader
+   *          the security loader, not null
+   * @param htsMaster
+   *          the historical time series master, not null
+   * @param legalEntityMaster
+   *          the organization master, not null
    */
   public MinimalWebSecuritiesResource(final SecurityMaster securityMaster, final SecurityLoader securityLoader,
       final HistoricalTimeSeriesMaster htsMaster, final LegalEntityMaster legalEntityMaster) {
     super(securityMaster, securityLoader, htsMaster, legalEntityMaster);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   @SubscribeMaster(MasterType.SECURITY)
@@ -172,7 +182,7 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
@@ -204,7 +214,7 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
           }
           final ManageableSecurity security = addSecurity(trimmedSecurityXml, trimmedUniqueIdScheme);
           final MinimalWebSecuritiesUris webSecuritiesUris = new MinimalWebSecuritiesUris(data());
-          responseURI =  webSecuritiesUris.security(security);
+          responseURI = webSecuritiesUris.security(security);
         } catch (final Exception ex) {
           out.put("err_securityXmlMsg", ex.getMessage());
           out.put(SECURITY_XML, StringEscapeUtils.escapeJavaScript(StringUtils.defaultString(securityXml)));
@@ -350,7 +360,7 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("metaData")
   @Produces(MediaType.APPLICATION_JSON)
@@ -372,7 +382,7 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
     return metaData.getSchemaVersion();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{securityId}")
   public MinimalWebSecurityResource findSecurity(@Subscribe @PathParam("securityId") final String idStr) {
     data().setUriSecurityId(idStr);
@@ -392,9 +402,10 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
     return new MinimalWebSecurityResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -427,13 +438,12 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
     return out;
   }
 
-
-
-
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for securities.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebSecuritiesData data) {
@@ -442,8 +452,11 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
 
   /**
    * Builds a URI for securities.
-   * @param data  the data, not null
-   * @param identifiers  the identifiers to search for, may be null
+   * 
+   * @param data
+   *          the data, not null
+   * @param identifiers
+   *          the identifiers to search for, may be null
    * @return the URI, not null
    */
   public static URI uri(final WebSecuritiesData data, final ExternalIdBundle identifiers) {

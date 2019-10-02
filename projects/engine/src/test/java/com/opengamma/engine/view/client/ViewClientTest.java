@@ -76,7 +76,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Tests ViewClient
+ * Tests ViewClient.
  */
 @Test(groups = TestGroup.INTEGRATION)
 public class ViewClientTest {
@@ -567,7 +567,7 @@ public class ViewClientTest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void testSetMinimumLogMode() throws InterruptedException {
     TestLifecycle.begin();
@@ -734,7 +734,7 @@ public class ViewClientTest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void assertComputationResult(final Map<ValueRequirement, Object> expected, final ViewCalculationResultModel result) {
     assertNotNull(result);
     final Set<ValueRequirement> remaining = new HashSet<>(expected.keySet());
@@ -754,8 +754,8 @@ public class ViewClientTest {
   }
 
   /**
-   * Avoids the ConcurrentHashMap-based implementation of InMemoryLKVSnapshotProvider, where the LKV map can appear to lag behind if
-   * accessed from a different thread immediately after a change.
+   * Avoids the ConcurrentHashMap-based implementation of InMemoryLKVSnapshotProvider, where the LKV map can appear to lag behind if accessed from a different
+   * thread immediately after a change.
    */
   private static class SynchronousInMemoryLKVSnapshotProvider extends InMemoryLKVMarketDataProvider {
 

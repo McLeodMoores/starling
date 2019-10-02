@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.livedata.normalization;
@@ -22,15 +22,15 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test EID field name and value normalization in liveData and snapshot
+ * Test EID field name and value normalization in liveData and snapshot.
  */
 @Test(groups = TestGroup.UNIT)
 public class BloombergEidFieldValueNormalizerTest {
 
   public void normalizeEidNameAndValue() {
-    BloombergEidFieldValueNormalizer normalizer = new BloombergEidFieldValueNormalizer();
+    final BloombergEidFieldValueNormalizer normalizer = new BloombergEidFieldValueNormalizer();
 
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add(BloombergConstants.EID_LIVE_DATA_FIELD, 10);
     msg.add("Bar", 2.0);
     msg.add("Baz", 500);
@@ -38,18 +38,18 @@ public class BloombergEidFieldValueNormalizerTest {
     msg.add(BloombergConstants.EID_DATA.toString(), 30);
     msg.add(BloombergConstants.EID_DATA.toString(), 40);
 
-    MutableFudgeMsg normalized = normalizer.apply(msg, "test", new FieldHistoryStore());
+    final MutableFudgeMsg normalized = normalizer.apply(msg, "test", new FieldHistoryStore());
     assertEquals(6, normalized.getAllFields().size());
-    List<FudgeField> eidLiveData = normalized.getAllByName(BloombergConstants.EID_LIVE_DATA_FIELD);
+    final List<FudgeField> eidLiveData = normalized.getAllByName(BloombergConstants.EID_LIVE_DATA_FIELD);
     assertTrue(eidLiveData.isEmpty());
 
-    List<FudgeField> eidRefData = normalized.getAllByName(BloombergConstants.EID_DATA.toString());
+    final List<FudgeField> eidRefData = normalized.getAllByName(BloombergConstants.EID_DATA.toString());
     assertTrue(eidRefData.isEmpty());
 
-    List<FudgeField> permissions = normalized.getAllByName(PermissionUtils.LIVE_DATA_PERMISSION_FIELD);
+    final List<FudgeField> permissions = normalized.getAllByName(PermissionUtils.LIVE_DATA_PERMISSION_FIELD);
     assertEquals(4, permissions.size());
-    List<String> permissionValues = Lists.newArrayList();
-    for (FudgeField fudgeField : permissions) {
+    final List<String> permissionValues = Lists.newArrayList();
+    for (final FudgeField fudgeField : permissions) {
       permissionValues.add((String) fudgeField.getValue());
     }
     assertTrue(permissionValues.contains("Data:Bloomberg:EID:10"));

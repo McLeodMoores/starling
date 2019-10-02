@@ -14,9 +14,7 @@ import org.testng.annotations.Test;
 
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.depgraph.impl.DependencyGraphImpl;
-import com.opengamma.engine.function.CompiledFunctionDefinition;
 import com.opengamma.engine.function.FunctionCompilationContext;
-import com.opengamma.engine.function.resolver.FunctionPriority;
 import com.opengamma.engine.test.MockFunction;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValuePropertyNames;
@@ -26,7 +24,7 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.TestLifecycle;
 
 /**
- * Tests the dependency graph building with requirement constraints
+ * Tests the dependency graph building with requirement constraints.
  */
 @Test(groups = TestGroup.UNIT)
 public class DepGraphConstraintsTest extends AbstractDependencyGraphBuilderTest {
@@ -37,14 +35,11 @@ public class DepGraphConstraintsTest extends AbstractDependencyGraphBuilderTest 
       final DepGraphTestHelper helper = helper();
       final MockFunction fn = helper.addFunctionProducing2();
       final MockFunction fnBeta = helper.addFunctionProducing2Beta();
-      final DependencyGraphBuilder builder = helper.createBuilder(new FunctionPriority() {
-        @Override
-        public int getPriority(final CompiledFunctionDefinition function) {
-          if (function.getFunctionDefinition().getUniqueId().equals(fnBeta.getUniqueId())) {
-            return -1;
-          }
-          return 0;
+      final DependencyGraphBuilder builder = helper.createBuilder(function -> {
+        if (function.getFunctionDefinition().getUniqueId().equals(fnBeta.getUniqueId())) {
+          return -1;
         }
+        return 0;
       });
       builder.addTarget(helper.getRequirement2());
       builder.addTarget(helper.getRequirement2Beta());
@@ -63,14 +58,11 @@ public class DepGraphConstraintsTest extends AbstractDependencyGraphBuilderTest 
       final DepGraphTestHelper helper = helper();
       helper.addFunctionProducing2();
       final MockFunction fnBeta = helper.addFunctionProducing2Beta();
-      final DependencyGraphBuilder builder = helper.createBuilder(new FunctionPriority() {
-        @Override
-        public int getPriority(final CompiledFunctionDefinition function) {
-          if (function.getFunctionDefinition().getUniqueId().equals(fnBeta.getUniqueId())) {
-            return 1;
-          }
-          return 0;
+      final DependencyGraphBuilder builder = helper.createBuilder(function -> {
+        if (function.getFunctionDefinition().getUniqueId().equals(fnBeta.getUniqueId())) {
+          return 1;
         }
+        return 0;
       });
       builder.addTarget(helper.getRequirement2Beta());
       builder.addTarget(helper.getRequirement2Beta());

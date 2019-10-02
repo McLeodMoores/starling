@@ -38,8 +38,8 @@ public class LongPollingTest {
 
   @BeforeClass
   void createJettyServer() throws Exception {
-    final Pair<Server, WebApplicationContext> serverAndContext =
-        _webPushTestUtils.createJettyServer("classpath:/com/opengamma/web/analytics/push/long-poll-test.xml");
+    final Pair<Server, WebApplicationContext> serverAndContext = _webPushTestUtils
+        .createJettyServer("classpath:/com/opengamma/web/analytics/push/long-poll-test.xml");
     _server = serverAndContext.getFirst();
     final WebApplicationContext context = serverAndContext.getSecond();
     _updateManager = context.getBean(TestConnectionManager.class);
@@ -58,7 +58,7 @@ public class LongPollingTest {
   }
 
   /**
-   * Tests sending an update to a client that is blocked on a long poll request
+   * Tests sending an update to a client that is blocked on a long poll request.
    *
    * @throws Exception
    *           if there is a problem with the polling or the JSON output
@@ -66,19 +66,13 @@ public class LongPollingTest {
   @Test
   public void longPollBlocking() throws Exception {
     final String clientId = _webPushTestUtils.handshake();
-    new Thread(new Runnable() {
-      @Override
-      public void run() {
-        waitAndSend(clientId, RESULT1);
-      }
-    }).start();
+    new Thread(() -> waitAndSend(clientId, RESULT1)).start();
     final String result = _webPushTestUtils.readFromPath("/updates/" + clientId);
     WebPushTestUtils.checkJsonResults(result, RESULT1);
   }
 
   /**
-   * Tests sending a single update to a client's connection when it's not
-   * connected and then connecting.
+   * Tests sending a single update to a client's connection when it's not connected and then connecting.
    *
    * @throws Exception
    *           if there is a problem with the polling or the JSON output
@@ -92,8 +86,7 @@ public class LongPollingTest {
   }
 
   /**
-   * Tests sending multiple updates to a connection where the client isn't
-   * currently connected.
+   * Tests sending multiple updates to a connection where the client isn't currently connected.
    *
    * @throws Exception
    *           if there is a problem with the polling or the JSON output
@@ -129,15 +122,12 @@ public class LongPollingTest {
   @Test
   public void repeatingLongPoll() throws Exception {
     final String clientId = _webPushTestUtils.handshake();
-    new Thread(new Runnable() {
-      @Override
-      public void run() {
-        waitAndSend(clientId, RESULT1);
-        waitAndSend(clientId, RESULT2);
-        waitAndSend(clientId, RESULT3);
-        waitAndSend(clientId, RESULT2);
-        waitAndSend(clientId, RESULT1);
-      }
+    new Thread(() -> {
+      waitAndSend(clientId, RESULT1);
+      waitAndSend(clientId, RESULT2);
+      waitAndSend(clientId, RESULT3);
+      waitAndSend(clientId, RESULT2);
+      waitAndSend(clientId, RESULT1);
     }).start();
     final String path = "/updates/" + clientId;
     WebPushTestUtils.checkJsonResults(_webPushTestUtils.readFromPath(path), RESULT1);

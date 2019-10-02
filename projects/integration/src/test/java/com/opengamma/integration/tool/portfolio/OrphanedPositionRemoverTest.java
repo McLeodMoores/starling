@@ -27,7 +27,7 @@ import com.opengamma.master.position.impl.InMemoryPositionMaster;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test {@link OrphanedPositionRemover}
+ * Test {@link OrphanedPositionRemover}.
  */
 @Test(groups = TestGroup.UNIT)
 public class OrphanedPositionRemoverTest {

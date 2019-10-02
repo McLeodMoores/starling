@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.testutils;
 
@@ -30,7 +30,9 @@ public class MockHistoricalTimeSeriesProvider extends AbstractHistoricalTimeSeri
 
   /**
    * Creates an instance.
-   * @param timeSeries  a map from identifiers to time series, not null
+   * 
+   * @param timeSeries
+   *          a map from identifiers to time series, not null
    */
   public MockHistoricalTimeSeriesProvider(final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> timeSeries) {
     ArgumentChecker.notNull(timeSeries, "timeSeries");

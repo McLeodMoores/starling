@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests {@link DoubleValueSignificantFiguresFormatter}
+ * Tests {@link DoubleValueSignificantFiguresFormatter}.
  */
 @Test(groups = TestGroup.UNIT)
 public class DoubleValueSignificantFiguresFormatterTest {

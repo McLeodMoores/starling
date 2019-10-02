@@ -1,10 +1,13 @@
-package com.opengamma.financial.temptarget.rest;
 /**
- * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
  */
-
+package com.opengamma.financial.temptarget.rest;
+/**
+ *
+ * Please see distribution for license.
+ */
 
 import org.fudgemsg.FudgeMsg;
 import org.fudgemsg.MutableFudgeMsg;

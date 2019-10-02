@@ -36,7 +36,7 @@ public class DataConventionSourceUrisTest {
   private URI _baseUri;
 
   /**
-   * Sets up the URI
+   * Sets up the URI.
    *
    * @throws URISyntaxException
    *           if the path is wrong
@@ -63,8 +63,7 @@ public class DataConventionSourceUrisTest {
   }
 
   /**
-   * Tests the URI that is built when the version correction is null (i.e.
-   * LATEST is required).
+   * Tests the URI that is built when the version correction is null (i.e. LATEST is required).
    */
   public void testBuildUriOidLatest() {
     final URI uri = DataConventionSourceUris.uriGet(_baseUri, OID, null);
@@ -133,8 +132,7 @@ public class DataConventionSourceUrisTest {
   }
 
   /**
-   * Tests the URI that is built when the version correction is null (i.e.
-   * LATEST is required).
+   * Tests the URI that is built when the version correction is null (i.e. LATEST is required).
    */
   public void testSearchLatest() {
     final URI uri = DataConventionSourceUris.uriSearch(_baseUri, null, EIDS);
@@ -219,8 +217,7 @@ public class DataConventionSourceUrisTest {
   }
 
   /**
-   * Tests the URI that is built when the version correction is null (i.e.
-   * LATEST is required).
+   * Tests the URI that is built when the version correction is null (i.e. LATEST is required).
    */
   public void testSearchSingleLatest() {
     final URI uri = DataConventionSourceUris.uriSearchSingle(_baseUri, EIDS, null);
@@ -254,8 +251,7 @@ public class DataConventionSourceUrisTest {
   }
 
   /**
-   * Tests the URI that is built when the version correction is null (i.e.
-   * LATEST is required).
+   * Tests the URI that is built when the version correction is null (i.e. LATEST is required).
    */
   public void testSearchSingleLatestNoType() {
     final URI uri = DataConventionSourceUris.uriSearchSingle(_baseUri, EIDS, null, null);

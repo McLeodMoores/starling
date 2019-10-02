@@ -46,7 +46,10 @@ public class DefaultComputationTargetResolverTest {
   private static final Position POSITION = new SimplePosition(UniqueId.of("Test", "1"), new BigDecimal(1), ExternalIdBundle.EMPTY);
   private static final Security SECURITY = new SimpleSecurity(UniqueId.of("Test", "SEC"), ExternalIdBundle.EMPTY, "Test security", "EQUITY");
 
-  public void test_constructor() {
+  /**
+   *
+   */
+  public void testConstructor() {
     final SecuritySource secSource = new InMemorySecuritySource();
     final PositionSource posSource = new MockPositionSource();
     final DefaultComputationTargetResolver test = new DefaultComputationTargetResolver(secSource, posSource);
@@ -60,7 +63,10 @@ public class DefaultComputationTargetResolverTest {
     assertEquals(expected.getUniqueId(), actual.getUniqueId());
   }
 
-  public void test_resolve_portfolioNode() {
+  /**
+   *
+   */
+  public void testResolvePortfolioNode() {
     final InMemorySecuritySource secSource = new InMemorySecuritySource();
     final MockPositionSource posSource = new MockPositionSource();
     final SimplePortfolio p = new SimplePortfolio(UniqueId.of("Test", "1"), "Name");
@@ -72,7 +78,10 @@ public class DefaultComputationTargetResolverTest {
     assertExpected(expected, test.resolve(spec, VersionCorrection.LATEST));
   }
 
-  public void test_resolve_position() {
+  /**
+   *
+   */
+  public void testResolvePosition() {
     final InMemorySecuritySource secSource = new InMemorySecuritySource();
     final MockPositionSource posSource = new MockPositionSource();
     final SimplePortfolio p = new SimplePortfolio(UniqueId.of("Test", "1"), "Name");
@@ -84,7 +93,10 @@ public class DefaultComputationTargetResolverTest {
     assertExpected(expected, test.resolve(spec, VersionCorrection.LATEST));
   }
 
-  public void test_resolve_trade() {
+  /**
+   *
+   */
+  public void testResolveTrade() {
     final OffsetDateTime now = OffsetDateTime.now();
     final InMemorySecuritySource secSource = new InMemorySecuritySource();
     final MockPositionSource posSource = new MockPositionSource();
@@ -102,7 +114,10 @@ public class DefaultComputationTargetResolverTest {
     assertExpected(expected, test.resolve(spec, VersionCorrection.LATEST));
   }
 
-  public void test_resolve_security() {
+  /**
+   *
+   */
+  public void testResolveSecurity() {
     final InMemorySecuritySource secSource = new InMemorySecuritySource();
     final MockPositionSource posSource = new MockPositionSource();
     secSource.addSecurity(SECURITY);
@@ -112,7 +127,10 @@ public class DefaultComputationTargetResolverTest {
     assertExpected(expected, test.resolve(spec, VersionCorrection.LATEST));
   }
 
-  public void test_resolve_primitive() {
+  /**
+   *
+   */
+  public void testResolvePrimitive() {
     final InMemorySecuritySource secSource = new InMemorySecuritySource();
     final MockPositionSource posSource = new MockPositionSource();
     final DefaultComputationTargetResolver test = new DefaultComputationTargetResolver(secSource, posSource);
@@ -121,7 +139,10 @@ public class DefaultComputationTargetResolverTest {
     assertExpected(expected, test.resolve(spec, VersionCorrection.LATEST));
   }
 
-  public void test_resolve_currency() {
+  /**
+   *
+   */
+  public void testResolveCurrency() {
     final InMemorySecuritySource secSource = new InMemorySecuritySource();
     final MockPositionSource posSource = new MockPositionSource();
     final DefaultComputationTargetResolver test = new DefaultComputationTargetResolver(secSource, posSource);
@@ -130,40 +151,55 @@ public class DefaultComputationTargetResolverTest {
     assertExpected(expected, test.resolve(spec, VersionCorrection.LATEST));
   }
 
-  public void test_resolve_unorderedCurrencyPair() {
+  /**
+   *
+   */
+  public void testResolveUnorderedCurrencyPair() {
     final InMemorySecuritySource secSource = new InMemorySecuritySource();
     final MockPositionSource posSource = new MockPositionSource();
     final DefaultComputationTargetResolver test = new DefaultComputationTargetResolver(secSource, posSource);
-    final ComputationTargetSpecification spec =
-        new ComputationTargetSpecification(ComputationTargetType.UNORDERED_CURRENCY_PAIR, UniqueId.of("UnorderedCurrencyPair", "EURGBP"));
-    final ComputationTarget expected =
-        new ComputationTarget(ComputationTargetType.UNORDERED_CURRENCY_PAIR, UnorderedCurrencyPair.of(Currency.GBP, Currency.EUR));
+    final ComputationTargetSpecification spec = new ComputationTargetSpecification(ComputationTargetType.UNORDERED_CURRENCY_PAIR,
+        UniqueId.of("UnorderedCurrencyPair", "EURGBP"));
+    final ComputationTarget expected = new ComputationTarget(ComputationTargetType.UNORDERED_CURRENCY_PAIR,
+        UnorderedCurrencyPair.of(Currency.GBP, Currency.EUR));
     assertExpected(expected, test.resolve(spec, VersionCorrection.LATEST));
   }
 
-  public void test_resolve_null() {
+  /**
+   *
+   */
+  public void testResolveNull() {
     final InMemorySecuritySource secSource = new InMemorySecuritySource();
     final MockPositionSource posSource = new MockPositionSource();
     final DefaultComputationTargetResolver test = new DefaultComputationTargetResolver(secSource, posSource);
     assertExpected(ComputationTarget.NULL, test.resolve(ComputationTargetSpecification.NULL, VersionCorrection.LATEST));
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = NullPointerException.class)
-  public void test_resolve_nullSpecification() {
+  public void testResolveNullSpecification() {
     final InMemorySecuritySource secSource = new InMemorySecuritySource();
     final MockPositionSource posSource = new MockPositionSource();
     final DefaultComputationTargetResolver test = new DefaultComputationTargetResolver(secSource, posSource);
     test.resolve(null, VersionCorrection.LATEST);
   }
 
-  public void test_resolve_notFound() {
+  /**
+   *
+   */
+  public void testResolveNotFound() {
     final InMemorySecuritySource secSource = new InMemorySecuritySource();
     final MockPositionSource posSource = new MockPositionSource();
     final DefaultComputationTargetResolver test = new DefaultComputationTargetResolver(secSource, posSource);
     assertNull(test.resolve(new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Foo", "Bar")), VersionCorrection.LATEST));
   }
 
-  public void test_simplifyType() {
+  /**
+   *
+   */
+  public void testSimplifyType() {
     final InMemorySecuritySource secSource = new InMemorySecuritySource();
     final MockPositionSource posSource = new MockPositionSource();
     final DefaultComputationTargetResolver test = new DefaultComputationTargetResolver(secSource, posSource);
@@ -182,21 +218,30 @@ public class DefaultComputationTargetResolverTest {
         ComputationTargetType.TRADE.or(ComputationTargetType.SECURITY));
   }
 
-  public void test_typeProvider_getSimple() {
+  /**
+   *
+   */
+  public void testTypeProviderGetSimple() {
     final InMemorySecuritySource secSource = new InMemorySecuritySource();
     final MockPositionSource posSource = new MockPositionSource();
     final DefaultComputationTargetResolver test = new DefaultComputationTargetResolver(secSource, posSource);
     assertEquals(test.getSimpleTypes().size(), 9);
   }
 
-  public void test_typeProvider_getAdditional() {
+  /**
+   *
+   */
+  public void testTypeProviderGetAdditional() {
     final InMemorySecuritySource secSource = new InMemorySecuritySource();
     final MockPositionSource posSource = new MockPositionSource();
     final DefaultComputationTargetResolver test = new DefaultComputationTargetResolver(secSource, posSource);
     assertEquals(test.getAdditionalTypes().size(), 0);
   }
 
-  public void test_typeProvider_getAll() {
+  /**
+   *
+   */
+  public void testTypeProviderGetAll() {
     final InMemorySecuritySource secSource = new InMemorySecuritySource();
     final MockPositionSource posSource = new MockPositionSource();
     final DefaultComputationTargetResolver test = new DefaultComputationTargetResolver(secSource, posSource);

@@ -19,8 +19,11 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class WebHomeUrisTest {
 
-  public void test_constructable() {
-    UriInfo uriInfo = mock(UriInfo.class);
+  /**
+   *
+   */
+  public void testConstructable() {
+    final UriInfo uriInfo = mock(UriInfo.class);
     new WebHomeUris(uriInfo);
   }
 

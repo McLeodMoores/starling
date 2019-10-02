@@ -38,7 +38,7 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbSecurityMasterWorkerTest.class);
 
-  private static ConcurrentMap<String, DbConnector> _dbConnectors = new ConcurrentHashMap<>(); // local cache for Hibernate reasons, closed in DbTest
+  private static final ConcurrentMap<String, DbConnector> DB_CONNECTORS = new ConcurrentHashMap<>(); // local cache for Hibernate reasons, closed in DbTest
   protected DbSecurityMaster _secMaster;
   protected Instant _version1Instant;
   protected Instant _version2Instant;
@@ -63,15 +63,15 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
   @Override
   protected void doTearDownClass() {
     _secMaster = null;
-    _dbConnectors.clear();
+    DB_CONNECTORS.clear();
   }
 
   // -------------------------------------------------------------------------
   private void init() {
-    DbConnector dbConnector = _dbConnectors.get(getDatabaseType());
+    DbConnector dbConnector = DB_CONNECTORS.get(getDatabaseType());
     if (dbConnector == null) {
       dbConnector = getDbConnector();
-      _dbConnectors.put(getDatabaseType(), dbConnector);
+      DB_CONNECTORS.put(getDatabaseType(), dbConnector);
     }
     _secMaster = new DbSecurityMaster(dbConnector);
     _secMaster.setDetailProvider(new HibernateSecurityMasterDetailProvider());

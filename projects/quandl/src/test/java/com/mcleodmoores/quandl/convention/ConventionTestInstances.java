@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.convention;
 
@@ -190,9 +190,9 @@ public final class ConventionTestInstances {
   /**
    * An overnight compounded roll date leg convention instance.
    */
-  public static final ONCompoundedLegRollDateConvention OVERNIGHT_COMPOUNDED_ROLL_DATE_LEG =
-      new ONCompoundedLegRollDateConvention("USD OVERNIGHT COMPOUNDED ROLL DATE", ExternalIdBundle.of(CONVENTION_SCHEME, "USD OVERNIGHT COMPOUNDED ROLL DATE"),
-          ExternalId.of(CONVENTION_SCHEME, "USD OVERNIGHT INDEX"), Tenor.ONE_YEAR, StubType.NONE, false, 2);
+  public static final ONCompoundedLegRollDateConvention OVERNIGHT_COMPOUNDED_ROLL_DATE_LEG = new ONCompoundedLegRollDateConvention(
+      "USD OVERNIGHT COMPOUNDED ROLL DATE", ExternalIdBundle.of(CONVENTION_SCHEME, "USD OVERNIGHT COMPOUNDED ROLL DATE"),
+      ExternalId.of(CONVENTION_SCHEME, "USD OVERNIGHT INDEX"), Tenor.ONE_YEAR, StubType.NONE, false, 2);
 
   /**
    * An overnight index convention instance.

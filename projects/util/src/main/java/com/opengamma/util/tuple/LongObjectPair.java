@@ -181,7 +181,7 @@ public class LongObjectPair<T>
     /**
      * The meta-properties.
      */
-    private final Map<String, MetaProperty<?>> _metaPropertyMap$ = new DirectMetaPropertyMap(
+    private final Map<String, MetaProperty<?>> _metaPropertyMap = new DirectMetaPropertyMap(
         this, null,
         "first",
         "second");
@@ -216,7 +216,7 @@ public class LongObjectPair<T>
 
     @Override
     public Map<String, MetaProperty<?>> metaPropertyMap() {
-      return _metaPropertyMap$;
+      return _metaPropertyMap;
     }
 
     //-----------------------------------------------------------------------

@@ -51,7 +51,7 @@ public class DataHistoricalTimeSeriesSourceUrisTest {
   private URI _baseUri;
 
   /**
-   * Sets up the URI
+   * Sets up the URI.
    *
    * @throws URISyntaxException
    *           if the path is wrong

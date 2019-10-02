@@ -47,50 +47,50 @@ import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
 
 /**
- * Bloomberg Security utility class to aid testing
+ * Bloomberg Security utility class to aid testing.
  */
 public final class BloombergSecurityUtils {
 
   /**
-   * USD Currency
+   * USD Currency.
    */
   public static final Currency USD = Currency.USD;
   /**
-   * AUD Currency
+   * AUD Currency.
    */
   public static final Currency AUD = Currency.AUD;
   /**
-   * EUR Currency
+   * EUR Currency.
    */
   public static final Currency EUR = Currency.EUR;
   /**
-   * GBP Currency
+   * GBP Currency.
    */
   public static final Currency GBP = Currency.GBP;
 
   /**
-   * ATT BUID
+   * ATT BUID.
    */
   public static final String ATT_BUID = "EQ0010137600001000";
   /**
-   * AAPL BUID
+   * AAPL BUID.
    */
   public static final String AAPL_BUID = "EQ0010169500001000";
   /**
-   * AAPL OPTION
+   * AAPL OPTION.
    */
   public static final String APV_EQUITY_OPTION_TICKER = "APV US 01/16/10 C190 Equity";
   // At times Bloomberg has changed this to SPT as the prefix in the past.
   /**
-   * SPX index option
+   * SPX index option.
    */
   public static final String SPX_INDEX_OPTION_TICKER = "SPX US 12/18/10 C1100 Index";
   /**
-   * AAPL ticker
+   * AAPL ticker.
    */
   public static final String AAPL_EQUITY_TICKER = "AAPL US Equity";
   /**
-   * ATT ticker
+   * ATT ticker.
    */
   public static final String ATT_EQUITY_TICKER = "T US Equity";
 

@@ -19,8 +19,11 @@ public class ExampleEquityOptionVolatilitySurfaceDataFunctionTest {
   // when written, this was the only unit test in examples-simulated
   // and was added to keep continuous integration happy
 
+  /**
+   *
+   */
   @Test
-  public void test_basics() {
+  public void testBasics() {
     final ExampleEquityOptionVolatilitySurfaceDataFunction test = new ExampleEquityOptionVolatilitySurfaceDataFunction("A", "B", "C");
     assertEquals("A", test.getDefinitionName());
     assertEquals("C", test.getSpecificationName());

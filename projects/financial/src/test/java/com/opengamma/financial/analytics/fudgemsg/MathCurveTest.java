@@ -42,16 +42,19 @@ public class MathCurveTest extends AnalyticsTestBase {
 
   @Test
   public void testInterpolatedCurve() {
-    Curve<Double, Double> c1 = InterpolatedDoublesCurve.from(new double[] {1, 2, 3, 4}, new double[] {4, 5, 6, 7}, new LinearInterpolator1D());
+    Curve<Double, Double> c1 = InterpolatedDoublesCurve.from(new double[] { 1, 2, 3, 4 }, new double[] { 4, 5, 6, 7 }, new LinearInterpolator1D());
     Curve<Double, Double> c2 = cycleObject(Curve.class, c1);
     assertEquals(c1, c2);
-    c1 = InterpolatedDoublesCurve.from(new double[] {1, 2, 3, 4}, new double[] {4, 5, 6, 7}, new LinearInterpolator1D(), "NAME");
+    c1 = InterpolatedDoublesCurve.from(new double[] { 1, 2, 3, 4 }, new double[] { 4, 5, 6, 7 }, new LinearInterpolator1D(), "NAME");
     c2 = cycleObject(Curve.class, c1);
     assertEquals(c1, c2);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testFunctionalCurve_Unserializable() {
+  public void testFunctionalCurveUnserializable() {
     final Function1D<Double, Double> f = new Function1D<Double, Double>() {
 
       @Override
@@ -72,10 +75,13 @@ public class MathCurveTest extends AnalyticsTestBase {
     }
   }
 
+  /**
+   *
+   */
   @Test
-  public void testFunctionalCurve_NSS() {
+  public void testFunctionalCurveNSS() {
     final NelsonSiegelSvennsonBondCurveModel curveBondModel = new NelsonSiegelSvennsonBondCurveModel();
-    final Function1D<Double, Double> f = curveBondModel.getParameterizedFunction().asFunctionOfArguments(new DoubleMatrix1D(new double[] {1, 2, 3, 4, 5, 6 }));
+    final Function1D<Double, Double> f = curveBondModel.getParameterizedFunction().asFunctionOfArguments(new DoubleMatrix1D(new double[] { 1, 2, 3, 4, 5, 6 }));
     Curve<Double, Double> c1 = FunctionalDoublesCurve.from(f);
     Curve<Double, Double> c2 = cycleObject(Curve.class, c1);
     assertCurveEquals(c1, c2);
@@ -84,10 +90,13 @@ public class MathCurveTest extends AnalyticsTestBase {
     assertCurveEquals(c1, c2);
   }
 
+  /**
+   *
+   */
   @Test
-  public void testFunctionalCurve_NS() {
+  public void testFunctionalCurveNS() {
     final NelsonSiegelBondCurveModel curveBondModel = new NelsonSiegelBondCurveModel();
-    final Function1D<Double, Double> func = curveBondModel.getParameterizedFunction().asFunctionOfArguments(new DoubleMatrix1D(new double[] {1, 2, 3, 4 }));
+    final Function1D<Double, Double> func = curveBondModel.getParameterizedFunction().asFunctionOfArguments(new DoubleMatrix1D(new double[] { 1, 2, 3, 4 }));
     Curve<Double, Double> c1 = FunctionalDoublesCurve.from(func);
     Curve<Double, Double> c2 = cycleObject(Curve.class, c1);
     assertCurveEquals(c1, c2);
@@ -96,6 +105,9 @@ public class MathCurveTest extends AnalyticsTestBase {
     assertCurveEquals(c1, c2);
   }
 
+  /**
+   *
+   */
   @Test
   public void testNodalDoubleCurve() {
     final NodalTenorDoubleCurve c1 = NodalTenorDoubleCurve.from(new Tenor[] { Tenor.ONE_DAY, Tenor.ONE_YEAR }, new Double[] { 1.2345, 67.89 });

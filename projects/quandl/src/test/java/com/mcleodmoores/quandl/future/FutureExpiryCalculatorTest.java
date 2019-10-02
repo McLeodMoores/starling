@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.future;
 
@@ -26,7 +26,6 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
 import com.opengamma.util.time.Tenor;
-
 
 /**
  * Unit tests for {@link FutureExpiryCalculator}.
@@ -94,8 +93,7 @@ public class FutureExpiryCalculatorTest {
   }
 
   /**
-   * Tests the calculation of the expiry of a short-term interest rate future (usually an IMM expiry i.e.
-   * the third Monday of a month).
+   * Tests the calculation of the expiry of a short-term interest rate future (usually an IMM expiry i.e. the third Monday of a month).
    */
   @Test
   public void testStirFutureExpiry() {

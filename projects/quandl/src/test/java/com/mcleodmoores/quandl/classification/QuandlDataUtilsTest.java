@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.classification;
 
@@ -90,16 +90,16 @@ public class QuandlDataUtilsTest {
       final HistoricalTimeSeriesFieldAdjustment fieldAdjustment = fieldMapping.getFieldAdjustment(MarketDataRequirementNames.MARKET_VALUE);
       if (fieldAdjustment != null) {
         final SimpleHistoricalTimeSeries ts = new SimpleHistoricalTimeSeries(UniqueId.of("Test", "1"),
-            ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] {LocalDate.of(2014, 12, 1)}, new double[] {123}));
+            ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] { LocalDate.of(2014, 12, 1) }, new double[] { 123 }));
         // cash rate, should be divided by 100
         SimpleHistoricalTimeSeries expectedTs = new SimpleHistoricalTimeSeries(UniqueId.of("Test", "1"),
-            ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] {LocalDate.of(2014, 12, 1)}, new double[] {1.23}));
+            ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] { LocalDate.of(2014, 12, 1) }, new double[] { 1.23 }));
         HistoricalTimeSeries adjustedTs = fieldAdjustment.getAdjuster().adjust(QuandlConstants.ofCode("FRED/USDONTD156N").toBundle(), ts);
         assertEquals(expectedTs.getUniqueId(), adjustedTs.getUniqueId());
         assertEquals(expectedTs.getTimeSeries(), adjustedTs.getTimeSeries());
         // unclassifiable code, should not be adjusted
         expectedTs = new SimpleHistoricalTimeSeries(UniqueId.of("Test", "1"),
-            ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] {LocalDate.of(2014, 12, 1)}, new double[] {123}));
+            ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] { LocalDate.of(2014, 12, 1) }, new double[] { 123 }));
         adjustedTs = fieldAdjustment.getAdjuster().adjust(QuandlConstants.ofCode("ABC/DEF").toBundle(), ts);
         assertEquals(adjustedTs.getUniqueId(), expectedTs.getUniqueId());
         assertEquals(adjustedTs.getTimeSeries(), expectedTs.getTimeSeries());
@@ -121,10 +121,10 @@ public class QuandlDataUtilsTest {
       final HistoricalTimeSeriesFieldAdjustment fieldAdjustment = fieldMapping.getFieldAdjustment(MarketDataRequirementNames.MARKET_VALUE);
       if (fieldAdjustment != null) {
         final SimpleHistoricalTimeSeries ts = new SimpleHistoricalTimeSeries(UniqueId.of("Test", "1"),
-            ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] {LocalDate.of(2014, 12, 1)}, new double[] {123}));
+            ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] { LocalDate.of(2014, 12, 1) }, new double[] { 123 }));
         // cash rate, should be divided by 100
         final SimpleHistoricalTimeSeries expectedTs = new SimpleHistoricalTimeSeries(UniqueId.of("Test", "1"),
-            ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] {LocalDate.of(2014, 12, 1)}, new double[] {123}));
+            ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] { LocalDate.of(2014, 12, 1) }, new double[] { 123 }));
         final HistoricalTimeSeries adjustedTs = fieldAdjustment.getAdjuster().adjust(ExternalSchemes.syntheticSecurityId("FRED/USDONTD156N").toBundle(), ts);
         assertEquals(adjustedTs.getUniqueId(), expectedTs.getUniqueId());
         assertEquals(adjustedTs.getTimeSeries(), expectedTs.getTimeSeries());

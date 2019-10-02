@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -57,14 +57,7 @@ public class BasisSwapInstrumentProviderPopulatorTest {
     EMPTY_MAPPER = CurveNodeIdMapper.builder()
         .name(NAME)
         .build();
-    final Function2<String, String, String> renamingFunction = new Function2<String, String, String>() {
-
-      @Override
-      public String apply(final String name, final String currency) {
-        return name + " test";
-      }
-
-    };
+    final Function2<String, String, String> renamingFunction = (name, currency) -> name + " test";
     BASIS_SWAP_RENAMING_PROVIDER = new BasisSwapInstrumentProviderPopulator(StripInstrumentType.BASIS_SWAP, renamingFunction);
     TENOR_SWAP_RENAMING_PROVIDER = new BasisSwapInstrumentProviderPopulator(StripInstrumentType.TENOR_SWAP, renamingFunction);
   }
@@ -115,8 +108,8 @@ public class BasisSwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the swap instrument provider is unpopulated if a curve specification builder configuration that has no tenor or basis
-   * swap instrument providers is supplied.
+   * Tests that the swap instrument provider is unpopulated if a curve specification builder configuration that has no tenor or basis swap instrument providers
+   * is supplied.
    */
   @Test
   public void testNoTenorOrBasisSwaps() {
@@ -130,8 +123,8 @@ public class BasisSwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the swap instrument provider is populated using the basis swap providers from the curve specification builder
-   * configuration for a basis swap strip instrument converter.
+   * Tests that the swap instrument provider is populated using the basis swap providers from the curve specification builder configuration for a basis swap
+   * strip instrument converter.
    */
   @Test
   public void testBasisSwapStrips() {
@@ -139,8 +132,8 @@ public class BasisSwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the swap instrument provider is populated using the tenor swap providers from the curve specification builder
-   * configuration for a tenor swap strip instrument converter.
+   * Tests that the swap instrument provider is populated using the tenor swap providers from the curve specification builder configuration for a tenor swap
+   * strip instrument converter.
    */
   @Test
   public void testTenorSwapStrips() {
@@ -164,8 +157,8 @@ public class BasisSwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map and that the original mapper is unchanged
-   * and that the renaming function is used to create the mapper name.
+   * Tests that an empty mapper is populated with the correct instrument provider map and that the original mapper is unchanged and that the renaming function
+   * is used to create the mapper name.
    */
   @Test
   public void testBuilderCreationForBasisSwapWithRename() {
@@ -197,8 +190,8 @@ public class BasisSwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map and that the original mapper is unchanged
-   * and that the renaming function is used to create the mapper name.
+   * Tests that an empty mapper is populated with the correct instrument provider map and that the original mapper is unchanged and that the renaming function
+   * is used to create the mapper name.
    */
   @Test
   public void testBuilderCreationForTenorSwapWithRename() {

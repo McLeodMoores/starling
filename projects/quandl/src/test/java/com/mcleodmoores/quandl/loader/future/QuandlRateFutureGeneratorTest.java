@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.future;
 
@@ -80,50 +80,46 @@ public class QuandlRateFutureGeneratorTest {
    */
   @Test
   public void testWrongNumberOfEntries() {
-    assertNull(LOADER.createSecurity(new String[] {"CME/EDZ2014", "STIR FUTURE", "2014-12-17"}));
+    assertNull(LOADER.createSecurity(new String[] { "CME/EDZ2014", "STIR FUTURE", "2014-12-17" }));
   }
 
   /**
-   * Tests that null is returned when the expiry could not be constructed because the
-   * date format is incorrect.
+   * Tests that null is returned when the expiry could not be constructed because the date format is incorrect.
    */
   @Test
   public void testBadExpiryString() {
-    final String[] line = new String[] {"CME/EDZ2014", "STIR FUTURE", "2014/12/17", "2500", "America/Chicago", "09:30-16:00", "CME", "CME",
-        "USD", "FRED/USD3MTD156N"};
+    final String[] line = new String[] { "CME/EDZ2014", "STIR FUTURE", "2014/12/17", "2500", "America/Chicago", "09:30-16:00", "CME", "CME",
+        "USD", "FRED/USD3MTD156N" };
     assertNull(LOADER.createSecurity(line));
   }
 
   /**
-   * Tests that null is returned when the expiry could not be constructed because the
-   * trading times format is empty.
+   * Tests that null is returned when the expiry could not be constructed because the trading times format is empty.
    */
   @Test
   public void testBadLastTradeTimeString1() {
-    final String[] line = new String[] {"CME/EDZ2014", "STIR FUTURE", "2014-12-17", "2500", "America/Chicago", "", "CME", "CME",
-        "USD", "FRED/USD3MTD156N"};
+    final String[] line = new String[] { "CME/EDZ2014", "STIR FUTURE", "2014-12-17", "2500", "America/Chicago", "", "CME", "CME",
+        "USD", "FRED/USD3MTD156N" };
     assertNull(LOADER.createSecurity(line));
   }
 
   /**
-   * Tests that null is returned when the expiry could not be constructed because the
-   * trading times format is incorrect.
+   * Tests that null is returned when the expiry could not be constructed because the trading times format is incorrect.
    */
   @Test
   public void testBadLastTradeTimeString2() {
-    final String[] line = new String[] {"CME/EDZ2014", "STIR FUTURE", "2014-12-17", "2500", "America/Chicago", "09:30;16:00", "CME", "CME",
-        "USD", "FRED/USD3MTD156N"};
+    final String[] line = new String[] { "CME/EDZ2014", "STIR FUTURE", "2014-12-17", "2500", "America/Chicago", "09:30;16:00", "CME", "CME",
+        "USD", "FRED/USD3MTD156N" };
     assertNull(LOADER.createSecurity(line));
   }
 
   /**
-   * Tests that null is returned when the expiry could not be constructed because the
-   * last time format is incorrect.
+   * Tests that null is returned when the expiry could not be constructed because the last time format is incorrect.
    */
   @Test
   public void testBadLastTradeTimeString3() {
-    final String[] line = new String[] {"CME/EDZ2014", "STIR FUTURE", "2014-12-17", "2500", "America/Chicago", "09:30-16:00 17:00", "CME", "CME",
-        "USD", "FRED/USD3MTD156N"};
+    final String[] line = new String[] { "CME/EDZ2014", "STIR FUTURE", "2014-12-17", "2500", "America/Chicago", "09:30-16:00 17:00", "CME", "CME",
+        "USD", "FRED/USD3MTD156N" };
     assertNull(LOADER.createSecurity(line));
   }
 
@@ -132,8 +128,8 @@ public class QuandlRateFutureGeneratorTest {
    */
   @Test
   public void testBadUnitAmountString() {
-    final String[] line = new String[] {"CME/EDZ2014", "STIR FUTURE", "2014-12-17", "250O", "America/Chicago", "09:30-16:00", "CME", "CME",
-        "USD", "FRED/USD3MTD156N"};
+    final String[] line = new String[] { "CME/EDZ2014", "STIR FUTURE", "2014-12-17", "250O", "America/Chicago", "09:30-16:00", "CME", "CME",
+        "USD", "FRED/USD3MTD156N" };
     assertNull(LOADER.createSecurity(line));
   }
 
@@ -142,8 +138,8 @@ public class QuandlRateFutureGeneratorTest {
    */
   @Test
   public void testBadCurrencyString() {
-    final String[] line = new String[] {"CME/EDZ2014", "STIR FUTURE", "2014-12-17", "2500", "America/Chicago", "09:30-16:00", "CME", "CME",
-        "USDA", "FRED/USD3MTD156N"};
+    final String[] line = new String[] { "CME/EDZ2014", "STIR FUTURE", "2014-12-17", "2500", "America/Chicago", "09:30-16:00", "CME", "CME",
+        "USDA", "FRED/USD3MTD156N" };
     assertNull(LOADER.createSecurity(line));
   }
 
@@ -152,8 +148,8 @@ public class QuandlRateFutureGeneratorTest {
    */
   @Test
   public void testBadUnderlyingIdString() {
-    final String[] line = new String[] {"CME/EDZ2014", "STIR FUTURE", "2014-12-17", "2500", "America/Chicago", "09:30-16:00", "CME", "CME",
-        "USD", ""};
+    final String[] line = new String[] { "CME/EDZ2014", "STIR FUTURE", "2014-12-17", "2500", "America/Chicago", "09:30-16:00", "CME", "CME",
+        "USD", "" };
     assertNull(LOADER.createSecurity(line));
   }
 
@@ -162,8 +158,8 @@ public class QuandlRateFutureGeneratorTest {
    */
   @Test
   public void testUnhandledCategory() {
-    final String[] line = new String[] {"CME/EDZ2014", "IR FUTURE", "2014-12-17", "2500", "America/Chicago", "09:30-16:00", "CME", "CME",
-        "USD", "FRED/USD3MTD156N"};
+    final String[] line = new String[] { "CME/EDZ2014", "IR FUTURE", "2014-12-17", "2500", "America/Chicago", "09:30-16:00", "CME", "CME",
+        "USD", "FRED/USD3MTD156N" };
     assertNull(LOADER.createSecurity(line));
   }
 
@@ -192,8 +188,7 @@ public class QuandlRateFutureGeneratorTest {
   }
 
   /**
-   * Tests that null is returned when the last four characters of the code cannot
-   * be parsed into a year.
+   * Tests that null is returned when the last four characters of the code cannot be parsed into a year.
    */
   @Test
   public void testBadYearInCode() {
@@ -214,8 +209,7 @@ public class QuandlRateFutureGeneratorTest {
   }
 
   /**
-   * Tests that null is returned if a convention could not be found for either the prefix
-   * or the full code.
+   * Tests that null is returned if a convention could not be found for either the prefix or the full code.
    */
   @Test
   public void testNoConvention() {
@@ -236,7 +230,9 @@ public class QuandlRateFutureGeneratorTest {
 
   /**
    * Tests the creation of an interest rate future security from a file.
-   * @throws IOException If the test data file could not be opened
+   * 
+   * @throws IOException
+   *           If the test data file could not be opened
    */
   @Test
   public void testLoadStirFutureFromFile() throws IOException {
@@ -245,11 +241,12 @@ public class QuandlRateFutureGeneratorTest {
         fail("Could not get file called StirFuture.csv");
       }
       try (CSVReader reader = new CSVReader(new BufferedReader(new InputStreamReader(resource)))) {
-        reader.readNext(); //ignore headers
+        reader.readNext(); // ignore headers
         final Security generatedSecurity = LOADER.createSecurity(reader.readNext());
-        final ManageableSecurity expectedSecurity =
-            new InterestRateFutureSecurity(new Expiry(ZonedDateTime.of(LocalDateTime.of(2014, 12, 17, 16, 0), ZoneOffset.UTC),
-                ExpiryAccuracy.MIN_HOUR_DAY_MONTH_YEAR), "CME", "CME", Currency.USD, 2500, QuandlConstants.ofCode("FRED/USD3MTD156N"), "STIR FUTURE");
+        final ManageableSecurity expectedSecurity = new InterestRateFutureSecurity(
+            new Expiry(ZonedDateTime.of(LocalDateTime.of(2014, 12, 17, 16, 0), ZoneOffset.UTC),
+                ExpiryAccuracy.MIN_HOUR_DAY_MONTH_YEAR),
+            "CME", "CME", Currency.USD, 2500, QuandlConstants.ofCode("FRED/USD3MTD156N"), "STIR FUTURE");
         expectedSecurity.setName("CME/EDZ2014");
         expectedSecurity.setExternalIdBundle(QuandlConstants.ofCode("CME/EDZ2014").toBundle());
         assertEquals(generatedSecurity, expectedSecurity);
@@ -280,7 +277,9 @@ public class QuandlRateFutureGeneratorTest {
 
   /**
    * Tests the creation of a Fed funds future security from a file.
-   * @throws IOException If the test data file could not be opened
+   * 
+   * @throws IOException
+   *           If the test data file could not be opened
    */
   @Test
   public void testLoadFedFundsFutureFromFile() throws IOException {
@@ -289,11 +288,12 @@ public class QuandlRateFutureGeneratorTest {
         fail("Could not get file called FedFunds.csv");
       }
       try (CSVReader reader = new CSVReader(new BufferedReader(new InputStreamReader(resource)))) {
-        reader.readNext(); //ignore headers
+        reader.readNext(); // ignore headers
         final Security generatedSecurity = LOADER.createSecurity(reader.readNext());
-        final ManageableSecurity expectedSecurity =
-            new FederalFundsFutureSecurity(new Expiry(ZonedDateTime.of(LocalDateTime.of(2014, 12, 31, 16, 0), ZoneOffset.UTC),
-                ExpiryAccuracy.MIN_HOUR_DAY_MONTH_YEAR), "CME", "CME", Currency.USD, 500000, QuandlConstants.ofCode("FRED/DFF"), "FED FUNDS FUTURE");
+        final ManageableSecurity expectedSecurity = new FederalFundsFutureSecurity(
+            new Expiry(ZonedDateTime.of(LocalDateTime.of(2014, 12, 31, 16, 0), ZoneOffset.UTC),
+                ExpiryAccuracy.MIN_HOUR_DAY_MONTH_YEAR),
+            "CME", "CME", Currency.USD, 500000, QuandlConstants.ofCode("FRED/DFF"), "FED FUNDS FUTURE");
         expectedSecurity.setName("CME/FFZ2014");
         expectedSecurity.setExternalIdBundle(QuandlConstants.ofCode("CME/FFZ2014").toBundle());
         assertEquals(generatedSecurity, expectedSecurity);

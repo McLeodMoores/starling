@@ -23,7 +23,7 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests the {@link RunQueue} implementations
+ * Tests the {@link RunQueue} implementations.
  */
 @Test(groups = TestGroup.UNIT)
 public class RunQueueTest {
@@ -42,13 +42,7 @@ public class RunQueueTest {
   }
 
   private ContextRunnable runnable() {
-    return new ContextRunnable() {
-      @Override
-      public boolean tryRun(final GraphBuildingContext context) {
-        // No-op
-        return true;
-      }
-    };
+    return context -> true;
   }
 
   private void testSpeed(final RunQueue queue, final CyclicBarrier barrier, final double[] speed) {
@@ -92,12 +86,7 @@ public class RunQueueTest {
     final double[] speed = new double[3];
     final CyclicBarrier barrier = new CyclicBarrier(threads);
     for (int i = 1; i < threads; i++) {
-      _executor.submit(new Runnable() {
-        @Override
-        public void run() {
-          testSpeed(queue, barrier, speed);
-        }
-      });
+      _executor.submit(() -> testSpeed(queue, barrier, speed));
     }
     for (int i = 0; i < 100; i++) {
       queue.add(runnable());
@@ -107,10 +96,10 @@ public class RunQueueTest {
   }
 
   private void testSpeed(final RunQueueFactory queueFactory) {
-    /*testSpeed(queueFactory.createRunQueue(), 1);
-    testSpeed(queueFactory.createRunQueue(), 4);
-    testSpeed(queueFactory.createRunQueue(), 8);
-    testSpeed(queueFactory.createRunQueue(), 16);*/
+    /*
+     * testSpeed(queueFactory.createRunQueue(), 1); testSpeed(queueFactory.createRunQueue(), 4); testSpeed(queueFactory.createRunQueue(), 8);
+     * testSpeed(queueFactory.createRunQueue(), 16);
+     */
   }
 
   private void testLIFO(final RunQueueFactory queueFactory) {

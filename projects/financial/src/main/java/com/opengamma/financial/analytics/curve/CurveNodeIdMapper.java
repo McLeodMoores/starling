@@ -38,7 +38,7 @@ public class CurveNodeIdMapper {
   /**
    * The names of the curve instrument providers.
    */
-  public static final List<String> s_curveIdMapperNames = getCurveIdMapperNames();
+  public static final List<String> _fundingCurveName = getCurveIdMapperNames();
   /** The name of this configuration */
   private final String _name;
   /** Curve instrument providers for bill nodes */

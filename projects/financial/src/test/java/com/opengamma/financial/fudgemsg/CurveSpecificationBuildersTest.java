@@ -59,7 +59,7 @@ public class CurveSpecificationBuildersTest extends AnalyticsTestBase {
   }
 
   /**
-   * Tests cycling of interpolated curve specifications
+   * Tests cycling of interpolated curve specifications.
    */
   @Test
   public void testInterpolatedCurveSpecification() {

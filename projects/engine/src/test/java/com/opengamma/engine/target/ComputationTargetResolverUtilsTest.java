@@ -30,17 +30,24 @@ public class ComputationTargetResolverUtilsTest {
   private static final SimplePortfolioNode NODE = new SimplePortfolioNode(UniqueId.of("A", "B", "C"), "Name");
   private static final Position POSITION = new SimplePosition(UniqueId.of("Test", "1", "0"), new BigDecimal(1), ExternalIdBundle.EMPTY);
 
-  public void testCreateResolvedTarget_noRewrite() {
+  /**
+   *
+   */
+  public void testCreateResolvedTargetNoRewrite() {
     // No re-write
     final ComputationTarget target = ComputationTargetResolverUtils.createResolvedTarget(
         new ComputationTargetSpecification(
-            ComputationTargetType.PORTFOLIO_NODE, NODE.getUniqueId()).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
+            ComputationTargetType.PORTFOLIO_NODE, NODE.getUniqueId()).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()),
+        POSITION);
     assertEquals(target.getType(), ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.of(SimplePosition.class)));
     assertEquals(target.getContextSpecification(), ComputationTargetSpecification.of(NODE));
     assertSame(target.getValue(), POSITION);
   }
 
-  public void testCreateResolvedTarget_rewriteUnion() {
+  /**
+   *
+   */
+  public void testCreateResolvedTargetRewriteUnion() {
     // Rewrite to remove the union type
     final ComputationTarget target = ComputationTargetResolverUtils.createResolvedTarget(
         new ComputationTargetSpecification(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), POSITION.getUniqueId()), POSITION);
@@ -49,18 +56,23 @@ public class ComputationTargetResolverUtilsTest {
     assertSame(target.getValue(), POSITION);
   }
 
-  public void testCreateResolvedTarget_rewriteNested() {
+  /**
+   *
+   */
+  public void testCreateResolvedTargetRewriteNested() {
     // Rewrite the nested type
     ComputationTarget target = ComputationTargetResolverUtils.createResolvedTarget(
         new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
-            NODE.getUniqueId()).containing(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), POSITION.getUniqueId()), POSITION);
+            NODE.getUniqueId()).containing(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), POSITION.getUniqueId()),
+        POSITION);
     assertEquals(target.getType(), ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.of(SimplePosition.class)));
     assertEquals(target.getContextSpecification(), ComputationTargetSpecification.of(NODE));
     assertSame(target.getValue(), POSITION);
     target = ComputationTargetResolverUtils.createResolvedTarget(
         new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
             NODE.getUniqueId()).containing(ComputationTargetType.PORTFOLIO_NODE, NODE.getUniqueId()).containing(
-            ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), POSITION.getUniqueId()), POSITION);
+                ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), POSITION.getUniqueId()),
+        POSITION);
     assertEquals(target.getType(),
         ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.PORTFOLIO_NODE).containing(ComputationTargetType.of(SimplePosition.class)));
     assertEquals(target.getContextSpecification(),
@@ -68,9 +80,12 @@ public class ComputationTargetResolverUtilsTest {
     assertSame(target.getValue(), POSITION);
   }
 
-  public void testCreateResolvedTarget_rewriteSpec() {
-    final ComputationTarget target =
-        ComputationTargetResolverUtils.createResolvedTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
+  /**
+   *
+   */
+  public void testCreateResolvedTargetRewriteSpec() {
+    final ComputationTarget target = ComputationTargetResolverUtils
+        .createResolvedTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
             NODE.getUniqueId().toLatest()), NODE);
     assertEquals(target.getType(), ComputationTargetType.of(SimplePortfolioNode.class));
     assertEquals(target.getUniqueId(), NODE.getUniqueId());

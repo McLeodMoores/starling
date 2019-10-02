@@ -51,7 +51,7 @@ import com.opengamma.util.test.TestLifecycle;
 import com.opengamma.util.test.Timeout;
 
 /**
- * Tests {@link ViewProcess}
+ * Tests {@link ViewProcess}.
  */
 @Test(groups = TestGroup.INTEGRATION)
 public class ViewProcessTest {
@@ -149,17 +149,17 @@ public class ViewProcessTest {
 
       final Instant time0 = Instant.now();
       final ViewCycleExecutionOptions defaultCycleOptions = ViewCycleExecutionOptions.builder().setMarketDataSpecification(MarketData.live()).create();
-      final ViewExecutionOptions executionOptions =
-          new ExecutionOptions(ArbitraryViewCycleExecutionSequence.of(time0, time0.plusMillis(10), time0.plusMillis(20), time0.plusMillis(30)),
-              ExecutionFlags.none().get(), defaultCycleOptions);
+      final ViewExecutionOptions executionOptions = new ExecutionOptions(
+          ArbitraryViewCycleExecutionSequence.of(time0, time0.plusMillis(10), time0.plusMillis(20), time0.plusMillis(30)),
+          ExecutionFlags.none().get(), defaultCycleOptions);
 
       client.attachToViewProcess(env.getViewDefinition().getUniqueId(), executionOptions);
 
       final ViewProcessImpl viewProcess = env.getViewProcess(vp, client.getUniqueId());
       final ViewProcessWorker worker = env.getCurrentWorker(viewProcess);
 
-      final CompiledViewDefinitionWithGraphsImpl compilationModel1 =
-          (CompiledViewDefinitionWithGraphsImpl) resultListener.getViewDefinitionCompiled(Timeout.standardTimeoutMillis()).getCompiledViewDefinition();
+      final CompiledViewDefinitionWithGraphsImpl compilationModel1 = (CompiledViewDefinitionWithGraphsImpl) resultListener
+          .getViewDefinitionCompiled(Timeout.standardTimeoutMillis()).getCompiledViewDefinition();
 
       assertEquals(time0,
           resultListener.getCycleCompleted(10 * Timeout.standardTimeoutMillis()).getFullResult().getViewCycleExecutionOptions().getValuationTime());
@@ -178,7 +178,7 @@ public class ViewProcessTest {
         configs.add(CompiledViewCalculationConfigurationImpl.of(graph));
       }
       final CompiledViewDefinitionWithGraphsImpl compiledViewDefinition = new CompiledViewDefinitionWithGraphsImpl(VersionCorrection.of(time0, time0), "",
-          compilationModel1.getViewDefinition(), graphs, Collections.<ComputationTargetReference, UniqueId>emptyMap(), compilationModel1.getPortfolio(),
+          compilationModel1.getViewDefinition(), graphs, Collections.<ComputationTargetReference, UniqueId> emptyMap(), compilationModel1.getPortfolio(),
           compilationModel1.getFunctionInitId(), configs, null, null) {
         @Override
         public Instant getValidTo() {
@@ -232,8 +232,8 @@ public class ViewProcessTest {
 
       final Instant time0 = Instant.now();
       final ViewCycleExecutionOptions defaultCycleOptions = ViewCycleExecutionOptions.builder().setMarketDataSpecification(MarketData.live()).create();
-      final ViewExecutionOptions executionOptions =
-          new ExecutionOptions(ArbitraryViewCycleExecutionSequence.of(time0), ExecutionFlags.none().get(), defaultCycleOptions);
+      final ViewExecutionOptions executionOptions = new ExecutionOptions(ArbitraryViewCycleExecutionSequence.of(time0), ExecutionFlags.none().get(),
+          defaultCycleOptions);
 
       client.attachToViewProcess(env.getViewDefinition().getUniqueId(), executionOptions);
 

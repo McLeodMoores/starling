@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -38,8 +38,7 @@ import com.opengamma.util.result.Function2;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Tests the class that adds rate future instrument providers to a {@link CurveNodeIdMapper} from
- * a {@link CurveSpecificationBuilderConfiguration}.
+ * Tests the class that adds rate future instrument providers to a {@link CurveNodeIdMapper} from a {@link CurveSpecificationBuilderConfiguration}.
  */
 public class FutureInstrumentProviderPopulatorTest {
   /** The name of the mapper */
@@ -59,14 +58,7 @@ public class FutureInstrumentProviderPopulatorTest {
     EMPTY_MAPPER = CurveNodeIdMapper.builder()
         .name(NAME)
         .build();
-    final Function2<String, String, String> renamingFunction = new Function2<String, String, String>() {
-
-      @Override
-      public String apply(final String name, final String currency) {
-        return name + " test";
-      }
-
-    };
+    final Function2<String, String, String> renamingFunction = (name, currency) -> name + " test";
     FUTURE_RENAMING_PROVIDER = new FutureInstrumentProviderPopulator(StripInstrumentType.FUTURE, renamingFunction);
     BA_RENAMING_PROVIDER = new FutureInstrumentProviderPopulator(StripInstrumentType.BANKERS_ACCEPTANCE, renamingFunction);
   }
@@ -128,8 +120,7 @@ public class FutureInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the rate future instrument provider is unpopulated if a curve specification builder that has no rate instrument providers
-   * is supplied.
+   * Tests that the rate future instrument provider is unpopulated if a curve specification builder that has no rate instrument providers is supplied.
    */
   public void testNoFras() {
     final CurveSpecificationBuilderConfiguration csbc = new CurveSpecificationBuilderConfiguration(USD_DEPOSIT_INSTRUMENTS,
@@ -142,8 +133,7 @@ public class FutureInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the rate future instrument provider is populated using the future instrument providers from the curve specification builder
-   * configuration.
+   * Tests that the rate future instrument provider is populated using the future instrument providers from the curve specification builder configuration.
    */
   @Test
   public void testFutureStrips() {
@@ -151,8 +141,8 @@ public class FutureInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the future instruments,
-   * and that the original mapper is unchanged.
+   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the future instruments, and that the original mapper is
+   * unchanged.
    */
   @Test
   public void testBuilderCreation() {
@@ -177,8 +167,8 @@ public class FutureInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an existing rate future mapper is over-written with values from the 3m FRA provider in the curve specification builder configuration
-   * when the 3m FRA converter is used.
+   * Tests that an existing rate future mapper is over-written with values from the 3m FRA provider in the curve specification builder configuration when the 3m
+   * FRA converter is used.
    */
   @Test
   public void testOverwriteWithFra3m() {

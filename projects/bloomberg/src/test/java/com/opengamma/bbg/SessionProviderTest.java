@@ -21,7 +21,7 @@ import com.opengamma.livedata.ConnectionUnavailableException;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests {@link SessionProvider}
+ * Tests {@link SessionProvider}.
  */
 @Test(groups = TestGroup.UNIT)
 public class SessionProviderTest {

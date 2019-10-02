@@ -31,7 +31,7 @@ public class DataConfigSourceUrisTest {
   private URI _baseUri;
 
   /**
-   * Sets up the URI
+   * Sets up the URI.
    *
    * @throws URISyntaxException
    *           if the path is wrong
@@ -66,8 +66,7 @@ public class DataConfigSourceUrisTest {
   }
 
   /**
-   * Tests the URI that is built when the version correction is null (i.e.
-   * LATEST is required).
+   * Tests the URI that is built when the version correction is null (i.e. LATEST is required).
    */
   public void testBuildUriNameTypeLatest() {
     final URI uri = DataConfigSourceUris.uriGet(_baseUri, NAME, null, TYPE);
@@ -168,8 +167,7 @@ public class DataConfigSourceUrisTest {
   }
 
   /**
-   * Tests the URI that is built when the version correction is null (i.e.
-   * LATEST is required).
+   * Tests the URI that is built when the version correction is null (i.e. LATEST is required).
    */
   public void testSearchSingleNameTypeLatest() {
     final URI uri = DataConfigSourceUris.uriSearchSingle(_baseUri, NAME, null, TYPE);
@@ -203,8 +201,7 @@ public class DataConfigSourceUrisTest {
   }
 
   /**
-   * Tests the URI that is built when the version correction is null (i.e.
-   * LATEST is required).
+   * Tests the URI that is built when the version correction is null (i.e. LATEST is required).
    */
   public void testSearchNameTypeLatest() {
     final URI uri = DataConfigSourceUris.uriSearch(_baseUri, TYPE, null);

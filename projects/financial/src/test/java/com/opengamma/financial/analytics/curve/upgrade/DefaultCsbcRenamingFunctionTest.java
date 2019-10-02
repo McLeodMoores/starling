@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -12,8 +12,7 @@ import com.opengamma.util.result.Function2;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests a renaming function for {@link com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration} where
- * the currency is fixed.
+ * Tests a renaming function for {@link com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration} where the currency is fixed.
  */
 @Test(groups = TestGroup.UNIT)
 public class DefaultCsbcRenamingFunctionTest {

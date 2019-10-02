@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +60,9 @@ public class ComputationTargetResultsTest {
   private static final Position POSITION = new SimplePosition(UniqueId.of("PosUID", "0"), BigDecimal.ONE, ExternalId.of("Sec", "0"));
   private static final Security SECURITY = new SimpleSecurity(UniqueId.of("SecUID", "0"), ExternalId.of("Sec", "0").toBundle(), "TEST", "Foo");
 
+  /**
+   *
+   */
   private static class MockFunction extends AbstractFunction.NonCompiled {
 
     private static int s_identifier = 0;
@@ -113,6 +117,9 @@ public class ComputationTargetResultsTest {
 
   }
 
+  /**
+   *
+   */
   private static class MockFunction2 extends MockFunction {
 
     MockFunction2(final ComputationTargetType type, final String resultValue, final ValueProperties resultProperties, final String requirementValue,
@@ -170,7 +177,7 @@ public class ComputationTargetResultsTest {
     securitySource.addSecurity(SECURITY);
     final PositionSource positionSource = Mockito.mock(PositionSource.class);
     Mockito.when(positionSource.getPosition(POSITION.getUniqueId())).thenReturn(POSITION);
-    Mockito.when(positionSource.getPosition(Mockito.eq(POSITION.getUniqueId().getObjectId()), Mockito.any(VersionCorrection.class))).thenReturn(POSITION);
+    Mockito.when(positionSource.getPosition(Matchers.eq(POSITION.getUniqueId().getObjectId()), Matchers.any(VersionCorrection.class))).thenReturn(POSITION);
     final FunctionCompilationContext context = new FunctionCompilationContext();
     context.setRawComputationTargetResolver(new DefaultComputationTargetResolver(securitySource, positionSource));
     context.setComputationTargetResolver(context.getRawComputationTargetResolver().atVersionCorrection(VersionCorrection.of(Instant.now(), Instant.now())));
@@ -184,7 +191,10 @@ public class ComputationTargetResultsTest {
     return results;
   }
 
-  public void testMaximalResults_emptyRepo() {
+  /**
+   *
+   */
+  public void testMaximalResultsEmptyRepo() {
     TestLifecycle.begin();
     try {
       final ComputationTargetResults ctr = createComputationTargetResults(emptyFunctionRepo());
@@ -205,7 +215,10 @@ public class ComputationTargetResultsTest {
     return results;
   }
 
-  public void testMaximalResults_basicRepo() {
+  /**
+   *
+   */
+  public void testMaximalResultsBasicRepo() {
     TestLifecycle.begin();
     try {
       final ComputationTargetResults ctr = createComputationTargetResults(basicFunctionRepo());
@@ -220,7 +233,10 @@ public class ComputationTargetResultsTest {
     }
   }
 
-  public void testPartialResults_emptyRepo() {
+  /**
+   *
+   */
+  public void testPartialResultsEmptyRepo() {
     TestLifecycle.begin();
     try {
       final ComputationTargetResults ctr = createComputationTargetResults(emptyFunctionRepo());
@@ -233,7 +249,10 @@ public class ComputationTargetResultsTest {
     }
   }
 
-  public void testPartialResults_basicRepo() {
+  /**
+   *
+   */
+  public void testPartialResultsBasicRepo() {
     TestLifecycle.begin();
     try {
       final ComputationTargetResults ctr = createComputationTargetResults(basicFunctionRepo());

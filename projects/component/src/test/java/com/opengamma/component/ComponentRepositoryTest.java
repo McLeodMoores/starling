@@ -36,7 +36,10 @@ public class ComponentRepositoryTest {
 
   private static final ComponentLogger LOGGER = ComponentLogger.Sink.INSTANCE;
 
-  public void test_registerSimple() {
+  /**
+   *
+   */
+  public void testRegisterSimple() {
     final ComponentRepository repo = new ComponentRepository(LOGGER);
     final ComponentInfo info = new ComponentInfo(MockSimple.class, "test");
     final MockSimple mock = new MockSimple();
@@ -65,7 +68,10 @@ public class ComponentRepositoryTest {
     repo.stop();
   }
 
-  public void test_registerLifecycle() {
+  /**
+   *
+   */
+  public void testRegisterLifecycle() {
     final ComponentRepository repo = new ComponentRepository(LOGGER);
     final ComponentInfo info = new ComponentInfo(MockInterfaces.class, "test");
     final MockInterfaces mock = new MockInterfaces();
@@ -78,19 +84,25 @@ public class ComponentRepositoryTest {
     assertEquals(MockInterfaces.class, repo.getTypeInfo().iterator().next().getType());
     assertEquals(MockInterfaces.class, repo.getTypeInfo(MockInterfaces.class).getType());
     assertEquals(info, repo.getTypeInfo(MockInterfaces.class).getInfo("test"));
-    assertEquals(0, mock.starts);
-    assertEquals(0, mock.stops);
+    assertEquals(0, mock._starts);
+    assertEquals(0, mock._stops);
     repo.start();
-    assertEquals(1, mock.starts);
-    assertEquals(0, mock.stops);
+    assertEquals(1, mock._starts);
+    assertEquals(0, mock._stops);
     repo.stop();
-    assertEquals(1, mock.starts);
-    assertEquals(1, mock.stops);
+    assertEquals(1, mock._starts);
+    assertEquals(1, mock._stops);
   }
 
-  public void test_registerPhased() {
+  /**
+   *
+   */
+  public void testRegisterPhased() {
     final ComponentRepository repo = new ComponentRepository(LOGGER);
     final List<String> order = new ArrayList<>();
+    /**
+     *
+     */
     class Simple1 implements Lifecycle {
       @Override
       public void start() {
@@ -107,6 +119,9 @@ public class ComponentRepositoryTest {
         return false;
       }
     }
+    /**
+     *
+     */
     class Simple2 implements Lifecycle {
       @Override
       public void start() {
@@ -123,6 +138,9 @@ public class ComponentRepositoryTest {
         return false;
       }
     }
+    /**
+     *
+     */
     class PhaseMinus1 implements Lifecycle, Phased {
       @Override
       public void start() {
@@ -144,6 +162,9 @@ public class ComponentRepositoryTest {
         return -1;
       }
     }
+    /**
+     *
+     */
     class PhasePlus1 implements Lifecycle, Phased {
       @Override
       public void start() {
@@ -182,7 +203,10 @@ public class ComponentRepositoryTest {
     assertEquals("-1", order.get(3));
   }
 
-  public void test_registerSCAware() {
+  /**
+   *
+   */
+  public void testRegisterSCAware() {
     final ComponentRepository repo = new ComponentRepository(LOGGER);
     final ComponentInfo info = new ComponentInfo(MockInterfaces.class, "test");
     final MockInterfaces mock = new MockInterfaces();
@@ -195,18 +219,21 @@ public class ComponentRepositoryTest {
     assertEquals(MockInterfaces.class, repo.getTypeInfo().iterator().next().getType());
     assertEquals(MockInterfaces.class, repo.getTypeInfo(MockInterfaces.class).getType());
     assertEquals(info, repo.getTypeInfo(MockInterfaces.class).getInfo("test"));
-    assertEquals(0, mock.servletContexts);
+    assertEquals(0, mock._servletContexts);
     repo.setServletContext(new MockServletContext());
-    assertEquals(1, mock.servletContexts);
+    assertEquals(1, mock._servletContexts);
   }
 
-  public void test_registerInitializingBean() {
+  /**
+   *
+   */
+  public void testRegisterInitializingBean() {
     final ComponentRepository repo = new ComponentRepository(LOGGER);
     final ComponentInfo info = new ComponentInfo(MockInterfaces.class, "test");
     final MockInterfaces mock = new MockInterfaces();
-    assertEquals(0, mock.inits);
+    assertEquals(0, mock._inits);
     repo.registerComponent(info, mock);
-    assertEquals(1, mock.inits);
+    assertEquals(1, mock._inits);
     assertEquals(1, repo.getInstanceMap().size());
     assertEquals(mock, repo.getInstanceMap().get(info.toComponentKey()));
     assertEquals(1, repo.getInstances(MockInterfaces.class).size());
@@ -217,27 +244,33 @@ public class ComponentRepositoryTest {
     assertEquals(info, repo.getTypeInfo(MockInterfaces.class).getInfo("test"));
   }
 
-  public void test_registerFactoryBean() {
+  /**
+   *
+   */
+  public void testRegisterFactoryBean() {
     final ComponentRepository repo = new ComponentRepository(LOGGER);
     final ComponentInfo info = new ComponentInfo(MockInterfaces.class, "test");
     final MockFactory mock = new MockFactory();
-    assertEquals(0, mock.inits);
-    assertEquals(0, mock.created.inits);
+    assertEquals(0, mock._inits);
+    assertEquals(0, mock._created._inits);
     repo.registerComponent(info, mock);
-    assertEquals(1, mock.inits);
-    assertEquals(1, mock.created.inits);
+    assertEquals(1, mock._inits);
+    assertEquals(1, mock._created._inits);
     assertEquals(1, repo.getInstanceMap().size());
-    assertEquals(mock.created, repo.getInstanceMap().get(info.toComponentKey()));
+    assertEquals(mock._created, repo.getInstanceMap().get(info.toComponentKey()));
     assertEquals(1, repo.getInstances(MockInterfaces.class).size());
-    assertEquals(mock.created, repo.getInstances(MockInterfaces.class).iterator().next());
+    assertEquals(mock._created, repo.getInstances(MockInterfaces.class).iterator().next());
     assertEquals(1, repo.getTypeInfo().size());
     assertEquals(MockInterfaces.class, repo.getTypeInfo().iterator().next().getType());
     assertEquals(MockInterfaces.class, repo.getTypeInfo(MockInterfaces.class).getType());
     assertEquals(info, repo.getTypeInfo(MockInterfaces.class).getInfo("test"));
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = RuntimeException.class)
-  public void test_registerAfterStart() {
+  public void testRegisterAfterStart() {
     final ComponentRepository repo = new ComponentRepository(LOGGER);
     final ComponentInfo info = new ComponentInfo(MockSimple.class, "test");
     repo.registerComponent(info, new MockSimple());
@@ -309,32 +342,42 @@ public class ComponentRepositoryTest {
     return factoryBean.getObject();
   }
 
+  /**
+   *
+   */
   public static class TestMBean {
 
-    private final int answer = 42;
+    private final int _answer = 42;
 
     public int getAnswer() {
-      return answer;
+      return _answer;
     }
   }
 
+  /**
+   *
+   */
   public static class TestMXBean implements TestMXInterface {
 
-    private final ComplexAttribute answer = new ComplexAttribute();
+    private final ComplexAttribute _answer = new ComplexAttribute();
 
     @Override
     public ComplexAttribute getAnswer() {
-      return answer;
+      return _answer;
     }
   }
 
+  /**
+   *
+   */
   @MXBean
   public interface TestMXInterface {
     ComplexAttribute getAnswer();
   }
 
-  // Standard MBean can't handle this without having the defintion on the
-  // client side as well. MX Beans should be able to handle
+  /**
+   * Standard MBean can't handle this without having the defintion on the client side as well. MX Beans should be able to handle
+   */
   public static class ComplexAttribute {
 
     public String getStringy() {
@@ -347,23 +390,29 @@ public class ComponentRepositoryTest {
   }
 
   // -------------------------------------------------------------------------
+  /**
+   *
+   */
   static class MockSimple {
   }
 
+  /**
+   *
+   */
   static class MockInterfaces implements Lifecycle, ServletContextAware, InitializingBean {
-    int starts;
-    int stops;
-    int servletContexts;
-    int inits;
+    private int _starts;
+    private int _stops;
+    private int _servletContexts;
+    private int _inits;
 
     @Override
     public void start() {
-      starts++;
+      _starts++;
     }
 
     @Override
     public void stop() {
-      stops++;
+      _stops++;
     }
 
     @Override
@@ -373,29 +422,29 @@ public class ComponentRepositoryTest {
 
     @Override
     public void setServletContext(final ServletContext servletContext) {
-      servletContexts++;
+      _servletContexts++;
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-      inits++;
+      _inits++;
     }
   }
 
   static class MockFactory extends SingletonFactoryBean<MockInterfaces> implements Lifecycle {
-    int starts;
-    int stops;
-    int inits;
-    MockInterfaces created = new MockInterfaces();
+    private int _starts;
+    private int _stops;
+    private int _inits;
+    private final MockInterfaces _created = new MockInterfaces();
 
     @Override
     public void start() {
-      starts++;
+      _starts++;
     }
 
     @Override
     public void stop() {
-      stops++;
+      _stops++;
     }
 
     @Override
@@ -405,13 +454,13 @@ public class ComponentRepositoryTest {
 
     @Override
     public void afterPropertiesSet() {
-      inits++;
+      _inits++;
       super.afterPropertiesSet();
     }
 
     @Override
     protected MockInterfaces createObject() {
-      return created;
+      return _created;
     }
   }
 

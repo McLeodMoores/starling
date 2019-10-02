@@ -46,13 +46,16 @@ public class CurrencyMatrixSpotSourcingFunctionTest {
   private final Currency _currencyUSD = Currency.USD;
   private final Currency _currencyGBP = Currency.GBP;
   private final Currency _currencyEUR = Currency.EUR;
-  private final double _rateUSD_GBP = 1.6;
-  private final double _rateEUR_GBP = 1.1;
+  private final double _rateUSDGBP = 1.6;
+  private final double _rateEURGBP = 1.1;
   private FunctionExecutionContext _functionExecutionContext;
   private FunctionCompilationContext _functionCompilationContext;
   private CurrencyMatrixSpotSourcingFunction _function;
   private ComputationTarget _matrixTarget;
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setupContexts() {
     _functionExecutionContext = new FunctionExecutionContext();
@@ -61,7 +64,7 @@ public class CurrencyMatrixSpotSourcingFunctionTest {
     matrix.setUniqueId(UniqueId.of("Matrix", "Test"));
     matrix.setLiveData(_currencyUSD, _currencyGBP,
         new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, ExternalId.of("LiveData", "USD_GBP")));
-    matrix.setFixedConversion(_currencyEUR, _currencyGBP, _rateEUR_GBP);
+    matrix.setFixedConversion(_currencyEUR, _currencyGBP, _rateEURGBP);
     matrix.setCrossConversion(_currencyEUR, _currencyUSD, _currencyGBP);
     _matrixTarget = new ComputationTarget(CurrencyMatrixResolver.TYPE, matrix);
     _function = new CurrencyMatrixSpotSourcingFunction();
@@ -69,12 +72,18 @@ public class CurrencyMatrixSpotSourcingFunctionTest {
     _function.init(_functionCompilationContext);
   }
 
+  /**
+   *
+   */
   @Test
   public void testGetResults() {
     final Set<ValueSpecification> results = _function.getResults(_functionCompilationContext, _matrixTarget);
     assertEquals(6, results.size());
   }
 
+  /**
+   *
+   */
   @Test
   public void testGetRequirementsAndExecute() {
     final ValueProperties properties = ValueProperties.with(ValuePropertyNames.FUNCTION, "liveDataSourcing").get();
@@ -98,13 +107,13 @@ public class CurrencyMatrixSpotSourcingFunctionTest {
     Set<ComputedValue> outputs = _function.execute(_functionExecutionContext,
         new FunctionInputsImpl(resolver.atVersionCorrection(VersionCorrection.LATEST), new ComputedValue(new ValueSpecification(
             MarketDataRequirementNames.MARKET_VALUE, ComputationTargetSpecification.of(UniqueId.of("ExternalId-LiveData", "USD_GBP")), properties),
-            _rateUSD_GBP)),
+            _rateUSDGBP)),
         _matrixTarget,
         Collections.singleton(outRequirement));
     assertEquals(1, outputs.size());
     ComputedValue output = outputs.iterator().next();
     assertTrue(output.getValue() instanceof Double);
-    assertEquals(_rateUSD_GBP, (Double) output.getValue(), Double.MIN_NORMAL);
+    assertEquals(_rateUSDGBP, (Double) output.getValue(), Double.MIN_NORMAL);
 
     // Require value the "wrong" way up
     // [PLAT-2290] Execute should be taking a ValueSpecification, getRequirements should be taking a ValueRequirement
@@ -122,12 +131,12 @@ public class CurrencyMatrixSpotSourcingFunctionTest {
     outputs = _function.execute(_functionExecutionContext,
         new FunctionInputsImpl(resolver.atVersionCorrection(VersionCorrection.LATEST),
             new ComputedValue(new ValueSpecification(MarketDataRequirementNames.MARKET_VALUE,
-                ComputationTargetSpecification.of(UniqueId.of("ExternalId-LiveData", "USD_GBP")), properties), _rateUSD_GBP)),
+                ComputationTargetSpecification.of(UniqueId.of("ExternalId-LiveData", "USD_GBP")), properties), _rateUSDGBP)),
         _matrixTarget, Collections.singleton(outRequirement));
     assertEquals(1, outputs.size());
     output = outputs.iterator().next();
     assertTrue(output.getValue() instanceof Double);
-    assertEquals(1.0 / _rateUSD_GBP, (Double) output.getValue(), Double.MIN_NORMAL);
+    assertEquals(1.0 / _rateUSDGBP, (Double) output.getValue(), Double.MIN_NORMAL);
 
     // Require no additional live data
     // [PLAT-2290] Execute should be taking a ValueSpecification, getRequirements should be taking a ValueRequirement
@@ -141,7 +150,7 @@ public class CurrencyMatrixSpotSourcingFunctionTest {
     assertEquals(1, outputs.size());
     output = outputs.iterator().next();
     assertTrue(output.getValue() instanceof Double);
-    assertEquals(1.0 / _rateEUR_GBP, (Double) output.getValue(), Double.MIN_NORMAL);
+    assertEquals(1.0 / _rateEURGBP, (Double) output.getValue(), Double.MIN_NORMAL);
 
     // Require intermediate value
     // [PLAT-2290] Execute should be taking a ValueSpecification, getRequirements should be taking a ValueRequirement
@@ -159,12 +168,12 @@ public class CurrencyMatrixSpotSourcingFunctionTest {
     outputs = _function.execute(_functionExecutionContext,
         new FunctionInputsImpl(resolver.atVersionCorrection(VersionCorrection.LATEST),
             new ComputedValue(new ValueSpecification(MarketDataRequirementNames.MARKET_VALUE,
-                ComputationTargetSpecification.of(UniqueId.of("ExternalId-LiveData", "USD_GBP")), properties), _rateUSD_GBP)),
+                ComputationTargetSpecification.of(UniqueId.of("ExternalId-LiveData", "USD_GBP")), properties), _rateUSDGBP)),
         _matrixTarget, Collections.singleton(outRequirement));
     assertEquals(1, outputs.size());
     output = outputs.iterator().next();
     assertTrue(output.getValue() instanceof Double);
-    assertEquals(_rateEUR_GBP / _rateUSD_GBP, (Double) output.getValue(), Double.MIN_NORMAL);
+    assertEquals(_rateEURGBP / _rateUSDGBP, (Double) output.getValue(), Double.MIN_NORMAL);
   }
 
 }

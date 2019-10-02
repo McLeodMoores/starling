@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -37,8 +37,7 @@ import com.opengamma.util.result.Function2;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Tests the class that adds swap instrument providers to a {@link CurveNodeIdMapper}
- * from a {@link CurveSpecificationBuilderConfiguration}.
+ * Tests the class that adds swap instrument providers to a {@link CurveNodeIdMapper} from a {@link CurveSpecificationBuilderConfiguration}.
  */
 public class SwapInstrumentProviderPopulatorTest {
   /** The name of the mapper */
@@ -70,14 +69,7 @@ public class SwapInstrumentProviderPopulatorTest {
     EMPTY_MAPPER = CurveNodeIdMapper.builder()
         .name(NAME)
         .build();
-    final Function2<String, String, String> renamingFunction = new Function2<String, String, String>() {
-
-      @Override
-      public String apply(final String name, final String currency) {
-        return name + " test";
-      }
-
-    };
+    final Function2<String, String, String> renamingFunction = (name, currency) -> name + " test";
     SWAP_12M_RENAMING_PROVIDER = new SwapInstrumentProviderPopulator(StripInstrumentType.SWAP_12M, renamingFunction);
     SWAP_28D_RENAMING_PROVIDER = new SwapInstrumentProviderPopulator(StripInstrumentType.SWAP_28D, renamingFunction);
     SWAP_3M_RENAMING_PROVIDER = new SwapInstrumentProviderPopulator(StripInstrumentType.SWAP_3M, renamingFunction);
@@ -148,8 +140,7 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the swap instrument provider is unpopulated if a curve specification builder that has no swap instrument providers
-   * is supplied.
+   * Tests that the swap instrument provider is unpopulated if a curve specification builder that has no swap instrument providers is supplied.
    */
   public void testNoSwaps() {
     final CurveSpecificationBuilderConfiguration csbc = new CurveSpecificationBuilderConfiguration(USD_DEPOSIT_INSTRUMENTS,
@@ -165,8 +156,7 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the swap instrument provider is populated using the 12m swap instrument providers from the curve specification builder
-   * configuration.
+   * Tests that the swap instrument provider is populated using the 12m swap instrument providers from the curve specification builder configuration.
    */
   @Test
   public void testSwap12mStrips() {
@@ -174,8 +164,7 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the swap instrument provider is populated using the 28d swap instrument providers from the curve specification builder
-   * configuration.
+   * Tests that the swap instrument provider is populated using the 28d swap instrument providers from the curve specification builder configuration.
    */
   @Test
   public void testSwap28dStrips() {
@@ -183,8 +172,7 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the swap instrument provider is populated using the 3m swap instrument providers from the curve specification builder
-   * configuration.
+   * Tests that the swap instrument provider is populated using the 3m swap instrument providers from the curve specification builder configuration.
    */
   @Test
   public void testSwap3mStrips() {
@@ -192,8 +180,7 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the swap instrument provider is populated using the 6m swap instrument providers from the curve specification builder
-   * configuration.
+   * Tests that the swap instrument provider is populated using the 6m swap instrument providers from the curve specification builder configuration.
    */
   @Test
   public void testSwap6mStrips() {
@@ -201,8 +188,7 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that the swap instrument provider is populated using the OIS instrument providers from the curve specification builder
-   * configuration.
+   * Tests that the swap instrument provider is populated using the OIS instrument providers from the curve specification builder configuration.
    */
   @Test
   public void testOisStrips() {
@@ -210,8 +196,8 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the 12m swap instruments,
-   * and that the original mapper is unchanged.
+   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the 12m swap instruments, and that the original mapper is
+   * unchanged.
    */
   @Test
   public void testBuilderCreationForSwap12m() {
@@ -236,8 +222,8 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the 3m swap instruments,
-   * and that the original mapper is unchanged.
+   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the 3m swap instruments, and that the original mapper is
+   * unchanged.
    */
   @Test
   public void testBuilderCreationForSwap12dm() {
@@ -262,8 +248,8 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the 3m swap instruments,
-   * and that the original mapper is unchanged.
+   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the 3m swap instruments, and that the original mapper is
+   * unchanged.
    */
   @Test
   public void testBuilderCreationForSwap3m() {
@@ -288,8 +274,8 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the 6m swap instruments,
-   * and that the original mapper is unchanged.
+   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the 6m swap instruments, and that the original mapper is
+   * unchanged.
    */
   @Test
   public void testBuilderCreationForSwap6m() {
@@ -314,8 +300,8 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the OIS instruments,
-   * and that the original mapper is unchanged.
+   * Tests that an empty mapper is populated with the correct instrument provider map, in this case the OIS instruments, and that the original mapper is
+   * unchanged.
    */
   @Test
   public void testBuilderCreationForOis() {
@@ -340,8 +326,8 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an existing swap mapper is over-written with values from the 12m swap provider in the curve specification builder configuration
-   * when the 12m swap converter is used.
+   * Tests that an existing swap mapper is over-written with values from the 12m swap provider in the curve specification builder configuration when the 12m
+   * swap converter is used.
    */
   @Test
   public void testOverwriteWithSwap12m() {
@@ -361,8 +347,8 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an existing swap mapper is over-written with values from the 28d swap provider in the curve specification builder configuration
-   * when the 28d swap converter is used.
+   * Tests that an existing swap mapper is over-written with values from the 28d swap provider in the curve specification builder configuration when the 28d
+   * swap converter is used.
    */
   @Test
   public void testOverwriteWithSwap28d() {
@@ -382,8 +368,8 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an existing swap mapper is over-written with values from the 3m swap provider in the curve specification builder configuration
-   * when the 3m swap converter is used.
+   * Tests that an existing swap mapper is over-written with values from the 3m swap provider in the curve specification builder configuration when the 3m swap
+   * converter is used.
    */
   @Test
   public void testOverwriteWithSwap3m() {
@@ -403,8 +389,8 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an existing swap mapper is over-written with values from the 6m swap provider in the curve specification builder configuration
-   * when the 6m swap converter is used.
+   * Tests that an existing swap mapper is over-written with values from the 6m swap provider in the curve specification builder configuration when the 6m swap
+   * converter is used.
    */
   @Test
   public void testOverwriteWithSwap6m() {
@@ -424,8 +410,8 @@ public class SwapInstrumentProviderPopulatorTest {
   }
 
   /**
-   * Tests that an existing swap mapper is over-written with values from the OIS provider in the curve specification builder configuration
-   * when the OIS converter is used.
+   * Tests that an existing swap mapper is over-written with values from the OIS provider in the curve specification builder configuration when the OIS
+   * converter is used.
    */
   @Test
   public void testOverwriteWithOis() {

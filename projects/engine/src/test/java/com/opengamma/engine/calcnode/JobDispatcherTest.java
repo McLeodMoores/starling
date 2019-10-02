@@ -46,22 +46,43 @@ public class JobDispatcherTest {
 
   private static final AtomicLong JOB_ID = new AtomicLong();
 
+  /**
+   * @return returns a job specification
+   */
   protected static CalculationJobSpecification createTestJobSpec() {
     return new CalculationJobSpecification(UniqueId.of("Test", "ViewCycle"), "default", Instant.now(), JOB_ID.incrementAndGet());
   }
 
+  /**
+   * @return return job items
+   */
   protected static List<CalculationJobItem> createTestJobItems() {
     return Collections.emptyList();
   }
 
+  /**
+   * @return returns a test job
+   */
   protected static CalculationJob createTestJob() {
     return new CalculationJob(createTestJobSpec(), 0L, VersionCorrection.LATEST, null, createTestJobItems(), CacheSelectHint.allPrivate());
   }
 
+  /**
+   * @param jobSpec
+   *          a specification
+   * @param time
+   *          the calculation time
+   * @param nodeId
+   *          the node identifier
+   * @return a job result
+   */
   protected static CalculationJobResult createTestJobResult(final CalculationJobSpecification jobSpec, final long time, final String nodeId) {
     return new CalculationJobResult(jobSpec, time, new ArrayList<CalculationJobResultItem>(), nodeId);
   }
 
+  /**
+   *
+   */
   private class TestJobInvoker extends AbstractJobInvoker {
 
     private JobInvokerRegister _callback;
@@ -88,6 +109,9 @@ public class JobDispatcherTest {
 
   }
 
+  /**
+   *
+   */
   @Test
   public void registerInvokerWithJobPending() {
     LOGGER.info("registerInvokerWithJobPending");
@@ -104,6 +128,9 @@ public class JobDispatcherTest {
     assertNull(jobInvoker._callback);
   }
 
+  /**
+   *
+   */
   @Test
   public void registerInvokerWithEmptyQueue() {
     LOGGER.info("registerInvokerWithEmptyQueue");
@@ -129,6 +156,9 @@ public class JobDispatcherTest {
     assertEquals(expectedNodeId, jobResult.getComputeNodeId());
   }
 
+  /**
+   *
+   */
   @Test
   public void invokeInRoundRobinOrder() {
     LOGGER.info("invokeInRoundRobinOrder");
@@ -151,6 +181,9 @@ public class JobDispatcherTest {
     assertNull(node2._callback);
   }
 
+  /**
+   *
+   */
   @Test
   public void saturateInvokers() {
     LOGGER.info("saturateInvokers");
@@ -229,6 +262,9 @@ public class JobDispatcherTest {
     LOGGER.debug("All jobs completed");
   }
 
+  /**
+   *
+   */
   private class FailingJobInvoker extends AbstractJobInvoker {
 
     private int _failureCount;
@@ -256,8 +292,11 @@ public class JobDispatcherTest {
 
   }
 
+  /**
+   *
+   */
   @Test
-  public void testJobRetry_failure() {
+  public void testJobRetryFailure() {
     LOGGER.info("testJobRetry_failure");
     final JobDispatcher jobDispatcher = new JobDispatcher();
     final TestJobResultReceiver result = new TestJobResultReceiver();
@@ -271,8 +310,11 @@ public class JobDispatcherTest {
     assertEquals(JobDispatcher.DEFAULT_JOB_FAILURE_NODE_ID, jobResult.getComputeNodeId());
   }
 
+  /**
+   *
+   */
   @Test
-  public void testJobRetry_success() {
+  public void testJobRetrySuccess() {
     LOGGER.info("testJobRetry_sucess");
     final JobDispatcher jobDispatcher = new JobDispatcher();
     final TestJobResultReceiver result = new TestJobResultReceiver();
@@ -289,6 +331,9 @@ public class JobDispatcherTest {
     assertEquals(job.getSpecification(), jobResult.getSpecification());
   }
 
+  /**
+   *
+   */
   private final class BlockingJobInvoker extends AbstractJobInvoker {
 
     private final long _waitFor;
@@ -344,6 +389,9 @@ public class JobDispatcherTest {
 
   }
 
+  /**
+   *
+   */
   @Test(invocationCount = 5, successPercentage = 19)
   public void testJobTimeoutFailure() {
     LOGGER.info("testJobTimeoutFailure");
@@ -364,6 +412,9 @@ public class JobDispatcherTest {
     }
   }
 
+  /**
+   *
+   */
   @Test(invocationCount = 5, successPercentage = 19)
   public void testJobTimeoutSuccess() {
     LOGGER.info("testJobTimeoutSuccess");
@@ -384,6 +435,9 @@ public class JobDispatcherTest {
     }
   }
 
+  /**
+   *
+   */
   @Test(invocationCount = 5, successPercentage = 19)
   public void testJobTimeoutQuerySuccess() {
     LOGGER.info("testJobTimeoutQuerySuccess");
@@ -407,6 +461,9 @@ public class JobDispatcherTest {
     }
   }
 
+  /**
+   *
+   */
   @Test(invocationCount = 5, successPercentage = 19)
   public void testJobTimeoutQueryFailure() {
     LOGGER.info("testJobTimeoutQueryFailure");
@@ -428,6 +485,9 @@ public class JobDispatcherTest {
     }
   }
 
+  /**
+   *
+   */
   @Test(invocationCount = 5, successPercentage = 19)
   public void testJobCancel() {
     LOGGER.info("testJobCancel");

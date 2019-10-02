@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.historicaltimeseries;
 
@@ -18,7 +18,7 @@ import com.opengamma.util.time.LocalDateRange;
 /**
  * Unit tests for {@link QuandlHistoricalTimeSeriesProvider}.
  */
-@Test//(groups = TestGroup.UNIT)
+@Test // (groups = TestGroup.UNIT)
 public class QuandlHistoricalTimeSeriesProviderTest {
   /** The data source */
   private static final String DATA_SOURCE = "DEFAULT";
@@ -34,9 +34,8 @@ public class QuandlHistoricalTimeSeriesProviderTest {
     provider.start();
     final ExternalIdBundle id = QuandlConstants.ofCode("FRED/DSWP10").toBundle();
     // start date is before start of time series and end is after
-    HistoricalTimeSeriesProviderGetRequest request =
-        HistoricalTimeSeriesProviderGetRequest.createGet(
-            id, DATA_SOURCE, DATA_PROVIDER, QuandlConstants.VALUE_FIELD_NAME, LocalDateRange.of(LocalDate.of(1900, 1, 1), LocalDate.of(2015, 11, 14), false));
+    HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGet(
+        id, DATA_SOURCE, DATA_PROVIDER, QuandlConstants.VALUE_FIELD_NAME, LocalDateRange.of(LocalDate.of(1900, 1, 1), LocalDate.of(2015, 11, 14), false));
     HistoricalTimeSeriesProviderGetResult result = provider.getHistoricalTimeSeries(request);
     assertEquals(result.getResultMap().size(), 1);
     LocalDateDoubleTimeSeries ts = result.getResultMap().get(id);
@@ -59,8 +58,8 @@ public class QuandlHistoricalTimeSeriesProviderTest {
     final QuandlHistoricalTimeSeriesProvider provider = new QuandlHistoricalTimeSeriesProvider("U4c8PuHYsa61ECEorSGC");
     provider.start();
     final ExternalIdBundle id = QuandlConstants.ofCode("FRED/DSWP10").toBundle();
-    final HistoricalTimeSeriesProviderGetRequest request =
-        HistoricalTimeSeriesProviderGetRequest.createGet(id, DATA_SOURCE, DATA_PROVIDER, QuandlConstants.VALUE_FIELD_NAME, LocalDateRange.ALL);
+    final HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGet(id, DATA_SOURCE, DATA_PROVIDER,
+        QuandlConstants.VALUE_FIELD_NAME, LocalDateRange.ALL);
     final HistoricalTimeSeriesProviderGetResult result = provider.getHistoricalTimeSeries(request);
     assertEquals(result.getResultMap().size(), 1);
     final LocalDateDoubleTimeSeries ts = result.getResultMap().get(id);

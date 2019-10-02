@@ -22,44 +22,68 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ComputationTargetReferenceFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
 
+  /**
+   *
+   */
   public void testRequirement() {
     assertEncodeDecodeCycle(ComputationTargetReference.class, new ComputationTargetRequirement(ComputationTargetType.PRIMITIVE, ExternalId.of("Foo", "Bar")));
   }
 
+  /**
+   *
+   */
   public void testSpecification() {
     assertEncodeDecodeCycle(ComputationTargetReference.class, new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Foo", "Bar")));
   }
 
-  public void testRequirement_null() {
+  /**
+   *
+   */
+  public void testRequirementNull() {
     assertEncodeDecodeCycle(ComputationTargetReference.class, new ComputationTargetSpecification(ComputationTargetType.NULL, null));
-//    assertEncodeDecodeCycle(ComputationTargetReference.class, new ComputationTargetRequirement(ComputationTargetType.NULL, ExternalIdBundle.EMPTY));
+    // assertEncodeDecodeCycle(ComputationTargetReference.class, new ComputationTargetRequirement(ComputationTargetType.NULL, (ExternalIdBundle) null));
   }
 
-  public void testSpecification_null() {
+  /**
+   *
+   */
+  public void testSpecificationNull() {
     assertEncodeDecodeCycle(ComputationTargetReference.class, new ComputationTargetSpecification(ComputationTargetType.NULL, null));
   }
 
-  public void testRequirement_nested() {
+  /**
+   *
+   */
+  public void testRequirementNested() {
     ComputationTargetRequirement req = new ComputationTargetRequirement(ComputationTargetType.SECURITY, ExternalId.of("Foo", "Bar"));
     req = req.containing(ComputationTargetType.SECURITY, ExternalId.of("Foo", "Underlying"));
     assertEncodeDecodeCycle(ComputationTargetReference.class, req);
   }
 
-  public void testSpecification_nested() {
+  /**
+   *
+   */
+  public void testSpecificationNested() {
     ComputationTargetSpecification spec = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Foo", "Bar"));
     spec = spec.containing(ComputationTargetType.SECURITY, UniqueId.of("Foo", "Underlying"));
     assertEncodeDecodeCycle(ComputationTargetReference.class, spec);
   }
 
-  public void testRequirement_multiple() {
-    final ComputationTargetRequirement req =
-        new ComputationTargetRequirement(ComputationTargetType.POSITION.or(ComputationTargetType.SECURITY), ExternalId.of("Foo", "Bar"));
+  /**
+   *
+   */
+  public void testRequirementMultiple() {
+    final ComputationTargetRequirement req = new ComputationTargetRequirement(ComputationTargetType.POSITION.or(ComputationTargetType.SECURITY),
+        ExternalId.of("Foo", "Bar"));
     assertEncodeDecodeCycle(ComputationTargetReference.class, req);
   }
 
-  public void testSpecification_multiple() {
-    final ComputationTargetSpecification spec =
-        new ComputationTargetSpecification(ComputationTargetType.POSITION.or(ComputationTargetType.SECURITY), UniqueId.of("Foo", "Bar"));
+  /**
+   *
+   */
+  public void testSpecificationMultiple() {
+    final ComputationTargetSpecification spec = new ComputationTargetSpecification(ComputationTargetType.POSITION.or(ComputationTargetType.SECURITY),
+        UniqueId.of("Foo", "Bar"));
     assertEncodeDecodeCycle(ComputationTargetReference.class, spec);
   }
 

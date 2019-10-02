@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Please see distribution for license.
  */
@@ -23,15 +23,18 @@ public class MinimalWebPortfoliosUris {
 
   /**
    * Creates an instance.
-   * @param data  the web data, not null
+   * 
+   * @param data
+   *          the web data, not null
    */
   public MinimalWebPortfoliosUris(final WebPortfoliosData data) {
     _data = data;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the base URI.
+   * 
    * @return the URI
    */
   public URI base() {
@@ -40,6 +43,7 @@ public class MinimalWebPortfoliosUris {
 
   /**
    * Gets the URI.
+   * 
    * @return the URI
    */
   public URI portfolios() {
@@ -48,6 +52,7 @@ public class MinimalWebPortfoliosUris {
 
   /**
    * Gets the URI.
+   * 
    * @return the URI
    */
   public URI portfolio() {
@@ -56,7 +61,9 @@ public class MinimalWebPortfoliosUris {
 
   /**
    * Gets the URI.
-   * @param portfolio  the portfolio, not null
+   * 
+   * @param portfolio
+   *          the portfolio, not null
    * @return the URI
    */
   public URI portfolio(final ManageablePortfolio portfolio) {
@@ -65,6 +72,7 @@ public class MinimalWebPortfoliosUris {
 
   /**
    * Gets the URI.
+   * 
    * @return the URI
    */
   public URI node() {
@@ -73,7 +81,9 @@ public class MinimalWebPortfoliosUris {
 
   /**
    * Gets the URI.
-   * @param node  the node, not null
+   * 
+   * @param node
+   *          the node, not null
    * @return the URI
    */
   public URI node(final ManageablePortfolioNode node) {
@@ -82,6 +92,7 @@ public class MinimalWebPortfoliosUris {
 
   /**
    * Gets the URI.
+   * 
    * @return the URI
    */
   public URI nodePositions() {
@@ -90,7 +101,9 @@ public class MinimalWebPortfoliosUris {
 
   /**
    * Gets the URI.
-   * @param node  the node, not null
+   * 
+   * @param node
+   *          the node, not null
    * @return the URI
    */
   public URI nodePositions(final ManageablePortfolioNode node) {
@@ -99,7 +112,9 @@ public class MinimalWebPortfoliosUris {
 
   /**
    * Gets the URI.
-   * @param positionId  the position id, not null
+   * 
+   * @param positionId
+   *          the position id, not null
    * @return the URI
    */
   public URI nodePosition(final ObjectIdentifiable positionId) {

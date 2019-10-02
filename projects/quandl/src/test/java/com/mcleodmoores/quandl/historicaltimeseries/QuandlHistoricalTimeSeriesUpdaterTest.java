@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.historicaltimeseries;
 
@@ -47,7 +47,7 @@ import com.opengamma.util.time.DateUtils;
 /**
  * Unit tests for {@link QuandlHistoricalTimeSeriesUpdater}.
  */
-@Test//(groups = TestGroup.UNIT)
+@Test // (groups = TestGroup.UNIT)
 public class QuandlHistoricalTimeSeriesUpdaterTest {
   /** A mock historical time series provider */
   private static final MockHistoricalTimeSeriesProvider HTS_PROVIDER;
@@ -174,9 +174,13 @@ public class QuandlHistoricalTimeSeriesUpdaterTest {
 
   /**
    * Tests that expired time series are correctly identified. This test uses reflection to access the method being tested.
-   * @throws NoSuchMethodException  if there is no method called "identifyExpiredTimeSeries"
-   * @throws InvocationTargetException  if the method called "identifyExpiredTimeSeries" cannot be invoked
-   * @throws IllegalAccessException  if the method called "identifyExpiredTimeSeries" has not been set accessible
+   * 
+   * @throws NoSuchMethodException
+   *           if there is no method called "identifyExpiredTimeSeries"
+   * @throws InvocationTargetException
+   *           if the method called "identifyExpiredTimeSeries" cannot be invoked
+   * @throws IllegalAccessException
+   *           if the method called "identifyExpiredTimeSeries" has not been set accessible
    */
   @Test
   public void testExpiredTimeSeriesIdentification() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -202,9 +206,13 @@ public class QuandlHistoricalTimeSeriesUpdaterTest {
 
   /**
    * Tests that only Quandl time series are valid to be updated. This test uses reflection to access the method being tested.
-   * @throws NoSuchMethodException  if there is no method called "getCurrentQuandlTimeSeriesDocuments"
-   * @throws InvocationTargetException  if the method called "getCurrentQuandlTimeSeriesDocuments" cannot be invoked
-   * @throws IllegalAccessException  if the method called "getCurrentQuandlTimeSeriesDocuments" has not been set accessible
+   * 
+   * @throws NoSuchMethodException
+   *           if there is no method called "getCurrentQuandlTimeSeriesDocuments"
+   * @throws InvocationTargetException
+   *           if the method called "getCurrentQuandlTimeSeriesDocuments" cannot be invoked
+   * @throws IllegalAccessException
+   *           if the method called "getCurrentQuandlTimeSeriesDocuments" has not been set accessible
    */
   @Test
   public void testCurrentQuandlTimeSeriesDocuments() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -230,9 +238,13 @@ public class QuandlHistoricalTimeSeriesUpdaterTest {
 
   /**
    * Tests the check for an up-to-date time series. This test uses reflection to access the method being tested.
-   * @throws NoSuchMethodException  if there is no method called "isUpToDate"
-   * @throws InvocationTargetException  if the method called "isUpToDate" cannot be invoked
-   * @throws IllegalAccessException  if the method called "isUpToDate" has not been set accessible
+   * 
+   * @throws NoSuchMethodException
+   *           if there is no method called "isUpToDate"
+   * @throws InvocationTargetException
+   *           if the method called "isUpToDate" cannot be invoked
+   * @throws IllegalAccessException
+   *           if the method called "isUpToDate" has not been set accessible
    */
   @Test
   public void testIsUpToDate() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -344,7 +356,7 @@ public class QuandlHistoricalTimeSeriesUpdaterTest {
     assertEquals(fieldToIds.size(), 2);
     assertEquals(fieldToIds.keySet(), Sets.newHashSet(QuandlConstants.RATE_FIELD_NAME, QuandlConstants.VALUE_FIELD_NAME));
     assertEquals(fieldToIds.get(QuandlConstants.RATE_FIELD_NAME), Sets.newHashSet(ID1.toBundle(), ID3.toBundle(), ID4.toBundle()));
-    assertEquals(fieldToIds.get(QuandlConstants.VALUE_FIELD_NAME), Collections.<ExternalIdBundle>singleton(ID2.toBundle()));
+    assertEquals(fieldToIds.get(QuandlConstants.VALUE_FIELD_NAME), Collections.<ExternalIdBundle> singleton(ID2.toBundle()));
     assertEquals(metaDataKeyMap.size(), 4);
   }
 
@@ -354,7 +366,8 @@ public class QuandlHistoricalTimeSeriesUpdaterTest {
   @Test
   public void testTsNotAvailable() {
     final InMemoryHistoricalTimeSeriesMaster master = new InMemoryHistoricalTimeSeriesMaster();
-    final MockHistoricalTimeSeriesProvider provider = new MockHistoricalTimeSeriesProvider(Collections.<ExternalIdBundle, LocalDateDoubleTimeSeries>emptyMap());
+    final MockHistoricalTimeSeriesProvider provider = new MockHistoricalTimeSeriesProvider(
+        Collections.<ExternalIdBundle, LocalDateDoubleTimeSeries> emptyMap());
     final QuandlHistoricalTimeSeriesUpdater updater = new QuandlHistoricalTimeSeriesUpdater(master, provider);
     updater.updateTimeSeries();
   }
@@ -382,15 +395,14 @@ public class QuandlHistoricalTimeSeriesUpdaterTest {
     final HistoricalTimeSeriesInfoDocument doc = master.add(new HistoricalTimeSeriesInfoDocument(HTS_INFO3));
     master.updateTimeSeriesDataPoints(doc.getObjectId(), TS3);
     final MockHistoricalTimeSeriesProvider provider = new MockHistoricalTimeSeriesProvider(
-        Collections.<ExternalIdBundle, LocalDateDoubleTimeSeries>singletonMap(ID3.toBundle(), ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES));
+        Collections.<ExternalIdBundle, LocalDateDoubleTimeSeries> singletonMap(ID3.toBundle(), ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES));
     final QuandlHistoricalTimeSeriesUpdater updater = new QuandlHistoricalTimeSeriesUpdater(master, provider);
     updater.updateTimeSeries();
     assertEquals(master.getTimeSeries(doc.getUniqueId()).getTimeSeries(), TS3);
   }
 
   /**
-   * Tests the behaviour when the time series from the provider does not contain any relevant data to add to the original
-   * series.
+   * Tests the behaviour when the time series from the provider does not contain any relevant data to add to the original series.
    */
   @Test
   public void testTsInProviderHasNoData() {
@@ -398,7 +410,7 @@ public class QuandlHistoricalTimeSeriesUpdaterTest {
     final HistoricalTimeSeriesInfoDocument doc = master.add(new HistoricalTimeSeriesInfoDocument(HTS_INFO4));
     master.updateTimeSeriesDataPoints(doc.getObjectId(), TS3);
     final MockHistoricalTimeSeriesProvider provider = new MockHistoricalTimeSeriesProvider(
-        Collections.<ExternalIdBundle, LocalDateDoubleTimeSeries>singletonMap(ID4.toBundle(),
+        Collections.<ExternalIdBundle, LocalDateDoubleTimeSeries> singletonMap(ID4.toBundle(),
             TS4.subSeries(TS4.getEarliestTime(), TS3.getLatestTime().minusDays(1))));
     final QuandlHistoricalTimeSeriesUpdater updater = new QuandlHistoricalTimeSeriesUpdater(master, provider);
     updater.updateTimeSeries();

@@ -45,38 +45,15 @@ public class ModifyConfigDbConfigMasterWorkerReplaceAllVersionsTest extends Abst
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-
   /**
    *
-   *       |                        |             |
-   *       |                        |             |
-   *       |                        |             |
-   *       |     setup_4            |             |
-   *       |                        |             |
-   *   +5m |------------------------|             |
-   *       |                        |             |
-   *       |     setup_3            |             |
-   *       |                        |             |
-   *   +4m |------------------------|             |
-   *       |                        |             |      replace_4
-   *       |     setup_2            |  <-- +3m20s |----------------------------------->>>
-   *       |                        |             |      replace_3
-   *   +3m |------------------------|  <-- +3m00s |----------------------------------->>>
-   *       |                        |             |      replace_2
-   *       |                        |  <-- +2m40s |----------------------------------->>>
-   *       |     setup_1            |             |      replace_1
-   *       |                        |  <-- +2m20s |----------------------------------->>>
-   *       |                        |
-   *       |                        |
-   *   +2m |------------------------|
-   *       |                        |
-   *       |     setup_0            |
-   *       |                        |
-   *   +1m |------------------------|
+   * | | | | | | | | | | setup_4 | | | | | +5m |------------------------| | | | | | setup_3 | | | | | +4m |------------------------| | | | | replace_4 | setup_2
+   * | <-- +3m20s |----------------------------------->>> | | | replace_3 +3m |------------------------| <-- +3m00s |----------------------------------->>> | |
+   * | replace_2 | | <-- +2m40s |----------------------------------->>> | setup_1 | | replace_1 | | <-- +2m20s |----------------------------------->>> | | | |
+   * +2m |------------------------| | | | setup_0 | | | +1m |------------------------|
    *
    *
-   *   NOW =================================================================================
-   *
+   * NOW ================================================================================= .
    */
   @Test
   public void test_ReplaceAllVersions1() {
@@ -87,7 +64,6 @@ public class ModifyConfigDbConfigMasterWorkerReplaceAllVersionsTest extends Abst
       final ObjectId baseOid = setupTestData(now);
       _cfgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
       final ConfigDocument latestDoc = _cfgMaster.get(baseOid, VersionCorrection.LATEST);
-
 
       final List<ConfigDocument> replacement = newArrayList();
       for (int i = 1; i <= 4; i++) {
@@ -128,40 +104,14 @@ public class ModifyConfigDbConfigMasterWorkerReplaceAllVersionsTest extends Abst
   @Test
   /**
    *
-   *       |                        |
-   *       |                        |
-   *       |                        |
-   *       |                        |
-   *       |                        |
-   *       |                        |
-   *       |     setup_4            |
-   *       |                        |
-   *   +5m |------------------------|
-   *       |                        |
-   *       |     setup_3            |
-   *       |                        |
-   *   +4m |------------------------|
-   *       |                        |
-   *       |                        |
-   *       |                        |  <-- +3m40s |----------------------------------->>>
-   *       |                        |             |      replace_4
-   *       |     setup_2            |  <-- +3m20s |----------------------------------->>>
-   *       |                        |             |      replace_3
-   *   +3m |------------------------|  <-- +3m00s |----------------------------------->>>
-   *       |                        |             |      replace_2
-   *       |                        |  <-- +2m40s |----------------------------------->>>
-   *       |     setup_1            |             |      replace_1
-   *       |                        |  <-- +2m20s |----------------------------------->>>
-   *       |                        |
-   *       |                        |
-   *   +2m |------------------------|
-   *       |                        |
-   *       |     setup_0            |
-   *       |                        |
-   *   +1m |------------------------|
+   * | | | | | | | | | | | | | setup_4 | | | +5m |------------------------| | | | setup_3 | | | +4m |------------------------| | | | | | | <-- +3m40s
+   * |----------------------------------->>> | | | replace_4 | setup_2 | <-- +3m20s |----------------------------------->>> | | | replace_3 +3m
+   * |------------------------| <-- +3m00s |----------------------------------->>> | | | replace_2 | | <-- +2m40s |----------------------------------->>> |
+   * setup_1 | | replace_1 | | <-- +2m20s |----------------------------------->>> | | | | +2m |------------------------| | | | setup_0 | | | +1m
+   * |------------------------|
    *
    *
-   *   NOW =================================================================================
+   * NOW =================================================================================
    *
    */
   public void test_ReplaceAllVersions2() {
@@ -176,7 +126,7 @@ public class ModifyConfigDbConfigMasterWorkerReplaceAllVersionsTest extends Abst
       final List<ConfigDocument> replacement = newArrayList();
       for (int i = 1; i <= 4; i++) {
         final String val = "replace_" + i;
-        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val,  "some_name_" + i));
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_" + i));
 
         doc.setVersionFromInstant(now.plus(2, MINUTES).plus(i * 20, SECONDS));
         replacement.add(doc);
@@ -210,38 +160,13 @@ public class ModifyConfigDbConfigMasterWorkerReplaceAllVersionsTest extends Abst
     }
   }
 
-
   @Test
   /**
    *
-   *       |                        |
-   *       |                        |
-   *       |                        |
-   *       |                        |
-   *       |     setup_4            |
-   *       |                        |
-   *   +4m |------------------------|
-   *       |                        |
-   *       |     setup_3            |
-   *       |                        |
-   *   +3m |------------------------|
-   *       |                        |
-   *       |     setup_2            |
-   *       |                        |
-   *       |                        |
-   *       |                        |
-   *   +2m |------------------------|
-   *       |                        |
-   *       |     setup_1            |
-   *       |                        |     <-- +2m30s |----------------------------------->>>
-   *   +1m |------------------------|                |      replace_4
-   *       |                        |     <-- +2m00s |----------------------------------->>>
-   *       |                        |                |      replace_3
-   *       |     setup_0            |     <-- +1m30s |----------------------------------->>>
-   *       |                        |                |      replace_2
-   *   NOW |========================|     <-- +1m00s |----------------------------------->>>
-   *                                                 |      replace_1
-   *                                      <-- +0m30s |----------------------------------->>>
+   * | | | | | | | | | setup_4 | | | +4m |------------------------| | | | setup_3 | | | +3m |------------------------| | | | setup_2 | | | | | | | +2m
+   * |------------------------| | | | setup_1 | | | <-- +2m30s |----------------------------------->>> +1m |------------------------| | replace_4 | | <-- +2m00s
+   * |----------------------------------->>> | | | replace_3 | setup_0 | <-- +1m30s |----------------------------------->>> | | | replace_2 NOW
+   * |========================| <-- +1m00s |----------------------------------->>> | replace_1 <-- +0m30s |----------------------------------->>>
    *
    *
    *
@@ -254,7 +179,6 @@ public class ModifyConfigDbConfigMasterWorkerReplaceAllVersionsTest extends Abst
       final ObjectId baseOid = setupTestData(now);
       _cfgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
       final ConfigDocument latestDoc = _cfgMaster.get(baseOid, VersionCorrection.LATEST);
-
 
       final List<ConfigDocument> replacement = newArrayList();
       for (int i = 1; i <= 4; i++) {

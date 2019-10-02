@@ -65,14 +65,14 @@ public class MultipleNodeExecutionPlannerTest {
   private final ValueSpecification _testValue21 = ValueSpecification.of("21", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "2"), _properties);
   private final ValueSpecification _testValue24 = ValueSpecification.of("24", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "2"), _properties);
   private final ValueSpecification _testValue34 = ValueSpecification.of("34", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "3"), _properties);
-  private final ValueRequirement _testRequirement0x =
-      new ValueRequirement("0x", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "0"), ValueProperties.none());
+  private final ValueRequirement _testRequirement0x = new ValueRequirement("0x", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "0"),
+      ValueProperties.none());
   private final ValueSpecification _testValue0x = ValueSpecification.of("0x", ComputationTargetType.PRIMITIVE, UniqueId.of("test", "0"), _properties);
-  private final ValueRequirement _testRequirement1x =
-      new ValueRequirement("1x", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "1"), ValueProperties.none());
+  private final ValueRequirement _testRequirement1x = new ValueRequirement("1x", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "1"),
+      ValueProperties.none());
   private final ValueSpecification _testValue1x = ValueSpecification.of("1x", ComputationTargetType.PRIMITIVE, UniqueId.of("test", "1"), _properties);
-  private final ValueRequirement _testRequirement4x =
-      new ValueRequirement("4x", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "4"), ValueProperties.none());
+  private final ValueRequirement _testRequirement4x = new ValueRequirement("4x", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "4"),
+      ValueProperties.none());
   private final ValueSpecification _testValue4x = ValueSpecification.of("4x", ComputationTargetType.PRIMITIVE, UniqueId.of("test", "4"), _properties);
   private final ValueSpecification _testValuex2 = ValueSpecification.of("x2", ComputationTargetType.PRIMITIVE, UniqueId.of("test", "X"), _properties);
   private final ValueSpecification _testValuex3 = ValueSpecification.of("x3", ComputationTargetType.PRIMITIVE, UniqueId.of("test", "X"), _properties);
@@ -112,7 +112,7 @@ public class MultipleNodeExecutionPlannerTest {
   }
 
   private GraphExecutionPlan plan(final GraphExecutionPlanner planner, final DependencyGraph graph, final Set<ValueSpecification> sharedData) {
-    return planner.createPlan(graph, new ExecutionLogModeSource(), 0, sharedData, Collections.<ValueSpecification, FunctionParameters>emptyMap());
+    return planner.createPlan(graph, new ExecutionLogModeSource(), 0, sharedData, Collections.<ValueSpecification, FunctionParameters> emptyMap());
   }
 
   /**
@@ -238,7 +238,7 @@ public class MultipleNodeExecutionPlannerTest {
   }
 
   /**
-   * Input-merge on N0+N1, single-dep merge on N4+N3
+   * Input-merge on N0+N1, single-dep merge on N4+N3.
    */
   public void testMinMax2() {
     final MultipleNodeExecutionPlanner planner = createPlanner(2, 2, 0);
@@ -497,7 +497,7 @@ public class MultipleNodeExecutionPlannerTest {
    * <ul>
    * <li>Should be broken into N{5, 2, 3, 1, 4, 7}, N6 and N0 at 3x concurrency
    * <li>Should be broken into N{5, 2, 3, [two of {1, 4, 7}]}, N6, N0 and other of N{1, 4, 7} at 2x concurrency
-   * <li>Should be broken into N{5, 2} or N{5, 3} and others at 1x concurrency
+   * <li>Should be broken into N{5, 2} or N{5, 3} and others at 1x concurrency.
    * </ul>
    */
   public void testTailGraphColouring() {
@@ -513,21 +513,21 @@ public class MultipleNodeExecutionPlannerTest {
     node.addTerminalOutput(testValue7x, testValue7x.toRequirementSpecification());
     graph.getNode(1).addInput(_testValue34);
     MultipleNodeExecutionPlanner planner = createPlanner(1, 1, 1);
-    GraphExecutionPlan plan = plan(planner, graph.buildGraph(), Collections.<ValueSpecification>emptySet());
+    GraphExecutionPlan plan = plan(planner, graph.buildGraph(), Collections.<ValueSpecification> emptySet());
     if (PRINT_GRAPHS) {
       System.out.println("Concurrency 1");
       plan.print();
     }
     assertEquals(gatherColours(plan), 7);
     planner = createPlanner(1, 1, 2);
-    plan = plan(planner, graph.buildGraph(), Collections.<ValueSpecification>emptySet());
+    plan = plan(planner, graph.buildGraph(), Collections.<ValueSpecification> emptySet());
     if (PRINT_GRAPHS) {
       System.out.println("Concurrency 2");
       plan.print();
     }
     assertEquals(gatherColours(plan), 4);
     planner = createPlanner(1, 1, 3);
-    plan = plan(planner, graph.buildGraph(), Collections.<ValueSpecification>emptySet());
+    plan = plan(planner, graph.buildGraph(), Collections.<ValueSpecification> emptySet());
     if (PRINT_GRAPHS) {
       System.out.println("Concurrency 3");
       plan.print();

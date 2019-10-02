@@ -278,7 +278,7 @@ public final class Triple<A, B, C>
     /**
      * The meta-properties.
      */
-    private final Map<String, MetaProperty<?>> _metaPropertyMap$ = new DirectMetaPropertyMap(
+    private final Map<String, MetaProperty<?>> _metaPropertyMap = new DirectMetaPropertyMap(
         this, null,
         "first",
         "second",
@@ -316,7 +316,7 @@ public final class Triple<A, B, C>
 
     @Override
     public Map<String, MetaProperty<?>> metaPropertyMap() {
-      return _metaPropertyMap$;
+      return _metaPropertyMap;
     }
 
     // -----------------------------------------------------------------------

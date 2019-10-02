@@ -29,7 +29,7 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.TestLifecycle;
 
 /**
- * Tests the dependency graph building with a multiple output function whose inputs vary with its output set
+ * Tests the dependency graph building with a multiple output function whose inputs vary with its output set.
  */
 @Test(groups = TestGroup.UNIT)
 public class DepGraphInputMergingTest extends AbstractDependencyGraphBuilderTest {

@@ -12,6 +12,7 @@ import static org.testng.AssertJUnit.assertNull;
 
 import java.util.Collections;
 
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.testng.annotations.Test;
@@ -19,13 +20,12 @@ import org.testng.annotations.Test;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValuePropertyNames;
-import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.id.UniqueId;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests {@link MarketDataProviderWithOverride}
+ * Tests {@link MarketDataProviderWithOverride}.
  */
 @Test(groups = TestGroup.UNIT)
 public class MarketDataProviderWithOverrideTest {
@@ -43,7 +43,7 @@ public class MarketDataProviderWithOverrideTest {
     p1.awaitSubscriptionResponses();
 
     verify(listener).subscriptionFailed(spec, "p1");
-    verify(listener, VerificationModeFactory.noMoreInteractions()).subscriptionFailed(Mockito.<ValueSpecification>anyObject(), Mockito.anyString());
+    verify(listener, VerificationModeFactory.noMoreInteractions()).subscriptionFailed(Matchers.<ValueSpecification> anyObject(), Mockito.anyString());
   }
 
   public void testSubscriptionSuccess() throws InterruptedException {
@@ -59,7 +59,7 @@ public class MarketDataProviderWithOverrideTest {
     p1.awaitSubscriptionResponses();
 
     verify(listener).subscriptionsSucceeded(Collections.singleton(spec));
-    verify(listener, VerificationModeFactory.noMoreInteractions()).subscriptionsSucceeded(Collections.singleton(Mockito.<ValueSpecification>anyObject()));
+    verify(listener, VerificationModeFactory.noMoreInteractions()).subscriptionsSucceeded(Collections.singleton(Mockito.<ValueSpecification> anyObject()));
 
     p1.valuesChanged(Collections.singleton(spec));
     verify(listener, VerificationModeFactory.times(1)).valuesChanged(Collections.singleton(spec));
@@ -109,13 +109,10 @@ public class MarketDataProviderWithOverrideTest {
   public void testSnapshotWithAlgorithmOverrides() throws InterruptedException {
     final ValueSpecification spec1 = getSpecification(1);
     final MarketDataInjectorImpl overrideInjector = new MarketDataInjectorImpl();
-    overrideInjector.addValue(spec1, new OverrideOperation() {
-      @Override
-      public Object apply(final ValueRequirement requirement, final Object original) {
-        assertEquals("Value-1", requirement.getValueName());
-        assertEquals("value2", original);
-        return "value1";
-      }
+    overrideInjector.addValue(spec1, (OverrideOperation) (requirement, original) -> {
+      assertEquals("Value-1", requirement.getValueName());
+      assertEquals("value2", original);
+      return "value1";
     });
     final MockMarketDataProvider underlyingProvider = new MockMarketDataProvider("p2", true, 1);
     underlyingProvider.put(spec1, "value2");

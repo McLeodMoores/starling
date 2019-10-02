@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.testutils;
 
@@ -14,8 +14,7 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Simple implementation of a calendar for testing purposes that is backed by a Set and can combine
- * other holidays.
+ * Simple implementation of a calendar for testing purposes that is backed by a Set and can combine other holidays.
  */
 public class ListCalendar implements Calendar {
   /** The calendar name */
@@ -27,8 +26,11 @@ public class ListCalendar implements Calendar {
 
   /**
    * Creates an instance that does not combine other calendars with the holiday dates.
-   * @param name  the calendar name, not null
-   * @param holidayDays  the holiday days, not null
+   * 
+   * @param name
+   *          the calendar name, not null
+   * @param holidayDays
+   *          the holiday days, not null
    */
   public ListCalendar(final String name, final Set<LocalDate> holidayDays) {
     this(name, holidayDays, new HashSet<Calendar>());
@@ -36,9 +38,13 @@ public class ListCalendar implements Calendar {
 
   /**
    * Creates an instance that does not combine other calendars with the holiday dates.
-   * @param name  the calendar name, not null
-   * @param holidayDays  the holiday days, not null
-   * @param calendar  the calendar, not null
+   * 
+   * @param name
+   *          the calendar name, not null
+   * @param holidayDays
+   *          the holiday days, not null
+   * @param calendar
+   *          the calendar, not null
    */
   public ListCalendar(final String name, final Set<LocalDate> holidayDays, final Calendar calendar) {
     this(name, holidayDays, Collections.singleton(ArgumentChecker.notNull(calendar, "calendar")));
@@ -46,9 +52,13 @@ public class ListCalendar implements Calendar {
 
   /**
    * Creates an instance that does not combine other calendars with the holiday dates.
-   * @param name  the calendar name, not null
-   * @param holidayDays  the holiday days, not null
-   * @param calendars  the calendars, not null
+   * 
+   * @param name
+   *          the calendar name, not null
+   * @param holidayDays
+   *          the holiday days, not null
+   * @param calendars
+   *          the calendars, not null
    */
   public ListCalendar(final String name, final Set<LocalDate> holidayDays, final Collection<Calendar> calendars) {
     ArgumentChecker.notNull(name, "name");

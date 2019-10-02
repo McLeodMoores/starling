@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve;
 
@@ -66,8 +66,7 @@ public class BondNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests the behaviour when there is no curve node id mapper with the same name as that in the node
-   * in the config source.
+   * Tests the behaviour when there is no curve node id mapper with the same name as that in the node in the config source.
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoCurveNodeIdMapper() {
@@ -83,7 +82,7 @@ public class BondNodeCurrencyVisitorTest {
     final BondNode node = new BondNode(Tenor.ONE_YEAR, CNIM_NAME);
     final CurveNodeIdMapper cnim = CurveNodeIdMapper.builder()
         .name(CNIM_NAME)
-        .bondNodeIds(Collections.<Tenor, CurveInstrumentProvider>singletonMap(Tenor.TWO_YEARS, CURVE_INSTRUMENT_PROVIDER))
+        .bondNodeIds(Collections.<Tenor, CurveInstrumentProvider> singletonMap(Tenor.TWO_YEARS, CURVE_INSTRUMENT_PROVIDER))
         .build();
     final InMemoryConfigMaster configMaster = new InMemoryConfigMaster();
     configMaster.add(new ConfigDocument(ConfigItem.of(cnim, CNIM_NAME)));
@@ -99,7 +98,7 @@ public class BondNodeCurrencyVisitorTest {
     final BondNode node = new BondNode(Tenor.ONE_YEAR, CNIM_NAME);
     final CurveNodeIdMapper cnim = CurveNodeIdMapper.builder()
         .name(CNIM_NAME)
-        .bondNodeIds(Collections.<Tenor, CurveInstrumentProvider>singletonMap(Tenor.ONE_YEAR, CURVE_INSTRUMENT_PROVIDER))
+        .bondNodeIds(Collections.<Tenor, CurveInstrumentProvider> singletonMap(Tenor.ONE_YEAR, CURVE_INSTRUMENT_PROVIDER))
         .build();
     final InMemoryConfigMaster configMaster = new InMemoryConfigMaster();
     configMaster.add(new ConfigDocument(ConfigItem.of(cnim, CNIM_NAME)));
@@ -115,20 +114,19 @@ public class BondNodeCurrencyVisitorTest {
     final BondNode node = new BondNode(Tenor.ONE_YEAR, CNIM_NAME);
     final CurveNodeIdMapper cnim = CurveNodeIdMapper.builder()
         .name(CNIM_NAME)
-        .bondNodeIds(Collections.<Tenor, CurveInstrumentProvider>singletonMap(Tenor.ONE_YEAR, CURVE_INSTRUMENT_PROVIDER))
+        .bondNodeIds(Collections.<Tenor, CurveInstrumentProvider> singletonMap(Tenor.ONE_YEAR, CURVE_INSTRUMENT_PROVIDER))
         .build();
     final InMemoryConfigMaster configMaster = new InMemoryConfigMaster();
     configMaster.add(new ConfigDocument(ConfigItem.of(cnim, CNIM_NAME)));
     final ConfigSource configSource = new MasterConfigSource(configMaster);
     final Currency currency = Currency.USD;
-    final ManageableSecurity security =
-        new CashSecurity(currency, US, DateUtils.getUTCDate(2015, 1, 1), DateUtils.getUTCDate(2025, 1, 1), DayCounts.ACT_360, 0.01, 1000);
+    final ManageableSecurity security = new CashSecurity(currency, US, DateUtils.getUTCDate(2015, 1, 1), DateUtils.getUTCDate(2025, 1, 1), DayCounts.ACT_360,
+        0.01, 1000);
     security.setExternalIdBundle(ExternalIdBundle.of(SCHEME, "ISIN"));
     final InMemorySecuritySource securitySource = new InMemorySecuritySource();
     securitySource.addSecurity(security);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(EMPTY_CONVENTION_SOURCE, securitySource, configSource)), Collections.singleton(currency));
   }
-
 
   /**
    * Tests that the correct currency is returned if the security and curve node id mapper are present in the sources.
@@ -138,7 +136,7 @@ public class BondNodeCurrencyVisitorTest {
     final BondNode node = new BondNode(Tenor.ONE_YEAR, CNIM_NAME);
     final CurveNodeIdMapper cnim = CurveNodeIdMapper.builder()
         .name(CNIM_NAME)
-        .bondNodeIds(Collections.<Tenor, CurveInstrumentProvider>singletonMap(Tenor.ONE_YEAR, CURVE_INSTRUMENT_PROVIDER))
+        .bondNodeIds(Collections.<Tenor, CurveInstrumentProvider> singletonMap(Tenor.ONE_YEAR, CURVE_INSTRUMENT_PROVIDER))
         .build();
     final InMemoryConfigMaster configMaster = new InMemoryConfigMaster();
     configMaster.add(new ConfigDocument(ConfigItem.of(cnim, CNIM_NAME)));

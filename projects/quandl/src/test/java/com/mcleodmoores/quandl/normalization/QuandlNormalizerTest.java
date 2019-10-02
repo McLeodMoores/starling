@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.normalization;
 
@@ -33,7 +33,7 @@ public class QuandlNormalizerTest {
       QuandlConstants.ofCode("FRED/USDONTD156N"));
   /** The time series */
   private static final HistoricalTimeSeries TS = new SimpleHistoricalTimeSeries(UniqueId.of("Test", "1"),
-      ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] {LocalDate.of(2014, 12, 1)}, new double[] {123}));
+      ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] { LocalDate.of(2014, 12, 1) }, new double[] { 123 }));
 
   /**
    * Tests the behaviour when a null code classifier is supplied.
@@ -74,17 +74,17 @@ public class QuandlNormalizerTest {
   public void testNormalization() {
     // cash rate, so divide by 100
     HistoricalTimeSeries expectedTs = new SimpleHistoricalTimeSeries(UniqueId.of("Test", "1"),
-        ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] {LocalDate.of(2014, 12, 1)}, new double[] {1.23}));
+        ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] { LocalDate.of(2014, 12, 1) }, new double[] { 1.23 }));
     assertEquals(expectedTs, NORMALIZER.adjust(ID_BUNDLE, TS));
     assertEquals(expectedTs, NORMALIZER.getAdjustment(ID_BUNDLE).adjust(TS));
     // unclassifiable rate, so no change
     expectedTs = new SimpleHistoricalTimeSeries(UniqueId.of("Test", "1"),
-        ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] {LocalDate.of(2014, 12, 1)}, new double[] {123}));
+        ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] { LocalDate.of(2014, 12, 1) }, new double[] { 123 }));
     assertEquals(expectedTs, NORMALIZER.adjust(QuandlConstants.ofCode("ABC/DEF").toBundle(), TS));
     assertEquals(expectedTs, NORMALIZER.getAdjustment(QuandlConstants.ofCode("ABC/DEF").toBundle()).adjust(TS));
     // no Quandl code, so no change
     expectedTs = new SimpleHistoricalTimeSeries(UniqueId.of("Test", "1"),
-        ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] {LocalDate.of(2014, 12, 1)}, new double[] {123}));
+        ImmutableLocalDateDoubleTimeSeries.of(new LocalDate[] { LocalDate.of(2014, 12, 1) }, new double[] { 123 }));
     assertEquals(expectedTs, NORMALIZER.adjust(ExternalSchemes.syntheticSecurityId("FRED/USDONTD156N").toBundle(), TS));
     assertEquals(expectedTs, NORMALIZER.getAdjustment(ExternalSchemes.syntheticSecurityId("FRED/USDONTD156N").toBundle()).adjust(TS));
   }

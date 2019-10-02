@@ -64,12 +64,19 @@ public class ViewProcessorTest {
   @Mock
   private ViewResultListener _viewResultListenerMock;
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @BeforeMethod
   public void setUp() throws Exception {
     initMocks(this);
     when(_viewResultListenerFactoryStub.createViewResultListener(ViewProcessorTestEnvironment.TEST_USER)).thenReturn(_viewResultListenerMock);
   }
 
+  /**
+   *
+   */
   public void testCreateViewProcessor() {
     TestLifecycle.begin();
     try {
@@ -85,6 +92,9 @@ public class ViewProcessorTest {
     }
   }
 
+  /**
+   *
+   */
   @Test
   public void testAttachToView() {
     TestLifecycle.begin();
@@ -113,8 +123,14 @@ public class ViewProcessorTest {
     worker.join();
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is an unexpected problem
+   * @throws ExecutionException
+   *           if there is an unexpected problem
+   */
   @Test
-  public void testSuspend_viewExists() throws InterruptedException, ExecutionException {
+  public void testSuspendViewExists() throws InterruptedException, ExecutionException {
     TestLifecycle.begin();
     final ExecutorService executor = Executors.newCachedThreadPool();
     try {
@@ -142,8 +158,14 @@ public class ViewProcessorTest {
     }
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is an unexpected problem
+   * @throws ExecutionException
+   *           if there is an unexpected problem
+   */
   @Test
-  public void testSuspend_viewNotExists() throws InterruptedException, ExecutionException {
+  public void testSuspendViewNotExists() throws InterruptedException, ExecutionException {
     TestLifecycle.begin();
     final ExecutorService executor = Executors.newCachedThreadPool();
     try {
@@ -170,8 +192,12 @@ public class ViewProcessorTest {
     }
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is an unexpected problem
+   */
   @Test
-  public void testCycleManagement_realTimeInterrupted() throws InterruptedException {
+  public void testCycleManagementRealTimeInterrupted() throws InterruptedException {
     TestLifecycle.begin();
     try {
       final ViewProcessorTestEnvironment env = new ViewProcessorTestEnvironment();
@@ -199,8 +225,12 @@ public class ViewProcessorTest {
     }
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is an unexpected problem
+   */
   @Test
-  public void testCycleManagement_processCompletes() throws InterruptedException {
+  public void testCycleManagementProcessCompletes() throws InterruptedException {
     TestLifecycle.begin();
     try {
       final ViewProcessorTestEnvironment env = new ViewProcessorTestEnvironment();
@@ -221,7 +251,11 @@ public class ViewProcessorTest {
     }
   }
 
-  public void testCycleManagement_processCompletesWithReferences() throws InterruptedException {
+  /**
+   * @throws InterruptedException
+   *           if there is an unexpected problem
+   */
+  public void testCycleManagementProcessCompletesWithReferences() throws InterruptedException {
     TestLifecycle.begin();
     try {
       final ViewProcessorTestEnvironment env = new ViewProcessorTestEnvironment();
@@ -288,6 +322,9 @@ public class ViewProcessorTest {
     return ArbitraryViewCycleExecutionSequence.of(valuationTimes);
   }
 
+  /**
+   *
+   */
   private class CycleCountingViewResultListener extends AbstractViewResultListener {
 
     private final CountDownLatch _cycleLatch;

@@ -24,16 +24,25 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ComputationTargetFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
 
+  /**
+   *
+   */
   public void testNull() {
     assertEncodeDecodeCycle(ComputationTarget.class, ComputationTarget.NULL);
   }
 
+  /**
+   *
+   */
   public void testBasic() {
     assertEncodeDecodeCycle(ComputationTarget.class,
         new ComputationTarget(ComputationTargetType.POSITION, new SimplePosition(UniqueId.of("Pos", "Foo"), BigDecimal.ONE, ExternalId.of("Sec", "Bar"))));
   }
 
-  public void testNested_1() {
+  /**
+   *
+   */
+  public void testNested1() {
     assertEncodeDecodeCycle(ComputationTarget.class,
         new ComputationTarget(
             new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Prt", "Foo"))
@@ -41,13 +50,16 @@ public class ComputationTargetFudgeBuilderTest extends AbstractFudgeBuilderTestC
             new SimplePosition(UniqueId.of("Pos", "Foo"), BigDecimal.ONE, ExternalId.of("Sec", "Bar"))));
   }
 
-  public void testNested_2() {
+  /**
+   *
+   */
+  public void testNested2() {
     assertEncodeDecodeCycle(
         ComputationTarget.class,
         new ComputationTarget(
-          new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Prt", "Foo"))
-              .containing(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Prt", "Bar"))
-              .containing(ComputationTargetType.POSITION, UniqueId.of("Pos", "Foo")),
+            new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Prt", "Foo"))
+                .containing(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Prt", "Bar"))
+                .containing(ComputationTargetType.POSITION, UniqueId.of("Pos", "Foo")),
             new SimplePosition(UniqueId.of("Pos", "Foo"), BigDecimal.ONE, ExternalId.of("Sec", "Bar"))));
   }
 

@@ -34,7 +34,10 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class MarketDataAvailabilityFilterTest {
 
-  public void testExternalId_present() {
+  /**
+   *
+   */
+  public void testExternalIdPresent() {
     final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(UniqueId.of("X", "0"));
     final ExternalId identifier = ExternalId.of("Foo", "1");
     final ValueRequirement desiredValue = new ValueRequirement("Foo", targetSpec);
@@ -57,13 +60,16 @@ public class MarketDataAvailabilityFilterTest {
     final Object target = new ExternalIdentifiablePrimitive(targetSpec.getUniqueId(), identifier);
     assertTrue(filter.isAvailable(targetSpec, target, desiredValue));
     final AbstractMarketDataAvailabilityProvider provider = Mockito.mock(AbstractMarketDataAvailabilityProvider.class);
-    final ValueSpecification valueSpec =
-        new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+    final ValueSpecification valueSpec = new ValueSpecification(desiredValue.getValueName(), targetSpec,
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
     Mockito.when(provider.getAvailability(targetSpec, identifier, desiredValue)).thenReturn(valueSpec);
     assertEquals(filter.withProvider(provider).getAvailability(targetSpec, target, desiredValue), valueSpec);
   }
 
-  public void testExternalId_missing() {
+  /**
+   *
+   */
+  public void testExternalIdMissing() {
     final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(UniqueId.of("X", "0"));
     final ExternalId identifier = ExternalId.of("Foo", "1");
     final ValueRequirement desiredValue = new ValueRequirement("Foo", targetSpec);
@@ -90,7 +96,10 @@ public class MarketDataAvailabilityFilterTest {
     Mockito.verifyZeroInteractions(provider);
   }
 
-  public void testExternalIdBundle_allPresent() {
+  /**
+   *
+   */
+  public void testExternalIdBundleAllPresent() {
     final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(UniqueId.of("X", "0"));
     final ExternalId identifier1 = ExternalId.of("Foo", "1");
     final ExternalId identifier2 = ExternalId.of("Foo", "2");
@@ -115,13 +124,16 @@ public class MarketDataAvailabilityFilterTest {
     final Object target = new ExternalBundleIdentifiablePrimitive(targetSpec.getUniqueId(), identifiers);
     assertTrue(filter.isAvailable(targetSpec, target, desiredValue));
     final AbstractMarketDataAvailabilityProvider provider = Mockito.mock(AbstractMarketDataAvailabilityProvider.class);
-    final ValueSpecification valueSpec =
-        new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+    final ValueSpecification valueSpec = new ValueSpecification(desiredValue.getValueName(), targetSpec,
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
     Mockito.when(provider.getAvailability(targetSpec, identifiers, desiredValue)).thenReturn(valueSpec);
     assertEquals(filter.withProvider(provider).getAvailability(targetSpec, target, desiredValue), valueSpec);
   }
 
-  public void testExternalIdBundle_onePresent() {
+  /**
+   *
+   */
+  public void testExternalIdBundleOnePresent() {
     final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(UniqueId.of("X", "0"));
     final ExternalId identifier1 = ExternalId.of("Foo", "1");
     final ExternalId identifier2 = ExternalId.of("Foo", "2");
@@ -146,13 +158,16 @@ public class MarketDataAvailabilityFilterTest {
     final Object target = identifiers;
     assertTrue(filter.isAvailable(targetSpec, target, desiredValue));
     final AbstractMarketDataAvailabilityProvider provider = Mockito.mock(AbstractMarketDataAvailabilityProvider.class);
-    final ValueSpecification valueSpec =
-        new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+    final ValueSpecification valueSpec = new ValueSpecification(desiredValue.getValueName(), targetSpec,
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
     Mockito.when(provider.getAvailability(targetSpec, identifier1, desiredValue)).thenReturn(valueSpec);
     assertEquals(filter.withProvider(provider).getAvailability(targetSpec, target, desiredValue), valueSpec);
   }
 
-  public void testExternalIdBundle_allMissing() {
+  /**
+   *
+   */
+  public void testExternalIdBundleAllMissing() {
     final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(UniqueId.of("X", "0"));
     final ExternalId identifier1 = ExternalId.of("Foo", "1");
     final ExternalId identifier2 = ExternalId.of("Foo", "2");
@@ -181,7 +196,10 @@ public class MarketDataAvailabilityFilterTest {
     Mockito.verifyZeroInteractions(provider);
   }
 
-  public void testUniqueId_present() {
+  /**
+   *
+   */
+  public void testUniqueIdPresent() {
     final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(UniqueId.of("X", "0"));
     final ValueRequirement desiredValue = new ValueRequirement("Foo", targetSpec);
     final MarketDataAvailabilityFilter filter = new AbstractMarketDataAvailabilityFilter() {
@@ -203,13 +221,16 @@ public class MarketDataAvailabilityFilterTest {
     final Object target = new Primitive(targetSpec.getUniqueId());
     assertTrue(filter.isAvailable(targetSpec, target, desiredValue));
     final AbstractMarketDataAvailabilityProvider provider = Mockito.mock(AbstractMarketDataAvailabilityProvider.class);
-    final ValueSpecification valueSpec =
-        new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+    final ValueSpecification valueSpec = new ValueSpecification(desiredValue.getValueName(), targetSpec,
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
     Mockito.when(provider.getAvailability(targetSpec, targetSpec.getUniqueId(), desiredValue)).thenReturn(valueSpec);
     assertEquals(filter.withProvider(provider).getAvailability(targetSpec, target, desiredValue), valueSpec);
   }
 
-  public void testUniqueId_missing() {
+  /**
+   *
+   */
+  public void testUniqueIdMissing() {
     final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(UniqueId.of("X", "0"));
     final ValueRequirement desiredValue = new ValueRequirement("Foo", targetSpec);
     final MarketDataAvailabilityFilter filter = new AbstractMarketDataAvailabilityFilter() {
@@ -235,7 +256,10 @@ public class MarketDataAvailabilityFilterTest {
     Mockito.verifyZeroInteractions(provider);
   }
 
-  public void testNull_present() {
+  /**
+   *
+   */
+  public void testNullPresent() {
     final ValueRequirement desiredValue = new ValueRequirement("Foo", ComputationTargetSpecification.NULL);
     final MarketDataAvailabilityFilter filter = new AbstractMarketDataAvailabilityFilter() {
 
@@ -260,7 +284,10 @@ public class MarketDataAvailabilityFilterTest {
     assertEquals(filter.withProvider(provider).getAvailability(ComputationTargetSpecification.NULL, null, desiredValue), valueSpec);
   }
 
-  public void testNull_missing() {
+  /**
+   *
+   */
+  public void testNullMissing() {
     final ValueRequirement desiredValue = new ValueRequirement("Foo", ComputationTargetSpecification.NULL);
     final MarketDataAvailabilityFilter filter = new AbstractMarketDataAvailabilityFilter() {
 

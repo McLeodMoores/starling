@@ -33,6 +33,9 @@ public class FunctionBlacklistRuleListenerSlowTest {
   private static final FunctionBlacklistRule RULE_2 = new FunctionBlacklistRule(ComputationTargetSpecification.of(UniqueId.of("test", "foo")));
   private static final FunctionBlacklistRule RULE_3 = new FunctionBlacklistRule(ComputationTargetSpecification.of(UniqueId.of("test", "bar")));
 
+  /**
+   *
+   */
   private class MockBlacklist extends HashSet<FunctionBlacklistRule> implements FunctionBlacklist {
 
     private static final long serialVersionUID = 1L;
@@ -69,6 +72,9 @@ public class FunctionBlacklistRuleListenerSlowTest {
     }
   }
 
+  /**
+   *
+   */
   private class Listener extends AbstractFunctionBlacklistRuleListener {
 
     private int _replaceRules;
@@ -96,7 +102,11 @@ public class FunctionBlacklistRuleListenerSlowTest {
   }
 
   // -------------------------------------------------------------------------
-  public void testAdd_badSequence() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testAddBadSequence() throws Exception {
     final ExecutorService executor = Executors.newSingleThreadExecutor();
     try {
       final MockBlacklist blacklist = new MockBlacklist();
@@ -119,7 +129,11 @@ public class FunctionBlacklistRuleListenerSlowTest {
     }
   }
 
-  public void testAddMultiple_badSequence() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testAddMultipleBadSequence() throws Exception {
     final ExecutorService executor = Executors.newSingleThreadExecutor();
     try {
       final MockBlacklist blacklist = new MockBlacklist();
@@ -143,7 +157,11 @@ public class FunctionBlacklistRuleListenerSlowTest {
     }
   }
 
-  public void testRemove_badSequence() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testRemoveBadSequence() throws Exception {
     final ExecutorService executor = Executors.newSingleThreadExecutor();
     try {
       final MockBlacklist blacklist = new MockBlacklist();
@@ -165,7 +183,11 @@ public class FunctionBlacklistRuleListenerSlowTest {
     }
   }
 
-  public void testRemoveMultiple_badSequence() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testRemoveMultipleBadSequence() throws Exception {
     final ExecutorService executor = Executors.newSingleThreadExecutor();
     try {
       final MockBlacklist blacklist = new MockBlacklist();

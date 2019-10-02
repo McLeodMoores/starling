@@ -34,7 +34,7 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.Timeout;
 
 /**
- * Tests the {@link SequencePartitioningViewProcessWorker} class
+ * Tests the {@link SequencePartitioningViewProcessWorker} class.
  */
 @Test(groups = TestGroup.UNIT)
 public class SequencePartitioningViewProcessWorkerTest {

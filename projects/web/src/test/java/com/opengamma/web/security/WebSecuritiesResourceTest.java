@@ -27,6 +27,10 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class WebSecuritiesResourceTest extends AbstractWebSecurityResourceTestCase {
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   public void testGetMetaDataJSON() throws Exception {
     final String metaDataJSON = _webSecuritiesResource.getMetaDataJSON(null);
     assertNotNull(metaDataJSON);
@@ -35,19 +39,23 @@ public class WebSecuritiesResourceTest extends AbstractWebSecurityResourceTestCa
   }
 
   private static JSONObject expectedSecurityTypes() {
-    final SecurityTypesDescriptionProvider s_secTypesProvider = SecurityTypesDescriptionProvider.getInstance();
+    final SecurityTypesDescriptionProvider secTypesProvider = SecurityTypesDescriptionProvider.getInstance();
     final Map<String, Object> result = new HashMap<>();
-    result.put("description2type", s_secTypesProvider.getDescription2Type());
-    result.put("types", s_secTypesProvider.getDescription2Type().values());
+    result.put("description2type", secTypesProvider.getDescription2Type());
+    result.put("types", secTypesProvider.getDescription2Type().values());
     return new JSONObject(result);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   public void testGetAllSecurities() throws Exception {
     final MultivaluedMap<String, String> queryParameters = _uriInfo.getQueryParameters();
     queryParameters.putSingle("name", StringUtils.EMPTY);
     queryParameters.putSingle("identifier", StringUtils.EMPTY);
     queryParameters.putSingle("type", StringUtils.EMPTY);
-    queryParameters.put("securityId", Collections.<String>emptyList());
+    queryParameters.put("securityId", Collections.<String> emptyList());
 
     final String resultJson = _webSecuritiesResource.getJSON(null, null, null, null, null,
         queryParameters.getFirst("name"), queryParameters.getFirst("identifier"),

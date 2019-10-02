@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Please see distribution for license.
  */
@@ -34,13 +34,15 @@ public class MinimalWebSecurityVersionResource extends AbstractMinimalWebSecurit
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public MinimalWebSecurityVersionResource(final AbstractMinimalWebSecurityResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public String getHTML() {
     final FlexiBean out = createRootData();
@@ -60,9 +62,10 @@ public class MinimalWebSecurityVersionResource extends AbstractMinimalWebSecurit
     return Response.ok(json).tag(etag).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -81,10 +84,12 @@ public class MinimalWebSecurityVersionResource extends AbstractMinimalWebSecurit
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebSecuritiesData data) {
@@ -93,8 +98,11 @@ public class MinimalWebSecurityVersionResource extends AbstractMinimalWebSecurit
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideVersionId  the override version id, null uses information from data
+   * 
+   * @param data
+   *          the data, not null
+   * @param overrideVersionId
+   *          the override version id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebSecuritiesData data, final UniqueId overrideVersionId) {

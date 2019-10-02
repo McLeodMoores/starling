@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.convention;
 
@@ -144,8 +144,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   }
 
   /**
-   * Tests the behaviour when a null currency is supplied to the constructor that does not
-   * take trading and settlement exchange names.
+   * Tests the behaviour when a null currency is supplied to the constructor that does not take trading and settlement exchange names.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullCurrency1() {
@@ -154,8 +153,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   }
 
   /**
-   * Tests the behaviour when a null currency is supplied to the constructor that takes trading
-   * and settlement exchange names.
+   * Tests the behaviour when a null currency is supplied to the constructor that takes trading and settlement exchange names.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullCurrency2() {
@@ -172,8 +170,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   }
 
   /**
-   * Tests the behaviour when a null future tenor is supplied to the constructor that does not
-   * take trading and settlement exchange names.
+   * Tests the behaviour when a null future tenor is supplied to the constructor that does not take trading and settlement exchange names.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullFutureTenor1() {
@@ -182,8 +179,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   }
 
   /**
-   * Tests the behaviour when a null future tenor is supplied to the constructor that takes trading
-   * and settlement exchange names.
+   * Tests the behaviour when a null future tenor is supplied to the constructor that takes trading and settlement exchange names.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullFutureTenor2() {
@@ -200,8 +196,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   }
 
   /**
-   * Tests the behaviour when a null underlying tenor is supplied to the constructor that does not
-   * take trading and settlement exchange names.
+   * Tests the behaviour when a null underlying tenor is supplied to the constructor that does not take trading and settlement exchange names.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullUnderlyingTenor1() {
@@ -210,8 +205,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   }
 
   /**
-   * Tests the behaviour when a null underlying tenor is supplied to the constructor that takes trading
-   * and settlement exchange names.
+   * Tests the behaviour when a null underlying tenor is supplied to the constructor that takes trading and settlement exchange names.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullUnderlyingTenor2() {
@@ -228,8 +222,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   }
 
   /**
-   * Tests the behaviour when a null day of week is supplied to the constructor that does not
-   * take trading and settlement exchange names.
+   * Tests the behaviour when a null day of week is supplied to the constructor that does not take trading and settlement exchange names.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullDayOfWeek1() {
@@ -238,8 +231,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   }
 
   /**
-   * Tests the behaviour when a null day of week is supplied to the constructor that takes trading
-   * and settlement exchange names.
+   * Tests the behaviour when a null day of week is supplied to the constructor that takes trading and settlement exchange names.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullDayOfWeek2() {
@@ -256,8 +248,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   }
 
   /**
-   * Tests the behaviour when a null trading exchange calendar id is supplied to the constructor that does not
-   * take trading and settlement exchange names.
+   * Tests the behaviour when a null trading exchange calendar id is supplied to the constructor that does not take trading and settlement exchange names.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullTradingExchangeCalendarId1() {
@@ -266,8 +257,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   }
 
   /**
-   * Tests the behaviour when a null day of week is supplied to the constructor that takes trading
-   * and settlement exchange names.
+   * Tests the behaviour when a null day of week is supplied to the constructor that takes trading and settlement exchange names.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullTradingExchangeCalendarId2() {

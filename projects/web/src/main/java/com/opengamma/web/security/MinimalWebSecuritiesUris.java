@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Please see distribution for license.
  */
@@ -24,15 +24,18 @@ public class MinimalWebSecuritiesUris {
 
   /**
    * Creates an instance.
-   * @param data  the web data, not null
+   * 
+   * @param data
+   *          the web data, not null
    */
   public MinimalWebSecuritiesUris(final WebSecuritiesData data) {
     _data = data;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the URI.
+   * 
    * @return the URI
    */
   public URI base() {
@@ -41,6 +44,7 @@ public class MinimalWebSecuritiesUris {
 
   /**
    * Gets the URI.
+   * 
    * @return the URI
    */
   public URI securities() {
@@ -49,7 +53,9 @@ public class MinimalWebSecuritiesUris {
 
   /**
    * Gets the URI.
-   * @param identifier  the identifier to search for, may be null
+   * 
+   * @param identifier
+   *          the identifier to search for, may be null
    * @return the URI
    */
   public URI securities(final ExternalId identifier) {
@@ -58,7 +64,9 @@ public class MinimalWebSecuritiesUris {
 
   /**
    * Gets the URI.
-   * @param identifiers  the identifiers to search for, may be null
+   * 
+   * @param identifiers
+   *          the identifiers to search for, may be null
    * @return the URI
    */
   public URI securities(final ExternalIdBundle identifiers) {
@@ -67,7 +75,9 @@ public class MinimalWebSecuritiesUris {
 
   /**
    * Gets the URI, returning a security serach or single security.
-   * @param link  the link to search for, may be null
+   * 
+   * @param link
+   *          the link to search for, may be null
    * @return the URI
    */
   public URI securities(final SecurityLink link) {
@@ -79,6 +89,7 @@ public class MinimalWebSecuritiesUris {
 
   /**
    * Gets the URI.
+   * 
    * @return the URI
    */
   public URI security() {
@@ -87,7 +98,9 @@ public class MinimalWebSecuritiesUris {
 
   /**
    * Gets the URI.
-   * @param security  the security, not null
+   * 
+   * @param security
+   *          the security, not null
    * @return the URI
    */
   public URI security(final Security security) {
@@ -96,6 +109,7 @@ public class MinimalWebSecuritiesUris {
 
   /**
    * Gets the URI.
+   * 
    * @return the URI
    */
   public URI securityVersions() {
@@ -104,6 +118,7 @@ public class MinimalWebSecuritiesUris {
 
   /**
    * Gets the URI.
+   * 
    * @return the URI
    */
   public URI securityVersion() {
@@ -112,7 +127,9 @@ public class MinimalWebSecuritiesUris {
 
   /**
    * Gets the URI.
-   * @param security  the security, not null
+   * 
+   * @param security
+   *          the security, not null
    * @return the URI
    */
   public URI securityVersion(final Security security) {

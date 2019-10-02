@@ -20,7 +20,10 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class InMemoryFunctionCostsMasterTest {
 
-  public void test_master() {
+  /**
+   *
+   */
+  public void testMaster() {
     final FunctionCostsDocument doc1 = new FunctionCostsDocument();
     doc1.setConfigurationName("Conf1");
     doc1.setFunctionId("Func1");

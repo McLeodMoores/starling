@@ -40,7 +40,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Tests RateLimitingMergingUpdateProvider
+ * Tests RateLimitingMergingUpdateProvider.
  */
 @Test(groups = TestGroup.INTEGRATION)
 public class RateLimitingMergingViewProcessListenerTest {
@@ -63,8 +63,8 @@ public class RateLimitingMergingViewProcessListenerTest {
     final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     try {
       final TestViewResultListener testListener = new TestViewResultListener();
-      final RateLimitingMergingViewProcessListener mergingListener =
-          new RateLimitingMergingViewProcessListener(testListener, mock(EngineResourceManagerImpl.class), executor);
+      final RateLimitingMergingViewProcessListener mergingListener = new RateLimitingMergingViewProcessListener(testListener,
+          mock(EngineResourceManagerImpl.class), executor);
 
       // OK, it doesn't really test the 'synchronous' bit, but it at least checks that no merging has happened.
       addCompile(mergingListener);
@@ -99,8 +99,8 @@ public class RateLimitingMergingViewProcessListenerTest {
     final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     try {
       final TestViewResultListener testListener = new TestViewResultListener();
-      final RateLimitingMergingViewProcessListener mergingListener =
-          new RateLimitingMergingViewProcessListener(testListener, mock(EngineResourceManagerImpl.class), executor);
+      final RateLimitingMergingViewProcessListener mergingListener = new RateLimitingMergingViewProcessListener(testListener,
+          mock(EngineResourceManagerImpl.class), executor);
       mergingListener.setMinimumUpdatePeriodMillis(500);
 
       addResults(mergingListener, 1000);
@@ -119,8 +119,8 @@ public class RateLimitingMergingViewProcessListenerTest {
     final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     try {
       final TestViewResultListener testListener = new TestViewResultListener();
-      final RateLimitingMergingViewProcessListener mergingListener =
-          new RateLimitingMergingViewProcessListener(testListener, mock(EngineResourceManagerImpl.class), executor);
+      final RateLimitingMergingViewProcessListener mergingListener = new RateLimitingMergingViewProcessListener(testListener,
+          mock(EngineResourceManagerImpl.class), executor);
 
       assertCorrectUpdateRate(mergingListener, testListener, 100);
       assertCorrectUpdateRate(mergingListener, testListener, 400);
@@ -137,8 +137,8 @@ public class RateLimitingMergingViewProcessListenerTest {
     final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     try {
       final TestViewResultListener testListener = new TestViewResultListener();
-      final RateLimitingMergingViewProcessListener mergingListener =
-          new RateLimitingMergingViewProcessListener(testListener, mock(EngineResourceManagerImpl.class), executor);
+      final RateLimitingMergingViewProcessListener mergingListener = new RateLimitingMergingViewProcessListener(testListener,
+          mock(EngineResourceManagerImpl.class), executor);
 
       mergingListener.setPaused(true);
       testListener.assertNoCalls();
@@ -234,7 +234,7 @@ public class RateLimitingMergingViewProcessListenerTest {
     assertTrue("Expecting results no faster than " + period + " ms, but got a result after " + testListener.getShortestDelay() + " ms",
         testListener.getShortestDelay() >= period - period / 10);
     assertTrue("Expecting results no slower than " + period * 2 + " ms, but got a result after " + testListener.getShortestDelay()
-    + " ms", testListener.getShortestDelay() <= period * 2);
+        + " ms", testListener.getShortestDelay() <= period * 2);
     LOGGER.info("Size = {}", testListener.getQueueSize());
     testListener.clear();
   }

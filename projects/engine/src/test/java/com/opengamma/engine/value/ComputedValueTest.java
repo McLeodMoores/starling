@@ -27,7 +27,10 @@ public class ComputedValueTest {
 
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
-  public void test_constructor_Object_Portfolio() {
+  /**
+   *
+   */
+  public void testConstructorObjectPortfolio() {
     final ValueSpecification vspec = ValueSpecification.of("DATA", ComputationTargetType.SECURITY, UniqueId.of("Foo", "Bar"),
         ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionid").get());
     final ComputedValue test = new ComputedValue(vspec, "HELLO");
@@ -35,6 +38,9 @@ public class ComputedValueTest {
     assertEquals(vspec, test.getSpecification());
   }
 
+  /**
+   *
+   */
   public static class ComplexValue {
     private final double _i;
     private final double _j;
@@ -84,14 +90,23 @@ public class ComputedValueTest {
         ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
   }
 
+  /**
+   *
+   */
   public void testDouble() {
     cycleComputedValue(new ComputedValue(createValueSpecification(), 3.1412d));
   }
 
+  /**
+   *
+   */
   public void testInteger() {
     cycleComputedValue(new ComputedValue(createValueSpecification(), 12345678));
   }
 
+  /**
+   *
+   */
   @Test
   public void testSubMessage() {
     cycleComputedValue(new ComputedValue(createValueSpecification(), new ComplexValue(1d, 2d)));

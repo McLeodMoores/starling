@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 - present by McLeod Moores Software Limited
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -71,8 +70,11 @@ public class QuandlHistoricalTimeSeriesUpdater {
 
   /**
    * Constructor for time series updater.
-   * @param htsMaster  the master holding the historical time series, not null
-   * @param underlyingHtsProvider  the time series provider, not null
+   * 
+   * @param htsMaster
+   *          the master holding the historical time series, not null
+   * @param underlyingHtsProvider
+   *          the time series provider, not null
    */
   public QuandlHistoricalTimeSeriesUpdater(final HistoricalTimeSeriesMaster htsMaster, final HistoricalTimeSeriesProvider underlyingHtsProvider) {
     ArgumentChecker.notNull(htsMaster, "htsMaster");
@@ -83,7 +85,9 @@ public class QuandlHistoricalTimeSeriesUpdater {
 
   /**
    * Sets the start date field.
-   * @param startDate the start date
+   * 
+   * @param startDate
+   *          the start date
    */
   public void setStartDate(final LocalDate startDate) {
     _startDate = startDate;
@@ -91,7 +95,9 @@ public class QuandlHistoricalTimeSeriesUpdater {
 
   /**
    * Sets the end date field.
-   * @param endDate the end date
+   * 
+   * @param endDate
+   *          the end date
    */
   public void setEndDate(final LocalDate endDate) {
     _endDate = endDate;
@@ -99,7 +105,9 @@ public class QuandlHistoricalTimeSeriesUpdater {
 
   /**
    * Sets the reload field.
-   * @param reload the reload
+   * 
+   * @param reload
+   *          the reload
    */
   public void setReload(final boolean reload) {
     _reload = reload;
@@ -116,13 +124,17 @@ public class QuandlHistoricalTimeSeriesUpdater {
     updateTimeSeries();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Check a time series entry to see if it requires updating and update request and lookup data structures.
-   * @param doc  time series info document of the time series to update, not null
-   * @param metaDataKeyMap  map from a meta data key to a set of object ids, not null
-   * @param tsRequest  data structure containing entries for start dates, each with a chain of maps to link providers and fields to id bundles, not null
-   * @return  whether to update this time series
+   * 
+   * @param doc
+   *          time series info document of the time series to update, not null
+   * @param metaDataKeyMap
+   *          map from a meta data key to a set of object ids, not null
+   * @param tsRequest
+   *          data structure containing entries for start dates, each with a chain of maps to link providers and fields to id bundles, not null
+   * @return whether to update this time series
    */
   protected boolean checkForUpdates(final HistoricalTimeSeriesInfoDocument doc, final Map<MetaDataKey, Set<ObjectId>> metaDataKeyMap,
       final Map<LocalDate, Map<String, Map<String, Set<ExternalIdBundle>>>> tsRequest) {
@@ -147,10 +159,10 @@ public class QuandlHistoricalTimeSeriesUpdater {
     final String dataProvider = info.getDataProvider();
     final String dataField = info.getDataField();
     synchronized (tsRequest) {
-      final Map<String, Map<String, Set<ExternalIdBundle>>> providerFieldIdentifiers =
-          MapUtils.putIfAbsentGet(tsRequest, startDate, new HashMap<String, Map<String, Set<ExternalIdBundle>>>());
-      final Map<String, Set<ExternalIdBundle>> fieldIdentifiers =
-          MapUtils.putIfAbsentGet(providerFieldIdentifiers, dataProvider, new HashMap<String, Set<ExternalIdBundle>>());
+      final Map<String, Map<String, Set<ExternalIdBundle>>> providerFieldIdentifiers = MapUtils.putIfAbsentGet(tsRequest, startDate,
+          new HashMap<String, Map<String, Set<ExternalIdBundle>>>());
+      final Map<String, Set<ExternalIdBundle>> fieldIdentifiers = MapUtils.putIfAbsentGet(providerFieldIdentifiers, dataProvider,
+          new HashMap<String, Set<ExternalIdBundle>>());
       final Set<ExternalIdBundle> identifiers = MapUtils.putIfAbsentGet(fieldIdentifiers, dataField, new HashSet<ExternalIdBundle>());
       identifiers.add(idBundle);
     }
@@ -168,10 +180,14 @@ public class QuandlHistoricalTimeSeriesUpdater {
   }
 
   /**
-   * Check for updates.  This method decorates the real method with code to report status.
-   * @param documents  a list of meta-data info documents, not null
-   * @param metaDataKeyMap  map from a meta data key to a set of object ids, not null
-   * @param tsRequest  data structure containing entries for start dates, each with a chain of maps to link providers and fields to id bundles, not null
+   * Check for updates. This method decorates the real method with code to report status.
+   * 
+   * @param documents
+   *          a list of meta-data info documents, not null
+   * @param metaDataKeyMap
+   *          map from a meta data key to a set of object ids, not null
+   * @param tsRequest
+   *          data structure containing entries for start dates, each with a chain of maps to link providers and fields to id bundles, not null
    */
   protected void checkForUpdates(final Collection<HistoricalTimeSeriesInfoDocument> documents,
       final Map<MetaDataKey, Set<ObjectId>> metaDataKeyMap, final Map<LocalDate, Map<String, Map<String, Set<ExternalIdBundle>>>> tsRequest) {
@@ -200,12 +216,7 @@ public class QuandlHistoricalTimeSeriesUpdater {
 
       });
       for (final HistoricalTimeSeriesInfoDocument doc : documents) {
-        service.execute(new Callable<Boolean>() {
-          @Override
-          public Boolean call() throws Exception {
-            return checkForUpdates(doc, metaDataKeyMap, tsRequest);
-          }
-        });
+        service.execute(() -> checkForUpdates(doc, metaDataKeyMap, tsRequest));
       }
       try {
         service.join();
@@ -246,7 +257,8 @@ public class QuandlHistoricalTimeSeriesUpdater {
 
   /**
    * Resolves the start date, returning the minimum possible date if the start date field is null.
-   * @return  the start date
+   * 
+   * @return the start date
    */
   private LocalDate resolveStartDate() {
     return _startDate == null ? LocalDate.MIN : _startDate;
@@ -254,17 +266,19 @@ public class QuandlHistoricalTimeSeriesUpdater {
 
   /**
    * Resolves the end date, returning the maximum possible date if the end date field is null.
-   * @return  the end date
+   * 
+   * @return the end date
    */
   private LocalDate resolveEndDate() {
     return _endDate == null ? LocalDate.MAX : _endDate;
   }
 
   /**
-   * Gets the latest date of a series stored in the master. If the time series is empty, returns the minimum
-   * date.
-   * @param htsId  the unique id of the series
-   * @return  the latest time for which there is data in the series
+   * Gets the latest date of a series stored in the master. If the time series is empty, returns the minimum date.
+   * 
+   * @param htsId
+   *          the unique id of the series
+   * @return the latest time for which there is data in the series
    */
   private LocalDate getLatestDate(final UniqueId htsId) {
     final LocalDateDoubleTimeSeries timeSeries = _timeSeriesMaster.getTimeSeries(htsId, HistoricalTimeSeriesGetFilter.ofLatestPoint()).getTimeSeries();
@@ -275,16 +289,18 @@ public class QuandlHistoricalTimeSeriesUpdater {
   }
 
   /**
-   * Checks that the time series is up to date, which it is assumed to be if there is data on the previous
-   * week day, unless the observation time is Tokyo close, in which case the previous week date plus one
-   * day is checked.
-   * @param latestDate  the latest date in the time series
-   * @param observationTime  the observation time
-   * @return  true if the series is up to date
+   * Checks that the time series is up to date, which it is assumed to be if there is data on the previous week day, unless the observation time is Tokyo close,
+   * in which case the previous week date plus one day is checked.
+   * 
+   * @param latestDate
+   *          the latest date in the time series
+   * @param observationTime
+   *          the observation time
+   * @return true if the series is up to date
    */
   private static boolean isUpToDate(final LocalDate latestDate, final String observationTime) {
     LocalDate previousWeekDay = null;
-    //TODO think carefully about this hard-coding. Wouldn't it be better passed in as a parameter?
+    // TODO think carefully about this hard-coding. Wouldn't it be better passed in as a parameter?
     if (observationTime.equalsIgnoreCase(HistoricalTimeSeriesConstants.TOKYO_CLOSE)) {
       previousWeekDay = DateUtils.previousWeekDay().plusDays(1);
     } else {
@@ -293,11 +309,12 @@ public class QuandlHistoricalTimeSeriesUpdater {
     return previousWeekDay.isBefore(latestDate) || previousWeekDay.equals(latestDate);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets all time series from the master and finds any that have expired.
-   * @return  the list of time series that have not expired
+   * 
+   * @return the list of time series that have not expired
    */
   private List<HistoricalTimeSeriesInfoDocument> getCurrentQuandlTimeSeriesDocuments() {
     // gets all time-series that were originally loaded from Quandl
@@ -308,8 +325,10 @@ public class QuandlHistoricalTimeSeriesUpdater {
 
   /**
    * Identifies expired time series from the master and returns a list of those time series that are still valid.
-   * @param searchIterable  an iterator over time series that have the data source set to Quandl
-   * @return  a list of time series that have not expired
+   * 
+   * @param searchIterable
+   *          an iterator over time series that have the data source set to Quandl
+   * @return a list of time series that have not expired
    */
   private static List<HistoricalTimeSeriesInfoDocument> identifyExpiredTimeSeries(final Iterable<HistoricalTimeSeriesInfoDocument> searchIterable) {
     final List<HistoricalTimeSeriesInfoDocument> result = Lists.newArrayList();
@@ -329,9 +348,11 @@ public class QuandlHistoricalTimeSeriesUpdater {
   }
 
   /**
-   * @param previousWeekDay  the previous week day
-   * @param tsInfo  the time series info
-   * @return  true if the series is valid on the previous week date
+   * @param previousWeekDay
+   *          the previous week day
+   * @param tsInfo
+   *          the time series info
+   * @return true if the series is valid on the previous week date
    */
   private static boolean getIsValidOn(final LocalDate previousWeekDay, final ManageableHistoricalTimeSeriesInfo tsInfo) {
     boolean anyInvalid = false;
@@ -349,7 +370,7 @@ public class QuandlHistoricalTimeSeriesUpdater {
     return !anyInvalid;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void getAndUpdateHistoricalData(final Map<LocalDate, Map<String, Map<String, Set<ExternalIdBundle>>>> quandlTsRequest,
       final Map<MetaDataKey, Set<ObjectId>> metaDataKeyMap, final LocalDate endDate) {
     // process the request
@@ -384,13 +405,15 @@ public class QuandlHistoricalTimeSeriesUpdater {
   /**
    * Resolves the data provider name.
    *
-   * @param dataProvider the data provider, null returns the unknown value
+   * @param dataProvider
+   *          the data provider, null returns the unknown value
    * @return the resolver data provider, not null
    */
   public static String resolveDataProvider(final String dataProvider) {
     return dataProvider == null || dataProvider.equalsIgnoreCase(QuandlHistoricalTimeSeriesLoader.UNKNOWN_DATA_PROVIDER)
         || dataProvider.equalsIgnoreCase(QuandlHistoricalTimeSeriesLoader.DEFAULT_DATA_PROVIDER)
-        ? QuandlHistoricalTimeSeriesLoader.DEFAULT_DATA_PROVIDER : dataProvider;
+            ? QuandlHistoricalTimeSeriesLoader.DEFAULT_DATA_PROVIDER
+            : dataProvider;
   }
 
   private void updateTimeSeriesMaster(final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> loadedTs, final Map<MetaDataKey, Set<ObjectId>> metaDataKeyMap,
@@ -402,7 +425,7 @@ public class QuandlHistoricalTimeSeriesUpdater {
         LOGGER.info("No new data for series {} {}", dataField, identifierTs.getKey());
         continue; // avoids errors in getLatestTime()
       }
-      LOGGER.info("Got {} new points for series {} {}", new Object[] {timeSeries.size(), dataField, identifierTs.getKey() });
+      LOGGER.info("Got {} new points for series {} {}", new Object[] { timeSeries.size(), dataField, identifierTs.getKey() });
 
       final LocalDate latestTime = timeSeries.getLatestTime();
       final LocalDate startDate = _startDate != null ? _startDate : LocalDate.MIN;
@@ -433,7 +456,9 @@ public class QuandlHistoricalTimeSeriesUpdater {
 
   /**
    * Error loading this time series key.
-   * @param timeSeries  the meta data key that caused the error
+   * 
+   * @param timeSeries
+   *          the meta data key that caused the error
    */
   protected void errorLoading(final MetaDataKey timeSeries) {
     // No-op
@@ -441,13 +466,13 @@ public class QuandlHistoricalTimeSeriesUpdater {
 
   protected Map<ExternalIdBundle, LocalDateDoubleTimeSeries> getTimeSeries(
       final String dataField, final LocalDate startDate, final LocalDate endDate, final String quandlDataProvider, final Set<ExternalIdBundle> identifierSet) {
-    LOGGER.debug("Loading time series {} ({}-{}) {}: {}", new Object[] {dataField, startDate, endDate, quandlDataProvider, identifierSet });
+    LOGGER.debug("Loading time series {} ({}-{}) {}: {}", new Object[] { dataField, startDate, endDate, quandlDataProvider, identifierSet });
     final LocalDateRange dateRange = LocalDateRange.of(startDate, endDate, true);
     return _historicalTimeSeriesProvider.getHistoricalTimeSeries(identifierSet, QuandlConstants.QUANDL_DATA_SOURCE_NAME, quandlDataProvider,
         dataField, dateRange);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Lookup data.
    */
@@ -459,9 +484,13 @@ public class QuandlHistoricalTimeSeriesUpdater {
 
     /**
      * Constructor for Meta data key.
-     * @param identifiers  an external id bundle
-     * @param dataProvider  a data provider (often DEFAULT)
-     * @param field  a field name (e.g. Value, Rate)
+     * 
+     * @param identifiers
+     *          an external id bundle
+     * @param dataProvider
+     *          a data provider (often DEFAULT)
+     * @param field
+     *          a field name (e.g. Value, Rate)
      */
     public MetaDataKey(final ExternalIdBundle identifiers, final String dataProvider, final String field) {
       _identifiers = identifiers;

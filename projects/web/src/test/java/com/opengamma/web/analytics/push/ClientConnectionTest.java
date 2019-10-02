@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.web.analytics.push;
 
 import static org.mockito.Matchers.anyCollection;
@@ -206,9 +211,9 @@ public class ClientConnectionTest {
  * <p>
  * Matcher for checking an argument to a mock is a collection containing all of the specified items and nothing else. The order of the elements isn't important.
  * </p>
- * 
+ *
  * <em>I'm surprised this isn't already available in Mockito, although maybe it's there and I just can't find it.</em>
- * 
+ *
  * @param <T>
  *          The type of items in the collection
  */

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.financial.curve;
 
@@ -35,8 +35,9 @@ import com.opengamma.util.time.Tenor;
 public class QuandlCurveNodeWithIdentifierBuilderTest {
   /** The curve date */
   private static final LocalDate CURVE_DATE = LocalDate.of(2015, 4, 15);
-  /** The node id mapper containing a P0D instrument provider that contains underlying information and a P3M
-   * provider that does not */
+  /**
+   * The node id mapper containing a P0D instrument provider that contains underlying information and a P3M provider that does not
+   */
   private static final CurveNodeIdMapper MAPPER;
   /** A Fed funds future rate node */
   private static final RateFutureNode NODE1 = new RateFutureNode(1, Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, Tenor.ON,
@@ -74,8 +75,7 @@ public class QuandlCurveNodeWithIdentifierBuilderTest {
   }
 
   /**
-   * Tests that a {@link CurveNodeWithIdentifier} is created if the curve instrument provider is not a
-   * {@link QuandlFedFundsFutureCurveInstrumentProvider}.
+   * Tests that a {@link CurveNodeWithIdentifier} is created if the curve instrument provider is not a {@link QuandlFedFundsFutureCurveInstrumentProvider}.
    */
   @Test
   public void testNodeWithoutUnderlyingData() {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Please see distribution for license.
  */
@@ -21,15 +21,18 @@ public class MinimalWebPositionsUris {
 
   /**
    * Creates an instance.
-   * @param data  the web data, not null
+   * 
+   * @param data
+   *          the web data, not null
    */
   public MinimalWebPositionsUris(final WebPositionsData data) {
     _data = data;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the base URI.
+   * 
    * @return the URI
    */
   public URI base() {
@@ -38,6 +41,7 @@ public class MinimalWebPositionsUris {
 
   /**
    * Gets the URI.
+   * 
    * @return the URI
    */
   public URI positions() {
@@ -46,6 +50,7 @@ public class MinimalWebPositionsUris {
 
   /**
    * Gets the URI.
+   * 
    * @return the URI
    */
   public URI position() {
@@ -54,7 +59,9 @@ public class MinimalWebPositionsUris {
 
   /**
    * Gets the URI.
-   * @param position  the position, not null
+   * 
+   * @param position
+   *          the position, not null
    * @return the URI
    */
   public URI position(final ManageablePosition position) {
@@ -63,6 +70,7 @@ public class MinimalWebPositionsUris {
 
   /**
    * Gets the URI.
+   * 
    * @return the URI
    */
   public URI positionVersions() {
@@ -71,6 +79,7 @@ public class MinimalWebPositionsUris {
 
   /**
    * Gets the URI.
+   * 
    * @return the URI
    */
   public URI positionVersion() {
@@ -79,7 +88,9 @@ public class MinimalWebPositionsUris {
 
   /**
    * Gets the URI.
-   * @param position  the position, not null
+   * 
+   * @param position
+   *          the position, not null
    * @return the URI
    */
   public URI positionVersion(final ManageablePosition position) {

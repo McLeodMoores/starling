@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve;
 
@@ -98,9 +98,9 @@ public class SwapNodeCurrencyVisitorTest {
   private static final OISLegConvention OIS_LEG_CONVENTION = new OISLegConvention("USD OIS Leg", OIS_LEG_CONVENTION_ID.toBundle(),
       OVERNIGHT_CONVENTION_ID, Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, StubType.NONE, false, 0);
   /** An overnight compounded swap leg convention */
-  private static final ONCompoundedLegRollDateConvention ON_COMPOUNDED_LEG_CONVENTION =
-      new ONCompoundedLegRollDateConvention("USD Overnight Compounded Swap Leg", ON_COMPOUNDED_LEG_CONVENTION_ID.toBundle(), OVERNIGHT_CONVENTION_ID,
-          Tenor.ONE_YEAR, StubType.NONE, false, 0);
+  private static final ONCompoundedLegRollDateConvention ON_COMPOUNDED_LEG_CONVENTION = new ONCompoundedLegRollDateConvention(
+      "USD Overnight Compounded Swap Leg", ON_COMPOUNDED_LEG_CONVENTION_ID.toBundle(), OVERNIGHT_CONVENTION_ID,
+      Tenor.ONE_YEAR, StubType.NONE, false, 0);
   /** An OIS swap leg convention */
   private static final ONArithmeticAverageLegConvention ON_AVERAGE_LEG_CONVENTION = new ONArithmeticAverageLegConvention("USD Overnight Average Swap Leg",
       ON_AVERAGE_LEG_CONVENTION_ID.toBundle(), OVERNIGHT_CONVENTION_ID, Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, StubType.NONE,
@@ -319,9 +319,9 @@ public class SwapNodeCurrencyVisitorTest {
   public void testWrongUnderlyingSecurityTypeForOnCompoundedRollDateLeg() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the convention refers to the security
-    final ONCompoundedLegRollDateConvention onCompoundedLegConvention =
-        new ONCompoundedLegRollDateConvention("USD Overnight Compounded Swap Leg", ON_COMPOUNDED_LEG_CONVENTION_ID.toBundle(), OVERNIGHT_SECURITY_ID,
-            Tenor.ONE_YEAR, StubType.NONE, false, 0);
+    final ONCompoundedLegRollDateConvention onCompoundedLegConvention = new ONCompoundedLegRollDateConvention("USD Overnight Compounded Swap Leg",
+        ON_COMPOUNDED_LEG_CONVENTION_ID.toBundle(), OVERNIGHT_SECURITY_ID,
+        Tenor.ONE_YEAR, StubType.NONE, false, 0);
     conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     conventionSource.addConvention(onCompoundedLegConvention);
     final IborIndex indexSecurity = LIBOR_SECURITY.clone();
@@ -339,9 +339,9 @@ public class SwapNodeCurrencyVisitorTest {
   public void testConventionFromUnderlyingSecurityForOnCompoundedRollDateLeg() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the convention refers to the security
-    final ONCompoundedLegRollDateConvention onCompoundedLegConvention =
-        new ONCompoundedLegRollDateConvention("USD Overnight Compounded Swap Leg", ON_COMPOUNDED_LEG_CONVENTION_ID.toBundle(), OVERNIGHT_SECURITY_ID,
-            Tenor.ONE_YEAR, StubType.NONE, false, 0);
+    final ONCompoundedLegRollDateConvention onCompoundedLegConvention = new ONCompoundedLegRollDateConvention("USD Overnight Compounded Swap Leg",
+        ON_COMPOUNDED_LEG_CONVENTION_ID.toBundle(), OVERNIGHT_SECURITY_ID,
+        Tenor.ONE_YEAR, StubType.NONE, false, 0);
     conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     conventionSource.addConvention(onCompoundedLegConvention);
     conventionSource.addConvention(OVERNIGHT_CONVENTION.clone());

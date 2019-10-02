@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.historicaltimeseries;
 
@@ -44,7 +44,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 /**
  * Unit tests for {@link QuandlHistoricalTimeSeriesLoader}.
  */
-@Test//(groups = TestGroup.UNIT)
+@Test // (groups = TestGroup.UNIT)
 public class QuandlHistoricalTimeSeriesLoaderTest {
   /** A mock historical time series provider */
   private static final HistoricalTimeSeriesProvider HTS_PROVIDER;
@@ -132,8 +132,7 @@ public class QuandlHistoricalTimeSeriesLoaderTest {
   }
 
   /**
-   * Tests the observation time observed. The observation time will be null if the data provider is not null,
-   * unknown or default.
+   * Tests the observation time observed. The observation time will be null if the data provider is not null, unknown or default.
    */
   @Test
   public void testObservationProvider() {
@@ -172,8 +171,7 @@ public class QuandlHistoricalTimeSeriesLoaderTest {
   }
 
   /**
-   * Tests that the expected time series is returned from the underlying provider and that the start and end dates
-   * are used.
+   * Tests that the expected time series is returned from the underlying provider and that the start and end dates are used.
    */
   @Test
   public void testLoadTimeSeriesFromProvider() {

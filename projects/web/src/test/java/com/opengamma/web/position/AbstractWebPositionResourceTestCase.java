@@ -68,7 +68,7 @@ import com.opengamma.web.WebResourceTestUtils;
 import freemarker.template.Configuration;
 
 /**
- * Test base class for WebPositionResource tests
+ * Test base class for WebPositionResource tests.
  */
 public abstract class AbstractWebPositionResourceTestCase {
 

@@ -36,12 +36,15 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class BundleManagerTest {
 
-  private static List<Fragment> EXPECTED_JS_BUNDLE_COMMON = Lists.newArrayList(CORE_JS, INIT_JS, JQUERY_JS);
-  private static List<Fragment> EXPECTED_CSS_UTIL = Lists.newArrayList(RESET_CSS, LINKS_CSS);
-  private static List<Fragment> EXPECTED_CSS_BUNDLE_COMMON = Lists.newArrayList(FRAG_A, BUTTON_CSS, CORE_CSS);
+  private static final List<Fragment> EXPECTED_JS_BUNDLE_COMMON = Lists.newArrayList(CORE_JS, INIT_JS, JQUERY_JS);
+  private static final List<Fragment> EXPECTED_CSS_UTIL = Lists.newArrayList(RESET_CSS, LINKS_CSS);
+  private static final List<Fragment> EXPECTED_CSS_BUNDLE_COMMON = Lists.newArrayList(FRAG_A, BUTTON_CSS, CORE_CSS);
 
   private final BundleManager _manager = new BundleManager();
 
+  /**
+   *
+   */
   public void testAddBundleWithFragments() {
     _manager.addBundle(makeCssBundleCommon());
     _manager.addBundle(makeCssUtil());
@@ -60,6 +63,9 @@ public class BundleManagerTest {
     assertEquals(EXPECTED_JS_BUNDLE_COMMON, bundle.getAllFragments());
   }
 
+  /**
+   *
+   */
   public void testAddBundleWithBundles() {
     final Bundle test = new Bundle("Composite");
     test.addChildNode(makeCssBundleCommon());

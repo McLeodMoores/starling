@@ -49,20 +49,31 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.TestLifecycle;
 
+/**
+ *
+ */
 @Test(groups = TestGroup.UNIT)
 public class ViewClientTest {
 
   @Mock
-  private ViewResultListenerFactory viewResultListenerFactoryStub;
+  private ViewResultListenerFactory _viewResultListenerFactoryStub;
   @Mock
-  private ViewResultListener viewResultListenerMock;
+  private ViewResultListener _viewResultListenerMock;
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @BeforeMethod(groups = TestGroup.UNIT)
   public void setUp() throws Exception {
     initMocks(this);
-    when(viewResultListenerFactoryStub.createViewResultListener(ViewProcessorTestEnvironment.TEST_USER)).thenReturn(viewResultListenerMock);
+    when(_viewResultListenerFactoryStub.createViewResultListener(ViewProcessorTestEnvironment.TEST_USER)).thenReturn(_viewResultListenerMock);
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is an unexpected problem
+   */
   @Test
   @SuppressWarnings("deprecation")
   public void testListenerNotifications() throws InterruptedException {
@@ -74,7 +85,7 @@ public class ViewClientTest {
       marketDataProvider.addValue(ViewProcessorTestEnvironment.getPrimitive2(), (byte) 0);
       env.setMarketDataProvider(marketDataProvider);
 
-      env.setViewResultListenerFactory(viewResultListenerFactoryStub);
+      env.setViewResultListenerFactory(_viewResultListenerFactoryStub);
       env.init();
 
       final ViewProcessorImpl vp = env.getViewProcessor();
@@ -96,7 +107,7 @@ public class ViewClientTest {
       client.waitForCompletion();
       //
       final ArgumentCaptor<ViewCycleMetadata> argument = ArgumentCaptor.forClass(ViewCycleMetadata.class);
-      verify(viewResultListenerMock).cycleStarted(argument.capture());
+      verify(_viewResultListenerMock).cycleStarted(argument.capture());
 
       assertEquals("boo~far", argument.getValue().getViewDefinitionId().toString());
       assertEquals(1, argument.getValue().getAllCalculationConfigurationNames().size());
@@ -104,7 +115,7 @@ public class ViewClientTest {
 
       final ArgumentCaptor<ViewComputationResultModel> fullFragment = ArgumentCaptor.forClass(ViewComputationResultModel.class);
       final ArgumentCaptor<ViewDeltaResultModel> deltaFragment = ArgumentCaptor.forClass(ViewDeltaResultModel.class);
-      verify(viewResultListenerMock, times(2)).cycleFragmentCompleted(fullFragment.capture(), deltaFragment.capture());
+      verify(_viewResultListenerMock, times(2)).cycleFragmentCompleted(fullFragment.capture(), deltaFragment.capture());
 
       final ViewComputationResultModel resultModel = fullFragment.getAllValues().get(0);
       assertEquals(UniqueId.of("ViewProcess", client.getUniqueId().getValue()), resultModel.getViewProcessId());

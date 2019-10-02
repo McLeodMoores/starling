@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -12,8 +12,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
-import net.sf.ehcache.CacheManager;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -30,34 +28,49 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
 
+import net.sf.ehcache.CacheManager;
+
 /**
- * Tests the {@link LazyResolvedTrade} class
+ * Tests the {@link LazyResolvedTrade} class.
  */
-@Test(groups = {TestGroup.UNIT, "ehcache" })
+@Test(groups = { TestGroup.UNIT, "ehcache" })
 public class LazyResolvedTradeTest {
 
   private CacheManager _cacheManager;
 
+  /**
+   *
+   */
   @BeforeClass
   public void setUpClass() {
     _cacheManager = EHCacheUtils.createTestCacheManager(getClass());
   }
 
+  /**
+   *
+   */
   @AfterClass
   public void tearDownClass() {
     EHCacheUtils.shutdownQuiet(_cacheManager);
   }
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
     EHCacheUtils.clear(_cacheManager);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   public void testBasicMethods() {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final Trade underlying = resolver.getPositionSource().getTrade(UniqueId.of("Trade", "0"));
-    Trade trade = new LazyResolvedTrade(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
+    final Trade trade = new LazyResolvedTrade(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST),
+        underlying);
     assertEquals(trade.getAttributes(), underlying.getAttributes());
     trade.setAttributes(ImmutableMap.of("K1", "V1"));
     assertEquals(trade.getAttributes(), underlying.getAttributes());
@@ -72,7 +85,11 @@ public class LazyResolvedTradeTest {
     assertEquals(trade.getSecurity().getUniqueId(), underlying.getSecurity().getUniqueId());
   }
 
-  public void testSerialization_full() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testSerializationFull() throws Exception {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final Trade underlying = resolver.getPositionSource().getTrade(UniqueId.of("Trade", "0"));
     underlying.setAttributes(ImmutableMap.of("K1", "V1"));
@@ -94,7 +111,11 @@ public class LazyResolvedTradeTest {
     assertEquals(trade.getSecurity().getUniqueId(), underlying.getSecurity().getUniqueId());
   }
 
-  public void testSerialization_targetResolver() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
+  public void testSerializationTargetResolver() throws Exception {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final Trade underlying = resolver.getPositionSource().getTrade(UniqueId.of("Trade", "0"));
     underlying.setAttributes(ImmutableMap.of("K1", "V1"));

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.config;
 
@@ -17,8 +17,8 @@ import com.opengamma.util.test.TestGroup;
 public class QuandlCurveConfigurationsGeneratorTest {
 
   /**
-   * Tests that the expected number of conventions are generated. EUR, GBP, CHF and JPY have single-curve
-   * configurations, while USD has a two-curve configuration.
+   * Tests that the expected number of conventions are generated. EUR, GBP, CHF and JPY have single-curve configurations, while USD has a two-curve
+   * configuration.
    */
   @Test
   public void test() {

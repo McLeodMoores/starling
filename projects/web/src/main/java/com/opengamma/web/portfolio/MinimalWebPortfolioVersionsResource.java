@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Please see distribution for license.
  */
@@ -33,7 +33,7 @@ public class MinimalWebPortfolioVersionsResource extends AbstractMinimalWebPortf
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param parent
    *          the parent resource, not null
    */
@@ -65,7 +65,7 @@ public class MinimalWebPortfolioVersionsResource extends AbstractMinimalWebPortf
   // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @return the output root data, not null
    */
   @Override
@@ -96,7 +96,7 @@ public class MinimalWebPortfolioVersionsResource extends AbstractMinimalWebPortf
   // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * 
+   *
    * @param data
    *          the data, not null
    * @return the URI, not null

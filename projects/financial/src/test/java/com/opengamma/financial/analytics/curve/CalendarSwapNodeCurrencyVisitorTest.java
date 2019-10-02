@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve;
 
@@ -81,7 +81,7 @@ public class CalendarSwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoPayConvention() {
-    final InMemoryConventionSource conventionSource = new InMemoryConventionSource(); //new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource(); // new TestConventionSource(conventions);
     conventionSource.addConvention(LIBOR_CONVENTION.clone());
     conventionSource.addConvention(RECEIVE_LEG_CONVENTION.clone());
     conventionSource.addConvention(SWAP_CONVENTION.clone());
@@ -103,8 +103,7 @@ public class CalendarSwapNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests the behaviour when the underlying index convention is not found and there is no underlying ibor index security
-   * in the security source.
+   * Tests the behaviour when the underlying index convention is not found and there is no underlying ibor index security in the security source.
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoIndexConvention() {

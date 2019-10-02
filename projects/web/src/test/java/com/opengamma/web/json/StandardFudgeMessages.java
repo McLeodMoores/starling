@@ -13,12 +13,13 @@ import org.fudgemsg.types.IndicatorType;
 import org.fudgemsg.wire.types.FudgeWireType;
 
 /**
- * StandardFudgeMessages for testing JSON converters in web
+ * StandardFudgeMessages for testing JSON converters in web.
  */
 public final class StandardFudgeMessages {
 
   /**
-   * @param context [documentation not available]
+   * @param context
+   *          [documentation not available]
    * @return [documentation not available]
    */
   public static MutableFudgeMsg createMessageAllNames(final FudgeContext context) {
@@ -57,7 +58,8 @@ public final class StandardFudgeMessages {
   }
 
   /**
-   * @param context [documentation not available]
+   * @param context
+   *          [documentation not available]
    * @return [documentation not available]
    */
   public static MutableFudgeMsg createMessageAllOrdinals(final FudgeContext context) {
@@ -91,7 +93,8 @@ public final class StandardFudgeMessages {
   }
 
   /**
-   * @param context [documentation not available]
+   * @param context
+   *          [documentation not available]
    * @return [documentation not available]
    */
   public static MutableFudgeMsg createMessageNoNamesNoOrdinals(final FudgeContext context) {
@@ -127,10 +130,9 @@ public final class StandardFudgeMessages {
     return msg;
   }
 
-
-
   /**
-   * @param context [documentation not available]
+   * @param context
+   *          [documentation not available]
    * @return [documentation not available]
    */
   public static FudgeMsg createMessageAllByteArrayLengths(final FudgeContext context) {
@@ -149,10 +151,9 @@ public final class StandardFudgeMessages {
     return msg;
   }
 
-
-
   /**
-   * @param context [documentation not available]
+   * @param context
+   *          [documentation not available]
    * @return [documentation not available]
    */
   public static FudgeMsg createMessageWithSubMsgs(final FudgeContext context) {

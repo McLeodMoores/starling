@@ -41,7 +41,7 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test for {@link DependencyGraphTraceProviderUris}
+ * Test for {@link DependencyGraphTraceProviderUris}.
  */
 @Test(groups = TestGroup.UNIT)
 public class DependencyGraphTraceProviderResourceTest {
@@ -54,6 +54,9 @@ public class DependencyGraphTraceProviderResourceTest {
   private DependencyGraphBuildTrace _sampleResult;
   private URI _baseUri;
 
+  /**
+   *
+   */
   @BeforeMethod
   public void beforeTest() {
     _fudgeContext = FudgeContext.GLOBAL_DEFAULT;
@@ -67,12 +70,18 @@ public class DependencyGraphTraceProviderResourceTest {
     }
   }
 
+  /**
+   *
+   */
   @Test
-  public void DependencyGraphTraceProviderUris() {
+  public void dependencyGraphTraceProviderUris() {
     assertEquals(_provider, _resource.getProvider());
     assertEquals(_fudgeContext, _resource.getFudgeContext());
   }
 
+  /**
+   *
+   */
   @Test
   public void getTraceWithCalculationConfigurationName() {
     final String calcConfigName = "test";
@@ -85,6 +94,9 @@ public class DependencyGraphTraceProviderResourceTest {
 
   }
 
+  /**
+   *
+   */
   @Test
   public void getTraceWithDefaultProperties() {
     // input
@@ -101,6 +113,9 @@ public class DependencyGraphTraceProviderResourceTest {
 
   }
 
+  /**
+   *
+   */
   @Test
   public void getTraceWithMarketData() {
     // input
@@ -116,6 +131,9 @@ public class DependencyGraphTraceProviderResourceTest {
     assertEquals(originalMD, _resource.getProperties().getMarketData());
   }
 
+  /**
+   *
+   */
   @Test
   public void getTraceWithResolutionTime() {
     // input
@@ -131,6 +149,9 @@ public class DependencyGraphTraceProviderResourceTest {
     assertEquals(originalRT, _resource.getProperties().getResolutionTime());
   }
 
+  /**
+   *
+   */
   @Test
   public void getTraceWithValuationTime() {
     // input
@@ -147,6 +168,9 @@ public class DependencyGraphTraceProviderResourceTest {
 
   }
 
+  /**
+   *
+   */
   @Test
   public void getTraceWithValueRequirementByExternalId() {
     // input
@@ -165,6 +189,9 @@ public class DependencyGraphTraceProviderResourceTest {
 
   }
 
+  /**
+   *
+   */
   @Test
   public void getTraceWithValueRequirementByUniqueId() {
     // input
@@ -184,6 +211,9 @@ public class DependencyGraphTraceProviderResourceTest {
 
   // -----------------------------------------------------------
 
+  /**
+   *
+   */
   @Test
   public void build() {
 
@@ -197,6 +227,10 @@ public class DependencyGraphTraceProviderResourceTest {
 
   // -----------------------------------------------------------
 
+  /**
+   * @throws UnsupportedEncodingException
+   *           if there is an unexpected problem
+   */
   @Test
   public void uriCalculationConfigurationName() throws UnsupportedEncodingException {
     final String testStr = "test";
@@ -205,6 +239,10 @@ public class DependencyGraphTraceProviderResourceTest {
     assertEquals(TEST_URL + "calculationConfigurationName/" + testStr, url);
   }
 
+  /**
+   * @throws UnsupportedEncodingException
+   *           if there is an unexpected problem
+   */
   @Test
   public void uriDefaultProperties() throws UnsupportedEncodingException {
     final String defaultPropertiesStr1 = "{A=[foo,bar],B=[*]}";
@@ -215,6 +253,10 @@ public class DependencyGraphTraceProviderResourceTest {
     assertTrue(url.equals(TEST_URL + "defaultProperties/" + defaultPropertiesStr1) || url.equals(TEST_URL + "defaultProperties/" + defaultPropertiesStr2));
   }
 
+  /**
+   * @throws UnsupportedEncodingException
+   *           if there is an unexpected problem
+   */
   @Test
   public void uriMarketDataSnapshot() throws UnsupportedEncodingException {
     final String snapshotId = "Foo~1";
@@ -224,6 +266,10 @@ public class DependencyGraphTraceProviderResourceTest {
     assertEquals(TEST_URL + "marketDataSnapshot/" + snapshotId, url);
   }
 
+  /**
+   * @throws UnsupportedEncodingException
+   *           if there is an unexpected problem
+   */
   @Test
   public void uriMarketDataLiveDefault() throws UnsupportedEncodingException {
     final MarketDataSpecification marketData = MarketData.live();
@@ -232,6 +278,10 @@ public class DependencyGraphTraceProviderResourceTest {
     assertEquals(TEST_URL + "marketDataLiveDefault", url);
   }
 
+  /**
+   * @throws UnsupportedEncodingException
+   *           if there is an unexpected problem
+   */
   @Test
   public void uriMarketDataLive() throws UnsupportedEncodingException {
     final MarketDataSpecification marketData = MarketData.live("BB");
@@ -240,6 +290,10 @@ public class DependencyGraphTraceProviderResourceTest {
     assertEquals(TEST_URL + "marketDataLive/BB", url);
   }
 
+  /**
+   * @throws UnsupportedEncodingException
+   *           if there is an unexpected problem
+   */
   @Test
   public void uriMarketDataHistorical() throws UnsupportedEncodingException {
     final LocalDate now = LocalDate.now();
@@ -249,6 +303,10 @@ public class DependencyGraphTraceProviderResourceTest {
     assertEquals(TEST_URL + "marketDataHistorical/" + now + "/ts", url);
   }
 
+  /**
+   * @throws UnsupportedEncodingException
+   *           if there is an unexpected problem
+   */
   @Test
   public void uriResolutionTime() throws UnsupportedEncodingException {
     final String rtStr = "V1970-01-01T00:00:01Z.CLATEST";
@@ -258,6 +316,10 @@ public class DependencyGraphTraceProviderResourceTest {
     assertEquals(TEST_URL + "resolutionTime/" + rtStr, url);
   }
 
+  /**
+   * @throws UnsupportedEncodingException
+   *           if there is an unexpected problem
+   */
   @Test
   public void uriValuationTime() throws UnsupportedEncodingException {
     final String instantStr = "2013-06-24T12:18:01.094Z";
@@ -267,6 +329,10 @@ public class DependencyGraphTraceProviderResourceTest {
     assertEquals(TEST_URL + "valuationTime/" + instantStr, url);
   }
 
+  /**
+   * @throws UnsupportedEncodingException
+   *           if there is an unexpected problem
+   */
   @Test
   public void uriValueRequirementByExternalId() throws UnsupportedEncodingException {
     final String valueName = "test1";
@@ -278,6 +344,10 @@ public class DependencyGraphTraceProviderResourceTest {
     assertEquals(TEST_URL + "requirement/" + valueName + "/" + targetType + "/" + idStr, url);
   }
 
+  /**
+   * @throws UnsupportedEncodingException
+   *           if there is an unexpected problem
+   */
   @Test
   public void uriValueRequirementByUniqueId() throws UnsupportedEncodingException {
     final String valueName = "test1";

@@ -36,48 +36,45 @@ public class BeanBuildingVisitorTest {
 
   private static final BeanVisitorDecorator SECURITY_TYPE_FILTER = new PropertyFilter(ManageableSecurity.meta().securityType());
 
-  private static final MetaBeanFactory META_BEAN_FACTORY = new MapMetaBeanFactory(ImmutableSet.<MetaBean>of(
+  private static final MetaBeanFactory META_BEAN_FACTORY = new MapMetaBeanFactory(ImmutableSet.<MetaBean> of(
       FXForwardSecurity.meta(),
       SwapSecurity.meta(),
       FixedInterestRateLeg.meta(),
       FloatingInterestRateLeg.meta(),
       InterestRateNotional.meta()));
 
-  private static Map<MetaProperty<?>, Converter<?, ?>> s_regionConverters =
-      ImmutableMap.<MetaProperty<?>, Converter<?, ?>>of(
-          FXForwardSecurity.meta().regionId(), new FXRegionConverter(),
-          SwapLeg.meta().regionId(), new StringToRegionIdConverter());
+  private static Map<MetaProperty<?>, Converter<?, ?>> s_regionConverters = ImmutableMap.<MetaProperty<?>, Converter<?, ?>> of(
+      FXForwardSecurity.meta().regionId(), new FXRegionConverter(),
+      SwapLeg.meta().regionId(), new StringToRegionIdConverter());
 
   private static final Converters CONVERTERS = new Converters(s_regionConverters,
-                                                              BlotterUtils.getStringConvert());
+      BlotterUtils.getStringConvert());
 
   /**
-   * test building a nice simple security
+   * test building a nice simple security.
    */
   @Test
   public void buildFXForwardSecurity() {
-    BeanVisitor<BeanBuilder<Bean>> visitor = new BeanBuildingVisitor<>(BlotterTestUtils.FX_FORWARD_DATA_SOURCE,
-                                                                       META_BEAN_FACTORY,
-                                                                       CONVERTERS);
-    MetaBean metaBean = META_BEAN_FACTORY.beanFor(BlotterTestUtils.FX_FORWARD_DATA_SOURCE);
-    BeanBuilder<ManageableSecurity> beanBuilder =
-        (BeanBuilder<ManageableSecurity>) new BeanTraverser(SECURITY_TYPE_FILTER).traverse(metaBean, visitor);
-    ManageableSecurity security = beanBuilder.build();
+    final BeanVisitor<BeanBuilder<Bean>> visitor = new BeanBuildingVisitor<>(BlotterTestUtils.FX_FORWARD_DATA_SOURCE,
+        META_BEAN_FACTORY,
+        CONVERTERS);
+    final MetaBean metaBean = META_BEAN_FACTORY.beanFor(BlotterTestUtils.FX_FORWARD_DATA_SOURCE);
+    final BeanBuilder<ManageableSecurity> beanBuilder = (BeanBuilder<ManageableSecurity>) new BeanTraverser(SECURITY_TYPE_FILTER).traverse(metaBean, visitor);
+    final ManageableSecurity security = beanBuilder.build();
     assertTrue(JodaBeanUtils.equalIgnoring(BlotterTestUtils.FX_FORWARD, security, ManageableSecurity.meta().uniqueId()));
   }
 
   /**
-   * test building a security with fields that are also beans and have bean fields themsevles (legs, notionals)
+   * test building a security with fields that are also beans and have bean fields themsevles (legs, notionals).
    */
   @Test
   public void buildSwapSecurity() {
-    BeanVisitor<BeanBuilder<Bean>> visitor = new BeanBuildingVisitor<>(BlotterTestUtils.SWAP_DATA_SOURCE,
-                                                                       META_BEAN_FACTORY,
-                                                                       CONVERTERS);
-    MetaBean metaBean = META_BEAN_FACTORY.beanFor(BlotterTestUtils.SWAP_DATA_SOURCE);
-    BeanBuilder<ManageableSecurity> beanBuilder =
-        (BeanBuilder<ManageableSecurity>) new BeanTraverser(SECURITY_TYPE_FILTER).traverse(metaBean, visitor);
-    ManageableSecurity security = beanBuilder.build();
+    final BeanVisitor<BeanBuilder<Bean>> visitor = new BeanBuildingVisitor<>(BlotterTestUtils.SWAP_DATA_SOURCE,
+        META_BEAN_FACTORY,
+        CONVERTERS);
+    final MetaBean metaBean = META_BEAN_FACTORY.beanFor(BlotterTestUtils.SWAP_DATA_SOURCE);
+    final BeanBuilder<ManageableSecurity> beanBuilder = (BeanBuilder<ManageableSecurity>) new BeanTraverser(SECURITY_TYPE_FILTER).traverse(metaBean, visitor);
+    final ManageableSecurity security = beanBuilder.build();
     assertTrue(JodaBeanUtils.equalIgnoring(BlotterTestUtils.SWAP, security, ManageableSecurity.meta().uniqueId()));
   }
 }

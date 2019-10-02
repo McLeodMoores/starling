@@ -51,81 +51,120 @@ public class ComputationTargetSpecificationTest {
     return trade;
   }
 
-  public void test_constructor_Object_Node() {
+  /**
+   *
+   */
+  public void testConstructorObjectNode() {
     final ComputationTargetSpecification test = ComputationTargetSpecification.of(NODE);
     assertEquals(ComputationTargetType.PORTFOLIO_NODE, test.getType());
     assertEquals(NODE.getUniqueId(), test.getUniqueId());
   }
 
-  public void test_constructor_Object_Position() {
+  /**
+   *
+   */
+  public void testConstructorObjectPosition() {
     final ComputationTargetSpecification test = ComputationTargetSpecification.of(POSITION);
     assertEquals(ComputationTargetType.POSITION, test.getType());
     assertEquals(POSITION.getUniqueId(), test.getUniqueId());
   }
 
-  public void test_constructor_Object_Security() {
+  /**
+   *
+   */
+  public void testConstructorObjectSecurity() {
     final ComputationTargetSpecification test = ComputationTargetSpecification.of(SECURITY);
     assertEquals(ComputationTargetType.SECURITY, test.getType());
     assertEquals(SECURITY.getUniqueId(), test.getUniqueId());
   }
 
-  public void test_constructor_Object_Trade() {
+  /**
+   *
+   */
+  public void testConstructorObjectTrade() {
     final ComputationTargetSpecification test = ComputationTargetSpecification.of(TRADE);
     assertEquals(ComputationTargetType.TRADE, test.getType());
     assertEquals(TRADE.getUniqueId(), test.getUniqueId());
   }
 
-  public void test_constructor_Object_Currency() {
+  /**
+   *
+   */
+  public void testConstructorObjectCurrency() {
     final ComputationTargetSpecification test = ComputationTargetSpecification.of(Currency.USD);
     assertEquals(ComputationTargetType.CURRENCY, test.getType());
     assertEquals(Currency.USD.getUniqueId(), test.getUniqueId());
   }
 
-  public void test_constructor_Object_UniqueId() {
+  /**
+   *
+   */
+  public void testConstructorObjectUniqueId() {
     final ComputationTargetSpecification test = ComputationTargetSpecification.of(UID);
     assertEquals(ComputationTargetType.PRIMITIVE, test.getType());
     assertEquals(UID, test.getUniqueId());
   }
 
-  public void test_constructor_Type_UniqueId_ok() {
+  /**
+   *
+   */
+  public void testConstructorTypeUniqueIdOk() {
     new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UID);
     new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
     new ComputationTargetSpecification(ComputationTargetType.SECURITY, UID);
     new ComputationTargetSpecification(ComputationTargetType.NULL, null);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_Type_UniqueId_nullType_validId() {
+  public void testConstructorTypeUniqueIdNullTypeValidId() {
     new ComputationTargetSpecification(ComputationTargetType.NULL, UniqueId.of("Foo", "Bar"));
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = AssertionError.class)
-  public void test_constructor_Type_UniqueId_nullType() {
+  public void testConstructorTypeUniqueIdNullType() {
     new ComputationTargetSpecification(null, UID);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_Type_UniqueId_nullId() {
+  public void testConstructorTypeUniqueIdNullId() {
     new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, (UniqueId) null);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getters_PortfolioNode() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGettersPortfolioNode() {
     final ComputationTargetSpecification test = new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UID);
     assertEquals(ComputationTargetType.PORTFOLIO_NODE, test.getType());
     assertEquals(UID.getScheme(), test.getUniqueId().getScheme());
     assertEquals(UID.getValue(), test.getUniqueId().getValue());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_toSpecification() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testToSpecification() {
     final ComputationTargetSpecification test = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
     assertEquals(true, test.toString().contains("POSITION"));
     assertEquals(true, test.toString().contains(UID.toString()));
   }
 
-  //-------------------------------------------------------------------------
-  public void test_equals_similar() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testEqualsSimilar() {
     final ComputationTargetSpecification a1 = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
     final ComputationTargetSpecification a2 = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
 
@@ -136,7 +175,10 @@ public class ComputationTargetSpecificationTest {
     assertEquals(true, a2.equals(a2));
   }
 
-  public void test_equals_different() {
+  /**
+   *
+   */
+  public void testEqualsDifferent() {
     final ComputationTargetSpecification a = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
     final ComputationTargetSpecification b = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID2);
     final ComputationTargetSpecification c = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UID2);
@@ -154,44 +196,65 @@ public class ComputationTargetSpecificationTest {
     assertEquals(true, c.equals(c));
   }
 
-  public void test_equals_other() {
+  /**
+   *
+   */
+  public void testEqualsOther() {
     final ComputationTargetSpecification a = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
     assertEquals(false, a.equals(null));
     assertEquals(false, a.equals("Rubbish"));
   }
 
-  public void test_hashCode() {
+  /**
+   *
+   */
+  public void testHashCode() {
     final ComputationTargetSpecification a = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
     final ComputationTargetSpecification b = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
     assertEquals(true, a.equals(b));
   }
 
-  public void test_isCompatible() {
+  /**
+   *
+   */
+  public void testIsCompatible() {
     final ComputationTargetSpecification a = new ComputationTargetSpecification(ComputationTargetType.of(SimpleSecurity.class), UID);
     final ComputationTargetSpecification b = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UID);
     assertFalse(a.isCompatible(b));
     assertTrue(b.isCompatible(a));
   }
 
-  @Test(expectedExceptions = {IllegalStateException.class })
-  public void test_getRequirement() {
+  /**
+   *
+   */
+  @Test(expectedExceptions = { IllegalStateException.class })
+  public void testGetRequirement() {
     final ComputationTargetReference a = ComputationTargetSpecification.of(SECURITY);
     a.getRequirement();
   }
 
-  public void test_getSpecification() {
+  /**
+   *
+   */
+  public void testGetSpecification() {
     final ComputationTargetReference a = ComputationTargetSpecification.of(SECURITY);
     assertEquals(a.getSpecification(), a);
   }
 
-  public void testContaining_id() {
+  /**
+   *
+   */
+  public void testContainingId() {
     final ComputationTargetReference ref = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Foo", "Bar"));
     final ComputationTargetReference underlying = ref.containing(ComputationTargetType.SECURITY, ExternalId.of("Foo", "Underlying"));
     assertEquals(underlying.getParent(), ref);
     assertEquals(underlying.getType(), ComputationTargetType.SECURITY.containing(ComputationTargetType.SECURITY));
   }
 
-  public void testContaining_uid() {
+  /**
+   *
+   */
+  public void testContainingUid() {
     final ComputationTargetReference ref = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Foo", "Bar"));
     final ComputationTargetReference underlying = ref.containing(ComputationTargetType.SECURITY, UniqueId.of("Foo", "Underlying"));
     assertEquals(underlying.getParent(), ref);

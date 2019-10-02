@@ -32,6 +32,9 @@ import com.opengamma.integration.tool.portfolio.xml.v1_0.conversion.OtcEquityInd
 import com.opengamma.integration.tool.portfolio.xml.v1_0.conversion.TradeSecurityExtractor;
 import com.opengamma.util.money.Currency;
 
+/**
+ *
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @BeanDefinition

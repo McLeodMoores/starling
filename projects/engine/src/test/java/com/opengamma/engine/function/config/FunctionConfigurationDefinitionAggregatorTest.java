@@ -23,7 +23,7 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test {@link FunctionConfigurationDefinitionAggregator}
+ * Test {@link FunctionConfigurationDefinitionAggregator}.
  */
 @Test(groups = TestGroup.UNIT)
 public class FunctionConfigurationDefinitionAggregatorTest {
@@ -76,10 +76,10 @@ public class FunctionConfigurationDefinitionAggregatorTest {
   @Test
   public void cyclicReference() {
 
-    final FunctionConfigurationDefinition defA =
-        new FunctionConfigurationDefinition("DFA", ImmutableList.<String>of("DFB"), ImmutableList.of(SF1, SF2), ImmutableList.of(PF1, PF2));
-    final FunctionConfigurationDefinition defB =
-        new FunctionConfigurationDefinition("DFB", ImmutableList.<String>of("DFA"), ImmutableList.of(SF3, SF4), ImmutableList.of(PF3, PF4));
+    final FunctionConfigurationDefinition defA = new FunctionConfigurationDefinition("DFA", ImmutableList.<String> of("DFB"), ImmutableList.of(SF1, SF2),
+        ImmutableList.of(PF1, PF2));
+    final FunctionConfigurationDefinition defB = new FunctionConfigurationDefinition("DFB", ImmutableList.<String> of("DFA"), ImmutableList.of(SF3, SF4),
+        ImmutableList.of(PF3, PF4));
 
     when(_cfgSource.getSingle(FunctionConfigurationDefinition.class, "DFA", VersionCorrection.LATEST)).thenReturn(defA);
     when(_cfgSource.getSingle(FunctionConfigurationDefinition.class, "DFB", VersionCorrection.LATEST)).thenReturn(defB);
@@ -126,7 +126,7 @@ public class FunctionConfigurationDefinitionAggregatorTest {
   }
 
   private static FunctionConfigurationDefinition makeDefinition1() {
-    return new FunctionConfigurationDefinition("CF1", ImmutableList.<String>of(), ImmutableList.of(SF6, SF5), ImmutableList.of(PF6, PF5));
+    return new FunctionConfigurationDefinition("CF1", ImmutableList.<String> of(), ImmutableList.of(SF6, SF5), ImmutableList.of(PF6, PF5));
   }
 
   private static FunctionConfigurationDefinition makeDefinition2() {
@@ -134,7 +134,7 @@ public class FunctionConfigurationDefinitionAggregatorTest {
   }
 
   private static FunctionConfigurationDefinition makeDefinition3() {
-    return new FunctionConfigurationDefinition("CF3", ImmutableList.<String>of(), ImmutableList.of(SF2, SF1), ImmutableList.of(PF2, PF1));
+    return new FunctionConfigurationDefinition("CF3", ImmutableList.<String> of(), ImmutableList.of(SF2, SF1), ImmutableList.of(PF2, PF1));
   }
 
 }

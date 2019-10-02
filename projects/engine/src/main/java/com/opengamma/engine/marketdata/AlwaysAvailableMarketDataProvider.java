@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  *
  * Please see distribution for license.
  */
@@ -17,8 +17,8 @@ import com.opengamma.engine.marketdata.spec.MarketDataSpecification;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * MarketDataProvider that returns an availability provider that says yes to any Market_* fields.
- * This provider cannot actually provide data and is intended to be used to determine market data requirements.
+ * MarketDataProvider that returns an availability provider that says yes to any Market_* fields. This provider cannot actually provide data and is intended to
+ * be used to determine market data requirements.
  */
 public class AlwaysAvailableMarketDataProvider extends AbstractMarketDataProvider {
   /** The availability provider */

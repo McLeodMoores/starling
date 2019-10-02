@@ -47,7 +47,7 @@ public class LoggingViewportListenerTest {
   private final GridStructure _gridStructure = gridStructure(_cell1, _cell2, _cell3);
 
   /**
-   * creates a viewport with logging enabled and then deletes it
+   * creates a viewport with logging enabled and then deletes it.
    */
   @Test
   public void createDeleteWithLogging() {
@@ -61,7 +61,7 @@ public class LoggingViewportListenerTest {
   }
 
   /**
-   * creates a deletes a viewport with no logging enabled
+   * creates a deletes a viewport with no logging enabled.
    */
   @Test
   public void createDeleteNoLogging() {
@@ -118,7 +118,7 @@ public class LoggingViewportListenerTest {
     verify(viewClient).setMinimumLogMode(ExecutionLogMode.INDICATORS, resultSpecs(_cell2, _cell3));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static ViewportDefinition viewportDef(final boolean enableLogging, final List<GridCell> cells) {
     return new ArbitraryViewportDefinition(0, cells, enableLogging);
   }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve;
 
@@ -79,8 +79,7 @@ public class FraNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests the behaviour when the ibor index security is available from the source but the convention referenced in
-   * the security is not.
+   * Tests the behaviour when the ibor index security is available from the source but the convention referenced in the security is not.
    */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoConventionFromSecurity() {
@@ -92,8 +91,7 @@ public class FraNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests the behaviour when the underlying convention is not available but the ibor index security and its
-   * referenced convention is.
+   * Tests the behaviour when the underlying convention is not available but the ibor index security and its referenced convention is.
    */
   @Test
   public void testConventionFromSecurity() {

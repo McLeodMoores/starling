@@ -54,8 +54,8 @@ public class JsonJodaRoundTripTest {
   private static final BeanVisitorDecorator PROPERTY_FILTER = new PropertyFilter(ManageableSecurity.meta().securityType());
 
   /**
-   * Simple security
-   * 
+   * Simple security.
+   *
    * @throws JSONException
    *           if there is a problem producing the JSON
    */
@@ -73,18 +73,16 @@ public class JsonJodaRoundTripTest {
     assertNotNull(json);
 
     final JsonBeanDataSource dataSource = new JsonBeanDataSource(new JSONObject(json.toString()));
-    final MetaBeanFactory metaBeanFactory = new MapMetaBeanFactory(ImmutableSet.<MetaBean>of(FXForwardSecurity.meta()));
-    final BeanVisitor<BeanBuilder<Bean>> readingVisitor =
-        new BeanBuildingVisitor<>(dataSource, metaBeanFactory, BlotterUtils.getBeanBuildingConverters());
-    final BeanBuilder<FXForwardSecurity> beanBuilder =
-        (BeanBuilder<FXForwardSecurity>) traverser.traverse(FXForwardSecurity.meta(), readingVisitor);
+    final MetaBeanFactory metaBeanFactory = new MapMetaBeanFactory(ImmutableSet.<MetaBean> of(FXForwardSecurity.meta()));
+    final BeanVisitor<BeanBuilder<Bean>> readingVisitor = new BeanBuildingVisitor<>(dataSource, metaBeanFactory, BlotterUtils.getBeanBuildingConverters());
+    final BeanBuilder<FXForwardSecurity> beanBuilder = (BeanBuilder<FXForwardSecurity>) traverser.traverse(FXForwardSecurity.meta(), readingVisitor);
     final FXForwardSecurity fxForward2 = beanBuilder.build();
     assertEquals(fxForward, fxForward2);
   }
 
   /**
-   * Complicated security with nested beans
-   * 
+   * Complicated security with nested beans.
+   *
    * @throws JSONException
    *           if there is a problem producing the JSON
    */
@@ -120,23 +118,21 @@ public class JsonJodaRoundTripTest {
     assertNotNull(json);
 
     final JsonBeanDataSource dataSource = new JsonBeanDataSource(new JSONObject(json.toString()));
-    final MetaBeanFactory metaBeanFactory = new MapMetaBeanFactory(ImmutableSet.<MetaBean>of(
+    final MetaBeanFactory metaBeanFactory = new MapMetaBeanFactory(ImmutableSet.<MetaBean> of(
         SwapSecurity.meta(),
         FixedInterestRateLeg.meta(),
         FloatingInterestRateLeg.meta(),
         InterestRateNotional.meta()));
-    final BeanVisitor<BeanBuilder<SwapSecurity>> readingVisitor =
-        new BeanBuildingVisitor<>(dataSource, metaBeanFactory, BlotterUtils.getBeanBuildingConverters());
-    final BeanBuilder<SwapSecurity> beanBuilder =
-        (BeanBuilder<SwapSecurity>) traverser.traverse(SwapSecurity.meta(), readingVisitor);
+    final BeanVisitor<BeanBuilder<SwapSecurity>> readingVisitor = new BeanBuildingVisitor<>(dataSource, metaBeanFactory,
+        BlotterUtils.getBeanBuildingConverters());
+    final BeanBuilder<SwapSecurity> beanBuilder = (BeanBuilder<SwapSecurity>) traverser.traverse(SwapSecurity.meta(), readingVisitor);
     final SwapSecurity security2 = beanBuilder.build();
     assertEquals(security, security2);
   }
 
   /**
-   * BondFutureSecurity contains a collection of bean instances
-   * (BondFutureDeliverable)
-   * 
+   * BondFutureSecurity contains a collection of bean instances (BondFutureDeliverable).
+   *
    * @throws JSONException
    *           if there is a problem producing the JSON
    */
@@ -162,20 +158,19 @@ public class JsonJodaRoundTripTest {
     assertNotNull(json);
 
     final JsonBeanDataSource dataSource = new JsonBeanDataSource(new JSONObject(json.toString()));
-    final MetaBeanFactory metaBeanFactory = new MapMetaBeanFactory(ImmutableSet.<MetaBean>of(
+    final MetaBeanFactory metaBeanFactory = new MapMetaBeanFactory(ImmutableSet.<MetaBean> of(
         BondFutureSecurity.meta(),
         BondFutureDeliverable.meta()));
-    final BeanVisitor<BeanBuilder<BondFutureSecurity>> readingVisitor =
-        new BeanBuildingVisitor<>(dataSource, metaBeanFactory, BlotterUtils.getBeanBuildingConverters());
-    final BeanBuilder<BondFutureSecurity> beanBuilder =
-        (BeanBuilder<BondFutureSecurity>) traverser.traverse(BondFutureSecurity.meta(), readingVisitor);
+    final BeanVisitor<BeanBuilder<BondFutureSecurity>> readingVisitor = new BeanBuildingVisitor<>(dataSource, metaBeanFactory,
+        BlotterUtils.getBeanBuildingConverters());
+    final BeanBuilder<BondFutureSecurity> beanBuilder = (BeanBuilder<BondFutureSecurity>) traverser.traverse(BondFutureSecurity.meta(), readingVisitor);
     final BondFutureSecurity security2 = beanBuilder.build();
     assertEquals(security, security2);
   }
 
   // TODO test for FRA to endure region is handled correctly
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static ZonedDateTime zdt(final int y, final int m, final int d, final int hr, final int min, final int sec, final int nanos, final ZoneId zone) {
     return LocalDateTime.of(y, m, d, hr, min, sec, nanos).atZone(zone);
   }

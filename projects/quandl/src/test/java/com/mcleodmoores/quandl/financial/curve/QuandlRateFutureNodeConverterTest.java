@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.financial.curve;
 
@@ -165,7 +165,6 @@ public class QuandlRateFutureNodeConverterTest {
     node.accept(converter);
   }
 
-
   /**
    * Tests the behaviour when there is no underlying overnight index convention in the source.
    */
@@ -219,8 +218,7 @@ public class QuandlRateFutureNodeConverterTest {
   }
 
   /**
-   * Tests that the expected definition is created when there is no ibor index security in the source but
-   * the ibor index convention is present.
+   * Tests that the expected definition is created when there is no ibor index security in the source but the ibor index convention is present.
    */
   @Test
   public void testMissingIborSecurity() {
@@ -240,15 +238,14 @@ public class QuandlRateFutureNodeConverterTest {
         Period.ofMonths(3), 2, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, true, IBOR_INDEX.getName());
     final double paymentAccrualFactor = 0.25;
     final InstrumentDefinition<?> definition = node.accept(converter);
-    final InterestRateFutureSecurityDefinition expectedUnderlying =
-        new InterestRateFutureSecurityDefinition(expiryDate, index, 1, paymentAccrualFactor, "", US_CALENDAR);
+    final InterestRateFutureSecurityDefinition expectedUnderlying = new InterestRateFutureSecurityDefinition(expiryDate, index, 1, paymentAccrualFactor, "",
+        US_CALENDAR);
     final InterestRateFutureTransactionDefinition expected = new InterestRateFutureTransactionDefinition(expectedUnderlying, 1, NOW, EDH5_PRICE);
     assertEquals(definition, expected);
   }
 
   /**
-   * Tests that the expected definition is created when there is no overnight index security in the source but
-   * the overnight index convention is present.
+   * Tests that the expected definition is created when there is no overnight index security in the source but the overnight index convention is present.
    */
   @Test
   public void testMissingOvernightSecurity() {
@@ -267,8 +264,8 @@ public class QuandlRateFutureNodeConverterTest {
     final IndexON index = new IndexON("USD OVERNIGHT INDEX", Currency.USD, DayCounts.ACT_360, 1);
     final double paymentAccrualFactor = 1 / 12.;
     final InstrumentDefinition<?> definition = node.accept(converter);
-    final FederalFundsFutureSecurityDefinition expectedUnderlying =
-        FederalFundsFutureSecurityDefinition.from(expiryDate, index, 1, paymentAccrualFactor, "", US_CALENDAR);
+    final FederalFundsFutureSecurityDefinition expectedUnderlying = FederalFundsFutureSecurityDefinition.from(expiryDate, index, 1, paymentAccrualFactor, "",
+        US_CALENDAR);
     final FederalFundsFutureTransactionDefinition expected = new FederalFundsFutureTransactionDefinition(expectedUnderlying, 1, NOW, FFH5_PRICE);
     assertEquals(definition, expected);
   }
@@ -295,15 +292,15 @@ public class QuandlRateFutureNodeConverterTest {
         Period.ofMonths(3), 2, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, true, IBOR_INDEX_SECURITY.getName());
     final double paymentAccrualFactor = 0.25;
     final InstrumentDefinition<?> definition = node.accept(converter);
-    final InterestRateFutureSecurityDefinition expectedUnderlying =
-        new InterestRateFutureSecurityDefinition(expiryDate, index, 1, paymentAccrualFactor, "", US_CALENDAR);
+    final InterestRateFutureSecurityDefinition expectedUnderlying = new InterestRateFutureSecurityDefinition(expiryDate, index, 1, paymentAccrualFactor, "",
+        US_CALENDAR);
     final InterestRateFutureTransactionDefinition expected = new InterestRateFutureTransactionDefinition(expectedUnderlying, 1, NOW, EDH5_PRICE);
     assertEquals(definition, expected);
   }
 
   /**
-   * Tests that the expected definition is created when the ibor index security and convention are available. In this case, the
-   * future last trade date is a holiday.
+   * Tests that the expected definition is created when the ibor index security and convention are available. In this case, the future last trade date is a
+   * holiday.
    */
   @Test
   public void testEdm5() {
@@ -324,8 +321,8 @@ public class QuandlRateFutureNodeConverterTest {
         Period.ofMonths(3), 2, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, true, IBOR_INDEX_SECURITY.getName());
     final double paymentAccrualFactor = 0.25;
     final InstrumentDefinition<?> definition = node.accept(converter);
-    final InterestRateFutureSecurityDefinition expectedUnderlying =
-        new InterestRateFutureSecurityDefinition(expiryDate, index, 1, paymentAccrualFactor, "", US_CALENDAR);
+    final InterestRateFutureSecurityDefinition expectedUnderlying = new InterestRateFutureSecurityDefinition(expiryDate, index, 1, paymentAccrualFactor, "",
+        US_CALENDAR);
     final InterestRateFutureTransactionDefinition expected = new InterestRateFutureTransactionDefinition(expectedUnderlying, 1, NOW, EDM5_PRICE);
     assertEquals(definition, expected);
   }
@@ -351,15 +348,15 @@ public class QuandlRateFutureNodeConverterTest {
     final IndexON index = new IndexON("USD OVERNIGHT INDEX", Currency.USD, DayCounts.ACT_360, 1);
     final double paymentAccrualFactor = 1 / 12.;
     final InstrumentDefinition<?> definition = node.accept(converter);
-    final FederalFundsFutureSecurityDefinition expectedUnderlying =
-        FederalFundsFutureSecurityDefinition.from(expiryDate, index, 1, paymentAccrualFactor, "", US_CALENDAR);
+    final FederalFundsFutureSecurityDefinition expectedUnderlying = FederalFundsFutureSecurityDefinition.from(expiryDate, index, 1, paymentAccrualFactor, "",
+        US_CALENDAR);
     final FederalFundsFutureTransactionDefinition expected = new FederalFundsFutureTransactionDefinition(expectedUnderlying, 1, NOW, FFH5_PRICE);
     assertEquals(definition, expected);
   }
 
   /**
-   * Tests that the expected definition is created when the overnight index security and convention are available. In this case, the
-   * future last trade date is a holiday.
+   * Tests that the expected definition is created when the overnight index security and convention are available. In this case, the future last trade date is a
+   * holiday.
    */
   @Test
   public void testFfm5() {
@@ -379,8 +376,8 @@ public class QuandlRateFutureNodeConverterTest {
     final IndexON index = new IndexON("USD OVERNIGHT INDEX", Currency.USD, DayCounts.ACT_360, 1);
     final double paymentAccrualFactor = 1 / 12.;
     final InstrumentDefinition<?> definition = node.accept(converter);
-    final FederalFundsFutureSecurityDefinition expectedUnderlying =
-        FederalFundsFutureSecurityDefinition.from(expiryDate, index, 1, paymentAccrualFactor, "", US_CALENDAR);
+    final FederalFundsFutureSecurityDefinition expectedUnderlying = FederalFundsFutureSecurityDefinition.from(expiryDate, index, 1, paymentAccrualFactor, "",
+        US_CALENDAR);
     final FederalFundsFutureTransactionDefinition expected = new FederalFundsFutureTransactionDefinition(expectedUnderlying, 1, NOW, FFM5_PRICE);
     assertEquals(definition, expected);
   }

@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.bbg.referencedata.statistics;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -76,35 +81,22 @@ public class BloombergReferenceDataStatisticsTest {
 
   @Test(groups = TestGroup.UNIT_SLOW)
   public void bigTest() throws InterruptedException {
-    assertSmall(new Supplier<MapBloombergReferenceDataStatistics>() {
-      @Override
-      public MapBloombergReferenceDataStatistics get() {
-        return getBigStats();
-      }
-    }, 10 * 1024 * 1024, "Stats");
+    assertSmall(() -> getBigStats(), 10 * 1024 * 1024, "Stats");
   }
 
-  @Test(groups = TestGroup.INTEGRATION)  // mark as integration because its a bit random
+  @Test(groups = TestGroup.INTEGRATION) // mark as integration because its a bit random
   public void bigIncrementTest() throws InterruptedException {
     final MapBloombergReferenceDataStatistics stats = getBigStats();
-    assertSmall(new Supplier<Object>() {
-      @Override
-      public Object get() {
-        incrementBigStats(stats);
-        return null;
-      }
+    assertSmall(() -> {
+      incrementBigStats(stats);
+      return null;
     }, 1 * 1024 * 1024, "Increment");
   }
 
-  @Test(groups = TestGroup.INTEGRATION)  // mark as integration because its a bit random
+  @Test(groups = TestGroup.INTEGRATION) // mark as integration because its a bit random
   public void bigSnapshotTest() throws InterruptedException {
     final MapBloombergReferenceDataStatistics stats = getBigStats();
-    assertSmall(new Supplier<Snapshot>() {
-      @Override
-      public Snapshot get() {
-        return stats.getSnapshot();
-      }
-    }, 10 * 1024 * 1024, "Snapshot");
+    assertSmall(() -> stats.getSnapshot(), 10 * 1024 * 1024, "Snapshot");
   }
 
   @Test(enabled = false)

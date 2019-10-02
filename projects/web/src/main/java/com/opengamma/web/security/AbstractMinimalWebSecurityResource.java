@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Please see distribution for license.
  */
@@ -43,7 +43,8 @@ public abstract class AbstractMinimalWebSecurityResource extends AbstractPerRequ
   /**
    * Creates the resource.
    *
-   * @param securityMaster  the security master, not null
+   * @param securityMaster
+   *          the security master, not null
    */
   protected AbstractMinimalWebSecurityResource(final SecurityMaster securityMaster) {
     super(new WebSecuritiesData());
@@ -55,8 +56,10 @@ public abstract class AbstractMinimalWebSecurityResource extends AbstractPerRequ
   /**
    * Creates the resource.
    *
-   * @param securityMaster  the security master, not null
-   * @param securityLoader  the security loader, not null
+   * @param securityMaster
+   *          the security master, not null
+   * @param securityLoader
+   *          the security loader, not null
    */
   protected AbstractMinimalWebSecurityResource(final SecurityMaster securityMaster, final SecurityLoader securityLoader) {
     super(new WebSecuritiesData());
@@ -70,10 +73,14 @@ public abstract class AbstractMinimalWebSecurityResource extends AbstractPerRequ
   /**
    * Creates the resource.
    *
-   * @param securityMaster  the security master, not null
-   * @param securityLoader  the security loader, not null
-   * @param htsMaster  the historical time series master
-   * @param legalEntityMaster the organization master
+   * @param securityMaster
+   *          the security master, not null
+   * @param securityLoader
+   *          the security loader, not null
+   * @param htsMaster
+   *          the historical time series master
+   * @param legalEntityMaster
+   *          the organization master
    */
   protected AbstractMinimalWebSecurityResource(final SecurityMaster securityMaster, final SecurityLoader securityLoader,
       final HistoricalTimeSeriesMaster htsMaster, final LegalEntityMaster legalEntityMaster) {
@@ -92,15 +99,17 @@ public abstract class AbstractMinimalWebSecurityResource extends AbstractPerRequ
   /**
    * Creates the resource.
    *
-   * @param parent  the parent resource, not null
+   * @param parent
+   *          the parent resource, not null
    */
   protected AbstractMinimalWebSecurityResource(final AbstractMinimalWebSecurityResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -110,7 +119,7 @@ public abstract class AbstractMinimalWebSecurityResource extends AbstractPerRequ
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the security template provider.
    *

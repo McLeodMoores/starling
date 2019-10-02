@@ -28,7 +28,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests {@link SimpleViewStatusModel}
+ * Tests {@link SimpleViewStatusModel}.
  */
 @Test(groups = TestGroup.UNIT)
 public class SimpleViewStatusModelTest {

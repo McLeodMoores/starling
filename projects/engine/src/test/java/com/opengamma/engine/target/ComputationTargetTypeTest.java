@@ -44,7 +44,10 @@ public class ComputationTargetTypeTest {
       new SimpleCounterparty(ExternalId.of("CPARTY", "C100")), TRADE_OFFSET_DATETIME.toLocalDate(),
       TRADE_OFFSET_DATETIME.toOffsetTime());
 
-  public void testIsCompatible_null() {
+  /**
+   *
+   */
+  public void testIsCompatibleNull() {
     assertTrue(ComputationTargetType.NULL.isCompatible((UniqueIdentifiable) null));
     assertFalse(ComputationTargetType.NULL.isCompatible(Currency.USD));
     assertTrue(ComputationTargetType.NULL.isCompatible(ComputationTargetType.NULL));
@@ -53,7 +56,10 @@ public class ComputationTargetTypeTest {
     assertFalse(ComputationTargetType.NULL.isCompatible(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE)));
   }
 
-  public void testIsCompatible_class() {
+  /**
+   *
+   */
+  public void testIsCompatibleClass() {
     assertFalse(ComputationTargetType.SECURITY.isCompatible((Security) null));
     assertFalse(ComputationTargetType.SECURITY.isCompatible(NODE));
     assertTrue(ComputationTargetType.SECURITY.isCompatible(SECURITY));
@@ -64,7 +70,10 @@ public class ComputationTargetTypeTest {
     assertFalse(ComputationTargetType.SECURITY.isCompatible(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE)));
   }
 
-  public void testIsCompatible_nested() {
+  /**
+   *
+   */
+  public void testIsCompatibleNested() {
     final ComputationTargetType t = ComputationTargetType.POSITION.containing(ComputationTargetType.TRADE);
     assertFalse(t.isCompatible((Position) null));
     assertTrue(t.isCompatible(TRADE));
@@ -80,7 +89,10 @@ public class ComputationTargetTypeTest {
     assertFalse(t.isCompatible(ComputationTargetType.PRIMITIVE.or(ComputationTargetType.SECURITY)));
   }
 
-  public void testIsCompatible_multiple() {
+  /**
+   *
+   */
+  public void testIsCompatibleMultiple() {
     final ComputationTargetType t = ComputationTargetType.POSITION.or(ComputationTargetType.TRADE);
     assertFalse(t.isCompatible((Trade) null));
     assertTrue(t.isCompatible(POSITION));
@@ -95,7 +107,10 @@ public class ComputationTargetTypeTest {
     assertFalse(t.isCompatible(ComputationTargetType.PRIMITIVE.or(ComputationTargetType.SECURITY)));
   }
 
-  public void testIsTargetType_null() {
+  /**
+   *
+   */
+  public void testIsTargetTypeNull() {
     assertFalse(ComputationTargetType.NULL.isTargetType(Currency.USD.getClass()));
     assertTrue(ComputationTargetType.NULL.isTargetType(ComputationTargetType.NULL));
     assertFalse(ComputationTargetType.NULL.isTargetType(ComputationTargetType.PRIMITIVE));
@@ -103,7 +118,10 @@ public class ComputationTargetTypeTest {
     assertFalse(ComputationTargetType.NULL.isTargetType(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE)));
   }
 
-  public void testIsTargetType_class() {
+  /**
+   *
+   */
+  public void testIsTargetTypeClass() {
     assertFalse(ComputationTargetType.SECURITY.isTargetType(NODE.getClass()));
     assertFalse(ComputationTargetType.SECURITY.isTargetType(SECURITY.getClass()));
     assertTrue(ComputationTargetType.SECURITY.isTargetType(Security.class));
@@ -116,7 +134,10 @@ public class ComputationTargetTypeTest {
     assertFalse(ComputationTargetType.SECURITY.isTargetType(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE)));
   }
 
-  public void testIsTargetType_nested() {
+  /**
+   *
+   */
+  public void testIsTargetTypeNested() {
     final ComputationTargetType t = ComputationTargetType.POSITION.containing(ComputationTargetType.TRADE);
     assertFalse(t.isTargetType(TRADE.getClass()));
     assertTrue(t.isTargetType(Trade.class));
@@ -132,7 +153,10 @@ public class ComputationTargetTypeTest {
     assertFalse(t.isTargetType(ComputationTargetType.PRIMITIVE.or(ComputationTargetType.SECURITY)));
   }
 
-  public void testIsTargetType_multiple() {
+  /**
+   *
+   */
+  public void testIsTargetTypeMultiple() {
     final ComputationTargetType t = ComputationTargetType.POSITION.or(ComputationTargetType.TRADE);
     assertFalse(t.isTargetType(POSITION.getClass()));
     assertTrue(t.isTargetType(Position.class));
@@ -176,6 +200,9 @@ public class ComputationTargetTypeTest {
     assertEquals(ComputationTargetType.parse(str2), type);
   }
 
+  /**
+   *
+   */
   private static class Foo implements UniqueIdentifiable {
 
     @Override
@@ -185,6 +212,9 @@ public class ComputationTargetTypeTest {
 
   }
 
+  /**
+   *
+   */
   public void testParseToString() {
     testParseToString(ComputationTargetType.NULL, "NULL", null, null, null);
     testParseToString(ComputationTargetType.PORTFOLIO_NODE, "PORTFOLIO_NODE", null, null, null);
@@ -204,7 +234,10 @@ public class ComputationTargetTypeTest {
         "com.opengamma.engine.target.ComputationTargetTypeTest$Foo|(POSITION/SECURITY)");
   }
 
-  public void testEquals_null() {
+  /**
+   *
+   */
+  public void testEqualsNull() {
     assertTrue(ComputationTargetType.NULL.equals(ComputationTargetType.NULL));
     assertFalse(ComputationTargetType.NULL.equals(ComputationTargetType.POSITION));
     assertFalse(ComputationTargetType.NULL.equals(ComputationTargetType.POSITION.containing(ComputationTargetType.SECURITY)));
@@ -212,7 +245,10 @@ public class ComputationTargetTypeTest {
     assertFalse(ComputationTargetType.NULL.equals(null));
   }
 
-  public void testEquals_class() {
+  /**
+   *
+   */
+  public void testEqualsClass() {
     assertFalse(ComputationTargetType.POSITION.equals(ComputationTargetType.NULL));
     assertTrue(ComputationTargetType.POSITION.equals(ComputationTargetType.POSITION));
     assertFalse(ComputationTargetType.POSITION.equals(ComputationTargetType.SECURITY));
@@ -221,7 +257,10 @@ public class ComputationTargetTypeTest {
     assertFalse(ComputationTargetType.POSITION.equals(null));
   }
 
-  public void testEquals_nested() {
+  /**
+   *
+   */
+  public void testEqualsNested() {
     final ComputationTargetType t = ComputationTargetType.POSITION.containing(ComputationTargetType.SECURITY);
     assertFalse(t.equals(ComputationTargetType.NULL));
     assertFalse(t.equals(ComputationTargetType.POSITION));
@@ -232,7 +271,10 @@ public class ComputationTargetTypeTest {
     assertFalse(t.equals(null));
   }
 
-  public void testEquals_multiple() {
+  /**
+   *
+   */
+  public void testEqualsMultiple() {
     final ComputationTargetType t = ComputationTargetType.POSITION.or(ComputationTargetType.TRADE);
     assertFalse(t.equals(ComputationTargetType.NULL));
     assertFalse(t.equals(ComputationTargetType.POSITION));
@@ -243,13 +285,19 @@ public class ComputationTargetTypeTest {
     assertFalse(t.equals(null));
   }
 
-  public void testConstruction_nested() {
+  /**
+   *
+   */
+  public void testConstructionNested() {
     final ComputationTargetType t1 = ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.POSITION).containing(HistoricalTimeSeries.class);
     final ComputationTargetType t2 = ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.POSITION.containing(HistoricalTimeSeries.class));
     assertEquals(t1, t2);
   }
 
-  public void testConstruction_multiple() {
+  /**
+   *
+   */
+  public void testConstructionMultiple() {
     final ComputationTargetType t1 = ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION).or(HistoricalTimeSeries.class);
     final ComputationTargetType t2 = ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION.or(HistoricalTimeSeries.class));
     assertEquals(t1, t2);

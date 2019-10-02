@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Please see distribution for license.
  */
@@ -46,9 +46,12 @@ public abstract class AbstractMinimalWebPositionResource extends AbstractPerRequ
   /**
    * Creates the resource.
    *
-   * @param positionMaster  the position master, not null
-   * @param securitySource  the security source, not null
-   * @param externalSchemes the map of external schemes, with {@link ExternalScheme} as key and description as value
+   * @param positionMaster
+   *          the position master, not null
+   * @param securitySource
+   *          the security source, not null
+   * @param externalSchemes
+   *          the map of external schemes, with {@link ExternalScheme} as key and description as value
    */
   protected AbstractMinimalWebPositionResource(final PositionMaster positionMaster, final SecuritySource securitySource,
       final Map<ExternalScheme, String> externalSchemes) {
@@ -64,11 +67,16 @@ public abstract class AbstractMinimalWebPositionResource extends AbstractPerRequ
   /**
    * Creates the resource.
    *
-   * @param positionMaster  the position master, not null
-   * @param securityLoader  the security loader, not null
-   * @param securitySource  the security source, not null
-   * @param htsSource  the historical time series source, not null
-   * @param externalSchemes the map of external schemes, with {@link ExternalScheme} as key and description as value
+   * @param positionMaster
+   *          the position master, not null
+   * @param securityLoader
+   *          the security loader, not null
+   * @param securitySource
+   *          the security source, not null
+   * @param htsSource
+   *          the historical time series source, not null
+   * @param externalSchemes
+   *          the map of external schemes, with {@link ExternalScheme} as key and description as value
    */
   protected AbstractMinimalWebPositionResource(final PositionMaster positionMaster, final SecurityLoader securityLoader, final SecuritySource securitySource,
       final HistoricalTimeSeriesSource htsSource, final Map<ExternalScheme, String> externalSchemes) {
@@ -88,15 +96,17 @@ public abstract class AbstractMinimalWebPositionResource extends AbstractPerRequ
   /**
    * Creates the resource.
    *
-   * @param parent  the parent resource, not null
+   * @param parent
+   *          the parent resource, not null
    */
   protected AbstractMinimalWebPositionResource(final AbstractMinimalWebPositionResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -117,7 +127,7 @@ public abstract class AbstractMinimalWebPositionResource extends AbstractPerRequ
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   protected Set<ManageableTrade> parseTrades(final String tradesJson) {
     return TradeJsonConverter.fromJson(tradesJson);
   }

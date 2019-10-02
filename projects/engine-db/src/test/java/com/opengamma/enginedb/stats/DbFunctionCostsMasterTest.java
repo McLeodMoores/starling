@@ -30,13 +30,19 @@ public class DbFunctionCostsMasterTest extends AbstractDbTest {
 
   private DbFunctionCostsMaster _costsMaster;
 
+  /**
+   * @param databaseType
+   *          the database type
+   * @param databaseVersion
+   *          the database version
+   */
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public DbFunctionCostsMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doSetUp() {
     _costsMaster = new DbFunctionCostsMaster(getDbConnector());
@@ -47,17 +53,25 @@ public class DbFunctionCostsMasterTest extends AbstractDbTest {
     _costsMaster = null;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_basics() throws Exception {
+  public void testBasics() throws Exception {
     assertNotNull(_costsMaster);
     assertNotNull(_costsMaster.getDbConnector());
     assertNotNull(_costsMaster.getClock());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_master() throws Exception {
+  public void testMaster() throws Exception {
     final FunctionCostsDocument doc1 = new FunctionCostsDocument();
     doc1.setConfigurationName("Conf1");
     doc1.setFunctionId("Func1");
@@ -120,8 +134,12 @@ public class DbFunctionCostsMasterTest extends AbstractDbTest {
     assertEquals(loaded1, loaded1b);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test
-  public void test_history() throws Exception {
+  public void testHistory() throws Exception {
     final FunctionCostsDocument doc1 = new FunctionCostsDocument();
     doc1.setConfigurationName("Conf");
     doc1.setFunctionId("Func");
@@ -167,9 +185,12 @@ public class DbFunctionCostsMasterTest extends AbstractDbTest {
     assertNull(_costsMaster.load("Conf", "Func", stored1.getVersion().minusMillis(1)));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test
-  public void test_toString() {
+  public void testToString() {
     assertEquals("DbFunctionCostsMaster", _costsMaster.toString());
   }
 
