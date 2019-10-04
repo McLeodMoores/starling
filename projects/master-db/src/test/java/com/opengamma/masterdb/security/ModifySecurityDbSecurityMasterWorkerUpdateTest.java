@@ -40,20 +40,32 @@ public class ModifySecurityDbSecurityMasterWorkerUpdateTest extends AbstractDbSe
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ModifySecurityDbSecurityMasterWorkerUpdateTest.class);
 
+  /**
+   * @param databaseType
+   *          the database type
+   * @param databaseVersion
+   *          the database version
+   */
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public ModifySecurityDbSecurityMasterWorkerUpdateTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_updateSecurity_nullDocument() {
+  public void testUpdateSecurityNullDocument() {
     _secMaster.update(null);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_update_noSecurityId() {
+  public void testUpdateNoSecurityId() {
     final UniqueId uniqueId = UniqueId.of("DbSec", "101");
     final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
     final SecurityDocument doc = new SecurityDocument();
@@ -61,31 +73,43 @@ public class ModifySecurityDbSecurityMasterWorkerUpdateTest extends AbstractDbSe
     _secMaster.update(doc);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_update_noSecurity() {
+  public void testUpdateNoSecurity() {
     final SecurityDocument doc = new SecurityDocument();
     doc.setUniqueId(UniqueId.of("DbSec", "101", "0"));
     _secMaster.update(doc);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_update_notFound() {
+  public void testUpdateNotFound() {
     final UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
     final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
     final SecurityDocument doc = new SecurityDocument(security);
     _secMaster.update(doc);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_update_notLatestVersion() {
+  public void testUpdateNotLatestVersion() {
     final UniqueId uniqueId = UniqueId.of("DbSec", "201", "0");
     final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
     final SecurityDocument doc = new SecurityDocument(security);
     _secMaster.update(doc);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_update_getUpdateGet() {
+  public void testUpdateGetUpdateGet() {
     final Instant now = Instant.now(_secMaster.getClock());
 
     final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
@@ -104,7 +128,7 @@ public class ModifySecurityDbSecurityMasterWorkerUpdateTest extends AbstractDbSe
     final SecurityDocument old = _secMaster.get(uniqueId);
     assertEquals(base.getUniqueId(), old.getUniqueId());
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
-    assertEquals(now, old.getVersionToInstant());  // old version ended
+    assertEquals(now, old.getVersionToInstant()); // old version ended
     assertEquals(base.getCorrectionFromInstant(), old.getCorrectionFromInstant());
     assertEquals(base.getCorrectionToInstant(), old.getCorrectionToInstant());
     assertEquals(base.getSecurity(), old.getSecurity());
@@ -115,8 +139,11 @@ public class ModifySecurityDbSecurityMasterWorkerUpdateTest extends AbstractDbSe
     assertEquals(2, searchResult.getDocuments().size());
   }
 
+  /**
+   * @throws Exception
+   */
   @Test
-  public void test_updatePermissions() throws Exception {
+  public void testUpdatePermissions() throws Exception {
     _secMaster.setClock(OpenGammaClock.getInstance());
 
     final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
@@ -170,8 +197,11 @@ public class ModifySecurityDbSecurityMasterWorkerUpdateTest extends AbstractDbSe
     assertEquals(3, searchResult.getDocuments().size());
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_update_rollback() {
+  public void testUpdatRollback() {
     final DbSecurityMaster w = new DbSecurityMaster(_secMaster.getDbConnector());
     w.setElSqlBundle(ElSqlBundle.of(new ElSqlConfig("TestRollback"), DbSecurityMaster.class));
     final SecurityDocument base = _secMaster.get(UniqueId.of("DbSec", "101", "0"));

@@ -37,26 +37,41 @@ public class ModifySecurityDbSecurityMasterWorkerAddTest extends AbstractDbSecur
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ModifySecurityDbSecurityMasterWorkerAddTest.class);
 
+  /**
+   * @param databaseType
+   *          the database version
+   * @param databaseVersion
+   *          the database type
+   */
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public ModifySecurityDbSecurityMasterWorkerAddTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_addSecurity_nullDocument() {
+  public void testAddSecurityNullDocument() {
     _secMaster.add(null);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_add_noSecurity() {
+  public void testAddNoSecurity() {
     final SecurityDocument doc = new SecurityDocument();
     _secMaster.add(doc);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_add_add() {
+  public void testAddAdd() {
     final Instant now = Instant.now(_secMaster.getClock());
 
     final ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));
@@ -85,8 +100,11 @@ public class ModifySecurityDbSecurityMasterWorkerAddTest extends AbstractDbSecur
     assertEquals(ExternalId.of("A", "B"), idKey.getExternalIds().iterator().next());
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_add_addThenGet() {
+  public void testAddAddThenGet() {
     final ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));
     final SecurityDocument doc = new SecurityDocument();
     doc.setSecurity(security);
@@ -96,8 +114,11 @@ public class ModifySecurityDbSecurityMasterWorkerAddTest extends AbstractDbSecur
     assertEquals(added, test);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_add_addWithMissingNameProperty() {
+  public void testAddAddWithMissingNameProperty() {
     final ManageableSecurity security = mock(ManageableSecurity.class);
     when(security.getSecurityType()).thenReturn("MANAGEABLE");
     when(security.getExternalIdBundle()).thenReturn(ExternalIdBundle.of("A", "B"));
@@ -105,8 +126,11 @@ public class ModifySecurityDbSecurityMasterWorkerAddTest extends AbstractDbSecur
     _secMaster.add(doc);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_add_addWithMissingExternalIdBundleProperty() {
+  public void testAddAddWithMissingExternalIdBundleProperty() {
     final ManageableSecurity security = mock(ManageableSecurity.class);
     when(security.getSecurityType()).thenReturn("MANAGEABLE");
     when(security.getName()).thenReturn("Test");
@@ -114,8 +138,11 @@ public class ModifySecurityDbSecurityMasterWorkerAddTest extends AbstractDbSecur
     _secMaster.add(doc);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_add_addWithMissingTypeProperty() {
+  public void testAddAddWithMissingTypeProperty() {
     final ManageableSecurity security = mock(ManageableSecurity.class);
     when(security.getName()).thenReturn("Test");
     when(security.getExternalIdBundle()).thenReturn(ExternalIdBundle.of("A", "B"));
@@ -123,15 +150,21 @@ public class ModifySecurityDbSecurityMasterWorkerAddTest extends AbstractDbSecur
     _secMaster.add(doc);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_add_addWithMinimalProperties() {
+  public void testAddAddWithMinimalProperties() {
     final ManageableSecurity security = new ManageableSecurity();
     final SecurityDocument doc = new SecurityDocument(security);
     _secMaster.add(doc);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_add_searchByAttribute() {
+  public void testAddAearchByAttribute() {
     final ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));
     security.addAttribute("city", "London");
     security.addAttribute("office", "Southern");
@@ -163,8 +196,11 @@ public class ModifySecurityDbSecurityMasterWorkerAddTest extends AbstractDbSecur
     assertEquals(added, searchResult.getDocuments().get(0));
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_addWithPermission_add() {
+  public void testAddWithPermissionAdd() {
     final Instant now = Instant.now(_secMaster.getClock());
 
     final ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));

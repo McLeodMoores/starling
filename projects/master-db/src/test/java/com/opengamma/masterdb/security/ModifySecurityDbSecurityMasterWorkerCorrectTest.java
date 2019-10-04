@@ -32,20 +32,32 @@ public class ModifySecurityDbSecurityMasterWorkerCorrectTest extends AbstractDbS
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ModifySecurityDbSecurityMasterWorkerCorrectTest.class);
 
+  /**
+   * @param databaseType
+   *          the database type
+   * @param databaseVersion
+   *          the database version
+   */
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public ModifySecurityDbSecurityMasterWorkerCorrectTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_correctSecurity_nullDocument() {
+  public void testCorrectSecurityNullDocument() {
     _secMaster.correct(null);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_correct_noSecurityId() {
+  public void testCorrectNoSecurityId() {
     final UniqueId uniqueId = UniqueId.of("DbSec", "101");
     final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
     final SecurityDocument doc = new SecurityDocument();
@@ -53,31 +65,40 @@ public class ModifySecurityDbSecurityMasterWorkerCorrectTest extends AbstractDbS
     _secMaster.correct(doc);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_correct_noSecurity() {
+  public void testCorrectNoSecurity() {
     final SecurityDocument doc = new SecurityDocument();
     doc.setUniqueId(UniqueId.of("DbSec", "101", "0"));
     _secMaster.correct(doc);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_correct_notFound() {
+  public void testCorrectNotFound() {
     final UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
     final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
     final SecurityDocument doc = new SecurityDocument(security);
     _secMaster.correct(doc);
   }
 
-//  @Test(expected = IllegalArgumentException.class)
-//  public void test_correct_notLatestCorrection() {
-//    UniqueId uniqueId = UniqueId("DbSec", "201", "0");
-//    DefaultSecurity security = new DefaultSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-//    SecurityDocument doc = new SecurityDocument(security);
-//    _worker.correct(doc);
-//  }
+  // @Test(expected = IllegalArgumentException.class)
+  // public void test_correct_notLatestCorrection() {
+  // UniqueId uniqueId = UniqueId("DbSec", "201", "0");
+  // DefaultSecurity security = new DefaultSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+  // SecurityDocument doc = new SecurityDocument(security);
+  // _worker.correct(doc);
+  // }
 
+  /**
+   *
+   */
   @Test
-  public void test_correct_getUpdateGet() {
+  public void testCorrectGetUpdateGet() {
     final Instant now = Instant.now(_secMaster.getClock());
 
     final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
@@ -98,7 +119,7 @@ public class ModifySecurityDbSecurityMasterWorkerCorrectTest extends AbstractDbS
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
     assertEquals(base.getVersionToInstant(), old.getVersionToInstant());
     assertEquals(base.getCorrectionFromInstant(), old.getCorrectionFromInstant());
-    assertEquals(now, old.getCorrectionToInstant());  // old version ended
+    assertEquals(now, old.getCorrectionToInstant()); // old version ended
     assertEquals(base.getSecurity(), old.getSecurity());
 
     final SecurityHistoryRequest search = new SecurityHistoryRequest(base.getUniqueId(), now, null);

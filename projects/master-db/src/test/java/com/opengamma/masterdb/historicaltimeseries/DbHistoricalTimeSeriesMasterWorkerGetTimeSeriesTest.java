@@ -33,6 +33,12 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest.class);
 
+  /**
+   * @param databaseType
+   *          the database type
+   * @param databaseVersion
+   *          the database version
+   */
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
@@ -40,26 +46,38 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
   }
 
   // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_get_nullUID() {
+  public void testGetNullUID() {
     _htsMaster.getTimeSeries((UniqueId) null);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_get_versioned_notFoundId() {
+  public void testGetVersionedNotFoundId() {
     final UniqueId uniqueId = UniqueId.of("DbHts", "DP0");
     _htsMaster.getTimeSeries(uniqueId);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_get_versioned_notFoundVersion() {
+  public void testGetVersionedNotFoundVersion() {
     final UniqueId uniqueId = UniqueId.of("DbHts", "DP101", "2010");
     _htsMaster.getTimeSeries(uniqueId);
   }
 
   // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test
-  public void test_get_UID_101_latest() {
+  public void testGetUID101Latest() {
     final UniqueId uniqueId = UniqueId.of("DbHts", "DP101");
     final ManageableHistoricalTimeSeries test = _htsMaster.getTimeSeries(uniqueId);
     assertEquals(uniqueId.getObjectId(), test.getUniqueId().getObjectId());
@@ -78,8 +96,11 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
     assertEquals(3.33d, timeSeries.getValueAtIndex(2), 0.001d);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_get_UID_102_latest() {
+  public void testGetUID102Latest() {
     final UniqueId uniqueId = UniqueId.of("DbHts", "DP102");
     final ManageableHistoricalTimeSeries test = _htsMaster.getTimeSeries(uniqueId);
     assertEquals(uniqueId.getObjectId(), test.getUniqueId().getObjectId());
@@ -87,8 +108,11 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
     assertEquals(0, timeSeries.size());
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_get_UID_101_removed() {
+  public void testGetUID101Removed() {
     final UniqueId uniqueId = UniqueId.of("DbHts", "101");
     _htsMaster.remove(uniqueId);
     // the data-points should still be there after deleting the time series itself
@@ -96,8 +120,11 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
   }
 
   // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test
-  public void test_get_OID_101_latest() {
+  public void testGetOID101Latest() {
     final ObjectId oid = ObjectId.of("DbHts", "DP101");
     final ManageableHistoricalTimeSeries test = _htsMaster.getTimeSeries(oid, VersionCorrection.LATEST);
     assertEquals(oid, test.getUniqueId().getObjectId());
@@ -111,14 +138,20 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
     assertEquals(3.33d, timeSeries.getValueAtIndex(2), 0.0001d);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_get_OID_101_pre1() {
+  public void testGetOID101Pre1() {
     final ObjectId oid = ObjectId.of("DbHts", "DP101");
     _htsMaster.getTimeSeries(oid, VersionCorrection.ofVersionAsOf(_version1Instant.minusSeconds(1)));
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_get_OID_101_post1() {
+  public void testGetOID101Post1() {
     final ObjectId oid = ObjectId.of("DbHts", "DP101");
     final ManageableHistoricalTimeSeries test = _htsMaster.getTimeSeries(oid, VersionCorrection.ofVersionAsOf(_version1Instant.plusSeconds(1)));
     assertEquals(oid, test.getUniqueId().getObjectId());
@@ -128,8 +161,11 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
     assertEquals(3.1d, timeSeries.getValueAtIndex(0), 0.0001d);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_get_OID_101_post2() {
+  public void testGetOID101Post2() {
     final ObjectId oid = ObjectId.of("DbHts", "DP101");
     final ManageableHistoricalTimeSeries test = _htsMaster.getTimeSeries(oid, VersionCorrection.ofVersionAsOf(_version2Instant.plusSeconds(1)));
     assertEquals(oid, test.getUniqueId().getObjectId());
@@ -143,8 +179,11 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
     assertEquals(3.33d, timeSeries.getValueAtIndex(2), 0.0001d);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_get_OID_101_correctPost2() {
+  public void testGetOID101CorrectPost2() {
     final ObjectId oid = ObjectId.of("DbHts", "DP101");
     final ManageableHistoricalTimeSeries test = _htsMaster.getTimeSeries(oid,
         VersionCorrection.of(_version2Instant.plusSeconds(1), _version2Instant.plusSeconds(1)));
@@ -159,8 +198,11 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
     assertEquals(3.3d, timeSeries.getValueAtIndex(2), 0.0001d);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_get_OID_101_correctPost3() {
+  public void testGetOID101CorrectPost3() {
     final ObjectId oid = ObjectId.of("DbHts", "DP101");
     final ManageableHistoricalTimeSeries test = _htsMaster.getTimeSeries(oid,
         VersionCorrection.of(_version2Instant.plusSeconds(1), _version3Instant.plusSeconds(1)));
@@ -175,8 +217,11 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
     assertEquals(3.3d, timeSeries.getValueAtIndex(2), 0.0001d);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_get_UID_101_correctPost3() {
+  public void testGetUID101CorrectPost3() {
     final ObjectId oid = ObjectId.of("DbHts", "DP101");
     final ManageableHistoricalTimeSeries base = _htsMaster.getTimeSeries(oid,
         VersionCorrection.of(_version2Instant.plusSeconds(1), _version3Instant.plusSeconds(1)));
@@ -185,8 +230,11 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
   }
 
   // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test
-  public void test_get_dateRangeFromStart() {
+  public void testGetDateRangeFromStart() {
     final ObjectId oid = ObjectId.of("DbHts", "DP101");
     final ManageableHistoricalTimeSeries test = _htsMaster.getTimeSeries(oid,
         VersionCorrection.of(_version2Instant.plusSeconds(1), _version3Instant.plusSeconds(1)),
@@ -200,8 +248,11 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
     assertEquals(3.21d, timeSeries.getValueAtIndex(1), 0.0001d);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_get_dateRangeToEnd() {
+  public void testGetDateRangeToEnd() {
     final ObjectId oid = ObjectId.of("DbHts", "DP101");
     final ManageableHistoricalTimeSeries test = _htsMaster.getTimeSeries(oid,
         VersionCorrection.of(_version2Instant.plusSeconds(1), _version3Instant.plusSeconds(1)),
@@ -215,8 +266,11 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
     assertEquals(3.3d, timeSeries.getValueAtIndex(1), 0.0001d);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_get_dateRange() {
+  public void testGetDateRange() {
     final ObjectId oid = ObjectId.of("DbHts", "DP101");
     final ManageableHistoricalTimeSeries test = _htsMaster.getTimeSeries(oid,
         VersionCorrection.of(_version2Instant.plusSeconds(1), _version3Instant.plusSeconds(1)),
@@ -228,8 +282,11 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
     assertEquals(3.21d, timeSeries.getValueAtIndex(0), 0.0001d);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_get_nPointsFromEarliest() {
+  public void testGetNPointsFromEarliest() {
     final ObjectId oid = ObjectId.of("DbHts", "DP101");
     final HistoricalTimeSeriesGetFilter filter = new HistoricalTimeSeriesGetFilter();
     filter.setMaxPoints(2);
@@ -244,8 +301,11 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
     assertEquals(3.21d, timeSeries.getValueAtIndex(1), 0.0001d);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_get_nPointsFromLatest() {
+  public void testGetNPointsFromLatest() {
     final ObjectId oid = ObjectId.of("DbHts", "DP101");
     final HistoricalTimeSeriesGetFilter filter = HistoricalTimeSeriesGetFilter.ofLatestPoint();
     final ManageableHistoricalTimeSeries test = _htsMaster.getTimeSeries(oid,
@@ -257,8 +317,11 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
     assertEquals(3.3d, timeSeries.getValueAtIndex(0), 0.0001d);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_get_nPointsFromLatestWithinDateRange() {
+  public void testGetNPointsFromLatestWithinDateRange() {
     final ObjectId oid = ObjectId.of("DbHts", "DP101");
     final HistoricalTimeSeriesGetFilter filter = HistoricalTimeSeriesGetFilter.ofRange(null, LocalDate.of(2011, 1, 2), -1);
     final ManageableHistoricalTimeSeries test = _htsMaster.getTimeSeries(oid,
@@ -271,8 +334,11 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTimeSeriesTest extends Abstrac
   }
 
   // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test
-  public void test_toString() {
+  public void testToString() {
     assertEquals(_htsMaster.getClass().getSimpleName() + "[DbHts]", _htsMaster.toString());
   }
 

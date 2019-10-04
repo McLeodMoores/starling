@@ -32,21 +32,33 @@ public class ModifySecurityDbSecurityMasterWorkerRemoveTest extends AbstractDbSe
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ModifySecurityDbSecurityMasterWorkerRemoveTest.class);
 
+  /**
+   * @param databaseType
+   *          the database type
+   * @param databaseVersion
+   *          the database version
+   */
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public ModifySecurityDbSecurityMasterWorkerRemoveTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_removeSecurity_versioned_notFound() {
+  public void testRemoveSecurityVersionedNotFound() {
     final UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
     _secMaster.remove(uniqueId);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_remove_removed() {
+  public void testRemoveRemoved() {
     final Instant now = Instant.now(_secMaster.getClock());
 
     final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");

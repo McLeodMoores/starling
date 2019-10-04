@@ -23,6 +23,8 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Sets of market data used in tests.
+ * 
+ * @deprecated used by deprecated tests
  */
 @Deprecated
 @Test(groups = TestGroup.UNIT)
@@ -297,13 +299,13 @@ public class TestsDataSets {
    * @return The yield curve bundle.
    */
   public static YieldCurveBundle createCurves1() {
-    final String FUNDING_CURVE_NAME = "Funding";
-    final String FORWARD_CURVE_NAME = "Forward";
-    final YieldAndDiscountCurve CURVE_5 = YieldCurve.from(ConstantDoublesCurve.from(0.05));
-    final YieldAndDiscountCurve CURVE_4 = YieldCurve.from(ConstantDoublesCurve.from(0.04));
+    final String fundingCurveName = "Funding";
+    final String forwardCurveName = "Forward";
+    final YieldAndDiscountCurve curve5 = YieldCurve.from(ConstantDoublesCurve.from(0.05));
+    final YieldAndDiscountCurve curve4 = YieldCurve.from(ConstantDoublesCurve.from(0.04));
     final YieldCurveBundle curves = new YieldCurveBundle();
-    curves.setCurve(FUNDING_CURVE_NAME, CURVE_5);
-    curves.setCurve(FORWARD_CURVE_NAME, CURVE_4);
+    curves.setCurve(fundingCurveName, curve5);
+    curves.setCurve(forwardCurveName, curve4);
     return curves;
   }
 
@@ -314,16 +316,16 @@ public class TestsDataSets {
    * @return The yield curve bundle.
    */
   public static YieldCurveBundle createCurvesBond1() {
-    final String CREDIT_CURVE_NAME = "Credit";
-    final String DISCOUNTING_CURVE_NAME = "Repo";
-    final String FORWARD_CURVE_NAME = "Forward";
-    final YieldAndDiscountCurve CURVE_5 = YieldCurve.from(ConstantDoublesCurve.from(0.05));
-    final YieldAndDiscountCurve CURVE_4 = YieldCurve.from(ConstantDoublesCurve.from(0.04));
-    final YieldAndDiscountCurve CURVE_45 = YieldCurve.from(ConstantDoublesCurve.from(0.045));
+    final String creditCurveName = "Credit";
+    final String discountingCurveName = "Repo";
+    final String forwardCurveName = "Forward";
+    final YieldAndDiscountCurve curve5 = YieldCurve.from(ConstantDoublesCurve.from(0.05));
+    final YieldAndDiscountCurve curve4 = YieldCurve.from(ConstantDoublesCurve.from(0.04));
+    final YieldAndDiscountCurve curve45 = YieldCurve.from(ConstantDoublesCurve.from(0.045));
     final YieldCurveBundle curves = new YieldCurveBundle();
-    curves.setCurve(CREDIT_CURVE_NAME, CURVE_5);
-    curves.setCurve(DISCOUNTING_CURVE_NAME, CURVE_4);
-    curves.setCurve(FORWARD_CURVE_NAME, CURVE_45);
+    curves.setCurve(creditCurveName, curve5);
+    curves.setCurve(discountingCurveName, curve4);
+    curves.setCurve(forwardCurveName, curve45);
     return curves;
   }
 
@@ -334,16 +336,16 @@ public class TestsDataSets {
    * @return The yield curve bundle.
    */
   public static YieldCurveBundle createCurvesBond2() {
-    final String CREDIT_CURVE_NAME = "Credit";
-    final String DISCOUNTING_CURVE_NAME = "Repo";
-    final String FORWARD_CURVE_NAME = "Forward";
-    final YieldAndDiscountCurve CURVE_6 = YieldCurve.from(ConstantDoublesCurve.from(0.06));
-    final YieldAndDiscountCurve CURVE_5 = YieldCurve.from(ConstantDoublesCurve.from(0.05));
-    final YieldAndDiscountCurve CURVE_55 = YieldCurve.from(ConstantDoublesCurve.from(0.0550));
+    final String creditCurveName = "Credit";
+    final String discountingCurveName = "Repo";
+    final String forwardCurveName = "Forward";
+    final YieldAndDiscountCurve curve6 = YieldCurve.from(ConstantDoublesCurve.from(0.06));
+    final YieldAndDiscountCurve curve5 = YieldCurve.from(ConstantDoublesCurve.from(0.05));
+    final YieldAndDiscountCurve curve55 = YieldCurve.from(ConstantDoublesCurve.from(0.0550));
     final YieldCurveBundle curves = new YieldCurveBundle();
-    curves.setCurve(CREDIT_CURVE_NAME, CURVE_6);
-    curves.setCurve(DISCOUNTING_CURVE_NAME, CURVE_5);
-    curves.setCurve(FORWARD_CURVE_NAME, CURVE_55);
+    curves.setCurve(creditCurveName, curve6);
+    curves.setCurve(discountingCurveName, curve5);
+    curves.setCurve(forwardCurveName, curve55);
     return curves;
   }
 
