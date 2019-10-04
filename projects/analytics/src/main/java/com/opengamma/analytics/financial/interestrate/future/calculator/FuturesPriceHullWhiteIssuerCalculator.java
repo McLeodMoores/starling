@@ -38,7 +38,7 @@ public final class FuturesPriceHullWhiteIssuerCalculator
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static FuturesPriceHullWhiteIssuerCalculator getInstance() {

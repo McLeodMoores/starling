@@ -7,6 +7,8 @@ package com.opengamma.analytics.financial.provider.description;
 
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
+import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedCompoundedONCompounded;
+import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedCompoundedONCompoundedMaster;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedIbor;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedIborMaster;
 import com.opengamma.analytics.financial.model.option.parameters.BlackFlatSwaptionParameters;
@@ -31,6 +33,8 @@ public class BlackDataSets {
   private static final GeneratorSwapFixedIborMaster GENERATOR_SWAP_MASTER = GeneratorSwapFixedIborMaster.getInstance();
   private static final GeneratorSwapFixedIbor EUR1YEURIBOR6M = GENERATOR_SWAP_MASTER.getGenerator("EUR1YEURIBOR6M", CALENDAR);
   private static final GeneratorSwapFixedIbor EUR1YEURIBOR3M = GENERATOR_SWAP_MASTER.getGenerator("EUR1YEURIBOR3M", CALENDAR);
+  private static final GeneratorSwapFixedCompoundedONCompounded BRLCDI = GeneratorSwapFixedCompoundedONCompoundedMaster.getInstance()
+      .getGenerator("BRLCDI", CALENDAR);
 
   private static final InterpolatedDoublesSurface BLACK_SURFACE_EXP_TEN = InterpolatedDoublesSurface.from(
       new double[] { 0.5, 1.0, 5.0, 0.5, 1.0, 5.0 },
@@ -46,6 +50,7 @@ public class BlackDataSets {
       EUR1YEURIBOR6M);
   private static final BlackFlatSwaptionParameters BLACK_SWAPTION_EUR3 = new BlackFlatSwaptionParameters(BLACK_SURFACE_EXP_TEN,
       EUR1YEURIBOR3M);
+  private static final BlackFlatSwaptionParameters BLACK_SWAPTION_BRL = new BlackFlatSwaptionParameters(BLACK_SURFACE_EXP_TEN, BRLCDI);
 
   public static InterpolatedDoublesSurface createBlackSurfaceExpiryTenor() {
     return BLACK_SURFACE_EXP_TEN;
@@ -78,9 +83,17 @@ public class BlackDataSets {
     return BLACK_SWAPTION_EUR3;
   }
 
+  public static BlackFlatSwaptionParameters createBlackSwaptionBrl() {
+    return BLACK_SWAPTION_BRL;
+  }
+
+  public static WorkingDayCalendar getBrlCalendar() {
+    return CALENDAR;
+  }
+
   /**
    * Create the same surface as createBlackSwaptionEUR6() but with a given parallel shift.
-   * 
+   *
    * @param shift
    *          The shift.
    * @return The surface.
@@ -92,7 +105,7 @@ public class BlackDataSets {
 
   /**
    * Create the same surface as createBlackSwaptionEUR6() but with one volatility shifted.
-   * 
+   *
    * @param index
    *          The index of the shifted volatility.
    * @param shift
@@ -107,4 +120,15 @@ public class BlackDataSets {
     return new BlackFlatSwaptionParameters(surfaceShift, EUR1YEURIBOR6M);
   }
 
+  /**
+   * Create the same surface as createBlackSwaptionEUR6() but with a given parallel shift.
+   *
+   * @param shift
+   *          The shift.
+   * @return The surface.
+   */
+  public static BlackFlatSwaptionParameters createBlackSwaptionBRLShift(final double shift) {
+    final InterpolatedDoublesSurface surfaceShift = createBlackSurfaceExpiryTenorShift(shift);
+    return new BlackFlatSwaptionParameters(surfaceShift, BRLCDI);
+  }
 }

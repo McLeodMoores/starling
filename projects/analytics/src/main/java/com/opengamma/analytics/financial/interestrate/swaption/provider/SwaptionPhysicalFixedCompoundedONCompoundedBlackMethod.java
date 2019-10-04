@@ -3,7 +3,7 @@
  *
  * Please see distribution for license.
  */
-package com.opengamma.analytics.financial.interestrate.swaption.method;
+package com.opengamma.analytics.financial.interestrate.swaption.provider;
 
 import java.util.ArrayList;
 import java.util.HashMap;

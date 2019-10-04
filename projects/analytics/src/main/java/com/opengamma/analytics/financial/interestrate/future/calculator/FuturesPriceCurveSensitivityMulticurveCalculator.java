@@ -77,17 +77,17 @@ public final class FuturesPriceCurveSensitivityMulticurveCalculator
     final IndexON index = futures.getIndex();
     final int nbFixing = futures.getFixingPeriodAccrualFactor().length;
     final double[] rates = new double[nbFixing];
-    for (int loopfix = 0; loopfix < nbFixing; loopfix++) {
-      rates[loopfix] = multicurve.getMulticurveProvider().getSimplyCompoundForwardRate(index, futures.getFixingPeriodTime()[loopfix],
-          futures.getFixingPeriodTime()[loopfix + 1],
-          futures.getFixingPeriodAccrualFactor()[loopfix]);
+    for (int i = 0; i < nbFixing; i++) {
+      rates[i] = multicurve.getMulticurveProvider().getSimplyCompoundForwardRate(index, futures.getFixingPeriodTime()[i],
+          futures.getFixingPeriodTime()[i + 1],
+          futures.getFixingPeriodAccrualFactor()[i]);
     }
     // Backward sweep
     final double priceBar = 1.0;
     final double interestBar = -1.0 / futures.getFixingTotalAccrualFactor() * priceBar;
     final double[] ratesBar = new double[nbFixing];
-    for (int loopfix = 0; loopfix < nbFixing; loopfix++) {
-      ratesBar[loopfix] = futures.getFixingPeriodAccrualFactor()[loopfix] * interestBar;
+    for (int i = 0; i < nbFixing; i++) {
+      ratesBar[i] = futures.getFixingPeriodAccrualFactor()[i] * interestBar;
     }
     final Map<String, List<ForwardSensitivity>> resultMap = new HashMap<>();
     final List<ForwardSensitivity> listON = new ArrayList<>();

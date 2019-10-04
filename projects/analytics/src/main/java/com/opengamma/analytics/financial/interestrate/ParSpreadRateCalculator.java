@@ -11,7 +11,7 @@ import com.opengamma.analytics.financial.calculator.PresentValueMCACalculator;
 import com.opengamma.analytics.financial.interestrate.cash.derivative.Cash;
 import com.opengamma.analytics.financial.interestrate.cash.derivative.DepositZero;
 import com.opengamma.analytics.financial.interestrate.cash.method.CashDiscountingMethod;
-import com.opengamma.analytics.financial.interestrate.cash.method.DepositZeroDiscountingMethod;
+import com.opengamma.analytics.financial.interestrate.cash.provider.DepositZeroDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.fra.derivative.ForwardRateAgreement;
 import com.opengamma.analytics.financial.interestrate.fra.method.ForwardRateAgreementDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureTransaction;

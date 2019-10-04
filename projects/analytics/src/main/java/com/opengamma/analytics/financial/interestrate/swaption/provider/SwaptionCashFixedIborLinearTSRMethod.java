@@ -25,8 +25,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Method to compute the present value of cash-settled European swaptions with with the Linear Terminal Swap Rate method. The physical swaptions are priced with
- * SABR.
+ * Method to compute the present value of cash-settled European swaptions with with the Linear Terminal Swap Rate method. The physical
+ * swaptions are priced with SABR.
  */
 public class SwaptionCashFixedIborLinearTSRMethod {
 
@@ -51,7 +51,7 @@ public class SwaptionCashFixedIborLinearTSRMethod {
 
   /**
    * Computes the present value of a cash-settled European swaption in the linear TSR method.
-   * 
+   *
    * @param swaption
    *          The swaption.
    * @param sabrData
@@ -118,17 +118,8 @@ public class SwaptionCashFixedIborLinearTSRMethod {
 
     private final BlackPriceFunction _blackFunction = new BlackPriceFunction();
 
-    /**
-     * Constructor with the required data.
-     * 
-     * @param baseMethod
-     *          The base method for the pricing of standard cap/floors.
-     * @param capStandard
-     *          The standard cap/floor used for replication.
-     * @param sabrData
-     *          The SABR data bundle used in the standard cap/floor pricing.
-     */
-    LinearTSRIntegrant(final SwaptionCashFixedIbor swaption, final SABRInterestRateParameters sabrParameter, final double forward, final double[] linear) {
+    LinearTSRIntegrant(final SwaptionCashFixedIbor swaption, final SABRInterestRateParameters sabrParameter, final double forward,
+        final double[] linear) {
       _forward = forward;
       _nbFixedPeriod = swaption.getUnderlyingSwap().getFixedLeg().getPayments().length;
       _nbFixedPaymentYear = (int) Math.round(1.0 / swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(0).getPaymentYearFraction());
@@ -156,7 +147,7 @@ public class SwaptionCashFixedIborLinearTSRMethod {
 
     /**
      * The factor used in the strike part and in the integration of the replication.
-     * 
+     *
      * @param x
      *          The swap rate.
      * @return The factor.
@@ -176,7 +167,7 @@ public class SwaptionCashFixedIborLinearTSRMethod {
 
     /**
      * The first and second derivative of the function k.
-     * 
+     *
      * @param x
      *          The swap rate.
      * @return The derivative (first element is the first derivative, second element is second derivative).
@@ -208,7 +199,7 @@ public class SwaptionCashFixedIborLinearTSRMethod {
 
     /**
      * The Black-Scholes formula with numeraire 1 as function of the strike.
-     * 
+     *
      * @param strike
      *          The strike.
      * @return The Black-Scholes formula.

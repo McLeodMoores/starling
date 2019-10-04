@@ -33,7 +33,9 @@ import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.LinearInterpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.util.time.TimeCalculator;
@@ -487,7 +489,7 @@ public class MulticurveProviderDiscountDataSets {
   /**
    * Returns a market with three currencies (EUR, USD, GBP), three Ibor indexes (Euribor3M, Euribor6M, UsdLibor3M) and three inflation (Euro
    * HICP x, UK RPI and US CPI-U).
-   * 
+   *
    * @return The market.
    */
   public static InflationIssuerProviderDiscount createMarket1() {
@@ -498,7 +500,7 @@ public class MulticurveProviderDiscountDataSets {
    * Creates a market with three currencies (EUR, USD, GBP), three Ibor indexes (Euribor3M, Euribor6M, UsdLibor3M) and three inflation (Euro
    * HICP x, UK RPI and US CPI-U). The US CPI-U price curve is constructed to have the correct past data (if available in the time series)
    * and a fake 2% inflation for the future. No seasonal adjustment is done.
-   * 
+   *
    * @param pricingDate
    *          The data for which the curve is constructed.
    * @return The market.
@@ -564,7 +566,7 @@ public class MulticurveProviderDiscountDataSets {
 
   /**
    * Returns a multi-curves provider with two currencies (EUR, USD), four Ibor indexes (Euribor3M, Euribor6M, UsdLibor3M, UsdLibor6M).
-   * 
+   *
    * @return The provider.
    */
   public static MulticurveProviderDiscount createMulticurveEurUsd() {
@@ -573,7 +575,7 @@ public class MulticurveProviderDiscountDataSets {
 
   /**
    * Returns a multi-curves provider with two currencies (GBP, USD), four Ibor indexes (UsdLibor3M, UsdLibor6M).
-   * 
+   *
    * @return The provider.
    */
   public static MulticurveProviderDiscount createMulticurveGbpUsd() {
@@ -583,7 +585,7 @@ public class MulticurveProviderDiscountDataSets {
   /**
    * Returns a multi-curves provider with two currencies USD without discount curve, four Ibor indexes (Euribor3M, Euribor6M, UsdLibor3M,
    * UsdLibor6M).
-   * 
+   *
    * @return The provider.
    */
   public static MulticurveProviderDiscount createMulticurveUsdWithoutDiscount() {
@@ -592,7 +594,7 @@ public class MulticurveProviderDiscountDataSets {
 
   /**
    * Returns a multi-curves provider with one currency (CAD), one Ibor index (CadCDOR3M).
-   * 
+   *
    * @return The provider.
    */
   public static MulticurveProviderDiscount createMulticurveCad() {
@@ -601,7 +603,7 @@ public class MulticurveProviderDiscountDataSets {
 
   /**
    * Returns a multi-curves provider with one currency (EUR), two Ibor index (EURIBOR3M and EURIBOR6M).
-   * 
+   *
    * @return The provider.
    */
   public static MulticurveProviderDiscount createMulticurveEUR() {
@@ -613,10 +615,21 @@ public class MulticurveProviderDiscountDataSets {
     return provideurEUR;
   }
 
+  public static MulticurveProviderDiscount createMulticurveBrl() {
+    final InterpolatedDoublesCurve yieldCurve = new InterpolatedDoublesCurve(new double[] { 0.05, 1.0, 2.0, 5.0, 10.0, 20.0 },
+        new double[] { 0.0050, 0.0100, 0.0150, 0.0200, 0.0200, 0.0300 },
+        NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME), true,
+        "BRL ON");
+    final MulticurveProviderDiscount curves = new MulticurveProviderDiscount();
+    curves.setCurve(Currency.BRL, YieldCurve.from(yieldCurve));
+    curves.setCurve(BRAZIL_CDI, YieldCurve.from(yieldCurve));
+    return curves;
+  }
+
   /**
    * Returns an issuer provider with two currencies (EUR, USD), four Ibor indexes (Euribor3M, Euribor6M, UsdLibor3M, UsdLibor6M) and one
    * issuer curve.
-   * 
+   *
    * @return The provider.
    */
   public static IssuerProviderDiscount createIssuerProvider() {
@@ -625,7 +638,7 @@ public class MulticurveProviderDiscountDataSets {
 
   /**
    * Returns the UK RPI time series (2010-2011).
-   * 
+   *
    * @return The time series.
    */
   public static DoubleTimeSeries<ZonedDateTime> ukRpiFrom2010() {
@@ -634,7 +647,7 @@ public class MulticurveProviderDiscountDataSets {
 
   /**
    * Returns the US CPI-U time series (2009-2011).
-   * 
+   *
    * @return The time series.
    */
   public static DoubleTimeSeries<ZonedDateTime> usCpiFrom2009() {
@@ -643,7 +656,7 @@ public class MulticurveProviderDiscountDataSets {
 
   /**
    * Returns the EURO HICP-X time series (2009-2011).
-   * 
+   *
    * @return The time series.
    */
   public static DoubleTimeSeries<ZonedDateTime> euroHICPXFrom2009() {
@@ -652,7 +665,7 @@ public class MulticurveProviderDiscountDataSets {
 
   /**
    * Returns the EURO HICP-X time series (2009-2011).
-   * 
+   *
    * @return The time series.
    */
   public static DoubleTimeSeries<ZonedDateTime> audCPIFrom2009() {

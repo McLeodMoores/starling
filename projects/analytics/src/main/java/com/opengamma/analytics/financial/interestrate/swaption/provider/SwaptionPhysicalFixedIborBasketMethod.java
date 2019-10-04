@@ -3,7 +3,7 @@
  *
  * Please see distribution for license.
  */
-package com.opengamma.analytics.financial.interestrate.swaption.method;
+package com.opengamma.analytics.financial.interestrate.swaption.provider;
 
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityCouponFixed;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.Payment;
@@ -51,10 +51,10 @@ public final class SwaptionPhysicalFixedIborBasketMethod {
     final int nbCal = legFixed.getNumberOfPayments();
     final SwaptionPhysicalFixedIbor[] basket = new SwaptionPhysicalFixedIbor[nbCal];
     final double notional = Math.abs(legFixed.getNthPayment(0).getNotional());
-    for (int loopcal = 0; loopcal < nbCal; loopcal++) {
-      final double maturity = legFixed.getNthPayment(loopcal).getPaymentTime();
+    for (int i = 0; i < nbCal; i++) {
+      final double maturity = legFixed.getNthPayment(i).getPaymentTime();
       final SwapFixedCoupon<? extends Payment> swap = swaption.getUnderlyingSwap().trimAfter(maturity).withNotional(notional);
-      basket[loopcal] = SwaptionPhysicalFixedIbor.from(swaption.getTimeToExpiry(), swap, swaption.getSettlementTime(), swaption.isCall(), true);
+      basket[i] = SwaptionPhysicalFixedIbor.from(swaption.getTimeToExpiry(), swap, swaption.getSettlementTime(), swaption.isCall(), true);
     }
     return basket;
   }

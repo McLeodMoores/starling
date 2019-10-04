@@ -15,12 +15,9 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.analytics.financial.instrument.index.IndexON;
-import com.opengamma.analytics.financial.interestrate.TestsDataSetsSABR;
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponFixed;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponONCompounded;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.Payment;
-import com.opengamma.analytics.financial.interestrate.payments.method.CouponFixedDiscountingMethod;
 import com.opengamma.analytics.financial.provider.description.MulticurveProviderDiscountDataSets;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
@@ -35,7 +32,6 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
-import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
@@ -734,43 +730,6 @@ public class CouponONCompoundedDefinitionTest {
         .getInstance().presentValue(cpnExpected, curves);
     assertEquals("CouponONCompounded definition: toDerivative", pvConverted, pvExpected);
     assertEquals("CouponONCompounded definition: toDerivative", pvConverted, MultipleCurrencyAmount.of(EUR_CUR, 19744.6689499392));
-
-  }
-
-  /**
-   * Tests the toDerivative method on the payment date. valuation is at noon, payment set at midnight...
-   */
-  @Test
-  public void toDerivativeJustAfterPaymentDeprecated() {
-    final ZonedDateTime referenceDate = DateUtils.getUTCDate(2011, 9, 19);
-    final YieldCurveBundle curves = TestsDataSetsSABR.createCurves1();
-    final String[] curveNames = curves.getAllNames().toArray(new String[curves.size()]);
-    final ZonedDateTime valuationTimeIsNoon = DateUtils.getUTCDate(2011, 9, 19, 12, 0);
-    assertTrue("valuationTimeIsNoon used to be after paymentDate, which was midnight. Confirm behaviour",
-        valuationTimeIsNoon.isAfter(ON_COMPOUNDED_COUPON_DEFINITION.getPaymentDate()));
-    final double fixingRate = 0.01;
-    final DoubleTimeSeries<ZonedDateTime> fixingTS = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
-        new ZonedDateTime[] { DateUtils.getUTCDate(2011, 9, 7), DateUtils.getUTCDate(2011, 9, 8),
-            DateUtils.getUTCDate(2011, 9, 9), DateUtils.getUTCDate(2011, 9, 12), DateUtils.getUTCDate(2011, 9, 13),
-            DateUtils.getUTCDate(2011, 9, 14), DateUtils.getUTCDate(2011, 9, 15) },
-        new double[] {
-            fixingRate, fixingRate, fixingRate, fixingRate, fixingRate, fixingRate, fixingRate });
-    final Payment cpnConverted = ON_COMPOUNDED_COUPON_DEFINITION.toDerivative(valuationTimeIsNoon, fixingTS, curveNames);
-    final double paymentTime = -EUR_DAY_COUNT.getDayCountFraction(referenceDate, EUR_PAYMENT_DATE, EUR_CALENDAR);
-    final double notionalAccrued = NOTIONAL * Math.pow(1 + fixingRate, ON_COMPOUNDED_COUPON_DEFINITION.getFixingPeriodAccrualFactors()[0]) *
-        Math.pow(1 + fixingRate, ON_COMPOUNDED_COUPON_DEFINITION.getFixingPeriodAccrualFactors()[1])
-        * Math.pow(1 + fixingRate, ON_COMPOUNDED_COUPON_DEFINITION.getFixingPeriodAccrualFactors()[2]) *
-        Math.pow(1 + fixingRate, ON_COMPOUNDED_COUPON_DEFINITION.getFixingPeriodAccrualFactors()[3])
-        * Math.pow(1 + fixingRate, ON_COMPOUNDED_COUPON_DEFINITION.getFixingPeriodAccrualFactors()[4]);
-    final CouponFixed cpnExpected = new CouponFixed(EUR_CUR, paymentTime, curveNames[0], EUR_PAYMENT_YEAR_FRACTION, NOTIONAL,
-        (notionalAccrued / NOTIONAL - 1.0) / EUR_PAYMENT_YEAR_FRACTION);
-    assertEquals("CouponONCompounded definition: toDerivative", cpnExpected, cpnConverted);
-
-    // Test pricing, too. Notice that the value of a coupon on its payment date is non-zero
-    final CurrencyAmount pvConverted = CouponFixedDiscountingMethod.getInstance().presentValue((CouponFixed) cpnConverted, curves);
-    final CurrencyAmount pvExpected = CouponFixedDiscountingMethod.getInstance().presentValue(cpnExpected, curves);
-    assertEquals("CouponONCompounded definition: toDerivative", pvConverted, pvExpected);
-    assertEquals("CouponONCompounded definition: toDerivative", pvConverted, CurrencyAmount.of(EUR_CUR, 19744.6689499392));
 
   }
 

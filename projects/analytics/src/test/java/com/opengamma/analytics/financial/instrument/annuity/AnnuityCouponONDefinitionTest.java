@@ -23,8 +23,6 @@ import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedON;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
-import com.opengamma.analytics.financial.interestrate.TestsDataSetsSABR;
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.Annuity;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponFixed;
@@ -39,7 +37,6 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
-import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
@@ -70,7 +67,15 @@ public class AnnuityCouponONDefinitionTest {
 
   private static final ZonedDateTime DATE = DateUtils.getUTCDate(2012, 3, 15);
 
-  // Utility to create a time series of fixings
+  /**
+   * Utility to create a time series of fixings.
+   * 
+   * @param startDate
+   *          the start date
+   * @param endDate
+   *          the end date
+   * @return a fixing series
+   */
   static ZonedDateTimeDoubleTimeSeries createFixingSeries(final ZonedDateTime startDate, final ZonedDateTime endDate) {
     final List<ZonedDateTime> dates = new ArrayList<>();
     final List<Double> data = new ArrayList<>();
@@ -87,25 +92,6 @@ public class AnnuityCouponONDefinitionTest {
   }
 
   private static final DoubleTimeSeries<ZonedDateTime> FIXING_TS = createFixingSeries(SETTLEMENT_DATE, FINAL_PAYMENT_DATE);
-
-  /**
-   * Tests the toDerivative method on the payment date. valuation is at noon, payment set at midnight...
-   */
-  @Test
-  public void toDerivativeOnDateOfFinalPaymentDeprecated() {
-    final YieldCurveBundle curves = TestsDataSetsSABR.createCurves1();
-    final String[] curveNames = curves.getAllNames().toArray(new String[curves.size()]);
-    final ZonedDateTime valuationTimeIsNoon = FINAL_PAYMENT_DATE.with(LocalTime.NOON);
-    assertTrue("valuationTimeIsNoon to be after paymentDate, which was midnight. Confirm behaviour",
-        valuationTimeIsNoon.isAfter(FINAL_PAYMENT_DATE));
-    final Annuity<? extends Coupon> derivative = DEFINITION.toDerivative(valuationTimeIsNoon, FIXING_TS, curveNames);
-    assertEquals("On the payment date, we expect the derivative to have the same number of payments as its definition", 1,
-        derivative.getNumberOfPayments());
-    assertTrue("CouponOIS should be of type CouponFixed on the payment date", derivative.getNthPayment(0) instanceof CouponFixed);
-    final CurrencyAmount pv = com.opengamma.analytics.financial.interestrate.payments.method.CouponFixedDiscountingMethod.getInstance()
-        .presentValue((CouponFixed) derivative.getNthPayment(0), curves);
-    assertEquals("CouponOIS definition: toDerivative", pv, CurrencyAmount.of(CCY, -2571693.2212814568));
-  }
 
   /**
    * Tests the toDerivative method on the payment date. valuation is at noon, payment set at midnight...
