@@ -11,11 +11,11 @@ import static com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACom
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.Period;
 
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.math.MathException;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.ArgumentChecker;
@@ -25,23 +25,20 @@ import com.opengamma.util.ArgumentChecker;
  * NOT a line-by-line translation of the ISDA code. We find agreement with ISDA to better than 1 part in 10^12 on a test suit of 200 example.
  */
 public class ISDACompliantPresentValueCreditDefaultSwap {
-
-  @SuppressWarnings("unused")
-  private static final int DEFAULT_CASH_SETTLEMENT_DAYS = 3;
   private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
-  private static final Calendar DEFAULT_CALENDAR = new MondayToFridayCalendar("Weekend_Only");
+  private static final WorkingDayCalendar DEFAULT_CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
 
   private static final DayCount ACT_365 = DayCounts.ACT_365;
   private static final DayCount ACT_360 = DayCounts.ACT_360;
 
   private final BusinessDayConvention _businessdayAdjustmentConvention;
-  private final Calendar _calandar;
+  private final WorkingDayCalendar _calendar;
   private final DayCount _accuralDayCount;
   private final DayCount _curveDayCount;
 
   public ISDACompliantPresentValueCreditDefaultSwap() {
     _businessdayAdjustmentConvention = FOLLOWING;
-    _calandar = DEFAULT_CALENDAR;
+    _calendar = DEFAULT_CALENDAR;
     _accuralDayCount = ACT_360;
     _curveDayCount = ACT_365;
   }
@@ -94,7 +91,7 @@ public class ISDACompliantPresentValueCreditDefaultSwap {
     ArgumentChecker.isFalse(valueDate.isBefore(today), "Require valueDate >= today");
     ArgumentChecker.isFalse(stepinDate.isBefore(today), "Require stepin >= today");
 
-    final ISDAPremiumLegSchedule paymentSchedule = new ISDAPremiumLegSchedule(startDate, endDate, tenor, stubType, _businessdayAdjustmentConvention, _calandar,
+    final ISDAPremiumLegSchedule paymentSchedule = new ISDAPremiumLegSchedule(startDate, endDate, tenor, stubType, _businessdayAdjustmentConvention, _calendar,
         protectStart);
     final int nPayments = paymentSchedule.getNumPayments();
 

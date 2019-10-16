@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.financial.credit.options;
 
+import java.util.function.Function;
+
 import com.opengamma.analytics.financial.credit.index.CDSIndexCalculator;
 import com.opengamma.analytics.financial.credit.index.IntrinsicIndexDataBundle;
 import com.opengamma.analytics.financial.credit.index.PortfolioSwapAdjustment;
@@ -20,7 +22,6 @@ import com.opengamma.analytics.financial.credit.isdastandardmodel.MarketQuoteCon
 import com.opengamma.analytics.financial.credit.isdastandardmodel.fastcalibration.SuperFastCreditCurveBuilder;
 import com.opengamma.analytics.math.differentiation.FiniteDifferenceType;
 import com.opengamma.analytics.math.differentiation.ScalarFirstOrderDifferentiator;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
@@ -44,7 +45,7 @@ public class FiniteDifferenceGreekCalculator {
    * its notional). The calculation used the intrinsic credit curves to compute an index price, an ATM (default-adjusted) forward price and a option price. The
    * index price is then bumped by a small amount, and the curves (re)adjusted to match this price - with these new curves, a new ATM forward price and option
    * value is calculated. The direction of the bumps and how they are used to estimate the sensitivity depends on the FiniteDifferenceType
-   * 
+   *
    * @param fwdCDS
    *          Forward CDS - represents the CDS at the expiry date (i.e. made with the tradeDate equal to the option expiry date).
    * @param timeToExpiry
@@ -83,18 +84,15 @@ public class FiniteDifferenceGreekCalculator {
     final CDSAnalytic fwdStartingCDS = fwdCDS.withOffset(timeToExpiry);
     final IndexOptionPricer pricer = new IndexOptionPricer(fwdCDS, timeToExpiry, yieldCurve, indexCoupon);
 
-    final Function1D<Double, Double> optPriceFunc = new Function1D<Double, Double>() {
-      @Override
-      public Double apply(final Double indexPrice) {
-        final double puf = indexPrice / indexFactor;
-        final IntrinsicIndexDataBundle adjCurves = PSA.adjustCurves(puf, indexCDX, indexCoupon, yieldCurve, intrinsicData);
-        final double atmFwd = INDEX_CAL.defaultAdjustedForwardIndexValue(fwdStartingCDS, timeToExpiry, yieldCurve, indexCoupon, adjCurves);
-        return pricer.getOptionPremium(atmFwd, vol, strike, isPayer);
-      }
+    final Function<Double, Double> optPriceFunc = indexPrice -> {
+      final double puf = indexPrice / indexFactor;
+      final IntrinsicIndexDataBundle adjCurves = PSA.adjustCurves(puf, indexCDX, indexCoupon, yieldCurve, intrinsicData);
+      final double atmFwd = INDEX_CAL.defaultAdjustedForwardIndexValue(fwdStartingCDS, timeToExpiry, yieldCurve, indexCoupon, adjCurves);
+      return pricer.getOptionPremium(atmFwd, vol, strike, isPayer);
     };
 
     final ScalarFirstOrderDifferentiator diff = new ScalarFirstOrderDifferentiator(type, bumpAmount);
-    final Function1D<Double, Double> g = diff.differentiate(optPriceFunc);
+    final Function<Double, Double> g = diff.differentiate(optPriceFunc);
     final double indexPrice = INDEX_CAL.indexPV(indexCDX, indexCoupon, yieldCurve, intrinsicData);
     return g.apply(indexPrice);
   }
@@ -112,7 +110,7 @@ public class FiniteDifferenceGreekCalculator {
    * Compute the delta as a ratio of the CS01 of an index option to the CS01 of the index. The CS01 of the index is computed by bumping up the index quoted
    * spread and recomputing the price from this bumped flat spread (using {@link FiniteDifferenceSpreadSensitivityCalculator#parallelCS01}); the CS01 of the
    * option is computed using a homogeneous pool approximation (using {@link CS01OptionCalculator#indexCurveApprox}). Both bumps ar 1bp.
-   * 
+   *
    * @param fwdCDS
    *          Forward CDS - represents the CDS at the expiry date (i.e. made with the tradeDate equal to the option expiry date).
    * @param timeToExpiry
@@ -143,7 +141,7 @@ public class FiniteDifferenceGreekCalculator {
    * Compute the delta as a ratio of the CS01 of an index option to the CS01 of the index. The CS01 of the index is computed by bumping up the index quoted
    * spread and recomputing the price from this bumped flat spread (using {@link FiniteDifferenceSpreadSensitivityCalculator#parallelCS01}); the CS01 of the
    * option is computed using a homogeneous pool approximation (using {@link CS01OptionCalculator#indexCurveApprox})
-   * 
+   *
    * @param fwdCDS
    *          Forward CDS - represents the CDS at the expiry date (i.e. made with the tradeDate equal to the option expiry date).
    * @param timeToExpiry
@@ -180,7 +178,7 @@ public class FiniteDifferenceGreekCalculator {
    * sensitivity of the option price to the price of the index. The calculation used the intrinsic credit curves to compute an index price, an ATM
    * (default-adjusted) forward price and a option price. The index price is then bumped by a small amount, and the curves (re)adjusted to match this price -
    * with these new curves, a new ATM forward price and option value is calculated. Gamma is computed using central finite difference.
-   * 
+   *
    * @param fwdCDS
    *          Forward CDS - represents the CDS at the expiry date (i.e. made with the tradeDate equal to the option expiry date).
    * @param timeToExpiry
@@ -227,7 +225,7 @@ public class FiniteDifferenceGreekCalculator {
   /**
    * This is defined as the difference in Delta (computed as a CS01 ratio {@link #deltaByCS01} with bump of 1bp) computed with the quoted spread bumped up by
    * 10bps from its normal value.
-   * 
+   *
    * @param fwdCDS
    *          Forward CDS - represents the CDS at the expiry date (i.e. made with the tradeDate equal to the option expiry date).
    * @param timeToExpiry
@@ -257,7 +255,7 @@ public class FiniteDifferenceGreekCalculator {
   /**
    * This is defined as the difference in Delta (computed as a CS01 ratio {@link #deltaByCS01}) computed with the quoted spread bumped up (usually by 10bps)
    * from its normal value.
-   * 
+   *
    * @param fwdCDS
    *          Forward CDS - represents the CDS at the expiry date (i.e. made with the tradeDate equal to the option expiry date).
    * @param timeToExpiry
@@ -297,7 +295,7 @@ public class FiniteDifferenceGreekCalculator {
   /**
    * This is the sensitivity of the option price to the log-normal volatility of the flat (pseudo) spread. This calculation does not depend on the details of
    * the CDS pool, just the computed value of the ATM forward price.
-   * 
+   *
    * @param atmFwdPrice
    *          The ATM Forward price. This can be a given, or calculated using {@link CDSIndexCalculator#defaultAdjustedForwardIndexValue}
    * @param fwdCDS
@@ -326,15 +324,10 @@ public class FiniteDifferenceGreekCalculator {
       final double vol, final boolean isPayer, final double bumpAmount, final FiniteDifferenceType type) {
     final IndexOptionPricer pricer = new IndexOptionPricer(fwdCDS, timeToExpiry, yieldCurve, indexCoupon);
 
-    final Function1D<Double, Double> priceForSigmaFunc = new Function1D<Double, Double>() {
-      @Override
-      public Double apply(final Double sigma) {
-        return pricer.getOptionPremium(atmFwdPrice, sigma, strike, isPayer);
-      }
-    };
+    final Function<Double, Double> priceForSigmaFunc = sigma -> pricer.getOptionPremium(atmFwdPrice, sigma, strike, isPayer);
 
     final ScalarFirstOrderDifferentiator differ = new ScalarFirstOrderDifferentiator(type, bumpAmount);
-    final Function1D<Double, Double> vega = differ.differentiate(priceForSigmaFunc);
+    final Function<Double, Double> vega = differ.differentiate(priceForSigmaFunc);
     return vega.apply(vol);
   }
 
@@ -345,7 +338,7 @@ public class FiniteDifferenceGreekCalculator {
    * <p>
    * Implicit in the Martingale property of the ATM forward is that defaults can occur over the time step (use {@link #thetaWithoutDefault} to compute a Theta
    * conditional on no defaults).
-   * 
+   *
    * @param atmFwdPrice
    *          The ATM Forward price. This can be a given, or calculated using {@link CDSIndexCalculator#defaultAdjustedForwardIndexValue}
    * @param fwdCDS
@@ -385,7 +378,7 @@ public class FiniteDifferenceGreekCalculator {
    * <p>
    * Implicit in the Martingale property of the ATM forward is that defaults can occur over the time step (use {@link #thetaWithoutDefault} to compute a Theta
    * conditional on no defaults).
-   * 
+   *
    * @param fwdCDS
    *          Forward CDS - represents the CDS at the expiry date (i.e. made with the tradeDate equal to the option expiry date).
    * @param timeToExpiry
@@ -459,7 +452,7 @@ public class FiniteDifferenceGreekCalculator {
    * increased (usually by 1bps). The quoted spread of the index is held constant, then a `bumped' PUF calculated using the bumped yield curve; the intrinsic
    * credit curves are adjusted to match this bumped PUF (using the bumped yield curve). The two sets of credit curves, together with the two yield curves are
    * used to obtain two option prices - the difference (divided by the bumpAmount) is the irDV01.
-   * 
+   *
    * @param fwdCDS
    *          Forward CDS - represents the CDS at the expiry date (i.e. made with the tradeDate equal to the option expiry date).
    * @param timeToExpiry
@@ -515,7 +508,7 @@ public class FiniteDifferenceGreekCalculator {
    * increased (usually by 1bps). The quoted spread of the index is held constant, then a `bumped' PUF calculated using the bumped yield curve; these in turn
    * are used to compute flat credit curves and two option prices computed using a homogeneous pool approximation (two ATM forward values are computed using
    * {@link CDSIndexCalculator#defaultAdjustedForwardIndexValue}
-   * 
+   *
    * @param fwdCDS
    *          Forward CDS - represents the CDS at the expiry date (i.e. made with the tradeDate equal to the option expiry date).
    * @param timeToExpiry

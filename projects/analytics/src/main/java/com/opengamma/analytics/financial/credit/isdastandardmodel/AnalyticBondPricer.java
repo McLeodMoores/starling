@@ -8,6 +8,7 @@ package com.opengamma.analytics.financial.credit.isdastandardmodel;
 import static com.opengamma.analytics.math.utilities.Epsilon.epsilon;
 
 import java.util.Arrays;
+import java.util.function.Function;
 
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.rootfinding.NewtonRaphsonSingleRootFinder;
@@ -80,12 +81,7 @@ public class AnalyticBondPricer {
           "The dirty price of " + dp + " give, is less than the bond's recovery rate of " + bond.getRecoveryRate() + ". Please check inputs");
     }
 
-    final Function1D<Double, Double> func = new Function1D<Double, Double>() {
-      @Override
-      public Double apply(final Double lambda) {
-        return priceFunc.apply(lambda) - bondPrice;
-      }
-    };
+    final Function<Double, Double> func = lambda -> priceFunc.apply(lambda) - bondPrice;
 
     final double guess = 0.01;
     return ROOTFINDER.getRoot(func, guess);
@@ -127,7 +123,7 @@ public class AnalyticBondPricer {
     ArgumentChecker.notNull(yieldCurve, "yieldCurve");
     ArgumentChecker.notNull(cleanOrDirty, "cleanOrDirty");
 
-    final int nPayments = bond.getnPayments();
+    final int nPayments = bond.getNPayments();
     final double[] discPayments = new double[nPayments];
     for (int i = 0; i < nPayments; i++) {
       discPayments[i] = bond.getPaymentAmount(i) * yieldCurve.getDiscountFactor(bond.getPaymentTime(i));

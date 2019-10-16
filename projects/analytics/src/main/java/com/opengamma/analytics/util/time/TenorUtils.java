@@ -11,6 +11,7 @@ import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
@@ -19,14 +20,18 @@ import com.opengamma.util.time.Tenor.BusinessDayTenor;
 /**
  * Utility class for {@link Tenor}s.
  */
-public class TenorUtils {
+public final class TenorUtils {
 
   /**
    * Adjusts a {@link ZonedDateTime} by a tenor that is backed by a {@link Period}.
-   * @param date The date to adjust, not null
-   * @param tenor The tenor, not null
+   *
+   * @param date
+   *          The date to adjust, not null
+   * @param tenor
+   *          The tenor, not null
    * @return The date adjusted by a tenor
-   * @throws IllegalStateException If the tenor is not backed by a {@link Period}
+   * @throws IllegalStateException
+   *           If the tenor is not backed by a {@link Period}
    */
   public static ZonedDateTime adjustDateByTenor(final ZonedDateTime date, final Tenor tenor) {
     ArgumentChecker.notNull(date, "date");
@@ -37,10 +42,14 @@ public class TenorUtils {
 
   /**
    * Adjusts a {@link LocalDateTime} by a tenor that is backed by a {@link Period}.
-   * @param date The date to adjust, not null
-   * @param tenor The tenor, not null
+   *
+   * @param date
+   *          The date to adjust, not null
+   * @param tenor
+   *          The tenor, not null
    * @return The date adjusted by a tenor
-   * @throws IllegalStateException If the tenor is not backed by a {@link Period}
+   * @throws IllegalStateException
+   *           If the tenor is not backed by a {@link Period}
    */
   public static LocalDateTime adjustDateByTenor(final LocalDateTime date, final Tenor tenor) {
     ArgumentChecker.notNull(date, "date");
@@ -51,10 +60,14 @@ public class TenorUtils {
 
   /**
    * Adjusts a {@link LocalDate} by a tenor that is backed by a {@link Period}.
-   * @param date The date to adjust, not null
-   * @param tenor The tenor, not null
+   *
+   * @param date
+   *          The date to adjust, not null
+   * @param tenor
+   *          The tenor, not null
    * @return The date adjusted by a tenor
-   * @throws IllegalStateException If the tenor is not backed by a {@link Period}
+   * @throws IllegalStateException
+   *           If the tenor is not backed by a {@link Period}
    */
   public static LocalDate adjustDateByTenor(final LocalDate date, final Tenor tenor) {
     ArgumentChecker.notNull(date, "date");
@@ -64,42 +77,37 @@ public class TenorUtils {
   }
 
   /**
-   * Adjusts a {@link ZonedDateTime} by a tenor. If the tenor is backed by a {@link BusinessDayTenor}, the calendar and
-   * spot days are used when adjusting.
-   * @param date The date to adjust, not null
-   * @param tenor The tenor, not null
-   * @param calendar The calendar, not null
-   * @param spotDays The number of days for spot, greater than or equal to zero
+   * Adjusts a {@link ZonedDateTime} by a tenor. If the tenor is backed by a {@link BusinessDayTenor}, the calendar and spot days are used when adjusting.
+   *
+   * @param date
+   *          The date to adjust, not null
+   * @param tenor
+   *          The tenor, not null
+   * @param calendar
+   *          The calendar, not null
+   * @param spotDays
+   *          The number of days for spot, greater than or equal to zero
    * @return The date adjusted by a tenor
+   * @deprecated Use {@link #adjustDateByTenor(ZonedDateTime, Tenor, WorkingDayCalendar, int)}
    */
+  @Deprecated
   public static ZonedDateTime adjustDateByTenor(final ZonedDateTime date, final Tenor tenor, final Calendar calendar, final int spotDays) {
-    ArgumentChecker.notNull(date, "date");
-    ArgumentChecker.notNull(tenor, "tenor");
-    ArgumentChecker.notNull(calendar, "calendar");
-    ArgumentChecker.isTrue(spotDays >= 0, "number of spot days must be greater than zero; have {}", spotDays);
-    ZonedDateTime result;
-    if (tenor.isBusinessDayTenor()) {
-      final BusinessDayTenor bdt = tenor.getBusinessDayTenor();
-      switch (bdt) {
-        case OVERNIGHT:
-        case TOM_NEXT:
-          result = date.plusDays(1);
-          break;
-        case SPOT_NEXT:
-          result = date.plusDays(spotDays);
-          break;
-        default:
-          throw new IllegalArgumentException("Did not recognise tenor " + tenor);
-      }
-      while (!calendar.isWorkingDay(result.toLocalDate())) {
-        result = result.plusDays(1);
-      }
-      return result;
-    }
-    result = date.plusDays(spotDays);
-    return result.plus(tenor.getPeriod());
+    return adjustDateByTenor(date, tenor, WorkingDayCalendarAdapter.of(calendar), spotDays);
   }
 
+  /**
+   * Adjusts a {@link ZonedDateTime} by a tenor. If the tenor is backed by a {@link BusinessDayTenor}, the calendar and spot days are used when adjusting.
+   *
+   * @param date
+   *          The date to adjust, not null
+   * @param tenor
+   *          The tenor, not null
+   * @param calendar
+   *          The calendar, not null
+   * @param spotDays
+   *          The number of days for spot, greater than or equal to zero
+   * @return The date adjusted by a tenor
+   */
   public static ZonedDateTime adjustDateByTenor(final ZonedDateTime date, final Tenor tenor, final WorkingDayCalendar calendar, final int spotDays) {
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(tenor, "tenor");
@@ -129,15 +137,38 @@ public class TenorUtils {
   }
 
   /**
-   * Adjusts a {@link LocalDateTime} by a tenor. If the tenor is backed by a {@link BusinessDayTenor}, the calendar and
-   * spot days are used when adjusting.
-   * @param date The date to adjust, not null
-   * @param tenor The tenor, not null
-   * @param calendar The calendar, not null
-   * @param spotDays The number of days for spot, greater than or equal to zero
+   * Adjusts a {@link LocalDateTime} by a tenor. If the tenor is backed by a {@link BusinessDayTenor}, the calendar and spot days are used when adjusting.
+   *
+   * @param date
+   *          The date to adjust, not null
+   * @param tenor
+   *          The tenor, not null
+   * @param calendar
+   *          The calendar, not null
+   * @param spotDays
+   *          The number of days for spot, greater than or equal to zero
+   * @return The date adjusted by a tenor
+   * @deprecated Use {@link TenorUtils#adjustDateByTenor(LocalDateTime, Tenor, WorkingDayCalendar, int)}
+   */
+  @Deprecated
+  public static LocalDateTime adjustDateByTenor(final LocalDateTime date, final Tenor tenor, final Calendar calendar, final int spotDays) {
+    return adjustDateByTenor(date, tenor, WorkingDayCalendarAdapter.of(calendar), spotDays);
+  }
+
+  /**
+   * Adjusts a {@link LocalDateTime} by a tenor. If the tenor is backed by a {@link BusinessDayTenor}, the calendar and spot days are used when adjusting.
+   *
+   * @param date
+   *          The date to adjust, not null
+   * @param tenor
+   *          The tenor, not null
+   * @param calendar
+   *          The calendar, not null
+   * @param spotDays
+   *          The number of days for spot, greater than or equal to zero
    * @return The date adjusted by a tenor
    */
-  public static LocalDateTime adjustDateByTenor(final LocalDateTime date, final Tenor tenor, final Calendar calendar, final int spotDays) {
+  public static LocalDateTime adjustDateByTenor(final LocalDateTime date, final Tenor tenor, final WorkingDayCalendar calendar, final int spotDays) {
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(tenor, "tenor");
     ArgumentChecker.notNull(calendar, "calendar");
@@ -176,15 +207,38 @@ public class TenorUtils {
   }
 
   /**
-   * Adjusts a {@link LocalDate} by a tenor. If the tenor is backed by a {@link BusinessDayTenor}, the calendar and
-   * spot days are used when adjusting.
-   * @param date The date to adjust, not null
-   * @param tenor The tenor, not null
-   * @param calendar The calendar, not null
-   * @param spotDays The number of days for spot, greater than or equal to zero
+   * Adjusts a {@link LocalDate} by a tenor. If the tenor is backed by a {@link BusinessDayTenor}, the calendar and spot days are used when adjusting.
+   *
+   * @param date
+   *          The date to adjust, not null
+   * @param tenor
+   *          The tenor, not null
+   * @param calendar
+   *          The calendar, not null
+   * @param spotDays
+   *          The number of days for spot, greater than or equal to zero
+   * @return The date adjusted by a tenor
+   * @deprecated Use {@link #adjustDateByTenor(LocalDate, Tenor, WorkingDayCalendar, int)}
+   */
+  @Deprecated
+  public static LocalDate adjustDateByTenor(final LocalDate date, final Tenor tenor, final Calendar calendar, final int spotDays) {
+    return adjustDateByTenor(date, tenor, WorkingDayCalendarAdapter.of(calendar), spotDays);
+  }
+
+  /**
+   * Adjusts a {@link LocalDate} by a tenor. If the tenor is backed by a {@link BusinessDayTenor}, the calendar and spot days are used when adjusting.
+   *
+   * @param date
+   *          The date to adjust, not null
+   * @param tenor
+   *          The tenor, not null
+   * @param calendar
+   *          The calendar, not null
+   * @param spotDays
+   *          The number of days for spot, greater than or equal to zero
    * @return The date adjusted by a tenor
    */
-  public static LocalDate adjustDateByTenor(final LocalDate date, final Tenor tenor, final Calendar calendar, final int spotDays) {
+  public static LocalDate adjustDateByTenor(final LocalDate date, final Tenor tenor, final WorkingDayCalendar calendar, final int spotDays) {
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(tenor, "tenor");
     ArgumentChecker.notNull(calendar, "calendar");
@@ -223,17 +277,18 @@ public class TenorUtils {
   }
 
   /**
-   * Add two tenors when it make sense.
-   * When the two tenors are backed by period, create a tenor backed by adding the periods.
-   * When one of the tenor is backed by a ZERO period, return the other tenor.
-   * When both tenors are ON, returns TN.
-   * In all other cases throw an exception.
-   * @param tenor1 The first tenor.
-   * @param tenor2 The second tenor.
-   * @return The sum tenor.
-   * @throws IllegalArgumentException as described above.
+   * Add two tenors when it make sense. When the two tenors are backed by period, create a tenor backed by adding the periods. When one of the tenor is backed
+   * by a ZERO period, return the other tenor. When both tenors are ON, returns TN. In all other cases throw an exception.
+   *
+   * @param tenor1
+   *          The first tenor, not null
+   * @param tenor2
+   *          The second tenor, not null
+   * @return The sum tenor
    */
   public static Tenor plus(final Tenor tenor1, final Tenor tenor2) {
+    ArgumentChecker.notNull(tenor1, "tenor1");
+    ArgumentChecker.notNull(tenor2, "tenor2");
     if (!tenor1.isBusinessDayTenor() && !tenor2.isBusinessDayTenor()) { // Standard periods
       return Tenor.of(tenor1.getPeriod().plus(tenor2.getPeriod()));
     }
@@ -249,10 +304,26 @@ public class TenorUtils {
     throw new IllegalArgumentException("Cannot add " + tenor1 + " and " + tenor2);
   }
 
+  /**
+   * Adds <i>n</i> periods to a date. The tenor must be backed by a period.
+   *
+   * @param date
+   *          the date, not null
+   * @param tenor
+   *          the tenor to add, not null
+   * @param n
+   *          the number of periods to add
+   * @return the adjusted date
+   */
   public static ZonedDateTime addTenors(final ZonedDateTime date, final Tenor tenor, final int n) {
+    ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.notNull(tenor, "tenor");
     if (!tenor.isBusinessDayTenor()) {
       return date.plus(tenor.getPeriod().multipliedBy(n));
     }
     throw new IllegalArgumentException("Cannot add " + n + " " + tenor + " tenors to a date");
+  }
+
+  private TenorUtils() {
   }
 }

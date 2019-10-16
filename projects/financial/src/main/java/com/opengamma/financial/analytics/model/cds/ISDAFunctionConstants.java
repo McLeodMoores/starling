@@ -10,7 +10,7 @@ package com.opengamma.financial.analytics.model.cds;
  *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  */
-public class ISDAFunctionConstants {
+public final class ISDAFunctionConstants {
 
   /**
    * Name of the ISDA calculation method.

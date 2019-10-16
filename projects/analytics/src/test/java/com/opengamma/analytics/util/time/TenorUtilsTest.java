@@ -7,6 +7,8 @@ package com.opengamma.analytics.util.time;
 
 import static org.testng.AssertJUnit.assertEquals;
 
+import java.util.Arrays;
+
 import org.testng.annotations.Test;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
@@ -14,10 +16,11 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.opengamma.analytics.financial.schedule.NoHolidayCalendar;
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.ExceptionCalendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.EmptyWorkingDayCalendar;
+import com.mcleodmoores.date.SimpleWorkingDayCalendar;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
@@ -28,12 +31,16 @@ import com.opengamma.util.time.Tenor;
 @Test(groups = TestGroup.UNIT)
 public class TenorUtilsTest {
   /** Empty holiday calendar */
-  private static final Calendar NO_HOLIDAYS = new NoHolidayCalendar();
+  private static final WorkingDayCalendar NO_HOLIDAYS = EmptyWorkingDayCalendar.INSTANCE;
   /** Holiday calendar containing only weekends */
-  private static final Calendar WEEKEND_CALENDAR = new MondayToFridayCalendar("Weekend");
+  private static final WorkingDayCalendar WEEKEND_CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   /** Holiday calendar containing weekends and 1/1/2014 */
-  private static final Calendar CALENDAR = new MyCalendar();
+  private static final WorkingDayCalendar CALENDAR = new SimpleWorkingDayCalendar("test", Arrays.asList(LocalDate.of(2013, 1, 1), LocalDate.of(2014, 1, 1)),
+      DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testAdjustZonedDateTime1() {
     final ZonedDateTime zonedDateTime = DateUtils.getUTCDate(2013, 12, 31);
@@ -43,6 +50,48 @@ public class TenorUtilsTest {
     TenorUtils.adjustDateByTenor(zonedDateTime, Tenor.ON);
   }
 
+  /**
+   *
+   */
+  @SuppressWarnings("deprecation")
+  @Test
+  public void testDeprecatedAdjustZonedDateTime2() {
+    final ZonedDateTime zonedDateTime = DateUtils.getUTCDate(2013, 12, 31);
+    assertEquals(DateUtils.getUTCDate(2014, 12, 31), TenorUtils.adjustDateByTenor(zonedDateTime, Tenor.ONE_YEAR, CalendarAdapter.of(CALENDAR), 0));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 31), TenorUtils.adjustDateByTenor(zonedDateTime, Tenor.ONE_MONTH, CalendarAdapter.of(CALENDAR), 0));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 1), TenorUtils.adjustDateByTenor(zonedDateTime, Tenor.ONE_DAY, CalendarAdapter.of(CALENDAR), 0));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 1),
+        TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.ON, CalendarAdapter.of(NO_HOLIDAYS), 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 1),
+        TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.TN, CalendarAdapter.of(NO_HOLIDAYS), 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2),
+        TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.SN, CalendarAdapter.of(NO_HOLIDAYS), 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 1),
+        TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.ON, CalendarAdapter.of(WEEKEND_CALENDAR), 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 1),
+        TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.TN, CalendarAdapter.of(WEEKEND_CALENDAR), 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2),
+        TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.SN, CalendarAdapter.of(WEEKEND_CALENDAR), 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2),
+        TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.ON, CalendarAdapter.of(NO_HOLIDAYS), 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2),
+        TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.TN, CalendarAdapter.of(NO_HOLIDAYS), 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 3),
+        TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.SN, CalendarAdapter.of(NO_HOLIDAYS), 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2),
+        TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.ON, CalendarAdapter.of(WEEKEND_CALENDAR), 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2),
+        TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.TN, CalendarAdapter.of(WEEKEND_CALENDAR), 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 3),
+        TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.SN, CalendarAdapter.of(WEEKEND_CALENDAR), 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.ON, CalendarAdapter.of(CALENDAR), 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.TN, CalendarAdapter.of(CALENDAR), 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.SN, CalendarAdapter.of(CALENDAR), 2));
+  }
+
+  /**
+   *
+   */
   @Test
   public void testAdjustZonedDateTime2() {
     final ZonedDateTime zonedDateTime = DateUtils.getUTCDate(2013, 12, 31);
@@ -66,6 +115,9 @@ public class TenorUtilsTest {
     assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.SN, CALENDAR, 2));
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testAdjustLocalDateTime1() {
     final LocalDateTime localDateTime = LocalDateTime.of(2013, 12, 31, 11, 0);
@@ -75,6 +127,52 @@ public class TenorUtilsTest {
     TenorUtils.adjustDateByTenor(localDateTime, Tenor.ON);
   }
 
+  /**
+   *
+   */
+  @SuppressWarnings("deprecation")
+  @Test
+  public void testDeprecatedAdjustLocalDateTime2() {
+    final int spotDays = 2;
+    final LocalDateTime localDateTime = LocalDateTime.of(2013, 12, 31, 11, 0);
+    assertEquals(LocalDateTime.of(2014, 12, 31, 11, 0), TenorUtils.adjustDateByTenor(localDateTime, Tenor.ONE_YEAR, CalendarAdapter.of(CALENDAR), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 31, 11, 0), TenorUtils.adjustDateByTenor(localDateTime, Tenor.ONE_MONTH, CalendarAdapter.of(CALENDAR), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 1, 11, 0), TenorUtils.adjustDateByTenor(localDateTime, Tenor.ONE_DAY, CalendarAdapter.of(CALENDAR), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 1, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.ON, CalendarAdapter.of(NO_HOLIDAYS), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 2, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.TN, CalendarAdapter.of(NO_HOLIDAYS), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 3, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.SN, CalendarAdapter.of(NO_HOLIDAYS), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 1, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.ON, CalendarAdapter.of(WEEKEND_CALENDAR), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 2, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.TN, CalendarAdapter.of(WEEKEND_CALENDAR), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 3, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.SN, CalendarAdapter.of(WEEKEND_CALENDAR), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 2, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2014, 1, 1, 11, 0), Tenor.ON, CalendarAdapter.of(NO_HOLIDAYS), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 3, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2014, 1, 1, 11, 0), Tenor.TN, CalendarAdapter.of(NO_HOLIDAYS), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 4, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2014, 1, 1, 11, 0), Tenor.SN, CalendarAdapter.of(NO_HOLIDAYS), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 2, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2014, 1, 1, 11, 0), Tenor.ON, CalendarAdapter.of(WEEKEND_CALENDAR), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 3, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2014, 1, 1, 11, 0), Tenor.TN, CalendarAdapter.of(WEEKEND_CALENDAR), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 6, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2014, 1, 1, 11, 0), Tenor.SN, CalendarAdapter.of(WEEKEND_CALENDAR), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 2, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.ON, CalendarAdapter.of(CALENDAR), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 3, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.TN, CalendarAdapter.of(CALENDAR), spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 6, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.SN, CalendarAdapter.of(CALENDAR), spotDays));
+  }
+
+  /**
+   *
+   */
   @Test
   public void testAdjustLocalDateTime2() {
     final int spotDays = 2;
@@ -85,9 +183,12 @@ public class TenorUtilsTest {
     assertEquals(LocalDateTime.of(2014, 1, 1, 11, 0), TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.ON, NO_HOLIDAYS, spotDays));
     assertEquals(LocalDateTime.of(2014, 1, 2, 11, 0), TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.TN, NO_HOLIDAYS, spotDays));
     assertEquals(LocalDateTime.of(2014, 1, 3, 11, 0), TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.SN, NO_HOLIDAYS, spotDays));
-    assertEquals(LocalDateTime.of(2014, 1, 1, 11, 0), TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.ON, WEEKEND_CALENDAR, spotDays));
-    assertEquals(LocalDateTime.of(2014, 1, 2, 11, 0), TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.TN, WEEKEND_CALENDAR, spotDays));
-    assertEquals(LocalDateTime.of(2014, 1, 3, 11, 0), TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.SN, WEEKEND_CALENDAR, spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 1, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.ON, WEEKEND_CALENDAR, spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 2, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.TN, WEEKEND_CALENDAR, spotDays));
+    assertEquals(LocalDateTime.of(2014, 1, 3, 11, 0),
+        TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.SN, WEEKEND_CALENDAR, spotDays));
     assertEquals(LocalDateTime.of(2014, 1, 2, 11, 0), TenorUtils.adjustDateByTenor(LocalDateTime.of(2014, 1, 1, 11, 0), Tenor.ON, NO_HOLIDAYS, spotDays));
     assertEquals(LocalDateTime.of(2014, 1, 3, 11, 0), TenorUtils.adjustDateByTenor(LocalDateTime.of(2014, 1, 1, 11, 0), Tenor.TN, NO_HOLIDAYS, spotDays));
     assertEquals(LocalDateTime.of(2014, 1, 4, 11, 0), TenorUtils.adjustDateByTenor(LocalDateTime.of(2014, 1, 1, 11, 0), Tenor.SN, NO_HOLIDAYS, spotDays));
@@ -99,6 +200,9 @@ public class TenorUtilsTest {
     assertEquals(LocalDateTime.of(2014, 1, 6, 11, 0), TenorUtils.adjustDateByTenor(LocalDateTime.of(2013, 12, 31, 11, 0), Tenor.SN, CALENDAR, spotDays));
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testAdjustLocalDate1() {
     final LocalDate localDate = LocalDate.of(2013, 12, 31);
@@ -108,6 +212,37 @@ public class TenorUtilsTest {
     TenorUtils.adjustDateByTenor(localDate, Tenor.ON);
   }
 
+  /**
+   *
+   */
+  @SuppressWarnings("deprecation")
+  @Test
+  public void testDeprecatedAdjustLocalDate2() {
+    final int spotDays = 2;
+    final LocalDate localDate = LocalDate.of(2013, 12, 31);
+    assertEquals(LocalDate.of(2014, 12, 31), TenorUtils.adjustDateByTenor(localDate, Tenor.ONE_YEAR, CalendarAdapter.of(CALENDAR), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 31), TenorUtils.adjustDateByTenor(localDate, Tenor.ONE_MONTH, CalendarAdapter.of(CALENDAR), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 1), TenorUtils.adjustDateByTenor(localDate, Tenor.ONE_DAY, CalendarAdapter.of(CALENDAR), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 1), TenorUtils.adjustDateByTenor(LocalDate.of(2013, 12, 31), Tenor.ON, CalendarAdapter.of(NO_HOLIDAYS), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 2), TenorUtils.adjustDateByTenor(LocalDate.of(2013, 12, 31), Tenor.TN, CalendarAdapter.of(NO_HOLIDAYS), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 3), TenorUtils.adjustDateByTenor(LocalDate.of(2013, 12, 31), Tenor.SN, CalendarAdapter.of(NO_HOLIDAYS), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 1), TenorUtils.adjustDateByTenor(LocalDate.of(2013, 12, 31), Tenor.ON, CalendarAdapter.of(WEEKEND_CALENDAR), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 2), TenorUtils.adjustDateByTenor(LocalDate.of(2013, 12, 31), Tenor.TN, CalendarAdapter.of(WEEKEND_CALENDAR), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 3), TenorUtils.adjustDateByTenor(LocalDate.of(2013, 12, 31), Tenor.SN, CalendarAdapter.of(WEEKEND_CALENDAR), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 2), TenorUtils.adjustDateByTenor(LocalDate.of(2014, 1, 1), Tenor.ON, CalendarAdapter.of(NO_HOLIDAYS), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 3), TenorUtils.adjustDateByTenor(LocalDate.of(2014, 1, 1), Tenor.TN, CalendarAdapter.of(NO_HOLIDAYS), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 4), TenorUtils.adjustDateByTenor(LocalDate.of(2014, 1, 1), Tenor.SN, CalendarAdapter.of(NO_HOLIDAYS), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 2), TenorUtils.adjustDateByTenor(LocalDate.of(2014, 1, 1), Tenor.ON, CalendarAdapter.of(WEEKEND_CALENDAR), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 3), TenorUtils.adjustDateByTenor(LocalDate.of(2014, 1, 1), Tenor.TN, CalendarAdapter.of(WEEKEND_CALENDAR), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 6), TenorUtils.adjustDateByTenor(LocalDate.of(2014, 1, 1), Tenor.SN, CalendarAdapter.of(WEEKEND_CALENDAR), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 2), TenorUtils.adjustDateByTenor(LocalDate.of(2013, 12, 31), Tenor.ON, CalendarAdapter.of(CALENDAR), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 3), TenorUtils.adjustDateByTenor(LocalDate.of(2013, 12, 31), Tenor.TN, CalendarAdapter.of(CALENDAR), spotDays));
+    assertEquals(LocalDate.of(2014, 1, 6), TenorUtils.adjustDateByTenor(LocalDate.of(2013, 12, 31), Tenor.SN, CalendarAdapter.of(CALENDAR), spotDays));
+  }
+
+  /**
+   *
+   */
   @Test
   public void testAdjustLocalDate2() {
     final int spotDays = 2;
@@ -132,6 +267,9 @@ public class TenorUtilsTest {
     assertEquals(LocalDate.of(2014, 1, 6), TenorUtils.adjustDateByTenor(LocalDate.of(2013, 12, 31), Tenor.SN, CALENDAR, spotDays));
   }
 
+  /**
+   *
+   */
   @Test
   public void plus() {
     final Tenor d1 = Tenor.ONE_DAY;
@@ -154,33 +292,4 @@ public class TenorUtilsTest {
     assertEquals("Tenor: plus", y3, TenorUtils.plus(y3, p0D));
   }
 
-  /**
-   * Calendar with weekends and 1-1-2013, 1-1-2014 as holidays
-   */
-  private static class MyCalendar extends ExceptionCalendar {
-
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * Default constructor
-     */
-    protected MyCalendar() {
-      super("");
-    }
-
-    @Override
-    protected boolean isNormallyWorkingDay(final LocalDate date) {
-      if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
-        return false;
-      }
-      if (date.equals(LocalDate.of(2014, 1, 1))) {
-        return false;
-      }
-      return true;
-    }
-
-  }
 }

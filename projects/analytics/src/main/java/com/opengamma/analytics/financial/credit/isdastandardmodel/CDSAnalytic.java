@@ -13,10 +13,12 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.Period;
 import org.threeten.bp.temporal.JulianFields;
 
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.ArgumentChecker;
@@ -29,7 +31,7 @@ import com.opengamma.util.ArgumentChecker;
  * @see CDSAnalyticFactory
  */
 public class CDSAnalytic {
-  private static final Calendar DEFAULT_CALENDAR = new MondayToFridayCalendar("Weekend_Only");
+  private static final WorkingDayCalendar DEFAULT_CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
   /** Curve daycount generally fixed to Act/365 in ISDA */
   private static final DayCount ACT_365 = DayCounts.ACT_365;
@@ -122,12 +124,57 @@ public class CDSAnalytic {
    *          Calendar defining what is a non-business day
    * @param accrualDayCount
    *          Day count used for accrual
+   * @deprecated Use a {@link WorkingDayCalendar}
+   */
+  @Deprecated
+  public CDSAnalytic(final LocalDate tradeDate, final LocalDate stepinDate, final LocalDate valueDate, final LocalDate accStartDate, final LocalDate endDate,
+      final boolean payAccOnDefault, final Period paymentInterval, final StubType stubType, final boolean protectStart, final double recoveryRate,
+      final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calendar, final DayCount accrualDayCount) {
+    this(tradeDate, stepinDate, valueDate, accStartDate, endDate, payAccOnDefault, paymentInterval, stubType, protectStart, recoveryRate,
+        businessdayAdjustmentConvention, calendar, accrualDayCount, ACT_365);
+  }
+
+  /**
+   * Generates an analytic description of a CDS trade on a particular date. This can then be passed to a analytic CDS pricer.<br>
+   * This using a weekend only calendar with a following convention. ACT/360 is used for accrual and ACT/365 to convert payment dates to year-fractions
+   * (doubles)
+   *
+   * Note this uses a curve daycount of ACT/365 to match the ISDA methodology.
+   *
+   * @param tradeDate
+   *          The trade date
+   * @param stepinDate
+   *          (aka Protection Effective sate or assignment date). Date when party assumes ownership. This is usually T+1. This is when protection (and risk)
+   *          starts in terms of the model. Note, this is sometimes just called the Effective Date, however this can cause confusion with the legal effective
+   *          date which is T-60 or T-90.
+   * @param valueDate
+   *          The valuation date. The date that values are PVed to. Is is normally today + 3 business days. Aka cash-settle date.
+   * @param accStartDate
+   *          This is when the CDS nominally starts in terms of premium payments. i.e. the number of days in the first period (and thus the amount of the first
+   *          premium payment) is counted from this date.
+   * @param endDate
+   *          (aka maturity date) This is when the contract expires and protection ends - any default after this date does not trigger a payment. (the
+   *          protection ends at end of day)
+   * @param payAccOnDefault
+   *          Is the accrued premium paid in the event of a default
+   * @param paymentInterval
+   *          The nominal step between premium payments (e.g. 3 months, 6 months).
+   * @param stubType
+   *          stubType Options are FRONTSHORT, FRONTLONG, BACKSHORT, BACKLONG or NONE - <b>Note</b> in this code NONE is not allowed
+   * @param protectStart
+   *          If protectStart = true, then protections starts at the beginning of the day, otherwise it is at the end.
+   * @param recoveryRate
+   *          The recovery rate
+   * @param businessdayAdjustmentConvention
+   *          How are adjustments for non-business days made
+   * @param calendar
+   *          Calendar defining what is a non-business day
+   * @param accrualDayCount
+   *          Day count used for accrual
    */
   public CDSAnalytic(final LocalDate tradeDate, final LocalDate stepinDate, final LocalDate valueDate, final LocalDate accStartDate, final LocalDate endDate,
-      final boolean payAccOnDefault,
-      final Period paymentInterval, final StubType stubType, final boolean protectStart, final double recoveryRate,
-      final BusinessDayConvention businessdayAdjustmentConvention,
-      final Calendar calendar, final DayCount accrualDayCount) {
+      final boolean payAccOnDefault, final Period paymentInterval, final StubType stubType, final boolean protectStart, final double recoveryRate,
+      final BusinessDayConvention businessdayAdjustmentConvention, final WorkingDayCalendar calendar, final DayCount accrualDayCount) {
     this(tradeDate, stepinDate, valueDate, accStartDate, endDate, payAccOnDefault, paymentInterval, stubType, protectStart, recoveryRate,
         businessdayAdjustmentConvention, calendar, accrualDayCount,
         ACT_365);
@@ -168,12 +215,56 @@ public class CDSAnalytic {
    *          Day count used for accrual
    * @param curveDayCount
    *          Day count used on curve (NOTE ISDA uses ACT/365 (fixed) and it is not recommended to change this)
+   * @deprecated Use a {@link WorkingDayCalendar}
+   */
+  @Deprecated
+  public CDSAnalytic(final LocalDate tradeDate, final LocalDate stepinDate, final LocalDate valueDate, final LocalDate accStartDate, final LocalDate endDate,
+      final boolean payAccOnDefault, final Period paymentInterval, final StubType stubType, final boolean isProtectStart, final double recoveryRate,
+      final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calendar, final DayCount accrualDayCount, final DayCount curveDayCount) {
+    this(tradeDate, stepinDate, valueDate, accStartDate, endDate, payAccOnDefault, paymentInterval, stubType, isProtectStart,
+        recoveryRate, businessdayAdjustmentConvention, WorkingDayCalendarAdapter.of(calendar), accrualDayCount, curveDayCount);
+  }
+
+  /**
+   * Generates an analytic description of a CDS trade on a particular date. This can then be passed to a analytic CDS pricer
+   *
+   * @param tradeDate
+   *          The trade date or 'today', this is the date other times are measured from (i.e. t = 0)
+   * @param stepinDate
+   *          (aka Protection Effective date or assignment date). Date when party assumes ownership. This is usually T+1. This is when protection (and risk)
+   *          starts in terms of the model. Note, this is sometimes just called the Effective Date, however this can cause confusion with the legal effective
+   *          date which is T-60 or T-90.
+   * @param valueDate
+   *          The valuation date. The date that values are PVed to. Is is normally today + 3 business days. Aka cash-settle date.
+   * @param accStartDate
+   *          This is when the CDS nominally starts in terms of premium payments. i.e. the number of days in the first period (and thus the amount of the first
+   *          premium payment) is counted from this date.
+   * @param endDate
+   *          (aka maturity date) This is when the contract expires and protection ends - any default after this date does not trigger a payment. (the
+   *          protection ends at end of day)
+   * @param payAccOnDefault
+   *          Is the accrued premium paid in the event of a default
+   * @param paymentInterval
+   *          The nominal step between premium payments (e.g. 3 months, 6 months).
+   * @param stubType
+   *          stubType Options are FRONTSHORT, FRONTLONG, BACKSHORT, BACKLONG or NONE - <b>Note</b> in this code NONE is not allowed
+   * @param isProtectStart
+   *          If protectStart = true, then protections starts at the beginning of the day, otherwise it is at the end.
+   * @param recoveryRate
+   *          The recovery rate
+   * @param businessdayAdjustmentConvention
+   *          How are adjustments for non-business days made
+   * @param calendar
+   *          Calendar defining what is a non-business day
+   * @param accrualDayCount
+   *          Day count used for accrual
+   * @param curveDayCount
+   *          Day count used on curve (NOTE ISDA uses ACT/365 (fixed) and it is not recommended to change this)
    */
   public CDSAnalytic(final LocalDate tradeDate, final LocalDate stepinDate, final LocalDate valueDate, final LocalDate accStartDate, final LocalDate endDate,
-      final boolean payAccOnDefault,
-      final Period paymentInterval, final StubType stubType, final boolean isProtectStart, final double recoveryRate,
-      final BusinessDayConvention businessdayAdjustmentConvention,
-      final Calendar calendar, final DayCount accrualDayCount, final DayCount curveDayCount) {
+      final boolean payAccOnDefault, final Period paymentInterval, final StubType stubType, final boolean isProtectStart, final double recoveryRate,
+      final BusinessDayConvention businessdayAdjustmentConvention, final WorkingDayCalendar calendar, final DayCount accrualDayCount,
+      final DayCount curveDayCount) {
     ArgumentChecker.notNull(tradeDate, "tradeDate");
     ArgumentChecker.notNull(stepinDate, "stepinDate");
     ArgumentChecker.notNull(valueDate, "valueDate");
@@ -218,6 +309,11 @@ public class CDSAnalytic {
     _accrued = accStart.isBefore(stepinDate) ? accrualDayCount.getDayCountFraction(accStart, stepinDate) : 0.0;
   }
 
+  /**
+   * Gets the number of payments.
+   * 
+   * @return the number of payments
+   */
   public int getNumPayments() {
     return _coupons.length;
   }

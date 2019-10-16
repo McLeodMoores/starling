@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
@@ -16,10 +16,11 @@ import org.threeten.bp.Period;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.temporal.JulianFields;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.ArgumentChecker;
@@ -28,40 +29,101 @@ import com.opengamma.util.test.TestGroup;
 /**
  * Test.
  */
+@SuppressWarnings("deprecation")
 @Test(groups = TestGroup.UNIT)
 public class ISDAPremiumLegScheduleTest {
-
   private static final DayCount ACT360 = DayCounts.ACT_360;
   private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
-  private static final Calendar CALENDAR = new MondayToFridayCalendar("TestCalendar");
+  private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
 
-  // TODO all the null input tests. startDate after endDate etc
-
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void undefinedStubTest() {
+  public void undefinedStubTest1() {
     final LocalDate startDate = LocalDate.of(2012, 6, 7);
     final LocalDate endDate = LocalDate.of(2015, 11, 29); // sunday
     final Period step = Period.ofMonths(3);
     final StubType stubType = StubType.NONE;
     final boolean protectionStart = false;
-    @SuppressWarnings("unused")
-    final ISDAPremiumLegSchedule schedule = new ISDAPremiumLegSchedule(startDate, endDate, step, stubType, FOLLOWING, CALENDAR, protectionStart);
+    new ISDAPremiumLegSchedule(startDate, endDate, step, stubType, FOLLOWING, CalendarAdapter.of(CALENDAR), protectionStart);
   }
 
   /**
-   * short front stub and end on a weekend at EoM 
+  *
+  */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void undefinedStubTest2() {
+    final LocalDate startDate = LocalDate.of(2012, 6, 7);
+    final LocalDate endDate = LocalDate.of(2015, 11, 29); // sunday
+    final Period step = Period.ofMonths(3);
+    final StubType stubType = StubType.NONE;
+    final boolean protectionStart = false;
+    new ISDAPremiumLegSchedule(startDate, endDate, step, stubType, FOLLOWING, CALENDAR, protectionStart);
+  }
+
+  /**
+   * short front stub and end on a weekend at EoM
    */
   @Test
   public void scheduleTest1() {
-    final LocalDate[] accStart = new LocalDate[] {LocalDate.of(2012, 6, 7), LocalDate.of(2012, 8, 29), LocalDate.of(2012, 11, 29), LocalDate.of(2013, 2, 28), LocalDate.of(2013, 5, 29),
-      LocalDate.of(2013, 8, 29), LocalDate.of(2013, 11, 29), LocalDate.of(2014, 2, 28), LocalDate.of(2014, 5, 29), LocalDate.of(2014, 8, 29), LocalDate.of(2014, 12, 1), LocalDate.of(2015, 3, 2),
-      LocalDate.of(2015, 5, 29), LocalDate.of(2015, 8, 31) };
-    final LocalDate[] accEnd = new LocalDate[] {LocalDate.of(2012, 8, 29), LocalDate.of(2012, 11, 29), LocalDate.of(2013, 2, 28), LocalDate.of(2013, 5, 29), LocalDate.of(2013, 8, 29),
-      LocalDate.of(2013, 11, 29), LocalDate.of(2014, 2, 28), LocalDate.of(2014, 5, 29), LocalDate.of(2014, 8, 29), LocalDate.of(2014, 12, 1), LocalDate.of(2015, 3, 2), LocalDate.of(2015, 5, 29),
-      LocalDate.of(2015, 8, 31), LocalDate.of(2015, 11, 30) };
-    final LocalDate[] pay = new LocalDate[] {LocalDate.of(2012, 8, 29), LocalDate.of(2012, 11, 29), LocalDate.of(2013, 2, 28), LocalDate.of(2013, 5, 29), LocalDate.of(2013, 8, 29),
-      LocalDate.of(2013, 11, 29), LocalDate.of(2014, 2, 28), LocalDate.of(2014, 5, 29), LocalDate.of(2014, 8, 29), LocalDate.of(2014, 12, 1), LocalDate.of(2015, 3, 2), LocalDate.of(2015, 5, 29),
-      LocalDate.of(2015, 8, 31), LocalDate.of(2015, 11, 30) };
+    final LocalDate[] accStart = new LocalDate[] { LocalDate.of(2012, 6, 7), LocalDate.of(2012, 8, 29), LocalDate.of(2012, 11, 29), LocalDate.of(2013, 2, 28),
+        LocalDate.of(2013, 5, 29),
+        LocalDate.of(2013, 8, 29), LocalDate.of(2013, 11, 29), LocalDate.of(2014, 2, 28), LocalDate.of(2014, 5, 29), LocalDate.of(2014, 8, 29),
+        LocalDate.of(2014, 12, 1), LocalDate.of(2015, 3, 2),
+        LocalDate.of(2015, 5, 29), LocalDate.of(2015, 8, 31) };
+    final LocalDate[] accEnd = new LocalDate[] { LocalDate.of(2012, 8, 29), LocalDate.of(2012, 11, 29), LocalDate.of(2013, 2, 28), LocalDate.of(2013, 5, 29),
+        LocalDate.of(2013, 8, 29),
+        LocalDate.of(2013, 11, 29), LocalDate.of(2014, 2, 28), LocalDate.of(2014, 5, 29), LocalDate.of(2014, 8, 29), LocalDate.of(2014, 12, 1),
+        LocalDate.of(2015, 3, 2), LocalDate.of(2015, 5, 29),
+        LocalDate.of(2015, 8, 31), LocalDate.of(2015, 11, 30) };
+    final LocalDate[] pay = new LocalDate[] { LocalDate.of(2012, 8, 29), LocalDate.of(2012, 11, 29), LocalDate.of(2013, 2, 28), LocalDate.of(2013, 5, 29),
+        LocalDate.of(2013, 8, 29),
+        LocalDate.of(2013, 11, 29), LocalDate.of(2014, 2, 28), LocalDate.of(2014, 5, 29), LocalDate.of(2014, 8, 29), LocalDate.of(2014, 12, 1),
+        LocalDate.of(2015, 3, 2), LocalDate.of(2015, 5, 29),
+        LocalDate.of(2015, 8, 31), LocalDate.of(2015, 11, 30) };
+    final int n = pay.length;
+    // data check
+    ArgumentChecker.isTrue(n == accStart.length, null);
+    ArgumentChecker.isTrue(n == accEnd.length, null);
+
+    final LocalDate startDate = LocalDate.of(2012, 6, 7);
+    final LocalDate endDate = LocalDate.of(2015, 11, 29); // sunday
+    final Period step = Period.ofMonths(3);
+    final StubType stubType = StubType.FRONTSHORT;
+    final boolean protectionStart = true;
+
+    final ISDAPremiumLegSchedule schedule = new ISDAPremiumLegSchedule(startDate, endDate, step, stubType, FOLLOWING, CalendarAdapter.of(CALENDAR),
+        protectionStart);
+    assertEquals(n, schedule.getNumPayments());
+    for (int i = 0; i < n; i++) {
+      assertEquals(accStart[i], schedule.getAccStartDate(i));
+      assertEquals(accEnd[i], schedule.getAccEndDate(i));
+      assertEquals(pay[i], schedule.getPaymentDate(i));
+    }
+
+  }
+
+  /**
+   * short front stub and end on a weekend at EoM
+   */
+  @Test
+  public void scheduleTest2() {
+    final LocalDate[] accStart = new LocalDate[] { LocalDate.of(2012, 6, 7), LocalDate.of(2012, 8, 29), LocalDate.of(2012, 11, 29), LocalDate.of(2013, 2, 28),
+        LocalDate.of(2013, 5, 29),
+        LocalDate.of(2013, 8, 29), LocalDate.of(2013, 11, 29), LocalDate.of(2014, 2, 28), LocalDate.of(2014, 5, 29), LocalDate.of(2014, 8, 29),
+        LocalDate.of(2014, 12, 1), LocalDate.of(2015, 3, 2),
+        LocalDate.of(2015, 5, 29), LocalDate.of(2015, 8, 31) };
+    final LocalDate[] accEnd = new LocalDate[] { LocalDate.of(2012, 8, 29), LocalDate.of(2012, 11, 29), LocalDate.of(2013, 2, 28), LocalDate.of(2013, 5, 29),
+        LocalDate.of(2013, 8, 29),
+        LocalDate.of(2013, 11, 29), LocalDate.of(2014, 2, 28), LocalDate.of(2014, 5, 29), LocalDate.of(2014, 8, 29), LocalDate.of(2014, 12, 1),
+        LocalDate.of(2015, 3, 2), LocalDate.of(2015, 5, 29),
+        LocalDate.of(2015, 8, 31), LocalDate.of(2015, 11, 30) };
+    final LocalDate[] pay = new LocalDate[] { LocalDate.of(2012, 8, 29), LocalDate.of(2012, 11, 29), LocalDate.of(2013, 2, 28), LocalDate.of(2013, 5, 29),
+        LocalDate.of(2013, 8, 29),
+        LocalDate.of(2013, 11, 29), LocalDate.of(2014, 2, 28), LocalDate.of(2014, 5, 29), LocalDate.of(2014, 8, 29), LocalDate.of(2014, 12, 1),
+        LocalDate.of(2015, 3, 2), LocalDate.of(2015, 5, 29),
+        LocalDate.of(2015, 8, 31), LocalDate.of(2015, 11, 30) };
     final int n = pay.length;
     // data check
     ArgumentChecker.isTrue(n == accStart.length, null);
@@ -84,13 +146,48 @@ public class ISDAPremiumLegScheduleTest {
   }
 
   /**
-   * Long front stub, start on weekend and end on IMM date 
+   * Long front stub, start on weekend and end on IMM date
    */
   @Test
-  public void scheduleTest2() {
-    final LocalDate[] accStart = new LocalDate[] {LocalDate.of(2012, 6, 30), LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20), LocalDate.of(2013, 9, 20) };
-    final LocalDate[] accEnd = new LocalDate[] {LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20), LocalDate.of(2013, 9, 20), LocalDate.of(2013, 12, 21) };
-    final LocalDate[] pay = new LocalDate[] {LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20), LocalDate.of(2013, 9, 20), LocalDate.of(2013, 12, 20) };
+  public void scheduleTest3() {
+    final LocalDate[] accStart = new LocalDate[] { LocalDate.of(2012, 6, 30), LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20),
+        LocalDate.of(2013, 9, 20) };
+    final LocalDate[] accEnd = new LocalDate[] { LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20), LocalDate.of(2013, 9, 20),
+        LocalDate.of(2013, 12, 21) };
+    final LocalDate[] pay = new LocalDate[] { LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20), LocalDate.of(2013, 9, 20),
+        LocalDate.of(2013, 12, 20) };
+    final int n = pay.length;
+    // data check
+    ArgumentChecker.isTrue(n == accStart.length, null);
+    ArgumentChecker.isTrue(n == accEnd.length, null);
+
+    final LocalDate startDate = LocalDate.of(2012, 6, 30); // Saturday
+    final LocalDate endDate = LocalDate.of(2013, 12, 20); // IMM date
+    final Period step = Period.ofMonths(3);
+    final StubType stubType = StubType.FRONTLONG;
+    final boolean protectionStart = true;
+
+    final ISDAPremiumLegSchedule schedule = new ISDAPremiumLegSchedule(startDate, endDate, step, stubType, FOLLOWING, CalendarAdapter.of(CALENDAR),
+        protectionStart);
+    assertEquals(n, schedule.getNumPayments());
+    for (int i = 0; i < n; i++) {
+      assertEquals(accStart[i], schedule.getAccStartDate(i));
+      assertEquals(accEnd[i], schedule.getAccEndDate(i));
+      assertEquals(pay[i], schedule.getPaymentDate(i));
+    }
+  }
+
+  /**
+   * Long front stub, start on weekend and end on IMM date
+   */
+  @Test
+  public void scheduleTest4() {
+    final LocalDate[] accStart = new LocalDate[] { LocalDate.of(2012, 6, 30), LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20),
+        LocalDate.of(2013, 9, 20) };
+    final LocalDate[] accEnd = new LocalDate[] { LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20), LocalDate.of(2013, 9, 20),
+        LocalDate.of(2013, 12, 21) };
+    final LocalDate[] pay = new LocalDate[] { LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20), LocalDate.of(2013, 9, 20),
+        LocalDate.of(2013, 12, 20) };
     final int n = pay.length;
     // data check
     ArgumentChecker.isTrue(n == accStart.length, null);
@@ -112,13 +209,48 @@ public class ISDAPremiumLegScheduleTest {
   }
 
   /**
-   * short back stub, start and end on IMM date 
+   * short back stub, start and end on IMM date
    */
   @Test
-  public void scheduleTest3() {
-    final LocalDate[] accStart = new LocalDate[] {LocalDate.of(2012, 6, 20), LocalDate.of(2012, 9, 20), LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20) };
-    final LocalDate[] accEnd = new LocalDate[] {LocalDate.of(2012, 9, 20), LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20), LocalDate.of(2013, 9, 21) };
-    final LocalDate[] pay = new LocalDate[] {LocalDate.of(2012, 9, 20), LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20), LocalDate.of(2013, 9, 20) };
+  public void scheduleTest5() {
+    final LocalDate[] accStart = new LocalDate[] { LocalDate.of(2012, 6, 20), LocalDate.of(2012, 9, 20), LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20),
+        LocalDate.of(2013, 6, 20) };
+    final LocalDate[] accEnd = new LocalDate[] { LocalDate.of(2012, 9, 20), LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20),
+        LocalDate.of(2013, 9, 21) };
+    final LocalDate[] pay = new LocalDate[] { LocalDate.of(2012, 9, 20), LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20),
+        LocalDate.of(2013, 9, 20) };
+    final int n = pay.length;
+    // data check
+    ArgumentChecker.isTrue(n == accStart.length, null);
+    ArgumentChecker.isTrue(n == accEnd.length, null);
+
+    final LocalDate startDate = LocalDate.of(2012, 6, 20); // IMM date
+    final LocalDate endDate = LocalDate.of(2013, 9, 20); // IMM date
+    final Period step = Period.ofMonths(3);
+    final StubType stubType = StubType.BACKSHORT;
+    final boolean protectionStart = true;
+
+    final ISDAPremiumLegSchedule schedule = new ISDAPremiumLegSchedule(startDate, endDate, step, stubType, FOLLOWING, CalendarAdapter.of(CALENDAR),
+        protectionStart);
+    assertEquals(n, schedule.getNumPayments());
+    for (int i = 0; i < n; i++) {
+      assertEquals(accStart[i], schedule.getAccStartDate(i));
+      assertEquals(accEnd[i], schedule.getAccEndDate(i));
+      assertEquals(pay[i], schedule.getPaymentDate(i));
+    }
+  }
+
+  /**
+   * short back stub, start and end on IMM date
+   */
+  @Test
+  public void scheduleTest6() {
+    final LocalDate[] accStart = new LocalDate[] { LocalDate.of(2012, 6, 20), LocalDate.of(2012, 9, 20), LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20),
+        LocalDate.of(2013, 6, 20) };
+    final LocalDate[] accEnd = new LocalDate[] { LocalDate.of(2012, 9, 20), LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20),
+        LocalDate.of(2013, 9, 21) };
+    final LocalDate[] pay = new LocalDate[] { LocalDate.of(2012, 9, 20), LocalDate.of(2012, 12, 20), LocalDate.of(2013, 3, 20), LocalDate.of(2013, 6, 20),
+        LocalDate.of(2013, 9, 20) };
     final int n = pay.length;
     // data check
     ArgumentChecker.isTrue(n == accStart.length, null);
@@ -140,13 +272,48 @@ public class ISDAPremiumLegScheduleTest {
   }
 
   /**
-   * long back stub, start and end NOT on IMM date 
+   * long back stub, start and end NOT on IMM date
    */
   @Test
-  public void scheduleTest4() {
-    final LocalDate[] accStart = new LocalDate[] {LocalDate.of(2012, 5, 10), LocalDate.of(2012, 8, 10), LocalDate.of(2012, 11, 12), LocalDate.of(2013, 2, 11), LocalDate.of(2013, 5, 10) };
-    final LocalDate[] accEnd = new LocalDate[] {LocalDate.of(2012, 8, 10), LocalDate.of(2012, 11, 12), LocalDate.of(2013, 2, 11), LocalDate.of(2013, 5, 10), LocalDate.of(2013, 10, 21) };
-    final LocalDate[] pay = new LocalDate[] {LocalDate.of(2012, 8, 10), LocalDate.of(2012, 11, 12), LocalDate.of(2013, 2, 11), LocalDate.of(2013, 5, 10), LocalDate.of(2013, 10, 21) };
+  public void scheduleTest7() {
+    final LocalDate[] accStart = new LocalDate[] { LocalDate.of(2012, 5, 10), LocalDate.of(2012, 8, 10), LocalDate.of(2012, 11, 12), LocalDate.of(2013, 2, 11),
+        LocalDate.of(2013, 5, 10) };
+    final LocalDate[] accEnd = new LocalDate[] { LocalDate.of(2012, 8, 10), LocalDate.of(2012, 11, 12), LocalDate.of(2013, 2, 11), LocalDate.of(2013, 5, 10),
+        LocalDate.of(2013, 10, 21) };
+    final LocalDate[] pay = new LocalDate[] { LocalDate.of(2012, 8, 10), LocalDate.of(2012, 11, 12), LocalDate.of(2013, 2, 11), LocalDate.of(2013, 5, 10),
+        LocalDate.of(2013, 10, 21) };
+    final int n = pay.length;
+    // data check
+    ArgumentChecker.isTrue(n == accStart.length, null);
+    ArgumentChecker.isTrue(n == accEnd.length, null);
+
+    final LocalDate startDate = LocalDate.of(2012, 5, 10);
+    final LocalDate endDate = LocalDate.of(2013, 10, 20);
+    final Period step = Period.ofMonths(3);
+    final StubType stubType = StubType.BACKLONG;
+    final boolean protectionStart = true;
+
+    final ISDAPremiumLegSchedule schedule = new ISDAPremiumLegSchedule(startDate, endDate, step, stubType, FOLLOWING, CalendarAdapter.of(CALENDAR),
+        protectionStart);
+    assertEquals(n, schedule.getNumPayments());
+    for (int i = 0; i < n; i++) {
+      assertEquals(accStart[i], schedule.getAccStartDate(i));
+      assertEquals(accEnd[i], schedule.getAccEndDate(i));
+      assertEquals(pay[i], schedule.getPaymentDate(i));
+    }
+  }
+
+  /**
+   * long back stub, start and end NOT on IMM date
+   */
+  @Test
+  public void scheduleTest8() {
+    final LocalDate[] accStart = new LocalDate[] { LocalDate.of(2012, 5, 10), LocalDate.of(2012, 8, 10), LocalDate.of(2012, 11, 12), LocalDate.of(2013, 2, 11),
+        LocalDate.of(2013, 5, 10) };
+    final LocalDate[] accEnd = new LocalDate[] { LocalDate.of(2012, 8, 10), LocalDate.of(2012, 11, 12), LocalDate.of(2013, 2, 11), LocalDate.of(2013, 5, 10),
+        LocalDate.of(2013, 10, 21) };
+    final LocalDate[] pay = new LocalDate[] { LocalDate.of(2012, 8, 10), LocalDate.of(2012, 11, 12), LocalDate.of(2013, 2, 11), LocalDate.of(2013, 5, 10),
+        LocalDate.of(2013, 10, 21) };
     final int n = pay.length;
     // data check
     ArgumentChecker.isTrue(n == accStart.length, null);
@@ -170,7 +337,7 @@ public class ISDAPremiumLegScheduleTest {
   // TODO other inputs: Period different from 3M, convention "proceeding", proctectionStart = false etc.
 
   /**
-   * This generates a table in the CDS pricing paper 
+   * This generates a table in the CDS pricing paper
    */
   @Test(enabled = false)
   public void printTest() {

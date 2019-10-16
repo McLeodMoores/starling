@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.ObjectUtils;
 
 import com.opengamma.OpenGammaRuntimeException;
@@ -108,7 +110,7 @@ public class SmileInterpolatorSpline implements GeneralSmileInterpolator {
     final double[] shiftLnVolLowTail;
 
     // Volatility gradient (dVol/dStrike) of interpolator
-    final Function1D<Double, Double> dSigmaDx = DIFFERENTIATOR.differentiate(interpFunc, domain);
+    final Function<Double, Double> dSigmaDx = DIFFERENTIATOR.differentiate(interpFunc, domain);
 
     // The 'quiet' method reduces smile if the volatility gradient is either out of bounds of ShiftedLognormal model, or if root-finder fails to find solution
     if (_extrapolatorFailureBehaviour.equalsIgnoreCase(QUIET)) {

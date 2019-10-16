@@ -65,6 +65,15 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
   }
 
+  /**
+   * Provides configurations.
+   *
+   * @param configMaster
+   *          the configuration master
+   * @param curveTypes
+   *          the curve types
+   * @return a populated source
+   */
   public static FunctionConfigurationSource providers(final ConfigMaster configMaster, final Map<String, CurveType> curveTypes) {
     return new BeanDynamicFunctionConfigurationSource(ConfigMasterChangeProvider.of(configMaster)) {
 
@@ -87,25 +96,51 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
     };
   }
 
+  /**
+   * Provides the curve type for a curve.
+   */
   public static class Providers extends VersionedFunctionConfigurationBean {
-
     private final Map<String, CurveType> _configurationTypes = new HashMap<>();
+    private ConfigMaster _configMaster;
 
+    /**
+     * Sets the curve information.
+     *
+     * @param configurationName
+     *          the configuration name
+     * @param type
+     *          the type
+     */
     public void setCurveInfo(final String configurationName, final CurveType type) {
       _configurationTypes.put(configurationName, ArgumentChecker.notNull(type, "type"));
     }
 
+    /**
+     * Sets the curve information.
+     *
+     * @param configurationTypes
+     *          the information
+     */
     public void setCurveInfo(final Map<String, CurveType> configurationTypes) {
       _configurationTypes.clear();
       _configurationTypes.putAll(configurationTypes);
     }
 
-    private ConfigMaster _configMaster;
-
+    /**
+     * Sets the configuration master.
+     *
+     * @param configMaster
+     *          the config master
+     */
     public void setConfigMaster(final ConfigMaster configMaster) {
       _configMaster = ArgumentChecker.notNull(configMaster, "configMaster");
     }
 
+    /**
+     * Gets the configuration master.
+     *
+     * @return the config master
+     */
     public ConfigMaster getConfigMaster() {
       return _configMaster;
     }
@@ -202,6 +237,9 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
 
   }
 
+  /**
+   * Defines the curve type.
+   */
   public enum CurveType {
     /**
      * Uses discounting to calculate bond curves.

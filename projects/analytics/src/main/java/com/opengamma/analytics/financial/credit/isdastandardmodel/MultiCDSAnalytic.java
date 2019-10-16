@@ -11,6 +11,8 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.Period;
 import org.threeten.bp.temporal.JulianFields;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -80,12 +82,62 @@ public class MultiCDSAnalytic {
    *          Day count used for accrual
    * @param curveDayCount
    *          Day count used on curve (NOTE ISDA uses ACT/365 and it is not recommended to change this)
+   * @deprecated Use {@link WorkingDayCalendar}
+   */
+  @Deprecated
+  public MultiCDSAnalytic(final LocalDate tradeDate, final LocalDate stepinDate, final LocalDate cashSettlementDate, final LocalDate accStartDate,
+      final LocalDate maturityReferanceDate, final int[] maturityIndexes, final boolean payAccOnDefault, final Tenor paymentInterval, final StubType stubType,
+      final boolean protectStart, final double recoveryRate, final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calendar,
+      final DayCount accrualDayCount, final DayCount curveDayCount) {
+    this(tradeDate, stepinDate, cashSettlementDate, accStartDate, maturityReferanceDate, maturityIndexes, payAccOnDefault, paymentInterval, stubType,
+        protectStart, recoveryRate, businessdayAdjustmentConvention, WorkingDayCalendarAdapter.of(calendar), accrualDayCount, curveDayCount);
+  }
+
+  /**
+   * Set up a strip of increasing maturity CDSs that have some coupons in common. The trade date, step-in date and valuation date and accrual start date are all
+   * common, as is the payment frequency. The maturities are expressed as integer multiples of the payment interval from a reference date (the next IMM date
+   * after the trade date for standard CDSs) - this guarantees that premiums will be the same across several CDSs.
+   *
+   * @param tradeDate
+   *          The trade date
+   * @param stepinDate
+   *          (aka Protection Effective sate or assignment date). Date when party assumes ownership. This is usually T+1. This is when protection (and risk)
+   *          starts in terms of the model. Note, this is sometimes just called the Effective Date, however this can cause confusion with the legal effective
+   *          date which is T-60 or T-90.
+   * @param cashSettlementDate
+   *          The cash settlement date. The date that values are PVed to. Is is normally today + 3 business days.
+   * @param accStartDate
+   *          Accrual Start Date. This is when the CDS nominally starts in terms of premium payments. i.e. the number of days in the first period (and thus the
+   *          amount of the first premium payment) is counted from this date.
+   * @param maturityReferanceDate
+   *          A reference date that maturities are measured from. For standard CDSSs, this is the next IMM date after the trade date, so the actually maturities
+   *          will be some fixed periods after this.
+   * @param maturityIndexes
+   *          The maturities are fixed integer multiples of the payment interval, so for 6M, 1Y and 2Y tenors with a 3M payment interval, would require 2, 4,
+   *          and 8 as the indices
+   * @param payAccOnDefault
+   *          Is the accrued premium paid in the event of a default
+   * @param paymentInterval
+   *          The nominal step between premium payments (e.g. 3 months, 6 months).
+   * @param stubType
+   *          Options are FRONTSHORT, FRONTLONG, BACKSHORT, BACKLONG or NONE - <b>Note</b> in this code NONE is not allowed
+   * @param protectStart
+   *          If protectStart = true, then protections starts at the beginning of the day, otherwise it is at the end.
+   * @param recoveryRate
+   *          The recovery rate
+   * @param businessdayAdjustmentConvention
+   *          How are adjustments for non-business days made
+   * @param calendar
+   *          Calendar defining what is a non-business day
+   * @param accrualDayCount
+   *          Day count used for accrual
+   * @param curveDayCount
+   *          Day count used on curve (NOTE ISDA uses ACT/365 and it is not recommended to change this)
    */
   public MultiCDSAnalytic(final LocalDate tradeDate, final LocalDate stepinDate, final LocalDate cashSettlementDate, final LocalDate accStartDate,
-      final LocalDate maturityReferanceDate,
-      final int[] maturityIndexes, final boolean payAccOnDefault, final Tenor paymentInterval, final StubType stubType, final boolean protectStart,
-      final double recoveryRate,
-      final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calendar, final DayCount accrualDayCount, final DayCount curveDayCount) {
+      final LocalDate maturityReferanceDate, final int[] maturityIndexes, final boolean payAccOnDefault, final Tenor paymentInterval, final StubType stubType,
+      final boolean protectStart, final double recoveryRate, final BusinessDayConvention businessdayAdjustmentConvention, final WorkingDayCalendar calendar,
+      final DayCount accrualDayCount, final DayCount curveDayCount) {
     ArgumentChecker.notNull(tradeDate, "tradeDate");
     ArgumentChecker.notNull(stepinDate, "stepinDate");
     ArgumentChecker.notNull(cashSettlementDate, "cashSettlementDate");
@@ -98,7 +150,6 @@ public class MultiCDSAnalytic {
     ArgumentChecker.notNull(curveDayCount, "curveDayCount");
     ArgumentChecker.isFalse(cashSettlementDate.isBefore(tradeDate), "Require valueDate >= today");
     ArgumentChecker.isFalse(stepinDate.isBefore(tradeDate), "Require stepin >= today");
-    // ArgumentChecker.isFalse(tradeDate.isAfter(maturityReferanceDate), "First CDS has expired");
     ArgumentChecker.notEmpty(maturityIndexes, "maturityIndexes");
 
     _nMaturities = maturityIndexes.length;
@@ -163,10 +214,8 @@ public class MultiCDSAnalytic {
   }
 
   private MultiCDSAnalytic(final double lgd, final boolean payAccOnDefault, final CDSCoupon[] standardCoupons, final CDSCoupon[] terminalCoupons,
-      final double accStart,
-      final double effectiveProtectionStart, final double valuationTime, final double[] protectionEnd, final double[] accrued, final int[] accruedDays,
-      final int totalPayments, final int nMaturities,
-      final int[] matIndexToPayments) {
+      final double accStart, final double effectiveProtectionStart, final double valuationTime, final double[] protectionEnd, final double[] accrued,
+      final int[] accruedDays, final int totalPayments, final int nMaturities, final int[] matIndexToPayments) {
     _lgd = lgd;
     _payAccOnDefault = payAccOnDefault;
     _standardCoupons = standardCoupons;
@@ -182,6 +231,11 @@ public class MultiCDSAnalytic {
     _matIndexToPayments = matIndexToPayments;
   }
 
+  /**
+   * Get the number of maturities.
+   *
+   * @return the number of maturities
+   */
   public int getNumMaturities() {
     return _nMaturities;
   }
@@ -234,10 +288,16 @@ public class MultiCDSAnalytic {
     return _lgd;
   }
 
+  /**
+   * Replaces the recovery rate.
+   *
+   * @param recovery
+   *          the recovery rate
+   * @return copies of the CDSs with a changed recovery rate
+   */
   public MultiCDSAnalytic withRecoveryRate(final double recovery) {
     return new MultiCDSAnalytic(1 - recovery, _payAccOnDefault, _standardCoupons, _terminalCoupons, _accStart, _effectiveProtectionStart, _cashSettlementTime,
-        _protectionEnd, _accrued, _accruedDays,
-        _totalPayments, _nMaturities, _matIndexToPayments);
+        _protectionEnd, _accrued, _accruedDays, _totalPayments, _nMaturities, _matIndexToPayments);
   }
 
   /**
@@ -302,6 +362,11 @@ public class MultiCDSAnalytic {
     return _standardCoupons[index];
   }
 
+  /**
+   * Gets the coupons.
+   * 
+   * @return the coupons
+   */
   public CDSCoupon[] getStandardCoupons() {
     return _standardCoupons;
   }

@@ -14,10 +14,13 @@ import static com.opengamma.financial.convention.businessday.BusinessDayDateUtil
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.Period;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.ArgumentChecker;
@@ -35,7 +38,7 @@ public class CDSAnalyticFactory {
   private static final StubType DEFAULT_STUB_TYPE = StubType.FRONTSHORT;
   private static final boolean PROT_START = true;
   private static final double DEFAULT_RR = 0.4;
-  private static final Calendar DEFAULT_CALENDAR = new MondayToFridayCalendar("Weekend_Only");
+  private static final WorkingDayCalendar DEFAULT_CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
   /** Curve daycount generally fixed to Act/365 in ISDA */
   private static final DayCount ACT_365 = DayCounts.ACT_365;
@@ -50,7 +53,7 @@ public class CDSAnalyticFactory {
   private final boolean _protectStart;
   private final double _recoveryRate;
   private final BusinessDayConvention _businessdayAdjustmentConvention;
-  private final Calendar _calendar;
+  private final WorkingDayCalendar _calendar;
   private final DayCount _accrualDayCount;
   private final DayCount _curveDayCount;
 
@@ -207,9 +210,67 @@ public class CDSAnalyticFactory {
     _couponIntervalTenor = Tenor.of(_couponInterval);
   }
 
+  /**
+   * @param stepIn
+   *          the step-in in days
+   * @param cashSettle
+   *          the number of cash settlement days
+   * @param payAccOnDefault
+   *          true to pay the accrued on default
+   * @param couponInterval
+   *          the coupon interval
+   * @param stubType
+   *          the stub type
+   * @param protectStart
+   *          true to protect from the start of the day
+   * @param recoveryRate
+   *          the recovery rate
+   * @param businessdayAdjustmentConvention
+   *          the business day adjustment convention
+   * @param calendar
+   *          the holiday calendar
+   * @param accrualDayCount
+   *          the accrual day count
+   * @param curveDayCount
+   *          the curve day count
+   * @deprecated Use the constructor that takes a {@link WorkingDayCalendar}
+   */
+  @Deprecated
   protected CDSAnalyticFactory(final int stepIn, final int cashSettle, final boolean payAccOnDefault, final Period couponInterval, final StubType stubType,
-      final boolean protectStart,
-      final double recoveryRate, final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calendar, final DayCount accrualDayCount,
+      final boolean protectStart, final double recoveryRate, final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calendar,
+      final DayCount accrualDayCount, final DayCount curveDayCount) {
+    this(stepIn, cashSettle, payAccOnDefault, couponInterval, stubType, protectStart, recoveryRate, businessdayAdjustmentConvention,
+        WorkingDayCalendarAdapter.of(calendar),
+        accrualDayCount, curveDayCount);
+  }
+
+  /**
+   * @param stepIn
+   *          the step-in in days
+   * @param cashSettle
+   *          the number of cash settlement days
+   * @param payAccOnDefault
+   *          true to pay the accrued on default
+   * @param couponInterval
+   *          the coupon interval
+   * @param stubType
+   *          the stub type
+   * @param protectStart
+   *          true to protect from the start of the day
+   * @param recoveryRate
+   *          the recovery rate
+   * @param businessdayAdjustmentConvention
+   *          the business day adjustment convention
+   * @param calendar
+   *          the holiday calendar
+   * @param accrualDayCount
+   *          the accrual day count
+   * @param curveDayCount
+   *          the curve day count
+   */
+  protected CDSAnalyticFactory(final int stepIn, final int cashSettle, final boolean payAccOnDefault, final Period couponInterval, final StubType stubType,
+      final boolean protectStart, final double recoveryRate, final BusinessDayConvention businessdayAdjustmentConvention, final WorkingDayCalendar calendar,
+      final DayCount accrualDayCount,
       final DayCount curveDayCount) {
     _stepIn = stepIn;
     _cashSettle = cashSettle;
@@ -339,8 +400,23 @@ public class CDSAnalyticFactory {
    * @param calendar
    *          Calendar defining what is a non-business day
    * @return A new factory with calendar set
+   * @deprecated Use {@link #with(WorkingDayCalendar)}
    */
+  @Deprecated
   public CDSAnalyticFactory with(final Calendar calendar) {
+    return new CDSAnalyticFactory(_stepIn, _cashSettle, _payAccOnDefault, _couponInterval, _stubType, _protectStart, _recoveryRate,
+        _businessdayAdjustmentConvention, WorkingDayCalendarAdapter.of(calendar), _accrualDayCount,
+        _curveDayCount);
+  }
+
+  /**
+   * Set the calendar. Default is weekend-only
+   *
+   * @param calendar
+   *          Calendar defining what is a non-business day
+   * @return A new factory with calendar set
+   */
+  public CDSAnalyticFactory with(final WorkingDayCalendar calendar) {
     return new CDSAnalyticFactory(_stepIn, _cashSettle, _payAccOnDefault, _couponInterval, _stubType, _protectStart, _recoveryRate,
         _businessdayAdjustmentConvention, calendar, _accrualDayCount,
         _curveDayCount);
@@ -391,7 +467,7 @@ public class CDSAnalyticFactory {
   public CDSAnalytic makeCDX(final LocalDate tradeDate, final Period tenor) {
     ArgumentChecker.notNull(tradeDate, "tradeDate");
     ArgumentChecker.notNull(tenor, "tenor");
-    final LocalDate effectiveDate = _businessdayAdjustmentConvention.adjustDate(_calendar, getPrevIMMDate(tradeDate));
+    final LocalDate effectiveDate = _businessdayAdjustmentConvention.adjustDate(CalendarAdapter.of(_calendar), getPrevIMMDate(tradeDate));
     final LocalDate roll = getNextIndexRollDate(tradeDate);
     final LocalDate maturity = roll.plus(tenor).minusMonths(3);
     return makeCDS(tradeDate, effectiveDate, maturity);
@@ -413,7 +489,7 @@ public class CDSAnalyticFactory {
   public CDSAnalytic[] makeCDX(final LocalDate tradeDate, final Period[] tenors) {
     ArgumentChecker.notNull(tradeDate, "tradeDate");
     ArgumentChecker.noNulls(tenors, "tenors");
-    final LocalDate effectiveDate = _businessdayAdjustmentConvention.adjustDate(_calendar, getPrevIMMDate(tradeDate));
+    final LocalDate effectiveDate = _businessdayAdjustmentConvention.adjustDate(CalendarAdapter.of(_calendar), getPrevIMMDate(tradeDate));
     final LocalDate mid = getNextIndexRollDate(tradeDate).minusMonths(3);
     final LocalDate[] maturities = getIMMDateSet(mid, tenors);
     return makeCDS(tradeDate, effectiveDate, maturities);
@@ -450,7 +526,7 @@ public class CDSAnalyticFactory {
   public CDSAnalytic makeIMMCDS(final LocalDate tradeDate, final Period tenor, final boolean makeEffBusDay) {
     ArgumentChecker.notNull(tradeDate, "tradeDate");
     ArgumentChecker.notNull(tenor, "tenor");
-    final LocalDate effectiveDate = makeEffBusDay ? _businessdayAdjustmentConvention.adjustDate(_calendar, getPrevIMMDate(tradeDate))
+    final LocalDate effectiveDate = makeEffBusDay ? _businessdayAdjustmentConvention.adjustDate(CalendarAdapter.of(_calendar), getPrevIMMDate(tradeDate))
         : getPrevIMMDate(tradeDate);
     final LocalDate nextIMM = getNextIMMDate(tradeDate);
     final LocalDate maturity = nextIMM.plus(tenor);
@@ -486,7 +562,7 @@ public class CDSAnalyticFactory {
    * @return An array of CDS analytic descriptions
    */
   public CDSAnalytic[] makeIMMCDS(final LocalDate tradeDate, final Period[] tenors, final boolean makeEffBusDay) {
-    final LocalDate effectiveDate = makeEffBusDay ? _businessdayAdjustmentConvention.adjustDate(_calendar, getPrevIMMDate(tradeDate))
+    final LocalDate effectiveDate = makeEffBusDay ? _businessdayAdjustmentConvention.adjustDate(CalendarAdapter.of(_calendar), getPrevIMMDate(tradeDate))
         : getPrevIMMDate(tradeDate);
     return makeIMMCDS(tradeDate, effectiveDate, tenors);
   }
@@ -528,8 +604,7 @@ public class CDSAnalyticFactory {
     final LocalDate stepinDate = tradeDate.plusDays(_stepIn);
     final LocalDate valueDate = addWorkDays(tradeDate, _cashSettle, _calendar);
     return new CDSAnalytic(tradeDate, stepinDate, valueDate, accStartDate, maturity, _payAccOnDefault, _couponInterval, _stubType, _protectStart, _recoveryRate,
-        _businessdayAdjustmentConvention,
-        _calendar, _accrualDayCount, _curveDayCount);
+        _businessdayAdjustmentConvention, _calendar, _accrualDayCount, _curveDayCount);
   }
 
   /**
@@ -554,8 +629,7 @@ public class CDSAnalyticFactory {
   public CDSAnalytic makeCDS(final LocalDate tradeDate, final LocalDate stepinDate, final LocalDate cashSettlementDate, final LocalDate accStartDate,
       final LocalDate maturity) {
     return new CDSAnalytic(tradeDate, stepinDate, cashSettlementDate, accStartDate, maturity, _payAccOnDefault, _couponInterval, _stubType, _protectStart,
-        _recoveryRate,
-        _businessdayAdjustmentConvention, _calendar, _accrualDayCount, _curveDayCount);
+        _recoveryRate, _businessdayAdjustmentConvention, _calendar, _accrualDayCount, _curveDayCount);
   }
 
   /**
@@ -601,8 +675,7 @@ public class CDSAnalyticFactory {
     final CDSAnalytic[] cds = new CDSAnalytic[n];
     for (int i = 0; i < n; i++) {
       cds[i] = new CDSAnalytic(tradeDate, stepinDate, valueDate, accStartDate, maturities[i], _payAccOnDefault, _couponInterval, _stubType, _protectStart,
-          _recoveryRate,
-          _businessdayAdjustmentConvention, _calendar, _accrualDayCount, _curveDayCount);
+          _recoveryRate, _businessdayAdjustmentConvention, _calendar, _accrualDayCount, _curveDayCount);
     }
     return cds;
   }
@@ -627,7 +700,7 @@ public class CDSAnalyticFactory {
     ArgumentChecker.isFalse(forwardStartDate.isBefore(tradeDate), "forwardStartDate of {} is before trade date of {}", forwardStartDate, tradeDate);
     final LocalDate stepinDate = forwardStartDate.plusDays(_stepIn);
     final LocalDate valueDate = addWorkDays(forwardStartDate, _cashSettle, _calendar);
-    final LocalDate accStartDate = _businessdayAdjustmentConvention.adjustDate(_calendar, getPrevIMMDate(forwardStartDate));
+    final LocalDate accStartDate = _businessdayAdjustmentConvention.adjustDate(CalendarAdapter.of(_calendar), getPrevIMMDate(forwardStartDate));
     return makeCDS(tradeDate, stepinDate, valueDate, accStartDate, maturity);
   }
 
@@ -715,7 +788,7 @@ public class CDSAnalyticFactory {
     for (int i = 0; i <= termMatIndex; i++) {
       maturityIndexes[i] = i;
     }
-    final LocalDate accStartDate = _businessdayAdjustmentConvention.adjustDate(_calendar, getPrevIMMDate(tradeDate));
+    final LocalDate accStartDate = _businessdayAdjustmentConvention.adjustDate(CalendarAdapter.of(_calendar), getPrevIMMDate(tradeDate));
     return makeMultiCDS(tradeDate, accStartDate, maturityReferanceDate, maturityIndexes);
   }
 
@@ -765,11 +838,9 @@ public class CDSAnalyticFactory {
    * @return A set of CDS represented as a MultiCDSAnalytic
    */
   public MultiCDSAnalytic makeMultiCDS(final LocalDate tradeDate, final LocalDate stepinDate, final LocalDate cashSettlementDate, final LocalDate accStartDate,
-      final LocalDate maturityReferanceDate,
-      final int[] maturityIndexes) {
+      final LocalDate maturityReferanceDate, final int[] maturityIndexes) {
     return new MultiCDSAnalytic(tradeDate, stepinDate, cashSettlementDate, accStartDate, maturityReferanceDate, maturityIndexes, _payAccOnDefault,
-        _couponIntervalTenor, _stubType, _protectStart,
-        _recoveryRate, _businessdayAdjustmentConvention, DEFAULT_CALENDAR, _accrualDayCount, _curveDayCount);
+        _couponIntervalTenor, _stubType, _protectStart, _recoveryRate, _businessdayAdjustmentConvention, DEFAULT_CALENDAR, _accrualDayCount, _curveDayCount);
   }
 
   /**
@@ -782,7 +853,7 @@ public class CDSAnalyticFactory {
    * @return A set of CDS represented as a MultiCDSAnalytic
    */
   public MultiCDSAnalytic makeMultiIMMCDS(final LocalDate tradeDate, final Period[] tenors) {
-    final LocalDate accStartDate = _businessdayAdjustmentConvention.adjustDate(_calendar, getPrevIMMDate(tradeDate));
+    final LocalDate accStartDate = _businessdayAdjustmentConvention.adjustDate(CalendarAdapter.of(_calendar), getPrevIMMDate(tradeDate));
     return makeMultiIMMCDS(tradeDate, accStartDate, tenors);
   }
 
@@ -877,7 +948,7 @@ public class CDSAnalyticFactory {
    * @return A set of CDS represented as a MultiCDSAnalytic
    */
   public MultiCDSAnalytic makeMultiIMMCDS(final LocalDate tradeDate, final int[] matIndices) {
-    final LocalDate accStartDate = _businessdayAdjustmentConvention.adjustDate(_calendar, getPrevIMMDate(tradeDate));
+    final LocalDate accStartDate = _businessdayAdjustmentConvention.adjustDate(CalendarAdapter.of(_calendar), getPrevIMMDate(tradeDate));
     return makeMultiIMMCDS(tradeDate, accStartDate, matIndices);
   }
 
@@ -906,8 +977,7 @@ public class CDSAnalyticFactory {
     final LocalDate valueDate = addWorkDays(tradeDate, _cashSettle, _calendar);
 
     return new MultiCDSAnalytic(tradeDate, stepinDate, valueDate, accStartDate, nextIMM, matIndices, _payAccOnDefault, _couponIntervalTenor, _stubType,
-        _protectStart, _recoveryRate,
-        _businessdayAdjustmentConvention, DEFAULT_CALENDAR, _accrualDayCount, _curveDayCount);
+        _protectStart, _recoveryRate, _businessdayAdjustmentConvention, DEFAULT_CALENDAR, _accrualDayCount, _curveDayCount);
   }
 
 }

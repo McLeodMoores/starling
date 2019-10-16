@@ -24,7 +24,6 @@ import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.financial.analytics.CurrencyPairsDefaults;
 import com.opengamma.financial.analytics.model.bond.BondFunctions;
 import com.opengamma.financial.analytics.model.bondfutureoption.BondFutureOptionFunctions;
-import com.opengamma.financial.analytics.model.credit.CreditFunctions;
 import com.opengamma.financial.analytics.model.curve.CurveFunctions;
 import com.opengamma.financial.analytics.model.curve.forward.ForwardFunctions;
 import com.opengamma.financial.analytics.model.curve.interestrate.InterestRateFunctions;
@@ -850,27 +849,6 @@ public abstract class StandardFunctionConfiguration extends AbstractFunctionConf
     return getRepository(defaults);
   }
 
-  protected void setCDSFunctionDefaults(final CurrencyInfo i, final CreditFunctions.Defaults.CurrencyInfo defaults) {
-    defaults.setCurveCalculationConfig(i.getCurveConfiguration("model/credit/yield"));
-    defaults.setCurveName(i.getCurveName("model/credit/yield"));
-    defaults.setCurveCalculationMethod(i.getCurveCalculationMethodName("model/credit/yield"));
-    defaults.setCurveCalculationMethod(i.getCurveCalculationMethodName("model/credit/hazardrate"));
-  }
-
-  protected void setCDSFunctionDefaults(final CreditFunctions.Defaults defaults) {
-    defaults.setPerCurrencyInfo(getCurrencyInfo(i -> {
-      final CreditFunctions.Defaults.CurrencyInfo d = new CreditFunctions.Defaults.CurrencyInfo();
-      setCDSFunctionDefaults(i, d);
-      return d;
-    }));
-  }
-
-  protected FunctionConfigurationSource cdsFunctions() {
-    final CreditFunctions.Defaults defaults = new CreditFunctions.Defaults();
-    setCDSFunctionDefaults(defaults);
-    return getRepository(defaults);
-  }
-
   protected void setXCcySwapFunctionDefaults(final CurrencyInfo i,
       final com.opengamma.financial.analytics.model.fixedincome.DeprecatedFunctions.Defaults.CurrencyInfo defaults) {
     defaults.setCurveCalculationConfig(i.getCurveName("model/xccyswap"));
@@ -1151,8 +1129,7 @@ public abstract class StandardFunctionConfiguration extends AbstractFunctionConf
   }
 
   protected FunctionConfigurationSource localVolatilityFunctions() {
-    final com.opengamma.financial.analytics.model.volatility.local.defaultproperties.DefaultPropertiesFunctions defaults = 
-        new com.opengamma.financial.analytics.model.volatility.local.defaultproperties.DefaultPropertiesFunctions();
+    final com.opengamma.financial.analytics.model.volatility.local.defaultproperties.DefaultPropertiesFunctions defaults = new com.opengamma.financial.analytics.model.volatility.local.defaultproperties.DefaultPropertiesFunctions();
     setLocalVolatilityDefaults(defaults);
     return getRepository(defaults);
   }
@@ -1322,7 +1299,7 @@ public abstract class StandardFunctionConfiguration extends AbstractFunctionConf
 
   @Override
   protected FunctionConfigurationSource createObject() {
-    return CombiningFunctionConfigurationSource.of(super.createObject(), bondFunctions(), bondFutureOptionFunctions(), forexDigitalFunctions(), cdsFunctions(),
+    return CombiningFunctionConfigurationSource.of(super.createObject(), bondFunctions(), bondFutureOptionFunctions(), forexDigitalFunctions(),
         deprecatedFunctions(), equityOptionFunctions(), externalSensitivitiesFunctions(), fixedIncomeFunctions(), forexFunctions(), forexOptionFunctions(),
         forwardCurveFunctions(), futureFunctions(), futureOptionFunctions(), horizonFunctions(), interestRateFunctions(), irFutureOptionFunctions(),
         localVolatilityFunctions(), pnlFunctions(), portfolioTheoryFunctions(), sabrCubeFunctions(), swaptionFunctions(), varFunctions(),

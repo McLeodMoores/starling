@@ -12,8 +12,11 @@ import java.util.Map;
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
@@ -21,9 +24,6 @@ import org.threeten.bp.LocalDate;
 
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
-import org.joda.beans.MetaBean;
-import org.joda.beans.gen.BeanDefinition;
-import org.joda.beans.gen.PropertyDefinition;
 
 /**
  * An ISDA compliant date credit curve.
@@ -41,7 +41,7 @@ public class ISDACompliantDateCreditCurve
   /**
    * The base date.
    */
-  @PropertyDefinition(set = "private")
+  @PropertyDefinition(set = "private", overrideGet = true)
   private LocalDate _baseDate;
   /**
    * The knot dates on the curve.
@@ -61,25 +61,32 @@ public class ISDACompliantDateCreditCurve
   }
 
   /**
-   * Builds a credit curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates.
-   * The times (year-fractions) between the baseDate and the knot dates is calculated using ACT/365.
+   * Builds a credit curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates. The times (year-fractions) between the
+   * baseDate and the knot dates is calculated using ACT/365.
    *
-   * @param baseDate  the base date for the curve (i.e. this is time zero), not null
-   * @param dates  the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
-   * @param rates  the continually compounded zero hazard rates at given knot dates, not null
+   * @param baseDate
+   *          the base date for the curve (i.e. this is time zero), not null
+   * @param dates
+   *          the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
+   * @param rates
+   *          the continually compounded zero hazard rates at given knot dates, not null
    */
   public ISDACompliantDateCreditCurve(final LocalDate baseDate, final LocalDate[] dates, final double[] rates) {
     this(baseDate, dates, rates, ACT_365);
   }
 
   /**
-   * Builds a credit curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates.
-   * The times (year-fractions) between the baseDate and the knot dates is calculated using the specified day-count-convention.
+   * Builds a credit curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates. The times (year-fractions) between the
+   * baseDate and the knot dates is calculated using the specified day-count-convention.
    *
-   * @param baseDate  the base date for the curve (i.e. this is time zero), not null
-   * @param dates  the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
-   * @param rates  the continually compounded zero hazard rates at given knot dates, not null
-   * @param dayCount  the day-count-convention, not null
+   * @param baseDate
+   *          the base date for the curve (i.e. this is time zero), not null
+   * @param dates
+   *          the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
+   * @param rates
+   *          the continually compounded zero hazard rates at given knot dates, not null
+   * @param dayCount
+   *          the day-count-convention, not null
    */
   public ISDACompliantDateCreditCurve(final LocalDate baseDate, final LocalDate[] dates, final double[] rates, final DayCount dayCount) {
     super(checkAndGetTimes(baseDate, dates, rates, dayCount), rates);
@@ -95,26 +102,26 @@ public class ISDACompliantDateCreditCurve
     _dayCount = dayCount;
   }
 
-  //  /**
-  //  * Converter from the old HazardRateCurve to ISDACompliantDateCreditCurve. Not this only works if offset = 0.0.
-  //  * @param hazardCurve a HazardRateCurve hazard curve
-  //  * @return A ISDACompliantDateCreditCurve
-  //  */
-  //  public static ISDACompliantDateCreditCurve fromHazardRateCurve(final HazardRateCurve hazardCurve) {
+  // /**
+  // * Converter from the old HazardRateCurve to ISDACompliantDateCreditCurve. Not this only works if offset = 0.0.
+  // * @param hazardCurve a HazardRateCurve hazard curve
+  // * @return A ISDACompliantDateCreditCurve
+  // */
+  // public static ISDACompliantDateCreditCurve fromHazardRateCurve(final HazardRateCurve hazardCurve) {
   //
-  //    ArgumentChecker.isTrue(hazardCurve.getOffset() == 0, "offset not zero - cannot convert");
-  //    final LocalDate[] dates = ISDACompliantScheduleGenerator.toLocalDate(hazardCurve.getCurveTenors());
-  //    final double[] t = hazardCurve.getTimes();
-  //    ISDACompliantCreditCurve temp = new ISDACompliantCreditCurve(t, hazardCurve.getRates());
+  // ArgumentChecker.isTrue(hazardCurve.getOffset() == 0, "offset not zero - cannot convert");
+  // final LocalDate[] dates = ISDACompliantScheduleGenerator.toLocalDate(hazardCurve.getCurveTenors());
+  // final double[] t = hazardCurve.getTimes();
+  // ISDACompliantCreditCurve temp = new ISDACompliantCreditCurve(t, hazardCurve.getRates());
   //
-  //    // back out the missing baseDate (assuming ACT/365 was used)
-  //    int days = (int) Math.round(365 * t[0]);
-  //    LocalDate baseDate = dates[0].minusDays(days);
+  // // back out the missing baseDate (assuming ACT/365 was used)
+  // int days = (int) Math.round(365 * t[0]);
+  // LocalDate baseDate = dates[0].minusDays(days);
   //
-  //    return new ISDACompliantDateCreditCurve(baseDate, dates, ACT_365, temp);
-  //  }
+  // return new ISDACompliantDateCreditCurve(baseDate, dates, ACT_365, temp);
+  // }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public LocalDate getCurveDate(final int index) {
     return _dates[index];
@@ -160,6 +167,7 @@ public class ISDACompliantDateCreditCurve
    * Gets the base date.
    * @return the value of the property
    */
+  @Override
   public LocalDate getBaseDate() {
     return _baseDate;
   }

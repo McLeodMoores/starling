@@ -251,18 +251,6 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
       functions.add(functionConfiguration(CurveConstructionConfigurationFunction.class, curveConfigName));
     }
 
-    /**
-     * Adds a function that constructs yield curves using the ISDA methodology.
-     *
-     * @param functions
-     *          The list of functions
-     * @param curveConfigName
-     *          The curve configuration name
-     */
-    protected void addCurveBuildingFunctions(final List<FunctionConfiguration> functions, final String curveConfigName) {
-      functions.add(functionConfiguration(ISDACompliantCurveFunction.class, curveConfigName));
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
@@ -283,13 +271,6 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
 
           addInterpolatedCurveBuildingFunctions(functions, allCurveTypeConfigs, documentName);
         }
-      }
-
-      searchRequest.setType(CurveDefinition.class);
-      searchRequest.setVersionCorrection(getVersionCorrection());
-      for (final ConfigDocument configDocument : ConfigSearchIterator.iterable(getConfigMaster(), searchRequest)) {
-        final String documentName = configDocument.getName();
-        addCurveBuildingFunctions(functions, documentName);
       }
     }
 

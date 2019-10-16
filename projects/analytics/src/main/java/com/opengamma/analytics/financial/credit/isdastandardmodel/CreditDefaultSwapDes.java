@@ -8,6 +8,8 @@ package com.opengamma.analytics.financial.credit.isdastandardmodel;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.Period;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCount;
@@ -23,9 +25,15 @@ public class CreditDefaultSwapDes {
   private final DayCount _accrualDayCount;
 
   public CreditDefaultSwapDes(final LocalDate accStartDate, final LocalDate protectionStartDate, final LocalDate protectionEndDate,
-      final boolean payAccOnDefault, final Period paymentInterval,
-      final StubType stubType, final boolean isProtectStart, final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calendar,
-      final DayCount accrualDayCount) {
+      final boolean payAccOnDefault, final Period paymentInterval, final StubType stubType, final boolean isProtectStart,
+      final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calendar, final DayCount accrualDayCount) {
+    this(accStartDate, protectionStartDate, protectionEndDate, payAccOnDefault, paymentInterval, stubType, isProtectStart, businessdayAdjustmentConvention,
+        WorkingDayCalendarAdapter.of(calendar), accrualDayCount);
+  }
+
+  public CreditDefaultSwapDes(final LocalDate accStartDate, final LocalDate protectionStartDate, final LocalDate protectionEndDate,
+      final boolean payAccOnDefault, final Period paymentInterval, final StubType stubType, final boolean isProtectStart,
+      final BusinessDayConvention businessdayAdjustmentConvention, final WorkingDayCalendar calendar, final DayCount accrualDayCount) {
     ArgumentChecker.notNull(accStartDate, "accStartDate");
     ArgumentChecker.notNull(protectionStartDate, "protectionStartDate");
     ArgumentChecker.notNull(protectionEndDate, "protectionEndDate");
@@ -47,7 +55,7 @@ public class CreditDefaultSwapDes {
 
   /**
    * Gets the coupons.
-   * 
+   *
    * @return the coupons
    */
   public CDSCouponDes[] getCoupons() {
@@ -56,7 +64,7 @@ public class CreditDefaultSwapDes {
 
   /**
    * Gets the payAccOnDefault.
-   * 
+   *
    * @return the payAccOnDefault
    */
   public boolean isPayAccOnDefault() {
@@ -65,7 +73,7 @@ public class CreditDefaultSwapDes {
 
   /**
    * Gets the accrualDayCount.
-   * 
+   *
    * @return the accrualDayCount
    */
   public DayCount getAccrualDayCount() {

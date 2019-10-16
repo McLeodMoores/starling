@@ -64,6 +64,9 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.money.Currency;
 
+/**
+ * Calculates the credit spread required for a bond to price to par, and the associated hazard rate.
+ */
 public class IsdaBondCreditSpreadHazardRateFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(IsdaBondCreditSpreadHazardRateFunction.class);
   private static final AnalyticBondPricer CALCULATOR = new AnalyticBondPricer();

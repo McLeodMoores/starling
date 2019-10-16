@@ -44,7 +44,7 @@ public enum StandardCDSQuotingConvention {
     } else if (PAR_SPREAD.name().equals(convention)) {
       return PAR_SPREAD;
     }
-    throw new OpenGammaRuntimeException("Unknown cds quoting convention: " + convention);
+    throw new OpenGammaRuntimeException("Unknown CDS quoting convention: " + convention);
   }
 
 }

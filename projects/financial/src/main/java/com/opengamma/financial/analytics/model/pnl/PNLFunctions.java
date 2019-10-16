@@ -52,7 +52,7 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Function repository configuration source for the deprecated functions contained in this package.
-   * 
+   *
    * @deprecated Deprecated
    */
   @Deprecated
@@ -520,7 +520,7 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       functions.add(functionConfiguration(EquityPnLDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName(),
           getReturnCalculatorName()));
-      functions.add(functionConfiguration(EquitySecurityPnLDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(), 
+      functions.add(functionConfiguration(EquitySecurityPnLDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(),
           getSamplingCalculatorName(), getReturnCalculatorName()));
       functions.add(functionConfiguration(FXOptionBlackPnLDefaults.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName()));
       functions.add(functionConfiguration(PositionPnLDefaults.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName()));
@@ -557,9 +557,6 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
     functions.add(functionConfiguration(BondFutureOptionBlackYieldCurveNodePnLFunction.class));
-    functions.add(functionConfiguration(CreditDefaultSwapIndexCS01PnLFunction.class));
-    functions.add(functionConfiguration(CreditDefaultSwapOptionCS01PnLFunction.class));
-    functions.add(functionConfiguration(CreditInstrumentCS01PnLFunction.class));
     functions.add(functionConfiguration(EquityPnLFunction.class));
     functions.add(functionConfiguration(EquitySecurityPnLFunction.class));
     functions.add(functionConfiguration(FXForwardCurrencyExposurePnLFunction.class));

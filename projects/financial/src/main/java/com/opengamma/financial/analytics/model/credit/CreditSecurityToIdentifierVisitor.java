@@ -9,8 +9,6 @@ import com.opengamma.core.security.SecuritySource;
 import com.opengamma.financial.security.FinancialSecurityVisitorAdapter;
 import com.opengamma.financial.security.cds.CreditDefaultSwapIndexSecurity;
 import com.opengamma.financial.security.cds.CreditDefaultSwapSecurity;
-import com.opengamma.financial.security.cds.LegacyVanillaCDSSecurity;
-import com.opengamma.financial.security.cds.StandardVanillaCDSSecurity;
 import com.opengamma.financial.security.credit.LegacyCDSSecurity;
 import com.opengamma.financial.security.credit.StandardCDSSecurity;
 import com.opengamma.financial.security.option.CreditDefaultSwapOptionSecurity;
@@ -45,32 +43,6 @@ public final class CreditSecurityToIdentifierVisitor extends FinancialSecurityVi
     ArgumentChecker.notNull(securitySource, "security source");
     _securitySource = securitySource;
     _prefix = prefix;
-  }
-
-  @Deprecated
-  @Override
-  public CreditCurveIdentifier visitStandardVanillaCDSSecurity(final StandardVanillaCDSSecurity security) {
-    final ExternalId redCode = security.getReferenceEntity();
-    final Currency currency = security.getNotional().getCurrency();
-    final String seniority = security.getDebtSeniority().name();
-    final String restructuringClause = security.getRestructuringClause().name();
-    if (_prefix == null) {
-      return CreditCurveIdentifier.of(redCode, currency, seniority, restructuringClause);
-    }
-    return CreditCurveIdentifier.of(_prefix, redCode.getValue(), currency, seniority, restructuringClause);
-  }
-
-  @Deprecated
-  @Override
-  public CreditCurveIdentifier visitLegacyVanillaCDSSecurity(final LegacyVanillaCDSSecurity security) {
-    final ExternalId redCode = security.getReferenceEntity();
-    final Currency currency = security.getNotional().getCurrency();
-    final String seniority = security.getDebtSeniority().name();
-    final String restructuringClause = security.getRestructuringClause().name();
-    if (_prefix == null) {
-      return CreditCurveIdentifier.of(redCode, currency, seniority, restructuringClause);
-    }
-    return CreditCurveIdentifier.of(_prefix, redCode.getValue(), currency, seniority, restructuringClause);
   }
 
   @Override

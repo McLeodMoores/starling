@@ -6,6 +6,7 @@
 package com.opengamma.analytics.financial.model.volatility.surface;
 
 import java.util.Map;
+import java.util.function.Function;
 
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
@@ -59,7 +60,7 @@ public class BlackScholesMertonImpliedVolatilitySurfaceModel implements Volatili
     }
 
     @Override
-    public StandardOptionDataBundle getRoot(final Function1D<StandardOptionDataBundle, Double> function, final StandardOptionDataBundle... volData) {
+    public StandardOptionDataBundle getRoot(final Function<StandardOptionDataBundle, Double> function, final StandardOptionDataBundle... volData) {
       final StandardOptionDataBundle lowVolData = volData[0];
       final StandardOptionDataBundle highVolData = volData[1];
       final Double lowPrice = function.apply(lowVolData) - _price;

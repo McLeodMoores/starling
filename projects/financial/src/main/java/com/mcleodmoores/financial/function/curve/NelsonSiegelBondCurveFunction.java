@@ -89,7 +89,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- *
+ * Constructs a bond curve using the Nelson-Siegel method.
  */
 public class NelsonSiegelBondCurveFunction extends AbstractFunction {
   private static final NonLinearLeastSquare MINIMISER = new NonLinearLeastSquare();
@@ -97,6 +97,10 @@ public class NelsonSiegelBondCurveFunction extends AbstractFunction {
   private CurveConstructionConfigurationSource _curveConstructionConfigurationSource;
   private final String _configurationName;
 
+  /**
+   * @param configurationName
+   *          the configuration name, not null
+   */
   public NelsonSiegelBondCurveFunction(final String configurationName) {
     _configurationName = ArgumentChecker.notNull(configurationName, "configurationName");
   }
@@ -130,11 +134,26 @@ public class NelsonSiegelBondCurveFunction extends AbstractFunction {
         exogenousRequirements, curveConstructionConfiguration);
   }
 
+  /**
+   * A compiled function that constructs the curve.
+   */
   class MyCompiledFunctionDefinition extends AbstractInvokingCompiledFunction {
     private final String[] _curveNames;
     private final Set<ValueRequirement> _exogenousRequirements;
     private final CurveConstructionConfiguration _curveConstructionConfiguration;
 
+    /**
+     * @param earliestInvocation
+     *          the earliest valid invocation time
+     * @param latestInvocation
+     *          the latest valid invocation time
+     * @param curveNames
+     *          the curve names
+     * @param exogenousRequirements
+     *          any exogenous requirements
+     * @param curveConstructionConfiguration
+     *          the configuration
+     */
     MyCompiledFunctionDefinition(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames,
         final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration) {
       super(earliestInvocation, latestInvocation);

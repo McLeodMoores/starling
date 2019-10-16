@@ -125,6 +125,9 @@ public class IsdaYieldCurveFunction extends AbstractFunction {
         curveNames[0], curveConstructionConfiguration);
   }
 
+  /**
+   * Calculates a yield curve using the ISDA method.
+   */
   private final class IsdaYieldCurveCompiledFunctionDefinition extends AbstractInvokingCompiledFunction {
     private final String _curveName;
     private final ValueProperties _curveProperties;

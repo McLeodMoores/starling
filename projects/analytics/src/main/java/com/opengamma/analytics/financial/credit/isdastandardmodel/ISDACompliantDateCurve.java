@@ -10,8 +10,11 @@ import java.util.Map;
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
@@ -20,9 +23,6 @@ import org.threeten.bp.LocalDate;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.ArgumentChecker;
-import org.joda.beans.MetaBean;
-import org.joda.beans.gen.BeanDefinition;
-import org.joda.beans.gen.PropertyDefinition;
 
 /**
  * An ISDA compliant date curve.
@@ -40,7 +40,7 @@ public class ISDACompliantDateCurve
   /**
    * The base date.
    */
-  @PropertyDefinition(set = "private")
+  @PropertyDefinition(set = "private", overrideGet = true)
   private LocalDate _baseDate;
   /**
    * The knot dates on the curve.
@@ -53,17 +53,17 @@ public class ISDACompliantDateCurve
   @PropertyDefinition(get = "private", set = "private")
   private DayCount _dayCount;
 
-  //-------------------------------------------------------------------------
-  //  protected static ISDACompliantCurve makeISDACompliantCurve(final LocalDate baseDate, final LocalDate[] dates, final double[] rates) {
-  //    return makeISDACompliantCurve(baseDate, dates, rates, ACT_365);
-  //  }
+  // -------------------------------------------------------------------------
+  // protected static ISDACompliantCurve makeISDACompliantCurve(final LocalDate baseDate, final LocalDate[] dates, final double[] rates) {
+  // return makeISDACompliantCurve(baseDate, dates, rates, ACT_365);
+  // }
 
   protected static ISDACompliantCurve makeISDACompliantCurve(final LocalDate baseDate, final LocalDate[] dates, final double[] rates, final DayCount dayCount) {
     final double[] t = checkAndGetTimes(baseDate, dates, rates, dayCount);
     return new ISDACompliantCurve(t, rates);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Constructor for Joda-Beans.
    */
@@ -71,25 +71,32 @@ public class ISDACompliantDateCurve
   }
 
   /**
-   * Builds a curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates
-   * The times (year-fractions) between the baseDate and the knot dates is calculated using ACT/365.
+   * Builds a curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates The times (year-fractions) between the baseDate
+   * and the knot dates is calculated using ACT/365.
    *
-   * @param baseDate  the base date for the curve (i.e. this is time zero), not null
-   * @param dates  the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
-   * @param rates  the continually compounded zero rates at given knot dates, not null
+   * @param baseDate
+   *          the base date for the curve (i.e. this is time zero), not null
+   * @param dates
+   *          the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
+   * @param rates
+   *          the continually compounded zero rates at given knot dates, not null
    */
   public ISDACompliantDateCurve(final LocalDate baseDate, final LocalDate[] dates, final double[] rates) {
     this(baseDate, dates, rates, ACT_365);
   }
 
   /**
-   * Builds a curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates.
-   * The times (year-fractions) between the baseDate and the knot dates is calculated using the specified day-count-convention.
+   * Builds a curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates. The times (year-fractions) between the baseDate
+   * and the knot dates is calculated using the specified day-count-convention.
    *
-   * @param baseDate  the base date for the curve (i.e. this is time zero), not null
-   * @param dates  the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
-   * @param rates  the continually compounded zero rates at given knot dates, not null
-   * @param dayCount  the day-count-convention, not null
+   * @param baseDate
+   *          the base date for the curve (i.e. this is time zero), not null
+   * @param dates
+   *          the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
+   * @param rates
+   *          the continually compounded zero rates at given knot dates, not null
+   * @param dayCount
+   *          the day-count-convention, not null
    */
   public ISDACompliantDateCurve(final LocalDate baseDate, final LocalDate[] dates, final double[] rates, final DayCount dayCount) {
     this(baseDate, dates, dayCount, makeISDACompliantCurve(baseDate, dates, rates, dayCount));
@@ -102,7 +109,7 @@ public class ISDACompliantDateCurve
     _dayCount = dayCount;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public final LocalDate getCurveDate(final int index) {
     return _dates[index];
@@ -170,6 +177,7 @@ public class ISDACompliantDateCurve
    * Gets the base date.
    * @return the value of the property
    */
+  @Override
   public LocalDate getBaseDate() {
     return _baseDate;
   }

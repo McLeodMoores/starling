@@ -7,6 +7,7 @@ package com.opengamma.analytics.financial.credit.isdastandardmodel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.Period;
@@ -15,7 +16,6 @@ import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendarAdapter;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.rootfinding.BracketRoot;
 import com.opengamma.analytics.math.rootfinding.NewtonRaphsonSingleRootFinder;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -45,8 +45,8 @@ public class ISDACompliantYieldCurveBuild {
   // ************************************************************************************************************************
 
   /**
-   * Build a ISDA-Compliant yield curve (i.e. one with piecewise flat forward rate) from money market rates and par swap rates. Note if
-   * cdsTradeDate (today) is different from spotDate, the curve is adjusted accordingly.
+   * Build a ISDA-Compliant yield curve (i.e. one with piecewise flat forward rate) from money market rates and par swap rates. Note if cdsTradeDate (today) is
+   * different from spotDate, the curve is adjusted accordingly.
    *
    * @param cdsTradeDate
    *          The 'observation' date
@@ -82,8 +82,8 @@ public class ISDACompliantYieldCurveBuild {
   }
 
   /**
-   * Build a ISDA-Compliant yield curve (i.e. one with piecewise flat forward rate) from money market rates and par swap rates. Note if
-   * cdsTradeDate (today) is different from spotDate, the curve is adjusted accordingly.
+   * Build a ISDA-Compliant yield curve (i.e. one with piecewise flat forward rate) from money market rates and par swap rates. Note if cdsTradeDate (today) is
+   * different from spotDate, the curve is adjusted accordingly.
    *
    * @param cdsTradeDate
    *          The 'observation' date
@@ -121,8 +121,8 @@ public class ISDACompliantYieldCurveBuild {
   }
 
   /**
-   * Build a ISDA-Compliant yield curve (i.e. one with piecewise flat forward rate) from money market rates and par swap rates. Note if
-   * cdsTradeDate (today) is different from spotDate, the curve is adjusted accordingly.
+   * Build a ISDA-Compliant yield curve (i.e. one with piecewise flat forward rate) from money market rates and par swap rates. Note if cdsTradeDate (today) is
+   * different from spotDate, the curve is adjusted accordingly.
    *
    * @param cdsTradeDate
    *          The 'observation' date
@@ -229,8 +229,8 @@ public class ISDACompliantYieldCurveBuild {
   // ************************************************************************************************************************
 
   /**
-   * Set up a yield curve builder (run the method build, to build the curve). Note, the cds trade date is taken as the spot date; a weekend
-   * only calendar is used.
+   * Set up a yield curve builder (run the method build, to build the curve). Note, the cds trade date is taken as the spot date; a weekend only calendar is
+   * used.
    *
    * @param spotDate
    *          The spot date for the instruments used to build the yield curve
@@ -253,8 +253,8 @@ public class ISDACompliantYieldCurveBuild {
   }
 
   /**
-   * Set up a yield curve builder (run the method build, to build the curve). Note, the cds trade date is taken as the spot date; a weekend
-   * only calendar is used.
+   * Set up a yield curve builder (run the method build, to build the curve). Note, the cds trade date is taken as the spot date; a weekend only calendar is
+   * used.
    *
    * @param spotDate
    *          The spot date for the instruments used to build the yield curve
@@ -519,34 +519,25 @@ public class ISDACompliantYieldCurveBuild {
     final int index1 = i1;
     final int index2 = i2;
 
-    final Function1D<Double, Double> func = new Function1D<Double, Double>() {
-
-      @Override
-      public Double apply(final Double x) {
-        final ISDACompliantCurve tempCurve = curve.withRate(x, curveIndex);
-        double sum = 1.0 - cachedValues; // Floating leg at par
-        for (int i = index1; i < index2; i++) {
-          final double t = swap.getPaymentTime(i);
-          sum -= paymentAmounts[i] * tempCurve.getDiscountFactor(t);
-        }
-        return sum;
+    final Function<Double, Double> func = x -> {
+      final ISDACompliantCurve tempCurve = curve.withRate(x, curveIndex);
+      double sum = 1.0 - cachedValues; // Floating leg at par
+      for (int i = index1; i < index2; i++) {
+        final double t = swap.getPaymentTime(i);
+        sum -= paymentAmounts[i] * tempCurve.getDiscountFactor(t);
       }
+      return sum;
     };
 
-    final Function1D<Double, Double> grad = new Function1D<Double, Double>() {
-
-      @Override
-      public Double apply(final Double x) {
-        final ISDACompliantCurve tempCurve = curve.withRate(x, curveIndex);
-        double sum = cachedSense;
-        for (int i = index1; i < index2; i++) {
-          final double t = swap.getPaymentTime(i);
-          // TODO have two looks ups for the same time - could have a specialist function in ISDACompliantCurve
-          sum -= swap.getPaymentAmounts(i, swapRate) * tempCurve.getSingleNodeDiscountFactorSensitivity(t, curveIndex);
-        }
-        return sum;
+    final Function<Double, Double> grad = x -> {
+      final ISDACompliantCurve tempCurve = curve.withRate(x, curveIndex);
+      double sum = cachedSense;
+      for (int i = index1; i < index2; i++) {
+        final double t = swap.getPaymentTime(i);
+        // TODO have two looks ups for the same time - could have a specialist function in ISDACompliantCurve
+        sum -= swap.getPaymentAmounts(i, swapRate) * tempCurve.getSingleNodeDiscountFactorSensitivity(t, curveIndex);
       }
-
+      return sum;
     };
 
     final double guess = curve.getZeroRateAtIndex(curveIndex);
@@ -569,8 +560,8 @@ public class ISDACompliantYieldCurveBuild {
   /**
    * very crude swap fixed leg description. TODO modify to match ISDA
    * <p>
-   * So that the floating leg can be taken as having a value of 1.0, rather than the text book 1 - P(T) for LIBOR discounting, we add 1.0 to
-   * the final payment, which is financially equivalent
+   * So that the floating leg can be taken as having a value of 1.0, rather than the text book 1 - P(T) for LIBOR discounting, we add 1.0 to the final payment,
+   * which is financially equivalent
    */
   private class BasicFixedLeg {
     private final int _nPayments;

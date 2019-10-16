@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
@@ -21,8 +21,11 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class CDSAnalyticTest extends ISDABaseTest {
-  private static CDSAnalyticFactory FACTORY = new CDSAnalyticFactory();
+  private static final CDSAnalyticFactory FACTORY = new CDSAnalyticFactory();
 
+  /**
+   *
+   */
   @Test
   public void accruedInterestTest() {
 
@@ -42,6 +45,9 @@ public class CDSAnalyticTest extends ISDABaseTest {
     assertEquals(1, cds.getAccruedDays());
   }
 
+  /**
+   *
+   */
   @Test
   public void accruedInterestTest2() {
 
@@ -54,10 +60,13 @@ public class CDSAnalyticTest extends ISDABaseTest {
 
     tradeDate = LocalDate.of(2011, Month.JUNE, 19);
     cds = FACTORY.makeCDS(tradeDate, accStart, maturity);
-    assertEquals(91, cds.getAccruedDays()); //NOTE: this is the result from calling the ISDA c code (via Excel). The Markit calculator
-    //shows 0 accrued days for this - this is probably an override before the model is hit. 
+    assertEquals(91, cds.getAccruedDays()); // NOTE: this is the result from calling the ISDA c code (via Excel). The Markit calculator
+    // shows 0 accrued days for this - this is probably an override before the model is hit.
   }
 
+  /**
+   *
+   */
   @Test
   public void equalsTest() {
     final LocalDate tradeDate = LocalDate.of(2014, 2, 26);
@@ -73,6 +82,9 @@ public class CDSAnalyticTest extends ISDABaseTest {
     assertTrue(cds1.equals(cds4));
   }
 
+  /**
+   *
+   */
   @Test
   public void offsetTest() {
     final LocalDate tradeDate = LocalDate.of(2014, 2, 26);

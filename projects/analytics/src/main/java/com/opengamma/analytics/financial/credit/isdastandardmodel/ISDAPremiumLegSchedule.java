@@ -13,6 +13,9 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.Period;
 import org.threeten.bp.temporal.JulianFields;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
@@ -126,6 +129,15 @@ public class ISDAPremiumLegSchedule {
     return dates.toArray(res);
   }
 
+  /**
+   * Truncates a schedule to contain only dates after the step-in date.
+   *
+   * @param stepin
+   *          the step-in in days
+   * @param schedule
+   *          the original schedule
+   * @return the truncated schedule
+   */
   public static ISDAPremiumLegSchedule truncateSchedule(final LocalDate stepin, final ISDAPremiumLegSchedule schedule) {
     return schedule.truncateSchedule(stepin);
   }
@@ -211,13 +223,66 @@ public class ISDAPremiumLegSchedule {
    *          A holiday calendar
    * @param protectionStart
    *          If true, protection starts are the beginning rather than end of day (protection still ends at end of day).
+   * @deprecated Use {@link WorkingDayCalendar}
    */
+  @Deprecated
   public ISDAPremiumLegSchedule(final LocalDate startDate, final LocalDate endDate, final Period step, final StubType stubType,
       final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calendar, final boolean protectionStart) {
     this(getUnadjustedDates(startDate, endDate, step, stubType), businessdayAdjustmentConvention, calendar, protectionStart);
   }
 
+  /**
+   * Mimics <code>JpmcdsCdsFeeLegMake</code>.
+   *
+   * @param startDate
+   *          The protection start date
+   * @param endDate
+   *          The protection end date
+   * @param step
+   *          The period or frequency at which payments are made (e.g. every three months)
+   * @param stubType
+   *          Options are FRONTSHORT, FRONTLONG, BACKSHORT, BACKLONG or NONE - <b>Note</b> in this code NONE is not allowed
+   * @param businessdayAdjustmentConvention
+   *          options are 'following' or 'proceeding'
+   * @param calendar
+   *          A holiday calendar
+   * @param protectionStart
+   *          If true, protection starts are the beginning rather than end of day (protection still ends at end of day).
+   */
+  public ISDAPremiumLegSchedule(final LocalDate startDate, final LocalDate endDate, final Period step, final StubType stubType,
+      final BusinessDayConvention businessdayAdjustmentConvention, final WorkingDayCalendar calendar, final boolean protectionStart) {
+    this(getUnadjustedDates(startDate, endDate, step, stubType), businessdayAdjustmentConvention, calendar, protectionStart);
+  }
+
+  /**
+   * @param unadjustedDates
+   *          the unadjusted premium dates
+   * @param businessdayAdjustmentConvention
+   *          adjusts business days for holidays
+   * @param calendar
+   *          the holidays
+   * @param protectionStart
+   *          true to start protection at the start of the day
+   * @deprecated Use {@link WorkingDayCalendar}
+   */
+  @Deprecated
   public ISDAPremiumLegSchedule(final LocalDate[] unadjustedDates, final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calendar,
+      final boolean protectionStart) {
+    this(unadjustedDates, businessdayAdjustmentConvention, WorkingDayCalendarAdapter.of(calendar), protectionStart);
+  }
+
+  /**
+   * @param unadjustedDates
+   *          the unadjusted premium dates
+   * @param businessdayAdjustmentConvention
+   *          adjusts business days for holidays
+   * @param calendar
+   *          the holidays
+   * @param protectionStart
+   *          true to start protection at the start of the day
+   */
+  public ISDAPremiumLegSchedule(final LocalDate[] unadjustedDates, final BusinessDayConvention businessdayAdjustmentConvention,
+      final WorkingDayCalendar calendar,
       final boolean protectionStart) {
     _nPayments = unadjustedDates.length - 1;
     _nominalPaymentDates = new LocalDate[_nPayments];
@@ -229,7 +294,7 @@ public class ISDAPremiumLegSchedule {
     LocalDate dPrevAdj = dPrev; // first date is never adjusted
     for (int i = 0; i < _nPayments; i++) {
       final LocalDate dNext = unadjustedDates[i + 1];
-      final LocalDate dNextAdj = businessDayAdjustDate(dNext, calendar, businessdayAdjustmentConvention);
+      final LocalDate dNextAdj = businessDayAdjustDate(dNext, CalendarAdapter.of(calendar), businessdayAdjustmentConvention);
       _accStartDates[i] = dPrevAdj;
       _accEndDates[i] = dNextAdj;
       _nominalPaymentDates[i] = dNext;

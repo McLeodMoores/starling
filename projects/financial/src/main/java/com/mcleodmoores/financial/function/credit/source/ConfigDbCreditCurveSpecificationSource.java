@@ -27,7 +27,7 @@ import com.opengamma.util.credit.CreditCurveIdentifier;
  * A source that retrieves {@link CreditCurveDefinition}s and {@link CurveNodeIdMapper}s from a {@link ConfigSource} and creates a
  * {@link CreditCurveSpecification}. If a definition or id mapper is changed, the query is re-initialized.
  */
-public class ConfigDbCreditCurveSpecificationSource {
+public final class ConfigDbCreditCurveSpecificationSource {
 
   /**
    * Initializes and returns the source. If a {@link CreditCurveDefinition} is added or changed, the source will re-initialize.

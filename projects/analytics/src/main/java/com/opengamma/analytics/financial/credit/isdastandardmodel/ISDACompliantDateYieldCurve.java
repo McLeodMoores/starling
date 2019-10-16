@@ -12,8 +12,11 @@ import java.util.Map;
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
@@ -21,9 +24,6 @@ import org.threeten.bp.LocalDate;
 
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
-import org.joda.beans.MetaBean;
-import org.joda.beans.gen.BeanDefinition;
-import org.joda.beans.gen.PropertyDefinition;
 
 /**
  * An ISDA compliant date yield curve.
@@ -41,7 +41,7 @@ public class ISDACompliantDateYieldCurve
   /**
    * The base date.
    */
-  @PropertyDefinition(set = "private")
+  @PropertyDefinition(set = "private", overrideGet = true)
   private LocalDate _baseDate;
   /**
    * The knot dates on the curve.
@@ -62,25 +62,32 @@ public class ISDACompliantDateYieldCurve
   }
 
   /**
-   * Builds a yield curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates.
-   * The times (year-fractions) between the baseDate and the knot dates is calculated using ACT/365.
+   * Builds a yield curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates. The times (year-fractions) between the
+   * baseDate and the knot dates is calculated using ACT/365.
    *
-   * @param baseDate  the base date for the curve (i.e. this is time zero), not null
-   * @param dates  the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
-   * @param rates  the continually compounded zero rates at given knot dates, not null
+   * @param baseDate
+   *          the base date for the curve (i.e. this is time zero), not null
+   * @param dates
+   *          the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
+   * @param rates
+   *          the continually compounded zero rates at given knot dates, not null
    */
   public ISDACompliantDateYieldCurve(final LocalDate baseDate, final LocalDate[] dates, final double[] rates) {
     this(baseDate, dates, rates, ACT_365);
   }
 
   /**
-   * Builds a yield curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates.
-   * The times (year-fractions) between the baseDate and the knot dates is calculated using the specified day-count-convention.
+   * Builds a yield curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates. The times (year-fractions) between the
+   * baseDate and the knot dates is calculated using the specified day-count-convention.
    *
-   * @param baseDate  the base date for the curve (i.e. this is time zero), not null
-   * @param dates  the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
-   * @param rates  the continually compounded zero rates at given knot dates, not null
-   * @param dayCount  the day-count-convention, not null
+   * @param baseDate
+   *          the base date for the curve (i.e. this is time zero), not null
+   * @param dates
+   *          the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
+   * @param rates
+   *          the continually compounded zero rates at given knot dates, not null
+   * @param dayCount
+   *          the day-count-convention, not null
    */
   public ISDACompliantDateYieldCurve(final LocalDate baseDate, final LocalDate[] dates, final double[] rates, final DayCount dayCount) {
     super(checkAndGetTimes(baseDate, dates, rates, dayCount), rates);
@@ -96,31 +103,31 @@ public class ISDACompliantDateYieldCurve
     _dayCount = dayCount;
   }
 
-  //  /**
-  //   * Converter from the old ISDADateCurve to ISDACompliantYieldCurve. Not this only works if offset = 0.0 and and baseDate is set.
-  //   * @param yieldCurve a ISDADateCurve yieldCurve
-  //   * @return A ISDACompliantYieldCurve
-  //   */
-  //  public static ISDACompliantDateYieldCurve fromISDADateCurve(final ISDADateCurve yieldCurve) {
+  // /**
+  // * Converter from the old ISDADateCurve to ISDACompliantYieldCurve. Not this only works if offset = 0.0 and and baseDate is set.
+  // * @param yieldCurve a ISDADateCurve yieldCurve
+  // * @return A ISDACompliantYieldCurve
+  // */
+  // public static ISDACompliantDateYieldCurve fromISDADateCurve(final ISDADateCurve yieldCurve) {
   //
-  //    ArgumentChecker.isTrue(yieldCurve.getOffset() == 0, "offset not zero - cannot convert");
-  //    final ZonedDateTime bDate = yieldCurve.getBaseDate();
-  //    ArgumentChecker.notNull(bDate, "base date");
-  //    final LocalDate baseDate = bDate.toLocalDate();
+  // ArgumentChecker.isTrue(yieldCurve.getOffset() == 0, "offset not zero - cannot convert");
+  // final ZonedDateTime bDate = yieldCurve.getBaseDate();
+  // ArgumentChecker.notNull(bDate, "base date");
+  // final LocalDate baseDate = bDate.toLocalDate();
   //
-  //    final ZonedDateTime[] curveDates = yieldCurve.getCurveDates();
-  //    final Double[] temp = yieldCurve.getCurve().getYData();
-  //    final int n = temp.length;
-  //    final double[] r = new double[n];
-  //    for (int i = 0; i < n; i++) {
-  //      r[i] = temp[i];
-  //    }
+  // final ZonedDateTime[] curveDates = yieldCurve.getCurveDates();
+  // final Double[] temp = yieldCurve.getCurve().getYData();
+  // final int n = temp.length;
+  // final double[] r = new double[n];
+  // for (int i = 0; i < n; i++) {
+  // r[i] = temp[i];
+  // }
   //
-  //    final LocalDate[] dates = ISDACompliantScheduleGenerator.toLocalDate(curveDates);
-  //    return new ISDACompliantDateYieldCurve(baseDate, dates, r);
-  //  }
+  // final LocalDate[] dates = ISDACompliantScheduleGenerator.toLocalDate(curveDates);
+  // return new ISDACompliantDateYieldCurve(baseDate, dates, r);
+  // }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public LocalDate getCurveDate(final int index) {
     return _dates[index];
@@ -166,6 +173,7 @@ public class ISDACompliantDateYieldCurve
    * Gets the base date.
    * @return the value of the property
    */
+  @Override
   public LocalDate getBaseDate() {
     return _baseDate;
   }
