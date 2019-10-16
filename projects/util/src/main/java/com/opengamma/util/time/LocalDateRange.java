@@ -8,17 +8,16 @@ package com.opengamma.util.time;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
-import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
-import org.joda.beans.ImmutableConstructor;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
-import org.joda.beans.Property;
-import org.joda.beans.PropertyDefinition;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.ImmutableConstructor;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
@@ -57,13 +56,16 @@ public final class LocalDateRange implements ImmutableBean, Serializable {
   @PropertyDefinition(get = "manual", validate = "notNull")
   private final LocalDate _endDateInclusive;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates an instance.
    *
-   * @param startDateInclusive  the start date, MIN_DATE treated as unbounded, not null
-   * @param endDate  the end date, MAX_DATE treated as unbounded, not null
-   * @param endDateInclusive  whether the end date is inclusive (true) or exclusive (false)
+   * @param startDateInclusive
+   *          the start date, MIN_DATE treated as unbounded, not null
+   * @param endDate
+   *          the end date, MAX_DATE treated as unbounded, not null
+   * @param endDateInclusive
+   *          whether the end date is inclusive (true) or exclusive (false)
    * @return the range, not null
    */
   public static LocalDateRange of(final LocalDate startDateInclusive, final LocalDate endDate, final boolean endDateInclusive) {
@@ -82,12 +84,14 @@ public final class LocalDateRange implements ImmutableBean, Serializable {
   /**
    * Creates an instance treating nulls as unbounded.
    * <p>
-   * The null value is stored as {@code MIN_DATE} or {@code MAX_DATE} internally,
-   * thus there is no special behavior for unbounded.
+   * The null value is stored as {@code MIN_DATE} or {@code MAX_DATE} internally, thus there is no special behavior for unbounded.
    *
-   * @param startDateInclusive  the start date, null means unbounded MIN_DATE
-   * @param endDate  the end date, null means unbounded MAX_DATE
-   * @param endDateInclusive  whether the end date is inclusive (true) or exclusive (false)
+   * @param startDateInclusive
+   *          the start date, null means unbounded MIN_DATE
+   * @param endDate
+   *          the end date, null means unbounded MAX_DATE
+   * @param endDateInclusive
+   *          whether the end date is inclusive (true) or exclusive (false)
    * @return the range, not null
    */
   public static LocalDateRange ofNullUnbounded(final LocalDate startDateInclusive, final LocalDate endDate, final boolean endDateInclusive) {
@@ -99,8 +103,10 @@ public final class LocalDateRange implements ImmutableBean, Serializable {
   /**
    * Creates an instance.
    *
-   * @param startDate  the start date, not null
-   * @param endDate  the end date, not null
+   * @param startDate
+   *          the start date, not null
+   * @param endDate
+   *          the end date, not null
    */
   @ImmutableConstructor
   private LocalDateRange(final LocalDate startDate, final LocalDate endDate) {
@@ -108,7 +114,7 @@ public final class LocalDateRange implements ImmutableBean, Serializable {
     _endDateInclusive = endDate;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the start date, inclusive.
    *
@@ -141,7 +147,7 @@ public final class LocalDateRange implements ImmutableBean, Serializable {
     return _endDateInclusive.plusDays(1);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if the start date is the minimum, typically signalling unbounded.
    *
@@ -160,11 +166,12 @@ public final class LocalDateRange implements ImmutableBean, Serializable {
     return _endDateInclusive.equals(LocalDate.MAX);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Returns a copy of this range with the start date adjusted.
    *
-   * @param adjuster  the adjuster to use, not null
+   * @param adjuster
+   *          the adjuster to use, not null
    * @return the new range, not null
    */
   public LocalDateRange withStartDate(final TemporalAdjuster adjuster) {
@@ -174,18 +181,20 @@ public final class LocalDateRange implements ImmutableBean, Serializable {
   /**
    * Returns a copy of this range with the end date adjusted.
    *
-   * @param adjuster  the adjuster to use, not null
+   * @param adjuster
+   *          the adjuster to use, not null
    * @return the new range, not null
    */
   public LocalDateRange withEndDate(final TemporalAdjuster adjuster) {
     return new LocalDateRange(_startDateInclusive, _endDateInclusive.with(adjuster));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Returns a copy of this range with the start date adjusted if it is unbounded.
    *
-   * @param startDateInclusive  the start date to use if currently MIN_DATE, not null
+   * @param startDateInclusive
+   *          the start date to use if currently MIN_DATE, not null
    * @return the new range, not null
    */
   public LocalDateRange resolveUnboundedStartDate(final LocalDate startDateInclusive) {
@@ -195,22 +204,23 @@ public final class LocalDateRange implements ImmutableBean, Serializable {
   /**
    * Returns a copy of this range with the end date adjusted if it is unbounded.
    *
-   * @param endDate  the end date to use if currently MAX_DATE, not null
-   * @param endDateInclusive  whether the end date is inclusive (true) or exclusive (false)
+   * @param endDate
+   *          the end date to use if currently MAX_DATE, not null
+   * @param endDateInclusive
+   *          whether the end date is inclusive (true) or exclusive (false)
    * @return the new range, not null
    */
   public LocalDateRange resolveUnboundedEndDate(final LocalDate endDate, final boolean endDateInclusive) {
     return isEndDateMaximum() ? LocalDateRange.of(_startDateInclusive, endDate, endDateInclusive) : this;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public String toString() {
     return "[" + _startDateInclusive + "," + _endDateInclusive + "]";
   }
 
   //------------------------- AUTOGENERATED START -------------------------
-  ///CLOVER:OFF
   /**
    * The meta-bean for {@code LocalDateRange}.
    * @return the meta-bean, not null
@@ -220,22 +230,12 @@ public final class LocalDateRange implements ImmutableBean, Serializable {
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(LocalDateRange.Meta.INSTANCE);
+    MetaBean.register(LocalDateRange.Meta.INSTANCE);
   }
 
   @Override
   public LocalDateRange.Meta metaBean() {
     return LocalDateRange.Meta.INSTANCE;
-  }
-
-  @Override
-  public <R> Property<R> property(String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
-  }
-
-  @Override
-  public Set<String> propertyNames() {
-    return metaBean().metaPropertyMap().keySet();
   }
 
   //-----------------------------------------------------------------------
@@ -373,7 +373,6 @@ public final class LocalDateRange implements ImmutableBean, Serializable {
      * Restricted constructor.
      */
     private Builder() {
-      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -424,6 +423,5 @@ public final class LocalDateRange implements ImmutableBean, Serializable {
 
   }
 
-  ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }

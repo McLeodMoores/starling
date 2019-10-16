@@ -8,15 +8,14 @@ package com.opengamma.integration.marketdata.manipulator.dsl;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import org.joda.beans.Bean;
-import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
-import org.joda.beans.Property;
-import org.joda.beans.PropertyDefinition;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
@@ -103,7 +102,9 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
 
   /**
    * Returns the x values of the points to be shifted as a list of periods or a double array.
-   * @param shifts The shifts
+   * 
+   * @param shifts
+   *          The shifts
    * @return The x values of the points to be shifted
    */
   private static Object xValues(final List<VolatilitySurfaceShift> shifts) {
@@ -116,7 +117,9 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
 
   /**
    * Returns the y values of the points to be shifted as a list of periods or a double array.
-   * @param shifts The shifts
+   * 
+   * @param shifts
+   *          The shifts
    * @return The y values of the points to be shifted
    */
   private static Object yValues(final List<VolatilitySurfaceShift> shifts) {
@@ -129,7 +132,9 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
 
   /**
    * Converts a list of values (Periods or Doubles) on the x or y axis to a list of Periods or a double array.
-   * @param values The axis values (Periods or Doubles)
+   * 
+   * @param values
+   *          The axis values (Periods or Doubles)
    * @return A list of Periods of a double array
    */
   private static Object axisValues(final List<Object> values) {
@@ -145,7 +150,9 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
 
   /**
    * Returns a list of periods
-   * @param values A list of periods
+   * 
+   * @param values
+   *          A list of periods
    * @return IllegalArgumentException If any of the values aren't periods
    */
   private static List<Period> periodValues(final List<Object> values) {
@@ -161,9 +168,12 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
 
   /**
    * Returns a double array containing the values
-   * @param values A list of Doubles
+   * 
+   * @param values
+   *          A list of Doubles
    * @return The values in a double array
-   * @throws IllegalArgumentException If any of the values aren't Doubles
+   * @throws IllegalArgumentException
+   *           If any of the values aren't Doubles
    */
   private static double[] doubleValues(final List<Object> values) {
     final double[] doubleVals = new double[values.size()];
@@ -177,12 +187,14 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
   }
 
   /**
-   * Returns the shift amounts to apply to each point.
-   * If the shift type is absolute the shift amounts are taken directly from the shifts.
-   * If the shift type is relative the amounts are 1 + shift amount. Relative amounts are specified as a percentage
-   * increase or decrease. e.g. +10.pc (0.1) is a scaling of 1.1 and -10.pc (-0.1) is a scaling of 0.9
-   * @param shifts The shifts
-   * @param shiftType Whether the shifts are relative or absolute
+   * Returns the shift amounts to apply to each point. If the shift type is absolute the shift amounts are taken directly from the shifts. If the shift type is
+   * relative the amounts are 1 + shift amount. Relative amounts are specified as a percentage increase or decrease. e.g. +10.pc (0.1) is a scaling of 1.1 and
+   * -10.pc (-0.1) is a scaling of 0.9
+   * 
+   * @param shifts
+   *          The shifts
+   * @param shiftType
+   *          Whether the shifts are relative or absolute
    * @return The shift amounts to apply to each point
    */
   private static double[] shiftValues(final List<VolatilitySurfaceShift> shifts, final ScenarioShiftType shiftType) {
@@ -201,11 +213,13 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
   }
 
   /**
-   * Converts the input values into an array of year fractions for passing to the analytics.
-   * If periods is a double array it is returned unchanged. If it's a list of periods then the year fraction
-   * is calculated for each period relative to the valuation time (using {@link TimeCalculator}).
-   * @param periods The input axis values, a list of periods or a double array
-   * @param valuationTime The valuation time
+   * Converts the input values into an array of year fractions for passing to the analytics. If periods is a double array it is returned unchanged. If it's a
+   * list of periods then the year fraction is calculated for each period relative to the valuation time (using {@link TimeCalculator}).
+   * 
+   * @param periods
+   *          The input axis values, a list of periods or a double array
+   * @param valuationTime
+   *          The valuation time
    * @return An array of year fractions for the axis values
    */
   /* package */ static double[] yearFractions(final List<Period> periods, final ZonedDateTime valuationTime) {
@@ -218,7 +232,6 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
   }
 
   //------------------------- AUTOGENERATED START -------------------------
-  ///CLOVER:OFF
   /**
    * The meta-bean for {@code VolatilitySurfaceShiftManipulator}.
    * @return the meta-bean, not null
@@ -228,7 +241,7 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(VolatilitySurfaceShiftManipulator.Meta.INSTANCE);
+    MetaBean.register(VolatilitySurfaceShiftManipulator.Meta.INSTANCE);
   }
 
   /**
@@ -253,16 +266,6 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
   @Override
   public VolatilitySurfaceShiftManipulator.Meta metaBean() {
     return VolatilitySurfaceShiftManipulator.Meta.INSTANCE;
-  }
-
-  @Override
-  public <R> Property<R> property(String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
-  }
-
-  @Override
-  public Set<String> propertyNames() {
-    return metaBean().metaPropertyMap().keySet();
   }
 
   //-----------------------------------------------------------------------
@@ -489,36 +492,6 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
       return this;
     }
 
-    /**
-     * @deprecated Use Joda-Convert in application code
-     */
-    @Override
-    @Deprecated
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    /**
-     * @deprecated Use Joda-Convert in application code
-     */
-    @Override
-    @Deprecated
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    /**
-     * @deprecated Loop in application code
-     */
-    @Override
-    @Deprecated
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
-      return this;
-    }
-
     @Override
     public VolatilitySurfaceShiftManipulator build() {
       return new VolatilitySurfaceShiftManipulator(this);
@@ -568,6 +541,5 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
 
   }
 
-  ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }

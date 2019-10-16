@@ -14,7 +14,6 @@ import org.joda.beans.Bean;
 import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
-import org.joda.beans.PropertyDefinition;
 import org.joda.beans.PropertyStyle;
 import org.joda.convert.StringConvert;
 import org.threeten.bp.ZonedDateTime;
@@ -25,6 +24,7 @@ import com.google.common.collect.Maps;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.OpenGammaClock;
+import org.joda.beans.gen.PropertyDefinition;
 
 /**
  * Builds an HTML page containing a description of a type's attributes. It's intended to help with the development

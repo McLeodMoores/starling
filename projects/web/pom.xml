@@ -87,7 +87,11 @@
       <groupId>javax.management.j2ee</groupId>
       <artifactId>javax.management.j2ee-api</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>org.joda</groupId>
+      <artifactId>joda-beans-integrate-freemarker</artifactId>
+    </dependency>
+    
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>

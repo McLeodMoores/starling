@@ -19,12 +19,12 @@ import java.util.SortedSet;
 import org.apache.commons.lang.text.StrBuilder;
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
-import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
-import org.joda.beans.Property;
-import org.joda.beans.PropertyDefinition;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
@@ -37,8 +37,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A bundle of external identifiers with validity dates.
  * <p>
- * This is similar to {@link ExternalIdBundle} but permits each external identifier
- * to be limited by validity dates.
+ * This is similar to {@link ExternalIdBundle} but permits each external identifier to be limited by validity dates.
  * <p>
  * This class is immutable and thread-safe.
  */
@@ -57,21 +56,22 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   /**
    * The set of identifiers in the bundle.
    * <p>
-   * The identifiers are sorted in the natural order of {@link ExternalId} to provide
-   * greater consistency in applications. The sort order is not suitable for a GUI.
+   * The identifiers are sorted in the natural order of {@link ExternalId} to provide greater consistency in applications. The sort order is not suitable for a
+   * GUI.
    */
   @PropertyDefinition(validate = "notNull")
   private final ImmutableSortedSet<ExternalIdWithDates> _externalIds;
   /**
    * The cached hash code.
    */
-  private transient int _hashCode;  // safe via racy single check idiom
+  private transient int _hashCode; // safe via racy single check idiom
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Obtains an {@code ExternalIdBundleWithDates} from an array of identifiers.
    *
-   * @param externalIds  the array of external identifiers, no nulls, not null
+   * @param externalIds
+   *          the array of external identifiers, no nulls, not null
    * @return the bundle, not null
    */
   public static ExternalIdBundleWithDates of(final ExternalIdWithDates... externalIds) {
@@ -82,7 +82,8 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   /**
    * Obtains an {@code ExternalIdBundleWithDates} from an iterable of identifiers.
    *
-   * @param externalIds the iterable of external identifiers, not null
+   * @param externalIds
+   *          the iterable of external identifiers, not null
    * @return the identifier bundle with dates set to null, not null
    */
   public static ExternalIdBundleWithDates of(final Iterable<ExternalIdWithDates> externalIds) {
@@ -93,7 +94,8 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   /**
    * Obtains an {@code ExternalIdBundleWithDates} from a bundle of identifiers.
    *
-   * @param bundle the identifier bundle, not null
+   * @param bundle
+   *          the identifier bundle, not null
    * @return the identifier bundle with dates set to null, not null
    */
   public static ExternalIdBundleWithDates of(final ExternalIdBundle bundle) {
@@ -108,14 +110,15 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   /**
    * Obtains an {@code ExternalIdBundleWithDates} from a collection of identifiers.
    *
-   * @param externalIds  the collection of external identifiers, validated
+   * @param externalIds
+   *          the collection of external identifiers, validated
    * @return the bundle, not null
    */
   private static ExternalIdBundleWithDates create(final Iterable<ExternalIdWithDates> externalIds) {
     return new ExternalIdBundleWithDates(ImmutableSortedSet.copyOf(externalIds));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates an empty bundle.
    */
@@ -126,7 +129,8 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   /**
    * Creates a bundle from an array of identifiers.
    *
-   * @param externalIds  the array of identifiers, null returns an empty bundle
+   * @param externalIds
+   *          the array of identifiers, null returns an empty bundle
    */
   public ExternalIdBundleWithDates(final ExternalIdWithDates... externalIds) {
     if (externalIds == null || externalIds.length == 0) {
@@ -140,7 +144,8 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   /**
    * Creates a bundle from a collection of identifiers.
    *
-   * @param externalIds  the collection of identifiers, null returns an empty bundle, no nulls in array
+   * @param externalIds
+   *          the collection of identifiers, null returns an empty bundle, no nulls in array
    */
   public ExternalIdBundleWithDates(final Collection<? extends ExternalIdWithDates> externalIds) {
     if (externalIds == null) {
@@ -151,12 +156,12 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Returns a new bundle with the specified identifier added.
-   * This instance is immutable and unaffected by this method call.
+   * Returns a new bundle with the specified identifier added. This instance is immutable and unaffected by this method call.
    *
-   * @param externalId  the identifier to add to the returned bundle, not null
+   * @param externalId
+   *          the identifier to add to the returned bundle, not null
    * @return the new bundle, not null
    */
   public ExternalIdBundleWithDates withExternalId(final ExternalIdWithDates externalId) {
@@ -169,10 +174,10 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   }
 
   /**
-   * Returns a new bundle with the specified identifier removed.
-   * This instance is immutable and unaffected by this method call.
+   * Returns a new bundle with the specified identifier removed. This instance is immutable and unaffected by this method call.
    *
-   * @param externalId  the identifier to remove from the returned bundle, not null
+   * @param externalId
+   *          the identifier to remove from the returned bundle, not null
    * @return the new bundle, not null
    */
   public ExternalIdBundleWithDates withoutExternalId(final ExternalIdWithDates externalId) {
@@ -185,10 +190,10 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   }
 
   /**
-   * Returns a new bundle with all references to the specified scheme removed.
-   * This instance is immutable and unaffected by this method call.
+   * Returns a new bundle with all references to the specified scheme removed. This instance is immutable and unaffected by this method call.
    *
-   * @param scheme  the scheme to remove from the returned bundle, null ignored
+   * @param scheme
+   *          the scheme to remove from the returned bundle, null ignored
    * @return the new bundle, not null
    */
   public ExternalIdBundleWithDates withoutScheme(final ExternalScheme scheme) {
@@ -201,7 +206,7 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
     return create(ids);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the number of identifiers in the bundle.
    *
@@ -224,7 +229,8 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   /**
    * Checks if this bundle contains all the keys from the specified bundle.
    *
-   * @param bundle  the bundle to search for, empty returns true, not null
+   * @param bundle
+   *          the bundle to search for, empty returns true, not null
    * @return true if this bundle contains all the keys from the specified bundle
    */
   public boolean containsAll(final ExternalIdBundleWithDates bundle) {
@@ -240,7 +246,8 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   /**
    * Checks if this bundle contains any key from the specified bundle.
    *
-   * @param bundle  the bundle to search for, empty returns false, not null
+   * @param bundle
+   *          the bundle to search for, empty returns false, not null
    * @return true if this bundle contains any key from the specified bundle
    */
   public boolean containsAny(final ExternalIdBundleWithDates bundle) {
@@ -256,7 +263,8 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   /**
    * Checks if this bundle contains the specified key.
    *
-   * @param externalId  the identifier to search for, null returns false
+   * @param externalId
+   *          the identifier to search for, null returns false
    * @return true if this bundle contains any key from the specified bundle
    */
   public boolean contains(final ExternalIdWithDates externalId) {
@@ -279,8 +287,7 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   /**
    * Returns the bundle without dates.
    * <p>
-   * This returns all the identifiers ignoring the validity dates.
-   * See {@link #toBundle(LocalDate)} for a better choice.
+   * This returns all the identifiers ignoring the validity dates. See {@link #toBundle(LocalDate)} for a better choice.
    *
    * @return the equivalent bundle, without the dates, not null
    */
@@ -291,7 +298,8 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   /**
    * Returns the bundle without dates as of a specific date.
    *
-   * @param validOn  the validity date, null returns all
+   * @param validOn
+   *          the validity date, null returns all
    * @return the equivalent bundle, without the dates, not null
    */
   public ExternalIdBundle toBundle(final LocalDate validOn) {
@@ -304,11 +312,12 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
     return ExternalIdBundle.of(ids);
   }
 
-  //-------------------------------------------------------------------
+  // -------------------------------------------------------------------
   /**
    * Compares the bundles.
    *
-   * @param other  the other external identifier, not null
+   * @param other
+   *          the other external identifier, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
   @Override
@@ -372,7 +381,6 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   }
 
   //------------------------- AUTOGENERATED START -------------------------
-  ///CLOVER:OFF
   /**
    * The meta-bean for {@code ExternalIdBundleWithDates}.
    * @return the meta-bean, not null
@@ -382,7 +390,7 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(ExternalIdBundleWithDates.Meta.INSTANCE);
+    MetaBean.register(ExternalIdBundleWithDates.Meta.INSTANCE);
   }
 
   private ExternalIdBundleWithDates(
@@ -396,22 +404,12 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
     return ExternalIdBundleWithDates.Meta.INSTANCE;
   }
 
-  @Override
-  public <R> Property<R> property(String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
-  }
-
-  @Override
-  public Set<String> propertyNames() {
-    return metaBean().metaPropertyMap().keySet();
-  }
-
   //-----------------------------------------------------------------------
   /**
    * Gets the set of identifiers in the bundle.
    * <p>
-   * The identifiers are sorted in the natural order of {@link ExternalId} to provide
-   * greater consistency in applications. The sort order is not suitable for a GUI.
+   * The identifiers are sorted in the natural order of {@link ExternalId} to provide greater consistency in applications. The sort order is not suitable for a
+   * GUI.
    * @return the value of the property, not null
    */
   public ImmutableSortedSet<ExternalIdWithDates> getExternalIds() {
@@ -513,7 +511,6 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
      * Restricted constructor.
      */
     private Builder() {
-      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -558,6 +555,5 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
 
   }
 
-  ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }

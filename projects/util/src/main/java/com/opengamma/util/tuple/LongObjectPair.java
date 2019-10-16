@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.joda.beans.Bean;
-import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
@@ -24,12 +24,12 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 /**
  * An immutable pair consisting of an {@code long} and {@code Object}.
  * <p>
- * The class provides direct access to the primitive types and implements
- * the relevant fastutil interface.
+ * The class provides direct access to the primitive types and implements the relevant fastutil interface.
  * <p>
  * This class is immutable and thread-safe if the stored object is immutable.
  *
- * @param <T> the type of the second side of the pair
+ * @param <T>
+ *          the type of the second side of the pair
  */
 public class LongObjectPair<T>
     extends Pair<Long, T>
@@ -44,25 +44,30 @@ public class LongObjectPair<T>
   /** The second element. */
   public final T second; // CSIGNORE
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates a pair inferring the types.
    *
-   * @param <B> the second element type
-   * @param first  the first element, may be null
-   * @param second  the second element, may be null
+   * @param <B>
+   *          the second element type
+   * @param first
+   *          the first element, may be null
+   * @param second
+   *          the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
   public static <B> LongObjectPair<B> of(final long first, final B second) {
     return new LongObjectPair<>(first, second);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Constructs a pair.
    *
-   * @param first  the first element
-   * @param second  the second element
+   * @param first
+   *          the first element
+   * @param second
+   *          the second element
    * @deprecated Use public factory of(long,Object)
    */
   @Deprecated
@@ -71,7 +76,7 @@ public class LongObjectPair<T>
     this.second = second;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Long getFirst() {
     return first;
@@ -91,7 +96,7 @@ public class LongObjectPair<T>
     return first;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public long getLongKey() {
     return first;
@@ -103,9 +108,10 @@ public class LongObjectPair<T>
   }
 
   // CSOFF
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * The meta-bean for {@code LongObjectPair}.
+   *
    * @return the meta-bean, not null
    */
   @SuppressWarnings("rawtypes")
@@ -114,7 +120,7 @@ public class LongObjectPair<T>
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(LongObjectPair.Meta.INSTANCE);
+    MetaBean.register(LongObjectPair.Meta.INSTANCE);
   }
 
   @Override
@@ -124,7 +130,7 @@ public class LongObjectPair<T>
 
   @Override
   public <R> Property<R> property(final String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
+    return metaBean().<R> metaProperty(propertyName).createProperty(this);
   }
 
   @Override
@@ -137,7 +143,7 @@ public class LongObjectPair<T>
     return this;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @SuppressWarnings("unchecked")
   @Override
   public boolean equals(final Object obj) {
@@ -157,9 +163,12 @@ public class LongObjectPair<T>
     return (int) (first ^ first >>> 32) ^ second.hashCode();
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * The meta-bean for {@code LongObjectPair}.
+   * 
+   * @param <T>
+   *          the type of the second value
    */
   public static final class Meta<T> extends DirectMetaBean {
     /**
@@ -219,9 +228,10 @@ public class LongObjectPair<T>
       return _metaPropertyMap;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * The meta-property for the {@code first} property.
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Long> first() {
@@ -230,13 +240,14 @@ public class LongObjectPair<T>
 
     /**
      * The meta-property for the {@code second} property.
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Object> second() {
       return _second;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     @SuppressWarnings("rawtypes")
     protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
@@ -260,11 +271,11 @@ public class LongObjectPair<T>
 
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * The bean-builder for {@code LongObjectPair}.
    */
-  @SuppressWarnings({"rawtypes" })
+  @SuppressWarnings({ "rawtypes" })
   private static final class Builder extends DirectFieldsBeanBuilder<LongObjectPair> {
 
     /** The first element. */
@@ -279,7 +290,7 @@ public class LongObjectPair<T>
       super();
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     public Builder set(final String propertyName, final Object newValue) {
       switch (propertyName) {
@@ -296,8 +307,8 @@ public class LongObjectPair<T>
     }
 
     @Override
-    public Builder setString(final String propertyName, final String value) {
-      setString(meta().metaProperty(propertyName), value);
+    public Builder set(final MetaProperty<?> property, final Object value) {
+      super.set(property, value);
       return this;
     }
 

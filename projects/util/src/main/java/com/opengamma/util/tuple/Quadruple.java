@@ -16,7 +16,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.joda.beans.Bean;
 import org.joda.beans.ImmutableBean;
-import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.impl.BasicImmutableBeanBuilder;
@@ -222,7 +222,7 @@ public final class Quadruple<A, B, C, D>
   // -------------------------------------------------------------------------
   /**
    * The meta-bean for {@code Triple}.
-   * 
+   *
    * @return the meta-bean, not null
    */
   @SuppressWarnings("rawtypes")
@@ -231,7 +231,7 @@ public final class Quadruple<A, B, C, D>
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(Quadruple.Meta.INSTANCE);
+    MetaBean.register(Quadruple.Meta.INSTANCE);
   }
 
   @Override
@@ -256,7 +256,16 @@ public final class Quadruple<A, B, C, D>
 
   // -----------------------------------------------------------------------
   /**
-   * The meta-bean for {@code Triple}.
+   * The meta-bean for {@code Quadruple}.
+   * 
+   * @param <A>
+   *          the type of the first value
+   * @param <B>
+   *          the type of the second value
+   * @param <C>
+   *          the type of the third value
+   * @param <D>
+   *          the type of the fourth value
    */
   public static final class Meta<A, B, C, D> extends DirectMetaBean {
     /**
@@ -335,7 +344,7 @@ public final class Quadruple<A, B, C, D>
     // -----------------------------------------------------------------------
     /**
      * The meta-property for the {@code first} property.
-     * 
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Object> first() {
@@ -344,7 +353,7 @@ public final class Quadruple<A, B, C, D>
 
     /**
      * The meta-property for the {@code second} property.
-     * 
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Object> second() {
@@ -353,7 +362,7 @@ public final class Quadruple<A, B, C, D>
 
     /**
      * The meta-property for the {@code third} property.
-     * 
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Object> third() {
@@ -362,7 +371,7 @@ public final class Quadruple<A, B, C, D>
 
     /**
      * The meta-property for the {@code fourth} property.
-     * 
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Object> fourth() {
@@ -439,6 +448,12 @@ public final class Quadruple<A, B, C, D>
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
+      return this;
+    }
+
+    @Override
+    public Builder set(final MetaProperty<?> property, final Object value) {
+      super.set(property, value);
       return this;
     }
 

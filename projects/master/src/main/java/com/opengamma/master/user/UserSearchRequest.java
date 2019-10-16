@@ -8,15 +8,15 @@ package com.opengamma.master.user;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
-import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
-import org.joda.beans.PropertyDefinition;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
@@ -32,23 +32,19 @@ import com.opengamma.util.paging.PagingRequest;
 /**
  * Request for searching for users.
  * <p>
- * Documents will be returned that match the search criteria.
- * This class provides the ability to page the results and to search
- * as at a specific version and correction instant.
- * See {@link UserEventHistoryRequest} for more details on how history works.
+ * Documents will be returned that match the search criteria. This class provides the ability to page the results and to search as at a specific version and
+ * correction instant. See {@link UserEventHistoryRequest} for more details on how history works.
  */
 @BeanDefinition
 public class UserSearchRequest implements Bean {
 
   /**
-   * The request for paging.
-   * By default all matching items will be returned.
+   * The request for paging. By default all matching items will be returned.
    */
   @PropertyDefinition
   private PagingRequest _pagingRequest = PagingRequest.ALL;
   /**
-   * The set of user object identifiers, null to not limit by user object identifiers.
-   * Note that an empty list will return no users.
+   * The set of user object identifiers, null to not limit by user object identifiers. Note that an empty list will return no users.
    */
   @PropertyDefinition(set = "manual")
   private List<ObjectId> _objectIds;
@@ -58,26 +54,20 @@ public class UserSearchRequest implements Bean {
   @PropertyDefinition
   private String _userName;
   /**
-   * The alternate user identifier scheme, matching only against the <b>scheme</b> of the
-   * identifiers, null not to match by identifier scheme.
-   * This matches against the {@link ExternalId#getScheme() scheme} of the identifier
-   * and does not match against the key. Wildcards are allowed.
+   * The alternate user identifier scheme, matching only against the <b>scheme</b> of the identifiers, null not to match by identifier scheme. This matches
+   * against the {@link ExternalId#getScheme() scheme} of the identifier and does not match against the key. Wildcards are allowed.
    */
   @PropertyDefinition
   private String _alternateIdScheme;
   /**
-   * The alternate user identifier value, matching only against the <b>value</b> of the
-   * stored identifiers, null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
+   * The alternate user identifier value, matching only against the <b>value</b> of the stored identifiers, null to not match by identifier value. This matches
+   * against the {@link ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed.
    */
   @PropertyDefinition
   private String _alternateIdValue;
   /**
-   * The associated permission to search for, no wildcards.
-   * If used, only those roles which explicitly reference the permission are returned.
-   * Any permissions implied by membership of roles are not matched.
-   * In other words, this searches {@link ManageableUser#getAssociatedPermissions()}.
+   * The associated permission to search for, no wildcards. If used, only those roles which explicitly reference the permission are returned. Any permissions
+   * implied by membership of roles are not matched. In other words, this searches {@link ManageableUser#getAssociatedPermissions()}.
    */
   @PropertyDefinition
   private String _associatedPermission;
@@ -103,11 +93,12 @@ public class UserSearchRequest implements Bean {
   public UserSearchRequest() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds a single user object identifier to the set.
    *
-   * @param userId  the user object identifier to add, not null
+   * @param userId
+   *          the user object identifier to add, not null
    */
   public void addObjectId(final ObjectIdentifiable userId) {
     ArgumentChecker.notNull(userId, "userId");
@@ -118,10 +109,10 @@ public class UserSearchRequest implements Bean {
   }
 
   /**
-   * Sets the set of user object identifiers, null to not limit by user object identifiers.
-   * Note that an empty collection will return no securities.
+   * Sets the set of user object identifiers, null to not limit by user object identifiers. Note that an empty collection will return no securities.
    *
-   * @param userIds  the new user identifiers, null clears the user id search
+   * @param userIds
+   *          the new user identifiers, null clears the user id search
    */
   public void setObjectIds(final Iterable<? extends ObjectIdentifiable> userIds) {
     if (userIds == null) {
@@ -134,11 +125,12 @@ public class UserSearchRequest implements Bean {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if this search matches the specified user.
    *
-   * @param user  the user to match, null returns false
+   * @param user
+   *          the user to match, null returns false
    * @return true if matches
    */
   public boolean matches(final ManageableUser user) {
@@ -178,7 +170,6 @@ public class UserSearchRequest implements Bean {
   }
 
   //------------------------- AUTOGENERATED START -------------------------
-  ///CLOVER:OFF
   /**
    * The meta-bean for {@code UserSearchRequest}.
    * @return the meta-bean, not null
@@ -188,7 +179,7 @@ public class UserSearchRequest implements Bean {
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(UserSearchRequest.Meta.INSTANCE);
+    MetaBean.register(UserSearchRequest.Meta.INSTANCE);
   }
 
   @Override
@@ -196,20 +187,9 @@ public class UserSearchRequest implements Bean {
     return UserSearchRequest.Meta.INSTANCE;
   }
 
-  @Override
-  public <R> Property<R> property(String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
-  }
-
-  @Override
-  public Set<String> propertyNames() {
-    return metaBean().metaPropertyMap().keySet();
-  }
-
   //-----------------------------------------------------------------------
   /**
-   * Gets the request for paging.
-   * By default all matching items will be returned.
+   * Gets the request for paging. By default all matching items will be returned.
    * @return the value of the property
    */
   public PagingRequest getPagingRequest() {
@@ -217,8 +197,7 @@ public class UserSearchRequest implements Bean {
   }
 
   /**
-   * Sets the request for paging.
-   * By default all matching items will be returned.
+   * Sets the request for paging. By default all matching items will be returned.
    * @param pagingRequest  the new value of the property
    */
   public void setPagingRequest(PagingRequest pagingRequest) {
@@ -227,7 +206,6 @@ public class UserSearchRequest implements Bean {
 
   /**
    * Gets the the {@code pagingRequest} property.
-   * By default all matching items will be returned.
    * @return the property, not null
    */
   public final Property<PagingRequest> pagingRequest() {
@@ -236,8 +214,7 @@ public class UserSearchRequest implements Bean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of user object identifiers, null to not limit by user object identifiers.
-   * Note that an empty list will return no users.
+   * Gets the set of user object identifiers, null to not limit by user object identifiers. Note that an empty list will return no users.
    * @return the value of the property
    */
   public List<ObjectId> getObjectIds() {
@@ -246,7 +223,6 @@ public class UserSearchRequest implements Bean {
 
   /**
    * Gets the the {@code objectIds} property.
-   * Note that an empty list will return no users.
    * @return the property, not null
    */
   public final Property<List<ObjectId>> objectIds() {
@@ -280,10 +256,8 @@ public class UserSearchRequest implements Bean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the alternate user identifier scheme, matching only against the <b>scheme</b> of the
-   * identifiers, null not to match by identifier scheme.
-   * This matches against the {@link ExternalId#getScheme() scheme} of the identifier
-   * and does not match against the key. Wildcards are allowed.
+   * Gets the alternate user identifier scheme, matching only against the <b>scheme</b> of the identifiers, null not to match by identifier scheme. This matches
+   * against the {@link ExternalId#getScheme() scheme} of the identifier and does not match against the key. Wildcards are allowed.
    * @return the value of the property
    */
   public String getAlternateIdScheme() {
@@ -291,10 +265,8 @@ public class UserSearchRequest implements Bean {
   }
 
   /**
-   * Sets the alternate user identifier scheme, matching only against the <b>scheme</b> of the
-   * identifiers, null not to match by identifier scheme.
-   * This matches against the {@link ExternalId#getScheme() scheme} of the identifier
-   * and does not match against the key. Wildcards are allowed.
+   * Sets the alternate user identifier scheme, matching only against the <b>scheme</b> of the identifiers, null not to match by identifier scheme. This matches
+   * against the {@link ExternalId#getScheme() scheme} of the identifier and does not match against the key. Wildcards are allowed.
    * @param alternateIdScheme  the new value of the property
    */
   public void setAlternateIdScheme(String alternateIdScheme) {
@@ -303,9 +275,7 @@ public class UserSearchRequest implements Bean {
 
   /**
    * Gets the the {@code alternateIdScheme} property.
-   * identifiers, null not to match by identifier scheme.
-   * This matches against the {@link ExternalId#getScheme() scheme} of the identifier
-   * and does not match against the key. Wildcards are allowed.
+   * against the {@link ExternalId#getScheme() scheme} of the identifier and does not match against the key. Wildcards are allowed.
    * @return the property, not null
    */
   public final Property<String> alternateIdScheme() {
@@ -314,10 +284,8 @@ public class UserSearchRequest implements Bean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the alternate user identifier value, matching only against the <b>value</b> of the
-   * stored identifiers, null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
+   * Gets the alternate user identifier value, matching only against the <b>value</b> of the stored identifiers, null to not match by identifier value. This matches
+   * against the {@link ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed.
    * @return the value of the property
    */
   public String getAlternateIdValue() {
@@ -325,10 +293,8 @@ public class UserSearchRequest implements Bean {
   }
 
   /**
-   * Sets the alternate user identifier value, matching only against the <b>value</b> of the
-   * stored identifiers, null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
+   * Sets the alternate user identifier value, matching only against the <b>value</b> of the stored identifiers, null to not match by identifier value. This matches
+   * against the {@link ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed.
    * @param alternateIdValue  the new value of the property
    */
   public void setAlternateIdValue(String alternateIdValue) {
@@ -337,9 +303,7 @@ public class UserSearchRequest implements Bean {
 
   /**
    * Gets the the {@code alternateIdValue} property.
-   * stored identifiers, null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
+   * against the {@link ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed.
    * @return the property, not null
    */
   public final Property<String> alternateIdValue() {
@@ -348,10 +312,8 @@ public class UserSearchRequest implements Bean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the associated permission to search for, no wildcards.
-   * If used, only those roles which explicitly reference the permission are returned.
-   * Any permissions implied by membership of roles are not matched.
-   * In other words, this searches {@link ManageableUser#getAssociatedPermissions()}.
+   * Gets the associated permission to search for, no wildcards. If used, only those roles which explicitly reference the permission are returned. Any permissions
+   * implied by membership of roles are not matched. In other words, this searches {@link ManageableUser#getAssociatedPermissions()}.
    * @return the value of the property
    */
   public String getAssociatedPermission() {
@@ -359,10 +321,8 @@ public class UserSearchRequest implements Bean {
   }
 
   /**
-   * Sets the associated permission to search for, no wildcards.
-   * If used, only those roles which explicitly reference the permission are returned.
-   * Any permissions implied by membership of roles are not matched.
-   * In other words, this searches {@link ManageableUser#getAssociatedPermissions()}.
+   * Sets the associated permission to search for, no wildcards. If used, only those roles which explicitly reference the permission are returned. Any permissions
+   * implied by membership of roles are not matched. In other words, this searches {@link ManageableUser#getAssociatedPermissions()}.
    * @param associatedPermission  the new value of the property
    */
   public void setAssociatedPermission(String associatedPermission) {
@@ -371,9 +331,7 @@ public class UserSearchRequest implements Bean {
 
   /**
    * Gets the the {@code associatedPermission} property.
-   * If used, only those roles which explicitly reference the permission are returned.
-   * Any permissions implied by membership of roles are not matched.
-   * In other words, this searches {@link ManageableUser#getAssociatedPermissions()}.
+   * implied by membership of roles are not matched. In other words, this searches {@link ManageableUser#getAssociatedPermissions()}.
    * @return the property, not null
    */
   public final Property<String> associatedPermission() {
@@ -626,7 +584,7 @@ public class UserSearchRequest implements Bean {
 
     @Override
     public BeanBuilder<? extends UserSearchRequest> builder() {
-      return new DirectBeanBuilder<UserSearchRequest>(new UserSearchRequest());
+      return new DirectBeanBuilder<>(new UserSearchRequest());
     }
 
     @Override
@@ -780,6 +738,5 @@ public class UserSearchRequest implements Bean {
 
   }
 
-  ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }

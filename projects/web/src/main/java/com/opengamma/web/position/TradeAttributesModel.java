@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import org.joda.beans.PropertyDefinition;
 
 import com.google.common.collect.Maps;
 import com.opengamma.id.UniqueId;
@@ -18,6 +17,7 @@ import com.opengamma.master.position.Deal;
 import com.opengamma.master.position.ManageablePosition;
 import com.opengamma.master.position.ManageableTrade;
 import com.opengamma.util.ArgumentChecker;
+import org.joda.beans.gen.PropertyDefinition;
 
 /**
  * Trade Attributes Model to help with freemarker rendering.

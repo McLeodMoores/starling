@@ -7,17 +7,16 @@ package com.opengamma.financial.currency;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
-import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
-import org.joda.beans.ImmutableConstructor;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
-import org.joda.beans.Property;
-import org.joda.beans.PropertyDefinition;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.ImmutableConstructor;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
@@ -51,12 +50,11 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
   public static final PrimitiveComputationTargetType<CurrencyPair> TYPE = PrimitiveComputationTargetType.of(ComputationTargetType.of(CurrencyPair.class),
       CurrencyPair.class,
       new AbstractPrimitiveResolver<CurrencyPair>(OBJECT_SCHEME) {
-    @Override
-    protected CurrencyPair resolveObject(final String identifier) {
-      return parse(identifier);
-    }
-  }
-      );
+        @Override
+        protected CurrencyPair resolveObject(final String identifier) {
+          return parse(identifier);
+        }
+      });
 
   /**
    * The base currency of the pair.
@@ -69,12 +67,14 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
   @PropertyDefinition
   private final Currency _counter;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Obtains a currency pair from a string with format AAA/BBB.
    *
-   * @param base  the base currency, not null
-   * @param counter  the counter currency, not null
+   * @param base
+   *          the base currency, not null
+   * @param counter
+   *          the counter currency, not null
    * @return the currency pair, not null
    */
   public static CurrencyPair of(final Currency base, final Currency counter) {
@@ -86,7 +86,8 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
    * <p>
    * The parsed format is '${baseCurrency}/${counterCurrency}'.
    *
-   * @param pairStr  the currency pair as a string AAA/BBB, not null
+   * @param pairStr
+   *          the currency pair as a string AAA/BBB, not null
    * @return the currency pair, not null
    */
   @FromString
@@ -100,12 +101,14 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
     return new CurrencyPair(base, counter);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates an instance.
    *
-   * @param base the base currency, not null
-   * @param counter the counter currency, not null
+   * @param base
+   *          the base currency, not null
+   * @param counter
+   *          the counter currency, not null
    */
   @ImmutableConstructor
   private CurrencyPair(final Currency base, final Currency counter) {
@@ -118,7 +121,7 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
     _counter = counter;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the name of the pair, formed from the two currencies.
    * <p>
@@ -144,7 +147,8 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
   /**
    * Indicates if the currency pair contains the supplied currency as either its base or counter.
    *
-   * @param currency  the currency to check against the pair, null returns false
+   * @param currency
+   *          the currency to check against the pair, null returns false
    * @return true if the currency is either the base or counter currency in the pair
    */
   public boolean contains(final Currency currency) {
@@ -154,13 +158,14 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
   /**
    * Return the pair's complementing currency for the supplied currency.
    * <p>
-   * If the supplied currency is the pair's base, then the counter currency is returned.
-   * If the supplied currency is the pair's counter, then the base currency is returned.
-   * Otherwise an exception is thrown.
+   * If the supplied currency is the pair's base, then the counter currency is returned. If the supplied currency is the pair's counter, then the base currency
+   * is returned. Otherwise an exception is thrown.
    *
-   * @param currency  the currency to find the complement for
+   * @param currency
+   *          the currency to find the complement for
    * @return the complementing currency, not null
-   * @throws IllegalArgumentException if the supplied currency is not a member of the pair
+   * @throws IllegalArgumentException
+   *           if the supplied currency is not a member of the pair
    */
   public Currency getComplement(final Currency currency) {
     if (_base.equals(currency)) {
@@ -175,8 +180,7 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
   /**
    * Gets a derived unique identifier.
    * <p>
-   * This allows the pair to be used in certain contexts where a {@code UniqueId} is needed.
-   * This uses the scheme 'CurrencyPair'.
+   * This allows the pair to be used in certain contexts where a {@code UniqueId} is needed. This uses the scheme 'CurrencyPair'.
    *
    * @return the unique identifier, not null
    */
@@ -185,7 +189,7 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
     return UniqueId.of(OBJECT_SCHEME, getName());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Returns the formatted string version of the currency pair.
    * <p>
@@ -200,7 +204,6 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
   }
 
   //------------------------- AUTOGENERATED START -------------------------
-  ///CLOVER:OFF
   /**
    * The meta-bean for {@code CurrencyPair}.
    * @return the meta-bean, not null
@@ -210,22 +213,12 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(CurrencyPair.Meta.INSTANCE);
+    MetaBean.register(CurrencyPair.Meta.INSTANCE);
   }
 
   @Override
   public CurrencyPair.Meta metaBean() {
     return CurrencyPair.Meta.INSTANCE;
-  }
-
-  @Override
-  public <R> Property<R> property(String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
-  }
-
-  @Override
-  public Set<String> propertyNames() {
-    return metaBean().metaPropertyMap().keySet();
   }
 
   //-----------------------------------------------------------------------
@@ -381,7 +374,6 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
      * Restricted constructor.
      */
     private Builder() {
-      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -432,6 +424,5 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
 
   }
 
-  ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }

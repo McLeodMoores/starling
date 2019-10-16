@@ -16,6 +16,7 @@ import com.opengamma.util.ArgumentChecker;
  * <p>
  * This class should be used when backwards compatibility is required.
  */
+@SuppressWarnings("deprecation")
 public final class WorkingDayCalendarAdapter implements WorkingDayCalendar {
 
   /**

@@ -22,6 +22,7 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Methods related to fixed accrued compounding coupons.
+ * 
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.payments.provider.CouponFixedAccruedCompoundingDiscountingMethod}
  */
 @Deprecated
@@ -34,6 +35,7 @@ public final class CouponFixedAccruedCompoundingDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static CouponFixedAccruedCompoundingDiscountingMethod getInstance() {
@@ -48,23 +50,28 @@ public final class CouponFixedAccruedCompoundingDiscountingMethod {
 
   /**
    * Computes the present value of a fixed coupon by discounting.
-   * @param cpn The coupon.
-   * @param curves The curve bundle.
+   * 
+   * @param cpn
+   *          The coupon.
+   * @param curves
+   *          The curve bundle.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final CouponFixedAccruedCompounding cpn, final YieldCurveBundle curves) {
     Validate.notNull(curves);
     Validate.notNull(cpn);
     final YieldAndDiscountCurve fundingCurve = curves.getCurve(cpn.getFundingCurveName());
-    double tmp = fundingCurve.getDiscountFactor(cpn.getPaymentTime());
     final double pv = cpn.getAmount() * fundingCurve.getDiscountFactor(cpn.getPaymentTime());
     return CurrencyAmount.of(cpn.getCurrency(), pv);
   }
 
   /**
    * Computes the present value of the fixed coupon with positive notional (abs(notional) is used) by discounting.
-   * @param cpn The coupon.
-   * @param curves The curve bundle.
+   * 
+   * @param cpn
+   *          The coupon.
+   * @param curves
+   *          The curve bundle.
    * @return The present value.
    */
   public CurrencyAmount presentValuePositiveNotional(final CouponFixedAccruedCompounding cpn, final YieldCurveBundle curves) {
@@ -75,8 +82,11 @@ public final class CouponFixedAccruedCompoundingDiscountingMethod {
 
   /**
    * Computes the present value curve sensitivity of a fixed coupon by discounting.
-   * @param cpn The coupon.
-   * @param curves The curve bundle.
+   * 
+   * @param cpn
+   *          The coupon.
+   * @param curves
+   *          The curve bundle.
    * @return The sensitivity.
    */
   public InterestRateCurveSensitivity presentValueCurveSensitivity(final CouponFixedAccruedCompounding cpn, final YieldCurveBundle curves) {
@@ -93,8 +103,11 @@ public final class CouponFixedAccruedCompoundingDiscountingMethod {
 
   /**
    * Compute the the present value curve sensitivity of a fixed coupon by discounting to a parallel curve movement.
-   * @param cpn The coupon.
-   * @param curves The curve bundle.
+   * 
+   * @param cpn
+   *          The coupon.
+   * @param curves
+   *          The curve bundle.
    * @return The sensitivity.
    */
   public StringAmount presentValueParallelCurveSensitivity(final CouponFixedAccruedCompounding cpn, final YieldCurveBundle curves) {

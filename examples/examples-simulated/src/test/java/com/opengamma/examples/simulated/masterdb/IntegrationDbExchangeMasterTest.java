@@ -28,6 +28,7 @@ public class IntegrationDbExchangeMasterTest extends AbstractIntegrationDbExchan
 
   /**
    * @throws Exception
+   *           if there is a problem
    */
   @Test
   public void testQuerySampleEntry() throws Exception {

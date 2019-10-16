@@ -16,7 +16,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.joda.beans.Bean;
 import org.joda.beans.ImmutableBean;
-import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
@@ -217,7 +217,7 @@ public final class Triple<A, B, C>
 
   /**
    * The meta-bean for {@code Triple}.
-   * 
+   *
    * @return the meta-bean, not null
    */
   @SuppressWarnings("rawtypes")
@@ -226,7 +226,7 @@ public final class Triple<A, B, C>
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(Triple.Meta.INSTANCE);
+    MetaBean.register(Triple.Meta.INSTANCE);
   }
 
   @Override
@@ -252,6 +252,13 @@ public final class Triple<A, B, C>
   // -----------------------------------------------------------------------
   /**
    * The meta-bean for {@code Triple}.
+   * 
+   * @param <A>
+   *          the type of the first value
+   * @param <B>
+   *          the type of the second value
+   * @param <C>
+   *          the type of the third value
    */
   public static final class Meta<A, B, C> extends DirectMetaBean {
     /**
@@ -322,7 +329,7 @@ public final class Triple<A, B, C>
     // -----------------------------------------------------------------------
     /**
      * The meta-property for the {@code first} property.
-     * 
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Object> first() {
@@ -331,7 +338,7 @@ public final class Triple<A, B, C>
 
     /**
      * The meta-property for the {@code second} property.
-     * 
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Object> second() {
@@ -340,7 +347,7 @@ public final class Triple<A, B, C>
 
     /**
      * The meta-property for the {@code third} property.
-     * 
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Object> third() {
@@ -414,8 +421,8 @@ public final class Triple<A, B, C>
     }
 
     @Override
-    public Builder setString(final String propertyName, final String value) {
-      setString(meta().metaProperty(propertyName), value);
+    public Builder set(final MetaProperty<?> property, final Object value) {
+      super.set(property, value);
       return this;
     }
 

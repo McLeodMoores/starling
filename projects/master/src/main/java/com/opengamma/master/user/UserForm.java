@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.LocaleUtils;
@@ -17,11 +16,12 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
-import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
-import org.joda.beans.PropertyDefinition;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
@@ -52,8 +52,7 @@ public class UserForm implements Bean {
   public static final Pattern VALID_PERMISSION = Pattern.compile("[a-zA-Z*][a-zA-Z0-9*_-]*(:[a-zA-Z*][a-zA-Z0-9*_,-]*)*");
 
   /**
-   * The user name that uniquely identifies the user.
-   * This is used with the password to authenticate.
+   * The user name that uniquely identifies the user. This is used with the password to authenticate.
    */
   @PropertyDefinition
   private String _userName;
@@ -68,8 +67,7 @@ public class UserForm implements Bean {
   @PropertyDefinition
   private String _emailAddress;
   /**
-   * The display name, such as the user's real name.
-   * This is typically used in a GUI and is not guaranteed to be unique.
+   * The display name, such as the user's real name. This is typically used in a GUI and is not guaranteed to be unique.
    */
   @PropertyDefinition
   private String _displayName;
@@ -109,7 +107,8 @@ public class UserForm implements Bean {
   /**
    * Creates a form object.
    *
-   * @param user  the user to copy from, not null
+   * @param user
+   *          the user to copy from, not null
    */
   public UserForm(final ManageableUser user) {
     setUserName(user.getUserName());
@@ -125,8 +124,10 @@ public class UserForm implements Bean {
   /**
    * Creates a form object for changing the password.
    *
-   * @param user  the user to copy from, not null
-   * @param passwordRaw  the new password
+   * @param user
+   *          the user to copy from, not null
+   * @param passwordRaw
+   *          the new password
    */
   public UserForm(final ManageableUser user, final String passwordRaw) {
     setUserName(user.getUserName());
@@ -144,13 +145,20 @@ public class UserForm implements Bean {
   /**
    * Creates a form object for changing everything except the name and password.
    *
-   * @param user  the user to copy from, not null
-   * @param emailAddress  the email address, not null
-   * @param displayName  the display name, not null
-   * @param localeStr  the locale, not null
-   * @param zoneStr  the time zone, not null
-   * @param dateStyleStr  the date style, not null
-   * @param timeStyleStr  the time style, not null
+   * @param user
+   *          the user to copy from, not null
+   * @param emailAddress
+   *          the email address, not null
+   * @param displayName
+   *          the display name, not null
+   * @param localeStr
+   *          the locale, not null
+   * @param zoneStr
+   *          the time zone, not null
+   * @param dateStyleStr
+   *          the date style, not null
+   * @param timeStyleStr
+   *          the time style, not null
    */
   public UserForm(final ManageableUser user, final String emailAddress, final String displayName,
       final String localeStr, final String zoneStr, final String dateStyleStr, final String timeStyleStr) {
@@ -168,14 +176,22 @@ public class UserForm implements Bean {
   /**
    * Creates a form object.
    *
-   * @param userName  the user name, not null
-   * @param password  the plain text password, not null
-   * @param emailAddress  the email address, not null
-   * @param displayName  the display name, not null
-   * @param localeStr  the locale, not null
-   * @param zoneStr  the time zone, not null
-   * @param dateStyleStr  the date style, not null
-   * @param timeStyleStr  the time style, not null
+   * @param userName
+   *          the user name, not null
+   * @param password
+   *          the plain text password, not null
+   * @param emailAddress
+   *          the email address, not null
+   * @param displayName
+   *          the display name, not null
+   * @param localeStr
+   *          the locale, not null
+   * @param zoneStr
+   *          the time zone, not null
+   * @param dateStyleStr
+   *          the date style, not null
+   * @param timeStyleStr
+   *          the time style, not null
    */
   public UserForm(final String userName, final String password, final String emailAddress, final String displayName,
       final String localeStr, final String zoneStr, final String dateStyleStr, final String timeStyleStr) {
@@ -189,14 +205,17 @@ public class UserForm implements Bean {
     setTimeStyle(timeStyleStr);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Validates and adds the proposed user to the master.
    *
-   * @param userMaster  the user master, not null
-   * @param pwService  the password service
+   * @param userMaster
+   *          the user master, not null
+   * @param pwService
+   *          the password service
    * @return the added user
-   * @throws UserFormException if the proposed user is invalid
+   * @throws UserFormException
+   *           if the proposed user is invalid
    */
   public ManageableUser add(final UserMaster userMaster, final PasswordService pwService) {
     try {
@@ -214,10 +233,13 @@ public class UserForm implements Bean {
   /**
    * Validates and updates the proposed user in the master.
    *
-   * @param userMaster  the user master, not null
-   * @param pwService  the password service
+   * @param userMaster
+   *          the user master, not null
+   * @param pwService
+   *          the password service
    * @return the added user
-   * @throws UserFormException if the proposed user is invalid
+   * @throws UserFormException
+   *           if the proposed user is invalid
    */
   public ManageableUser update(final UserMaster userMaster, final PasswordService pwService) {
     try {
@@ -235,11 +257,15 @@ public class UserForm implements Bean {
   /**
    * Validates and adds the proposed user to the master.
    *
-   * @param userMaster  the user master, not null
-   * @param pwService  the password service
-   * @param add  true if adding, false if updating
+   * @param userMaster
+   *          the user master, not null
+   * @param pwService
+   *          the password service
+   * @param add
+   *          true if adding, false if updating
    * @return the added user
-   * @throws UserFormException if the proposed user is invalid
+   * @throws UserFormException
+   *           if the proposed user is invalid
    */
   protected ManageableUser validate(final UserMaster userMaster, final PasswordService pwService, final boolean add) {
     final UserMaster master = ArgumentChecker.notNull(userMaster, "userMaster");
@@ -358,11 +384,12 @@ public class UserForm implements Bean {
     return user;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if the user name is too short.
    *
-   * @param userName  the user name, not null
+   * @param userName
+   *          the user name, not null
    * @return true if short
    */
   protected boolean isUserNameTooShort(final String userName) {
@@ -372,7 +399,8 @@ public class UserForm implements Bean {
   /**
    * Checks if the user name is too long.
    *
-   * @param userName  the user name, not null
+   * @param userName
+   *          the user name, not null
    * @return true if long
    */
   protected boolean isUserNameTooLong(final String userName) {
@@ -382,7 +410,8 @@ public class UserForm implements Bean {
   /**
    * Checks if the user name is invalid.
    *
-   * @param userName  the user name, not null
+   * @param userName
+   *          the user name, not null
    * @return true if invalid
    */
   protected boolean isUserNameInvalid(final String userName) {
@@ -392,7 +421,8 @@ public class UserForm implements Bean {
   /**
    * Checks if the password is too short.
    *
-   * @param password  the password, not null
+   * @param password
+   *          the password, not null
    * @return true if short
    */
   protected boolean isPasswordTooShort(final String password) {
@@ -402,7 +432,8 @@ public class UserForm implements Bean {
   /**
    * Checks if the password is too long.
    *
-   * @param password  the password, not null
+   * @param password
+   *          the password, not null
    * @return true if long
    */
   protected boolean isPasswordTooLong(final String password) {
@@ -412,8 +443,10 @@ public class UserForm implements Bean {
   /**
    * Checks if the password is weak.
    *
-   * @param userName  the user name, not null
-   * @param password  the password, not null
+   * @param userName
+   *          the user name, not null
+   * @param password
+   *          the password, not null
    * @return true if weak
    */
   protected boolean isPasswordWeak(final String userName, final String password) {
@@ -425,7 +458,8 @@ public class UserForm implements Bean {
   /**
    * Checks if the email address is too long.
    *
-   * @param emailAddress  the email address, not null
+   * @param emailAddress
+   *          the email address, not null
    * @return true if long
    */
   protected boolean isEmailAddressTooLong(final String emailAddress) {
@@ -435,7 +469,8 @@ public class UserForm implements Bean {
   /**
    * Checks if the email address is invalid.
    *
-   * @param email  the email address, not null
+   * @param email
+   *          the email address, not null
    * @return true if invalid
    */
   protected boolean isEmailAddressInvalid(final String email) {
@@ -445,7 +480,8 @@ public class UserForm implements Bean {
   /**
    * Checks if the display name is too long.
    *
-   * @param displayName  the display name, not null
+   * @param displayName
+   *          the display name, not null
    * @return true if invalid
    */
   protected boolean isDisplayNameTooLong(final String displayName) {
@@ -455,7 +491,8 @@ public class UserForm implements Bean {
   /**
    * Checks if the display name is invalid.
    *
-   * @param displayName  the display name, not null
+   * @param displayName
+   *          the display name, not null
    * @return true if invalid
    */
   protected boolean isDisplayNameInvalid(final String displayName) {
@@ -463,7 +500,6 @@ public class UserForm implements Bean {
   }
 
   //------------------------- AUTOGENERATED START -------------------------
-  ///CLOVER:OFF
   /**
    * The meta-bean for {@code UserForm}.
    * @return the meta-bean, not null
@@ -473,7 +509,7 @@ public class UserForm implements Bean {
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(UserForm.Meta.INSTANCE);
+    MetaBean.register(UserForm.Meta.INSTANCE);
   }
 
   @Override
@@ -481,20 +517,9 @@ public class UserForm implements Bean {
     return UserForm.Meta.INSTANCE;
   }
 
-  @Override
-  public <R> Property<R> property(String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
-  }
-
-  @Override
-  public Set<String> propertyNames() {
-    return metaBean().metaPropertyMap().keySet();
-  }
-
   //-----------------------------------------------------------------------
   /**
-   * Gets the user name that uniquely identifies the user.
-   * This is used with the password to authenticate.
+   * Gets the user name that uniquely identifies the user. This is used with the password to authenticate.
    * @return the value of the property
    */
   public String getUserName() {
@@ -502,8 +527,7 @@ public class UserForm implements Bean {
   }
 
   /**
-   * Sets the user name that uniquely identifies the user.
-   * This is used with the password to authenticate.
+   * Sets the user name that uniquely identifies the user. This is used with the password to authenticate.
    * @param userName  the new value of the property
    */
   public void setUserName(String userName) {
@@ -512,7 +536,6 @@ public class UserForm implements Bean {
 
   /**
    * Gets the the {@code userName} property.
-   * This is used with the password to authenticate.
    * @return the property, not null
    */
   public final Property<String> userName() {
@@ -571,8 +594,7 @@ public class UserForm implements Bean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the display name, such as the user's real name.
-   * This is typically used in a GUI and is not guaranteed to be unique.
+   * Gets the display name, such as the user's real name. This is typically used in a GUI and is not guaranteed to be unique.
    * @return the value of the property
    */
   public String getDisplayName() {
@@ -580,8 +602,7 @@ public class UserForm implements Bean {
   }
 
   /**
-   * Sets the display name, such as the user's real name.
-   * This is typically used in a GUI and is not guaranteed to be unique.
+   * Sets the display name, such as the user's real name. This is typically used in a GUI and is not guaranteed to be unique.
    * @param displayName  the new value of the property
    */
   public void setDisplayName(String displayName) {
@@ -590,7 +611,6 @@ public class UserForm implements Bean {
 
   /**
    * Gets the the {@code displayName} property.
-   * This is typically used in a GUI and is not guaranteed to be unique.
    * @return the property, not null
    */
   public final Property<String> displayName() {
@@ -891,7 +911,7 @@ public class UserForm implements Bean {
 
     @Override
     public BeanBuilder<? extends UserForm> builder() {
-      return new DirectBeanBuilder<UserForm>(new UserForm());
+      return new DirectBeanBuilder<>(new UserForm());
     }
 
     @Override
@@ -1039,6 +1059,5 @@ public class UserForm implements Bean {
 
   }
 
-  ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }

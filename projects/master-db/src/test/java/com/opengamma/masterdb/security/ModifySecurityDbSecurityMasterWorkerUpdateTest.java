@@ -141,6 +141,7 @@ public class ModifySecurityDbSecurityMasterWorkerUpdateTest extends AbstractDbSe
 
   /**
    * @throws Exception
+   *           if there is a problem
    */
   @Test
   public void testUpdatePermissions() throws Exception {

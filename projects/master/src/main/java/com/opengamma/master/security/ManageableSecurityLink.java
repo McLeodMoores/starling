@@ -9,9 +9,9 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.beans.BeanBuilder;
-import org.joda.beans.BeanDefinition;
-import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
+import org.joda.beans.gen.BeanDefinition;
 import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.slf4j.Logger;
@@ -35,9 +35,8 @@ import com.opengamma.util.PublicSPI;
 /**
  * A flexible link between an object and a security.
  * <p>
- * The security link represents a connection from an entity to a security.
- * The connection can be held by an {@code ObjectId} or an {@code ExternalIdBundle}.
- * The link also holds a resolved reference to the security itself.
+ * The security link represents a connection from an entity to a security. The connection can be held by an {@code ObjectId} or an {@code ExternalIdBundle}. The
+ * link also holds a resolved reference to the security itself.
  * <p>
  * This class is mutable and not thread-safe.
  */
@@ -51,11 +50,11 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   private static final Logger LOGGER = LoggerFactory.getLogger(ManageableSecurityLink.class);
 
   /**
-   * Obtains an instance from a security, locking by strong object identifier
-   * if possible and the external identifier bundle if not.
-   * The result will contain the resolved target and one type of reference.
+   * Obtains an instance from a security, locking by strong object identifier if possible and the external identifier bundle if not. The result will contain the
+   * resolved target and one type of reference.
    *
-   * @param security  the security to store, not null
+   * @param security
+   *          the security to store, not null
    * @return the link with target and object identifier set, not null
    */
   public static ManageableSecurityLink of(final Security security) {
@@ -69,10 +68,10 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   }
 
   /**
-   * Obtains an instance from a security, locking by external identifier bundle.
-   * The result will contain the external identifier bundle and the resolved target.
+   * Obtains an instance from a security, locking by external identifier bundle. The result will contain the external identifier bundle and the resolved target.
    *
-   * @param security  the security to store, not null
+   * @param security
+   *          the security to store, not null
    * @return the link with target and identifier bundle set, not null
    */
   public static ManageableSecurityLink ofBundleId(final Security security) {
@@ -82,7 +81,7 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
     return link;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates an new instance.
    */
@@ -93,7 +92,8 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   /**
    * Creates a link from an object identifier.
    *
-   * @param objectId  the object identifier, not null
+   * @param objectId
+   *          the object identifier, not null
    * @deprecated using object ids will limit ability to export links, use ExternalIds or ExternalIdBundles, even if they need to be generated GUIDs
    */
   @Deprecated
@@ -104,7 +104,8 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   /**
    * Creates a link from a unique identifier, only storing the object identifier.
    *
-   * @param uniqueId  the unique identifier, not null
+   * @param uniqueId
+   *          the unique identifier, not null
    * @deprecated using unique ids will limit ability to export links, use ExternalIds or ExternalIdBundles, even if they need to be generated GUIDs
    */
   @Deprecated
@@ -115,7 +116,8 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   /**
    * Creates a link from an external identifier.
    *
-   * @param identifier  the identifier, not null
+   * @param identifier
+   *          the identifier, not null
    */
   public ManageableSecurityLink(final ExternalId identifier) {
     super(ExternalIdBundle.of(identifier));
@@ -124,7 +126,8 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   /**
    * Creates a link from an external identifier bundle.
    *
-   * @param bundle  the identifier bundle, not null
+   * @param bundle
+   *          the identifier bundle, not null
    */
   public ManageableSecurityLink(final ExternalIdBundle bundle) {
     super(bundle);
@@ -133,7 +136,8 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   /**
    * Clones the specified link, sharing the target security.
    *
-   * @param linkToClone  the link to clone, not null
+   * @param linkToClone
+   *          the link to clone, not null
    */
   public ManageableSecurityLink(final SecurityLink linkToClone) {
     setObjectId(linkToClone.getObjectId());
@@ -141,7 +145,7 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
     setTarget(linkToClone.getTarget());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the best descriptive name.
    *
@@ -176,14 +180,17 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
     return "";
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Resolves the link to the target security.
    *
-   * @param resolver  the resolver capable of finding the target, not null
+   * @param resolver
+   *          the resolver capable of finding the target, not null
    * @return the resolved target, null if unable to resolve
-   * @throws DataNotFoundException if the target could not be resolved
-   * @throws RuntimeException if an error occurs
+   * @throws DataNotFoundException
+   *           if the target could not be resolved
+   * @throws RuntimeException
+   *           if an error occurs
    */
   @Override
   public Security resolve(final LinkResolver<Security> resolver) {
@@ -193,10 +200,13 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   /**
    * Resolves the security for the latest version-correction using a security source.
    *
-   * @param source  the source to use to resolve, not null
+   * @param source
+   *          the source to use to resolve, not null
    * @return the resolved security, not null
-   * @throws DataNotFoundException if the security could not be resolved
-   * @throws RuntimeException if an error occurs while resolving
+   * @throws DataNotFoundException
+   *           if the security could not be resolved
+   * @throws RuntimeException
+   *           if an error occurs while resolving
    */
   @Override
   public Security resolve(final SecuritySource source) {
@@ -206,11 +216,15 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   /**
    * Resolves the security using a security source.
    *
-   * @param source  the source to use to resolve, not null
-   * @param versionCorrection  the version-correction, not null
+   * @param source
+   *          the source to use to resolve, not null
+   * @param versionCorrection
+   *          the version-correction, not null
    * @return the resolved security, not null
-   * @throws DataNotFoundException if the security could not be resolved
-   * @throws RuntimeException if an error occurs while resolving
+   * @throws DataNotFoundException
+   *           if the security could not be resolved
+   * @throws RuntimeException
+   *           if an error occurs while resolving
    */
   @Override
   public Security resolve(final SecuritySource source, final VersionCorrection versionCorrection) {
@@ -232,10 +246,10 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   }
 
   /**
-   * Resolves the security using a security source,
-   * logging any exception and returning null.
+   * Resolves the security using a security source, logging any exception and returning null.
    *
-   * @param source  the source to use to resolve, not null
+   * @param source
+   *          the source to use to resolve, not null
    * @return the resolved security, null if unable to resolve
    */
   @Override
@@ -251,7 +265,7 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Clones this link, sharing the target security.
    *
@@ -263,7 +277,6 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   }
 
   //------------------------- AUTOGENERATED START -------------------------
-  ///CLOVER:OFF
   /**
    * The meta-bean for {@code ManageableSecurityLink}.
    * @return the meta-bean, not null
@@ -273,7 +286,7 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(ManageableSecurityLink.Meta.INSTANCE);
+    MetaBean.register(ManageableSecurityLink.Meta.INSTANCE);
   }
 
   @Override
@@ -341,7 +354,7 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
 
     @Override
     public BeanBuilder<? extends ManageableSecurityLink> builder() {
-      return new DirectBeanBuilder<ManageableSecurityLink>(new ManageableSecurityLink());
+      return new DirectBeanBuilder<>(new ManageableSecurityLink());
     }
 
     @Override
@@ -357,6 +370,5 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
     //-----------------------------------------------------------------------
   }
 
-  ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }

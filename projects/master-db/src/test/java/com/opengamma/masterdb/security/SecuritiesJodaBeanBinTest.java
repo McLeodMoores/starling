@@ -7,7 +7,6 @@ package com.opengamma.masterdb.security;
 
 import static org.testng.AssertJUnit.assertEquals;
 
-import org.joda.beans.ser.bin.MsgPackVisualizer;
 import org.testng.annotations.Test;
 
 import com.opengamma.master.security.ManageableSecurity;
@@ -23,40 +22,39 @@ public class SecuritiesJodaBeanBinTest extends SecurityTestCase {
   @Override
   protected <T extends ManageableSecurity> void assertSecurity(final Class<T> securityClass, final T security) {
     final byte[] bytes = JodaBeanSerialization.serializer(false).binWriter().write(security, false);
-//    System.out.println(bytes);
+    // System.out.println(bytes);
 
     try {
       final T readIn = securityClass.cast(JodaBeanSerialization.deserializer().binReader().read(bytes, securityClass));
       assertEquals(security, readIn);
     } catch (final Throwable ex) {
-      new MsgPackVisualizer(bytes).visualize();
       throw ex;
     }
 
     // fudge equivalent
-//    FudgeContext fc = OpenGammaFudgeContext.getInstance();
-//    FudgeSerializer serializer = new FudgeSerializer(fc);
-//    FudgeMsg msg = serializer.objectToFudgeMsg(security);
-//    ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
-//    @SuppressWarnings("resource")
-//    final FudgeMsgWriter fmwr = new FudgeMsgWriter(new FudgeDataOutputStreamWriter(fc, baos));
-//    fmwr.writeMessage(msg);
-//    fmwr.flush();
-//    try {
-//      baos.close();
-//    } catch (IOException ex) {
-//      ex.printStackTrace();
-//    }
-//    byte[] fudgeBytes = baos.toByteArray();
-//    double a = bytes.length;
-//    double b = fudgeBytes.length;
-//    int percent = (int) ((a / b) * 100);
-//    System.out.println(percent + "% Joda " +  bytes.length + " vs Fudge " + fudgeBytes.length);
-//    if (bytes.length > fudgeBytes.length) {
-//      System.out.println(securityClass.getSimpleName());
-//      dump(bytes);
-//      dump(fudgeBytes);
-//    }
+    // FudgeContext fc = OpenGammaFudgeContext.getInstance();
+    // FudgeSerializer serializer = new FudgeSerializer(fc);
+    // FudgeMsg msg = serializer.objectToFudgeMsg(security);
+    // ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
+    // @SuppressWarnings("resource")
+    // final FudgeMsgWriter fmwr = new FudgeMsgWriter(new FudgeDataOutputStreamWriter(fc, baos));
+    // fmwr.writeMessage(msg);
+    // fmwr.flush();
+    // try {
+    // baos.close();
+    // } catch (IOException ex) {
+    // ex.printStackTrace();
+    // }
+    // byte[] fudgeBytes = baos.toByteArray();
+    // double a = bytes.length;
+    // double b = fudgeBytes.length;
+    // int percent = (int) ((a / b) * 100);
+    // System.out.println(percent + "% Joda " + bytes.length + " vs Fudge " + fudgeBytes.length);
+    // if (bytes.length > fudgeBytes.length) {
+    // System.out.println(securityClass.getSimpleName());
+    // dump(bytes);
+    // dump(fudgeBytes);
+    // }
   }
 
   void dump(final byte[] bytes) {

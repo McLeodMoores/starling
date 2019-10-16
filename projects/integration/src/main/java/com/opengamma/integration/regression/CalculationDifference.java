@@ -10,14 +10,14 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.joda.beans.Bean;
-import org.joda.beans.BeanDefinition;
-import org.joda.beans.DerivedProperty;
 import org.joda.beans.ImmutableBean;
-import org.joda.beans.ImmutableConstructor;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
-import org.joda.beans.Property;
-import org.joda.beans.PropertyDefinition;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.DerivedProperty;
+import org.joda.beans.gen.ImmutableConstructor;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
@@ -111,8 +111,6 @@ public final class CalculationDifference implements ImmutableBean {
     }
   }
 
-
-
   /**
    * Generates differences between two {@link CalculationResults} objects.
    */
@@ -126,11 +124,14 @@ public final class CalculationDifference implements ImmutableBean {
 
     /**
      * Whether to consider differences between value properties.
-     * @param compareValueProperties boolean
+     * 
+     * @param compareValueProperties
+     *          boolean
      * @return this generator
      */
     public Generator compareValueProperties(final boolean compareValueProperties) {
-      this._compareValueProperties = compareValueProperties; return this;
+      this._compareValueProperties = compareValueProperties;
+      return this;
     }
 
     public CalculationDifference between(final CalculationResults results1, final CalculationResults results2) {
@@ -162,35 +163,39 @@ public final class CalculationDifference implements ImmutableBean {
         throw new IllegalArgumentException("The results must have the same valuation time");
       }
       return new CalculationDifference(equalResultCount,
-                                       viewDefName,
-                                       snapshotName,
-                                       valuationTime,
-                                       results1.getVersion(),
-                                       results2.getVersion(),
-                                       only1,
-                                       only2,
-                                       diffs,
-                                       differentProps);
+          viewDefName,
+          snapshotName,
+          valuationTime,
+          results1.getVersion(),
+          results2.getVersion(),
+          only1,
+          only2,
+          diffs,
+          differentProps);
     }
 
   }
 
-
   /**
    * Returns a generator object which can be used to generate a comparison.
-   * @param delta the delta to use for comparisons
+   * 
+   * @param delta
+   *          the delta to use for comparisons
    * @return a {@link Generator} object
    */
   public static Generator generatorWithDelta(final double delta) {
     return new Generator(delta);
   }
 
-
   /**
    * Convenience method for comparing two result sets. Simply calls through to a {@link Generator} using default settings.
-   * @param results1 The first set of results
-   * @param results2 The second set of results
-   * @param delta the delta to use
+   * 
+   * @param results1
+   *          The first set of results
+   * @param results2
+   *          The second set of results
+   * @param delta
+   *          the delta to use
    * @return the CalculationDifference
    */
   public static CalculationDifference between(final CalculationResults results1, final CalculationResults results2, final double delta) {
@@ -199,7 +204,9 @@ public final class CalculationDifference implements ImmutableBean {
 
   /**
    * This only exists to workaround the inadequacy of Freemarker.
-   * @param key  the key
+   * 
+   * @param key
+   *          the key
    * @return the value
    */
   public CalculatedValue getOnlyBaseValue(final CalculationResultKey key) {
@@ -208,7 +215,9 @@ public final class CalculationDifference implements ImmutableBean {
 
   /**
    * This only exists to workaround the inadequacy of Freemarker.
-   * @param key  the key
+   * 
+   * @param key
+   *          the key
    * @return the value
    */
   public CalculatedValue getOnlyTestValue(final CalculationResultKey key) {
@@ -217,7 +226,9 @@ public final class CalculationDifference implements ImmutableBean {
 
   /**
    * This only exists to workaround the inadequacy of Freemarker.
-   * @param key  the key
+   * 
+   * @param key
+   *          the key
    * @return the value
    */
   public Pair<CalculatedValue, CalculatedValue> getDifferentValue(final CalculationResultKey key) {
@@ -226,7 +237,9 @@ public final class CalculationDifference implements ImmutableBean {
 
   /**
    * This only exists to workaround the inadequacy of Freemarker.
-   * @param key  the key
+   * 
+   * @param key
+   *          the key
    * @return the value
    */
   public Pair<CalculatedValue, CalculatedValue> getDifferentPropertiesValue(final CalculationResultKey key) {
@@ -234,7 +247,7 @@ public final class CalculationDifference implements ImmutableBean {
   }
 
   private static Map<CalculationResultKey, CalculatedValue> getValues(final Set<CalculationResultKey> keys,
-                                                                      final Map<CalculationResultKey, CalculatedValue> map) {
+      final Map<CalculationResultKey, CalculatedValue> map) {
     final Map<CalculationResultKey, CalculatedValue> retMap = Maps.newTreeMap();
     for (final CalculationResultKey key : keys) {
       if (map.containsKey(key)) {
@@ -250,7 +263,6 @@ public final class CalculationDifference implements ImmutableBean {
   }
 
   //------------------------- AUTOGENERATED START -------------------------
-  ///CLOVER:OFF
   /**
    * The meta-bean for {@code CalculationDifference}.
    * @return the meta-bean, not null
@@ -260,7 +272,7 @@ public final class CalculationDifference implements ImmutableBean {
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(CalculationDifference.Meta.INSTANCE);
+    MetaBean.register(CalculationDifference.Meta.INSTANCE);
   }
 
   /**
@@ -274,16 +286,6 @@ public final class CalculationDifference implements ImmutableBean {
   @Override
   public CalculationDifference.Meta metaBean() {
     return CalculationDifference.Meta.INSTANCE;
-  }
-
-  @Override
-  public <R> Property<R> property(String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
-  }
-
-  @Override
-  public Set<String> propertyNames() {
-    return metaBean().metaPropertyMap().keySet();
   }
 
   //-----------------------------------------------------------------------
@@ -821,36 +823,6 @@ public final class CalculationDifference implements ImmutableBean {
       return this;
     }
 
-    /**
-     * @deprecated Use Joda-Convert in application code
-     */
-    @Override
-    @Deprecated
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    /**
-     * @deprecated Use Joda-Convert in application code
-     */
-    @Override
-    @Deprecated
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    /**
-     * @deprecated Loop in application code
-     */
-    @Override
-    @Deprecated
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
-      return this;
-    }
-
     @Override
     public CalculationDifference build() {
       return new CalculationDifference(
@@ -997,8 +969,5 @@ public final class CalculationDifference implements ImmutableBean {
 
   }
 
-  ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }
-
-

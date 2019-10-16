@@ -25,4 +25,5 @@ public interface Function<S, T> {
    * @return The value of the function
    */
   T evaluate(S... x);
+
 }

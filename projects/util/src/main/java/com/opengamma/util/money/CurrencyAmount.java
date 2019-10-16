@@ -8,18 +8,17 @@ package com.opengamma.util.money;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
-import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
-import org.joda.beans.ImmutableConstructor;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
-import org.joda.beans.Property;
-import org.joda.beans.PropertyDefinition;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.ImmutableConstructor;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
@@ -32,25 +31,17 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * An amount of a currency.
  * <p>
- * This class represents a {@code double} amount associated with a currency.
- * It is specifically named "CurrencyAmount" and not "Money" to indicate that
- * it simply holds a currency and an amount. By contrast, naming it "Money"
- * would imply it was a suitable choice for accounting purposes, which it is not.
+ * This class represents a {@code double} amount associated with a currency. It is specifically named "CurrencyAmount" and not "Money" to indicate that it
+ * simply holds a currency and an amount. By contrast, naming it "Money" would imply it was a suitable choice for accounting purposes, which it is not.
  * <p>
- * This design approach has been chosen primarily for performance reasons.
- * Using a {@code BigDecimal} is markedly slower.
+ * This design approach has been chosen primarily for performance reasons. Using a {@code BigDecimal} is markedly slower.
  * <p>
- * A {@code double} is a 64 bit floating point value suitable for most calculations.
- * Floating point maths is
- * <a href="http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">inexact</a>
- * due to the conflict between binary and decimal arithmetic.
- * As such, there is the potential for data loss at the margins.
- * For example, adding the {@code double} values {@code 0.1d} and {@code 0.2d}
- * results in {@code 0.30000000000000004} rather than {@code 0.3}.
- * As can be seen, the level of error is small, hence providing this class is
- * used appropriately, the use of {@code double} is acceptable.
- * For example, using this class to provide a meaningful result type after
- * calculations have completed would be an appropriate use.
+ * A {@code double} is a 64 bit floating point value suitable for most calculations. Floating point maths is
+ * <a href="http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">inexact</a> due to the conflict between binary and decimal arithmetic. As such,
+ * there is the potential for data loss at the margins. For example, adding the {@code double} values {@code 0.1d} and {@code 0.2d} results in
+ * {@code 0.30000000000000004} rather than {@code 0.3}. As can be seen, the level of error is small, hence providing this class is used appropriately, the use
+ * of {@code double} is acceptable. For example, using this class to provide a meaningful result type after calculations have completed would be an appropriate
+ * use.
  * <p>
  * This class is immutable and thread-safe.
  */
@@ -61,14 +52,12 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
   private static final long serialVersionUID = 1L;
 
   /**
-   * The currency.
-   * For example, in the value 'GBP 12.34' the currency is 'GBP'.
+   * The currency. For example, in the value 'GBP 12.34' the currency is 'GBP'.
    */
   @PropertyDefinition(get = "manual", validate = "notNull")
   private final Currency _currency;
   /**
-   * The amount of the currency.
-   * For example, in the value 'GBP 12.34' the amount is 12.34.
+   * The amount of the currency. For example, in the value 'GBP 12.34' the amount is 12.34.
    */
   @PropertyDefinition(get = "manual")
   private final double _amount;
@@ -76,8 +65,10 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
   /**
    * Obtains an instance of {@code CurrencyAmount} for the specified currency and amount.
    *
-   * @param currency  the currency the amount is in, not null
-   * @param amount  the amount of the currency to represent
+   * @param currency
+   *          the currency the amount is in, not null
+   * @param amount
+   *          the amount of the currency to represent
    * @return the currency amount, not null
    */
   public static CurrencyAmount of(final Currency currency, final double amount) {
@@ -85,16 +76,17 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
   }
 
   /**
-   * Obtains an instance of {@code CurrencyAmount} for the specified ISO-4217
-   * three letter currency code and amount.
+   * Obtains an instance of {@code CurrencyAmount} for the specified ISO-4217 three letter currency code and amount.
    * <p>
-   * A currency is uniquely identified by ISO-4217 three letter code.
-   * This method creates the currency if it is not known.
+   * A currency is uniquely identified by ISO-4217 three letter code. This method creates the currency if it is not known.
    *
-   * @param currencyCode  the three letter currency code, ASCII and upper case, not null
-   * @param amount  the amount of the currency to represent
+   * @param currencyCode
+   *          the three letter currency code, ASCII and upper case, not null
+   * @param amount
+   *          the amount of the currency to represent
    * @return the currency amount, not null
-   * @throws IllegalArgumentException if the currency code is invalid
+   * @throws IllegalArgumentException
+   *           if the currency code is invalid
    */
   public static CurrencyAmount of(final String currencyCode, final double amount) {
     return of(Currency.of(currencyCode), amount);
@@ -105,9 +97,11 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
    * <p>
    * This parses the {@code toString} format of '${currency} ${amount}'.
    *
-   * @param amountStr  the amount string, not null
+   * @param amountStr
+   *          the amount string, not null
    * @return the currency amount
-   * @throws IllegalArgumentException if the amount cannot be parsed
+   * @throws IllegalArgumentException
+   *           if the amount cannot be parsed
    */
   @FromString
   public static CurrencyAmount parse(final String amountStr) {
@@ -125,12 +119,14 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates an instance.
    *
-   * @param currency  the currency, not null
-   * @param amount  the amount
+   * @param currency
+   *          the currency, not null
+   * @param amount
+   *          the amount
    */
   @ImmutableConstructor
   private CurrencyAmount(final Currency currency, final double amount) {
@@ -139,10 +135,9 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
     _amount = amount;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Gets the currency.
-   * For example, in the value 'GBP 12.34' the currency is 'GBP'.
+   * Gets the currency. For example, in the value 'GBP 12.34' the currency is 'GBP'.
    *
    * @return the currency, not null
    */
@@ -151,8 +146,7 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
   }
 
   /**
-   * Gets the amount of the currency.
-   * For example, in the value 'GBP 12.34' the amount is 12.34.
+   * Gets the amount of the currency. For example, in the value 'GBP 12.34' the amount is 12.34.
    *
    * @return the amount
    */
@@ -160,18 +154,19 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
     return _amount;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Returns a copy of this {@code CurrencyAmount} with the specified amount added.
    * <p>
-   * This adds the specified amount to this monetary amount, returning a new object.
-   * The addition simply uses standard {@code double} arithmetic.
+   * This adds the specified amount to this monetary amount, returning a new object. The addition simply uses standard {@code double} arithmetic.
    * <p>
    * This instance is immutable and unaffected by this method.
    *
-   * @param amountToAdd  the amount to add, in the same currency, not null
+   * @param amountToAdd
+   *          the amount to add, in the same currency, not null
    * @return an amount based on this with the specified amount added, not null
-   * @throws IllegalArgumentException if the currencies are not equal
+   * @throws IllegalArgumentException
+   *           if the currencies are not equal
    */
   public CurrencyAmount plus(final CurrencyAmount amountToAdd) {
     ArgumentChecker.notNull(amountToAdd, "amountToAdd");
@@ -182,12 +177,12 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
   /**
    * Returns a copy of this {@code CurrencyAmount} with the specified amount added.
    * <p>
-   * This adds the specified amount to this monetary amount, returning a new object.
-   * The addition simply uses standard {@code double} arithmetic.
+   * This adds the specified amount to this monetary amount, returning a new object. The addition simply uses standard {@code double} arithmetic.
    * <p>
    * This instance is immutable and unaffected by this method.
    *
-   * @param amountToAdd  the amount to add, in the same currency
+   * @param amountToAdd
+   *          the amount to add, in the same currency
    * @return an amount based on this with the specified amount added, not null
    */
   public CurrencyAmount plus(final double amountToAdd) {
@@ -197,24 +192,23 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
   /**
    * Returns a copy of this {@code CurrencyAmount} with the amount multiplied.
    * <p>
-   * This takes this amount and multiplies it by the specified value.
-   * The multiplication simply uses standard {@code double} arithmetic.
+   * This takes this amount and multiplies it by the specified value. The multiplication simply uses standard {@code double} arithmetic.
    * <p>
    * This instance is immutable and unaffected by this method.
    *
-   * @param valueToMultiplyBy  the scalar amount to multiply by
+   * @param valueToMultiplyBy
+   *          the scalar amount to multiply by
    * @return an amount based on this with the amount multiplied, not null
    */
   public CurrencyAmount multipliedBy(final double valueToMultiplyBy) {
     return new CurrencyAmount(_currency, _amount * valueToMultiplyBy);
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * Gets the amount as a string.
    * <p>
-   * The format is the currency code, followed by a space, followed by the
-   * amount: '${currency} ${amount}'.
+   * The format is the currency code, followed by a space, followed by the amount: '${currency} ${amount}'.
    *
    * @return the currency amount, not null
    */
@@ -225,7 +219,6 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
   }
 
   //------------------------- AUTOGENERATED START -------------------------
-  ///CLOVER:OFF
   /**
    * The meta-bean for {@code CurrencyAmount}.
    * @return the meta-bean, not null
@@ -235,22 +228,12 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(CurrencyAmount.Meta.INSTANCE);
+    MetaBean.register(CurrencyAmount.Meta.INSTANCE);
   }
 
   @Override
   public CurrencyAmount.Meta metaBean() {
     return CurrencyAmount.Meta.INSTANCE;
-  }
-
-  @Override
-  public <R> Property<R> property(String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
-  }
-
-  @Override
-  public Set<String> propertyNames() {
-    return metaBean().metaPropertyMap().keySet();
   }
 
   //-----------------------------------------------------------------------
@@ -388,7 +371,6 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
      * Restricted constructor.
      */
     private Builder() {
-      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -439,6 +421,5 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
 
   }
 
-  ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }

@@ -5,7 +5,6 @@
  */
 package com.opengamma.integration.regression;
 
-
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -15,12 +14,12 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.beans.Bean;
-import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
-import org.joda.beans.Property;
-import org.joda.beans.PropertyDefinition;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
@@ -79,18 +78,18 @@ public final class CalculationResults implements ImmutableBean {
   private final String _version;
 
   public static CalculationResults create(final ViewComputationResultModel results,
-                                          final CompiledViewDefinition viewDef,
-                                          final String snapshotName,
-                                          final Instant valuationTime,
-                                          final String version,
-                                          final PositionSource positionSource,
-                                          final SecuritySource securitySource) {
+      final CompiledViewDefinition viewDef,
+      final String snapshotName,
+      final Instant valuationTime,
+      final String version,
+      final PositionSource positionSource,
+      final SecuritySource securitySource) {
     ArgumentChecker.notNull(viewDef, "viewDef");
     ArgumentChecker.notNull(results, "results");
     final List<ViewResultEntry> allResults = results.getAllResults();
     final Map<CalculationResultKey, CalculatedValue> valueMap = Maps.newHashMapWithExpectedSize(allResults.size());
     final Map<UniqueId, List<String>> nodesToPaths = nodesToPaths(viewDef.getPortfolio().getRootNode(),
-                                                            Collections.<String>emptyList());
+        Collections.<String> emptyList());
     for (final ViewResultEntry entry : allResults) {
       final ComputedValueResult computedValue = entry.getComputedValue();
       final ValueSpecification valueSpec = computedValue.getSpecification();
@@ -103,10 +102,10 @@ public final class CalculationResults implements ImmutableBean {
         final Set<CalculationResultKey> keys = getResultKey(entry, targetSpec, nodesToPaths, positionSource, valueReqs);
         final String targetType = valueSpec.getTargetSpecification().getType().getName();
         final String targetName = getTargetName(valueSpec.getTargetSpecification().getUniqueId(),
-                                          valueSpec.getTargetSpecification().getType(),
-                                          positionSource,
-                                          securitySource,
-                                          nodesToPaths);
+            valueSpec.getTargetSpecification().getType(),
+            positionSource,
+            securitySource,
+            nodesToPaths);
         for (final CalculationResultKey key : keys) {
           valueMap.put(key, CalculatedValue.of(computedValue.getValue(), valueSpec.getProperties(), targetType, targetName));
         }
@@ -117,10 +116,10 @@ public final class CalculationResults implements ImmutableBean {
   }
 
   private static String getTargetName(final UniqueId targetId,
-                                      final ComputationTargetType targetType,
-                                      final PositionSource positionSource,
-                                      final SecuritySource securitySource,
-                                      final Map<UniqueId, List<String>> nodesToPaths) {
+      final ComputationTargetType targetType,
+      final PositionSource positionSource,
+      final SecuritySource securitySource,
+      final Map<UniqueId, List<String>> nodesToPaths) {
     Security security;
     BigDecimal quantity;
     if (targetType.equals(ComputationTargetType.POSITION)) {
@@ -142,14 +141,14 @@ public final class CalculationResults implements ImmutableBean {
 
   // TODO use ValueRequirement for the key?
   // that should give far fewer false positives because
-  //   a) the functions put things in the properties that cause breaks (e.g. unique IDs)
-  //   b) there is so much ambiguity in graph building
+  // a) the functions put things in the properties that cause breaks (e.g. unique IDs)
+  // b) there is so much ambiguity in graph building
   // or is it good to flag up the ambiguity?
   private static Set<CalculationResultKey> getResultKey(final ViewResultEntry entry,
-                                                        final ComputationTargetSpecification targetSpec,
-                                                        final Map<UniqueId, List<String>> nodesToPaths,
-                                                        final PositionSource positionSource,
-                                                        final Set<ValueRequirement> valueReqs) {
+      final ComputationTargetSpecification targetSpec,
+      final Map<UniqueId, List<String>> nodesToPaths,
+      final PositionSource positionSource,
+      final Set<ValueRequirement> valueReqs) {
     CalculationResultKey key;
     // TODO ugh. see AbstractTradeOrDailyPositionPnLFunction CostOfCarryTimeSeries
     final Set<CalculationResultKey> keys = Sets.newHashSet();
@@ -169,15 +168,15 @@ public final class CalculationResults implements ImmutableBean {
           final UniqueId nodeId = nodeRef.getSpecification().getUniqueId();
           final List<String> path = nodesToPaths.get(nodeId);
           key = CalculationResultKey.forPositionWithParentNode(entry.getCalculationConfiguration(),
-                                                               valueName,
-                                                               properties,
-                                                               path,
-                                                               ObjectId.parse(idAttr));
+              valueName,
+              properties,
+              path,
+              ObjectId.parse(idAttr));
         } else {
           key = CalculationResultKey.forPosition(entry.getCalculationConfiguration(),
-                                                 valueName,
-                                                 properties,
-                                                 ObjectId.parse(idAttr));
+              valueName,
+              properties,
+              ObjectId.parse(idAttr));
         }
       } else if (targetType.equals(ComputationTargetType.PORTFOLIO_NODE)) {
         final UniqueId nodeId = targetSpec.getUniqueId();
@@ -194,19 +193,19 @@ public final class CalculationResults implements ImmutableBean {
           idAttr = tradeId.getObjectId().toString();
         }
         key = CalculationResultKey.forTrade(entry.getCalculationConfiguration(),
-                                            valueName,
-                                            properties,
-                                            ObjectId.parse(idAttr));
+            valueName,
+            properties,
+            ObjectId.parse(idAttr));
       } else if (targetType.equals(ComputationTargetType.CURRENCY)) {
         key = CalculationResultKey.forCurrency(entry.getCalculationConfiguration(),
-                                               valueName,
-                                               properties,
-                                               targetSpec.getUniqueId().getObjectId());
+            valueName,
+            properties,
+            targetSpec.getUniqueId().getObjectId());
       } else if (targetType.equals(ComputationTargetType.UNORDERED_CURRENCY_PAIR)) {
         key = CalculationResultKey.forCurrency(entry.getCalculationConfiguration(),
-                                               valueName,
-                                               properties,
-                                               targetSpec.getUniqueId().getObjectId());
+            valueName,
+            properties,
+            targetSpec.getUniqueId().getObjectId());
       } else {
         LOGGER.warn("Ignoring target with type {}", targetType);
         key = null;
@@ -221,7 +220,7 @@ public final class CalculationResults implements ImmutableBean {
   // TODO test case
   private static Map<UniqueId, List<String>> nodesToPaths(final PortfolioNode node, final List<String> parentPath) {
     final String name = node.getName();
-    final List<String> path = ImmutableList.<String>builder().addAll(parentPath).add(name).build();
+    final List<String> path = ImmutableList.<String> builder().addAll(parentPath).add(name).build();
     final Map<UniqueId, List<String>> map = Maps.newHashMap();
     map.put(node.getUniqueId(), path);
     for (final PortfolioNode childNode : node.getChildNodes()) {
@@ -229,8 +228,8 @@ public final class CalculationResults implements ImmutableBean {
     }
     return map;
   }
+
   //------------------------- AUTOGENERATED START -------------------------
-  ///CLOVER:OFF
   /**
    * The meta-bean for {@code CalculationResults}.
    * @return the meta-bean, not null
@@ -240,7 +239,7 @@ public final class CalculationResults implements ImmutableBean {
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(CalculationResults.Meta.INSTANCE);
+    MetaBean.register(CalculationResults.Meta.INSTANCE);
   }
 
   /**
@@ -271,16 +270,6 @@ public final class CalculationResults implements ImmutableBean {
   @Override
   public CalculationResults.Meta metaBean() {
     return CalculationResults.Meta.INSTANCE;
-  }
-
-  @Override
-  public <R> Property<R> property(String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
-  }
-
-  @Override
-  public Set<String> propertyNames() {
-    return metaBean().metaPropertyMap().keySet();
   }
 
   //-----------------------------------------------------------------------
@@ -612,36 +601,6 @@ public final class CalculationResults implements ImmutableBean {
       return this;
     }
 
-    /**
-     * @deprecated Use Joda-Convert in application code
-     */
-    @Override
-    @Deprecated
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    /**
-     * @deprecated Use Joda-Convert in application code
-     */
-    @Override
-    @Deprecated
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    /**
-     * @deprecated Loop in application code
-     */
-    @Override
-    @Deprecated
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
-      return this;
-    }
-
     @Override
     public CalculationResults build() {
       return new CalculationResults(
@@ -723,6 +682,5 @@ public final class CalculationResults implements ImmutableBean {
 
   }
 
-  ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }

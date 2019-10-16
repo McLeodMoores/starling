@@ -206,7 +206,7 @@ public class CurveBean extends AbstractCurveBean {
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(CurveBean.Meta.INSTANCE);
+    MetaBean.register(CurveBean.Meta.INSTANCE);
   }
 
   @Override

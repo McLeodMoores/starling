@@ -11,7 +11,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.beans.Bean;
-import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
@@ -28,8 +28,7 @@ import it.unimi.dsi.fastutil.ints.Int2DoubleMap;
 /**
  * An immutable pair consisting of an {@code int} and {@code double}.
  * <p>
- * The class provides direct access to the primitive types and implements
- * the relevant fastutil interface.
+ * The class provides direct access to the primitive types and implements the relevant fastutil interface.
  * <p>
  * This class is immutable and thread-safe.
  */
@@ -46,11 +45,12 @@ public class IntDoublePair
   /** The second element. */
   public final double second; // CSIGNORE
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Obtains an {@code IntDoublePair} from a {@code Pair}.
    *
-   * @param pair  the pair to convert, not null
+   * @param pair
+   *          the pair to convert, not null
    * @return a pair formed by extracting values from the pair, not null
    */
   public static IntDoublePair of(final Pair<Integer, Double> pair) {
@@ -66,21 +66,24 @@ public class IntDoublePair
   /**
    * Obtains an {@code IntDoublePair} from two values.
    *
-   * @param first  the first element
-   * @param second  the second element
+   * @param first
+   *          the first element
+   * @param second
+   *          the second element
    * @return a pair formed from the two parameters, not null
    */
   public static IntDoublePair of(final int first, final double second) {
     return new IntDoublePair(first, second);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Parses an {@code IntDoublePair} from the standard string format.
    * <p>
    * The standard format is '[$first, $second]'. Spaces around the values are trimmed.
    *
-   * @param pairStr  the text to parse, not null
+   * @param pairStr
+   *          the text to parse, not null
    * @return the parsed pair, not null
    */
   @FromString
@@ -104,12 +107,14 @@ public class IntDoublePair
     return new IntDoublePair(first, second);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Constructs a pair.
    *
-   * @param first  the first element
-   * @param second  the second element
+   * @param first
+   *          the first element
+   * @param second
+   *          the second element
    * @deprecated Use public factory of(int,double)
    */
   @Deprecated
@@ -118,7 +123,7 @@ public class IntDoublePair
     this.second = second;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Integer getFirst() {
     return first;
@@ -147,7 +152,7 @@ public class IntDoublePair
     return second;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public int getIntKey() {
     return first;
@@ -164,9 +169,10 @@ public class IntDoublePair
   }
 
   // CSOFF
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * The meta-bean for {@code IntDoublePair}.
+   *
    * @return the meta-bean, not null
    */
   public static IntDoublePair.Meta meta() {
@@ -174,7 +180,7 @@ public class IntDoublePair
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(IntDoublePair.Meta.INSTANCE);
+    MetaBean.register(IntDoublePair.Meta.INSTANCE);
   }
 
   @Override
@@ -184,7 +190,7 @@ public class IntDoublePair
 
   @Override
   public <R> Property<R> property(final String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
+    return metaBean().<R> metaProperty(propertyName).createProperty(this);
   }
 
   @Override
@@ -197,7 +203,7 @@ public class IntDoublePair
     return this;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public int compareTo(final Pair<Integer, Double> other) {
     if (other instanceof IntDoublePair) {
@@ -211,7 +217,8 @@ public class IntDoublePair
    * <p>
    * This compares the first elements, then the second elements.
    *
-   * @param other  the other pair
+   * @param other
+   *          the other pair
    * @return negative if this is less, zero if equal, positive if greater
    */
   public int compareTo(final IntDoublePair other) {
@@ -222,7 +229,7 @@ public class IntDoublePair
     return cmp;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean equals(final Object obj) {
     if (this == obj) {
@@ -260,7 +267,7 @@ public class IntDoublePair
         .append("]").toString();
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * The meta-bean for {@code IntDoublePair}.
    */
@@ -320,9 +327,10 @@ public class IntDoublePair
       return _metaPropertyMap;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * The meta-property for the {@code first} property.
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Integer> first() {
@@ -331,13 +339,14 @@ public class IntDoublePair
 
     /**
      * The meta-property for the {@code second} property.
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Double> second() {
       return _second;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
       switch (propertyName) {
@@ -360,7 +369,7 @@ public class IntDoublePair
 
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * The bean-builder for {@code IntDoublePair}.
    */
@@ -378,7 +387,7 @@ public class IntDoublePair
       super();
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     public Builder set(final String propertyName, final Object newValue) {
       switch (propertyName) {
@@ -391,12 +400,6 @@ public class IntDoublePair
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder setString(final String propertyName, final String value) {
-      setString(meta().metaProperty(propertyName), value);
       return this;
     }
 

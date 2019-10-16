@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.joda.beans.Bean;
-import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
@@ -21,14 +21,15 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 /**
  * An immutable pair consisting of two {@code Object} elements.
  * <p>
- * Although the implementation is immutable, there is no restriction on the objects
- * that may be stored. If mutable objects are stored in the pair, then the pair
+ * Although the implementation is immutable, there is no restriction on the objects that may be stored. If mutable objects are stored in the pair, then the pair
  * itself effectively becomes mutable.
  * <p>
  * This class is immutable and thread-safe if the stored objects are immutable.
  *
- * @param <A> the type of the first side of the pair
- * @param <B> the type of the second side of the pair
+ * @param <A>
+ *          the type of the first side of the pair
+ * @param <B>
+ *          the type of the second side of the pair
  */
 public final class ObjectsPair<A, B>
     extends Pair<A, B> {
@@ -42,26 +43,32 @@ public final class ObjectsPair<A, B>
   /** The second element. */
   public final B second; // CSIGNORE
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates a pair inferring the types.
    *
-   * @param <A> the first element type
-   * @param <B> the second element type
-   * @param first  the first element, may be null
-   * @param second  the second element, may be null
+   * @param <A>
+   *          the first element type
+   * @param <B>
+   *          the second element type
+   * @param first
+   *          the first element, may be null
+   * @param second
+   *          the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
   public static <A, B> ObjectsPair<A, B> of(final A first, final B second) {
     return new ObjectsPair<>(first, second);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Constructs a pair.
    *
-   * @param first  the first element, may be null
-   * @param second  the second element, may be null
+   * @param first
+   *          the first element, may be null
+   * @param second
+   *          the second element, may be null
    * @deprecated Use of(first, second)
    */
   @Deprecated
@@ -70,7 +77,7 @@ public final class ObjectsPair<A, B>
     this.second = second;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public A getFirst() {
     return first;
@@ -82,9 +89,10 @@ public final class ObjectsPair<A, B>
   }
 
   // CSOFF
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * The meta-bean for {@code ObjectsPair}.
+   *
    * @return the meta-bean, not null
    */
   @SuppressWarnings("rawtypes")
@@ -93,7 +101,7 @@ public final class ObjectsPair<A, B>
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(ObjectsPair.Meta.INSTANCE);
+    MetaBean.register(ObjectsPair.Meta.INSTANCE);
   }
 
   @Override
@@ -103,7 +111,7 @@ public final class ObjectsPair<A, B>
 
   @Override
   public <R> Property<R> property(final String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
+    return metaBean().<R> metaProperty(propertyName).createProperty(this);
   }
 
   @Override
@@ -116,9 +124,14 @@ public final class ObjectsPair<A, B>
     return this;
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * The meta-bean for {@code ObjectsPair}.
+   * 
+   * @param <A>
+   *          the type of the first value
+   * @param <B>
+   *          the type of the second value
    */
   public static final class Meta<A, B> extends DirectMetaBean {
     /**
@@ -178,9 +191,10 @@ public final class ObjectsPair<A, B>
       return _metaPropertyMap;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * The meta-property for the {@code first} property.
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Object> first() {
@@ -189,13 +203,14 @@ public final class ObjectsPair<A, B>
 
     /**
      * The meta-property for the {@code second} property.
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Object> second() {
       return _second;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     @SuppressWarnings("rawtypes")
     protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
@@ -219,11 +234,11 @@ public final class ObjectsPair<A, B>
 
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * The bean-builder for {@code ObjectsPair}.
    */
-  @SuppressWarnings({"rawtypes" })
+  @SuppressWarnings({ "rawtypes" })
   private static final class Builder extends DirectFieldsBeanBuilder<ObjectsPair> {
 
     /** The first element. */
@@ -238,7 +253,7 @@ public final class ObjectsPair<A, B>
       super();
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     public Builder set(final String propertyName, final Object newValue) {
       switch (propertyName) {
@@ -255,8 +270,8 @@ public final class ObjectsPair<A, B>
     }
 
     @Override
-    public Builder setString(final String propertyName, final String value) {
-      setString(meta().metaProperty(propertyName), value);
+    public Builder set(final MetaProperty<?> property, final Object value) {
+      super.set(property, value);
       return this;
     }
 

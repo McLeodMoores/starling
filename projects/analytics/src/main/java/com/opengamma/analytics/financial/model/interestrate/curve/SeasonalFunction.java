@@ -12,9 +12,10 @@ import org.apache.commons.lang.Validate;
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
-import org.joda.beans.PropertyDefinition;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
@@ -96,7 +97,7 @@ class SeasonalFunction extends Function1D<Double, Double> implements Bean {
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(SeasonalFunction.Meta.INSTANCE);
+    MetaBean.register(SeasonalFunction.Meta.INSTANCE);
   }
 
   @Override

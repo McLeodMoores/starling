@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.joda.beans.Bean;
-import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
@@ -24,12 +24,12 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 /**
  * An immutable pair consisting of an {@code int} and {@code Object}.
  * <p>
- * The class provides direct access to the primitive types and implements
- * the relevant fastutil interface.
+ * The class provides direct access to the primitive types and implements the relevant fastutil interface.
  * <p>
  * This class is immutable and thread-safe if the stored object is immutable.
  *
- * @param <T> the type of the second side of the pair
+ * @param <T>
+ *          the type of the second side of the pair
  */
 public class IntObjectPair<T>
     extends Pair<Integer, T>
@@ -44,25 +44,30 @@ public class IntObjectPair<T>
   /** The second element. */
   public final T second; // CSIGNORE
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates a pair inferring the types.
    *
-   * @param <B> the second element type
-   * @param first  the first element, may be null
-   * @param second  the second element, may be null
+   * @param <B>
+   *          the second element type
+   * @param first
+   *          the first element, may be null
+   * @param second
+   *          the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
   public static <B> IntObjectPair<B> of(final int first, final B second) {
     return new IntObjectPair<>(first, second);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Constructs a pair.
    *
-   * @param first  the first element
-   * @param second  the second element
+   * @param first
+   *          the first element
+   * @param second
+   *          the second element
    * @deprecated Use public factory of(int,Object)
    */
   @Deprecated
@@ -71,7 +76,7 @@ public class IntObjectPair<T>
     this.second = second;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Integer getFirst() {
     return first;
@@ -91,7 +96,7 @@ public class IntObjectPair<T>
     return first;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public int getIntKey() {
     return first;
@@ -103,9 +108,10 @@ public class IntObjectPair<T>
   }
 
   // CSOFF
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * The meta-bean for {@code IntObjectPair}.
+   *
    * @return the meta-bean, not null
    */
   @SuppressWarnings("rawtypes")
@@ -114,7 +120,7 @@ public class IntObjectPair<T>
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(IntObjectPair.Meta.INSTANCE);
+    MetaBean.register(IntObjectPair.Meta.INSTANCE);
   }
 
   @SuppressWarnings("unchecked")
@@ -125,7 +131,7 @@ public class IntObjectPair<T>
 
   @Override
   public <R> Property<R> property(final String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
+    return metaBean().<R> metaProperty(propertyName).createProperty(this);
   }
 
   @Override
@@ -138,7 +144,7 @@ public class IntObjectPair<T>
     return this;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @SuppressWarnings("unchecked")
   @Override
   public boolean equals(final Object obj) {
@@ -158,9 +164,12 @@ public class IntObjectPair<T>
     return first ^ second.hashCode();
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * The meta-bean for {@code IntObjectPair}.
+   * 
+   * @param <T>
+   *          the type of the second value
    */
   public static final class Meta<T> extends DirectMetaBean {
     /**
@@ -220,9 +229,10 @@ public class IntObjectPair<T>
       return _metaPropertyMap;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * The meta-property for the {@code first} property.
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Integer> first() {
@@ -231,13 +241,14 @@ public class IntObjectPair<T>
 
     /**
      * The meta-property for the {@code second} property.
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Object> second() {
       return _second;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     @SuppressWarnings("rawtypes")
     protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
@@ -261,11 +272,11 @@ public class IntObjectPair<T>
 
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * The bean-builder for {@code IntObjectPair}.
    */
-  @SuppressWarnings({"rawtypes" })
+  @SuppressWarnings({ "rawtypes" })
   private static final class Builder extends DirectFieldsBeanBuilder<IntObjectPair> {
 
     /** The first element. */
@@ -280,7 +291,7 @@ public class IntObjectPair<T>
       super();
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     public Builder set(final String propertyName, final Object newValue) {
       switch (propertyName) {
@@ -297,8 +308,8 @@ public class IntObjectPair<T>
     }
 
     @Override
-    public Builder setString(final String propertyName, final String value) {
-      setString(meta().metaProperty(propertyName), value);
+    public Builder set(final MetaProperty<?> property, final Object value) {
+      super.set(property, value);
       return this;
     }
 

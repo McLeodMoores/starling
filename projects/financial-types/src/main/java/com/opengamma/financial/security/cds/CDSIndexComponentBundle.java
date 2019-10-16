@@ -16,14 +16,14 @@ import java.util.SortedSet;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
-import org.joda.beans.BeanDefinition;
-import org.joda.beans.DerivedProperty;
 import org.joda.beans.ImmutableBean;
-import org.joda.beans.ImmutableConstructor;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
-import org.joda.beans.Property;
-import org.joda.beans.PropertyDefinition;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.DerivedProperty;
+import org.joda.beans.gen.ImmutableConstructor;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
@@ -37,17 +37,12 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Immutable set of {@link CreditDefaultSwapIndexComponent} that
- * represents the CreditDefaultSwapIndexDefinitionSecurity components
+ * Immutable set of {@link CreditDefaultSwapIndexComponent} that represents the CreditDefaultSwapIndexDefinitionSecurity components
  * <p>
- * It uses a comparator based on the ObligorCode of each components
- * as opposed to natural ordering of weight and name.
+ * It uses a comparator based on the ObligorCode of each components as opposed to natural ordering of weight and name.
  * <p>
- * Note that ideally we would use a Map keyed on RED code with values
- * of the components, sorted by the values. However, standard maps
- * are sorted by keys so would not be usable. Instead this class
- * maintains a Map to ensure each RED code only appears once and
- * a sorted set of the components.
+ * Note that ideally we would use a Map keyed on RED code with values of the components, sorted by the values. However, standard maps are sorted by keys so
+ * would not be usable. Instead this class maintains a Map to ensure each RED code only appears once and a sorted set of the components.
  */
 @BeanDefinition(builderScope = "private")
 public final class CDSIndexComponentBundle
@@ -67,12 +62,12 @@ public final class CDSIndexComponentBundle
   @PropertyDefinition(validate = "notNull")
   private final ImmutableSortedSet<CreditDefaultSwapIndexComponent> _components;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Obtains a {@link CDSIndexComponentBundle} from an array of
-   * CreditDefaultSwapIndexComponents.
+   * Obtains a {@link CDSIndexComponentBundle} from an array of CreditDefaultSwapIndexComponents.
    *
-   * @param components  an array of components, no nulls, not null
+   * @param components
+   *          an array of components, no nulls, not null
    * @return the cdsIndex components bundle, not null
    */
   public static CDSIndexComponentBundle of(final CreditDefaultSwapIndexComponent... components) {
@@ -80,10 +75,10 @@ public final class CDSIndexComponentBundle
   }
 
   /**
-   * Obtains a {@link CDSIndexComponentBundle} from a collection of
-   * CreditDefaultSwapIndexComponents.
+   * Obtains a {@link CDSIndexComponentBundle} from a collection of CreditDefaultSwapIndexComponents.
    *
-   * @param components  the collection of components, no nulls, not null
+   * @param components
+   *          the collection of components, no nulls, not null
    * @return the cdsIndex components bundle, not null
    */
   public static CDSIndexComponentBundle of(final Iterable<CreditDefaultSwapIndexComponent> components) {
@@ -91,21 +86,22 @@ public final class CDSIndexComponentBundle
   }
 
   /**
-   * Obtains an {@link CDSIndexComponentBundle} from a collection of
-   * {@link CreditDefaultSwapIndexComponent}.
+   * Obtains an {@link CDSIndexComponentBundle} from a collection of {@link CreditDefaultSwapIndexComponent}.
    *
-   * @param components  the collection of components
+   * @param components
+   *          the collection of components
    * @return the bundle, not null
    */
   private static CDSIndexComponentBundle create(final Iterable<CreditDefaultSwapIndexComponent> components) {
     return new CDSIndexComponentBundle(components);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates a cdsIndex components bundle from a set of cdsIndex component.
    *
-   * @param components  the set of components assigned, not null
+   * @param components
+   *          the set of components assigned, not null
    */
   @ImmutableConstructor
   private CDSIndexComponentBundle(final Iterable<CreditDefaultSwapIndexComponent> components) {
@@ -113,13 +109,13 @@ public final class CDSIndexComponentBundle
   }
 
   /**
-   * Creates a cdsIndex components bundle from a set of cdsIndex
-   * component and a comparator.
+   * Creates a cdsIndex components bundle from a set of cdsIndex component and a comparator.
    *
-   * @param components  the set of components assigned, not null
+   * @param components
+   *          the set of components assigned, not null
    */
   private CDSIndexComponentBundle(final Iterable<CreditDefaultSwapIndexComponent> components,
-                                  final Comparator<? super CreditDefaultSwapIndexComponent> comparator) {
+      final Comparator<? super CreditDefaultSwapIndexComponent> comparator) {
     ArgumentChecker.notEmpty(components, "components");
     ArgumentChecker.noNulls(components, "components");
     ArgumentChecker.notNull(comparator, "comparator");
@@ -134,28 +130,23 @@ public final class CDSIndexComponentBundle
     return redCodeMapping.values();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // this method exists to place this map into the equals/hashCode check
   // this should not be necessary, but tests fail unless it is there
   @DerivedProperty
   private Map<ExternalId, CreditDefaultSwapIndexComponent> getRedCodeMapping() {
     Map<ExternalId, CreditDefaultSwapIndexComponent> redCodeMapping;
-    redCodeMapping = Maps.uniqueIndex(_components, new Function<CreditDefaultSwapIndexComponent, ExternalId>() {
-      @Override
-      public ExternalId apply(final CreditDefaultSwapIndexComponent input) {
-        return input.getObligorRedCode();
-      }
-    });
+    redCodeMapping = Maps.uniqueIndex(_components, (Function<CreditDefaultSwapIndexComponent, ExternalId>) input -> input.getObligorRedCode());
     return redCodeMapping;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Returns a new {@link CDSIndexComponentBundle} with the specified
-   * {@link CreditDefaultSwapIndexComponent}s added.
-   * This instance is immutable and unaffected by this method call.
+   * Returns a new {@link CDSIndexComponentBundle} with the specified {@link CreditDefaultSwapIndexComponent}s added. This instance is immutable and unaffected
+   * by this method call.
    *
-   * @param components the identifiers to add to the returned bundle, not null
+   * @param components
+   *          the identifiers to add to the returned bundle, not null
    * @return the new bundle, not null
    */
   public CDSIndexComponentBundle withCDSIndexComponents(final CreditDefaultSwapIndexComponent... components) {
@@ -163,11 +154,11 @@ public final class CDSIndexComponentBundle
   }
 
   /**
-   * Returns a new {@link CDSIndexComponentBundle} with the specified
-   * {@link CreditDefaultSwapIndexComponent}s added.
-   * This instance is immutable and unaffected by this method call.
+   * Returns a new {@link CDSIndexComponentBundle} with the specified {@link CreditDefaultSwapIndexComponent}s added. This instance is immutable and unaffected
+   * by this method call.
    *
-   * @param components the identifiers to add to the returned bundle, not null
+   * @param components
+   *          the identifiers to add to the returned bundle, not null
    * @return the new bundle, not null
    */
   public CDSIndexComponentBundle withCDSIndexComponents(final Iterable<CreditDefaultSwapIndexComponent> components) {
@@ -181,14 +172,14 @@ public final class CDSIndexComponentBundle
     return new CDSIndexComponentBundle(updatedComponents, _components.comparator());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Returns a new bundle using a custom comparator for ordering.
-   * Primarily useful for display.
+   * Returns a new bundle using a custom comparator for ordering. Primarily useful for display.
    * <p>
    * NOTE: The comparator will not be transported across a network connection.
    *
-   * @param comparator comparator specifying how to order the ExternalIds
+   * @param comparator
+   *          comparator specifying how to order the ExternalIds
    * @return the new copy of the bundle, ordered by the comparator
    */
   public CDSIndexComponentBundle withCustomIdOrdering(final Comparator<CreditDefaultSwapIndexComponent> comparator) {
@@ -196,7 +187,7 @@ public final class CDSIndexComponentBundle
     return new CDSIndexComponentBundle(_components, comparator);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the number of components in the bundle.
    *
@@ -236,7 +227,6 @@ public final class CDSIndexComponentBundle
   }
 
   //------------------------- AUTOGENERATED START -------------------------
-  ///CLOVER:OFF
   /**
    * The meta-bean for {@code CDSIndexComponentBundle}.
    * @return the meta-bean, not null
@@ -246,22 +236,12 @@ public final class CDSIndexComponentBundle
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(CDSIndexComponentBundle.Meta.INSTANCE);
+    MetaBean.register(CDSIndexComponentBundle.Meta.INSTANCE);
   }
 
   @Override
   public CDSIndexComponentBundle.Meta metaBean() {
     return CDSIndexComponentBundle.Meta.INSTANCE;
-  }
-
-  @Override
-  public <R> Property<R> property(String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
-  }
-
-  @Override
-  public Set<String> propertyNames() {
-    return metaBean().metaPropertyMap().keySet();
   }
 
   //-----------------------------------------------------------------------
@@ -416,7 +396,6 @@ public final class CDSIndexComponentBundle
      * Restricted constructor.
      */
     private Builder() {
-      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -461,6 +440,5 @@ public final class CDSIndexComponentBundle
 
   }
 
-  ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }

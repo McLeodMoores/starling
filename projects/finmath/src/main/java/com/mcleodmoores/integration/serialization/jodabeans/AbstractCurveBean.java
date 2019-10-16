@@ -91,7 +91,7 @@ public abstract class AbstractCurveBean extends DirectBean implements Serializab
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(AbstractCurveBean.Meta.INSTANCE);
+    MetaBean.register(AbstractCurveBean.Meta.INSTANCE);
   }
 
   @Override

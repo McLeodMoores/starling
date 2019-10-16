@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,12 +84,7 @@ public class CurveNodeHistoricalDataLoader {
 
     final List<LocalDate> dates = buildDates();
 
-    final Set<String> curveNames = functional(curves).map(new Function1<YieldCurveDefinition, String>() {
-      @Override
-      public String execute(final YieldCurveDefinition yieldCurveDefinition) {
-        return yieldCurveDefinition.getName() + "_" + yieldCurveDefinition.getCurrency().getCode();
-      }
-    }).asSet();
+    final Set<String> curveNames = curves.stream().map(ycd -> ycd.getName() + "_" + ycd.getCurrency().getCode()).collect(Collectors.toSet());
     _curveNodesExternalIds = getCurves(configSource, curveNames, dates);
     _curveNodesExternalIds.add(ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "EONIA Index"));
     _futuresExternalIds = getFutures(configSource, curveNames, dates);

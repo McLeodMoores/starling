@@ -28,8 +28,7 @@ import it.unimi.dsi.fastutil.longs.Long2DoubleMap;
 /**
  * An immutable pair consisting of an {@code long} and {@code double}.
  * <p>
- * The class provides direct access to the primitive types and implements
- * the relevant fastutil interface.
+ * The class provides direct access to the primitive types and implements the relevant fastutil interface.
  * <p>
  * This class is immutable and thread-safe.
  */
@@ -46,11 +45,12 @@ public class LongDoublePair
   /** The second element. */
   public final double second; // CSIGNORE
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Obtains a {@code LongDoublePair} from a {@code Pair}.
    *
-   * @param pair  the pair to convert, not null
+   * @param pair
+   *          the pair to convert, not null
    * @return a pair formed by extracting values from the pair, not null
    */
   public static LongDoublePair of(final Pair<Long, Double> pair) {
@@ -66,21 +66,24 @@ public class LongDoublePair
   /**
    * Obtains a {@code LongDoublePair} from two values.
    *
-   * @param first  the first element
-   * @param second  the second element
+   * @param first
+   *          the first element
+   * @param second
+   *          the second element
    * @return a pair formed from the two parameters, not null
    */
   public static LongDoublePair of(final long first, final double second) {
     return new LongDoublePair(first, second);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Parses an {@code LongDoublePair} from the standard string format.
    * <p>
    * The standard format is '[$first, $second]'. Spaces around the values are trimmed.
    *
-   * @param pairStr  the text to parse, not null
+   * @param pairStr
+   *          the text to parse, not null
    * @return the parsed pair, not null
    */
   @FromString
@@ -104,12 +107,14 @@ public class LongDoublePair
     return new LongDoublePair(first, second);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Constructs a pair.
    *
-   * @param first  the first element
-   * @param second  the second element
+   * @param first
+   *          the first element
+   * @param second
+   *          the second element
    * @deprecated Use public factory of(long,double)
    */
   @Deprecated
@@ -118,7 +123,7 @@ public class LongDoublePair
     this.second = second;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Long getFirst() {
     return first;
@@ -147,7 +152,7 @@ public class LongDoublePair
     return second;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public long getLongKey() {
     return first;
@@ -164,9 +169,10 @@ public class LongDoublePair
   }
 
   // CSOFF
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * The meta-bean for {@code LongDoublePair}.
+   * 
    * @return the meta-bean, not null
    */
   public static LongDoublePair.Meta meta() {
@@ -184,7 +190,7 @@ public class LongDoublePair
 
   @Override
   public <R> Property<R> property(final String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
+    return metaBean().<R> metaProperty(propertyName).createProperty(this);
   }
 
   @Override
@@ -197,7 +203,7 @@ public class LongDoublePair
     return this;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public int compareTo(final Pair<Long, Double> other) {
     if (other instanceof LongDoublePair) {
@@ -211,7 +217,8 @@ public class LongDoublePair
    * <p>
    * This compares the first elements, then the second elements.
    *
-   * @param other  the other pair
+   * @param other
+   *          the other pair
    * @return negative if this is less, zero if equal, positive if greater
    */
   public int compareTo(final LongDoublePair other) {
@@ -222,7 +229,7 @@ public class LongDoublePair
     return cmp;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean equals(final Object obj) {
     if (this == obj) {
@@ -260,7 +267,7 @@ public class LongDoublePair
         .append("]").toString();
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * The meta-bean for {@code LongDoublePair}.
    */
@@ -320,9 +327,10 @@ public class LongDoublePair
       return _metaPropertyMap;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * The meta-property for the {@code first} property.
+     * 
      * @return the meta-property, not null
      */
     public MetaProperty<Long> first() {
@@ -331,13 +339,14 @@ public class LongDoublePair
 
     /**
      * The meta-property for the {@code second} property.
+     * 
      * @return the meta-property, not null
      */
     public MetaProperty<Double> second() {
       return _second;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
       switch (propertyName) {
@@ -360,7 +369,7 @@ public class LongDoublePair
 
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * The bean-builder for {@code LongDoublePair}.
    */
@@ -378,7 +387,7 @@ public class LongDoublePair
       super();
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     public Builder set(final String propertyName, final Object newValue) {
       switch (propertyName) {
@@ -395,8 +404,8 @@ public class LongDoublePair
     }
 
     @Override
-    public Builder setString(final String propertyName, final String value) {
-      setString(meta().metaProperty(propertyName), value);
+    public Builder set(final MetaProperty<?> property, final Object value) {
+      super.set(property, value);
       return this;
     }
 

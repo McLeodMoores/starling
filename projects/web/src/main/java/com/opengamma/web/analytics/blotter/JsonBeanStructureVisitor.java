@@ -15,7 +15,6 @@ import org.joda.beans.Bean;
 import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
-import org.joda.beans.PropertyDefinition;
 import org.joda.convert.StringConvert;
 import org.json.JSONObject;
 
@@ -23,6 +22,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.ArgumentChecker;
+import org.joda.beans.gen.PropertyDefinition;
 
 /**
  * TODO can this be deleted?

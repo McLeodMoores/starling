@@ -8,15 +8,15 @@ package com.opengamma.master.user;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
-import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
-import org.joda.beans.PropertyDefinition;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
@@ -31,23 +31,19 @@ import com.opengamma.util.paging.PagingRequest;
 /**
  * Request for searching for roles.
  * <p>
- * Documents will be returned that match the search criteria.
- * This class provides the ability to page the results and to search
- * as at a specific version and correction instant.
- * See {@link UserEventHistoryRequest} for more details on how history works.
+ * Documents will be returned that match the search criteria. This class provides the ability to page the results and to search as at a specific version and
+ * correction instant. See {@link UserEventHistoryRequest} for more details on how history works.
  */
 @BeanDefinition
 public class RoleSearchRequest implements Bean {
 
   /**
-   * The request for paging.
-   * By default all matching items will be returned.
+   * The request for paging. By default all matching items will be returned.
    */
   @PropertyDefinition
   private PagingRequest _pagingRequest = PagingRequest.ALL;
   /**
-   * The set of role object identifiers, null to not limit by user object identifiers.
-   * Note that an empty list will return no users.
+   * The set of role object identifiers, null to not limit by user object identifiers. Note that an empty list will return no users.
    */
   @PropertyDefinition(set = "manual")
   private List<ObjectId> _objectIds;
@@ -57,26 +53,20 @@ public class RoleSearchRequest implements Bean {
   @PropertyDefinition
   private String _roleName;
   /**
-   * The associated role name to search for, no wildcards.
-   * If used, only those roles which explicitly reference the role are returned.
-   * Any roles implied by membership of other roles are not matched.
-   * In other words, this searches {@link ManageableRole#associatedRoles()}.
+   * The associated role name to search for, no wildcards. If used, only those roles which explicitly reference the role are returned. Any roles implied by
+   * membership of other roles are not matched. In other words, this searches {@link ManageableRole#associatedRoles()}.
    */
   @PropertyDefinition
   private String _associatedRole;
   /**
-   * The associated user name to search for, no wildcards.
-   * If used, only those roles which explicitly reference the user are returned.
-   * Any users implied by membership of other roles are not matched.
-   * In other words, this searches {@link ManageableRole#associatedUsers()}.
+   * The associated user name to search for, no wildcards. If used, only those roles which explicitly reference the user are returned. Any users implied by
+   * membership of other roles are not matched. In other words, this searches {@link ManageableRole#associatedUsers()}.
    */
   @PropertyDefinition
   private String _associatedUser;
   /**
-   * The associated permission to search for, no wildcards.
-   * If used, only those roles which explicitly reference the permission are returned.
-   * Any permissions implied by membership of other roles are not matched.
-   * In other words, this searches {@link ManageableRole#associatedPermissions()}.
+   * The associated permission to search for, no wildcards. If used, only those roles which explicitly reference the permission are returned. Any permissions
+   * implied by membership of other roles are not matched. In other words, this searches {@link ManageableRole#associatedPermissions()}.
    */
   @PropertyDefinition
   private String _associatedPermission;
@@ -92,11 +82,12 @@ public class RoleSearchRequest implements Bean {
   public RoleSearchRequest() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds a single user object identifier to the set.
    *
-   * @param userId  the user object identifier to add, not null
+   * @param userId
+   *          the user object identifier to add, not null
    */
   public void addObjectId(final ObjectIdentifiable userId) {
     ArgumentChecker.notNull(userId, "userId");
@@ -107,10 +98,10 @@ public class RoleSearchRequest implements Bean {
   }
 
   /**
-   * Sets the set of user object identifiers, null to not limit by user object identifiers.
-   * Note that an empty collection will return no securities.
+   * Sets the set of user object identifiers, null to not limit by user object identifiers. Note that an empty collection will return no securities.
    *
-   * @param userIds  the new user identifiers, null clears the user id search
+   * @param userIds
+   *          the new user identifiers, null clears the user id search
    */
   public void setObjectIds(final Iterable<? extends ObjectIdentifiable> userIds) {
     if (userIds == null) {
@@ -123,11 +114,12 @@ public class RoleSearchRequest implements Bean {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if this search matches the specified role.
    *
-   * @param role  the role to match, null returns false
+   * @param role
+   *          the role to match, null returns false
    * @return true if matches
    */
   public boolean matches(final ManageableRole role) {
@@ -153,7 +145,6 @@ public class RoleSearchRequest implements Bean {
   }
 
   //------------------------- AUTOGENERATED START -------------------------
-  ///CLOVER:OFF
   /**
    * The meta-bean for {@code RoleSearchRequest}.
    * @return the meta-bean, not null
@@ -163,7 +154,7 @@ public class RoleSearchRequest implements Bean {
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(RoleSearchRequest.Meta.INSTANCE);
+    MetaBean.register(RoleSearchRequest.Meta.INSTANCE);
   }
 
   @Override
@@ -171,20 +162,9 @@ public class RoleSearchRequest implements Bean {
     return RoleSearchRequest.Meta.INSTANCE;
   }
 
-  @Override
-  public <R> Property<R> property(String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
-  }
-
-  @Override
-  public Set<String> propertyNames() {
-    return metaBean().metaPropertyMap().keySet();
-  }
-
   //-----------------------------------------------------------------------
   /**
-   * Gets the request for paging.
-   * By default all matching items will be returned.
+   * Gets the request for paging. By default all matching items will be returned.
    * @return the value of the property
    */
   public PagingRequest getPagingRequest() {
@@ -192,8 +172,7 @@ public class RoleSearchRequest implements Bean {
   }
 
   /**
-   * Sets the request for paging.
-   * By default all matching items will be returned.
+   * Sets the request for paging. By default all matching items will be returned.
    * @param pagingRequest  the new value of the property
    */
   public void setPagingRequest(PagingRequest pagingRequest) {
@@ -202,7 +181,6 @@ public class RoleSearchRequest implements Bean {
 
   /**
    * Gets the the {@code pagingRequest} property.
-   * By default all matching items will be returned.
    * @return the property, not null
    */
   public final Property<PagingRequest> pagingRequest() {
@@ -211,8 +189,7 @@ public class RoleSearchRequest implements Bean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of role object identifiers, null to not limit by user object identifiers.
-   * Note that an empty list will return no users.
+   * Gets the set of role object identifiers, null to not limit by user object identifiers. Note that an empty list will return no users.
    * @return the value of the property
    */
   public List<ObjectId> getObjectIds() {
@@ -221,7 +198,6 @@ public class RoleSearchRequest implements Bean {
 
   /**
    * Gets the the {@code objectIds} property.
-   * Note that an empty list will return no users.
    * @return the property, not null
    */
   public final Property<List<ObjectId>> objectIds() {
@@ -255,10 +231,8 @@ public class RoleSearchRequest implements Bean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the associated role name to search for, no wildcards.
-   * If used, only those roles which explicitly reference the role are returned.
-   * Any roles implied by membership of other roles are not matched.
-   * In other words, this searches {@link ManageableRole#associatedRoles()}.
+   * Gets the associated role name to search for, no wildcards. If used, only those roles which explicitly reference the role are returned. Any roles implied by
+   * membership of other roles are not matched. In other words, this searches {@link ManageableRole#associatedRoles()}.
    * @return the value of the property
    */
   public String getAssociatedRole() {
@@ -266,10 +240,8 @@ public class RoleSearchRequest implements Bean {
   }
 
   /**
-   * Sets the associated role name to search for, no wildcards.
-   * If used, only those roles which explicitly reference the role are returned.
-   * Any roles implied by membership of other roles are not matched.
-   * In other words, this searches {@link ManageableRole#associatedRoles()}.
+   * Sets the associated role name to search for, no wildcards. If used, only those roles which explicitly reference the role are returned. Any roles implied by
+   * membership of other roles are not matched. In other words, this searches {@link ManageableRole#associatedRoles()}.
    * @param associatedRole  the new value of the property
    */
   public void setAssociatedRole(String associatedRole) {
@@ -278,9 +250,7 @@ public class RoleSearchRequest implements Bean {
 
   /**
    * Gets the the {@code associatedRole} property.
-   * If used, only those roles which explicitly reference the role are returned.
-   * Any roles implied by membership of other roles are not matched.
-   * In other words, this searches {@link ManageableRole#associatedRoles()}.
+   * membership of other roles are not matched. In other words, this searches {@link ManageableRole#associatedRoles()}.
    * @return the property, not null
    */
   public final Property<String> associatedRole() {
@@ -289,10 +259,8 @@ public class RoleSearchRequest implements Bean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the associated user name to search for, no wildcards.
-   * If used, only those roles which explicitly reference the user are returned.
-   * Any users implied by membership of other roles are not matched.
-   * In other words, this searches {@link ManageableRole#associatedUsers()}.
+   * Gets the associated user name to search for, no wildcards. If used, only those roles which explicitly reference the user are returned. Any users implied by
+   * membership of other roles are not matched. In other words, this searches {@link ManageableRole#associatedUsers()}.
    * @return the value of the property
    */
   public String getAssociatedUser() {
@@ -300,10 +268,8 @@ public class RoleSearchRequest implements Bean {
   }
 
   /**
-   * Sets the associated user name to search for, no wildcards.
-   * If used, only those roles which explicitly reference the user are returned.
-   * Any users implied by membership of other roles are not matched.
-   * In other words, this searches {@link ManageableRole#associatedUsers()}.
+   * Sets the associated user name to search for, no wildcards. If used, only those roles which explicitly reference the user are returned. Any users implied by
+   * membership of other roles are not matched. In other words, this searches {@link ManageableRole#associatedUsers()}.
    * @param associatedUser  the new value of the property
    */
   public void setAssociatedUser(String associatedUser) {
@@ -312,9 +278,7 @@ public class RoleSearchRequest implements Bean {
 
   /**
    * Gets the the {@code associatedUser} property.
-   * If used, only those roles which explicitly reference the user are returned.
-   * Any users implied by membership of other roles are not matched.
-   * In other words, this searches {@link ManageableRole#associatedUsers()}.
+   * membership of other roles are not matched. In other words, this searches {@link ManageableRole#associatedUsers()}.
    * @return the property, not null
    */
   public final Property<String> associatedUser() {
@@ -323,10 +287,8 @@ public class RoleSearchRequest implements Bean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the associated permission to search for, no wildcards.
-   * If used, only those roles which explicitly reference the permission are returned.
-   * Any permissions implied by membership of other roles are not matched.
-   * In other words, this searches {@link ManageableRole#associatedPermissions()}.
+   * Gets the associated permission to search for, no wildcards. If used, only those roles which explicitly reference the permission are returned. Any permissions
+   * implied by membership of other roles are not matched. In other words, this searches {@link ManageableRole#associatedPermissions()}.
    * @return the value of the property
    */
   public String getAssociatedPermission() {
@@ -334,10 +296,8 @@ public class RoleSearchRequest implements Bean {
   }
 
   /**
-   * Sets the associated permission to search for, no wildcards.
-   * If used, only those roles which explicitly reference the permission are returned.
-   * Any permissions implied by membership of other roles are not matched.
-   * In other words, this searches {@link ManageableRole#associatedPermissions()}.
+   * Sets the associated permission to search for, no wildcards. If used, only those roles which explicitly reference the permission are returned. Any permissions
+   * implied by membership of other roles are not matched. In other words, this searches {@link ManageableRole#associatedPermissions()}.
    * @param associatedPermission  the new value of the property
    */
   public void setAssociatedPermission(String associatedPermission) {
@@ -346,9 +306,7 @@ public class RoleSearchRequest implements Bean {
 
   /**
    * Gets the the {@code associatedPermission} property.
-   * If used, only those roles which explicitly reference the permission are returned.
-   * Any permissions implied by membership of other roles are not matched.
-   * In other words, this searches {@link ManageableRole#associatedPermissions()}.
+   * implied by membership of other roles are not matched. In other words, this searches {@link ManageableRole#associatedPermissions()}.
    * @return the property, not null
    */
   public final Property<String> associatedPermission() {
@@ -529,7 +487,7 @@ public class RoleSearchRequest implements Bean {
 
     @Override
     public BeanBuilder<? extends RoleSearchRequest> builder() {
-      return new DirectBeanBuilder<RoleSearchRequest>(new RoleSearchRequest());
+      return new DirectBeanBuilder<>(new RoleSearchRequest());
     }
 
     @Override
@@ -657,6 +615,5 @@ public class RoleSearchRequest implements Bean {
 
   }
 
-  ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }

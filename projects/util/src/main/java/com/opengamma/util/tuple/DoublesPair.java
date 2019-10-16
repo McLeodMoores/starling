@@ -11,7 +11,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.beans.Bean;
-import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
@@ -28,8 +28,7 @@ import it.unimi.dsi.fastutil.doubles.Double2DoubleMap;
 /**
  * An immutable pair consisting of two {@code double} elements.
  * <p>
- * The class provides direct access to the primitive types and implements
- * the relevant fastutil interface.
+ * The class provides direct access to the primitive types and implements the relevant fastutil interface.
  * <p>
  * This class is immutable and thread-safe.
  */
@@ -46,14 +45,14 @@ public final class DoublesPair
   /** The second element. */
   public final double second; // CSIGNORE
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Obtains a {@code DoublesPair} from a {@code DoublesPair} checking for null.
    * <p>
-   * This method exists to catch instances of {@code DoublesPair} being passed to
-   * {@link #of(Pair)} in an optimal way.
+   * This method exists to catch instances of {@code DoublesPair} being passed to {@link #of(Pair)} in an optimal way.
    *
-   * @param pair  the pair to convert, not null
+   * @param pair
+   *          the pair to convert, not null
    * @return the input pair, not null
    */
   public static DoublesPair of(final DoublesPair pair) {
@@ -64,7 +63,8 @@ public final class DoublesPair
   /**
    * Obtains a {@code DoublesPair} from a {@code Pair}.
    *
-   * @param pair  the pair to convert, not null
+   * @param pair
+   *          the pair to convert, not null
    * @return a pair formed by extracting values from the pair, not null
    */
   public static DoublesPair of(final Pair<Double, Double> pair) {
@@ -82,7 +82,8 @@ public final class DoublesPair
    * <p>
    * This uses {@link Number#doubleValue()}.
    *
-   * @param pair  the pair to convert, not null
+   * @param pair
+   *          the pair to convert, not null
    * @return a pair formed by extracting values from the pair, not null
    */
   public static DoublesPair ofNumbers(final Pair<? extends Number, ? extends Number> pair) {
@@ -98,21 +99,24 @@ public final class DoublesPair
   /**
    * Obtains a {@code DoublesPair} from two {@code double} values.
    *
-   * @param first  the first element
-   * @param second  the second element
+   * @param first
+   *          the first element
+   * @param second
+   *          the second element
    * @return a pair formed from the two parameters, not null
    */
   public static DoublesPair of(final double first, final double second) {
     return new DoublesPair(first, second);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Parses a {@code DoublesPair} from the standard string format.
    * <p>
    * The standard format is '[$first, $second]'. Spaces around the values are trimmed.
    *
-   * @param pairStr  the text to parse, not null
+   * @param pairStr
+   *          the text to parse, not null
    * @return the parsed pair, not null
    */
   @FromString
@@ -136,12 +140,14 @@ public final class DoublesPair
     return new DoublesPair(first, second);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Constructs a pair.
    *
-   * @param first  the first element
-   * @param second  the second element
+   * @param first
+   *          the first element
+   * @param second
+   *          the second element
    * @deprecated Use public factory of(double,double)
    */
   @Deprecated
@@ -150,7 +156,7 @@ public final class DoublesPair
     this.second = second;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Double getFirst() {
     return first;
@@ -179,7 +185,7 @@ public final class DoublesPair
     return second;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public double getDoubleKey() {
     return first;
@@ -194,10 +200,12 @@ public final class DoublesPair
   public double setValue(final double newValue) {
     throw new UnsupportedOperationException("Immutable");
   }
+
   // CSOFF
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * The meta-bean for {@code DoublesPair}.
+   *
    * @return the meta-bean, not null
    */
   public static DoublesPair.Meta meta() {
@@ -205,7 +213,7 @@ public final class DoublesPair
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(DoublesPair.Meta.INSTANCE);
+    MetaBean.register(DoublesPair.Meta.INSTANCE);
   }
 
   @Override
@@ -215,7 +223,7 @@ public final class DoublesPair
 
   @Override
   public <R> Property<R> property(final String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
+    return metaBean().<R> metaProperty(propertyName).createProperty(this);
   }
 
   @Override
@@ -228,7 +236,7 @@ public final class DoublesPair
     return this;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public int compareTo(final Pair<Double, Double> other) {
     if (other instanceof DoublesPair) {
@@ -242,7 +250,8 @@ public final class DoublesPair
    * <p>
    * This compares the first elements, then the second elements.
    *
-   * @param other  the other pair
+   * @param other
+   *          the other pair
    * @return negative if this is less, zero if equal, positive if greater
    */
   public int compareTo(final DoublesPair other) {
@@ -253,7 +262,7 @@ public final class DoublesPair
     return cmp;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean equals(final Object obj) {
     if (this == obj) {
@@ -292,7 +301,7 @@ public final class DoublesPair
         .append("]").toString();
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * The meta-bean for {@code DoublesPair}.
    */
@@ -352,9 +361,10 @@ public final class DoublesPair
       return _metaPropertyMap;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * The meta-property for the {@code first} property.
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Double> first() {
@@ -363,13 +373,14 @@ public final class DoublesPair
 
     /**
      * The meta-property for the {@code second} property.
+     *
      * @return the meta-property, not null
      */
     public MetaProperty<Double> second() {
       return _second;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
       switch (propertyName) {
@@ -392,7 +403,7 @@ public final class DoublesPair
 
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * The bean-builder for {@code DoublesPair}.
    */
@@ -410,7 +421,7 @@ public final class DoublesPair
       super();
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     public Builder set(final String propertyName, final Object newValue) {
       switch (propertyName) {
@@ -427,8 +438,8 @@ public final class DoublesPair
     }
 
     @Override
-    public Builder setString(final String propertyName, final String value) {
-      setString(meta().metaProperty(propertyName), value);
+    public Builder set(final MetaProperty<?> property, final Object value) {
+      super.set(property, value);
       return this;
     }
 

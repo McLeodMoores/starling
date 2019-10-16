@@ -372,7 +372,7 @@ public abstract class AbstractForwardCurveBean extends CurveBean {
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(AbstractForwardCurveBean.Meta.INSTANCE);
+    MetaBean.register(AbstractForwardCurveBean.Meta.INSTANCE);
   }
 
   @Override

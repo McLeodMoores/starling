@@ -14,17 +14,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NoSuchElementException;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
-import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
-import org.joda.beans.Property;
-import org.joda.beans.PropertyDefinition;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
@@ -37,18 +36,16 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A map of currency amounts keyed by currency.
  * <p>
- * This is a container holding multiple {@link CurrencyAmount} instances.
- * The amounts do not necessarily the same worth or value in each currency.
+ * This is a container holding multiple {@link CurrencyAmount} instances. The amounts do not necessarily the same worth or value in each currency.
  * <p>
- * This class behaves as a set - if an amount is added with the same currency as one of the
- * elements, the amounts are added. For example, adding EUR 100 to the container
- * (EUR 200, CAD 100) would give (EUR 300, CAD 100).
+ * This class behaves as a set - if an amount is added with the same currency as one of the elements, the amounts are added. For example, adding EUR 100 to the
+ * container (EUR 200, CAD 100) would give (EUR 300, CAD 100).
  * <p>
  * This class is immutable and thread-safe.
  */
 @BeanDefinition(builderScope = "private")
 public final class MultipleCurrencyAmount implements ImmutableBean,
-Iterable<CurrencyAmount>, Serializable {
+    Iterable<CurrencyAmount>, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -62,8 +59,10 @@ Iterable<CurrencyAmount>, Serializable {
   /**
    * Obtains a {@code MultipleCurrencyAmount} from a currency and amount.
    *
-   * @param currency  the currency, not null
-   * @param amount  the amount
+   * @param currency
+   *          the currency, not null
+   * @param amount
+   *          the amount
    * @return the amount, not null
    */
   public static MultipleCurrencyAmount of(final Currency currency, final double amount) {
@@ -75,8 +74,10 @@ Iterable<CurrencyAmount>, Serializable {
   /**
    * Obtains a {@code MultipleCurrencyAmount} from a paired array of currencies and amounts.
    *
-   * @param currencies  the currencies, not null
-   * @param amounts  the amounts, not null
+   * @param currencies
+   *          the currencies, not null
+   * @param amounts
+   *          the amounts, not null
    * @return the amount, not null
    */
   public static MultipleCurrencyAmount of(final Currency[] currencies, final double[] amounts) {
@@ -94,8 +95,10 @@ Iterable<CurrencyAmount>, Serializable {
   /**
    * Obtains a {@code MultipleCurrencyAmount} from a paired list of currencies and amounts.
    *
-   * @param currencies  the currencies, not null
-   * @param amounts  the amounts, not null
+   * @param currencies
+   *          the currencies, not null
+   * @param amounts
+   *          the amounts, not null
    * @return the amount, not null
    */
   public static MultipleCurrencyAmount of(final List<Currency> currencies, final List<Double> amounts) {
@@ -113,7 +116,8 @@ Iterable<CurrencyAmount>, Serializable {
   /**
    * Obtains a {@code MultipleCurrencyAmount} from a map of currency to amount.
    *
-   * @param amountMap  the amounts, not null
+   * @param amountMap
+   *          the amounts, not null
    * @return the amount, not null
    */
   public static MultipleCurrencyAmount of(final Map<Currency, Double> amountMap) {
@@ -129,7 +133,8 @@ Iterable<CurrencyAmount>, Serializable {
   /**
    * Obtains a {@code MultipleCurrencyAmount} from a list of {@code CurrencyAmount}.
    *
-   * @param currencyAmounts  the amounts, not null
+   * @param currencyAmounts
+   *          the amounts, not null
    * @return the amount, not null
    */
   public static MultipleCurrencyAmount of(final CurrencyAmount... currencyAmounts) {
@@ -140,7 +145,8 @@ Iterable<CurrencyAmount>, Serializable {
   /**
    * Obtains a {@code MultipleCurrencyAmount} from a list of {@code CurrencyAmount}.
    *
-   * @param currencyAmounts  the amounts, not null
+   * @param currencyAmounts
+   *          the amounts, not null
    * @return the amount, not null
    */
   public static MultipleCurrencyAmount of(final Iterable<CurrencyAmount> currencyAmounts) {
@@ -158,7 +164,7 @@ Iterable<CurrencyAmount>, Serializable {
     return new MultipleCurrencyAmount(map);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the number of stored amounts.
    *
@@ -190,9 +196,11 @@ Iterable<CurrencyAmount>, Serializable {
   /**
    * Gets the amount for the specified currency.
    *
-   * @param currency  the currency to find an amount for, not null
+   * @param currency
+   *          the currency to find an amount for, not null
    * @return the amount
-   * @throws IllegalArgumentException if the currency is not present
+   * @throws IllegalArgumentException
+   *           if the currency is not present
    */
   public double getAmount(final Currency currency) {
     final CurrencyAmount currencyAmount = getCurrencyAmount(currency);
@@ -205,7 +213,8 @@ Iterable<CurrencyAmount>, Serializable {
   /**
    * Gets the {@code CurrencyAmount} for the specified currency.
    *
-   * @param currency  the currency to find an amount for, not null
+   * @param currency
+   *          the currency to find an amount for, not null
    * @return the amount, null if no amount for the currency
    */
   public CurrencyAmount getCurrencyAmount(final Currency currency) {
@@ -213,18 +222,17 @@ Iterable<CurrencyAmount>, Serializable {
     return _currencyAmountMap.get(currency);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Returns a copy of this {@code MultipleCurrencyAmount} with the specified amount added.
    * <p>
-   * This adds the specified amount to this monetary amount, returning a new object.
-   * If the currency is already present, the amount is added to the existing amount.
-   * If the currency is not yet present, the currency-amount is added to the map.
-   * The addition simply uses standard {@code double} arithmetic.
+   * This adds the specified amount to this monetary amount, returning a new object. If the currency is already present, the amount is added to the existing
+   * amount. If the currency is not yet present, the currency-amount is added to the map. The addition simply uses standard {@code double} arithmetic.
    * <p>
    * This instance is immutable and unaffected by this method.
    *
-   * @param currencyAmountToAdd  the amount to add, in the same currency, not null
+   * @param currencyAmountToAdd
+   *          the amount to add, in the same currency, not null
    * @return an amount based on this with the specified amount added, not null
    */
   public MultipleCurrencyAmount plus(final CurrencyAmount currencyAmountToAdd) {
@@ -247,15 +255,15 @@ Iterable<CurrencyAmount>, Serializable {
   /**
    * Returns a copy of this {@code MultipleCurrencyAmount} with the specified amount added.
    * <p>
-   * This adds the specified amount to this monetary amount, returning a new object.
-   * If the currency is already present, the amount is added to the existing amount.
-   * If the currency is not yet present, the currency-amount is added to the map.
-   * The addition simply uses standard {@code double} arithmetic.
+   * This adds the specified amount to this monetary amount, returning a new object. If the currency is already present, the amount is added to the existing
+   * amount. If the currency is not yet present, the currency-amount is added to the map. The addition simply uses standard {@code double} arithmetic.
    * <p>
    * This instance is immutable and unaffected by this method.
    *
-   * @param currency  the currency to add to, not null
-   * @param amountToAdd  the amount to add
+   * @param currency
+   *          the currency to add to, not null
+   * @param amountToAdd
+   *          the amount to add
    * @return an amount based on this with the specified amount added, not null
    */
   public MultipleCurrencyAmount plus(final Currency currency, final double amountToAdd) {
@@ -278,14 +286,13 @@ Iterable<CurrencyAmount>, Serializable {
   /**
    * Returns a copy of this {@code MultipleCurrencyAmount} with the specified amount added.
    * <p>
-   * This adds the specified amount to this monetary amount, returning a new object.
-   * If the currency is already present, the amount is added to the existing amount.
-   * If the currency is not yet present, the currency-amount is added to the map.
-   * The addition simply uses standard {@code double} arithmetic.
+   * This adds the specified amount to this monetary amount, returning a new object. If the currency is already present, the amount is added to the existing
+   * amount. If the currency is not yet present, the currency-amount is added to the map. The addition simply uses standard {@code double} arithmetic.
    * <p>
    * This instance is immutable and unaffected by this method.
    *
-   * @param multipleCurrencyAmountToAdd  the currency to add to, not null
+   * @param multipleCurrencyAmountToAdd
+   *          the currency to add to, not null
    * @return an amount based on this with the specified amount added, not null
    */
   public MultipleCurrencyAmount plus(final MultipleCurrencyAmount multipleCurrencyAmountToAdd) {
@@ -297,13 +304,13 @@ Iterable<CurrencyAmount>, Serializable {
     return result;
   }
 
-
   /**
    * Returns a copy of this {@code MultipleCurrencyAmount} with all the amounts multiplied by the factor.
    * <p>
    * This instance is immutable and unaffected by this method.
    *
-   * @param factor The multiplicative factor.
+   * @param factor
+   *          The multiplicative factor.
    * @return An amount based on this with all the amounts multiplied by the factor. Not null
    */
   public MultipleCurrencyAmount multipliedBy(final double factor) {
@@ -314,17 +321,18 @@ Iterable<CurrencyAmount>, Serializable {
     return MultipleCurrencyAmount.of(map);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Returns a copy of this {@code MultipleCurrencyAmount} with the specified currency.
    * <p>
-   * This adds the specified amount to this monetary amount, returning a new object.
-   * Any previous amount for the specified currency is replaced.
+   * This adds the specified amount to this monetary amount, returning a new object. Any previous amount for the specified currency is replaced.
    * <p>
    * This instance is immutable and unaffected by this method.
    *
-   * @param currency  the currency to replace, not null
-   * @param amount  the new amount
+   * @param currency
+   *          the currency to replace, not null
+   * @param amount
+   *          the new amount
    * @return an amount based on this with the specified currency replaced, not null
    */
   public MultipleCurrencyAmount with(final Currency currency, final double amount) {
@@ -341,7 +349,8 @@ Iterable<CurrencyAmount>, Serializable {
    * <p>
    * This instance is immutable and unaffected by this method.
    *
-   * @param currency  the currency to replace, not null
+   * @param currency
+   *          the currency to replace, not null
    * @return an amount based on this with the specified currency removed, not null
    */
   public MultipleCurrencyAmount without(final Currency currency) {
@@ -353,7 +362,7 @@ Iterable<CurrencyAmount>, Serializable {
     return new MultipleCurrencyAmount(copy);
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * Gets the amount as a string.
    * <p>
@@ -372,7 +381,6 @@ Iterable<CurrencyAmount>, Serializable {
   }
 
   //------------------------- AUTOGENERATED START -------------------------
-  ///CLOVER:OFF
   /**
    * The meta-bean for {@code MultipleCurrencyAmount}.
    * @return the meta-bean, not null
@@ -382,7 +390,7 @@ Iterable<CurrencyAmount>, Serializable {
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(MultipleCurrencyAmount.Meta.INSTANCE);
+    MetaBean.register(MultipleCurrencyAmount.Meta.INSTANCE);
   }
 
   private MultipleCurrencyAmount(
@@ -394,16 +402,6 @@ Iterable<CurrencyAmount>, Serializable {
   @Override
   public MultipleCurrencyAmount.Meta metaBean() {
     return MultipleCurrencyAmount.Meta.INSTANCE;
-  }
-
-  @Override
-  public <R> Property<R> property(String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
-  }
-
-  @Override
-  public Set<String> propertyNames() {
-    return metaBean().metaPropertyMap().keySet();
   }
 
   //-----------------------------------------------------------------------
@@ -530,7 +528,6 @@ Iterable<CurrencyAmount>, Serializable {
      * Restricted constructor.
      */
     private Builder() {
-      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -575,6 +572,5 @@ Iterable<CurrencyAmount>, Serializable {
 
   }
 
-  ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }

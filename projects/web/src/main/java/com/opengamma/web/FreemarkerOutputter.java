@@ -32,16 +32,13 @@ import freemarker.template.TemplateScalarModel;
 /**
  * Main class that groups functionality for outputting to Freemarker.
  * <p>
- * Freemarker is a template engine that allows Jaa objects to be easily converted to text.
- * The Freemarker system is controlled by a {@link Configuration configuration class}.
+ * Freemarker is a template engine that allows Jaa objects to be easily converted to text. The Freemarker system is controlled by a {@link Configuration
+ * configuration class}.
  * <p>
- * The configuration is typically managed within the {@link ServletContext}.
- * The application initialization should call {@link #createConfiguration()}
- * followed by {@link #init(ServletContext, Configuration)} to setup the servlet context.
- * This can then be used by subclasses of {@link AbstractPerRequestWebResource}.
+ * The configuration is typically managed within the {@link ServletContext}. The application initialization should call {@link #createConfiguration()} followed
+ * by {@link #init(ServletContext, Configuration)} to setup the servlet context. This can then be used by subclasses of {@link AbstractPerRequestWebResource}.
  * <p>
- * An instance of this class is intended to be used from multiple threads,
- * however thread-safety is not enforced.
+ * An instance of this class is intended to be used from multiple threads, however thread-safety is not enforced.
  */
 public class FreemarkerOutputter {
 
@@ -58,12 +55,11 @@ public class FreemarkerOutputter {
   /**
    * Creates the Freemarker system configuration.
    * <p>
-   * This creates the {@link Configuration Freemarker configuration} which must be customised
-   * with a template loader. Callers must then invoke {@link #init(ServletContext, Configuration)}.
+   * This creates the {@link Configuration Freemarker configuration} which must be customised with a template loader. Callers must then invoke
+   * {@link #init(ServletContext, Configuration)}.
    * <p>
-   * The configuration uses UTF-8, a default locale of English, localized lookup and
-   * always includes the file "common/base.ftl".
-   * A model is added that converts nulls to empty strings
+   * The configuration uses UTF-8, a default locale of English, localized lookup and always includes the file "common/base.ftl". A model is added that converts
+   * nulls to empty strings
    *
    * @return the standard Freemarker configuration, not null
    */
@@ -85,8 +81,10 @@ public class FreemarkerOutputter {
    * <p>
    * This stores the {@link Configuration Freemarker configuration} in the servlet context for later use.
    *
-   * @param servletContext  the servlet context, not null
-   * @param configuration  the configuration to use, not null
+   * @param servletContext
+   *          the servlet context, not null
+   * @param configuration
+   *          the configuration to use, not null
    */
   public static void init(final ServletContext servletContext, final Configuration configuration) {
     servletContext.setAttribute(FreemarkerOutputter.FREEMARKER_CONFIGURATION, configuration);
@@ -128,7 +126,8 @@ public class FreemarkerOutputter {
    * <li>security - an instance of WebSecurity
    * </ul>
    *
-   * @param uriInfo  the URI information, not null
+   * @param uriInfo
+   *          the URI information, not null
    * @return the root data, not null
    */
   public static FlexiBean createRootData(final UriInfo uriInfo) {
@@ -153,13 +152,14 @@ public class FreemarkerOutputter {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the resource.
    * <p>
    * This constructor extracts the Freemarker configuration from the {@code ServletContext}.
    *
-   * @param servletContext  the servlet context, not null
+   * @param servletContext
+   *          the servlet context, not null
    */
   public FreemarkerOutputter(final ServletContext servletContext) {
     ArgumentChecker.notNull(servletContext, "servletContext");
@@ -170,18 +170,18 @@ public class FreemarkerOutputter {
   /**
    * Creates the resource.
    * <p>
-   * This constructor allows the Freemarker configuration to be directly passed in.
-   * It is recommended to use the {@code ServletContext} constructor to allow the configuration
-   * to be managed in the context.
+   * This constructor allows the Freemarker configuration to be directly passed in. It is recommended to use the {@code ServletContext} constructor to allow the
+   * configuration to be managed in the context.
    *
-   * @param configuration  the configuration, not null
+   * @param configuration
+   *          the configuration, not null
    */
   public FreemarkerOutputter(final Configuration configuration) {
     ArgumentChecker.notNull(configuration, "configuration");
     _configuration = configuration;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the Freemarker configuration, which must not be altered.
    *
@@ -194,12 +194,13 @@ public class FreemarkerOutputter {
   /**
    * Creates a Freemarker template.
    * <p>
-   * This converts a template name, which may include a file system path, into a
-   * configured {@code Template} object.
+   * This converts a template name, which may include a file system path, into a configured {@code Template} object.
    *
-   * @param templateName  the template name, not null
+   * @param templateName
+   *          the template name, not null
    * @return the template, not null
-   * @throws RuntimeException if an error occurs
+   * @throws RuntimeException
+   *           if an error occurs
    */
   public Template createTemplate(final String templateName) {
     try {
@@ -209,7 +210,7 @@ public class FreemarkerOutputter {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds the Freemarker template creating the output string.
    * <p>
@@ -220,10 +221,13 @@ public class FreemarkerOutputter {
    * <li>freemarkerVersion - the version of the Freemarker configuration
    * </ul>
    *
-   * @param templateName  the template name, not null
-   * @param data  the root data to merge, not null
+   * @param templateName
+   *          the template name, not null
+   * @param data
+   *          the root data to merge, not null
    * @return the template, not null
-   * @throws RuntimeException if an error occurs
+   * @throws RuntimeException
+   *           if an error occurs
    */
   public String build(final String templateName, final Object data) {
     return build(createTemplate(templateName), data);
@@ -239,10 +243,13 @@ public class FreemarkerOutputter {
    * <li>freemarkerVersion - the version of the Freemarker configuration
    * </ul>
    *
-   * @param template  the template, not null
-   * @param data  the root data to merge, not null
+   * @param template
+   *          the template, not null
+   * @param data
+   *          the root data to merge, not null
    * @return the template, not null
-   * @throws RuntimeException if an error occurs
+   * @throws RuntimeException
+   *           if an error occurs
    */
   @SuppressWarnings("unchecked")
   public String build(final Template template, final Object data) {
@@ -269,14 +276,15 @@ public class FreemarkerOutputter {
   /**
    * Handles any exception in template output.
    *
-   * @param ex  the exception from Freemarker, not null
+   * @param ex
+   *          the exception from Freemarker, not null
    * @return a dummy return type for Java compiler reasons
    */
   private static String handleException(final Exception ex) {
     throw new RuntimeException(ex);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public String toString() {
     return String.format("FreemarkerOutputter[%s]", Configuration.getVersionNumber());

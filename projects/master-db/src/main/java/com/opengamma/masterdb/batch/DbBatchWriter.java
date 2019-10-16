@@ -768,7 +768,7 @@ public class DbBatchWriter extends AbstractDbMaster {
         LOGGER.debug("Skipping market data value " + value + " because market data already persisted in snapshot");
         continue;
       }
-      final ResultConverter<Object> resultConverter;
+      final ResultConverter<? super Object> resultConverter;
       try {
         resultConverter = _resultConverterCache.getConverter(value.getValue());
       } catch (final IllegalArgumentException e) {
@@ -874,7 +874,7 @@ public class DbBatchWriter extends AbstractDbMaster {
         final long computationTargetId = _computationTargets.get(targetSpec);
         boolean specFailures = false;
         for (final ComputedValueResult computedValue : viewCalculationResultModel.getAllValues(targetSpec)) {
-          ResultConverter<Object> resultConverter = null;
+          ResultConverter<? super Object> resultConverter = null;
           if (!(computedValue.getValue() instanceof MissingValue)) {
             try {
               resultConverter = _resultConverterCache.getConverter(computedValue.getValue());

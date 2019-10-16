@@ -136,7 +136,7 @@ public class DiscountCurveBean extends CurveBean {
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(DiscountCurveBean.Meta.INSTANCE);
+    MetaBean.register(DiscountCurveBean.Meta.INSTANCE);
   }
 
   @Override

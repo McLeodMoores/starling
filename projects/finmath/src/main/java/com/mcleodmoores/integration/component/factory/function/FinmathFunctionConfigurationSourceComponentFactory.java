@@ -199,7 +199,7 @@ public class FinmathFunctionConfigurationSourceComponentFactory extends Abstract
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(FinmathFunctionConfigurationSourceComponentFactory.Meta.INSTANCE);
+    MetaBean.register(FinmathFunctionConfigurationSourceComponentFactory.Meta.INSTANCE);
   }
 
   @Override

@@ -8,17 +8,17 @@ package com.opengamma.master.user;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
-import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaBean;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
-import org.joda.beans.PropertyDefinition;
+import org.joda.beans.gen.BeanDefinition;
+import org.joda.beans.gen.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
@@ -41,8 +41,7 @@ public class RoleForm implements Bean {
   private static final Pattern VALID_NAME = Pattern.compile("[a-zA-Z][a-zA-Z0-9_-]*");
 
   /**
-   * The role name that uniquely identifies the role.
-   * This is used with the password to authenticate.
+   * The role name that uniquely identifies the role. This is used with the password to authenticate.
    */
   @PropertyDefinition
   private String _roleName;
@@ -97,7 +96,8 @@ public class RoleForm implements Bean {
   /**
    * Creates a form object.
    *
-   * @param role  the role to copy from, not null
+   * @param role
+   *          the role to copy from, not null
    */
   public RoleForm(final ManageableRole role) {
     setRoleName(role.getRoleName());
@@ -108,8 +108,10 @@ public class RoleForm implements Bean {
   /**
    * Creates a form object, changing everything except the description.
    *
-   * @param role  the role to copy from, not null
-   * @param description  the description, not null
+   * @param role
+   *          the role to copy from, not null
+   * @param description
+   *          the description, not null
    */
   public RoleForm(final ManageableRole role, final String description) {
     setRoleName(role.getRoleName());
@@ -120,21 +122,25 @@ public class RoleForm implements Bean {
   /**
    * Creates a form object.
    *
-   * @param roleName  the role name, not null
-   * @param description  the description, not null
+   * @param roleName
+   *          the role name, not null
+   * @param description
+   *          the description, not null
    */
   public RoleForm(final String roleName, final String description) {
     setRoleName(roleName);
     setDescription(description);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Validates and adds the proposed role to the master.
    *
-   * @param userMaster  the user master, not null
+   * @param userMaster
+   *          the user master, not null
    * @return the added role
-   * @throws RoleFormException if the proposed role is invalid
+   * @throws RoleFormException
+   *           if the proposed role is invalid
    */
   public ManageableRole add(final UserMaster userMaster) {
     try {
@@ -152,9 +158,11 @@ public class RoleForm implements Bean {
   /**
    * Validates and updates the proposed role in the master.
    *
-   * @param userMaster  the user master, not null
+   * @param userMaster
+   *          the user master, not null
    * @return the added role
-   * @throws RoleFormException if the proposed role is invalid
+   * @throws RoleFormException
+   *           if the proposed role is invalid
    */
   public ManageableRole update(final UserMaster userMaster) {
     try {
@@ -172,10 +180,13 @@ public class RoleForm implements Bean {
   /**
    * Validates and adds the proposed role to the master.
    *
-   * @param userMaster  the user master, not null
-   * @param add  true if adding, false if updating
+   * @param userMaster
+   *          the user master, not null
+   * @param add
+   *          true if adding, false if updating
    * @return the added role
-   * @throws RoleFormException if the proposed role is invalid
+   * @throws RoleFormException
+   *           if the proposed role is invalid
    */
   protected ManageableRole validate(final UserMaster userMaster, final boolean add) {
     final UserMaster master = ArgumentChecker.notNull(userMaster, "userMaster");
@@ -260,11 +271,12 @@ public class RoleForm implements Bean {
     return role;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if the role name is too short.
    *
-   * @param roleName  the role name, not null
+   * @param roleName
+   *          the role name, not null
    * @return true if short
    */
   protected boolean isRoleNameTooShort(final String roleName) {
@@ -274,7 +286,8 @@ public class RoleForm implements Bean {
   /**
    * Checks if the role name is too long.
    *
-   * @param roleName  the role name, not null
+   * @param roleName
+   *          the role name, not null
    * @return true if long
    */
   protected boolean isRoleNameTooLong(final String roleName) {
@@ -284,7 +297,8 @@ public class RoleForm implements Bean {
   /**
    * Checks if the role name is invalid.
    *
-   * @param roleName  the role name, not null
+   * @param roleName
+   *          the role name, not null
    * @return true if invalid
    */
   protected boolean isRoleNameInvalid(final String roleName) {
@@ -294,7 +308,8 @@ public class RoleForm implements Bean {
   /**
    * Checks if the email address is too long.
    *
-   * @param emailAddress  the email address, not null
+   * @param emailAddress
+   *          the email address, not null
    * @return true if long
    */
   protected boolean isDescriptionTooLong(final String emailAddress) {
@@ -304,7 +319,8 @@ public class RoleForm implements Bean {
   /**
    * Checks if the email address is invalid.
    *
-   * @param email  the email address, not null
+   * @param email
+   *          the email address, not null
    * @return true if invalid
    */
   protected boolean isDescriptionInvalid(final String email) {
@@ -312,7 +328,6 @@ public class RoleForm implements Bean {
   }
 
   //------------------------- AUTOGENERATED START -------------------------
-  ///CLOVER:OFF
   /**
    * The meta-bean for {@code RoleForm}.
    * @return the meta-bean, not null
@@ -322,7 +337,7 @@ public class RoleForm implements Bean {
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(RoleForm.Meta.INSTANCE);
+    MetaBean.register(RoleForm.Meta.INSTANCE);
   }
 
   @Override
@@ -330,20 +345,9 @@ public class RoleForm implements Bean {
     return RoleForm.Meta.INSTANCE;
   }
 
-  @Override
-  public <R> Property<R> property(String propertyName) {
-    return metaBean().<R>metaProperty(propertyName).createProperty(this);
-  }
-
-  @Override
-  public Set<String> propertyNames() {
-    return metaBean().metaPropertyMap().keySet();
-  }
-
   //-----------------------------------------------------------------------
   /**
-   * Gets the role name that uniquely identifies the role.
-   * This is used with the password to authenticate.
+   * Gets the role name that uniquely identifies the role. This is used with the password to authenticate.
    * @return the value of the property
    */
   public String getRoleName() {
@@ -351,8 +355,7 @@ public class RoleForm implements Bean {
   }
 
   /**
-   * Sets the role name that uniquely identifies the role.
-   * This is used with the password to authenticate.
+   * Sets the role name that uniquely identifies the role. This is used with the password to authenticate.
    * @param roleName  the new value of the property
    */
   public void setRoleName(String roleName) {
@@ -361,7 +364,6 @@ public class RoleForm implements Bean {
 
   /**
    * Gets the the {@code roleName} property.
-   * This is used with the password to authenticate.
    * @return the property, not null
    */
   public final Property<String> roleName() {
@@ -737,7 +739,7 @@ public class RoleForm implements Bean {
 
     @Override
     public BeanBuilder<? extends RoleForm> builder() {
-      return new DirectBeanBuilder<RoleForm>(new RoleForm());
+      return new DirectBeanBuilder<>(new RoleForm());
     }
 
     @Override
@@ -885,6 +887,5 @@ public class RoleForm implements Bean {
 
   }
 
-  ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }

@@ -44,7 +44,7 @@ public final class BusinessDayConventionAdapter implements BusinessDayConvention
 
   @Override
   public String getConventionName() {
-    return _convention.getConventionName();
+    return _convention.getName();
   }
 
   @Override
