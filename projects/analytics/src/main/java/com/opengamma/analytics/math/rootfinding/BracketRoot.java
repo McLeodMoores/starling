@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.math.rootfinding;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.math.MathException;
@@ -23,11 +25,15 @@ public class BracketRoot {
   private static final int MAX_STEPS = 50;
 
   /**
-   * @param f The function, not null
-   * @param xLower Initial value of lower bracket
-   * @param xUpper Initial value of upper bracket
+   * @param f
+   *          The function, not null
+   * @param xLower
+   *          Initial value of lower bracket
+   * @param xUpper
+   *          Initial value of upper bracket
    * @return The bracketed points as an array, where the first element is the lower bracket and the second the upper bracket.
-   * @throws MathException If a root is not bracketed in 50 attempts.
+   * @throws MathException
+   *           If a root is not bracketed in 50 attempts.
    */
   public double[] getBracketedPoints(final Function1D<Double, Double> f, final double xLower, final double xUpper) {
     Validate.notNull(f, "f");
@@ -46,7 +52,7 @@ public class BracketRoot {
 
     for (int count = 0; count < MAX_STEPS; count++) {
       if (f1 * f2 < 0) {
-        return new double[] {x1, x2 };
+        return new double[] { x1, x2 };
       }
       if (Math.abs(f1) < Math.abs(f2)) {
         x1 += RATIO * (x1 - x2);
@@ -65,7 +71,7 @@ public class BracketRoot {
     throw new MathException("Failed to bracket root");
   }
 
-  public double[] getBracketedPoints(final Function1D<Double, Double> f, final double xLower, final double xUpper, final double minX, final double maxX) {
+  public double[] getBracketedPoints(final Function<Double, Double> f, final double xLower, final double xUpper, final double minX, final double maxX) {
     Validate.notNull(f, "f");
     Validate.isTrue(xLower >= minX, "xLower < minX");
     Validate.isTrue(xUpper <= maxX, "xUpper < maxX");
@@ -85,7 +91,7 @@ public class BracketRoot {
     }
     for (int count = 0; count < MAX_STEPS; count++) {
       if (f1 * f2 <= 0) {
-        return new double[] {x1, x2 };
+        return new double[] { x1, x2 };
       }
       if (lowerLimitReached && upperLimitReached) {
         throw new MathException("Failed to bracket root: no root found between minX and maxX");

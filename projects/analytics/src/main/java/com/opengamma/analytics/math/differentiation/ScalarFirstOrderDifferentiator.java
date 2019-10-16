@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.math.differentiation;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.math.MathException;
@@ -62,7 +64,7 @@ public class ScalarFirstOrderDifferentiator implements Differentiator<Double, Do
   }
 
   @Override
-  public Function1D<Double, Double> differentiate(final Function1D<Double, Double> function) {
+  public Function1D<Double, Double> differentiate(final Function<Double, Double> function) {
     Validate.notNull(function);
     switch (_differenceType) {
       case FORWARD:
@@ -101,7 +103,7 @@ public class ScalarFirstOrderDifferentiator implements Differentiator<Double, Do
   }
 
   @Override
-  public Function1D<Double, Double> differentiate(final Function1D<Double, Double> function, final Function1D<Double, Boolean> domain) {
+  public Function1D<Double, Double> differentiate(final Function<Double, Double> function, final Function<Double, Boolean> domain) {
     Validate.notNull(function);
     Validate.notNull(domain);
 

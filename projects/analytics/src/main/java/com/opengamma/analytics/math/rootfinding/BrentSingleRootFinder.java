@@ -5,8 +5,9 @@
  */
 package com.opengamma.analytics.math.rootfinding;
 
+import java.util.function.Function;
+
 import com.opengamma.analytics.math.MathException;
-import com.opengamma.analytics.math.function.Function1D;
 
 /**
  *
@@ -32,7 +33,7 @@ public class BrentSingleRootFinder extends RealSingleRootFinder {
   }
 
   @Override
-  public Double getRoot(final Function1D<Double, Double> function, final Double xLower, final Double xUpper) {
+  public Double getRoot(final Function<Double, Double> function, final Double xLower, final Double xUpper) {
     checkInputs(function, xLower, xUpper);
     if (Double.compare(xLower, xUpper) == 0) {
       return xLower;

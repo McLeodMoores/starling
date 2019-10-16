@@ -5,13 +5,14 @@
  */
 package com.opengamma.analytics.math.rootfinding;
 
+import java.util.function.Function;
+
 import org.apache.commons.math.FunctionEvaluationException;
 import org.apache.commons.math.MaxIterationsExceededException;
 import org.apache.commons.math.analysis.UnivariateRealFunction;
 import org.apache.commons.math.analysis.solvers.RiddersSolver;
 
 import com.opengamma.analytics.math.MathException;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.util.wrapper.CommonsMathWrapper;
 
 /**
@@ -54,12 +55,12 @@ public class RidderSingleRootFinder extends RealSingleRootFinder {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @throws MathException
    *           If the Commons method could not evaluate the function; if the Commons method could not converge.
    */
   @Override
-  public Double getRoot(final Function1D<Double, Double> function, final Double xLow, final Double xHigh) {
+  public Double getRoot(final Function<Double, Double> function, final Double xLow, final Double xHigh) {
     checkInputs(function, xLow, xHigh);
     final UnivariateRealFunction wrapped = CommonsMathWrapper.wrapUnivariate(function);
     try {

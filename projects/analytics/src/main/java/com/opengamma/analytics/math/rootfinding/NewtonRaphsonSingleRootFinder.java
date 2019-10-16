@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.math.rootfinding;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.math.MathException;
@@ -56,12 +58,12 @@ public class NewtonRaphsonSingleRootFinder extends RealSingleRootFinder {
    *           If the root is not found in 1000 attempts; if the Newton step takes the estimate for the root outside the original bounds.
    */
   @Override
-  public Double getRoot(final Function1D<Double, Double> function, final Double x1, final Double x2) {
+  public Double getRoot(final Function<Double, Double> function, final Double x1, final Double x2) {
     Validate.notNull(function, "function");
     return getRoot(DoubleFunction1D.from(function), x1, x2);
   }
 
-  public Double getRoot(final Function1D<Double, Double> function, final Double x) {
+  public Double getRoot(final Function<Double, Double> function, final Double x) {
     Validate.notNull(function, "function");
     Validate.notNull(x, "x");
     final DoubleFunction1D f = DoubleFunction1D.from(function);
@@ -119,7 +121,7 @@ public class NewtonRaphsonSingleRootFinder extends RealSingleRootFinder {
    * @throws MathException
    *           If the root is not found in 1000 attempts; if the Newton step takes the estimate for the root outside the original bounds.
    */
-  public Double getRoot(final Function1D<Double, Double> function, final Function1D<Double, Double> derivative, final Double x1, final Double x2) {
+  public Double getRoot(final Function<Double, Double> function, final Function<Double, Double> derivative, final Double x1, final Double x2) {
     checkInputs(function, x1, x2);
     Validate.notNull(derivative, "derivative");
     return getRoot(DoubleFunction1D.from(function), DoubleFunction1D.from(derivative), x1, x2);

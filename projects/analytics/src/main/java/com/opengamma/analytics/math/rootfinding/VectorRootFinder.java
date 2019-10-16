@@ -9,6 +9,8 @@
  */
 package com.opengamma.analytics.math.rootfinding;
 
+import java.util.function.Function;
+
 import com.google.common.primitives.Doubles;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
@@ -16,31 +18,34 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.NamedInstance;
 
 /**
- * Parent class for root-finders that calculate a root for a vector function (i.e. $\mathbf{y} = f(\mathbf{x})$, where
- * $\mathbf{x}$ and $\mathbf{y}$ are vectors).
+ * Parent class for root-finders that calculate a root for a vector function (i.e. $\mathbf{y} = f(\mathbf{x})$, where $\mathbf{x}$ and $\mathbf{y}$ are
+ * vectors).
  */
 public abstract class VectorRootFinder implements SingleRootFinder<DoubleMatrix1D, DoubleMatrix1D>, NamedInstance {
 
   /**
-   * {@inheritDoc}
-   * Vector root finders only need a single starting point; if more than one is provided, the first is used and any other points ignored.
+   * {@inheritDoc} Vector root finders only need a single starting point; if more than one is provided, the first is used and any other points ignored.
    */
   @Override
-  public DoubleMatrix1D getRoot(final Function1D<DoubleMatrix1D, DoubleMatrix1D> function, final DoubleMatrix1D... startingPoint) {
+  public DoubleMatrix1D getRoot(final Function<DoubleMatrix1D, DoubleMatrix1D> function, final DoubleMatrix1D... startingPoint) {
     ArgumentChecker.notNull(startingPoint, "starting point");
     return getRoot(function, startingPoint[0]);
   }
 
   /**
-   * @param function The (vector) function, not null
-   * @param x0 The starting point, not null
+   * @param function
+   *          The (vector) function, not null
+   * @param x0
+   *          The starting point, not null
    * @return The vector root of this function
    */
   public abstract DoubleMatrix1D getRoot(Function1D<DoubleMatrix1D, DoubleMatrix1D> function, DoubleMatrix1D x0);
 
   /**
-   * @param function The function, not null
-   * @param x0 The starting point, not null
+   * @param function
+   *          The function, not null
+   * @param x0
+   *          The starting point, not null
    */
   protected void checkInputs(final Function1D<DoubleMatrix1D, DoubleMatrix1D> function, final DoubleMatrix1D x0) {
     ArgumentChecker.notNull(function, "function");

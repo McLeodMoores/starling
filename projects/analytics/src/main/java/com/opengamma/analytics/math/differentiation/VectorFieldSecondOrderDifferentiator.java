@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.math.differentiation;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.math.function.Function1D;
@@ -42,7 +44,7 @@ public class VectorFieldSecondOrderDifferentiator implements Differentiator<Doub
    * @return A function representing the second derivative of the vector field (i.e. a rank 3 tensor field)
    */
   @Override
-  public Function1D<DoubleMatrix1D, DoubleMatrix2D[]> differentiate(final Function1D<DoubleMatrix1D, DoubleMatrix1D> function) {
+  public Function1D<DoubleMatrix1D, DoubleMatrix2D[]> differentiate(final Function<DoubleMatrix1D, DoubleMatrix1D> function) {
     Validate.notNull(function);
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacFunc = _vectorFieldDiff.differentiate(function);
     final Function1D<DoubleMatrix1D, DoubleMatrix2D[]> hFunc = _maxtrixFieldDiff.differentiate(jacFunc);
@@ -57,8 +59,8 @@ public class VectorFieldSecondOrderDifferentiator implements Differentiator<Doub
   }
 
   @Override
-  public Function1D<DoubleMatrix1D, DoubleMatrix2D[]> differentiate(final Function1D<DoubleMatrix1D, DoubleMatrix1D> function,
-      final Function1D<DoubleMatrix1D, Boolean> domain) {
+  public Function1D<DoubleMatrix1D, DoubleMatrix2D[]> differentiate(final Function<DoubleMatrix1D, DoubleMatrix1D> function,
+      final Function<DoubleMatrix1D, Boolean> domain) {
     Validate.notNull(function);
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacFunc = _vectorFieldDiff.differentiate(function, domain);
     final Function1D<DoubleMatrix1D, DoubleMatrix2D[]> hFunc = _maxtrixFieldDiff.differentiate(jacFunc, domain);

@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.math.util.wrapper;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.Validate;
 import org.apache.commons.math.FunctionEvaluationException;
 import org.apache.commons.math.analysis.DifferentiableUnivariateRealFunction;
@@ -40,15 +42,9 @@ public final class CommonsMathWrapper {
    *          An OG 1-D function mapping doubles onto doubles, not null
    * @return A Commons univariate real function
    */
-  public static UnivariateRealFunction wrapUnivariate(final Function1D<Double, Double> f) {
+  public static UnivariateRealFunction wrapUnivariate(final Function<Double, Double> f) {
     Validate.notNull(f);
-    return new UnivariateRealFunction() {
-
-      @Override
-      public double value(final double x) {
-        return f.apply(x);
-      }
-    };
+    return x -> f.apply(x);
   }
 
   /**
@@ -56,16 +52,9 @@ public final class CommonsMathWrapper {
    *          An OG 1-D function mapping vectors of doubles onto doubles, not null
    * @return A Commons multivariate real function
    */
-  public static MultivariateRealFunction wrapMultivariate(final Function1D<DoubleMatrix1D, Double> f) {
+  public static MultivariateRealFunction wrapMultivariate(final Function<DoubleMatrix1D, Double> f) {
     Validate.notNull(f);
-    return new MultivariateRealFunction() {
-
-      @Override
-      public double value(final double[] point) throws FunctionEvaluationException, IllegalArgumentException {
-
-        return f.apply(new DoubleMatrix1D(point));
-      }
-    };
+    return point -> f.apply(new DoubleMatrix1D(point));
   }
 
   /**
@@ -75,17 +64,13 @@ public final class CommonsMathWrapper {
    */
   public static MultivariateRealFunction wrap(final FunctionND<Double, Double> f) {
     Validate.notNull(f);
-    return new MultivariateRealFunction() {
-
-      @Override
-      public double value(final double[] point) throws FunctionEvaluationException, IllegalArgumentException {
-        final int n = point.length;
-        final Double[] coordinate = new Double[n];
-        for (int i = 0; i < n; i++) {
-          coordinate[i] = point[i];
-        }
-        return f.evaluate(coordinate);
+    return point -> {
+      final int n = point.length;
+      final Double[] coordinate = new Double[n];
+      for (int i = 0; i < n; i++) {
+        coordinate[i] = point[i];
       }
+      return f.evaluate(coordinate);
     };
   }
 

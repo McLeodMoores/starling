@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.math.differentiation;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.math.MathException;
@@ -41,7 +43,7 @@ public class MatrixFieldFirstOrderDifferentiator implements Differentiator<Doubl
   }
 
   @Override
-  public Function1D<DoubleMatrix1D, DoubleMatrix2D[]> differentiate(final Function1D<DoubleMatrix1D, DoubleMatrix2D> function) {
+  public Function1D<DoubleMatrix1D, DoubleMatrix2D[]> differentiate(final Function<DoubleMatrix1D, DoubleMatrix2D> function) {
     Validate.notNull(function);
 
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D[]>() {
@@ -68,8 +70,8 @@ public class MatrixFieldFirstOrderDifferentiator implements Differentiator<Doubl
   }
 
   @Override
-  public Function1D<DoubleMatrix1D, DoubleMatrix2D[]> differentiate(final Function1D<DoubleMatrix1D, DoubleMatrix2D> function,
-      final Function1D<DoubleMatrix1D, Boolean> domain) {
+  public Function1D<DoubleMatrix1D, DoubleMatrix2D[]> differentiate(final Function<DoubleMatrix1D, DoubleMatrix2D> function,
+      final Function<DoubleMatrix1D, Boolean> domain) {
     Validate.notNull(function);
     Validate.notNull(domain);
 

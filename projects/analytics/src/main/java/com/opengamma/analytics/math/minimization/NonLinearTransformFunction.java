@@ -1,9 +1,11 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.minimization;
+
+import java.util.function.Function;
 
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
@@ -12,7 +14,7 @@ import com.opengamma.analytics.math.matrix.MatrixAlgebra;
 import com.opengamma.analytics.math.matrix.OGMatrixAlgebra;
 
 /**
- * 
+ *
  */
 public class NonLinearTransformFunction {
 
@@ -22,7 +24,7 @@ public class NonLinearTransformFunction {
   private final Function1D<DoubleMatrix1D, DoubleMatrix1D> _func;
   private final Function1D<DoubleMatrix1D, DoubleMatrix2D> _jac;
 
-  public NonLinearTransformFunction(final Function1D<DoubleMatrix1D, DoubleMatrix1D> func, final Function1D<DoubleMatrix1D, DoubleMatrix2D> jac,
+  public NonLinearTransformFunction(final Function<DoubleMatrix1D, DoubleMatrix1D> func, final Function<DoubleMatrix1D, DoubleMatrix2D> jac,
       final NonLinearParameterTransforms transform) {
 
     _transform = transform;

@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.math.differentiation;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.math.MathException;
@@ -37,7 +39,7 @@ public class ScalarFieldFirstOrderDifferentiator implements Differentiator<Doubl
 
   /**
    * Approximates the derivative of a scalar function by finite difference. If the size of the domain is very small or very large, consider re-scaling first.
-   * 
+   *
    * @param differenceType
    *          {@link FiniteDifferenceType#FORWARD}, {@link FiniteDifferenceType#BACKWARD}, or {@link FiniteDifferenceType#CENTRAL}. In most situations,
    *          {@link FiniteDifferenceType#CENTRAL} is preferable. Not null
@@ -56,7 +58,7 @@ public class ScalarFieldFirstOrderDifferentiator implements Differentiator<Doubl
   }
 
   @Override
-  public Function1D<DoubleMatrix1D, DoubleMatrix1D> differentiate(final Function1D<DoubleMatrix1D, Double> function) {
+  public Function1D<DoubleMatrix1D, DoubleMatrix1D> differentiate(final Function<DoubleMatrix1D, Double> function) {
     Validate.notNull(function);
     switch (_differenceType) {
       case FORWARD:
@@ -131,8 +133,8 @@ public class ScalarFieldFirstOrderDifferentiator implements Differentiator<Doubl
   }
 
   @Override
-  public Function1D<DoubleMatrix1D, DoubleMatrix1D> differentiate(final Function1D<DoubleMatrix1D, Double> function,
-      final Function1D<DoubleMatrix1D, Boolean> domain) {
+  public Function1D<DoubleMatrix1D, DoubleMatrix1D> differentiate(final Function<DoubleMatrix1D, Double> function,
+      final Function<DoubleMatrix1D, Boolean> domain) {
     Validate.notNull(function);
     Validate.notNull(domain);
 
