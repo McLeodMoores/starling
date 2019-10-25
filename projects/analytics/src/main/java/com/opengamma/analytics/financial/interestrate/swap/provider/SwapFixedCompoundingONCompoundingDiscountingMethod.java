@@ -121,8 +121,7 @@ public class SwapFixedCompoundingONCompoundingDiscountingMethod {
     final Currency currency = cpnFixed.getCurrency();
     final double dfPay = curves.getDiscountFactor(currency, cpnFixed.getPaymentTime());
     final double rate = Math.pow(-pvLegFloating.getAmount(currency) / (dfPay * cpnFixed.getNotional()),
-        1.0d / cpnFixed.getPaymentYearFraction())
-        - 1.0d;
+        1.0d / cpnFixed.getPaymentYearFraction()) - 1.0d;
     return rate;
   }
 

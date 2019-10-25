@@ -19,22 +19,26 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the difference in the present value of a bond future between two dates without rate slide
- * i.e. assumes that the market moves in such a way that the discount factors or rates for the same
- * maturity <b>dates</b> will be equal.
+ * Calculates the difference in the present value of a bond future between two dates without rate slide i.e. assumes that the market moves
+ * in such a way that the discount factors or rates for the same maturity <b>dates</b> will be equal.
+ * 
+ * @deprecated Use {@link com.opengamma.analytics.financial.horizon.constantspread.BondFutureConstantSpreadHorizonCalculator}.
  */
-public final class BondFutureConstantSpreadHorizonCalculator extends HorizonCalculator<BondFuturesTransactionDefinition, IssuerProviderInterface, Double> {
+@Deprecated
+public final class BondFutureConstantSpreadHorizonCalculator
+    extends HorizonCalculator<BondFuturesTransactionDefinition, IssuerProviderInterface, Double> {
   /** Rolls down a yield curve provider */
-  private static final CurveProviderConstantSpreadRolldownFunction CURVE_ROLLDOWN = CurveProviderConstantSpreadRolldownFunction.getInstance();
+  private static final CurveProviderConstantSpreadRolldownFunction CURVE_ROLLDOWN = CurveProviderConstantSpreadRolldownFunction
+      .getInstance();
   /** The present value calculator */
-  private static final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, MultipleCurrencyAmount> PV_CALCULATOR =
-      PresentValueIssuerCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, MultipleCurrencyAmount> PV_CALCULATOR = PresentValueIssuerCalculator
+      .getInstance();
   /** The singleton instance */
-  private static final HorizonCalculator<BondFuturesTransactionDefinition, IssuerProviderInterface, Double> INSTANCE =
-      new BondFutureConstantSpreadHorizonCalculator();
+  private static final HorizonCalculator<BondFuturesTransactionDefinition, IssuerProviderInterface, Double> INSTANCE = new BondFutureConstantSpreadHorizonCalculator();
 
   /**
    * Gets the singleton instance.
+   * 
    * @return The instance
    */
   public static HorizonCalculator<BondFuturesTransactionDefinition, IssuerProviderInterface, Double> getInstance() {
@@ -48,13 +52,15 @@ public final class BondFutureConstantSpreadHorizonCalculator extends HorizonCalc
   }
 
   @Override
-  public MultipleCurrencyAmount getTheta(final BondFuturesTransactionDefinition definition, final ZonedDateTime date, final IssuerProviderInterface data,
+  public MultipleCurrencyAmount getTheta(final BondFuturesTransactionDefinition definition, final ZonedDateTime date,
+      final IssuerProviderInterface data,
       final int daysForward, final Calendar calendar) {
     throw new UnsupportedOperationException("Must supply a last margin price");
   }
 
   @Override
-  public MultipleCurrencyAmount getTheta(final BondFuturesTransactionDefinition definition, final ZonedDateTime date, final IssuerProviderInterface data,
+  public MultipleCurrencyAmount getTheta(final BondFuturesTransactionDefinition definition, final ZonedDateTime date,
+      final IssuerProviderInterface data,
       final int daysForward, final Calendar calendar, final Double lastMarginPrice) {
     ArgumentChecker.notNull(definition, "definition");
     ArgumentChecker.notNull(date, "date");

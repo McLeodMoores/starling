@@ -55,7 +55,7 @@ public final class ConstantSpreadHorizonThetaCalculator {
   /** Rolls down a yield curve */
   private static final ConstantSpreadYieldCurveBundleRolldownFunction CURVE_ROLLDOWN = ConstantSpreadYieldCurveBundleRolldownFunction.getInstance();
   /** Rolls down swaption data (curves and surface) */
-  private static final ConstantSpreadSwaptionBlackRolldown SWAPTION_ROLLDOWN = ConstantSpreadSwaptionBlackRolldown.getInstance();
+  private static final SwaptionBlackDataConstantSpreadRolldown SWAPTION_ROLLDOWN = SwaptionBlackDataConstantSpreadRolldown.getInstance();
   /** Rolls down interest rate future option data (curves and surface) */
   private static final ConstantSpreadInterestRateFutureOptionBlackDataRolldown IR_FUTURE_OPTION_ROLLDOWN =
       ConstantSpreadInterestRateFutureOptionBlackDataRolldown.getInstance();

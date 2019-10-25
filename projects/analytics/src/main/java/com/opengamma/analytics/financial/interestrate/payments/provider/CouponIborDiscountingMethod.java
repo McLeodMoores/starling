@@ -157,50 +157,41 @@ public final class CouponIborDiscountingMethod {
     return MultipleCurrencyMulticurveSensitivity.of(coupon.getCurrency(), MulticurveSensitivity.of(mapDsc, mapFwd));
   }
 
-  // TODO
-  // /**
-  // * Compute the par rate (Ibor forward) of a Ibor coupon by discounting.
-  // *
-  // * @param coupon
-  // * The coupon.
-  // * @param curves
-  // * The yield curves. Should contain the discounting and forward curves associated.
-  // * @return The present value.
-  // */
-  // public double parRate(final CouponIbor coupon, final YieldCurveBundle curves) {
-  // Validate.notNull(coupon, "Coupon");
-  // Validate.notNull(curves, "Curves");
-  // final YieldAndDiscountCurve curve = curves.getCurve(coupon.getForwardCurveName());
-  // return (curve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / curve.getDiscountFactor(coupon.getFixingPeriodEndTime()) - 1.0)
-  // / coupon.getFixingAccrualFactor();
-  // }
-  //
-  // /**
-  // * Compute the par rate (Ibor forward) sensitivity to rates of a Ibor coupon by discounting.
-  // *
-  // * @param coupon
-  // * The coupon.
-  // * @param curves
-  // * The yield curves. Should contain the discounting and forward curves associated.
-  // * @return The par rate curve sensitivity.
-  // */
-  // public InterestRateCurveSensitivity parRateCurveSensitivity(final CouponIbor coupon, final YieldCurveBundle curves) {
-  // Validate.notNull(coupon, "Coupon");
-  // Validate.notNull(curves, "Curves");
-  // final YieldAndDiscountCurve forwardCurve = curves.getCurve(coupon.getForwardCurveName());
-  // final double dfForwardStart = forwardCurve.getDiscountFactor(coupon.getFixingPeriodStartTime());
-  // final double dfForwardEnd = forwardCurve.getDiscountFactor(coupon.getFixingPeriodEndTime());
-  // // Backward sweep
-  // final double parRateBar = 1.0;
-  // final double dfForwardEndBar = -dfForwardStart / (dfForwardEnd * dfForwardEnd) / coupon.getFixingAccrualFactor() * parRateBar;
-  // final double dfForwardStartBar = 1.0 / (coupon.getFixingAccrualFactor() * dfForwardEnd) * parRateBar;
-  // final List<DoublesPair> listForward = new ArrayList<>();
-  // listForward.add(DoublesPair.of(coupon.getFixingPeriodStartTime(), -coupon.getFixingPeriodStartTime() * dfForwardStart *
-  // dfForwardStartBar));
-  // listForward.add(DoublesPair.of(coupon.getFixingPeriodEndTime(), -coupon.getFixingPeriodEndTime() * dfForwardEnd * dfForwardEndBar));
-  // InterestRateCurveSensitivity result = new InterestRateCurveSensitivity();
-  // result = result.plus(coupon.getForwardCurveName(), listForward);
-  // return result;
-  // }
+  /**
+   * Compute the par rate (Ibor forward) of a Ibor coupon by discounting.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param curves
+   *          The yield curves. Should contain the discounting and forward curves associated.
+   * @return The present value.
+   */
+  public double parRate(final CouponIbor coupon, final MulticurveProviderInterface curves) {
+    ArgumentChecker.notNull(coupon, "coupon");
+    ArgumentChecker.notNull(curves, "curves");
+    return curves.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTime(), coupon.getFixingPeriodEndTime(),
+        coupon.getFixingAccrualFactor());
+  }
+
+  /**
+   * Compute the par rate (Ibor forward) sensitivity to rates of a Ibor coupon by discounting.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param curves
+   *          The yield curves.
+   * @return The par rate curve sensitivity.
+   */
+  public MulticurveSensitivity parRateCurveSensitivity(final CouponIbor coupon, final MulticurveProviderInterface curves) {
+    ArgumentChecker.notNull(coupon, "coupon");
+    ArgumentChecker.notNull(curves, "curves");
+    final double dfForwardStart = curves.getDiscountFactor(coupon.getIndex(), coupon.getFixingPeriodStartTime());
+    final double dfForwardEnd = curves.getDiscountFactor(coupon.getIndex(), coupon.getFixingPeriodEndTime());
+    // Backward sweep
+    final double parRateBar = 1.0;
+    final double dfForwardEndBar = -dfForwardStart / (dfForwardEnd * dfForwardEnd) / coupon.getFixingAccrualFactor() * parRateBar;
+    final double dfForwardStartBar = 1.0 / (coupon.getFixingAccrualFactor() * dfForwardEnd) * parRateBar;
+    return result;
+  }
 
 }

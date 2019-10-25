@@ -7,7 +7,6 @@ package com.opengamma.analytics.financial.interestrate.future.derivative;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -15,7 +14,7 @@ import com.opengamma.util.money.Currency;
 /**
  * Description of an interest rate future option with up-front margin security.
  */
-public class InterestRateFutureOptionPremiumSecurity implements InstrumentDerivative {
+public class InterestRateFutureOptionPremiumSecurity extends FuturesSecurity {
 
   /**
    * Underlying future security.
@@ -44,7 +43,7 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
 
   /**
    * Constructor of the option future from the details.
-   * 
+   *
    * @param underlyingFuture
    *          The underlying future security.
    * @param expirationTime
@@ -55,8 +54,10 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
    *          The cap (true) / floor (false) flag.
    */
   @SuppressWarnings("deprecation")
-  public InterestRateFutureOptionPremiumSecurity(final InterestRateFutureSecurity underlyingFuture, final double expirationTime, final double strike,
+  public InterestRateFutureOptionPremiumSecurity(final InterestRateFutureSecurity underlyingFuture, final double expirationTime,
+      final double strike,
       final boolean isCall) {
+    super(expirationTime);
     ArgumentChecker.notNull(underlyingFuture, "underlying future");
     _underlyingFuture = underlyingFuture;
     _expirationTime = expirationTime;
@@ -73,7 +74,7 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
 
   /**
    * Gets the underlying future security.
-   * 
+   *
    * @return The underlying future security.
    */
   public InterestRateFutureSecurity getUnderlyingFuture() {
@@ -82,7 +83,7 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
 
   /**
    * Gets the expiration date.
-   * 
+   *
    * @return The expiration date.
    */
   public double getExpirationTime() {
@@ -91,7 +92,7 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
 
   /**
    * Gets the cap (true) / floor (false) flag.
-   * 
+   *
    * @return The cap/floor flag.
    */
   public boolean isCall() {
@@ -100,7 +101,7 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
 
   /**
    * Gets the option strike.
-   * 
+   *
    * @return The option strike.
    */
   public double getStrike() {
@@ -109,16 +110,17 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
 
   /**
    * The future option currency.
-   * 
+   *
    * @return The currency.
    */
+  @Override
   public Currency getCurrency() {
     return _underlyingFuture.getCurrency();
   }
 
   /**
    * Gets the discounting curve name.
-   * 
+   *
    * @return The discounting curve name.
    * @deprecated Curve names should not be set in derivatives
    */
@@ -132,7 +134,7 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
 
   /**
    * Gets the forward curve name.
-   * 
+   *
    * @return The forward curve name.
    * @deprecated Curve names should not be set in derivatives
    */

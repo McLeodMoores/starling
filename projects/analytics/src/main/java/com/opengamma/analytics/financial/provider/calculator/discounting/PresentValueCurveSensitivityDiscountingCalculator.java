@@ -77,7 +77,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 
 public final class PresentValueCurveSensitivityDiscountingCalculator
-extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+    extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, MultipleCurrencyMulticurveSensitivity> {
   /**
    * The unique instance of the calculator.
    */
@@ -105,24 +105,29 @@ extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Multiple
   private static final DepositIborDiscountingMethod METHOD_DEPOSIT_IBOR = DepositIborDiscountingMethod.getInstance();
   private static final PaymentFixedDiscountingMethod METHOD_PAY_FIXED = PaymentFixedDiscountingMethod.getInstance();
   private static final CouponFixedDiscountingMethod METHOD_CPN_FIXED = CouponFixedDiscountingMethod.getInstance();
-  private static final CouponFixedCompoundingDiscountingMethod METHOD_CPN_FIXED_COMPOUNDING = CouponFixedCompoundingDiscountingMethod.getInstance();
+  private static final CouponFixedCompoundingDiscountingMethod METHOD_CPN_FIXED_COMPOUNDING = CouponFixedCompoundingDiscountingMethod
+      .getInstance();
   private static final CouponIborDiscountingMethod METHOD_CPN_IBOR = CouponIborDiscountingMethod.getInstance();
   private static final CouponIborAverageDiscountingMethod METHOD_CPN_IBOR_AVERAGE = CouponIborAverageDiscountingMethod.getInstance();
   private static final CouponIborSpreadDiscountingMethod METHOD_CPN_IBOR_SPREAD = CouponIborSpreadDiscountingMethod.getInstance();
   private static final CouponIborGearingDiscountingMethod METHOD_CPN_IBOR_GEARING = CouponIborGearingDiscountingMethod.getInstance();
   private static final CouponIborCompoundingDiscountingMethod METHOD_CPN_IBOR_COMP = CouponIborCompoundingDiscountingMethod.getInstance();
-  private static final CouponIborCompoundingSpreadDiscountingMethod METHOD_CPN_IBOR_COMP_SPREAD = CouponIborCompoundingSpreadDiscountingMethod.getInstance();
+  private static final CouponIborCompoundingSpreadDiscountingMethod METHOD_CPN_IBOR_COMP_SPREAD = CouponIborCompoundingSpreadDiscountingMethod
+      .getInstance();
   private static final CouponIborCompoundingFlatSpreadDiscountingMethod METHOD_CPN_IBOR_COMP_FLAT_SPREAD = CouponIborCompoundingFlatSpreadDiscountingMethod
       .getInstance();
-  private static final CouponIborCompoundingSimpleSpreadDiscountingMethod METHOD_CPN_IBOR_COMP_SIMPLE_SPREAD =
-      CouponIborCompoundingSimpleSpreadDiscountingMethod.getInstance();
+  private static final CouponIborCompoundingSimpleSpreadDiscountingMethod METHOD_CPN_IBOR_COMP_SIMPLE_SPREAD = CouponIborCompoundingSimpleSpreadDiscountingMethod
+      .getInstance();
   private static final CouponONDiscountingMethod METHOD_CPN_ON = CouponONDiscountingMethod.getInstance();
   private static final CouponONSpreadDiscountingMethod METHOD_CPN_ON_SPREAD = CouponONSpreadDiscountingMethod.getInstance();
-  private static final CouponONArithmeticAverageDiscountingApproxMethod METHOD_CPN_AAON_APPROX = CouponONArithmeticAverageDiscountingApproxMethod.getInstance();
-  private static final CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod METHOD_CPN_ONAA_SPREADSIMPL_APPROX =
-      CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod.getInstance();
-  private static final CouponONArithmeticAverageSpreadDiscountingMethod METHOD_CPN_ONAA_SPREAD = CouponONArithmeticAverageSpreadDiscountingMethod.getInstance();
-  private static final ForwardRateAgreementDiscountingProviderMethod METHOD_FRA = ForwardRateAgreementDiscountingProviderMethod.getInstance();
+  private static final CouponONArithmeticAverageDiscountingApproxMethod METHOD_CPN_AAON_APPROX = CouponONArithmeticAverageDiscountingApproxMethod
+      .getInstance();
+  private static final CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod METHOD_CPN_ONAA_SPREADSIMPL_APPROX = CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod
+      .getInstance();
+  private static final CouponONArithmeticAverageSpreadDiscountingMethod METHOD_CPN_ONAA_SPREAD = CouponONArithmeticAverageSpreadDiscountingMethod
+      .getInstance();
+  private static final ForwardRateAgreementDiscountingProviderMethod METHOD_FRA = ForwardRateAgreementDiscountingProviderMethod
+      .getInstance();
   private static final ForexDiscountingMethod METHOD_FOREX = ForexDiscountingMethod.getInstance();
   private static final ForexSwapDiscountingMethod METHOD_FOREX_SWAP = ForexSwapDiscountingMethod.getInstance();
   private static final FuturesTransactionMulticurveMethod METHOD_FUT = new FuturesTransactionMulticurveMethod();
@@ -131,10 +136,10 @@ extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Multiple
   private static final CouponONCompoundedDiscountingMethod METHOD_CPN_ON_COMPOUNDING = CouponONCompoundedDiscountingMethod.getInstance();
   private static final CouponIborAverageFixingDatesDiscountingMethod METHOD_CPN_IBOR_AVERAGE_FIXING_DATES = CouponIborAverageFixingDatesDiscountingMethod
       .getInstance();
-  private static final CouponIborAverageFixingDatesCompoundingDiscountingMethod METHOD_CPN_IBOR_AVERAGE_CMP =
-      CouponIborAverageFixingDatesCompoundingDiscountingMethod.getInstance();
-  private static final CouponIborAverageFixingDatesCompoundingFlatSpreadDiscountingMethod METHOD_CPN_IBOR_FLAT_CMP_SPREAD =
-      CouponIborAverageFixingDatesCompoundingFlatSpreadDiscountingMethod.getInstance();
+  private static final CouponIborAverageFixingDatesCompoundingDiscountingMethod METHOD_CPN_IBOR_AVERAGE_CMP = CouponIborAverageFixingDatesCompoundingDiscountingMethod
+      .getInstance();
+  private static final CouponIborAverageFixingDatesCompoundingFlatSpreadDiscountingMethod METHOD_CPN_IBOR_FLAT_CMP_SPREAD = CouponIborAverageFixingDatesCompoundingFlatSpreadDiscountingMethod
+      .getInstance();
 
   // ----- Deposit ------
 
@@ -161,7 +166,8 @@ extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Multiple
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitCouponFixedCompounding(final CouponFixedCompounding payment, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity visitCouponFixedCompounding(final CouponFixedCompounding payment,
+      final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_FIXED_COMPOUNDING.presentValueCurveSensitivity(payment, multicurve);
   }
 
@@ -171,22 +177,26 @@ extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Multiple
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitCouponIborAverage(final CouponIborAverage payment, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity visitCouponIborAverage(final CouponIborAverage payment,
+      final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_IBOR_AVERAGE.presentValueCurveSensitivity(payment, multicurve);
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitCouponIborSpread(final CouponIborSpread payment, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity visitCouponIborSpread(final CouponIborSpread payment,
+      final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_IBOR_SPREAD.presentValueCurveSensitivity(payment, multicurve);
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitCouponIborGearing(final CouponIborGearing payment, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity visitCouponIborGearing(final CouponIborGearing payment,
+      final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_IBOR_GEARING.presentValueCurveSensitivity(payment, multicurve);
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitCouponIborCompounding(final CouponIborCompounding payment, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity visitCouponIborCompounding(final CouponIborCompounding payment,
+      final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_IBOR_COMP.presentValueCurveSensitivity(payment, multicurve);
   }
 
@@ -215,7 +225,8 @@ extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Multiple
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitCouponONArithmeticAverageSpreadSimplified(final CouponONArithmeticAverageSpreadSimplified coupon,
+  public MultipleCurrencyMulticurveSensitivity visitCouponONArithmeticAverageSpreadSimplified(
+      final CouponONArithmeticAverageSpreadSimplified coupon,
       final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_ONAA_SPREADSIMPL_APPROX.presentValueCurveSensitivity(coupon, multicurve);
   }
@@ -232,12 +243,14 @@ extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Multiple
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitCouponONSpread(final CouponONSpread payment, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity visitCouponONSpread(final CouponONSpread payment,
+      final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_ON_SPREAD.presentValueCurveSensitivity(payment, multicurve);
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitForwardRateAgreement(final ForwardRateAgreement fra, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity visitForwardRateAgreement(final ForwardRateAgreement fra,
+      final MulticurveProviderInterface multicurve) {
     return METHOD_FRA.presentValueCurveSensitivity(fra, multicurve);
   }
 
@@ -248,7 +261,8 @@ extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Multiple
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitCouponONCompounded(final CouponONCompounded coupon, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity visitCouponONCompounded(final CouponONCompounded coupon,
+      final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_ON_COMPOUNDING.presentValueCurveSensitivity(coupon, multicurve);
   }
 
@@ -265,7 +279,8 @@ extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Multiple
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitCouponIborAverageFlatCompoundingSpread(final CouponIborAverageFixingDatesCompoundingFlatSpread coupon,
+  public MultipleCurrencyMulticurveSensitivity visitCouponIborAverageFlatCompoundingSpread(
+      final CouponIborAverageFixingDatesCompoundingFlatSpread coupon,
       final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_IBOR_FLAT_CMP_SPREAD.presentValueCurveSensitivity(coupon, multicurve);
   }
@@ -273,7 +288,8 @@ extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Multiple
   // ----- Annuity ------
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitGenericAnnuity(final Annuity<? extends Payment> annuity, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity visitGenericAnnuity(final Annuity<? extends Payment> annuity,
+      final MulticurveProviderInterface multicurve) {
     ArgumentChecker.notNull(annuity, "Annuity");
     ArgumentChecker.notNull(multicurve, "multicurve");
     MultipleCurrencyMulticurveSensitivity cs = annuity.getNthPayment(0).accept(this, multicurve);
@@ -284,7 +300,8 @@ extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Multiple
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitFixedCouponAnnuity(final AnnuityCouponFixed annuity, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity visitFixedCouponAnnuity(final AnnuityCouponFixed annuity,
+      final MulticurveProviderInterface multicurve) {
     return visitGenericAnnuity(annuity, multicurve);
   }
 
@@ -298,7 +315,8 @@ extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Multiple
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitFixedCouponSwap(final SwapFixedCoupon<?> swap, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity visitFixedCouponSwap(final SwapFixedCoupon<?> swap,
+      final MulticurveProviderInterface multicurve) {
     return visitSwap(swap, multicurve);
   }
 
@@ -327,7 +345,8 @@ extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Multiple
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitSwapFuturesPriceDeliverableTransaction(final SwapFuturesPriceDeliverableTransaction future,
+  public MultipleCurrencyMulticurveSensitivity visitSwapFuturesPriceDeliverableTransaction(
+      final SwapFuturesPriceDeliverableTransaction future,
       final MulticurveProviderInterface multicurves) {
     return METHOD_FUT.presentValueCurveSensitivity(future, multicurves);
   }

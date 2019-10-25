@@ -7,14 +7,24 @@ package com.opengamma.analytics.financial.interestrate.swaption.provider;
 
 import org.apache.commons.lang.NotImplementedException;
 
+import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
+import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
+import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedCompoundedONCompounded;
 import com.opengamma.analytics.financial.interestrate.InterestRateCurveSensitivity;
+import com.opengamma.analytics.financial.interestrate.annuity.derivative.Annuity;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.Payment;
 import com.opengamma.analytics.financial.interestrate.sensitivity.PresentValueBlackSwaptionSensitivity;
 import com.opengamma.analytics.financial.interestrate.swap.provider.SwapFixedCompoundingONCompoundingDiscountingMethod;
+import com.opengamma.analytics.financial.interestrate.swap.provider.SwapFixedCouponDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionCashFixedCompoundedONCompounded;
+import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackFunctionData;
+import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackPriceFunction;
 import com.opengamma.analytics.financial.provider.calculator.discounting.ParRateDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.description.interestrate.BlackSwaptionFlatProviderInterface;
+import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
-import com.opengamma.util.money.CurrencyAmount;
+import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  * Class used to compute the price and sensitivity of a cash-settled swaption with the Black model.
@@ -71,33 +81,32 @@ public final class SwaptionCashFixedCompoundedONCompoundedBlackMethod {
    *          The curves with Black volatility data.
    * @return The present value.
    */
-  public CurrencyAmount presentValue(final SwaptionCashFixedCompoundedONCompounded swaption,
+  public MultipleCurrencyAmount presentValue(final SwaptionCashFixedCompoundedONCompounded swaption,
       final BlackSwaptionFlatProviderInterface marketData) {
     ArgumentChecker.notNull(marketData, "curves");
     ArgumentChecker.notNull(swaption, "swaption");
-    // ArgumentChecker.notNull(swaption, "Swaption");
-    // ArgumentChecker.notNull(curveBlack, "Curves with Black volatility");
-    // final Annuity<? extends Payment> annuityFixed = swaption.getUnderlyingSwap().getFirstLeg();
-    // final GeneratorInstrument<GeneratorAttributeIR> generatorSwap = curveBlack.getBlackParameters().getGeneratorSwap();
-    // final GeneratorSwapFixedCompoundedONCompounded fixedCompoundedON = (GeneratorSwapFixedCompoundedONCompounded) generatorSwap;
-    // final Calendar calendar = fixedCompoundedON.getOvernightCalendar();
-    // final double tenor = swaption.getMaturityTime();
-    // final double forward = swaption.getUnderlyingSwap().accept(PRC, curveBlack);
-    // // final double forward = METHOD_SWAP.presentValueBasisPoint(swaption.getUnderlyingSwap(), fixedCompoundedON.getFixedLegDayCount(),
-    // calendar,
-    // curveBlack);
-    // final double pvbp = METHOD_SWAP.getAnnuityCash(swaption.getUnderlyingSwap(), forward);
-    // // Implementation comment: cash-settled swaptions make sense only for constant strike, the computation of coupon equivalent is not
+    final Annuity<? extends Payment> annuityFixed = swaption.getUnderlyingSwap().getFirstLeg();
+    final GeneratorInstrument<GeneratorAttributeIR> generatorSwap = marketData.getBlackParameters().getGeneratorSwap();
+    final GeneratorSwapFixedCompoundedONCompounded fixedCompoundedON = (GeneratorSwapFixedCompoundedONCompounded) generatorSwap;
+    final Calendar calendar = fixedCompoundedON.getOvernightCalendar();
+    final double tenor = swaption.getMaturityTime();
+    final double forward = SwapFixedCouponDiscountingMethod.getInstance().presentValueBasisPoint(swaption.getUnderlyingSwap(),
+        fixedCompoundedON.getFixedLegDayCount(),
+        calendar, marketData.getMulticurveProvider());
+    // final double forward = swaption.getUnderlyingSwap().accept(PRC, marketData.getMulticurveProvider());
+    // final double forward = METHOD_SWAP.presentValueBasisPoint(swaption.getUnderlyingSwap(), fixedCompoundedON.getFixedLegDayCount(),
+    // calendar, curveBlack);
+    final double pvbp = METHOD_SWAP.getAnnuityCash(swaption.getUnderlyingSwap(), forward);
+    // Implementation comment: cash-settled swaptions make sense only for constant strike, the computation of coupon equivalent is not
     // required.
-    // final BlackPriceFunction blackFunction = new BlackPriceFunction();
-    // final double volatility = curveBlack.getBlackParameters().getVolatility(swaption.getTimeToExpiry(), tenor);
-    // final double discountFactorSettle =
-    // curveBlack.getCurve(annuityFixed.getNthPayment(0).getFundingCurveName()).getDiscountFactor(swaption.getSettlementTime());
-    // final BlackFunctionData dataBlack = new BlackFunctionData(forward, discountFactorSettle * pvbp, volatility);
-    // final Function1D<BlackFunctionData, Double> func = blackFunction.getPriceFunction(swaption);
-    // final double price = func.evaluate(dataBlack) * (swaption.isLong() ? 1.0 : -1.0);
-    // return CurrencyAmount.of(swaption.getCurrency(), price);
-    throw new NotImplementedException();
+    final BlackPriceFunction blackFunction = new BlackPriceFunction();
+    final double volatility = marketData.getBlackParameters().getVolatility(swaption.getTimeToExpiry(), tenor);
+    final double discountFactorSettle = marketData.getMulticurveProvider().getDiscountFactor(swaption.getCurrency(),
+        swaption.getSettlementTime());
+    final BlackFunctionData dataBlack = new BlackFunctionData(forward, discountFactorSettle * pvbp, volatility);
+    final Function1D<BlackFunctionData, Double> func = blackFunction.getPriceFunction(swaption);
+    final double price = func.evaluate(dataBlack) * (swaption.isLong() ? 1.0 : -1.0);
+    return MultipleCurrencyAmount.of(swaption.getCurrency(), price);
   }
 
   /**

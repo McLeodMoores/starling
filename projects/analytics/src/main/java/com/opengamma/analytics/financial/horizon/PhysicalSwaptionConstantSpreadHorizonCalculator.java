@@ -26,7 +26,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 public class PhysicalSwaptionConstantSpreadHorizonCalculator
     implements HorizonCalculatorDeprecated<SwaptionPhysicalFixedIborDefinition, YieldCurveWithBlackSwaptionBundle, Void> {
   /** Rolls down swaption data (curves and surface) */
-  private static final ConstantSpreadSwaptionBlackRolldown SWAPTION_ROLLDOWN = ConstantSpreadSwaptionBlackRolldown.getInstance();
+  private static final SwaptionBlackDataConstantSpreadRolldown SWAPTION_ROLLDOWN = SwaptionBlackDataConstantSpreadRolldown.getInstance();
 
   @Override
   public MultipleCurrencyAmount getTheta(final SwaptionPhysicalFixedIborDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,

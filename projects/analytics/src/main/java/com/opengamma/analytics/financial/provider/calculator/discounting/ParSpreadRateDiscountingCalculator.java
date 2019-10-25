@@ -15,7 +15,7 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 /**
  * Compute the spread to be added to the rate-like quote of the instrument for which the present value of the instrument is zero. The notion
  * of "rate" will depend of each instrument. The "market quote" will be used for most instruments. The exceptions are: STIR futures, Fed
- * Funds futres,
+ * Funds futures.
  */
 public final class ParSpreadRateDiscountingCalculator extends InstrumentDerivativeVisitorDelegate<MulticurveProviderInterface, Double> {
 
@@ -26,7 +26,7 @@ public final class ParSpreadRateDiscountingCalculator extends InstrumentDerivati
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static ParSpreadRateDiscountingCalculator getInstance() {

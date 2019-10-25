@@ -7,6 +7,7 @@ package com.opengamma.analytics.financial.provider.calculator.blackstirfutures;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
 import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureOptionMarginTransaction;
+import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureOptionPremiumTransaction;
 import com.opengamma.analytics.financial.interestrate.future.provider.FuturesTransactionBlackSTIRFuturesMethod;
 import com.opengamma.analytics.financial.provider.description.interestrate.BlackSTIRFuturesProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
@@ -24,6 +25,7 @@ public final class PresentValueCurveSensitivityBlackSTIRFutureOptionCalculator e
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityBlackSTIRFutureOptionCalculator getInstance() {
@@ -39,14 +41,21 @@ public final class PresentValueCurveSensitivityBlackSTIRFutureOptionCalculator e
   /**
    * Pricing methods.
    */
-  private static final FuturesTransactionBlackSTIRFuturesMethod METHOD_STRIRFUT_MARGIN = new FuturesTransactionBlackSTIRFuturesMethod();
+  private static final FuturesTransactionBlackSTIRFuturesMethod STIR_OPTION = new FuturesTransactionBlackSTIRFuturesMethod();
 
-  // -----     Futures     ------
+  // ----- Futures ------
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures,
+  public MultipleCurrencyMulticurveSensitivity visitInterestRateFutureOptionMarginTransaction(
+      final InterestRateFutureOptionMarginTransaction futures,
       final BlackSTIRFuturesProviderInterface black) {
-    return METHOD_STRIRFUT_MARGIN.presentValueCurveSensitivity(futures, black);
+    return STIR_OPTION.presentValueCurveSensitivity(futures, black);
   }
 
+  @Override
+  public MultipleCurrencyMulticurveSensitivity visitInterestRateFutureOptionPremiumTransaction(
+      final InterestRateFutureOptionPremiumTransaction futures,
+      final BlackSTIRFuturesProviderInterface black) {
+    return STIR_OPTION.presentValueCurveSensitivity(futures, black);
+  }
 }

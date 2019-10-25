@@ -7,7 +7,9 @@ package com.opengamma.analytics.financial.provider.calculator.sabrstirfutures;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
 import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureOptionMarginTransaction;
+import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureOptionPremiumTransaction;
 import com.opengamma.analytics.financial.interestrate.future.provider.InterestRateFutureOptionMarginTransactionSABRMethod;
+import com.opengamma.analytics.financial.interestrate.future.provider.InterestRateFutureOptionPremiumTransactionSABRMethod;
 import com.opengamma.analytics.financial.provider.description.interestrate.SABRSTIRFuturesProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
 
@@ -15,7 +17,7 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
  * Calculator of the present value as a multiple currency amount.
  */
 public final class PresentValueCurveSensitivitySABRSTIRFuturesCalculator
-extends InstrumentDerivativeVisitorAdapter<SABRSTIRFuturesProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+    extends InstrumentDerivativeVisitorAdapter<SABRSTIRFuturesProviderInterface, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -37,18 +39,19 @@ extends InstrumentDerivativeVisitorAdapter<SABRSTIRFuturesProviderInterface, Mul
   private PresentValueCurveSensitivitySABRSTIRFuturesCalculator() {
   }
 
-  /**
-   * Pricing methods.
-   */
-  private static final InterestRateFutureOptionMarginTransactionSABRMethod METHOD_STRIRFUT_MARGIN =
-      InterestRateFutureOptionMarginTransactionSABRMethod.getInstance();
-
   // ----- Futures ------
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures,
+  public MultipleCurrencyMulticurveSensitivity visitInterestRateFutureOptionMarginTransaction(
+      final InterestRateFutureOptionMarginTransaction futures,
       final SABRSTIRFuturesProviderInterface sabr) {
-    return METHOD_STRIRFUT_MARGIN.presentValueCurveSensitivity(futures, sabr);
+    return InterestRateFutureOptionMarginTransactionSABRMethod.getInstance().presentValueCurveSensitivity(futures, sabr);
   }
 
+  @Override
+  public MultipleCurrencyMulticurveSensitivity visitInterestRateFutureOptionPremiumTransaction(
+      final InterestRateFutureOptionPremiumTransaction futures,
+      final SABRSTIRFuturesProviderInterface sabr) {
+    return InterestRateFutureOptionPremiumTransactionSABRMethod.getInstance().presentValueCurveSensitivity(futures, sabr);
+  }
 }

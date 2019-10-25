@@ -42,7 +42,8 @@ public class SwaptionBermudaFixedIborTest {
   private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2011, 7, 22);
   // Total swap -5Y semi bond vs quarterly money
   private static final Period FORWARD_TENOR = Period.ofYears(1);
-  private static final ZonedDateTime SETTLEMENT_DATE = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, FORWARD_TENOR, BUSINESS_DAY, CALENDAR, IS_EOM);
+  private static final ZonedDateTime SETTLEMENT_DATE = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, FORWARD_TENOR, BUSINESS_DAY,
+      CALENDAR, IS_EOM);
   private static final Period SWAP_TENOR = Period.ofYears(5);
   private static final double NOTIONAL = 123000000;
   private static final boolean FIXED_IS_PAYER = true;
@@ -51,10 +52,12 @@ public class SwaptionBermudaFixedIborTest {
   private static final Period IBOR_TENOR = Period.ofMonths(3);
   private static final int IBOR_SETTLEMENT_DAYS = 2;
   private static final DayCount IBOR_DAY_COUNT = DayCounts.ACT_360;
-  private static final IborIndex IBOR_INDEX = new IborIndex(CUR, IBOR_TENOR, IBOR_SETTLEMENT_DAYS, IBOR_DAY_COUNT, BUSINESS_DAY, IS_EOM, "Ibor");
+  private static final IborIndex IBOR_INDEX = new IborIndex(CUR, IBOR_TENOR, IBOR_SETTLEMENT_DAYS, IBOR_DAY_COUNT, BUSINESS_DAY, IS_EOM,
+      "Ibor");
   private static final IndexSwap CMS_INDEX = new IndexSwap(FIXED_PAYMENT_PERIOD, FIXED_DAY_COUNT, IBOR_INDEX, SWAP_TENOR, CALENDAR);
   private static final double RATE = 0.0325;
-  private static final SwapFixedIborDefinition TOTAL_SWAP_DEFINITION = SwapFixedIborDefinition.from(SETTLEMENT_DATE, CMS_INDEX, NOTIONAL, RATE, FIXED_IS_PAYER, CALENDAR);
+  private static final SwapFixedIborDefinition TOTAL_SWAP_DEFINITION = SwapFixedIborDefinition.from(SETTLEMENT_DATE, CMS_INDEX, NOTIONAL,
+      RATE, FIXED_IS_PAYER, CALENDAR);
   // Semi-annual expiry
   private static final boolean IS_LONG = true;
   private static final int NB_EXPIRY = TOTAL_SWAP_DEFINITION.getFixedLeg().getNumberOfPayments();
@@ -62,7 +65,8 @@ public class SwaptionBermudaFixedIborTest {
   private static final SwapFixedIborDefinition[] EXPIRY_SWAP_DEFINITION = new SwapFixedIborDefinition[NB_EXPIRY];
   static {
     for (int loopexp = 0; loopexp < NB_EXPIRY; loopexp++) {
-      EXPIRY_DATE[loopexp] = ScheduleCalculator.getAdjustedDate(TOTAL_SWAP_DEFINITION.getFixedLeg().getNthPayment(loopexp).getAccrualStartDate(), -IBOR_SETTLEMENT_DAYS, CALENDAR);
+      EXPIRY_DATE[loopexp] = ScheduleCalculator.getAdjustedDate(
+          TOTAL_SWAP_DEFINITION.getFixedLeg().getNthPayment(loopexp).getAccrualStartDate(), -IBOR_SETTLEMENT_DAYS, CALENDAR);
       EXPIRY_SWAP_DEFINITION[loopexp] = TOTAL_SWAP_DEFINITION.trimStart(EXPIRY_DATE[loopexp]);
     }
   }
@@ -77,30 +81,41 @@ public class SwaptionBermudaFixedIborTest {
     for (int loopexp = 0; loopexp < NB_EXPIRY; loopexp++) {
       EXPIRY_TIME[loopexp] = ACT_ACT.getDayCountFraction(REFERENCE_DATE, EXPIRY_DATE[loopexp]);
       EXPIRY_SWAP[loopexp] = EXPIRY_SWAP_DEFINITION[loopexp].toDerivative(REFERENCE_DATE);
-      SETTLE_TIME[loopexp] = ACT_ACT.getDayCountFraction(REFERENCE_DATE, EXPIRY_SWAP_DEFINITION[loopexp].getFixedLeg().getNthPayment(0).getAccrualStartDate());
+      SETTLE_TIME[loopexp] = ACT_ACT.getDayCountFraction(REFERENCE_DATE,
+          EXPIRY_SWAP_DEFINITION[loopexp].getFixedLeg().getNthPayment(0).getAccrualStartDate());
     }
   }
-  private static final SwaptionBermudaFixedIbor BERMUDA_SWAPTION = new SwaptionBermudaFixedIbor(EXPIRY_SWAP, IS_LONG, EXPIRY_TIME, SETTLE_TIME);
+  private static final SwaptionBermudaFixedIbor BERMUDA_SWAPTION = new SwaptionBermudaFixedIbor(EXPIRY_SWAP, IS_LONG, EXPIRY_TIME,
+      SETTLE_TIME);
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullSwap() {
     new SwaptionBermudaFixedIbor(null, IS_LONG, EXPIRY_TIME, SETTLE_TIME);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullExpiry() {
     new SwaptionBermudaFixedIbor(EXPIRY_SWAP, IS_LONG, null, SETTLE_TIME);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullSettle() {
     new SwaptionBermudaFixedIbor(EXPIRY_SWAP, IS_LONG, EXPIRY_TIME, null);
   }
 
-  @Test
   /**
    * Tests the Bermuda swaption getters.
    */
+  @Test
   public void getter() {
     assertEquals("Getter: underlying swaps", EXPIRY_SWAP, BERMUDA_SWAPTION.getUnderlyingSwap());
     assertEquals("Getter: long/short", IS_LONG, BERMUDA_SWAPTION.isLong());
@@ -108,10 +123,10 @@ public class SwaptionBermudaFixedIborTest {
     assertEquals("Getter: settle times", SETTLE_TIME, BERMUDA_SWAPTION.getSettlementTime());
   }
 
-  @Test
   /**
    * Tests the equal and hash-code methods.
    */
+  @Test
   public void hashEqual() {
     final SwaptionBermudaFixedIbor bermuda2 = new SwaptionBermudaFixedIbor(EXPIRY_SWAP, IS_LONG, EXPIRY_TIME, SETTLE_TIME);
     assertTrue("Bermuda swaption", BERMUDA_SWAPTION.equals(bermuda2));
