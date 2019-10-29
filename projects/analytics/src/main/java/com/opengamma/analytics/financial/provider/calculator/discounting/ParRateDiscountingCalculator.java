@@ -17,6 +17,10 @@ import com.opengamma.analytics.financial.interestrate.fra.provider.ForwardRateAg
 import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureSecurity;
 import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureTransaction;
 import com.opengamma.analytics.financial.interestrate.future.provider.InterestRateFutureSecurityDiscountingMethod;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIbor;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborSpread;
+import com.opengamma.analytics.financial.interestrate.payments.provider.CouponIborDiscountingMethod;
+import com.opengamma.analytics.financial.interestrate.payments.provider.CouponIborSpreadDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.Swap;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
 import com.opengamma.analytics.financial.interestrate.swap.provider.SwapFixedCouponDiscountingMethod;
@@ -76,6 +80,16 @@ public final class ParRateDiscountingCalculator extends InstrumentDerivativeVisi
   }
 
   // ----- Payment/Coupon ------
+
+  @Override
+  public Double visitCouponIbor(final CouponIbor coupon, final MulticurveProviderInterface curves) {
+    return CouponIborDiscountingMethod.getInstance().parRate(coupon, curves);
+  }
+
+  @Override
+  public Double visitCouponIborSpread(final CouponIborSpread coupon, final MulticurveProviderInterface curves) {
+    return CouponIborSpreadDiscountingMethod.getInstance().parRate(coupon, curves);
+  }
 
   @Override
   public Double visitForwardRateAgreement(final ForwardRateAgreement fra, final MulticurveProviderInterface multicurves) {

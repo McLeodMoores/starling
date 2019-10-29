@@ -11,9 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
-import com.opengamma.analytics.financial.interestrate.InterestRateCurveSensitivity;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborSpread;
-import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.ForwardSensitivity;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
@@ -147,50 +145,49 @@ public final class CouponIborSpreadDiscountingMethod {
     return result;
   }
 
-   TODO
-   /**
+  /**
    * Compute the par rate (Ibor forward) of a Ibor coupon by discounting. The par rate is the same with or without spread.
    *
    * @param coupon
-   * The coupon.
+   *          The coupon.
    * @param curves
-   * The yield curves. Should contain the discounting and forward curves associated.
+   *          The yield curves. Should contain the discounting and forward curves associated.
    * @return The present value.
    */
-   public double parRate(final CouponIborSpread coupon, final MulticurveProviderInterface curves) {
-   ArgumentChecker.notNull(coupon, "Coupon");
-   ArgumentChecker.notNull(curves, "curves");
-   final YieldAndDiscountCurve curve = curves.getCurve(coupon.getForwardCurveName());
-   return (curve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / curve.getDiscountFactor(coupon.getFixingPeriodEndTime()) - 1.0)
-   / coupon.getFixingAccrualFactor();
-   }
+  public double parRate(final CouponIborSpread coupon, final MulticurveProviderInterface curves) {
+    ArgumentChecker.notNull(coupon, "Coupon");
+    ArgumentChecker.notNull(curves, "curves");
+    return (curves.getDiscountFactor(coupon.getCurrency(), coupon.getFixingPeriodStartTime())
+        / curves.getDiscountFactor(coupon.getCurrency(), coupon.getFixingPeriodEndTime()) - 1.0)
+        / coupon.getFixingAccrualFactor();
+  }
 
-   /**
-   * Compute the par rate (Ibor forward) sensitivity to rates of a Ibor coupon by discounting.
-   *
-   * @param coupon
-   * The coupon.
-   * @param curves
-   * The yield curves. Should contain the discounting and forward curves associated.
-   * @return The par rate curve sensitivity.
-   */
-   public MulticurveSensitivity parRateCurveSensitivity(final CouponIborSpread coupon, final MulticurveProviderInterface curves) {
-   ArgumentChecker.notNull(coupon, "Coupon");
-   ArgumentChecker.notNull(curves, "curves");
-   final YieldAndDiscountCurve forwardCurve = curves.getCurve(coupon.getForwardCurveName());
-   final double dfForwardStart = forwardCurve.getDiscountFactor(coupon.getFixingPeriodStartTime());
-   final double dfForwardEnd = forwardCurve.getDiscountFactor(coupon.getFixingPeriodEndTime());
-   // Backward sweep
-   final double parRateBar = 1.0;
-   final double dfForwardEndBar = -dfForwardStart / (dfForwardEnd * dfForwardEnd) / coupon.getFixingAccrualFactor() * parRateBar;
-   final double dfForwardStartBar = 1.0 / (coupon.getFixingAccrualFactor() * dfForwardEnd) * parRateBar;
-   final List<DoublesPair> listForward = new ArrayList<>();
-   listForward.add(DoublesPair.of(coupon.getFixingPeriodStartTime(), -coupon.getFixingPeriodStartTime() * dfForwardStart *
-   dfForwardStartBar));
-   listForward.add(DoublesPair.of(coupon.getFixingPeriodEndTime(), -coupon.getFixingPeriodEndTime() * dfForwardEnd * dfForwardEndBar));
-   InterestRateCurveSensitivity result = new InterestRateCurveSensitivity();
-   result = result.plus(coupon.getForwardCurveName(), listForward);
-   return result;
-   }
+  // /**
+  // * Compute the par rate (Ibor forward) sensitivity to rates of a Ibor coupon by discounting.
+  // *
+  // * @param coupon
+  // * The coupon.
+  // * @param curves
+  // * The yield curves. Should contain the discounting and forward curves associated.
+  // * @return The par rate curve sensitivity.
+  // */
+  // public MulticurveSensitivity parRateCurveSensitivity(final CouponIborSpread coupon, final MulticurveProviderInterface curves) {
+  // ArgumentChecker.notNull(coupon, "Coupon");
+  // ArgumentChecker.notNull(curves, "curves");
+  // final YieldAndDiscountCurve forwardCurve = curves.getCurve(coupon.getForwardCurveName());
+  // final double dfForwardStart = forwardCurve.getDiscountFactor(coupon.getFixingPeriodStartTime());
+  // final double dfForwardEnd = forwardCurve.getDiscountFactor(coupon.getFixingPeriodEndTime());
+  // // Backward sweep
+  // final double parRateBar = 1.0;
+  // final double dfForwardEndBar = -dfForwardStart / (dfForwardEnd * dfForwardEnd) / coupon.getFixingAccrualFactor() * parRateBar;
+  // final double dfForwardStartBar = 1.0 / (coupon.getFixingAccrualFactor() * dfForwardEnd) * parRateBar;
+  // final List<DoublesPair> listForward = new ArrayList<>();
+  // listForward.add(DoublesPair.of(coupon.getFixingPeriodStartTime(), -coupon.getFixingPeriodStartTime() * dfForwardStart *
+  // dfForwardStartBar));
+  // listForward.add(DoublesPair.of(coupon.getFixingPeriodEndTime(), -coupon.getFixingPeriodEndTime() * dfForwardEnd * dfForwardEndBar));
+  // InterestRateCurveSensitivity result = new InterestRateCurveSensitivity();
+  // result = result.plus(coupon.getForwardCurveName(), listForward);
+  // return result;
+  // }
 
 }

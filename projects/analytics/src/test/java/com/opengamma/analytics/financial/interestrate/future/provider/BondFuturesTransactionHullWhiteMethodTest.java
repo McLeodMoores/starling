@@ -159,8 +159,9 @@ public class BondFuturesTransactionHullWhiteMethodTest {
    */
   @Test
   public void presentValueCurveSensitivity() {
+    // TODO calculator should take into account quantity
     final MultipleCurrencyParameterSensitivity pvpsDepositExact = PSC.calculateSensitivity(BOND_FUTURES_TRA, MULTICURVES_HW_ISSUER,
-        ISSUER_MULTICURVES.getAllNames());
+        ISSUER_MULTICURVES.getAllNames()).multipliedBy(QUANTITY);
     final MultipleCurrencyParameterSensitivity pvpsDepositFD = PSC_DSC_FD.calculateSensitivity(BOND_FUTURES_TRA, MULTICURVES_HW_ISSUER);
     AssertSensitivityObjects.assertEquals(pvpsDepositExact, pvpsDepositFD,
         TOLERANCE_PV_DELTA);
@@ -171,8 +172,9 @@ public class BondFuturesTransactionHullWhiteMethodTest {
    */
   @Test
   public void presentValueCurveSensitivityVsPrice() {
+    // TODO calculator should take into account quantity
     final MultipleCurrencyMulticurveSensitivity pvcsComputed = METHOD_FUT_TRA_HW
-        .presentValueCurveSensitivity(BOND_FUTURES_TRA, MULTICURVES_HW_ISSUER).cleaned();
+        .presentValueCurveSensitivity(BOND_FUTURES_TRA, MULTICURVES_HW_ISSUER).cleaned().multipliedBy(QUANTITY);
     final MulticurveSensitivity pcs = METHOD_FUT_SEC_HW.priceCurveSensitivity(BOND_FUTURES_SEC, MULTICURVES_HW_ISSUER);
     final MultipleCurrencyMulticurveSensitivity pvcsExpected = MultipleCurrencyMulticurveSensitivity.of(USD,
         pcs.multipliedBy(NOTIONAL * QUANTITY).cleaned());

@@ -10,19 +10,22 @@ import org.apache.commons.lang.NotImplementedException;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
 import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedCompoundedONCompounded;
-import com.opengamma.analytics.financial.interestrate.InterestRateCurveSensitivity;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.Annuity;
-import com.opengamma.analytics.financial.interestrate.payments.derivative.Payment;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponFixedAccruedCompounding;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponONCompounded;
 import com.opengamma.analytics.financial.interestrate.sensitivity.PresentValueBlackSwaptionSensitivity;
+import com.opengamma.analytics.financial.interestrate.swap.derivative.Swap;
 import com.opengamma.analytics.financial.interestrate.swap.provider.SwapFixedCompoundingONCompoundingDiscountingMethod;
-import com.opengamma.analytics.financial.interestrate.swap.provider.SwapFixedCouponDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionCashFixedCompoundedONCompounded;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackFunctionData;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackPriceFunction;
 import com.opengamma.analytics.financial.provider.calculator.discounting.ParRateDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.description.interestrate.BlackSwaptionFlatProviderInterface;
+import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
+import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.financial.convention.calendar.Calendar;
+import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
@@ -85,14 +88,12 @@ public final class SwaptionCashFixedCompoundedONCompoundedBlackMethod {
       final BlackSwaptionFlatProviderInterface marketData) {
     ArgumentChecker.notNull(marketData, "curves");
     ArgumentChecker.notNull(swaption, "swaption");
-    final Annuity<? extends Payment> annuityFixed = swaption.getUnderlyingSwap().getFirstLeg();
     final GeneratorInstrument<GeneratorAttributeIR> generatorSwap = marketData.getBlackParameters().getGeneratorSwap();
     final GeneratorSwapFixedCompoundedONCompounded fixedCompoundedON = (GeneratorSwapFixedCompoundedONCompounded) generatorSwap;
     final Calendar calendar = fixedCompoundedON.getOvernightCalendar();
     final double tenor = swaption.getMaturityTime();
-    final double forward = SwapFixedCouponDiscountingMethod.getInstance().presentValueBasisPoint(swaption.getUnderlyingSwap(),
-        fixedCompoundedON.getFixedLegDayCount(),
-        calendar, marketData.getMulticurveProvider());
+    final double forward = presentValueBasisPoint(swaption.getUnderlyingSwap(),
+        fixedCompoundedON.getFixedLegDayCount(), calendar, marketData.getMulticurveProvider());
     // final double forward = swaption.getUnderlyingSwap().accept(PRC, marketData.getMulticurveProvider());
     // final double forward = METHOD_SWAP.presentValueBasisPoint(swaption.getUnderlyingSwap(), fixedCompoundedON.getFixedLegDayCount(),
     // calendar, curveBlack);
@@ -118,7 +119,7 @@ public final class SwaptionCashFixedCompoundedONCompoundedBlackMethod {
    *          The curves with Black volatility data.
    * @return The present value curve sensitivity.
    */
-  public InterestRateCurveSensitivity presentValueCurveSensitivity(final SwaptionCashFixedCompoundedONCompounded swaption,
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final SwaptionCashFixedCompoundedONCompounded swaption,
       final BlackSwaptionFlatProviderInterface marketData) {
     ArgumentChecker.notNull(marketData, "curves");
     ArgumentChecker.notNull(swaption, "swaption");
@@ -219,4 +220,23 @@ public final class SwaptionCashFixedCompoundedONCompoundedBlackMethod {
     final double volatility = marketData.getBlackParameters().getVolatility(swaption.getTimeToExpiry(), tenor);
     return volatility;
   }
+
+  private static double presentValueBasisPoint(final Swap<CouponFixedAccruedCompounding, CouponONCompounded> swap, final DayCount dayCount,
+      final Calendar calendar, final MulticurveProviderInterface multicurves) {
+    ArgumentChecker.notNull(swap, "swap");
+    ArgumentChecker.notNull(dayCount, "day count");
+    ArgumentChecker.notNull(multicurves, "Multi-curves provider");
+    final Annuity<CouponFixedAccruedCompounding> annuityFixed = swap.getFirstLeg();
+    double pvbp = 0;
+    for (int i = 0; i < annuityFixed.getPayments().length; i++) {
+      pvbp += dayCount.getDayCountFraction(annuityFixed.getNthPayment(i).getAccrualStartDate(),
+          annuityFixed.getNthPayment(i).getAccrualEndDate(),
+          calendar)
+          * Math.abs(annuityFixed.getNthPayment(i).getNotional())
+          * multicurves.getDiscountFactor(annuityFixed.getNthPayment(i).getCurrency(),
+              annuityFixed.getNthPayment(i).getPaymentTime());
+    }
+    return pvbp;
+  }
+
 }

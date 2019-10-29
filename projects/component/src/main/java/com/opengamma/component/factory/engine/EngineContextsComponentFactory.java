@@ -274,15 +274,14 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
       context.setGraphExecutionBlacklist(new DefaultFunctionBlacklistQuery(getExecutionBlacklist()));
     }
     OpenGammaCompilationContext.setPermissive(context, Boolean.TRUE.equals(getPermissive()));
-    OpenGammaCompilationContext.setPnLRequirementsGatherer(context, getPnlRequirementsGatherer());
     if (getRiskFactorsGatherer() == null) {
       if (getSecuritySource() != null) {
         setRiskFactorsGatherer(new DefaultRiskFactorsGatherer(getSecuritySource(), new DefaultRiskFactorsConfigurationProvider()));
       }
     }
-    if (getRiskFactorsGatherer() != null) {
-      OpenGammaCompilationContext.setRiskFactorsGatherer(context, getRiskFactorsGatherer());
-    }
+    // if (getRiskFactorsGatherer() != null) {
+    // OpenGammaCompilationContext.setRiskFactorsGatherer(context, getRiskFactorsGatherer());
+    // }
     final ComponentInfo info = new ComponentInfo(FunctionCompilationContext.class, getClassifier());
     repo.registerComponent(info, context);
   }

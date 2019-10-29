@@ -23,10 +23,15 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  * the market moves in such a way that the interest rates or volatility for the same time to maturity will be equal. The pricing model used
  * is the Black model.
  */
-public class CashSwaptionBlackConstantSpreadHorizonCalculator
+public final class CashSwaptionBlackConstantSpreadHorizonCalculator
     extends HorizonCalculator<SwaptionCashFixedIborDefinition, BlackSwaptionFlatProviderInterface, Void> {
-  /** Present value calculator */
-  private static final PresentValueBlackSwaptionCalculator PV_CALCULATOR = PresentValueBlackSwaptionCalculator.getInstance();
+  /**
+   * A static instance.
+   */
+  public static final HorizonCalculator<SwaptionCashFixedIborDefinition, BlackSwaptionFlatProviderInterface, Void> INSTANCE = new CashSwaptionBlackConstantSpreadHorizonCalculator();
+
+  private CashSwaptionBlackConstantSpreadHorizonCalculator() {
+  }
 
   @Override
   public MultipleCurrencyAmount getTheta(final SwaptionCashFixedIborDefinition definition, final ZonedDateTime date,
@@ -47,7 +52,8 @@ public class CashSwaptionBlackConstantSpreadHorizonCalculator
     final double shiftTime = TimeCalculator.getTimeBetween(date, horizonDate);
     final SwaptionCashFixedIbor swaptionTomorrow = definition.toDerivative(horizonDate);
     final BlackSwaptionFlatProviderInterface tomorrowData = SwaptionBlackDataConstantSpreadRolldown.INSTANCE.rollDown(data, shiftTime);
-    return subtract(swaptionTomorrow.accept(PV_CALCULATOR, tomorrowData), swaptionToday.accept(PV_CALCULATOR, data));
+    return subtract(swaptionTomorrow.accept(PresentValueBlackSwaptionCalculator.getInstance(), tomorrowData),
+        swaptionToday.accept(PresentValueBlackSwaptionCalculator.getInstance(), data));
   }
 
 }

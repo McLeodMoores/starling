@@ -29,17 +29,10 @@ public final class BondFutureConstantSpreadHorizonCalculator
   /** The present value calculator */
   private static final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, MultipleCurrencyAmount> PV_CALCULATOR = PresentValueIssuerCalculator
       .getInstance();
-  /** The singleton instance */
-  private static final HorizonCalculator<BondFuturesTransactionDefinition, IssuerProviderInterface, Double> INSTANCE = new BondFutureConstantSpreadHorizonCalculator();
-
   /**
-   * Gets the singleton instance.
-   *
-   * @return The instance
+   * A static instance.
    */
-  public static HorizonCalculator<BondFuturesTransactionDefinition, IssuerProviderInterface, Double> getInstance() {
-    return INSTANCE;
-  }
+  public static final HorizonCalculator<BondFuturesTransactionDefinition, IssuerProviderInterface, Double> INSTANCE = new BondFutureConstantSpreadHorizonCalculator();
 
   /**
    * Private constructor

@@ -16,21 +16,14 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Param
 import com.opengamma.analytics.math.surface.Surface;
 
 /**
- * Produces a YieldCurveWithBlackCubeBundle that has been shifted forward in time without slide. That is, it moves in such a way that the
- * vol or rate requested for the same maturity DATE will be equal for the original market data bundle and the shifted one.
+ * Produces a {@link BlackSTIRFuturesProviderInterface} that has been shifted forward in time without slide. That is, it moves in such a way
+ * that the vol or rate requested for the same maturity DATE will be equal for the original market data bundle and the shifted one.
  */
 public final class StirFutureOptionBlackDataConstantSpreadRolldown implements RolldownFunction<BlackSTIRFuturesProviderInterface> {
-  /** The singleton instance */
-  private static final StirFutureOptionBlackDataConstantSpreadRolldown INSTANCE = new StirFutureOptionBlackDataConstantSpreadRolldown();
-
   /**
-   * Gets the singleton instance.
-   *
-   * @return The instance
+   * A static instance.
    */
-  public static StirFutureOptionBlackDataConstantSpreadRolldown getInstance() {
-    return INSTANCE;
-  }
+  public static final StirFutureOptionBlackDataConstantSpreadRolldown INSTANCE = new StirFutureOptionBlackDataConstantSpreadRolldown();
 
   /**
    * Private constructor

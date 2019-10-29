@@ -5,34 +5,19 @@
  */
 package com.opengamma.analytics.financial.provider.calculator.discounting;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
-import com.opengamma.analytics.financial.interestrate.annuity.derivative.Annuity;
-import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
 import com.opengamma.analytics.financial.interestrate.cash.derivative.Cash;
 import com.opengamma.analytics.financial.interestrate.cash.derivative.DepositZero;
 import com.opengamma.analytics.financial.interestrate.cash.provider.CashDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.cash.provider.DepositZeroDiscountingMethod;
-import com.opengamma.analytics.financial.interestrate.payments.derivative.CapFloorIbor;
-import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponFixed;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIbor;
-import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborSpread;
-import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponON;
-import com.opengamma.analytics.financial.interestrate.payments.derivative.PaymentFixed;
 import com.opengamma.analytics.financial.interestrate.payments.provider.CouponIborDiscountingMethod;
-import com.opengamma.analytics.financial.interestrate.payments.provider.CouponIborSpreadDiscountingMethod;
-import com.opengamma.analytics.financial.interestrate.payments.provider.CouponONDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
 import com.opengamma.analytics.financial.interestrate.swap.provider.SwapFixedCouponDiscountingMethod;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.util.money.Currency;
-import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * For an instrument, this calculates the sensitivity of the par rate (the exact meaning of par rate depends on the instrument - for swaps
@@ -176,56 +161,56 @@ public final class ParRateCurveSensitivityDiscountingCalculator
     return CashDiscountingMethod.getInstance().parRateCurveSensitivity(cash, curves);
   }
 
-  @Override
-  public MulticurveSensitivity visitCouponIbor(final CouponIbor payment, final MulticurveProviderInterface data) {
-    return CouponIborDiscountingMethod.getInstance().parRateCurveSensitivity(payment, data);
-  }
-
-  @Override
-  public MulticurveSensitivity visitCouponIborSpread(final CouponIborSpread payment, final MulticurveProviderInterface data) {
-    return CouponIborSpreadDiscountingMethod.getInstance().parRateCurveSensitivity(payment, data);
-  }
-
-  @Override
-  public MulticurveSensitivity visitCouponOIS(final CouponON payment, final MulticurveProviderInterface data) {
-    return CouponONDiscountingMethod.getInstance().parRateCurveSensitivity(payment, data);
-  }
-
-  @Override
-  public MulticurveSensitivity visitCapFloorIbor(final CapFloorIbor payment, final MulticurveProviderInterface data) {
-    return visitCouponIborSpread(payment.toCoupon(), data);
-  }
-
-  @Override
-  public MulticurveSensitivity visitBondFixedSecurity(final BondFixedSecurity bond, final MulticurveProviderInterface curves) {
-    final Annuity<CouponFixed> coupons = bond.getCoupon();
-    final int n = coupons.getNumberOfPayments();
-    final CouponFixed[] unitCoupons = new CouponFixed[n];
-    for (int i = 0; i < n; i++) {
-      unitCoupons[i] = coupons.getNthPayment(i).withUnitCoupon();
-    }
-    final Annuity<CouponFixed> unitCouponAnnuity = new Annuity<>(unitCoupons);
-    final double a = unitCouponAnnuity.accept(PV_CALCULATOR, curves);
-    final Map<String, List<DoublesPair>> senseA = unitCouponAnnuity.accept(PV_SENSITIVITY_CALCULATOR, curves);
-    final Map<String, List<DoublesPair>> result = new HashMap<>();
-    final PaymentFixed principlePayment = bond.getNominal().getNthPayment(0);
-    final double df = principlePayment.accept(PV_CALCULATOR, curves);
-    final double factor = -(1 - df) / a / a;
-    for (final String name : curves.getAllNames()) {
-      if (senseA.containsKey(name)) {
-        final List<DoublesPair> temp = new ArrayList<>();
-        final List<DoublesPair> list = senseA.get(name);
-        final int m = list.size();
-        for (int i = 0; i < m - 1; i++) {
-          final DoublesPair pair = list.get(i);
-          temp.add(DoublesPair.of(pair.getFirstDouble(), factor * pair.getSecondDouble()));
-        }
-        final DoublesPair pair = list.get(m - 1);
-        temp.add(DoublesPair.of(pair.getFirstDouble(), principlePayment.getPaymentTime() * df / a + factor * pair.getSecondDouble()));
-        result.put(name, temp);
-      }
-    }
-    return result;
-  }
+  // @Override
+  // public MulticurveSensitivity visitCouponIbor(final CouponIbor payment, final MulticurveProviderInterface data) {
+  // return CouponIborDiscountingMethod.getInstance().parRateCurveSensitivity(payment, data);
+  // }
+  //
+  // @Override
+  // public MulticurveSensitivity visitCouponIborSpread(final CouponIborSpread payment, final MulticurveProviderInterface data) {
+  // return CouponIborSpreadDiscountingMethod.getInstance().parRateCurveSensitivity(payment, data);
+  // }
+  //
+  // @Override
+  // public MulticurveSensitivity visitCouponOIS(final CouponON payment, final MulticurveProviderInterface data) {
+  // return CouponONDiscountingMethod.getInstance().parRateCurveSensitivity(payment, data);
+  // }
+  //
+  // @Override
+  // public MulticurveSensitivity visitCapFloorIbor(final CapFloorIbor payment, final MulticurveProviderInterface data) {
+  // return visitCouponIborSpread(payment.toCoupon(), data);
+  // }
+  //
+  // @Override
+  // public MulticurveSensitivity visitBondFixedSecurity(final BondFixedSecurity bond, final MulticurveProviderInterface curves) {
+  // final Annuity<CouponFixed> coupons = bond.getCoupon();
+  // final int n = coupons.getNumberOfPayments();
+  // final CouponFixed[] unitCoupons = new CouponFixed[n];
+  // for (int i = 0; i < n; i++) {
+  // unitCoupons[i] = coupons.getNthPayment(i).withUnitCoupon();
+  // }
+  // final Annuity<CouponFixed> unitCouponAnnuity = new Annuity<>(unitCoupons);
+  // final double a = unitCouponAnnuity.accept(PresentValueDiscountingCalculator., curves);
+  // final Map<String, List<DoublesPair>> senseA = unitCouponAnnuity.accept(PV_SENSITIVITY_CALCULATOR, curves);
+  // final Map<String, List<DoublesPair>> result = new HashMap<>();
+  // final PaymentFixed principlePayment = bond.getNominal().getNthPayment(0);
+  // final double df = principlePayment.accept(PV_CALCULATOR, curves);
+  // final double factor = -(1 - df) / a / a;
+  // for (final String name : curves.getAllNames()) {
+  // if (senseA.containsKey(name)) {
+  // final List<DoublesPair> temp = new ArrayList<>();
+  // final List<DoublesPair> list = senseA.get(name);
+  // final int m = list.size();
+  // for (int i = 0; i < m - 1; i++) {
+  // final DoublesPair pair = list.get(i);
+  // temp.add(DoublesPair.of(pair.getFirstDouble(), factor * pair.getSecondDouble()));
+  // }
+  // final DoublesPair pair = list.get(m - 1);
+  // temp.add(DoublesPair.of(pair.getFirstDouble(), principlePayment.getPaymentTime() * df / a + factor * pair.getSecondDouble()));
+  // result.put(name, temp);
+  // }
+  // }
+  // return result;
+  // }
 
 }

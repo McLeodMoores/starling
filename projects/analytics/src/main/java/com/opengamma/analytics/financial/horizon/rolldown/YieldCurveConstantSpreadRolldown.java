@@ -31,7 +31,7 @@ public final class YieldCurveConstantSpreadRolldown implements RolldownFunction<
 
   @Override
   public YieldAndDiscountCurve rollDown(final YieldAndDiscountCurve yieldCurve, final double time) {
-    ArgumentChecker.notNull(yieldCurve, "yield curve");
+    ArgumentChecker.notNull(yieldCurve, "yieldCurve");
     if (!(yieldCurve instanceof YieldCurve)) {
       throw new IllegalArgumentException("Can only handle YieldCurve");
     }

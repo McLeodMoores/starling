@@ -173,25 +173,25 @@ public final class CouponIborDiscountingMethod {
         coupon.getFixingAccrualFactor());
   }
 
-  /**
-   * Compute the par rate (Ibor forward) sensitivity to rates of a Ibor coupon by discounting.
-   *
-   * @param coupon
-   *          The coupon.
-   * @param curves
-   *          The yield curves.
-   * @return The par rate curve sensitivity.
-   */
-  public MulticurveSensitivity parRateCurveSensitivity(final CouponIbor coupon, final MulticurveProviderInterface curves) {
-    ArgumentChecker.notNull(coupon, "coupon");
-    ArgumentChecker.notNull(curves, "curves");
-    final double dfForwardStart = curves.getDiscountFactor(coupon.getIndex(), coupon.getFixingPeriodStartTime());
-    final double dfForwardEnd = curves.getDiscountFactor(coupon.getIndex(), coupon.getFixingPeriodEndTime());
-    // Backward sweep
-    final double parRateBar = 1.0;
-    final double dfForwardEndBar = -dfForwardStart / (dfForwardEnd * dfForwardEnd) / coupon.getFixingAccrualFactor() * parRateBar;
-    final double dfForwardStartBar = 1.0 / (coupon.getFixingAccrualFactor() * dfForwardEnd) * parRateBar;
-    return result;
-  }
+  // /**
+  // * Compute the par rate (Ibor forward) sensitivity to rates of a Ibor coupon by discounting.
+  // *
+  // * @param coupon
+  // * The coupon.
+  // * @param curves
+  // * The yield curves.
+  // * @return The par rate curve sensitivity.
+  // */
+  // public MulticurveSensitivity parRateCurveSensitivity(final CouponIbor coupon, final MulticurveProviderInterface curves) {
+  // ArgumentChecker.notNull(coupon, "coupon");
+  // ArgumentChecker.notNull(curves, "curves");
+  // final double dfForwardStart = curves.getDiscountFactor(coupon.getIndex(), coupon.getFixingPeriodStartTime());
+  // final double dfForwardEnd = curves.getDiscountFactor(coupon.getIndex(), coupon.getFixingPeriodEndTime());
+  // // Backward sweep
+  // final double parRateBar = 1.0;
+  // final double dfForwardEndBar = -dfForwardStart / (dfForwardEnd * dfForwardEnd) / coupon.getFixingAccrualFactor() * parRateBar;
+  // final double dfForwardStartBar = 1.0 / (coupon.getFixingAccrualFactor() * dfForwardEnd) * parRateBar;
+  // return result;
+  // }
 
 }

@@ -17,7 +17,6 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Calculates the change in value of a FX option when the curves and (Black) surface have been shifted forward in time without slide.
  *
  */
 public final class FxOptionBlackDataConstantSpreadRolldown implements RolldownFunction<BlackForexSmileProviderInterface> {

@@ -29,17 +29,10 @@ public final class BondConstantSpreadHorizonCalculator
   /** The present value calculator */
   private static final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, MultipleCurrencyAmount> PV_CALCULATOR = PresentValueIssuerCalculator
       .getInstance();
-  /** The singleton instance */
-  private static final HorizonCalculator<BondTransactionDefinition<?, ?>, IssuerProviderInterface, Double> INSTANCE = new BondConstantSpreadHorizonCalculator();
-
   /**
-   * Gets the singleton instance.
-   *
-   * @return The instance
+   * A static instance.
    */
-  public static HorizonCalculator<BondTransactionDefinition<?, ?>, IssuerProviderInterface, Double> getInstance() {
-    return INSTANCE;
-  }
+  public static final HorizonCalculator<BondTransactionDefinition<?, ?>, IssuerProviderInterface, Double> INSTANCE = new BondConstantSpreadHorizonCalculator();
 
   /**
    * Private constructor
@@ -58,8 +51,8 @@ public final class BondConstantSpreadHorizonCalculator
     final ZonedDateTime horizonDate = date.plusDays(daysForward);
     final double shiftTime = TimeCalculator.getTimeBetween(date, horizonDate);
     final InstrumentDerivative instrumentTomorrow = definition.toDerivative(horizonDate);
-    final ParameterIssuerProviderInterface dataTomorrow = (ParameterIssuerProviderInterface) CurveProviderConstantSpreadRolldown.INSTANCE
-        .rollDown(data, shiftTime);
+    final IssuerProviderInterface dataTomorrow = (IssuerProviderInterface) CurveProviderConstantSpreadRolldown.INSTANCE.rollDown(data,
+        shiftTime);
     final MultipleCurrencyAmount pvTomorrow = instrumentTomorrow.accept(PV_CALCULATOR, dataTomorrow);
     final MultipleCurrencyAmount pvToday = instrumentToday.accept(PV_CALCULATOR, data);
     return subtract(pvTomorrow, pvToday);

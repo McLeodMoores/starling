@@ -10,9 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.opengamma.analytics.financial.interestrate.InterestRateCurveSensitivity;
 import com.opengamma.analytics.financial.interestrate.fra.derivative.ForwardRateAgreement;
-import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.ForwardSensitivity;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
@@ -168,53 +166,53 @@ public final class ForwardRateAgreementDiscountingProviderMethod {
     return MulticurveSensitivity.ofForward(mapFwd);
   }
 
-  /**
-   * Compute the par rate sensitivity to the rates for a FRA.
-   *
-   * @param fra
-   *          The FRA.
-   * @param curves
-   *          The yield curves.
-   * @return The par rate sensitivity.
-   */
-  public MulticurveSensitivity parRateCurveSensitivity(final ForwardRateAgreement fra, final MulticurveProviderInterface curves) {
-    ArgumentChecker.notNull(fra, "fra");
-    ArgumentChecker.notNull(curves, "curves");
-    final YieldAndDiscountCurve forwardCurve = curves.getCurve(fra.getForwardCurveName());
-    final double dfForwardStart = forwardCurve.getDiscountFactor(fra.getFixingPeriodStartTime());
-    final double dfForwardEnd = forwardCurve.getDiscountFactor(fra.getFixingPeriodEndTime());
-    // Backward sweep
-    final double forwardBar = 1.0;
-    final double dfForwardEndBar = -dfForwardStart / (dfForwardEnd * dfForwardEnd) / fra.getFixingYearFraction() * forwardBar;
-    final double dfForwardStartBar = 1.0 / (fra.getFixingYearFraction() * dfForwardEnd) * forwardBar;
-    final Map<String, List<DoublesPair>> resultMap = new HashMap<>();
-    final List<DoublesPair> listForward = new ArrayList<>();
-    listForward.add(DoublesPair.of(fra.getFixingPeriodStartTime(), -fra.getFixingPeriodStartTime() * dfForwardStart * dfForwardStartBar));
-    listForward.add(DoublesPair.of(fra.getFixingPeriodEndTime(), -fra.getFixingPeriodEndTime() * dfForwardEnd * dfForwardEndBar));
-    resultMap.put(fra.getForwardCurveName(), listForward);
-    final InterestRateCurveSensitivity result = new InterestRateCurveSensitivity(resultMap);
-    return result;
-  }
-
-  /**
-   * Computes the sensitivity of the present value of a FRA with notional 1 to the change of fixed rate.
-   *
-   * @param fra
-   *          The FRA.
-   * @param curves
-   *          The curve bundle.
-   * @return The sensitivity.
-   */
-  public MulticurveSensitivity presentValueCouponSensitivity(final ForwardRateAgreement fra, final MulticurveProviderInterface curves) {
-    ArgumentChecker.notNull(fra, "fra");
-    ArgumentChecker.notNull(curves, "curves");
-    final double fixingAF = fra.getFixingYearFraction();
-    final double paymentAF = fra.getPaymentYearFraction();
-    final double forward = (curves.getDiscountFactor(fra.getIndex(), fra.getFixingPeriodStartTime()) /
-        curves.getDiscountFactor(fra.getIndex(), fra.getFixingPeriodEndTime()) - 1.0)
-        / fixingAF;
-    final double res = -curves.getDiscountFactor(fra.getCurrency(), fra.getPaymentTime()) * paymentAF / (1 + forward * paymentAF);
-    return res;
-  }
+  // /**
+  // * Compute the par rate sensitivity to the rates for a FRA.
+  // *
+  // * @param fra
+  // * The FRA.
+  // * @param curves
+  // * The yield curves.
+  // * @return The par rate sensitivity.
+  // */
+  // public MulticurveSensitivity parRateCurveSensitivity(final ForwardRateAgreement fra, final MulticurveProviderInterface curves) {
+  // ArgumentChecker.notNull(fra, "fra");
+  // ArgumentChecker.notNull(curves, "curves");
+  // final YieldAndDiscountCurve forwardCurve = curves.getCurve(fra.getForwardCurveName());
+  // final double dfForwardStart = forwardCurve.getDiscountFactor(fra.getFixingPeriodStartTime());
+  // final double dfForwardEnd = forwardCurve.getDiscountFactor(fra.getFixingPeriodEndTime());
+  // // Backward sweep
+  // final double forwardBar = 1.0;
+  // final double dfForwardEndBar = -dfForwardStart / (dfForwardEnd * dfForwardEnd) / fra.getFixingYearFraction() * forwardBar;
+  // final double dfForwardStartBar = 1.0 / (fra.getFixingYearFraction() * dfForwardEnd) * forwardBar;
+  // final Map<String, List<DoublesPair>> resultMap = new HashMap<>();
+  // final List<DoublesPair> listForward = new ArrayList<>();
+  // listForward.add(DoublesPair.of(fra.getFixingPeriodStartTime(), -fra.getFixingPeriodStartTime() * dfForwardStart * dfForwardStartBar));
+  // listForward.add(DoublesPair.of(fra.getFixingPeriodEndTime(), -fra.getFixingPeriodEndTime() * dfForwardEnd * dfForwardEndBar));
+  // resultMap.put(fra.getForwardCurveName(), listForward);
+  // final InterestRateCurveSensitivity result = new InterestRateCurveSensitivity(resultMap);
+  // return result;
+  // }
+  //
+  // /**
+  // * Computes the sensitivity of the present value of a FRA with notional 1 to the change of fixed rate.
+  // *
+  // * @param fra
+  // * The FRA.
+  // * @param curves
+  // * The curve bundle.
+  // * @return The sensitivity.
+  // */
+  // public MulticurveSensitivity presentValueCouponSensitivity(final ForwardRateAgreement fra, final MulticurveProviderInterface curves) {
+  // ArgumentChecker.notNull(fra, "fra");
+  // ArgumentChecker.notNull(curves, "curves");
+  // final double fixingAF = fra.getFixingYearFraction();
+  // final double paymentAF = fra.getPaymentYearFraction();
+  // final double forward = (curves.getDiscountFactor(fra.getIndex(), fra.getFixingPeriodStartTime()) /
+  // curves.getDiscountFactor(fra.getIndex(), fra.getFixingPeriodEndTime()) - 1.0)
+  // / fixingAF;
+  // final double res = -curves.getDiscountFactor(fra.getCurrency(), fra.getPaymentTime()) * paymentAF / (1 + forward * paymentAF);
+  // return res;
+  // }
 
 }

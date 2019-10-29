@@ -15,7 +15,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 /**
  * Calculates the difference in present value between one day and the next, giving a theta-like result. Possible implementations could be a
  * constant spread-type calculation, where there is no forward slide of the market data, or one where all market data has slide.
- * 
+ *
  * @param <U>
  *          The type of instrument
  * @param <V>
@@ -27,7 +27,7 @@ public abstract class HorizonCalculator<U extends InstrumentDefinition<?>, V ext
 
   /**
    * Calculates the theta for an instrument.
-   * 
+   *
    * @param definition
    *          The swap definition, not null
    * @param date
@@ -44,7 +44,7 @@ public abstract class HorizonCalculator<U extends InstrumentDefinition<?>, V ext
 
   /**
    * Calculates the theta for an instrument.
-   * 
+   *
    * @param definition
    *          The swap definition, not null
    * @param date
@@ -60,21 +60,20 @@ public abstract class HorizonCalculator<U extends InstrumentDefinition<?>, V ext
    * @return The theta
    */
   public MultipleCurrencyAmount getTheta(final U definition, final ZonedDateTime date, final V data, final int daysForward,
-      final Calendar calendar,
-      final W additionalData) {
+      final Calendar calendar, final W additionalData) {
     return getTheta(definition, date, data, daysForward, calendar);
   }
 
   /**
    * Convenience method that subtracts two multiple currency amounts.
-   * 
+   *
    * @param a
    *          The first currency amount
    * @param b
    *          The second currency amount
    * @return a - b
    */
-  protected static MultipleCurrencyAmount subtract(final MultipleCurrencyAmount a, final MultipleCurrencyAmount b) {
+  public static MultipleCurrencyAmount subtract(final MultipleCurrencyAmount a, final MultipleCurrencyAmount b) {
     return a.plus(b.multipliedBy(-1));
   }
 
