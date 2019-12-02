@@ -37,7 +37,7 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Returns a factory that populates the repository with functions that produce
-   * {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_HISTORICAL_TIME_SERIES}.
+   * {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_HISTORICAL_TIME_SERIES} for all curve types.
    *
    * @param configMaster
    *          The configuration master
@@ -90,7 +90,6 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
       return _configMaster;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       // search for the names of implied deposit curves and exclude from historical time series function
