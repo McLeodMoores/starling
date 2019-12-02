@@ -16,6 +16,7 @@ import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionSource;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationBuilder;
+import com.opengamma.financial.analytics.model.pnl.PnLRequirementsGatherer;
 import com.opengamma.financial.analytics.riskfactors.RiskFactorsGatherer;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
 import com.opengamma.financial.convention.ConventionBundleSource;
@@ -104,6 +105,13 @@ public final class OpenGammaCompilationContext {
    */
   @Deprecated
   public static final String RISK_FACTORS_GATHERER_NAME = "riskFactorsGatherer";
+  /**
+   * The name under which an instance of {@link PnLRequirementsGatherer} should be bound.
+   *
+   * @deprecated this functionality will be removed
+   */
+  @Deprecated
+  public static final String PNL_REQUIREMENTS_GATHERER_NAME = "pnlRequirementsGatherer";
   /**
    * The name under which a {@link Boolean#TRUE} value should be bound to put functions which support it into a permissive requirement mode. Note that this is a
    * non-default mode of behavior that is not usually required.
@@ -389,6 +397,22 @@ public final class OpenGammaCompilationContext {
         return currencyPairs.getCurrencyPair(currency1, currency2);
       }
     };
+  }
+
+  public static RiskFactorsGatherer getRiskFactorsGatherer(final FunctionCompilationContext compilationContext) {
+    return get(compilationContext, RISK_FACTORS_GATHERER_NAME);
+  }
+
+  public static void setRiskFactorsGatherer(final FunctionCompilationContext compilationContext, final RiskFactorsGatherer riskFactorsGatherer) {
+    set(compilationContext, RISK_FACTORS_GATHERER_NAME, riskFactorsGatherer);
+  }
+
+  public static PnLRequirementsGatherer getPnLRequirementsGatherer(final FunctionCompilationContext compilationContext) {
+    return get(compilationContext, PNL_REQUIREMENTS_GATHERER_NAME);
+  }
+
+  public static void setPnLRequirementsGatherer(final FunctionCompilationContext compilationContext, final PnLRequirementsGatherer pnlRequirementsGatherer) {
+    set(compilationContext, PNL_REQUIREMENTS_GATHERER_NAME, pnlRequirementsGatherer);
   }
 
 }

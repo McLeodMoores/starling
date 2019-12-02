@@ -24,6 +24,7 @@ import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
+import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.FinancialSecurityVisitorAdapter;
@@ -115,8 +116,15 @@ public class PositionPnLFunction extends AbstractFunction.NonCompiledInvoker {
     final String samplingFunction = samplingFunctions.iterator().next();
     final FinancialSecurity security = (FinancialSecurity) target.getPosition().getSecurity();
     final String currency = currencies.iterator().next();
-    LOGGER.error("Could not get delta requirements for {} {}; reason was {}", new Object[] {getCcyString(security), security.getClass()});
-    return null;
+    try {
+      final Set<ValueRequirement> set =
+          OpenGammaCompilationContext.getPnLRequirementsGatherer(context)
+          .getFirstOrderRequirements(security, samplingPeriod, scheduleCalculator, samplingFunction, target.toSpecification(), currency);
+      return set;
+    } catch (final OpenGammaRuntimeException e) {
+      LOGGER.error("Could not get delta requirements for {} {}; reason was {}", new Object[] {getCcyString(security), security.getClass(), e.getMessage() });
+      return null;
+    }
   }
 
   private String getCcyString(final FinancialSecurity financialSecurity) {
