@@ -549,6 +549,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
             }
           }
         } catch (final RuntimeException e) {
+          e.printStackTrace(System.err);
           LOGGER.error("Couldn't process rules for {}: {}", target, e.getMessage());
           LOGGER.info("Caught exception", e);
           // Now have an incomplete rule set for the target, possibly even an empty one

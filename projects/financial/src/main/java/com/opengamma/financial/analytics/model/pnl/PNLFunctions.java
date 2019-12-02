@@ -374,28 +374,6 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
       super.afterPropertiesSet();
     }
 
-    protected void addBondFutureOptionBlackYieldCurveNodePnLDefaults(final List<FunctionConfiguration> functions) {
-      int i = 0;
-      for (final CurrencyInfo e : getPerCurrencyInfo().values()) {
-        if (e.getSurfaceName() != null) {
-          i++;
-        }
-      }
-      final String[] args = new String[3 + i * 3];
-      i = 0;
-      args[i++] = getSamplingPeriodName();
-      args[i++] = getScheduleName();
-      args[i++] = getSamplingCalculatorName();
-      for (final Map.Entry<String, CurrencyInfo> e : getPerCurrencyInfo().entrySet()) {
-        if (e.getValue().getSurfaceName() != null) {
-          args[i++] = e.getKey();
-          args[i++] = e.getValue().getCurveConfiguration();
-          args[i++] = e.getValue().getSurfaceName();
-        }
-      }
-      functions.add(functionConfiguration(BondFutureOptionBlackYieldCurveNodePnLDefaults.class, args));
-    }
-
     protected void addCreditInstrumetCS01PnLDefaults(final List<FunctionConfiguration> functions) {
       final String[] args = new String[3];
       args[0] = getSamplingPeriodName();
