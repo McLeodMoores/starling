@@ -42,8 +42,7 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Returns a factory that populates the repository with functions that produce
-   * {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_HISTORICAL_TIME_SERIES} for all curve types <b>except</b>
-   * {@link ImpliedDepositCurveFunction#IMPLIED_DEPOSIT}.
+   * {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_HISTORICAL_TIME_SERIES} for all curve types.
    *
    * @param configMaster
    *          The configuration master
@@ -69,7 +68,7 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Function repository configuration source for yield curve functions based on the items defined in a Config Master.
-   * 
+   *
    * @deprecated This configuration type should no longer be used.
    */
   @Deprecated
