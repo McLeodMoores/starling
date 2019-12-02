@@ -44,6 +44,7 @@ import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionSource;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationBuilder;
+import com.opengamma.financial.analytics.model.pnl.DefaultPnLRequirementsGatherer;
 import com.opengamma.financial.analytics.model.pnl.PnLRequirementsGatherer;
 import com.opengamma.financial.analytics.riskfactors.DefaultRiskFactorsConfigurationProvider;
 import com.opengamma.financial.analytics.riskfactors.DefaultRiskFactorsGatherer;
@@ -201,10 +202,15 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    initPnlRequirementsGatherer();
     initThreadLocalServiceContext();
     initFunctionCompilationContext(repo, configuration);
     final OverrideOperationCompiler ooc = initOverrideOperationCompiler(repo, configuration);
     initFunctionExecutionContext(repo, configuration, ooc);
+  }
+
+  protected void initPnlRequirementsGatherer() {
+    _pnlRequirementsGatherer = new DefaultPnLRequirementsGatherer();
   }
 
   private void initThreadLocalServiceContext() {
@@ -274,14 +280,15 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
       context.setGraphExecutionBlacklist(new DefaultFunctionBlacklistQuery(getExecutionBlacklist()));
     }
     OpenGammaCompilationContext.setPermissive(context, Boolean.TRUE.equals(getPermissive()));
+    OpenGammaCompilationContext.setPnLRequirementsGatherer(context, getPnlRequirementsGatherer());
     if (getRiskFactorsGatherer() == null) {
       if (getSecuritySource() != null) {
         setRiskFactorsGatherer(new DefaultRiskFactorsGatherer(getSecuritySource(), new DefaultRiskFactorsConfigurationProvider()));
       }
     }
-    // if (getRiskFactorsGatherer() != null) {
-    // OpenGammaCompilationContext.setRiskFactorsGatherer(context, getRiskFactorsGatherer());
-    // }
+    if (getRiskFactorsGatherer() != null) {
+      OpenGammaCompilationContext.setRiskFactorsGatherer(context, getRiskFactorsGatherer());
+    }
     final ComponentInfo info = new ComponentInfo(FunctionCompilationContext.class, getClassifier());
     repo.registerComponent(info, context);
   }
