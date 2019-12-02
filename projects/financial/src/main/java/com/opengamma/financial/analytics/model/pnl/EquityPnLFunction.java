@@ -93,8 +93,8 @@ public class EquityPnLFunction extends AbstractFunction.NonCompiledInvoker {
         .with(ValuePropertyNames.SAMPLING_FUNCTION, samplingFunctionName).get();
     final ComputationTargetSpecification targetSpec =
         new ComputationTargetSpecification(ComputationTargetType.SECURITY, target.getPosition().getSecurity().getUniqueId());
-    //    requirements.add(new ValueRequirement(ValueRequirementNames.FAIR_VALUE, targetSpec, ValueProperties.with(ValuePropertyNames.CURRENCY, currency).get()));
-    //    requirements.add(new ValueRequirement(ValueRequirementNames.PRICE_SERIES, targetSpec, priceSeriesProperties));
+    requirements.add(new ValueRequirement(ValueRequirementNames.FAIR_VALUE, targetSpec, ValueProperties.with(ValuePropertyNames.CURRENCY, currency).get()));
+    requirements.add(new ValueRequirement(ValueRequirementNames.PRICE_SERIES, targetSpec, priceSeriesProperties));
     return requirements;
   }
 
